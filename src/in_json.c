@@ -275,6 +275,17 @@ json_fixed_key (char *key, Bit_Chain *restrict dat,
   return;
 }
 
+// which would require a different size, need to recalc.
+static inline bool
+does_cross_unicode_datversion (Bit_Chain *restrict dat)
+{
+  if ((dat->version < R_2007 && dat->from_version >= R_2007)
+      || (dat->version >= R_2007 && dat->from_version < R_2007))
+    return true;
+  else
+    return false;
+}
+
 ATTRIBUTE_MALLOC
 static char *
 json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
@@ -1003,6 +1014,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   size = json_long (dat, tokens);
                   isize = (int)i;
                   LOG_TRACE ("eed[%u].size %ld\n", i, size);
+                  // see below: if does_cross_unicode_datversion (dat) we need to recalc
                   obj->eed[i].size = (BITCODE_BS)size;
                   obj->eed[i].data = calloc (size + 8, 1);
                 }
@@ -1036,12 +1048,20 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                     case 0:
                       {
+                        //FIXME: wstring case, which we cannot write yet
                         char *s = json_string (dat, tokens);
                         int len = strlen (s);
                         memcpy (&data->u.eed_0.string, s, len + 1);
                         data->u.eed_0.codepage = dwg->header.codepage;
                         data->u.eed_0.length = len;
                         LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
+                        // so far only if PRE(R_2007), so the size gets smaller
+                        if (does_cross_unicode_datversion (dat))
+                          {
+                            int oldsize = (len * 2) + 2;
+                            size = len + 3;
+                            obj->eed[isize].size -= (oldsize - size);
+                          }
                         free (s);
                       }
                       break;
@@ -1138,6 +1158,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 char *s = json_string (dat, tokens);
                 int len = strlen (s);
                 rbuf->value.str.size = len;
+                // here the xdata_size gets re-calculated from size
                 PRE (R_2007) // target version
                 {
                   rbuf->value.str.u.data = s;
