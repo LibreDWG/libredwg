@@ -491,7 +491,7 @@ bit_read_RD (Bit_Chain *dat)
   unsigned char byte[8];
   double *result;
 
-  // TODO: I think it might not work on big-endian platforms:
+  // TODO: big-endian
   for (i = 0; i < 8; i++)
     byte[i] = bit_read_RC (dat);
 
@@ -507,7 +507,7 @@ bit_write_RD (Bit_Chain *dat, double value)
   int i;
   unsigned char *val;
 
-  // TODO: I think it might not work on big-endian platforms:
+  // TODO: big-endian
   val = (unsigned char *)&value;
 
   for (i = 0; i < 8; i++)
@@ -1054,6 +1054,7 @@ bit_read_DD (Bit_Chain *dat, double default_value)
     return bit_read_RD (dat);
   if (two_bit_code == 2)
     {
+      // dbl: 7654 3210
       // first 2 bits eq (6-7), the rest not (0-5)
       uchar_result = (unsigned char *)&default_value;
       uchar_result[4] = bit_read_RC (dat);
@@ -1067,7 +1068,7 @@ bit_read_DD (Bit_Chain *dat, double default_value)
     }
   else /* if (two_bit_code == 1) */
     {
-      // first half eq, only update 2nd
+      // first 4bits eq, only last 4
       uchar_result = (unsigned char *)&default_value;
       uchar_result[0] = bit_read_RC (dat);
       uchar_result[1] = bit_read_RC (dat);
@@ -1083,27 +1084,25 @@ bit_read_DD (Bit_Chain *dat, double default_value)
 BITCODE_BB
 bit_write_DD (Bit_Chain *dat, double value, double default_value)
 {
-  unsigned char *uchar_value;
-  uint32_t *uint_value;
-  uint32_t *uint_default;
   BITCODE_BB bits = 0;
 
   if (value == default_value)
     bit_write_BB (dat, 0);
   else
     {
-      uchar_value = (unsigned char *)&value;
-      uint_value = (uint32_t *)&value;
-      uint_default = (uint32_t *)&default_value;
+      const unsigned char *uchar_value = (const unsigned char *)&value;
+      const unsigned char *uchar_default = (const unsigned char *)&default_value;
+      const uint16_t *uint_value = (const uint16_t *)&uchar_value;
+      const uint16_t *uint_default = (const uint16_t *)&uchar_default;
+      // dbl: 7654 3210, little-endian only
+      // check the first 2 bits for eq
       if (uint_value[0] == uint_default[0])
         {
-          // in fact only the first 2 bits need to diff
-          if (uint_value[1] != uint_default[1])
+          // first 4 bits eq, i.e. next 2 bits also
+          if (uint_value[1] == uint_default[1])
             {
-              bits = 2;
-              bit_write_BB (dat, 2);
-              bit_write_RC (dat, uchar_value[4]);
-              bit_write_RC (dat, uchar_value[5]);
+              bits = 1;
+              bit_write_BB (dat, 1);
               bit_write_RC (dat, uchar_value[0]);
               bit_write_RC (dat, uchar_value[1]);
               bit_write_RC (dat, uchar_value[2]);
@@ -1111,8 +1110,10 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
             }
           else
             {
-              bits = 1;
-              bit_write_BB (dat, 1);
+              bits = 2;
+              bit_write_BB (dat, 2);
+              bit_write_RC (dat, uchar_value[4]);
+              bit_write_RC (dat, uchar_value[5]);
               bit_write_RC (dat, uchar_value[0]);
               bit_write_RC (dat, uchar_value[1]);
               bit_write_RC (dat, uchar_value[2]);

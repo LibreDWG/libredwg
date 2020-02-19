@@ -185,9 +185,9 @@ static bool env_var_checked_p;
   {                                                                           \
     BITCODE_BB b1 = _FIELD_DD (nam, _default, dxf);                           \
     if (b1 == 3)                                                              \
-      LOG_TRACE (#nam ": %f [DD %d]\n", _obj->nam, dxf)                       \
+      LOG_TRACE (#nam ": %f [DD %d]", _obj->nam, dxf)                         \
     else                                                                      \
-      LOG_TRACE (#nam ": %f [DD/%d %d]\n", _obj->nam, b1, dxf)                \
+      LOG_TRACE (#nam ": %f [DD/%d %d]", _obj->nam, b1, dxf)                  \
     LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte,       \
                 dat->bit)                                                     \
     LOG_TRACE ("\n")                                                          \

@@ -250,6 +250,8 @@
 #  define SET_PARENT_FIELD(field, what_parent, to)                            \
     if (_obj->field)                                                          \
       _obj->field->what_parent = to;
+#else
+#  define TRACE_DD
 #endif
 
 #if defined(IS_PRINT)

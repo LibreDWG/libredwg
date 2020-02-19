@@ -484,8 +484,26 @@
         LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]\n", _obj->nam.x, _obj->nam.y, \
                    _obj->nam.z, dxf);                                         \
   }
+#define TRACE_DD                                                              \
+  {                                                                           \
+    BITCODE_BB result;                                                        \
+    BITCODE_RC byte = dat->chain[dat->byte];                                  \
+    if (dat->bit < 7)                                                         \
+      result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);                 \
+    else                                                                      \
+      {                                                                       \
+        result = (byte & 0x01) << 1;                                          \
+        if (dat->byte < dat->size - 1)                                        \
+          {                                                                   \
+            byte = dat->chain[dat->byte + 1];                                 \
+            result |= (byte & 0x80) >> 7;                                     \
+          }                                                                   \
+      }                                                                       \
+    LOG_HANDLE ("DD code %u\n", result)                                       \
+  }
 #define FIELD_DD(nam, _default, dxf)                                          \
   {                                                                           \
+    TRACE_DD                                                                  \
     FIELD_VALUE (nam) = bit_read_DD (dat, _default);                          \
     if (bit_isnan (_obj->nam))                                                \
       {                                                                       \
@@ -493,10 +511,10 @@
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
   }
-#define FIELD_2DD(nam, d1, d2, dxf)                                           \
+#define FIELD_2DD(nam, dx, dy, dxf)                                           \
   {                                                                           \
-    FIELD_DD (nam.x, d1, dxf);                                                \
-    FIELD_DD (nam.y, d2, dxf + 10);                                           \
+    FIELD_DD (nam.x, dx, dxf);                                                \
+    FIELD_DD (nam.y, dy, dxf + 10);                                           \
     FIELD_2PT_TRACE (nam, 2DD, dxf);                                           \
   }
 #define FIELD_3DD(nam, def, dxf)                                              \
