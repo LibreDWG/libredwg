@@ -579,10 +579,7 @@ static bool env_var_checked_p;
   *dat = sav_dat;                                                             \
   }
 #define START_HANDLE_STREAM                                                   \
-  *hdl_dat = *dat;                                                            \
   LOG_INSANE ("HANDLE_STREAM @%lu.%u\n", dat->byte - obj->address, dat->bit)  \
-  if (dat->version >= R_2007 && obj->bitsize)                                 \
-    bit_set_position (hdl_dat, obj->hdlpos);                                  \
   /* DD sizes can vary */                                                     \
   if (!obj->bitsize || dwg->opts & DWG_OPTS_INJSON)                           \
     {                                                                         \
@@ -591,7 +588,28 @@ static bool env_var_checked_p;
       obj->bitsize = bit_position (dat) - (obj->address * 8);                 \
       obj->was_bitsize_set = 1;                                               \
     }                                                                         \
+  if (!obj->hdlpos) obj->hdlpos = bit_position (dat);                         \
+  if (dat->version >= R_2007 && bit_position (hdl_dat) > 0)                   \
+    obj_flush_hdlstream (obj, dat, hdl_dat);                                  \
+  *hdl_dat = *dat;                                                            \
   RESET_VER
+
+static void
+obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                     Bit_Chain *restrict hdl_dat)
+{
+  unsigned long datpos = bit_position (dat);
+  unsigned long hdlpos = bit_position (hdl_dat);
+  LOG_TRACE ("Flush handle stream %lu to %lu, hdlpos=%lu\n", hdlpos,
+             datpos, obj->hdlpos);
+  for (unsigned long i = 0; i < hdlpos; i++)
+    {
+      // TODO optimize
+      bit_write_B (dat, bit_read_B (hdl_dat));
+    }
+  free (hdl_dat->chain);
+  hdl_dat->size = 0;
+}
 
 #if 0
 /** See dec_macro.h instead.
@@ -666,9 +684,14 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     Dwg_Entity_##token *_obj = _ent->tio.token;                               \
     int error;                                                                \
     Bit_Chain *hdl_dat = dat;                                                 \
-    Bit_Chain *str_dat = dat;                                                 \
+    Bit_Chain *str_dat = dat; /* a ref */                                     \
     Dwg_Data *dwg = obj->parent;                                              \
     LOG_INFO ("Encode entity " #token "\n")                                   \
+    SINCE (R_2007) {                                                          \
+      Bit_Chain _hdl_dat;                                                     \
+      hdl_dat = &_hdl_dat; /* a new copy */                                   \
+      bit_chain_init (hdl_dat, 128);                                          \
+    }                                                                         \
     error = dwg_encode_entity (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       return error;
@@ -688,9 +711,14 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
     int error;                                                                \
     Bit_Chain *hdl_dat = dat;                                                 \
-    Bit_Chain *str_dat = dat;                                                 \
+    Bit_Chain *str_dat = dat; /* a ref */                                     \
     Dwg_Data *dwg = obj->parent;                                              \
     Dwg_Object_##token *_obj = obj->tio.object ? obj->tio.object->tio.token : NULL; \
+    SINCE (R_2007) {                                                          \
+      Bit_Chain _hdl_dat;                                                     \
+      hdl_dat = &_hdl_dat; /* a new copy */                                   \
+      bit_chain_init (hdl_dat, 128);                                          \
+    }                                                                         \
     error = dwg_encode_object (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       return error;                                                           \
@@ -2512,7 +2540,9 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *hdl_dat,
   }
   obj->was_bitsize_set = 0;
   if (obj->bitsize)
-    obj->hdlpos = obj->address * 8 + obj->bitsize;
+    {
+      obj->hdlpos = obj->address * 8 + obj->bitsize;
+    }
   SINCE (R_2007)
   {
     // The handle stream offset, i.e. end of the object, right after

@@ -2209,8 +2209,17 @@ bit_write_sentinel (Bit_Chain *dat, unsigned char sentinel[16])
     bit_write_RC (dat, sentinel[i]);
 }
 
+void
+bit_chain_init (Bit_Chain *dat, const int size)
+{
+  dat->chain = (unsigned char *)calloc (1, size);
+  dat->size = (long unsigned int)size;
+  dat->byte = 0;
+  dat->bit = 0;
+}
+
 /*
- * Allocates memory space for bit_chain
+ * Allocates or adds more memory space for bit_chain
  * adds 10 4kB pages.
  */
 #define CHAIN_BLOCK 40960
@@ -2219,10 +2228,7 @@ bit_chain_alloc (Bit_Chain *dat)
 {
   if (dat->size == 0)
     {
-      dat->chain = (unsigned char *)calloc (1, CHAIN_BLOCK);
-      dat->size = CHAIN_BLOCK;
-      dat->byte = 0;
-      dat->bit = 0;
+      bit_chain_init (dat, CHAIN_BLOCK);
     }
   else
     {

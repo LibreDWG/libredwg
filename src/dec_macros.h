@@ -19,11 +19,15 @@
  * modified by Denis Pruchkovsky
  */
 
+#ifndef DEC_MACROS_H
+#define DEC_MACROS_H
+
 #include "config.h"
 #ifdef HAVE_CTYPE_H
 #  include <ctype.h>
 #endif
 
+// needed by decode and decode_r2007
 #define ACTION decode
 #define IS_DECODER
 
@@ -1247,12 +1251,9 @@
       return error;                                                           \
     SINCE (R_2007)                                                            \
       {                                                                       \
-        Bit_Chain obj_dat, str_dat, hdl_dat;                                  \
-        obj_dat = *dat;                                                       \
-        hdl_dat = *dat;                                                       \
-        str_dat = *dat;                                                       \
-        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat,             \
-                                              &str_dat, obj);                 \
+        Bit_Chain obj_dat = *dat, str_dat = *dat, hdl_dat = *dat;             \
+        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,   \
+                                              obj);                           \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -1263,7 +1264,7 @@
                                                                               \
   GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,\
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
@@ -1285,16 +1286,16 @@
 
 // Does size include the CRC?
 #define DWG_ENTITY_END                                                        \
-  {                                                                           \
-    unsigned long pos = obj_stream_position (dat, hdl_dat, str_dat);          \
-    int64_t padding = (obj->size * 8) - pos;                                  \
-    SINCE (R_2007) bit_set_position (dat, pos);                               \
-    if (padding)                                                              \
-      LOG_HANDLE (" padding: %+ld %s\n", (long)padding,                       \
-                  padding >= 8 ? "MISSING"                                    \
+    {                                                                         \
+      unsigned long pos = obj_stream_position (dat, hdl_dat, str_dat);        \
+      int64_t padding = (obj->size * 8) - pos;                                \
+      SINCE (R_2007) bit_set_position (dat, pos);                             \
+      if (padding)                                                            \
+        LOG_HANDLE (" padding: %+ld %s\n", (long)padding,                     \
+                    padding >= 8 ? "MISSING"                                  \
                                : (padding < 0) ? "OVERSHOOT" : "");           \
-  }                                                                           \
-  return error & ~DWG_ERR_UNHANDLEDCLASS;                                     \
+    }                                                                         \
+    return error & ~DWG_ERR_UNHANDLEDCLASS;                                   \
   }
 
 #define DWG_OBJECT(token)                                                     \
@@ -1343,15 +1344,15 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007)                                                            \
-    {                                                                         \
-      Bit_Chain obj_dat, str_dat, hdl_dat;                                    \
-      obj_dat = *dat;                                                         \
-      hdl_dat = *dat;                                                         \
-      str_dat = *dat;                                                         \
-      error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,     \
-                                            obj);                             \
-    }                                                                         \
-    else { error = dwg_decode_##token##_private (dat, dat, dat, obj); }       \
+      {                                                                       \
+        Bit_Chain obj_dat = *dat, str_dat = *dat, hdl_dat = *dat;             \
+        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,   \
+                                              obj);                           \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        error = dwg_decode_##token##_private (dat, dat, dat, obj);            \
+      }                                                                       \
     return error;                                                             \
   }                                                                           \
                                                                               \
@@ -1374,3 +1375,5 @@
       }
 
 #define DWG_OBJECT_END DWG_ENTITY_END
+
+#endif

@@ -62,6 +62,8 @@ int dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                  Bit_Chain *str_dat, Dwg_Data *restrict dwg);
 int dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                            Bit_Chain *hdl_dat, long unsigned int address);
+int obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                       Bit_Chain *restrict hdl_dat);
 void bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src,
                size_t size);
 
@@ -79,8 +81,6 @@ int dwg_validate_INSERT (Dwg_Object *restrict obj);
 int dwg_validate_POLYLINE (Dwg_Object *restrict obj);
 
 /* from decode_r2007.c */
-int obj_handle_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
-                       Bit_Chain *hdl_dat);
 int obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
                        Bit_Chain *str_dat);
 unsigned long obj_stream_position (Bit_Chain *restrict dat,

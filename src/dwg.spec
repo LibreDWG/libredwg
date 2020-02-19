@@ -2772,9 +2772,7 @@ DWG_OBJECT (LTYPE)
   REPEAT_BLOCK
     SUB_FIELD_BD (dashes[rcount1],length, 49);
     SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
-    DXF_OR_PRINT {
-      SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
-    }
+    SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
     SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
     SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
     SUB_FIELD_BD (dashes[rcount1],scale, 46);
@@ -2789,9 +2787,7 @@ DWG_OBJECT (LTYPE)
     }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (dashes)
-#ifndef IS_FREE
   END_REPEAT (dashes);  // there's a 2nd loop below, don't free
-#endif
 
   UNTIL (R_2004) {
     JSON {
@@ -2809,14 +2805,6 @@ DWG_OBJECT (LTYPE)
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (extref_handle, 5, 0);
-  // FIXME: init HANDLE_STREAM earlier, merge into upper repeat_block
-#if !(defined(IS_JSON) || defined (IS_DXF))
-  _REPEAT_CNF (_obj->num_dashes, dashes, Dwg_LTYPE_dash, 1)
-  REPEAT_BLOCK
-      SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 0);
-  END_REPEAT_BLOCK
-  END_REPEAT (dashes);
-#endif
 
 DWG_OBJECT_END
 
@@ -3585,7 +3573,7 @@ DWG_OBJECT (MLINESTYLE)
     SUB_FIELD_CMC (lines[rcount1], color, 62,420); /*!< default: 0 */
     PRE (R_2018)
     {
-#if defined (IS_DXF) && !defined (IS_ENCODE)
+#if defined (IS_DXF) && !defined (IS_ENCODER)
         switch (FIELD_VALUE (lines[rcount1].lt.index)) {
         case 32767: VALUE_TFF ("BYLAYER", 6); break; /* default (SHRT_MAX) */
         case 32766: VALUE_TFF ("BYBLOCK", 6); break;
@@ -3598,31 +3586,14 @@ DWG_OBJECT (MLINESTYLE)
         SUB_FIELD_BSd (lines[rcount1], lt.index, 6);
 #endif
     }
-#if defined(IS_JSON) || defined (IS_DXF)
-    SINCE (R_2018) {
+    LATER_VERSIONS {
       SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
     }
-#endif
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (lines)
-  if (!IF_IS_FREE || dat->from_version < R_2018) // there's a 2nd loop below, don't free
-    {
-      END_REPEAT (lines);
-    }
+  END_REPEAT (lines);
 
   START_OBJECT_HANDLE_STREAM;
-  // FIXME: init HANDLE_STREAM earlier, merge into upper repeat_block
-#if !(defined(IS_JSON) || defined (IS_DXF))
-  SINCE (R_2018)
-  {
-    _REPEAT_CNF (_obj->num_lines, lines, Dwg_MLINESTYLE_line, 1)
-    REPEAT_BLOCK
-        SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
-    END_REPEAT_BLOCK
-    //SET_PARENT_OBJ (lines)
-    END_REPEAT (lines);
-  }
-#endif
 
 DWG_OBJECT_END
 
@@ -3876,11 +3847,6 @@ DWG_ENTITY (HATCH)
           SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
           SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
           FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
-          //REPEAT2 (deflines[rcount1].num_dashes, deflines[rcount1].dashes, BITCODE_BD)
-          //REPEAT_BLOCK
-          //    SUB_FIELD_BD (deflines[rcount1], dashes[rcount2], 49);
-          //END_REPEAT_BLOCK
-          //END_REPEAT (deflines[rcount1].dashes);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (deflines)
       END_REPEAT (deflines);
@@ -4720,7 +4686,7 @@ DWG_OBJECT_END
           SUB_FIELD_BL (cell,has_linked_data, 92);	\
           if (FIELD_VALUE (cell.has_linked_data))	\
             {						\
-              SUB_FIELD_HANDLE (cell,data_link, 5, 340);\
+              SUB_FIELD_HANDLE (cell,data_link, 5, 340);  \
               SUB_FIELD_BL (cell,num_rows, 93);		\
               SUB_FIELD_BL (cell,num_cols, 94);		\
               SUB_FIELD_BL (cell,unknown, 96);		\
@@ -4753,7 +4719,7 @@ DWG_OBJECT_END
               SUB_FIELD_BL (content,num_attrs, 91);	\
               REPEAT4 (content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)	\
               REPEAT_BLOCK				\
-                  SUB_FIELD_HANDLE (attr,attdef, 5, 330);	\
+                  SUB_FIELD_HANDLE (attr,attdef, 5, 330); \
                   SUB_FIELD_T (attr,value, 301);	\
                   SUB_FIELD_BL (attr,index, 92);	\
               END_REPEAT_BLOCK				\
@@ -4774,7 +4740,7 @@ DWG_OBJECT_END
               SUB_FIELD_BD (cell,unknown_d40, 40);	\
               SUB_FIELD_BD (cell,unknown_d41, 41);	\
               SUB_FIELD_BL (cell,has_cell_geom, 0);	\
-              SUB_FIELD_HANDLE (cell,cell_geom_handle, ANYCODE, 0);	\
+              SUB_FIELD_HANDLE (cell,cell_geom_handle, ANYCODE, 0); \
               if (FIELD_VALUE (cell.has_cell_geom))	\
                 {					\
                   REPEAT_N (1, cell.geom_data, Dwg_CellContentGeometry)	\
@@ -5045,7 +5011,9 @@ DWG_ENTITY (TABLE)
           }
     END_REPEAT_BLOCK
     SET_PARENT_OBJ (cells)
+#ifndef IS_FREE
     END_REPEAT (cells);
+#endif
     /* End Cell Data (remaining data applies to entire table)*/
   
     /* COMMON: */
@@ -5092,9 +5060,9 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x20000)
           FIELD_HANDLE (title_text_style, 5, 7);
         if (table_flag & 0x40000)
-          FIELD_HANDLE (header_text_style, 5, 7); // doc error
+          FIELD_HANDLE (header_text_style, 5, 7);
         if (table_flag & 0x80000)
-          FIELD_HANDLE (data_text_style, 5, 7); // doc error
+          FIELD_HANDLE (data_text_style, 5, 7);
         if (table_flag & 0x100000)
           FIELD_BD (title_row_height, 140);
         if (table_flag & 0x200000)
@@ -5259,33 +5227,28 @@ DWG_ENTITY (TABLE)
       FIELD_HANDLE (seqend, 3, 0);
     }
     FIELD_HANDLE (table_style, 5, 342);
-  
-    REPEAT (num_cells, cells, Dwg_TABLE_Cell)
+    _REPEAT_CNF (_obj->num_cells, cells, Dwg_TABLE_Cell, 1)
     REPEAT_BLOCK
         if (FIELD_VALUE (cells[rcount1].type) == 1)
           { /* text cell */
             SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 344);
           }
         else
-          { /* block cell */
-            SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 340);
+          {
+            /* block cell */
+            SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 340)
           }
-  
+
         if (FIELD_VALUE (cells[rcount1].type) == 2 &&
             FIELD_VALUE (cells[rcount1].additional_data_flag) == 1)
-          {
-            HANDLE_VECTOR (cells[rcount1].attr_def_id, cells[rcount1].num_attr_defs, 4, 331);
-          }
-  
+          HANDLE_VECTOR (cells[rcount1].attr_def_id, cells[rcount1].num_attr_defs, 4, 331);
         if (FIELD_VALUE (cells[rcount1].additional_data_flag2) == 1 &&
             FIELD_VALUE (cells[rcount1].cell_flag_override) & 0x08)
-          {
-            SUB_FIELD_HANDLE (cells[rcount1],text_style_override, ANYCODE, 7);
-          }
+          SUB_FIELD_HANDLE (cells[rcount1],text_style_override, ANYCODE, 7);
     END_REPEAT_BLOCK
     SET_PARENT_OBJ (cells)
     END_REPEAT (cells);
-  
+
     if (FIELD_VALUE (has_table_overrides))
       {
         BITCODE_BL table_flag;
@@ -5410,10 +5373,11 @@ DWG_OBJECT (TABLESTYLE)
     REPEAT_CN (3, rowstyles, Dwg_TABLESTYLE_rowstyles)
     REPEAT_BLOCK
         #define rowstyle rowstyles[rcount1]
+        // TODO in DXF by name
         SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
         SUB_FIELD_BD (rowstyle,text_height, 140);
         SUB_FIELD_BS (rowstyle,text_alignment, 170);
-        SUB_FIELD_CMC (rowstyle,text_color, 62,0);
+        SUB_FIELD_CMC (rowstyle,text_color, 62,0); //FIXME
         SUB_FIELD_CMC (rowstyle,fill_color, 63,0);
         SUB_FIELD_B (rowstyle,has_bgcolor, 283);
 
@@ -5569,13 +5533,9 @@ DWG_ENTITY (MULTILEADER)
       SUB_FIELD_B (lnode, has_lastleaderlinepoint, 290);
       SUB_FIELD_B (lnode, has_dogleg, 291);
       if (FIELD_VALUE (lnode.has_lastleaderlinepoint))
-        {
-          SUB_FIELD_3BD (lnode, lastleaderlinepoint, 10);
-        }
+        SUB_FIELD_3BD (lnode, lastleaderlinepoint, 10);
       if (FIELD_VALUE (lnode.has_dogleg))
-        {
-          SUB_FIELD_3BD (lnode, dogleg_vector, 11);
-        }
+        SUB_FIELD_3BD (lnode, dogleg_vector, 11);
       SUB_FIELD_BL (lnode, num_breaks, 0);
       VALUEOUTOFBOUNDS (lnode.num_breaks, 5000)
       REPEAT2 (lnode.num_breaks, lnode.breaks, Dwg_LEADER_Break)
@@ -5644,8 +5604,7 @@ DWG_ENTITY (MULTILEADER)
     {
       FIELD_T (ctx.content.txt.default_text, 304);
       FIELD_3BD (ctx.content.txt.normal, 11);
-      SINCE (R_2007)
-        FIELD_HANDLE (ctx.content.txt.style, 5, 340);
+      FIELD_HANDLE (ctx.content.txt.style, 5, 340);
       FIELD_3BD (ctx.content.txt.location, 12);
       FIELD_3BD (ctx.content.txt.direction, 13);
       FIELD_BD (ctx.content.txt.rotation, 42);
@@ -5677,8 +5636,7 @@ DWG_ENTITY (MULTILEADER)
       FIELD_B (ctx.has_content_blk, 296);
       if (FIELD_VALUE (ctx.has_content_blk))
         {
-          SINCE (R_2007)
-            FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
+          FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
           FIELD_3BD (ctx.content.blk.normal, 14);
           FIELD_3BD (ctx.content.blk.location, 15);
           FIELD_3BD (ctx.content.blk.scale, 16);
@@ -5729,32 +5687,22 @@ DWG_ENTITY (MULTILEADER)
       REPEAT (num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead)
       REPEAT_BLOCK
           SUB_FIELD_BL (arrowheads[rcount1],is_default, 94);
-          SINCE (R_2007)
-            SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
+          SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (arrowheads)
-      // dont free it for the 2nd loop below
-      if (!IF_IS_FREE || dat->version >= R_2007)
-        {
-          END_REPEAT (arrowheads);
-        }
+      END_REPEAT (arrowheads);
 
       FIELD_BL (num_blocklabels, 0);
       VALUEOUTOFBOUNDS (num_blocklabels, 5000)
       REPEAT (num_blocklabels, blocklabels, Dwg_LEADER_BlockLabel)
       REPEAT_BLOCK
-          SINCE (R_2007)
-            SUB_FIELD_HANDLE (blocklabels[rcount1],attdef, 4, 330);
+          SUB_FIELD_HANDLE (blocklabels[rcount1],attdef, 4, 330);
           SUB_FIELD_T (blocklabels[rcount1],label_text, 302);
           SUB_FIELD_BS (blocklabels[rcount1],ui_index, 177);
           SUB_FIELD_BD (blocklabels[rcount1],width, 44);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (blocklabels)
-      // dont free it for the 2nd loop below
-      if (!IF_IS_FREE || dat->version >= R_2007)
-        {
-          END_REPEAT (blocklabels)
-        }
+      END_REPEAT (blocklabels)
       FIELD_B (neg_textdir, 294);
       FIELD_BS (ipe_alignment, 178);
       FIELD_BS (justification, 179);
@@ -5771,29 +5719,6 @@ DWG_ENTITY (MULTILEADER)
     FIELD_B (text_extended, 295);
 
   COMMON_ENTITY_HANDLE_DATA;
-  // TODO: seperate hdl_dat earlier, and use it above.
-  // 2nd loop, use the variant without calloc
-  VERSIONS (R_13, R_2004) {
-    if (FIELD_VALUE (ctx.has_content_txt)) {
-      FIELD_HANDLE (ctx.content.txt.style, 5, 340);
-    } else if (FIELD_VALUE (ctx.has_content_blk)) {
-      FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
-    }
-    // ??
-    VERSIONS (R_2000, R_2004)
-    {
-      _REPEAT_CNF (_obj->num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead, 1)
-      REPEAT_BLOCK
-          SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
-      END_REPEAT_BLOCK
-      END_REPEAT (arrowheads);
-      _REPEAT_CNF (_obj->num_blocklabels, blocklabels, Dwg_LEADER_BlockLabel, 1)
-      REPEAT_BLOCK
-          SUB_FIELD_HANDLE (blocklabels[rcount1],attdef, 4, 330);
-      END_REPEAT_BLOCK
-      END_REPEAT (blocklabels)
-    }
-  }
   FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_HANDLE (ltype, 5, 341);
   FIELD_HANDLE (arrow_handle, 5, 342);
@@ -6113,12 +6038,10 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72);
-#if defined (IS_JSON) || defined (IS_DXF) || defined (IS_FREE)
       if (FIELD_VALUE (ref[rcount1].main_subent_type))
         SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 331);
       if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
         SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332);
-#endif
       SUB_FIELD_BS (ref[rcount1], rotated_type, 71);
       SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
@@ -6131,20 +6054,6 @@ DWG_OBJECT (DIMASSOC)
   //FIELD_BL (intsect_gsmarker, 92);
 
   START_OBJECT_HANDLE_STREAM;
-#if !defined (IS_JSON) && !defined (IS_DXF) && !defined (IS_FREE)
-  _REPEAT_CNF (4, ref, Dwg_DIMASSOC_Ref, 1)
-  REPEAT_BLOCK
-      // skip unset bits
-      if (!(FIELD_VALUE (associativity) & (1<<rcount1)))
-        continue;
-      LOG_TRACE ("rcount1: %d\n", rcount1);
-      if (FIELD_VALUE (ref[rcount1].main_subent_type))
-        SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 0);
-      if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 0);
-  END_REPEAT_BLOCK
-  END_REPEAT (ref)
-#endif
   //FIELD_HANDLE (dimensionobj, 4, 330);
   //FIELD_HANDLE (xrefobj, 4, 301);
   //FIELD_HANDLE (intsectxrefobj, 4, 302);

@@ -25,7 +25,6 @@
 #include <assert.h>
 #include "common.h"
 #include "bits.h"
-#include "dec_macros.h"
 #include "decode.h"
 
 #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
@@ -37,6 +36,7 @@ static unsigned int cur_ver = 0;
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
+#include "dec_macros.h"
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -1262,32 +1262,6 @@ obj_stream_position (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
 }
 
 int
-obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                   Bit_Chain *restrict hdl_dat)
-{
-  long unsigned int bit8 = obj->bitsize / 8;
-  long unsigned int pos = dat->byte;
-  // The handle stream offset, i.e. end of the object, right after
-  // the has_strings bit.
-  obj->hdlpos = obj->bitsize; // relative to dat
-  // restrict it to 0-end
-  hdl_dat->byte = bit8;
-  hdl_dat->bit = obj->bitsize % 8;
-  // bit_reset_chain (hdl_dat); //but keep the same start
-  if (!obj->handlestream_size)
-    {
-      obj->handlestream_size = (obj->size * 8) - obj->bitsize;
-      LOG_TRACE (" Hdlsize: %lu,", obj->handlestream_size);
-    }
-  hdl_dat->size = obj->size;
-  pos = (pos * 8) + obj->bitsize + obj->handlestream_size;
-  LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu (%lu)", bit8, hdl_dat->bit,
-              pos / 8, pos % 8, hdl_dat->size);
-  LOG_TRACE ("\n")
-  return 0;
-}
-
-int
 obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                    Bit_Chain *restrict str)
 {
@@ -1295,6 +1269,7 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   BITCODE_RL data_size = 0;            // in byte
   BITCODE_RL old_size;                 // in byte
   BITCODE_RL old_byte;
+  assert (dat != str);
   old_size = str->size;
   old_byte = str->byte;
 

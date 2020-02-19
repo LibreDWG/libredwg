@@ -101,7 +101,7 @@ static int dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat,
                               Bit_Chain *str_dat,
                               Dwg_Object_Object *restrict obj);
 
-static int dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat,
+static int dwg_decode_entity (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
                               Bit_Chain *str_dat,
                               Dwg_Object_Entity *restrict ent);
 static int dwg_decode_common_entity_handle_data (Bit_Chain *dat,
@@ -3973,6 +3973,37 @@ obj_has_strings (unsigned int type)
       return 1;
     }
 }
+
+/* restrict the hdl_dat stream. */
+int
+obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                   Bit_Chain *restrict hdl_dat)
+{
+  long unsigned int bit8 = obj->bitsize / 8;
+  assert (dat != hdl_dat);
+  // The handle stream offset, i.e. end of the object, right after
+  // the has_strings bit.
+  obj->hdlpos = obj->bitsize; // relative to dat
+  // restrict it to 0-end
+  hdl_dat->byte = bit8;
+  hdl_dat->bit = obj->bitsize % 8;
+  // bit_reset_chain (hdl_dat); //but keep the same start
+  if (!obj->handlestream_size)
+    {
+      obj->handlestream_size = (obj->size * 8) - obj->bitsize;
+      LOG_TRACE (" Hdlsize: %lu,", obj->handlestream_size);
+    }
+  hdl_dat->size = obj->size;
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+    {
+      long unsigned int pos = (dat->byte * 8) + obj->bitsize + obj->handlestream_size;
+      LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu (%lu)", bit8, hdl_dat->bit,
+                  pos / 8, pos % 8, hdl_dat->size);
+    }
+  LOG_TRACE ("\n")
+  return 0;
+}
+
 
 /* The first common part of every entity.
 

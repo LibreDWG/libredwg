@@ -75,7 +75,7 @@ static Bit_Chain *g_dat;
  */
 
 #define ACTION injson
-#define IS_ENCODE
+#define IS_ENCODER
 #define IS_JSON
 
 /******************************************************************/
@@ -3212,5 +3212,5 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-#undef IS_ENCODE
+#undef IS_ENCODER
 #undef IS_JSON
