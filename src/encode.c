@@ -2249,10 +2249,16 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               bit_write_RC (dat, data->u.eed_0.length);
               bit_write_RS_LE (dat, data->u.eed_0.codepage);
               bit_write_TF (dat, (BITCODE_TF)data->u.eed_0.string, data->u.eed_0.length);
+              LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]\n",
+                         data->u.eed_0.length, data->u.eed_0.codepage,
+                         data->u.eed_0.string);
             }
-          LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]\n",
-                     data->u.eed_0.length, data->u.eed_0.codepage,
-                     data->u.eed_0.string);
+          else
+            {
+              bit_write_RC (dat, 0);
+              LOG_WARN ("string overflow: len=%d + 3 > size %d",
+                        data->u.eed_0.length, size);
+            }
         }
         LATER_VERSIONS
         {
@@ -2264,7 +2270,11 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                 bit_write_RS (dat, *s++);
             }
           else
-            bit_write_RS (dat, 0);
+            {
+              bit_write_RS (dat, 0);
+              LOG_WARN ("string overflow: len=%d *2 + 2 > size %d",
+                         data->u.eed_0.length, size);
+            }
 #ifdef _WIN32
           LOG_TRACE ("wstring: len=%d [RS] \"" FORMAT_TU "\" [TU]\n",
                      (int)data->u.eed_0_r2007.length,
@@ -2283,27 +2293,56 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 2:
       if (1 <= size)
-        bit_write_RC (dat, data->u.eed_2.byte);
-      LOG_TRACE ("byte: %d [RC]\n", (int)data->u.eed_2.byte);
+        {
+          bit_write_RC (dat, data->u.eed_2.byte);
+          LOG_TRACE ("byte: %d [RC]\n", (int)data->u.eed_2.byte);
+        }
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("RC overflow: 1 > size %d", size)
+        }
       break;
     case 3:
       if (4 <= size)
-        bit_write_RL (dat, data->u.eed_3.layer);
-      LOG_TRACE ("layer: %d [RL]\n", (int)data->u.eed_3.layer);
+        {
+          bit_write_RL (dat, data->u.eed_3.layer);
+          LOG_TRACE ("layer: %d [RL]\n", (int)data->u.eed_3.layer);
+        }
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("layer RL overflow: 4 > size %d", size)
+        }
       break;
     case 4:
       if (data->u.eed_0.length + 1 <= size)
         {
           bit_write_RC (dat, data->u.eed_4.length);
-          bit_write_TF (dat, (BITCODE_TF)data->u.eed_4.data, data->u.eed_4.length);
+          bit_write_TF (dat, (BITCODE_TF)data->u.eed_4.data,
+                        data->u.eed_4.length);
+          LOG_TRACE ("binary: \"%s\" [TF %d]\n", data->u.eed_4.data,
+                     data->u.eed_4.length);
         }
-      LOG_TRACE ("binary: \"%s\" [TF %d]\n", data->u.eed_4.data,
-                 data->u.eed_4.length);
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("binary overflow: len=%d+1 > size %d", data->u.eed_0.length,
+                    size)
+        }
       break;
     case 5:
       if (8 <= size)
-        bit_write_RLL (dat, data->u.eed_5.entity);
-      LOG_TRACE ("entity: 0x%lX [RLL]\n", (unsigned long)data->u.eed_5.entity);
+        {
+          bit_write_RLL (dat, data->u.eed_5.entity);
+          LOG_TRACE ("entity: 0x%lX [RLL]\n",
+                     (unsigned long)data->u.eed_5.entity);
+        }
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("RLL overflow: 8 > size %d", size)
+        }
       break;
     case 10:
     case 11:
@@ -2316,28 +2355,55 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           bit_write_RD (dat, data->u.eed_10.point.x);
           bit_write_RD (dat, data->u.eed_10.point.y);
           bit_write_RD (dat, data->u.eed_10.point.z);
+          LOG_TRACE ("3dpoint: (%f, %f, %f) [3RD]\n", data->u.eed_10.point.x,
+                     data->u.eed_10.point.y, data->u.eed_10.point.z);
         }
-      LOG_TRACE ("3dpoint: (%f, %f, %f) [3RD]\n", data->u.eed_10.point.x,
-                 data->u.eed_10.point.y, data->u.eed_10.point.z);
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("3RD overflow: 24 > size %d", size)
+        }
       break;
     case 40:
     case 41:
     case 42:
       if (8 <= size)
-        bit_write_RD (dat, data->u.eed_40.real);
-      LOG_TRACE ("real: %f [RD]\n", data->u.eed_40.real);
+        {
+          bit_write_RD (dat, data->u.eed_40.real);
+          LOG_TRACE ("real: %f [RD]\n", data->u.eed_40.real);
+        }
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("RD overflow: 8 > size %d", size)
+        }
       break;
     case 70:
       if (2 <= size)
-        bit_write_RS (dat, data->u.eed_70.rs);
-      LOG_TRACE ("short: " FORMAT_RS " [RS]\n", data->u.eed_70.rs);
+        {
+          bit_write_RS (dat, data->u.eed_70.rs);
+          LOG_TRACE ("short: " FORMAT_RS " [RS]\n", data->u.eed_70.rs);
+        }
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("RS overflow: 2 > size %d", size)
+        }
       break;
     case 71:
       if (4 <= size)
-        bit_write_RL (dat, data->u.eed_71.rl);
-      LOG_TRACE ("long: " FORMAT_RL " [RL]\n", data->u.eed_71.rl);
+        {
+          bit_write_RL (dat, data->u.eed_71.rl);
+          LOG_TRACE ("long: " FORMAT_RL " [RL]\n", data->u.eed_71.rl);
+        }
+      else
+        {
+          dat->byte--;
+          LOG_WARN ("RL overflow: 4 > size %d", size)
+        }
       break;
     default:
+      dat->byte--;
       LOG_ERROR ("unknown EED code %d", data->code);
     }
   return 0;
@@ -2356,12 +2422,13 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 #define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte - off, dat->bit)
 
   int i, num_eed = obj->tio.object->num_eed;
+  BITCODE_BS size = 0;
   for (i = 0; i < num_eed; i++)
     {
       Dwg_Eed *eed = &obj->tio.object->eed[i];
-      BITCODE_BS size = eed->size;
-      if (size)
+      if (eed->size)
         {
+          size = eed->size;
           bit_write_BS (dat, size);
           LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]\n", i, size);
           LOG_POS
@@ -2391,10 +2458,10 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         }
     }
   bit_write_BS (dat, 0);
+  LOG_POS
   if (i)
     LOG_TRACE ("EED[%d] size: 0 [BS] (end)\n", i);
   LOG_TRACE ("num_eed: %d\n", num_eed);
-  LOG_POS
 #undef LOG_POS
   return 0;
 }
