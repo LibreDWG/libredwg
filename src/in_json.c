@@ -971,15 +971,18 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
         }
     }
-  {
-    Dwg_Class *oldkl = &dwg->dwg_class[dwg->num_classes - 1];
-    if (!oldkl->number || !oldkl->dxfname || !oldkl->appname ||
-        !oldkl->cppname || !oldkl->item_class_id)
-      {
-        dwg->num_classes--;
-        LOG_ERROR ("Illegal CLASS [%d]. Mandatory field missing, skipped", dwg->num_classes)
-      }
-  }
+  // also check the last one
+  if (dwg->num_classes > 0)
+    {
+      Dwg_Class *oldkl = &dwg->dwg_class[dwg->num_classes - 1];
+      if (!oldkl->number || !oldkl->dxfname || !oldkl->appname
+          || !oldkl->cppname || !oldkl->item_class_id)
+        {
+          dwg->num_classes--;
+          LOG_ERROR ("Illegal CLASS [%d]. Mandatory field missing, skipped",
+                     dwg->num_classes)
+        }
+    }
   LOG_TRACE ("End of %s\n", section)
   tokens->index--;
   return 0;
