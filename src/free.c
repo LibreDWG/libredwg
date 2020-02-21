@@ -169,6 +169,12 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_3DPOINT(name, dxf)                                              \
   {                                                                           \
   }
+#define FIELD_2PT_TRACE(name, type, dxf)                                      \
+  {                                                                           \
+  }
+#define FIELD_3PT_TRACE(name, type, dxf)                                      \
+  {                                                                           \
+  }
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
 // indxf does not assign names yet
