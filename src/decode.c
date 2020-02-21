@@ -2722,8 +2722,10 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (section_size > 2040)
         {
           LOG_ERROR ("Object-map/handles page size greater than 2040!");
-          free (hdl_dat.chain);
-          free (obj_dat.chain);
+          if (hdl_dat.chain)
+            free (hdl_dat.chain);
+          if (obj_dat.chain)
+            free (obj_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
