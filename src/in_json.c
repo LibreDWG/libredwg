@@ -1457,7 +1457,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
             }
-          // all numfields are calculated form array sizes
+          // all numfields are calculated from array sizes
           else if (t->type == JSMN_PRIMITIVE
                    && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
             {
@@ -1594,10 +1594,10 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               BITCODE_H *hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "itemhandles"))
                 {
-                  BITCODE_BL numitems; // check against existing texts size
+                  BITCODE_BL numitems; // check against existing texts[] size
                   const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
                   memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
-                  if (numitems && size1 > numitems)
+                  if (size1 > numitems)
                     {
                       LOG_WARN ("Skip some itemhandles, only accept %d of %d",
                                 numitems, (int)size1)
