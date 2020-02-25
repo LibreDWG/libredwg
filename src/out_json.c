@@ -1567,7 +1567,6 @@ json_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-#if 0
 static int
 json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1577,14 +1576,14 @@ json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RL rcount1;
 
   RECORD (AppInfoHistory); // single hash
-  HASH;
+  PREFIX fprintf (dat->fh, "\"size\": %d,\n", _obj->size);
+  FIELD_BINARY (unknown_bits, _obj->size, 0)
   // clang-format off
   //#include "appinfohistory.spec"
   // clang-format on
   ENDRECORD ();
   return 0;
 }
-#endif
 
 static int
 json_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -1751,7 +1750,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dwg->header.vbaproj_address)
             error |= json_section_vbaproject (dat, dwg);
           error |= json_section_appinfo (dat, dwg);
-          //error |= json_section_appinfohistory (dat, dwg);
+          error |= json_section_appinfohistory (dat, dwg);
           error |= json_section_filedeplist (dat, dwg);
           error |= json_section_security (dat, dwg);
           error |= json_section_revhistory (dat, dwg);

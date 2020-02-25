@@ -2691,7 +2691,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      LOG_TRACE ("%s\n", key)
+      //LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
 
       // clang-format off
@@ -2724,6 +2724,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "AppInfoHistory";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
   int size;
   if (t->type != JSMN_OBJECT)
     {
@@ -2742,9 +2743,23 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      LOG_TRACE ("%s\n", key)
-      //t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+      //LOG_TRACE ("%s\n", key)
+      t = &tokens->tokens[tokens->index];
+      if (0) ;
+      FIELD_RL (size, 0)
+      else if (strEQc (key, "unknown_bits"))
+        {
+          //FIELD_BINARY (unknown_bits, _obj->size, 0)
+          long slen;
+          _obj->unknown_bits
+              = (BITCODE_TF)json_binary (dat, tokens, "unknown_bits", &slen);
+          _obj->size = (int)slen;
+        }
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          json_advance_unknown (dat, tokens, 0);
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)
