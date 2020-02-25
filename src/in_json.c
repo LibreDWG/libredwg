@@ -106,14 +106,21 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": %.*s\n", len, _obj->nam);                              \
     free (s);                                                                 \
   }
-#define FIELD_TFFx(nam, len, dxf)  FIELD_BINARY(nam, len, dxf)
-#define FIELD_BINARY(nam, len, dxf)                                           \
+#define FIELD_TFFx(nam, len, dxf)                                             \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
     long slen;                                                                \
     char *s = json_binary (dat, tokens, #nam, &slen);                         \
-    memcpy (&_obj->nam, s, MIN (len, slen));                                  \
+    memcpy (&_obj->nam, s, slen);                                             \
+    LOG_TRACE (#nam ": %.*s\n", (int)slen, _obj->nam);                        \
     free (s);                                                                 \
+  }
+#define FIELD_BINARY(nam, lenf, dxf)                                          \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    long slen;                                                                \
+    _obj->nam = (BITCODE_TF)json_binary (dat, tokens, #nam, &slen);           \
+    _obj->lenf = slen;                                                        \
   }
 #define FIELD_T(nam, dxf)                                                     \
   else if (strEQc (key, #nam))                                                \
@@ -2747,14 +2754,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       t = &tokens->tokens[tokens->index];
       if (0) ;
       FIELD_RL (size, 0)
-      else if (strEQc (key, "unknown_bits"))
-        {
-          //FIELD_BINARY (unknown_bits, _obj->size, 0)
-          long slen;
-          _obj->unknown_bits
-              = (BITCODE_TF)json_binary (dat, tokens, "unknown_bits", &slen);
-          _obj->size = (int)slen;
-        }
+      FIELD_BINARY (unknown_bits, size, 0)
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
@@ -2772,6 +2772,7 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         jsmntokens_t *restrict tokens,
                         struct Dwg_FileDepList *o, int size)
 {
+  const char *section = "FileDepList_Files";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   o->files = calloc (size, sizeof (Dwg_FileDepList_Files));
   o->num_files = size;
@@ -2804,7 +2805,7 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           FIELD_RL (refcount, 0)
           else
             {
-              LOG_TRACE ("%s\n", key);
+              LOG_ERROR ("Unknown %s.%s ignored", section, key);
               json_advance_unknown (dat, tokens, 0);
             }
           // clang-format on
@@ -2881,7 +2882,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          LOG_TRACE ("%s\n", key)
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
           json_advance_unknown (dat, tokens, 0);
         }
     }
@@ -2896,6 +2897,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                jsmntokens_t *restrict tokens)
 {
   const char *section = "Security";
+  struct Dwg_Security *_obj = &dwg->security;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int size;
   if (t->type != JSMN_OBJECT)
@@ -2915,9 +2917,23 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      LOG_TRACE ("%s\n", key)
+      //LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+      if (0) ;
+      FIELD_RLx (unknown_1, 0)
+      FIELD_RLx (unknown_2, 0)
+      FIELD_RLx (unknown_3, 0)
+      FIELD_RL (crypto_id, 0)
+      FIELD_T32 (crypto_name, 0)
+      FIELD_RL (algo_id, 0)
+      FIELD_RL (key_len, 0)
+      FIELD_RL (encr_size, 0)
+      FIELD_BINARY (encr_buffer, encr_size, 0)
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          json_advance_unknown (dat, tokens, 0);
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)
