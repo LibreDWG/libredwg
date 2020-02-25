@@ -199,6 +199,20 @@ static Bit_Chain *g_dat;
                    _obj->nam[vcount], dxf);                                   \
       }                                                                       \
   }
+// e.g. FIELD_VECTOR (histories, RL, num_histories, 0)
+#define FIELD_VECTOR(nam, typ, _sizef, dxf)                                   \
+  else if (strEQc (key, #nam) && t->type == JSMN_ARRAY)                       \
+  {                                                                           \
+    _obj->nam = (BITCODE_##typ *)calloc (t->size, sizeof (BITCODE_##typ));    \
+    _obj->_sizef = t->size;                                                   \
+    tokens->index++;                                                          \
+    for (int vcount = 0; vcount < (int)t->size; vcount++)                     \
+      {                                                                       \
+        _obj->nam[vcount] = (BITCODE_##typ)json_long (dat, tokens);           \
+        LOG_TRACE (#nam "[%d]: " FORMAT_##typ " [" #typ " %d]\n", vcount,     \
+                   _obj->nam[vcount], dxf);                                   \
+      }                                                                       \
+  }
 
 #define JSON_TOKENS_CHECK_OVERFLOW_ERR                                        \
   if (tokens->index >= (unsigned int)tokens->num_tokens)                      \
@@ -2473,13 +2487,13 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (section_array_size, 0)
       FIELD_RL (gap_array_size, 0)
       FIELD_RLx (crc32, 0)
-          // clang-format on
-          // end of encrypted 0x6c header
-          else
-      {
-        LOG_ERROR ("Unknown %s.%s ignored", section, key);
-        tokens->index++;
-      }
+      // clang-format on
+      // end of encrypted 0x6c header
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          tokens->index++;
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)
@@ -2752,6 +2766,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_fixed_key (key, dat, tokens);
       //LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
+      // clang-format off
       if (0) ;
       FIELD_RL (size, 0)
       FIELD_BINARY (unknown_bits, size, 0)
@@ -2760,6 +2775,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
           json_advance_unknown (dat, tokens, 0);
         }
+      // clang-format on
     }
 
   LOG_TRACE ("End of %s\n", section)
@@ -2917,8 +2933,8 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      //LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
+      // clang-format off
       if (0) ;
       FIELD_RLx (unknown_1, 0)
       FIELD_RLx (unknown_2, 0)
@@ -2934,6 +2950,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
           json_advance_unknown (dat, tokens, 0);
         }
+      // clang-format on
     }
 
   LOG_TRACE ("End of %s\n", section)
@@ -2946,6 +2963,7 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                  jsmntokens_t *restrict tokens)
 {
   const char *section = "RevHistory";
+  struct Dwg_RevHistory *_obj = &dwg->revhistory;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int size;
   if (t->type != JSMN_OBJECT)
@@ -2965,9 +2983,19 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+      // clang-format off
+      if (0) ;
+      FIELD_RL (class_version, 0)
+      FIELD_RL (class_minor, 0)
+      FIELD_RL (num_histories, 0)
+      FIELD_VECTOR (histories, RL, num_histories, 0)
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          json_advance_unknown (dat, tokens, 0);
+        }
+      // clang-format on
     }
 
   LOG_TRACE ("End of %s\n", section)
@@ -2980,6 +3008,7 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    jsmntokens_t *restrict tokens)
 {
   const char *section = "ObjFreeSpace";
+  struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int size;
   if (t->type != JSMN_OBJECT)
@@ -2999,9 +3028,28 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      LOG_TRACE ("%s\n", key)
       t = &tokens->tokens[tokens->index];
-      json_advance_unknown (dat, tokens, 0);
+      // clang-format off
+      if (0) ;
+      FIELD_RLL (zero, 0)
+      FIELD_RLL (num_handles, 0)
+      FIELD_TIMERLL (TDUPDATE, 0)
+      FIELD_RC (num_nums, 0)
+      FIELD_RLL (max32, 0)
+      FIELD_RLL (max32_hi, 0)
+      FIELD_RLL (max64, 0)
+      FIELD_RLL (max64_hi, 0)
+      FIELD_RLL (maxtbl, 0)
+      FIELD_RLL (maxtbl_hi, 0)
+      FIELD_RLL (maxrl, 0)
+      FIELD_RLL (maxrl_hi, 0)
+      FIELD_RL (objects_address, 0)
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          json_advance_unknown (dat, tokens, 0);
+        }
+      // clang-format on
     }
 
   LOG_TRACE ("End of %s\n", section)
