@@ -5782,7 +5782,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   i = 0;
                 dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
                                          &num_entries, NULL);
-                if (num_entries != i + 1)
+                if (i >= num_entries)
                   {
                     // DXF often lies about num_entries, skipping defaults
                     // e.g. BLOCK_CONTROL contains mspace+pspace in DXF, but in
