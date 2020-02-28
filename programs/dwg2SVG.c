@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2020 Free Software Foundation, Inc.                   */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -17,6 +17,10 @@
  * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
+ *
+ * TODO: all entities,
+ *       common_entity_data: color, ltype, ltype_scale, invisible, linewt.
+ *       PLINE: widths, bulges.
  */
 
 #include "../src/config.h"
@@ -167,21 +171,31 @@ output_TEXT (Dwg_Object *obj)
   free (escaped);
 }
 
+static double
+entity_lweight (Dwg_Object_Entity *ent)
+{
+  // stroke-width:%0.1fpx. 100th of a mm
+  int lw = dxf_cvt_lweight (ent->linewt);
+  return lw < 0 ? 0.1 : (double)(lw * 0.001);
+}
+
 static void
 output_LINE (Dwg_Object *obj)
 {
   Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
   BITCODE_3DPOINT start, end;
+  double lweight;
 
   if (isnan_3BD (line->start) || isnan_3BD (line->end)
       || isnan_3BD (line->extrusion))
     return;
+  lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&start, line->start, line->extrusion);
   transform_OCS (&end, line->end, line->extrusion);
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" "
-          "style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
+          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
           obj->index, transform_X (start.x), transform_Y (start.y),
-          transform_X (end.x), transform_Y (end.y));
+          transform_X (end.x), transform_Y (end.y), lweight);
 }
 
 static void
@@ -189,15 +203,17 @@ output_CIRCLE (Dwg_Object *obj)
 {
   Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
   BITCODE_3DPOINT center;
+  double lweight;
 
   if (isnan_3BD (circle->center) || isnan_3BD (circle->extrusion)
       || isnan (circle->radius))
     return;
+  lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&center, circle->center, circle->extrusion);
   printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" "
-          "fill=\"none\" stroke=\"blue\" stroke-width=\"0.1px\" />\n",
+          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
           obj->index, transform_X (center.x), transform_Y (center.y),
-          circle->radius);
+          circle->radius, lweight);
 }
 
 static void
@@ -206,12 +222,14 @@ output_ARC (Dwg_Object *obj)
   Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
   BITCODE_3DPOINT center;
   double x_start, y_start, x_end, y_end;
+  double lweight;
   int large_arc;
 
   if (isnan_3BD (arc->center) || isnan_3BD (arc->extrusion)
       || isnan (arc->radius) || isnan (arc->start_angle)
       || isnan (arc->start_angle))
     return;
+  lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&center, arc->center, arc->extrusion);
 
   x_start = center.x + arc->radius * cos (arc->start_angle);
@@ -222,10 +240,10 @@ output_ARC (Dwg_Object *obj)
   large_arc = (arc->end_angle - arc->start_angle < M_PI) ? 0 : 1;
 
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" "
-          "fill=\"none\" stroke=\"blue\" stroke-width=\"%f\" />\n",
+          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
           obj->index, transform_X (x_start), transform_Y (y_start),
           arc->radius, arc->radius, large_arc, transform_X (x_end),
-          transform_Y (y_end), 0.1);
+          transform_Y (y_end), lweight);
 }
 
 static void
@@ -261,6 +279,7 @@ output_POLYLINE_2D (Dwg_Object *obj)
         }
       if (pline->flag & 1) // closed
         printf (" Z");
+      // TODO color, lweight. GH #168
       printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
       free (pts);
     }
@@ -299,6 +318,7 @@ output_LWPOLYLINE (Dwg_Object *obj)
         }
       if (pline->flag & 512) // closed
         printf (" Z");
+      // TODO color, lweight. GH #168
       printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
       free (pts);
     }
