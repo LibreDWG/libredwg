@@ -1,0 +1,42 @@
+#!/bin/sh
+# create -v3 logs and SVG from dwg's with dwg2SVG
+srcdir="@srcdir@"
+
+make -s -C src
+make -s -C programs dwg2SVG
+@DSYMUTIL@ programs/dwg2SVG
+v=-v3
+y=
+out=
+ob=$b
+
+for d in "$@"; do
+    case $d in
+        -v*) v=$d
+             ;;
+        *)
+        if [ ! -f $d ]; then
+            if [ -f $srcdir/test/test-data/$d ]
+            then
+                d=$srcdir/test/test-data/$d;
+            else
+                if [ -f $srcdir/test/test-data/$d.dwg ]
+                then
+                    d=$srcdir/test/test-data/$d.dwg
+                fi
+            fi
+        fi
+        dir=_$(basename `dirname "$d"`)
+        if [ x$dir = x_test-data ]; then dir=""; fi
+        if [ x$dir = x_td ]; then dir=""; fi
+        b=`basename "$d" .dwg`
+        log=$b$dir.svg.log
+        out="$b$dir.svg"
+        echo programs/dwg2SVG $v "$d" \>"$out" 2\>$log
+        @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG $v "$d" >"$out" 2>$log
+        ;;
+    esac
+done
+v=
+y=
+b=$ob

@@ -117,6 +117,14 @@ isnan_3BD (BITCODE_3BD pt)
   return isnan (pt.x) || isnan (pt.y) || isnan (pt.z);
 }
 
+static double
+entity_lweight (Dwg_Object_Entity *ent)
+{
+  // stroke-width:%0.1fpx. 100th of a mm
+  int lw = dxf_cvt_lweight (ent->linewt);
+  return lw < 0 ? 0.1 : (double)(lw * 0.001);
+}
+
 static void
 output_TEXT (Dwg_Object *obj)
 {
@@ -171,14 +179,6 @@ output_TEXT (Dwg_Object *obj)
   free (escaped);
 }
 
-static double
-entity_lweight (Dwg_Object_Entity *ent)
-{
-  // stroke-width:%0.1fpx. 100th of a mm
-  int lw = dxf_cvt_lweight (ent->linewt);
-  return lw < 0 ? 0.1 : (double)(lw * 0.001);
-}
-
 static void
 output_LINE (Dwg_Object *obj)
 {
@@ -214,6 +214,26 @@ output_CIRCLE (Dwg_Object *obj)
           "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
           obj->index, transform_X (center.x), transform_Y (center.y),
           circle->radius, lweight);
+}
+
+// CIRCLE with radius 0.1
+static void
+output_POINT (Dwg_Object *obj)
+{
+  Dwg_Entity_POINT *point = obj->tio.entity->tio.POINT;
+  BITCODE_3DPOINT pt, pt1;
+  double lweight;
+
+  pt.x = point->x;
+  pt.y = point->y;
+  pt.z = point->z;
+  if (isnan_3BD (pt) || isnan_3BD (point->extrusion))
+    return;
+  lweight = entity_lweight (obj->tio.entity);
+  transform_OCS (&pt1, pt, point->extrusion);
+  printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"0.1\" "
+          "style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
+          obj->index, transform_X (pt1.x), transform_Y (pt1.y));
 }
 
 static void
@@ -376,14 +396,22 @@ output_object (Dwg_Object *obj)
     case DWG_TYPE_ARC:
       output_ARC (obj);
       break;
+    case DWG_TYPE_POINT:
+      output_POINT (obj);
+      break;
     case DWG_TYPE_POLYLINE_2D:
       output_POLYLINE_2D (obj);
       break;
     case DWG_TYPE_LWPOLYLINE:
       output_LWPOLYLINE (obj);
       break;
+    case DWG_TYPE_SEQEND:
+    case DWG_TYPE_VIEWPORT:
+      break;
     default:
-      // ignored
+      if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+        fprintf (stderr, "%s ignored\n", obj->name);
+      // all other non-graphical objects are silently ignored
       break;
     }
 }

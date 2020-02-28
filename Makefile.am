@@ -42,7 +42,7 @@ JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
-	     log.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
+	     log.in svg.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
@@ -167,7 +167,7 @@ dist-hook:
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf example_*.dxf.log
-DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh log json dwg dxf libredwg.pc
+DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh log json dwg dxf svg libredwg.pc
 MAINTAINERCLEANFILES  = *~ *.log *.dxf *.json *.dwg cover_db .analysis
 
 maintainer-clean-local:
