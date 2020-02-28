@@ -336,6 +336,39 @@ output_SOLID (Dwg_Object *obj)
           transform_Y (c3.y), transform_X (c4.x), transform_Y (c4.y), lweight);
 }
 
+// untested
+static void
+output_3DFACE (Dwg_Object *obj)
+{
+  Dwg_Entity__3DFACE *ent = obj->tio.entity->tio._3DFACE;
+
+  if (isnan_3BD (ent->corner1) || isnan_3BD (ent->corner2) ||
+      isnan_3BD (ent->corner3) || isnan_3BD (ent->corner4))
+    return;
+  if (ent->invis_flags)
+    {
+      // move to 1
+      printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
+              ent->corner1.x, ent->corner1.y);
+      printf (" %s %f,%f", ent->invis_flags & 1 ? "M" : "L", ent->corner2.x,
+              ent->corner2.y);
+      printf (" %s %f,%f", ent->invis_flags & 2 ? "M" : "L", ent->corner3.x,
+              ent->corner3.y);
+      printf (" %s %f,%f", ent->invis_flags & 4 ? "M" : "L", ent->corner4.x,
+              ent->corner4.y);
+      printf (" %s %f,%f", ent->invis_flags & 8 ? "M" : "L", ent->corner1.x,
+              ent->corner1.y);
+      printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
+    }
+  else
+    printf ("\t<polygon id=\"dwg-object-%d\" "
+            "points=\"%f,%f %f,%f %f,%f %f,%f\" "
+            "style=\"stroke:blue;stroke-width:0.1px\" />\n",
+            obj->index, ent->corner1.x, ent->corner1.y, ent->corner2.x,
+            ent->corner2.y, ent->corner3.x, ent->corner3.y, ent->corner4.x,
+            ent->corner4.y);
+}
+
 static void
 output_POLYLINE_2D (Dwg_Object *obj)
 {
@@ -474,6 +507,9 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_SOLID:
       output_SOLID (obj);
+      break;
+    case DWG_TYPE__3DFACE:
+      output_3DFACE (obj);
       break;
     case DWG_TYPE_POLYLINE_2D:
       output_POLYLINE_2D (obj);
