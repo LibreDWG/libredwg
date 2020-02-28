@@ -37,6 +37,9 @@
 #include <unistd.h>
 #include <math.h>
 #include <getopt.h>
+#ifdef HAVE_VALGRIND_VALGRIND_H
+#  include <valgrind/valgrind.h>
+#endif
 
 #include <dwg.h>
 #include <dwg_api.h>
@@ -73,6 +76,7 @@ help (void)
   // TODO: -p for paperspace only, -m for modelspace only
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf ("           --force-free     force free\n");
   printf ("           --help           display this help and exit\n");
   printf ("           --version        output version information and exit\n"
           "\n");
@@ -635,12 +639,14 @@ int
 main (int argc, char *argv[])
 {
   int error;
+  int force_free = 0;
   int i = 1;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
+          { "force-free", 0, 0, 0 },
           { "help", 0, 0, 0 },
           { "version", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
@@ -691,6 +697,8 @@ main (int argc, char *argv[])
             return opt_version ();
           if (!strcmp (long_options[option_index].name, "help"))
             return help ();
+          if (!strcmp (long_options[option_index].name, "force-free"))
+            force_free = 1;
           break;
 #else
         case 'i':
@@ -730,9 +738,24 @@ main (int argc, char *argv[])
   memset (&g_dwg, 0, sizeof (Dwg_Data));
   g_dwg.opts = opts;
   error = dwg_read_file (argv[i], &g_dwg);
+
+  if (opts)
+    fprintf (stderr, "\nSVG\n===\n");
   if (error < DWG_ERR_CRITICAL)
     output_SVG (&g_dwg);
 
-  dwg_free (&g_dwg);
+  // forget about leaks. really huge DWG's need endlessly here.
+  if ((g_dwg.header.version && g_dwg.num_objects < 1000)
+      || force_free
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+      || 1
+#endif
+#ifdef HAVE_VALGRIND_VALGRIND_H
+      || (RUNNING_ON_VALGRIND)
+#endif
+      )
+    {
+      dwg_free (&g_dwg);
+    }
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
