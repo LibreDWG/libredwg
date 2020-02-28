@@ -332,11 +332,18 @@ main (int argc, char *argv[])
       if (error)
         fprintf (stderr, "WRITE ERROR 0x%x %s\n", error, filename_out);
 
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+  {
+    char *asanenv = getenv("ASAN_OPTIONS");
+    if (!asanenv)
+      do_free = 1;
+    // detect_leaks is enabled by default. see if it's turned off
+    else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
+      do_free = 1;
+  }
+#endif
       // forget about leaks. really huge DWG's need endlessly here.
       if (do_free
-#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
-          || 1 /* but skip detect_leaks via __asan_default_options() */
-#endif
 #ifdef HAVE_VALGRIND_VALGRIND_H
           || (RUNNING_ON_VALGRIND)
 #endif

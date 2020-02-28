@@ -744,12 +744,20 @@ main (int argc, char *argv[])
   if (error < DWG_ERR_CRITICAL)
     output_SVG (&g_dwg);
 
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+  {
+    char *asanenv = getenv("ASAN_OPTIONS");
+    if (!asanenv)
+      force_free = 1;
+    // detect_leaks is enabled by default. see if it's turned off
+    else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
+      force_free = 1;
+  }
+#endif
+
   // forget about leaks. really huge DWG's need endlessly here.
   if ((g_dwg.header.version && g_dwg.num_objects < 1000)
       || force_free
-#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
-      || 1
-#endif
 #ifdef HAVE_VALGRIND_VALGRIND_H
       || (RUNNING_ON_VALGRIND)
 #endif

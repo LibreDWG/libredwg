@@ -94,6 +94,7 @@ main (int argc, char *argv[])
   const char *fmt = NULL;
   const char *outfile = NULL;
   int has_v = 0;
+  int force_free = 0;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
@@ -101,6 +102,7 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "format", 1, 0, 'O' },    { "file", 1, 0, 'o' },
           { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
+          { "force-free", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
 #endif
 
@@ -151,6 +153,8 @@ main (int argc, char *argv[])
             return opt_version ();
           if (!strcmp (long_options[option_index].name, "help"))
             return help ();
+          if (!strcmp (long_options[option_index].name, "force-free"))
+            force_free = 1;
           break;
 #else
         case 'i':
@@ -310,16 +314,28 @@ main (int argc, char *argv[])
             }
         }
     }
+
+#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+  {
+    char *asanenv = getenv("ASAN_OPTIONS");
+    if (!asanenv)
+      force_free = 1;
+    // detect_leaks is enabled by default. see if it's turned off
+    else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
+      force_free = 1;
+  }
+#endif
+
   // forget about valgrind. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
-#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
-      || 1
-#endif
+      || force_free
 #ifdef HAVE_VALGRIND_VALGRIND_H
       || (RUNNING_ON_VALGRIND)
 #endif
   )
-    dwg_free (&dwg);
+    {
+      dwg_free (&dwg);
+    }
 
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
