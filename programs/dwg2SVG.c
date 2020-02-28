@@ -47,7 +47,7 @@
 
 static int opts = 0;
 Dwg_Data g_dwg;
-double model_xmin, model_ymin;
+double model_xmin, model_ymin, model_xmax, model_ymax;
 double page_width, page_height, scale;
 
 static void output_SVG (Dwg_Data *dwg);
@@ -247,7 +247,7 @@ output_ARC (Dwg_Object *obj)
 
   if (isnan_3BD (arc->center) || isnan_3BD (arc->extrusion)
       || isnan (arc->radius) || isnan (arc->start_angle)
-      || isnan (arc->start_angle))
+      || isnan (arc->end_angle))
     return;
   lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&center, arc->center, arc->extrusion);
@@ -264,6 +264,47 @@ output_ARC (Dwg_Object *obj)
           obj->index, transform_X (x_start), transform_Y (y_start),
           arc->radius, arc->radius, large_arc, transform_X (x_end),
           transform_Y (y_end), lweight);
+}
+
+// FIXME
+static void
+output_ELLIPSE (Dwg_Object *obj)
+{
+  Dwg_Entity_ELLIPSE *ell = obj->tio.entity->tio.ELLIPSE;
+  BITCODE_2DPOINT radius;
+  //BITCODE_3DPOINT center, sm_axis;
+  //double x_start, y_start, x_end, y_end;
+  double lweight;
+
+  if (isnan_3BD (ell->center) || isnan_3BD (ell->extrusion)
+      || isnan_3BD (ell->sm_axis)
+      || isnan (ell->axis_ratio) || isnan (ell->start_angle)
+      || isnan (ell->end_angle))
+    return;
+  lweight = entity_lweight (obj->tio.entity);
+  /* The 2 points are already WCS */
+  //transform_OCS (&center, ell->center, ell->extrusion);
+  //transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
+  radius.x = ell->sm_axis.x;
+  radius.y = ell->sm_axis.y * ell->axis_ratio;
+
+  /*
+  x_start = ell->center.x + radius.x * cos (ell->start_angle);
+  y_start = ell->center.y + radius.y * sin (ell->start_angle);
+  x_end = ell->center.x + radius.x * cos (ell->end_angle);
+  y_end = ell->center.y + radius.y * sin (ell->end_angle);
+  */
+
+  // TODO: rotate, start,end_angle
+  printf (
+      "\t<!-- sm_axis=(%f,%f,%f) axis_ratio=%f start_angle=%f end_angle=%f-->\n",
+      ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z, ell->axis_ratio,
+      ell->start_angle, ell->end_angle);
+  printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
+          "ry=\"%f\" transform=\"rotate=(%f)\" "
+          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
+          obj->index, ell->center.x, ell->center.y, radius.x, radius.y,
+          cos (ell->sm_axis.x), lweight);
 }
 
 static void
@@ -399,6 +440,9 @@ output_object (Dwg_Object *obj)
     case DWG_TYPE_POINT:
       output_POINT (obj);
       break;
+    case DWG_TYPE_ELLIPSE:
+      output_ELLIPSE (obj);
+      break;
     case DWG_TYPE_POLYLINE_2D:
       output_POLYLINE_2D (obj);
       break;
@@ -476,12 +520,14 @@ output_SVG (Dwg_Data *dwg)
 
   model_xmin = dwg_model_x_min (dwg);
   model_ymin = dwg_model_y_min (dwg);
+  model_xmax = dwg_model_x_max (dwg);
+  model_ymax = dwg_model_y_max (dwg);
 
-  dx = (dwg_model_x_max (dwg) - dwg_model_x_min (dwg));
-  dy = (dwg_model_y_max (dwg) - dwg_model_y_min (dwg));
+  dx = model_xmax - model_xmin;
+  dy = model_ymax - model_ymin;
   // double scale_x = dx / (dwg_page_x_max(dwg) - dwg_page_x_min(dwg));
   // double scale_y = dy / (dwg_page_y_max(dwg) - dwg_page_y_min(dwg));
-  // scale = 25.4 / 72; // pt:mm
+  scale = 25.4 / 72; // pt:mm
   if (isnan (dx))
     dx = 100.0;
   if (isnan (dy))
@@ -490,16 +536,18 @@ output_SVG (Dwg_Data *dwg)
   page_height = dy;
   // scale *= (scale_x > scale_y ? scale_x : scale_y);
 
+  // optional, for xmllint
+  // <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  //   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
   printf ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
           "<svg\n"
           "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
           "   xmlns=\"http://www.w3.org/2000/svg\"\n"
           "   xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
-          "   version=\"1.1\"\n"
-          "   width=\"%f\"\n"
-          "   height=\"%f\"\n"
-          ">\n",
-          page_width, page_height);
+          "   version=\"1.1\" baseProfile=\"basic\"\n"
+		      "   width=\"100%%\" height=\"100%%\"\n"
+          "   viewBox=\"%f %f %f %f\">\n",
+          model_xmin, model_ymin, page_width, page_height);
 
   if ((ref = dwg_model_space_ref (dwg)))
     output_BLOCK_HEADER (ref);
