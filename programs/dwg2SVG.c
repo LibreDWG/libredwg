@@ -307,6 +307,35 @@ output_ELLIPSE (Dwg_Object *obj)
           cos (ell->sm_axis.x), lweight);
 }
 
+// untested
+static void
+output_SOLID (Dwg_Object *obj)
+{
+  Dwg_Entity_SOLID *sol = obj->tio.entity->tio.SOLID;
+  BITCODE_2DPOINT c1, c2, c3, c4;
+  BITCODE_2DPOINT s1, s2, s3, s4;
+  double lweight;
+
+  memcpy (&s1, &sol->corner1, sizeof s1);
+  memcpy (&s2, &sol->corner2, sizeof s1);
+  memcpy (&s3, &sol->corner3, sizeof s1);
+  memcpy (&s4, &sol->corner4, sizeof s1);
+  if (isnan_2BD (s1) || isnan_2BD (s2) || isnan_2BD (s3) || isnan_2BD (s4))
+    return;
+  lweight = entity_lweight (obj->tio.entity);
+  transform_OCS_2d (&c1, s1, sol->extrusion);
+  transform_OCS_2d (&c2, s2, sol->extrusion);
+  transform_OCS_2d (&c3, s3, sol->extrusion);
+  transform_OCS_2d (&c4, s4, sol->extrusion);
+
+  printf ("\t<polygon id=\"dwg-object-%d\" "
+          "points=\"%f,%f %f,%f %f,%f %f,%f\" "
+          "style=\"stroke:blue;stroke-width:%.1fpx\" />\n",
+          obj->index, transform_X (c1.x), transform_Y (c1.y),
+          transform_X (c2.x), transform_Y (c2.y), transform_X (c3.x),
+          transform_Y (c3.y), transform_X (c4.x), transform_Y (c4.y), lweight);
+}
+
 static void
 output_POLYLINE_2D (Dwg_Object *obj)
 {
@@ -442,6 +471,9 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_ELLIPSE:
       output_ELLIPSE (obj);
+      break;
+    case DWG_TYPE_SOLID:
+      output_SOLID (obj);
       break;
     case DWG_TYPE_POLYLINE_2D:
       output_POLYLINE_2D (obj);
