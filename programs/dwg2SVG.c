@@ -609,8 +609,18 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
         escaped = htmlwescape ((BITCODE_TU)hdr->name);
       else
         escaped = htmlescape (hdr->name, dwg->header.codepage);
+      // fatal: The string "--" is not permitted within comments.
+      if (escaped && strstr (escaped, "--"))
+        {
+          char *s;
+          while ((s = strstr (escaped, "--")))
+            {
+              *s = '_';
+              *(s + 1) = '_';
+            }
+        }
       // don't group *Model_Space
-      if (strcmp (escaped, "*Model_Space") != 0)
+      if (!escaped || strcmp (escaped, "*Model_Space") != 0)
         {
           is_g = 1;
           printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
