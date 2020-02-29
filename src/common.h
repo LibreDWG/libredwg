@@ -230,6 +230,12 @@ typedef enum DWG_BITS
 extern const char *dwg_bits_name[];
 extern const unsigned char dwg_bits_size[];
 
+/* The old color.index 0-256 */
+typedef struct rgbpalette {
+  unsigned char r,g,b;
+} RGB_Palette;
+extern const RGB_Palette dwg_rgb_palette[256];
+
 /**
  * References of sentinels
  */

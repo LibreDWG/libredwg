@@ -44,6 +44,7 @@
 #include <dwg.h>
 #include <dwg_api.h>
 #include "bits.h"
+#include "common.h"
 #include "escape.h"
 #include "geom.h"
 #include "suffix.inc"
@@ -129,42 +130,57 @@ entity_lweight (Dwg_Object_Entity *ent)
   return lw < 0 ? 0.1 : (double)(lw * 0.001);
 }
 
-// TODO rgb, 8-255
-static const char *
+static char *
 entity_color (Dwg_Object_Entity *ent)
 {
-  switch (ent->color.index)
+  if (ent->color.index >= 8 && ent->color.index < 256)
     {
-    case 1:
-      return "red";
-    case 2:
-      return "yellow";
-    case 3:
-      return "green";
-    case 4:
-      return "cyan";
-    case 5:
-      return "blue";
-    case 6:
-      return "magenta";
-    case 7:
-      return "white";
-    case 0:
-    case 256:
-    default:
-      return "black";
+      const RGB_Palette *rgb = &dwg_rgb_palette[ent->color.index];
+      char *s = malloc (8);
+      sprintf (s, "#%02x%02x%02x", rgb->r, rgb->g, rgb->b);
+      return s;
     }
+  else if (ent->color.flag & 0x80 && !(ent->color.flag & 0x40))
+    {
+      char *s = malloc (8);
+      sprintf (s, "#%06x", ent->color.rgb & 0x00ffffff);
+      return s;
+    }
+  else
+    switch (ent->color.index)
+      {
+      case 1:
+        return (char*)"red";
+      case 2:
+        return (char*)"yellow";
+      case 3:
+        return (char*)"green";
+      case 4:
+        return (char*)"cyan";
+      case 5:
+        return (char*)"blue";
+      case 6:
+        return (char*)"magenta";
+      case 7:
+        return (char*)"white";
+      case 0:   // ByBlock
+      case 256: // ByLayer
+      default:
+        return (char*)"black";
+      }
 }
 
 static void
 common_entity (Dwg_Object_Entity *ent)
 {
   double lweight;
-  const char* color;
+  char* color;
   lweight = entity_lweight (ent);
   color = entity_color (ent);
   printf ("      style=\"fill:none;stroke:%s;stroke-width:%.1fpx\" />\n",
           color, lweight);
+  if (*color == '#')
+    free (color);
 }
 
 static void
