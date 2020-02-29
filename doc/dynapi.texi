@@ -3281,7 +3281,7 @@ struct _dwg_object_entity*
 @item pt
 3BD,	DXF 10
 @item extrusion
-BE,	DXF 210
+BE
 @item rotation
 BD,	DXF 50
 @item height
@@ -9097,6 +9097,62 @@ H
 @end vtable
 @end indentedblock
 
+@strong{Dwg_AcDs} @anchor{Dwg_AcDs}
+@vindex Dwg_AcDs
+
+@indentedblock
+@vtable @code
+
+@item file_signature
+RL
+@item file_header_size
+RL
+@item unknown_1
+RL
+@item version
+RL
+@item unknown_2
+RL
+@item ds_version
+RL
+@item segidx_offset
+RL
+@item segidx_unknown
+RL
+@item num_segidx
+RL
+@item schidx_segidx
+RL
+@item datidx_segidx
+RL
+@item search_segidx
+RL
+@item prvsav_segidx
+RL
+@item file_size
+RL
+@item total_segments
+BL
+@item segidx
+Dwg_AcDs_SegmentIndex*
+@item datidx
+Dwg_AcDs_DataIndex
+@item data
+Dwg_AcDs_Data*
+@item blob01
+Dwg_AcDs_DataBlob
+@item schidx
+Dwg_AcDs_SchemaIndex
+@item schdat
+Dwg_AcDs_SchemaData
+@item search
+Dwg_AcDs_Search
+@item segments
+Dwg_AcDs_Segment*
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_AcDs_Data} @anchor{Dwg_AcDs_Data}
 @vindex Dwg_AcDs_Data
 
@@ -10437,6 +10493,94 @@ BS,	DXF 272
 @end vtable
 @end indentedblock
 
+@strong{Dwg_MLEADER_Content_Block} @anchor{Dwg_MLEADER_Content_Block}
+@vindex Dwg_MLEADER_Content_Block
+
+@indentedblock
+@vtable @code
+
+@item block_table
+H
+@item normal
+3BD
+@item location
+3BD
+@item scale
+3BD
+@item rotation
+BD
+@item color
+CMC
+@item transform
+BD*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_MLEADER_Content_MText} @anchor{Dwg_MLEADER_Content_MText}
+@vindex Dwg_MLEADER_Content_MText
+
+@indentedblock
+@vtable @code
+
+@item default_text
+T
+@item normal
+3BD
+@item style
+H
+@item location
+3BD
+@item direction
+3BD
+@item rotation
+BD
+@item width
+BD
+@item height
+BD
+@item line_spacing_factor
+BD
+@item line_spacing_style
+BS
+@item color
+CMC
+@item alignment
+BS
+@item flow
+BS
+@item bg_color
+CMC
+@item bg_scale
+BD
+@item bg_transparency
+BL
+@item is_bg_fill
+B
+@item is_bg_mask_fill
+B
+@item col_type
+BS
+@item is_height_auto
+B
+@item col_width
+BD
+@item col_gutter
+BD
+@item is_col_flow_reversed
+B
+@item num_col_sizes
+BL
+@item col_sizes
+BD*
+@item word_break
+B
+@item unknown
+B
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_MLINESTYLE_line} @anchor{Dwg_MLINESTYLE_line}
 @vindex Dwg_MLINESTYLE_line
 
@@ -11175,78 +11319,10 @@ BS,	DXF 71
 @indentedblock
 @vtable @code
 
-@item txt.default_text
-TV
-@item txt.normal
-3BD
-@item txt.style
-H
-@item txt.location
-3BD
-@item txt.direction
-3BD
-@item txt.rotation
-BD
-@item txt.width
-BD
-@item txt.height
-BD
-@item txt.line_spacing_factor
-BD
-@item txt.line_spacing_style
-BS
-@item txt.color
-CMC
-@item txt.alignment
-BS
-@item txt.flow
-BS
-@item txt.bg_color
-CMC
-@item txt.bg_scale
-BD
-@item txt.bg_transparency
-BL
-@item txt.is_bg_fill
-B
-@item txt.is_bg_mask_fill
-B
-@item txt.col_type
-BS
-@item txt.is_height_auto
-B
-@item txt.col_width
-BD
-@item txt.col_gutter
-BD
-@item txt.is_col_flow_reversed
-B
-@item txt.num_col_sizes
-BL
-@item txt.col_sizes
-BD*
-@item txt.word_break
-B
-@item txt.unknown
-B
 @item txt
-struct _content_mtext
-@item blk.block_table
-H
-@item blk.normal
-3BD
-@item blk.location
-3BD
-@item blk.scale
-3BD
-@item blk.rotation
-BD
-@item blk.color
-CMC
-@item blk.transform
-BD*
+Dwg_MLEADER_Content_MText
 @item blk
-struct _content_block
+Dwg_MLEADER_Content_Block
 
 @end vtable
 @end indentedblock

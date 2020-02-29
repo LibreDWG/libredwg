@@ -109,7 +109,8 @@ BITCODE_RC dxf_find_lweight (const int lw);
     (void)dwg_add_object (dwg);                                               \
     obj = &dwg->object[idx];                                                  \
     obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
-    obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                 \
+    obj->tio.object                                                           \
+        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
     obj->tio.object->objid = obj->index;                                      \
     obj->tio.object->dwg = dwg;                                               \
   }
@@ -120,7 +121,8 @@ BITCODE_RC dxf_find_lweight (const int lw);
     (void)dwg_add_object (dwg);                                               \
     obj = &dwg->object[idx];                                                  \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
-    obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));                 \
+    obj->tio.entity                                                           \
+        = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
     obj->tio.entity->objid = obj->index;                                      \
     obj->tio.entity->dwg = dwg;                                               \
   }
@@ -161,7 +163,7 @@ BITCODE_RC dxf_find_lweight (const int lw);
 #define STRADD_TV(field, string)                                              \
   if (string)                                                                 \
     {                                                                         \
-      field = malloc (strlen (string) + 1);                                   \
+      field = (char*)malloc (strlen (string) + 1);                            \
       strcpy (field, string);                                                 \
     }
 #define STRADD_T(field, string)                                               \

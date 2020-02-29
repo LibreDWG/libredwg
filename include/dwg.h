@@ -2820,48 +2820,52 @@ typedef struct _dwg_LEADER_Node
   BITCODE_BS attach_dir; //2010+ 271
 } Dwg_LEADER_Node;
 
+typedef struct _dwg_MLEADER_Content_MText
+{
+  BITCODE_T default_text;
+  BITCODE_3BD normal; // 11
+  BITCODE_H style;
+  BITCODE_3BD location;
+  BITCODE_3BD direction;
+  BITCODE_BD rotation;
+  BITCODE_BD width;
+  BITCODE_BD height;
+  BITCODE_BD line_spacing_factor;
+  BITCODE_BS line_spacing_style;
+  BITCODE_CMC color;
+  BITCODE_BS alignment;
+  BITCODE_BS flow;
+  BITCODE_CMC bg_color;
+  BITCODE_BD bg_scale;
+  BITCODE_BL bg_transparency;
+  BITCODE_B is_bg_fill;
+  BITCODE_B is_bg_mask_fill;
+  BITCODE_BS col_type;
+  BITCODE_B is_height_auto;
+  BITCODE_BD col_width;
+  BITCODE_BD col_gutter;
+  BITCODE_B is_col_flow_reversed;
+  BITCODE_BL num_col_sizes;
+  BITCODE_BD *col_sizes;
+  BITCODE_B word_break;
+  BITCODE_B unknown;
+} Dwg_MLEADER_Content_MText;
+
+typedef struct _dwg_MLEADER_Content_Block
+{
+  BITCODE_H block_table;
+  BITCODE_3BD normal; // 14
+  BITCODE_3BD location;
+  BITCODE_3BD scale;
+  BITCODE_BD rotation;
+  BITCODE_CMC color;
+  BITCODE_BD *transform;
+} Dwg_MLEADER_Content_Block;
+
 typedef union _dwg_MLEADER_Content
 {
-  struct _content_mtext
-    {
-      BITCODE_T default_text;
-      BITCODE_3BD normal; // 11
-      BITCODE_H style;
-      BITCODE_3BD location;
-      BITCODE_3BD direction;
-      BITCODE_BD rotation;
-      BITCODE_BD width;
-      BITCODE_BD height;
-      BITCODE_BD line_spacing_factor;
-      BITCODE_BS line_spacing_style;
-      BITCODE_CMC color;
-      BITCODE_BS alignment;
-      BITCODE_BS flow;
-      BITCODE_CMC bg_color;
-      BITCODE_BD bg_scale;
-      BITCODE_BL bg_transparency;
-      BITCODE_B is_bg_fill;
-      BITCODE_B is_bg_mask_fill;
-      BITCODE_BS col_type;
-      BITCODE_B is_height_auto;
-      BITCODE_BD col_width;
-      BITCODE_BD col_gutter;
-      BITCODE_B is_col_flow_reversed;
-      BITCODE_BL num_col_sizes;
-      BITCODE_BD *col_sizes;
-      BITCODE_B word_break;
-      BITCODE_B unknown;
-    } txt;
-  struct _content_block
-    {
-      BITCODE_H block_table;
-      BITCODE_3BD normal; // 14
-      BITCODE_3BD location;
-      BITCODE_3BD scale;
-      BITCODE_BD rotation;
-      BITCODE_CMC color;
-      BITCODE_BD *transform;
-    } blk;
+  Dwg_MLEADER_Content_MText txt;
+  Dwg_MLEADER_Content_Block blk;
 } Dwg_MLEADER_Content;
 
 /* The MLeaderAnnotContext object (par 20.4.86), embedded into an MLEADER */
@@ -6863,6 +6867,60 @@ typedef struct _dwg_AcDs_Segment
   BITCODE_RC padding[9]; // always 8x 0x55
 } Dwg_AcDs_Segment;
 
+typedef struct _dwg_AcDs
+{
+  // header
+  BITCODE_RL file_signature;
+  BITCODE_RL file_header_size;
+  BITCODE_RL unknown_1;  /* acis version? always 2 */
+  BITCODE_RL version;    /* always 2 */
+  BITCODE_RL unknown_2;  /* always 0 */
+  BITCODE_RL ds_version; /* datastorage revision */
+  BITCODE_RL segidx_offset;
+  BITCODE_RL segidx_unknown;
+  BITCODE_RL num_segidx;
+  BITCODE_RL schidx_segidx;
+  BITCODE_RL datidx_segidx;
+  BITCODE_RL search_segidx;
+  BITCODE_RL prvsav_segidx;
+  BITCODE_RL file_size;
+  BITCODE_BL total_segments; // computed
+  Dwg_AcDs_SegmentIndex *segidx;
+  Dwg_AcDs_DataIndex datidx;
+  Dwg_AcDs_Data *data;
+  Dwg_AcDs_DataBlob blob01;
+  Dwg_AcDs_SchemaIndex schidx;
+  Dwg_AcDs_SchemaData schdat;
+  Dwg_AcDs_Search search;
+  Dwg_AcDs_Segment *segments;
+} Dwg_AcDs;
+
+typedef struct _dwg_header
+{
+  Dwg_Version_Type version;      /* calculated from the header magic */
+  Dwg_Version_Type from_version; /* option. set by --as (convert from) */
+  BITCODE_RC zero_5[5];
+  BITCODE_RC is_maint;
+  BITCODE_RC zero_one_or_three;
+  BITCODE_RS unknown_s[3];      /* <R13 */
+  BITCODE_RL thumbnail_address; /* THUMBNAIL or AdDb:Preview */
+  BITCODE_RC dwg_version;
+  BITCODE_RC maint_version;
+  BITCODE_RS codepage;
+  BITCODE_RC unknown_0;           /* R2004+ */
+  BITCODE_RC app_dwg_version;     /* R2004+ */
+  BITCODE_RC app_maint_version;   /* R2004+ */
+  BITCODE_RL security_type;       /* R2004+ */
+  BITCODE_RL rl_1c_address;       /* R2004+ mostly 0 */
+  BITCODE_RL summaryinfo_address; /* R2004+ */
+  BITCODE_RL vbaproj_address;     /* R2004+ */
+  BITCODE_RL r2004_header_address; /* R2004+ */
+  BITCODE_RL num_sections;
+  Dwg_Section *section;
+  Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
+  Dwg_Section_Info *section_info;
+} Dwg_Header;
+
 #pragma pack(1)
 typedef struct _dwg_R2004_Header /* encrypted */
 {
@@ -6898,6 +6956,165 @@ typedef struct _dwg_R2004_Header /* encrypted */
 } Dwg_R2004_Header;
 #pragma pack()
 
+typedef struct _dwg_auxheader
+{
+  BITCODE_RC aux_intro[3]; /* ff 77 01 */
+  BITCODE_RS dwg_version;
+  BITCODE_RS maint_version;
+  BITCODE_RL numsaves;
+  BITCODE_RL minus_1;
+  BITCODE_RS numsaves_1;
+  BITCODE_RS numsaves_2;
+  BITCODE_RL zero;
+  BITCODE_RS dwg_version_1;
+  BITCODE_RS maint_version_1;
+  BITCODE_RS dwg_version_2;
+  BITCODE_RS maint_version_2;
+  BITCODE_RS unknown_6rs[6];
+  BITCODE_RL unknown_5rl[5];
+  BITCODE_RD TDCREATE; /* ?? format TD */
+  BITCODE_RD TDUPDATE;
+  BITCODE_RL HANDSEED;
+  BITCODE_RL plot_stamp;
+  BITCODE_RS zero_1;
+  BITCODE_RS numsaves_3;
+  BITCODE_RL zero_2;
+  BITCODE_RL zero_3;
+  BITCODE_RL zero_4;
+  BITCODE_RL numsaves_4;
+  BITCODE_RL zero_5;
+  BITCODE_RL zero_6;
+  BITCODE_RL zero_7;
+  BITCODE_RL zero_8;     /* ?? */
+  BITCODE_RS zero_18[3]; /* R2018+ */
+} Dwg_AuxHeader;
+
+typedef struct _dwg_summaryinfo
+{
+  BITCODE_T TITLE;
+  BITCODE_T SUBJECT;
+  BITCODE_T AUTHOR;
+  BITCODE_T KEYWORDS;
+  BITCODE_T COMMENTS;
+  BITCODE_T LASTSAVEDBY;
+  BITCODE_T REVISIONNUMBER;
+  BITCODE_T HYPERLINKBASE;
+  BITCODE_TIMERLL TDINDWG; /* days + ms, fixed size! */
+  BITCODE_TIMERLL TDCREATE;
+  BITCODE_TIMERLL TDUPDATE;
+  BITCODE_RS num_props;
+  Dwg_SummaryInfo_Property *props;
+  BITCODE_RL unknown1;
+  BITCODE_RL unknown2;
+} Dwg_SummaryInfo;
+
+/* Contains information about the application that wrote
+   the .dwg file (encrypted = 2). */
+typedef struct _dwg_appinfo
+{
+  BITCODE_RL class_version; // 3
+  BITCODE_RL num_strings;   // 2-3
+  BITCODE_TU appinfo_name;  // AppInfoDataList
+  BITCODE_RC version_checksum[16];
+  BITCODE_RC comment_checksum[16];
+  BITCODE_RC product_checksum[16];
+  BITCODE_TU version;      // "19.0.55.0.0", "Teigha(R) 4.3.2.0"
+  BITCODE_TU comment;      // "Autodesk DWG.  This file is a Trusted DWG "...
+  BITCODE_TU product_info; // XML ProductInformation
+} Dwg_AppInfo;
+
+/* File Dependencies, IMAGE files, fonts, xrefs, plotconfigs */
+typedef struct _dwg_filedeplist
+{
+  BITCODE_RL num_features;
+  BITCODE_TU32 *features; // Acad:XRef, Acad:Image, Acad:PlotConfig, Acad:Text
+  BITCODE_RL num_files;
+  Dwg_FileDepList_Files *files;
+} Dwg_FileDepList;
+
+/* password info */
+typedef struct _dwg_security
+{
+  BITCODE_RL unknown_1;   // 0xc
+  BITCODE_RL unknown_2;   // 0
+  BITCODE_RL unknown_3;   // 0xabcdabcd
+  BITCODE_RL crypto_id;   //
+  BITCODE_TV crypto_name; // "Microsoft Base DSS and Diffie-Hellman
+                          // Cryptographic Provider"
+  BITCODE_RL algo_id;     // RC4
+  BITCODE_RL key_len;     // 40
+  BITCODE_RL encr_size;   //
+  BITCODE_TF encr_buffer;
+} Dwg_Security;
+
+typedef struct _dwg_vbaproject
+{
+  int size;
+  BITCODE_TF unknown_bits;
+} Dwg_VBAProject;
+
+typedef struct _dwg_appinfohistory
+{
+  int size;
+  BITCODE_TF unknown_bits;
+} Dwg_AppInfoHistory;
+
+typedef struct _dwg_revhistory
+{
+  BITCODE_RL class_version;
+  BITCODE_RL class_minor;
+  BITCODE_RL num_histories;
+  BITCODE_RL *histories;
+} Dwg_RevHistory;
+
+typedef struct _dwg_objfreespace
+{
+  BITCODE_RLL zero;
+  BITCODE_RLL num_handles;
+  BITCODE_TIMERLL TDUPDATE;
+  BITCODE_RL objects_address;
+  BITCODE_RC num_nums; // RLL (uint64_t) or uint128_t
+  BITCODE_RLL max32;   // 0x32
+  BITCODE_RLL max64;   // 0x64
+  BITCODE_RLL maxtbl;  // 0x200
+  BITCODE_RLL maxrl;
+  BITCODE_RLL max32_hi;
+  BITCODE_RLL max64_hi;
+  BITCODE_RLL maxtbl_hi;
+  BITCODE_RLL maxrl_hi;
+} Dwg_ObjFreeSpace;
+
+typedef struct _dwg_template
+{
+  BITCODE_T16 description;
+  BITCODE_RS MEASUREMENT;
+} Dwg_Template;
+
+typedef struct _dwg_second_header
+{
+  BITCODE_RL size;
+  BITCODE_RL address;
+  BITCODE_RC version[12];
+  BITCODE_B null_b[4];
+  BITCODE_RC unknown_10;
+  BITCODE_RC unknown_rc4[4];
+  BITCODE_RC num_sections;
+  struct _sections
+  {
+    BITCODE_RC nr;
+    BITCODE_BL address;
+    BITCODE_BL size;
+  } section[6];
+  BITCODE_BS num_handlers;
+  struct _handler
+  {
+    BITCODE_RC size;
+    BITCODE_RC nr;
+    BITCODE_RC *data;
+  } handlers[16];
+  BITCODE_RL junk_r14_1; /*!< r14 only */
+  BITCODE_RL junk_r14_2; /*!< r14 only */
+} Dwg_Second_Header;
 
 /**
  Main DWG struct
@@ -6905,32 +7122,7 @@ typedef struct _dwg_R2004_Header /* encrypted */
 
 typedef struct _dwg_struct
 {
-  struct Dwg_Header
-  {
-    Dwg_Version_Type version;          /* option. set by --as (convert to) */
-    Dwg_Version_Type from_version;     /* calculated from the header magic */
-    BITCODE_RC   zero_5[5];
-    BITCODE_RC   is_maint;
-    BITCODE_RC   zero_one_or_three;
-    BITCODE_RS   unknown_s[3];         /* <R13 */
-    BITCODE_RL   thumbnail_address;    /* THUMBNAIL or AdDb:Preview */
-    BITCODE_RC   dwg_version;
-    BITCODE_RC   maint_version;
-    BITCODE_RS   codepage;
-    BITCODE_RC   unknown_0;            /* R2004+ */
-    BITCODE_RC   app_dwg_version;      /* R2004+ */
-    BITCODE_RC   app_maint_version;    /* R2004+ */
-    BITCODE_RL   security_type;        /* R2004+ */
-    BITCODE_RL   rl_1c_address;        /* R2004+ mostly 0 */
-    BITCODE_RL   summaryinfo_address;  /* R2004+ */
-    BITCODE_RL   vbaproj_address;      /* R2004+ */
-    BITCODE_RL   r2004_header_address; /* R2004+ */
-
-    BITCODE_RL   num_sections; // TODO: should not be here
-    Dwg_Section* section;
-    Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
-    Dwg_Section_Info* section_info;
-  } header;
+  Dwg_Header header;
 
   BITCODE_BS num_classes;        /*!< number of classes */
   Dwg_Class * dwg_class;         /*!< array of classes */
@@ -6947,7 +7139,7 @@ typedef struct _dwg_struct
   Dwg_Header_Variables header_vars;
   Dwg_Chain thumbnail;
 
-  Dwg_R2004_Header r2004_header; // packed
+  Dwg_R2004_Header r2004_header; /* encrypted, packed */
 
   Dwg_Object *mspace_block;
   Dwg_Object *pspace_block;
@@ -6964,191 +7156,21 @@ typedef struct _dwg_struct
   Dwg_Object_VPORT_ENTITY_CONTROL  vport_entity_control;
 
   /* #define DWG_AUXHEADER_SIZE 123 */
-  struct Dwg_AuxHeader
-  {
-    BITCODE_RC   aux_intro[3]; /* ff 77 01 */
-    BITCODE_RS   dwg_version;
-    BITCODE_RS   maint_version;
-    BITCODE_RL   numsaves;
-    BITCODE_RL   minus_1;
-    BITCODE_RS   numsaves_1;
-    BITCODE_RS   numsaves_2;
-    BITCODE_RL   zero;
-    BITCODE_RS   dwg_version_1;
-    BITCODE_RS   maint_version_1;
-    BITCODE_RS   dwg_version_2;
-    BITCODE_RS   maint_version_2;
-    BITCODE_RS   unknown_6rs[6];
-    BITCODE_RL   unknown_5rl[5];
-    BITCODE_RD   TDCREATE; /* ?? format TD */
-    BITCODE_RD   TDUPDATE;
-    BITCODE_RL   HANDSEED;
-    BITCODE_RL   plot_stamp;
-    BITCODE_RS   zero_1;
-    BITCODE_RS   numsaves_3;
-    BITCODE_RL   zero_2;
-    BITCODE_RL   zero_3;
-    BITCODE_RL   zero_4;
-    BITCODE_RL   numsaves_4;
-    BITCODE_RL   zero_5;
-    BITCODE_RL   zero_6;
-    BITCODE_RL   zero_7;
-    BITCODE_RL   zero_8; /* ?? */
-    BITCODE_RS   zero_18[3]; /* R2018+ */
-  } auxheader;
-
-  struct Dwg_SummaryInfo
-  {
-    BITCODE_T    TITLE;
-    BITCODE_T    SUBJECT;
-    BITCODE_T    AUTHOR;
-    BITCODE_T    KEYWORDS;
-    BITCODE_T    COMMENTS;
-    BITCODE_T    LASTSAVEDBY;
-    BITCODE_T    REVISIONNUMBER;
-    BITCODE_T    HYPERLINKBASE;
-    BITCODE_TIMERLL  TDINDWG; /* days + ms, fixed size! */
-    BITCODE_TIMERLL  TDCREATE;
-    BITCODE_TIMERLL  TDUPDATE;
-    BITCODE_RS   num_props;
-    Dwg_SummaryInfo_Property *props;
-    BITCODE_RL   unknown1;
-    BITCODE_RL   unknown2;
-  } summaryinfo;
-
+  Dwg_AuxHeader auxheader;
+  Dwg_SummaryInfo summaryinfo;
   /* Contains information about the application that wrote
      the .dwg file (encrypted = 2). */
-  struct Dwg_AppInfo
-  {
-    BITCODE_RL class_version;   // 3
-    BITCODE_RL num_strings;     // 2-3
-    BITCODE_TU appinfo_name;    // AppInfoDataList
-    BITCODE_RC version_checksum[16];
-    BITCODE_RC comment_checksum[16];
-    BITCODE_RC product_checksum[16];
-    BITCODE_TU version; // "19.0.55.0.0", "Teigha(R) 4.3.2.0"
-    BITCODE_TU comment; // "Autodesk DWG.  This file is a Trusted DWG "...
-    BITCODE_TU product_info; // XML ProductInformation
-  } appinfo;
-
+  Dwg_AppInfo appinfo;
   /* File Dependencies, IMAGE files, fonts, xrefs, plotconfigs */
-  struct Dwg_FileDepList
-  {
-    BITCODE_RL num_features;
-    BITCODE_TU32 *features; // Acad:XRef, Acad:Image, Acad:PlotConfig, Acad:Text
-    BITCODE_RL num_files;
-    Dwg_FileDepList_Files *files;
-  } filedeplist;
-
-  /* password info */
-  struct Dwg_Security
-  {
-    BITCODE_RL unknown_1;        // 0xc
-    BITCODE_RL unknown_2;        // 0
-    BITCODE_RL unknown_3;        // 0xabcdabcd
-    BITCODE_RL crypto_id;        //
-    BITCODE_TV crypto_name;      // "Microsoft Base DSS and Diffie-Hellman Cryptographic Provider"
-    BITCODE_RL algo_id;          // RC4
-    BITCODE_RL key_len;          // 40
-    BITCODE_RL encr_size;        //
-    BITCODE_TF encr_buffer;
-  } security;
-  
-  struct Dwg_VBAProject
-  {
-    int    size;
-    BITCODE_TF unknown_bits;
-  } vbaproject;
-
-  struct Dwg_AppInfoHistory
-  {
-    int    size;
-    BITCODE_TF unknown_bits;
-  } appinfohistory;
-
-  struct Dwg_RevHistory
-  {
-    BITCODE_RL class_version;
-    BITCODE_RL class_minor;
-    BITCODE_RL num_histories;
-    BITCODE_RL *histories;
-  } revhistory;
-
-  struct Dwg_ObjFreeSpace
-  {
-    BITCODE_RLL zero;
-    BITCODE_RLL num_handles;
-    BITCODE_TIMERLL TDUPDATE;
-    BITCODE_RL objects_address;
-    BITCODE_RC num_nums; // RLL (uint64_t) or uint128_t
-    BITCODE_RLL max32;  // 0x32
-    BITCODE_RLL max64;  // 0x64
-    BITCODE_RLL maxtbl; // 0x200
-    BITCODE_RLL maxrl;
-    BITCODE_RLL max32_hi;
-    BITCODE_RLL max64_hi;
-    BITCODE_RLL maxtbl_hi;
-    BITCODE_RLL maxrl_hi;
-  } objfreespace;
-
-  struct Dwg_Template
-  {
-    BITCODE_T16 description;
-    BITCODE_RS MEASUREMENT;
-  } template;
-
-  struct Dwg_AcDs
-  {
-    // header
-    BITCODE_RL file_signature;
-    BITCODE_RL file_header_size;
-    BITCODE_RL unknown_1; /* acis version? always 2 */
-    BITCODE_RL version; /* always 2 */
-    BITCODE_RL unknown_2; /* always 0 */
-    BITCODE_RL ds_version; /* datastorage revision */
-    BITCODE_RL segidx_offset;
-    BITCODE_RL segidx_unknown;
-    BITCODE_RL num_segidx;
-    BITCODE_RL schidx_segidx;
-    BITCODE_RL datidx_segidx;
-    BITCODE_RL search_segidx;
-    BITCODE_RL prvsav_segidx;
-    BITCODE_RL file_size;
-    BITCODE_BL total_segments; // computed
-    Dwg_AcDs_SegmentIndex *segidx;
-    Dwg_AcDs_DataIndex datidx;
-    Dwg_AcDs_Data *data;
-    Dwg_AcDs_DataBlob blob01;
-    Dwg_AcDs_SchemaIndex schidx;
-    Dwg_AcDs_SchemaData schdat;
-    Dwg_AcDs_Search search;
-    Dwg_AcDs_Segment *segments;
-  } acds;
-
-  struct _dwg_second_header {
-    BITCODE_RL size;
-    BITCODE_RL address;
-    BITCODE_RC version[12];
-    BITCODE_B null_b[4];
-    BITCODE_RC unknown_10;
-    BITCODE_RC unknown_rc4[4];
-    BITCODE_RC num_sections;
-    struct _sections
-    {
-      BITCODE_RC nr;
-      BITCODE_BL address;
-      BITCODE_BL size;
-    } section[6];
-    BITCODE_BS num_handlers;
-    struct _handler
-    {
-      BITCODE_RC size;
-      BITCODE_RC nr;
-      BITCODE_RC *data;
-    } handlers[16];
-    BITCODE_RL junk_r14_1; /*!< r14 only */
-    BITCODE_RL junk_r14_2; /*!< r14 only */
-  } second_header;
+  Dwg_FileDepList filedeplist;
+  Dwg_Security security; /* password info */
+  Dwg_VBAProject vbaproject;
+  Dwg_AppInfoHistory appinfohistory;
+  Dwg_RevHistory revhistory;
+  Dwg_ObjFreeSpace objfreespace;
+  Dwg_Template Template;
+  Dwg_AcDs acds;
+  Dwg_Second_Header second_header;
 
   unsigned int layout_type;
 } Dwg_Data;

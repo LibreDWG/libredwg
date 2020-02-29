@@ -1430,13 +1430,14 @@ ATTRIBUTE_MALLOC
 BITCODE_TF
 bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
 {
-  BITCODE_RC *chain = calloc (length + 1, 1);
+  BITCODE_RC *chain = (BITCODE_RC *)calloc (length + 1, 1);
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory");
       return NULL;
     }
+
   bit_read_fixed (dat, chain, length);
   chain[length] = '\0';
 
@@ -1548,7 +1549,7 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
   if (!wstr)
     return NULL;
   size = len + 1;
-  str = malloc (size);
+  str = (char*)malloc (size);
   if (!str)
     return NULL;
   read = write = 0;
@@ -1580,7 +1581,7 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
           if (write + 7 > size)
             {
               size += 8;
-              str = realloc (str, size);
+              str = (char*)realloc (str, size);
             }
           str[write++] = '\\';
           str[write++] = 'U';
@@ -2162,7 +2163,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
         LOG_INSANE ("U+%04X ", c);
 #endif
     }
-  str = malloc (len + 1);
+  str = (char*)malloc (len + 1);
   if (!str)
     {
       loglevel = 1;
@@ -2351,7 +2352,7 @@ bit_utf8_to_TU (char *restrict str)
   int len = strlen (str);
   unsigned char c;
 
-  wstr = malloc (2 * (len + 1));
+  wstr = (BITCODE_TU)malloc (2 * (len + 1));
   if (!wstr)
     {
       loglevel = 1;
@@ -2593,7 +2594,7 @@ bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         color->rgb = bit_read_BL (dat); // ODA bug, documented as BS
       if (flag & 0x40)
         {
-          color->handle = calloc (1, sizeof (Dwg_Object_Ref));
+          color->handle = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
           if (!color->handle)
             {
               loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -2878,8 +2879,8 @@ bit_explore_chain (Bit_Chain *dat, long unsigned int datsize)
 uint16_t
 bit_calc_CRC (const uint16_t seed, unsigned char *addr, long len)
 {
-  register unsigned char al;
-  register uint16_t dx = seed;
+  unsigned char al;
+  uint16_t dx = seed;
 
   static const uint16_t crctable[256] = {
     0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241, 0xC601,
@@ -2925,8 +2926,8 @@ bit_calc_CRC (const uint16_t seed, unsigned char *addr, long len)
 uint32_t
 bit_calc_CRC32 (const uint32_t seed, unsigned char *addr, long len)
 {
-  register unsigned char al;
-  register uint32_t dx = ~seed; /* inverted */
+  unsigned char al;
+  uint32_t dx = ~seed; /* inverted */
 
   static const uint32_t crctable[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,

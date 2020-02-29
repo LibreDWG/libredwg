@@ -1001,16 +1001,17 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
     dwg_point_2d *point;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
-    point = calloc (1, sizeof (dwg_point_2d));
+    point = (dwg_point_2d *)calloc (1, sizeof (dwg_point_2d));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
       {
         free (point);
-        return false;
+        return NULL;
       }
     if (strEQc (field.type, "2RD") || strEQc (field.type, "2BD")
         || strEQc (field.type, "2DPOINT"))
@@ -1034,15 +1035,16 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
 {
 #  ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !point)
-    return NULL;
+    return false;
 #  endif
   {
     dwg_point_2d dummy;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
-      return NULL;
+      return false;
 
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
@@ -1076,11 +1078,12 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
     dwg_point_3d *point;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
-    point = calloc (1, sizeof (dwg_point_3d));
+    point = (dwg_point_3d *)calloc (1, sizeof (dwg_point_3d));
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &point,
                                   &field))
       {
@@ -1115,9 +1118,10 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
     dwg_point_3d dummy;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
-      return NULL;
+      return false;
 
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
                                   &field))
@@ -1149,7 +1153,8 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
     char *str;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1183,7 +1188,8 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname, int
     char *str;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1215,7 +1221,8 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
     char *dummy;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1248,7 +1255,8 @@ dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
     char *dummy;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1280,7 +1288,8 @@ dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
     BITCODE_BD num;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return 0.0;
 
@@ -1312,7 +1321,8 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
     BITCODE_BD dummy;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return false;
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
@@ -1343,7 +1353,8 @@ dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
     BITCODE_BS num;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return 0;
 
@@ -1375,7 +1386,8 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
     BITCODE_BS dummy;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1407,7 +1419,8 @@ dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
     BITCODE_BL num;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return 0;
 
@@ -1440,7 +1453,8 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
     BITCODE_BL dummy;
     Dwg_DYNAPI_field field;
     int error;
-    const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
+        (const dwg_obj_generic *)_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -12395,7 +12409,7 @@ dwg_ent_spline_get_fit_pts (const dwg_ent_spline *restrict spline,
                             int *restrict error)
 {
   dwg_point_3d *ptx
-      = calloc (spline->num_fit_pts, sizeof (dwg_point_3d));
+      = (dwg_point_3d *)calloc (spline->num_fit_pts, sizeof (dwg_point_3d));
   if (ptx)
     {
       BITCODE_BS i;
@@ -12420,8 +12434,8 @@ dwg_spline_control_point *
 dwg_ent_spline_get_ctrl_pts (const dwg_ent_spline *restrict spline,
                              int *restrict error)
 {
-  dwg_spline_control_point *ptx
-      = calloc (spline->num_ctrl_pts, sizeof (dwg_spline_control_point));
+  dwg_spline_control_point *ptx = (dwg_spline_control_point *)calloc (
+      spline->num_ctrl_pts, sizeof (dwg_spline_control_point));
   if (ptx)
     {
       BITCODE_BL i;
@@ -14477,7 +14491,7 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
 
       if (!num_points || *error)
         return NULL;
-      ptx = calloc (num_points, sizeof (dwg_point_2d));
+      ptx = (dwg_point_2d *)calloc (num_points, sizeof (dwg_point_2d));
       if (!ptx)
         {
           LOG_ERROR ("%s: Out of memory", __FUNCTION__);
@@ -14735,7 +14749,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
 
       if (!num_points || *error)
         return NULL;
-      ptx = calloc (num_points, sizeof (dwg_point_3d));
+      ptx = (dwg_point_3d *)calloc (num_points, sizeof (dwg_point_3d));
       if (!ptx)
         {
           LOG_ERROR ("%s: Out of memory", __FUNCTION__);
@@ -15729,7 +15743,7 @@ BITCODE_2RD *
 dwg_ent_image_get_clip_verts (const dwg_ent_image *restrict image,
                               int *restrict error)
 {
-  BITCODE_2RD *ptx = calloc (image->num_clip_verts, sizeof (BITCODE_2RD));
+  BITCODE_2RD *ptx = (BITCODE_2RD *)calloc (image->num_clip_verts, sizeof (BITCODE_2RD));
   if (ptx)
     {
       BITCODE_BL i;
@@ -15988,7 +16002,8 @@ dwg_mline_line *
 dwg_mline_vertex_get_lines (const dwg_mline_vertex *restrict vertex,
                             int *restrict error)
 {
-  dwg_mline_line *ptx = calloc (vertex->num_lines, sizeof (dwg_mline_line));
+  dwg_mline_line *ptx
+      = (dwg_mline_line *)calloc (vertex->num_lines, sizeof (dwg_mline_line));
   if (ptx)
     {
       BITCODE_BS i;
@@ -16032,7 +16047,8 @@ dwg_mline_vertex *
 dwg_ent_mline_get_verts (const dwg_ent_mline *restrict mline,
                          int *restrict error)
 {
-  dwg_mline_vertex *ptx = calloc (mline->num_verts, sizeof (dwg_mline_vertex));
+  dwg_mline_vertex *ptx = (dwg_mline_vertex *)calloc (
+      mline->num_verts, sizeof (dwg_mline_vertex));
   if (ptx)
     {
       BITCODE_BS i;
@@ -16421,8 +16437,8 @@ dwg_3dsolid_wire *
 dwg_ent_3dsolid_get_wires (const dwg_ent_3dsolid *restrict _3dsolid,
                            int *restrict error)
 {
-  dwg_3dsolid_wire *wire
-      = calloc (_3dsolid->num_wires, sizeof (dwg_3dsolid_wire));
+  dwg_3dsolid_wire *wire = (dwg_3dsolid_wire *)calloc (
+      _3dsolid->num_wires, sizeof (dwg_3dsolid_wire));
   if (wire)
     {
       BITCODE_BL i;
@@ -16467,8 +16483,8 @@ dwg_3dsolid_silhouette *
 dwg_ent_3dsolid_get_silhouettes (const dwg_ent_3dsolid *restrict _3dsolid,
                                  int *restrict error)
 {
-  dwg_3dsolid_silhouette *sh
-      = calloc (_3dsolid->num_silhouettes, sizeof (dwg_3dsolid_silhouette));
+  dwg_3dsolid_silhouette *sh = (dwg_3dsolid_silhouette *)calloc (
+      _3dsolid->num_silhouettes, sizeof (dwg_3dsolid_silhouette));
   if (sh)
     {
       BITCODE_BL i;

@@ -133,7 +133,7 @@
   dat->byte = 0x31b;
   FIELD_RS (CECOLOR.index, 62);
   DECODER {
-    _obj->CELTYPE = calloc(1, sizeof(Dwg_Object_Ref));
+    _obj->CELTYPE = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->CELTYPE->absolute_ref = (BITCODE_RL)bit_read_RS (dat); // 6, ff for BYLAYER, fe for BYBLOCK
     LOG_TRACE ("CELTYPE: %lu [long 6]\n", _obj->CELTYPE->absolute_ref)
   }
@@ -203,7 +203,7 @@
 
   dat->byte = 0x4ee;
   DECODER {
-    _obj->HANDSEED = calloc(1, sizeof(Dwg_Object_Ref));
+    _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
     LOG_TRACE ("HANDSEED: %lX [RS 5]\n", _obj->HANDSEED->absolute_ref)
   }

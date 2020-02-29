@@ -1771,7 +1771,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           while (FIELD_VALUE (block_size[i++]) > 0 && AVAIL_BITS (dat) >= 16); // crc RS
 
           // de-obfuscate SAT data
-          FIELD_VALUE (acis_data) = malloc (total_size + 1);
+          FIELD_VALUE (acis_data) = (BITCODE_RC *)malloc (total_size + 1);
           num_blocks = i - 1;
           FIELD_VALUE (num_blocks) = num_blocks;
           LOG_TRACE ("num_blocks: " FORMAT_BL "\n", FIELD_VALUE (num_blocks));
@@ -1812,8 +1812,8 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           //TODO string in strhdl, even <r2007
           FIELD_VALUE (num_blocks) = 2;
           LOG_TRACE ("num_blocks: 2\n");
-          FIELD_VALUE (block_size) = calloc (3, sizeof (BITCODE_RL));
-          FIELD_VALUE (encr_sat_data) = calloc (3, sizeof (char*));
+          FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (3, sizeof (BITCODE_BL));
+          FIELD_VALUE (encr_sat_data) = (char**)calloc (3, sizeof (char*));
           FIELD_TFv (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
           FIELD_VALUE (block_size[0]) = 15;
           FIELD_RL (block_size[1], 0);
@@ -1871,7 +1871,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   VALUE_RL (0, 0);
                   return error;
                 }
-              FIELD_VALUE (block_size) = calloc (2, sizeof (BITCODE_BL));
+              FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
               FIELD_VALUE (block_size[0]) = strlen ((char*)FIELD_VALUE (acis_data));
               FIELD_VALUE (block_size[1]) = 0;
               LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[0]));
@@ -1907,7 +1907,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
             FIELD_TF (encr_sat_data[0], 15, 1);
           if (!FIELD_VALUE (block_size))
             {
-              FIELD_VALUE (block_size) = calloc (3, sizeof (BITCODE_BL));
+              FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (3, sizeof (BITCODE_BL));
               FIELD_VALUE (block_size[0]) = 15;
               if (!FIELD_VALUE (acis_data))
                 {
@@ -5816,9 +5816,9 @@ DWG_OBJECT (XRECORD)
       for (vcount=0; bit_position (hdl_dat) < obj->handlestream_size; vcount++)
         {
           FIELD_VALUE (objid_handles) = vcount
-            ? realloc (FIELD_VALUE (objid_handles),
+            ? (BITCODE_H*)realloc (FIELD_VALUE (objid_handles),
                                    (vcount+1) * sizeof (Dwg_Object_Ref))
-            : malloc (sizeof (Dwg_Object_Ref));
+            : (BITCODE_H*)malloc (sizeof (Dwg_Object_Ref));
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
           if (!FIELD_VALUE (objid_handles[vcount]))
             {

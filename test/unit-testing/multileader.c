@@ -142,7 +142,7 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_txt, B);
   if (ctx.has_content_txt)
     {
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.default_text, TV);
+      CHK_SUBCLASS_UTF8TEXT (ctx.content, MLEADER_Content, txt.default_text);
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.normal);
       CHK_SUBCLASS_H (ctx.content, MLEADER_Content, txt.style);
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.location);

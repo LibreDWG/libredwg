@@ -223,8 +223,7 @@ rs_decode_block (unsigned char *blk, int fix)
   unsigned char *synbuf, *sigma, *omega;
   int errflag = 0;
 
-  synbuf = malloc (POLY_LENGTH);
-
+  synbuf = (unsigned char *)malloc (POLY_LENGTH);
   memset (synbuf, 0, 16);
 
   for (j = 0; j < 16; j++)
@@ -250,10 +249,10 @@ rs_decode_block (unsigned char *blk, int fix)
       return -1;
     }
 
-  sigma = malloc (POLY_LENGTH);
+  sigma = (unsigned char *)malloc (POLY_LENGTH);
   memset (sigma, 0, POLY_LENGTH);
 
-  omega = malloc (POLY_LENGTH);
+  omega = (unsigned char *)malloc (POLY_LENGTH);
   memset (omega, 0, POLY_LENGTH);
 
   solve_key_equation (synbuf, sigma, omega);
@@ -317,14 +316,13 @@ initialize_matrix (unsigned char *s)
   PolyMatrix matrix;
   int i, j;
 
-  matrix = malloc (sizeof (PolyRow) * 2);
+  matrix = (PolyMatrix)calloc (2, sizeof (PolyRow));
   for (i = 0; i < 2; i++)
     {
-      matrix[i] = malloc (sizeof (Poly) * 3);
+      matrix[i] = (PolyRow)calloc (3, sizeof (Poly));
       for (j = 0; j < 3; j++)
         {
-          matrix[i][j] = malloc (POLY_LENGTH);
-          memset (matrix[i][j], 0, POLY_LENGTH);
+          matrix[i][j] = (Poly)calloc (1, POLY_LENGTH);
         }
     }
 

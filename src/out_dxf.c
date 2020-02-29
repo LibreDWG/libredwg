@@ -961,7 +961,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str)
       if (strchr (str, '\n') || strchr (str, '\r'))
         {
           const int len = 2 * strlen (str) + 1;
-          char *_buf = alloca (len);
+          char *_buf = (char *)alloca (len);
           fprintf (dat->fh, "%s\r\n", cquote (_buf, str, len));
           freea (_buf);
         }
@@ -2246,13 +2246,13 @@ static void
 dxf_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
 {
   // temp. only. not registered in dwg->object[]
-  Dwg_Object *obj = calloc (1, sizeof (Dwg_Object));
+  Dwg_Object *obj = (Dwg_Object *)calloc (1, sizeof (Dwg_Object));
   Dwg_Data *dwg = hdr->parent;
   // Dwg_Entity_ENDBLK *_obj;
   obj->parent = dwg;
   obj->index = dwg->num_objects;
   dwg_setup_ENDBLK (obj);
-  obj->tio.entity->ownerhandle = calloc (1, sizeof (Dwg_Object_Ref));
+  obj->tio.entity->ownerhandle = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
   obj->tio.entity->ownerhandle->obj = (Dwg_Object *)hdr;
   obj->tio.entity->ownerhandle->handleref = hdr->handle;
   obj->tio.entity->ownerhandle->absolute_ref = hdr->handle.value;
@@ -2439,7 +2439,7 @@ static int
 dxf_acds_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   //const char *section = "AcDsProtoype";
-  struct Dwg_AcDs *_obj = &dwg->acds;
+  Dwg_AcDs *_obj = &dwg->acds;
   if (0 && _obj->num_segidx)
     {
       SECTION (ACSDSDATA); // FIXME

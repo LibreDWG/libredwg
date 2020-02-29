@@ -1086,7 +1086,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
 {
   Dwg_Data *dwg = owner->parent;
   Dwg_Version_Type version = dwg->header.version;
-  const Dwg_Object_Type type = owner->type;
+  const Dwg_Object_Type type = (const Dwg_Object_Type)owner->type;
   Dwg_Object_Entity *ent = owner->tio.entity;
   Dwg_Object *obj = dwg_next_object (current);
 
@@ -1295,7 +1295,7 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
             {
               if (!_hdr->endblk_entity)
                 {
-                  _hdr->endblk_entity = calloc (1, sizeof (Dwg_Object_Ref));
+                  _hdr->endblk_entity = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
                   if (_hdr->endblk_entity)
                     {
                       _hdr->endblk_entity->obj = obj;

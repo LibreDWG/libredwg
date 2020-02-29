@@ -44,6 +44,8 @@
 #  include <wchar.h>
 #endif
 #include <stdio.h>
+#include <string.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include "common.h"
 #include "dwg.h"

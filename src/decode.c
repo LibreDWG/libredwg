@@ -191,7 +191,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   strncpy (version, (const char *)dat->chain, 6);
   version[6] = '\0';
 
-  dwg->header.from_version = 0;
+  dwg->header.from_version = R_INVALID;
   for (i = 0; i < R_AFTER; i++)
     {
       if (strEQ (version, version_codes[(Dwg_Version_Type)i]))
@@ -321,18 +321,18 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       return DWG_ERR_INVALIDDWG;
     }
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
-    dwg->object = realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
+    dwg->object = (Dwg_Object*)realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
 
     // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
 #define PREP_TABLE(token)                                                     \
   Dwg_Object *obj = &dwg->object[num + i];                                    \
-  Dwg_Object_##token *_obj = calloc (1, sizeof (Dwg_Object_##token));         \
+  Dwg_Object_##token *_obj = (Dwg_Object_##token*)calloc (1, sizeof (Dwg_Object_##token)); \
   if (dat->byte > dat->size)                                                  \
     {                                                                         \
       free (_obj);                                                            \
       return DWG_ERR_INVALIDDWG;                                              \
     }                                                                         \
-  obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                   \
+  obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof (Dwg_Object_Object)); \
   if (!_obj || !obj->tio.object)                                              \
     {                                                                         \
       if (_obj) free (_obj);                                                  \
@@ -651,7 +651,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   {
     int i;
-    struct Dwg_Header *_obj = &dwg->header;
+    Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
     Bit_Chain *hdl_dat = dat;
     dat->byte = 0x06;
     // clang-format off
@@ -863,7 +863,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   {
     int i;
-    struct Dwg_Header *_obj = &dwg->header;
+    Dwg_Header *_obj = &dwg->header;
     Bit_Chain *hdl_dat = dat;
     dat->byte = 0x06;
     // clang-format off
@@ -944,7 +944,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->header.num_sections == 6 && dwg->header.version >= R_2000)
     {
       int i;
-      struct Dwg_AuxHeader *_obj = &dwg->auxheader;
+      Dwg_AuxHeader *_obj = &dwg->auxheader;
       Bit_Chain *hdl_dat = dat;
       BITCODE_BL end_address
           = dwg->header.section[SECTION_AUXHEADER_R2000].address
@@ -1108,10 +1108,10 @@ classes_section:
 
       i = dwg->num_classes;
       if (i == 0)
-        dwg->dwg_class = malloc (sizeof (Dwg_Class));
+        dwg->dwg_class = (Dwg_Class *)malloc (sizeof (Dwg_Class));
       else
-        dwg->dwg_class
-            = realloc (dwg->dwg_class, (i + 1) * sizeof (Dwg_Class));
+        dwg->dwg_class = (Dwg_Class *)realloc (dwg->dwg_class,
+                                               (i + 1) * sizeof (Dwg_Class));
       if (!dwg->dwg_class)
         {
           LOG_ERROR ("Out of memory");
@@ -1362,9 +1362,9 @@ classes_section:
           LOG_WARN ("Only %d num_sections, but 2ndheader found, extending to 4",
                     dwg->header.num_sections);
           dwg->header.num_sections = SECTION_2NDHEADER_R13 + 1; /* 4 */
-          dwg->header.section
-              = realloc (dwg->header.section,
-                         dwg->header.num_sections * sizeof (Dwg_Section));
+          dwg->header.section = (Dwg_Section *)realloc (
+              dwg->header.section,
+              dwg->header.num_sections * sizeof (Dwg_Section));
           memset (&dwg->header.section[SECTION_2NDHEADER_R13], 0,
                   sizeof (Dwg_Section));
         }
@@ -1796,13 +1796,13 @@ add_section (Dwg_Data *dwg)
 {
   if (dwg->header.num_sections == 0)
     {
-      dwg->header.section = calloc (1, sizeof (Dwg_Section));
+      dwg->header.section = (Dwg_Section*)calloc (1, sizeof (Dwg_Section));
     }
   else
     {
-      dwg->header.section
-          = realloc (dwg->header.section,
-                     sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
+      dwg->header.section = (Dwg_Section *)realloc (
+          dwg->header.section,
+          sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
       memset (&dwg->header.section[dwg->header.num_sections], 0,
               sizeof (Dwg_Section));
     }
@@ -2218,7 +2218,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               error |= DWG_ERR_VALUEOUTOFBOUNDS;
             }
           LOG_INFO ("Page count %u in area %d\n", info->num_sections, i);
-          info->sections = calloc (info->num_sections, sizeof (Dwg_Section *));
+          info->sections = (Dwg_Section **)calloc (info->num_sections, sizeof (Dwg_Section *));
           if (!info->sections)
             {
               free (decomp);
@@ -2260,9 +2260,9 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 { // gap/unused data
                   LOG_TRACE ("Page: %4" PRId32 " (-)", page.number)
                   info->num_sections++;
-                  info->sections
-                      = realloc (info->sections,
-                                 info->num_sections * sizeof (Dwg_Section *));
+                  info->sections = (Dwg_Section **)realloc (
+                      info->sections,
+                      info->num_sections * sizeof (Dwg_Section *));
                   info->sections[info->num_sections - 1] = NULL;
                 }
               else if (page.address < prev_address)
@@ -2879,7 +2879,7 @@ static int
 summaryinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
-  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+  Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
 
@@ -2926,7 +2926,7 @@ static int
 appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
-  struct Dwg_AppInfo *_obj = &dwg->appinfo;
+  Dwg_AppInfo *_obj = &dwg->appinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
   if (!dat->chain || !dat->size)
@@ -2980,7 +2980,7 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 filedeplist_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  struct Dwg_FileDepList *_obj = &dwg->filedeplist;
+  Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL; // for obj->size overflow check
   int error = 0;
   BITCODE_BL vcount;
@@ -3027,7 +3027,7 @@ static int
 security_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
-  struct Dwg_Security *_obj = &dwg->security;
+  Dwg_Security *_obj = &dwg->security;
   Dwg_Object *obj = NULL;
   int error = 0;
 
@@ -3121,7 +3121,7 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  struct Dwg_VBAProject *_obj = &dwg->vbaproject;
+  Dwg_VBAProject *_obj = &dwg->vbaproject;
   if (!dwg->header.vbaproj_address)
     return 0;
   // compressed
@@ -3157,7 +3157,7 @@ read_2004_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
+  Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
   // compressed
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_APPINFOHISTORY);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
@@ -3189,7 +3189,7 @@ static int
 revhistory_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
-  struct Dwg_RevHistory *_obj = &dwg->revhistory;
+  Dwg_RevHistory *_obj = &dwg->revhistory;
   Dwg_Object *obj = NULL;
   int error = 0;
 
@@ -3207,7 +3207,7 @@ read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  struct Dwg_RevHistory *_obj = &dwg->revhistory;
+  Dwg_RevHistory *_obj = &dwg->revhistory;
   // compressed
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_REVHISTORY);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
@@ -3238,7 +3238,7 @@ read_2004_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+  Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
 
   // compressed
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_OBJFREESPACE);
@@ -3270,7 +3270,7 @@ static int
 template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
-  struct Dwg_Template *_obj = &dwg->template;
+  Dwg_Template *_obj = &dwg->Template;
   Dwg_Object *obj = NULL;
   int error = 0;
 
@@ -3328,7 +3328,7 @@ static int
 acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
-  struct Dwg_AcDs *_obj = &dwg->acds;
+  Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   BITCODE_BL rcount3 = 0, rcount4, vcount;
   int error = 0;
@@ -3545,7 +3545,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Section *section;
 
   {
-    struct Dwg_Header *_obj = &dwg->header;
+    Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
     Bit_Chain *hdl_dat = dat;
     int i;
@@ -3653,7 +3653,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   hdl_dat = *dat;
   {
     int i;
-    struct Dwg_Header *_obj = &dwg->header;
+    Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
 
     dat->byte = 0x06;
@@ -3932,9 +3932,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                           && appid->entries[j]->absolute_ref
                                  == ref.absolute_ref)
                         {
-                          Dwg_Object_MLEADERSTYLE *o
+                          Dwg_Object_MLEADERSTYLE *mstyle
                               = obj->tio.MLEADERSTYLE;
-                          o->class_version = 2; // real value with code 70 follows
+                          mstyle->class_version = 2; // real value with code 70 follows
                           LOG_TRACE (
                               "EED found ACAD_MLEADERVER %lX\n",
                               ref.absolute_ref);
@@ -4445,11 +4445,11 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
 
   // Reserve memory space for object references
   if (!dwg->num_object_refs)
-    dwg->object_ref = calloc (REFS_PER_REALLOC, sizeof (Dwg_Object_Ref *));
+    dwg->object_ref = (Dwg_Object_Ref **)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object_Ref *));
   else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
     dwg->object_ref
-        = realloc (dwg->object_ref, (dwg->num_object_refs + REFS_PER_REALLOC)
-                                        * sizeof (Dwg_Object_Ref *));
+        = (Dwg_Object_Ref **)realloc (dwg->object_ref, (dwg->num_object_refs + REFS_PER_REALLOC)
+                                     * sizeof (Dwg_Object_Ref *));
   if (!dwg->object_ref)
     {
       LOG_ERROR ("Out of memory");
@@ -4828,7 +4828,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             length = bit_read_RS (dat);
             if ((short)length > 0 && dat->byte + (length * 2) <= end_address)
               {
-                rbuf->value.str.u.wdata = calloc (length + 1, 2);
+                rbuf->value.str.u.wdata = (BITCODE_TU)calloc (length + 1, 2);
                 if (!rbuf->value.str.u.wdata)
                   {
                     LOG_ERROR ("Out of memory");
@@ -5106,8 +5106,8 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         dwg->object
             = (Dwg_Object *)malloc (REFS_PER_REALLOC * sizeof (Dwg_Object));
       else if (num % REFS_PER_REALLOC == 0)
-        dwg->object = realloc (dwg->object,
-                               (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
+        dwg->object = (Dwg_Object *)realloc (
+            dwg->object, (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
       if (!dwg->object)
         {
           LOG_ERROR ("Out of memory");
@@ -5255,12 +5255,12 @@ dwg_add_object (Dwg_Data *restrict dwg)
   BITCODE_BL num = dwg->num_objects;
   int realloced = 0;
   if (!num)
-    dwg->object = calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
+    dwg->object = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
   else if (num % REFS_PER_REALLOC == 0)
     {
       Dwg_Object *restrict old = dwg->object;
-      dwg->object = realloc (dwg->object,
-                             (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
+      dwg->object = (Dwg_Object *)realloc (
+          dwg->object, (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
       realloced = old != dwg->object;
     }
   if (!dwg->object)

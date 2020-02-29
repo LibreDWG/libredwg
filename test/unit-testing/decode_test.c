@@ -1,8 +1,13 @@
 #define DECODE_TEST_C
-#include "../../src/common.h"
-CLANG_DIAG_IGNORE (-Wpragma-pack)
+//#include "../../src/common.h"
+#include <stddef.h>
+#ifdef CLANG_DIAG_IGNORE
+  CLANG_DIAG_IGNORE (-Wpragma-pack)
+#endif
 #include "../../src/decode.c"
-CLANG_DIAG_RESTORE
+#ifdef CLANG_DIAG_IGNORE
+  CLANG_DIAG_RESTORE
+#endif
 #include "tests_common.h"
 
 void read_literal_length_tests (void);

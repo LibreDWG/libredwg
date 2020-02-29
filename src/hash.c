@@ -26,7 +26,7 @@
 dwg_inthash *
 hash_new (uint32_t size)
 {
-  dwg_inthash *hash = malloc (sizeof (dwg_inthash));
+  dwg_inthash *hash = (dwg_inthash *)malloc (sizeof (dwg_inthash));
   uint32_t cap;
   if (!hash)
     return NULL;
@@ -38,7 +38,7 @@ hash_new (uint32_t size)
   // this is slow, but only done once. clz would be much faster
   while (size <= cap)
     size <<= 1U;
-  hash->array = calloc (size, sizeof (struct _hashbucket)); // key+value pairs
+  hash->array = (struct _hashbucket *)calloc (size, sizeof (struct _hashbucket)); // key+value pairs
   hash->elems = 0;
   hash->size = size;
   return hash;
@@ -59,7 +59,7 @@ hash_resize (dwg_inthash *hash)
   uint32_t i;
 
   // allocate key+value pairs afresh
-  hash->array = calloc (size, sizeof (struct _hashbucket));
+  hash->array = (struct _hashbucket *)calloc (size, sizeof (struct _hashbucket));
   if (!hash->array)
     {
       *hash = oldhash;

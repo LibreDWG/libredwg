@@ -990,7 +990,7 @@
     {                                                                         \
       _VECTOR_CHKCOUNT (name, _obj->size,                                     \
                         dat->from_version >= R_2007 ? 18 : 2, dat)            \
-      _obj->name = calloc (_obj->size, sizeof (char *));                      \
+      _obj->name = (char**)calloc (_obj->size, sizeof (char *));              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           PRE (R_2007)                                                        \
@@ -1164,8 +1164,8 @@
   if (obj->tio.object->num_reactors > 0)                                      \
     {                                                                         \
       HANDLE_VECTOR_CHKCOUNT (reactors, obj->tio.object->num_reactors)        \
-      obj->tio.object->reactors                                               \
-          = calloc (obj->tio.object->num_reactors, sizeof (BITCODE_H));       \
+      obj->tio.object->reactors = (BITCODE_H *)calloc (                       \
+          obj->tio.object->num_reactors, sizeof (BITCODE_H));                 \
       for (vcount = 0; vcount < obj->tio.object->num_reactors; vcount++)      \
         {                                                                     \
           VALUE_HANDLE_N (obj->tio.object->reactors[vcount], reactors,        \
@@ -1177,7 +1177,8 @@
   if (_ent->num_reactors > 0)                                                 \
     {                                                                         \
       HANDLE_VECTOR_CHKCOUNT (reactors, _ent->num_reactors)                   \
-      _ent->reactors = calloc (_ent->num_reactors, sizeof (BITCODE_H));       \
+      _ent->reactors                                                          \
+          = (BITCODE_H *)calloc (_ent->num_reactors, sizeof (BITCODE_H));     \
       for (vcount = 0; vcount < _ent->num_reactors; vcount++)                 \
         {                                                                     \
           VALUE_HANDLE_N (_ent->reactors[vcount], reactors, vcount, code,     \
@@ -1389,10 +1390,12 @@
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
           obj->name = strdup (obj->name);                                     \
       }                                                                       \
-    _ent = obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));          \
+    _ent = obj->tio.entity                                                    \
+        = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
     if (!_ent)                                                                \
       return DWG_ERR_OUTOFMEM;                                                \
-    _ent->tio.token = calloc (1, sizeof (Dwg_Entity_##token));                \
+    _ent->tio.token                                                           \
+        = (Dwg_Entity_##token *)calloc (1, sizeof (Dwg_Entity_##token));      \
     if (!_ent->tio.token)                                                     \
       return DWG_ERR_OUTOFMEM;                                                \
     _ent->dwg = obj->parent;                                                  \
@@ -1415,21 +1418,18 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007)                                                            \
-      {                                                                       \
-        Bit_Chain obj_dat = *dat, str_dat = *dat;                             \
-        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,   \
-                                              obj);                           \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        error = dwg_decode_##token##_private (dat, &hdl_dat, dat, obj);       \
-      }                                                                       \
+    {                                                                         \
+      Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
+      error                                                                   \
+          = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
+    }                                                                         \
+    else { error = dwg_decode_##token##_private (dat, &hdl_dat, dat, obj); }  \
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
+  GCC30_DIAG_IGNORE (-Wformat - nonliteral)                                   \
   static int dwg_decode_##token##_private (                                   \
-      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,\
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
@@ -1469,11 +1469,12 @@
     Dwg_Object_##token *_obj;                                                 \
     LOG_INFO ("Add object " #token " [%d] ", obj->index)                      \
     obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
-    obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                 \
+    obj->tio.object                                                           \
+        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
     if (!obj->tio.object)                                                     \
       return DWG_ERR_OUTOFMEM;                                                \
     _obj = obj->tio.object->tio.token                                         \
-        = calloc (1, sizeof (Dwg_Object_##token));                            \
+        = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));      \
     if (!_obj)                                                                \
       {                                                                       \
         free (obj->tio.object);                                               \
@@ -1520,15 +1521,12 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007)                                                            \
-      {                                                                       \
-        Bit_Chain obj_dat = *dat, str_dat = *dat;                             \
-        error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,   \
-                                              obj);                           \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        error = dwg_decode_##token##_private (dat, &hdl_dat, dat, obj);       \
-      }                                                                       \
+    {                                                                         \
+      Bit_Chain obj_dat = *dat, str_dat = *dat;               \
+      error                                                                   \
+          = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
+    }                                                                         \
+    else { error = dwg_decode_##token##_private (dat, &hdl_dat, dat, obj); }  \
     return error;                                                             \
   }                                                                           \
                                                                               \

@@ -752,7 +752,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       LOG_ERROR ("Invalid max decompression size %" PRIu64, max_decomp_size);
       return DWG_ERR_INVALIDDWG;
     }
-  decomp = calloc (max_decomp_size, 1);
+  decomp = (BITCODE_RC *)calloc (max_decomp_size, 1);
   if (decomp == NULL)
     {
       LOG_ERROR ("Out of memory")
@@ -1693,7 +1693,7 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   //Bit_Chain *str_dat;
-  struct Dwg_VBAProject *_obj = &dwg->vbaproject;
+  Dwg_VBAProject *_obj = &dwg->vbaproject;
   Dwg_Object *obj = NULL;
   int error = 0;
   //BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -1732,7 +1732,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   static Bit_Chain old_dat, sec_dat = { 0 };
   Bit_Chain *str_dat;
-  struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+  Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
   int error;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -1773,7 +1773,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   Bit_Chain *str_dat;
-  struct Dwg_AppInfo *_obj = &dwg->appinfo;
+  Dwg_AppInfo *_obj = &dwg->appinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -1813,7 +1813,7 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   //Bit_Chain *str_dat;
-  struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
+  Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
   Dwg_Object *obj = NULL;
   int error = 0;
   //BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -1854,7 +1854,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   //Bit_Chain *str_dat;
-  struct Dwg_RevHistory *_obj = &dwg->revhistory;
+  Dwg_RevHistory *_obj = &dwg->revhistory;
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -1894,7 +1894,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   //Bit_Chain *str_dat;
-  struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+  Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -1935,7 +1935,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   //Bit_Chain *str_dat;
-  struct Dwg_Template *_obj = &dwg->template;
+  Dwg_Template *_obj = &dwg->Template;
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -1980,7 +1980,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
   Bit_Chain *str_dat;
-  struct Dwg_FileDepList *_obj = &dwg->filedeplist;
+  Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL;
   BITCODE_BL vcount;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
@@ -2021,7 +2021,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
   Bit_Chain *str_dat;
-  struct Dwg_Security *_obj = &dwg->security;
+  Dwg_Security *_obj = &dwg->security;
   Dwg_Object *obj = NULL;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
 
@@ -2097,7 +2097,7 @@ static int
 acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
-  struct Dwg_AcDs *_obj = &dwg->acds;
+  Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_BL rcount1 = 0, rcount2 = 0;
@@ -2121,7 +2121,7 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   int error;
   Bit_Chain *str_dat;
   const char *secname = "AcDsPrototype_1b";
-  struct Dwg_AcDs *_obj = &dwg->acds;
+  Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
 

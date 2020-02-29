@@ -133,7 +133,7 @@ static unsigned int cur_ver = 0;
     if (len < 4096 / 6)                                                       \
       {                                                                       \
         const int _len = 6 * len + 1;                                         \
-        char *_buf = alloca (_len);                                           \
+        char *_buf = (char *)alloca (_len);                                   \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
                         json_cquote (_buf, str, _len));                       \
         freea (_buf);                                                         \
@@ -141,7 +141,7 @@ static unsigned int cur_ver = 0;
     else                                                                      \
       {                                                                       \
         const int _len = 6 * len + 1;                                         \
-        char *_buf = malloc (_len);                                           \
+        char *_buf = (char *)malloc (_len);                                   \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
                         json_cquote (_buf, str, _len));                       \
         free (_buf);                                                          \
