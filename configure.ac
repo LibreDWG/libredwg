@@ -552,24 +552,54 @@ case $host_os in
   windows*) RUN_JING=rem ;;
   *) RUN_JING=: ;;
 esac
-dnl requires LaTeXML
+dnl LaTeXML has a broken svg11-basic.rng
+dnl The zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/ is correct.
+dnl Needs to be installed into /usr/local/share/relaxng/svg11/
+dnl See https://github.com/brucemiller/LaTeXML/issues/1237
 if test -n "$JING"
 then
-  AC_MSG_CHECKING([LaTeXML for the relaxng svg11-basic.rng])
-  if test -e "/usr/share/perl5/vendor_perl/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+  AC_MSG_CHECKING([for a working relaxng svg11-basic.rng])
+  if test -e "/usr/local/share/relaxng/svg11/svg11-basic.rng"
   then
-    RUN_JING="$JING /usr/share/perl5/vendor_perl/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
-    AC_MSG_RESULT([yes])
+    try_jing="$JING /usr/local/share/relaxng/svg11/svg11-basic.rng"
+    AC_MSG_RESULT([$try_jing])
+  elif test -e "/usr/share/perl5/vendor_perl/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+  then
+    try_jing="$JING /usr/share/perl5/vendor_perl/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+    AC_MSG_RESULT([$try_jing])
   else
     LATEXPM=`$PERL -MLaTeXML -e'print $INC{"LaTeXML.pm"}`
     if test -e "$LATEXPM" -a -e "`dirname $LATEXPM`/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
     then
-      RUN_JING="$JING `dirname $LATEXPM`/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
-      AC_MSG_RESULT([yes])
+      try_jing="$JING `dirname $LATEXPM`/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+      AC_MSG_RESULT([$try_jing])
     else
-      AC_MSG_RESULT([no. Need LaTeXML or a different perl])
+      AC_MSG_RESULT([none])
     fi
   fi
+  AC_MSG_CHECKING([whether the svg validator works (broken LaTeXML?)])
+  cat <<_ACEOF >try.svg
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1" baseProfile="basic"
+   width="100%" height="100%"
+   viewBox="-2680430.068109 -1672547.179548 3540706.089899 2726367.694617">
+	<path id="dwg-object-45" d="M 2680800.926721,1053089.884765 L 2680880.107866,1053201.295796"
+	      style="fill:none;stroke:black;stroke-width:0.1px" />
+</svg>
+_ACEOF
+  if $try_jing try.svg
+  then
+    RUN_JING="$try_jing"
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no. Use the zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/
+and unpack it into /usr/local/share/relaxng/svg11/])
+  fi
+  rm try.svg 2>/dev/null
 fi
 AC_SUBST([JING])
 AC_SUBST([RUN_JING])
