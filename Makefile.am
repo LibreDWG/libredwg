@@ -143,6 +143,15 @@ check-json: all
             env MAKEFLAGS= $(srcdir)/json-check $$f; \
 	  done; \
 	done
+check-svg: all
+	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
+            $(srcdir)/test/test-data/sample_*.dwg \
+            $(srcdir)/test/test-data/example_*.dwg; \
+          do env MAKEFLAGS= ./svg $$f; done
+	-for d in r14 2000 2004 2007 2010 2013 2018; do \
+	   for f in $(srcdir)/test/test-data/$$d/*.dwg; \
+       do env MAKEFLAGS= ./svg $$f; done; \
+	done
 
 # clang-analyzer.llvm.org, debian: clang-tools-{6.0,7}, redhat: clang-analyzer
 SCAN_BUILD = scan-build
