@@ -545,6 +545,35 @@ AC_SUBST([DSYMUTIL])
 AC_CHECK_PROGS([RPMLINT], [rpmlint])
 AM_CONDITIONAL([HAVE_RPMLINT], [test -n "$RPMLINT"])
 
+dnl SVG validation
+AC_CHECK_PROGS([JING], [jing])
+case $host_os in
+  mingw*)   RUN_JING=rem ;;
+  windows*) RUN_JING=rem ;;
+  *) RUN_JING=: ;;
+esac
+dnl requires LaTeXML
+if test -n "$JING"
+then
+  AC_MSG_CHECKING([LaTeXML for the relaxng svg11-basic.rng])
+  if test -e "/usr/share/perl5/vendor_perl/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+  then
+    RUN_JING="$JING /usr/share/perl5/vendor_perl/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+    AC_MSG_RESULT([yes])
+  else
+    LATEXPM=`$PERL -MLaTeXML -e'print $INC{"LaTeXML.pm"}`
+    if test -e "$LATEXPM" -a -e "`dirname $LATEXPM`/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+    then
+      RUN_JING="$JING `dirname $LATEXPM`/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
+      AC_MSG_RESULT([yes])
+    else
+      AC_MSG_RESULT([no. Need LaTeXML or a different perl])
+    fi
+  fi
+fi
+AC_SUBST([JING])
+AC_SUBST([RUN_JING])
+
 dnl help2man only by the maintainer
 
 if test x$cross_compiling = xno; then

@@ -34,6 +34,7 @@ for d in "$@"; do
         out="$b$dir.svg"
         echo programs/dwg2SVG $v "$d" \>"$out" 2\>$log
         @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG $v "$d" >"$out" 2>$log
+        @RUN_JING@ $out
         ;;
     esac
 done
