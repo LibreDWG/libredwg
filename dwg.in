@@ -8,7 +8,7 @@ make -s -j4 -C programs dwgwrite
 v=-v3
 y=
 out=
-ob=$b
+ob="$b"
 
 for d in "$@"; do
     case $d in
@@ -16,24 +16,25 @@ for d in "$@"; do
              ;;
         --force-free) y="$y $d"
              ;;
-        -v*) v=$d
+        -v*) v="$d"
              ;;
         *)
-        if [ ! -f $d ]; then
-            if [ -f $srcdir/test/test-data/$d ]
+        if [ ! -f "$d" ]; then
+            if [ -f "$srcdir/test/test-data/$d" ]
             then
-                d=$srcdir/test/test-data/$d;
+                d="$srcdir/test/test-data/$d";
             else
-                if [ -f $srcdir/test/test-data/$d.dxf ]
+                if [ -f "$srcdir/test/test-data/$d.dwg" ]
                 then
-                    d=$srcdir/test/test-data/$d.dxf
+                    d="$srcdir/test/test-data/$d.dwg"
                 fi
             fi
         fi
-        dir=_$(basename `dirname "$d"`)
-        if [ x$dir = x_test-data ]; then dir=""; fi
-        if [ x$dir = x_td ]; then dir=""; fi
-        if [ x$dir = x_. ]; then dir=""; fi
+        xd=$(dirname "$d")
+        dir=_$(basename "$xd")
+        if [ "$dir" = "_test-data" ]; then dir=""; fi
+        if [ "$dir" = "_td" ]; then dir=""; fi
+        if [ "$dir" = "_." ]; then dir=""; fi
         case $(basename "$d") in
             *.dxf)  ext=dxf ;;
             *.DXF)  ext=dxf ;;
@@ -41,11 +42,11 @@ for d in "$@"; do
             *.JSON) ext=json ;;
             *)      echo "Illegal extension for $d"; exit ;;
         esac
-        b=`basename "$d" .$ext`
-        log=$b$dir.$ext.log
-        out=$b$dir.dwg
-        echo programs/dwgwrite $y $v -o "$out" "$d" 2\>$log
-        @TIMEOUT_30@ @LTEXEC@ programs/dwgwrite $y $v -o "$out" "$d" 2>$log
+        b=$(basename "$d" .$ext)
+        log="$b$dir.$ext.log"
+        out="$b$dir.dwg"
+        echo "programs/dwgwrite $y $v -o $out $d 2\>$log"
+        @TIMEOUT_30@ @LTEXEC@ programs/dwgwrite "$y" "$v" -o "$out" "$d" 2>"$log"
         ;;
     esac
 done
