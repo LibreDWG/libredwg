@@ -44,30 +44,35 @@ exec_prefix="@exec_prefix@"
 jq="@JQ@"
 jq="${jq:-jq}"
 json="/tmp/dwgfilter-$$.json"
-selfpath="$(realpath $0)"
+selfpath="$(realpath "$0")"
 if [ "$selfpath" = "@bindir@/dwgfilter" ]; then
     dwgread="@bindir@/dwgread"
     dwgwrite="@bindir@/dwgwrite"
 else
-    dwgread="$(dirname $selfpath)/dwgread"
-    dwgwrite="$(dirname $selfpath)/dwgwrite"
+    dwgread="$(dirname "$selfpath")/dwgread"
+    dwgwrite="$(dirname "$selfpath")/dwgwrite"
 fi
 
 if [ -n "$debug" ]; then
     dwgread="$dwgread -v3"
     dwgwrite="$dwgwrite -v3"
 fi
-echo $dwgread -O json -o $json $dwg
-$dwgread -O json -o $json $dwg
-echo $jq "$opts" $json
-$jq "$opts" $json
+echo "$dwgread -O json -o $json $dwg"
+$dwgread -O json -o "$json" "$dwg"
+echo "$jq $opts $json"
+$jq "$opts" "$json"
 fail=$?
-if [ $fail = 0 -a -n "$writemode" ]; then
+if [ $fail = 0 ] && [ -n "$writemode" ]; then
     mv "$dwg" "$dwg.bak"
-    echo $dwgwrite -o $dwg $json
-    $dwgwrite -o $dwg $json || ( mv "$dwg.bak" "$dwg"; fail=1)
+    echo "$dwgwrite -o $dwg $json"
+    if $dwgwrite -o "$dwg" "$json"; then
+        :
+    else
+        mv "$dwg.bak" "$dwg"
+        fail=1
+    fi
 fi
 if [ -z "$debug" ]; then
-    rm $json
+    rm "$json"
 fi
 exit $fail
