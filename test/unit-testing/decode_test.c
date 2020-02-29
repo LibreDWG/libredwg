@@ -19,6 +19,7 @@ read_literal_length_tests (void)
     ok ("read_literal_length");
   else
     fail ("read_literal_length");
+  bitfree (&bitchain);
 }
 
 void
@@ -26,13 +27,10 @@ read_long_compression_offset_tests (void)
 {
   Bit_Chain bitchain = strtobt ("11011101");
   if (read_long_compression_offset (&bitchain) == 0xDD)
-    {
-      pass ();
-    }
+    pass ();
   else
-    {
-      fail ("read_long_compression_offset");
-    }
+    fail ("read_long_compression_offset");
+  bitfree (&bitchain);
 }
 
 /* This functions calls tests for read_two_byte_offset()
@@ -44,13 +42,10 @@ read_two_byte_offset_tests (void)
   unsigned int litlength = 0x03;
   int result = read_two_byte_offset (&bitchain, &litlength);
   if (result == 508 && litlength == 0)
-    {
-      pass ();
-    }
+    pass ();
   else
-    {
-      fail ("read_two_byte_offset");
-    }
+    fail ("read_two_byte_offset");
+  bitfree (&bitchain);
 }
 
 int

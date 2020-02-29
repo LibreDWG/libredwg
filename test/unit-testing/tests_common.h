@@ -93,9 +93,9 @@ bitprepare (Bit_Chain *dat, size_t size)
   dat->byte = 0;
   dat->from_version = dat->version = R_2000;
   dat->opts = 1;
-  dat->size = size;
+  dat->size = size + 1;
   dat->fh = NULL;
-  dat->chain = (unsigned char *)calloc (size, 1);
+  dat->chain = (unsigned char *)calloc (size + 1, 1);
 }
 
 /*

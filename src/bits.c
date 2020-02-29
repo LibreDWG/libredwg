@@ -144,7 +144,7 @@ bit_read_B (Bit_Chain *dat)
 void
 bit_write_B (Bit_Chain *dat, unsigned char value)
 {
-  if (dat->byte >= dat->size - 1)
+  if (dat->byte >= dat->size)
     bit_chain_alloc (dat);
 
   if (value)
@@ -198,9 +198,8 @@ bit_write_BB (Bit_Chain *dat, unsigned char value)
   unsigned char mask;
   unsigned char byte;
 
-  if (dat->byte >= dat->size - 1)
+  if (dat->byte >= dat->size)
     bit_chain_alloc (dat);
-
   byte = dat->chain[dat->byte];
   if (dat->bit < 7)
     {
@@ -210,11 +209,10 @@ bit_write_BB (Bit_Chain *dat, unsigned char value)
   else
     {
       dat->chain[dat->byte] = (byte & 0xfe) | (value >> 1);
-      if (dat->byte < dat->size - 1)
-        {
-          byte = dat->chain[dat->byte + 1];
-          dat->chain[dat->byte + 1] = (byte & 0x7f) | ((value & 0x01) << 7);
-        }
+      if (dat->byte + 1 >= dat->size)
+        bit_chain_alloc (dat);
+      byte = dat->chain[dat->byte + 1];
+      dat->chain[dat->byte + 1] = (byte & 0x7f) | ((value & 0x01) << 7);
     }
 
   bit_advance_position (dat, 2);
@@ -346,24 +344,22 @@ bit_write_RC (Bit_Chain *dat, unsigned char value)
   unsigned char byte;
   unsigned char remainder;
 
-  if (dat->byte >= dat->size - 1)
-    bit_chain_alloc (dat);
-
   if (dat->bit == 0)
     {
+      if (dat->byte >= dat->size)
+        bit_chain_alloc (dat);
       dat->chain[dat->byte] = value;
     }
   else
     {
+      if (dat->byte + 1 >= dat->size)
+        bit_chain_alloc (dat);
       byte = dat->chain[dat->byte];
       remainder = byte & (0xff << (8 - dat->bit));
       dat->chain[dat->byte] = remainder | (value >> dat->bit);
-      if (dat->byte < dat->size - 1)
-        {
-          byte = dat->chain[dat->byte + 1];
-          remainder = byte & (0xff >> dat->bit);
-          dat->chain[dat->byte + 1] = remainder | (value << (8 - dat->bit));
-        }
+      byte = dat->chain[dat->byte + 1];
+      remainder = byte & (0xff >> dat->bit);
+      dat->chain[dat->byte + 1] = remainder | (value << (8 - dat->bit));
     }
 
   bit_advance_position (dat, 8);
