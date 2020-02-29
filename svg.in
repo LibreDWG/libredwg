@@ -6,38 +6,38 @@ make -s -C src
 make -s -C programs dwg2SVG
 @DSYMUTIL@ programs/dwg2SVG
 v=-v3
-y=
 out=
-ob=$b
+ob="$b"
 
 for d in "$@"; do
     case $d in
-        -v*) v=$d
+        -v*) v="$d"
              ;;
         *)
-        if [ ! -f $d ]; then
-            if [ -f $srcdir/test/test-data/$d ]
+        if [ ! -f "$d" ]; then
+            if [ -f "$srcdir/test/test-data/$d" ]
             then
-                d=$srcdir/test/test-data/$d;
+                d="$srcdir/test/test-data/$d";
             else
-                if [ -f $srcdir/test/test-data/$d.dwg ]
+                if [ -f "$srcdir/test/test-data/$d.dwg" ]
                 then
-                    d=$srcdir/test/test-data/$d.dwg
+                    d="$srcdir/test/test-data/$d.dwg"
                 fi
             fi
         fi
-        dir=_$(basename `dirname "$d"`)
-        if [ x$dir = x_test-data ]; then dir=""; fi
-        if [ x$dir = x_td ]; then dir=""; fi
-        b=`basename "$d" .dwg`
-        log=$b$dir.svg.log
+        xd=$(dirname "$d")
+        dir=_$(basename "$xd")
+        if [ "$dir" = "_test-data" ]; then dir=""; fi
+        if [ "$dir" = "_td" ]; then dir=""; fi
+        if [ "$dir" = "_." ]; then dir=""; fi
+        b=$(basename "$d" .dwg)
+        log="$b$dir.svg.log"
         out="$b$dir.svg"
-        echo programs/dwg2SVG $v "$d" \>"$out" 2\>$log
-        @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG $v "$d" >"$out" 2>$log
-        @RUN_JING@ $out
+        echo programs/dwg2SVG "$v" "$d" \>"$out" 2\>"$log"
+        @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG "$v" "$d" >"$out" 2>"$log"
+        @RUN_JING@ "$out"
         ;;
     esac
 done
 v=
-y=
-b=$ob
+b="$ob"
