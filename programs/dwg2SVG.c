@@ -129,6 +129,44 @@ entity_lweight (Dwg_Object_Entity *ent)
   return lw < 0 ? 0.1 : (double)(lw * 0.001);
 }
 
+// TODO rgb, 8-255
+static const char *
+entity_color (Dwg_Object_Entity *ent)
+{
+  switch (ent->color.index)
+    {
+    case 1:
+      return "red";
+    case 2:
+      return "yellow";
+    case 3:
+      return "green";
+    case 4:
+      return "cyan";
+    case 5:
+      return "blue";
+    case 6:
+      return "magenta";
+    case 7:
+      return "white";
+    case 0:
+    case 256:
+    default:
+      return "black";
+    }
+}
+
+static void
+common_entity (Dwg_Object_Entity *ent)
+{
+  double lweight;
+  const char* color;
+  lweight = entity_lweight (ent);
+  color = entity_color (ent);
+  printf ("      style=\"fill:none;stroke:%s;stroke-width:%.1fpx\" />\n",
+          color, lweight);
+}
+
 static void
 output_TEXT (Dwg_Object *obj)
 {
@@ -177,9 +215,10 @@ output_TEXT (Dwg_Object *obj)
 
   transform_OCS_2d (&pt, text->insertion_pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
-          "font-family=\"%s\" font-size=\"%f\" fill=\"blue\">%s</text>\n",
+          "font-family=\"%s\" font-size=\"%f\" fill=\"%s\">%s</text>\n",
           obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
-          text->height /* fontsize */, escaped ? escaped : "");
+          text->height /* fontsize */, entity_color (obj->tio.entity),
+          escaped ? escaped : "");
   free (escaped);
 }
 
@@ -188,18 +227,16 @@ output_LINE (Dwg_Object *obj)
 {
   Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
   BITCODE_3DPOINT start, end;
-  double lweight;
 
   if (isnan_3BD (line->start) || isnan_3BD (line->end)
       || isnan_3BD (line->extrusion))
     return;
-  lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&start, line->start, line->extrusion);
   transform_OCS (&end, line->end, line->extrusion);
-  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\" "
-          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\"\n\t",
           obj->index, transform_X (start.x), transform_Y (start.y),
-          transform_X (end.x), transform_Y (end.y), lweight);
+          transform_X (end.x), transform_Y (end.y));
+  common_entity (obj->tio.entity);
 }
 
 static void
@@ -207,17 +244,15 @@ output_CIRCLE (Dwg_Object *obj)
 {
   Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
   BITCODE_3DPOINT center;
-  double lweight;
 
   if (isnan_3BD (circle->center) || isnan_3BD (circle->extrusion)
       || isnan (circle->radius))
     return;
-  lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&center, circle->center, circle->extrusion);
-  printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\" "
-          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
+  printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"%f\"\n\t",
           obj->index, transform_X (center.x), transform_Y (center.y),
-          circle->radius, lweight);
+          circle->radius);
+  common_entity (obj->tio.entity);
 }
 
 // CIRCLE with radius 0.1
@@ -226,18 +261,16 @@ output_POINT (Dwg_Object *obj)
 {
   Dwg_Entity_POINT *point = obj->tio.entity->tio.POINT;
   BITCODE_3DPOINT pt, pt1;
-  double lweight;
 
   pt.x = point->x;
   pt.y = point->y;
   pt.z = point->z;
   if (isnan_3BD (pt) || isnan_3BD (point->extrusion))
     return;
-  lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&pt1, pt, point->extrusion);
-  printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"0.1\" "
-          "style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n",
+  printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"0.1\"\n\t",
           obj->index, transform_X (pt1.x), transform_Y (pt1.y));
+  common_entity (obj->tio.entity);
 }
 
 static void
@@ -246,14 +279,12 @@ output_ARC (Dwg_Object *obj)
   Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
   BITCODE_3DPOINT center;
   double x_start, y_start, x_end, y_end;
-  double lweight;
   int large_arc;
 
   if (isnan_3BD (arc->center) || isnan_3BD (arc->extrusion)
       || isnan (arc->radius) || isnan (arc->start_angle)
       || isnan (arc->end_angle))
     return;
-  lweight = entity_lweight (obj->tio.entity);
   transform_OCS (&center, arc->center, arc->extrusion);
 
   x_start = center.x + arc->radius * cos (arc->start_angle);
@@ -263,11 +294,11 @@ output_ARC (Dwg_Object *obj)
   // Assuming clockwise arcs.
   large_arc = (arc->end_angle - arc->start_angle < M_PI) ? 0 : 1;
 
-  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d 0 %f,%f\" "
-          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d,0 %f,%f\"\n\t",
           obj->index, transform_X (x_start), transform_Y (y_start),
           arc->radius, arc->radius, large_arc, transform_X (x_end),
-          transform_Y (y_end), lweight);
+          transform_Y (y_end));
+  common_entity (obj->tio.entity);
 }
 
 // FIXME
@@ -278,14 +309,12 @@ output_ELLIPSE (Dwg_Object *obj)
   BITCODE_2DPOINT radius;
   //BITCODE_3DPOINT center, sm_axis;
   //double x_start, y_start, x_end, y_end;
-  double lweight;
 
   if (isnan_3BD (ell->center) || isnan_3BD (ell->extrusion)
       || isnan_3BD (ell->sm_axis)
       || isnan (ell->axis_ratio) || isnan (ell->start_angle)
       || isnan (ell->end_angle))
     return;
-  lweight = entity_lweight (obj->tio.entity);
   /* The 2 points are already WCS */
   //transform_OCS (&center, ell->center, ell->extrusion);
   //transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
@@ -305,10 +334,10 @@ output_ELLIPSE (Dwg_Object *obj)
       ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z, ell->axis_ratio,
       ell->start_angle, ell->end_angle);
   printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
-          "ry=\"%f\" transform=\"rotate=(%f)\" "
-          "style=\"fill:none;stroke:blue;stroke-width:%.1fpx\" />\n",
+          "ry=\"%f\" transform=\"rotate=(%f)\"\n\t",
           obj->index, ell->center.x, ell->center.y, radius.x, radius.y,
-          cos (ell->sm_axis.x), lweight);
+          cos (ell->sm_axis.x));
+  common_entity (obj->tio.entity);
 }
 
 // untested
@@ -318,7 +347,6 @@ output_SOLID (Dwg_Object *obj)
   Dwg_Entity_SOLID *sol = obj->tio.entity->tio.SOLID;
   BITCODE_2DPOINT c1, c2, c3, c4;
   BITCODE_2DPOINT s1, s2, s3, s4;
-  double lweight;
 
   memcpy (&s1, &sol->corner1, sizeof s1);
   memcpy (&s2, &sol->corner2, sizeof s1);
@@ -326,18 +354,17 @@ output_SOLID (Dwg_Object *obj)
   memcpy (&s4, &sol->corner4, sizeof s1);
   if (isnan_2BD (s1) || isnan_2BD (s2) || isnan_2BD (s3) || isnan_2BD (s4))
     return;
-  lweight = entity_lweight (obj->tio.entity);
   transform_OCS_2d (&c1, s1, sol->extrusion);
   transform_OCS_2d (&c2, s2, sol->extrusion);
   transform_OCS_2d (&c3, s3, sol->extrusion);
   transform_OCS_2d (&c4, s4, sol->extrusion);
 
   printf ("\t<polygon id=\"dwg-object-%d\" "
-          "points=\"%f,%f %f,%f %f,%f %f,%f\" "
-          "style=\"stroke:blue;stroke-width:%.1fpx\" />\n",
+          "points=\"%f,%f %f,%f %f,%f %f,%f\"\n\t",
           obj->index, transform_X (c1.x), transform_Y (c1.y),
           transform_X (c2.x), transform_Y (c2.y), transform_X (c3.x),
-          transform_Y (c3.y), transform_X (c4.x), transform_Y (c4.y), lweight);
+          transform_Y (c3.y), transform_X (c4.x), transform_Y (c4.y));
+  common_entity (obj->tio.entity);
 }
 
 // untested
@@ -360,17 +387,16 @@ output_3DFACE (Dwg_Object *obj)
               ent->corner3.y);
       printf (" %s %f,%f", ent->invis_flags & 4 ? "M" : "L", ent->corner4.x,
               ent->corner4.y);
-      printf (" %s %f,%f", ent->invis_flags & 8 ? "M" : "L", ent->corner1.x,
+      printf (" %s %f,%f\"\n\t", ent->invis_flags & 8 ? "M" : "L", ent->corner1.x,
               ent->corner1.y);
-      printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
     }
   else
     printf ("\t<polygon id=\"dwg-object-%d\" "
-            "points=\"%f,%f %f,%f %f,%f %f,%f\" "
-            "style=\"stroke:blue;stroke-width:0.1px\" />\n",
+            "points=\"%f,%f %f,%f %f,%f %f,%f\"\n\t",
             obj->index, ent->corner1.x, ent->corner1.y, ent->corner2.x,
             ent->corner2.y, ent->corner3.x, ent->corner3.y, ent->corner4.x,
             ent->corner4.y);
+  common_entity (obj->tio.entity);
 }
 
 static void
@@ -393,7 +419,7 @@ output_POLYLINE_2D (Dwg_Object *obj)
       transform_OCS_2d (&pt, ptin, pline->extrusion);
       printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
               transform_X (pt.x), transform_Y (pt.y));
-      // TODO curve_types, C for Bezier
+      // TODO curve_types, C for Bezier https://svgwg.org/specs/paths/#PathData
       for (j = 1; j < numpts; j++)
         {
           ptin.x = pts[j].x;
@@ -406,8 +432,8 @@ output_POLYLINE_2D (Dwg_Object *obj)
         }
       if (pline->flag & 1) // closed
         printf (" Z");
-      // TODO color, lweight. GH #168
-      printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
+      printf ("\"\n\t");
+      common_entity (obj->tio.entity);
       free (pts);
     }
 }
@@ -432,7 +458,7 @@ output_LWPOLYLINE (Dwg_Object *obj)
       transform_OCS_2d (&pt, ptin, pline->extrusion);
       printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
               transform_X (pt.x), transform_Y (pt.y));
-      // TODO curve_types, C for Bezier
+      // TODO curve_types, C for Bezier https://svgwg.org/specs/paths/#PathData
       for (j = 1; j < numpts; j++)
         {
           ptin.x = pts[j].x;
@@ -445,8 +471,8 @@ output_LWPOLYLINE (Dwg_Object *obj)
         }
       if (pline->flag & 512) // closed
         printf (" Z");
-      // TODO color, lweight. GH #168
-      printf ("\" style=\"fill:none;stroke:blue;stroke-width:0.1px\" />\n");
+      printf ("\"\n\t");
+      common_entity (obj->tio.entity);
       free (pts);
     }
 }
