@@ -250,7 +250,7 @@ output_LINE (Dwg_Object *obj)
     return;
   transform_OCS (&start, line->start, line->extrusion);
   transform_OCS (&end, line->end, line->extrusion);
-  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f %f,%f\"\n\t",
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
           obj->index, transform_X (start.x), transform_Y (start.y),
           transform_X (end.x), transform_Y (end.y));
   common_entity (obj->tio.entity);
@@ -580,6 +580,7 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
 {
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *hdr;
+  int is_g = 0;
 
   if (!ref) // silently ignore empty pspaces
     return;
@@ -608,8 +609,15 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
         escaped = htmlwescape ((BITCODE_TU)hdr->name);
       else
         escaped = htmlescape (hdr->name, dwg->header.codepage);
-      printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
-              escaped ? escaped : "");
+      // don't group *Model_Space
+      if (strcmp (escaped, "*Model_Space") != 0)
+        {
+          is_g = 1;
+          printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
+                  escaped ? escaped : "");
+        }
+      else
+        printf ("\t<!-- %s -->\n", escaped);
       if (escaped)
         free (escaped);
     }
@@ -621,7 +629,8 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
       obj = get_next_owned_entity (ref->obj, obj);
     }
 
-  printf ("\t</g>\n");
+  if (is_g)
+    printf ("\t</g>\n");
 }
 
 static void
