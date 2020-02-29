@@ -2314,12 +2314,13 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           && type != SECTION_OBJFREESPACE)
         {
           LOG_WARN ("Failed to find section_info[%u] with type %d", i, type)
+          return DWG_ERR_SECTIONNOTFOUND;
         }
       else
         {
           LOG_TRACE ("Found no section_info[%u] with type %d\n", i, type)
+          return DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      return DWG_ERR_SECTIONNOTFOUND;
     }
   else
     {
