@@ -1,6 +1,7 @@
 #!/bin/sh
 # create -v3 logs and json's from dwg's with dwgread -Ojson
 srcdir="@srcdir@"
+top_builddir="@top_builddir@"
 
 make -s -C src
 make -s -C programs dwgread

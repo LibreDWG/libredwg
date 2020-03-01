@@ -1,6 +1,7 @@
 #!/bin/sh
 # create -v3 logs and dxf's from dwg's with dwg2dxf
 srcdir="@srcdir@"
+top_builddir="@top_builddir@"
 
 make -s -C src
 make -s -C programs dwg2dxf

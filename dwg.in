@@ -1,6 +1,7 @@
 #!/bin/sh
 # create -v3 logs and dwg's with dwgwrite from DXF or JSON)
 srcdir="@srcdir@"
+top_builddir="@top_builddir@"
 
 make -s -j4 -C src
 make -s -j4 -C programs dwgwrite

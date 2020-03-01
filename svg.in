@@ -1,6 +1,7 @@
 #!/bin/sh
 # create -v3 logs and SVG from dwg's with dwg2SVG
 srcdir="@srcdir@"
+top_builddir="@top_builddir@"
 
 make -s -C src
 make -s -C programs dwg2SVG
