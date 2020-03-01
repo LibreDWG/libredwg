@@ -135,7 +135,8 @@ entity_color (Dwg_Object_Entity *ent)
 {
   if (ent->color.index >= 8 && ent->color.index < 256)
     {
-      const RGB_Palette *rgb = &dwg_rgb_palette[ent->color.index];
+      const Dwg_RGB_Palette *palette = dwg_rgb_palette ();
+      const Dwg_RGB_Palette *rgb = &palette[ent->color.index];
       char *s = malloc (8);
       sprintf (s, "#%02x%02x%02x", rgb->r, rgb->g, rgb->b);
       return s;

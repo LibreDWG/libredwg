@@ -137,7 +137,7 @@ const unsigned char dwg_bits_size[] = {
   64,  //"CRC64",
 };
 
-EXPORT const RGB_Palette dwg_rgb_palette[256] = {
+static const Dwg_RGB_Palette rgb_palette[256] = {
   { 0x00, 0x00, 0x00 }, // 0
   { 0xFF, 0x00, 0x00 }, { 0xFF, 0xFF, 0x00 }, { 0x00, 0xFF, 0x00 },
   { 0x00, 0xFF, 0xFF }, { 0x00, 0x00, 0xFF }, // 5
@@ -242,6 +242,11 @@ EXPORT const RGB_Palette dwg_rgb_palette[256] = {
   { 0x50, 0x50, 0x50 }, { 0x69, 0x69, 0x69 }, { 0x82, 0x82, 0x82 },
   { 0xBE, 0xBE, 0xBE }, { 0xFF, 0xFF, 0xFF } // 255
 };
+
+EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void)
+{
+  return rgb_palette;
+}
 
 // map [rVER] to our enum number, not the dwg->header.dwgversion
 // Acad 2018 offers SaveAs DWG: 2018,2013,2010,2007,2004,2004,2000,r14
