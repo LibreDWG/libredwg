@@ -104,6 +104,7 @@ if HAVE_SHELLCHECK
 # fragile, serial-tests only. SPEC_LOG_COMPILER does not work there,
 # and parallel cannot do srcdir TESTS
 TESTS += log dwg dxf json svg logs-all.sh dynapi_test_all.sh \
+	 $(srcdir)/json-check $(srcdir)/dxf-check \
          programs/dwgfilter programs/alive.test $(srcdir)/programs/dxf.test programs/json.test
 TESTS_ENVIRONMENT = $(SHELLCHECK)
 # TEST_EXTENSIONS = .sh

@@ -1,53 +1,55 @@
-#!/bin/sh
+#!/bin/bash
 # dwg -> dxf
 # dxf -> dwg2
 # teigha dwg2 -> dxf
-d=${1:-example_2000}
-b=$(basename $d .dwg)
-dir=$(dirname $d)
-r=$(basename $dir)
+d="${1:-example_2000}"
+b="$(basename "$d" .dwg)"
+dir="$(dirname "$d")"
+r="$(basename "$dir")"
 case $dir in
-    *test/test-data) ;;
-    *test/test-data/*) r=`basename $(dirname $d)`; b=${b}_${r} ;;
-    *td) ;;
-    *td/*)             r=`basename $(dirname $d)`; b=${b}_${r} ;;
+    *test/test-data)   ;;
+    *test/test-data/*) b="${b}_${r}" ;;
+    *td)               ;;
+    *td/*)             b="${b}_${r}" ;;
 esac
 case $r in
-    20*)      ;;
+    20*)          ;;
     r9)       r=9 ;;
     r1[0234]) r=${r:1} ;;
     *)  case $b in
-            *_20*)      r=${b:(-4)}; f=`basename $b _$r` ;;
-            *_r9)       r=9;         f=`basename $b _r$r` ;;
-            *_r1[0234]) r=${b:(-2)}; f=`basename $b _r$r` ;;
-        esac ;;
+            *_20*)      r=${b:(-4)} ;;
+            *_r9)       r=9         ;;
+            *_r1[0234]) r=${b:(-2)} ;;
+        esac
+        ;;
 esac
 
 # first create a dwg log to compare against
-./log -v3 $d
-mv $b.log $b.log.orig
+./log -v3 "$d"
+mv "$b.log" "$b.log.orig"
+rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-./dxf -v4 $d
-if [ -f $b.dxf ]; then
-    mv $b.log $b.dwg2dxf.log
-    ./dwg -y -v4 $b.dxf
+./dxf -v4 "$d"
+if [ -f "$b.dxf" ]; then
+    mv "./$b.log" "$b.dwg2dxf.log"
+    ./dwg -y -v4 "$b.dxf"
 fi
 
-if [ -f $b.dwg ]; then
-    case `uname` in
+if [ -f "$b.dwg" ]; then
+    case $(uname) in
         Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
         Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
         Windows) TeighaFileConverter=TeighaFileConverter ;;
     esac
     if [ -x $TeighaFileConverter ]; then
-        echo TeighaFileConverter "." "test" ACAD$r DXF 0 1 $b.dwg
-        $TeighaFileConverter "." "test" ACAD$r DXF 0 1 $b.dwg
-        cat test/$b.dxf.err
+        echo TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
+        $TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
+        cat "test/$b.dxf.err"
     else
         echo TeighaFileConverter not installed
     fi
 
-    ./log -v3 $b.dwg
-    echo diff -bu $b.log.orig $b.log
-    diff -bu $b.log.orig $b.log
+    ./log -v3 "$b.dwg"
+    echo diff -bu "$b.log.orig" "$b.log"
+    diff -bu "$b.log.orig" "$b.log"
 fi
