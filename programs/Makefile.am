@@ -65,18 +65,18 @@ endif
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
  PROGS='$(bin_PROGRAMS)' \
- datadir='$(top_srcdir)/test/test-data' \
+ DATADIR='$(top_srcdir)/test/test-data' \
  TESTPROG='wine'
 else
 if DISABLE_DXF
 TESTS_ENVIRONMENT = \
  PROGS='$(bin_PROGRAMS)' \
- datadir='$(top_srcdir)/test/test-data' \
+ DATADIR='$(top_srcdir)/test/test-data' \
  TESTPROG=''
 else
 TESTS_ENVIRONMENT = \
  PROGS='$(bin_PROGRAMS)' \
- datadir='$(top_srcdir)/test/test-data' \
+ DATADIR='$(top_srcdir)/test/test-data' \
  TESTPROG=''
 endif
 endif

@@ -13,9 +13,9 @@
 # Author: Reini Urban
 
 if [ -d test/test-data ]; then cd ..; fi
-datadir=${datadir:-../test/test-data}
-problems=0
-rm -f *dxf.log
+DATADIR=${DATADIR:-../test/test-data}
+i=0
+rm -f ./*dxf.log
 enable_debug="$(grep '^CFLAGS =' Makefile | grep 'DDEBUG_CLASSES')"
 
 check_subentity() {
@@ -24,15 +24,15 @@ check_subentity() {
         grep -A8 ^VERTEX "$dxf" >tmp1
         grep -A8 ^VERTEX "$tgt" >tmp2
         d="$(diff -b tmp1 tmp2)"
-        test -z "$d" || echo VERTEX "$tgt" $d
+        test -z "$d" || echo "VERTEX $tgt $d"
         grep -A8 ^SEQEND "$dxf" >tmp1
         grep -A8 ^SEQEND "$tgt" >tmp2
         d="$(diff -b tmp1 tmp2)"
-        test -z "$d" || echo SEQEND "$tgt" $d
+        test -z "$d" || echo "SEQEND $tgt $d"
         grep -A8 ^POLYLINE "$dxf" >tmp1
         grep -A8 ^POLYLINE "$tgt" >tmp2
         d="$(diff -b tmp1 tmp2)"
-        test -z "$d" || echo POLYLINE "$tgt" $d
+        test -z "$d" || echo "POLYLINE $tgt $d"
         rm tmp1 tmp2
 #   else
 #       echo skip $dxf missing
@@ -44,9 +44,9 @@ for year in r14 2000 2004 2007 2010 2013 2018
 do
     for base in PolyLine3D PolyLine2D
     do
-        dwg=$datadir/${year}/${base}.dwg
-        dxf=$datadir/${year}/${base}.dxf
-        tgt=../${base}_${year}.dxf
+        dwg="$DATADIR/${year}/${base}.dwg"
+        dxf="$DATADIR/${year}/${base}.dxf"
+        tgt="../${base}_${year}.dxf"
         check_subentity
     done
 done
@@ -54,37 +54,37 @@ for year in r14 2000 2004 2007 2010 2013 2018
 do
     for base in example Drawing
     do
-        dwg=$datadir/${base}_${year}.dwg
-        dxf=$datadir/${base}_${year}.dxf
-        tgt=../${base}_${year}.dxf
+        dwg="$DATADIR/${base}_${year}.dwg"
+        dxf="$DATADIR/${base}_${year}.dxf"
+        tgt="../${base}_${year}.dxf"
         check_subentity
     done
 done
 
 check_acdb_dxfname() {
-    if [ -f "$dwg" ] && [ -f $dxf ]; then
+    if [ -f "$dwg" ] && [ -f "$dxf" ]; then
         ../libtool --mode=execute ./dwg2dxf -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
-        expect=$(grep -c ^$dxfname "$dxf")
-        if [ -n "$1" ]; then expect=$1; fi
-        got=$(grep -c ^$dxfname "$tgt")
-        if [ $got = $expect ]
+        expect="$(grep -c "^$dxfname" "$dxf")"
+        if [ -n "$1" ]; then expect="$1"; fi
+        got=$(grep -c "^$dxfname" "$tgt")
+        if [ "$got" = "$expect" ]
         then
-            echo "$tgt" $dxfname ok
+            echo "$tgt $dxfname ok"
         else
-            echo "$tgt" $dxfname fail: $got != $expect
-            problems=$(expr 1 + $problems)
-            grep -2 ^$dxfname "$tgt" >$log
+            echo "$tgt $dxfname fail: $got != $expect"
+            i=$((i+1))
+            grep -2 "^$dxfname" "$tgt" >"$log"
         fi
     fi
 }
 
 # check handled ACDB* dxfname's
 # UNHANDLED: ACDBDETAILVIEWSTYLE ACDBSECTIONVIEWSTYLE
-for dwg in $datadir/sample_2*.dwg; do
-    dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
-    tgt=../$(basename "$dxf")
-    log=$(basename "$tgt").log
-    rm "$log" 2>/dev/null
+for dwg in "$DATADIR"/sample_2*.dwg; do
+    dxf="$(echo "$dwg" | sed 's,.dwg,.dxf,')"
+    tgt="../$(basename "$dxf")"
+    log="$(basename "$tgt").log"
+    rm "./$log" 2>/dev/null
     for dxfname in ACDBDICTIONARYWDFLT ACDBPLACEHOLDER LAYOUT
     do
         check_acdb_dxfname
@@ -92,12 +92,12 @@ for dwg in $datadir/sample_2*.dwg; do
 done
 
 # Note that UNSTABLE classes are now skipped, just the single CLASS entry
-for dwg in $datadir/example_*.dwg; do
-    dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
-    tgt=../$(basename "$dxf")
-    log=$(basename "$tgt").log
-    rm "$log" 2>/dev/null
-    if [ "$tgt" != "../example_r14.dxf" -a "$tgt" != "../example_r13.dxf" ]; then
+for dwg in "$DATADIR"/example_*.dwg; do
+    dxf="$(echo "$dwg" | sed 's,.dwg,.dxf,')"
+    tgt="../$(basename "$dxf")"
+    log="$(basename "$tgt").log"
+    rm "./$log" 2>/dev/null
+    if [ "$tgt" != "../example_r14.dxf" ] && [ "$tgt" != "../example_r13.dxf" ]; then
         for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
         do
             if [ -z "$enable_debug" ]; then
@@ -108,11 +108,11 @@ for dwg in $datadir/example_*.dwg; do
         done
     fi
 done
-for dwg in $datadir/2004/Underlay.dwg; do
-    dxf=$(echo "$dwg" | sed 's,.dwg,.dxf,')
-    tgt=../$(basename "$dxf" .dxf)_2004.dxf
-    log=$(basename "$tgt").log
-    rm "$log" 2>/dev/null
+for dwg in "$DATADIR"/2004/Underlay.dwg; do
+    dxf="$(echo "$dwg" | sed 's,.dwg,.dxf,')"
+    tgt="../$(basename "$dxf" .dxf)_2004.dxf"
+    log="$(basename "$tgt").log"
+    rm "./$log" 2>/dev/null
     for dxfname in PDFDEFINITION PDFUNDERLAY
     do
         check_acdb_dxfname
@@ -121,67 +121,67 @@ done
 
 # check vertex - seqend order
 check_pline_order() {
-    if [ -f "$dwg" ] && [ -f $dxf ]; then
+    if [ -f "$dwg" ] && [ -f "$dxf" ]; then
         ../libtool --mode=execute ./dwg2dxf -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
-        got=$(egrep '^(POLYLINE|VERTEX|SEQEND)' "$tgt")
-        expect=$(egrep '^(POLYLINE|VERTEX|SEQEND)' "$dxf")
+        got="$(grep -E '^(POLYLINE|VERTEX|SEQEND)' "$tgt")"
+        expect="$(grep -E '^(POLYLINE|VERTEX|SEQEND)' "$dxf")"
         if [ "$got" = "$expect" ]
         then
             echo "$tgt" pline order ok
         else
             echo "$tgt" pline order fail: "$got"
-            problems=$(expr 1 + $problems)
-            echo "expect=$expect" >$log
-            echo "got=$got" >>$log
+            i=$((i+1))
+            echo "expect=$expect" >"$log"
+            echo "got=$got" >>"$log"
         fi
     fi
 }
 # check insert - attrib - seqend order
 check_insert_order() {
-    if [ -f "$dwg" ] && [ -f $dxf ]; then
+    if [ -f "$dwg" ] && [ -f "$dxf" ]; then
         ../libtool --mode=execute ./dwg2dxf -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
-        got=$(egrep '^(INSERT|ATTRIB|SEQEND)' "$tgt")
-        expect=$(egrep '^(INSERT|ATTRIB|SEQEND)' "$dxf")
+        got="$(grep -E '^(INSERT|ATTRIB|SEQEND)' "$tgt")"
+        expect="$(grep -E '^(INSERT|ATTRIB|SEQEND)' "$dxf")"
         if [ "$got" = "$expect" ]
         then
             echo "$tgt" insert order ok
         else
             echo "$tgt" insert order fail: "$got"
-            problems=$(expr 1 + $problems)
-            echo "expect=$expect" >$log
-            echo "got=$got" >>$log
+            i=$((i+1))
+            echo "expect=$expect" >"$log"
+            echo "got=$got" >>"$log"
         fi
     fi
 }
 
 check_roundtrip() {
-    if [ -f "$dwg" -a -x dxf2dwg ]
+    if [ -f "$dwg" ] && [ -x dxf2dwg ]
     then
-        dxf=$(basename "$dwg" .dwg).dxf
-        tgt=$(basename "$dwg")
-        log1=$(basename "$dwg" .dwg).log1
-        log2=$(basename "$dwg" .dwg).log2
-        ../libtool --mode=execute ./dwg2dxf -y -v2 -o "$dxf" "$dwg" 2>$log1 >/dev/null
+        dxf="$(basename "$dwg" .dwg).dxf"
+        tgt="$(basename "$dwg")"
+        log1="$(basename "$dwg" .dwg).log1"
+        log2="$(basename "$dwg" .dwg).log2"
+        ../libtool --mode=execute ./dwg2dxf -y -v2 -o "$dxf" "$dwg" 2>"$log1" >/dev/null
         ../libtool --mode=execute ./dxf2dwg -y -v0 -o "$tgt" "$dxf" 2>/dev/null >/dev/null
-        ../libtool --mode=execute ./dwgread -v2 "$tgt" 2>$log2 >/dev/null
-        expect=$(egrep -c '^Add entity' "$log1")
-        got=$(egrep -c '^Add entity' "$log2")
-        rm "$dxf" "$tgt" 2>/dev/null
+        ../libtool --mode=execute ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
+        expect="$(grep -E -c '^Add entity' "$log1")"
+        got="$(grep -E -c '^Add entity' "$log2")"
+        rm "./$dxf" "./$tgt" 2>/dev/null
         if [ "$got" = "$expect" ]
         then
             echo "$dxf" roundtrip ok
             rm "$log1" "$log2" 2>/dev/null
         elif [ "$got" = "0" ]
         then
-            echo "$json" "roundtrip fail: $expect vs $got entities"
-            problems=$(expr 1 + $problems)
-            echo "expect=$expect" >$log
-            echo "got=$got" >>$log
+            echo "$dxf" "roundtrip fail: $expect vs $got entities"
+            i=$((i+1))
+            echo "expect=$expect" >"$log"
+            echo "got=$got" >>"$log"
         else
             echo "$dxf" "roundtrip fail: $expect vs $got entities (TODO)"
-            #problems=$(expr 1 + $problems)
-            echo "expect=$expect" >$log
-            echo "got=$got" >>$log
+            #i=$((i+1))
+            echo "expect=$expect" >"$log"
+            echo "got=$got" >>"$log"
         fi
     fi
 }
@@ -189,51 +189,51 @@ check_roundtrip() {
 for year in 2007 2018
 do
     base=PolyLine3D
-    dwg=$datadir/${year}/${base}.dwg
-    dxf=$datadir/2013/${base}.dxf
-    tgt=../${base}_${year}.dxf
-    log=$(basename "$tgt" .dxf)_pline.dxf.log
-    rm "$log" 2>/dev/null
+    dwg="$DATADIR/${year}/${base}.dwg"
+    dxf="$DATADIR/2013/${base}.dxf"
+    tgt="../${base}_${year}.dxf"
+    log="$(basename "$tgt" .dxf)_pline.dxf.log"
+    rm "./$log" 2>/dev/null
     check_pline_order
 done
 
 for year in 2000 2004 2007 2010 2013 2018
 do
     base=example
-    dwg=$datadir/${base}_${year}.dwg
-    dxf=$datadir/${base}_${year}.dxf
-    tgt=../${base}_${year}.dxf
-    log=$(basename "$tgt" .dxf)_pline.dxf.log
-    rm "$log" 2>/dev/null
+    dwg="$DATADIR/${base}_${year}.dwg"
+    dxf="$DATADIR/${base}_${year}.dxf"
+    tgt="../${base}_${year}.dxf"
+    log="$(basename "$tgt" .dxf)_pline.dxf.log"
+    rm "./$log" 2>/dev/null
     check_pline_order
 done
 
 for year in 2000 2004 2007 2010 2013 2018
 do
     base=example
-    dwg=$datadir/${base}_${year}.dwg
-    dxf=$datadir/${base}_${year}.dxf
-    tgt=../${base}_${year}.dxf
-    log=$(basename "$tgt" .dxf)_insert.dxf.log
-    rm "$log" 2>/dev/null
+    dwg="$DATADIR/${base}_${year}.dwg"
+    dxf="$DATADIR/${base}_${year}.dxf"
+    tgt="../${base}_${year}.dxf"
+    log="$(basename "$tgt" .dxf)_insert.dxf.log"
+    rm "./$log" 2>/dev/null
     check_insert_order
 done
 
 for year in 2000 2004 2007 2010 2013 2018
 do
     base=example
-    dwg=$datadir/${base}_${year}.dwg
-    tgt=../${base}_${year}
-    log=$tgt.dxf.log
-    rm "$log" 2>/dev/null
+    dwg="$DATADIR/${base}_${year}.dwg"
+    tgt="../${base}_${year}"
+    log="$tgt.dxf.log"
+    rm "./$log" 2>/dev/null
     check_roundtrip
 done
 
-if test x0 = x$problems ; then
+if test "0" = "$i" ; then
     rm ./*.dxf.log 2>/dev/null
     exit 0
 else
-    echo $(basename "$0"): $problems failures
+    echo "$(basename "$0"): $i failures"
     ls -l ./*dxf.log
     exit 1
 fi

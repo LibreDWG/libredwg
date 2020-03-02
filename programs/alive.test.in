@@ -26,47 +26,48 @@
 #
 # If there are no problems, exit successfully.  Otherwise display
 # the count of problem runs, the list of *.log files and exit with failure.
-# datadir must be set to support testing from a separate build dir.
+# DATADIR must be set to support testing from a separate build dir.
 
 # Code:
 
-test "$PROGS" || { echo ERROR: Env var PROGS not set ; exit 1 ; }
-test "$datadir" || { echo ERROR: Env var datadir not set ; exit 1 ; }
+test -n "$PROGS" || { echo ERROR: Env var PROGS not set ; exit 1 ; }
+test -n "$DATADIR" || { echo ERROR: Env var DATADIR not set ; exit 1 ; }
+top_builddir="@top_builddir@"
+[ -z "$top_builddir" ] && echo $top_builddir
 
-problems=0
-rm -f *dwg*.log
+i=0
+rm -f ./*dwg*.log
 
 #just check that it does not crash
 run ()
 {
-    prog=$1
-    dwg=$2
+    prog="$1"
+    dwg="$2"
 
-    bprog=`basename $prog .exe`
-    bdwg=`basename $dwg .dwg`
-    log=$bdwg-$bprog.log
-    arg="${datadir}/$dwg.dwg"
-    rm $log 2>/dev/null
+    bprog="$(basename "$prog" .exe)"
+    bdwg="$(basename "$dwg" .dwg)"
+    log="$bdwg-$bprog.log"
+    arg="${DATADIR}/$dwg.dwg"
+    rm "./$log" 2>/dev/null
     case $bprog in
     dwglayers)  ;;
     dwg2dxf)    arg="-y $arg" ;;
     dwggrep)    arg="-i tekst $arg" ;;
-    dxf2dwg)    arg="-y -v2 ${datadir}/$dwg.dxf" ;;
+    dxf2dwg)    arg="-y -v2 ${DATADIR}/$dwg.dxf" ;;
     dwgread)    arg="-v2 -o $dwg.json $arg" ;;
     dwgwrite)   arg="-y -v2 $dwg.json" ;;
     #dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v2 $arg" ;;
     esac
-    if [ -n "$VALGRIND" -a -n "$LOG_COMPILER" ]; then
+    if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
         TESTPROG="$LOG_COMPILER $LOG_FLAGS"
-        log=$TEST_SUITE_LOG
+        log="$TEST_SUITE_LOG"
     else
         # libtool only if shared
-        top_builddir=..
         TESTPROG="@LTEXEC@"
     fi
     # indxf still leaks, GH #151
-    if test $bprog = dxf2dwg -a -n "@HAVE_ASAN@"
+    if test "$bprog" = "dxf2dwg" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
@@ -80,7 +81,7 @@ run ()
     #then
     #   TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     #fi
-    echo $TESTPROG ./$prog $arg 2\>$log
+    echo "$TESTPROG ./$prog $arg 2>$log"
     # writers can hang
     #if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
     #then
@@ -91,69 +92,69 @@ run ()
     #        (sleep 10s; killall $bprog 2>/dev/null) &
     #    fi
     #fi
-    if $TESTPROG ./$prog $arg >$log 2>&1
+    # shellcheck disable=SC2086
+    if $TESTPROG ./$prog $arg >"$log" 2>&1
     then
-        rm $log
+        rm "./$log"
     else
         case $bprog in
         dwggrep) ;;
         dwgwrite)
-            case "`uname -s`" in
-            CYGWIN*)tmpnum=$(expr 1 + $problems)
-                    echo $(basename $0): TODO $prog $tmpnum failures
-                    ls -l $log ;;
-            *)      problems=$(expr 1 + $problems)
-                    echo $prog failure $?
-                    tail -n100 $log ;;
+            case "$(uname -s)" in
+            CYGWIN*)tmpnum=$((i+1))
+                    echo "$(basename "$0"): TODO $prog $tmpnum failures"
+                    ls -l "$log" ;;
+            *)      i=$((i+1))
+                    echo "$prog failure $?"
+                    tail -n100 "$log" ;;
             esac
             ;;
         dwgrewrite)
-            case "`uname -s`" in
+            case "$(uname -s)" in
             MINGW*) test -f core && rm core
-                    tmpnum=$(expr 1 + $problems)
-                    echo $(basename $0): TODO $prog $tmpnum failures
-                    ls -l $log ;;
-            *)      problems=$(expr 1 + $problems)
-                    echo $prog failure $?
-                    tail -n100 $log ;;
+                    tmpnum=$((i+1))
+                    echo "$(basename "$0"): TODO $prog $tmpnum failures"
+                    ls -l "$log" ;;
+            *)      i=$((i+1))
+                    echo "$prog failure $?"
+                    tail -n100 "$log" ;;
             esac
             ;;
-        *)      problems=$(expr 1 + $problems)
-                echo $prog failure $?
-                tail -n100 $log ;;
+        *)      i=$((i+1))
+                echo "$prog failure $?"
+                tail -n100 "$log" ;;
         esac
     fi
-    if test x"$MINGW" != x -a x"$OLDTESTPROG" != x; then
-        TESTPROG=$OLDTESTPROG
+    if [ x"$MINGW" != x ] && [ x"$OLDTESTPROG" != x ]; then
+        TESTPROG="$OLDTESTPROG"
     fi
 }
 
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
-TODO="r11/ACEL10"
+#TODO="r11/ACEL10"
 
 for d in $DATA; do
-    b=$(basename $d)
-    rm $b.dxf 2>/dev/null
-    rm $b.svg 2>/dev/null
-    rm $b.ps 2>/dev/null
-    rm $b.bmp 2>/dev/null
-    rm $b-rewrite.dwg 2>/dev/null
-    rm $b-dwgwrite.dwg 2>/dev/null
+    b="$(basename "$d")"
+    rm "./$b.dxf" 2>/dev/null
+    rm "./$b.svg" 2>/dev/null
+    rm "./$b.ps" 2>/dev/null
+    rm "./$b.bmp" 2>/dev/null
+    rm "./$b-rewrite.dwg" 2>/dev/null
+    rm "./$b-dwgwrite.dwg" 2>/dev/null
 done
 
 for prog in $PROGS ; do
     for dwg in $DATA; do
-        run $prog $dwg
+        run "$prog" "$dwg"
     done
 done
 case $PROGS in
   *dwggrep*)
-    top_builddir=..
-    echo @LTEXEC@ ./dwggrep -i -c tekst ${datadir}/example_*.dwg
-    if test x"`@LTEXEC@ ./dwggrep -i -c tekst ${datadir}/example_*.dwg`" != x"24"; then
-      problems=$(expr 1 + $problems)
-      echo dwggrep failure $?
+    echo "@LTEXEC@ ./dwggrep -i -c tekst ${DATADIR}/example_*.dwg"
+    if test x"$(@LTEXEC@ ./dwggrep -i -c tekst "${DATADIR}"/example_*.dwg)" != x"24"; then
+      i=$((i+1))
+      echo "dwggrep failure $?"
     fi
 
 esac
@@ -164,12 +165,12 @@ esac
 # skip the run part if dwg2dxf is part of bin_PROGRAMS (i.e. being installed)
 # rather see the dxf.test roundtrip test
 # only in programs, not examples:
-if test -f cmp_dxf.pl -a -e dwg2dxf; then
+if [ -f cmp_dxf.pl ] && [ -e dwg2dxf ]; then
     for dwg in $DATA; do
-        base=$(basename $dwg .dwg)
-        run dwg2dxf $dwg
-        #if [ -f ${datadir}/$dwg.dxf ]; then
-        #    perl filt_dxf.pl ${datadir}/$dwg.dxf > $base.dxf.orig
+        run dwg2dxf "$dwg"
+        #if [ -f ${DATADIR}/$dwg.dxf ]; then
+        #    base="$(basename "$dwg" .dwg)"
+        #    perl filt_dxf.pl ${DATADIR}/$dwg.dxf > $base.dxf.orig
         #    perl filt_dxf.pl $base.dxf > $base.dxf.new
         #    diff -bu  $base.dxf.orig $base.dxf.new | perl cmp_dxf.pl
         #    rm $base.dxf.orig $base.dxf.new 2>/dev/null
@@ -177,11 +178,11 @@ if test -f cmp_dxf.pl -a -e dwg2dxf; then
     done
 fi
 
-if test x0 = x$problems ; then
+if test "0" = "$i" ; then
     exit 0
 else
-    echo `basename $0`: $problems failures
-    ls -l *.log
+    echo "$(basename "$0"): $i failures"
+    ls -l ./*.log
     exit 1
 fi
 

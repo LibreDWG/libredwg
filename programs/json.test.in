@@ -11,48 +11,49 @@
 #
 # Author: Reini Urban
 
-test "$datadir" || { echo ERROR: Env var datadir not set ; exit 1 ; }
+test "$DATADIR" || { echo ERROR: Env var DATADIR not set ; exit 1 ; }
 
-problems=0
+i=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
-TODO="r11/ACEL10"
+#TODO="r11/ACEL10"
 SED=@SED@
 JQ=@JQ@
+[ -z "$SED" ] && echo "$SED"
 
 for d in $DATA; do
-    b=$(basename "$d")
-    rm "$b.json" 2>/dev/null
+    b="$(basename "$d")"
+    rm "./$b.json" 2>/dev/null
 done
 
 check_roundtrip() {
-    if [ -f "$dwg" -a -x dwgwrite ]
+    if [ -f "$dwg" ] && [ -x dwgwrite ]
     then
-        json=$(basename "$dwg" .dwg).json
-        tgt=$(basename "$dwg")
-        log1=$(basename "$dwg" .dwg).log1
-        log2=$(basename "$dwg" .dwg).log2
-        ../libtool --mode=execute ./dwgread -y -v2 -o "$json" "$dwg" 2>$log1 >/dev/null
+        json="$(basename "$dwg" .dwg).json"
+        tgt="$(basename "$dwg")"
+        log1="$(basename "$dwg" .dwg).log1"
+        log2="$(basename "$dwg" .dwg).log2"
+        ../libtool --mode=execute ./dwgread -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null
         ../libtool --mode=execute ./dwgwrite -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null
-        ../libtool --mode=execute ./dwgread -v2 "$tgt" 2>$log2 >/dev/null
-        expect=$(egrep -c '^Add entity' "$log1")
-        got=$(egrep -c '^Add entity' "$log2")
-        rm "$json" "$tgt" 2>/dev/null
+        ../libtool --mode=execute ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
+        expect="$(grep -E -c '^Add entity' "$log1")"
+        got="$(grep -E -c '^Add entity' "$log2")"
+        rm "./$json" "./$tgt" 2>/dev/null
         if [ "$got" = "$expect" ]
         then
-            echo "$json" roundtrip ok
-            rm "$log1" "$log2" 2>/dev/null
+            echo "$json roundtrip ok"
+            rm "./$log1" "./$log2" 2>/dev/null
         elif [ "$got" = "0" ]
         then
             echo "$json" "roundtrip fail: $expect vs $got entities"
-            problems=$(expr 1 + $problems)
-            echo "expect=$expect" >$log
-            echo "got=$got" >>$log
+            i=$((i+1))
+            echo "expect=$expect" >"$log"
+            echo "got=$got" >>"$log"
         else
             echo "$json" "roundtrip fail: $expect vs $got entities"
-            problems=$(expr 1 + $problems)
-            echo "expect=$expect" >$log
-            echo "got=$got" >>$log
+            i=$((i+1))
+            echo "expect=$expect" >"$log"
+            echo "got=$got" >>"$log"
         fi
     fi
 }
@@ -60,17 +61,17 @@ check_roundtrip() {
 for dwg in $DATA; do
     json="$(basename "$dwg" .dwg).json"
     log="$json.log"
-    dwg="${datadir}/$dwg.dwg"
+    dwg="${DATADIR}/$dwg.dwg"
     echo dwgread -Ojson -o"$json" "$dwg"
     # With --enable-debug fixup nan
     if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$json" && \
        $JQ . "$json" >"$json.log" 2>&1
     then
-        rm "$json.log" "$json"
+        rm "./$json.log" "./$json"
     else
         cat "$json.log"
-        problems=$(expr 1 + $problems)
+        i=$((i+1))
     fi
 
     geojson="$(basename "$dwg" .dwg).geojson"
@@ -79,19 +80,19 @@ for dwg in $DATA; do
        @JSON_SED_NAN@ "$geojson" && \
        $JQ . "$geojson" >>"$json.log" 2>&1
     then
-        rm "$json.log" "$geojson"
+        rm "./$json.log" "./$geojson"
     else
         cat "$json.log"
-        problems=$(expr 1 + $problems)
+        i=$((i+1))
     fi
 
     check_roundtrip
 done
 
-if test x0 = x$problems ; then
+if test "0" = "$i" ; then
     exit 0
 else
-    echo $(basename "$0"): $problems failures
+    echo "$(basename "$0"): $i failures"
     ls -l ./*json.log
     exit 1
 fi

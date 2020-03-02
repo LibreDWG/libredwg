@@ -66,12 +66,12 @@ endif
 if HAVE_WINE
 TESTS_ENVIRONMENT = \
  PROGS='$(check_PROGRAMS)' \
- datadir='$(top_srcdir)/test/test-data' \
+ DATADIR='$(top_srcdir)/test/test-data' \
  TESTPROG='wine'
 else
 TESTS_ENVIRONMENT = \
  PROGS='$(check_PROGRAMS)' \
- datadir='$(top_srcdir)/test/test-data' \
+ DATADIR='$(top_srcdir)/test/test-data' \
  TESTPROG=''
 endif
 
