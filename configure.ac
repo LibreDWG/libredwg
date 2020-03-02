@@ -16,6 +16,8 @@ AC_INIT([LibreDWG],
 AC_CONFIG_AUX_DIR([build-aux])
 dnl for older systems use this:
 dnl AM_INIT_AUTOMAKE([1.11.6 gnu no-define])
+dnl parallel-tests:
+dnl: error: using '$(srcdir)' in TESTS is currently broken: '$(srcdir)/libredwg.spec'
 AM_INIT_AUTOMAKE([1.12.2 gnu no-define serial-tests dist-xz])
 
 # Keep this in sync with what is passed in AC_INIT
@@ -542,6 +544,8 @@ case $host_os in
 esac
 AC_SUBST([DSYMUTIL])
 
+AC_CHECK_PROGS([SHELLCHECK], [shellcheck])
+AM_CONDITIONAL([HAVE_SHELLCHECK], [test -n "$SHELLCHECK"])
 AC_CHECK_PROGS([RPMLINT], [rpmlint])
 AM_CONDITIONAL([HAVE_RPMLINT], [test -n "$RPMLINT"])
 

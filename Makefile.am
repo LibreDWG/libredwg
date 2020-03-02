@@ -99,12 +99,23 @@ regen-swig-patch:
 	-difforig bindings/python/swig_python.c >xxxx
 	if test -s xxxx; then mv xxxx build-aux/swig_python.patch; fi
 
+TESTS =
+if HAVE_SHELLCHECK
+# fragile, serial-tests only. SPEC_LOG_COMPILER does not work there,
+# and parallel cannot do srcdir TESTS
+TESTS += log dwg dxf json svg logs-all.sh dynapi_test_all.sh \
+         programs/dwgfilter programs/alive.test $(srcdir)/programs/dxf.test programs/json.test
+TESTS_ENVIRONMENT = $(SHELLCHECK)
+# TEST_EXTENSIONS = .sh
+# SPEC_LOG_COMPILER = $(SHELLCHECK)
+else
 if HAVE_RPMLINT
-# fragile, serial-tests only. SPEC_LOG_COMPILER does not work there
-TESTS = $(srcdir)/libredwg.spec
+# serial-tests only, see above. only with parallel-tests we can do both
+TESTS += $(srcdir)/libredwg.spec
 TESTS_ENVIRONMENT = $(RPMLINT)
 # TEST_EXTENSIONS = .spec
 # SPEC_LOG_COMPILER = $(RPMLINT)
+endif
 endif
 
 check-dwg: all
