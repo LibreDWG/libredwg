@@ -550,8 +550,9 @@ AC_CHECK_PROGS([JING], [jing])
 case $host_os in
   mingw*)   RUN_JING=rem ;;
   windows*) RUN_JING=rem ;;
-  *) RUN_JING=: ;;
+  *) RUN_JING=":" ;;
 esac
+
 dnl LaTeXML has a broken svg11-basic.rng
 dnl The zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/ is correct.
 dnl Needs to be installed into /usr/local/share/relaxng/svg11/
@@ -568,7 +569,7 @@ then
     try_jing="$JING /usr/share/perl5/vendor_perl/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
     AC_MSG_RESULT([$try_jing])
   else
-    LATEXPM=`$PERL -MLaTeXML -e'print $INC{"LaTeXML.pm"}`
+    LATEXPM=`$PERL -MLaTeXML -e'print $INC{"LaTeXML.pm"}'`
     if test -e "$LATEXPM" -a -e "`dirname $LATEXPM`/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
     then
       try_jing="$JING `dirname $LATEXPM`/LaTeXML/resources/RelaxNG/svg/svg11-basic.rng"
@@ -577,7 +578,7 @@ then
       AC_MSG_RESULT([none])
     fi
   fi
-  AC_MSG_CHECKING([whether the svg validator works (broken LaTeXML?)])
+  AC_MSG_CHECKING([whether the svg validator works (maybe broken LaTeXML)])
   cat <<_ACEOF >try.svg
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -596,12 +597,14 @@ _ACEOF
     RUN_JING="$try_jing"
     AC_MSG_RESULT([yes])
   else
-    AC_MSG_RESULT([no. Use the zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/
-and unpack it into /usr/local/share/relaxng/svg11/])
+    AC_MSG_RESULT([no])
+    AC_MSG_RESULT(m4_normalize([
+      Use the zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/
+      and unpack it into /usr/local/share/relaxng/svg11/
+      ]))
   fi
   rm try.svg 2>/dev/null
 fi
-AC_SUBST([JING])
 AC_SUBST([RUN_JING])
 
 dnl help2man only by the maintainer
