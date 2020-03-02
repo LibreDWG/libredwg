@@ -5,12 +5,18 @@ abs_builddir="@abs_builddir@"
 
 make -s -j4
 
-@PARALLEL@ @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 {} \2\>{/.}.log ::: $srcdir/test/test-data/*.dwg
+# shellcheck disable=SC1001,SC1083
+@PARALLEL@ @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 {} \2\>{/.}.log ::: "$srcdir"/test/test-data/*.dwg
 
-cd $srcdir/test/test-data
-@PARALLEL@ @TIMEOUT_10@ $abs_builddir/libtool --mode=execute $abs_builddir/programs/dwgread -v4 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
-cd $abs_builddir
+cd "$srcdir/test/test-data" || exit
+# shellcheck disable=SC1001,SC1083
+@PARALLEL@ @TIMEOUT_10@ "$abs_builddir"/libtool --mode=execute "$abs_builddir"/programs/dwgread -v4 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
+cd "$abs_builddir" || exit
 
-cd $srcdir/test/test-big
-@PARALLEL@ @TIMEOUT_30@ $abs_builddir/libtool --mode=execute $abs_builddir/programs/dwgread -v3 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
-cd $abs_builddir
+if test -d "$srcdir/test/test-big"
+then
+    cd "$srcdir/test/test-big" || exit
+    # shellcheck disable=SC1001,SC1083
+    @PARALLEL@ @TIMEOUT_30@ "$abs_builddir"/libtool --mode=execute "$abs_builddir"/programs/dwgread -v3 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
+    cd "$abs_builddir" || exit
+fi

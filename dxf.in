@@ -7,6 +7,8 @@ make -s -C src
 make -s -C programs dwg2dxf
 @DSYMUTIL@ programs/dwg2dxf
 v=-v3
+# dummy to please shellcheck
+test -z "$v" && echo $top_builddir
 out=
 
 for d in "$@"; do
