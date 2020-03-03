@@ -37,7 +37,7 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         log="$b$dir.log"
         out="$b$dir.dxf"
-        echo "programs/dwg2dxf $v -o $out $d 2\>$log"
+        echo "programs/dwg2dxf $v -o $out $d 2>$log"
         @TIMEOUT_10@ @LTEXEC@ programs/dwg2dxf "$v" -o "$out" "$d" 2>"$log"
         ;;
     esac

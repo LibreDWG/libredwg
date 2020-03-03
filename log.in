@@ -34,7 +34,7 @@ for d in "$@"; do
         if [ "$dir" = "_." ]; then dir=""; fi
         b=$(basename "$d" .dwg)
         log="$b$dir.log"
-        echo programs/dwgread "$v" "$d" 2\>"$log"
+        echo "programs/dwgread $v $d 2>$log"
         # (sleep 12s; killall dwgread 2>/dev/null) &
         @TIMEOUT_10@ @LTEXEC@ programs/dwgread "$v" "$d" 2>"$log"
         ;;

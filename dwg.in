@@ -48,7 +48,7 @@ for d in "$@"; do
         b=$(basename "$d" .$ext)
         log="$b$dir.$ext.log"
         out="$b$dir.dwg"
-        echo "programs/dwgwrite $args $v -o $out $d 2\>$log"
+        echo "programs/dwgwrite $args $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
         @TIMEOUT_30@ @LTEXEC@ programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
         ;;

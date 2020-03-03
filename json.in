@@ -36,7 +36,7 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         log="$b$dir.log"
         out="$b$dir.json"
-        echo programs/dwgread "$v" -Ojson -o "$out" "$d" 2\>"$log"
+        echo "programs/dwgread $v -Ojson -o $out $d 2>$log"
         @TIMEOUT_10@ @LTEXEC@ programs/dwgread "$v" -Ojson -o "$out" "$d" 2>"$log"
         ;;
     esac
