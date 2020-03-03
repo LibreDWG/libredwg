@@ -56,10 +56,16 @@ Optionally:
 - Perl 5 for the perl bindings
 - doxygen to generate the reference manual
 - jq to check json validity
+- shellcheck to check shell scripts
+- rpmlint to check the spec validity
+- jinq with some svg11 relaxng to check SVG validity.
+  LaTeXML used to have a broken svg11-basic.rng. If so
+  the zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/ is correct.
+  Needs to be installed into /usr/local/share/relaxng/svg11/
 - valgrind to find leaks and memory bugs
 - timeout to help tests with large or hanging DWG's
 - GNU parallel to speed up special tests
-- picat to find unknown fields, a better prolog. picat-lang.org
+- picat to find unknown fields, a better prolog. http://picat-lang.org/
 
 See INSTALL for generic instructions.  Basically, you do:
 
