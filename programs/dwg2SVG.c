@@ -12,13 +12,17 @@
 /*****************************************************************************/
 
 /*
- * testSVG.c: convert a DWG to SVG
+ * dwg2SVG.c: convert a DWG to SVG
  * written by Felipe Corrêa da Silva Sances
  * modified by Rodrigo Rodrigues da Silva
  * modified by Thien-Thi Nguyen
  * modified by Reini Urban
  *
- * TODO: all entities,
+ * TODO: all entities: 3DSOLID, SHAPE, ARC_DIMENSION, ATTRIB, DIMENSION*,
+ *         *SURFACE, GEOPOSITIONMARKER/CAMERA/LIGHT, HATCH, HELIX,
+ *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE, MTEXT, MULTILEADER,
+ *         OLE2FRAME, OLEFRAME, POLYLINE_3D, POLYLINE_MESH, POLYLINE_PFACE, RAY, XLINE,
+ *         SPLINE, TABLE, TOLERANCE, VIEWPORT?
  *       common_entity_data: ltype, ltype_scale, invisible.
  *       PLINE: widths, bulges.
  */
@@ -136,6 +140,7 @@ entity_lweight (Dwg_Object_Entity *ent)
 static char *
 entity_color (Dwg_Object_Entity *ent)
 {
+  // TODO: alpha?
   if (ent->color.index >= 8 && ent->color.index < 256)
     {
       const Dwg_RGB_Palette *palette = dwg_rgb_palette ();
@@ -187,6 +192,7 @@ common_entity (Dwg_Object_Entity *ent)
     free (color);
 }
 
+// TODO: MTEXT
 static void
 output_TEXT (Dwg_Object *obj)
 {
@@ -497,6 +503,7 @@ output_LWPOLYLINE (Dwg_Object *obj)
     }
 }
 
+// TODO: MINSERT
 static void
 output_INSERT (Dwg_Object *obj)
 {
@@ -595,11 +602,14 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
       fprintf (stderr, "Argument not a BLOCK_HEADER reference\n");
       return;
     }
-  /* TODO: Review.  (This check avoids a segfault, but it is
-     still unclear whether or not the condition is valid.)  */
   if (!obj->tio.object)
-    {
+    { // TODO could be an assert also
       fprintf (stderr, "Found null obj->tio.object\n");
+      return;
+    }
+  if (!obj->tio.object->tio.BLOCK_HEADER)
+    { // TODO could be an assert also
+      fprintf (stderr, "Found null obj->tio.object->tio.BLOCK_HEADER\n");
       return;
     }
 
@@ -676,6 +686,7 @@ output_SVG (Dwg_Data *dwg)
   // optional, for xmllint
   // <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   //   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+  // But we use jing with relaxng, which is better. Just LaTeXML ships a broken rng
   printf ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
           "<svg\n"
           "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
