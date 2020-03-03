@@ -87,6 +87,9 @@ TESTS += dxf.test
 if HAVE_JQ
 TESTS += json.test
 endif
+if HAVE_JING
+TESTS += svg.test
+endif
 endif
 
 EXTRA_DIST  = suffix.inc escape.h geom.h common.inc $(TESTS) cmp_dxf.pl
@@ -97,7 +100,7 @@ CLEANFILES += {example_,sample_}*.dwg
 CLEANFILES += example_*.{log1,log2}
 endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i *.ii *.log
-DISTCLEANFILES       = core alive.test json.test
+DISTCLEANFILES       = core alive.test json.test svg.test
 
 .PHONY: man dsymutil clean-dsymutil check-syntax
 

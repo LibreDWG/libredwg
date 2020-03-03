@@ -1,0 +1,51 @@
+#!/bin/sh
+# svg.test
+#
+# Copyright (C) 2020 Free Software Foundation, Inc.
+#
+# This program is free software, licensed under the terms of the GNU
+# General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Author: Reini Urban
+top_srcdir="@top_srcdir@"
+DATADIR=${DATADIR:-"$(top_srcdir)/test/test-data"}
+top_builddir="@top_builddir@"
+# artefacts for "shellcheck"
+[ -z "$top_srcdir" ] && echo $top_srcdir
+[ -z "$top_builddir" ] && echo $top_builddir
+
+i=0
+DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
+DATA="$DATA example_2013 example_2018 example_r14"
+
+for d in $DATA; do
+    b="$(basename "$d")"
+    rm "./$b.svg" 2>/dev/null
+done
+
+for dwg in $DATA; do
+    svg="$(basename "$dwg" .dwg).svg"
+    log="$svg.log"
+    dwg="${DATADIR}/$dwg.dwg"
+    echo "dwg2SVG $dwg >$svg &&"
+    echo "  @RUN_JING@ $svg"
+    if @TIMEOUT_10@ @LTEXEC@ ./dwg2SVG "$dwg" >"$svg" 2>"$log" && \
+       @RUN_JING@ "$svg"
+    then
+        rm "./$svg.log" "./$svg"
+    else
+        cat "$svg.log"
+        i=$((i+1))
+    fi
+done
+
+if test "0" = "$i" ; then
+    exit 0
+else
+    echo "$(basename "$0"): $i failures"
+    ls -l ./*svg.log
+    exit 1
+fi

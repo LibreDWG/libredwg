@@ -580,6 +580,7 @@ then
       AC_MSG_RESULT([$try_jing])
     else
       AC_MSG_RESULT([none])
+      JING=
     fi
   fi
   AC_MSG_CHECKING([whether the svg validator works (maybe broken LaTeXML)])
@@ -606,10 +607,12 @@ _ACEOF
       Use the zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/
       and unpack it into /usr/local/share/relaxng/svg11/
       ]))
+    JING=
   fi
   rm try.svg 2>/dev/null
 fi
 AC_SUBST([RUN_JING])
+AM_CONDITIONAL([HAVE_JING], [test -n "$JING"])
 
 dnl help2man only by the maintainer
 
@@ -671,6 +674,7 @@ AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])
 AC_CONFIG_FILES([programs/dwgfilter], [chmod +x programs/dwgfilter])
 AC_CONFIG_FILES([programs/alive.test], [chmod +x programs/alive.test])
 AC_CONFIG_FILES([programs/json.test], [chmod +x programs/json.test])
+AC_CONFIG_FILES([programs/svg.test], [chmod +x programs/svg.test])
 AC_CONFIG_FILES([logs-all.sh:$logs_all], [chmod +x logs-all.sh])
 AC_CONFIG_FILES([log], [chmod +x log])
 AC_CONFIG_FILES([dwg], [chmod +x dwg])
