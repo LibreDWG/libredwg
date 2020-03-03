@@ -12,11 +12,9 @@
 # test DXF specific content
 # Author: Reini Urban
 
-top_srcdir="@top_srcdir@"
-DATADIR=${DATADIR:-"$(top_srcdir)/test/test-data"}
+[ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
-# artefacts for "shellcheck"
-[ -z "$top_srcdir" ] && echo $top_srcdir
+# artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
 
 i=0
