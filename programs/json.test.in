@@ -11,7 +11,12 @@
 #
 # Author: Reini Urban
 
-test "$DATADIR" || { echo ERROR: Env var DATADIR not set ; exit 1 ; }
+top_srcdir="@top_srcdir@"
+DATADIR=${DATADIR:-"$(top_srcdir)/test/test-data"}
+top_builddir="@top_builddir@"
+# artefacts for "shellcheck"
+[ -z "$top_srcdir" ] && echo $top_srcdir
+[ -z "$top_builddir" ] && echo $top_builddir
 
 i=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
@@ -33,9 +38,9 @@ check_roundtrip() {
         tgt="$(basename "$dwg")"
         log1="$(basename "$dwg" .dwg).log1"
         log2="$(basename "$dwg" .dwg).log2"
-        ../libtool --mode=execute ./dwgread -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null
-        ../libtool --mode=execute ./dwgwrite -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null
-        ../libtool --mode=execute ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
+        @LTEXEC@ ./dwgread -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null
+        @LTEXEC@ ./dwgwrite -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null
+        @LTEXEC@ ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
         expect="$(grep -E -c '^Add entity' "$log1")"
         got="$(grep -E -c '^Add entity' "$log2")"
         rm "./$json" "./$tgt" 2>/dev/null
@@ -64,7 +69,7 @@ for dwg in $DATA; do
     dwg="${DATADIR}/$dwg.dwg"
     echo dwgread -Ojson -o"$json" "$dwg"
     # With --enable-debug fixup nan
-    if ../libtool --mode=execute ./dwgread -Ojson -o"$json" "$dwg" 2>/dev/null && \
+    if @LTEXEC@ ./dwgread -Ojson -o"$json" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$json" && \
        $JQ . "$json" >"$json.log" 2>&1
     then
@@ -76,7 +81,7 @@ for dwg in $DATA; do
 
     geojson="$(basename "$dwg" .dwg).geojson"
     echo dwgread -o"$geojson" "$dwg"
-    if ../libtool --mode=execute ./dwgread -Ogeojson -o"$geojson" "$dwg" 2>/dev/null && \
+    if @LTEXEC@ ./dwgread -Ogeojson -o"$geojson" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$geojson" && \
        $JQ . "$geojson" >>"$json.log" 2>&1
     then

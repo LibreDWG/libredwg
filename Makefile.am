@@ -107,7 +107,7 @@ TESTS += log dwg dxf json svg logs-all.sh dynapi_test_all.sh \
 	 $(srcdir)/json-check $(srcdir)/dxf-check \
 	 $(srcdir)/dxf-allcvt.sh $(srcdir)/test-dxf.sh $(srcdir)/unknown.sh \
          programs/dwgfilter \
-	 programs/alive.test $(srcdir)/programs/dxf.test programs/json.test programs/svg.test
+	 programs/alive.test programs/dxf.test programs/json.test programs/svg.test
 TESTS_ENVIRONMENT = $(SHELLCHECK)
 # TEST_EXTENSIONS = .sh
 # SPEC_LOG_COMPILER = $(SHELLCHECK)
