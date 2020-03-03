@@ -26,6 +26,9 @@
 #  ifndef __USE_GNU
 #    define __USE_GNU
 #  endif
+#  ifndef __BSD_VISIBLE
+#    define __BSD_VISIBLE 1
+#  endif
 #  include <string.h>
 #else
 #  include <string.h>

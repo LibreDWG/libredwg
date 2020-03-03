@@ -19,7 +19,7 @@
  * modified by Reini Urban
  *
  * TODO: all entities,
- *       common_entity_data: color, ltype, ltype_scale, invisible, linewt.
+ *       common_entity_data: ltype, ltype_scale, invisible.
  *       PLINE: widths, bulges.
  */
 
@@ -31,6 +31,9 @@
 #  define __DARWIN_C_LEVEL __DARWIN_C_FULL
 #  ifndef __USE_GNU
 #    define __USE_GNU
+#  endif
+#  ifndef __BSD_VISIBLE
+#    define __BSD_VISIBLE 1
 #  endif
 #endif
 #include <string.h>
