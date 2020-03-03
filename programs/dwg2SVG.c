@@ -290,25 +290,46 @@ static void
 output_XLINE (Dwg_Object *obj)
 {
   Dwg_Entity_XLINE *xline = obj->tio.entity->tio.XLINE;
-  BITCODE_3DPOINT point, vector;
-  static BITCODE_2DPOINT start, end;
-  double dx, dy;
+  BITCODE_3DPOINT invvec;
+  static BITCODE_3DPOINT box[2];
+  int sign[3];
+  double txmin, txmax, tymin, tymax, tzmin, tzmax;
 
   if (isnan_3BD (xline->point) || isnan_3BD (xline->vector)
       || entity_invisible (obj))
     return;
 
-  dx = xline->vector.x;
-  dy = xline->vector.y;
+  invvec.x = 1.0 / xline->vector.x;
+  invvec.y = 1.0 / xline->vector.y;
+  invvec.z = 1.0 / xline->vector.z;
+  sign[0] = (invvec.x < 0.0);
+  sign[1] = (invvec.y < 0.0);
+  sign[2] = (invvec.z < 0.0);
+  box[0].x = model_xmin;
+  box[0].y = model_ymin;
+  box[1].x = model_xmax;
+  box[1].y = model_ymin;
+  printf ("\t<!-- xline-%d -->\n", obj->index);
+
   // untested!
   /* intersect xline with model_xmin, model_ymin, model_xmax, model_ymax */
-  start.x = (model_xmin - xline->point.x) / dx;
-  start.y = (model_ymin - xline->point.y) / dy;
-  end.x = (model_xmax - xline->point.x) / dx;
-  end.y = (model_ymax - xline->point.y) / dy;
-  printf ("\t<!-- xline-%d -->\n", obj->index);
+  txmin = (box[sign[0]].x - xline->point.x) * invvec.x;
+  txmax = (box[1-sign[0]].x - xline->point.x) * invvec.x;
+  tymin = (box[sign[1]].x - xline->point.y) * invvec.y;
+  tymax = (box[1-sign[1]].x - xline->point.y) * invvec.y;
+  if ((txmin > tymax) || (tymin > txmax))
+    return;
+  if (tymin > txmin)
+    txmin = tymin;
+  if (tymax > txmax)
+    txmax = tymax;
+  tzmin = (box[sign[0]].z - xline->point.z) * invvec.z;
+  tzmax = (box[1-sign[0]].z - xline->point.z) * invvec.z;
+  if ((txmin > tzmax) || (tzmin > txmax))
+    return;
+
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
-          obj->index, start.x, start.y, end.x, end.y);
+          obj->index, txmin, tymin, txmax, tymax);
   common_entity (obj->tio.entity);
 }
 
@@ -316,23 +337,53 @@ static void
 output_RAY (Dwg_Object *obj)
 {
   Dwg_Entity_XLINE *xline = obj->tio.entity->tio.RAY;
-  BITCODE_3DPOINT point, vector;
-  static BITCODE_2DPOINT end;
-  double dx, dy;
+  BITCODE_3DPOINT point, invvec;
+  static BITCODE_3DPOINT box[2];
+  int sign[3];
+  double txmin, txmax, tymin, tymax, tzmin, tzmax;
 
   if (isnan_3BD (xline->point) || isnan_3BD (xline->vector)
       || entity_invisible (obj))
     return;
 
-  dx = xline->vector.x;
-  dy = xline->vector.y;
-  // untested!
-  /* intersect ray from point to model_xmin, model_ymin, model_xmax, model_ymax */
-  end.x = (model_xmax - xline->point.x) / dx;
-  end.y = (model_ymax - xline->point.y) / dy;
+  invvec.x = 1.0 / xline->vector.x;
+  invvec.y = 1.0 / xline->vector.y;
+  invvec.z = 1.0 / xline->vector.z;
+  sign[0] = (invvec.x < 0.0);
+  sign[1] = (invvec.y < 0.0);
+  sign[2] = (invvec.z < 0.0);
+  box[0].x = model_xmin;
+  box[0].y = model_ymin;
+  box[1].x = model_xmax;
+  box[1].y = model_ymin;
   printf ("\t<!-- ray-%d -->\n", obj->index);
+
+  // untested!
+  /* intersect ray from point with box (model_xmin, model_ymin, model_xmax, model_ymax) */
+  txmin = (box[sign[0]].x - xline->point.x) * invvec.x;
+  txmax = (box[1-sign[0]].x - xline->point.x) * invvec.x;
+  tymin = (box[sign[1]].x - xline->point.y) * invvec.y;
+  tymax = (box[1-sign[1]].x - xline->point.y) * invvec.y;
+  if ((txmin > tymax) || (tymin > txmax))
+    return;
+  if (tymin > txmin)
+    txmin = tymin;
+  if (tymax > txmax)
+    txmax = tymax;
+  point.x = (xline->point.x > txmax) ? txmax : xline->point.x;
+  if (point.x < txmin)
+   point.x = txmin;
+  point.y = (xline->point.y > tymax) ? tymax : xline->point.y;
+  if (point.y < tymin)
+    point.y = tymin;
+
+  tzmin = (box[sign[0]].z - xline->point.z) * invvec.z;
+  tzmax = (box[1-sign[0]].z - xline->point.z) * invvec.z;
+  if ((txmin > tzmax) || (tzmin > txmax))
+    return;
+
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
-          obj->index, xline->point.x, xline->point.y, end.x, end.y);
+          obj->index, point.x, point.y, txmax, tymax);
   common_entity (obj->tio.entity);
 }
 
