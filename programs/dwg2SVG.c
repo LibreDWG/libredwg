@@ -290,17 +290,49 @@ static void
 output_XLINE (Dwg_Object *obj)
 {
   Dwg_Entity_XLINE *xline = obj->tio.entity->tio.XLINE;
-  BITCODE_3DPOINT point, vector, start, end;
+  BITCODE_3DPOINT point, vector;
+  static BITCODE_2DPOINT start, end;
+  double dx, dy;
 
-  if (isnan_3BD (xline->point) || isnan_3BD (line->vector) || xline->extrusion
+  if (isnan_3BD (xline->point) || isnan_3BD (xline->vector)
       || entity_invisible (obj))
     return;
-  transform_OCS (&point, xline->point, xline->extrusion);
-  transform_OCS (&vector, xline->vector, xline->extrusion);
+
+  dx = xline->vector.x;
+  dy = xline->vector.y;
+  // untested!
+  /* intersect xline with model_xmin, model_ymin, model_xmax, model_ymax */
+  start.x = (model_xmin - xline->point.x) / dx;
+  start.y = (model_ymin - xline->point.y) / dy;
+  end.x = (model_xmax - xline->point.x) / dx;
+  end.y = (model_ymax - xline->point.y) / dy;
   printf ("\t<!-- xline-%d -->\n", obj->index);
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
-          obj->index, transform_X (start.x), transform_Y (start.y),
-          transform_X (end.x), transform_Y (end.y));
+          obj->index, start.x, start.y, end.x, end.y);
+  common_entity (obj->tio.entity);
+}
+
+static void
+output_RAY (Dwg_Object *obj)
+{
+  Dwg_Entity_XLINE *xline = obj->tio.entity->tio.RAY;
+  BITCODE_3DPOINT point, vector;
+  static BITCODE_2DPOINT end;
+  double dx, dy;
+
+  if (isnan_3BD (xline->point) || isnan_3BD (xline->vector)
+      || entity_invisible (obj))
+    return;
+
+  dx = xline->vector.x;
+  dy = xline->vector.y;
+  // untested!
+  /* intersect ray from point to model_xmin, model_ymin, model_xmax, model_ymax */
+  end.x = (model_xmax - xline->point.x) / dx;
+  end.y = (model_ymax - xline->point.y) / dy;
+  printf ("\t<!-- ray-%d -->\n", obj->index);
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
+          obj->index, xline->point.x, xline->point.y, end.x, end.y);
   common_entity (obj->tio.entity);
 }
 
@@ -631,6 +663,12 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_LWPOLYLINE:
       output_LWPOLYLINE (obj);
+      break;
+    case DWG_TYPE_RAY:
+      output_RAY (obj);
+      break;
+    case DWG_TYPE_XLINE:
+      output_XLINE (obj);
       break;
     case DWG_TYPE_SEQEND:
     case DWG_TYPE_VIEWPORT:
