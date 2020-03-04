@@ -11,6 +11,8 @@ case $dir in
     *test/test-data/*) b="${b}_${r}" ;;
     *td)               ;;
     *td/*)             b="${b}_${r}" ;;
+    .)                 ;;
+    *)                 b="${b}_${r}" ;;
 esac
 case $r in
     20*)          ;;
@@ -29,7 +31,7 @@ esac
 mv "$b.log" "$b.log.orig"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-./dxf -v4 "$d"
+./dxf -y -v4 "$d"
 if [ -f "$b.dxf" ]; then
     mv "./$b.log" "$b.dwg2dxf.log"
     ./dwg -y -v4 "$b.dxf"

@@ -10,12 +10,13 @@ v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
 out=
+args=
 
 for d in "$@"; do
     case $d in
         -v*) v="$d"
              ;;
-        -y) # ignore
+        -y)  args=-y
              ;;
         *)
         if [ ! -f "$d" ]; then
@@ -37,8 +38,9 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         log="$b$dir.log"
         out="$b$dir.dxf"
-        echo "programs/dwg2dxf $v -o $out $d 2>$log"
-        @TIMEOUT_10@ @LTEXEC@ programs/dwg2dxf "$v" -o "$out" "$d" 2>"$log"
+        echo "programs/dwg2dxf $args $v -o $out $d 2>$log"
+        # shellcheck disable=SC2086
+        @TIMEOUT_10@ @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
         ;;
     esac
 done

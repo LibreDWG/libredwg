@@ -11,6 +11,8 @@ case $dir in
     *test/test-data/*) b="${b}_${r}" ;;
     *td) ;;
     *td/*)             b="${b}_${r}" ;;
+    .)                 ;;
+    *)                 b="${b}_${r}" ;;
 esac
 case $r in
     20*)      ;;
