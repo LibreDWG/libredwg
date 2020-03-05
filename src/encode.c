@@ -2197,6 +2197,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (!obj->size || dwg->opts & DWG_OPTS_INJSON)
     {
       BITCODE_BL pos = bit_position (dat);
+      BITCODE_RL old_size = obj->size; 
       assert (address);
       obj->size = dat->byte - address - 2; // excludes the CRC
       if (dat->bit)
@@ -2212,9 +2213,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           obj->bitsize = pos - (obj->address * 8);
         }
       bit_set_position (dat, address * 8);
-      if (obj->size > 0x7fff)
-        // TODO: with overlarge sizes >0x7fff memmove dat
-        LOG_ERROR ("Unhandled size %u > 0x7fff", (unsigned)obj->size);
+      if (obj->size > 0x7fff && old_size < 0x7fff)
+        {
+          // with overlarge sizes >0x7fff memmove dat by one
+          LOG_WARN ("Experimental overlarge size %u > 0x7fff @%lu", (unsigned)obj->size, dat->byte);
+          memmove (&dat->chain[dat->byte + 1], &dat->chain[dat->byte], obj->size);
+        }
       bit_write_MS (dat, obj->size);
       LOG_TRACE ("-size: %u [MS] @%lu\n", obj->size, address);
       SINCE (R_2013)
