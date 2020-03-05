@@ -1483,7 +1483,22 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                    && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
             {
               tokens->index++;
-              LOG_TRACE ("%s: %.*s (ignored)\n", key, t->end - t->start, &dat->chain[t->start]);
+              if (strEQc (key, "numitems"))
+                {
+                  int32_t num;
+                  dwg_dynapi_field_get_value (_obj, f, &num);
+                  if (num) // may not exist
+                    {
+                      LOG_ERROR ("%s.numitems %d may not exist", name, (int)num);
+                      return 0;
+                    }
+                  else
+                    num = -1;
+                  dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+                  LOG_TRACE ("%s: %.*s => -1 (init)\n", key, t->end - t->start, &dat->chain[t->start]);
+                }
+              else
+                LOG_TRACE ("%s: %.*s (ignored)\n", key, t->end - t->start, &dat->chain[t->start]);
             }
           else if (t->type == JSMN_PRIMITIVE
                    && (strEQc (f->type, "RC") || strEQc (f->type, "B")
@@ -1612,19 +1627,21 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "H*"))
             {
               BITCODE_BL size1 = t->size;
-              BITCODE_H *hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
+              BITCODE_H *hdls;
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "itemhandles"))
                 {
                   BITCODE_BL numitems; // check against existing texts[] size
                   const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
                   memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
-                  if (size1 > numitems)
+                  if (numitems != (BITCODE_BL)-1)
                     {
+                      // already have texts. if less we leak them
                       LOG_WARN ("Skip some itemhandles, only accept %d of %d",
                                 numitems, (int)size1)
                       size1 = numitems;
                     }
                 }
+              hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
               for (int k = 0; k < t->size; k++)
@@ -1651,27 +1668,28 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               int skip = 0;
               BITCODE_BL size1 = t->size;
-              BITCODE_TV *elems = size1 ? calloc (size1, sizeof (BITCODE_TV)) : NULL;
+              BITCODE_TV *elems;
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "texts"))
                 {
+                  BITCODE_BL numitems;
                   const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
-                  memcpy (&size1, &((char *)_obj)[numf->offset], numf->size);
-                  if (size1)
+                  memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
+                  if (numitems != (BITCODE_BL)-1)
                     {
-                      // leak the wrong handles
-                      LOG_ERROR ("%s.texts must be before itemhandles", name)
-                      error |= DWG_ERR_INVALIDTYPE;
-                      skip = 1;
+                      // have less itemhandles. leak the texts
+                      LOG_WARN ("%s.texts must be before itemhandles", name)
+                      size1 = numitems;
                     }
                   else
                     size1 = t->size;
                 }
+              elems = size1 ? calloc (size1, sizeof (BITCODE_TV)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
               for (int k = 0; k < t->size; k++)
                 {
                   JSON_TOKENS_CHECK_OVERFLOW_ERR
-                  if (!skip && k < (int)size1)
+                  if (k < (int)size1)
                     {
                       elems[k] = json_string (dat, tokens);
                       LOG_TRACE ("%s[%d]: \"%s\" [%s]\n", key, k, elems[k],
@@ -1687,8 +1705,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               if (!t->size)
                 LOG_TRACE ("%s: [%s] empty\n", key, f->type);
-              if (!skip)
-                dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "3DPOINT*"))
             {
@@ -1943,6 +1960,67 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error | (f->name ? 1 : 0); // found or not
 }
 
+// check both texts[] and itemhandles[]
+static void
+in_postprocess_DICTIONARY (Dwg_Object *obj)
+{
+  Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
+  int do_free = 0;
+  if (_obj->numitems == (BITCODE_BL)-1)
+    {
+      _obj->numitems = 0;
+      do_free = 1;
+      LOG_ERROR ("reset DICTIONARY, no numitems");
+    }
+  if ((_obj->numitems || do_free) && !_obj->texts)
+    {
+      LOG_ERROR ("reset DICTIONARY, no texts");
+      // need to leave the handles, just free H*
+      free (_obj->itemhandles);
+      _obj->itemhandles = NULL;
+      _obj->numitems = 0;
+    }
+  if ((_obj->numitems || do_free) && !_obj->itemhandles)
+    {
+      LOG_ERROR ("reset DICTIONARY, no itemhandles");
+      for (BITCODE_BL i = 0; i < _obj->numitems; i++)
+        free (_obj->texts[i]);
+      free (_obj->texts);
+      _obj->texts = NULL;
+      _obj->numitems = 0;
+    }
+}
+// check both texts[] and itemhandles[]
+static void
+in_postprocess_DICTIONARYWDFLT (Dwg_Object *obj)
+{
+  Dwg_Object_DICTIONARYWDFLT *_obj = obj->tio.object->tio.DICTIONARYWDFLT;
+  int do_free = 0;
+  if (_obj->numitems == (BITCODE_BL)-1)
+    {
+      _obj->numitems = 0;
+      do_free = 1;
+      LOG_ERROR ("reset DICTIONARYWDFLT, no numitems");
+    }
+  if ((_obj->numitems || do_free) && !_obj->texts)
+    {
+      LOG_ERROR ("reset DICTIONARYWDFLT, no texts");
+      // need to leave the handles, just free H*
+      free (_obj->itemhandles);
+      _obj->itemhandles = NULL;
+      _obj->numitems = 0;
+    }
+  if ((_obj->numitems || do_free) && !_obj->itemhandles)
+    {
+      LOG_ERROR ("reset DICTIONARYWDFLT, no itemhandles");
+      for (BITCODE_BL i = 0; i < _obj->numitems; i++)
+        free (_obj->texts[i]);
+      free (_obj->texts);
+      _obj->texts = NULL;
+      _obj->numitems = 0;
+    }
+}
+
 static int
 json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               jsmntokens_t *restrict tokens)
@@ -2011,6 +2089,14 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (oldobj->fixedtype == DWG_TYPE_SEQEND)
             {
               in_postprocess_SEQEND (oldobj, 0, NULL);
+            }
+          else if (oldobj->fixedtype == DWG_TYPE_DICTIONARY)
+            {
+              in_postprocess_DICTIONARY (oldobj);
+            }
+          else if (oldobj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
+            {
+              in_postprocess_DICTIONARYWDFLT (oldobj);
             }
         }
 
