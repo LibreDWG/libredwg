@@ -17,6 +17,12 @@ for d in "$@"; do
     case $d in
         -y) args="$args -y"
              ;;
+        -Ijson) args="$args $d"
+                ext=json
+                ;;
+        -Idxf) args="$args $d"
+                ext=dxf
+                ;;
         --force-free) args="$args $d"
              ;;
         -v*) v="$d"
@@ -38,13 +44,15 @@ for d in "$@"; do
         if [ "$dir" = "_test-data" ]; then dir=""; fi
         if [ "$dir" = "_td" ]; then dir=""; fi
         if [ "$dir" = "_." ]; then dir=""; fi
-        case $(basename "$d") in
-            *.dxf)  ext=dxf ;;
-            *.DXF)  ext=dxf ;;
-            *.json) ext=json ;;
-            *.JSON) ext=json ;;
-            *)      echo "Illegal extension for $d"; exit ;;
-        esac
+        if [ -z "$ext" ]; then
+            case $(basename "$d") in
+                *.dxf)  ext=dxf ;;
+                *.DXF)  ext=dxf ;;
+                *.json) ext=json ;;
+                *.JSON) ext=json ;;
+                *)      echo "Illegal extension for $d"; exit ;;
+            esac
+        fi
         b=$(basename "$d" .$ext)
         log="$b$dir.$ext.log"
         out="$b$dir.dwg"
