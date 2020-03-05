@@ -212,6 +212,10 @@ dwg_dynapi_entity_field (const char *restrict name,
                          const char *restrict fieldname) __nonnull ((1, 2));
 
 EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_subclass_field (const char *restrict name,
+                           const char *restrict fieldname) __nonnull ((1, 2));
+
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_common_entity_field (const char *restrict fieldname)
     __nonnull ((1));
 

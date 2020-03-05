@@ -4380,6 +4380,7 @@ DWG_OBJECT (FIELD)
   SUBCLASS (AcDbField)
   FIELD_T (id, 1);
   FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
+  // DXF { }
   FIELD_BL (num_childs, 90);
   VALUEOUTOFBOUNDS (num_childs, 20000)
   FIELD_BL (num_objects, 97);

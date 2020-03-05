@@ -1505,6 +1505,22 @@ dwg_dynapi_entity_field (const char *restrict name, const char *restrict field)
 }
 
 EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_subclass_field (const char *restrict name, const char *restrict field)
+{
+  const Dwg_DYNAPI_field *fields = dwg_dynapi_subclass_fields (name);
+  if (fields)
+    { /* linear search (unsorted) */
+      Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
+      for (; f->name; f++)
+        {
+          if (strEQ (f->name, field))
+            return f;
+        }
+    }
+  return NULL;
+}
+
+EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_header_field (const char *restrict fieldname)
 {
   return (Dwg_DYNAPI_field *)bsearch (

@@ -1825,29 +1825,43 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       JSON_TOKENS_CHECK_OVERFLOW_ERR
                       json_fixed_key (key1, dat, tokens);
                       LOG_INSANE ("-search %s.%s\n", subclass, key1);
-                      for (f1 = &sfields[0]; f1->name;
-                           f1++) // linear search, not binary
+                      f1 = dwg_dynapi_subclass_field (subclass, key1);
+                      if (f1)
                         {
-                          // LOG_INSANE ("-%s.%s [%s]\n", subclass, f1->name,
-                          // f1->type);
-                          if (strEQ (f1->name, key1)) // found
-                            {
-                              LOG_INSANE ("-found %s [%s]\n", f1->name,
-                                          f1->type);
-                              if (_set_struct_field (dat, obj, tokens,
-                                                     &elems[k * size_elem],
-                                                     subclass, key1, sfields))
-                                break;
-                            }
+                          LOG_INSANE ("-found %s [%s]\n", f1->name,
+                                      f1->type);
+                          if (!_set_struct_field (dat, obj, tokens,
+                                                  &elems[k * size_elem],
+                                                  subclass, key1, sfields))
+                            ++tokens->index;
                         }
-                      if (!f1->name && strEQc (key, "lt.index"))
+                      else if (strEQc (key1, "lt.index"))
                         {
                           if (!_set_struct_field (dat, obj, tokens,
                                                   &elems[k * size_elem],
                                                   subclass, "lt", sfields))
                             ++tokens->index;
                         }
-                      else if (!f1->name) // not found
+                      else if (strchr (key1, '.')) // embedded struct
+                        {
+                          char *rest = strchr (key1, '.');
+                          *rest = '\0';
+                          rest++;
+                          f1 = dwg_dynapi_subclass_field (subclass, key1);
+                          if (f1)
+                            {
+                              char *sb1
+                                  = dwg_dynapi_subclass_name (f1->type);
+                              const Dwg_DYNAPI_field *sfields1
+                                  = dwg_dynapi_subclass_fields (sb1);
+                              if (!_set_struct_field (dat, obj, tokens,
+                                                      &elems[(k * size_elem) + f1->offset],
+                                                      sb1, rest, sfields1))
+                                ++tokens->index;
+                              free (sb1);
+                            }
+                        }
+                      if (!f1 || !f1->name) // not found
                         {
                           LOG_ERROR ("Unknown subclass field %s.%s", subclass,
                                      key1);
@@ -2301,6 +2315,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                          dwg_dynapi_common_object_fields ()))
                     continue;
                 }
+              // first the MLEADER_AnnotContext union
               if (strEQc (name, "MULTILEADER"))
                 {
                   // embedded structs
@@ -2331,8 +2346,33 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         continue;
                     }
                 }
-              LOG_TRACE ("Unknown %s.%s %.*s\n", name, key, t->end - t->start,
-                         &dat->chain[t->start]);
+              // or starts with an embedded subclass, like TABLE_value "value.xxx"
+              if (strchr (key, '.'))
+                {
+                  const Dwg_DYNAPI_field *f1;
+                  char *rest = strchr (key, '.');
+                  *rest = '\0';
+                  rest++;
+                  // find field for key prefix, like value.
+                  f1 = dwg_dynapi_entity_field (name, key);
+                  if (f1)
+                    {
+                      char *subclass = dwg_dynapi_subclass_name (f1->type);
+                      const Dwg_DYNAPI_field *sfields
+                        = dwg_dynapi_subclass_fields (subclass);
+                      // subclass offset for _obj
+                      void *off = &((char*)_obj)[f1->offset];
+                      if (_set_struct_field (dat, obj, tokens, off, subclass, rest,
+                                     sfields))
+                        {
+                          free (subclass);
+                          continue;
+                        }
+                      free (subclass);
+                    }
+                }
+              LOG_ERROR ("Unknown %s.%s %.*s ignored\n", name, key,
+                         t->end - t->start, &dat->chain[t->start]);
               json_advance_unknown (dat, tokens, 0);
             }
         }
