@@ -77,6 +77,7 @@ check_PROGRAMS = \
 	seqend \
 	shape \
 	solid \
+	spline \
 	text \
 	tolerance \
 	trace \
