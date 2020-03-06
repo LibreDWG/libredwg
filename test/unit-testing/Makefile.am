@@ -59,6 +59,7 @@ check_PROGRAMS = \
 	dim_radius \
 	ellipse \
 	endblk \
+	hatch \
 	insert \
 	line \
 	lwpline \
