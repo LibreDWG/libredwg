@@ -63,6 +63,7 @@ check_PROGRAMS = \
 	ellipse \
 	endblk \
 	hatch \
+	image \
 	insert \
 	line \
 	lwpline \
