@@ -8290,9 +8290,13 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
 
     if (f)
       {
+        int size = f->size;
         if (fp)
           memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
-        memcpy (out, &((char *)_obj)[f->offset], f->size);
+        if (f->dxf == 160 && strEQc (fieldname, "preview_size")
+            && obj->parent->header.version < R_2010)
+          size = 4;
+        memcpy (out, &((char *)_obj)[f->offset], size);
         return true;
       }
     else
@@ -8564,7 +8568,15 @@ dwg_dynapi_common_set_value (void *restrict _obj,
       }
 
     old = &((char*)_obj)[f->offset];
-    dynapi_set_helper (old, f, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
+    if (f->dxf == 160 && strEQc (fieldname, "preview_size"))
+      {
+        int size = f->size;
+        if (dwg && dwg->header.version < R_2010)
+          size = 4;
+        memcpy (old, value, size);
+      }
+    else
+      dynapi_set_helper (old, f, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
     return true;
   }
 }
