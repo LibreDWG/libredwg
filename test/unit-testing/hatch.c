@@ -39,15 +39,16 @@ api_process (dwg_object *obj)
   dwg_ent_hatch *hatch = dwg_object_to_HATCH (obj);
 
   CHK_ENTITY_TYPE (hatch, HATCH, is_gradient_fill, BL, is_gradient_fill);
-  // if is_gradient_fill
-  CHK_ENTITY_TYPE (hatch, HATCH, reserved, BL, reserved);
-  CHK_ENTITY_TYPE (hatch, HATCH, gradient_angle, BD, gradient_angle);
-  CHK_ENTITY_TYPE (hatch, HATCH, gradient_shift, BD, gradient_shift);
-  CHK_ENTITY_TYPE (hatch, HATCH, single_color_gradient, BL, single_color_gradient);
-  CHK_ENTITY_TYPE (hatch, HATCH, gradient_tint, BD, gradient_tint);
+  if (is_gradient_fill)
+    {
+      CHK_ENTITY_TYPE (hatch, HATCH, reserved, BL, reserved);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_angle, BD, gradient_angle);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_shift, BD, gradient_shift);
+      CHK_ENTITY_TYPE (hatch, HATCH, single_color_gradient, BL, single_color_gradient);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_tint, BD, gradient_tint);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_name, TV, gradient_name);
+    }
   CHK_ENTITY_TYPE (hatch, HATCH, num_colors, BL, num_colors);
-  CHK_ENTITY_TYPE (hatch, HATCH, gradient_name, TV, gradient_name);
-
   CHK_ENTITY_TYPE (hatch, HATCH, elevation, BD, elevation);
   CHK_ENTITY_3RD (hatch, HATCH, extrusion, extrusion);
   CHK_ENTITY_TYPE (hatch, HATCH, name, TV, name);
