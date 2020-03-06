@@ -264,6 +264,7 @@ CAST_DWG_OBJECT_TO_ENTITY (ARC)
 CAST_DWG_OBJECT_TO_ENTITY (CIRCLE)
 CAST_DWG_OBJECT_TO_ENTITY (LINE)
 #ifndef __AFL_COMPILER
+CAST_DWG_OBJECT_TO_ENTITY (_3DFACE)
 CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ORDINATE)
 CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_LINEAR)
 CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ALIGNED)
@@ -14752,13 +14753,13 @@ dwg_ent_3dface_set_invis_flags (dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_get_corner1(face, &point, &error);
 \endcode
 \param[in]  3dface  dwg_ent_3dface*
-\param[out] point   dwg_point_2d*
+\param[out] point   dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_get_corner1 (const dwg_ent_3dface *restrict _3dface,
-                            dwg_point_2d *restrict point, int *restrict error)
+                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
 #  ifndef HAVE_NONNULL
@@ -14769,6 +14770,7 @@ dwg_ent_3dface_get_corner1 (const dwg_ent_3dface *restrict _3dface,
       *error = 0;
       point->x = _3dface->corner1.x;
       point->y = _3dface->corner1.y;
+      point->z = _3dface->corner1.z;
     }
   else
     {
@@ -14781,13 +14783,13 @@ dwg_ent_3dface_get_corner1 (const dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_set_corner1(face, &point, &error);
 \endcode
 \param[in,out] 3dface   dwg_ent_3dface*
-\param[in]     point    dwg_point_2d*
+\param[in]     point    dwg_point_3d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_set_corner1 (dwg_ent_3dface *restrict _3dface,
-                            const dwg_point_2d *restrict point,
+                            const dwg_point_3d *restrict point,
                             int *restrict error)
 {
   if (_3dface
@@ -14799,6 +14801,7 @@ dwg_ent_3dface_set_corner1 (dwg_ent_3dface *restrict _3dface,
       *error = 0;
       _3dface->corner1.x = point->x;
       _3dface->corner1.y = point->y;
+      _3dface->corner1.z = point->z;
     }
   else
     {
@@ -14811,13 +14814,13 @@ dwg_ent_3dface_set_corner1 (dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_get_corner2(face, &point, &error);
 \endcode
 \param[in]  3dface  dwg_ent_3dface*
-\param[out] point   dwg_point_2d*
+\param[out] point   dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_get_corner2 (const dwg_ent_3dface *restrict _3dface,
-                            dwg_point_2d *restrict point, int *restrict error)
+                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
 #  ifndef HAVE_NONNULL
@@ -14828,6 +14831,7 @@ dwg_ent_3dface_get_corner2 (const dwg_ent_3dface *restrict _3dface,
       *error = 0;
       point->x = _3dface->corner2.x;
       point->y = _3dface->corner2.y;
+      point->z = _3dface->corner2.z;
     }
   else
     {
@@ -14840,13 +14844,13 @@ dwg_ent_3dface_get_corner2 (const dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_set_corner2(face, &point, &error);
 \endcode
 \param[in,out] 3dface   dwg_ent_3dface*
-\param[in]     point    dwg_point_2d*
+\param[in]     point    dwg_point_3d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_set_corner2 (dwg_ent_3dface *restrict _3dface,
-                            const dwg_point_2d *restrict point,
+                            const dwg_point_3d *restrict point,
                             int *restrict error)
 {
   if (_3dface
@@ -14858,6 +14862,7 @@ dwg_ent_3dface_set_corner2 (dwg_ent_3dface *restrict _3dface,
       *error = 0;
       _3dface->corner2.x = point->x;
       _3dface->corner2.y = point->y;
+      _3dface->corner2.z = point->z;
     }
   else
     {
@@ -14870,13 +14875,13 @@ dwg_ent_3dface_set_corner2 (dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_get_corner3(face, &point, &error);
 \endcode
 \param[in]  3dface  dwg_ent_3dface*
-\param[out] point   dwg_point_2d*
+\param[out] point   dwg_point_3d*
 \param[out] error   int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_get_corner3 (const dwg_ent_3dface *restrict _3dface,
-                            dwg_point_2d *restrict point, int *restrict error)
+                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
 #  ifndef HAVE_NONNULL
@@ -14887,6 +14892,7 @@ dwg_ent_3dface_get_corner3 (const dwg_ent_3dface *restrict _3dface,
       *error = 0;
       point->x = _3dface->corner3.x;
       point->y = _3dface->corner3.y;
+      point->z = _3dface->corner3.z;
     }
   else
     {
@@ -14899,13 +14905,13 @@ dwg_ent_3dface_get_corner3 (const dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_set_corner3(face, &point, &error);
 \endcode
 \param[in,out] 3dface   dwg_ent_3dface*
-\param[in]     point    dwg_point_2d*
+\param[in]     point    dwg_point_3d*
 \param[out]    error    int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_set_corner3 (dwg_ent_3dface *restrict _3dface,
-                            const dwg_point_2d *restrict point,
+                            const dwg_point_3d *restrict point,
                             int *restrict error)
 {
   if (_3dface
@@ -14917,7 +14923,8 @@ dwg_ent_3dface_set_corner3 (dwg_ent_3dface *restrict _3dface,
       *error = 0;
       _3dface->corner3.x = point->x;
       _3dface->corner3.y = point->y;
-    }
+      _3dface->corner3.z = point->z;
+  }
   else
     {
       *error = 1;
@@ -14929,13 +14936,13 @@ dwg_ent_3dface_set_corner3 (dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_get_corner4(face, &point, &error);
 \endcode
 \param[in]  3dface  dwg_ent_3dface*
-\param[out] point   dwg_point_2d
+\param[out] point   dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_get_corner4 (const dwg_ent_3dface *restrict _3dface,
-                            dwg_point_2d *restrict point, int *restrict error)
+                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
 #  ifndef HAVE_NONNULL
@@ -14946,6 +14953,7 @@ dwg_ent_3dface_get_corner4 (const dwg_ent_3dface *restrict _3dface,
       *error = 0;
       point->x = _3dface->corner4.x;
       point->y = _3dface->corner4.y;
+      point->z = _3dface->corner4.z;
     }
   else
     {
@@ -14958,13 +14966,13 @@ dwg_ent_3dface_get_corner4 (const dwg_ent_3dface *restrict _3dface,
 \code Usage: dwg_ent_3dface_set_corner4(face, &point, &error);
 \endcode
 \param[out]  3dface  dwg_ent_3dface*
-\param[in]   point   dwg_point_2d*
+\param[in]   point   dwg_point_3d*
 \param[out]  error   int*, is set to 0 for ok, 1 on error
 \deprecated
 */
 void
 dwg_ent_3dface_set_corner4 (dwg_ent_3dface *restrict _3dface,
-                            const dwg_point_2d *restrict point,
+                            const dwg_point_3d *restrict point,
                             int *restrict error)
 {
   if (_3dface
@@ -14976,6 +14984,7 @@ dwg_ent_3dface_set_corner4 (dwg_ent_3dface *restrict _3dface,
       *error = 0;
       _3dface->corner4.x = point->x;
       _3dface->corner4.y = point->y;
+      _3dface->corner4.z = point->z;
     }
   else
     {

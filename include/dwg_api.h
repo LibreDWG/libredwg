@@ -813,6 +813,7 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL (POLYLINE_3D)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (ARC)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (CIRCLE)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (LINE)
+CAST_DWG_OBJECT_TO_ENTITY_DECL (_3DFACE)
 EXPORT dwg_ent_dim * dwg_object_to_DIMENSION(dwg_object *obj);
 CAST_DWG_OBJECT_TO_ENTITY_DECL (DIMENSION_ORDINATE)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (DIMENSION_LINEAR)
@@ -3964,42 +3965,42 @@ EXPORT void dwg_ent_3dface_set_invis_flags (dwg_ent_3dface *restrict _3dface,
     __nonnull ((3)) _deprecated_dynapi_setter;
 
 EXPORT void dwg_ent_3dface_get_corner1 (const dwg_ent_3dface *restrict _3dface,
-                                        dwg_point_2d *restrict point,
+                                        dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_3dface_set_corner1 (dwg_ent_3dface *restrict _3dface,
-                                        const dwg_point_2d *restrict point,
+                                        const dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
 EXPORT void dwg_ent_3dface_get_corner2 (const dwg_ent_3dface *restrict _3dface,
-                                        dwg_point_2d *restrict point,
+                                        dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_3dface_set_corner2 (dwg_ent_3dface *restrict _3dface,
-                                        const dwg_point_2d *restrict point,
+                                        const dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
 EXPORT void dwg_ent_3dface_get_corner3 (const dwg_ent_3dface *restrict _3dface,
-                                        dwg_point_2d *restrict point,
+                                        dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_3dface_set_corner3 (dwg_ent_3dface *restrict _3dface,
-                                        const dwg_point_2d *restrict point,
+                                        const dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
 EXPORT void dwg_ent_3dface_get_corner4 (const dwg_ent_3dface *restrict _3dface,
-                                        dwg_point_2d *restrict point,
+                                        dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_3dface_set_corner4 (dwg_ent_3dface *restrict _3dface,
-                                        const dwg_point_2d *restrict point,
+                                        const dwg_point_3d *restrict point,
                                         int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 

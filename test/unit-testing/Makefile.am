@@ -43,6 +43,7 @@ check_PROGRAMS = \
 	decode_test \
 	hash_test \
 	dynapi_test \
+	3dface \
 	3dsolid \
 	arc \
 	attdef \
