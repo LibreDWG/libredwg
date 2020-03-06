@@ -98,6 +98,19 @@ main (int argc, char *argv[])
               strcat (tmp, "2000/PolyLine2D.dwg");
               error += test_code (tmp);
             }
+          if (DWG_TYPE == DWG_TYPE_POLYLINE_3D
+              || DWG_TYPE == DWG_TYPE_VERTEX_3D)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/PolyLine3D.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/PolyLine3D.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2018/PolyLine3D.dwg");
+              error += test_code (tmp);
+            }
           if (DWG_TYPE == DWG_TYPE_POLYLINE_MESH
               || DWG_TYPE == DWG_TYPE_VERTEX_MESH || DWG_TYPE == DWG_TYPE_TRACE
               || DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT
@@ -107,6 +120,18 @@ main (int argc, char *argv[])
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2000/TS1.dwg");
+              error += test_code (tmp);
+            }
+          if (DWG_TYPE == DWG_TYPE_IMAGE || DWG_TYPE == DWG_TYPE_LEADER)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/Leader.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Leader.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2018/Leader.dwg");
               error += test_code (tmp);
             }
           // TODO: CAMERA
