@@ -333,11 +333,13 @@ print_api (dwg_object *obj)
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
-        char *_hdlname = dwg_dynapi_handle_name (ent->parent->dwg, hdl);      \
+        char *_hdlname = dwg_dynapi_handle_name (dwg, hdl);                   \
         if (hdl == (BITCODE_H)ent->parent->field)                             \
           ok (#field ": %s " FORMAT_REF, _hdlname ?: "", ARGS_REF (hdl));     \
         else                                                                  \
           fail (#field ": %s " FORMAT_REF, _hdlname ?: "", ARGS_REF (hdl));   \
+        if (version >= R_2007)                                                \
+          free (_hdlname);                                                    \
       }                                                                       \
   }
 
@@ -351,7 +353,7 @@ print_api (dwg_object *obj)
       for (int _i = 0; _i < (int)(num); _i++)                                 \
         {                                                                     \
           BITCODE_H _hdl = hdlp[_i];                                          \
-          char *_hdlname = dwg_dynapi_handle_name (ent->parent->dwg, _hdl);   \
+          char *_hdlname = dwg_dynapi_handle_name (dwg, _hdl);                \
           if (_hdl == ent->parent->field[_i])                                 \
             {                                                                 \
               ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",          \
@@ -362,6 +364,8 @@ print_api (dwg_object *obj)
               fail (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",        \
                     ARGS_REF (_hdl));                                         \
             }                                                                 \
+          if (version >= R_2007)                                              \
+            free (_hdlname);                                                  \
         }                                                                     \
     }
 
@@ -378,9 +382,10 @@ api_common_entity (dwg_object *obj)
   BITCODE_BLL preview_size;
   BITCODE_BD ltype_scale;
   BITCODE_BS invisible;
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Version_Type version = obj->parent->header.version;
   Dwg_Object_Entity *_ent = obj->tio.entity;
   Dwg_Entity_LINE *ent = obj->tio.entity->tio.LINE;
-  Dwg_Version_Type version = obj->parent->header.version;
 
   CHK_COMMON_TYPE (ent, entmode, BB, entmode)
   CHK_COMMON_TYPE (ent, preview_exists, B, preview_exists)
@@ -585,6 +590,8 @@ api_common_object (dwg_object *obj)
   BITCODE_BL num_reactors, num_eed;
   BITCODE_H *reactors;
   BITCODE_B xdic_missing_flag, has_ds_binary_data;
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Version_Type version = obj->parent->header.version;
   Dwg_Object_Object *obj_obj = obj->tio.object;
   Dwg_Object_LAYER *_obj = obj->tio.object->tio.LAYER;
 
@@ -620,6 +627,8 @@ api_common_object (dwg_object *obj)
                   handle->handleref.code,
                   handle->handleref.size, handle->handleref.value);
           }
+      if (version >= R_2007)
+        free (_hdlname);
     }
 #endif
 }

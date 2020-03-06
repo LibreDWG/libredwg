@@ -39,6 +39,7 @@ api_process (dwg_object *obj)
   dwg_ent_hatch *hatch = dwg_object_to_HATCH (obj);
 
   CHK_ENTITY_TYPE (hatch, HATCH, is_gradient_fill, BL, is_gradient_fill);
+  // if is_gradient_fill
   CHK_ENTITY_TYPE (hatch, HATCH, reserved, BL, reserved);
   CHK_ENTITY_TYPE (hatch, HATCH, gradient_angle, BD, gradient_angle);
   CHK_ENTITY_TYPE (hatch, HATCH, gradient_shift, BD, gradient_shift);
@@ -46,6 +47,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (hatch, HATCH, gradient_tint, BD, gradient_tint);
   CHK_ENTITY_TYPE (hatch, HATCH, num_colors, BL, num_colors);
   CHK_ENTITY_TYPE (hatch, HATCH, gradient_name, TV, gradient_name);
+
   CHK_ENTITY_TYPE (hatch, HATCH, elevation, BD, elevation);
   CHK_ENTITY_3RD (hatch, HATCH, extrusion, extrusion);
   CHK_ENTITY_TYPE (hatch, HATCH, name, TV, name);
@@ -63,9 +65,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (hatch, HATCH, num_seeds, BL, num_seeds);
   CHK_ENTITY_TYPE (hatch, HATCH, num_boundary_handles, BL, num_boundary_handles);
 
+  if (!dwg_dynapi_entity_value (hatch, "HATCH", "colors", &colors, NULL))
+    fail ("HATCH.colors");
   if (num_colors)
     {
-      if (!dwg_dynapi_entity_value (hatch, "HATCH", "colors", &colors, NULL))
+      if (!is_gradient_fill)
+        fail ("HATCH.num_colors without is_gradient_fill");
+      if (!colors)
         fail ("HATCH.colors");
       else
         for (i = 0; i < num_colors; i++)
@@ -74,9 +80,12 @@ api_process (dwg_object *obj)
                 colors[i].color.index);
           }
     }
+
+  if (!dwg_dynapi_entity_value (hatch, "HATCH", "paths", &paths, NULL))
+    fail ("HATCH.paths");
   if (num_paths)
     {
-      if (!dwg_dynapi_entity_value (hatch, "HATCH", "paths", &paths, NULL))
+      if (!paths)
         fail ("HATCH.paths");
       else
         for (i = 0; i < num_paths; i++)
@@ -149,10 +158,15 @@ api_process (dwg_object *obj)
                 paths[i].num_boundary_handles);
           }
     }
+
+  if (!dwg_dynapi_entity_value (hatch, "HATCH", "deflines", &deflines, NULL))
+    fail ("HATCH.deflines");
   // only with !solid_fill
   if (num_deflines)
     {
-      if (!dwg_dynapi_entity_value (hatch, "HATCH", "deflines", &deflines, NULL))
+      if (solid_fill)
+        fail ("HATCH.num_deflines with solid_fill");
+      if (!deflines)
         fail ("HATCH.deflines");
       else
         {
@@ -169,9 +183,12 @@ api_process (dwg_object *obj)
             }
         }
     }
+
+  if (!dwg_dynapi_entity_value (hatch, "HATCH", "seeds", &seeds, NULL))
+    fail ("HATCH.seeds");
   if (num_seeds)
     {
-      if (!dwg_dynapi_entity_value (hatch, "HATCH", "seeds", &seeds, NULL))
+      if (!seeds)
         fail ("HATCH.seeds");
       else
         for (i = 0; i < num_seeds; i++)
@@ -179,9 +196,14 @@ api_process (dwg_object *obj)
             ok ("HATCH.seeds[%d]: (%f, %f)", i, seeds[i].x, seeds[i].y);
           }
     }
+  else if (seeds)
+    fail ("HATCH.seeds with !num_seeds");
+
+  if (!dwg_dynapi_entity_value (hatch, "HATCH", "boundary_handles", &boundary_handles, NULL))
+    fail ("HATCH.boundary_handles");
   if (num_boundary_handles)
     {
-      if (!dwg_dynapi_entity_value (hatch, "HATCH", "boundary_handles", &boundary_handles, NULL))
+      if (!boundary_handles)
         fail ("HATCH.boundary_handles");
       else
         for (i = 0; i < num_boundary_handles; i++)
@@ -189,4 +211,6 @@ api_process (dwg_object *obj)
             ok ("HATCH.boundary_handles[%d]: " FORMAT_REF, i, ARGS_REF (boundary_handles[i]));
           }
     }
+  else if (boundary_handles)
+    fail ("HATCH.boundary_handles with !num_boundary_handles");
 }
