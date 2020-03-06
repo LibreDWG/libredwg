@@ -117,6 +117,7 @@ DWG_GETALL_ENTITY (UNDERLAY)
 DWG_GETALL_ENTITY (WIPEOUT)
 #  ifdef DEBUG_CLASSES
 DWG_GETALL_ENTITY (TABLE)
+DWG_GETALL_ENTITY (ARC_DIMENSION)
 DWG_GETALL_ENTITY (PLANESURFACE)
 DWG_GETALL_ENTITY (GEOPOSITIONMARKER)
 DWG_GETALL_ENTITY (EXTRUDEDSURFACE)
@@ -304,6 +305,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (UNDERLAY)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (WIPEOUT)
 #  ifdef DEBUG_CLASSES
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (TABLE)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ARC_DIMENSION)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (PLANESURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (GEOPOSITIONMARKER)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (EXTRUDEDSURFACE)
@@ -447,14 +449,15 @@ dwg_object_to_DIMENSION (dwg_object *obj)
           || obj->type == DWG_TYPE_DIMENSION_ANG3PT
           || obj->type == DWG_TYPE_DIMENSION_ANG2LN
           || obj->type == DWG_TYPE_DIMENSION_RADIUS
-          || obj->type == DWG_TYPE_DIMENSION_DIAMETER))
+          || obj->type == DWG_TYPE_DIMENSION_DIAMETER
+          || obj->fixedtype == DWG_TYPE_ARC_DIMENSION))
     {
       ret_obj = obj->tio.entity->tio.DIMENSION_common;
     }
   else
     {
-      LOG_ERROR ("invalid %s type: got 0x%x", "DIMENSION",
-                 obj ? obj->type : 0);
+      unsigned int type = obj ? obj->type : 0;
+      LOG_ERROR ("invalid %s type: got %u/0x%x", "DIMENSION", type, type);
     }
   return (dwg_ent_dim *)ret_obj;
 }
@@ -736,7 +739,6 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
   dwg_get_OBJECT (ent_lwpline, LWPOLYLINE)
   //dwg_get_OBJECT(ent_proxy_entity, PROXY_ENTITY)
   dwg_get_OBJECT (ent_hatch, HATCH)
-  //dwg_get_OBJECT(ent_arc_dimension, ARC_DIMENSION)
   dwg_get_OBJECT (ent_image, IMAGE)
   dwg_get_OBJECT (ent_camera, CAMERA)
   dwg_get_OBJECT (ent_helix, HELIX)
@@ -746,6 +748,7 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
   dwg_get_OBJECT (ent_wipeout, WIPEOUT)
 
 #  ifdef DEBUG_CLASSES
+  dwg_get_OBJECT (ent_arc_dimension, ARC_DIMENSION)
   dwg_get_OBJECT (ent_planesurface, PLANESURFACE)
   dwg_get_OBJECT (ent_extrudedsurface, EXTRUDEDSURFACE)
   dwg_get_OBJECT (ent_loftedsurface, LOFTEDSURFACE)

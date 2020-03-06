@@ -305,9 +305,9 @@ print_api (dwg_object *obj)
 #endif
   api_process (obj);
 
-  if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT)
     api_common_entity (obj);
-  else if (obj->supertype == DWG_SUPERTYPE_OBJECT)
+  else if (obj->supertype == DWG_SUPERTYPE_OBJECT && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
     api_common_object (obj);
   printf ("\n");
 }

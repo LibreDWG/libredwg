@@ -46,6 +46,7 @@ check_PROGRAMS = \
 	3dface \
 	3dsolid \
 	arc \
+	arc_dimension \
 	attdef \
 	attrib \
 	block \
@@ -89,6 +90,20 @@ check_PROGRAMS = \
 	vertex_pface_face \
 	xline \
 	xrecord
+#TODO:
+#	camera \
+#	extrudedsurface \
+#	geopositionmarker \
+#	extrudedsurface \
+#	helix \
+#	multileader \
+#	revolvedsurface \
+#	surface \
+#	sweptsurface \
+#	table \
+#       underlay \
+#       viewport \
+#       wipeout
 
 dynapi_test.c: dynapi_test.c.in \
 		$(top_srcdir)/include/dwg.h \
