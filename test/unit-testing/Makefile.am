@@ -51,6 +51,7 @@ check_PROGRAMS = \
 	attrib \
 	block \
 	body \
+	camera \
 	circle \
 	dim_aligned \
 	dim_ang2ln \
@@ -91,7 +92,6 @@ check_PROGRAMS = \
 	xline \
 	xrecord
 #TODO:
-#	camera \
 #	extrudedsurface \
 #	geopositionmarker \
 #	extrudedsurface \

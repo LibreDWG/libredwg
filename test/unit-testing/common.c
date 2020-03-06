@@ -109,6 +109,7 @@ main (int argc, char *argv[])
               strcat (tmp, "2000/TS1.dwg");
               error += test_code (tmp);
             }
+          // TODO: CAMERA
         }
     }
   else
@@ -212,7 +213,7 @@ output_test (dwg_data *dwg)
       while ((obj = dwg_next_object (obj)))
         {
           // printf ("%s [%d]\n", obj->name, obj->index);
-          if (obj->type == DWG_TYPE || obj->fixedtype == DWG_TYPE)
+          if (obj->fixedtype == DWG_TYPE)
             {
               output_object (obj);
             }
@@ -277,7 +278,7 @@ output_object (dwg_object *obj)
       printf ("object is NULL\n");
       return;
     }
-  if (obj->type == DWG_TYPE || obj->fixedtype == DWG_TYPE)
+  if (obj->fixedtype == DWG_TYPE)
     {
       output_process (obj);
     }
