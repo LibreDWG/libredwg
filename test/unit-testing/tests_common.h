@@ -7,7 +7,7 @@
 #  include "../../src/bits.h"
 #endif
 
-#if defined(_WIN32) && defined HAVE_FUNC_ATTRIBUTE_MS_FORMAT
+#if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT) && !defined(__USE_MINGW_ANSI_STDIO)
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
 #elif defined HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (gnu_printf, x, y)))
@@ -43,6 +43,7 @@ numfailed (void)
 
 #ifndef DYNAPI_TEST_C
 static void
+ATTRIBUTE_FORMAT (1, 2)
 ok (const char *fmt, ...)
 {
   va_list ap;
@@ -63,6 +64,7 @@ pass (void)
 }
 
 static void
+ATTRIBUTE_FORMAT (1, 2)
 fail (const char *fmt, ...)
 {
   va_list ap;
