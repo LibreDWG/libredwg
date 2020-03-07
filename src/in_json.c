@@ -2591,6 +2591,11 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_TRACE ("file_ID_string: %.*s\n", 12, _obj->file_ID_string)
           free (s);
         }
+      else if (strEQc (key, "padding"))
+        {
+          LOG_TRACE ("padding: %.*s (ignored)\n", t->end - t->start,
+                     &dat->chain[t->start])
+        }
       // clang-format off
       FIELD_RLx (header_address, 0)
       FIELD_RL (header_size, 0)
