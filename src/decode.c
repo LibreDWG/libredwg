@@ -998,6 +998,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dwg->thumbnail.size = (dat->byte - 16) - start_address;
           dwg->thumbnail.chain
               = (unsigned char *)calloc (dwg->thumbnail.size, 1);
+          dwg->thumbnail.byte = 0;
           if (!dwg->thumbnail.chain)
             {
               LOG_ERROR ("Out of memory");

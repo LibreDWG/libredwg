@@ -103,22 +103,22 @@ static Bit_Chain *g_dat;
     char *s = json_string (dat, tokens);                                      \
     int slen = strlen (s);                                                    \
     memcpy (&_obj->nam, s, MIN (len, slen));                                  \
-    LOG_TRACE (#nam ": %.*s\n", len, _obj->nam);                              \
+    LOG_TRACE (#nam ": \"%.*s\"\n", len, _obj->nam);                          \
     free (s);                                                                 \
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
-    long slen;                                                                \
+    unsigned long slen;                                                       \
     char *s = json_binary (dat, tokens, #nam, &slen);                         \
     memcpy (&_obj->nam, s, slen);                                             \
-    LOG_TRACE (#nam ": %.*s\n", (int)slen, _obj->nam);                        \
+    LOG_TRACE (#nam ": \"%.*s\"\n", (int)slen, _obj->nam);                    \
     free (s);                                                                 \
   }
 #define FIELD_BINARY(nam, lenf, dxf)                                          \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
-    long slen;                                                                \
+    unsigned long slen;                                                       \
     _obj->nam = (BITCODE_TF)json_binary (dat, tokens, #nam, &slen);           \
     _obj->lenf = slen;                                                        \
   }
@@ -370,13 +370,13 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
 ATTRIBUTE_MALLOC
 static char *
 json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
-             const char *restrict key, long *lenp)
+             const char *restrict key, unsigned long *lenp)
 {
   // convert from hex
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   char *str = json_string (dat, tokens);
   size_t len = strlen (str);
-  unsigned blen = len / 2;
+  unsigned long blen = len / 2;
   char *buf = len ? malloc (blen + 1) : NULL;
   char *pos = str;
   char *old;
@@ -1099,7 +1099,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       break;
                     case 4:
                       {
-                        long len;
+                        unsigned long len;
                         char *s = json_binary (dat, tokens, "eed", &len);
                         memcpy (&data->u.eed_4.data, s, len);
                         data->u.eed_4.length = len;
@@ -1248,7 +1248,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               break;
             case VT_BINARY:
               {
-                long len;
+                unsigned long len;
                 char *s = json_binary (dat, tokens, "xdata", &len);
                 rbuf->value.str.u.data = s;
                 rbuf->value.str.size = len;
@@ -2534,14 +2534,14 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         size1 = json_long (dat, tokens);
       else if (strEQc (key, "chain"))
         {
-          long len;
+          unsigned long len;
           dwg->thumbnail.chain
               = (unsigned char *)json_binary (dat, tokens, key, &len);
           dwg->thumbnail.size = len;
-          if (size1 > 0 && size1 != len)
-            LOG_WARN ("thumbnail size mismatch: binary len %ld != size %ld",
+          if (size1 > 0 && size1 != (long)len)
+            LOG_WARN ("thumbnail size mismatch: binary len %lu != size %ld",
                       len, size1);
-          LOG_TRACE ("size: %ld\n", len);
+          LOG_TRACE ("size: %lu\n", len);
         }
       else
         {
@@ -2588,13 +2588,14 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           char *s = json_string (dat, tokens);
           int slen = strlen (s);
           memcpy (&_obj->file_ID_string, s, MIN (12, slen));
-          LOG_TRACE ("file_ID_string: %.*s\n", 12, _obj->file_ID_string)
+          LOG_TRACE ("file_ID_string: \"%.*s\"\n", 12, _obj->file_ID_string)
           free (s);
         }
       else if (strEQc (key, "padding"))
         {
-          LOG_TRACE ("padding: %.*s (ignored)\n", t->end - t->start,
+          LOG_TRACE ("padding: \"%.*s\" (ignored)\n", t->end - t->start,
                      &dat->chain[t->start])
+          tokens->index++;
         }
       // clang-format off
       FIELD_RLx (header_address, 0)

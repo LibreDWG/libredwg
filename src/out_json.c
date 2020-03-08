@@ -1493,10 +1493,16 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *_obj = (Bit_Chain *)&dwg->thumbnail;
   if (_obj->chain && _obj->size && _obj->size > 10)
     {
+      /* SECTION_PREVIEW includes the sentinel.
+         _obj->byte is at the BMP offset, via dwg_bmp */
+      if (dwg->header.from_version >= R_2004)
+        _obj->chain += 16; /* skip the sentinel */
       KEY (THUMBNAILIMAGE);
       HASH;
       PREFIX fprintf (dat->fh, "\"size\": %lu,\n", _obj->size);
       FIELD_BINARY (chain, _obj->size, 310);
+      if (dwg->header.from_version >= R_2004)
+        _obj->chain -= 16; /* undo for free */
       NOCOMMA;
       ENDHASH;
     }
