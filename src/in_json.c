@@ -1306,7 +1306,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 char *s = json_binary (dat, tokens, "xdata", &len);
                 rbuf->value.str.u.data = s;
                 rbuf->value.str.size = len;
-                size += len + 2;
+                size += len + 1;
                 break;
               }
             case VT_HANDLE:
@@ -1329,9 +1329,13 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         json_advance_unknown (dat, tokens, 0);
     }
-  if (dat->version == dat->from_version
-      && obj->xdata_size != size)
-    LOG_WARN ("Changed XRECORD.xdata_size from %u to %u", obj->xdata_size, size)
+  if (obj->xdata_size != size)
+    {
+      if (!does_cross_unicode_datversion (dat))
+        LOG_WARN ("Changed XRECORD.xdata_size from %u to %u", obj->xdata_size, size)
+      else
+        LOG_TRACE ("Changed XRECORD.xdata_size from %u to %u\n", obj->xdata_size, size)
+    }
   obj->xdata_size = size;
   return 0;
 }
