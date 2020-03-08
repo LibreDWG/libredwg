@@ -1865,15 +1865,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                           *rest = '\0';
                           rest++;
                           f1 = dwg_dynapi_subclass_field (subclass, key1);
-                          if (f1)
+                          if (f1 && *rest)
                             {
-                              char *sb1
-                                  = dwg_dynapi_subclass_name (f1->type);
+                              char *sb1 = dwg_dynapi_subclass_name (f1->type);
                               const Dwg_DYNAPI_field *sfields1
-                                  = dwg_dynapi_subclass_fields (sb1);
-                              if (!_set_struct_field (dat, obj, tokens,
-                                                      &elems[(k * size_elem) + f1->offset],
-                                                      sb1, rest, sfields1))
+                                  = sb1 ? dwg_dynapi_subclass_fields (sb1)
+                                        : NULL;
+                              if (!sfields1
+                                  || !_set_struct_field (
+                                      dat, obj, tokens,
+                                      &elems[(k * size_elem) + f1->offset],
+                                      sb1, rest, sfields1))
                                 ++tokens->index;
                               free (sb1);
                             }
@@ -2441,15 +2443,17 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   rest++;
                   // find field for key prefix, like value.
                   f1 = dwg_dynapi_entity_field (name, key);
-                  if (f1)
+                  if (f1 && *rest)
                     {
+                      void *off = &((char *)_obj)[f1->offset];
                       char *subclass = dwg_dynapi_subclass_name (f1->type);
                       const Dwg_DYNAPI_field *sfields
-                        = dwg_dynapi_subclass_fields (subclass);
+                          = subclass ? dwg_dynapi_subclass_fields (subclass)
+                                     : NULL;
                       // subclass offset for _obj
-                      void *off = &((char*)_obj)[f1->offset];
-                      if (_set_struct_field (dat, obj, tokens, off, subclass, rest,
-                                     sfields))
+                      if (sfields
+                          && _set_struct_field (dat, obj, tokens, off,
+                                                subclass, rest, sfields))
                         {
                           free (subclass);
                           continue;
