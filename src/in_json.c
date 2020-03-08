@@ -1010,18 +1010,25 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static inline bool
-eed_need_size (Dwg_Eed *restrict eed, const int need, int *havep)
+eed_need_size (Bit_Chain *restrict dat, Dwg_Eed *restrict eed, const unsigned int i,
+               const int need, int *havep)
 {
   if (need > *havep)
     {
+      int size;
+      unsigned int isize;
       int diff = need - *havep;
-      eed->data = realloc (eed->data, *havep + diff);
-      *havep += diff;
-      //memset (&eed->data[have], 0, need - have - 1);
+      // find isize
+      for (isize = i; !eed[isize].size && isize > 0; isize--)
+        ;
+      size = eed[isize].size;
+      LOG_TRACE (" extend eed[%u].size to %d (+%d)\n", isize, size, diff)
+      eed[i].data = realloc (eed[i].data, size + diff);
+      eed[isize].size += diff;
+      *havep = size + diff - need;
       return true;
     }
-  else
-    *havep -= need;
+  *havep -= need;
   return false;
 }
 
@@ -1057,9 +1064,9 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_TRACE ("eed[%u].size %ld\n", i, size);
                   // see below: if does_cross_unicode_datversion (dat) we need to recalc
                   obj->eed[i].size = (BITCODE_BS)size;
-                  have = size;
+                  have = size + 1; // we overallocate by 1 for the ending NUL
                   obj->eed[i].data = calloc (have, 1);
-                  LOG_INSANE ("-eed[%u].data: %d\n", i, have)
+                  LOG_INSANE (" alloc eed[%u].data: %d\n", i, have)
                }
               else if (strEQc (key, "handle"))
                 {
@@ -1076,12 +1083,17 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   long code = json_long (dat, tokens);
                   if (isize != (int)i)
                     {
-                      have = size - have;
+                      if (have > 0)
+                        {
+                          obj->eed[i - 1].data = realloc (obj->eed[i - 1].data, size - have);
+                          LOG_INSANE (" realloc eed[%u].data: %d\n", i-1, (int)(size - have))
+                        }
+                      have = size - have - 1;
                       obj->eed[i].data = calloc (have, 1);
-                      LOG_INSANE ("-eed[%u].data: %d\n", i, have)
+                      LOG_INSANE (" alloc eed[%u].data: %d\n", i, have)
                     }
-                  obj->eed[i].data->code = (BITCODE_RC)code;
                   have--;
+                  obj->eed[i].data->code = (BITCODE_RC)code;
                   LOG_TRACE ("eed[%u].data.code %ld\n", i, code);
                 }
               else if (strEQc (key, "value"))
@@ -1099,12 +1111,13 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         //FIXME: wstring case, which we cannot write yet
                         char *s = json_string (dat, tokens);
                         int len = strlen (s);
-                        if (eed_need_size (&obj->eed[i], len + 1 + 1 + 2, &have))
+                        if (eed_need_size (dat, obj->eed, i, len + 1 + 1 + 2, &have))
                           data = obj->eed[i].data;
                         data->u.eed_0.length = len;
                         data->u.eed_0.codepage = dwg->header.codepage;
                         memcpy (&data->u.eed_0.string, s, len + 1);
                         LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
+                        have++; // ignore the ending NUL
                         // so far only if PRE(R_2007), so the size gets smaller
                         if (does_cross_unicode_datversion (dat))
                           {
@@ -1116,14 +1129,13 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       }
                       break;
                     case 2:
-                      if (eed_need_size (&obj->eed[i], 1, &have))
+                      if (eed_need_size (dat, obj->eed, i, 1, &have))
                         data = obj->eed[i].data;
                       data->u.eed_2.byte = (BITCODE_RC)json_long (dat, tokens);
                       LOG_TRACE ("eed[%u].data.value %d\n", i, data->u.eed_2.byte);
                       break;
                     case 3:
-                      if (eed_need_size (&obj->eed[i], 4, &have))
-                        data = obj->eed[i].data;
+                      eed_need_size (dat, obj->eed, i, 4, &have);
                       data->u.eed_3.layer = json_long (dat, tokens);
                       LOG_TRACE ("eed[%u].data.value %d\n", i, data->u.eed_3.layer);
                       break;
@@ -1131,7 +1143,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       {
                         unsigned long len;
                         char *s = json_binary (dat, tokens, "eed", &len);
-                        if (eed_need_size (&obj->eed[i], len + 2, &have))
+                        if (eed_need_size (dat, obj->eed, i, len + 2, &have))
                           data = obj->eed[i].data;
                         memcpy (&data->u.eed_4.data, s, len);
                         data->u.eed_4.length = len;
@@ -1140,7 +1152,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         break;
                       }
                     case 5:
-                      if (eed_need_size (&obj->eed[i], 4, &have))
+                      if (eed_need_size (dat, obj->eed, i, 4, &have))
                         data = obj->eed[i].data;
                       data->u.eed_5.entity = json_long (dat, tokens);
                       LOG_TRACE ("eed[%u].data.value %ld\n", i, (long)data->u.eed_5.entity);
@@ -1154,7 +1166,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       {
                         BITCODE_3BD pt;
                         json_3DPOINT (dat, tokens, "eed", "3RD", &pt);
-                        if (eed_need_size (&obj->eed[i], 24, &have))
+                        if (eed_need_size (dat, obj->eed, i, 24, &have))
                           data = obj->eed[i].data;
                         memcpy (&data->u.eed_10.point, &pt, 24);
                       }
@@ -1162,19 +1174,19 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     case 40:
                     case 41:
                     case 42:
-                      if (eed_need_size (&obj->eed[i], 8, &have))
+                      if (eed_need_size (dat, obj->eed, i, 8, &have))
                         data = obj->eed[i].data;
                       data->u.eed_40.real = json_float (dat, tokens);
                       LOG_TRACE ("eed[%u].data.value %f\n", i, data->u.eed_40.real);
                       break;
                     case 70:
-                      if (eed_need_size (&obj->eed[i], 2, &have))
+                      if (eed_need_size (dat, obj->eed, i, 2, &have))
                         data = obj->eed[i].data;
                       data->u.eed_70.rs = (BITCODE_RS)json_long (dat, tokens);
                       LOG_TRACE ("eed[%u].data.value %d\n", i, (int)data->u.eed_70.rs);
                       break;
                     case 71:
-                      if (eed_need_size (&obj->eed[i], 4, &have))
+                      if (eed_need_size (dat, obj->eed, i, 4, &have))
                         data = obj->eed[i].data;
                       data->u.eed_71.rl = (BITCODE_RL)json_long (dat, tokens);
                       LOG_TRACE ("eed[%u].data.value %d\n", i, (int)data->u.eed_71.rl);
