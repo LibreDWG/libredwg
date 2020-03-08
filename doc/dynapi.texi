@@ -7837,7 +7837,7 @@ BL,	DXF 97
 @item parent
 struct _dwg_HATCH_Path*
 @item point
-2RD
+2RD,	DXF 10
 @item bulge
 BD,	DXF 42
 

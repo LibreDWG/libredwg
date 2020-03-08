@@ -1317,7 +1317,7 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_blocks");
   else if (strEQc (key, "styles")) // conflicts? only for LTYPE
     strcpy (s, "num_dashes");
-  else if (strEQc (key, "segs"))
+  else if (strEQc (key, "segs") || strEQc (key, "polyline_paths"))
     {
       s = realloc (s, strlen ("num_segs_or_paths") + 1);
       strcpy (s, "num_segs_or_paths");

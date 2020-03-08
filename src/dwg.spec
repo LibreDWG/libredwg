@@ -3797,7 +3797,7 @@ DWG_ENTITY (HATCH)
 #define polyline_paths paths[rcount1].polyline_paths
           REPEAT2 (paths[rcount1].num_segs_or_paths, polyline_paths, Dwg_HATCH_PolylinePath)
           REPEAT_BLOCK
-              FIELD_2RD (polyline_paths[rcount2].point, 10);
+              SUB_FIELD_2RD (polyline_paths[rcount2],point, 10);
               if (FIELD_VALUE (paths[rcount1].bulges_present))
                 {
                   SUB_FIELD_BD (polyline_paths[rcount2],bulge, 42);

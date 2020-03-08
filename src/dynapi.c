@@ -6760,7 +6760,7 @@ static const Dwg_DYNAPI_field _dwg_HATCH_PolylinePath_fields[] = {
   { "parent",	"struct _dwg_HATCH_Path*", sizeof (void *),  OFF (struct _dwg_HATCH_PolylinePath, parent),
     1,1,0, 0 },
   { "point",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_HATCH_PolylinePath, point),
-    1,0,0, 0 },
+    1,0,0, 10 },
   { "bulge",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_HATCH_PolylinePath, bulge),
     0,0,0, 42 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
