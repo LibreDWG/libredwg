@@ -172,6 +172,8 @@ typedef char* BITCODE_TV;
 #define FORMAT_T16 "\"%s\""
 #define BITCODE_T32 BITCODE_TV
 #define FORMAT_T32 "\"%s\""
+#define BITCODE_TU32 BITCODE_TV
+#define FORMAT_TU32 "\"%s\""
 typedef BITCODE_DOUBLE BITCODE_BT;
 #define FORMAT_BT "%f"
 typedef BITCODE_DOUBLE BITCODE_DD;
@@ -5911,7 +5913,7 @@ typedef struct _dwg_struct
   struct Dwg_FileDepList
   {
     BITCODE_RL num_features;
-    BITCODE_TV *features; // Acad:XRef, Acad:Image, Acad:PlotConfig, Acad:Text
+    BITCODE_TU32 *features; // Acad:XRef, Acad:Image, Acad:PlotConfig, Acad:Text
     BITCODE_RL num_files;
     Dwg_FileDepList_Files *files;
   } filedeplist;

@@ -426,6 +426,18 @@
     _obj->nam = bit_read_TU16 (dat);                                          \
     LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                              \
   }
+#define FIELD_TU32(nam, dxf)                                                  \
+  {                                                                           \
+    _obj->nam = bit_read_TU32 (dat);                                          \
+    if (dat->version < R_2007)                                                \
+      {                                                                       \
+        LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);              \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        LOG_TRACE_TU_I (#nam, rcount1, FIELD_VALUE (nam), TU32, dxf)          \
+      }                                                                       \
+  }
 #define FIELD_T32(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_T32 (dat);                                           \
@@ -435,7 +447,7 @@
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE_TU_I (#nam, rcount1, FIELD_VALUE (nam), dxf)                \
+        LOG_TRACE_TU_I (#nam, rcount1, FIELD_VALUE (nam), T32, dxf)           \
       }                                                                       \
   }
 #define FIELD_TV(nam, dxf)                                                    \
@@ -852,7 +864,10 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_INSANE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,       \
+          if (strEQc (#type, "TU") || strEQc (#type, "TU32"))                 \
+            LOG_TRACE_TU_I (#name, vcount, FIELD_VALUE (name), type, dxf)     \
+          else                                                                \
+            LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,      \
                       _obj->name[vcount])                                     \
         }                                                                     \
     }
@@ -879,7 +894,7 @@
           PRE (R_2007)                                                        \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
+            LOG_TRACE (#name "[%d]: \"%s\" [T %d]", (int)vcount,              \
                        _obj->name[vcount], dxf)                               \
             LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                      \
             LOG_TRACE ("\n")                                                  \
@@ -887,7 +902,7 @@
           LATER_VERSIONS                                                      \
           {                                                                   \
             _obj->name[vcount] = (char *)bit_read_TU (dat);                   \
-            LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], dxf)           \
+            LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], T, dxf)        \
           }                                                                   \
         }                                                                     \
     }

@@ -1643,7 +1643,7 @@ bit_read_TU16 (Bit_Chain *restrict dat)
   return chain;
 }
 
-/** String32: Read ASCII/Unicode string prefixed by a RL size (not length)
+/** String32: Read ASCII/UCS-2 string prefixed by a RL size (not length)
  */
 BITCODE_T32
 bit_read_T32 (Bit_Chain *restrict dat)
@@ -1665,6 +1665,49 @@ bit_read_T32 (Bit_Chain *restrict dat)
       wstr = (BITCODE_TU)malloc (size + 2);
       for (i = 0; i < len; i++)
         wstr[i] = bit_read_RS (dat);
+      wstr[len] = 0;
+      return (BITCODE_T32)wstr;
+    }
+  else
+    {
+      BITCODE_T32 str;
+      if (dat->byte + size > dat->size)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
+                     dat->byte, size)
+            return NULL;
+        }
+      str = (BITCODE_T32)malloc (size + 1);
+      for (i = 0; i < size; i++)
+        str[i] = bit_read_RC (dat);
+      str[size] = 0;
+      return str;
+    }
+}
+
+/** String32: Read ASCII/UCS-4 string prefixed by a RL size (not length)
+ */
+BITCODE_TU32
+bit_read_TU32 (Bit_Chain *restrict dat)
+{
+  BITCODE_RL i, size;
+
+  size = bit_read_RL (dat);
+  if (dat->from_version >= R_2007)
+    {
+      BITCODE_TU wstr;
+      BITCODE_RL len = size / 4;
+      if (dat->byte + size > dat->size)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
+                     dat->byte, size)
+            return NULL;
+        }
+      wstr = (BITCODE_TU)malloc (size + 2);
+      for (i = 0; i < len; i++)
+        wstr[i] = (BITCODE_RS)bit_read_RL (dat);
       wstr[len] = 0;
       return (BITCODE_T32)wstr;
     }

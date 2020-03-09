@@ -160,6 +160,9 @@
 #ifndef FIELD_TFFx
 #  define FIELD_TFFx(name, len, dxf) FIELD_TFF (name, len, dxf)
 #endif
+#ifndef FIELD_TU32
+#  define FIELD_TU32(name, dxf) FIELD_TV (name, dxf)
+#endif
 #ifndef FIELD_RLd
 #  define FIELD_RLd(name, dxf) FIELD_RL (name, dxf)
 #endif
