@@ -1152,10 +1152,11 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         break;
                       }
                     case 5:
-                      if (eed_need_size (dat, obj->eed, i, 4, &have))
+                      if (eed_need_size (dat, obj->eed, i, 8, &have))
                         data = obj->eed[i].data;
-                      data->u.eed_5.entity = json_long (dat, tokens);
-                      LOG_TRACE ("eed[%u].data.value %ld\n", i, (long)data->u.eed_5.entity);
+                      data->u.eed_5.entity = (BITCODE_RLL)json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.value " FORMAT_RLL "\n", i,
+                                 (BITCODE_RLL)data->u.eed_5.entity);
                       break;
                     case 10:
                     case 11:
@@ -2994,6 +2995,14 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       t = &tokens->tokens[tokens->index];
       keys = t->size;
+      if (t->type != JSMN_OBJECT)
+        {
+          LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                     t_typename[t->type], tokens->index, tokens->num_tokens,
+                     section);
+          json_advance_unknown (dat, tokens, 0);
+          return DWG_ERR_INVALIDTYPE;
+        }
       assert (t->type == JSMN_OBJECT);
       tokens->index++;
       for (int k = 0; k < keys; k++)
