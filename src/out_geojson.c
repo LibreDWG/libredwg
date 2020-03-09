@@ -266,7 +266,8 @@ static unsigned int cur_ver = 0;
   if (size)                                                                   \
     NOCOMMA;                                                                  \
   ENDARRAY;
-#define FIELD_VECTOR_T(name, size, dxf)                                       \
+
+#define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   ARRAY;                                                                      \
   PRE (R_2007)                                                                \
   {                                                                           \

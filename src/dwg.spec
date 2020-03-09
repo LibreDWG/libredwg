@@ -2126,8 +2126,8 @@ DWG_OBJECT (DICTIONARY)
 #endif
 
 #ifdef IS_DXF
-    if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
-      REPEAT (numitems, texts, T)
+  if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
+     REPEAT (numitems, texts, T)
       {
         int dxf = FIELD_VALUE (hard_owner) & 1 ? 360 : 350;
         FIELD_T (texts[rcount1], 3);
@@ -2136,7 +2136,7 @@ DWG_OBJECT (DICTIONARY)
       END_REPEAT (texts)
     }
 #else
-  FIELD_VECTOR_T (texts, numitems, 3);
+  FIELD_VECTOR_T (texts, T, numitems, 3);
 #endif
 
   START_OBJECT_HANDLE_STREAM;
@@ -2183,7 +2183,7 @@ DWG_OBJECT (DICTIONARYWDFLT)
       END_REPEAT (texts)
     }
 #else
-  FIELD_VECTOR_T (texts, numitems, 3);
+  FIELD_VECTOR_T (texts, T, numitems, 3);
 #endif
 
   START_OBJECT_HANDLE_STREAM;

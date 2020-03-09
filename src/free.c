@@ -199,7 +199,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
         FIELD_##type (nam[vcount], dxf);                                      \
     }                                                                         \
   FIELD_TV (nam, dxf);
-#define FIELD_VECTOR_T(name, size, dxf)                                       \
+#define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   FIELD_VECTOR_N (name, TV, _obj->size, dxf)
 #define FIELD_VECTOR(name, type, size, dxf)                                   \
   FIELD_VECTOR_N (name, type, _obj->size, dxf)

@@ -223,7 +223,7 @@ static unsigned int cur_ver = 0;
                      _obj->name[vcount])                                      \
         }                                                                     \
     }
-#define FIELD_VECTOR_T(name, size, dxf)                                       \
+#define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   if (_obj->size > 0 && _obj->name != NULL)                                   \
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \

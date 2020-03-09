@@ -119,7 +119,9 @@
             }                                                                 \
         }                                                                     \
       else                                                                    \
-        LOG_TRACE (#nam ": " FORMAT_##type " [" #type "]\n", _obj->nam)       \
+        {                                                                     \
+          LOG_TRACE (#nam ": " FORMAT_##type " [" #type "]\n", _obj->nam)     \
+        }                                                                     \
     }
 #define LOG_TF(level, var, len)                                               \
   {                                                                           \
@@ -172,8 +174,10 @@
             }                                                                 \
         }                                                                     \
       else                                                                    \
-        LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]",    \
-                   _obj->nam.x, _obj->nam.y, dxf)                             \
+        {                                                                     \
+          LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]",  \
+                     _obj->nam.x, _obj->nam.y, dxf)                           \
+        }                                                                     \
       LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
       LOG_TRACE ("\n")                                                        \
     }
@@ -206,9 +210,11 @@
             }                                                                 \
         }                                                                     \
       else                                                                    \
-        LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD         \
-                        ") [" #type " %d]",                                   \
-                   _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf)                \
+        {                                                                     \
+          LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD       \
+                     ") [" #type " %d]",                                      \
+                     _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf)              \
+        }                                                                     \
       LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
       LOG_TRACE ("\n")                                                        \
     }
@@ -431,11 +437,11 @@
     _obj->nam = bit_read_TU32 (dat);                                          \
     if (dat->version < R_2007)                                                \
       {                                                                       \
-        LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);              \
+        LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf)               \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE_TU_I (#nam, rcount1, FIELD_VALUE (nam), TU32, dxf)          \
+        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf)                           \
       }                                                                       \
   }
 #define FIELD_T32(nam, dxf)                                                   \
@@ -447,7 +453,7 @@
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        LOG_TRACE_TU_I (#nam, rcount1, FIELD_VALUE (nam), T32, dxf)           \
+        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf)                           \
       }                                                                       \
   }
 #define FIELD_TV(nam, dxf)                                                    \
@@ -497,8 +503,10 @@
   {                                                                           \
     bit_read_BE (dat, &_obj->nam.x, &_obj->nam.y, &_obj->nam.z);              \
     if (_obj->nam.z != 1.0)                                                   \
+      {                                                                       \
         LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]\n", _obj->nam.x, _obj->nam.y, \
                    _obj->nam.z, dxf);                                         \
+      }                                                                       \
   }
 #define TRACE_DD                                                              \
   {                                                                           \
@@ -645,10 +653,14 @@
         LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->color.flag);                               \
         if (_obj->color.flag & 1)                                             \
-          LOG_TRACE (#color ".name: %s [CMC.TV]\n", _obj->color.name);        \
+          {                                                                   \
+            LOG_TRACE (#color ".name: %s [CMC.TV]\n", _obj->color.name);      \
+          }                                                                   \
         if (_obj->color.flag & 2)                                             \
-          LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                       \
+          {                                                                   \
+            LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                     \
                      _obj->color.book_name);                                  \
+          }                                                                   \
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
   }
@@ -664,10 +676,14 @@
         LOG_TRACE (#o "." #color ".flag: 0x%x [CMC.RC]\n",                    \
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
-          LOG_TRACE (#o "." #color ".name: %s [CMC.TV]\n", _obj->o.color.name);\
+          {                                                                   \
+            LOG_TRACE (#o "." #color ".name: %s [CMC.TV]\n", _obj->o.color.name);\
+          }                                                                   \
         if (_obj->o.color.flag & 2)                                           \
-          LOG_TRACE (#o "." #color ".bookname: %s [CMC.TV]\n",                \
+          {                                                                   \
+            LOG_TRACE (#o "." #color ".bookname: %s [CMC.TV]\n",              \
                      _obj->o.color.book_name);                                \
+          }                                                                   \
       }                                                                       \
   }
 #define FIELD_ENC(color, dxf1, dxf2)                                          \
@@ -864,10 +880,7 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          if (strEQc (#type, "TU") || strEQc (#type, "TU32"))                 \
-            LOG_TRACE_TU_I (#name, vcount, FIELD_VALUE (name), type, dxf)     \
-          else                                                                \
-            LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,      \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
                       _obj->name[vcount])                                     \
         }                                                                     \
     }
@@ -883,7 +896,7 @@
                       _obj->name[vcount])                                     \
         }                                                                     \
     }
-#define FIELD_VECTOR_T(name, size, dxf)                                       \
+#define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _VECTOR_CHKCOUNT (name, _obj->size,                                     \
@@ -894,15 +907,15 @@
           PRE (R_2007)                                                        \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_TRACE (#name "[%d]: \"%s\" [T %d]", (int)vcount,              \
-                       _obj->name[vcount], dxf)                               \
+            LOG_TRACE (#name "[%d]: \"%s\" [%s %d]", (int)vcount,             \
+                       _obj->name[vcount], #type, dxf)                        \
             LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                      \
             LOG_TRACE ("\n")                                                  \
           }                                                                   \
           LATER_VERSIONS                                                      \
           {                                                                   \
-            _obj->name[vcount] = (char *)bit_read_TU (dat);                   \
-            LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], T, dxf)        \
+            _obj->name[vcount] = (char *)bit_read_##type (dat);               \
+            LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], type, dxf)     \
           }                                                                   \
         }                                                                     \
     }

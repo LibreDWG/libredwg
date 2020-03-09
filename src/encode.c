@@ -429,7 +429,7 @@ static bool env_var_checked_p;
                      _obj->nam[vcount], #type, dxf)                           \
         }                                                                     \
     }
-#define FIELD_VECTOR_T(nam, size, dxf)                                        \
+#define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (_obj->size > 0 && _obj->nam)                                            \
     {                                                                         \
       OVERFLOW_CHECK_LV (nam, _obj->size)                                     \
@@ -443,7 +443,7 @@ static bool env_var_checked_p;
           }                                                                   \
           else                                                                \
           {                                                                   \
-            bit_write_TU (dat, (BITCODE_TU)_obj->nam[vcount]);                \
+            bit_write_##type (dat, (BITCODE_TU)_obj->nam[vcount]);            \
             LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf)                       \
           }                                                                   \
         }                                                                     \

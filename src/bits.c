@@ -1686,7 +1686,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
     }
 }
 
-/** String32: Read ASCII/UCS-4 string prefixed by a RL size (not length)
+/** String32: Read ASCII/UCS-4 or -2 string prefixed by a RL size (not length)
  */
 BITCODE_TU32
 bit_read_TU32 (Bit_Chain *restrict dat)
@@ -1697,17 +1697,35 @@ bit_read_TU32 (Bit_Chain *restrict dat)
   if (dat->from_version >= R_2007)
     {
       BITCODE_TU wstr;
-      BITCODE_RL len = size / 4;
+      BITCODE_RL rl1, len = size / 4;
+      unsigned long pos = bit_position (dat);
       if (dat->byte + size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
                      dat->byte, size)
-            return NULL;
+          return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
-      for (i = 0; i < len; i++)
-        wstr[i] = (BITCODE_RS)bit_read_RL (dat);
+      rl1 = bit_read_RL (dat);
+      if (rl1 & 0x00ff0000) /* 00 xx 00 nn */
+        { // only UCS-2
+          bit_set_position (dat, pos);
+          len = size / 2;
+          LOG_HANDLE ("TU32 is only UCS-2\n");
+          for (i = 0; i < len; i++)
+            {
+              wstr[i] = bit_read_RS (dat);
+            }
+        }
+      else
+        {
+          wstr[0] = (BITCODE_RS)rl1;
+          for (i = 1; i < len; i++)
+            {
+              wstr[i] = (BITCODE_RS)bit_read_RL (dat);
+            }
+        }
       wstr[len] = 0;
       return (BITCODE_T32)wstr;
     }

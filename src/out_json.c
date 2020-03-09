@@ -516,7 +516,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
         NOCOMMA;                                                              \
     }                                                                         \
   ENDARRAY;
-#define FIELD_VECTOR_T(nam, size, dxf)                                        \
+#define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   KEY (nam);                                                                  \
   ARRAY;                                                                      \
   if (_obj->nam)                                                              \

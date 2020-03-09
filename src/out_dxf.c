@@ -537,7 +537,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           VALUE_##type (_obj->nam[vcount], dxf);                              \
         }                                                                     \
     }
-#define FIELD_VECTOR_T(nam, size, dxf)                                        \
+#define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \
       PRE (R_2007)                                                            \

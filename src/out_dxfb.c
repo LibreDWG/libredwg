@@ -449,7 +449,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         VALUE (_obj->nam[vcount], type, dxf);                                 \
     }
-#define FIELD_VECTOR_T(nam, size, dxf)                                        \
+#define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \
       PRE (R_2007)                                                            \

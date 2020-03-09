@@ -19,11 +19,7 @@
   #include "spec.h"
 
   FIELD_RL (num_features, 0);
-#ifdef IS_JSON
-  FIELD_VECTOR_T (features, num_features, 0);
-#else
-  FIELD_VECTOR (features, TU32, num_features, 0);
-#endif
+  FIELD_VECTOR_T (features, TU32, num_features, 0);
   FIELD_RL (num_files, 0);
   REPEAT (num_files, files, Dwg_FileDepList_Files)
   REPEAT_BLOCK
