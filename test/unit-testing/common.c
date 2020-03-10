@@ -417,7 +417,7 @@ api_common_entity (dwg_object *obj)
   CHK_COMMON_TYPE (ent, preview_exists, B, preview_exists)
   if (preview_exists)
     {
-      if (version > R_2010)
+      if (version >= R_2010)
         CHK_COMMON_TYPE (ent, preview_size, BLL, preview_size)
       else
         CHK_COMMON_TYPE (ent, preview_size, RL, preview_size_rl);
