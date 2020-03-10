@@ -91,6 +91,7 @@ check_PROGRAMS = \
 	vertex_mesh \
 	vertex_pface \
 	vertex_pface_face \
+	viewport \
 	wipeout \
 	xline \
 	xrecord
@@ -98,14 +99,12 @@ check_PROGRAMS = \
 #TODO:
 #	extrudedsurface \
 #	geopositionmarker \
-#	extrudedsurface \
 #	helix \
 #	multileader \
 #	revolvedsurface \
 #	surface \
 #	sweptsurface \
-#	table \
-#       viewport
+#	table
 
 dynapi_test.c: dynapi_test.c.in \
 		$(top_srcdir)/include/dwg.h \

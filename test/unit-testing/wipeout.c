@@ -25,7 +25,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_3RD (wipeout, WIPEOUT, pt0, pt0);
   CHK_ENTITY_3RD (wipeout, WIPEOUT, uvec, uvec);
-  CHK_ENTITY_3RD (wipeout, WIPEOUT, vvec, uvec);
+  CHK_ENTITY_3RD (wipeout, WIPEOUT, vvec, vvec);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, display_props, BS, display_props);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, clipping, B, clipping);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, brightness, RC, brightness);

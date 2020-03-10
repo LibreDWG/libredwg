@@ -25,7 +25,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_3RD_W_OLD (image, IMAGE, pt0, pt0);
   CHK_ENTITY_3RD (image, IMAGE, uvec, uvec); // still old api name u_vector
-  CHK_ENTITY_3RD (image, IMAGE, vvec, uvec);
+  CHK_ENTITY_3RD (image, IMAGE, vvec, vvec);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, display_props, BS, display_props);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, clipping, B, clipping);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, brightness, RC, brightness);
