@@ -8583,6 +8583,27 @@ dwg_dynapi_common_set_value (void *restrict _obj,
 
 // arbitrary structs, no text
 EXPORT bool
+dwg_dynapi_subclass_value (const void *restrict ptr,
+                           const char *restrict subclass,
+                           const char *restrict fieldname,
+                           void *restrict out, Dwg_DYNAPI_field *restrict fp)
+{
+  const Dwg_DYNAPI_field *f;
+#ifndef HAVE_NONNULL
+  if (!ptr || !subclass || !fieldname || !out)
+    return false;
+#endif
+  f = dwg_dynapi_subclass_field (subclass, fieldname);
+  if (!f) // TODO maybe search via dwg_dynapi_subclass_name ()
+    return false;
+  memcpy (out, &((char*)ptr)[f->offset], f->size);
+  if (fp)
+    memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
+  return true;
+}
+
+// arbitrary structs, no text
+EXPORT bool
 dwg_dynapi_field_get_value (const void *restrict ptr,
                             const Dwg_DYNAPI_field *restrict field,
                             void *restrict out)

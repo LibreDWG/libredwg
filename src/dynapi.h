@@ -107,6 +107,11 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict entity,
     __nonnull ((1, 2, 3));
 
 EXPORT bool
+dwg_dynapi_subclass_value (const void *restrict ptr, const char *restrict subclass,
+                           const char *restrict fieldname, void *restrict out,
+                           Dwg_DYNAPI_field *restrict fp)
+    __nonnull ((1, 2, 3, 4));
+EXPORT bool
 dwg_dynapi_field_get_value (const void *restrict ptr,
                             const Dwg_DYNAPI_field *restrict field,
                             void *restrict out)

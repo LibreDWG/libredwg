@@ -126,6 +126,17 @@ EXPORT bool dwg_dynapi_common_value (void *restrict _obj,
                                      void *restrict out,
                                      Dwg_DYNAPI_field *restrict fp)
   __nonnull ((1, 2, 3));
+
+/** Returns the common OBJECT.subclass.fieldname value in out.
+    ptr points to the subclass field. The optional Dwg_DYNAPI_field *fp is filled with the field
+    types from dynapi.c
+ */
+EXPORT bool
+dwg_dynapi_subclass_value (const void *restrict ptr, const char *restrict subclass,
+                           const char *restrict fieldname, void *restrict out,
+                           Dwg_DYNAPI_field *restrict fp)
+    __nonnull ((1, 2, 3, 4));
+
 // Converts T or TU wide-strings to utf-8. Only for text values
 // isnew is set to 1 if textp is freshly malloced (r2007+), otherwise 0
 EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
