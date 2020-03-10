@@ -71,6 +71,7 @@ check_PROGRAMS = \
 	minsert \
 	mline \
 	mtext \
+	multileader \
 	ole2frame \
 	point \
 	polyline_2d \
@@ -101,7 +102,6 @@ check_PROGRAMS = \
 #	extrudedsurface \
 #	geopositionmarker \
 #	helix \
-#	multileader \
 #	revolvedsurface \
 #	surface \
 #	sweptsurface \
