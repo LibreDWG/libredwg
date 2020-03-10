@@ -105,6 +105,8 @@ TESTDATA = \
     test-data/2004/Text.dwg \
     test-data/2004/Text.jpg \
     test-data/2004/Text.txt \
+    test-data/2004/Underlay.dwg \
+    test-data/2004/Underlay.dxf \
     test-data/2004/circle.dwg \
     test-data/2004/circle.jpg \
     test-data/2004/circle.txt \
