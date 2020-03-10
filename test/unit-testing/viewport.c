@@ -68,5 +68,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, default_lighting_type, RC, default_lighting_type);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, brightness, BD, brightness);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, contrast, BD, contrast);
-  //CHK_ENTITY_TYPE (viewport, VIEWPORT, ambient_color, CMC, ambient_color);
+  CHK_ENTITY_CMC (viewport, VIEWPORT, ambient_color, ambient_color);
 }

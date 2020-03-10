@@ -52,7 +52,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (mleader, MULTILEADER, mleaderstyle, mleaderstyle);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, flags, BL, flags);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, type, BS, type);
-  //CHK_ENTITY_CMC (mleader, MULTILEADER, color, color);
+  CHK_ENTITY_CMC (mleader, MULTILEADER, color, color);
   CHK_ENTITY_H (mleader, MULTILEADER, ltype, ltype);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, linewt, BLd, linewt);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_landing, B, has_landing);
@@ -66,17 +66,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_right, BS, text_right);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_angletype, BS, text_angletype);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_type, BS, attach_type);
-  //CHK_ENTITY_CMC (mleader, MULTILEADER, text_color, text_color);
+  CHK_ENTITY_CMC (mleader, MULTILEADER, text_color, text_color);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_text_frame, B, has_text_frame);
   CHK_ENTITY_H (mleader, MULTILEADER, block_style, block_style);
-  //CHK_ENTITY_CMC (mleader, MULTILEADER, block_color, block_color);
+  CHK_ENTITY_CMC (mleader, MULTILEADER, block_color, block_color);
   CHK_ENTITY_3RD (mleader, MULTILEADER, block_scale, block_scale);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, block_rotation, BD, block_rotation);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, style_attachment, BS, style_attachment);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, is_annotative, B, is_annotative);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, num_arrowheads, BL, num_arrowheads);
+
   if (dwg_version >= R_2000 && dwg_version <= R_2007)
     {
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, num_arrowheads, BL, num_arrowheads);
       //  Dwg_LEADER_ArrowHead *arrowheads;
       CHK_ENTITY_TYPE (mleader, MULTILEADER, num_blocklabels, BL, num_blocklabels);
       // Dwg_LEADER_BlockLabel *blocklabels;

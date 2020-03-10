@@ -77,6 +77,20 @@ api_process (dwg_object *obj)
       else
         for (i = 0; i < num_colors; i++)
           {
+            /*
+            BITCODE_CMC color;
+            if (!dwg_dynapi_entity_value (&colors[i], "HATCH_color", "color",
+                                          &color, NULL))
+              fail ("HATCH.colors[%d].color", i);
+            else
+              {
+                if (memcmp (&color, &hatch->colors[i].color,
+                            sizeof (Dwg_Color)) == 0)
+                  ok ("HATCH.colors[%d].color:\t" FORMAT_BSd, i, color.index);
+                else
+                  fail ("HATCH.colors[%d].color:\t" FORMAT_BSd, i, color.index);
+              }
+            */
             ok ("HATCH.colors[%d]: %f, %d", i, colors[i].shift_value,
                 colors[i].color.index);
           }

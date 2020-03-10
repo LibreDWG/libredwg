@@ -10,6 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_BS attachment, drawing_dir, linespace_style, class_version;
   BITCODE_B unknown_bit, annotative, default_flag;
   BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans, column_type;
+  BITCODE_CMC bg_fill_color;
   char *text;
   int isnew;
   dwg_point_3d ins_pt, ext, x_axis_dir, pt3d;
@@ -18,19 +19,8 @@ api_process (dwg_object *obj)
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT (obj);
   Dwg_Version_Type version = obj->parent->header.version;
 
-  printf ("MTEXT.text: \"%s\"\n", mtext->text);
-  if (!dwg_dynapi_entity_utf8text (mtext, "MTEXT", "text", &text, &isnew, NULL))
-    {
-      fail ("dynapi for MTEXT.text");
-    }
-  else
-    {
-      printf ("MTEXT.text: \"%s\" (utf8)\n", text);
-    }
   if (strcmp (dwg_ent_mtext_get_text (mtext, &error), mtext->text))
     fail ("old API dwg_ent_mtext_get_text");
-  if (isnew)
-    free (text);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, x_axis_dir, x_axis_dir);
@@ -41,6 +31,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, drawing_dir, BS, drawing_dir);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_height, BD, extents_ht);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_width, BD, extents_wid);
+  CHK_ENTITY_UTF8TEXT (mtext, MTEXT, text, text);
+  CHK_ENTITY_H (mtext, MTEXT, style, style);
   if (version >= R_2000)
     {
       CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_style, BS,
@@ -53,6 +45,7 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_flag, BL, bg_fill_flag);
       CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_scale, BL, bg_fill_scale);
+      CHK_ENTITY_CMC (mtext, MTEXT, bg_fill_color, bg_fill_color);
       CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_trans, BL, bg_fill_trans);
     }
   if (version >= R_2018)
@@ -63,5 +56,4 @@ api_process (dwg_object *obj)
       CHK_ENTITY_H (mtext, MTEXT, appid, appid);
       CHK_ENTITY_TYPE (mtext, MTEXT, column_type, BL, column_type);
     }
-  CHK_ENTITY_H (mtext, MTEXT, style, style);
 }

@@ -508,6 +508,17 @@ api_common_entity (dwg_object *obj)
         fail (#name "." #field ":\t" FORMAT_##type, value);                   \
     }
 
+#define CHK_ENTITY_CMC(ent, name, field, value)                               \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &value, NULL))            \
+    fail (#name "." #field);                                                  \
+  else                                                                        \
+    {                                                                         \
+      if (memcmp (&value, &ent->field, sizeof (Dwg_Color)) == 0)              \
+        ok (#name "." #field ":\t" FORMAT_BSd, value.index);                  \
+      else                                                                    \
+        fail (#name "." #field ":\t" FORMAT_BSd, value.index);                \
+    }
+
 #define CHK_ENTITY_H(ent, name, field, hdl)                                   \
   {                                                                           \
     if (!dwg_dynapi_entity_value (ent, #name, #field, &hdl, NULL))            \
