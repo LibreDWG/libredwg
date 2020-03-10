@@ -5,7 +5,6 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  dwg_point_3d ins_pt, ext, scale;
   BITCODE_BL class_version;
   dwg_point_3d pt0, uvec, vvec;
   dwg_point_2d size; /*!< DXF 13/23; width, height in pixel */
