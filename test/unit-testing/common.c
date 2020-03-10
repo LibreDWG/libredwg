@@ -134,6 +134,12 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/Leader.dwg");
               error += test_code (tmp);
             }
+          if (DWG_TYPE == DWG_TYPE_HATCH)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/HatchG.dwg");
+              error += test_code (tmp);
+            }
           if (DWG_TYPE == DWG_TYPE_UNDERLAY)
             {
               strcpy (tmp, prefix);

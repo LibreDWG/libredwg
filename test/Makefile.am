@@ -73,6 +73,7 @@ TESTDATA = \
     test-data/2004/Ellipse.dwg \
     test-data/2004/Ellipse.jpg \
     test-data/2004/Ellipse.txt \
+    test-data/2004/HatchG.dwg \
     test-data/2004/Helix.dwg \
     test-data/2004/Helix.jpg \
     test-data/2004/Helix.txt \
