@@ -367,9 +367,9 @@ print_api (dwg_object *obj)
       {                                                                       \
         char *_hdlname = dwg_dynapi_handle_name (dwg, hdl);                   \
         if (hdl == (BITCODE_H)ent->parent->field)                             \
-          ok (#field ": %s " FORMAT_REF, _hdlname ?: "", ARGS_REF (hdl));     \
+          ok (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "", ARGS_REF (hdl));  \
         else                                                                  \
-          fail (#field ": %s " FORMAT_REF, _hdlname ?: "", ARGS_REF (hdl));   \
+          fail (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "", ARGS_REF (hdl)); \
         if (version >= R_2007)                                                \
           free (_hdlname);                                                    \
       }                                                                       \
@@ -516,17 +516,20 @@ api_common_entity (dwg_object *obj)
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
+        Dwg_Version_Type _version = ent->parent->dwg->header.version;         \
         char *_hdlname = dwg_dynapi_handle_name (obj->parent, hdl);           \
         if (hdl == ent->field)                                                \
           {                                                                   \
-            ok (#name "." #field ": %s " FORMAT_REF, _hdlname ?: "",          \
-                ARGS_REF (hdl));                                              \
+            ok (#name "." #field ": %s " FORMAT_REF,                          \
+                _hdlname ? _hdlname : "", ARGS_REF (hdl));                    \
           }                                                                   \
         else                                                                  \
           {                                                                   \
-            fail (#name "." #field ": %s " FORMAT_REF, _hdlname ?: "",        \
-                  ARGS_REF (hdl));                                            \
+            fail (#name "." #field ": %s " FORMAT_REF,                        \
+                  _hdlname ? _hdlname : "", ARGS_REF (hdl));                  \
           }                                                                   \
+        if (_version >= R_2007)                                               \
+          free (_hdlname);                                                    \
       }                                                                       \
   }
 
@@ -537,6 +540,7 @@ api_common_entity (dwg_object *obj)
     pass ();                                                                  \
   else                                                                        \
     {                                                                         \
+      Dwg_Version_Type _version = ent->parent->dwg->header.version;           \
       for (int _i = 0; _i < (int)(num); _i++)                                 \
         {                                                                     \
           BITCODE_H _hdl = hdlp[_i];                                          \
@@ -544,13 +548,15 @@ api_common_entity (dwg_object *obj)
           if (_hdl == ent->field[_i])                                         \
             {                                                                 \
               ok (#name "." #field "[%d]: %s " FORMAT_REF, _i,                \
-                  _hdlname ?: "", ARGS_REF (_hdl));                           \
+                  _hdlname ? _hdlname : "", ARGS_REF (_hdl));                 \
             }                                                                 \
           else                                                                \
             {                                                                 \
               fail (#name "." #field "[%d]: %s " FORMAT_REF, _i,              \
-                    _hdlname ?: "", ARGS_REF (_hdl));                         \
+                    _hdlname ? _hdlname : "", ARGS_REF (_hdl));               \
             }                                                                 \
+          if (_version >= R_2007)                                             \
+            free (_hdlname);                                                  \
         }                                                                     \
     }
 
@@ -648,14 +654,14 @@ api_common_object (dwg_object *obj)
       if (!memcmp (&handle->handleref, &obj->handle, sizeof (handle->handleref)))
         {
           ok ("%s.handleref: %s (%x.%d.%lX)", obj->name,
-              _hdlname ? : "",
+              _hdlname ? _hdlname : "",
               handle->handleref.code,
               handle->handleref.size, handle->handleref.value);
           }
         else
           {
             fail ("%s.handleref: %s (%x.%d.%lX)", obj->name,
-                  _hdlname ? : "",
+                  _hdlname ? _hdlname : "",
                   handle->handleref.code,
                   handle->handleref.size, handle->handleref.value);
           }
