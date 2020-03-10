@@ -65,6 +65,7 @@ check_PROGRAMS = \
 	hatch \
 	image \
 	insert \
+	leader \
 	line \
 	lwpline \
 	minsert \
