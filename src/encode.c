@@ -437,13 +437,13 @@ static bool env_var_checked_p;
         {                                                                     \
           PRE (R_2007)                                                        \
           {                                                                   \
-            bit_write_TV (dat, _obj->nam[vcount]);                            \
+            bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);                \
             LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]\n", (int)vcount,            \
                        _obj->nam[vcount], dxf)                                \
           }                                                                   \
           else                                                                \
           {                                                                   \
-            bit_write_##type (dat, (BITCODE_TU)_obj->nam[vcount]);            \
+            bit_write_##type (dat, _obj->nam[vcount]);                        \
             LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf)                       \
           }                                                                   \
         }                                                                     \
