@@ -5617,7 +5617,7 @@ DWG_ENTITY (MULTILEADER)
       FIELD_BS (ctx.content.txt.alignment, 171);
       FIELD_BS (ctx.content.txt.flow, 172);
       FIELD_CMC (ctx.content.txt.bg_color, 91,0);
-      FIELD_BD (ctx.content.txt.bg_scale, 141);
+      FIELD_BD (ctx.content.txt.bg_scale, 141); // r2000!!
       FIELD_BL (ctx.content.txt.bg_transparency, 92);
       FIELD_B (ctx.content.txt.is_bg_fill, 291);
       FIELD_B (ctx.content.txt.is_bg_mask_fill, 292);

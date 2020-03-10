@@ -511,7 +511,7 @@ api_common_entity (dwg_object *obj)
       if (value == ent->field)                                                \
         ok (#name "." #field ":\t" FORMAT_##type, value);                     \
       else                                                                    \
-        fail (#name "." #field ":\t" FORMAT_##type, value);                   \
+        fail (#name "." #field ":\t" FORMAT_##type " [" #type "]", value);    \
     }
 
 #define CHK_ENTITY_CMC(ent, name, field, value)                               \
@@ -522,7 +522,7 @@ api_common_entity (dwg_object *obj)
       if (memcmp (&value, &ent->field, sizeof (Dwg_Color)) == 0)              \
         ok (#name "." #field ":\t" FORMAT_BSd, value.index);                  \
       else                                                                    \
-        fail (#name "." #field ":\t" FORMAT_BSd, value.index);                \
+        fail (#name "." #field ":\t" FORMAT_BSd " [CMC]", value.index);       \
     }
 
 #define CHK_ENTITY_H(ent, name, field, hdl)                                   \
@@ -638,46 +638,58 @@ api_common_entity (dwg_object *obj)
       fail ("old API dwg_ent_" #ent "_get_" #field);                          \
   }
 
-#define CHK_SUBCLASS_TYPE(ptr, name, field, type, value)                      \
-  if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))         \
+#define CHK_SUBCLASS_TYPE(ptr, name, field, typ)                              \
+  {                                                                           \
+    BITCODE_##typ value;                                                      \
+    if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))       \
+      fail (#name "." #field);                                                \
+    else                                                                      \
+      {                                                                       \
+        if (ptr.field == value)                                               \
+          ok (#name "." #field ":\t" FORMAT_##typ, ptr.field);                \
+        else                                                                  \
+          fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]", ptr.field);\
+        }                                                                     \
+  }
+#define CHK_SUBCLASS_3RD(ptr, name, field)                                    \
+  {                                                                           \
+    BITCODE_3RD value;                                                        \
+    if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))       \
+      fail (#name "." #field);                                                \
+    else                                                                      \
+      {                                                                       \
+        if (value.x == ptr.field.x && value.y == ptr.field.y                  \
+            && value.z == ptr.field.z)                                        \
+          ok (#name "." #field ":\t(%f, %f, %f)",                             \
+              value.x, value.y, value.z);                                     \
+        else                                                                  \
+          fail (#name "." #field ":\t(%f, %f, %f)",                           \
+                value.x, value.y, value.z);                                   \
+      }                                                                       \
+  }
+#define CHK_SUBCLASS_H(ptr, name, field)                                      \
+  {                                                                           \
+    BITCODE_H value;                                                          \
+    if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))       \
+      fail (#name "." #field);                                                \
+    else                                                                      \
+      {                                                                       \
+        char *_hdlname = dwg_dynapi_handle_name (obj->parent, value);         \
+        if (memcmp (&ptr.field, &value, sizeof value) == 0)                   \
+          ok (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",          \
+              ARGS_REF (value));                                              \
+        else                                                                  \
+          fail (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",        \
+                ARGS_REF (value));                                            \
+        if (dwg_version >= R_2007)                                            \
+          free (_hdlname);                                                    \
+      }                                                                       \
+  }
+#define CHK_SUBCLASS_CMC(ptr, name, field)                                    \
+  if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &ptr.field, NULL))     \
     fail (#name "." #field);                                                  \
   else                                                                        \
-    {                                                                         \
-      if (value == ptr.field)                                                 \
-        ok (#name "." #field ":\t" FORMAT_##type, value);                     \
-      else                                                                    \
-        fail (#name "." #field ":\t" FORMAT_##type, value);                   \
-    }
-#define CHK_SUBCLASS_3RD(ptr, name, field, value)                             \
-  if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))         \
-    fail (#name "." #field);                                                  \
-  else                                                                        \
-    {                                                                         \
-      if (memcmp (&value, &ptr.field, sizeof (BITCODE_3RD)) == 0)             \
-        ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, value.z);   \
-      else                                                                    \
-        fail (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, value.z); \
-    }
-#define CHK_SUBCLASS_H(ptr, name, field, value)                               \
-  if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))         \
-    fail (#name "." #field);                                                  \
-  else                                                                        \
-    {                                                                         \
-      if (memcmp (&value, &ptr.field, sizeof (BITCODE_H)) == 0)               \
-        ok (#name "." #field ":\t" FORMAT_REF, ARGS_REF (value));             \
-      else                                                                    \
-        fail (#name "." #field ":\t" FORMAT_REF, ARGS_REF (value));           \
-    }
-#define CHK_SUBCLASS_CMC(ptr, name, field, value)                             \
-  if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))         \
-    fail (#name "." #field);                                                  \
-  else                                                                        \
-    {                                                                         \
-      if (memcmp (&value, &ptr.field, sizeof (BITCODE_CMC)) == 0)             \
-        ok (#name "." #field ":\t%d", value.index);                           \
-      else                                                                    \
-        fail (#name "." #field ":\t%d", value.index);                         \
-    }
+    ok (#name "." #field ":\t%d", ptr.field.index)
 
 void
 api_common_object (dwg_object *obj)

@@ -46,6 +46,7 @@ api_process (dwg_object *obj)
   BITCODE_BS attach_top;
   BITCODE_BS attach_bottom;
   BITCODE_B text_extended;
+  BITCODE_3RD *points;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_mleader *mleader = dwg_object_to_MULTILEADER (obj);
@@ -53,7 +54,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (mleader, MULTILEADER, class_version, BS, class_version);
   if (!dwg_dynapi_entity_value (mleader, "MULTILEADER", "ctx", &ctx, NULL))
     fail ("MULTILEADER.ctx");
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, num_leaders, BL, ctx.num_leaders);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, num_leaders, BL);
   if (!dwg_dynapi_subclass_value (&ctx, "MLEADER_AnnotContext", "leaders", &ctx.leaders, NULL))
     fail ("MULTILEADER.ctx.leaders");
   if (ctx.num_leaders)
@@ -63,146 +64,110 @@ api_process (dwg_object *obj)
       else
         for (i = 0; i < ctx.num_leaders; i++)
           {
-            ok ("MULTILEADER.ctx.leaders[%d].has_lastleaderlinepoint: " FORMAT_B, i,
-                ctx.leaders[i].has_lastleaderlinepoint);
+            CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, has_lastleaderlinepoint, B);
             if (ctx.leaders[i].has_lastleaderlinepoint)
-              ok ("MULTILEADER.ctx.leaders[%d].lastleaderlinepoint: (%f, %f, %f)", i,
-                  ctx.leaders[i].lastleaderlinepoint.x, ctx.leaders[i].lastleaderlinepoint.y,
-                  ctx.leaders[i].lastleaderlinepoint.z);
-            ok ("MULTILEADER.ctx.leaders[%d].has_dogleg: " FORMAT_B, i,
-                ctx.leaders[i].has_dogleg);
+              CHK_SUBCLASS_3RD (ctx.leaders[i], LEADER_Node, lastleaderlinepoint);
+            CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, has_dogleg, B);
             if (ctx.leaders[i].has_dogleg)
-              ok ("MULTILEADER.ctx.leaders[%d].dogleg_vector: (%f, %f, %f)", i,
-                  ctx.leaders[i].dogleg_vector.x, ctx.leaders[i].dogleg_vector.y,
-                  ctx.leaders[i].dogleg_vector.z);
-            ok ("MULTILEADER.ctx.leaders[%d].num_breaks: " FORMAT_BL, i,
-                ctx.leaders[i].num_breaks);
+              CHK_SUBCLASS_3RD (ctx.leaders[i], LEADER_Node, dogleg_vector);
+            CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, num_breaks, BL);
             for (BITCODE_BL j = 0; j < ctx.leaders[i].num_breaks; j++)
               {
-                ok ("MULTILEADER.ctx.leaders[%d].breaks[%d].start: (%f, %f, "
-                    "%f)",
-                    i, j, ctx.leaders[i].breaks[j].start.x,
-                    ctx.leaders[i].breaks[j].start.y,
-                    ctx.leaders[i].breaks[j].start.z);
-                ok ("MULTILEADER.ctx.leaders[%d].breaks[%d].end: (%f, %f, "
-                    "%f)",
-                    i, j, ctx.leaders[i].breaks[j].end.x,
-                    ctx.leaders[i].breaks[j].end.y,
-                    ctx.leaders[i].breaks[j].end.z);
+                CHK_SUBCLASS_3RD (ctx.leaders[i].breaks[j], LEADER_Break, start);
+                CHK_SUBCLASS_3RD (ctx.leaders[i].breaks[j], LEADER_Break, end);
               }
-            ok ("MULTILEADER.ctx.leaders[%d].branch_index: " FORMAT_BL, i,
-                ctx.leaders[i].branch_index);
-            ok ("MULTILEADER.ctx.leaders[%d].dogleg_length: " FORMAT_BD, i,
-                ctx.leaders[i].dogleg_length);
-            ok ("MULTILEADER.ctx.leaders[%d].num_lines: " FORMAT_BL, i,
-                ctx.leaders[i].num_lines);
+            CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, branch_index, BL);
+            CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, dogleg_length, BD);
+            CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, num_lines, BL);
             for (BITCODE_BL j = 0; j < ctx.leaders[i].num_lines; j++)
               {
-                #define lline ctx.leaders[i].lines[j]
-                ok ("MULTILEADER.ctx.leaders[%d].lines[%d].num_points: " FORMAT_BL,
-                    i, j, lline.num_points);
-                for (BITCODE_BL k = 0; k < lline.num_points; k++)
+                CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, num_points, BL);
+                if (!dwg_dynapi_subclass_value (&ctx.leaders[i].lines[j], "LEADER_Line", "points",
+                                                &points, NULL))
+                  fail ("LEADER_Line.points");
+                else
+                  for (BITCODE_BL k = 0; k < ctx.leaders[i].lines[j].num_points; k++)
+                    {
+                      ok ("LEADER_Line.points[%d]: (%f, %f, %f)", k,
+                          points[k].x, points[k].y, points[k].z);
+                    }
+                CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line,
+                                   num_breaks, BL);
+                for (BITCODE_BL k = 0; k < ctx.leaders[i].lines[j].num_breaks; k++)
                   {
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].points[%d]: "
-                        "(%f, %f, %f)", i, j, k, lline.points[k].x,
-                        lline.points[k].y, lline.points[k].z);
+                    CHK_SUBCLASS_3RD (ctx.leaders[i].lines[j].breaks[k], LEADER_Break, start);
+                    CHK_SUBCLASS_3RD (ctx.leaders[i].lines[j].breaks[k], LEADER_Break, end);
                   }
-                ok ("MULTILEADER.ctx.leaders[%d].lines[%d].num_breaks: " FORMAT_BL,
-                    i, j, lline.num_breaks);
-                for (BITCODE_BL k = 0; k < lline.num_breaks; k++)
-                  {
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].breaks[%d].start: (%f, %f, "
-                        "%f)", i, j, k, lline.breaks[k].start.x, lline.breaks[k].start.y,
-                        lline.breaks[k].start.z);
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].breaks[%d].end: (%f, %f, "
-                        "%f)", i, j, k, lline.breaks[k].end.x,
-                        lline.breaks[k].end.y, lline.breaks[k].end.z);
-                  }
-                ok ("MULTILEADER.ctx.leaders[%d].lines[%d].line_index: " FORMAT_BL,
-                    i, j, lline.line_index);
+                CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, line_index, BL);
                 if (dwg_version >= R_2010)
                   {
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].type: " FORMAT_BL,
-                        i, j, lline.type);
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].color.index: " FORMAT_BSd,
-                        i, j, lline.color.index);
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].ltype: " FORMAT_REF,
-                        i, j, ARGS_REF (lline.ltype));
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].linewt: " FORMAT_BLd,
-                        i, j, lline.linewt);
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].arrow_size: " FORMAT_BD,
-                        i, j, lline.arrow_size);
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].arrow_handle: " FORMAT_REF,
-                        i, j, ARGS_REF (lline.arrow_handle));
-                    ok ("MULTILEADER.ctx.leaders[%d].lines[%d].flags: " FORMAT_BL,
-                        i, j, lline.flags);
+                    CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, type, BL);
+                    CHK_SUBCLASS_CMC (ctx.leaders[i].lines[j], LEADER_Line, color);
+                    CHK_SUBCLASS_H (ctx.leaders[i].lines[j], LEADER_Line, ltype);
+                    CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, linewt, BLd);
+                    CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, arrow_size, BD);
+                    CHK_SUBCLASS_H (ctx.leaders[i].lines[j], LEADER_Line, arrow_handle);
+                    CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, flags, BL);
                   }
-                #undef lline
               }
           }
         }
       else
         if (ctx.leaders)
           fail ("MULTILEADER.ctx.leaders but 0 ctx.num_leaders");
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, scale, BD, ctx.scale);
-  //CHK_SUBCLASS_3RD (ctx, MLEADER_AnnotContext, content_base, ctx.content_base);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_height, BD, ctx.text_height);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, arrow_size, BD, ctx.arrow_size);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, landing_gap, BD, ctx.landing_gap);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_left, BS, ctx.text_left);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_right, BS, ctx.text_right);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_alignment, BS, ctx.text_alignment);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, attach_type, BS, ctx.attach_type);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_txt, B, ctx.has_content_txt);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, scale, BD);
+  CHK_SUBCLASS_3RD (ctx, MLEADER_AnnotContext, content_base);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_height, BD);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, arrow_size, BD);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, landing_gap, BD);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_left, BS);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_right, BS);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_alignment, BS);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, attach_type, BS);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_txt, B);
   if (ctx.has_content_txt)
     {
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.default_text, TV, ctx.content.txt.default_text);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.normal, ctx.content.txt.normal);
-      CHK_SUBCLASS_H (ctx.content, MLEADER_Content, txt.style, ctx.content.txt.style);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.location, ctx.content.txt.location);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.direction, ctx.content.txt.direction);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.rotation, BD, ctx.content.txt.rotation);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.width, BD, ctx.content.txt.width);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_factor, BD,
-                         ctx.content.txt.line_spacing_factor);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_style, BS,
-                         ctx.content.txt.line_spacing_style);
-      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.color, ctx.content.txt.color);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.alignment, BS, ctx.content.txt.alignment);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.flow, BS, ctx.content.txt.flow);
-      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.bg_color, ctx.content.txt.bg_color);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_scale, BD, ctx.content.txt.bg_scale);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_transparency, BL, ctx.content.txt.bg_transparency);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_bg_fill, B, ctx.content.txt.is_bg_fill);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_bg_mask_fill, B, ctx.content.txt.is_bg_mask_fill);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_type, BS, ctx.content.txt.col_type);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_height_auto, B, ctx.content.txt.is_height_auto);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_width, BD, ctx.content.txt.col_width);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_gutter, BD, ctx.content.txt.col_gutter);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_col_flow_reversed, B,
-                         ctx.content.txt.is_col_flow_reversed);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.num_col_sizes, BL,
-                         ctx.content.txt.num_col_sizes);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.default_text, TV);
+      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.normal);
+      CHK_SUBCLASS_H (ctx.content, MLEADER_Content, txt.style);
+      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.location);
+      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.direction);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.rotation, BD);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.width, BD);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_factor, BD);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_style, BS);
+      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.color);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.alignment, BS);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.flow, BS);
+      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.bg_color);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_scale, BD); // FIXME! r2000
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_transparency, BL);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_bg_fill, B);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_bg_mask_fill, B);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_type, BS);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_height_auto, B);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_width, BD);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_gutter, BD);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_col_flow_reversed, B);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.num_col_sizes, BL);
       for (i = 0; i < ctx.content.txt.num_col_sizes; i++)
         {
           ok ("MULTILEADER.ctx.content.txt.col_sizes[%d]: %f", i, ctx.content.txt.col_sizes[i]);
         }
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.word_break, B,
-                         ctx.content.txt.word_break);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.unknown, B,
-                         ctx.content.txt.unknown);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.word_break, B);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.unknown, B);
     }
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_blk, B, ctx.has_content_blk);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_blk, B);
   if (ctx.has_content_blk)
     {
       if (ctx.has_content_txt)
         fail ("ctx.has_content_blk && ctx.has_content_txt");
-      CHK_SUBCLASS_H (ctx.content, MLEADER_Content, blk.block_table, ctx.content.blk.block_table);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.normal, ctx.content.blk.normal);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.location, ctx.content.blk.location);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.scale, ctx.content.blk.scale);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, blk.rotation, BD, ctx.content.blk.rotation);
-      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, blk.color, ctx.content.blk.color);
+      CHK_SUBCLASS_H (ctx.content, MLEADER_Content, blk.block_table);
+      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.normal);
+      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.location);
+      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.scale);
+      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, blk.rotation, BD);
+      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, blk.color);
       ok ("MULTILEADER.ctx.content.txt.transform:");
       for (i = 0; i < 16; i++)
         {
