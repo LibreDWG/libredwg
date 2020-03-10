@@ -85,6 +85,7 @@ check_PROGRAMS = \
 	text \
 	tolerance \
 	trace \
+	underlay \
 	vertex_2d \
 	vertex_3d \
 	vertex_mesh \
@@ -104,7 +105,6 @@ check_PROGRAMS = \
 #	surface \
 #	sweptsurface \
 #	table \
-#       underlay \
 #       viewport
 
 dynapi_test.c: dynapi_test.c.in \

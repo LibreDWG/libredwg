@@ -37,7 +37,13 @@ api_process (dwg_object *obj)
 
   if (!dwg_dynapi_entity_value (wipeout, "WIPEOUT", "clip_verts", &clip_verts, NULL))
     fail ("WIPEOUT.clip_verts");
-
+  else
+    {
+      for (BITCODE_BL i = 0; i < num_clip_verts; i++)
+        {
+          ok ("WIPEOUT.clip_verts[%d]: (%f, %f)", i, clip_verts[i].x, clip_verts[i].y);
+        }
+    }
   CHK_ENTITY_H (wipeout, WIPEOUT, imagedef, imagedef);
   CHK_ENTITY_H (wipeout, WIPEOUT, imagedefreactor, imagedefreactor);
 }
