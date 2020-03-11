@@ -41,6 +41,9 @@ if HAVE_PERL
 # maintainer rules only
 regen-unknown: $(srcdir)/alldwg.inc $(srcdir)/alldxf_0.inc $(srcdir)/bd-unknown.inc
 
+#ACAD_EVALUATION_GRAPH.pi: unknown
+#	$(MAKE) -C .. unknown
+
 $(srcdir)/bd-unknown.inc: $(srcdir)/bd-unknown.pl $(srcdir)/alldxf_0.inc \
 	                  ACAD_EVALUATION_GRAPH.pi
 	$(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
@@ -58,7 +61,7 @@ $(srcdir)/alldwg.inc: $(srcdir)/log_unknown.pl
 	-cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
 	  cp $(abs_srcdir)/alldwg.inc examples/alldwg.inc~; \
-	  for l in *_r*.log *_20*.log DS_*.log; \
+	  for l in *_r??.log *_20??.log DS_*.log; \
 	    do $(PERL) $(abs_srcdir)/log_unknown.pl "$$l" >>alldwg.tmp; done; \
           grep -v '^//' alldwg.tmp | sort >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp
 endif
