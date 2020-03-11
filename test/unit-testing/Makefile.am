@@ -66,6 +66,7 @@ check_PROGRAMS = \
 	image \
 	insert \
 	leader \
+	light \
 	line \
 	lwpline \
 	minsert \
@@ -84,6 +85,7 @@ check_PROGRAMS = \
 	shape \
 	solid \
 	spline \
+	table \
 	tablestyle \
 	text \
 	tolerance \
@@ -107,8 +109,7 @@ check_PROGRAMS = \
 #	helix \
 #	revolvedsurface \
 #	surface \
-#	sweptsurface \
-#	table
+#	sweptsurface
 
 dynapi_test.c: dynapi_test.c.in \
 		$(top_srcdir)/include/dwg.h \

@@ -4287,7 +4287,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BD attenuation_start_limit; /*!< DXF 41 */
   BITCODE_BD attenuation_end_limit;   /*!< DXF 42 */
   BITCODE_BD hotspot_angle; /*!< DXF 50 */
-  BITCODE_BD falloff_angle; /*!< DXF 51, always stored, used with type=spot only */
+  BITCODE_BD falloff_angle; /*!< DXF 51, with type=spot only */
   BITCODE_B cast_shadows;   /*!< DXF 293 */
   BITCODE_BS shadow_type;   /*!< DXF 73, 0 or 1 */
   BITCODE_BS shadow_map_size;     /*!< DXF 91 */

@@ -6167,7 +6167,8 @@ DWG_ENTITY (LIGHT)
   FIELD_BS (shadow_map_size, 91); //256 11
   FIELD_BD (attenuation_end_limit, 42);
   FIELD_BD (hotspot_angle, 50);
-  FIELD_BD (falloff_angle, 51);
+  if (FIELD_VALUE (type == 3))
+    FIELD_BD (falloff_angle, 51);
   FIELD_B (cast_shadows, 293);
   FIELD_BS (shadow_type, 73);   // 0 or 1
   FIELD_RC (shadow_map_softness, 280);

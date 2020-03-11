@@ -146,6 +146,16 @@ main (int argc, char *argv[])
               strcat (tmp, "2004/Underlay.dwg");
               error += test_code (tmp);
             }
+          if (DWG_TYPE == DWG_TYPE_LIGHT || DWG_TYPE == DWG_TYPE_VISUALSTYLE)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Visualstyle.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2018/Visualstyle.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+            }
           // TODO: CAMERA
         }
     }
@@ -192,7 +202,8 @@ test_code (const char *filename)
       DWG_TYPE == DWG_TYPE_PROXY_OBJECT ||
       DWG_TYPE == DWG_TYPE_PERSSUBENTMANAGER ||
       DWG_TYPE == DWG_TYPE_VISUALSTYLE ||
-      DWG_TYPE == DWG_TYPE_TABLESTYLE
+      DWG_TYPE == DWG_TYPE_TABLESTYLE ||
+      DWG_TYPE == DWG_TYPE_TABLE
       )
     {
       if (error)
