@@ -763,6 +763,9 @@ dwg_write_geojson (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   char date[12] = "YYYY-MM-DD";
   time_t rawtime;
 
+  if (!dwg->num_objects)
+    goto fail;
+
   HASH;
   PAIR_S (type, "FeatureCollection");
 

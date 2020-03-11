@@ -233,25 +233,24 @@ main (int argc, char *argv[])
       error = dwg_read_file ("-", &dwg); // i.e. from stdin
     }
 
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fprintf (stderr, "ERROR 0x%x\n", error);
+      if (error && opts > 2)
+        dwg_errstrings (error);
+      goto done;
+    }
+
   if (!fmt)
     {
-      if (error >= DWG_ERR_CRITICAL)
+      if (opts > 1)
         {
-          fprintf (stderr, "ERROR 0x%x\n", error);
+          fprintf (stderr, "SUCCESS 0x%x\n", error);
           if (error && opts > 2)
             dwg_errstrings (error);
         }
       else
-        {
-          if (opts > 1)
-            {
-              fprintf (stderr, "SUCCESS 0x%x\n", error);
-              if (error && opts > 2)
-                dwg_errstrings (error);
-            }
-          else
-            fprintf (stderr, "SUCCESS\n");
-        }
+        fprintf (stderr, "SUCCESS\n");
     }
   else
     {
@@ -315,6 +314,7 @@ main (int argc, char *argv[])
         }
     }
 
+ done:
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
   {
     char *asanenv = getenv("ASAN_OPTIONS");
