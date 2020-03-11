@@ -715,15 +715,35 @@ api_common_entity (dwg_object *obj)
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        char *_hdlname = dwg_dynapi_handle_name (obj->parent, value);         \
-        if (memcmp (&ptr.field, &value, sizeof value) == 0)                   \
+        char *_hdlname = value ? dwg_dynapi_handle_name (obj->parent, value) : NULL; \
+        if (!value)                                                           \
+          {                                                                   \
+            if (!ptr.field)                                                   \
+              ok (#name "." #field ":\tNULL");                                \
+            else                                                              \
+              fail (#name "." #field ":\tNULL");                              \
+          }                                                                   \
+        else if (memcmp (&ptr.field, &value, sizeof value) == 0)              \
           ok (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",          \
               ARGS_REF (value));                                              \
         else                                                                  \
           fail (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",        \
                 ARGS_REF (value));                                            \
-        if (dwg_version >= R_2007)                                            \
+        if (_hdlname && dwg_version >= R_2007)                                \
           free (_hdlname);                                                    \
+      }                                                                       \
+  }
+#define CHK_SUBCLASS_UTF8TEXT(ptr, name, field)                               \
+  {                                                                           \
+    BITCODE_TV value;                                                         \
+    if (dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))        \
+      ok (#name "." #field ":\t\"%s\"", value);                               \
+    else                                                                      \
+      {                                                                       \
+        if (dwg_version < R_2007)                                             \
+          fail (#name "." #field ":\t\"%s\"", value);                         \
+        else                                                                  \
+          fail (#name "." #field);                                            \
       }                                                                       \
   }
 #define CHK_SUBCLASS_CMC(ptr, name, field)                                    \

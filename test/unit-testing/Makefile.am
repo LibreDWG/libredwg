@@ -84,6 +84,7 @@ check_PROGRAMS = \
 	shape \
 	solid \
 	spline \
+	tablestyle \
 	text \
 	tolerance \
 	trace \
