@@ -95,6 +95,7 @@ check_PROGRAMS = \
 	vertex_pface \
 	vertex_pface_face \
 	viewport \
+	visualstyle \
 	wipeout \
 	xline \
 	xrecord
