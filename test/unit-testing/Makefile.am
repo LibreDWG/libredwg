@@ -62,6 +62,7 @@ check_PROGRAMS = \
 	dim_radius \
 	ellipse \
 	endblk \
+	geodata \
 	hatch \
 	image \
 	insert \
