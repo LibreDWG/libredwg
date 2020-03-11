@@ -28321,6 +28321,70 @@ static int test_GEODATA (const Dwg_Object *obj)
         fail ("GEODATA.ref_pt [3BD]");
   }
   {
+    BITCODE_RD refpt0x;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "refpt0x", &refpt0x, NULL)
+        && refpt0x == geodata->refpt0x)
+      pass ();
+    else
+      fail ("GEODATA.refpt0x [RD] %g != %g", geodata->refpt0x, refpt0x);
+    refpt0x++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "refpt0x", &refpt0x, 0)
+        && refpt0x == geodata->refpt0x)
+      pass ();
+    else
+      fail ("GEODATA.refpt0x [RD] set+1 %g != %g", geodata->refpt0x, refpt0x);
+    geodata->refpt0x--;
+
+  }
+  {
+    BITCODE_RD refpt0y;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "refpt0y", &refpt0y, NULL)
+        && refpt0y == geodata->refpt0y)
+      pass ();
+    else
+      fail ("GEODATA.refpt0y [RD] %g != %g", geodata->refpt0y, refpt0y);
+    refpt0y++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "refpt0y", &refpt0y, 0)
+        && refpt0y == geodata->refpt0y)
+      pass ();
+    else
+      fail ("GEODATA.refpt0y [RD] set+1 %g != %g", geodata->refpt0y, refpt0y);
+    geodata->refpt0y--;
+
+  }
+  {
+    BITCODE_RD refpt1x;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "refpt1x", &refpt1x, NULL)
+        && refpt1x == geodata->refpt1x)
+      pass ();
+    else
+      fail ("GEODATA.refpt1x [RD] %g != %g", geodata->refpt1x, refpt1x);
+    refpt1x++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "refpt1x", &refpt1x, 0)
+        && refpt1x == geodata->refpt1x)
+      pass ();
+    else
+      fail ("GEODATA.refpt1x [RD] set+1 %g != %g", geodata->refpt1x, refpt1x);
+    geodata->refpt1x--;
+
+  }
+  {
+    BITCODE_RD refpt1y;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "refpt1y", &refpt1y, NULL)
+        && refpt1y == geodata->refpt1y)
+      pass ();
+    else
+      fail ("GEODATA.refpt1y [RD] %g != %g", geodata->refpt1y, refpt1y);
+    refpt1y++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "refpt1y", &refpt1y, 0)
+        && refpt1y == geodata->refpt1y)
+      pass ();
+    else
+      fail ("GEODATA.refpt1y [RD] set+1 %g != %g", geodata->refpt1y, refpt1y);
+    geodata->refpt1y--;
+
+  }
+  {
     BITCODE_BL scale_est;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "scale_est", &scale_est, NULL)
         && scale_est == geodata->scale_est)
@@ -28433,6 +28497,54 @@ static int test_GEODATA (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BL unknown1;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "unknown1", &unknown1, NULL)
+        && unknown1 == geodata->unknown1)
+      pass ();
+    else
+      fail ("GEODATA.unknown1 [BL] %u != %u", geodata->unknown1, unknown1);
+    unknown1++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "unknown1", &unknown1, 0)
+        && unknown1 == geodata->unknown1)
+      pass ();
+    else
+      fail ("GEODATA.unknown1 [BL] set+1 %u != %u", geodata->unknown1, unknown1);
+    geodata->unknown1--;
+
+  }
+  {
+    BITCODE_BL unknown2;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "unknown2", &unknown2, NULL)
+        && unknown2 == geodata->unknown2)
+      pass ();
+    else
+      fail ("GEODATA.unknown2 [BL] %u != %u", geodata->unknown2, unknown2);
+    unknown2++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "unknown2", &unknown2, 0)
+        && unknown2 == geodata->unknown2)
+      pass ();
+    else
+      fail ("GEODATA.unknown2 [BL] set+1 %u != %u", geodata->unknown2, unknown2);
+    geodata->unknown2--;
+
+  }
+  {
+    BITCODE_B unknown_b;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "unknown_b", &unknown_b, NULL)
+        && unknown_b == geodata->unknown_b)
+      pass ();
+    else
+      fail ("GEODATA.unknown_b [B] " FORMAT_B " != " FORMAT_B "", geodata->unknown_b, unknown_b);
+    unknown_b++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "unknown_b", &unknown_b, 0)
+        && unknown_b == geodata->unknown_b)
+      pass ();
+    else
+      fail ("GEODATA.unknown_b [B] set+1 " FORMAT_B " != " FORMAT_B "", geodata->unknown_b, unknown_b);
+    geodata->unknown_b--;
+
+  }
+  {
     BITCODE_3BD up_dir;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "up_dir", &up_dir, NULL)
         && !memcmp (&up_dir, &geodata->up_dir, sizeof (geodata->up_dir)))
@@ -28455,6 +28567,22 @@ static int test_GEODATA (const Dwg_Object *obj)
       fail ("GEODATA.user_scale_factor [BD] set+1 %g != %g", geodata->user_scale_factor, user_scale_factor);
     geodata->user_scale_factor--;
 
+  }
+  {
+    BITCODE_2RD zero0;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "zero0", &zero0, NULL)
+        && !memcmp (&zero0, &geodata->zero0, sizeof (geodata->zero0)))
+        pass ();
+    else
+        fail ("GEODATA.zero0 [2RD]");
+  }
+  {
+    BITCODE_2RD zero1;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "zero1", &zero1, NULL)
+        && !memcmp (&zero1, &geodata->zero1, sizeof (geodata->zero1)))
+        pass ();
+    else
+        fail ("GEODATA.zero1 [2RD]");
   }
   return failed;
 }

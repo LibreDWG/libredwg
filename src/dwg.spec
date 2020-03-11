@@ -4458,10 +4458,7 @@ DWG_OBJECT (GEODATA)
       FIELD_BD (unit_scale_vert, 41);
       FIELD_BL (units_value_vert, 92);
       FIELD_3BD (up_dir, 210);
-
-      FIELD_RD (north_dir_angle_deg, 0);
-      DEBUG_HERE_OBJ
-      FIELD_2BD (north_dir, 12);
+      FIELD_2RD (north_dir, 12);
       FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
                                 // User defined = 2, Grid scale at reference point = 3,
                                 // Prismodial = 4
@@ -4472,7 +4469,7 @@ DWG_OBJECT (GEODATA)
       FIELD_T (coord_system_def, 0);
       FIELD_T (geo_rss_tag, 302);
     }
-    VERSIONS (R_2007, R_2010)// r2009-2010 really, class_version 1
+  else
     {
       FIELD_3BD (ref_pt, 11);
       FIELD_BL (units_value_horiz, 91);
@@ -4505,11 +4502,25 @@ DWG_OBJECT (GEODATA)
       SUB_FIELD_BL (geomesh_faces[rcount1],face1, 97);
       SUB_FIELD_BL (geomesh_faces[rcount1],face2, 98);
       SUB_FIELD_BL (geomesh_faces[rcount1],face3, 99);
-      SUB_FIELD_BL (geomesh_faces[rcount1],face4, 0);
+      //SUB_FIELD_BL (geomesh_faces[rcount1],face4, 0);
   END_REPEAT_BLOCK
   END_REPEAT (geomesh_faces);
+
   UNTIL (R_2007) // r2009, class_version 1 really
     {
+      FIELD_B (has_civil_data, 0);
+      FIELD_B (obsolete_false, 0);
+      FIELD_RD (refpt0y, 0);
+      FIELD_RD (refpt0x, 0);
+      FIELD_RD (refpt1y, 0);
+      FIELD_RD (refpt1x, 0);
+      FIELD_BL (unknown1, 0);
+      FIELD_BL (unknown2, 0);
+      FIELD_2RD (zero0, 0);
+      FIELD_2RD (zero1, 0);
+      FIELD_B (unknown_b, 0);
+      FIELD_BD (north_dir_angle_deg, 0);
+      FIELD_BD (north_dir_angle_rad, 0);
       FIELD_BL (scale_est, 0);
       FIELD_BD (user_scale_factor, 0);
       FIELD_B (sea_level_corr, 0);

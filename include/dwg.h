@@ -3717,7 +3717,7 @@ typedef struct _dwg_GEODATA_meshface
   BITCODE_BL face1;
   BITCODE_BL face2;
   BITCODE_BL face3;
-  BITCODE_BL face4;
+  //BITCODE_BL face4;
 } Dwg_GEODATA_meshface;
 
 typedef struct _dwg_object_GEODATA
@@ -3758,6 +3758,15 @@ typedef struct _dwg_object_GEODATA
 
   BITCODE_B has_civil_data;
   BITCODE_B obsolete_false;
+  BITCODE_RD refpt0y;
+  BITCODE_RD refpt0x;
+  BITCODE_RD refpt1y;
+  BITCODE_RD refpt1x;
+  BITCODE_BL unknown1;
+  BITCODE_BL unknown2;
+  BITCODE_2RD zero0;
+  BITCODE_2RD zero1;
+  BITCODE_B unknown_b;
   BITCODE_BD north_dir_angle_deg;
   BITCODE_BD north_dir_angle_rad;
 } Dwg_Object_GEODATA;

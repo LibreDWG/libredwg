@@ -5255,6 +5255,24 @@ Dwg_GEODATA_meshface*
 B
 @item obsolete_false
 B
+@item refpt0y
+RD
+@item refpt0x
+RD
+@item refpt1y
+RD
+@item refpt1x
+RD
+@item unknown1
+BL
+@item unknown2
+BL
+@item zero0
+2RD
+@item zero1
+2RD
+@item unknown_b
+B
 @item north_dir_angle_deg
 BD
 @item north_dir_angle_rad
@@ -7673,8 +7691,6 @@ BL
 @item face2
 BL
 @item face3
-BL
-@item face4
 BL
 
 @end vtable
