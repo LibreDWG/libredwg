@@ -4441,14 +4441,15 @@ DWG_OBJECT_END
 
 DWG_OBJECT (GEODATA)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbGeoData)
-  FIELD_BL (class_version, 90); //1 for r2009, 2 for r2010 (default)
+  FIELD_BL (class_version, 90); //1 for r2009, 2 for r2010 (default), 3 for r2013 (same as r2010)
   if (FIELD_VALUE (class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_HANDLE (host_block, 4, 330);
   FIELD_BS (coord_type, 70); // 0 unknown, 1 local grid, 2 projected grid,
                              // 3 geographic (defined by latitude/longitude) (default)
-  SINCE (R_2010)
+  if (FIELD_VALUE (class_version) > 1) // or SINCE(R_2010)
     {
       FIELD_3BD (design_pt, 10);
       FIELD_3BD (ref_pt, 11);
@@ -4457,13 +4458,17 @@ DWG_OBJECT (GEODATA)
       FIELD_BD (unit_scale_vert, 41);
       FIELD_BL (units_value_vert, 92);
       FIELD_3BD (up_dir, 210);
-      FIELD_3BD (north_dir, 12);
+
+      // unknown:
+      FIELD_BD (sea_level_elev, 142);
+      DEBUG_HERE_OBJ
+      FIELD_2BD (north_dir, 12);
       FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
                                 // User defined = 2, Grid scale at reference point = 3,
                                 // Prismodial = 4
       FIELD_BD (user_scale_factor, 141);
       FIELD_B (sea_level_corr, 294);
-      FIELD_BD (sea_level_elev, 142);
+      //FIELD_BD (sea_level_elev, 142);
       FIELD_BD (coord_proj_radius, 143);
       FIELD_T (coord_system_def, 0);
       FIELD_T (geo_rss_tag, 302);

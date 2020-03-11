@@ -3732,9 +3732,9 @@ typedef struct _dwg_object_GEODATA
   BITCODE_3BD ref_pt;
   BITCODE_3BD obs_pt;
   BITCODE_BD unit_scale_horiz;
-  BITCODE_BL units_value_horiz;
+  BITCODE_BL units_value_horiz; // enum 0-20
   BITCODE_BD unit_scale_vert;
-  BITCODE_BL units_value_vert;
+  BITCODE_BL units_value_vert; // enum 0-20
   BITCODE_3BD up_dir;
   BITCODE_3BD north_dir;
   BITCODE_BL scale_est; /* None = 1, User specified scale factor = 2,
