@@ -89,6 +89,7 @@ check_PROGRAMS = \
 	tolerance \
 	trace \
 	underlay \
+	underlaydefinition \
 	vertex_2d \
 	vertex_3d \
 	vertex_mesh \

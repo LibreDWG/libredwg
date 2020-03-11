@@ -140,7 +140,7 @@ main (int argc, char *argv[])
               strcat (tmp, "2004/HatchG.dwg");
               error += test_code (tmp);
             }
-          if (DWG_TYPE == DWG_TYPE_UNDERLAY)
+          if (DWG_TYPE == DWG_TYPE_UNDERLAY || DWG_TYPE == DWG_TYPE_UNDERLAYDEFINITION)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2004/Underlay.dwg");
