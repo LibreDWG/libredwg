@@ -493,6 +493,7 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       return dwg_geojson_LWPOLYLINE (dat, obj);
     }
+  /*
   if (strEQc (dxfname, "GEODATA"))
     {
       Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
@@ -502,6 +503,7 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       ENDFEATURE;
       return 0;
     }
+  */
   if (strEQc (dxfname, "GEOPOSITIONMARKER"))
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj
