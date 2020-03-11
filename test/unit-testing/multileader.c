@@ -101,14 +101,27 @@ api_process (dwg_object *obj)
                 CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, line_index, BL);
                 if (dwg_version >= R_2010)
                   {
-                    CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, type, BL);
+                    type = ctx.leaders[i].lines[j].type;
+                    CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, type, BS);
+                    if (type > 2)
+                      fail ("Invalid LEADER_Line.type " FORMAT_BS " > 2", type);
                     CHK_SUBCLASS_CMC (ctx.leaders[i].lines[j], LEADER_Line, color);
                     CHK_SUBCLASS_H (ctx.leaders[i].lines[j], LEADER_Line, ltype);
                     CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, linewt, BLd);
                     CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, arrow_size, BD);
                     CHK_SUBCLASS_H (ctx.leaders[i].lines[j], LEADER_Line, arrow_handle);
                     CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, flags, BL);
+                    flags = ctx.leaders[i].lines[j].flags;
+                    if (flags > 63)
+                      fail ("Invalid LEADER_Line.flags " FORMAT_BLx " > 63", flags);
                   }
+              }
+            if (dwg_version >= R_2010)
+              {
+                CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, attach_dir, BS);
+                attach_dir = ctx.leaders[i].attach_dir;
+                if (attach_dir > 1)
+                  fail ("Invalid LEADER_Node.attach_dir " FORMAT_BS " > 1", attach_dir);
               }
           }
         }
@@ -123,7 +136,11 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_left, BS);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_right, BS);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_alignment, BS);
+  if (ctx.text_alignment > 2)
+    fail ("Invalid MLEADER_AnnotContext.text_alignment " FORMAT_BS " > 2", ctx.text_alignment);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, attach_type, BS);
+  if (ctx.attach_type > 1)
+    fail ("Invalid MLEADER_AnnotContext.attach_type " FORMAT_BS " > 1", ctx.attach_type);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_txt, B);
   if (ctx.has_content_txt)
     {
@@ -136,9 +153,18 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.width, BD);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_factor, BD);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_style, BS);
+      if (ctx.content.txt.line_spacing_style > 2)
+        fail ("Invalid MLEADER txt.line_spacing_style " FORMAT_BS " > 2",
+              ctx.content.txt.line_spacing_style);
       CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.color);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.alignment, BS);
+      if (ctx.content.txt.alignment > 3)
+        fail ("Invalid MLEADER txt.alignment " FORMAT_BS " > 2",
+              ctx.content.txt.alignment);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.flow, BS);
+      if (ctx.content.txt.flow > 6)
+        fail ("Invalid MLEADER txt.flow " FORMAT_BS " > 6",
+              ctx.content.txt.flow);
       CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.bg_color);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_scale, BD); // FIXME! r2000
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_transparency, BL);
@@ -260,7 +286,10 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2010)
     {
+      attach_dir = mleader->attach_dir;
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_dir, BS, attach_dir);
+      if (attach_dir > 1)
+        fail ("Invalid MULTILEADER.attach_dir " FORMAT_BS " > 1", attach_dir);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_top, BS, attach_top);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_bottom, BS, attach_bottom);
     }
