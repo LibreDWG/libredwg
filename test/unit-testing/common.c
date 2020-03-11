@@ -413,18 +413,24 @@ print_api (dwg_object *obj)
       for (int _i = 0; _i < (int)(num); _i++)                                 \
         {                                                                     \
           BITCODE_H _hdl = hdlp[_i];                                          \
-          char *_hdlname = dwg_dynapi_handle_name (dwg, _hdl);                \
+          char *_hdlname = _hdl ? dwg_dynapi_handle_name (dwg, _hdl) : NULL;  \
           if (_hdl == ent->parent->field[_i])                                 \
             {                                                                 \
-              ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",          \
-                  ARGS_REF (_hdl));                                           \
+              if (_hdl)                                                       \
+                ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",        \
+                    ARGS_REF (_hdl));                                         \
+              else                                                            \
+                ok (#field "[%d]: NULL", _i);                                 \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              fail (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",        \
-                    ARGS_REF (_hdl));                                         \
+              if (_hdl)                                                       \
+                fail (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",      \
+                      ARGS_REF (_hdl));                                       \
+              else                                                            \
+                ok (#field "[%d]: NULL", _i);                                 \
             }                                                                 \
-          if (version >= R_2007)                                              \
+          if (_hdlname && version >= R_2007)                                  \
             free (_hdlname);                                                  \
         }                                                                     \
     }
