@@ -4459,8 +4459,7 @@ DWG_OBJECT (GEODATA)
       FIELD_BL (units_value_vert, 92);
       FIELD_3BD (up_dir, 210);
 
-      // unknown:
-      FIELD_BD (sea_level_elev, 142);
+      FIELD_RD (north_dir_angle_deg, 0);
       DEBUG_HERE_OBJ
       FIELD_2BD (north_dir, 12);
       FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
@@ -4468,7 +4467,7 @@ DWG_OBJECT (GEODATA)
                                 // Prismodial = 4
       FIELD_BD (user_scale_factor, 141);
       FIELD_B (sea_level_corr, 294);
-      //FIELD_BD (sea_level_elev, 142);
+      FIELD_BD (sea_level_elev, 142);
       FIELD_BD (coord_proj_radius, 143);
       FIELD_T (coord_system_def, 0);
       FIELD_T (geo_rss_tag, 302);
