@@ -689,6 +689,19 @@ api_common_entity (dwg_object *obj)
                 value.x, value.y, value.z);                                   \
       }                                                                       \
   }
+#define CHK_SUBCLASS_2RD(ptr, name, field)                                    \
+  {                                                                           \
+    BITCODE_2RD value;                                                        \
+    if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))       \
+      fail (#name "." #field);                                                \
+    else                                                                      \
+      {                                                                       \
+        if (value.x == ptr.field.x && value.y == ptr.field.y)                 \
+          ok (#name "." #field ":\t(%f, %f)", value.x, value.y);              \
+        else                                                                  \
+          fail (#name "." #field ":\t(%f, %f)", value.x, value.y);            \
+      }                                                                       \
+  }
 #define CHK_SUBCLASS_H(ptr, name, field)                                      \
   {                                                                           \
     BITCODE_H value;                                                          \
