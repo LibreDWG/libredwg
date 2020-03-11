@@ -53,9 +53,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (geodata, GEODATA, ref_pt, ref_pt);
   CHK_ENTITY_3RD (geodata, GEODATA, obs_pt, obs_pt);
   CHK_ENTITY_TYPE (geodata, GEODATA, unit_scale_horiz, BD, unit_scale_horiz);
-  CHK_ENTITY_TYPE (geodata, GEODATA, units_value_horiz, BL, units_value_horiz);
-  CHK_ENTITY_TYPE (geodata, GEODATA, unit_scale_vert, BD, unit_scale_vert);
-  CHK_ENTITY_TYPE (geodata, GEODATA, units_value_vert, BL, units_value_vert);
   CHK_ENTITY_3RD (geodata, GEODATA, up_dir, up_dir);
   CHK_ENTITY_3RD (geodata, GEODATA, north_dir, north_dir);
   CHK_ENTITY_TYPE (geodata, GEODATA, scale_est, BL, scale_est);
@@ -69,8 +66,23 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (geodata, GEODATA, coord_proj_radius, BD, coord_proj_radius);
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_def, coord_system_def);
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, geo_rss_tag, geo_rss_tag);
-  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_datum, coord_system_datum); /* obsolete */
-  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt, coord_system_wkt); /* obsolete */
+
+  if (class_version >= 2)
+    {
+      CHK_ENTITY_TYPE (geodata, GEODATA, unit_scale_vert, BD, unit_scale_vert);
+      CHK_ENTITY_TYPE (geodata, GEODATA, units_value_vert, BL, units_value_vert);
+    }
+  else
+    {
+      CHK_ENTITY_TYPE (geodata, GEODATA, units_value_horiz, BL, units_value_horiz);
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_datum, coord_system_datum); /* obsolete */
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt, coord_system_wkt); /* obsolete */
+      CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B, has_civil_data);
+      CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B, obsolete_false);
+      CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_deg, BD, north_dir_angle_deg);
+      CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_rad, BD, north_dir_angle_rad);
+    }
+
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_from_tag, observation_from_tag);
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_to_tag, observation_to_tag);
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_coverage_tag, observation_coverage_tag);
@@ -101,11 +113,7 @@ api_process (dwg_object *obj)
             CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face1, BL);
             CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face2, BL);
             CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face3, BL);
-            CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face4, BL);
+            //CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face4, BL);
           }
     }
-  CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B, has_civil_data);
-  CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B, obsolete_false);
-  CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_deg, BD, north_dir_angle_deg);
-  CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_rad, BD, north_dir_angle_rad);
 }

@@ -156,7 +156,12 @@ main (int argc, char *argv[])
               error += test_code (tmp);
               strcpy (tmp, prefix);
             }
-          // TODO: CAMERA
+          if (DWG_TYPE == DWG_TYPE_GEODATA)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/gh209_1.dwg");
+              error += test_code (tmp);
+            }
         }
     }
   else

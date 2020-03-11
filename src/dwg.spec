@@ -4439,6 +4439,7 @@ DWG_OBJECT (FIELDLIST)
 
 DWG_OBJECT_END
 
+// only one v2 testcase yet, but decodes fine
 DWG_OBJECT (GEODATA)
 
   DECODE_UNKNOWN_BITS
