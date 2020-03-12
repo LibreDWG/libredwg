@@ -1,0 +1,15 @@
+#!/bin/sh
+abs_srcdir="@abs_srcdir@"
+top_builddir="@top_builddir@"
+# dummy to please shellcheck
+test -z "$top_builddir" && echo $top_builddir
+
+for d in "$abs_srcdir"/test-data/*.dwg "$abs_srcdir"/test-data/*/*.dwg
+do
+    cd test/unit-testing || exit
+    for t in $(make -s list)
+    do
+        INPUT="$d" @LTEXEC@ "./$t" || echo "$t $d"
+    done
+    cd - || exit
+done

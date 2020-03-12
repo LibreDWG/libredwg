@@ -688,6 +688,7 @@ AC_CONFIG_FILES([dxf], [chmod +x dxf])
 AC_CONFIG_FILES([json], [chmod +x json])
 AC_CONFIG_FILES([svg], [chmod +x svg])
 AC_CONFIG_FILES([dynapi_test_all.sh], [chmod +x dynapi_test_all.sh])
+AC_CONFIG_FILES([unit_testing_all.sh], [chmod +x unit_testing_all.sh])
 
 AC_OUTPUT
 

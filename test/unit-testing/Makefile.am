@@ -35,14 +35,7 @@ hash_test_LDADD = $(LDADD) \
 dynapi_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
 
-
-# NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
-#     and include this directory's .gitignore in the commit.
-check_PROGRAMS = \
-	bits_test \
-	decode_test \
-	hash_test \
-	dynapi_test \
+testobjects = \
 	3dface \
 	3dsolid \
 	arc \
@@ -107,6 +100,15 @@ check_PROGRAMS = \
 	xline \
 	xrecord
 
+# NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
+#     and include this directory's .gitignore in the commit.
+check_PROGRAMS = \
+	bits_test \
+	decode_test \
+	hash_test \
+	dynapi_test \
+	$(testobjects)
+
 #TODO:
 #	extrudedsurface \
 #	geopositionmarker \
@@ -114,6 +116,9 @@ check_PROGRAMS = \
 #	revolvedsurface \
 #	surface \
 #	sweptsurface
+
+list:
+	echo $(testobjects) dynapi_test
 
 dynapi_test.c: dynapi_test.c.in \
 		$(top_srcdir)/include/dwg.h \

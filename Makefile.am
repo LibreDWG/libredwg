@@ -113,7 +113,7 @@ TESTS =
 if HAVE_SHELLCHECK
 # fragile, serial-tests only. SPEC_LOG_COMPILER does not work there,
 # and parallel cannot do srcdir TESTS
-TESTS += log dwg dxf json svg logs-all.sh dynapi_test_all.sh \
+TESTS += log dwg dxf json svg logs-all.sh dynapi_test_all.sh unit_testing_all.sh \
 	 $(srcdir)/json-check $(srcdir)/dxf-check \
 	 $(srcdir)/dxf-allcvt.sh $(srcdir)/test-dxf.sh $(srcdir)/unknown.sh \
          programs/dwgfilter \
