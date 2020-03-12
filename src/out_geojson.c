@@ -180,13 +180,8 @@ static unsigned int cur_ver = 0;
 //#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
 
 #define FIELD(name, type, dxf)
-//    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n",
-//    _obj->name)
 #define _FIELD(name, type, value)
-//    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n", obj->name)
 #define ENT_FIELD(name, type, value)
-//    PREFIX fprintf(dat->fh, "\"" #name "\": " FORMAT_##type ",\n",
-//    _ent->name)
 #define FIELD_CAST(name, type, cast, dxf) FIELD (name, cast, dxf)
 #define FIELD_TRACE(name, type)
 #define FIELD_TEXT(name, str)
@@ -204,10 +199,10 @@ static unsigned int cur_ver = 0;
 #define FIELD_BS(name, dxf) FIELD (name, BS, dxf)
 #define FIELD_BL(name, dxf) FIELD (name, BL, dxf)
 #define FIELD_BLL(name, dxf) FIELD (name, BLL, dxf)
-#define FIELD_BD(name, dxf) FIELD (name, BD, dxf)
+#define FIELD_BD(name, dxf)
 #define FIELD_RC(name, dxf) FIELD (name, RC, dxf)
 #define FIELD_RS(name, dxf) FIELD (name, RS, dxf)
-#define FIELD_RD(name, dxf) FIELD (name, RD, dxf)
+#define FIELD_RD(name, dxf) FIELD_BD (name, dxf)
 #define FIELD_RL(name, dxf) FIELD (name, RL, dxf)
 #define FIELD_RLL(name, dxf) FIELD (name, RLL, dxf)
 #define FIELD_MC(name, dxf) FIELD (name, MC, dxf)
@@ -219,11 +214,9 @@ static unsigned int cur_ver = 0;
 #define FIELD_T(name, dxf)
 //  { if (dat->version >= R_2007) { FIELD_TU(name, dxf); }
 //    else                        { FIELD_TV(name, dxf); } }
-#define FIELD_BT(name, dxf) FIELD (name, BT, dxf);
+#define FIELD_BT(name, dxf) FIELD (name, BT, dxf)
 #define FIELD_4BITS(name, dxf) FIELD (name, 4BITS, dxf)
 #define FIELD_BE(name, dxf) FIELD_3RD (name, dxf)
-#define FIELD_DD(name, _default, dxf)                                         \
-  PREFIX fprintf (dat->fh, FORMAT_DD ", ", _obj->name)
 #define FIELD_2DD(name, d1, d2, dxf)
 #define FIELD_3DD(name, def, dxf)
 #define FIELD_2RD(name, dxf)
@@ -232,24 +225,63 @@ static unsigned int cur_ver = 0;
 #define FIELD_3RD(name, dxf) ;
 #define FIELD_3BD(name, dxf)
 #define FIELD_3BD_1(name, dxf)
+#define FIELD_DD(name, _default, dxf)
+
+#define _VALUE_RD(value) fprintf (dat->fh, FORMAT_RD, value)
+#ifdef IS_RELEASE
+#  define VALUE_RD(value)                                                     \
+  {                                                                           \
+    if (bit_isnan (value))                                                    \
+      _VALUE_RD (0.0);                                                        \
+    else                                                                      \
+      _VALUE_RD (value);                                                      \
+   }
+#else
+#  define VALUE_RD(value) _VALUE_RD (value)
+#endif
 #define VALUE_2DPOINT(px, py)                                                 \
-  PREFIX fprintf (dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ],\n", px, py)
+  {                                                                           \
+    PREFIX fprintf (dat->fh, "[ ");                                           \
+    VALUE_RD (px);                                                            \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (py);                                                            \
+    fprintf (dat->fh, " ],\n");                                               \
+  }
 #define LASTVALUE_2DPOINT(px, py)                                             \
-  PREFIX fprintf (dat->fh, "[ " FORMAT_DD ", " FORMAT_DD " ]\n", px, py)
+  {                                                                           \
+    PREFIX fprintf (dat->fh, "[ ");                                           \
+    VALUE_RD (px);                                                            \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (py);                                                            \
+    fprintf (dat->fh, " ]\n");                                                \
+  }
 #define FIELD_2DPOINT(name) VALUE_2DPOINT (_obj->name.x, _obj->name.y)
 #define LASTFIELD_2DPOINT(name) LASTVALUE_2DPOINT (_obj->name.x, _obj->name.y)
-#define VALUE_3DPOINT(px, py, pz)                                             \
-  PREFIX fprintf (dat->fh,                                                    \
-                  "[ " FORMAT_DD ", " FORMAT_DD ", " FORMAT_DD " ],\n", px,   \
-                  py, pz)
+#define VALUE_3DPOINT(px, py, pz)                                          \
+  {                                                                           \
+    PREFIX fprintf (dat->fh, "[ ");                                           \
+    VALUE_RD (px);                                                            \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (py);                                                            \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (pz);                                                            \
+    fprintf (dat->fh, " ],\n");                                               \
+  }
 #define LASTVALUE_3DPOINT(px, py, pz)                                         \
-  PREFIX fprintf (dat->fh,                                                    \
-                  "[ " FORMAT_DD ", " FORMAT_DD ", " FORMAT_DD " ]\n", px,    \
-                  py, pz)
+  {                                                                           \
+    PREFIX fprintf (dat->fh, "[ ");                                           \
+    VALUE_RD (px);                                                            \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (py);                                                            \
+    fprintf (dat->fh, ", ");                                                  \
+    VALUE_RD (pz);                                                            \
+    fprintf (dat->fh, " ]\n");                                                \
+  }
 #define FIELD_3DPOINT(name)                                                   \
   VALUE_3DPOINT (_obj->name.x, _obj->name.y, _obj->name.z)
 #define LASTFIELD_3DPOINT(name)                                               \
   LASTVALUE_3DPOINT (_obj->name.x, _obj->name.y, _obj->name.z)
+
 #define FIELD_CMC(name, dxf1, dxf2)
 #define FIELD_TIMEBLL(name, dxf)
 

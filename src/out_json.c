@@ -138,15 +138,24 @@ static char* _path_field(const char *path);
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
-#define VALUE_RD(value, dxf)                                                  \
+#ifdef IS_RELEASE
+#  define VALUE_RD(value, dxf)                                                \
+    if (bit_isnan (value))                                                    \
+      _VALUE_RD (0.0, dxf)                                                    \
+    else                                                                      \
+      _VALUE_RD (value, dxf)
+#else
+#  define VALUE_RD(value, dxf) _VALUE_RD (value, dxf)
+#endif
+#define _VALUE_RD(value, dxf)                                                 \
   {                                                                           \
     char _buf[256];                                                           \
     int k;                                                                    \
     snprintf (_buf, 255, FORMAT_RD, value);                                   \
     k = strlen (_buf);                                                        \
-    if (strrchr (_buf, '.') && _buf[k-1] == '0')                              \
+    if (strrchr (_buf, '.') && _buf[k - 1] == '0')                            \
       {                                                                       \
-        for (k--; k > 1 && _buf[k-1] != '.' && _buf[k] == '0'; k--)           \
+        for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)         \
           _buf[k] = '\0';                                                     \
       }                                                                       \
     fprintf (dat->fh, "%s", _buf);                                            \
@@ -335,12 +344,67 @@ static char* _path_field(const char *path);
 #define FIELD_BS(nam, dxf) FIELD (nam, BS, dxf)
 #define FIELD_BL(nam, dxf) FIELD (nam, BL, dxf)
 #define FIELD_BLL(nam, dxf) FIELD (nam, BLL, dxf)
-#define FIELD_BD(nam, dxf)                                                    \
-  {                                                                           \
-    PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));                 \
-    VALUE_RD (_obj->nam, dxf);                                                \
-    fprintf (dat->fh, ",\n");                                                 \
-  }
+#ifdef IS_RELEASE
+#  define FIELD_BD(nam, dxf)                                                  \
+    {                                                                         \
+      if (!bit_isnan (_obj->nam))                                             \
+        {                                                                     \
+          PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));           \
+          _VALUE_RD (_obj->nam, dxf);                                         \
+          fprintf (dat->fh, ",\n");                                           \
+        }                                                                     \
+    }
+#  define FIELD_2RD(nam, dxf)                                                 \
+    {                                                                         \
+      if (!bit_isnan (_obj->nam.x) && !bit_isnan (_obj->nam.y))               \
+        {                                                                     \
+          PREFIX fprintf (dat->fh, "\"" #nam "\": ");                         \
+          VALUE_2RD (_obj->nam, dxf);                                         \
+        }                                                                     \
+    }
+#  define FIELD_3RD(nam, dxf)                                                 \
+    {                                                                         \
+      if (!bit_isnan (_obj->nam.x) && !bit_isnan (_obj->nam.y)                \
+          && !bit_isnan (_obj->nam.z))                                        \
+        {                                                                     \
+          PREFIX fprintf (dat->fh, "\"" #nam "\": ");                         \
+          VALUE_3RD (_obj->nam, dxf);                                         \
+        }                                                                     \
+    }
+#  define SUB_FIELD_BD(o, nam, dxf)                                           \
+    {                                                                         \
+      if (!bit_isnan (_obj->o.nam))                                           \
+        {                                                                     \
+          PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));           \
+          _VALUE_RD (_obj->o.nam, dxf);                                       \
+          fprintf (dat->fh, ",\n");                                           \
+        }                                                                     \
+    }
+#else /* IS_RELEASE */
+#  define FIELD_BD(nam, dxf)                                                  \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));               \
+      _VALUE_RD (_obj->nam, dxf);                                             \
+      fprintf (dat->fh, ",\n");                                               \
+    }
+#  define FIELD_2RD(nam, dxf)                                                 \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"" #nam "\": ");                             \
+      VALUE_2RD (_obj->nam, dxf);                                             \
+    }
+#  define FIELD_3RD(nam, dxf)                                                  \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"" #nam "\": ");                             \
+      VALUE_3RD (_obj->nam, dxf);                                             \
+    }
+# define SUB_FIELD_BD(o, nam, dxf)                                            \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));               \
+      _VALUE_RD (_obj->o.nam, dxf);                                           \
+      fprintf (dat->fh, ",\n");                                               \
+    }
+#endif
+
 #define FIELD_RC(nam, dxf) FIELD (nam, RC, dxf)
 #define FIELD_RCx(nam, dxf) FIELD (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELD (nam, RS, dxf)
@@ -388,18 +452,10 @@ static char* _path_field(const char *path);
 #define FIELD_4BITS(nam, dxf) FIELD (nam, 4BITS, dxf)
 #define FIELD_BE(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_DD(nam, _default, dxf) FIELD_BD (nam, dxf)
-#define FIELD_2DD(nam, d1, d2, dxf) FIELD_2RD (nam, dxf)
-#define FIELD_3DD(nam, def, dxf) FIELD_3RD (nam, dxf)
-#define FIELD_2RD(nam, dxf)                                                   \
-  {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": "); VALUE_2RD (_obj->nam, dxf);   \
-  }
 #define FIELD_2BD(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_2BD_1(nam, dxf) FIELD_2RD (nam, dxf)
-#define FIELD_3RD(nam, dxf)                                                   \
-  {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": "); VALUE_3RD (_obj->nam, dxf);   \
-  }
+#define FIELD_2DD(nam, d1, d2, dxf) FIELD_2RD (nam, dxf)
+#define FIELD_3DD(nam, def, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3BD(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3BD_1(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
@@ -431,13 +487,6 @@ static char* _path_field(const char *path);
 #define SUB_FIELD_BLL(o, nam, dxf) SUB_FIELD (o, nam, BLL, dxf)
 #define SUB_FIELD_RLL(o, nam, dxf) SUB_FIELD (o, nam, RLL, dxf)
 
-#define SUB_FIELD_BD(o, nam, dxf)                                             \
-  if (!memBEGINc (#nam, "num_"))                                              \
-    {                                                                         \
-      PREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam));                \
-      VALUE_RD (_obj->o.nam, dxf);                                            \
-      fprintf (dat->fh, ",\n");                                               \
-    }
 #define SUB_FIELD_RD(o, nam, dxf) SUB_FIELD_BD (o, nam, dxf)
 #define SUB_FIELD_3BD_inl(o, nam, dxf)                                        \
   SUB_FIELD_RD (o, x, dxf);                                                   \

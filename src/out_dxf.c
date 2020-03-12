@@ -241,12 +241,16 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
 static void
 dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 {
-  if (dxf && !bit_isnan (value))
+  if (dxf)
     {
       char _buf[128];
       int k;
       fprintf (dat->fh, "%3i\r\n", dxf);
-      snprintf (_buf, 127, "%-16.14f", value);
+#ifdef IS_RELEASE
+      if (bit_isnan (value))
+        value = 0.0;
+#endif
+        snprintf (_buf, 127, "%-16.14f", value);
       k = strlen (_buf);
       if (strrchr (_buf, '.') && _buf[k - 1] == '0')
         {
