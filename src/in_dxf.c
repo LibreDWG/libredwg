@@ -5663,7 +5663,7 @@ new_object (char *restrict name, char *restrict dxfname,
   if (obj->fixedtype == DWG_TYPE_LAYOUT)
     {
       Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
-      _o->real_world_units = 1.0; // default
+      _o->paper_units = 1.0; // default
     }
   else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
     {

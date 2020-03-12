@@ -3983,17 +3983,17 @@ DWG_OBJECT (LAYOUT)
   FIELD_BD (paper_height, 45);
   FIELD_T (paper_size, 4);
   FIELD_2BD_1 (plot_origin, 46);
-  FIELD_BS (paper_units, 72);
+  FIELD_BS (plot_paper_unit, 72);
   FIELD_BS (plot_rotation, 73);
   FIELD_BS (plot_type, 74);
-  FIELD_2BD_1 (window_min, 48);
-  FIELD_2BD_1 (window_max, 140);
+  FIELD_2BD_1 (plot_window_ll, 48);
+  FIELD_2BD_1 (plot_window_ur, 140);
 
   VERSIONS (R_13, R_2000) {
     FIELD_TV (plot_view_name, 6);
   }
 
-  FIELD_BD (real_world_units, 142);
+  FIELD_BD (paper_units, 142);
   FIELD_BD (drawing_units, 143);
   FIELD_T (current_style_sheet, 7);
   FIELD_BS (scale_type, 75);
@@ -4003,8 +4003,8 @@ DWG_OBJECT (LAYOUT)
   SINCE (R_2004)
     {
       FIELD_BS (shade_plot_mode, 76);
-      FIELD_BS (shade_plot_res_level, 77);
-      FIELD_BS (shade_plot_custom_dpi, 78);
+      FIELD_BS (shade_plot_reslevel, 77);
+      FIELD_BS (shade_plot_customdpi, 78);
     }
 
   SUBCLASS (AcDbLayout)
@@ -4029,7 +4029,7 @@ DWG_OBJECT (LAYOUT)
 
   START_OBJECT_HANDLE_STREAM;
   IF_FREE_OR_SINCE (R_2004) {
-    FIELD_HANDLE (plot_view, 5, 6);
+    FIELD_HANDLE (plotview, 5, 6);
   }
   IF_FREE_OR_SINCE (R_2007) {
     FIELD_HANDLE (visualstyle, 4, 0);
@@ -6578,8 +6578,8 @@ DWG_OBJECT (PLOTSETTINGS)
   FIELD_2BD_1 (plot_origin, 46); // + 47
   FIELD_2BD_1 (plot_window_ll, 48); // + 49
   FIELD_2BD_1 (plot_window_ur, 140); // + 141
-  FIELD_BD (num_custom_print_scale, 142); // in paper units
-  FIELD_BD (den_custom_print_scale, 143); // in drawing units
+  FIELD_BD (paper_units, 142);
+  FIELD_BD (drawing_units, 143);
   FIELD_BS (plot_layout, 70); /*!< plot layout flag:
                                 1 = PlotViewportBorders
                                 2 = ShowPlotStyles
@@ -6595,10 +6595,10 @@ DWG_OBJECT (PLOTSETTINGS)
                                 4096 = ZoomToPaperOnUpdate
                                 8192 = Initializing
                                 16384 = PrevPlotInit */
-  FIELD_BS (plot_paper_units, 72); /*!< 0 inches, 1 mm, 2 pixel */
-  FIELD_BS (plot_rotation, 73);    /*!< 0 normal, 1 90, 2 180, 3 270 deg */
-  FIELD_BS (plot_type, 74);    /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
-                                    4 window (see 48-140), 5 layout */
+  FIELD_BS (plot_paper_unit, 72); /*!< 0 inches, 1 mm, 2 pixel */
+  FIELD_BS (plot_rotation, 73);   /*!< 0 normal, 1 90, 2 180, 3 270 deg */
+  FIELD_BS (plot_type, 74);       /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
+                                       4 window (see 48-140), 5 layout */
   FIELD_HANDLE (stylesheet, 0, 7);
   FIELD_B (use_std_scale, 0);
   FIELD_BS (std_scale_type, 75); /*!< 0 = scaled to fit,
@@ -6616,10 +6616,10 @@ DWG_OBJECT (PLOTSETTINGS)
   SINCE (R_2004)
     {
       FIELD_BS (shade_plot_mode, 76); /*!< 0 display, 1 wireframe, 2 hidden, 3 rendered, 4 visualstyle,
-                                       5 renderPreset */
-      FIELD_BS (shade_plot_res_level, 77); /*!< 0 draft, 1 preview, 2 nomal,
-                                             3 presentation, 4 maximum, 5 custom */
-      FIELD_BS (shade_plot_custom_dpi, 78); /*!< 100-32767 */
+                                           5 renderPreset */
+      FIELD_BS (shade_plot_reslevel, 77); /*!< 0 draft, 1 preview, 2 nomal,
+                                               3 presentation, 4 maximum, 5 custom */
+      FIELD_BS (shade_plot_customdpi, 78); /*!< 100-32767 */
       FIELD_HANDLE (shade_plot_id, 0, 333); // optional
     }
 

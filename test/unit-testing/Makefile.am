@@ -67,6 +67,7 @@ check_PROGRAMS = \
 	helix \
 	image \
 	insert \
+	layout \
 	leader \
 	light \
 	line \
@@ -76,6 +77,7 @@ check_PROGRAMS = \
 	mtext \
 	multileader \
 	ole2frame \
+	plotsettings \
 	point \
 	polyline_2d \
 	polyline_3d \

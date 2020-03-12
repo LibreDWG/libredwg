@@ -162,6 +162,12 @@ main (int argc, char *argv[])
               strcat (tmp, "2010/gh209_1.dwg");
               error += test_code (tmp);
             }
+          if (DWG_TYPE == DWG_TYPE_PLOTSETTINGS)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2013/gh109_1.dwg");
+              error += test_code (tmp);
+            }
           if (DWG_TYPE == DWG_TYPE_HELIX)
             {
               strcpy (tmp, prefix);
@@ -655,6 +661,10 @@ api_common_entity (dwg_object *obj)
       else                                                                    \
         fail (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, value.z); \
     }
+
+#define CHK_ENTITY_MAX(ent, name, field, type, _max)                          \
+  if (field > _max)                                                           \
+    fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, field)
 
 #define _DWGAPI_ENT_NAME(name, field) dwg_ent_##name##_get_##field
 #define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME (ent, field)
