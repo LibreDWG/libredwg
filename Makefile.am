@@ -19,11 +19,17 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src programs examples test doc
+SUBDIRS = src programs examples test
 if HAVE_SWIG_PYTHON
 if !DISABLE_BINDINGS
 SUBDIRS += bindings
 endif
+endif
+if HAVE_MAKEINFO
+SUBDIRS += doc
+endif
+if DISABLE_BINDINGS
+AM_DISTCHECK_CONFIGURE_FLAGS = --disable-bindings
 endif
 
 include_HEADERS = \
@@ -50,6 +56,10 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec \
 .PHONY: check-dwg check-dxf check-json check-dwg-valgrind \
         regen-man man manual refman scan-build gcov \
 	unknown regen-unknown
+
+# automake bug, see GH #211
+distcheck-hook:
+	chmod u+w "$(srcdir)/doc"
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
 UNKNOWN_SKIP = examples/alldwg.skip
