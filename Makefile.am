@@ -200,7 +200,7 @@ dist-hook:
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf example_*.dxf.log
-DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh log json dwg dxf svg libredwg.pc
+DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh unit_testing_all.sh log json dwg dxf svg libredwg.pc
 MAINTAINERCLEANFILES  = *~ *.log *.dxf *.json *.dwg cover_db .analysis
 
 maintainer-clean-local:

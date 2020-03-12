@@ -14,7 +14,7 @@
 dwg_data g_dwg;
 
 /// This function declaration reads the DWG file
-int test_code (const char *filename);
+int test_code (const char *filename, int cov);
 
 /// Return the name of a handle
 char *handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl);
@@ -52,6 +52,11 @@ main (int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
   int error = 0;
+  int cov = 1;
+
+  // don't warn/error on no coverage. for unit_testing_all.sh
+  if (argc > 1 && strEQc (argv[1], "-n"))
+    cov = 0;
 
   if (!input)
     {
@@ -83,10 +88,10 @@ main (int argc, char *argv[])
                 fprintf (stderr, "Env var INPUT not defined, %s not found\n",
                          tmp);
               else
-                error += test_code (tmp);
+                error += test_code (tmp, cov);
             }
           else
-            error += test_code (*ptr);
+            error += test_code (*ptr, cov);
         }
       if (!numpassed () && !numfailed ())
         {
@@ -96,20 +101,20 @@ main (int argc, char *argv[])
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2000/PolyLine2D.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_POLYLINE_3D
               || DWG_TYPE == DWG_TYPE_VERTEX_3D)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2000/PolyLine3D.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
               strcat (tmp, "2004/PolyLine3D.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
               strcat (tmp, "2018/PolyLine3D.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_POLYLINE_MESH
               || DWG_TYPE == DWG_TYPE_VERTEX_MESH || DWG_TYPE == DWG_TYPE_TRACE
@@ -120,86 +125,87 @@ main (int argc, char *argv[])
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2000/TS1.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_IMAGE || DWG_TYPE == DWG_TYPE_LEADER)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2000/Leader.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
               strcat (tmp, "2004/Leader.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
               strcat (tmp, "2018/Leader.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_HATCH)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2004/HatchG.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_UNDERLAY || DWG_TYPE == DWG_TYPE_UNDERLAYDEFINITION)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2004/Underlay.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_LIGHT || DWG_TYPE == DWG_TYPE_VISUALSTYLE)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2004/Visualstyle.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
               strcat (tmp, "2018/Visualstyle.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
             }
           if (DWG_TYPE == DWG_TYPE_GEODATA)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2010/gh209_1.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_PLOTSETTINGS)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2013/gh109_1.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_HELIX)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2000/work.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
               strcat (tmp, "2004/Helix.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
               strcpy (tmp, prefix);
               strcat (tmp, "2018/Helix.dwg");
-              error += test_code (tmp);
+              error += test_code (tmp, cov);
             }
         }
+#ifdef DWG_TYPE
+      if (cov && !numpassed () && !numfailed ())
+        printf ("TODO no coverage for this type %d\n", DWG_TYPE);
+#endif
     }
   else
-    error = test_code (input);
+    error = test_code (input, cov);
 
-#ifdef DWG_TYPE
-  if (!numpassed () && !numfailed ())
-    printf ("TODO no coverage for this type %d\n", DWG_TYPE);
-#endif
   return error;
 }
 
 /// read the DWG file
 int
-test_code (const char *filename)
+test_code (const char *filename, int cov)
 {
   int error;
 
 #ifdef DWG_TYPE
-  printf ("Testing with %s:\n", filename);
+  if (cov)
+    printf ("Testing with %s:\n", filename);
 #endif
   error = dwg_read_file (filename, &g_dwg);
   if (error < DWG_ERR_CRITICAL)
@@ -230,12 +236,12 @@ test_code (const char *filename)
       DWG_TYPE == DWG_TYPE_TABLE
       )
     {
-      if (error)
+      if (cov && error)
         printf ("%s failed (TODO: unstable)\n", filename);
       return 0;
     }
 #endif
-  if (error)
+  if (cov && error)
     printf ("%s failed\n", filename);
   return error;
 }

@@ -9,7 +9,7 @@ do
     cd test/unit-testing || exit
     for t in $(make -s list)
     do
-        INPUT="$d" @LTEXEC@ "./$t" || echo "$t $d"
+        INPUT="$d" @LTEXEC@ "./$t" -n || echo "$t $d"
     done
     cd - || exit
 done
