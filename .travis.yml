@@ -33,7 +33,7 @@ matrix:
       env: ASAN=1 CONF="--disable-bindings"
     - compiler: clang
     - compiler: gcc
-      env: DISTCHECK=1
+      env: DISTCHECK=1 CONF="--enable-release"
 
 branches:
   except:

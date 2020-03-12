@@ -153,6 +153,11 @@ AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
 AC_DEFINE([__XSI_VISIBLE],[700],[Needed for cygwin strdup])
 
 AX_IS_RELEASE([git-directory])
+dnl ability to override with a .git dir, to test release features
+AC_ARG_ENABLE([release],AS_HELP_STRING([--enable-release],[
+    Override IS_RELEASE with .git dir present (default: $ax_is_release).]),
+    [ax_is_release=yes
+    AC_MSG_RESULT(IS_RELEASE override with --enable-release)])
 if test x$ax_is_release = xyes; then
    AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
    skipping unstable DWG features, unknown DWG versions and objects.])
