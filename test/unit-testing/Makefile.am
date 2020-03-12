@@ -64,6 +64,7 @@ check_PROGRAMS = \
 	endblk \
 	geodata \
 	hatch \
+	helix \
 	image \
 	insert \
 	leader \

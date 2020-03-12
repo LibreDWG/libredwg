@@ -162,6 +162,18 @@ main (int argc, char *argv[])
               strcat (tmp, "2010/gh209_1.dwg");
               error += test_code (tmp);
             }
+          if (DWG_TYPE == DWG_TYPE_HELIX)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/work.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Helix.dwg");
+              error += test_code (tmp);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2018/Helix.dwg");
+              error += test_code (tmp);
+            }
         }
     }
   else

@@ -33,7 +33,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (spline, SPLINE, knotparam, BL, knotparam);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, scenario, BS, scenario);
   if (scenario == 0 || scenario > 2)
-    fail ("SPLINE.scenario illegal");
+    fail ("Illegal SPLINE.scenario %d", (int)scenario);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, degree, BS, degree);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, fit_tol, BD, fit_tol);
   CHK_ENTITY_3RD  (spline, SPLINE, beg_tan_vec, beg_tan_vec);
