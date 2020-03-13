@@ -39,6 +39,7 @@ api_process (dwg_object *obj)
           points[i].y);
   else
     fail ("POLYLINE_2D.points");
+  free (points);
 
   if (version >= R_2004)
     {
