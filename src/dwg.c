@@ -1606,7 +1606,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
       int isnew = 0;
       bool ok;
 
-      if (!hdlv | !hdlv[i])
+      if (!hdlv || !hdlv[i])
         continue;
       hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
       if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID || !hobj->name)
