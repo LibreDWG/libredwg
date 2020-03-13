@@ -211,6 +211,8 @@ TESTDATA = \
     test-data/2010/circle.dwg \
     test-data/2010/circle.jpg \
     test-data/2010/circle.txt \
+    test-data/2010/gh209_1.dwg \
+    test-data/2010/gh209_1.dxf \
     test-data/2013/Arc.dwg \
     test-data/2013/Arc.jpg \
     test-data/2013/Arc.txt \
