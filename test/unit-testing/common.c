@@ -1,10 +1,14 @@
 #include "../../src/config.h"
+#define _DEFAULT_SOURCE
+#define _BSD_SOURCE
+#define __BSD_VISIBLE 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include "../../src/common.h"
 
 #include "dwg.h"
@@ -13,8 +17,11 @@
 
 dwg_data g_dwg;
 
-/// This function declaration reads the DWG file
+/// test a DWG file
 int test_code (const char *filename, int cov);
+
+/// test all DWG's in a subdir
+int test_subdirs (const char *dirname, int cov);
 
 /// Return the name of a handle
 char *handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl);
@@ -51,12 +58,22 @@ int
 main (int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
+  char *dir = NULL;
   int error = 0;
-  int cov = 1;
+  int i = 1, cov = 1;
 
-  // don't warn/error on no coverage. for unit_testing_all.sh
-  if (argc > 1 && strEQc (argv[1], "-n"))
-    cov = 0;
+  if (argc > i)
+    {
+      // don't warn/error on no coverage. for unit_testing_all.sh
+      if (strEQc (argv[i], "-n"))
+        {
+          i = 2;
+          cov = 0;
+        }
+      // process subdirs
+      if (argc > i && *argv[i] != '-')
+        dir = argv[i];
+    }
 
   if (!input)
     {
@@ -70,6 +87,17 @@ main (int argc, char *argv[])
               //"2007/PolyLine3D.dwg",
               NULL };
       const char *prefix = "../test-data/";
+
+      if (dir)
+        {
+          if (!stat (dir, &attrib) &&
+              S_ISDIR (attrib.st_mode))
+#ifdef _WIN32
+            fprintf (stderr, "dir argument not supported yet on windows (scandir)\n");
+#else
+            return test_subdirs (dir, cov);
+#endif
+        }
 
       /* ../configure out-of-tree. find srcdir */
       if (stat (prefix, &attrib))
@@ -197,7 +225,46 @@ main (int argc, char *argv[])
   return error;
 }
 
-/// read the DWG file
+/// test all DWG's in all subdirs. not on windows yet
+int
+test_subdirs (const char *dir, int cov)
+{
+  int error = 0, n;
+  struct stat attrib;
+  struct dirent **namelist;
+
+#ifndef _WIN32
+  n = scandir (dir, &namelist, NULL, NULL);
+  if (n == -1)
+    {
+      perror ("scandir");
+      exit (1);
+    }
+  while (n--)
+    {
+      char *elem = namelist[n]->d_name;
+      if (namelist[n]->d_type == DT_DIR && *elem != '.')
+        {
+          char path[256];
+          path[255] = '\0';
+          strncpy (path, dir, 254);
+          strncat (path, "/", 254);
+          strncat (path, elem, 254);
+          path[255] = '\0';
+          error += test_subdirs (path, cov);
+        }
+      if (namelist[n]->d_type == DT_REG &&
+          (strstr (elem, ".dwg") || strstr (elem, ".DWG")))
+        error += test_code (elem, cov);
+
+      free (namelist[n]);
+    }
+  free (namelist);
+#endif
+  return error;
+}
+
+/// test a DWG file
 int
 test_code (const char *filename, int cov)
 {
