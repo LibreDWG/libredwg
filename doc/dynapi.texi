@@ -6976,6 +6976,8 @@ BD,	DXF 42
 BS,	DXF 92
 @item edge_color
 CMC,	DXF 66
+@item unknown_bs64
+BS
 @item edge_opacity
 BD,	DXF 43
 @item edge_width

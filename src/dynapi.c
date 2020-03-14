@@ -6094,6 +6094,8 @@ static const Dwg_DYNAPI_field _dwg_VISUALSTYLE_fields[] = {
     0,0,0, 92 },
   { "edge_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_VISUALSTYLE, edge_color),
     1,0,0, 66 },
+  { "unknown_bs64",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VISUALSTYLE, unknown_bs64),
+    0,0,0, 0 },
   { "edge_opacity",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_VISUALSTYLE, edge_opacity),
     0,0,0, 43 },
   { "edge_width",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VISUALSTYLE, edge_width),

@@ -4011,7 +4011,7 @@ typedef struct _dwg_object_VISUALSTYLE
 {
   struct _dwg_object_object *parent;
   BITCODE_T desc;       /*!< DXF 2  */
-  BITCODE_BS type;      /*!< DXF 70  */
+  BITCODE_BS type;      /*!< DXF 70 enum 0-32: (kFlat-kEmptyStyle acgivisualstyle.h) */
   BITCODE_BS face_lighting_model;  /*!< DXF 71 0:Invisible 1:Visible 2:Phong 3:Gooch */
   BITCODE_BS face_lighting_quality;/*!< DXF 72 0:No lighting 1:Per face 2:Per vertex */
   BITCODE_BS face_color_mode;   /*!< DXF 73 0 = No color
@@ -4035,6 +4035,7 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_BD edge_crease_angle;         /*!< DXF 42  */
   BITCODE_BS edge_modifier;             /*!< DXF 92  */
   BITCODE_CMC edge_color;               /*!< DXF 66  */
+  BITCODE_BS unknown_bs64;
   BITCODE_BD edge_opacity;              /*!< DXF 43  */
   BITCODE_BS edge_width;                /*!< DXF 76  */
   BITCODE_BS edge_overhang;             /*!< DXF 77  */

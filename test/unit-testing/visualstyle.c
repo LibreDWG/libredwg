@@ -46,15 +46,21 @@ api_process (dwg_object *obj)
  
   CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, desc, desc);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, type, BS, type);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, type, BS, 32);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_lighting_model, BS, face_lighting_model);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_lighting_model, BS, 3);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_lighting_quality, BS, face_lighting_quality);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_lighting_quality, BS, 2);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_color_mode, BS, face_color_mode);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_color_mode, BS, 6);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_opacity, BD, face_opacity);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_specular, BD, face_specular);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_modifier, BS, face_modifier);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_modifier, BS, 2);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, color, color);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, face_mono_color, face_mono_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_model, BS, edge_model);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, edge_model, BS, 2);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style, BL, edge_style);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_intersection_color, edge_intersection_color);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_obscured_color, edge_obscured_color);
@@ -63,7 +69,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_line_pattern, BS, edge_intersection_line_pattern);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_crease_angle, BD, edge_crease_angle);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_modifier, BS, edge_modifier);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_color, CMC, edge_color);
+  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_color, edge_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_opacity, BD, edge_opacity);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BS, edge_width);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_overhang, BS, edge_overhang);

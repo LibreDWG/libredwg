@@ -743,7 +743,7 @@
       LOG_TRACE ("DEBUG_POS @%u.%u (%lu)\n", (unsigned int)dat->byte,         \
                  dat->bit, bit_position (dat));                               \
     }
-#define _DEBUG_HERE                                                           \
+#define _DEBUG_HERE(objsize)                                                  \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
       Bit_Chain here = *dat;                                                  \
@@ -754,13 +754,16 @@
       BITCODE_RL rl;                                                          \
       double bd;                                                              \
       Dwg_Handle hdl;                                                         \
-      tmp = bit_read_TF (dat, 24);                                            \
+      rs = 24;                                                                \
+      if (objsize && dat->byte + 24 > objsize)                                \
+        rs = objsize - dat->byte;                                             \
+      tmp = bit_read_TF (dat, rs);                                            \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
         {                                                                     \
           bit_fprint_bits (OUTPUT, tmp, 68);                                  \
           HANDLER (OUTPUT, "\n");                                             \
         }                                                                     \
-      LOG_TRACE_TF (tmp, 24);                                                 \
+      LOG_TRACE_TF (tmp, rs);                                                 \
       free (tmp);                                                             \
       SINCE (R_13)                                                            \
       {                                                                       \
@@ -822,10 +825,10 @@
     }
 #define DEBUG_HERE_OBJ                                                        \
   DEBUG_POS_OBJ                                                               \
-  _DEBUG_HERE
+  _DEBUG_HERE (obj->size)
 #define DEBUG_HERE                                                            \
   DEBUG_POS                                                                   \
-  _DEBUG_HERE
+  _DEBUG_HERE (0)
 
 // check for overflow into next object (invalid num_elems)
 #define AVAIL_BITS(dat)                                                       \

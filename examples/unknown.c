@@ -1332,7 +1332,6 @@ main (int argc, char *argv[])
                        have_struct ? "," : " ", piname, g[j].code);
               have_struct = 1;
               bit_fprint_bits (pi, g[j].bytes, g[j].num_bits);
-              //free (g[j].bytes);
               if (g[j].type == BITS_HANDLE)
                 {
                   char buf[32];

@@ -36773,6 +36773,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS unknown_bs64;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_bs64", &unknown_bs64, NULL)
+        && unknown_bs64 == visualstyle->unknown_bs64)
+      pass ();
+    else
+      fail ("VISUALSTYLE.unknown_bs64 [BS] %hu != %hu", visualstyle->unknown_bs64, unknown_bs64);
+    unknown_bs64++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_bs64", &unknown_bs64, 0)
+        && unknown_bs64 == visualstyle->unknown_bs64)
+      pass ();
+    else
+      fail ("VISUALSTYLE.unknown_bs64 [BS] set+1 %hu != %hu", visualstyle->unknown_bs64, unknown_bs64);
+    visualstyle->unknown_bs64--;
+
+  }
+  {
     BITCODE_BS unknown_float45;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_float45", &unknown_float45, NULL)
         && unknown_float45 == visualstyle->unknown_float45)
