@@ -4132,6 +4132,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     //obj->name = "UNKNOWN_OBJ";
     obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;
     // undo NEW_OBJECT
+    free (dxfname);
     free (obj->tio.object);
     dwg->num_objects--;
     LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
@@ -7770,12 +7771,12 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       while (pair != NULL && pair->code == 0 && pair->value.s)
         {
-          char *dxfname = strdup (pair->value.s);
-          strncpy (name, dxfname, 79);
+          strncpy (name, pair->value.s, 79);
           name[79] = '\0';
           object_alias (name);
           if (is_dwg_object (name))
             {
+              char *dxfname = strdup (pair->value.s);
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, 0);
             }
