@@ -4388,7 +4388,6 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           xdata = xdata->next;
         }
       prev->next = rbuf;
-      xdata = _obj->xdata;
     }
   else
     _obj->xdata = rbuf;

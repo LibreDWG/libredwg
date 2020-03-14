@@ -3231,7 +3231,7 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      t = &tokens->tokens[tokens->index];
+      // t = &tokens->tokens[tokens->index];
       // clang-format off
       if (0) ;
       FIELD_RLL (zero, 0)

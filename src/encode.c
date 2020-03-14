@@ -1362,7 +1362,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dwg->header.section[SECTION_HANDLES_R13].number = 2;
   dwg->header.section[SECTION_HANDLES_R13].address = dat->byte;
 
-  sec_size = 0;
   pvzadr = dat->byte; // Correct value of section size must be written later
   dat->byte += 2;
   last_offset = 0;

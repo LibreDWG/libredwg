@@ -2290,7 +2290,7 @@ static int
 read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                               Bit_Chain *sec_dat, Dwg_Section_Type type)
 {
-  uint32_t address, sec_mask, initial_address;
+  uint32_t address, sec_mask;
   uint32_t max_decomp_size;
   long bytes_left;
   Dwg_Section_Info *info = NULL;
@@ -2366,7 +2366,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       return DWG_ERR_OUTOFMEM;
     }
   bytes_left = max_decomp_size;
-  initial_address = info->sections[0] ? info->sections[0]->address : 0;
   sec_dat->bit = 0;
   sec_dat->byte = 0;
   sec_dat->version = dat->version;

@@ -96,7 +96,7 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
           ret = 1;
         }
     }
-  return 1;
+  return ret;
 }
 
 static void
