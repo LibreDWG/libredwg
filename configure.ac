@@ -54,7 +54,7 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_PROG_RANLIB
+dnl AC_PROG_RANLIB: in LT_INIT
 LT_INIT
 
 if test x$enable_shared = xyes; then
