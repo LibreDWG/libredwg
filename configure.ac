@@ -54,6 +54,7 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
+AC_PROG_RANLIB
 LT_INIT
 
 if test x$enable_shared = xyes; then
@@ -62,6 +63,9 @@ if test x$enable_shared = xyes; then
 fi
 AM_CONDITIONAL([ENABLE_SHARED], [test "x$enable_shared" = xyes])
 AC_SUBST(LTEXEC)
+
+AC_C_INLINE
+AC_C_RESTRICT
 
 dnl Checks for libraries
 AC_CHECK_LIB([ps],[PS_open_file],
@@ -103,7 +107,9 @@ dnl We just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h \
+                  float.h limits.h \
                   libgen.h getopt.h alloca.h valgrind/valgrind.h])
+AC_CHECK_HEADER_STDBOOL
 AX_INCLUDE_STRCASECMP
 
 # Don't bother testing for libps headers if libps is not available.
@@ -138,6 +144,7 @@ esac
 AC_SUBST(HAVE_ASAN)
 
 AC_TYPE_SIZE_T
+AC_TYPE_INT16_T
 AC_TYPE_UINT16_T
 AC_TYPE_INT32_T
 AC_TYPE_UINT32_T
@@ -229,6 +236,12 @@ AC_CHECK_FUNCS([basename],[],
   AC_MSG_WARN([basename not found. The default outfile will be unexpected.]))
 AC_CHECK_FUNCS([strcasestr],[],
   AC_MSG_WARN([strcasestr not found. Using a slower workaround.]))
+AC_CHECK_FUNCS([scandir],[],
+  AC_MSG_WARN([BSD/POSIX scandir not found. No helper unit_testing_all.sh]))
+AC_CHECK_FUNCS([floor sqrt])
+AC_CHECK_LIB([m],[floor])
+AC_CHECK_LIB([m],[sqrt])
+AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strrchr strtol strtoul strtoull])
 
 dnl mingw-w64 7.0 bug with _FORTIFY_SOURCE, need -lssp
 case $host in
@@ -688,7 +701,9 @@ AC_CONFIG_FILES([dxf], [chmod +x dxf])
 AC_CONFIG_FILES([json], [chmod +x json])
 AC_CONFIG_FILES([svg], [chmod +x svg])
 AC_CONFIG_FILES([dynapi_test_all.sh], [chmod +x dynapi_test_all.sh])
-AC_CONFIG_FILES([unit_testing_all.sh], [chmod +x unit_testing_all.sh])
+if test "x$ac_cv_func_scandir" = xyes; then
+  AC_CONFIG_FILES([unit_testing_all.sh], [chmod +x unit_testing_all.sh])
+fi
 
 AC_OUTPUT
 

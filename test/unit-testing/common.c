@@ -92,8 +92,8 @@ main (int argc, char *argv[])
         {
           if (!stat (dir, &attrib) &&
               S_ISDIR (attrib.st_mode))
-#ifdef _WIN32
-            fprintf (stderr, "dir argument not supported yet on windows (scandir)\n");
+#ifndef HAVE_SCANDIR
+            fprintf (stderr, "dir argument not supported yet on this platform (missing scandir)\n");
 #else
             return test_subdirs (dir, cov);
 #endif
@@ -233,7 +233,7 @@ test_subdirs (const char *dir, int cov)
   struct stat attrib;
   struct dirent **namelist;
 
-#ifndef _WIN32
+#ifdef HAVE_SCANDIR
   n = scandir (dir, &namelist, NULL, NULL);
   if (n == -1)
     {
