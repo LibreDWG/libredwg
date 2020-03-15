@@ -43,6 +43,7 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_TYPE (hatch, HATCH, reserved, BL, reserved);
       CHK_ENTITY_TYPE (hatch, HATCH, gradient_angle, BD, gradient_angle);
+      CHK_ENTITY_MAX (hatch, HATCH, gradient_angle, BD, 6.284);
       CHK_ENTITY_TYPE (hatch, HATCH, gradient_shift, BD, gradient_shift);
       CHK_ENTITY_TYPE (hatch, HATCH, single_color_gradient, BL, single_color_gradient);
       CHK_ENTITY_TYPE (hatch, HATCH, gradient_tint, BD, gradient_tint);
@@ -133,7 +134,9 @@ api_process (dwg_object *obj)
                         CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg, center);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, radius, BD);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, start_angle, BD);
+                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, start_angle, BD, 6.284);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, end_angle, BD);
+                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, end_angle, BD, 6.284);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, is_ccw, B);
                       }
                     else if (paths[i].segs[j].type_status == 3)
@@ -142,7 +145,9 @@ api_process (dwg_object *obj)
                         CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg, endpoint);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, minor_major_ratio, BD);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, start_angle, BD);
+                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, start_angle, BD, 6.284);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, end_angle, BD);
+                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, end_angle, BD, 6.284);
                         CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, is_ccw, B);
                       }
                     else if (paths[i].segs[j].type_status == 4)

@@ -6,7 +6,7 @@ api_process (dwg_object *obj)
 {
   int error;
   double elevation, act_measurement, horiz_dir, lspace_factor, text_rotation,
-      ins_rotation, ext_line_rotation;
+      ins_rotation;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC class_version, flag, flag1;
   BITCODE_BS lspace_style, attachment;
@@ -47,6 +47,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, horiz_dir, BD, horiz_dir);
+  CHK_ENTITY_MAX (dim, ARC_DIMENSION, text_rotation, BD, 6.284);
+  CHK_ENTITY_MAX (dim, ARC_DIMENSION, ins_rotation, BD, 6.284);
+  CHK_ENTITY_MAX (dim, ARC_DIMENSION, horiz_dir, BD, 6.284);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow1, B, flip_arrow1);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow2, B, flip_arrow2);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flag1, RC, flag1);

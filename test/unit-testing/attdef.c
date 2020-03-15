@@ -46,10 +46,12 @@ api_process (dwg_object *obj)
   if (error || thickness != rdvalue)
     fail ("old API dwg_ent_attdef_get_thickness");
   CHK_ENTITY_TYPE (attdef, ATTDEF, rotation, RD, rotation);
+  CHK_ENTITY_MAX (attdef, ATTDEF, rotation, RD, 6.284);
   rdvalue = dwg_ent_attdef_get_rotation (attdef, &error);
   if (error || rotation != rdvalue)
     fail ("old API dwg_ent_attdef_get_rotation");
   CHK_ENTITY_TYPE (attdef, ATTDEF, oblique_ang, RD, oblique_ang);
+  CHK_ENTITY_MAX (attdef, ATTDEF, oblique_ang, RD, 6.284);
   CHK_ENTITY_TYPE (attdef, ATTDEF, width_factor, RD, width_factor);
   CHK_ENTITY_TYPE (attdef, ATTDEF, generation, BS, generation);
 

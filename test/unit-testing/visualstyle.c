@@ -68,6 +68,7 @@ api_process (dwg_object *obj)
 #if defined (DEBUG_CLASSES)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_line_pattern, BS, edge_intersection_line_pattern);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_crease_angle, BD, edge_crease_angle);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, edge_crease_angle, BD, 6.284);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_modifier, BS, edge_modifier);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_color, edge_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_opacity, BD, edge_opacity);

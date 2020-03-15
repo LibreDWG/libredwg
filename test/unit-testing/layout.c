@@ -102,6 +102,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (layout, LAYOUT, ucs_y_axis, ucs_y_axis);
   CHK_ENTITY_TYPE (layout, LAYOUT, elevation, BD, elevation);
   CHK_ENTITY_TYPE (layout, LAYOUT, orthoview_type, BS, orthoview_type);
+  CHK_ENTITY_MAX (layout, LAYOUT, orthoview_type, BS, 6);
   CHK_ENTITY_3RD (layout, LAYOUT, extent_min, extent_min);
   CHK_ENTITY_3RD (layout, LAYOUT, extent_max, extent_max);
 

@@ -45,37 +45,31 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (light, LIGHT, class_version, BL, class_version);
   CHK_ENTITY_UTF8TEXT (light, LIGHT, name, name);
   CHK_ENTITY_TYPE (light, LIGHT, type, BS, type);
-  if (type > 3)
-    fail ("Invalid LIGHT.type " FORMAT_BS " > 3", type);
+  CHK_ENTITY_MAX (light, LIGHT, type, BS, 3);
   CHK_ENTITY_TYPE (light, LIGHT, status, B, status);
   CHK_ENTITY_CMC (light, LIGHT, color, color);
   CHK_ENTITY_TYPE (light, LIGHT, plot_glyph, B, plot_glyph);
-  CHK_ENTITY_TYPE (light, LIGHT, intensity, BD, intensity);
+  CHK_ENTITY_TYPE (light, LIGHT, intensity, BD, intensity); // max 100.0?
   CHK_ENTITY_3RD (light, LIGHT, position, position);
   CHK_ENTITY_3RD (light, LIGHT, target, target);
   CHK_ENTITY_TYPE (light, LIGHT, attenuation_type, BS, attenuation_type);
-  if (attenuation_type > 2)
-    fail ("Invalid LIGHT.attenuation_type " FORMAT_BS " > 2", attenuation_type);
+  CHK_ENTITY_MAX (light, LIGHT, attenuation_type, BS, 2);
   CHK_ENTITY_TYPE (light, LIGHT, use_attenuation_limits, B, use_attenuation_limits);
   CHK_ENTITY_TYPE (light, LIGHT, attenuation_start_limit, BD, attenuation_start_limit);
   CHK_ENTITY_TYPE (light, LIGHT, attenuation_end_limit, BD, attenuation_end_limit);
   CHK_ENTITY_TYPE (light, LIGHT, hotspot_angle, BD, hotspot_angle);
-  if (hotspot_angle > 3.142)
-    fail ("Invalid LIGHT.hotspot_angle > pi");
+  CHK_ENTITY_MAX (light, LIGHT, hotspot_angle, BD, 6.284);
   CHK_ENTITY_TYPE (light, LIGHT, falloff_angle, BD, falloff_angle); // only with type=3
-  if (falloff_angle > 3.142)
-    fail ("Invalid LIGHT.falloff_angle > pi");
+  CHK_ENTITY_MAX (light, LIGHT, falloff_angle, BD, 6.284);
   CHK_ENTITY_TYPE (light, LIGHT, cast_shadows, B, cast_shadows);
   CHK_ENTITY_TYPE (light, LIGHT, shadow_type, BS, shadow_type);
-  if (shadow_type > 1)
-    fail ("Invalid LIGHT.shadow_type " FORMAT_BS " > 1", shadow_type);
+  CHK_ENTITY_MAX (light, LIGHT, shadow_type, BS, 1);
   CHK_ENTITY_TYPE (light, LIGHT, shadow_map_size, BS, shadow_map_size);
   CHK_ENTITY_TYPE (light, LIGHT, shadow_map_softness, RC, shadow_map_softness);
   CHK_ENTITY_H (light, LIGHT, lights_layer, lights_layer);
 #ifdef DEBUG_CLASSES
   CHK_ENTITY_TYPE (light, LIGHT, lamp_color_type, BS, lamp_color_type);
-  if (lamp_color_type > 1)
-    fail ("Invalid LIGHT.lamp_color_type " FORMAT_BS " > 1", lamp_color_type);
+  CHK_ENTITY_MAX (light, LIGHT, lamp_color_type, BS, 1);
   CHK_ENTITY_TYPE (light, LIGHT, lamp_color_temp, BD, lamp_color_temp);
   CHK_ENTITY_TYPE (light, LIGHT, lamp_color_preset, BS, lamp_color_preset);
   CHK_ENTITY_TYPE (light, LIGHT, lamp_color_rgb, BL, lamp_color_rgb);
@@ -83,8 +77,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (light, LIGHT, web_rotation, web_rotation);
   CHK_ENTITY_TYPE (light, LIGHT, has_target_grip, B, has_target_grip);
   CHK_ENTITY_TYPE (light, LIGHT, glyph_display_type, BS, glyph_display_type);
-  if (glyph_display_type > 2)
-    fail ("Invalid LIGHT.glyph_display_type " FORMAT_BS " > 2", glyph_display_type);
+  CHK_ENTITY_MAX (light, LIGHT, glyph_display_type, BS, 2);
   CHK_ENTITY_TYPE (light, LIGHT, physical_intensity_method, BS, physical_intensity_method);
   CHK_ENTITY_TYPE (light, LIGHT, drawable_type, BS, drawable_type);
 #endif  

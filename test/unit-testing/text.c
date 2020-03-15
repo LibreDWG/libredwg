@@ -34,7 +34,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (text, TEXT, height, RD, height);
   CHK_ENTITY_TYPE_W_OLD (text, TEXT, thickness, RD, thickness);
   CHK_ENTITY_TYPE_W_OLD (text, TEXT, rotation, RD, rotation);
+  CHK_ENTITY_MAX (text, TEXT, rotation, RD, 6.284);
   CHK_ENTITY_TYPE (text, TEXT, oblique_ang, RD, oblique_ang);
+  CHK_ENTITY_MAX (text, TEXT, oblique_ang, RD, 6.284);
   CHK_ENTITY_TYPE (text, TEXT, width_factor, RD, width_factor);
   CHK_ENTITY_TYPE (text, TEXT, generation, BS, generation);
 

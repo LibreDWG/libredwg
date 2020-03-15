@@ -58,7 +58,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, plot_paper_unit, BS, plot_paper_unit);
   CHK_ENTITY_MAX (plt, PLOTSETTINGS, plot_paper_unit, BS, 2);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, plot_rotation, BS, plot_rotation);
-  CHK_ENTITY_MAX (plt, PLOTSETTINGS, plot_paper_units, BS, 3);
+  CHK_ENTITY_MAX (plt, PLOTSETTINGS, plot_rotation, BS, 3);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, plot_type, BS, plot_type);
   CHK_ENTITY_MAX (plt, PLOTSETTINGS, plot_type, BS, 5);
   CHK_ENTITY_H (plt, PLOTSETTINGS, stylesheet, stylesheet);
