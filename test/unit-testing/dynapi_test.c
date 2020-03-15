@@ -36299,6 +36299,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         fail ("VISUALSTYLE.color [CMC]");
   }
   {
+    BITCODE_BS color_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "color_ext", &color_ext, NULL)
+        && color_ext == visualstyle->color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.color_ext [BS] %hu != %hu", visualstyle->color_ext, color_ext);
+    color_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "color_ext", &color_ext, 0)
+        && color_ext == visualstyle->color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.color_ext [BS] set+1 %hu != %hu", visualstyle->color_ext, color_ext);
+    visualstyle->color_ext--;
+
+  }
+  {
     BITCODE_T description;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "description", &description, NULL)
         && description
@@ -36325,6 +36341,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS display_brightness_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_brightness_ext", &display_brightness_ext, NULL)
+        && display_brightness_ext == visualstyle->display_brightness_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_brightness_ext [BS] %hu != %hu", visualstyle->display_brightness_ext, display_brightness_ext);
+    display_brightness_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_brightness_ext", &display_brightness_ext, 0)
+        && display_brightness_ext == visualstyle->display_brightness_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_brightness_ext [BS] set+1 %hu != %hu", visualstyle->display_brightness_ext, display_brightness_ext);
+    visualstyle->display_brightness_ext--;
+
+  }
+  {
     BITCODE_BS display_shadow_type;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_shadow_type", &display_shadow_type, NULL)
         && display_shadow_type == visualstyle->display_shadow_type)
@@ -36338,6 +36370,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_shadow_type [BS] set+1 %hu != %hu", visualstyle->display_shadow_type, display_shadow_type);
     visualstyle->display_shadow_type--;
+
+  }
+  {
+    BITCODE_BS display_shadow_type_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_shadow_type_ext", &display_shadow_type_ext, NULL)
+        && display_shadow_type_ext == visualstyle->display_shadow_type_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_shadow_type_ext [BS] %hu != %hu", visualstyle->display_shadow_type_ext, display_shadow_type_ext);
+    display_shadow_type_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_shadow_type_ext", &display_shadow_type_ext, 0)
+        && display_shadow_type_ext == visualstyle->display_shadow_type_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_shadow_type_ext [BS] set+1 %hu != %hu", visualstyle->display_shadow_type_ext, display_shadow_type_ext);
+    visualstyle->display_shadow_type_ext--;
 
   }
   {
@@ -36357,12 +36405,44 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS display_style_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_style_ext", &display_style_ext, NULL)
+        && display_style_ext == visualstyle->display_style_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_style_ext [BS] %hu != %hu", visualstyle->display_style_ext, display_style_ext);
+    display_style_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_style_ext", &display_style_ext, 0)
+        && display_style_ext == visualstyle->display_style_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_style_ext [BS] set+1 %hu != %hu", visualstyle->display_style_ext, display_style_ext);
+    visualstyle->display_style_ext--;
+
+  }
+  {
     BITCODE_CMC edge_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_color", &edge_color, NULL)
         && !memcmp (&edge_color, &visualstyle->edge_color, sizeof (visualstyle->edge_color)))
         pass ();
     else
         fail ("VISUALSTYLE.edge_color [CMC]");
+  }
+  {
+    BITCODE_BS edge_color_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_color_ext", &edge_color_ext, NULL)
+        && edge_color_ext == visualstyle->edge_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_color_ext [BS] %hu != %hu", visualstyle->edge_color_ext, edge_color_ext);
+    edge_color_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_color_ext", &edge_color_ext, 0)
+        && edge_color_ext == visualstyle->edge_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_color_ext, edge_color_ext);
+    visualstyle->edge_color_ext--;
+
   }
   {
     BITCODE_BD edge_crease_angle;
@@ -36378,6 +36458,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_crease_angle [BD] set+1 %g != %g", visualstyle->edge_crease_angle, edge_crease_angle);
     visualstyle->edge_crease_angle--;
+
+  }
+  {
+    BITCODE_BS edge_crease_angle_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_crease_angle_ext", &edge_crease_angle_ext, NULL)
+        && edge_crease_angle_ext == visualstyle->edge_crease_angle_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_crease_angle_ext [BS] %hu != %hu", visualstyle->edge_crease_angle_ext, edge_crease_angle_ext);
+    edge_crease_angle_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_crease_angle_ext", &edge_crease_angle_ext, 0)
+        && edge_crease_angle_ext == visualstyle->edge_crease_angle_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_crease_angle_ext [BS] set+1 %hu != %hu", visualstyle->edge_crease_angle_ext, edge_crease_angle_ext);
+    visualstyle->edge_crease_angle_ext--;
 
   }
   {
@@ -36397,19 +36493,51 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BS edge_hide_precision_flag;
+    BITCODE_BS edge_halo_gap_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_halo_gap_ext", &edge_halo_gap_ext, NULL)
+        && edge_halo_gap_ext == visualstyle->edge_halo_gap_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_halo_gap_ext [BS] %hu != %hu", visualstyle->edge_halo_gap_ext, edge_halo_gap_ext);
+    edge_halo_gap_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_halo_gap_ext", &edge_halo_gap_ext, 0)
+        && edge_halo_gap_ext == visualstyle->edge_halo_gap_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_halo_gap_ext [BS] set+1 %hu != %hu", visualstyle->edge_halo_gap_ext, edge_halo_gap_ext);
+    visualstyle->edge_halo_gap_ext--;
+
+  }
+  {
+    BITCODE_B edge_hide_precision_flag;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag", &edge_hide_precision_flag, NULL)
         && edge_hide_precision_flag == visualstyle->edge_hide_precision_flag)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_hide_precision_flag [BS] %hu != %hu", visualstyle->edge_hide_precision_flag, edge_hide_precision_flag);
+      fail ("VISUALSTYLE.edge_hide_precision_flag [B] " FORMAT_B " != " FORMAT_B "", visualstyle->edge_hide_precision_flag, edge_hide_precision_flag);
     edge_hide_precision_flag++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag", &edge_hide_precision_flag, 0)
         && edge_hide_precision_flag == visualstyle->edge_hide_precision_flag)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_hide_precision_flag [BS] set+1 %hu != %hu", visualstyle->edge_hide_precision_flag, edge_hide_precision_flag);
+      fail ("VISUALSTYLE.edge_hide_precision_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->edge_hide_precision_flag, edge_hide_precision_flag);
     visualstyle->edge_hide_precision_flag--;
+
+  }
+  {
+    BITCODE_BS edge_hide_precision_flag_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag_ext", &edge_hide_precision_flag_ext, NULL)
+        && edge_hide_precision_flag_ext == visualstyle->edge_hide_precision_flag_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_hide_precision_flag_ext [BS] %hu != %hu", visualstyle->edge_hide_precision_flag_ext, edge_hide_precision_flag_ext);
+    edge_hide_precision_flag_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag_ext", &edge_hide_precision_flag_ext, 0)
+        && edge_hide_precision_flag_ext == visualstyle->edge_hide_precision_flag_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_hide_precision_flag_ext [BS] set+1 %hu != %hu", visualstyle->edge_hide_precision_flag_ext, edge_hide_precision_flag_ext);
+    visualstyle->edge_hide_precision_flag_ext--;
 
   }
   {
@@ -36419,6 +36547,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("VISUALSTYLE.edge_intersection_color [CMC]");
+  }
+  {
+    BITCODE_BS edge_intersection_color_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_intersection_color_ext", &edge_intersection_color_ext, NULL)
+        && edge_intersection_color_ext == visualstyle->edge_intersection_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_intersection_color_ext [BS] %hu != %hu", visualstyle->edge_intersection_color_ext, edge_intersection_color_ext);
+    edge_intersection_color_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_color_ext", &edge_intersection_color_ext, 0)
+        && edge_intersection_color_ext == visualstyle->edge_intersection_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_intersection_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_intersection_color_ext, edge_intersection_color_ext);
+    visualstyle->edge_intersection_color_ext--;
+
   }
   {
     BITCODE_BS edge_intersection_line_pattern;
@@ -36434,6 +36578,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_intersection_line_pattern [BS] set+1 %hu != %hu", visualstyle->edge_intersection_line_pattern, edge_intersection_line_pattern);
     visualstyle->edge_intersection_line_pattern--;
+
+  }
+  {
+    BITCODE_BS edge_intersection_line_pattern_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern_ext", &edge_intersection_line_pattern_ext, NULL)
+        && edge_intersection_line_pattern_ext == visualstyle->edge_intersection_line_pattern_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_intersection_line_pattern_ext [BS] %hu != %hu", visualstyle->edge_intersection_line_pattern_ext, edge_intersection_line_pattern_ext);
+    edge_intersection_line_pattern_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern_ext", &edge_intersection_line_pattern_ext, 0)
+        && edge_intersection_line_pattern_ext == visualstyle->edge_intersection_line_pattern_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_intersection_line_pattern_ext [BS] set+1 %hu != %hu", visualstyle->edge_intersection_line_pattern_ext, edge_intersection_line_pattern_ext);
+    visualstyle->edge_intersection_line_pattern_ext--;
 
   }
   {
@@ -36453,6 +36613,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS edge_jitter_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_jitter_ext", &edge_jitter_ext, NULL)
+        && edge_jitter_ext == visualstyle->edge_jitter_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_jitter_ext [BS] %hu != %hu", visualstyle->edge_jitter_ext, edge_jitter_ext);
+    edge_jitter_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_jitter_ext", &edge_jitter_ext, 0)
+        && edge_jitter_ext == visualstyle->edge_jitter_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_jitter_ext [BS] set+1 %hu != %hu", visualstyle->edge_jitter_ext, edge_jitter_ext);
+    visualstyle->edge_jitter_ext--;
+
+  }
+  {
     BITCODE_BS edge_model;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_model", &edge_model, NULL)
         && edge_model == visualstyle->edge_model)
@@ -36466,6 +36642,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_model [BS] set+1 %hu != %hu", visualstyle->edge_model, edge_model);
     visualstyle->edge_model--;
+
+  }
+  {
+    BITCODE_BS edge_model_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_model_ext", &edge_model_ext, NULL)
+        && edge_model_ext == visualstyle->edge_model_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_model_ext [BS] %hu != %hu", visualstyle->edge_model_ext, edge_model_ext);
+    edge_model_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_model_ext", &edge_model_ext, 0)
+        && edge_model_ext == visualstyle->edge_model_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_model_ext [BS] set+1 %hu != %hu", visualstyle->edge_model_ext, edge_model_ext);
+    visualstyle->edge_model_ext--;
 
   }
   {
@@ -36485,12 +36677,44 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS edge_modifier_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_modifier_ext", &edge_modifier_ext, NULL)
+        && edge_modifier_ext == visualstyle->edge_modifier_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_modifier_ext [BS] %hu != %hu", visualstyle->edge_modifier_ext, edge_modifier_ext);
+    edge_modifier_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_modifier_ext", &edge_modifier_ext, 0)
+        && edge_modifier_ext == visualstyle->edge_modifier_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_modifier_ext [BS] set+1 %hu != %hu", visualstyle->edge_modifier_ext, edge_modifier_ext);
+    visualstyle->edge_modifier_ext--;
+
+  }
+  {
     BITCODE_CMC edge_obscured_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_color", &edge_obscured_color, NULL)
         && !memcmp (&edge_obscured_color, &visualstyle->edge_obscured_color, sizeof (visualstyle->edge_obscured_color)))
         pass ();
     else
         fail ("VISUALSTYLE.edge_obscured_color [CMC]");
+  }
+  {
+    BITCODE_BS edge_obscured_color_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_color_ext", &edge_obscured_color_ext, NULL)
+        && edge_obscured_color_ext == visualstyle->edge_obscured_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_obscured_color_ext [BS] %hu != %hu", visualstyle->edge_obscured_color_ext, edge_obscured_color_ext);
+    edge_obscured_color_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_color_ext", &edge_obscured_color_ext, 0)
+        && edge_obscured_color_ext == visualstyle->edge_obscured_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_obscured_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_obscured_color_ext, edge_obscured_color_ext);
+    visualstyle->edge_obscured_color_ext--;
+
   }
   {
     BITCODE_BS edge_obscured_line_pattern;
@@ -36506,6 +36730,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_obscured_line_pattern [BS] set+1 %hu != %hu", visualstyle->edge_obscured_line_pattern, edge_obscured_line_pattern);
     visualstyle->edge_obscured_line_pattern--;
+
+  }
+  {
+    BITCODE_BS edge_obscured_line_pattern_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern_ext", &edge_obscured_line_pattern_ext, NULL)
+        && edge_obscured_line_pattern_ext == visualstyle->edge_obscured_line_pattern_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_obscured_line_pattern_ext [BS] %hu != %hu", visualstyle->edge_obscured_line_pattern_ext, edge_obscured_line_pattern_ext);
+    edge_obscured_line_pattern_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern_ext", &edge_obscured_line_pattern_ext, 0)
+        && edge_obscured_line_pattern_ext == visualstyle->edge_obscured_line_pattern_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_obscured_line_pattern_ext [BS] set+1 %hu != %hu", visualstyle->edge_obscured_line_pattern_ext, edge_obscured_line_pattern_ext);
+    visualstyle->edge_obscured_line_pattern_ext--;
 
   }
   {
@@ -36525,6 +36765,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS edge_opacity_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_opacity_ext", &edge_opacity_ext, NULL)
+        && edge_opacity_ext == visualstyle->edge_opacity_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_opacity_ext [BS] %hu != %hu", visualstyle->edge_opacity_ext, edge_opacity_ext);
+    edge_opacity_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_opacity_ext", &edge_opacity_ext, 0)
+        && edge_opacity_ext == visualstyle->edge_opacity_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_opacity_ext [BS] set+1 %hu != %hu", visualstyle->edge_opacity_ext, edge_opacity_ext);
+    visualstyle->edge_opacity_ext--;
+
+  }
+  {
     BITCODE_BS edge_overhang;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_overhang", &edge_overhang, NULL)
         && edge_overhang == visualstyle->edge_overhang)
@@ -36541,12 +36797,44 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS edge_overhang_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_overhang_ext", &edge_overhang_ext, NULL)
+        && edge_overhang_ext == visualstyle->edge_overhang_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_overhang_ext [BS] %hu != %hu", visualstyle->edge_overhang_ext, edge_overhang_ext);
+    edge_overhang_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_overhang_ext", &edge_overhang_ext, 0)
+        && edge_overhang_ext == visualstyle->edge_overhang_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_overhang_ext [BS] set+1 %hu != %hu", visualstyle->edge_overhang_ext, edge_overhang_ext);
+    visualstyle->edge_overhang_ext--;
+
+  }
+  {
     BITCODE_CMC edge_silhouette_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_silhouette_color", &edge_silhouette_color, NULL)
         && !memcmp (&edge_silhouette_color, &visualstyle->edge_silhouette_color, sizeof (visualstyle->edge_silhouette_color)))
         pass ();
     else
         fail ("VISUALSTYLE.edge_silhouette_color [CMC]");
+  }
+  {
+    BITCODE_BS edge_silhouette_color_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_silhouette_color_ext", &edge_silhouette_color_ext, NULL)
+        && edge_silhouette_color_ext == visualstyle->edge_silhouette_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_silhouette_color_ext [BS] %hu != %hu", visualstyle->edge_silhouette_color_ext, edge_silhouette_color_ext);
+    edge_silhouette_color_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_silhouette_color_ext", &edge_silhouette_color_ext, 0)
+        && edge_silhouette_color_ext == visualstyle->edge_silhouette_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_silhouette_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_silhouette_color_ext, edge_silhouette_color_ext);
+    visualstyle->edge_silhouette_color_ext--;
+
   }
   {
     BITCODE_BS edge_silhouette_width;
@@ -36562,6 +36850,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_silhouette_width [BS] set+1 %hu != %hu", visualstyle->edge_silhouette_width, edge_silhouette_width);
     visualstyle->edge_silhouette_width--;
+
+  }
+  {
+    BITCODE_BS edge_silhouette_width_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_silhouette_width_ext", &edge_silhouette_width_ext, NULL)
+        && edge_silhouette_width_ext == visualstyle->edge_silhouette_width_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_silhouette_width_ext [BS] %hu != %hu", visualstyle->edge_silhouette_width_ext, edge_silhouette_width_ext);
+    edge_silhouette_width_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_silhouette_width_ext", &edge_silhouette_width_ext, 0)
+        && edge_silhouette_width_ext == visualstyle->edge_silhouette_width_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_silhouette_width_ext [BS] set+1 %hu != %hu", visualstyle->edge_silhouette_width_ext, edge_silhouette_width_ext);
+    visualstyle->edge_silhouette_width_ext--;
 
   }
   {
@@ -36597,6 +36901,38 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS edge_style_apply_flag_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag_ext", &edge_style_apply_flag_ext, NULL)
+        && edge_style_apply_flag_ext == visualstyle->edge_style_apply_flag_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_style_apply_flag_ext [BS] %hu != %hu", visualstyle->edge_style_apply_flag_ext, edge_style_apply_flag_ext);
+    edge_style_apply_flag_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag_ext", &edge_style_apply_flag_ext, 0)
+        && edge_style_apply_flag_ext == visualstyle->edge_style_apply_flag_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_style_apply_flag_ext [BS] set+1 %hu != %hu", visualstyle->edge_style_apply_flag_ext, edge_style_apply_flag_ext);
+    visualstyle->edge_style_apply_flag_ext--;
+
+  }
+  {
+    BITCODE_BS edge_style_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_style_ext", &edge_style_ext, NULL)
+        && edge_style_ext == visualstyle->edge_style_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_style_ext [BS] %hu != %hu", visualstyle->edge_style_ext, edge_style_ext);
+    edge_style_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_ext", &edge_style_ext, 0)
+        && edge_style_ext == visualstyle->edge_style_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_style_ext [BS] set+1 %hu != %hu", visualstyle->edge_style_ext, edge_style_ext);
+    visualstyle->edge_style_ext--;
+
+  }
+  {
     BITCODE_BS edge_width;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_width", &edge_width, NULL)
         && edge_width == visualstyle->edge_width)
@@ -36610,6 +36946,38 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_width [BS] set+1 %hu != %hu", visualstyle->edge_width, edge_width);
     visualstyle->edge_width--;
+
+  }
+  {
+    BITCODE_BS edge_width_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_width_ext", &edge_width_ext, NULL)
+        && edge_width_ext == visualstyle->edge_width_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_width_ext [BS] %hu != %hu", visualstyle->edge_width_ext, edge_width_ext);
+    edge_width_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_width_ext", &edge_width_ext, 0)
+        && edge_width_ext == visualstyle->edge_width_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_width_ext [BS] set+1 %hu != %hu", visualstyle->edge_width_ext, edge_width_ext);
+    visualstyle->edge_width_ext--;
+
+  }
+  {
+    BITCODE_BS ext_lighting_model;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "ext_lighting_model", &ext_lighting_model, NULL)
+        && ext_lighting_model == visualstyle->ext_lighting_model)
+      pass ();
+    else
+      fail ("VISUALSTYLE.ext_lighting_model [BS] %hu != %hu", visualstyle->ext_lighting_model, ext_lighting_model);
+    ext_lighting_model++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "ext_lighting_model", &ext_lighting_model, 0)
+        && ext_lighting_model == visualstyle->ext_lighting_model)
+      pass ();
+    else
+      fail ("VISUALSTYLE.ext_lighting_model [BS] set+1 %hu != %hu", visualstyle->ext_lighting_model, ext_lighting_model);
+    visualstyle->ext_lighting_model--;
 
   }
   {
@@ -36629,6 +36997,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS face_color_mode_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_color_mode_ext", &face_color_mode_ext, NULL)
+        && face_color_mode_ext == visualstyle->face_color_mode_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_color_mode_ext [BS] %hu != %hu", visualstyle->face_color_mode_ext, face_color_mode_ext);
+    face_color_mode_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_color_mode_ext", &face_color_mode_ext, 0)
+        && face_color_mode_ext == visualstyle->face_color_mode_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_color_mode_ext [BS] set+1 %hu != %hu", visualstyle->face_color_mode_ext, face_color_mode_ext);
+    visualstyle->face_color_mode_ext--;
+
+  }
+  {
     BITCODE_BS face_lighting_model;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_lighting_model", &face_lighting_model, NULL)
         && face_lighting_model == visualstyle->face_lighting_model)
@@ -36642,6 +37026,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_lighting_model [BS] set+1 %hu != %hu", visualstyle->face_lighting_model, face_lighting_model);
     visualstyle->face_lighting_model--;
+
+  }
+  {
+    BITCODE_BS face_lighting_model_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_lighting_model_ext", &face_lighting_model_ext, NULL)
+        && face_lighting_model_ext == visualstyle->face_lighting_model_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_lighting_model_ext [BS] %hu != %hu", visualstyle->face_lighting_model_ext, face_lighting_model_ext);
+    face_lighting_model_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_model_ext", &face_lighting_model_ext, 0)
+        && face_lighting_model_ext == visualstyle->face_lighting_model_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_lighting_model_ext [BS] set+1 %hu != %hu", visualstyle->face_lighting_model_ext, face_lighting_model_ext);
+    visualstyle->face_lighting_model_ext--;
 
   }
   {
@@ -36661,6 +37061,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS face_lighting_quality_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_lighting_quality_ext", &face_lighting_quality_ext, NULL)
+        && face_lighting_quality_ext == visualstyle->face_lighting_quality_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_lighting_quality_ext [BS] %hu != %hu", visualstyle->face_lighting_quality_ext, face_lighting_quality_ext);
+    face_lighting_quality_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_quality_ext", &face_lighting_quality_ext, 0)
+        && face_lighting_quality_ext == visualstyle->face_lighting_quality_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_lighting_quality_ext [BS] set+1 %hu != %hu", visualstyle->face_lighting_quality_ext, face_lighting_quality_ext);
+    visualstyle->face_lighting_quality_ext--;
+
+  }
+  {
     BITCODE_BS face_modifier;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_modifier", &face_modifier, NULL)
         && face_modifier == visualstyle->face_modifier)
@@ -36677,12 +37093,44 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
+    BITCODE_BS face_modifier_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_modifier_ext", &face_modifier_ext, NULL)
+        && face_modifier_ext == visualstyle->face_modifier_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_modifier_ext [BS] %hu != %hu", visualstyle->face_modifier_ext, face_modifier_ext);
+    face_modifier_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_modifier_ext", &face_modifier_ext, 0)
+        && face_modifier_ext == visualstyle->face_modifier_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_modifier_ext [BS] set+1 %hu != %hu", visualstyle->face_modifier_ext, face_modifier_ext);
+    visualstyle->face_modifier_ext--;
+
+  }
+  {
     BITCODE_CMC face_mono_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_mono_color", &face_mono_color, NULL)
         && !memcmp (&face_mono_color, &visualstyle->face_mono_color, sizeof (visualstyle->face_mono_color)))
         pass ();
     else
         fail ("VISUALSTYLE.face_mono_color [CMC]");
+  }
+  {
+    BITCODE_BS face_mono_color_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_mono_color_ext", &face_mono_color_ext, NULL)
+        && face_mono_color_ext == visualstyle->face_mono_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_mono_color_ext [BS] %hu != %hu", visualstyle->face_mono_color_ext, face_mono_color_ext);
+    face_mono_color_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_mono_color_ext", &face_mono_color_ext, 0)
+        && face_mono_color_ext == visualstyle->face_mono_color_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_mono_color_ext [BS] set+1 %hu != %hu", visualstyle->face_mono_color_ext, face_mono_color_ext);
+    visualstyle->face_mono_color_ext--;
+
   }
   {
     BITCODE_BD face_opacity;
@@ -36698,6 +37146,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_opacity [BD] set+1 %g != %g", visualstyle->face_opacity, face_opacity);
     visualstyle->face_opacity--;
+
+  }
+  {
+    BITCODE_BS face_opacity_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_opacity_ext", &face_opacity_ext, NULL)
+        && face_opacity_ext == visualstyle->face_opacity_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_opacity_ext [BS] %hu != %hu", visualstyle->face_opacity_ext, face_opacity_ext);
+    face_opacity_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_opacity_ext", &face_opacity_ext, 0)
+        && face_opacity_ext == visualstyle->face_opacity_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.face_opacity_ext [BS] set+1 %hu != %hu", visualstyle->face_opacity_ext, face_opacity_ext);
+    visualstyle->face_opacity_ext--;
 
   }
   {
@@ -36717,19 +37181,35 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_B has_xdata;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "has_xdata", &has_xdata, NULL)
-        && has_xdata == visualstyle->has_xdata)
+    BITCODE_BS face_specular_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_specular_ext", &face_specular_ext, NULL)
+        && face_specular_ext == visualstyle->face_specular_ext)
       pass ();
     else
-      fail ("VISUALSTYLE.has_xdata [B] " FORMAT_B " != " FORMAT_B "", visualstyle->has_xdata, has_xdata);
-    has_xdata++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "has_xdata", &has_xdata, 0)
-        && has_xdata == visualstyle->has_xdata)
+      fail ("VISUALSTYLE.face_specular_ext [BS] %hu != %hu", visualstyle->face_specular_ext, face_specular_ext);
+    face_specular_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_specular_ext", &face_specular_ext, 0)
+        && face_specular_ext == visualstyle->face_specular_ext)
       pass ();
     else
-      fail ("VISUALSTYLE.has_xdata [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->has_xdata, has_xdata);
-    visualstyle->has_xdata--;
+      fail ("VISUALSTYLE.face_specular_ext [BS] set+1 %hu != %hu", visualstyle->face_specular_ext, face_specular_ext);
+    visualstyle->face_specular_ext--;
+
+  }
+  {
+    BITCODE_B has_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "has_ext", &has_ext, NULL)
+        && has_ext == visualstyle->has_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.has_ext [B] " FORMAT_B " != " FORMAT_B "", visualstyle->has_ext, has_ext);
+    has_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "has_ext", &has_ext, 0)
+        && has_ext == visualstyle->has_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.has_ext [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->has_ext, has_ext);
+    visualstyle->has_ext--;
 
   }
   {
@@ -36746,6 +37226,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.num_edge_isolines [BS] set+1 %hu != %hu", visualstyle->num_edge_isolines, num_edge_isolines);
     visualstyle->num_edge_isolines--;
+
+  }
+  {
+    BITCODE_BS num_edge_isolines_ext;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "num_edge_isolines_ext", &num_edge_isolines_ext, NULL)
+        && num_edge_isolines_ext == visualstyle->num_edge_isolines_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.num_edge_isolines_ext [BS] %hu != %hu", visualstyle->num_edge_isolines_ext, num_edge_isolines_ext);
+    num_edge_isolines_ext++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "num_edge_isolines_ext", &num_edge_isolines_ext, 0)
+        && num_edge_isolines_ext == visualstyle->num_edge_isolines_ext)
+      pass ();
+    else
+      fail ("VISUALSTYLE.num_edge_isolines_ext [BS] set+1 %hu != %hu", visualstyle->num_edge_isolines_ext, num_edge_isolines_ext);
+    visualstyle->num_edge_isolines_ext--;
 
   }
   {
@@ -36773,51 +37269,35 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BS unknown_bs64;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_bs64", &unknown_bs64, NULL)
-        && unknown_bs64 == visualstyle->unknown_bs64)
+    BITCODE_B unknown_b;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_b", &unknown_b, NULL)
+        && unknown_b == visualstyle->unknown_b)
       pass ();
     else
-      fail ("VISUALSTYLE.unknown_bs64 [BS] %hu != %hu", visualstyle->unknown_bs64, unknown_bs64);
-    unknown_bs64++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_bs64", &unknown_bs64, 0)
-        && unknown_bs64 == visualstyle->unknown_bs64)
+      fail ("VISUALSTYLE.unknown_b [B] " FORMAT_B " != " FORMAT_B "", visualstyle->unknown_b, unknown_b);
+    unknown_b++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_b", &unknown_b, 0)
+        && unknown_b == visualstyle->unknown_b)
       pass ();
     else
-      fail ("VISUALSTYLE.unknown_bs64 [BS] set+1 %hu != %hu", visualstyle->unknown_bs64, unknown_bs64);
-    visualstyle->unknown_bs64--;
+      fail ("VISUALSTYLE.unknown_b [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->unknown_b, unknown_b);
+    visualstyle->unknown_b--;
 
   }
   {
-    BITCODE_BS unknown_float45;
+    BITCODE_BD unknown_float45;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_float45", &unknown_float45, NULL)
         && unknown_float45 == visualstyle->unknown_float45)
       pass ();
     else
-      fail ("VISUALSTYLE.unknown_float45 [BS] %hu != %hu", visualstyle->unknown_float45, unknown_float45);
+      fail ("VISUALSTYLE.unknown_float45 [BD] %g != %g", visualstyle->unknown_float45, unknown_float45);
     unknown_float45++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_float45", &unknown_float45, 0)
         && unknown_float45 == visualstyle->unknown_float45)
       pass ();
     else
-      fail ("VISUALSTYLE.unknown_float45 [BS] set+1 %hu != %hu", visualstyle->unknown_float45, unknown_float45);
+      fail ("VISUALSTYLE.unknown_float45 [BD] set+1 %g != %g", visualstyle->unknown_float45, unknown_float45);
     visualstyle->unknown_float45--;
-
-  }
-  {
-    BITCODE_BS unknown_lighting_model;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_lighting_model", &unknown_lighting_model, NULL)
-        && unknown_lighting_model == visualstyle->unknown_lighting_model)
-      pass ();
-    else
-      fail ("VISUALSTYLE.unknown_lighting_model [BS] %hu != %hu", visualstyle->unknown_lighting_model, unknown_lighting_model);
-    unknown_lighting_model++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_lighting_model", &unknown_lighting_model, 0)
-        && unknown_lighting_model == visualstyle->unknown_lighting_model)
-      pass ();
-    else
-      fail ("VISUALSTYLE.unknown_lighting_model [BS] set+1 %hu != %hu", visualstyle->unknown_lighting_model, unknown_lighting_model);
-    visualstyle->unknown_lighting_model--;
 
   }
   return failed;

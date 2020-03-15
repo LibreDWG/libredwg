@@ -6085,57 +6085,114 @@ DWG_OBJECT (VISUALSTYLE)
   FIELD_T (description, 2);
   FIELD_BS (style_type, 70);
   SINCE (R_2010) {
-    FIELD_BS (unknown_lighting_model, 177);
-    FIELD_B (has_xdata, 291)
+    FIELD_BS (ext_lighting_model, 177);
+    FIELD_B (has_ext, 291)
   }
   FIELD_BS (face_lighting_model, 71);
+  SINCE (R_2010) { FIELD_BS (face_lighting_model_ext, 176); } // 1
   FIELD_BS (face_lighting_quality, 72);
-  UNTIL (R_2007) {
-    FIELD_BS (face_color_mode, 73);
+  SINCE (R_2010) { FIELD_BS (face_lighting_quality_ext, 176); } // 1
+  FIELD_BS (face_color_mode, 73);
+  SINCE (R_2010) { FIELD_BS (face_color_mode_ext, 176); } // 1
+  SINCE (R_2010) {
+    FIELD_BS (face_modifier, 90);
+    FIELD_BS (face_modifier_ext, 0);
   }
   FIELD_BD (face_opacity, 40);
-  SINCE (R_2010) {
-    FIELD_BS (face_color_mode, 73);
-  }
+  SINCE (R_2010) { FIELD_BS (face_opacity_ext, 176); } // 1
   FIELD_BD (face_specular, 41);
+  SINCE (R_2010) { FIELD_BS (face_specular_ext, 176); } // 1
   FIELD_CMC (face_mono_color, 63,421);
-  FIELD_BS (face_modifier, 90);
+  SINCE (R_2010) { FIELD_BS (face_mono_color_ext, 176); } // 1
+  UNTIL (R_2007) { FIELD_BS (face_modifier, 90); }
   FIELD_BS (edge_model, 74);
+  SINCE (R_2010) { FIELD_BS (edge_model_ext, 176); } // 1
   FIELD_BL (edge_style, 91);
-  //UNTIL (R_2007) {
+  SINCE (R_2010) { FIELD_BS (edge_style_ext, 176); } // 1
   FIELD_CMC (edge_intersection_color, 64,422);
+  SINCE (R_2010) { FIELD_BS (edge_intersection_color_ext, 176); } // 1
   FIELD_CMC (edge_obscured_color, 65,423);
-  //}
+  SINCE (R_2010) { FIELD_BS (edge_obscured_color_ext, 176); } // 1
   FIELD_BS (edge_obscured_line_pattern, 75);
-#if defined (DEBUG_CLASSES) || defined (IS_FREE)
+  SINCE (R_2010) { FIELD_BS (edge_obscured_line_pattern_ext, 176); } // 1
+  SINCE (R_2010) {
+    FIELD_BS (edge_intersection_line_pattern, 175);
+    FIELD_BS (edge_intersection_line_pattern_ext, 176);
+  }
+//#if defined (DEBUG_CLASSES) || defined (IS_FREE)
+  // unstable <r2010:
   FIELD_BD (edge_crease_angle, 42);
+  SINCE (R_2010) { FIELD_BS (edge_crease_angle_ext, 176); }
   FIELD_BS (edge_modifier, 92);
+  SINCE (R_2010) { FIELD_BS (edge_modifier_ext, 176); } // 1
   FIELD_CMC (edge_color, 66,424);
-  DEBUG_HERE_OBJ
-  FIELD_BS (unknown_bs64, 0);
+  SINCE (R_2010) { FIELD_BS (edge_color_ext, 176); } // 1
   FIELD_BD (edge_opacity, 43);
-  FIELD_BS (edge_overhang, 77);
-  FIELD_BS (edge_jitter, 78);
+  SINCE (R_2010) { FIELD_BS (edge_opacity_ext, 176); } // 1
+  FIELD_BS (edge_width, 76); // 1
+  SINCE (R_2010) { FIELD_BS (edge_width_ext, 176); } // 1
+  FIELD_BS (edge_overhang, 77); // 6
+  SINCE (R_2010) { FIELD_BS (edge_overhang_ext, 176); } // 1
+  FIELD_BS (edge_jitter, 78); // 2
+  SINCE (R_2010) { FIELD_BS (edge_jitter_ext, 176); } // 1
   FIELD_CMC (edge_silhouette_color, 67,425);
-  FIELD_BS (edge_silhouette_width, 79);
-  DEBUG_HERE_OBJ
+  SINCE (R_2010) { FIELD_BS (edge_silhouette_color_ext, 176); } // 1
+  FIELD_BS (edge_silhouette_width, 79); // 3 or 5
+  SINCE (R_2010) { FIELD_BS (edge_silhouette_width_ext, 176); } // 1
+  UNTIL (R_2007) {
+    FIELD_B (unknown_b, 0);
+    //FIELD_B (unknown_b, 0);
+    DEBUG_HERE_OBJ
+    //FIELD_BS (edge_intersection_line_pattern, 175); // 1 or 7
+  }
+  FIELD_BS (edge_halo_gap, 170); // 0
+  SINCE (R_2010) { FIELD_BS (edge_halo_gap_ext, 176); }
+  //FIELD_CMC (color, 62,420);
+  //SINCE (R_2010) { FIELD_BS (color_ext, 176); } // 1
 
-  FIELD_BS (edge_halo_gap, 170);
-  FIELD_BS (edge_intersection_line_pattern, 175);
-  FIELD_CMC (color, 62,420);
-
-  FIELD_BS (edge_width, 76);
   FIELD_BS (num_edge_isolines, 171);
   VALUEOUTOFBOUNDS (num_edge_isolines, 5000)
-  DXF  { FIELD_B (edge_hide_precision_flag, 290); }
-  else { FIELD_BS (edge_hide_precision_flag, 290); }
-  FIELD_BS (edge_style_apply_flag, 174);
-  FIELD_BS (display_style, 93);
-  FIELD_BS (display_shadow_type, 173);
-  FIELD_BD (display_brightness, 44);
-  /*
-  FIELD_BS (unknown_float45, 45); // only in DXF, not in header
-  */
+  SINCE (R_2010) { FIELD_BS (num_edge_isolines_ext, 176); } // 1
+
+  FIELD_B (edge_hide_precision_flag, 290);
+  SINCE (R_2010) { FIELD_BS (edge_hide_precision_flag_ext, 176); }
+  UNTIL (R_2007) {
+    FIELD_BS (edge_style_apply_flag, 174);
+  }
+  FIELD_BS (display_style, 93); // 1
+  SINCE (R_2010) { FIELD_BS (display_style_ext, 176); } // 1
+  FIELD_BS (display_shadow_type, 173); // 0
+  SINCE (R_2010) { FIELD_BS (display_shadow_type_ext, 176); } // 1
+  FIELD_BD (display_brightness, 44); // 0.0
+  SINCE (R_2010) { FIELD_BS (display_brightness_ext, 176); } // 1
+  DXF {
+    UNTIL (R_2007) { FIELD_B (has_ext, 291); }
+    FIELD_BD (unknown_float45, 45);  // 0.0
+  }
+#if !(defined (DEBUG_CLASSES) || defined (IS_FREE))
+  UNTIL (R_2007) {
+    DECODER { // unstable, overwrite with defaults
+      FIELD_VALUE (edge_crease_angle) = 1.0;
+      FIELD_VALUE (edge_opacity) = 1.0;
+      FIELD_VALUE (edge_width) = 1;
+      FIELD_VALUE (edge_silhouette_width) = 3; // or 5
+      FIELD_VALUE (edge_overhang) = 6;
+      FIELD_VALUE (edge_jitter) = 2;
+      FIELD_VALUE (display_style) = 1;
+      FIELD_VALUE (edge_hide_precision_flag) = 0;
+      FIELD_VALUE (has_ext) = 1;
+      SINCE (R_2010) {
+        FIELD_VALUE (edge_crease_angle_ext) = 1;
+        FIELD_VALUE (edge_color_ext) = 1;
+        FIELD_VALUE (edge_opacity_ext) = 1;
+        FIELD_VALUE (edge_width_ext) = 1;
+        FIELD_VALUE (edge_overhang_ext) = 1;
+        FIELD_VALUE (edge_jitter_ext) = 1;
+        FIELD_VALUE (edge_silhouette_color_ext) = 1;
+        FIELD_VALUE (edge_silhouette_width_ext) = 1;
+      }
+    }
+  }
 #endif
 
   START_OBJECT_HANDLE_STREAM;
