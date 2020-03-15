@@ -898,7 +898,7 @@ dwg_free (Dwg_Data *dwg)
       FREE_IF (dwg->revhistory.histories);
       FREE_IF (dwg->appinfohistory.unknown_bits);
       //FREE_IF (dwg->objfreespace...);
-      FREE_IF (dwg->template.desc);
+      FREE_IF (dwg->template.description);
       FREE_IF (dwg->header.section);
       for (i = 0; i < dwg->second_header.num_handlers; i++)
         FREE_IF (dwg->second_header.handlers[i].data);

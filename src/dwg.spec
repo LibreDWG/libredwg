@@ -3543,7 +3543,7 @@ DWG_OBJECT (MLINESTYLE)
 
   SUBCLASS (AcDbMlineStyle)
   FIELD_T (name, 2);
-  FIELD_T (desc, 0);
+  FIELD_T (description, 0);
   FIELD_BS (flag, 70);  /*!< 1 = Fill on,
                              2 = Display miters,
                              16 = Start square end (line) cap,
@@ -3552,7 +3552,7 @@ DWG_OBJECT (MLINESTYLE)
                              256 = End square (line) cap,
                              512 = End inner arcs cap,
                              1024 = End round (outer arcs) cap */
-  DXF { FIELD_T (desc, 3); }
+  DXF { FIELD_T (description, 3); }
   FIELD_CMC (fill_color, 62,420); /*!< default 256 */
 #ifdef IS_DXF
   // 0 - 90
@@ -4663,7 +4663,7 @@ DWG_OBJECT_END
 #define TABLECONTENT_fields             \
   SUBCLASS (AcDbDataTableContent)	\
   FIELD_T (ldata.name, 1);		\
-  FIELD_T (ldata.desc, 300);		\
+  FIELD_T (ldata.description, 300);	\
   FIELD_BL (tdata.num_cols, 90);	\
   REPEAT (tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
   REPEAT_BLOCK				\
@@ -6082,16 +6082,25 @@ DWG_OBJECT (VISUALSTYLE)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbVisualStyle)
-  FIELD_T (desc, 2);
-  FIELD_BS (type, 70);
+  FIELD_T (description, 2);
+  FIELD_BS (style_type, 70);
+  SINCE (R_2010) {
+    FIELD_BS (unknown_lighting_model, 177);
+    FIELD_B (has_xdata, 291)
+  }
   FIELD_BS (face_lighting_model, 71);
   FIELD_BS (face_lighting_quality, 72);
-  FIELD_BS (face_color_mode, 73); // 1
+  UNTIL (R_2007) {
+    FIELD_BS (face_color_mode, 73);
+  }
   FIELD_BD (face_opacity, 40);
+  SINCE (R_2010) {
+    FIELD_BS (face_color_mode, 73);
+  }
   FIELD_BD (face_specular, 41);
-  FIELD_CMC (face_mono_color, 63,421); // TODO 2010
+  FIELD_CMC (face_mono_color, 63,421);
   FIELD_BS (face_modifier, 90);
-  FIELD_BS (edge_model, 74); // TODO 2010
+  FIELD_BS (edge_model, 74);
   FIELD_BL (edge_style, 91);
   //UNTIL (R_2007) {
   FIELD_CMC (edge_intersection_color, 64,422);
@@ -6124,8 +6133,6 @@ DWG_OBJECT (VISUALSTYLE)
   FIELD_BS (display_style, 93);
   FIELD_BS (display_shadow_type, 173);
   FIELD_BD (display_brightness, 44);
-  DXF  { FIELD_B (is_internal_use_only, 291); }
-  else { FIELD_BS (is_internal_use_only, 291); }
   /*
   FIELD_BS (unknown_float45, 45); // only in DXF, not in header
   */
@@ -6430,7 +6437,7 @@ DWG_OBJECT (MATERIAL)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbMaterial)
   FIELD_T (name, 1);
-  FIELD_T (desc, 2);
+  FIELD_T (description, 2);
 #ifdef IS_DXF
   FIELD_BS (normalmap_projection, 73);
   FIELD_BS (specularmap_projection, 78);
@@ -6725,7 +6732,7 @@ DWG_OBJECT (SUNSTUDY)
   FIELD_BL (class_version, 90);
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_T (setup_name, 1);
-  FIELD_T (desc, 2);
+  FIELD_T (description, 2);
   FIELD_BL (output_type, 70);
   if (FIELD_VALUE (output_type) == 0) // Sheet_Set
     {

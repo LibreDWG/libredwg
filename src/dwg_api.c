@@ -6484,9 +6484,9 @@ dwg_obj_mlinestyle_get_desc (const dwg_obj_mlinestyle *restrict mlinestyle,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)mlinestyle->desc);
+        return bit_convert_TU ((BITCODE_TU)mlinestyle->description);
       else
-        return mlinestyle->desc;
+        return mlinestyle->description;
     }
   else
     {
@@ -6512,9 +6512,9 @@ dwg_obj_mlinestyle_set_desc (dwg_obj_mlinestyle *restrict mlinestyle,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        mlinestyle->desc = (char *)bit_utf8_to_TU ((char *)desc);
+        mlinestyle->description = (char *)bit_utf8_to_TU ((char *)desc);
       else
-        mlinestyle->desc = (char *)desc;
+        mlinestyle->description = (char *)desc;
     }
   else
     {

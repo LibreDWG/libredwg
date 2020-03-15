@@ -30787,14 +30787,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_T desc;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "desc", &desc, NULL)
-        && desc
-           ? strEQ ((char *)desc, (char *)material->desc)
-           : !material->desc)
+    BITCODE_T description;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "description", &description, NULL)
+        && description
+           ? strEQ ((char *)description, (char *)material->description)
+           : !material->description)
       pass ();
     else
-      fail ("MATERIAL.desc [T] '%s' <> '%s'", desc, material->desc);
+      fail ("MATERIAL.description [T] '%s' <> '%s'", description, material->description);
   }
   {
     BITCODE_CMC diffuse_color;
@@ -32570,14 +32570,14 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_MLINESTYLE *restrict mlinestyle = obj->tio.object->tio.MLINESTYLE;
   {
-    BITCODE_T desc;
-    if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "desc", &desc, NULL)
-        && desc
-           ? strEQ ((char *)desc, (char *)mlinestyle->desc)
-           : !mlinestyle->desc)
+    BITCODE_T description;
+    if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "description", &description, NULL)
+        && description
+           ? strEQ ((char *)description, (char *)mlinestyle->description)
+           : !mlinestyle->description)
       pass ();
     else
-      fail ("MLINESTYLE.desc [T] '%s' <> '%s'", desc, mlinestyle->desc);
+      fail ("MLINESTYLE.description [T] '%s' <> '%s'", description, mlinestyle->description);
   }
   {
     BITCODE_BD end_angle;
@@ -34752,14 +34752,14 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
       fail ("SUNSTUDY.dates [Dwg_SUNSTUDY_Dates*] * %u num_dates", count);
   }
   {
-    BITCODE_T desc;
-    if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "desc", &desc, NULL)
-        && desc
-           ? strEQ ((char *)desc, (char *)sunstudy->desc)
-           : !sunstudy->desc)
+    BITCODE_T description;
+    if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "description", &description, NULL)
+        && description
+           ? strEQ ((char *)description, (char *)sunstudy->description)
+           : !sunstudy->description)
       pass ();
     else
-      fail ("SUNSTUDY.desc [T] '%s' <> '%s'", desc, sunstudy->desc);
+      fail ("SUNSTUDY.description [T] '%s' <> '%s'", description, sunstudy->description);
   }
   {
     BITCODE_BL end_time;
@@ -36299,14 +36299,14 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         fail ("VISUALSTYLE.color [CMC]");
   }
   {
-    BITCODE_T desc;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "desc", &desc, NULL)
-        && desc
-           ? strEQ ((char *)desc, (char *)visualstyle->desc)
-           : !visualstyle->desc)
+    BITCODE_T description;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "description", &description, NULL)
+        && description
+           ? strEQ ((char *)description, (char *)visualstyle->description)
+           : !visualstyle->description)
       pass ();
     else
-      fail ("VISUALSTYLE.desc [T] '%s' <> '%s'", desc, visualstyle->desc);
+      fail ("VISUALSTYLE.description [T] '%s' <> '%s'", description, visualstyle->description);
   }
   {
     BITCODE_BD display_brightness;
@@ -36717,19 +36717,19 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
 
   }
   {
-    BITCODE_BS is_internal_use_only;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "is_internal_use_only", &is_internal_use_only, NULL)
-        && is_internal_use_only == visualstyle->is_internal_use_only)
+    BITCODE_B has_xdata;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "has_xdata", &has_xdata, NULL)
+        && has_xdata == visualstyle->has_xdata)
       pass ();
     else
-      fail ("VISUALSTYLE.is_internal_use_only [BS] %hu != %hu", visualstyle->is_internal_use_only, is_internal_use_only);
-    is_internal_use_only++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "is_internal_use_only", &is_internal_use_only, 0)
-        && is_internal_use_only == visualstyle->is_internal_use_only)
+      fail ("VISUALSTYLE.has_xdata [B] " FORMAT_B " != " FORMAT_B "", visualstyle->has_xdata, has_xdata);
+    has_xdata++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "has_xdata", &has_xdata, 0)
+        && has_xdata == visualstyle->has_xdata)
       pass ();
     else
-      fail ("VISUALSTYLE.is_internal_use_only [BS] set+1 %hu != %hu", visualstyle->is_internal_use_only, is_internal_use_only);
-    visualstyle->is_internal_use_only--;
+      fail ("VISUALSTYLE.has_xdata [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->has_xdata, has_xdata);
+    visualstyle->has_xdata--;
 
   }
   {
@@ -36757,19 +36757,19 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         fail ("VISUALSTYLE.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BS type;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "type", &type, NULL)
-        && type == visualstyle->type)
+    BITCODE_BS style_type;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "style_type", &style_type, NULL)
+        && style_type == visualstyle->style_type)
       pass ();
     else
-      fail ("VISUALSTYLE.type [BS] %hu != %hu", visualstyle->type, type);
-    type++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "type", &type, 0)
-        && type == visualstyle->type)
+      fail ("VISUALSTYLE.style_type [BS] %hu != %hu", visualstyle->style_type, style_type);
+    style_type++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "style_type", &style_type, 0)
+        && style_type == visualstyle->style_type)
       pass ();
     else
-      fail ("VISUALSTYLE.type [BS] set+1 %hu != %hu", visualstyle->type, type);
-    visualstyle->type--;
+      fail ("VISUALSTYLE.style_type [BS] set+1 %hu != %hu", visualstyle->style_type, style_type);
+    visualstyle->style_type--;
 
   }
   {
@@ -36802,6 +36802,22 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.unknown_float45 [BS] set+1 %hu != %hu", visualstyle->unknown_float45, unknown_float45);
     visualstyle->unknown_float45--;
+
+  }
+  {
+    BITCODE_BS unknown_lighting_model;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_lighting_model", &unknown_lighting_model, NULL)
+        && unknown_lighting_model == visualstyle->unknown_lighting_model)
+      pass ();
+    else
+      fail ("VISUALSTYLE.unknown_lighting_model [BS] %hu != %hu", visualstyle->unknown_lighting_model, unknown_lighting_model);
+    unknown_lighting_model++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_lighting_model", &unknown_lighting_model, 0)
+        && unknown_lighting_model == visualstyle->unknown_lighting_model)
+      pass ();
+    else
+      fail ("VISUALSTYLE.unknown_lighting_model [BS] set+1 %hu != %hu", visualstyle->unknown_lighting_model, unknown_lighting_model);
+    visualstyle->unknown_lighting_model--;
 
   }
   return failed;

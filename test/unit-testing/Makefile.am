@@ -67,6 +67,7 @@ testobjects = \
 	lwpline \
 	minsert \
 	mline \
+	mlinestyle \
 	mtext \
 	multileader \
 	ole2frame \

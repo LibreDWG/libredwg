@@ -2386,7 +2386,7 @@ typedef struct _dwg_object_MLINESTYLE
 {
   struct _dwg_object_object *parent;
   BITCODE_TV name;
-  BITCODE_TV desc;
+  BITCODE_TV description;
   BITCODE_BS flag;
   BITCODE_CMC fill_color;
   BITCODE_BD start_angle;
@@ -3140,7 +3140,7 @@ typedef struct _dwg_TABLE_BreakRow
 typedef struct _dwg_LinkedData
 {
   BITCODE_TV name;
-  BITCODE_TV desc;
+  BITCODE_TV description;
 } Dwg_LinkedData;
 
 typedef struct _dwg_TableCellContent_Attr
@@ -4010,8 +4010,9 @@ typedef struct _dwg_object_WIPEOUTVARIABLES
 typedef struct _dwg_object_VISUALSTYLE
 {
   struct _dwg_object_object *parent;
-  BITCODE_T desc;       /*!< DXF 2  */
-  BITCODE_BS type;      /*!< DXF 70 enum 0-32: (kFlat-kEmptyStyle acgivisualstyle.h) */
+  BITCODE_T description;      /*!< DXF 2  */
+  BITCODE_BS style_type;      /*!< DXF 70 enum 0-32: (kFlat-kEmptyStyle acgivisualstyle.h) */
+  BITCODE_BS unknown_lighting_model;  /*!< DXF 177, r2010+ ? required on has_xdata */
   BITCODE_BS face_lighting_model;  /*!< DXF 71 0:Invisible 1:Visible 2:Phong 3:Gooch */
   BITCODE_BS face_lighting_quality;/*!< DXF 72 0:No lighting 1:Per face 2:Per vertex */
   BITCODE_BS face_color_mode;   /*!< DXF 73 0 = No color
@@ -4049,7 +4050,7 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_BS display_style;             /*!< DXF 93  */
   BITCODE_BD display_brightness;        /*!< DXF 44  */
   BITCODE_BS display_shadow_type;       /*!< DXF 173  */
-  BITCODE_BS is_internal_use_only;      /*!< DXF 291  */
+  BITCODE_B has_xdata;                  /*!< DXF 291, r2010+ */
   BITCODE_BS unknown_float45;           /*!< DXF 45  */
 
   //BITCODE_H dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
@@ -4084,7 +4085,7 @@ typedef struct _dwg_object_MATERIAL
   struct _dwg_object_object *parent;
 
   BITCODE_T name; /*!< DXF 1 */
-  BITCODE_T desc; /*!< DXF 2 optional */
+  BITCODE_T description; /*!< DXF 2 optional */
 
   BITCODE_BS ambient_color_flag;    /*!< DXF 70 0 Use current color, 1 Override */
   BITCODE_BD ambient_color_factor;  /*!< DXF 40 0.0 - 1.0 */
@@ -4675,7 +4676,7 @@ typedef struct _dwg_object_SUNSTUDY
 
   BITCODE_BL class_version;    //90
   BITCODE_T setup_name;        //1
-  BITCODE_T desc;              //2
+  BITCODE_T description;              //2
   BITCODE_BL output_type;      //70
   BITCODE_T sheet_set_name;    //3
   BITCODE_B use_subset;        //290
@@ -5981,7 +5982,7 @@ typedef struct _dwg_struct
 
   struct Dwg_Template
   {
-    BITCODE_T16 desc;
+    BITCODE_T16 description;
     BITCODE_RS MEASUREMENT;
   } template;
 

@@ -6,8 +6,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_T desc;
-  BITCODE_BS type;
+  BITCODE_T description;
+  BITCODE_BS style_type;
   BITCODE_BS face_lighting_model;
   BITCODE_BS face_lighting_quality;
   BITCODE_BS face_color_mode;
@@ -44,9 +44,9 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_visualstyle *vsty = dwg_object_to_VISUALSTYLE (obj);
  
-  CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, desc, desc);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, type, BS, type);
-  CHK_ENTITY_MAX (vsty, VISUALSTYLE, type, BS, 32);
+  CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, description, description);
+  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, style_type, BS, style_type);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, style_type, BS, 32);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_lighting_model, BS, face_lighting_model);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_lighting_model, BS, 3);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_lighting_quality, BS, face_lighting_quality);
@@ -64,8 +64,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style, BL, edge_style);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_intersection_color, edge_intersection_color);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_obscured_color, edge_obscured_color);
-#if defined (DEBUG_CLASSES)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_obscured_line_pattern, BS, edge_obscured_line_pattern);
+#if defined (DEBUG_CLASSES)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_line_pattern, BS, edge_intersection_line_pattern);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_crease_angle, BD, edge_crease_angle);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_modifier, BS, edge_modifier);

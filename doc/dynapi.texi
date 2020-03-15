@@ -5755,7 +5755,7 @@ H
 struct _dwg_object_object*
 @item name
 T,	DXF 1
-@item desc
+@item description
 T,	DXF 2
 @item ambient_color_flag
 BS,	DXF 70
@@ -6051,7 +6051,7 @@ B
 struct _dwg_object_object*
 @item name
 T,	DXF 2
-@item desc
+@item description
 T,	DXF 3
 @item flag
 BS,	DXF 70
@@ -6565,7 +6565,7 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item setup_name
 T,	DXF 1
-@item desc
+@item description
 T,	DXF 2
 @item output_type
 BL,	DXF 70
@@ -6938,10 +6938,12 @@ BL
 
 @item parent
 struct _dwg_object_object*
-@item desc
+@item description
 T,	DXF 2
-@item type
+@item style_type
 BS,	DXF 70
+@item unknown_lighting_model
+BS,	DXF 177
 @item face_lighting_model
 BS,	DXF 71
 @item face_lighting_quality
@@ -7004,8 +7006,8 @@ BS,	DXF 93
 BD,	DXF 44
 @item display_shadow_type
 BS,	DXF 173
-@item is_internal_use_only
-BS,	DXF 291
+@item has_xdata
+B,	DXF 291
 @item unknown_float45
 BS,	DXF 45
 
@@ -8050,7 +8052,7 @@ BD,	DXF 41
 
 @item name
 TV
-@item desc
+@item description
 TV
 
 @end vtable

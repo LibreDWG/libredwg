@@ -3291,7 +3291,7 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
           LOG_TRACE ("%s: %d\n", key, (int)_obj->MEASUREMENT)
         }
-      else if (strEQc (key, "desc"))
+      else if (strEQc (key, "description"))
         {
           LOG_TRACE ("%s: \"%.*s\" (ignored)\n", key, t->end - t->start, &dat->chain[t->start])
           tokens->index++;
