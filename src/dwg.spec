@@ -4828,7 +4828,6 @@ DWG_OBJECT_END
 // added with r2008, backcompat with r2007
 // The cellstyle map can contain custom cell styles, whereas the TABLESTYLE
 // only contains the Table (R24), _Title, _Header and _Data cell style.
-// unused
 DWG_OBJECT (CELLSTYLEMAP)
 
   DECODE_UNKNOWN_BITS
