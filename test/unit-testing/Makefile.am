@@ -108,6 +108,7 @@ check_PROGRAMS = \
 	decode_test \
 	hash_test \
 	dynapi_test \
+	dxf_test \
 	$(testobjects)
 
 #TODO:

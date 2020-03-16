@@ -48,52 +48,15 @@
 #define CHAIN_SIZE 32
 int cur_hdl; // to avoid dupl. search
 
-struct _unknown_field
-{
-  int code;
-  const char *value;
-  unsigned char *bytes;
-  int num_bits;
-  Dwg_Bits type;
-  const char *name; // in dwg.spec
-  // number of occurrences of this type:value pair (max 1423)
-  unsigned short num;
-  int pos[5]; // 5x found bit offset in dxf->bytes or -1 if not found
-  // many typical values are 5x found (handle 0, BL 2)
-};
-static struct _unknown_dxf
-{
-  const char *name;
-  const char *dxf;
-  const unsigned int handle;
-  const char *bytes;
-  const int is_entity;
-  const int num_bits; // size of dumped unknown_bits TF
-  const int commonsize;
-  const int hdloff;
-  const int strsize;
-  const int hdlsize;
-  const int bitsize;
-  const struct _unknown_field *fields;
-} unknown_dxf[] = {
-// see log_unknown_dxf.pl
-#include "alldxf_0.inc"
+#include "unknown.h"
+
+static struct _unknown_dxf unknown_dxf[] = {
+  // see log_unknown_dxf.pl
+  #include "alldxf_0.inc"
   { NULL, NULL, 0, "", 0, 0, 0, 0, 0, 0, 0, NULL }
 };
 
 #include "alldxf_1.inc"
-
-// dynamic helper companion
-struct _dxf
-{
-  unsigned char *found;    // coverage per bit for found 1
-  unsigned char *possible; // coverage for mult. finds >1
-  int num_bits;            // copy of unknown_dxf.num_bits
-  int num_filled;
-  int num_empty;
-  int num_possible;
-  double percentage;
-};
 
 /* not needed for the solver, only to check against afterwards */
 #if 0
@@ -137,8 +100,8 @@ static struct _bd
   const char *value;
   const char *bin;
 } bd[] = {
-// see bd-unknown.pl
-#include "bd-unknown.inc"
+  // see bd-unknown.pl
+  #include "bd-unknown.inc"
   { NULL, NULL }
 };
 
@@ -813,7 +776,7 @@ main (int argc, char *argv[])
   char *classes[MAX_CLASSES]; // create files per classes
   struct _dxf *dxf = calloc (sizeof (unknown_dxf) / sizeof (unknown_dxf[0]),
                              sizeof (struct _dxf));
-// clang-format off
+  // clang-format off
   #include "alldxf_2.inc"
   // clang-format on
 

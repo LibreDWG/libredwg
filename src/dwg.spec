@@ -6104,7 +6104,7 @@ DWG_OBJECT (VISUALSTYLE)
   SINCE (R_2010) { FIELD_BS (face_specular_ext, 176); } // 1
   FIELD_CMC (face_mono_color, 63,421);
   SINCE (R_2010) { FIELD_BS (face_mono_color_ext, 176); } // 1
-  UNTIL (R_2007) { FIELD_BS (face_modifier, 90); }
+  UNTIL (R_2007) { FIELD_BS (face_modifier, 90); } // ?
   FIELD_BS (edge_model, 74);
   SINCE (R_2010) { FIELD_BS (edge_model_ext, 176); } // 1
   FIELD_BL (edge_style, 91);

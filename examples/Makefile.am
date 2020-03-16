@@ -80,8 +80,9 @@ endif
 
 TESTS = $(top_builddir)/programs/alive.test
 
-EXTRA_DIST = alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc log_unknown_dxf.pl log_unknown.pl
-EXTRA_DIST += load_dwg.py unknown.pi ACAD_EVALUATION_GRAPH.pi bd-unknown.pl
+EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc
+EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl
+EXTRA_DIST += load_dwg.py unknown.pi ACAD_EVALUATION_GRAPH.pi
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
 DISTCLEANFILES = alldxf_0.inc alldxf_1.inc alldxf_2.inc
