@@ -6630,21 +6630,6 @@ DWG_OBJECT (PLOTSETTINGS)
   DECODE_UNKNOWN_BITS
   //unsorted! See also LAYOUT
   SUBCLASS (AcDbPlotSettings)
-  FIELD_T (page_setup_name, 1);
-  FIELD_T (printer_cfg_file, 2);
-  FIELD_T (paper_size, 4);
-  FIELD_HANDLE (plotview, 0, 6);
-  FIELD_BD (left_margin, 40);
-  FIELD_BD (bottom_margin, 41);
-  FIELD_BD (right_margin, 42);
-  FIELD_BD (top_margin, 43);
-  FIELD_BD (paper_width, 44); // in mm
-  FIELD_BD (paper_height, 45); // in mm
-  FIELD_2BD_1 (plot_origin, 46); // + 47
-  FIELD_2BD_1 (plot_window_ll, 48); // + 49
-  FIELD_2BD_1 (plot_window_ur, 140); // + 141
-  FIELD_BD (paper_units, 142);
-  FIELD_BD (drawing_units, 143);
   FIELD_BS (plot_layout, 70); /*!< plot layout flag:
                                 1 = PlotViewportBorders
                                 2 = ShowPlotStyles
@@ -6660,6 +6645,22 @@ DWG_OBJECT (PLOTSETTINGS)
                                 4096 = ZoomToPaperOnUpdate
                                 8192 = Initializing
                                 16384 = PrevPlotInit */
+  FIELD_T (page_setup_name, 1);
+  FIELD_T (printer_cfg_file, 2);
+  FIELD_T (paper_size, 4);
+  FIELD_HANDLE (plotview, 0, 6);
+  //DEBUG_HERE_OBJ;
+  FIELD_BD (left_margin, 40); // 6.349999904632568
+  FIELD_BD (bottom_margin, 41);
+  FIELD_BD (right_margin, 42);
+  FIELD_BD (top_margin, 43);
+  FIELD_BD (paper_width, 44); // in mm
+  FIELD_BD (paper_height, 45); // in mm
+  FIELD_2BD_1 (plot_origin, 46); // + 47
+  FIELD_2BD_1 (plot_window_ll, 48); // + 49
+  FIELD_2BD_1 (plot_window_ur, 140); // + 141
+  FIELD_BD (paper_units, 142);
+  FIELD_BD (drawing_units, 143);
   FIELD_BS (plot_paper_unit, 72); /*!< 0 inches, 1 mm, 2 pixel */
   FIELD_BS (plot_rotation, 73);   /*!< 0 normal, 1 90, 2 180, 3 270 deg */
   FIELD_BS (plot_type, 74);       /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),

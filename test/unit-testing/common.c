@@ -452,7 +452,7 @@ output_object (dwg_object *obj)
 }
 #endif
 
-/// Low level printing function
+/// Low level printing function (ignored)
 void
 print_low_level (dwg_object *obj)
 {
