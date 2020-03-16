@@ -231,7 +231,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
           const char *restrict dwgfile)
 {
   int error = 0;
-  static const char *prev_dwgfile;
+  static char prev_dwgfile[128];
   static Dwg_Data dwg;
   BITCODE_BL i;
 
@@ -250,7 +250,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
           return 1;
         }
     }
-  prev_dwgfile = dwgfile;
+  strcpy (prev_dwgfile, dwgfile);
 
   // find the object
   for (i = 0; i < dwg.num_objects; i++)
@@ -311,15 +311,22 @@ main (int argc, char *argv[])
               entity_alias (name);
               if (!is_dwg_entity (name) && !class)
                 {
+                  free (dwgfile);
                   fprintf (stderr, "Unknown %s\n", dxf->name);
                   continue;
                 }
             }
         }
       if (class && strNE (class, name))
-        continue;
+        {
+          free (dwgfile);
+          continue;
+        }
       if (file && strNE (file, dwgfile))
-        continue;
+        {
+          free (dwgfile);
+          continue;
+        }
 
       if (stat (dwgfile, &attrib)) // not found
         {
@@ -340,6 +347,7 @@ main (int argc, char *argv[])
         }
       else
         error += test_dxf (dxf, name, dwgfile);
+      free (dwgfile);
     }
   // so far all unknown objects are debugging or unstable. ignore all errors
   return 0;
