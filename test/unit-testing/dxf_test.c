@@ -44,24 +44,10 @@ static struct _unknown_dxf unknown_dxf[] = {
 
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
-             const struct _unknown_dxf *dxf)
+             const struct _unknown_dxf *restrict dxf, const char *restrict name)
 {
   int isnew;
-  char name[80];
   const struct _unknown_field *f = dxf->fields;
-
-  strcpy (name, dxf->name);
-  if (!is_dwg_object (name) && !is_dwg_entity (name))
-    {
-      object_alias (name);
-      if (!is_dwg_object (name))
-        {
-          strcpy (name, dxf->name);
-          entity_alias (name);
-          if (!is_dwg_entity (name))
-            return 0;
-        }
-    }
 
   // check all fields against dxf->fields
   for (; f->value; f++)
@@ -220,7 +206,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
 }
 
 static int
-test_dxf (const struct _unknown_dxf *dxf, const char *dwgfile)
+test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
+          const char *restrict dwgfile)
 {
   int error = 0;
   static const char *prev_dwgfile;
@@ -254,7 +241,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *dwgfile)
           if (strNE (dwg.object[i].dxfname, dxf->name))
             fprintf (stderr, "Invalid handle 0x%X for %s\n", dxf->handle, dxf->name);
           else
-            error += test_object (&dwg, &dwg.object[i], dxf);
+            error += test_object (&dwg, &dwg.object[i], dxf, name);
           break;
         }
     }
@@ -266,11 +253,21 @@ test_dxf (const struct _unknown_dxf *dxf, const char *dwgfile)
 int
 main (int argc, char *argv[])
 {
-  int i = 0, error = 0;
+  int i = 1, error = 0;
   struct _unknown_dxf *dxf;
+  char *class = NULL;
+  char *file = NULL;
   // clang-format off
   #include "../../examples/alldxf_2.inc"
   // clang-format on
+
+  if (argc > 2 && !strcmp (argv[i], "--class"))
+    {
+      class = argv[i + 1];
+      i = 3;
+    }
+  if (argc - i >= 2 && !strcmp (argv[i], "--file"))
+    file = argv[i + 1];
 
   for (dxf = &unknown_dxf[0]; dxf->name; dxf++)
     {
@@ -291,13 +288,17 @@ main (int argc, char *argv[])
             {
               strcpy (name, dxf->name);
               entity_alias (name);
-              if (!is_dwg_entity (name))
+              if (!is_dwg_entity (name) && !class)
                 {
                   fprintf (stderr, "Unknown %s\n", dxf->name);
                   continue;
                 }
             }
         }
+      if (class && strNE (class, name))
+        continue;
+      if (file && strNE (file, dwgfile))
+        continue;
 
       if (stat (dwgfile, &attrib)) // not found
         {
@@ -314,10 +315,10 @@ main (int argc, char *argv[])
           if (stat (path, &attrib))
             fprintf (stderr, "%s not found\n", path);
           else
-            error += test_dxf (dxf, path);
+            error += test_dxf (dxf, name, path);
         }
       else
-        error += test_dxf (dxf, dwgfile);
+        error += test_dxf (dxf, name, dwgfile);
     }
   // so far all unknown objects are debugging or unstable. ignore all errors
   return 0;
