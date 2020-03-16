@@ -21,7 +21,8 @@
 #include <math.h>
 #include <sys/stat.h>
 
-#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+static unsigned int loglevel;
+#define DWG_LOGLEVEL loglevel
 #include "../../src/config.h"
 #include "../../src/common.h"
 #include "../../src/decode.h"
@@ -234,16 +235,24 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
   static char prev_dwgfile[128];
   static Dwg_Data dwg;
   BITCODE_BL i;
+  char *trace;
+
+  loglevel = 0;
+  trace = getenv ("LIBREDWG_TRACE");
+  if (trace)
+    loglevel = atoi (trace);
 
   printf ("%s %X %s\n", dxf->name, dxf->handle, dwgfile);
   num = passed = failed = 0;
-  dwg.opts = 0;
+  dwg.opts = loglevel;
 
   if (dwg.num_objects && strEQ (dwgfile, prev_dwgfile))
     ;
   else
     {
-      dwg_free (&dwg);
+      if (dwg.num_objects && dwg.header.version > R_INVALID)
+        dwg_free (&dwg);
+      dwg.opts = loglevel;
       if (dwg_read_file (dwgfile, &dwg) >= DWG_ERR_CRITICAL)
         {
           dwg_free (&dwg);
