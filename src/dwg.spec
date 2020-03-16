@@ -6288,7 +6288,9 @@ DWG_OBJECT (DBCOLOR)
 #else
   DXF { FIELD_VALUE (rgb) = FIELD_VALUE (rgb) & 0xffffff; }
   FIELD_BLx (rgb, 420);   //34
-  FIELD_VALUE (unknown1) = FIELD_VALUE (rgb) & 0xff000000; //0xc2
+  DECODER {
+    FIELD_VALUE (unknown1) = FIELD_VALUE (rgb) & 0xff000000; //0xc2
+  }
   FIELD_RC (unknown2, 0); //8
 #endif
   DXF {

@@ -53,11 +53,30 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
   for (; f->value; f++)
     {
       Dwg_DYNAPI_field field;
+      const Dwg_DYNAPI_field *fp;
       enum RES_BUF_VALUE_TYPE vtype;
       if (!f->name || !*f->name)
         continue;
-      if (!dwg_dynapi_entity_field (name, f->name))
+      if (!(fp = dwg_dynapi_entity_field (name, f->name)))
         continue;
+      if (strEQc (fp->type, "CMC"))
+        {
+          BITCODE_CMC color;
+          if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                       f->name, &color, &field))
+            {
+              BITCODE_BS i = (BITCODE_BS)strtol (f->value, NULL, 10);
+              if (i == color.index)
+                ok ("%s.%s: %s", name, f->name, f->value);
+              else if (field.type)
+                fail ("%s.%s: %d <=> %s [%s]", name, f->name,
+                      (int)color.index, f->value, field.type);
+              else
+                ok ("%s.%s: %d <=> %s [CMC] (TODO)", name, f->name,
+                    (int)color.index, f->value);
+            }
+          continue;
+        }
       vtype = get_base_value_type (f->code);
       switch (vtype)
         {
@@ -151,8 +170,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
               {
                 long l = strtol (f->value, NULL, 10);
                 BITCODE_BL i = (BITCODE_BL)l;
-                if (i == value)
-                  ok ("%s.%s: %d", name, f->name, (int)value);
+                if (strEQc (f->name, "rgb") && i == (value & 0xffffff))
+                  ok ("%s.%s: 0x%x", name, f->name, (unsigned)value);
+                else if (i == value)
+                  ok ("%s.%s: %u", name, f->name, (unsigned)value);
                 else if (field.type)
                   fail ("%s.%s: %u <=> %s [INT32 %s]", name, f->name, (unsigned)value,
                         f->value, field.type);
