@@ -97,6 +97,43 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case VT_POINT3D:
+          {
+            BITCODE_3BD pt;
+            if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                         f->name, &pt, &field))
+              {
+                double d = strtod (f->value, NULL);
+                double ptv;
+                int offset = f->code;
+                if (strstr (field.type, "_1"))
+                  {
+                    while (offset > 10) // 10,11,12
+                      offset -= 10;
+                    if (offset == 2 && field.size > 2 * sizeof (double))
+                      ptv = pt.z;
+                    else if (offset == 1)
+                      ptv = pt.y;
+                    else
+                      ptv = pt.x;
+                  }
+                else // 10/20/30
+                  {
+                    offset = offset % 100;
+                    if (offset >= 30 && field.size > 2 * sizeof (double))
+                      ptv = pt.z;
+                    else if (offset >= 20)
+                      ptv = pt.y;
+                    else
+                      ptv = pt.x;
+                  }
+                if (fabs (ptv - d) < 1e-6)
+                  ok ("%s.%s: %f [%s %d]", name, f->name, ptv, field.type, f->code);
+                else
+                  fail ("%s.%s: %f <=> %s [%s %d]", name, f->name, ptv,
+                        f->value, field.type, f->code);
+              }
+          }
+          break;
         case VT_REAL:
           {
             double value;
