@@ -118,8 +118,13 @@ check_PROGRAMS = \
 	decode_test \
 	hash_test \
 	dynapi_test \
-	dxf_test \
 	$(testobjects)
+
+if !DISABLE_DXF
+if USE_WRITE
+check_PROGRAMS += dxf_test
+endif
+endif
 
 #TODO:
 #	extrudedsurface \
