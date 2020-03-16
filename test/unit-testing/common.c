@@ -201,6 +201,15 @@ main (int argc, char *argv[])
               strcat (tmp, "2013/gh109_1.dwg");
               error += test_code (tmp, cov);
             }
+          if (DWG_TYPE == DWG_TYPE_DBCOLOR)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/dbcolor.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Truecolor.dwg");
+              error += test_code (tmp, cov);
+            }
           if (DWG_TYPE == DWG_TYPE_HELIX)
             {
               strcpy (tmp, prefix);

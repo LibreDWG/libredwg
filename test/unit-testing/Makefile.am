@@ -56,6 +56,7 @@ testobjects = \
 	body \
 	camera \
 	circle \
+	dbcolor \
 	dim_aligned \
 	dim_ang2ln \
 	dim_ang3pt \
