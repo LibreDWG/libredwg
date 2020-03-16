@@ -48,7 +48,7 @@
 #include "dwg.h"
 
 // avoid double linkage on windows with unit-testing
-#if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
+#if defined(BITS_TEST_C) || defined(DECODE_TEST_C) || defined(DXF_TEST_C)
 #  undef EXPORT
 #  define EXPORT
 #endif

@@ -34,6 +34,16 @@ hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/hash.lo
 dynapi_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
+dxf_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/decode.lo \
+	$(top_builddir)/src/dwg.lo \
+	$(top_builddir)/src/decode_r2007.lo \
+	$(top_builddir)/src/common.lo \
+	$(top_builddir)/src/in_dxf.lo \
+	$(top_builddir)/src/encode.lo \
+	$(top_builddir)/src/print.lo
 
 testobjects = \
 	3dface \
@@ -114,7 +124,6 @@ check_PROGRAMS = \
 #TODO:
 #	extrudedsurface \
 #	geopositionmarker \
-#	helix \
 #	revolvedsurface \
 #	surface \
 #	sweptsurface
@@ -133,6 +142,7 @@ dynapi_test.c: dynapi_test.c.in \
 
 TESTS = $(check_PROGRAMS)
 TESTS_ENVIRONMENT = \
+  top_srcdir="$(top_srcdir)" \
   ASAN_OPTIONS="detect_leaks=0"
 
 bits_test.cbmc: bits_test.c $(top_srcdir)/src/bits.c
