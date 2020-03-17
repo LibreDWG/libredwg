@@ -81,6 +81,7 @@ testobjects = \
 	mtext \
 	multileader \
 	ole2frame \
+	perssubentmanager \
 	plotsettings \
 	point \
 	polyline_2d \
