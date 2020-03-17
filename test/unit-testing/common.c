@@ -167,6 +167,12 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/Leader.dwg");
               error += test_code (tmp, cov);
             }
+          if (DWG_TYPE == DWG_TYPE_VIEW)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2007/big.dwg");
+              error += test_code (tmp, cov);
+            }
           if (DWG_TYPE == DWG_TYPE_HATCH)
             {
               strcpy (tmp, prefix);

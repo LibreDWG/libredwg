@@ -42,19 +42,34 @@ dxf_test_LDADD = $(LDADD) \
 testobjects = \
 	3dface \
 	3dsolid \
+	acsh_box_class \
+	acsh_extrusion_class \
+	acsh_sweep_class \
+	annotscaleobjectcontextdata \
+	appid \
+	appid_control \
 	arc \
 	arc_dimension \
+	assoc2dconstraintgroup \
+	assocaction \
 	assocaligneddimactionbody \
+	assocdependency \
+	assocnetwork \
 	assocperssubentmanager \
 	assocplanesurfaceactionbody \
-	assocdependency \
+	assocosnappointrefactionparam \
 	attdef \
 	attrib \
 	block \
+	block_control \
+	block_header \
 	body \
 	camera \
 	circle \
 	dbcolor \
+	dictionary \
+	dictionaryvar \
+	dictionarywdflt \
 	dim_aligned \
 	dim_ang2ln \
 	dim_ang3pt \
@@ -63,23 +78,49 @@ testobjects = \
 	dim_ordinate \
 	dim_radius \
 	dimassoc \
+	dimstyle \
+	dimstyle_control \
+	dynamicblockpurgepreventer \
 	ellipse \
 	endblk \
+	evaluation_graph \
+	extrudedsurface \
+	field \
+	fieldlist \
 	geodata \
+	geomapimage \
+	geopositionmarker \
+	group \
 	hatch \
 	helix \
+	idbuffer \
 	image \
+	imagedef \
+	imagedef_reactor \
 	insert \
+	layer \
+	layer_control \
+	layer_index \
 	layout \
 	leader \
 	light \
+	lightlist \
 	line \
-	lwpline \
+	loftedsurface \
+	ltype \
+	ltype_control \
+	lwpolyline \
+	material \
+	mesh \
 	minsert \
+	mleaderstyle \
 	mline \
 	mlinestyle \
 	mtext \
 	multileader \
+	navisworksmodeldef \
+	object_ptr \
+	objectcontextdata \
 	ole2frame \
 	perssubentmanager \
 	plotsettings \
@@ -88,17 +129,34 @@ testobjects = \
 	polyline_3d \
 	polyline_mesh \
 	polyline_pface \
+	proxy_object \
+	rastervariables \
 	ray \
 	region \
+	renderenvironment \
+	renderglobal \
+	revolvedsurface \
+	scale \
 	seqend \
 	shape \
 	solid \
+	sortentstable \
+	spatial_filter \
+	spatial_index \
 	spline \
+	style \
+	style_control \
+	sun \
+	sunstudy \
+	surface \
+	sweptsurface \
 	table \
 	tablestyle \
 	text \
 	tolerance \
 	trace \
+	ucs \
+	ucs_control \
 	underlay \
 	underlaydefinition \
 	vertex_2d \
@@ -106,9 +164,16 @@ testobjects = \
 	vertex_mesh \
 	vertex_pface \
 	vertex_pface_face \
+	view \
+	view_control \
+	vport_entity_control \
+	vport_entity_header \
 	viewport \
 	visualstyle \
+	vport \
+	vport_control \
 	wipeout \
+	wipeoutvariables \
 	xline \
 	xrecord
 
@@ -121,13 +186,6 @@ check_PROGRAMS = \
 	dynapi_test \
 	dxf_test \
 	$(testobjects)
-
-#TODO:
-#	extrudedsurface \
-#	geopositionmarker \
-#	revolvedsurface \
-#	surface \
-#	sweptsurface
 
 list:
 	echo $(testobjects) dynapi_test
