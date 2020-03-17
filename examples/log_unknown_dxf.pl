@@ -65,6 +65,10 @@ if (0) {
   close $skip_fh;
 }
 
+# dxf names or obj names?
+# The name in the all*.inc files.
+# which comes from the (?:Unhandled|Unstable) Class (object|entity) \d+ (\w+) warning
+# which uses the klass->dxfname.
 my $known = {
   ACAD_EVALUATION_GRAPH => [
     96 => 'has_graph',

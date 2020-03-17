@@ -35,15 +35,8 @@ hash_test_LDADD = $(LDADD) \
 dynapi_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
 dxf_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/bits.lo \
-	$(top_builddir)/src/hash.lo \
-	$(top_builddir)/src/decode.lo \
-	$(top_builddir)/src/dwg.lo \
-	$(top_builddir)/src/decode_r2007.lo \
 	$(top_builddir)/src/common.lo \
-	$(top_builddir)/src/in_dxf.lo \
-	$(top_builddir)/src/encode.lo \
-	$(top_builddir)/src/print.lo
+	$(top_builddir)/src/classes.lo
 
 testobjects = \
 	3dface \
@@ -119,13 +112,8 @@ check_PROGRAMS = \
 	decode_test \
 	hash_test \
 	dynapi_test \
+	dxf_test \
 	$(testobjects)
-
-if !DISABLE_DXF
-if USE_WRITE
-check_PROGRAMS += dxf_test
-endif
-endif
 
 #TODO:
 #	extrudedsurface \

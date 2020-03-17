@@ -248,6 +248,23 @@ typedef enum DWG_SENTINEL
   DWG_SENTINEL_SECOND_HEADER_END
 } Dwg_Sentinel;
 
+enum RES_BUF_VALUE_TYPE
+{
+  VT_INVALID = 0,
+  VT_STRING = 1,
+  VT_POINT3D = 2,
+  VT_REAL = 3,
+  VT_INT16 = 4,
+  VT_INT32 = 5,
+  VT_INT8 = 6,
+  VT_BINARY = 7,
+  VT_HANDLE = 8,
+  VT_OBJECTID = 9,
+  VT_BOOL = 10,
+  VT_INT64 = 11, // BLL
+};
+
+enum RES_BUF_VALUE_TYPE get_base_value_type (short gc);
 
 EXPORT Dwg_Version_Type dwg_version_as (const char *);
 const char *dwg_version_type (const Dwg_Version_Type version);

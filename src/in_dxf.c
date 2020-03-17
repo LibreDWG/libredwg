@@ -43,6 +43,7 @@
 #include "encode.h"
 #include "dynapi.h"
 #include "hash.h"
+#include "classes.h"
 #include "free.h"
 
 #ifndef _DWG_API_H_
@@ -7612,37 +7613,6 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-void
-entity_alias (char *restrict name)
-{
-  const int len = strlen (name);
-  // check aliases (dxfname => name)
-  if (strEQc (name, "ACAD_TABLE"))
-    strcpy (name, "TABLE");
-  else if (strEQc (name, "ACAD_PROXY_ENTITY"))
-    strcpy (name, "PROXY_ENTITY");
-  else if (strEQc (name, "ACDBPLACEHOLDER"))
-    strcpy (name, "PLACEHOLDER");
-  else if (strEQc (name, "POLYLINE"))
-    strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag or subclass?
-  else if (strEQc (name, "VERTEX"))
-    strcpy (name, "VERTEX_2D"); // other VERTEX_* by flag?
-  else if (len == strlen ("PDFUNDERLAY") && strEQc (&name[3], "UNDERLAY"))
-    strcpy (name, "UNDERLAY");
-  // if (strEQc (name, "BLOCK"))
-  //  strcpy (name, "BLOCK_HEADER");
-  // else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
-  //  strcpy (name, "VERTEX_3D");
-  // else if (strEQc (name, "DIMENSION"))
-  //  strcpy (name, "DIMENSION_ANG2LN");   // allocate room for the largest
-  // strip a ACAD_ prefix
-  else if (memBEGINc (name, "ACAD_") && is_dwg_entity (&name[5]))
-    memmove (name, &name[5], len - 4);
-  // strip the ACDB prefix
-  else if (memBEGINc (name, "ACDB") && is_dwg_entity (&name[4]))
-    memmove (name, &name[4], len - 3);
-}
-
 static void
 postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
                           Dwg_Object_Ref *restrict ownerhandle)
@@ -7723,43 +7693,6 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   dxf_free_pair (pair);
   return 0;
-}
-
-void
-object_alias (char *restrict name)
-{
-  const int len = strlen (name);
-  // check aliases (dxfname => name)
-  if (len == strlen ("PDFDEFINITION") && strEQc (&name[3], "DEFINITION"))
-    strcpy (name, "UNDERLAYDEFINITION");
-  else if (strEQc (name, "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION"))
-    strcpy (name, "DYNAMICBLOCKPURGEPREVENTER");
-  else if (strEQc (name, "PROXY"))
-    strcpy (name, "PROXY_OBJECT");
-  else if (strEQc (name, "CSACDOCUMENTOPTIONS"))
-    strcpy (name, "DOCUMENTOPTIONS");
-  // TODO: not sure yet, if all of them can be one object. i.e. MLEADER looks
-  // larger
-  else if (strEQc (name, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
-  else if (strEQc (name, "EXACXREFPANELOBJECT"))
-    strcpy (name, "XREFPANELOBJECT");
-  // strip ACAD_ prefix
-  else if (memBEGINc (name, "ACAD_") && is_dwg_object (&name[5]))
-    memmove (name, &name[5], len - 4);
-  // strip the ACDB prefix
-  else if (memBEGINc (name, "ACDB") && is_dwg_object (&name[4]))
-    memmove (name, &name[4], len - 3);
 }
 
 static int
