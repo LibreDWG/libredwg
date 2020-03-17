@@ -319,7 +319,7 @@ Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg);
 EXPORT \
 Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg) \
 { \
-  BITCODE_BL i=0, counts=0; \
+  BITCODE_BL i, counts=0; \
   Dwg_Object_##token ** ret_##token; \
   for (i=0; i < dwg->num_objects; i++) \
     { \
