@@ -33,6 +33,7 @@ calc. number of same-typed: value fields as num.
 =cut
 
 use strict;
+#use File::Basename qw(dirname);
 
 # DXF types
 use constant UNKNOWN => 0;
@@ -42,6 +43,8 @@ use constant HDL     => 3;
 use constant STR     => 4;
 use constant HEXSTR  => 5;
 use constant DBL     => 6;
+
+#require dirname(__FILE__)."/unstable.pm";
 
 my $i = 0;
 open my $f0, ">", "examples/alldxf_0.inc" || die "$!";

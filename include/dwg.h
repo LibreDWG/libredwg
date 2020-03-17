@@ -4233,8 +4233,8 @@ typedef struct _dwg_object_MATERIAL
 } Dwg_Object_MATERIAL;
 
 /**
- Object PLOTSETTINGS (varies) UNKNOWN FIELDS
- yet unsorted, and unused. See LAYOUT.
+ Object PLOTSETTINGS (varies)
+ See LAYOUT.
  */
 typedef struct _dwg_object_PLOTSETTINGS
 {
