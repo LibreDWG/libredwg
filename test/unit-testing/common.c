@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include "../../src/common.h"
+#include "../../src/classes.h"
 
 #include "dwg.h"
 #include "dwg_api.h"
@@ -229,10 +230,81 @@ main (int argc, char *argv[])
               error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCPERSSUBENTMANAGER)
+              DWG_TYPE == DWG_TYPE_ASSOCPERSSUBENTMANAGER ||
+              DWG_TYPE == DWG_TYPE_ASSOCACTION)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2004/Surface.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_ASSOCNETWORK)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/Constraints.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Constraints.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2007/Constraints.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/Constraints.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2013/Constraints.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_ACSH_BOX_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2013/JW.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2013/gh55-ltype.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/TS1.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/5151-024.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_SORTENTSTABLE)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/PolyLine2D.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Surface.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "r13/PolyLine2D.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Publish.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_SUN)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/2.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/3.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/4.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/5.dwg");
               error += test_code (tmp, cov);
             }
         }
@@ -307,23 +379,7 @@ test_code (const char *filename, int cov)
      so clamp it to either 0 or 1.  */
   error = (error >= DWG_ERR_CRITICAL || numfailed () > 0) ? 1 : 0;
 #ifdef DWG_TYPE
-  // unstable objects
-  if (DWG_TYPE == DWG_TYPE_MULTILEADER ||
-      DWG_TYPE == DWG_TYPE_ASSOCDEPENDENCY ||
-      DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY ||
-      DWG_TYPE == DWG_TYPE_DIMASSOC ||
-      DWG_TYPE == DWG_TYPE_DBCOLOR ||
-      DWG_TYPE == DWG_TYPE_GEODATA ||
-      DWG_TYPE == DWG_TYPE_HELIX ||
-      DWG_TYPE == DWG_TYPE_LIGHT ||
-      DWG_TYPE == DWG_TYPE_OBJECT_PTR ||
-      DWG_TYPE == DWG_TYPE_PLOTSETTINGS ||
-      DWG_TYPE == DWG_TYPE_PROXY_OBJECT ||
-      DWG_TYPE == DWG_TYPE_PERSSUBENTMANAGER ||
-      DWG_TYPE == DWG_TYPE_VISUALSTYLE ||
-      DWG_TYPE == DWG_TYPE_TABLESTYLE ||
-      DWG_TYPE == DWG_TYPE_TABLE
-      )
+  if (is_type_unstable (DWG_TYPE) || is_type_debugging (DWG_TYPE))
     {
       if (cov && error)
         printf ("%s failed (TODO: unstable)\n", filename);

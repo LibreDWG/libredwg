@@ -3661,9 +3661,9 @@ typedef struct _dwg_object_DBCOLOR
  */
 typedef struct _dwg_FIELD_ChildValue
 {
+  struct _dwg_object_FIELD *parent;
   BITCODE_TV key;   /*!< DXF 6 */
   Dwg_TABLE_value value;
-  struct _dwg_object_FIELD *parent;
 } Dwg_FIELD_ChildValue;
 
 typedef struct _dwg_object_FIELD
@@ -3840,10 +3840,9 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR
  */
 typedef struct _dwg_LAYER_entry
 {
+  struct _dwg_object_LAYER_INDEX *parent;
   BITCODE_BL idxlong;
   BITCODE_T layername;
-
-  struct _dwg_object_LAYER_INDEX *parent;
 } Dwg_LAYER_entry;
 
 typedef struct _dwg_object_LAYER_INDEX
@@ -3963,7 +3962,7 @@ typedef struct _dwg_object_SPATIAL_INDEX
 
   BITCODE_BL timestamp1;
   BITCODE_BL timestamp2;
-  char     * unknown;
+  BITCODE_TV unknown;
 } Dwg_Object_SPATIAL_INDEX;
 
 /**
@@ -4483,7 +4482,7 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   _3DSOLID_FIELDS;
   //? sweep_profile, taper_angle
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
-  BITCODE_BL size_bindata; // 90
+  BITCODE_BL bindata_size; // 90
   BITCODE_TF bindata; // 310|1
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
@@ -4602,11 +4601,11 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_BL class_version; /*!< DXF 90 */
 
   BITCODE_BL sweep_entity_id; // 90
-  BITCODE_BL sweepdata_size; // 90
-  BITCODE_TF sweepdata; // 310
-  BITCODE_BL path_entity_id; // 90
-  BITCODE_BL pathdata_size; // 90
-  BITCODE_TF pathdata; // 310
+  BITCODE_BL sweepdata_size;
+  BITCODE_TF sweepdata;
+  BITCODE_BL path_entity_id;
+  BITCODE_BL pathdata_size;
+  BITCODE_TF pathdata;
   BITCODE_BD* sweep_entity_transmatrix; // 40
   BITCODE_BD* path_entity_transmatrix; // 41
   BITCODE_BD draft_angle; // 42
@@ -5072,7 +5071,6 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   BITCODE_CMC color; /*!< DXF 62 */
   BITCODE_B  shhn_b92; /*!< DXF 92 */
   BITCODE_BL shhn_bl347; /*!< DXF 347 */
-
   // AcDbShPrimitive
   // AcDbShSweepBase
   BITCODE_BL shsw_bl90;       /*!< DXF 90 */

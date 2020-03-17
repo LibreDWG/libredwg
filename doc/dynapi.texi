@@ -1647,7 +1647,7 @@ H
 B
 @item modeler_format_version
 BS
-@item size_bindata
+@item bindata_size
 BL
 @item bindata
 TF
@@ -7668,12 +7668,12 @@ BL
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_FIELD*
 @item key
 TV,	DXF 6
 @item value
 Dwg_TABLE_value
-@item parent
-struct _dwg_object_FIELD*
 
 @end vtable
 @end indentedblock
@@ -7930,12 +7930,12 @@ BD,	DXF 42
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_LAYER_INDEX*
 @item idxlong
 BL
 @item layername
 T,	DXF 8
-@item parent
-struct _dwg_object_LAYER_INDEX*
 
 @end vtable
 @end indentedblock

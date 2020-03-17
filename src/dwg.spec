@@ -7051,8 +7051,8 @@ DWG_ENTITY (PLANESURFACE)
   SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
-  //FIELD_BL (size_bindata, 90);
-  //FIELD_TF (bindata, FIELD_VALUE (size_bindata), 1); // in DXF as encrypted ASCII
+  //FIELD_BL (bindata_size, 90);
+  //FIELD_TF (bindata, FIELD_VALUE (bindata_size), 1); // in DXF as encrypted ASCII
 
   SUBCLASS (AcDbSurface)
   FIELD_BS (u_isolines, 71);

@@ -19,7 +19,8 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD     = $(top_builddir)/src/libredwg.la
+LDADD     = $(top_builddir)/src/libredwg.la \
+	$(top_builddir)/src/classes.lo
 
 bits_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
@@ -33,11 +34,9 @@ hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo
 dynapi_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/bits.lo \
-	$(top_builddir)/src/classes.lo
+	$(top_builddir)/src/bits.lo
 dxf_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/common.lo \
-	$(top_builddir)/src/classes.lo
+	$(top_builddir)/src/common.lo
 
 testobjects = \
 	3dface \
@@ -119,7 +118,6 @@ testobjects = \
 	mtext \
 	multileader \
 	navisworksmodeldef \
-	object_ptr \
 	objectcontextdata \
 	ole2frame \
 	perssubentmanager \
@@ -129,7 +127,6 @@ testobjects = \
 	polyline_3d \
 	polyline_mesh \
 	polyline_pface \
-	proxy_object \
 	rastervariables \
 	ray \
 	region \
@@ -176,6 +173,10 @@ testobjects = \
 	wipeoutvariables \
 	xline \
 	xrecord
+
+# TODO:
+# 	object_ptr \
+# 	proxy_object
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.

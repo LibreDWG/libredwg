@@ -9726,6 +9726,21 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         fail ("EXTRUDEDSURFACE.bindata [TF]");
   }
   {
+    BITCODE_BL bindata_size;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "bindata_size", &bindata_size, NULL)
+        && bindata_size == extrudedsurface->bindata_size)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.bindata_size [BL] %u != %u", extrudedsurface->bindata_size, bindata_size);
+    bindata_size++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "bindata_size", &bindata_size, 0)
+        && bindata_size == extrudedsurface->bindata_size)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.bindata_size [BL] set+1 %u != %u", extrudedsurface->bindata_size, bindata_size);
+    extrudedsurface->bindata_size--;
+  }
+  {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "block_size", &block_size, NULL)
         && !memcmp (&block_size, &extrudedsurface->block_size, sizeof (extrudedsurface->block_size)))
@@ -10016,21 +10031,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
       pass ();
     else
       fail ("EXTRUDEDSURFACE.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
-  }
-  {
-    BITCODE_BL size_bindata;
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "size_bindata", &size_bindata, NULL)
-        && size_bindata == extrudedsurface->size_bindata)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.size_bindata [BL] %u != %u", extrudedsurface->size_bindata, size_bindata);
-    size_bindata++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "size_bindata", &size_bindata, 0)
-        && size_bindata == extrudedsurface->size_bindata)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.size_bindata [BL] set+1 %u != %u", extrudedsurface->size_bindata, size_bindata);
-    extrudedsurface->size_bindata--;
   }
   {
     BITCODE_B solid;

@@ -1691,7 +1691,7 @@ static const Dwg_DYNAPI_field _dwg_EXTRUDEDSURFACE_fields[] = {
     0,0,0, 0 },
   { "modeler_format_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, modeler_format_version),
     0,0,0, 0 },
-  { "size_bindata",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, size_bindata),
+  { "bindata_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, bindata_size),
     0,0,0, 0 },
   { "bindata",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, bindata),
     1,1,0, 0 },
@@ -5682,7 +5682,7 @@ static const Dwg_DYNAPI_field _dwg_SPATIAL_INDEX_fields[] = {
     0,0,0, 0 },
   { "timestamp2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_SPATIAL_INDEX, timestamp2),
     0,0,0, 0 },
-  { "unknown",	"TV", sizeof (char*),  OFF (struct _dwg_object_SPATIAL_INDEX, unknown),
+  { "unknown",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_SPATIAL_INDEX, unknown),
     1,1,1, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6657,12 +6657,12 @@ static const Dwg_DYNAPI_field _dwg_EVAL_Node_fields[] = {
 };
 /* from typedef struct _dwg_FIELD_ChildValue: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_FIELD_ChildValue_fields[] = {
+  { "parent",	"struct _dwg_object_FIELD*", sizeof (void *),  OFF (struct _dwg_FIELD_ChildValue, parent),
+    1,1,0, 0 },
   { "key",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_FIELD_ChildValue, key),
     1,1,1, 6 },
   { "value",	"Dwg_TABLE_value", sizeof (Dwg_TABLE_value),  OFF (struct _dwg_FIELD_ChildValue, value),
     0,0,0, 0 },
-  { "parent",	"struct _dwg_object_FIELD*", sizeof (void *),  OFF (struct _dwg_FIELD_ChildValue, parent),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_FileDepList_Files: (sorted by offset) */
@@ -6847,12 +6847,12 @@ static const Dwg_DYNAPI_field _dwg_HATCH_PolylinePath_fields[] = {
 };
 /* from typedef struct _dwg_LAYER_entry: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_LAYER_entry_fields[] = {
+  { "parent",	"struct _dwg_object_LAYER_INDEX*", sizeof (void *),  OFF (struct _dwg_LAYER_entry, parent),
+    1,1,0, 0 },
   { "idxlong",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_LAYER_entry, idxlong),
     0,0,0, 0 },
   { "layername",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_LAYER_entry, layername),
     1,1,1, 8 },
-  { "parent",	"struct _dwg_object_LAYER_INDEX*", sizeof (void *),  OFF (struct _dwg_LAYER_entry, parent),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_LEADER_ArrowHead: (sorted by offset) */
