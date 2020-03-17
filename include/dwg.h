@@ -6319,6 +6319,7 @@ EXPORT int dwg_add_WIPEOUT (Dwg_Object *obj);
 
 /* UNSTABLE: */
 EXPORT int dwg_add_ASSOCDEPENDENCY (Dwg_Object *obj);
+EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_add_DIMASSOC (Dwg_Object *obj);
@@ -6341,7 +6342,6 @@ EXPORT int dwg_add_VISUALSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_VBA_PROJECT (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
-EXPORT int dwg_add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
 EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
 //EXPORT int dwg_add_ACDSRECORD (Dwg_Object *obj);

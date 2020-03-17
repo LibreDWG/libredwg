@@ -43,6 +43,7 @@ testobjects = \
 	3dsolid \
 	arc \
 	arc_dimension \
+	assocaligneddimactionbody \
 	assocdependency \
 	attdef \
 	attrib \

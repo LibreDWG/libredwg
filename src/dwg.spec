@@ -6461,38 +6461,7 @@ DWG_OBJECT (PLOTSETTINGS)
     }
 DWG_OBJECT_END
 
-/* In work area:
-   The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
-   unless enabled via --enable-debug/-DDEBUG_CLASSES */
-
-#if defined (DEBUG_CLASSES) || defined (IS_FREE)
-
-// DEBUGGING
-DWG_OBJECT (EVALUATION_GRAPH)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalGraph)
-  FIELD_BL (has_graph, 96);        // 1
-  FIELD_BL (unknown1, 97);         // 1
-  FIELD_BL (unknown2, 0);          // 1
-  FIELD_BL (nodeid, 91);           // 0
-  if (FIELD_VALUE (has_graph))
-    {
-      FIELD_BL (edge_flags, 93);   // 32
-      FIELD_BL (num_evalexpr, 95); // 1
-      // maybe REPEAT num_evalexpr: edge1-4, evalexpr
-      FIELD_BL (node_edge1, 92);   // -1
-      FIELD_BL (node_edge2, 92);   // -1
-      FIELD_BL (node_edge3, 92);   // -1
-      FIELD_BL (node_edge4, 92);   // -1
-      VALUEOUTOFBOUNDS (num_evalexpr, 20)
-    }
-
-  START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);
-DWG_OBJECT_END
-
-// DEBUGGING
+// unstable
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
 
@@ -6523,6 +6492,37 @@ DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
     FIELD_HANDLE (d_node, 3, 330);
     FIELD_HANDLE (r_node, 4, 330);
   }
+DWG_OBJECT_END
+
+/* In work area:
+   The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
+   unless enabled via --enable-debug/-DDEBUG_CLASSES */
+
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
+
+// DEBUGGING
+DWG_OBJECT (EVALUATION_GRAPH)
+
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbEvalGraph)
+  FIELD_BL (has_graph, 96);        // 1
+  FIELD_BL (unknown1, 97);         // 1
+  FIELD_BL (unknown2, 0);          // 1
+  FIELD_BL (nodeid, 91);           // 0
+  if (FIELD_VALUE (has_graph))
+    {
+      FIELD_BL (edge_flags, 93);   // 32
+      FIELD_BL (num_evalexpr, 95); // 1
+      // maybe REPEAT num_evalexpr: edge1-4, evalexpr
+      FIELD_BL (node_edge1, 92);   // -1
+      FIELD_BL (node_edge2, 92);   // -1
+      FIELD_BL (node_edge3, 92);   // -1
+      FIELD_BL (node_edge4, 92);   // -1
+      VALUEOUTOFBOUNDS (num_evalexpr, 20)
+    }
+
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);
 DWG_OBJECT_END
 
 #undef ASSOCACTION_fields

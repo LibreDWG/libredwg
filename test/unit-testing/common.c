@@ -222,6 +222,14 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/Helix.dwg");
               error += test_code (tmp, cov);
             }
+#if 0
+          if (DWG_TYPE == DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/??.dwg");
+              error += test_code (tmp, cov);
+            }
+#endif
         }
 #ifdef DWG_TYPE
       if (cov && !numpassed () && !numfailed ())
