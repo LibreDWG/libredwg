@@ -47,6 +47,8 @@ api_process (dwg_object *obj)
   BITCODE_BL unknown_bl36;
   BITCODE_B unknown_b37;
 
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+    return;
 #ifdef DEBUG_CLASSES
   dwg_obj_assocperssubentmanager *_obj = dwg_object_to_ASSOCPERSSUBENTMANAGER (obj);
  

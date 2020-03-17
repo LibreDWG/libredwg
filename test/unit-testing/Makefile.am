@@ -61,6 +61,7 @@ testobjects = \
 	dim_linear \
 	dim_ordinate \
 	dim_radius \
+	dimassoc \
 	ellipse \
 	endblk \
 	geodata \
