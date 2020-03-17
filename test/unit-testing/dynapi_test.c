@@ -5383,6 +5383,7 @@ static int test__3DFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity__3DFACE *restrict _3dface = obj->tio.entity->tio._3DFACE;
+  failed = 0;
   {
     BITCODE_3BD corner1;
     if (dwg_dynapi_entity_value (_3dface, "3DFACE", "corner1", &corner1, NULL)
@@ -5429,7 +5430,6 @@ static int test__3DFACE (const Dwg_Object *obj)
     else
       fail ("3DFACE.has_no_flags [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dface->has_no_flags, has_no_flags);
     _3dface->has_no_flags--;
-
   }
   {
     BITCODE_BS invis_flags;
@@ -5445,7 +5445,6 @@ static int test__3DFACE (const Dwg_Object *obj)
     else
       fail ("3DFACE.invis_flags [BS] set+1 %hu != %hu", _3dface->invis_flags, invis_flags);
     _3dface->invis_flags--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -5469,7 +5468,6 @@ static int test__3DFACE (const Dwg_Object *obj)
     else
       fail ("3DFACE.z_is_zero [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dface->z_is_zero, z_is_zero);
     _3dface->z_is_zero--;
-
   }
   return failed;
 }
@@ -5478,6 +5476,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity__3DSOLID *restrict _3dsolid = obj->tio.entity->tio._3DSOLID;
+  failed = 0;
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "acis_data", &acis_data, NULL)
@@ -5502,7 +5501,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->acis_empty, acis_empty);
     _3dsolid->acis_empty--;
-
   }
   {
     BITCODE_B acis_empty2;
@@ -5518,7 +5516,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->acis_empty2, acis_empty2);
     _3dsolid->acis_empty2--;
-
   }
   {
     BITCODE_B acis_empty_bit;
@@ -5534,7 +5531,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->acis_empty_bit, acis_empty_bit);
     _3dsolid->acis_empty_bit--;
-
   }
   {
     BITCODE_BL* block_size;
@@ -5582,7 +5578,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->isoline_present, isoline_present);
     _3dsolid->isoline_present--;
-
   }
   {
     BITCODE_BL num_blocks;
@@ -5598,7 +5593,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.num_blocks [BL] set+1 %u != %u", _3dsolid->num_blocks, num_blocks);
     _3dsolid->num_blocks--;
-
   }
   {
     BITCODE_BL num_isolines;
@@ -5614,7 +5608,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.num_isolines [BL] set+1 %u != %u", _3dsolid->num_isolines, num_isolines);
     _3dsolid->num_isolines--;
-
   }
   {
     BITCODE_BL num_silhouettes;
@@ -5630,7 +5623,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.num_silhouettes [BL] set+1 %u != %u", _3dsolid->num_silhouettes, num_silhouettes);
     _3dsolid->num_silhouettes--;
-
   }
   {
     BITCODE_BL num_wires;
@@ -5646,7 +5638,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.num_wires [BL] set+1 %u != %u", _3dsolid->num_wires, num_wires);
     _3dsolid->num_wires--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -5678,7 +5669,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->point_present, point_present);
     _3dsolid->point_present--;
-
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -5704,7 +5694,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->unknown, unknown);
     _3dsolid->unknown--;
-
   }
   {
     BITCODE_BL unknown_2007;
@@ -5720,7 +5709,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.unknown_2007 [BL] set+1 %u != %u", _3dsolid->unknown_2007, unknown_2007);
     _3dsolid->unknown_2007--;
-
   }
   {
     BITCODE_BS version;
@@ -5736,7 +5724,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.version [BS] set+1 %hu != %hu", _3dsolid->version, version);
     _3dsolid->version--;
-
   }
   {
     BITCODE_B wireframe_data_present;
@@ -5752,7 +5739,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->wireframe_data_present, wireframe_data_present);
     _3dsolid->wireframe_data_present--;
-
   }
   {
     Dwg_3DSOLID_wire* wires;
@@ -5771,6 +5757,7 @@ static int test_ARC (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_ARC *restrict arc = obj->tio.entity->tio.ARC;
+  failed = 0;
   {
     BITCODE_3BD center;
     if (dwg_dynapi_entity_value (arc, "ARC", "center", &center, NULL)
@@ -5793,7 +5780,6 @@ static int test_ARC (const Dwg_Object *obj)
     else
       fail ("ARC.end_angle [BD] set+1 %g != %g", arc->end_angle, end_angle);
     arc->end_angle--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -5825,7 +5811,6 @@ static int test_ARC (const Dwg_Object *obj)
     else
       fail ("ARC.radius [BD] set+1 %g != %g", arc->radius, radius);
     arc->radius--;
-
   }
   {
     BITCODE_BD start_angle;
@@ -5841,7 +5826,6 @@ static int test_ARC (const Dwg_Object *obj)
     else
       fail ("ARC.start_angle [BD] set+1 %g != %g", arc->start_angle, start_angle);
     arc->start_angle--;
-
   }
   {
     BITCODE_BT thickness;
@@ -5856,7 +5840,6 @@ static int test_ARC (const Dwg_Object *obj)
     else
       fail ("ARC.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", arc->thickness, thickness);
     arc->thickness--;
-
   }
   return failed;
 }
@@ -5865,6 +5848,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_ARC_DIMENSION *restrict arc_dimension = obj->tio.entity->tio.ARC_DIMENSION;
+  failed = 0;
   {
     BITCODE_3BD _13_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "_13_pt", &_13_pt, NULL)
@@ -5919,7 +5903,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.act_measurement [BD] set+1 %g != %g", arc_dimension->act_measurement, act_measurement);
     arc_dimension->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -5935,7 +5918,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.attachment [BS] set+1 %hu != %hu", arc_dimension->attachment, attachment);
     arc_dimension->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -5969,7 +5951,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.class_version [RC] set+1 %u != %u", arc_dimension->class_version, class_version);
     arc_dimension->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -6009,7 +5990,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.elevation [BD] set+1 %g != %g", arc_dimension->elevation, elevation);
     arc_dimension->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -6033,7 +6013,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.flag [RC] set+1 %u != %u", arc_dimension->flag, flag);
     arc_dimension->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -6049,7 +6028,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.flag1 [RC] set+1 %u != %u", arc_dimension->flag1, flag1);
     arc_dimension->flag1--;
-
   }
   {
     BITCODE_RC flag2;
@@ -6065,7 +6043,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.flag2 [RC] set+1 %u != %u", arc_dimension->flag2, flag2);
     arc_dimension->flag2--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -6081,7 +6058,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", arc_dimension->flip_arrow1, flip_arrow1);
     arc_dimension->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -6097,7 +6073,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", arc_dimension->flip_arrow2, flip_arrow2);
     arc_dimension->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -6113,7 +6088,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.horiz_dir [BD] set+1 %g != %g", arc_dimension->horiz_dir, horiz_dir);
     arc_dimension->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -6129,7 +6103,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.ins_rotation [BD] set+1 %g != %g", arc_dimension->ins_rotation, ins_rotation);
     arc_dimension->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -6153,7 +6126,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.leader_len [BD] set+1 %g != %g", arc_dimension->leader_len, leader_len);
     arc_dimension->leader_len--;
-
   }
   {
     BITCODE_BD lspace_factor;
@@ -6169,7 +6141,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.lspace_factor [BD] set+1 %g != %g", arc_dimension->lspace_factor, lspace_factor);
     arc_dimension->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -6185,7 +6156,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.lspace_style [BS] set+1 %hu != %hu", arc_dimension->lspace_style, lspace_style);
     arc_dimension->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -6217,7 +6187,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.text_rotation [BD] set+1 %g != %g", arc_dimension->text_rotation, text_rotation);
     arc_dimension->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -6233,7 +6202,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", arc_dimension->unknown, unknown);
     arc_dimension->unknown--;
-
   }
   {
     BITCODE_3BD unknown_pt;
@@ -6260,6 +6228,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_ATTDEF *restrict attdef = obj->tio.entity->tio.ATTDEF;
+  failed = 0;
   {
     BITCODE_2DPOINT alignment_pt;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "alignment_pt", &alignment_pt, NULL)
@@ -6290,7 +6259,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.annotative_data_bytes [RC] set+1 %u != %u", attdef->annotative_data_bytes, annotative_data_bytes);
     attdef->annotative_data_bytes--;
-
   }
   {
     BITCODE_BS annotative_data_size;
@@ -6306,7 +6274,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.annotative_data_size [BS] set+1 %hu != %hu", attdef->annotative_data_size, annotative_data_size);
     attdef->annotative_data_size--;
-
   }
   {
     BITCODE_BS annotative_short;
@@ -6322,7 +6289,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.annotative_short [BS] set+1 %hu != %hu", attdef->annotative_short, annotative_short);
     attdef->annotative_short--;
-
   }
   {
     BITCODE_RC attdef_class_version;
@@ -6338,7 +6304,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.attdef_class_version [RC] set+1 %u != %u", attdef->attdef_class_version, attdef_class_version);
     attdef->attdef_class_version--;
-
   }
   {
     BITCODE_RC class_version;
@@ -6354,7 +6319,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.class_version [RC] set+1 %u != %u", attdef->class_version, class_version);
     attdef->class_version--;
-
   }
   {
     BITCODE_RC dataflags;
@@ -6370,7 +6334,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.dataflags [RC] set+1 %u != %u", attdef->dataflags, dataflags);
     attdef->dataflags--;
-
   }
   {
     BITCODE_T default_value;
@@ -6396,7 +6359,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.elevation [BD] set+1 %g != %g", attdef->elevation, elevation);
     attdef->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -6420,7 +6382,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.field_length [BS] set+1 %hu != %hu", attdef->field_length, field_length);
     attdef->field_length--;
-
   }
   {
     BITCODE_RC flags;
@@ -6436,7 +6397,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.flags [RC] set+1 %u != %u", attdef->flags, flags);
     attdef->flags--;
-
   }
   {
     BITCODE_BS generation;
@@ -6452,7 +6412,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.generation [BS] set+1 %hu != %hu", attdef->generation, generation);
     attdef->generation--;
-
   }
   {
     BITCODE_RD height;
@@ -6468,7 +6427,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.height [RD] set+1 %g != %g", attdef->height, height);
     attdef->height--;
-
   }
   {
     BITCODE_BS horiz_alignment;
@@ -6484,7 +6442,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.horiz_alignment [BS] set+1 %hu != %hu", attdef->horiz_alignment, horiz_alignment);
     attdef->horiz_alignment--;
-
   }
   {
     BITCODE_2DPOINT insertion_pt;
@@ -6508,7 +6465,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.lock_position_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", attdef->lock_position_flag, lock_position_flag);
     attdef->lock_position_flag--;
-
   }
   {
     BITCODE_H mtext_handles;
@@ -6532,7 +6488,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.oblique_ang [RD] set+1 %g != %g", attdef->oblique_ang, oblique_ang);
     attdef->oblique_ang--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -6566,7 +6521,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.rotation [RD] set+1 %g != %g", attdef->rotation, rotation);
     attdef->rotation--;
-
   }
   {
     BITCODE_H style;
@@ -6600,7 +6554,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.thickness [RD] set+1 %g != %g", attdef->thickness, thickness);
     attdef->thickness--;
-
   }
   {
     BITCODE_RC type;
@@ -6616,7 +6569,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.type [RC] set+1 %u != %u", attdef->type, type);
     attdef->type--;
-
   }
   {
     BITCODE_BS vert_alignment;
@@ -6632,7 +6584,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.vert_alignment [BS] set+1 %hu != %hu", attdef->vert_alignment, vert_alignment);
     attdef->vert_alignment--;
-
   }
   {
     BITCODE_RD width_factor;
@@ -6648,7 +6599,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.width_factor [RD] set+1 %g != %g", attdef->width_factor, width_factor);
     attdef->width_factor--;
-
   }
   return failed;
 }
@@ -6657,6 +6607,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_ATTRIB *restrict attrib = obj->tio.entity->tio.ATTRIB;
+  failed = 0;
   {
     BITCODE_2DPOINT alignment_pt;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "alignment_pt", &alignment_pt, NULL)
@@ -6687,7 +6638,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.annotative_data_bytes [RC] set+1 %u != %u", attrib->annotative_data_bytes, annotative_data_bytes);
     attrib->annotative_data_bytes--;
-
   }
   {
     BITCODE_BS annotative_data_size;
@@ -6703,7 +6653,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.annotative_data_size [BS] set+1 %hu != %hu", attrib->annotative_data_size, annotative_data_size);
     attrib->annotative_data_size--;
-
   }
   {
     BITCODE_BS annotative_short;
@@ -6719,7 +6668,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.annotative_short [BS] set+1 %hu != %hu", attrib->annotative_short, annotative_short);
     attrib->annotative_short--;
-
   }
   {
     BITCODE_RC class_version;
@@ -6735,7 +6683,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.class_version [RC] set+1 %u != %u", attrib->class_version, class_version);
     attrib->class_version--;
-
   }
   {
     BITCODE_RC dataflags;
@@ -6751,7 +6698,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.dataflags [RC] set+1 %u != %u", attrib->dataflags, dataflags);
     attrib->dataflags--;
-
   }
   {
     BITCODE_BD elevation;
@@ -6767,7 +6713,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.elevation [BD] set+1 %g != %g", attrib->elevation, elevation);
     attrib->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -6791,7 +6736,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.field_length [BS] set+1 %hu != %hu", attrib->field_length, field_length);
     attrib->field_length--;
-
   }
   {
     BITCODE_RC flags;
@@ -6807,7 +6751,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.flags [RC] set+1 %u != %u", attrib->flags, flags);
     attrib->flags--;
-
   }
   {
     BITCODE_BS generation;
@@ -6823,7 +6766,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.generation [BS] set+1 %hu != %hu", attrib->generation, generation);
     attrib->generation--;
-
   }
   {
     BITCODE_RD height;
@@ -6839,7 +6781,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.height [RD] set+1 %g != %g", attrib->height, height);
     attrib->height--;
-
   }
   {
     BITCODE_BS horiz_alignment;
@@ -6855,7 +6796,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.horiz_alignment [BS] set+1 %hu != %hu", attrib->horiz_alignment, horiz_alignment);
     attrib->horiz_alignment--;
-
   }
   {
     BITCODE_2DPOINT insertion_pt;
@@ -6879,7 +6819,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.lock_position_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", attrib->lock_position_flag, lock_position_flag);
     attrib->lock_position_flag--;
-
   }
   {
     BITCODE_H mtext_handles;
@@ -6903,7 +6842,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.oblique_ang [RD] set+1 %g != %g", attrib->oblique_ang, oblique_ang);
     attrib->oblique_ang--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -6927,7 +6865,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.rotation [RD] set+1 %g != %g", attrib->rotation, rotation);
     attrib->rotation--;
-
   }
   {
     BITCODE_H style;
@@ -6971,7 +6908,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.thickness [RD] set+1 %g != %g", attrib->thickness, thickness);
     attrib->thickness--;
-
   }
   {
     BITCODE_RC type;
@@ -6987,7 +6923,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.type [RC] set+1 %u != %u", attrib->type, type);
     attrib->type--;
-
   }
   {
     BITCODE_BS vert_alignment;
@@ -7003,7 +6938,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.vert_alignment [BS] set+1 %hu != %hu", attrib->vert_alignment, vert_alignment);
     attrib->vert_alignment--;
-
   }
   {
     BITCODE_RD width_factor;
@@ -7019,7 +6953,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.width_factor [RD] set+1 %g != %g", attrib->width_factor, width_factor);
     attrib->width_factor--;
-
   }
   return failed;
 }
@@ -7028,6 +6961,7 @@ static int test_BLOCK (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_BLOCK *restrict block = obj->tio.entity->tio.BLOCK;
+  failed = 0;
   {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (block, "BLOCK", "name", &name, NULL)
@@ -7053,6 +6987,7 @@ static int test_BODY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_BODY *restrict body = obj->tio.entity->tio.BODY;
+  failed = 0;
   return failed;
 }
 static int test_CAMERA (const Dwg_Object *obj)
@@ -7060,6 +6995,7 @@ static int test_CAMERA (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_CAMERA *restrict camera = obj->tio.entity->tio.CAMERA;
+  failed = 0;
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (camera, "CAMERA", "parent", &parent, NULL)
@@ -7083,6 +7019,7 @@ static int test_CIRCLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_CIRCLE *restrict circle = obj->tio.entity->tio.CIRCLE;
+  failed = 0;
   {
     BITCODE_3BD center;
     if (dwg_dynapi_entity_value (circle, "CIRCLE", "center", &center, NULL)
@@ -7121,7 +7058,6 @@ static int test_CIRCLE (const Dwg_Object *obj)
     else
       fail ("CIRCLE.radius [BD] set+1 %g != %g", circle->radius, radius);
     circle->radius--;
-
   }
   {
     BITCODE_BT thickness;
@@ -7136,7 +7072,6 @@ static int test_CIRCLE (const Dwg_Object *obj)
     else
       fail ("CIRCLE.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", circle->thickness, thickness);
     circle->thickness--;
-
   }
   return failed;
 }
@@ -7145,6 +7080,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DIMENSION_ALIGNED *restrict dimension_aligned = obj->tio.entity->tio.DIMENSION_ALIGNED;
+  failed = 0;
   {
     BITCODE_3BD _13_pt;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "_13_pt", &_13_pt, NULL)
@@ -7175,7 +7111,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.act_measurement [BD] set+1 %g != %g", dimension_aligned->act_measurement, act_measurement);
     dimension_aligned->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -7191,7 +7126,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.attachment [BS] set+1 %hu != %hu", dimension_aligned->attachment, attachment);
     dimension_aligned->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -7225,7 +7159,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.class_version [RC] set+1 %u != %u", dimension_aligned->class_version, class_version);
     dimension_aligned->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -7265,7 +7198,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.elevation [BD] set+1 %g != %g", dimension_aligned->elevation, elevation);
     dimension_aligned->elevation--;
-
   }
   {
     BITCODE_BD ext_line_rotation;
@@ -7281,7 +7213,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.ext_line_rotation [BD] set+1 %g != %g", dimension_aligned->ext_line_rotation, ext_line_rotation);
     dimension_aligned->ext_line_rotation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -7305,7 +7236,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.flag [RC] set+1 %u != %u", dimension_aligned->flag, flag);
     dimension_aligned->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -7321,7 +7251,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.flag1 [RC] set+1 %u != %u", dimension_aligned->flag1, flag1);
     dimension_aligned->flag1--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -7337,7 +7266,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_aligned->flip_arrow1, flip_arrow1);
     dimension_aligned->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -7353,7 +7281,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_aligned->flip_arrow2, flip_arrow2);
     dimension_aligned->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -7369,7 +7296,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.horiz_dir [BD] set+1 %g != %g", dimension_aligned->horiz_dir, horiz_dir);
     dimension_aligned->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -7385,7 +7311,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.ins_rotation [BD] set+1 %g != %g", dimension_aligned->ins_rotation, ins_rotation);
     dimension_aligned->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -7409,7 +7334,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.lspace_factor [BD] set+1 %g != %g", dimension_aligned->lspace_factor, lspace_factor);
     dimension_aligned->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -7425,7 +7349,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.lspace_style [BS] set+1 %hu != %hu", dimension_aligned->lspace_style, lspace_style);
     dimension_aligned->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -7457,7 +7380,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.text_rotation [BD] set+1 %g != %g", dimension_aligned->text_rotation, text_rotation);
     dimension_aligned->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -7473,7 +7395,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_aligned->unknown, unknown);
     dimension_aligned->unknown--;
-
   }
   {
     BITCODE_TV user_text;
@@ -7492,6 +7413,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DIMENSION_ANG2LN *restrict dimension_ang2ln = obj->tio.entity->tio.DIMENSION_ANG2LN;
+  failed = 0;
   {
     BITCODE_3BD _13_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "_13_pt", &_13_pt, NULL)
@@ -7530,7 +7452,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.act_measurement [BD] set+1 %g != %g", dimension_ang2ln->act_measurement, act_measurement);
     dimension_ang2ln->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -7546,7 +7467,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.attachment [BS] set+1 %hu != %hu", dimension_ang2ln->attachment, attachment);
     dimension_ang2ln->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -7580,7 +7500,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.class_version [RC] set+1 %u != %u", dimension_ang2ln->class_version, class_version);
     dimension_ang2ln->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -7620,7 +7539,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.elevation [BD] set+1 %g != %g", dimension_ang2ln->elevation, elevation);
     dimension_ang2ln->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -7652,7 +7570,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.flag [RC] set+1 %u != %u", dimension_ang2ln->flag, flag);
     dimension_ang2ln->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -7668,7 +7585,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.flag1 [RC] set+1 %u != %u", dimension_ang2ln->flag1, flag1);
     dimension_ang2ln->flag1--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -7684,7 +7600,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ang2ln->flip_arrow1, flip_arrow1);
     dimension_ang2ln->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -7700,7 +7615,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ang2ln->flip_arrow2, flip_arrow2);
     dimension_ang2ln->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -7716,7 +7630,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.horiz_dir [BD] set+1 %g != %g", dimension_ang2ln->horiz_dir, horiz_dir);
     dimension_ang2ln->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -7732,7 +7645,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.ins_rotation [BD] set+1 %g != %g", dimension_ang2ln->ins_rotation, ins_rotation);
     dimension_ang2ln->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -7756,7 +7668,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.lspace_factor [BD] set+1 %g != %g", dimension_ang2ln->lspace_factor, lspace_factor);
     dimension_ang2ln->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -7772,7 +7683,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.lspace_style [BS] set+1 %hu != %hu", dimension_ang2ln->lspace_style, lspace_style);
     dimension_ang2ln->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -7804,7 +7714,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.text_rotation [BD] set+1 %g != %g", dimension_ang2ln->text_rotation, text_rotation);
     dimension_ang2ln->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -7820,7 +7729,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ang2ln->unknown, unknown);
     dimension_ang2ln->unknown--;
-
   }
   {
     BITCODE_TV user_text;
@@ -7839,6 +7747,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DIMENSION_ANG3PT *restrict dimension_ang3pt = obj->tio.entity->tio.DIMENSION_ANG3PT;
+  failed = 0;
   {
     BITCODE_3BD _13_pt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "_13_pt", &_13_pt, NULL)
@@ -7869,7 +7778,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.act_measurement [BD] set+1 %g != %g", dimension_ang3pt->act_measurement, act_measurement);
     dimension_ang3pt->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -7885,7 +7793,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.attachment [BS] set+1 %hu != %hu", dimension_ang3pt->attachment, attachment);
     dimension_ang3pt->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -7919,7 +7826,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.class_version [RC] set+1 %u != %u", dimension_ang3pt->class_version, class_version);
     dimension_ang3pt->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -7959,7 +7865,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.elevation [BD] set+1 %g != %g", dimension_ang3pt->elevation, elevation);
     dimension_ang3pt->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -7991,7 +7896,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.flag [RC] set+1 %u != %u", dimension_ang3pt->flag, flag);
     dimension_ang3pt->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -8007,7 +7911,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.flag1 [RC] set+1 %u != %u", dimension_ang3pt->flag1, flag1);
     dimension_ang3pt->flag1--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -8023,7 +7926,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ang3pt->flip_arrow1, flip_arrow1);
     dimension_ang3pt->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -8039,7 +7941,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ang3pt->flip_arrow2, flip_arrow2);
     dimension_ang3pt->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -8055,7 +7956,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.horiz_dir [BD] set+1 %g != %g", dimension_ang3pt->horiz_dir, horiz_dir);
     dimension_ang3pt->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -8071,7 +7971,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.ins_rotation [BD] set+1 %g != %g", dimension_ang3pt->ins_rotation, ins_rotation);
     dimension_ang3pt->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -8095,7 +7994,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.lspace_factor [BD] set+1 %g != %g", dimension_ang3pt->lspace_factor, lspace_factor);
     dimension_ang3pt->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -8111,7 +8009,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.lspace_style [BS] set+1 %hu != %hu", dimension_ang3pt->lspace_style, lspace_style);
     dimension_ang3pt->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -8143,7 +8040,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.text_rotation [BD] set+1 %g != %g", dimension_ang3pt->text_rotation, text_rotation);
     dimension_ang3pt->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -8159,7 +8055,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ang3pt->unknown, unknown);
     dimension_ang3pt->unknown--;
-
   }
   {
     BITCODE_TV user_text;
@@ -8178,6 +8073,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DIMENSION_DIAMETER *restrict dimension_diameter = obj->tio.entity->tio.DIMENSION_DIAMETER;
+  failed = 0;
   {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "act_measurement", &act_measurement, NULL)
@@ -8192,7 +8088,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.act_measurement [BD] set+1 %g != %g", dimension_diameter->act_measurement, act_measurement);
     dimension_diameter->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -8208,7 +8103,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.attachment [BS] set+1 %hu != %hu", dimension_diameter->attachment, attachment);
     dimension_diameter->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -8242,7 +8136,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.class_version [RC] set+1 %u != %u", dimension_diameter->class_version, class_version);
     dimension_diameter->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -8282,7 +8175,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.elevation [BD] set+1 %g != %g", dimension_diameter->elevation, elevation);
     dimension_diameter->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -8314,7 +8206,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.flag [RC] set+1 %u != %u", dimension_diameter->flag, flag);
     dimension_diameter->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -8330,7 +8221,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.flag1 [RC] set+1 %u != %u", dimension_diameter->flag1, flag1);
     dimension_diameter->flag1--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -8346,7 +8236,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_diameter->flip_arrow1, flip_arrow1);
     dimension_diameter->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -8362,7 +8251,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_diameter->flip_arrow2, flip_arrow2);
     dimension_diameter->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -8378,7 +8266,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.horiz_dir [BD] set+1 %g != %g", dimension_diameter->horiz_dir, horiz_dir);
     dimension_diameter->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -8394,7 +8281,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.ins_rotation [BD] set+1 %g != %g", dimension_diameter->ins_rotation, ins_rotation);
     dimension_diameter->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -8418,7 +8304,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.leader_len [BD] set+1 %g != %g", dimension_diameter->leader_len, leader_len);
     dimension_diameter->leader_len--;
-
   }
   {
     BITCODE_BD lspace_factor;
@@ -8434,7 +8319,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.lspace_factor [BD] set+1 %g != %g", dimension_diameter->lspace_factor, lspace_factor);
     dimension_diameter->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -8450,7 +8334,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.lspace_style [BS] set+1 %hu != %hu", dimension_diameter->lspace_style, lspace_style);
     dimension_diameter->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -8482,7 +8365,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.text_rotation [BD] set+1 %g != %g", dimension_diameter->text_rotation, text_rotation);
     dimension_diameter->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -8498,7 +8380,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_diameter->unknown, unknown);
     dimension_diameter->unknown--;
-
   }
   {
     BITCODE_TV user_text;
@@ -8517,6 +8398,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DIMENSION_LINEAR *restrict dimension_linear = obj->tio.entity->tio.DIMENSION_LINEAR;
+  failed = 0;
   {
     BITCODE_3BD _13_pt;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "_13_pt", &_13_pt, NULL)
@@ -8547,7 +8429,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.act_measurement [BD] set+1 %g != %g", dimension_linear->act_measurement, act_measurement);
     dimension_linear->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -8563,7 +8444,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.attachment [BS] set+1 %hu != %hu", dimension_linear->attachment, attachment);
     dimension_linear->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -8597,7 +8477,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.class_version [RC] set+1 %u != %u", dimension_linear->class_version, class_version);
     dimension_linear->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -8629,7 +8508,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.dim_rotation [BD] set+1 %g != %g", dimension_linear->dim_rotation, dim_rotation);
     dimension_linear->dim_rotation--;
-
   }
   {
     BITCODE_H dimstyle;
@@ -8653,7 +8531,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.elevation [BD] set+1 %g != %g", dimension_linear->elevation, elevation);
     dimension_linear->elevation--;
-
   }
   {
     BITCODE_BD ext_line_rotation;
@@ -8669,7 +8546,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.ext_line_rotation [BD] set+1 %g != %g", dimension_linear->ext_line_rotation, ext_line_rotation);
     dimension_linear->ext_line_rotation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -8693,7 +8569,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.flag [RC] set+1 %u != %u", dimension_linear->flag, flag);
     dimension_linear->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -8709,7 +8584,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.flag1 [RC] set+1 %u != %u", dimension_linear->flag1, flag1);
     dimension_linear->flag1--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -8725,7 +8599,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_linear->flip_arrow1, flip_arrow1);
     dimension_linear->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -8741,7 +8614,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_linear->flip_arrow2, flip_arrow2);
     dimension_linear->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -8757,7 +8629,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.horiz_dir [BD] set+1 %g != %g", dimension_linear->horiz_dir, horiz_dir);
     dimension_linear->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -8773,7 +8644,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.ins_rotation [BD] set+1 %g != %g", dimension_linear->ins_rotation, ins_rotation);
     dimension_linear->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -8797,7 +8667,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.lspace_factor [BD] set+1 %g != %g", dimension_linear->lspace_factor, lspace_factor);
     dimension_linear->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -8813,7 +8682,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.lspace_style [BS] set+1 %hu != %hu", dimension_linear->lspace_style, lspace_style);
     dimension_linear->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -8845,7 +8713,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.text_rotation [BD] set+1 %g != %g", dimension_linear->text_rotation, text_rotation);
     dimension_linear->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -8861,7 +8728,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_linear->unknown, unknown);
     dimension_linear->unknown--;
-
   }
   {
     BITCODE_TV user_text;
@@ -8880,6 +8746,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DIMENSION_ORDINATE *restrict dimension_ordinate = obj->tio.entity->tio.DIMENSION_ORDINATE;
+  failed = 0;
   {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "act_measurement", &act_measurement, NULL)
@@ -8894,7 +8761,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.act_measurement [BD] set+1 %g != %g", dimension_ordinate->act_measurement, act_measurement);
     dimension_ordinate->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -8910,7 +8776,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.attachment [BS] set+1 %hu != %hu", dimension_ordinate->attachment, attachment);
     dimension_ordinate->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -8944,7 +8809,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.class_version [RC] set+1 %u != %u", dimension_ordinate->class_version, class_version);
     dimension_ordinate->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -8984,7 +8848,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.elevation [BD] set+1 %g != %g", dimension_ordinate->elevation, elevation);
     dimension_ordinate->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -9016,7 +8879,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.flag [RC] set+1 %u != %u", dimension_ordinate->flag, flag);
     dimension_ordinate->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -9032,7 +8894,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.flag1 [RC] set+1 %u != %u", dimension_ordinate->flag1, flag1);
     dimension_ordinate->flag1--;
-
   }
   {
     BITCODE_RC flag2;
@@ -9048,7 +8909,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.flag2 [RC] set+1 %u != %u", dimension_ordinate->flag2, flag2);
     dimension_ordinate->flag2--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -9064,7 +8924,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ordinate->flip_arrow1, flip_arrow1);
     dimension_ordinate->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -9080,7 +8939,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ordinate->flip_arrow2, flip_arrow2);
     dimension_ordinate->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -9096,7 +8954,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.horiz_dir [BD] set+1 %g != %g", dimension_ordinate->horiz_dir, horiz_dir);
     dimension_ordinate->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -9112,7 +8969,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.ins_rotation [BD] set+1 %g != %g", dimension_ordinate->ins_rotation, ins_rotation);
     dimension_ordinate->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -9144,7 +9000,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.lspace_factor [BD] set+1 %g != %g", dimension_ordinate->lspace_factor, lspace_factor);
     dimension_ordinate->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -9160,7 +9015,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.lspace_style [BS] set+1 %hu != %hu", dimension_ordinate->lspace_style, lspace_style);
     dimension_ordinate->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -9192,7 +9046,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.text_rotation [BD] set+1 %g != %g", dimension_ordinate->text_rotation, text_rotation);
     dimension_ordinate->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -9208,7 +9061,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_ordinate->unknown, unknown);
     dimension_ordinate->unknown--;
-
   }
   {
     BITCODE_TV user_text;
@@ -9227,6 +9079,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DIMENSION_RADIUS *restrict dimension_radius = obj->tio.entity->tio.DIMENSION_RADIUS;
+  failed = 0;
   {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "act_measurement", &act_measurement, NULL)
@@ -9241,7 +9094,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.act_measurement [BD] set+1 %g != %g", dimension_radius->act_measurement, act_measurement);
     dimension_radius->act_measurement--;
-
   }
   {
     BITCODE_BS attachment;
@@ -9257,7 +9109,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.attachment [BS] set+1 %hu != %hu", dimension_radius->attachment, attachment);
     dimension_radius->attachment--;
-
   }
   {
     BITCODE_H block;
@@ -9291,7 +9142,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.class_version [RC] set+1 %u != %u", dimension_radius->class_version, class_version);
     dimension_radius->class_version--;
-
   }
   {
     BITCODE_2RD clone_ins_pt;
@@ -9331,7 +9181,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.elevation [BD] set+1 %g != %g", dimension_radius->elevation, elevation);
     dimension_radius->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -9363,7 +9212,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.flag [RC] set+1 %u != %u", dimension_radius->flag, flag);
     dimension_radius->flag--;
-
   }
   {
     BITCODE_RC flag1;
@@ -9379,7 +9227,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.flag1 [RC] set+1 %u != %u", dimension_radius->flag1, flag1);
     dimension_radius->flag1--;
-
   }
   {
     BITCODE_B flip_arrow1;
@@ -9395,7 +9242,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_radius->flip_arrow1, flip_arrow1);
     dimension_radius->flip_arrow1--;
-
   }
   {
     BITCODE_B flip_arrow2;
@@ -9411,7 +9257,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_radius->flip_arrow2, flip_arrow2);
     dimension_radius->flip_arrow2--;
-
   }
   {
     BITCODE_BD horiz_dir;
@@ -9427,7 +9272,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.horiz_dir [BD] set+1 %g != %g", dimension_radius->horiz_dir, horiz_dir);
     dimension_radius->horiz_dir--;
-
   }
   {
     BITCODE_BD ins_rotation;
@@ -9443,7 +9287,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.ins_rotation [BD] set+1 %g != %g", dimension_radius->ins_rotation, ins_rotation);
     dimension_radius->ins_rotation--;
-
   }
   {
     BITCODE_3BD ins_scale;
@@ -9467,7 +9310,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.leader_len [BD] set+1 %g != %g", dimension_radius->leader_len, leader_len);
     dimension_radius->leader_len--;
-
   }
   {
     BITCODE_BD lspace_factor;
@@ -9483,7 +9325,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.lspace_factor [BD] set+1 %g != %g", dimension_radius->lspace_factor, lspace_factor);
     dimension_radius->lspace_factor--;
-
   }
   {
     BITCODE_BS lspace_style;
@@ -9499,7 +9340,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.lspace_style [BS] set+1 %hu != %hu", dimension_radius->lspace_style, lspace_style);
     dimension_radius->lspace_style--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -9531,7 +9371,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.text_rotation [BD] set+1 %g != %g", dimension_radius->text_rotation, text_rotation);
     dimension_radius->text_rotation--;
-
   }
   {
     BITCODE_B unknown;
@@ -9547,7 +9386,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", dimension_radius->unknown, unknown);
     dimension_radius->unknown--;
-
   }
   {
     BITCODE_TV user_text;
@@ -9566,6 +9404,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_ELLIPSE *restrict ellipse = obj->tio.entity->tio.ELLIPSE;
+  failed = 0;
   {
     BITCODE_BD axis_ratio;
     if (dwg_dynapi_entity_value (ellipse, "ELLIPSE", "axis_ratio", &axis_ratio, NULL)
@@ -9580,7 +9419,6 @@ static int test_ELLIPSE (const Dwg_Object *obj)
     else
       fail ("ELLIPSE.axis_ratio [BD] set+1 %g != %g", ellipse->axis_ratio, axis_ratio);
     ellipse->axis_ratio--;
-
   }
   {
     BITCODE_3BD center;
@@ -9604,7 +9442,6 @@ static int test_ELLIPSE (const Dwg_Object *obj)
     else
       fail ("ELLIPSE.end_angle [BD] set+1 %g != %g", ellipse->end_angle, end_angle);
     ellipse->end_angle--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -9644,7 +9481,6 @@ static int test_ELLIPSE (const Dwg_Object *obj)
     else
       fail ("ELLIPSE.start_angle [BD] set+1 %g != %g", ellipse->start_angle, start_angle);
     ellipse->start_angle--;
-
   }
   return failed;
 }
@@ -9653,6 +9489,7 @@ static int test_ENDBLK (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_ENDBLK *restrict endblk = obj->tio.entity->tio.ENDBLK;
+  failed = 0;
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (endblk, "ENDBLK", "parent", &parent, NULL)
@@ -9668,6 +9505,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_EXTRUDEDSURFACE *restrict extrudedsurface = obj->tio.entity->tio.EXTRUDEDSURFACE;
+  failed = 0;
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_data", &acis_data, NULL)
@@ -9692,7 +9530,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->acis_empty, acis_empty);
     extrudedsurface->acis_empty--;
-
   }
   {
     BITCODE_B acis_empty2;
@@ -9708,7 +9545,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->acis_empty2, acis_empty2);
     extrudedsurface->acis_empty2--;
-
   }
   {
     BITCODE_B acis_empty_bit;
@@ -9724,7 +9560,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->acis_empty_bit, acis_empty_bit);
     extrudedsurface->acis_empty_bit--;
-
   }
   {
     BITCODE_BD align_angle;
@@ -9740,7 +9575,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.align_angle [BD] set+1 %g != %g", extrudedsurface->align_angle, align_angle);
     extrudedsurface->align_angle--;
-
   }
   {
     BITCODE_B align_start;
@@ -9756,7 +9590,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.align_start [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->align_start, align_start);
     extrudedsurface->align_start--;
-
   }
   {
     BITCODE_B bank;
@@ -9772,7 +9605,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.bank [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->bank, bank);
     extrudedsurface->bank--;
-
   }
   {
     BITCODE_B base_point_set;
@@ -9788,7 +9620,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.base_point_set [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->base_point_set, base_point_set);
     extrudedsurface->base_point_set--;
-
   }
   {
     BITCODE_TF bindata;
@@ -9820,7 +9651,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.class_version [BL] set+1 %u != %u", extrudedsurface->class_version, class_version);
     extrudedsurface->class_version--;
-
   }
   {
     BITCODE_BD draft_angle;
@@ -9836,7 +9666,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.draft_angle [BD] set+1 %g != %g", extrudedsurface->draft_angle, draft_angle);
     extrudedsurface->draft_angle--;
-
   }
   {
     BITCODE_BD draft_end_distance;
@@ -9852,7 +9681,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.draft_end_distance [BD] set+1 %g != %g", extrudedsurface->draft_end_distance, draft_end_distance);
     extrudedsurface->draft_end_distance--;
-
   }
   {
     BITCODE_BD draft_start_distance;
@@ -9868,7 +9696,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.draft_start_distance [BD] set+1 %g != %g", extrudedsurface->draft_start_distance, draft_start_distance);
     extrudedsurface->draft_start_distance--;
-
   }
   {
     char ** encr_sat_data;
@@ -9900,7 +9727,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.height [BD] set+1 %g != %g", extrudedsurface->height, height);
     extrudedsurface->height--;
-
   }
   {
     BITCODE_H history_id;
@@ -9924,7 +9750,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->isoline_present, isoline_present);
     extrudedsurface->isoline_present--;
-
   }
   {
     BITCODE_BS modeler_format_version;
@@ -9940,7 +9765,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.modeler_format_version [BS] set+1 %hu != %hu", extrudedsurface->modeler_format_version, modeler_format_version);
     extrudedsurface->modeler_format_version--;
-
   }
   {
     BITCODE_BL num_blocks;
@@ -9956,7 +9780,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.num_blocks [BL] set+1 %u != %u", extrudedsurface->num_blocks, num_blocks);
     extrudedsurface->num_blocks--;
-
   }
   {
     BITCODE_BL num_isolines;
@@ -9972,7 +9795,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.num_isolines [BL] set+1 %u != %u", extrudedsurface->num_isolines, num_isolines);
     extrudedsurface->num_isolines--;
-
   }
   {
     BITCODE_BL num_silhouettes;
@@ -9988,7 +9810,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.num_silhouettes [BL] set+1 %u != %u", extrudedsurface->num_silhouettes, num_silhouettes);
     extrudedsurface->num_silhouettes--;
-
   }
   {
     BITCODE_BL num_wires;
@@ -10004,7 +9825,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.num_wires [BL] set+1 %u != %u", extrudedsurface->num_wires, num_wires);
     extrudedsurface->num_wires--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -10036,7 +9856,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.path_entity_transform_computed [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->path_entity_transform_computed, path_entity_transform_computed);
     extrudedsurface->path_entity_transform_computed--;
-
   }
   {
     BITCODE_BD* path_entity_transmatrix;
@@ -10068,7 +9887,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->point_present, point_present);
     extrudedsurface->point_present--;
-
   }
   {
     BITCODE_3BD reference_vector_for_controlling_twist;
@@ -10092,7 +9910,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.scale_factor [BD] set+1 %g != %g", extrudedsurface->scale_factor, scale_factor);
     extrudedsurface->scale_factor--;
-
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -10118,7 +9935,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.size_bindata [BL] set+1 %u != %u", extrudedsurface->size_bindata, size_bindata);
     extrudedsurface->size_bindata--;
-
   }
   {
     BITCODE_B solid;
@@ -10134,7 +9950,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->solid, solid);
     extrudedsurface->solid--;
-
   }
   {
     BITCODE_BS sweep_alignment_flags;
@@ -10150,7 +9965,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.sweep_alignment_flags [BS] set+1 %hu != %hu", extrudedsurface->sweep_alignment_flags, sweep_alignment_flags);
     extrudedsurface->sweep_alignment_flags--;
-
   }
   {
     BITCODE_H sweep_entity;
@@ -10174,7 +9988,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.sweep_entity_transform_computed [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->sweep_entity_transform_computed, sweep_entity_transform_computed);
     extrudedsurface->sweep_entity_transform_computed--;
-
   }
   {
     BITCODE_BD* sweep_entity_transmatrix;
@@ -10214,7 +10027,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.twist_angle [BD] set+1 %g != %g", extrudedsurface->twist_angle, twist_angle);
     extrudedsurface->twist_angle--;
-
   }
   {
     BITCODE_BS u_isolines;
@@ -10230,7 +10042,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.u_isolines [BS] set+1 %hu != %hu", extrudedsurface->u_isolines, u_isolines);
     extrudedsurface->u_isolines--;
-
   }
   {
     BITCODE_B unknown;
@@ -10246,7 +10057,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->unknown, unknown);
     extrudedsurface->unknown--;
-
   }
   {
     BITCODE_BL unknown_2007;
@@ -10262,7 +10072,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.unknown_2007 [BL] set+1 %u != %u", extrudedsurface->unknown_2007, unknown_2007);
     extrudedsurface->unknown_2007--;
-
   }
   {
     BITCODE_BS v_isolines;
@@ -10278,7 +10087,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.v_isolines [BS] set+1 %hu != %hu", extrudedsurface->v_isolines, v_isolines);
     extrudedsurface->v_isolines--;
-
   }
   {
     BITCODE_BS version;
@@ -10294,7 +10102,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.version [BS] set+1 %hu != %hu", extrudedsurface->version, version);
     extrudedsurface->version--;
-
   }
   {
     BITCODE_B wireframe_data_present;
@@ -10310,7 +10117,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->wireframe_data_present, wireframe_data_present);
     extrudedsurface->wireframe_data_present--;
-
   }
   {
     Dwg_3DSOLID_wire* wires;
@@ -10329,6 +10135,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_GEOPOSITIONMARKER *restrict geopositionmarker = obj->tio.entity->tio.GEOPOSITIONMARKER;
+  failed = 0;
   {
     BITCODE_B enable_frame_text;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "enable_frame_text", &enable_frame_text, NULL)
@@ -10343,7 +10150,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.enable_frame_text [B] set+1 " FORMAT_B " != " FORMAT_B "", geopositionmarker->enable_frame_text, enable_frame_text);
     geopositionmarker->enable_frame_text--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -10367,7 +10173,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.landing_gap [BD] set+1 %g != %g", geopositionmarker->landing_gap, landing_gap);
     geopositionmarker->landing_gap--;
-
   }
   {
     BITCODE_H mtext_handle;
@@ -10391,7 +10196,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.mtext_visible [B] set+1 " FORMAT_B " != " FORMAT_B "", geopositionmarker->mtext_visible, mtext_visible);
     geopositionmarker->mtext_visible--;
-
   }
   {
     BITCODE_T notes;
@@ -10433,7 +10237,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.radius [BD] set+1 %g != %g", geopositionmarker->radius, radius);
     geopositionmarker->radius--;
-
   }
   {
     BITCODE_T text;
@@ -10459,7 +10262,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.text_alignment [BS] set+1 %hu != %hu", geopositionmarker->text_alignment, text_alignment);
     geopositionmarker->text_alignment--;
-
   }
   {
     BITCODE_H text_style;
@@ -10483,7 +10285,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.type [BS] set+1 %hu != %hu", geopositionmarker->type, type);
     geopositionmarker->type--;
-
   }
   return failed;
 }
@@ -10492,6 +10293,7 @@ static int test_HATCH (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_HATCH *restrict hatch = obj->tio.entity->tio.HATCH;
+  failed = 0;
   {
     BITCODE_BD angle;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "angle", &angle, NULL)
@@ -10506,7 +10308,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.angle [BD] set+1 %g != %g", hatch->angle, angle);
     hatch->angle--;
-
   }
   {
     BITCODE_B associative;
@@ -10522,7 +10323,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.associative [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->associative, associative);
     hatch->associative--;
-
   }
   {
     BITCODE_H* boundary_handles;
@@ -10568,7 +10368,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.double_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->double_flag, double_flag);
     hatch->double_flag--;
-
   }
   {
     BITCODE_BD elevation;
@@ -10584,7 +10383,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.elevation [BD] set+1 %g != %g", hatch->elevation, elevation);
     hatch->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -10608,7 +10406,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.gradient_angle [BD] set+1 %g != %g", hatch->gradient_angle, gradient_angle);
     hatch->gradient_angle--;
-
   }
   {
     BITCODE_T gradient_name;
@@ -10634,7 +10431,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.gradient_shift [BD] set+1 %g != %g", hatch->gradient_shift, gradient_shift);
     hatch->gradient_shift--;
-
   }
   {
     BITCODE_BD gradient_tint;
@@ -10650,7 +10446,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.gradient_tint [BD] set+1 %g != %g", hatch->gradient_tint, gradient_tint);
     hatch->gradient_tint--;
-
   }
   {
     BITCODE_B has_derived;
@@ -10666,7 +10461,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.has_derived [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->has_derived, has_derived);
     hatch->has_derived--;
-
   }
   {
     BITCODE_BL is_gradient_fill;
@@ -10682,7 +10476,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.is_gradient_fill [BL] set+1 %u != %u", hatch->is_gradient_fill, is_gradient_fill);
     hatch->is_gradient_fill--;
-
   }
   {
     BITCODE_T name;
@@ -10708,7 +10501,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.num_boundary_handles [BL] set+1 %u != %u", hatch->num_boundary_handles, num_boundary_handles);
     hatch->num_boundary_handles--;
-
   }
   {
     BITCODE_BL num_colors;
@@ -10724,7 +10516,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.num_colors [BL] set+1 %u != %u", hatch->num_colors, num_colors);
     hatch->num_colors--;
-
   }
   {
     BITCODE_BS num_deflines;
@@ -10740,7 +10531,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.num_deflines [BS] set+1 %hu != %hu", hatch->num_deflines, num_deflines);
     hatch->num_deflines--;
-
   }
   {
     BITCODE_BL num_paths;
@@ -10756,7 +10546,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.num_paths [BL] set+1 %u != %u", hatch->num_paths, num_paths);
     hatch->num_paths--;
-
   }
   {
     BITCODE_BL num_seeds;
@@ -10772,7 +10561,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.num_seeds [BL] set+1 %u != %u", hatch->num_seeds, num_seeds);
     hatch->num_seeds--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -10806,7 +10594,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.pattern_type [BS] set+1 %hu != %hu", hatch->pattern_type, pattern_type);
     hatch->pattern_type--;
-
   }
   {
     BITCODE_BD pixel_size;
@@ -10822,7 +10609,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.pixel_size [BD] set+1 %g != %g", hatch->pixel_size, pixel_size);
     hatch->pixel_size--;
-
   }
   {
     BITCODE_BL reserved;
@@ -10838,7 +10624,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.reserved [BL] set+1 %u != %u", hatch->reserved, reserved);
     hatch->reserved--;
-
   }
   {
     BITCODE_BD scale_spacing;
@@ -10854,7 +10639,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.scale_spacing [BD] set+1 %g != %g", hatch->scale_spacing, scale_spacing);
     hatch->scale_spacing--;
-
   }
   {
     BITCODE_2RD* seeds;
@@ -10880,7 +10664,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.single_color_gradient [BL] set+1 %u != %u", hatch->single_color_gradient, single_color_gradient);
     hatch->single_color_gradient--;
-
   }
   {
     BITCODE_B solid_fill;
@@ -10896,7 +10679,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.solid_fill [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->solid_fill, solid_fill);
     hatch->solid_fill--;
-
   }
   {
     BITCODE_BS style;
@@ -10912,7 +10694,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.style [BS] set+1 %hu != %hu", hatch->style, style);
     hatch->style--;
-
   }
   return failed;
 }
@@ -10921,6 +10702,7 @@ static int test_HELIX (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_HELIX *restrict helix = obj->tio.entity->tio.HELIX;
+  failed = 0;
   {
     BITCODE_3BD axis_base_pt;
     if (dwg_dynapi_entity_value (helix, "HELIX", "axis_base_pt", &axis_base_pt, NULL)
@@ -10959,7 +10741,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.closed_b [B] set+1 " FORMAT_B " != " FORMAT_B "", helix->closed_b, closed_b);
     helix->closed_b--;
-
   }
   {
     BITCODE_BS constraint_type;
@@ -10975,7 +10756,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.constraint_type [BS] set+1 %hu != %hu", helix->constraint_type, constraint_type);
     helix->constraint_type--;
-
   }
   {
     Dwg_SPLINE_control_point* ctrl_pts;
@@ -11001,7 +10781,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.ctrl_tol [BD] set+1 %g != %g", helix->ctrl_tol, ctrl_tol);
     helix->ctrl_tol--;
-
   }
   {
     BITCODE_BS degree;
@@ -11017,7 +10796,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.degree [BS] set+1 %hu != %hu", helix->degree, degree);
     helix->degree--;
-
   }
   {
     BITCODE_3BD end_tan_vec;
@@ -11051,7 +10829,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.fit_tol [BD] set+1 %g != %g", helix->fit_tol, fit_tol);
     helix->fit_tol--;
-
   }
   {
     BITCODE_BS flag;
@@ -11067,7 +10844,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.flag [BS] set+1 %hu != %hu", helix->flag, flag);
     helix->flag--;
-
   }
   {
     BITCODE_B handedness;
@@ -11083,7 +10859,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.handedness [B] set+1 " FORMAT_B " != " FORMAT_B "", helix->handedness, handedness);
     helix->handedness--;
-
   }
   {
     BITCODE_BD knot_tol;
@@ -11099,7 +10874,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.knot_tol [BD] set+1 %g != %g", helix->knot_tol, knot_tol);
     helix->knot_tol--;
-
   }
   {
     BITCODE_BL knotparam;
@@ -11115,7 +10889,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.knotparam [BL] set+1 %u != %u", helix->knotparam, knotparam);
     helix->knotparam--;
-
   }
   {
     BITCODE_BD* knots;
@@ -11141,7 +10914,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.maint_version [BS] set+1 %hu != %hu", helix->maint_version, maint_version);
     helix->maint_version--;
-
   }
   {
     BITCODE_BS major_version;
@@ -11157,7 +10929,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.major_version [BS] set+1 %hu != %hu", helix->major_version, major_version);
     helix->major_version--;
-
   }
   {
     BITCODE_BL num_ctrl_pts;
@@ -11173,7 +10944,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.num_ctrl_pts [BL] set+1 %u != %u", helix->num_ctrl_pts, num_ctrl_pts);
     helix->num_ctrl_pts--;
-
   }
   {
     BITCODE_BS num_fit_pts;
@@ -11189,7 +10959,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.num_fit_pts [BS] set+1 %hu != %hu", helix->num_fit_pts, num_fit_pts);
     helix->num_fit_pts--;
-
   }
   {
     BITCODE_BL num_knots;
@@ -11205,7 +10974,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.num_knots [BL] set+1 %u != %u", helix->num_knots, num_knots);
     helix->num_knots--;
-
   }
   {
     BITCODE_BD num_turns;
@@ -11221,7 +10989,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.num_turns [BD] set+1 %g != %g", helix->num_turns, num_turns);
     helix->num_turns--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -11245,7 +11012,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.periodic [B] set+1 " FORMAT_B " != " FORMAT_B "", helix->periodic, periodic);
     helix->periodic--;
-
   }
   {
     BITCODE_BD radius;
@@ -11261,7 +11027,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.radius [BD] set+1 %g != %g", helix->radius, radius);
     helix->radius--;
-
   }
   {
     BITCODE_B rational;
@@ -11277,7 +11042,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.rational [B] set+1 " FORMAT_B " != " FORMAT_B "", helix->rational, rational);
     helix->rational--;
-
   }
   {
     BITCODE_BS scenario;
@@ -11293,7 +11057,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.scenario [BS] set+1 %hu != %hu", helix->scenario, scenario);
     helix->scenario--;
-
   }
   {
     BITCODE_BL splineflags1;
@@ -11309,7 +11072,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.splineflags1 [BL] set+1 %u != %u", helix->splineflags1, splineflags1);
     helix->splineflags1--;
-
   }
   {
     BITCODE_3BD start_pt;
@@ -11333,7 +11095,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.turn_height [BD] set+1 %g != %g", helix->turn_height, turn_height);
     helix->turn_height--;
-
   }
   {
     BITCODE_B weighted;
@@ -11349,7 +11110,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.weighted [B] set+1 " FORMAT_B " != " FORMAT_B "", helix->weighted, weighted);
     helix->weighted--;
-
   }
   return failed;
 }
@@ -11358,6 +11118,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_IMAGE *restrict image = obj->tio.entity->tio.IMAGE;
+  failed = 0;
   {
     BITCODE_RC brightness;
     if (dwg_dynapi_entity_value (image, "IMAGE", "brightness", &brightness, NULL)
@@ -11372,7 +11133,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.brightness [RC] set+1 %u != %u", image->brightness, brightness);
     image->brightness--;
-
   }
   {
     BITCODE_BL class_version;
@@ -11388,7 +11148,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.class_version [BL] set+1 %u != %u", image->class_version, class_version);
     image->class_version--;
-
   }
   {
     BITCODE_BS clip_boundary_type;
@@ -11404,7 +11163,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.clip_boundary_type [BS] set+1 %hu != %hu", image->clip_boundary_type, clip_boundary_type);
     image->clip_boundary_type--;
-
   }
   {
     BITCODE_B clip_mode;
@@ -11420,7 +11178,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.clip_mode [B] set+1 " FORMAT_B " != " FORMAT_B "", image->clip_mode, clip_mode);
     image->clip_mode--;
-
   }
   {
     BITCODE_2RD* clip_verts;
@@ -11446,7 +11203,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.clipping [B] set+1 " FORMAT_B " != " FORMAT_B "", image->clipping, clipping);
     image->clipping--;
-
   }
   {
     BITCODE_RC contrast;
@@ -11462,7 +11218,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.contrast [RC] set+1 %u != %u", image->contrast, contrast);
     image->contrast--;
-
   }
   {
     BITCODE_BS display_props;
@@ -11478,7 +11233,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.display_props [BS] set+1 %hu != %hu", image->display_props, display_props);
     image->display_props--;
-
   }
   {
     BITCODE_RC fade;
@@ -11494,7 +11248,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.fade [RC] set+1 %u != %u", image->fade, fade);
     image->fade--;
-
   }
   {
     BITCODE_H imagedef;
@@ -11526,7 +11279,6 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
       fail ("IMAGE.num_clip_verts [BL] set+1 %u != %u", image->num_clip_verts, num_clip_verts);
     image->num_clip_verts--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -11575,6 +11327,7 @@ static int test_INSERT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_INSERT *restrict insert = obj->tio.entity->tio.INSERT;
+  failed = 0;
   {
     BITCODE_H* attrib_handles;
     BITCODE_BL count = 0;
@@ -11623,7 +11376,6 @@ static int test_INSERT (const Dwg_Object *obj)
     else
       fail ("INSERT.has_attribs [B] set+1 " FORMAT_B " != " FORMAT_B "", insert->has_attribs, has_attribs);
     insert->has_attribs--;
-
   }
   {
     BITCODE_3DPOINT ins_pt;
@@ -11655,7 +11407,6 @@ static int test_INSERT (const Dwg_Object *obj)
     else
       fail ("INSERT.num_owned [BL] set+1 %u != %u", insert->num_owned, num_owned);
     insert->num_owned--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -11679,7 +11430,6 @@ static int test_INSERT (const Dwg_Object *obj)
     else
       fail ("INSERT.rotation [BD] set+1 %g != %g", insert->rotation, rotation);
     insert->rotation--;
-
   }
   {
     BITCODE_3BD scale;
@@ -11703,7 +11453,6 @@ static int test_INSERT (const Dwg_Object *obj)
     else
       fail ("INSERT.scale_flag [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", insert->scale_flag, scale_flag);
     insert->scale_flag--;
-
   }
   {
     BITCODE_H seqend;
@@ -11720,6 +11469,7 @@ static int test_LEADER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_LEADER *restrict leader = obj->tio.entity->tio.LEADER;
+  failed = 0;
   {
     BITCODE_BS annot_type;
     if (dwg_dynapi_entity_value (leader, "LEADER", "annot_type", &annot_type, NULL)
@@ -11734,7 +11484,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.annot_type [BS] set+1 %hu != %hu", leader->annot_type, annot_type);
     leader->annot_type--;
-
   }
   {
     BITCODE_B arrowhead_on;
@@ -11750,7 +11499,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.arrowhead_on [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->arrowhead_on, arrowhead_on);
     leader->arrowhead_on--;
-
   }
   {
     BITCODE_BS arrowhead_type;
@@ -11766,7 +11514,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.arrowhead_type [BS] set+1 %hu != %hu", leader->arrowhead_type, arrowhead_type);
     leader->arrowhead_type--;
-
   }
   {
     BITCODE_H associated_annotation;
@@ -11790,7 +11537,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.box_height [BD] set+1 %g != %g", leader->box_height, box_height);
     leader->box_height--;
-
   }
   {
     BITCODE_BD box_width;
@@ -11806,7 +11552,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.box_width [BD] set+1 %g != %g", leader->box_width, box_width);
     leader->box_width--;
-
   }
   {
     BITCODE_BS byblock_color;
@@ -11822,7 +11567,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.byblock_color [BS] set+1 %hu != %hu", leader->byblock_color, byblock_color);
     leader->byblock_color--;
-
   }
   {
     BITCODE_BD dimasz;
@@ -11838,7 +11582,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.dimasz [BD] set+1 %g != %g", leader->dimasz, dimasz);
     leader->dimasz--;
-
   }
   {
     BITCODE_BD dimgap;
@@ -11854,7 +11597,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.dimgap [BD] set+1 %g != %g", leader->dimgap, dimgap);
     leader->dimgap--;
-
   }
   {
     BITCODE_H dimstyle;
@@ -11894,7 +11636,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.hookline_dir [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->hookline_dir, hookline_dir);
     leader->hookline_dir--;
-
   }
   {
     BITCODE_B hookline_on;
@@ -11910,7 +11651,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.hookline_on [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->hookline_on, hookline_on);
     leader->hookline_on--;
-
   }
   {
     BITCODE_BL num_points;
@@ -11926,7 +11666,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.num_points [BL] set+1 %u != %u", leader->num_points, num_points);
     leader->num_points--;
-
   }
   {
     BITCODE_3DPOINT offset_to_block_ins_pt;
@@ -11966,7 +11705,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.path_type [BS] set+1 %hu != %hu", leader->path_type, path_type);
     leader->path_type--;
-
   }
   {
     BITCODE_3DPOINT* points;
@@ -11992,7 +11730,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.unknown_bit_1 [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->unknown_bit_1, unknown_bit_1);
     leader->unknown_bit_1--;
-
   }
   {
     BITCODE_B unknown_bit_2;
@@ -12008,7 +11745,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.unknown_bit_2 [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->unknown_bit_2, unknown_bit_2);
     leader->unknown_bit_2--;
-
   }
   {
     BITCODE_B unknown_bit_3;
@@ -12024,7 +11760,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.unknown_bit_3 [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->unknown_bit_3, unknown_bit_3);
     leader->unknown_bit_3--;
-
   }
   {
     BITCODE_B unknown_bit_5;
@@ -12040,7 +11775,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.unknown_bit_5 [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->unknown_bit_5, unknown_bit_5);
     leader->unknown_bit_5--;
-
   }
   {
     BITCODE_BS unknown_short_1;
@@ -12056,7 +11790,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.unknown_short_1 [BS] set+1 %hu != %hu", leader->unknown_short_1, unknown_short_1);
     leader->unknown_short_1--;
-
   }
   {
     BITCODE_3DPOINT x_direction;
@@ -12073,6 +11806,7 @@ static int test_LIGHT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_LIGHT *restrict light = obj->tio.entity->tio.LIGHT;
+  failed = 0;
   {
     BITCODE_BD attenuation_end_limit;
     if (dwg_dynapi_entity_value (light, "LIGHT", "attenuation_end_limit", &attenuation_end_limit, NULL)
@@ -12087,7 +11821,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.attenuation_end_limit [BD] set+1 %g != %g", light->attenuation_end_limit, attenuation_end_limit);
     light->attenuation_end_limit--;
-
   }
   {
     BITCODE_BD attenuation_start_limit;
@@ -12103,7 +11836,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.attenuation_start_limit [BD] set+1 %g != %g", light->attenuation_start_limit, attenuation_start_limit);
     light->attenuation_start_limit--;
-
   }
   {
     BITCODE_BS attenuation_type;
@@ -12119,7 +11851,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.attenuation_type [BS] set+1 %hu != %hu", light->attenuation_type, attenuation_type);
     light->attenuation_type--;
-
   }
   {
     BITCODE_B cast_shadows;
@@ -12135,7 +11866,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.cast_shadows [B] set+1 " FORMAT_B " != " FORMAT_B "", light->cast_shadows, cast_shadows);
     light->cast_shadows--;
-
   }
   {
     BITCODE_BL class_version;
@@ -12151,7 +11881,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.class_version [BL] set+1 %u != %u", light->class_version, class_version);
     light->class_version--;
-
   }
   {
     BITCODE_CMC color;
@@ -12175,7 +11904,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.falloff_angle [BD] set+1 %g != %g", light->falloff_angle, falloff_angle);
     light->falloff_angle--;
-
   }
   {
     BITCODE_BD hotspot_angle;
@@ -12191,7 +11919,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.hotspot_angle [BD] set+1 %g != %g", light->hotspot_angle, hotspot_angle);
     light->hotspot_angle--;
-
   }
   {
     BITCODE_BD intensity;
@@ -12207,7 +11934,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.intensity [BD] set+1 %g != %g", light->intensity, intensity);
     light->intensity--;
-
   }
   {
     BITCODE_H lights_layer;
@@ -12249,7 +11975,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.plot_glyph [B] set+1 " FORMAT_B " != " FORMAT_B "", light->plot_glyph, plot_glyph);
     light->plot_glyph--;
-
   }
   {
     BITCODE_3BD position;
@@ -12273,7 +11998,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.shadow_map_size [BS] set+1 %hu != %hu", light->shadow_map_size, shadow_map_size);
     light->shadow_map_size--;
-
   }
   {
     BITCODE_RC shadow_map_softness;
@@ -12289,7 +12013,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.shadow_map_softness [RC] set+1 %u != %u", light->shadow_map_softness, shadow_map_softness);
     light->shadow_map_softness--;
-
   }
   {
     BITCODE_BS shadow_type;
@@ -12305,7 +12028,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.shadow_type [BS] set+1 %hu != %hu", light->shadow_type, shadow_type);
     light->shadow_type--;
-
   }
   {
     BITCODE_B status;
@@ -12321,7 +12043,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.status [B] set+1 " FORMAT_B " != " FORMAT_B "", light->status, status);
     light->status--;
-
   }
   {
     BITCODE_3BD target;
@@ -12345,7 +12066,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.type [BS] set+1 %hu != %hu", light->type, type);
     light->type--;
-
   }
   {
     BITCODE_B use_attenuation_limits;
@@ -12361,7 +12081,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.use_attenuation_limits [B] set+1 " FORMAT_B " != " FORMAT_B "", light->use_attenuation_limits, use_attenuation_limits);
     light->use_attenuation_limits--;
-
   }
   return failed;
 }
@@ -12370,6 +12089,7 @@ static int test_LINE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_LINE *restrict line = obj->tio.entity->tio.LINE;
+  failed = 0;
   {
     BITCODE_3BD end;
     if (dwg_dynapi_entity_value (line, "LINE", "end", &end, NULL)
@@ -12415,7 +12135,6 @@ static int test_LINE (const Dwg_Object *obj)
     else
       fail ("LINE.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", line->thickness, thickness);
     line->thickness--;
-
   }
   {
     BITCODE_RC z_is_zero;
@@ -12431,7 +12150,6 @@ static int test_LINE (const Dwg_Object *obj)
     else
       fail ("LINE.z_is_zero [RC] set+1 %u != %u", line->z_is_zero, z_is_zero);
     line->z_is_zero--;
-
   }
   return failed;
 }
@@ -12440,6 +12158,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_LOFTEDSURFACE *restrict loftedsurface = obj->tio.entity->tio.LOFTEDSURFACE;
+  failed = 0;
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "acis_data", &acis_data, NULL)
@@ -12464,7 +12183,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->acis_empty, acis_empty);
     loftedsurface->acis_empty--;
-
   }
   {
     BITCODE_B acis_empty2;
@@ -12480,7 +12198,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->acis_empty2, acis_empty2);
     loftedsurface->acis_empty2--;
-
   }
   {
     BITCODE_B acis_empty_bit;
@@ -12496,7 +12213,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->acis_empty_bit, acis_empty_bit);
     loftedsurface->acis_empty_bit--;
-
   }
   {
     BITCODE_B align_direction;
@@ -12512,7 +12228,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.align_direction [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->align_direction, align_direction);
     loftedsurface->align_direction--;
-
   }
   {
     BITCODE_B arc_length_parameterization;
@@ -12528,7 +12243,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.arc_length_parameterization [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->arc_length_parameterization, arc_length_parameterization);
     loftedsurface->arc_length_parameterization--;
-
   }
   {
     BITCODE_BL* block_size;
@@ -12552,7 +12266,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.closed_surfaces [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->closed_surfaces, closed_surfaces);
     loftedsurface->closed_surfaces--;
-
   }
   {
     BITCODE_H* cross_sections;
@@ -12586,7 +12299,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.end_draft_angle [BD] set+1 %g != %g", loftedsurface->end_draft_angle, end_draft_angle);
     loftedsurface->end_draft_angle--;
-
   }
   {
     BITCODE_BD end_draft_magnitude;
@@ -12602,7 +12314,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.end_draft_magnitude [BD] set+1 %g != %g", loftedsurface->end_draft_magnitude, end_draft_magnitude);
     loftedsurface->end_draft_magnitude--;
-
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
@@ -12644,7 +12355,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->isoline_present, isoline_present);
     loftedsurface->isoline_present--;
-
   }
   {
     BITCODE_BD* loft_entity_transmatrix;
@@ -12668,7 +12378,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.modeler_format_version [BS] set+1 %hu != %hu", loftedsurface->modeler_format_version, modeler_format_version);
     loftedsurface->modeler_format_version--;
-
   }
   {
     BITCODE_B no_twist;
@@ -12684,7 +12393,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.no_twist [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->no_twist, no_twist);
     loftedsurface->no_twist--;
-
   }
   {
     BITCODE_BL num_blocks;
@@ -12700,7 +12408,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_blocks [BL] set+1 %u != %u", loftedsurface->num_blocks, num_blocks);
     loftedsurface->num_blocks--;
-
   }
   {
     BITCODE_BS num_cross_sections;
@@ -12716,7 +12423,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_cross_sections [BS] set+1 %hu != %hu", loftedsurface->num_cross_sections, num_cross_sections);
     loftedsurface->num_cross_sections--;
-
   }
   {
     BITCODE_BS num_guide_curves;
@@ -12732,7 +12438,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_guide_curves [BS] set+1 %hu != %hu", loftedsurface->num_guide_curves, num_guide_curves);
     loftedsurface->num_guide_curves--;
-
   }
   {
     BITCODE_BL num_isolines;
@@ -12748,7 +12453,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_isolines [BL] set+1 %u != %u", loftedsurface->num_isolines, num_isolines);
     loftedsurface->num_isolines--;
-
   }
   {
     BITCODE_BL num_silhouettes;
@@ -12764,7 +12468,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_silhouettes [BL] set+1 %u != %u", loftedsurface->num_silhouettes, num_silhouettes);
     loftedsurface->num_silhouettes--;
-
   }
   {
     BITCODE_BL num_wires;
@@ -12780,7 +12483,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_wires [BL] set+1 %u != %u", loftedsurface->num_wires, num_wires);
     loftedsurface->num_wires--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -12812,7 +12514,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.plane_normal_lofting_type [BL] set+1 %u != %u", loftedsurface->plane_normal_lofting_type, plane_normal_lofting_type);
     loftedsurface->plane_normal_lofting_type--;
-
   }
   {
     BITCODE_3BD point;
@@ -12836,7 +12537,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->point_present, point_present);
     loftedsurface->point_present--;
-
   }
   {
     BITCODE_B ruled_surface;
@@ -12852,7 +12552,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.ruled_surface [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->ruled_surface, ruled_surface);
     loftedsurface->ruled_surface--;
-
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -12878,7 +12577,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.simple_surfaces [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->simple_surfaces, simple_surfaces);
     loftedsurface->simple_surfaces--;
-
   }
   {
     BITCODE_B solid;
@@ -12894,7 +12592,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->solid, solid);
     loftedsurface->solid--;
-
   }
   {
     BITCODE_BD start_draft_angle;
@@ -12910,7 +12607,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.start_draft_angle [BD] set+1 %g != %g", loftedsurface->start_draft_angle, start_draft_angle);
     loftedsurface->start_draft_angle--;
-
   }
   {
     BITCODE_BD start_draft_magnitude;
@@ -12926,7 +12622,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.start_draft_magnitude [BD] set+1 %g != %g", loftedsurface->start_draft_magnitude, start_draft_magnitude);
     loftedsurface->start_draft_magnitude--;
-
   }
   {
     BITCODE_BS u_isolines;
@@ -12942,7 +12637,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.u_isolines [BS] set+1 %hu != %hu", loftedsurface->u_isolines, u_isolines);
     loftedsurface->u_isolines--;
-
   }
   {
     BITCODE_B unknown;
@@ -12958,7 +12652,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->unknown, unknown);
     loftedsurface->unknown--;
-
   }
   {
     BITCODE_BL unknown_2007;
@@ -12974,7 +12667,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.unknown_2007 [BL] set+1 %u != %u", loftedsurface->unknown_2007, unknown_2007);
     loftedsurface->unknown_2007--;
-
   }
   {
     BITCODE_BS v_isolines;
@@ -12990,7 +12682,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.v_isolines [BS] set+1 %hu != %hu", loftedsurface->v_isolines, v_isolines);
     loftedsurface->v_isolines--;
-
   }
   {
     BITCODE_BS version;
@@ -13006,7 +12697,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.version [BS] set+1 %hu != %hu", loftedsurface->version, version);
     loftedsurface->version--;
-
   }
   {
     BITCODE_B virtual_guide;
@@ -13022,7 +12712,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.virtual_guide [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->virtual_guide, virtual_guide);
     loftedsurface->virtual_guide--;
-
   }
   {
     BITCODE_B wireframe_data_present;
@@ -13038,7 +12727,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->wireframe_data_present, wireframe_data_present);
     loftedsurface->wireframe_data_present--;
-
   }
   {
     Dwg_3DSOLID_wire* wires;
@@ -13057,6 +12745,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_LWPOLYLINE *restrict lwpolyline = obj->tio.entity->tio.LWPOLYLINE;
+  failed = 0;
   {
     BITCODE_BD* bulges;
     BITCODE_BL count = 0;
@@ -13081,7 +12770,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.const_width [BD] set+1 %g != %g", lwpolyline->const_width, const_width);
     lwpolyline->const_width--;
-
   }
   {
     BITCODE_BD elevation;
@@ -13097,7 +12785,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.elevation [BD] set+1 %g != %g", lwpolyline->elevation, elevation);
     lwpolyline->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -13121,7 +12808,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.flag [BS] set+1 %hu != %hu", lwpolyline->flag, flag);
     lwpolyline->flag--;
-
   }
   {
     BITCODE_BL num_bulges;
@@ -13137,7 +12823,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.num_bulges [BL] set+1 %u != %u", lwpolyline->num_bulges, num_bulges);
     lwpolyline->num_bulges--;
-
   }
   {
     BITCODE_BL num_points;
@@ -13153,7 +12838,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.num_points [BL] set+1 %u != %u", lwpolyline->num_points, num_points);
     lwpolyline->num_points--;
-
   }
   {
     BITCODE_BL num_vertexids;
@@ -13169,7 +12853,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.num_vertexids [BL] set+1 %u != %u", lwpolyline->num_vertexids, num_vertexids);
     lwpolyline->num_vertexids--;
-
   }
   {
     BITCODE_BL num_widths;
@@ -13185,7 +12868,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.num_widths [BL] set+1 %u != %u", lwpolyline->num_widths, num_widths);
     lwpolyline->num_widths--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -13219,7 +12901,6 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.thickness [BD] set+1 %g != %g", lwpolyline->thickness, thickness);
     lwpolyline->thickness--;
-
   }
   {
     BITCODE_BL* vertexids;
@@ -13248,6 +12929,7 @@ static int test_MESH (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_MESH *restrict mesh = obj->tio.entity->tio.MESH;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (mesh, "MESH", "class_version", &class_version, NULL)
@@ -13262,7 +12944,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.class_version [BL] set+1 %u != %u", mesh->class_version, class_version);
     mesh->class_version--;
-
   }
   {
     BITCODE_BD* crease;
@@ -13288,7 +12969,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.dlevel [RC] set+1 %u != %u", mesh->dlevel, dlevel);
     mesh->dlevel--;
-
   }
   {
     Dwg_MESH_edge* edges;
@@ -13324,7 +13004,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.is_watertight [RC] set+1 %u != %u", mesh->is_watertight, is_watertight);
     mesh->is_watertight--;
-
   }
   {
     BITCODE_BL num_crease;
@@ -13340,7 +13019,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.num_crease [BL] set+1 %u != %u", mesh->num_crease, num_crease);
     mesh->num_crease--;
-
   }
   {
     BITCODE_BL num_edges;
@@ -13356,7 +13034,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.num_edges [BL] set+1 %u != %u", mesh->num_edges, num_edges);
     mesh->num_edges--;
-
   }
   {
     BITCODE_BL num_faces;
@@ -13372,7 +13049,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.num_faces [BL] set+1 %u != %u", mesh->num_faces, num_faces);
     mesh->num_faces--;
-
   }
   {
     BITCODE_BL num_subdiv_vertex;
@@ -13388,7 +13064,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.num_subdiv_vertex [BL] set+1 %u != %u", mesh->num_subdiv_vertex, num_subdiv_vertex);
     mesh->num_subdiv_vertex--;
-
   }
   {
     BITCODE_BL num_vertex;
@@ -13404,7 +13079,6 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.num_vertex [BL] set+1 %u != %u", mesh->num_vertex, num_vertex);
     mesh->num_vertex--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -13441,6 +13115,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_MINSERT *restrict minsert = obj->tio.entity->tio.MINSERT;
+  failed = 0;
   {
     BITCODE_H* attrib_handles;
     BITCODE_BL count = 0;
@@ -13473,7 +13148,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.col_spacing [BD] set+1 %g != %g", minsert->col_spacing, col_spacing);
     minsert->col_spacing--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -13505,7 +13179,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.has_attribs [B] set+1 " FORMAT_B " != " FORMAT_B "", minsert->has_attribs, has_attribs);
     minsert->has_attribs--;
-
   }
   {
     BITCODE_3DPOINT ins_pt;
@@ -13537,7 +13210,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.num_cols [BS] set+1 %hu != %hu", minsert->num_cols, num_cols);
     minsert->num_cols--;
-
   }
   {
     BITCODE_BL num_owned;
@@ -13553,7 +13225,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.num_owned [BL] set+1 %u != %u", minsert->num_owned, num_owned);
     minsert->num_owned--;
-
   }
   {
     BITCODE_BS num_rows;
@@ -13569,7 +13240,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.num_rows [BS] set+1 %hu != %hu", minsert->num_rows, num_rows);
     minsert->num_rows--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -13593,7 +13263,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.rotation [BD] set+1 %g != %g", minsert->rotation, rotation);
     minsert->rotation--;
-
   }
   {
     BITCODE_BD row_spacing;
@@ -13609,7 +13278,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.row_spacing [BD] set+1 %g != %g", minsert->row_spacing, row_spacing);
     minsert->row_spacing--;
-
   }
   {
     BITCODE_3BD scale;
@@ -13633,7 +13301,6 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
       fail ("MINSERT.scale_flag [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", minsert->scale_flag, scale_flag);
     minsert->scale_flag--;
-
   }
   {
     BITCODE_H seqend;
@@ -13650,6 +13317,7 @@ static int test_MLINE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_MLINE *restrict mline = obj->tio.entity->tio.MLINE;
+  failed = 0;
   {
     BITCODE_3BD base_point;
     if (dwg_dynapi_entity_value (mline, "MLINE", "base_point", &base_point, NULL)
@@ -13680,7 +13348,6 @@ static int test_MLINE (const Dwg_Object *obj)
     else
       fail ("MLINE.flags [BS] set+1 %hu != %hu", mline->flags, flags);
     mline->flags--;
-
   }
   {
     BITCODE_RC justification;
@@ -13696,7 +13363,6 @@ static int test_MLINE (const Dwg_Object *obj)
     else
       fail ("MLINE.justification [RC] set+1 %u != %u", mline->justification, justification);
     mline->justification--;
-
   }
   {
     BITCODE_H mlinestyle;
@@ -13720,7 +13386,6 @@ static int test_MLINE (const Dwg_Object *obj)
     else
       fail ("MLINE.num_lines [RC] set+1 %u != %u", mline->num_lines, num_lines);
     mline->num_lines--;
-
   }
   {
     BITCODE_BS num_verts;
@@ -13736,7 +13401,6 @@ static int test_MLINE (const Dwg_Object *obj)
     else
       fail ("MLINE.num_verts [BS] set+1 %hu != %hu", mline->num_verts, num_verts);
     mline->num_verts--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -13760,7 +13424,6 @@ static int test_MLINE (const Dwg_Object *obj)
     else
       fail ("MLINE.scale [BD] set+1 %g != %g", mline->scale, scale);
     mline->scale--;
-
   }
   {
     Dwg_MLINE_vertex* verts;
@@ -13779,6 +13442,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_MTEXT *restrict mtext = obj->tio.entity->tio.MTEXT;
+  failed = 0;
   {
     BITCODE_B annotative;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "annotative", &annotative, NULL)
@@ -13793,7 +13457,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.annotative [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->annotative, annotative);
     mtext->annotative--;
-
   }
   {
     BITCODE_H appid;
@@ -13817,7 +13480,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.attachment [BS] set+1 %hu != %hu", mtext->attachment, attachment);
     mtext->attachment--;
-
   }
   {
     BITCODE_B auto_height;
@@ -13833,7 +13495,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.auto_height [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->auto_height, auto_height);
     mtext->auto_height--;
-
   }
   {
     BITCODE_CMC bg_fill_color;
@@ -13857,7 +13518,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.bg_fill_flag [BL] set+1 %u != %u", mtext->bg_fill_flag, bg_fill_flag);
     mtext->bg_fill_flag--;
-
   }
   {
     BITCODE_BL bg_fill_scale;
@@ -13873,7 +13533,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.bg_fill_scale [BL] set+1 %u != %u", mtext->bg_fill_scale, bg_fill_scale);
     mtext->bg_fill_scale--;
-
   }
   {
     BITCODE_BL bg_fill_trans;
@@ -13889,7 +13548,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.bg_fill_trans [BL] set+1 %u != %u", mtext->bg_fill_trans, bg_fill_trans);
     mtext->bg_fill_trans--;
-
   }
   {
     BITCODE_BS class_version;
@@ -13905,7 +13563,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.class_version [BS] set+1 %hu != %hu", mtext->class_version, class_version);
     mtext->class_version--;
-
   }
   {
     BITCODE_BD* column_heights;
@@ -13931,7 +13588,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.column_type [BL] set+1 %u != %u", mtext->column_type, column_type);
     mtext->column_type--;
-
   }
   {
     BITCODE_BD column_width;
@@ -13947,7 +13603,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.column_width [BD] set+1 %g != %g", mtext->column_width, column_width);
     mtext->column_width--;
-
   }
   {
     BITCODE_B default_flag;
@@ -13963,7 +13618,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.default_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->default_flag, default_flag);
     mtext->default_flag--;
-
   }
   {
     BITCODE_BS drawing_dir;
@@ -13979,7 +13633,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.drawing_dir [BS] set+1 %hu != %hu", mtext->drawing_dir, drawing_dir);
     mtext->drawing_dir--;
-
   }
   {
     BITCODE_BD extents_height;
@@ -13995,7 +13648,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.extents_height [BD] set+1 %g != %g", mtext->extents_height, extents_height);
     mtext->extents_height--;
-
   }
   {
     BITCODE_BD extents_width;
@@ -14011,7 +13663,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.extents_width [BD] set+1 %g != %g", mtext->extents_width, extents_width);
     mtext->extents_width--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -14035,7 +13686,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.flow_reversed [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->flow_reversed, flow_reversed);
     mtext->flow_reversed--;
-
   }
   {
     BITCODE_BD gutter;
@@ -14051,7 +13701,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.gutter [BD] set+1 %g != %g", mtext->gutter, gutter);
     mtext->gutter--;
-
   }
   {
     BITCODE_3BD insertion_pt;
@@ -14075,7 +13724,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.linespace_factor [BD] set+1 %g != %g", mtext->linespace_factor, linespace_factor);
     mtext->linespace_factor--;
-
   }
   {
     BITCODE_BS linespace_style;
@@ -14091,7 +13739,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.linespace_style [BS] set+1 %hu != %hu", mtext->linespace_style, linespace_style);
     mtext->linespace_style--;
-
   }
   {
     BITCODE_BL num_column_heights;
@@ -14107,7 +13754,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.num_column_heights [BL] set+1 %u != %u", mtext->num_column_heights, num_column_heights);
     mtext->num_column_heights--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -14131,7 +13777,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.rect_height [BD] set+1 %g != %g", mtext->rect_height, rect_height);
     mtext->rect_height--;
-
   }
   {
     BITCODE_BD rect_width;
@@ -14147,7 +13792,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.rect_width [BD] set+1 %g != %g", mtext->rect_width, rect_width);
     mtext->rect_width--;
-
   }
   {
     BITCODE_H style;
@@ -14181,7 +13825,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.text_height [BD] set+1 %g != %g", mtext->text_height, text_height);
     mtext->text_height--;
-
   }
   {
     BITCODE_B unknown_bit;
@@ -14197,7 +13840,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.unknown_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->unknown_bit, unknown_bit);
     mtext->unknown_bit--;
-
   }
   {
     BITCODE_3BD x_axis_dir;
@@ -14214,6 +13856,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_MULTILEADER *restrict multileader = obj->tio.entity->tio.MULTILEADER;
+  failed = 0;
   {
     BITCODE_H arrow_handle;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "arrow_handle", &arrow_handle, NULL)
@@ -14236,7 +13879,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.arrow_size [BD] set+1 %g != %g", multileader->arrow_size, arrow_size);
     multileader->arrow_size--;
-
   }
   {
     Dwg_LEADER_ArrowHead* arrowheads;
@@ -14262,7 +13904,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.attach_bottom [BS] set+1 %hu != %hu", multileader->attach_bottom, attach_bottom);
     multileader->attach_bottom--;
-
   }
   {
     BITCODE_BS attach_dir;
@@ -14278,7 +13919,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.attach_dir [BS] set+1 %hu != %hu", multileader->attach_dir, attach_dir);
     multileader->attach_dir--;
-
   }
   {
     BITCODE_BS attach_top;
@@ -14294,7 +13934,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.attach_top [BS] set+1 %hu != %hu", multileader->attach_top, attach_top);
     multileader->attach_top--;
-
   }
   {
     BITCODE_BS attach_type;
@@ -14310,7 +13949,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.attach_type [BS] set+1 %hu != %hu", multileader->attach_type, attach_type);
     multileader->attach_type--;
-
   }
   {
     BITCODE_CMC block_color;
@@ -14334,7 +13972,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.block_rotation [BD] set+1 %g != %g", multileader->block_rotation, block_rotation);
     multileader->block_rotation--;
-
   }
   {
     BITCODE_3BD block_scale;
@@ -14376,7 +14013,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.class_version [BS] set+1 %hu != %hu", multileader->class_version, class_version);
     multileader->class_version--;
-
   }
   {
     BITCODE_CMC color;
@@ -14408,7 +14044,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.flags [BL] set+1 %u != %u", multileader->flags, flags);
     multileader->flags--;
-
   }
   {
     BITCODE_B has_dogleg;
@@ -14424,7 +14059,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.has_dogleg [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->has_dogleg, has_dogleg);
     multileader->has_dogleg--;
-
   }
   {
     BITCODE_B has_landing;
@@ -14440,7 +14074,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.has_landing [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->has_landing, has_landing);
     multileader->has_landing--;
-
   }
   {
     BITCODE_B has_text_frame;
@@ -14456,7 +14089,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.has_text_frame [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->has_text_frame, has_text_frame);
     multileader->has_text_frame--;
-
   }
   {
     BITCODE_BS ipe_alignment;
@@ -14472,7 +14104,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.ipe_alignment [BS] set+1 %hu != %hu", multileader->ipe_alignment, ipe_alignment);
     multileader->ipe_alignment--;
-
   }
   {
     BITCODE_B is_annotative;
@@ -14488,7 +14119,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.is_annotative [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->is_annotative, is_annotative);
     multileader->is_annotative--;
-
   }
   {
     BITCODE_BS justification;
@@ -14504,7 +14134,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.justification [BS] set+1 %hu != %hu", multileader->justification, justification);
     multileader->justification--;
-
   }
   {
     BITCODE_BD landing_dist;
@@ -14520,7 +14149,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.landing_dist [BD] set+1 %g != %g", multileader->landing_dist, landing_dist);
     multileader->landing_dist--;
-
   }
   {
     BITCODE_BLd linewt;
@@ -14535,7 +14163,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.linewt [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", multileader->linewt, linewt);
     multileader->linewt--;
-
   }
   {
     BITCODE_H ltype;
@@ -14567,7 +14194,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.neg_textdir [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->neg_textdir, neg_textdir);
     multileader->neg_textdir--;
-
   }
   {
     BITCODE_BL num_arrowheads;
@@ -14583,7 +14209,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.num_arrowheads [BL] set+1 %u != %u", multileader->num_arrowheads, num_arrowheads);
     multileader->num_arrowheads--;
-
   }
   {
     BITCODE_BL num_blocklabels;
@@ -14599,7 +14224,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.num_blocklabels [BL] set+1 %u != %u", multileader->num_blocklabels, num_blocklabels);
     multileader->num_blocklabels--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -14623,7 +14247,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.scale_factor [BD] set+1 %g != %g", multileader->scale_factor, scale_factor);
     multileader->scale_factor--;
-
   }
   {
     BITCODE_BS style_attachment;
@@ -14639,7 +14262,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.style_attachment [BS] set+1 %hu != %hu", multileader->style_attachment, style_attachment);
     multileader->style_attachment--;
-
   }
   {
     BITCODE_BS style_content;
@@ -14655,7 +14277,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.style_content [BS] set+1 %hu != %hu", multileader->style_content, style_content);
     multileader->style_content--;
-
   }
   {
     BITCODE_BS text_angletype;
@@ -14671,7 +14292,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.text_angletype [BS] set+1 %hu != %hu", multileader->text_angletype, text_angletype);
     multileader->text_angletype--;
-
   }
   {
     BITCODE_CMC text_color;
@@ -14695,7 +14315,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.text_extended [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->text_extended, text_extended);
     multileader->text_extended--;
-
   }
   {
     BITCODE_BS text_left;
@@ -14711,7 +14330,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.text_left [BS] set+1 %hu != %hu", multileader->text_left, text_left);
     multileader->text_left--;
-
   }
   {
     BITCODE_BS text_right;
@@ -14727,7 +14345,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.text_right [BS] set+1 %hu != %hu", multileader->text_right, text_right);
     multileader->text_right--;
-
   }
   {
     BITCODE_H text_style;
@@ -14751,7 +14368,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.type [BS] set+1 %hu != %hu", multileader->type, type);
     multileader->type--;
-
   }
   return failed;
 }
@@ -14760,6 +14376,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_OLE2FRAME *restrict ole2frame = obj->tio.entity->tio.OLE2FRAME;
+  failed = 0;
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "data", &data, NULL)
@@ -14782,7 +14399,6 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     else
       fail ("OLE2FRAME.data_size [BL] set+1 %u != %u", ole2frame->data_size, data_size);
     ole2frame->data_size--;
-
   }
   {
     BITCODE_RC lock_aspect;
@@ -14798,7 +14414,6 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     else
       fail ("OLE2FRAME.lock_aspect [RC] set+1 %u != %u", ole2frame->lock_aspect, lock_aspect);
     ole2frame->lock_aspect--;
-
   }
   {
     BITCODE_BS mode;
@@ -14814,7 +14429,6 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     else
       fail ("OLE2FRAME.mode [BS] set+1 %hu != %hu", ole2frame->mode, mode);
     ole2frame->mode--;
-
   }
   {
     BITCODE_TF oleclient;
@@ -14838,7 +14452,6 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     else
       fail ("OLE2FRAME.oleversion [BS] set+1 %hu != %hu", ole2frame->oleversion, oleversion);
     ole2frame->oleversion--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -14878,7 +14491,6 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     else
       fail ("OLE2FRAME.type [BS] set+1 %hu != %hu", ole2frame->type, type);
     ole2frame->type--;
-
   }
   return failed;
 }
@@ -14887,6 +14499,7 @@ static int test_OLEFRAME (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_OLEFRAME *restrict oleframe = obj->tio.entity->tio.OLEFRAME;
+  failed = 0;
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (oleframe, "OLEFRAME", "data", &data, NULL)
@@ -14909,7 +14522,6 @@ static int test_OLEFRAME (const Dwg_Object *obj)
     else
       fail ("OLEFRAME.data_size [BL] set+1 %u != %u", oleframe->data_size, data_size);
     oleframe->data_size--;
-
   }
   {
     BITCODE_BS flag;
@@ -14925,7 +14537,6 @@ static int test_OLEFRAME (const Dwg_Object *obj)
     else
       fail ("OLEFRAME.flag [BS] set+1 %hu != %hu", oleframe->flag, flag);
     oleframe->flag--;
-
   }
   {
     BITCODE_BS mode;
@@ -14941,7 +14552,6 @@ static int test_OLEFRAME (const Dwg_Object *obj)
     else
       fail ("OLEFRAME.mode [BS] set+1 %hu != %hu", oleframe->mode, mode);
     oleframe->mode--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -14958,6 +14568,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_PLANESURFACE *restrict planesurface = obj->tio.entity->tio.PLANESURFACE;
+  failed = 0;
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "acis_data", &acis_data, NULL)
@@ -14982,7 +14593,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->acis_empty, acis_empty);
     planesurface->acis_empty--;
-
   }
   {
     BITCODE_B acis_empty2;
@@ -14998,7 +14608,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->acis_empty2, acis_empty2);
     planesurface->acis_empty2--;
-
   }
   {
     BITCODE_B acis_empty_bit;
@@ -15014,7 +14623,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->acis_empty_bit, acis_empty_bit);
     planesurface->acis_empty_bit--;
-
   }
   {
     BITCODE_BL* block_size;
@@ -15038,7 +14646,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.class_version [BL] set+1 %u != %u", planesurface->class_version, class_version);
     planesurface->class_version--;
-
   }
   {
     char ** encr_sat_data;
@@ -15078,7 +14685,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->isoline_present, isoline_present);
     planesurface->isoline_present--;
-
   }
   {
     BITCODE_BS modeler_format_version;
@@ -15094,7 +14700,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.modeler_format_version [BS] set+1 %hu != %hu", planesurface->modeler_format_version, modeler_format_version);
     planesurface->modeler_format_version--;
-
   }
   {
     BITCODE_BL num_blocks;
@@ -15110,7 +14715,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.num_blocks [BL] set+1 %u != %u", planesurface->num_blocks, num_blocks);
     planesurface->num_blocks--;
-
   }
   {
     BITCODE_BL num_isolines;
@@ -15126,7 +14730,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.num_isolines [BL] set+1 %u != %u", planesurface->num_isolines, num_isolines);
     planesurface->num_isolines--;
-
   }
   {
     BITCODE_BL num_silhouettes;
@@ -15142,7 +14745,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.num_silhouettes [BL] set+1 %u != %u", planesurface->num_silhouettes, num_silhouettes);
     planesurface->num_silhouettes--;
-
   }
   {
     BITCODE_BL num_wires;
@@ -15158,7 +14760,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.num_wires [BL] set+1 %u != %u", planesurface->num_wires, num_wires);
     planesurface->num_wires--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -15190,7 +14791,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->point_present, point_present);
     planesurface->point_present--;
-
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -15216,7 +14816,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.u_isolines [BS] set+1 %hu != %hu", planesurface->u_isolines, u_isolines);
     planesurface->u_isolines--;
-
   }
   {
     BITCODE_B unknown;
@@ -15232,7 +14831,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->unknown, unknown);
     planesurface->unknown--;
-
   }
   {
     BITCODE_BL unknown_2007;
@@ -15248,7 +14846,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.unknown_2007 [BL] set+1 %u != %u", planesurface->unknown_2007, unknown_2007);
     planesurface->unknown_2007--;
-
   }
   {
     BITCODE_BS v_isolines;
@@ -15264,7 +14861,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.v_isolines [BS] set+1 %hu != %hu", planesurface->v_isolines, v_isolines);
     planesurface->v_isolines--;
-
   }
   {
     BITCODE_BS version;
@@ -15280,7 +14876,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.version [BS] set+1 %hu != %hu", planesurface->version, version);
     planesurface->version--;
-
   }
   {
     BITCODE_B wireframe_data_present;
@@ -15296,7 +14891,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->wireframe_data_present, wireframe_data_present);
     planesurface->wireframe_data_present--;
-
   }
   {
     Dwg_3DSOLID_wire* wires;
@@ -15315,6 +14909,7 @@ static int test_POINT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_POINT *restrict point = obj->tio.entity->tio.POINT;
+  failed = 0;
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (point, "POINT", "extrusion", &extrusion, NULL)
@@ -15344,7 +14939,6 @@ static int test_POINT (const Dwg_Object *obj)
     else
       fail ("POINT.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", point->thickness, thickness);
     point->thickness--;
-
   }
   {
     BITCODE_BD x;
@@ -15360,7 +14954,6 @@ static int test_POINT (const Dwg_Object *obj)
     else
       fail ("POINT.x [BD] set+1 %g != %g", point->x, x);
     point->x--;
-
   }
   {
     BITCODE_BD x_ang;
@@ -15376,7 +14969,6 @@ static int test_POINT (const Dwg_Object *obj)
     else
       fail ("POINT.x_ang [BD] set+1 %g != %g", point->x_ang, x_ang);
     point->x_ang--;
-
   }
   {
     BITCODE_BD y;
@@ -15392,7 +14984,6 @@ static int test_POINT (const Dwg_Object *obj)
     else
       fail ("POINT.y [BD] set+1 %g != %g", point->y, y);
     point->y--;
-
   }
   {
     BITCODE_BD z;
@@ -15408,7 +14999,6 @@ static int test_POINT (const Dwg_Object *obj)
     else
       fail ("POINT.z [BD] set+1 %g != %g", point->z, z);
     point->z--;
-
   }
   return failed;
 }
@@ -15417,6 +15007,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_POLYLINE_2D *restrict polyline_2d = obj->tio.entity->tio.POLYLINE_2D;
+  failed = 0;
   {
     BITCODE_BS curve_type;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "curve_type", &curve_type, NULL)
@@ -15431,7 +15022,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.curve_type [BS] set+1 %hu != %hu", polyline_2d->curve_type, curve_type);
     polyline_2d->curve_type--;
-
   }
   {
     BITCODE_BD elevation;
@@ -15447,7 +15037,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.elevation [BD] set+1 %g != %g", polyline_2d->elevation, elevation);
     polyline_2d->elevation--;
-
   }
   {
     BITCODE_BD end_width;
@@ -15463,7 +15052,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.end_width [BD] set+1 %g != %g", polyline_2d->end_width, end_width);
     polyline_2d->end_width--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -15495,7 +15083,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.flag [BS] set+1 %hu != %hu", polyline_2d->flag, flag);
     polyline_2d->flag--;
-
   }
   {
     BITCODE_B has_vertex;
@@ -15511,7 +15098,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_2d->has_vertex, has_vertex);
     polyline_2d->has_vertex--;
-
   }
   {
     BITCODE_H last_vertex;
@@ -15535,7 +15121,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.num_owned [BL] set+1 %u != %u", polyline_2d->num_owned, num_owned);
     polyline_2d->num_owned--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -15567,7 +15152,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.start_width [BD] set+1 %g != %g", polyline_2d->start_width, start_width);
     polyline_2d->start_width--;
-
   }
   {
     BITCODE_BT thickness;
@@ -15582,7 +15166,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", polyline_2d->thickness, thickness);
     polyline_2d->thickness--;
-
   }
   {
     BITCODE_H* vertex;
@@ -15601,6 +15184,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_POLYLINE_3D *restrict polyline_3d = obj->tio.entity->tio.POLYLINE_3D;
+  failed = 0;
   {
     BITCODE_RC curve_type;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "curve_type", &curve_type, NULL)
@@ -15615,7 +15199,6 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_3D.curve_type [RC] set+1 %u != %u", polyline_3d->curve_type, curve_type);
     polyline_3d->curve_type--;
-
   }
   {
     BITCODE_H first_vertex;
@@ -15639,7 +15222,6 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_3D.flag [RC] set+1 %u != %u", polyline_3d->flag, flag);
     polyline_3d->flag--;
-
   }
   {
     BITCODE_B has_vertex;
@@ -15655,7 +15237,6 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_3D.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_3d->has_vertex, has_vertex);
     polyline_3d->has_vertex--;
-
   }
   {
     BITCODE_H last_vertex;
@@ -15679,7 +15260,6 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_3D.num_owned [BL] set+1 %u != %u", polyline_3d->num_owned, num_owned);
     polyline_3d->num_owned--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -15714,6 +15294,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_POLYLINE_MESH *restrict polyline_mesh = obj->tio.entity->tio.POLYLINE_MESH;
+  failed = 0;
   {
     BITCODE_BS curve_type;
     if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "curve_type", &curve_type, NULL)
@@ -15728,7 +15309,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.curve_type [BS] set+1 %hu != %hu", polyline_mesh->curve_type, curve_type);
     polyline_mesh->curve_type--;
-
   }
   {
     BITCODE_H first_vertex;
@@ -15752,7 +15332,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.flag [BS] set+1 %hu != %hu", polyline_mesh->flag, flag);
     polyline_mesh->flag--;
-
   }
   {
     BITCODE_B has_vertex;
@@ -15768,7 +15347,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_mesh->has_vertex, has_vertex);
     polyline_mesh->has_vertex--;
-
   }
   {
     BITCODE_H last_vertex;
@@ -15792,7 +15370,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.m_density [BS] set+1 %hu != %hu", polyline_mesh->m_density, m_density);
     polyline_mesh->m_density--;
-
   }
   {
     BITCODE_BS n_density;
@@ -15808,7 +15385,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.n_density [BS] set+1 %hu != %hu", polyline_mesh->n_density, n_density);
     polyline_mesh->n_density--;
-
   }
   {
     BITCODE_BS num_m_verts;
@@ -15824,7 +15400,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.num_m_verts [BS] set+1 %hu != %hu", polyline_mesh->num_m_verts, num_m_verts);
     polyline_mesh->num_m_verts--;
-
   }
   {
     BITCODE_BS num_n_verts;
@@ -15840,7 +15415,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.num_n_verts [BS] set+1 %hu != %hu", polyline_mesh->num_n_verts, num_n_verts);
     polyline_mesh->num_n_verts--;
-
   }
   {
     BITCODE_BL num_owned;
@@ -15856,7 +15430,6 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.num_owned [BL] set+1 %u != %u", polyline_mesh->num_owned, num_owned);
     polyline_mesh->num_owned--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -15891,6 +15464,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_POLYLINE_PFACE *restrict polyline_pface = obj->tio.entity->tio.POLYLINE_PFACE;
+  failed = 0;
   {
     BITCODE_H first_vertex;
     if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "first_vertex", &first_vertex, NULL)
@@ -15913,7 +15487,6 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
     else
       fail ("POLYLINE_PFACE.has_vertex [B] set+1 " FORMAT_B " != " FORMAT_B "", polyline_pface->has_vertex, has_vertex);
     polyline_pface->has_vertex--;
-
   }
   {
     BITCODE_H last_vertex;
@@ -15937,7 +15510,6 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
     else
       fail ("POLYLINE_PFACE.num_owned [BL] set+1 %u != %u", polyline_pface->num_owned, num_owned);
     polyline_pface->num_owned--;
-
   }
   {
     BITCODE_BS numfaces;
@@ -15953,7 +15525,6 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
     else
       fail ("POLYLINE_PFACE.numfaces [BS] set+1 %hu != %hu", polyline_pface->numfaces, numfaces);
     polyline_pface->numfaces--;
-
   }
   {
     BITCODE_BS numverts;
@@ -15969,7 +15540,6 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
     else
       fail ("POLYLINE_PFACE.numverts [BS] set+1 %hu != %hu", polyline_pface->numverts, numverts);
     polyline_pface->numverts--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -16004,6 +15574,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_PROXY_ENTITY *restrict proxy_entity = obj->tio.entity->tio.PROXY_ENTITY;
+  failed = 0;
   {
     BITCODE_BL class_id;
     if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "class_id", &class_id, NULL)
@@ -16018,7 +15589,6 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     else
       fail ("PROXY_ENTITY.class_id [BL] set+1 %u != %u", proxy_entity->class_id, class_id);
     proxy_entity->class_id--;
-
   }
   {
     BITCODE_TV data;
@@ -16044,7 +15614,6 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     else
       fail ("PROXY_ENTITY.from_dxf [B] set+1 " FORMAT_B " != " FORMAT_B "", proxy_entity->from_dxf, from_dxf);
     proxy_entity->from_dxf--;
-
   }
   {
     BITCODE_BL maint_version;
@@ -16060,7 +15629,6 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     else
       fail ("PROXY_ENTITY.maint_version [BL] set+1 %u != %u", proxy_entity->maint_version, maint_version);
     proxy_entity->maint_version--;
-
   }
   {
     BITCODE_H* objid_object_handles;
@@ -16091,7 +15659,6 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     else
       fail ("PROXY_ENTITY.size [MS] set+1 " FORMAT_MS " != " FORMAT_MS "", proxy_entity->size, size);
     proxy_entity->size--;
-
   }
   {
     BITCODE_BL version;
@@ -16107,7 +15674,6 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     else
       fail ("PROXY_ENTITY.version [BL] set+1 %u != %u", proxy_entity->version, version);
     proxy_entity->version--;
-
   }
   return failed;
 }
@@ -16116,6 +15682,7 @@ static int test_RAY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_RAY *restrict ray = obj->tio.entity->tio.RAY;
+  failed = 0;
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (ray, "RAY", "parent", &parent, NULL)
@@ -16147,6 +15714,7 @@ static int test_REGION (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_REGION *restrict region = obj->tio.entity->tio.REGION;
+  failed = 0;
   return failed;
 }
 static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
@@ -16154,6 +15722,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_REVOLVEDSURFACE *restrict revolvedsurface = obj->tio.entity->tio.REVOLVEDSURFACE;
+  failed = 0;
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "acis_data", &acis_data, NULL)
@@ -16178,7 +15747,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->acis_empty, acis_empty);
     revolvedsurface->acis_empty--;
-
   }
   {
     BITCODE_B acis_empty2;
@@ -16194,7 +15762,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->acis_empty2, acis_empty2);
     revolvedsurface->acis_empty2--;
-
   }
   {
     BITCODE_B acis_empty_bit;
@@ -16210,7 +15777,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->acis_empty_bit, acis_empty_bit);
     revolvedsurface->acis_empty_bit--;
-
   }
   {
     BITCODE_3BD axis_point;
@@ -16250,7 +15816,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.class_version [BL] set+1 %u != %u", revolvedsurface->class_version, class_version);
     revolvedsurface->class_version--;
-
   }
   {
     BITCODE_B close_to_axis;
@@ -16266,7 +15831,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.close_to_axis [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->close_to_axis, close_to_axis);
     revolvedsurface->close_to_axis--;
-
   }
   {
     BITCODE_BD draft_angle;
@@ -16282,7 +15846,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.draft_angle [BD] set+1 %g != %g", revolvedsurface->draft_angle, draft_angle);
     revolvedsurface->draft_angle--;
-
   }
   {
     BITCODE_BD draft_end_distance;
@@ -16298,7 +15861,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.draft_end_distance [BD] set+1 %g != %g", revolvedsurface->draft_end_distance, draft_end_distance);
     revolvedsurface->draft_end_distance--;
-
   }
   {
     BITCODE_BD draft_start_distance;
@@ -16314,7 +15876,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.draft_start_distance [BD] set+1 %g != %g", revolvedsurface->draft_start_distance, draft_start_distance);
     revolvedsurface->draft_start_distance--;
-
   }
   {
     char ** encr_sat_data;
@@ -16354,7 +15915,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.id [BL] set+1 %u != %u", revolvedsurface->id, id);
     revolvedsurface->id--;
-
   }
   {
     BITCODE_B isoline_present;
@@ -16370,7 +15930,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->isoline_present, isoline_present);
     revolvedsurface->isoline_present--;
-
   }
   {
     BITCODE_BS modeler_format_version;
@@ -16386,7 +15945,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.modeler_format_version [BS] set+1 %hu != %hu", revolvedsurface->modeler_format_version, modeler_format_version);
     revolvedsurface->modeler_format_version--;
-
   }
   {
     BITCODE_BL num_blocks;
@@ -16402,7 +15960,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.num_blocks [BL] set+1 %u != %u", revolvedsurface->num_blocks, num_blocks);
     revolvedsurface->num_blocks--;
-
   }
   {
     BITCODE_BL num_isolines;
@@ -16418,7 +15975,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.num_isolines [BL] set+1 %u != %u", revolvedsurface->num_isolines, num_isolines);
     revolvedsurface->num_isolines--;
-
   }
   {
     BITCODE_BL num_silhouettes;
@@ -16434,7 +15990,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.num_silhouettes [BL] set+1 %u != %u", revolvedsurface->num_silhouettes, num_silhouettes);
     revolvedsurface->num_silhouettes--;
-
   }
   {
     BITCODE_BL num_wires;
@@ -16450,7 +16005,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.num_wires [BL] set+1 %u != %u", revolvedsurface->num_wires, num_wires);
     revolvedsurface->num_wires--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -16482,7 +16036,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->point_present, point_present);
     revolvedsurface->point_present--;
-
   }
   {
     BITCODE_BD revolve_angle;
@@ -16498,7 +16051,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.revolve_angle [BD] set+1 %g != %g", revolvedsurface->revolve_angle, revolve_angle);
     revolvedsurface->revolve_angle--;
-
   }
   {
     BITCODE_BD* revolved_entity_transmatrix;
@@ -16532,7 +16084,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->solid, solid);
     revolvedsurface->solid--;
-
   }
   {
     BITCODE_BD start_angle;
@@ -16548,7 +16099,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.start_angle [BD] set+1 %g != %g", revolvedsurface->start_angle, start_angle);
     revolvedsurface->start_angle--;
-
   }
   {
     BITCODE_BD twist_angle;
@@ -16564,7 +16114,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.twist_angle [BD] set+1 %g != %g", revolvedsurface->twist_angle, twist_angle);
     revolvedsurface->twist_angle--;
-
   }
   {
     BITCODE_BS u_isolines;
@@ -16580,7 +16129,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.u_isolines [BS] set+1 %hu != %hu", revolvedsurface->u_isolines, u_isolines);
     revolvedsurface->u_isolines--;
-
   }
   {
     BITCODE_B unknown;
@@ -16596,7 +16144,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->unknown, unknown);
     revolvedsurface->unknown--;
-
   }
   {
     BITCODE_BL unknown_2007;
@@ -16612,7 +16159,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.unknown_2007 [BL] set+1 %u != %u", revolvedsurface->unknown_2007, unknown_2007);
     revolvedsurface->unknown_2007--;
-
   }
   {
     BITCODE_BS v_isolines;
@@ -16628,7 +16174,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.v_isolines [BS] set+1 %hu != %hu", revolvedsurface->v_isolines, v_isolines);
     revolvedsurface->v_isolines--;
-
   }
   {
     BITCODE_BS version;
@@ -16644,7 +16189,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.version [BS] set+1 %hu != %hu", revolvedsurface->version, version);
     revolvedsurface->version--;
-
   }
   {
     BITCODE_B wireframe_data_present;
@@ -16660,7 +16204,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->wireframe_data_present, wireframe_data_present);
     revolvedsurface->wireframe_data_present--;
-
   }
   {
     Dwg_3DSOLID_wire* wires;
@@ -16679,6 +16222,7 @@ static int test_SEQEND (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_SEQEND *restrict seqend = obj->tio.entity->tio.SEQEND;
+  failed = 0;
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (seqend, "SEQEND", "parent", &parent, NULL)
@@ -16694,6 +16238,7 @@ static int test_SHAPE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_SHAPE *restrict shape = obj->tio.entity->tio.SHAPE;
+  failed = 0;
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "extrusion", &extrusion, NULL)
@@ -16724,7 +16269,6 @@ static int test_SHAPE (const Dwg_Object *obj)
     else
       fail ("SHAPE.oblique [BD] set+1 %g != %g", shape->oblique, oblique);
     shape->oblique--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -16748,7 +16292,6 @@ static int test_SHAPE (const Dwg_Object *obj)
     else
       fail ("SHAPE.rotation [BD] set+1 %g != %g", shape->rotation, rotation);
     shape->rotation--;
-
   }
   {
     BITCODE_BD scale;
@@ -16764,7 +16307,6 @@ static int test_SHAPE (const Dwg_Object *obj)
     else
       fail ("SHAPE.scale [BD] set+1 %g != %g", shape->scale, scale);
     shape->scale--;
-
   }
   {
     BITCODE_H style;
@@ -16788,7 +16330,6 @@ static int test_SHAPE (const Dwg_Object *obj)
     else
       fail ("SHAPE.style_id [BS] set+1 %hu != %hu", shape->style_id, style_id);
     shape->style_id--;
-
   }
   {
     BITCODE_BD thickness;
@@ -16804,7 +16345,6 @@ static int test_SHAPE (const Dwg_Object *obj)
     else
       fail ("SHAPE.thickness [BD] set+1 %g != %g", shape->thickness, thickness);
     shape->thickness--;
-
   }
   {
     BITCODE_BD width_factor;
@@ -16820,7 +16360,6 @@ static int test_SHAPE (const Dwg_Object *obj)
     else
       fail ("SHAPE.width_factor [BD] set+1 %g != %g", shape->width_factor, width_factor);
     shape->width_factor--;
-
   }
   return failed;
 }
@@ -16829,6 +16368,7 @@ static int test_SOLID (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_SOLID *restrict solid = obj->tio.entity->tio.SOLID;
+  failed = 0;
   {
     BITCODE_2RD corner1;
     if (dwg_dynapi_entity_value (solid, "SOLID", "corner1", &corner1, NULL)
@@ -16875,7 +16415,6 @@ static int test_SOLID (const Dwg_Object *obj)
     else
       fail ("SOLID.elevation [BD] set+1 %g != %g", solid->elevation, elevation);
     solid->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -16906,7 +16445,6 @@ static int test_SOLID (const Dwg_Object *obj)
     else
       fail ("SOLID.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", solid->thickness, thickness);
     solid->thickness--;
-
   }
   return failed;
 }
@@ -16915,6 +16453,7 @@ static int test_SPLINE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_SPLINE *restrict spline = obj->tio.entity->tio.SPLINE;
+  failed = 0;
   {
     BITCODE_3BD beg_tan_vec;
     if (dwg_dynapi_entity_value (spline, "SPLINE", "beg_tan_vec", &beg_tan_vec, NULL)
@@ -16937,7 +16476,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.closed_b [B] set+1 " FORMAT_B " != " FORMAT_B "", spline->closed_b, closed_b);
     spline->closed_b--;
-
   }
   {
     Dwg_SPLINE_control_point* ctrl_pts;
@@ -16963,7 +16501,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.ctrl_tol [BD] set+1 %g != %g", spline->ctrl_tol, ctrl_tol);
     spline->ctrl_tol--;
-
   }
   {
     BITCODE_BS degree;
@@ -16979,7 +16516,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.degree [BS] set+1 %hu != %hu", spline->degree, degree);
     spline->degree--;
-
   }
   {
     BITCODE_3BD end_tan_vec;
@@ -17013,7 +16549,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.fit_tol [BD] set+1 %g != %g", spline->fit_tol, fit_tol);
     spline->fit_tol--;
-
   }
   {
     BITCODE_RS flag;
@@ -17029,7 +16564,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.flag [RS] set+1 %hu != %hu", spline->flag, flag);
     spline->flag--;
-
   }
   {
     BITCODE_BD knot_tol;
@@ -17045,7 +16579,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.knot_tol [BD] set+1 %g != %g", spline->knot_tol, knot_tol);
     spline->knot_tol--;
-
   }
   {
     BITCODE_BL knotparam;
@@ -17061,7 +16594,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.knotparam [BL] set+1 %u != %u", spline->knotparam, knotparam);
     spline->knotparam--;
-
   }
   {
     BITCODE_BD* knots;
@@ -17087,7 +16619,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.num_ctrl_pts [BL] set+1 %u != %u", spline->num_ctrl_pts, num_ctrl_pts);
     spline->num_ctrl_pts--;
-
   }
   {
     BITCODE_BS num_fit_pts;
@@ -17103,7 +16634,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.num_fit_pts [BS] set+1 %hu != %hu", spline->num_fit_pts, num_fit_pts);
     spline->num_fit_pts--;
-
   }
   {
     BITCODE_BL num_knots;
@@ -17119,7 +16649,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.num_knots [BL] set+1 %u != %u", spline->num_knots, num_knots);
     spline->num_knots--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -17143,7 +16672,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.periodic [B] set+1 " FORMAT_B " != " FORMAT_B "", spline->periodic, periodic);
     spline->periodic--;
-
   }
   {
     BITCODE_B rational;
@@ -17159,7 +16687,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.rational [B] set+1 " FORMAT_B " != " FORMAT_B "", spline->rational, rational);
     spline->rational--;
-
   }
   {
     BITCODE_BS scenario;
@@ -17175,7 +16702,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.scenario [BS] set+1 %hu != %hu", spline->scenario, scenario);
     spline->scenario--;
-
   }
   {
     BITCODE_BL splineflags1;
@@ -17191,7 +16717,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.splineflags1 [BL] set+1 %u != %u", spline->splineflags1, splineflags1);
     spline->splineflags1--;
-
   }
   {
     BITCODE_B weighted;
@@ -17207,7 +16732,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     else
       fail ("SPLINE.weighted [B] set+1 " FORMAT_B " != " FORMAT_B "", spline->weighted, weighted);
     spline->weighted--;
-
   }
   return failed;
 }
@@ -17216,6 +16740,7 @@ static int test_SURFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_SURFACE *restrict surface = obj->tio.entity->tio.SURFACE;
+  failed = 0;
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_data", &acis_data, NULL)
@@ -17240,7 +16765,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty, acis_empty);
     surface->acis_empty--;
-
   }
   {
     BITCODE_B acis_empty2;
@@ -17256,7 +16780,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty2, acis_empty2);
     surface->acis_empty2--;
-
   }
   {
     BITCODE_B acis_empty_bit;
@@ -17272,7 +16795,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty_bit, acis_empty_bit);
     surface->acis_empty_bit--;
-
   }
   {
     BITCODE_BL* block_size;
@@ -17296,7 +16818,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.class_version [BL] set+1 %u != %u", surface->class_version, class_version);
     surface->class_version--;
-
   }
   {
     char ** encr_sat_data;
@@ -17336,7 +16857,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->isoline_present, isoline_present);
     surface->isoline_present--;
-
   }
   {
     BITCODE_BS modeler_format_version;
@@ -17352,7 +16872,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.modeler_format_version [BS] set+1 %hu != %hu", surface->modeler_format_version, modeler_format_version);
     surface->modeler_format_version--;
-
   }
   {
     BITCODE_BL num_blocks;
@@ -17368,7 +16887,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.num_blocks [BL] set+1 %u != %u", surface->num_blocks, num_blocks);
     surface->num_blocks--;
-
   }
   {
     BITCODE_BL num_isolines;
@@ -17384,7 +16902,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.num_isolines [BL] set+1 %u != %u", surface->num_isolines, num_isolines);
     surface->num_isolines--;
-
   }
   {
     BITCODE_BL num_silhouettes;
@@ -17400,7 +16917,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.num_silhouettes [BL] set+1 %u != %u", surface->num_silhouettes, num_silhouettes);
     surface->num_silhouettes--;
-
   }
   {
     BITCODE_BL num_wires;
@@ -17416,7 +16932,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.num_wires [BL] set+1 %u != %u", surface->num_wires, num_wires);
     surface->num_wires--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -17448,7 +16963,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->point_present, point_present);
     surface->point_present--;
-
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -17474,7 +16988,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.u_isolines [BS] set+1 %hu != %hu", surface->u_isolines, u_isolines);
     surface->u_isolines--;
-
   }
   {
     BITCODE_B unknown;
@@ -17490,7 +17003,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->unknown, unknown);
     surface->unknown--;
-
   }
   {
     BITCODE_BL unknown_2007;
@@ -17506,7 +17018,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.unknown_2007 [BL] set+1 %u != %u", surface->unknown_2007, unknown_2007);
     surface->unknown_2007--;
-
   }
   {
     BITCODE_BS v_isolines;
@@ -17522,7 +17033,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.v_isolines [BS] set+1 %hu != %hu", surface->v_isolines, v_isolines);
     surface->v_isolines--;
-
   }
   {
     BITCODE_BS version;
@@ -17538,7 +17048,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.version [BS] set+1 %hu != %hu", surface->version, version);
     surface->version--;
-
   }
   {
     BITCODE_B wireframe_data_present;
@@ -17554,7 +17063,6 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->wireframe_data_present, wireframe_data_present);
     surface->wireframe_data_present--;
-
   }
   {
     Dwg_3DSOLID_wire* wires;
@@ -17573,6 +17081,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_SWEPTSURFACE *restrict sweptsurface = obj->tio.entity->tio.SWEPTSURFACE;
+  failed = 0;
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "acis_data", &acis_data, NULL)
@@ -17597,7 +17106,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->acis_empty, acis_empty);
     sweptsurface->acis_empty--;
-
   }
   {
     BITCODE_B acis_empty2;
@@ -17613,7 +17121,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->acis_empty2, acis_empty2);
     sweptsurface->acis_empty2--;
-
   }
   {
     BITCODE_B acis_empty_bit;
@@ -17629,7 +17136,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->acis_empty_bit, acis_empty_bit);
     sweptsurface->acis_empty_bit--;
-
   }
   {
     BITCODE_BD align_angle;
@@ -17645,7 +17151,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.align_angle [BD] set+1 %g != %g", sweptsurface->align_angle, align_angle);
     sweptsurface->align_angle--;
-
   }
   {
     BITCODE_B align_start;
@@ -17661,7 +17166,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.align_start [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->align_start, align_start);
     sweptsurface->align_start--;
-
   }
   {
     BITCODE_B bank;
@@ -17677,7 +17181,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.bank [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->bank, bank);
     sweptsurface->bank--;
-
   }
   {
     BITCODE_B base_point_set;
@@ -17693,7 +17196,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.base_point_set [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->base_point_set, base_point_set);
     sweptsurface->base_point_set--;
-
   }
   {
     BITCODE_BL* block_size;
@@ -17717,7 +17219,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.class_version [BL] set+1 %u != %u", sweptsurface->class_version, class_version);
     sweptsurface->class_version--;
-
   }
   {
     BITCODE_BD draft_angle;
@@ -17733,7 +17234,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.draft_angle [BD] set+1 %g != %g", sweptsurface->draft_angle, draft_angle);
     sweptsurface->draft_angle--;
-
   }
   {
     BITCODE_BD draft_end_distance;
@@ -17749,7 +17249,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.draft_end_distance [BD] set+1 %g != %g", sweptsurface->draft_end_distance, draft_end_distance);
     sweptsurface->draft_end_distance--;
-
   }
   {
     BITCODE_BD draft_start_distance;
@@ -17765,7 +17264,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.draft_start_distance [BD] set+1 %g != %g", sweptsurface->draft_start_distance, draft_start_distance);
     sweptsurface->draft_start_distance--;
-
   }
   {
     char ** encr_sat_data;
@@ -17805,7 +17303,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->isoline_present, isoline_present);
     sweptsurface->isoline_present--;
-
   }
   {
     BITCODE_BS modeler_format_version;
@@ -17821,7 +17318,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.modeler_format_version [BS] set+1 %hu != %hu", sweptsurface->modeler_format_version, modeler_format_version);
     sweptsurface->modeler_format_version--;
-
   }
   {
     BITCODE_BL num_blocks;
@@ -17837,7 +17333,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.num_blocks [BL] set+1 %u != %u", sweptsurface->num_blocks, num_blocks);
     sweptsurface->num_blocks--;
-
   }
   {
     BITCODE_BL num_isolines;
@@ -17853,7 +17348,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.num_isolines [BL] set+1 %u != %u", sweptsurface->num_isolines, num_isolines);
     sweptsurface->num_isolines--;
-
   }
   {
     BITCODE_BL num_silhouettes;
@@ -17869,7 +17363,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.num_silhouettes [BL] set+1 %u != %u", sweptsurface->num_silhouettes, num_silhouettes);
     sweptsurface->num_silhouettes--;
-
   }
   {
     BITCODE_BL num_wires;
@@ -17885,7 +17378,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.num_wires [BL] set+1 %u != %u", sweptsurface->num_wires, num_wires);
     sweptsurface->num_wires--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -17909,7 +17401,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.path_entity_id [BL] set+1 %u != %u", sweptsurface->path_entity_id, path_entity_id);
     sweptsurface->path_entity_id--;
-
   }
   {
     BITCODE_B path_entity_transform_computed;
@@ -17925,7 +17416,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.path_entity_transform_computed [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->path_entity_transform_computed, path_entity_transform_computed);
     sweptsurface->path_entity_transform_computed--;
-
   }
   {
     BITCODE_BD* path_entity_transmatrix;
@@ -17965,7 +17455,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.pathdata_size [BL] set+1 %u != %u", sweptsurface->pathdata_size, pathdata_size);
     sweptsurface->pathdata_size--;
-
   }
   {
     BITCODE_3BD point;
@@ -17989,7 +17478,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->point_present, point_present);
     sweptsurface->point_present--;
-
   }
   {
     BITCODE_3BD reference_vector_for_controlling_twist;
@@ -18013,7 +17501,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.scale_factor [BD] set+1 %g != %g", sweptsurface->scale_factor, scale_factor);
     sweptsurface->scale_factor--;
-
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -18039,7 +17526,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->solid, solid);
     sweptsurface->solid--;
-
   }
   {
     BITCODE_RC sweep_alignment;
@@ -18055,7 +17541,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.sweep_alignment [RC] set+1 %u != %u", sweptsurface->sweep_alignment, sweep_alignment);
     sweptsurface->sweep_alignment--;
-
   }
   {
     BITCODE_BL sweep_entity_id;
@@ -18071,7 +17556,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.sweep_entity_id [BL] set+1 %u != %u", sweptsurface->sweep_entity_id, sweep_entity_id);
     sweptsurface->sweep_entity_id--;
-
   }
   {
     BITCODE_B sweep_entity_transform_computed;
@@ -18087,7 +17571,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.sweep_entity_transform_computed [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->sweep_entity_transform_computed, sweep_entity_transform_computed);
     sweptsurface->sweep_entity_transform_computed--;
-
   }
   {
     BITCODE_BD* sweep_entity_transmatrix;
@@ -18127,7 +17610,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.sweepdata_size [BL] set+1 %u != %u", sweptsurface->sweepdata_size, sweepdata_size);
     sweptsurface->sweepdata_size--;
-
   }
   {
     BITCODE_BD twist_angle;
@@ -18143,7 +17625,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.twist_angle [BD] set+1 %g != %g", sweptsurface->twist_angle, twist_angle);
     sweptsurface->twist_angle--;
-
   }
   {
     BITCODE_BS u_isolines;
@@ -18159,7 +17640,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.u_isolines [BS] set+1 %hu != %hu", sweptsurface->u_isolines, u_isolines);
     sweptsurface->u_isolines--;
-
   }
   {
     BITCODE_B unknown;
@@ -18175,7 +17655,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->unknown, unknown);
     sweptsurface->unknown--;
-
   }
   {
     BITCODE_BL unknown_2007;
@@ -18191,7 +17670,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.unknown_2007 [BL] set+1 %u != %u", sweptsurface->unknown_2007, unknown_2007);
     sweptsurface->unknown_2007--;
-
   }
   {
     BITCODE_BS v_isolines;
@@ -18207,7 +17685,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.v_isolines [BS] set+1 %hu != %hu", sweptsurface->v_isolines, v_isolines);
     sweptsurface->v_isolines--;
-
   }
   {
     BITCODE_BS version;
@@ -18223,7 +17700,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.version [BS] set+1 %hu != %hu", sweptsurface->version, version);
     sweptsurface->version--;
-
   }
   {
     BITCODE_B wireframe_data_present;
@@ -18239,7 +17715,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->wireframe_data_present, wireframe_data_present);
     sweptsurface->wireframe_data_present--;
-
   }
   {
     Dwg_3DSOLID_wire* wires;
@@ -18258,6 +17733,7 @@ static int test_TABLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_TABLE *restrict table = obj->tio.entity->tio.TABLE;
+  failed = 0;
   {
     BITCODE_H* attrib_handles;
     BITCODE_BL count = 0;
@@ -18290,7 +17766,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.border_color_overrides_flag [BL] set+1 %u != %u", table->border_color_overrides_flag, border_color_overrides_flag);
     table->border_color_overrides_flag--;
-
   }
   {
     BITCODE_BL border_lineweight_overrides_flag;
@@ -18306,7 +17781,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.border_lineweight_overrides_flag [BL] set+1 %u != %u", table->border_lineweight_overrides_flag, border_lineweight_overrides_flag);
     table->border_lineweight_overrides_flag--;
-
   }
   {
     BITCODE_BL border_visibility_overrides_flag;
@@ -18322,7 +17796,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.border_visibility_overrides_flag [BL] set+1 %u != %u", table->border_visibility_overrides_flag, border_visibility_overrides_flag);
     table->border_visibility_overrides_flag--;
-
   }
   {
     BITCODE_BL break_flag;
@@ -18338,7 +17811,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.break_flag [BL] set+1 %u != %u", table->break_flag, break_flag);
     table->break_flag--;
-
   }
   {
     BITCODE_BL break_flow_direction;
@@ -18354,7 +17826,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.break_flow_direction [BL] set+1 %u != %u", table->break_flow_direction, break_flow_direction);
     table->break_flow_direction--;
-
   }
   {
     Dwg_TABLE_BreakHeight* break_heights;
@@ -18390,7 +17861,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.break_spacing [BD] set+1 %g != %g", table->break_spacing, break_spacing);
     table->break_spacing--;
-
   }
   {
     BITCODE_BL break_unknown1;
@@ -18406,7 +17876,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.break_unknown1 [BL] set+1 %u != %u", table->break_unknown1, break_unknown1);
     table->break_unknown1--;
-
   }
   {
     BITCODE_BL break_unknown2;
@@ -18422,7 +17891,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.break_unknown2 [BL] set+1 %u != %u", table->break_unknown2, break_unknown2);
     table->break_unknown2--;
-
   }
   {
     Dwg_TABLE_Cell* cells;
@@ -18458,7 +17926,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_flags [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", table->data_flags, data_flags);
     table->data_flags--;
-
   }
   {
     BITCODE_CMC data_horiz_bottom_color;
@@ -18482,7 +17949,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_horiz_bottom_linewt [BS] set+1 %hu != %hu", table->data_horiz_bottom_linewt, data_horiz_bottom_linewt);
     table->data_horiz_bottom_linewt--;
-
   }
   {
     BITCODE_BS data_horiz_bottom_visibility;
@@ -18498,7 +17964,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_horiz_bottom_visibility [BS] set+1 %hu != %hu", table->data_horiz_bottom_visibility, data_horiz_bottom_visibility);
     table->data_horiz_bottom_visibility--;
-
   }
   {
     BITCODE_CMC data_horiz_ins_color;
@@ -18522,7 +17987,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_horiz_ins_linewt [BS] set+1 %hu != %hu", table->data_horiz_ins_linewt, data_horiz_ins_linewt);
     table->data_horiz_ins_linewt--;
-
   }
   {
     BITCODE_BS data_horiz_ins_visibility;
@@ -18538,7 +18002,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_horiz_ins_visibility [BS] set+1 %hu != %hu", table->data_horiz_ins_visibility, data_horiz_ins_visibility);
     table->data_horiz_ins_visibility--;
-
   }
   {
     BITCODE_CMC data_horiz_top_color;
@@ -18562,7 +18025,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_horiz_top_linewt [BS] set+1 %hu != %hu", table->data_horiz_top_linewt, data_horiz_top_linewt);
     table->data_horiz_top_linewt--;
-
   }
   {
     BITCODE_BS data_horiz_top_visibility;
@@ -18578,7 +18040,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_horiz_top_visibility [BS] set+1 %hu != %hu", table->data_horiz_top_visibility, data_horiz_top_visibility);
     table->data_horiz_top_visibility--;
-
   }
   {
     BITCODE_BS data_row_alignment;
@@ -18594,7 +18055,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_row_alignment [BS] set+1 %hu != %hu", table->data_row_alignment, data_row_alignment);
     table->data_row_alignment--;
-
   }
   {
     BITCODE_CMC data_row_color;
@@ -18626,7 +18086,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_row_fill_none [B] set+1 " FORMAT_B " != " FORMAT_B "", table->data_row_fill_none, data_row_fill_none);
     table->data_row_fill_none--;
-
   }
   {
     BITCODE_BD data_row_height;
@@ -18642,7 +18101,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_row_height [BD] set+1 %g != %g", table->data_row_height, data_row_height);
     table->data_row_height--;
-
   }
   {
     BITCODE_H data_row_style_override;
@@ -18682,7 +18140,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_vert_ins_linewt [BS] set+1 %hu != %hu", table->data_vert_ins_linewt, data_vert_ins_linewt);
     table->data_vert_ins_linewt--;
-
   }
   {
     BITCODE_BS data_vert_ins_visibility;
@@ -18698,7 +18155,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_vert_ins_visibility [BS] set+1 %hu != %hu", table->data_vert_ins_visibility, data_vert_ins_visibility);
     table->data_vert_ins_visibility--;
-
   }
   {
     BITCODE_CMC data_vert_left_color;
@@ -18722,7 +18178,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_vert_left_linewt [BS] set+1 %hu != %hu", table->data_vert_left_linewt, data_vert_left_linewt);
     table->data_vert_left_linewt--;
-
   }
   {
     BITCODE_BS data_vert_left_visibility;
@@ -18738,7 +18193,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_vert_left_visibility [BS] set+1 %hu != %hu", table->data_vert_left_visibility, data_vert_left_visibility);
     table->data_vert_left_visibility--;
-
   }
   {
     BITCODE_CMC data_vert_right_color;
@@ -18762,7 +18216,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_vert_right_linewt [BS] set+1 %hu != %hu", table->data_vert_right_linewt, data_vert_right_linewt);
     table->data_vert_right_linewt--;
-
   }
   {
     BITCODE_BS data_vert_right_visibility;
@@ -18778,7 +18231,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.data_vert_right_visibility [BS] set+1 %hu != %hu", table->data_vert_right_visibility, data_vert_right_visibility);
     table->data_vert_right_visibility--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -18818,7 +18270,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.flag_for_table_value [BS] set+1 %hu != %hu", table->flag_for_table_value, flag_for_table_value);
     table->flag_for_table_value--;
-
   }
   {
     BITCODE_BS flow_direction;
@@ -18834,7 +18285,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.flow_direction [BS] set+1 %hu != %hu", table->flow_direction, flow_direction);
     table->flow_direction--;
-
   }
   {
     BITCODE_B has_attribs;
@@ -18850,7 +18300,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.has_attribs [B] set+1 " FORMAT_B " != " FORMAT_B "", table->has_attribs, has_attribs);
     table->has_attribs--;
-
   }
   {
     BITCODE_B has_border_color_overrides;
@@ -18866,7 +18315,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.has_border_color_overrides [B] set+1 " FORMAT_B " != " FORMAT_B "", table->has_border_color_overrides, has_border_color_overrides);
     table->has_border_color_overrides--;
-
   }
   {
     BITCODE_B has_border_lineweight_overrides;
@@ -18882,7 +18330,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.has_border_lineweight_overrides [B] set+1 " FORMAT_B " != " FORMAT_B "", table->has_border_lineweight_overrides, has_border_lineweight_overrides);
     table->has_border_lineweight_overrides--;
-
   }
   {
     BITCODE_B has_border_visibility_overrides;
@@ -18898,7 +18345,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.has_border_visibility_overrides [B] set+1 " FORMAT_B " != " FORMAT_B "", table->has_border_visibility_overrides, has_border_visibility_overrides);
     table->has_border_visibility_overrides--;
-
   }
   {
     BITCODE_BL has_break_data;
@@ -18914,7 +18360,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.has_break_data [BL] set+1 %u != %u", table->has_break_data, has_break_data);
     table->has_break_data--;
-
   }
   {
     BITCODE_B has_table_overrides;
@@ -18930,7 +18375,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.has_table_overrides [B] set+1 " FORMAT_B " != " FORMAT_B "", table->has_table_overrides, has_table_overrides);
     table->has_table_overrides--;
-
   }
   {
     BITCODE_CMC header_horiz_bottom_color;
@@ -18954,7 +18398,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_horiz_bottom_linewt [BS] set+1 %hu != %hu", table->header_horiz_bottom_linewt, header_horiz_bottom_linewt);
     table->header_horiz_bottom_linewt--;
-
   }
   {
     BITCODE_BS header_horiz_bottom_visibility;
@@ -18970,7 +18413,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_horiz_bottom_visibility [BS] set+1 %hu != %hu", table->header_horiz_bottom_visibility, header_horiz_bottom_visibility);
     table->header_horiz_bottom_visibility--;
-
   }
   {
     BITCODE_CMC header_horiz_ins_color;
@@ -18994,7 +18436,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_horiz_ins_linewt [BS] set+1 %hu != %hu", table->header_horiz_ins_linewt, header_horiz_ins_linewt);
     table->header_horiz_ins_linewt--;
-
   }
   {
     BITCODE_BS header_horiz_ins_visibility;
@@ -19010,7 +18451,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_horiz_ins_visibility [BS] set+1 %hu != %hu", table->header_horiz_ins_visibility, header_horiz_ins_visibility);
     table->header_horiz_ins_visibility--;
-
   }
   {
     BITCODE_CMC header_horiz_top_color;
@@ -19034,7 +18474,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_horiz_top_linewt [BS] set+1 %hu != %hu", table->header_horiz_top_linewt, header_horiz_top_linewt);
     table->header_horiz_top_linewt--;
-
   }
   {
     BITCODE_BS header_horiz_top_visibility;
@@ -19050,7 +18489,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_horiz_top_visibility [BS] set+1 %hu != %hu", table->header_horiz_top_visibility, header_horiz_top_visibility);
     table->header_horiz_top_visibility--;
-
   }
   {
     BITCODE_BS header_row_alignment;
@@ -19066,7 +18504,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_row_alignment [BS] set+1 %hu != %hu", table->header_row_alignment, header_row_alignment);
     table->header_row_alignment--;
-
   }
   {
     BITCODE_CMC header_row_color;
@@ -19098,7 +18535,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_row_fill_none [B] set+1 " FORMAT_B " != " FORMAT_B "", table->header_row_fill_none, header_row_fill_none);
     table->header_row_fill_none--;
-
   }
   {
     BITCODE_BD header_row_height;
@@ -19114,7 +18550,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_row_height [BD] set+1 %g != %g", table->header_row_height, header_row_height);
     table->header_row_height--;
-
   }
   {
     BITCODE_H header_row_style_override;
@@ -19138,7 +18573,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", table->header_suppressed, header_suppressed);
     table->header_suppressed--;
-
   }
   {
     BITCODE_H header_text_style;
@@ -19170,7 +18604,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_vert_ins_linewt [BS] set+1 %hu != %hu", table->header_vert_ins_linewt, header_vert_ins_linewt);
     table->header_vert_ins_linewt--;
-
   }
   {
     BITCODE_BS header_vert_ins_visibility;
@@ -19186,7 +18619,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_vert_ins_visibility [BS] set+1 %hu != %hu", table->header_vert_ins_visibility, header_vert_ins_visibility);
     table->header_vert_ins_visibility--;
-
   }
   {
     BITCODE_CMC header_vert_left_color;
@@ -19210,7 +18642,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_vert_left_linewt [BS] set+1 %hu != %hu", table->header_vert_left_linewt, header_vert_left_linewt);
     table->header_vert_left_linewt--;
-
   }
   {
     BITCODE_BS header_vert_left_visibility;
@@ -19226,7 +18657,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_vert_left_visibility [BS] set+1 %hu != %hu", table->header_vert_left_visibility, header_vert_left_visibility);
     table->header_vert_left_visibility--;
-
   }
   {
     BITCODE_CMC header_vert_right_color;
@@ -19250,7 +18680,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_vert_right_linewt [BS] set+1 %hu != %hu", table->header_vert_right_linewt, header_vert_right_linewt);
     table->header_vert_right_linewt--;
-
   }
   {
     BITCODE_BS header_vert_right_visibility;
@@ -19266,7 +18695,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.header_vert_right_visibility [BS] set+1 %hu != %hu", table->header_vert_right_visibility, header_vert_right_visibility);
     table->header_vert_right_visibility--;
-
   }
   {
     BITCODE_3BD hor_dir;
@@ -19290,7 +18718,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.horiz_cell_margin [BD] set+1 %g != %g", table->horiz_cell_margin, horiz_cell_margin);
     table->horiz_cell_margin--;
-
   }
   {
     BITCODE_3BD horiz_direction;
@@ -19338,7 +18765,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.num_break_heights [BL] set+1 %u != %u", table->num_break_heights, num_break_heights);
     table->num_break_heights--;
-
   }
   {
     BITCODE_BL num_break_rows;
@@ -19354,7 +18780,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.num_break_rows [BL] set+1 %u != %u", table->num_break_rows, num_break_rows);
     table->num_break_rows--;
-
   }
   {
     unsigned long num_cells;
@@ -19370,7 +18795,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.num_cells [unsigned long] set+1 %lu != %lu", table->num_cells, num_cells);
     table->num_cells--;
-
   }
   {
     BITCODE_BL num_cols;
@@ -19386,7 +18810,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.num_cols [BL] set+1 %u != %u", table->num_cols, num_cols);
     table->num_cols--;
-
   }
   {
     BITCODE_BL num_owned;
@@ -19402,7 +18825,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.num_owned [BL] set+1 %u != %u", table->num_owned, num_owned);
     table->num_owned--;
-
   }
   {
     BITCODE_BL num_rows;
@@ -19418,7 +18840,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.num_rows [BL] set+1 %u != %u", table->num_rows, num_rows);
     table->num_rows--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -19442,7 +18863,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.rotation [BD] set+1 %g != %g", table->rotation, rotation);
     table->rotation--;
-
   }
   {
     BITCODE_BD* row_heights;
@@ -19484,7 +18904,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.table_flag_override [BL] set+1 %u != %u", table->table_flag_override, table_flag_override);
     table->table_flag_override--;
-
   }
   {
     BITCODE_H table_style;
@@ -19524,7 +18943,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_horiz_bottom_linewt [BS] set+1 %hu != %hu", table->title_horiz_bottom_linewt, title_horiz_bottom_linewt);
     table->title_horiz_bottom_linewt--;
-
   }
   {
     BITCODE_BS title_horiz_bottom_visibility;
@@ -19540,7 +18958,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_horiz_bottom_visibility [BS] set+1 %hu != %hu", table->title_horiz_bottom_visibility, title_horiz_bottom_visibility);
     table->title_horiz_bottom_visibility--;
-
   }
   {
     BITCODE_CMC title_horiz_ins_color;
@@ -19564,7 +18981,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_horiz_ins_linewt [BS] set+1 %hu != %hu", table->title_horiz_ins_linewt, title_horiz_ins_linewt);
     table->title_horiz_ins_linewt--;
-
   }
   {
     BITCODE_BS title_horiz_ins_visibility;
@@ -19580,7 +18996,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_horiz_ins_visibility [BS] set+1 %hu != %hu", table->title_horiz_ins_visibility, title_horiz_ins_visibility);
     table->title_horiz_ins_visibility--;
-
   }
   {
     BITCODE_CMC title_horiz_top_color;
@@ -19604,7 +19019,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_horiz_top_linewt [BS] set+1 %hu != %hu", table->title_horiz_top_linewt, title_horiz_top_linewt);
     table->title_horiz_top_linewt--;
-
   }
   {
     BITCODE_BS title_horiz_top_visibility;
@@ -19620,7 +19034,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_horiz_top_visibility [BS] set+1 %hu != %hu", table->title_horiz_top_visibility, title_horiz_top_visibility);
     table->title_horiz_top_visibility--;
-
   }
   {
     BITCODE_BS title_row_alignment;
@@ -19636,7 +19049,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_row_alignment [BS] set+1 %hu != %hu", table->title_row_alignment, title_row_alignment);
     table->title_row_alignment--;
-
   }
   {
     BITCODE_CMC title_row_color;
@@ -19668,7 +19080,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_row_fill_none [B] set+1 " FORMAT_B " != " FORMAT_B "", table->title_row_fill_none, title_row_fill_none);
     table->title_row_fill_none--;
-
   }
   {
     BITCODE_BD title_row_height;
@@ -19684,7 +19095,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_row_height [BD] set+1 %g != %g", table->title_row_height, title_row_height);
     table->title_row_height--;
-
   }
   {
     BITCODE_H title_row_style_override;
@@ -19708,7 +19118,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", table->title_suppressed, title_suppressed);
     table->title_suppressed--;
-
   }
   {
     BITCODE_H title_text_style;
@@ -19740,7 +19149,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_vert_ins_linewt [BS] set+1 %hu != %hu", table->title_vert_ins_linewt, title_vert_ins_linewt);
     table->title_vert_ins_linewt--;
-
   }
   {
     BITCODE_BS title_vert_ins_visibility;
@@ -19756,7 +19164,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_vert_ins_visibility [BS] set+1 %hu != %hu", table->title_vert_ins_visibility, title_vert_ins_visibility);
     table->title_vert_ins_visibility--;
-
   }
   {
     BITCODE_CMC title_vert_left_color;
@@ -19780,7 +19187,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_vert_left_linewt [BS] set+1 %hu != %hu", table->title_vert_left_linewt, title_vert_left_linewt);
     table->title_vert_left_linewt--;
-
   }
   {
     BITCODE_BS title_vert_left_visibility;
@@ -19796,7 +19202,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_vert_left_visibility [BS] set+1 %hu != %hu", table->title_vert_left_visibility, title_vert_left_visibility);
     table->title_vert_left_visibility--;
-
   }
   {
     BITCODE_CMC title_vert_right_color;
@@ -19820,7 +19225,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_vert_right_linewt [BS] set+1 %hu != %hu", table->title_vert_right_linewt, title_vert_right_linewt);
     table->title_vert_right_linewt--;
-
   }
   {
     BITCODE_BS title_vert_right_visibility;
@@ -19836,7 +19240,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.title_vert_right_visibility [BS] set+1 %hu != %hu", table->title_vert_right_visibility, title_vert_right_visibility);
     table->title_vert_right_visibility--;
-
   }
   {
     BITCODE_B unknown_b;
@@ -19852,7 +19255,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.unknown_b [B] set+1 " FORMAT_B " != " FORMAT_B "", table->unknown_b, unknown_b);
     table->unknown_b--;
-
   }
   {
     BITCODE_BL unknown_bl;
@@ -19868,7 +19270,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.unknown_bl [BL] set+1 %u != %u", table->unknown_bl, unknown_bl);
     table->unknown_bl--;
-
   }
   {
     BITCODE_BL unknown_bl1;
@@ -19884,7 +19285,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.unknown_bl1 [BL] set+1 %u != %u", table->unknown_bl1, unknown_bl1);
     table->unknown_bl1--;
-
   }
   {
     BITCODE_BS unknown_bs;
@@ -19900,7 +19300,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.unknown_bs [BS] set+1 %hu != %hu", table->unknown_bs, unknown_bs);
     table->unknown_bs--;
-
   }
   {
     BITCODE_H unknown_h;
@@ -19924,7 +19323,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.unknown_rc [RC] set+1 %u != %u", table->unknown_rc, unknown_rc);
     table->unknown_rc--;
-
   }
   {
     BITCODE_BD vert_cell_margin;
@@ -19940,7 +19338,6 @@ static int test_TABLE (const Dwg_Object *obj)
     else
       fail ("TABLE.vert_cell_margin [BD] set+1 %g != %g", table->vert_cell_margin, vert_cell_margin);
     table->vert_cell_margin--;
-
   }
   return failed;
 }
@@ -19949,6 +19346,7 @@ static int test_TEXT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_TEXT *restrict text = obj->tio.entity->tio.TEXT;
+  failed = 0;
   {
     BITCODE_2DPOINT alignment_pt;
     if (dwg_dynapi_entity_value (text, "TEXT", "alignment_pt", &alignment_pt, NULL)
@@ -19971,7 +19369,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.dataflags [RC] set+1 %u != %u", text->dataflags, dataflags);
     text->dataflags--;
-
   }
   {
     BITCODE_RD elevation;
@@ -19987,7 +19384,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.elevation [RD] set+1 %g != %g", text->elevation, elevation);
     text->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -20011,7 +19407,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.generation [BS] set+1 %hu != %hu", text->generation, generation);
     text->generation--;
-
   }
   {
     BITCODE_RD height;
@@ -20027,7 +19422,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.height [RD] set+1 %g != %g", text->height, height);
     text->height--;
-
   }
   {
     BITCODE_BS horiz_alignment;
@@ -20043,7 +19437,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.horiz_alignment [BS] set+1 %hu != %hu", text->horiz_alignment, horiz_alignment);
     text->horiz_alignment--;
-
   }
   {
     BITCODE_2DPOINT insertion_pt;
@@ -20067,7 +19460,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.oblique_ang [RD] set+1 %g != %g", text->oblique_ang, oblique_ang);
     text->oblique_ang--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -20091,7 +19483,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.rotation [RD] set+1 %g != %g", text->rotation, rotation);
     text->rotation--;
-
   }
   {
     BITCODE_H style;
@@ -20125,7 +19516,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.thickness [RD] set+1 %g != %g", text->thickness, thickness);
     text->thickness--;
-
   }
   {
     BITCODE_BS vert_alignment;
@@ -20141,7 +19531,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.vert_alignment [BS] set+1 %hu != %hu", text->vert_alignment, vert_alignment);
     text->vert_alignment--;
-
   }
   {
     BITCODE_RD width_factor;
@@ -20157,7 +19546,6 @@ static int test_TEXT (const Dwg_Object *obj)
     else
       fail ("TEXT.width_factor [RD] set+1 %g != %g", text->width_factor, width_factor);
     text->width_factor--;
-
   }
   return failed;
 }
@@ -20166,6 +19554,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_TOLERANCE *restrict tolerance = obj->tio.entity->tio.TOLERANCE;
+  failed = 0;
   {
     BITCODE_BD dimgap;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "dimgap", &dimgap, NULL)
@@ -20180,7 +19569,6 @@ static int test_TOLERANCE (const Dwg_Object *obj)
     else
       fail ("TOLERANCE.dimgap [BD] set+1 %g != %g", tolerance->dimgap, dimgap);
     tolerance->dimgap--;
-
   }
   {
     BITCODE_H dimstyle;
@@ -20212,7 +19600,6 @@ static int test_TOLERANCE (const Dwg_Object *obj)
     else
       fail ("TOLERANCE.height [BD] set+1 %g != %g", tolerance->height, height);
     tolerance->height--;
-
   }
   {
     BITCODE_3BD ins_pt;
@@ -20254,7 +19641,6 @@ static int test_TOLERANCE (const Dwg_Object *obj)
     else
       fail ("TOLERANCE.unknown_short [BS] set+1 %hu != %hu", tolerance->unknown_short, unknown_short);
     tolerance->unknown_short--;
-
   }
   {
     BITCODE_3BD x_direction;
@@ -20271,6 +19657,7 @@ static int test_TRACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_TRACE *restrict trace = obj->tio.entity->tio.TRACE;
+  failed = 0;
   {
     BITCODE_2RD corner1;
     if (dwg_dynapi_entity_value (trace, "TRACE", "corner1", &corner1, NULL)
@@ -20317,7 +19704,6 @@ static int test_TRACE (const Dwg_Object *obj)
     else
       fail ("TRACE.elevation [BD] set+1 %g != %g", trace->elevation, elevation);
     trace->elevation--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -20348,7 +19734,6 @@ static int test_TRACE (const Dwg_Object *obj)
     else
       fail ("TRACE.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", trace->thickness, thickness);
     trace->thickness--;
-
   }
   return failed;
 }
@@ -20357,6 +19742,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_UNDERLAY *restrict underlay = obj->tio.entity->tio.UNDERLAY;
+  failed = 0;
   {
     BITCODE_BD angle;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "angle", &angle, NULL)
@@ -20371,7 +19757,6 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     else
       fail ("UNDERLAY.angle [BD] set+1 %g != %g", underlay->angle, angle);
     underlay->angle--;
-
   }
   {
     BITCODE_2RD* clip_verts;
@@ -20397,7 +19782,6 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     else
       fail ("UNDERLAY.contrast [RC] set+1 %u != %u", underlay->contrast, contrast);
     underlay->contrast--;
-
   }
   {
     BITCODE_H definition_id;
@@ -20429,7 +19813,6 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     else
       fail ("UNDERLAY.fade [RC] set+1 %u != %u", underlay->fade, fade);
     underlay->fade--;
-
   }
   {
     BITCODE_RC flag;
@@ -20445,7 +19828,6 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     else
       fail ("UNDERLAY.flag [RC] set+1 %u != %u", underlay->flag, flag);
     underlay->flag--;
-
   }
   {
     BITCODE_3BD insertion_pt;
@@ -20469,7 +19851,6 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     else
       fail ("UNDERLAY.num_clip_verts [BL] set+1 %u != %u", underlay->num_clip_verts, num_clip_verts);
     underlay->num_clip_verts--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -20502,6 +19883,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_2D *restrict vertex_2d = obj->tio.entity->tio.VERTEX_2D;
+  failed = 0;
   {
     BITCODE_BD bulge;
     if (dwg_dynapi_entity_value (vertex_2d, "VERTEX_2D", "bulge", &bulge, NULL)
@@ -20516,7 +19898,6 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
     else
       fail ("VERTEX_2D.bulge [BD] set+1 %g != %g", vertex_2d->bulge, bulge);
     vertex_2d->bulge--;
-
   }
   {
     BITCODE_BD end_width;
@@ -20532,7 +19913,6 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
     else
       fail ("VERTEX_2D.end_width [BD] set+1 %g != %g", vertex_2d->end_width, end_width);
     vertex_2d->end_width--;
-
   }
   {
     BITCODE_RC flag;
@@ -20548,7 +19928,6 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
     else
       fail ("VERTEX_2D.flag [RC] set+1 %u != %u", vertex_2d->flag, flag);
     vertex_2d->flag--;
-
   }
   {
     BITCODE_BL id;
@@ -20564,7 +19943,6 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
     else
       fail ("VERTEX_2D.id [BL] set+1 %u != %u", vertex_2d->id, id);
     vertex_2d->id--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -20596,7 +19974,6 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
     else
       fail ("VERTEX_2D.start_width [BD] set+1 %g != %g", vertex_2d->start_width, start_width);
     vertex_2d->start_width--;
-
   }
   {
     BITCODE_BD tangent_dir;
@@ -20612,7 +19989,6 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
     else
       fail ("VERTEX_2D.tangent_dir [BD] set+1 %g != %g", vertex_2d->tangent_dir, tangent_dir);
     vertex_2d->tangent_dir--;
-
   }
   return failed;
 }
@@ -20621,6 +19997,7 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_3D *restrict vertex_3d = obj->tio.entity->tio.VERTEX_3D;
+  failed = 0;
   {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "flag", &flag, NULL)
@@ -20635,7 +20012,6 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
     else
       fail ("VERTEX_3D.flag [RC] set+1 %u != %u", vertex_3d->flag, flag);
     vertex_3d->flag--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -20660,6 +20036,7 @@ static int test_VERTEX_MESH (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_MESH *restrict vertex_mesh = obj->tio.entity->tio.VERTEX_MESH;
+  failed = 0;
   return failed;
 }
 static int test_VERTEX_PFACE (const Dwg_Object *obj)
@@ -20667,6 +20044,7 @@ static int test_VERTEX_PFACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_PFACE *restrict vertex_pface = obj->tio.entity->tio.VERTEX_PFACE;
+  failed = 0;
   return failed;
 }
 static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
@@ -20674,6 +20052,7 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_PFACE_FACE *restrict vertex_pface_face = obj->tio.entity->tio.VERTEX_PFACE_FACE;
+  failed = 0;
   {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "flag", &flag, NULL)
@@ -20688,7 +20067,6 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
     else
       fail ("VERTEX_PFACE_FACE.flag [RC] set+1 %u != %u", vertex_pface_face->flag, flag);
     vertex_pface_face->flag--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -20713,6 +20091,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VIEWPORT *restrict viewport = obj->tio.entity->tio.VIEWPORT;
+  failed = 0;
   {
     BITCODE_CMC ambient_color;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ambient_color", &ambient_color, NULL)
@@ -20735,7 +20114,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.back_clip_z [BD] set+1 %g != %g", viewport->back_clip_z, back_clip_z);
     viewport->back_clip_z--;
-
   }
   {
     BITCODE_BD brightness;
@@ -20751,7 +20129,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.brightness [BD] set+1 %g != %g", viewport->brightness, brightness);
     viewport->brightness--;
-
   }
   {
     BITCODE_3BD center;
@@ -20775,7 +20152,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.circle_zoom [BS] set+1 %hu != %hu", viewport->circle_zoom, circle_zoom);
     viewport->circle_zoom--;
-
   }
   {
     BITCODE_BD contrast;
@@ -20791,7 +20167,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.contrast [BD] set+1 %g != %g", viewport->contrast, contrast);
     viewport->contrast--;
-
   }
   {
     BITCODE_RC default_lighting_type;
@@ -20807,7 +20182,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.default_lighting_type [RC] set+1 %u != %u", viewport->default_lighting_type, default_lighting_type);
     viewport->default_lighting_type--;
-
   }
   {
     BITCODE_BD front_clip_z;
@@ -20823,7 +20197,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.front_clip_z [BD] set+1 %g != %g", viewport->front_clip_z, front_clip_z);
     viewport->front_clip_z--;
-
   }
   {
     BITCODE_BS grid_major;
@@ -20839,7 +20212,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.grid_major [BS] set+1 %hu != %hu", viewport->grid_major, grid_major);
     viewport->grid_major--;
-
   }
   {
     BITCODE_2RD grid_spacing;
@@ -20863,7 +20235,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.height [BD] set+1 %g != %g", viewport->height, height);
     viewport->height--;
-
   }
   {
     BITCODE_RS id;
@@ -20879,7 +20250,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.id [RS] set+1 %hu != %hu", viewport->id, id);
     viewport->id--;
-
   }
   {
     BITCODE_BD lens_length;
@@ -20895,7 +20265,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.lens_length [BD] set+1 %g != %g", viewport->lens_length, lens_length);
     viewport->lens_length--;
-
   }
   {
     BITCODE_BL num_frozen_layers;
@@ -20911,7 +20280,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.num_frozen_layers [BL] set+1 %u != %u", viewport->num_frozen_layers, num_frozen_layers);
     viewport->num_frozen_layers--;
-
   }
   {
     BITCODE_RS on_off;
@@ -20927,7 +20295,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.on_off [RS] set+1 %hu != %hu", viewport->on_off, on_off);
     viewport->on_off--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -20951,7 +20318,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.render_mode [RC] set+1 %u != %u", viewport->render_mode, render_mode);
     viewport->render_mode--;
-
   }
   {
     BITCODE_BS shadeplot_mode;
@@ -20967,7 +20333,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.shadeplot_mode [BS] set+1 %hu != %hu", viewport->shadeplot_mode, shadeplot_mode);
     viewport->shadeplot_mode--;
-
   }
   {
     BITCODE_BD snap_angle;
@@ -20983,7 +20348,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.snap_angle [BD] set+1 %g != %g", viewport->snap_angle, snap_angle);
     viewport->snap_angle--;
-
   }
   {
     BITCODE_2RD snap_base;
@@ -21015,7 +20379,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.status_flag [BL] set+1 %u != %u", viewport->status_flag, status_flag);
     viewport->status_flag--;
-
   }
   {
     BITCODE_T style_sheet;
@@ -21041,7 +20404,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.ucs_at_origin [B] set+1 " FORMAT_B " != " FORMAT_B "", viewport->ucs_at_origin, ucs_at_origin);
     viewport->ucs_at_origin--;
-
   }
   {
     BITCODE_BD ucs_elevation;
@@ -21057,7 +20419,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.ucs_elevation [BD] set+1 %g != %g", viewport->ucs_elevation, ucs_elevation);
     viewport->ucs_elevation--;
-
   }
   {
     BITCODE_3BD ucs_origin;
@@ -21081,7 +20442,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.ucs_ortho_view_type [BS] set+1 %hu != %hu", viewport->ucs_ortho_view_type, ucs_ortho_view_type);
     viewport->ucs_ortho_view_type--;
-
   }
   {
     BITCODE_B ucs_per_viewport;
@@ -21097,7 +20457,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.ucs_per_viewport [B] set+1 " FORMAT_B " != " FORMAT_B "", viewport->ucs_per_viewport, ucs_per_viewport);
     viewport->ucs_per_viewport--;
-
   }
   {
     BITCODE_3BD ucs_x_axis;
@@ -21129,7 +20488,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.use_default_lights [B] set+1 " FORMAT_B " != " FORMAT_B "", viewport->use_default_lights, use_default_lights);
     viewport->use_default_lights--;
-
   }
   {
     BITCODE_2RD view_center;
@@ -21161,7 +20519,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.view_height [BD] set+1 %g != %g", viewport->view_height, view_height);
     viewport->view_height--;
-
   }
   {
     BITCODE_3BD view_target;
@@ -21185,7 +20542,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.view_twist [BD] set+1 %g != %g", viewport->view_twist, view_twist);
     viewport->view_twist--;
-
   }
   {
     BITCODE_BD width;
@@ -21201,7 +20557,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.width [BD] set+1 %g != %g", viewport->width, width);
     viewport->width--;
-
   }
   return failed;
 }
@@ -21210,6 +20565,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_WIPEOUT *restrict wipeout = obj->tio.entity->tio.WIPEOUT;
+  failed = 0;
   {
     BITCODE_RC brightness;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "brightness", &brightness, NULL)
@@ -21224,7 +20580,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.brightness [RC] set+1 %u != %u", wipeout->brightness, brightness);
     wipeout->brightness--;
-
   }
   {
     BITCODE_BL class_version;
@@ -21240,7 +20595,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.class_version [BL] set+1 %u != %u", wipeout->class_version, class_version);
     wipeout->class_version--;
-
   }
   {
     BITCODE_BS clip_boundary_type;
@@ -21256,7 +20610,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.clip_boundary_type [BS] set+1 %hu != %hu", wipeout->clip_boundary_type, clip_boundary_type);
     wipeout->clip_boundary_type--;
-
   }
   {
     BITCODE_B clip_mode;
@@ -21272,7 +20625,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.clip_mode [B] set+1 " FORMAT_B " != " FORMAT_B "", wipeout->clip_mode, clip_mode);
     wipeout->clip_mode--;
-
   }
   {
     BITCODE_2RD* clip_verts;
@@ -21298,7 +20650,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.clipping [B] set+1 " FORMAT_B " != " FORMAT_B "", wipeout->clipping, clipping);
     wipeout->clipping--;
-
   }
   {
     BITCODE_RC contrast;
@@ -21314,7 +20665,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.contrast [RC] set+1 %u != %u", wipeout->contrast, contrast);
     wipeout->contrast--;
-
   }
   {
     BITCODE_BS display_props;
@@ -21330,7 +20680,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.display_props [BS] set+1 %hu != %hu", wipeout->display_props, display_props);
     wipeout->display_props--;
-
   }
   {
     BITCODE_RC fade;
@@ -21346,7 +20695,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.fade [RC] set+1 %u != %u", wipeout->fade, fade);
     wipeout->fade--;
-
   }
   {
     BITCODE_H imagedef;
@@ -21378,7 +20726,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
       fail ("WIPEOUT.num_clip_verts [BL] set+1 %u != %u", wipeout->num_clip_verts, num_clip_verts);
     wipeout->num_clip_verts--;
-
   }
   {
     struct _dwg_object_entity* parent;
@@ -21427,6 +20774,7 @@ static int test_XLINE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_XLINE *restrict xline = obj->tio.entity->tio.XLINE;
+  failed = 0;
   return failed;
 }
 static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
@@ -21434,6 +20782,7 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ACSH_BOX_CLASS *restrict acsh_box_class = obj->tio.object->tio.ACSH_BOX_CLASS;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "class_version", &class_version, NULL)
@@ -21448,7 +20797,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.class_version [BL] set+1 %u != %u", acsh_box_class->class_version, class_version);
     acsh_box_class->class_version--;
-
   }
   {
     BITCODE_CMC color;
@@ -21472,7 +20820,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.ee_bl98 [BL] set+1 %u != %u", acsh_box_class->ee_bl98, ee_bl98);
     acsh_box_class->ee_bl98--;
-
   }
   {
     BITCODE_BL ee_bl99;
@@ -21488,7 +20835,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.ee_bl99 [BL] set+1 %u != %u", acsh_box_class->ee_bl99, ee_bl99);
     acsh_box_class->ee_bl99--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -21512,7 +20858,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shb_bd40 [BD] set+1 %g != %g", acsh_box_class->shb_bd40, shb_bd40);
     acsh_box_class->shb_bd40--;
-
   }
   {
     BITCODE_BD shb_bd41;
@@ -21528,7 +20873,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shb_bd41 [BD] set+1 %g != %g", acsh_box_class->shb_bd41, shb_bd41);
     acsh_box_class->shb_bd41--;
-
   }
   {
     BITCODE_BD shb_bd42;
@@ -21544,7 +20888,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shb_bd42 [BD] set+1 %g != %g", acsh_box_class->shb_bd42, shb_bd42);
     acsh_box_class->shb_bd42--;
-
   }
   {
     BITCODE_BL shb_bl90;
@@ -21560,7 +20903,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shb_bl90 [BL] set+1 %u != %u", acsh_box_class->shb_bl90, shb_bl90);
     acsh_box_class->shb_bl90--;
-
   }
   {
     BITCODE_BL shb_bl91;
@@ -21576,7 +20918,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shb_bl91 [BL] set+1 %u != %u", acsh_box_class->shb_bl91, shb_bl91);
     acsh_box_class->shb_bl91--;
-
   }
   {
     BITCODE_B shhn_b92;
@@ -21592,7 +20933,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shhn_b92 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_box_class->shhn_b92, shhn_b92);
     acsh_box_class->shhn_b92--;
-
   }
   {
     BITCODE_BL shhn_bl347;
@@ -21608,7 +20948,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shhn_bl347 [BL] set+1 %u != %u", acsh_box_class->shhn_bl347, shhn_bl347);
     acsh_box_class->shhn_bl347--;
-
   }
   {
     BITCODE_BL shhn_bl90;
@@ -21624,7 +20963,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shhn_bl90 [BL] set+1 %u != %u", acsh_box_class->shhn_bl90, shhn_bl90);
     acsh_box_class->shhn_bl90--;
-
   }
   {
     BITCODE_BL shhn_bl91;
@@ -21640,7 +20978,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_BOX_CLASS.shhn_bl91 [BL] set+1 %u != %u", acsh_box_class->shhn_bl91, shhn_bl91);
     acsh_box_class->shhn_bl91--;
-
   }
   {
     BITCODE_BD* shhn_pts;
@@ -21657,6 +20994,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ACSH_EXTRUSION_CLASS *restrict acsh_extrusion_class = obj->tio.object->tio.ACSH_EXTRUSION_CLASS;
+  failed = 0;
   {
     BITCODE_BD align_angle;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "align_angle", &align_angle, NULL)
@@ -21671,7 +21009,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.align_angle [BD] set+1 %g != %g", acsh_extrusion_class->align_angle, align_angle);
     acsh_extrusion_class->align_angle--;
-
   }
   {
     BITCODE_RC align_option;
@@ -21687,7 +21024,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.align_option [RC] set+1 %u != %u", acsh_extrusion_class->align_option, align_option);
     acsh_extrusion_class->align_option--;
-
   }
   {
     BITCODE_B bank;
@@ -21703,7 +21039,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.bank [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->bank, bank);
     acsh_extrusion_class->bank--;
-
   }
   {
     BITCODE_3BD basept;
@@ -21727,7 +21062,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.check_intersections [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->check_intersections, check_intersections);
     acsh_extrusion_class->check_intersections--;
-
   }
   {
     BITCODE_BL class_version;
@@ -21743,7 +21077,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.class_version [BL] set+1 %u != %u", acsh_extrusion_class->class_version, class_version);
     acsh_extrusion_class->class_version--;
-
   }
   {
     BITCODE_CMC color;
@@ -21767,7 +21100,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.draft_angle [BD] set+1 %g != %g", acsh_extrusion_class->draft_angle, draft_angle);
     acsh_extrusion_class->draft_angle--;
-
   }
   {
     BITCODE_BL ee_bl98;
@@ -21783,7 +21115,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.ee_bl98 [BL] set+1 %u != %u", acsh_extrusion_class->ee_bl98, ee_bl98);
     acsh_extrusion_class->ee_bl98--;
-
   }
   {
     BITCODE_BL ee_bl99;
@@ -21799,7 +21130,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.ee_bl99 [BL] set+1 %u != %u", acsh_extrusion_class->ee_bl99, ee_bl99);
     acsh_extrusion_class->ee_bl99--;
-
   }
   {
     BITCODE_BD end_draft_dist;
@@ -21815,7 +21145,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.end_draft_dist [BD] set+1 %g != %g", acsh_extrusion_class->end_draft_dist, end_draft_dist);
     acsh_extrusion_class->end_draft_dist--;
-
   }
   {
     BITCODE_B has_align_start;
@@ -21831,7 +21160,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.has_align_start [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->has_align_start, has_align_start);
     acsh_extrusion_class->has_align_start--;
-
   }
   {
     BITCODE_RC miter_option;
@@ -21847,7 +21175,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.miter_option [RC] set+1 %u != %u", acsh_extrusion_class->miter_option, miter_option);
     acsh_extrusion_class->miter_option--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -21887,7 +21214,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.scale_factor [BD] set+1 %g != %g", acsh_extrusion_class->scale_factor, scale_factor);
     acsh_extrusion_class->scale_factor--;
-
   }
   {
     BITCODE_B shhn_b92;
@@ -21903,7 +21229,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shhn_b92 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shhn_b92, shhn_b92);
     acsh_extrusion_class->shhn_b92--;
-
   }
   {
     BITCODE_BL shhn_bl347;
@@ -21919,7 +21244,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shhn_bl347 [BL] set+1 %u != %u", acsh_extrusion_class->shhn_bl347, shhn_bl347);
     acsh_extrusion_class->shhn_bl347--;
-
   }
   {
     BITCODE_BL shhn_bl90;
@@ -21935,7 +21259,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shhn_bl90 [BL] set+1 %u != %u", acsh_extrusion_class->shhn_bl90, shhn_bl90);
     acsh_extrusion_class->shhn_bl90--;
-
   }
   {
     BITCODE_BL shhn_bl91;
@@ -21951,7 +21274,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shhn_bl91 [BL] set+1 %u != %u", acsh_extrusion_class->shhn_bl91, shhn_bl91);
     acsh_extrusion_class->shhn_bl91--;
-
   }
   {
     BITCODE_BD* shhn_pts;
@@ -21975,7 +21297,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_b294 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b294, shsw_b294);
     acsh_extrusion_class->shsw_b294--;
-
   }
   {
     BITCODE_B shsw_b295;
@@ -21991,7 +21312,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_b295 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b295, shsw_b295);
     acsh_extrusion_class->shsw_b295--;
-
   }
   {
     BITCODE_B shsw_b296;
@@ -22007,7 +21327,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_b296 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_extrusion_class->shsw_b296, shsw_b296);
     acsh_extrusion_class->shsw_b296--;
-
   }
   {
     BITCODE_BL shsw_bl90;
@@ -22023,7 +21342,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_bl90 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl90, shsw_bl90);
     acsh_extrusion_class->shsw_bl90--;
-
   }
   {
     BITCODE_BL shsw_bl91;
@@ -22039,7 +21357,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_bl91 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl91, shsw_bl91);
     acsh_extrusion_class->shsw_bl91--;
-
   }
   {
     BITCODE_BL shsw_bl92;
@@ -22055,7 +21372,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_bl92 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl92, shsw_bl92);
     acsh_extrusion_class->shsw_bl92--;
-
   }
   {
     BITCODE_BL shsw_bl93;
@@ -22071,7 +21387,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_bl93 [BL] set+1 %u != %u", acsh_extrusion_class->shsw_bl93, shsw_bl93);
     acsh_extrusion_class->shsw_bl93--;
-
   }
   {
     BITCODE_TF shsw_text;
@@ -22103,7 +21418,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_text2_size [BL] set+1 %u != %u", acsh_extrusion_class->shsw_text2_size, shsw_text2_size);
     acsh_extrusion_class->shsw_text2_size--;
-
   }
   {
     BITCODE_BL shsw_text_size;
@@ -22119,7 +21433,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.shsw_text_size [BL] set+1 %u != %u", acsh_extrusion_class->shsw_text_size, shsw_text_size);
     acsh_extrusion_class->shsw_text_size--;
-
   }
   {
     BITCODE_BD start_draft_dist;
@@ -22135,7 +21448,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.start_draft_dist [BD] set+1 %g != %g", acsh_extrusion_class->start_draft_dist, start_draft_dist);
     acsh_extrusion_class->start_draft_dist--;
-
   }
   {
     BITCODE_BD* sweepentity_transform;
@@ -22159,7 +21471,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.twist_angle [BD] set+1 %g != %g", acsh_extrusion_class->twist_angle, twist_angle);
     acsh_extrusion_class->twist_angle--;
-
   }
   return failed;
 }
@@ -22168,6 +21479,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ACSH_SWEEP_CLASS *restrict acsh_sweep_class = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+  failed = 0;
   {
     BITCODE_BD align_angle;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "align_angle", &align_angle, NULL)
@@ -22182,7 +21494,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.align_angle [BD] set+1 %g != %g", acsh_sweep_class->align_angle, align_angle);
     acsh_sweep_class->align_angle--;
-
   }
   {
     BITCODE_RC align_option;
@@ -22198,7 +21509,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.align_option [RC] set+1 %u != %u", acsh_sweep_class->align_option, align_option);
     acsh_sweep_class->align_option--;
-
   }
   {
     BITCODE_B bank;
@@ -22214,7 +21524,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.bank [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_sweep_class->bank, bank);
     acsh_sweep_class->bank--;
-
   }
   {
     BITCODE_3BD basept;
@@ -22238,7 +21547,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.check_intersections [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_sweep_class->check_intersections, check_intersections);
     acsh_sweep_class->check_intersections--;
-
   }
   {
     BITCODE_BL class_version;
@@ -22254,7 +21562,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.class_version [BL] set+1 %u != %u", acsh_sweep_class->class_version, class_version);
     acsh_sweep_class->class_version--;
-
   }
   {
     BITCODE_CMC color;
@@ -22278,7 +21585,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.draft_angle [BD] set+1 %g != %g", acsh_sweep_class->draft_angle, draft_angle);
     acsh_sweep_class->draft_angle--;
-
   }
   {
     BITCODE_BL ee_bl98;
@@ -22294,7 +21600,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.ee_bl98 [BL] set+1 %u != %u", acsh_sweep_class->ee_bl98, ee_bl98);
     acsh_sweep_class->ee_bl98--;
-
   }
   {
     BITCODE_BL ee_bl99;
@@ -22310,7 +21615,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.ee_bl99 [BL] set+1 %u != %u", acsh_sweep_class->ee_bl99, ee_bl99);
     acsh_sweep_class->ee_bl99--;
-
   }
   {
     BITCODE_BD end_draft_dist;
@@ -22326,7 +21630,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.end_draft_dist [BD] set+1 %g != %g", acsh_sweep_class->end_draft_dist, end_draft_dist);
     acsh_sweep_class->end_draft_dist--;
-
   }
   {
     BITCODE_B has_align_start;
@@ -22342,7 +21645,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.has_align_start [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_sweep_class->has_align_start, has_align_start);
     acsh_sweep_class->has_align_start--;
-
   }
   {
     BITCODE_RC miter_option;
@@ -22358,7 +21660,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.miter_option [RC] set+1 %u != %u", acsh_sweep_class->miter_option, miter_option);
     acsh_sweep_class->miter_option--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -22398,7 +21699,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.scale_factor [BD] set+1 %g != %g", acsh_sweep_class->scale_factor, scale_factor);
     acsh_sweep_class->scale_factor--;
-
   }
   {
     BITCODE_B shhn_b92;
@@ -22414,7 +21714,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shhn_b92 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_sweep_class->shhn_b92, shhn_b92);
     acsh_sweep_class->shhn_b92--;
-
   }
   {
     BITCODE_BL shhn_bl347;
@@ -22430,7 +21729,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shhn_bl347 [BL] set+1 %u != %u", acsh_sweep_class->shhn_bl347, shhn_bl347);
     acsh_sweep_class->shhn_bl347--;
-
   }
   {
     BITCODE_BL shhn_bl90;
@@ -22446,7 +21744,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shhn_bl90 [BL] set+1 %u != %u", acsh_sweep_class->shhn_bl90, shhn_bl90);
     acsh_sweep_class->shhn_bl90--;
-
   }
   {
     BITCODE_BL shhn_bl91;
@@ -22462,7 +21759,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shhn_bl91 [BL] set+1 %u != %u", acsh_sweep_class->shhn_bl91, shhn_bl91);
     acsh_sweep_class->shhn_bl91--;
-
   }
   {
     BITCODE_BD* shhn_pts;
@@ -22486,7 +21782,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_b294 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_sweep_class->shsw_b294, shsw_b294);
     acsh_sweep_class->shsw_b294--;
-
   }
   {
     BITCODE_B shsw_b295;
@@ -22502,7 +21797,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_b295 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_sweep_class->shsw_b295, shsw_b295);
     acsh_sweep_class->shsw_b295--;
-
   }
   {
     BITCODE_B shsw_b296;
@@ -22518,7 +21812,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_b296 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_sweep_class->shsw_b296, shsw_b296);
     acsh_sweep_class->shsw_b296--;
-
   }
   {
     BITCODE_BL shsw_bl90;
@@ -22534,7 +21827,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_bl90 [BL] set+1 %u != %u", acsh_sweep_class->shsw_bl90, shsw_bl90);
     acsh_sweep_class->shsw_bl90--;
-
   }
   {
     BITCODE_BL shsw_bl91;
@@ -22550,7 +21842,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_bl91 [BL] set+1 %u != %u", acsh_sweep_class->shsw_bl91, shsw_bl91);
     acsh_sweep_class->shsw_bl91--;
-
   }
   {
     BITCODE_BL shsw_bl92;
@@ -22566,7 +21857,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_bl92 [BL] set+1 %u != %u", acsh_sweep_class->shsw_bl92, shsw_bl92);
     acsh_sweep_class->shsw_bl92--;
-
   }
   {
     BITCODE_BL shsw_bl93;
@@ -22582,7 +21872,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_bl93 [BL] set+1 %u != %u", acsh_sweep_class->shsw_bl93, shsw_bl93);
     acsh_sweep_class->shsw_bl93--;
-
   }
   {
     BITCODE_TF shsw_text;
@@ -22614,7 +21903,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_text2_size [BL] set+1 %u != %u", acsh_sweep_class->shsw_text2_size, shsw_text2_size);
     acsh_sweep_class->shsw_text2_size--;
-
   }
   {
     BITCODE_BL shsw_text_size;
@@ -22630,7 +21918,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.shsw_text_size [BL] set+1 %u != %u", acsh_sweep_class->shsw_text_size, shsw_text_size);
     acsh_sweep_class->shsw_text_size--;
-
   }
   {
     BITCODE_BD start_draft_dist;
@@ -22646,7 +21933,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.start_draft_dist [BD] set+1 %g != %g", acsh_sweep_class->start_draft_dist, start_draft_dist);
     acsh_sweep_class->start_draft_dist--;
-
   }
   {
     BITCODE_BD* sweepentity_transform;
@@ -22670,7 +21956,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.twist_angle [BD] set+1 %g != %g", acsh_sweep_class->twist_angle, twist_angle);
     acsh_sweep_class->twist_angle--;
-
   }
   return failed;
 }
@@ -22679,6 +21964,7 @@ static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA *restrict annotscaleobjectcontextdata = obj->tio.object->tio.ANNOTSCALEOBJECTCONTEXTDATA;
+  failed = 0;
   {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
@@ -22693,7 +21979,6 @@ static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("ANNOTSCALEOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", annotscaleobjectcontextdata->class_version, class_version);
     annotscaleobjectcontextdata->class_version--;
-
   }
   {
     BITCODE_B defaultflag;
@@ -22709,7 +21994,6 @@ static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("ANNOTSCALEOBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->defaultflag, defaultflag);
     annotscaleobjectcontextdata->defaultflag--;
-
   }
   {
     BITCODE_B has_file;
@@ -22725,7 +22009,6 @@ static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("ANNOTSCALEOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->has_file, has_file);
     annotscaleobjectcontextdata->has_file--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -22750,6 +22033,7 @@ static int test_APPID (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_APPID *restrict appid = obj->tio.object->tio.APPID;
+  failed = 0;
   {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (appid, "APPID", "flag", &flag, NULL)
@@ -22764,7 +22048,6 @@ static int test_APPID (const Dwg_Object *obj)
     else
       fail ("APPID.flag [RC] set+1 %u != %u", appid->flag, flag);
     appid->flag--;
-
   }
   {
     BITCODE_TV name;
@@ -22806,7 +22089,6 @@ static int test_APPID (const Dwg_Object *obj)
     else
       fail ("APPID.unknown [RC] set+1 %u != %u", appid->unknown, unknown);
     appid->unknown--;
-
   }
   {
     BITCODE_RS used;
@@ -22822,7 +22104,6 @@ static int test_APPID (const Dwg_Object *obj)
     else
       fail ("APPID.used [RS] set+1 %hu != %hu", appid->used, used);
     appid->used--;
-
   }
   {
     BITCODE_B xrefdep;
@@ -22838,7 +22119,6 @@ static int test_APPID (const Dwg_Object *obj)
     else
       fail ("APPID.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", appid->xrefdep, xrefdep);
     appid->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -22854,7 +22134,6 @@ static int test_APPID (const Dwg_Object *obj)
     else
       fail ("APPID.xrefindex_plus1 [BS] set+1 %hu != %hu", appid->xrefindex_plus1, xrefindex_plus1);
     appid->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -22870,7 +22149,6 @@ static int test_APPID (const Dwg_Object *obj)
     else
       fail ("APPID.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", appid->xrefref, xrefref);
     appid->xrefref--;
-
   }
   return failed;
 }
@@ -22879,6 +22157,7 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_APPID_CONTROL *restrict appid_control = obj->tio.object->tio.APPID_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -22903,7 +22182,6 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
     else
       fail ("APPID_CONTROL.num_entries [BS] set+1 %hu != %hu", appid_control->num_entries, num_entries);
     appid_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -22919,7 +22197,6 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
     else
       fail ("APPID_CONTROL.objid [BL] set+1 %u != %u", appid_control->objid, objid);
     appid_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -22936,6 +22213,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOC2DCONSTRAINTGROUP *restrict assoc2dconstraintgroup = obj->tio.object->tio.ASSOC2DCONSTRAINTGROUP;
+  failed = 0;
   {
     BITCODE_B b1;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "b1", &b1, NULL)
@@ -22950,7 +22228,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.b1 [B] set+1 " FORMAT_B " != " FORMAT_B "", assoc2dconstraintgroup->b1, b1);
     assoc2dconstraintgroup->b1--;
-
   }
   {
     BITCODE_3BD c1;
@@ -22990,7 +22267,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.cl1 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl1, cl1);
     assoc2dconstraintgroup->cl1--;
-
   }
   {
     BITCODE_BL cl2;
@@ -23006,7 +22282,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.cl2 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl2, cl2);
     assoc2dconstraintgroup->cl2--;
-
   }
   {
     BITCODE_BL cl3;
@@ -23022,7 +22297,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.cl3 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl3, cl3);
     assoc2dconstraintgroup->cl3--;
-
   }
   {
     BITCODE_BL cl4;
@@ -23038,7 +22312,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.cl4 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl4, cl4);
     assoc2dconstraintgroup->cl4--;
-
   }
   {
     BITCODE_BL constraint_status;
@@ -23054,7 +22327,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.constraint_status [BL] set+1 %u != %u", assoc2dconstraintgroup->constraint_status, constraint_status);
     assoc2dconstraintgroup->constraint_status--;
-
   }
   {
     BITCODE_RC cs1;
@@ -23070,7 +22342,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.cs1 [RC] set+1 %u != %u", assoc2dconstraintgroup->cs1, cs1);
     assoc2dconstraintgroup->cs1--;
-
   }
   {
     BITCODE_BL dof;
@@ -23086,7 +22357,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.dof [BL] set+1 %u != %u", assoc2dconstraintgroup->dof, dof);
     assoc2dconstraintgroup->dof--;
-
   }
   {
     BITCODE_BL geometry_status;
@@ -23102,7 +22372,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.geometry_status [BL] set+1 %u != %u", assoc2dconstraintgroup->geometry_status, geometry_status);
     assoc2dconstraintgroup->geometry_status--;
-
   }
   {
     BITCODE_B is_body_a_proxy;
@@ -23118,7 +22387,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.is_body_a_proxy [B] set+1 " FORMAT_B " != " FORMAT_B "", assoc2dconstraintgroup->is_body_a_proxy, is_body_a_proxy);
     assoc2dconstraintgroup->is_body_a_proxy--;
-
   }
   {
     BITCODE_BL l5;
@@ -23134,7 +22402,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.l5 [BL] set+1 %u != %u", assoc2dconstraintgroup->l5, l5);
     assoc2dconstraintgroup->l5--;
-
   }
   {
     BITCODE_BL l6;
@@ -23150,7 +22417,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.l6 [BL] set+1 %u != %u", assoc2dconstraintgroup->l6, l6);
     assoc2dconstraintgroup->l6--;
-
   }
   {
     BITCODE_BL l7;
@@ -23166,7 +22432,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.l7 [BL] set+1 %u != %u", assoc2dconstraintgroup->l7, l7);
     assoc2dconstraintgroup->l7--;
-
   }
   {
     BITCODE_BL l8;
@@ -23182,7 +22447,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.l8 [BL] set+1 %u != %u", assoc2dconstraintgroup->l8, l8);
     assoc2dconstraintgroup->l8--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -23214,7 +22478,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.solution_status [BL] set+1 %u != %u", assoc2dconstraintgroup->solution_status, solution_status);
     assoc2dconstraintgroup->solution_status--;
-
   }
   {
     BITCODE_BD w1;
@@ -23230,7 +22493,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.w1 [BD] set+1 %g != %g", assoc2dconstraintgroup->w1, w1);
     assoc2dconstraintgroup->w1--;
-
   }
   {
     BITCODE_BD w2;
@@ -23246,7 +22508,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.w2 [BD] set+1 %g != %g", assoc2dconstraintgroup->w2, w2);
     assoc2dconstraintgroup->w2--;
-
   }
   {
     BITCODE_BD w3;
@@ -23262,7 +22523,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.w3 [BD] set+1 %g != %g", assoc2dconstraintgroup->w3, w3);
     assoc2dconstraintgroup->w3--;
-
   }
   {
     BITCODE_3BD workplane[3];
@@ -23287,6 +22547,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOCACTION *restrict assocaction = obj->tio.object->tio.ASSOCACTION;
+  failed = 0;
   {
     BITCODE_H actionbody;
     if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "actionbody", &actionbody, NULL)
@@ -23325,7 +22586,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.constraint_status [BL] set+1 %u != %u", assocaction->constraint_status, constraint_status);
     assocaction->constraint_status--;
-
   }
   {
     BITCODE_BL dof;
@@ -23341,7 +22601,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.dof [BL] set+1 %u != %u", assocaction->dof, dof);
     assocaction->dof--;
-
   }
   {
     BITCODE_BL geometry_status;
@@ -23357,7 +22616,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.geometry_status [BL] set+1 %u != %u", assocaction->geometry_status, geometry_status);
     assocaction->geometry_status--;
-
   }
   {
     BITCODE_B is_body_a_proxy;
@@ -23373,7 +22631,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.is_body_a_proxy [B] set+1 " FORMAT_B " != " FORMAT_B "", assocaction->is_body_a_proxy, is_body_a_proxy);
     assocaction->is_body_a_proxy--;
-
   }
   {
     BITCODE_BL num_deps;
@@ -23389,7 +22646,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.num_deps [BL] set+1 %u != %u", assocaction->num_deps, num_deps);
     assocaction->num_deps--;
-
   }
   {
     BITCODE_H owningnetwork;
@@ -23429,7 +22685,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.solution_status [BL] set+1 %u != %u", assocaction->solution_status, solution_status);
     assocaction->solution_status--;
-
   }
   {
     BITCODE_BL status;
@@ -23445,7 +22700,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
       fail ("ASSOCACTION.status [BL] set+1 %u != %u", assocaction->status, status);
     assocaction->status--;
-
   }
   {
     BITCODE_H writedep;
@@ -23462,6 +22716,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *restrict assocaligneddimactionbody = obj->tio.object->tio.ASSOCALIGNEDDIMACTIONBODY;
+  failed = 0;
   {
     BITCODE_BL aab_status;
     if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_status", &aab_status, NULL)
@@ -23476,7 +22731,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.aab_status [BL] set+1 %u != %u", assocaligneddimactionbody->aab_status, aab_status);
     assocaligneddimactionbody->aab_status--;
-
   }
   {
     BITCODE_H d_node;
@@ -23500,7 +22754,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.dcm_status [BL] set+1 %u != %u", assocaligneddimactionbody->dcm_status, dcm_status);
     assocaligneddimactionbody->dcm_status--;
-
   }
   {
     BITCODE_BL pab_l2;
@@ -23516,7 +22769,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.pab_l2 [BL] set+1 %u != %u", assocaligneddimactionbody->pab_l2, pab_l2);
     assocaligneddimactionbody->pab_l2--;
-
   }
   {
     BITCODE_BL pab_l3;
@@ -23532,7 +22784,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.pab_l3 [BL] set+1 %u != %u", assocaligneddimactionbody->pab_l3, pab_l3);
     assocaligneddimactionbody->pab_l3--;
-
   }
   {
     BITCODE_BL pab_l4;
@@ -23548,7 +22799,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.pab_l4 [BL] set+1 %u != %u", assocaligneddimactionbody->pab_l4, pab_l4);
     assocaligneddimactionbody->pab_l4--;
-
   }
   {
     BITCODE_BL pab_l5;
@@ -23564,7 +22814,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.pab_l5 [BL] set+1 %u != %u", assocaligneddimactionbody->pab_l5, pab_l5);
     assocaligneddimactionbody->pab_l5--;
-
   }
   {
     BITCODE_BL pab_l6;
@@ -23580,7 +22829,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.pab_l6 [BL] set+1 %u != %u", assocaligneddimactionbody->pab_l6, pab_l6);
     assocaligneddimactionbody->pab_l6--;
-
   }
   {
     BITCODE_BL pab_status;
@@ -23596,7 +22844,6 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.pab_status [BL] set+1 %u != %u", assocaligneddimactionbody->pab_status, pab_status);
     assocaligneddimactionbody->pab_status--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -23637,6 +22884,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOCDEPENDENCY *restrict assocdependency = obj->tio.object->tio.ASSOCDEPENDENCY;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (assocdependency, "ASSOCDEPENDENCY", "class_version", &class_version, NULL)
@@ -23651,7 +22899,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.class_version [BL] set+1 %u != %u", assocdependency->class_version, class_version);
     assocdependency->class_version--;
-
   }
   {
     BITCODE_BL depbodyid;
@@ -23667,7 +22914,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.depbodyid [BL] set+1 %u != %u", assocdependency->depbodyid, depbodyid);
     assocdependency->depbodyid--;
-
   }
   {
     BITCODE_B isobjectstate_dep;
@@ -23683,7 +22929,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.isobjectstate_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", assocdependency->isobjectstate_dep, isobjectstate_dep);
     assocdependency->isobjectstate_dep--;
-
   }
   {
     BITCODE_B isread_dep;
@@ -23699,7 +22944,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.isread_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", assocdependency->isread_dep, isread_dep);
     assocdependency->isread_dep--;
-
   }
   {
     BITCODE_B iswrite_dep;
@@ -23715,7 +22959,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.iswrite_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", assocdependency->iswrite_dep, iswrite_dep);
     assocdependency->iswrite_dep--;
-
   }
   {
     BITCODE_H node;
@@ -23739,7 +22982,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.order [BL] set+1 %u != %u", assocdependency->order, order);
     assocdependency->order--;
-
   }
   {
     BITCODE_H owner;
@@ -23779,7 +23021,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.status [BL] set+1 %u != %u", assocdependency->status, status);
     assocdependency->status--;
-
   }
   {
     BITCODE_B unknown_b4;
@@ -23795,7 +23036,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.unknown_b4 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocdependency->unknown_b4, unknown_b4);
     assocdependency->unknown_b4--;
-
   }
   {
     BITCODE_B unknown_b5;
@@ -23811,7 +23051,6 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
       fail ("ASSOCDEPENDENCY.unknown_b5 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocdependency->unknown_b5, unknown_b5);
     assocdependency->unknown_b5--;
-
   }
   {
     BITCODE_H writedep;
@@ -23828,6 +23067,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOCNETWORK *restrict assocnetwork = obj->tio.object->tio.ASSOCNETWORK;
+  failed = 0;
   {
     BITCODE_H* actions;
     BITCODE_BL count = 0;
@@ -23852,7 +23092,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.constraint_status [BL] set+1 %u != %u", assocnetwork->constraint_status, constraint_status);
     assocnetwork->constraint_status--;
-
   }
   {
     BITCODE_BL dof;
@@ -23868,7 +23107,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.dof [BL] set+1 %u != %u", assocnetwork->dof, dof);
     assocnetwork->dof--;
-
   }
   {
     BITCODE_BL geometry_status;
@@ -23884,7 +23122,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.geometry_status [BL] set+1 %u != %u", assocnetwork->geometry_status, geometry_status);
     assocnetwork->geometry_status--;
-
   }
   {
     BITCODE_B is_body_a_proxy;
@@ -23900,7 +23137,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.is_body_a_proxy [B] set+1 " FORMAT_B " != " FORMAT_B "", assocnetwork->is_body_a_proxy, is_body_a_proxy);
     assocnetwork->is_body_a_proxy--;
-
   }
   {
     BITCODE_BL num_actions;
@@ -23916,7 +23152,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.num_actions [BL] set+1 %u != %u", assocnetwork->num_actions, num_actions);
     assocnetwork->num_actions--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -23948,7 +23183,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.solution_status [BL] set+1 %u != %u", assocnetwork->solution_status, solution_status);
     assocnetwork->solution_status--;
-
   }
   {
     BITCODE_BL unknown_assoc;
@@ -23964,7 +23198,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.unknown_assoc [BL] set+1 %u != %u", assocnetwork->unknown_assoc, unknown_assoc);
     assocnetwork->unknown_assoc--;
-
   }
   {
     BITCODE_BL unknown_n1;
@@ -23980,7 +23213,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.unknown_n1 [BL] set+1 %u != %u", assocnetwork->unknown_n1, unknown_n1);
     assocnetwork->unknown_n1--;
-
   }
   {
     BITCODE_BL unknown_n2;
@@ -23996,7 +23228,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.unknown_n2 [BL] set+1 %u != %u", assocnetwork->unknown_n2, unknown_n2);
     assocnetwork->unknown_n2--;
-
   }
   {
     BITCODE_H writedep;
@@ -24013,6 +23244,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *restrict assocosnappointrefactionparam = obj->tio.object->tio.ASSOCOSNAPPOINTREFACTIONPARAM;
+  failed = 0;
   {
     BITCODE_H actionparam;
     if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "actionparam", &actionparam, NULL)
@@ -24035,7 +23267,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCOSNAPPOINTREFACTIONPARAM.flags [RS] set+1 %hu != %hu", assocosnappointrefactionparam->flags, flags);
     assocosnappointrefactionparam->flags--;
-
   }
   {
     BITCODE_T name;
@@ -24061,7 +23292,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCOSNAPPOINTREFACTIONPARAM.num_params [BS] set+1 %hu != %hu", assocosnappointrefactionparam->num_params, num_params);
     assocosnappointrefactionparam->num_params--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -24085,7 +23315,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCOSNAPPOINTREFACTIONPARAM.status [BS] set+1 %hu != %hu", assocosnappointrefactionparam->status, status);
     assocosnappointrefactionparam->status--;
-
   }
   {
     BITCODE_RC unknown;
@@ -24101,7 +23330,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCOSNAPPOINTREFACTIONPARAM.unknown [RC] set+1 %u != %u", assocosnappointrefactionparam->unknown, unknown);
     assocosnappointrefactionparam->unknown--;
-
   }
   {
     BITCODE_B unknown1;
@@ -24117,7 +23345,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCOSNAPPOINTREFACTIONPARAM.unknown1 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocosnappointrefactionparam->unknown1, unknown1);
     assocosnappointrefactionparam->unknown1--;
-
   }
   {
     BITCODE_BD unknown3;
@@ -24133,7 +23360,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCOSNAPPOINTREFACTIONPARAM.unknown3 [BD] set+1 %g != %g", assocosnappointrefactionparam->unknown3, unknown3);
     assocosnappointrefactionparam->unknown3--;
-
   }
   {
     BITCODE_H writedep;
@@ -24150,6 +23376,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOCPERSSUBENTMANAGER *restrict assocperssubentmanager = obj->tio.object->tio.ASSOCPERSSUBENTMANAGER;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "class_version", &class_version, NULL)
@@ -24164,7 +23391,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.class_version [BL] set+1 %u != %u", assocperssubentmanager->class_version, class_version);
     assocperssubentmanager->class_version--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -24188,7 +23414,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_b37 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocperssubentmanager->unknown_b37, unknown_b37);
     assocperssubentmanager->unknown_b37--;
-
   }
   {
     BITCODE_BL unknown_bl1;
@@ -24204,7 +23429,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl1 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl1, unknown_bl1);
     assocperssubentmanager->unknown_bl1--;
-
   }
   {
     BITCODE_BL unknown_bl10;
@@ -24220,7 +23444,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl10 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl10, unknown_bl10);
     assocperssubentmanager->unknown_bl10--;
-
   }
   {
     BITCODE_BL unknown_bl11;
@@ -24236,7 +23459,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl11 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl11, unknown_bl11);
     assocperssubentmanager->unknown_bl11--;
-
   }
   {
     BITCODE_BL unknown_bl12;
@@ -24252,7 +23474,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl12 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl12, unknown_bl12);
     assocperssubentmanager->unknown_bl12--;
-
   }
   {
     BITCODE_BL unknown_bl13;
@@ -24268,7 +23489,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl13 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl13, unknown_bl13);
     assocperssubentmanager->unknown_bl13--;
-
   }
   {
     BITCODE_BL unknown_bl14;
@@ -24284,7 +23504,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl14 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl14, unknown_bl14);
     assocperssubentmanager->unknown_bl14--;
-
   }
   {
     BITCODE_BL unknown_bl15;
@@ -24300,7 +23519,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl15 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl15, unknown_bl15);
     assocperssubentmanager->unknown_bl15--;
-
   }
   {
     BITCODE_BL unknown_bl16;
@@ -24316,7 +23534,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl16 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl16, unknown_bl16);
     assocperssubentmanager->unknown_bl16--;
-
   }
   {
     BITCODE_BL unknown_bl17;
@@ -24332,7 +23549,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl17 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl17, unknown_bl17);
     assocperssubentmanager->unknown_bl17--;
-
   }
   {
     BITCODE_BL unknown_bl18;
@@ -24348,7 +23564,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl18 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl18, unknown_bl18);
     assocperssubentmanager->unknown_bl18--;
-
   }
   {
     BITCODE_BL unknown_bl19;
@@ -24364,7 +23579,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl19 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl19, unknown_bl19);
     assocperssubentmanager->unknown_bl19--;
-
   }
   {
     BITCODE_BL unknown_bl2;
@@ -24380,7 +23594,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl2 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl2, unknown_bl2);
     assocperssubentmanager->unknown_bl2--;
-
   }
   {
     BITCODE_BL unknown_bl20;
@@ -24396,7 +23609,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl20 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl20, unknown_bl20);
     assocperssubentmanager->unknown_bl20--;
-
   }
   {
     BITCODE_BL unknown_bl21;
@@ -24412,7 +23624,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl21 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl21, unknown_bl21);
     assocperssubentmanager->unknown_bl21--;
-
   }
   {
     BITCODE_BL unknown_bl22;
@@ -24428,7 +23639,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl22 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl22, unknown_bl22);
     assocperssubentmanager->unknown_bl22--;
-
   }
   {
     BITCODE_BL unknown_bl23;
@@ -24444,7 +23654,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl23 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl23, unknown_bl23);
     assocperssubentmanager->unknown_bl23--;
-
   }
   {
     BITCODE_BL unknown_bl24;
@@ -24460,7 +23669,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl24 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl24, unknown_bl24);
     assocperssubentmanager->unknown_bl24--;
-
   }
   {
     BITCODE_BL unknown_bl25;
@@ -24476,7 +23684,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl25 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl25, unknown_bl25);
     assocperssubentmanager->unknown_bl25--;
-
   }
   {
     BITCODE_BL unknown_bl26;
@@ -24492,7 +23699,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl26 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl26, unknown_bl26);
     assocperssubentmanager->unknown_bl26--;
-
   }
   {
     BITCODE_BL unknown_bl27;
@@ -24508,7 +23714,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl27 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl27, unknown_bl27);
     assocperssubentmanager->unknown_bl27--;
-
   }
   {
     BITCODE_BL unknown_bl28;
@@ -24524,7 +23729,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl28 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl28, unknown_bl28);
     assocperssubentmanager->unknown_bl28--;
-
   }
   {
     BITCODE_BL unknown_bl29;
@@ -24540,7 +23744,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl29 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl29, unknown_bl29);
     assocperssubentmanager->unknown_bl29--;
-
   }
   {
     BITCODE_BL unknown_bl3;
@@ -24556,7 +23759,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl3 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl3, unknown_bl3);
     assocperssubentmanager->unknown_bl3--;
-
   }
   {
     BITCODE_BL unknown_bl30;
@@ -24572,7 +23774,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl30 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl30, unknown_bl30);
     assocperssubentmanager->unknown_bl30--;
-
   }
   {
     BITCODE_BL unknown_bl31;
@@ -24588,7 +23789,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl31 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl31, unknown_bl31);
     assocperssubentmanager->unknown_bl31--;
-
   }
   {
     BITCODE_BL unknown_bl32;
@@ -24604,7 +23804,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl32 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl32, unknown_bl32);
     assocperssubentmanager->unknown_bl32--;
-
   }
   {
     BITCODE_BL unknown_bl33;
@@ -24620,7 +23819,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl33 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl33, unknown_bl33);
     assocperssubentmanager->unknown_bl33--;
-
   }
   {
     BITCODE_BL unknown_bl34;
@@ -24636,7 +23834,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl34 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl34, unknown_bl34);
     assocperssubentmanager->unknown_bl34--;
-
   }
   {
     BITCODE_BL unknown_bl35;
@@ -24652,7 +23849,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl35 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl35, unknown_bl35);
     assocperssubentmanager->unknown_bl35--;
-
   }
   {
     BITCODE_BL unknown_bl36;
@@ -24668,7 +23864,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl36 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl36, unknown_bl36);
     assocperssubentmanager->unknown_bl36--;
-
   }
   {
     BITCODE_BL unknown_bl4;
@@ -24684,7 +23879,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl4 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl4, unknown_bl4);
     assocperssubentmanager->unknown_bl4--;
-
   }
   {
     BITCODE_BL unknown_bl5;
@@ -24700,7 +23894,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl5 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl5, unknown_bl5);
     assocperssubentmanager->unknown_bl5--;
-
   }
   {
     BITCODE_BL unknown_bl6;
@@ -24716,7 +23909,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl6 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl6, unknown_bl6);
     assocperssubentmanager->unknown_bl6--;
-
   }
   {
     BITCODE_BL unknown_bl6a;
@@ -24732,7 +23924,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl6a [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl6a, unknown_bl6a);
     assocperssubentmanager->unknown_bl6a--;
-
   }
   {
     BITCODE_BL unknown_bl7;
@@ -24748,7 +23939,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl7 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl7, unknown_bl7);
     assocperssubentmanager->unknown_bl7--;
-
   }
   {
     BITCODE_BL unknown_bl7a;
@@ -24764,7 +23954,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl7a [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl7a, unknown_bl7a);
     assocperssubentmanager->unknown_bl7a--;
-
   }
   {
     BITCODE_BL unknown_bl8;
@@ -24780,7 +23969,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl8 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl8, unknown_bl8);
     assocperssubentmanager->unknown_bl8--;
-
   }
   {
     BITCODE_BL unknown_bl9;
@@ -24796,7 +23984,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl9 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl9, unknown_bl9);
     assocperssubentmanager->unknown_bl9--;
-
   }
   return failed;
 }
@@ -24805,6 +23992,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_ASSOCPLANESURFACEACTIONBODY *restrict assocplanesurfaceactionbody = obj->tio.object->tio.ASSOCPLANESURFACEACTIONBODY;
+  failed = 0;
   {
     BITCODE_BL aab_status;
     if (dwg_dynapi_entity_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "aab_status", &aab_status, NULL)
@@ -24819,7 +24007,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.aab_status [BL] set+1 %u != %u", assocplanesurfaceactionbody->aab_status, aab_status);
     assocplanesurfaceactionbody->aab_status--;
-
   }
   {
     BITCODE_BL pab_l2;
@@ -24835,7 +24022,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.pab_l2 [BL] set+1 %u != %u", assocplanesurfaceactionbody->pab_l2, pab_l2);
     assocplanesurfaceactionbody->pab_l2--;
-
   }
   {
     BITCODE_BL pab_l3;
@@ -24851,7 +24037,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.pab_l3 [BL] set+1 %u != %u", assocplanesurfaceactionbody->pab_l3, pab_l3);
     assocplanesurfaceactionbody->pab_l3--;
-
   }
   {
     BITCODE_BL pab_l4;
@@ -24867,7 +24052,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.pab_l4 [BL] set+1 %u != %u", assocplanesurfaceactionbody->pab_l4, pab_l4);
     assocplanesurfaceactionbody->pab_l4--;
-
   }
   {
     BITCODE_BL pab_l5;
@@ -24883,7 +24067,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.pab_l5 [BL] set+1 %u != %u", assocplanesurfaceactionbody->pab_l5, pab_l5);
     assocplanesurfaceactionbody->pab_l5--;
-
   }
   {
     BITCODE_BL pab_status;
@@ -24899,7 +24082,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.pab_status [BL] set+1 %u != %u", assocplanesurfaceactionbody->pab_status, pab_status);
     assocplanesurfaceactionbody->pab_status--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -24923,7 +24105,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.pbsab_status [BL] set+1 %u != %u", assocplanesurfaceactionbody->pbsab_status, pbsab_status);
     assocplanesurfaceactionbody->pbsab_status--;
-
   }
   {
     BITCODE_BL psab_status;
@@ -24939,7 +24120,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.psab_status [BL] set+1 %u != %u", assocplanesurfaceactionbody->psab_status, psab_status);
     assocplanesurfaceactionbody->psab_status--;
-
   }
   {
     BITCODE_H readdep;
@@ -24963,7 +24143,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.sab_b1 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocplanesurfaceactionbody->sab_b1, sab_b1);
     assocplanesurfaceactionbody->sab_b1--;
-
   }
   {
     BITCODE_B sab_b2;
@@ -24979,7 +24158,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.sab_b2 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocplanesurfaceactionbody->sab_b2, sab_b2);
     assocplanesurfaceactionbody->sab_b2--;
-
   }
   {
     BITCODE_BL sab_l2;
@@ -24995,7 +24173,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.sab_l2 [BL] set+1 %u != %u", assocplanesurfaceactionbody->sab_l2, sab_l2);
     assocplanesurfaceactionbody->sab_l2--;
-
   }
   {
     BITCODE_BS sab_s1;
@@ -25011,7 +24188,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.sab_s1 [BS] set+1 %hu != %hu", assocplanesurfaceactionbody->sab_s1, sab_s1);
     assocplanesurfaceactionbody->sab_s1--;
-
   }
   {
     BITCODE_BL sab_status;
@@ -25027,7 +24203,6 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCPLANESURFACEACTIONBODY.sab_status [BL] set+1 %u != %u", assocplanesurfaceactionbody->sab_status, sab_status);
     assocplanesurfaceactionbody->sab_status--;
-
   }
   {
     BITCODE_H writedep;
@@ -25044,6 +24219,7 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_BLOCK_CONTROL *restrict block_control = obj->tio.object->tio.BLOCK_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -25076,7 +24252,6 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
     else
       fail ("BLOCK_CONTROL.num_entries [BS] set+1 %hu != %hu", block_control->num_entries, num_entries);
     block_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -25092,7 +24267,6 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
     else
       fail ("BLOCK_CONTROL.objid [BL] set+1 %u != %u", block_control->objid, objid);
     block_control->objid--;
-
   }
   {
     BITCODE_H paper_space;
@@ -25117,6 +24291,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_BLOCK_HEADER *restrict block_header = obj->tio.object->tio.BLOCK_HEADER;
+  failed = 0;
   {
     BITCODE_BL __iterator;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "__iterator", &__iterator, NULL)
@@ -25131,7 +24306,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.__iterator [BL] set+1 %u != %u", block_header->__iterator, __iterator);
     block_header->__iterator--;
-
   }
   {
     BITCODE_B anonymous;
@@ -25147,7 +24321,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.anonymous [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->anonymous, anonymous);
     block_header->anonymous--;
-
   }
   {
     BITCODE_3DPOINT base_pt;
@@ -25171,7 +24344,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.blkisxref [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->blkisxref, blkisxref);
     block_header->blkisxref--;
-
   }
   {
     BITCODE_H block_entity;
@@ -25195,7 +24367,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.block_scaling [RC] set+1 %u != %u", block_header->block_scaling, block_scaling);
     block_header->block_scaling--;
-
   }
   {
     BITCODE_T description;
@@ -25239,7 +24410,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.explodable [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->explodable, explodable);
     block_header->explodable--;
-
   }
   {
     BITCODE_H first_entity;
@@ -25263,7 +24433,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.flag [RC] set+1 %u != %u", block_header->flag, flag);
     block_header->flag--;
-
   }
   {
     BITCODE_RC flag2;
@@ -25279,7 +24448,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.flag2 [RC] set+1 %u != %u", block_header->flag2, flag2);
     block_header->flag2--;
-
   }
   {
     BITCODE_RS flag3;
@@ -25295,7 +24463,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.flag3 [RS] set+1 %hu != %hu", block_header->flag3, flag3);
     block_header->flag3--;
-
   }
   {
     BITCODE_B hasattrs;
@@ -25311,7 +24478,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.hasattrs [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->hasattrs, hasattrs);
     block_header->hasattrs--;
-
   }
   {
     BITCODE_BS insert_units;
@@ -25327,7 +24493,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.insert_units [BS] set+1 %hu != %hu", block_header->insert_units, insert_units);
     block_header->insert_units--;
-
   }
   {
     BITCODE_H* inserts;
@@ -25369,7 +24534,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.loaded_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->loaded_bit, loaded_bit);
     block_header->loaded_bit--;
-
   }
   {
     BITCODE_TV name;
@@ -25403,7 +24567,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.num_inserts [RL] set+1 %u != %u", block_header->num_inserts, num_inserts);
     block_header->num_inserts--;
-
   }
   {
     BITCODE_BL num_owned;
@@ -25419,7 +24582,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.num_owned [BL] set+1 %u != %u", block_header->num_owned, num_owned);
     block_header->num_owned--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -25451,7 +24613,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.preview_size [BL] set+1 %u != %u", block_header->preview_size, preview_size);
     block_header->preview_size--;
-
   }
   {
     BITCODE_RS used;
@@ -25467,7 +24628,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.used [RS] set+1 %hu != %hu", block_header->used, used);
     block_header->used--;
-
   }
   {
     BITCODE_T xref_pname;
@@ -25493,7 +24653,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xrefdep, xrefdep);
     block_header->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -25509,7 +24668,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.xrefindex_plus1 [BS] set+1 %hu != %hu", block_header->xrefindex_plus1, xrefindex_plus1);
     block_header->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefoverlaid;
@@ -25525,7 +24683,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.xrefoverlaid [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xrefoverlaid, xrefoverlaid);
     block_header->xrefoverlaid--;
-
   }
   {
     BITCODE_B xrefref;
@@ -25541,7 +24698,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xrefref, xrefref);
     block_header->xrefref--;
-
   }
   return failed;
 }
@@ -25550,6 +24706,7 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_CELLSTYLEMAP *restrict cellstylemap = obj->tio.object->tio.CELLSTYLEMAP;
+  failed = 0;
   {
     Dwg_CELLSTYLEMAP_Cell* cells;
     BITCODE_BL count = 0;
@@ -25574,7 +24731,6 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
     else
       fail ("CELLSTYLEMAP.num_cells [BL] set+1 %u != %u", cellstylemap->num_cells, num_cells);
     cellstylemap->num_cells--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -25591,6 +24747,7 @@ static int test_DATATABLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DATATABLE *restrict datatable = obj->tio.object->tio.DATATABLE;
+  failed = 0;
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (datatable, "DATATABLE", "parent", &parent, NULL)
@@ -25606,6 +24763,7 @@ static int test_DBCOLOR (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DBCOLOR *restrict dbcolor = obj->tio.object->tio.DBCOLOR;
+  failed = 0;
   {
     BITCODE_T catalog;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "catalog", &catalog, NULL)
@@ -25630,7 +24788,6 @@ static int test_DBCOLOR (const Dwg_Object *obj)
     else
       fail ("DBCOLOR.class_version [BL] set+1 %u != %u", dbcolor->class_version, class_version);
     dbcolor->class_version--;
-
   }
   {
     BITCODE_CMC color;
@@ -25672,7 +24829,6 @@ static int test_DBCOLOR (const Dwg_Object *obj)
     else
       fail ("DBCOLOR.rgb [RL] set+1 %u != %u", dbcolor->rgb, rgb);
     dbcolor->rgb--;
-
   }
   {
     BITCODE_BB unknown1;
@@ -25688,7 +24844,6 @@ static int test_DBCOLOR (const Dwg_Object *obj)
     else
       fail ("DBCOLOR.unknown1 [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", dbcolor->unknown1, unknown1);
     dbcolor->unknown1--;
-
   }
   {
     BITCODE_RC unknown2;
@@ -25704,7 +24859,6 @@ static int test_DBCOLOR (const Dwg_Object *obj)
     else
       fail ("DBCOLOR.unknown2 [RC] set+1 %u != %u", dbcolor->unknown2, unknown2);
     dbcolor->unknown2--;
-
   }
   return failed;
 }
@@ -25713,6 +24867,7 @@ static int test_DICTIONARY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DICTIONARY *restrict dictionary = obj->tio.object->tio.DICTIONARY;
+  failed = 0;
   {
     BITCODE_BS cloning;
     if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "cloning", &cloning, NULL)
@@ -25727,7 +24882,6 @@ static int test_DICTIONARY (const Dwg_Object *obj)
     else
       fail ("DICTIONARY.cloning [BS] set+1 %hu != %hu", dictionary->cloning, cloning);
     dictionary->cloning--;
-
   }
   {
     BITCODE_RC cloning_r14;
@@ -25743,7 +24897,6 @@ static int test_DICTIONARY (const Dwg_Object *obj)
     else
       fail ("DICTIONARY.cloning_r14 [RC] set+1 %u != %u", dictionary->cloning_r14, cloning_r14);
     dictionary->cloning_r14--;
-
   }
   {
     BITCODE_RC hard_owner;
@@ -25759,7 +24912,6 @@ static int test_DICTIONARY (const Dwg_Object *obj)
     else
       fail ("DICTIONARY.hard_owner [RC] set+1 %u != %u", dictionary->hard_owner, hard_owner);
     dictionary->hard_owner--;
-
   }
   {
     BITCODE_H* itemhandles;
@@ -25785,7 +24937,6 @@ static int test_DICTIONARY (const Dwg_Object *obj)
     else
       fail ("DICTIONARY.numitems [BL] set+1 %u != %u", dictionary->numitems, numitems);
     dictionary->numitems--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -25812,6 +24963,7 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DICTIONARYVAR *restrict dictionaryvar = obj->tio.object->tio.DICTIONARYVAR;
+  failed = 0;
   {
     BITCODE_RC intval;
     if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "intval", &intval, NULL)
@@ -25826,7 +24978,6 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
     else
       fail ("DICTIONARYVAR.intval [RC] set+1 %u != %u", dictionaryvar->intval, intval);
     dictionaryvar->intval--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -25853,6 +25004,7 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DICTIONARYWDFLT *restrict dictionarywdflt = obj->tio.object->tio.DICTIONARYWDFLT;
+  failed = 0;
   {
     BITCODE_BS cloning;
     if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning", &cloning, NULL)
@@ -25867,7 +25019,6 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
     else
       fail ("DICTIONARYWDFLT.cloning [BS] set+1 %hu != %hu", dictionarywdflt->cloning, cloning);
     dictionarywdflt->cloning--;
-
   }
   {
     BITCODE_RL cloning_r14;
@@ -25883,7 +25034,6 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
     else
       fail ("DICTIONARYWDFLT.cloning_r14 [RL] set+1 %u != %u", dictionarywdflt->cloning_r14, cloning_r14);
     dictionarywdflt->cloning_r14--;
-
   }
   {
     BITCODE_H defaultid;
@@ -25907,7 +25057,6 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
     else
       fail ("DICTIONARYWDFLT.hard_owner [RC] set+1 %u != %u", dictionarywdflt->hard_owner, hard_owner);
     dictionarywdflt->hard_owner--;
-
   }
   {
     BITCODE_H* itemhandles;
@@ -25933,7 +25082,6 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
     else
       fail ("DICTIONARYWDFLT.numitems [BL] set+1 %u != %u", dictionarywdflt->numitems, numitems);
     dictionarywdflt->numitems--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -25960,6 +25108,7 @@ static int test_DIMASSOC (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DIMASSOC *restrict dimassoc = obj->tio.object->tio.DIMASSOC;
+  failed = 0;
   {
     BITCODE_BL associativity;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "associativity", &associativity, NULL)
@@ -25974,7 +25123,6 @@ static int test_DIMASSOC (const Dwg_Object *obj)
     else
       fail ("DIMASSOC.associativity [BL] set+1 %u != %u", dimassoc->associativity, associativity);
     dimassoc->associativity--;
-
   }
   {
     BITCODE_BL intsect_gsmarker;
@@ -25990,7 +25138,6 @@ static int test_DIMASSOC (const Dwg_Object *obj)
     else
       fail ("DIMASSOC.intsect_gsmarker [BL] set+1 %u != %u", dimassoc->intsect_gsmarker, intsect_gsmarker);
     dimassoc->intsect_gsmarker--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -26022,7 +25169,6 @@ static int test_DIMASSOC (const Dwg_Object *obj)
     else
       fail ("DIMASSOC.trans_space_flag [RC] set+1 %u != %u", dimassoc->trans_space_flag, trans_space_flag);
     dimassoc->trans_space_flag--;
-
   }
   return failed;
 }
@@ -26031,6 +25177,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DIMSTYLE *restrict dimstyle = obj->tio.object->tio.DIMSTYLE;
+  failed = 0;
   {
     BITCODE_BS DIMADEC;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMADEC", &DIMADEC, NULL)
@@ -26045,7 +25192,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMADEC [BS] set+1 %hu != %hu", dimstyle->DIMADEC, DIMADEC);
     dimstyle->DIMADEC--;
-
   }
   {
     BITCODE_B DIMALT;
@@ -26061,7 +25207,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALT [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMALT, DIMALT);
     dimstyle->DIMALT--;
-
   }
   {
     BITCODE_BS DIMALTD;
@@ -26077,7 +25222,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTD [BS] set+1 %hu != %hu", dimstyle->DIMALTD, DIMALTD);
     dimstyle->DIMALTD--;
-
   }
   {
     BITCODE_BD DIMALTF;
@@ -26093,7 +25237,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTF [BD] set+1 %g != %g", dimstyle->DIMALTF, DIMALTF);
     dimstyle->DIMALTF--;
-
   }
   {
     BITCODE_BD DIMALTMZF;
@@ -26109,7 +25252,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTMZF [BD] set+1 %g != %g", dimstyle->DIMALTMZF, DIMALTMZF);
     dimstyle->DIMALTMZF--;
-
   }
   {
     BITCODE_T DIMALTMZS;
@@ -26135,7 +25277,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTRND [BD] set+1 %g != %g", dimstyle->DIMALTRND, DIMALTRND);
     dimstyle->DIMALTRND--;
-
   }
   {
     BITCODE_BS DIMALTTD;
@@ -26151,7 +25292,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTTD [BS] set+1 %hu != %hu", dimstyle->DIMALTTD, DIMALTTD);
     dimstyle->DIMALTTD--;
-
   }
   {
     BITCODE_BS DIMALTTZ;
@@ -26167,7 +25307,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTTZ [BS] set+1 %hu != %hu", dimstyle->DIMALTTZ, DIMALTTZ);
     dimstyle->DIMALTTZ--;
-
   }
   {
     BITCODE_BS DIMALTU;
@@ -26183,7 +25322,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTU [BS] set+1 %hu != %hu", dimstyle->DIMALTU, DIMALTU);
     dimstyle->DIMALTU--;
-
   }
   {
     BITCODE_BS DIMALTZ;
@@ -26199,7 +25337,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMALTZ [BS] set+1 %hu != %hu", dimstyle->DIMALTZ, DIMALTZ);
     dimstyle->DIMALTZ--;
-
   }
   {
     BITCODE_T DIMAPOST;
@@ -26225,7 +25362,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMARCSYM [BS] set+1 %hu != %hu", dimstyle->DIMARCSYM, DIMARCSYM);
     dimstyle->DIMARCSYM--;
-
   }
   {
     BITCODE_BD DIMASZ;
@@ -26241,7 +25377,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMASZ [BD] set+1 %g != %g", dimstyle->DIMASZ, DIMASZ);
     dimstyle->DIMASZ--;
-
   }
   {
     BITCODE_BS DIMATFIT;
@@ -26257,7 +25392,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMATFIT [BS] set+1 %hu != %hu", dimstyle->DIMATFIT, DIMATFIT);
     dimstyle->DIMATFIT--;
-
   }
   {
     BITCODE_BS DIMAUNIT;
@@ -26273,7 +25407,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMAUNIT [BS] set+1 %hu != %hu", dimstyle->DIMAUNIT, DIMAUNIT);
     dimstyle->DIMAUNIT--;
-
   }
   {
     BITCODE_BS DIMAZIN;
@@ -26289,7 +25422,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMAZIN [BS] set+1 %hu != %hu", dimstyle->DIMAZIN, DIMAZIN);
     dimstyle->DIMAZIN--;
-
   }
   {
     BITCODE_H DIMBLK;
@@ -26359,7 +25491,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMCEN [BD] set+1 %g != %g", dimstyle->DIMCEN, DIMCEN);
     dimstyle->DIMCEN--;
-
   }
   {
     BITCODE_CMC DIMCLRD;
@@ -26383,7 +25514,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMCLRD_N [RS] set+1 %hu != %hu", dimstyle->DIMCLRD_N, DIMCLRD_N);
     dimstyle->DIMCLRD_N--;
-
   }
   {
     BITCODE_CMC DIMCLRE;
@@ -26407,7 +25537,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMCLRE_N [RS] set+1 %hu != %hu", dimstyle->DIMCLRE_N, DIMCLRE_N);
     dimstyle->DIMCLRE_N--;
-
   }
   {
     BITCODE_CMC DIMCLRT;
@@ -26431,7 +25560,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMCLRT_N [RS] set+1 %hu != %hu", dimstyle->DIMCLRT_N, DIMCLRT_N);
     dimstyle->DIMCLRT_N--;
-
   }
   {
     BITCODE_BS DIMDEC;
@@ -26447,7 +25575,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMDEC [BS] set+1 %hu != %hu", dimstyle->DIMDEC, DIMDEC);
     dimstyle->DIMDEC--;
-
   }
   {
     BITCODE_BD DIMDLE;
@@ -26463,7 +25590,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMDLE [BD] set+1 %g != %g", dimstyle->DIMDLE, DIMDLE);
     dimstyle->DIMDLE--;
-
   }
   {
     BITCODE_BD DIMDLI;
@@ -26479,7 +25605,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMDLI [BD] set+1 %g != %g", dimstyle->DIMDLI, DIMDLI);
     dimstyle->DIMDLI--;
-
   }
   {
     BITCODE_BS DIMDSEP;
@@ -26495,7 +25620,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMDSEP [BS] set+1 %hu != %hu", dimstyle->DIMDSEP, DIMDSEP);
     dimstyle->DIMDSEP--;
-
   }
   {
     BITCODE_BD DIMEXE;
@@ -26511,7 +25635,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMEXE [BD] set+1 %g != %g", dimstyle->DIMEXE, DIMEXE);
     dimstyle->DIMEXE--;
-
   }
   {
     BITCODE_BD DIMEXO;
@@ -26527,7 +25650,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMEXO [BD] set+1 %g != %g", dimstyle->DIMEXO, DIMEXO);
     dimstyle->DIMEXO--;
-
   }
   {
     BITCODE_BS DIMFIT;
@@ -26543,7 +25665,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMFIT [BS] set+1 %hu != %hu", dimstyle->DIMFIT, DIMFIT);
     dimstyle->DIMFIT--;
-
   }
   {
     BITCODE_BS DIMFRAC;
@@ -26559,7 +25680,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMFRAC [BS] set+1 %hu != %hu", dimstyle->DIMFRAC, DIMFRAC);
     dimstyle->DIMFRAC--;
-
   }
   {
     BITCODE_BD DIMFXL;
@@ -26575,7 +25695,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMFXL [BD] set+1 %g != %g", dimstyle->DIMFXL, DIMFXL);
     dimstyle->DIMFXL--;
-
   }
   {
     BITCODE_B DIMFXLON;
@@ -26591,7 +25710,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMFXLON [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMFXLON, DIMFXLON);
     dimstyle->DIMFXLON--;
-
   }
   {
     BITCODE_BD DIMGAP;
@@ -26607,7 +25725,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMGAP [BD] set+1 %g != %g", dimstyle->DIMGAP, DIMGAP);
     dimstyle->DIMGAP--;
-
   }
   {
     BITCODE_BD DIMJOGANG;
@@ -26623,7 +25740,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMJOGANG [BD] set+1 %g != %g", dimstyle->DIMJOGANG, DIMJOGANG);
     dimstyle->DIMJOGANG--;
-
   }
   {
     BITCODE_BS DIMJUST;
@@ -26639,7 +25755,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMJUST [BS] set+1 %hu != %hu", dimstyle->DIMJUST, DIMJUST);
     dimstyle->DIMJUST--;
-
   }
   {
     BITCODE_H DIMLDRBLK;
@@ -26663,7 +25778,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMLFAC [BD] set+1 %g != %g", dimstyle->DIMLFAC, DIMLFAC);
     dimstyle->DIMLFAC--;
-
   }
   {
     BITCODE_B DIMLIM;
@@ -26679,7 +25793,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMLIM [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMLIM, DIMLIM);
     dimstyle->DIMLIM--;
-
   }
   {
     BITCODE_H DIMLTEX1;
@@ -26719,7 +25832,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMLUNIT [BS] set+1 %hu != %hu", dimstyle->DIMLUNIT, DIMLUNIT);
     dimstyle->DIMLUNIT--;
-
   }
   {
     BITCODE_BSd DIMLWD;
@@ -26734,7 +25846,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMLWD [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", dimstyle->DIMLWD, DIMLWD);
     dimstyle->DIMLWD--;
-
   }
   {
     BITCODE_BSd DIMLWE;
@@ -26749,7 +25860,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMLWE [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", dimstyle->DIMLWE, DIMLWE);
     dimstyle->DIMLWE--;
-
   }
   {
     BITCODE_BS DIMMALTTZ;
@@ -26765,7 +25875,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMMALTTZ [BS] set+1 %hu != %hu", dimstyle->DIMMALTTZ, DIMMALTTZ);
     dimstyle->DIMMALTTZ--;
-
   }
   {
     BITCODE_BS DIMMALTZ;
@@ -26781,7 +25890,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMMALTZ [BS] set+1 %hu != %hu", dimstyle->DIMMALTZ, DIMMALTZ);
     dimstyle->DIMMALTZ--;
-
   }
   {
     BITCODE_BD DIMMZF;
@@ -26797,7 +25905,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMMZF [BD] set+1 %g != %g", dimstyle->DIMMZF, DIMMZF);
     dimstyle->DIMMZF--;
-
   }
   {
     BITCODE_T DIMMZS;
@@ -26833,7 +25940,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMRND [BD] set+1 %g != %g", dimstyle->DIMRND, DIMRND);
     dimstyle->DIMRND--;
-
   }
   {
     BITCODE_B DIMSAH;
@@ -26849,7 +25955,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMSAH [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMSAH, DIMSAH);
     dimstyle->DIMSAH--;
-
   }
   {
     BITCODE_BD DIMSCALE;
@@ -26865,7 +25970,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMSCALE [BD] set+1 %g != %g", dimstyle->DIMSCALE, DIMSCALE);
     dimstyle->DIMSCALE--;
-
   }
   {
     BITCODE_B DIMSD1;
@@ -26881,7 +25985,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMSD1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMSD1, DIMSD1);
     dimstyle->DIMSD1--;
-
   }
   {
     BITCODE_B DIMSD2;
@@ -26897,7 +26000,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMSD2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMSD2, DIMSD2);
     dimstyle->DIMSD2--;
-
   }
   {
     BITCODE_B DIMSE1;
@@ -26913,7 +26015,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMSE1 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMSE1, DIMSE1);
     dimstyle->DIMSE1--;
-
   }
   {
     BITCODE_B DIMSE2;
@@ -26929,7 +26030,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMSE2 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMSE2, DIMSE2);
     dimstyle->DIMSE2--;
-
   }
   {
     BITCODE_B DIMSOXD;
@@ -26945,7 +26045,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMSOXD [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMSOXD, DIMSOXD);
     dimstyle->DIMSOXD--;
-
   }
   {
     BITCODE_BS DIMTAD;
@@ -26961,7 +26060,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTAD [BS] set+1 %hu != %hu", dimstyle->DIMTAD, DIMTAD);
     dimstyle->DIMTAD--;
-
   }
   {
     BITCODE_BS DIMTDEC;
@@ -26977,7 +26075,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTDEC [BS] set+1 %hu != %hu", dimstyle->DIMTDEC, DIMTDEC);
     dimstyle->DIMTDEC--;
-
   }
   {
     BITCODE_BD DIMTFAC;
@@ -26993,7 +26090,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTFAC [BD] set+1 %g != %g", dimstyle->DIMTFAC, DIMTFAC);
     dimstyle->DIMTFAC--;
-
   }
   {
     BITCODE_BS DIMTFILL;
@@ -27009,7 +26105,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTFILL [BS] set+1 %hu != %hu", dimstyle->DIMTFILL, DIMTFILL);
     dimstyle->DIMTFILL--;
-
   }
   {
     BITCODE_CMC DIMTFILLCLR;
@@ -27033,7 +26128,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTIH [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMTIH, DIMTIH);
     dimstyle->DIMTIH--;
-
   }
   {
     BITCODE_B DIMTIX;
@@ -27049,7 +26143,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTIX [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMTIX, DIMTIX);
     dimstyle->DIMTIX--;
-
   }
   {
     BITCODE_BD DIMTM;
@@ -27065,7 +26158,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTM [BD] set+1 %g != %g", dimstyle->DIMTM, DIMTM);
     dimstyle->DIMTM--;
-
   }
   {
     BITCODE_BS DIMTMOVE;
@@ -27081,7 +26173,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTMOVE [BS] set+1 %hu != %hu", dimstyle->DIMTMOVE, DIMTMOVE);
     dimstyle->DIMTMOVE--;
-
   }
   {
     BITCODE_B DIMTOFL;
@@ -27097,7 +26188,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTOFL [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMTOFL, DIMTOFL);
     dimstyle->DIMTOFL--;
-
   }
   {
     BITCODE_B DIMTOH;
@@ -27113,7 +26203,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTOH [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMTOH, DIMTOH);
     dimstyle->DIMTOH--;
-
   }
   {
     BITCODE_B DIMTOL;
@@ -27129,7 +26218,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTOL [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMTOL, DIMTOL);
     dimstyle->DIMTOL--;
-
   }
   {
     BITCODE_BS DIMTOLJ;
@@ -27145,7 +26233,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTOLJ [BS] set+1 %hu != %hu", dimstyle->DIMTOLJ, DIMTOLJ);
     dimstyle->DIMTOLJ--;
-
   }
   {
     BITCODE_BD DIMTP;
@@ -27161,7 +26248,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTP [BD] set+1 %g != %g", dimstyle->DIMTP, DIMTP);
     dimstyle->DIMTP--;
-
   }
   {
     BITCODE_BD DIMTSZ;
@@ -27177,7 +26263,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTSZ [BD] set+1 %g != %g", dimstyle->DIMTSZ, DIMTSZ);
     dimstyle->DIMTSZ--;
-
   }
   {
     BITCODE_BD DIMTVP;
@@ -27193,7 +26278,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTVP [BD] set+1 %g != %g", dimstyle->DIMTVP, DIMTVP);
     dimstyle->DIMTVP--;
-
   }
   {
     BITCODE_H DIMTXSTY;
@@ -27217,7 +26301,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTXT [BD] set+1 %g != %g", dimstyle->DIMTXT, DIMTXT);
     dimstyle->DIMTXT--;
-
   }
   {
     BITCODE_B DIMTXTDIRECTION;
@@ -27233,7 +26316,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTXTDIRECTION [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMTXTDIRECTION, DIMTXTDIRECTION);
     dimstyle->DIMTXTDIRECTION--;
-
   }
   {
     BITCODE_BS DIMTZIN;
@@ -27249,7 +26331,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMTZIN [BS] set+1 %hu != %hu", dimstyle->DIMTZIN, DIMTZIN);
     dimstyle->DIMTZIN--;
-
   }
   {
     BITCODE_BS DIMUNIT;
@@ -27265,7 +26346,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMUNIT [BS] set+1 %hu != %hu", dimstyle->DIMUNIT, DIMUNIT);
     dimstyle->DIMUNIT--;
-
   }
   {
     BITCODE_B DIMUPT;
@@ -27281,7 +26361,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMUPT [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->DIMUPT, DIMUPT);
     dimstyle->DIMUPT--;
-
   }
   {
     BITCODE_BS DIMZIN;
@@ -27297,7 +26376,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.DIMZIN [BS] set+1 %hu != %hu", dimstyle->DIMZIN, DIMZIN);
     dimstyle->DIMZIN--;
-
   }
   {
     BITCODE_H extref_handle;
@@ -27321,7 +26399,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.flag [RC] set+1 %u != %u", dimstyle->flag, flag);
     dimstyle->flag--;
-
   }
   {
     BITCODE_TV name;
@@ -27355,7 +26432,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.used [RS] set+1 %hu != %hu", dimstyle->used, used);
     dimstyle->used--;
-
   }
   {
     BITCODE_B xrefdep;
@@ -27371,7 +26447,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->xrefdep, xrefdep);
     dimstyle->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -27387,7 +26462,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.xrefindex_plus1 [BS] set+1 %hu != %hu", dimstyle->xrefindex_plus1, xrefindex_plus1);
     dimstyle->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -27403,7 +26477,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->xrefref, xrefref);
     dimstyle->xrefref--;
-
   }
   return failed;
 }
@@ -27412,6 +26485,7 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DIMSTYLE_CONTROL *restrict dimstyle_control = obj->tio.object->tio.DIMSTYLE_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -27446,7 +26520,6 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE_CONTROL.num_entries [BS] set+1 %hu != %hu", dimstyle_control->num_entries, num_entries);
     dimstyle_control->num_entries--;
-
   }
   {
     BITCODE_RC num_morehandles;
@@ -27462,7 +26535,6 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE_CONTROL.num_morehandles [RC] set+1 %u != %u", dimstyle_control->num_morehandles, num_morehandles);
     dimstyle_control->num_morehandles--;
-
   }
   {
     BITCODE_BL objid;
@@ -27478,7 +26550,6 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE_CONTROL.objid [BL] set+1 %u != %u", dimstyle_control->objid, objid);
     dimstyle_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -27495,6 +26566,7 @@ static int test_DUMMY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DUMMY *restrict dummy = obj->tio.object->tio.DUMMY;
+  failed = 0;
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dummy, "DUMMY", "parent", &parent, NULL)
@@ -27510,6 +26582,7 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_DYNAMICBLOCKPURGEPREVENTER *restrict dynamicblockpurgepreventer = obj->tio.object->tio.DYNAMICBLOCKPURGEPREVENTER;
+  failed = 0;
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "block", &block, NULL)
@@ -27532,7 +26605,6 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
     else
       fail ("DYNAMICBLOCKPURGEPREVENTER.flag [BS] set+1 %hu != %hu", dynamicblockpurgepreventer->flag, flag);
     dynamicblockpurgepreventer->flag--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -27549,6 +26621,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_EVALUATION_GRAPH *restrict evaluation_graph = obj->tio.object->tio.EVALUATION_GRAPH;
+  failed = 0;
   {
     BITCODE_BL edge_flags;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "edge_flags", &edge_flags, NULL)
@@ -27563,7 +26636,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.edge_flags [BL] set+1 %u != %u", evaluation_graph->edge_flags, edge_flags);
     evaluation_graph->edge_flags--;
-
   }
   {
     BITCODE_H* evalexpr;
@@ -27589,7 +26661,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.has_graph [BL] set+1 %u != %u", evaluation_graph->has_graph, has_graph);
     evaluation_graph->has_graph--;
-
   }
   {
     BITCODE_BL node_edge1;
@@ -27605,7 +26676,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.node_edge1 [BL] set+1 %u != %u", evaluation_graph->node_edge1, node_edge1);
     evaluation_graph->node_edge1--;
-
   }
   {
     BITCODE_BL node_edge2;
@@ -27621,7 +26691,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.node_edge2 [BL] set+1 %u != %u", evaluation_graph->node_edge2, node_edge2);
     evaluation_graph->node_edge2--;
-
   }
   {
     BITCODE_BL node_edge3;
@@ -27637,7 +26706,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.node_edge3 [BL] set+1 %u != %u", evaluation_graph->node_edge3, node_edge3);
     evaluation_graph->node_edge3--;
-
   }
   {
     BITCODE_BL node_edge4;
@@ -27653,7 +26721,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.node_edge4 [BL] set+1 %u != %u", evaluation_graph->node_edge4, node_edge4);
     evaluation_graph->node_edge4--;
-
   }
   {
     BITCODE_BL nodeid;
@@ -27669,7 +26736,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.nodeid [BL] set+1 %u != %u", evaluation_graph->nodeid, nodeid);
     evaluation_graph->nodeid--;
-
   }
   {
     BITCODE_BL num_evalexpr;
@@ -27685,7 +26751,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.num_evalexpr [BL] set+1 %u != %u", evaluation_graph->num_evalexpr, num_evalexpr);
     evaluation_graph->num_evalexpr--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -27709,7 +26774,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.unknown1 [BL] set+1 %u != %u", evaluation_graph->unknown1, unknown1);
     evaluation_graph->unknown1--;
-
   }
   {
     BITCODE_BL unknown2;
@@ -27725,7 +26789,6 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     else
       fail ("EVALUATION_GRAPH.unknown2 [BL] set+1 %u != %u", evaluation_graph->unknown2, unknown2);
     evaluation_graph->unknown2--;
-
   }
   return failed;
 }
@@ -27734,6 +26797,7 @@ static int test_FIELD (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_FIELD *restrict field = obj->tio.object->tio.FIELD;
+  failed = 0;
   {
     BITCODE_H* childs;
     BITCODE_BL count = 0;
@@ -27778,7 +26842,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.evaluation_error_code [BL] set+1 %u != %u", field->evaluation_error_code, evaluation_error_code);
     field->evaluation_error_code--;
-
   }
   {
     BITCODE_T evaluation_error_msg;
@@ -27804,7 +26867,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.evaluation_option [BL] set+1 %u != %u", field->evaluation_option, evaluation_option);
     field->evaluation_option--;
-
   }
   {
     BITCODE_BL evaluation_status;
@@ -27820,7 +26882,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.evaluation_status [BL] set+1 %u != %u", field->evaluation_status, evaluation_status);
     field->evaluation_status--;
-
   }
   {
     BITCODE_BL field_state;
@@ -27836,7 +26897,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.field_state [BL] set+1 %u != %u", field->field_state, field_state);
     field->field_state--;
-
   }
   {
     BITCODE_BL filing_option;
@@ -27852,7 +26912,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.filing_option [BL] set+1 %u != %u", field->filing_option, filing_option);
     field->filing_option--;
-
   }
   {
     BITCODE_TV format;
@@ -27888,7 +26947,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.num_childs [BL] set+1 %u != %u", field->num_childs, num_childs);
     field->num_childs--;
-
   }
   {
     BITCODE_BL num_childval;
@@ -27904,7 +26962,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.num_childval [BL] set+1 %u != %u", field->num_childval, num_childval);
     field->num_childval--;
-
   }
   {
     BITCODE_BL num_objects;
@@ -27920,7 +26977,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.num_objects [BL] set+1 %u != %u", field->num_objects, num_objects);
     field->num_objects--;
-
   }
   {
     BITCODE_H* objects;
@@ -27972,7 +27028,6 @@ static int test_FIELD (const Dwg_Object *obj)
     else
       fail ("FIELD.value_string_length [BL] set+1 %u != %u", field->value_string_length, value_string_length);
     field->value_string_length--;
-
   }
   return failed;
 }
@@ -27981,6 +27036,7 @@ static int test_FIELDLIST (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_FIELDLIST *restrict fieldlist = obj->tio.object->tio.FIELDLIST;
+  failed = 0;
   {
     BITCODE_H* fields;
     BITCODE_BL count = 0;
@@ -28005,7 +27061,6 @@ static int test_FIELDLIST (const Dwg_Object *obj)
     else
       fail ("FIELDLIST.num_fields [BL] set+1 %u != %u", fieldlist->num_fields, num_fields);
     fieldlist->num_fields--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -28029,7 +27084,6 @@ static int test_FIELDLIST (const Dwg_Object *obj)
     else
       fail ("FIELDLIST.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", fieldlist->unknown, unknown);
     fieldlist->unknown--;
-
   }
   return failed;
 }
@@ -28038,6 +27092,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_GEODATA *restrict geodata = obj->tio.object->tio.GEODATA;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "class_version", &class_version, NULL)
@@ -28052,7 +27107,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.class_version [BL] set+1 %u != %u", geodata->class_version, class_version);
     geodata->class_version--;
-
   }
   {
     BITCODE_BD coord_proj_radius;
@@ -28068,7 +27122,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.coord_proj_radius [BD] set+1 %g != %g", geodata->coord_proj_radius, coord_proj_radius);
     geodata->coord_proj_radius--;
-
   }
   {
     BITCODE_T coord_system_datum;
@@ -28114,7 +27167,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.coord_type [BS] set+1 %hu != %hu", geodata->coord_type, coord_type);
     geodata->coord_type--;
-
   }
   {
     BITCODE_3BD design_pt;
@@ -28168,7 +27220,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.has_civil_data [B] set+1 " FORMAT_B " != " FORMAT_B "", geodata->has_civil_data, has_civil_data);
     geodata->has_civil_data--;
-
   }
   {
     BITCODE_H host_block;
@@ -28200,7 +27251,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.north_dir_angle_deg [BD] set+1 %g != %g", geodata->north_dir_angle_deg, north_dir_angle_deg);
     geodata->north_dir_angle_deg--;
-
   }
   {
     BITCODE_BD north_dir_angle_rad;
@@ -28216,7 +27266,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.north_dir_angle_rad [BD] set+1 %g != %g", geodata->north_dir_angle_rad, north_dir_angle_rad);
     geodata->north_dir_angle_rad--;
-
   }
   {
     BITCODE_BL num_geomesh_faces;
@@ -28232,7 +27281,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.num_geomesh_faces [BL] set+1 %u != %u", geodata->num_geomesh_faces, num_geomesh_faces);
     geodata->num_geomesh_faces--;
-
   }
   {
     BITCODE_BL num_geomesh_pts;
@@ -28248,7 +27296,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.num_geomesh_pts [BL] set+1 %u != %u", geodata->num_geomesh_pts, num_geomesh_pts);
     geodata->num_geomesh_pts--;
-
   }
   {
     BITCODE_3BD obs_pt;
@@ -28302,7 +27349,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.obsolete_false [B] set+1 " FORMAT_B " != " FORMAT_B "", geodata->obsolete_false, obsolete_false);
     geodata->obsolete_false--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -28334,7 +27380,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.refpt0x [RD] set+1 %g != %g", geodata->refpt0x, refpt0x);
     geodata->refpt0x--;
-
   }
   {
     BITCODE_RD refpt0y;
@@ -28350,7 +27395,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.refpt0y [RD] set+1 %g != %g", geodata->refpt0y, refpt0y);
     geodata->refpt0y--;
-
   }
   {
     BITCODE_RD refpt1x;
@@ -28366,7 +27410,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.refpt1x [RD] set+1 %g != %g", geodata->refpt1x, refpt1x);
     geodata->refpt1x--;
-
   }
   {
     BITCODE_RD refpt1y;
@@ -28382,7 +27425,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.refpt1y [RD] set+1 %g != %g", geodata->refpt1y, refpt1y);
     geodata->refpt1y--;
-
   }
   {
     BITCODE_BL scale_est;
@@ -28398,7 +27440,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.scale_est [BL] set+1 %u != %u", geodata->scale_est, scale_est);
     geodata->scale_est--;
-
   }
   {
     BITCODE_B sea_level_corr;
@@ -28414,7 +27455,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.sea_level_corr [B] set+1 " FORMAT_B " != " FORMAT_B "", geodata->sea_level_corr, sea_level_corr);
     geodata->sea_level_corr--;
-
   }
   {
     BITCODE_BD sea_level_elev;
@@ -28430,7 +27470,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.sea_level_elev [BD] set+1 %g != %g", geodata->sea_level_elev, sea_level_elev);
     geodata->sea_level_elev--;
-
   }
   {
     BITCODE_BD unit_scale_horiz;
@@ -28446,7 +27485,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.unit_scale_horiz [BD] set+1 %g != %g", geodata->unit_scale_horiz, unit_scale_horiz);
     geodata->unit_scale_horiz--;
-
   }
   {
     BITCODE_BD unit_scale_vert;
@@ -28462,7 +27500,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.unit_scale_vert [BD] set+1 %g != %g", geodata->unit_scale_vert, unit_scale_vert);
     geodata->unit_scale_vert--;
-
   }
   {
     BITCODE_BL units_value_horiz;
@@ -28478,7 +27515,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.units_value_horiz [BL] set+1 %u != %u", geodata->units_value_horiz, units_value_horiz);
     geodata->units_value_horiz--;
-
   }
   {
     BITCODE_BL units_value_vert;
@@ -28494,7 +27530,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.units_value_vert [BL] set+1 %u != %u", geodata->units_value_vert, units_value_vert);
     geodata->units_value_vert--;
-
   }
   {
     BITCODE_BL unknown1;
@@ -28510,7 +27545,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.unknown1 [BL] set+1 %u != %u", geodata->unknown1, unknown1);
     geodata->unknown1--;
-
   }
   {
     BITCODE_BL unknown2;
@@ -28526,7 +27560,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.unknown2 [BL] set+1 %u != %u", geodata->unknown2, unknown2);
     geodata->unknown2--;
-
   }
   {
     BITCODE_B unknown_b;
@@ -28542,7 +27575,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.unknown_b [B] set+1 " FORMAT_B " != " FORMAT_B "", geodata->unknown_b, unknown_b);
     geodata->unknown_b--;
-
   }
   {
     BITCODE_3BD up_dir;
@@ -28566,7 +27598,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
       fail ("GEODATA.user_scale_factor [BD] set+1 %g != %g", geodata->user_scale_factor, user_scale_factor);
     geodata->user_scale_factor--;
-
   }
   {
     BITCODE_2RD zero0;
@@ -28591,6 +27622,7 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_GEOMAPIMAGE *restrict geomapimage = obj->tio.object->tio.GEOMAPIMAGE;
+  failed = 0;
   {
     BITCODE_RC brightness;
     if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "brightness", &brightness, NULL)
@@ -28605,7 +27637,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.brightness [RC] set+1 %u != %u", geomapimage->brightness, brightness);
     geomapimage->brightness--;
-
   }
   {
     BITCODE_BL class_version;
@@ -28621,7 +27652,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.class_version [BL] set+1 %u != %u", geomapimage->class_version, class_version);
     geomapimage->class_version--;
-
   }
   {
     BITCODE_B clipping;
@@ -28637,7 +27667,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.clipping [B] set+1 " FORMAT_B " != " FORMAT_B "", geomapimage->clipping, clipping);
     geomapimage->clipping--;
-
   }
   {
     BITCODE_RC contrast;
@@ -28653,7 +27682,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.contrast [RC] set+1 %u != %u", geomapimage->contrast, contrast);
     geomapimage->contrast--;
-
   }
   {
     BITCODE_BS display_props;
@@ -28669,7 +27697,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.display_props [BS] set+1 %hu != %hu", geomapimage->display_props, display_props);
     geomapimage->display_props--;
-
   }
   {
     BITCODE_RC fade;
@@ -28685,7 +27712,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.fade [RC] set+1 %u != %u", geomapimage->fade, fade);
     geomapimage->fade--;
-
   }
   {
     BITCODE_BS geoimage_brightness;
@@ -28701,7 +27727,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.geoimage_brightness [BS] set+1 %hu != %hu", geomapimage->geoimage_brightness, geoimage_brightness);
     geomapimage->geoimage_brightness--;
-
   }
   {
     BITCODE_BS geoimage_contrast;
@@ -28717,7 +27742,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.geoimage_contrast [BS] set+1 %hu != %hu", geomapimage->geoimage_contrast, geoimage_contrast);
     geomapimage->geoimage_contrast--;
-
   }
   {
     BITCODE_BS geoimage_fade;
@@ -28733,7 +27757,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.geoimage_fade [BS] set+1 %hu != %hu", geomapimage->geoimage_fade, geoimage_fade);
     geomapimage->geoimage_fade--;
-
   }
   {
     BITCODE_BS geoimage_height;
@@ -28749,7 +27772,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.geoimage_height [BS] set+1 %hu != %hu", geomapimage->geoimage_height, geoimage_height);
     geomapimage->geoimage_height--;
-
   }
   {
     BITCODE_BS geoimage_position;
@@ -28765,7 +27787,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.geoimage_position [BS] set+1 %hu != %hu", geomapimage->geoimage_position, geoimage_position);
     geomapimage->geoimage_position--;
-
   }
   {
     BITCODE_BS geoimage_width;
@@ -28781,7 +27802,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.geoimage_width [BS] set+1 %hu != %hu", geomapimage->geoimage_width, geoimage_width);
     geomapimage->geoimage_width--;
-
   }
   {
     BITCODE_BD height;
@@ -28797,7 +27817,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.height [BD] set+1 %g != %g", geomapimage->height, height);
     geomapimage->height--;
-
   }
   {
     BITCODE_BD image_file;
@@ -28813,7 +27832,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.image_file [BD] set+1 %g != %g", geomapimage->image_file, image_file);
     geomapimage->image_file--;
-
   }
   {
     BITCODE_BD image_height;
@@ -28829,7 +27847,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.image_height [BD] set+1 %g != %g", geomapimage->image_height, image_height);
     geomapimage->image_height--;
-
   }
   {
     BITCODE_BD image_visibility;
@@ -28845,7 +27862,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.image_visibility [BD] set+1 %g != %g", geomapimage->image_visibility, image_visibility);
     geomapimage->image_visibility--;
-
   }
   {
     BITCODE_BD image_width;
@@ -28861,7 +27877,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.image_width [BD] set+1 %g != %g", geomapimage->image_width, image_width);
     geomapimage->image_width--;
-
   }
   {
     BITCODE_T name;
@@ -28903,7 +27918,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.rotation [BD] set+1 %g != %g", geomapimage->rotation, rotation);
     geomapimage->rotation--;
-
   }
   {
     BITCODE_BD scale_factor;
@@ -28919,7 +27933,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.scale_factor [BD] set+1 %g != %g", geomapimage->scale_factor, scale_factor);
     geomapimage->scale_factor--;
-
   }
   {
     BITCODE_B show_rotation;
@@ -28935,7 +27948,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.show_rotation [B] set+1 " FORMAT_B " != " FORMAT_B "", geomapimage->show_rotation, show_rotation);
     geomapimage->show_rotation--;
-
   }
   {
     BITCODE_2RD size;
@@ -28959,7 +27971,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.transparency [BS] set+1 %hu != %hu", geomapimage->transparency, transparency);
     geomapimage->transparency--;
-
   }
   {
     BITCODE_BD width;
@@ -28975,7 +27986,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.width [BD] set+1 %g != %g", geomapimage->width, width);
     geomapimage->width--;
-
   }
   return failed;
 }
@@ -28984,6 +27994,7 @@ static int test_GROUP (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_GROUP *restrict group = obj->tio.object->tio.GROUP;
+  failed = 0;
   {
     BITCODE_H* groups;
     BITCODE_BL count = 0;
@@ -29018,7 +28029,6 @@ static int test_GROUP (const Dwg_Object *obj)
     else
       fail ("GROUP.num_groups [BL] set+1 %u != %u", group->num_groups, num_groups);
     group->num_groups--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -29042,7 +28052,6 @@ static int test_GROUP (const Dwg_Object *obj)
     else
       fail ("GROUP.selectable [BS] set+1 %hu != %hu", group->selectable, selectable);
     group->selectable--;
-
   }
   {
     BITCODE_BS unnamed;
@@ -29058,7 +28067,6 @@ static int test_GROUP (const Dwg_Object *obj)
     else
       fail ("GROUP.unnamed [BS] set+1 %hu != %hu", group->unnamed, unnamed);
     group->unnamed--;
-
   }
   return failed;
 }
@@ -29067,6 +28075,7 @@ static int test_IDBUFFER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_IDBUFFER *restrict idbuffer = obj->tio.object->tio.IDBUFFER;
+  failed = 0;
   {
     BITCODE_BL num_obj_ids;
     if (dwg_dynapi_entity_value (idbuffer, "IDBUFFER", "num_obj_ids", &num_obj_ids, NULL)
@@ -29081,7 +28090,6 @@ static int test_IDBUFFER (const Dwg_Object *obj)
     else
       fail ("IDBUFFER.num_obj_ids [BL] set+1 %u != %u", idbuffer->num_obj_ids, num_obj_ids);
     idbuffer->num_obj_ids--;
-
   }
   {
     BITCODE_H* obj_ids;
@@ -29115,7 +28123,6 @@ static int test_IDBUFFER (const Dwg_Object *obj)
     else
       fail ("IDBUFFER.unknown [RC] set+1 %u != %u", idbuffer->unknown, unknown);
     idbuffer->unknown--;
-
   }
   return failed;
 }
@@ -29124,6 +28131,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_IMAGEDEF *restrict imagedef = obj->tio.object->tio.IMAGEDEF;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (imagedef, "IMAGEDEF", "class_version", &class_version, NULL)
@@ -29138,7 +28146,6 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
     else
       fail ("IMAGEDEF.class_version [BL] set+1 %u != %u", imagedef->class_version, class_version);
     imagedef->class_version--;
-
   }
   {
     BITCODE_T file_path;
@@ -29172,7 +28179,6 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
     else
       fail ("IMAGEDEF.is_loaded [B] set+1 " FORMAT_B " != " FORMAT_B "", imagedef->is_loaded, is_loaded);
     imagedef->is_loaded--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -29204,7 +28210,6 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
     else
       fail ("IMAGEDEF.resunits [RC] set+1 %u != %u", imagedef->resunits, resunits);
     imagedef->resunits--;
-
   }
   return failed;
 }
@@ -29213,6 +28218,7 @@ static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_IMAGEDEF_REACTOR *restrict imagedef_reactor = obj->tio.object->tio.IMAGEDEF_REACTOR;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (imagedef_reactor, "IMAGEDEF_REACTOR", "class_version", &class_version, NULL)
@@ -29227,7 +28233,6 @@ static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
     else
       fail ("IMAGEDEF_REACTOR.class_version [BL] set+1 %u != %u", imagedef_reactor->class_version, class_version);
     imagedef_reactor->class_version--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -29244,6 +28249,7 @@ static int test_LAYER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LAYER *restrict layer = obj->tio.object->tio.LAYER;
+  failed = 0;
   {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (layer, "LAYER", "color", &color, NULL)
@@ -29266,7 +28272,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.color_rs [short] set+1 %hd != %hd", layer->color_rs, color_rs);
     layer->color_rs--;
-
   }
   {
     BITCODE_BS flag;
@@ -29282,7 +28287,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.flag [BS] set+1 %hu != %hu", layer->flag, flag);
     layer->flag--;
-
   }
   {
     BITCODE_B frozen;
@@ -29298,7 +28302,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.frozen [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->frozen, frozen);
     layer->frozen--;
-
   }
   {
     BITCODE_B frozen_in_new;
@@ -29314,7 +28317,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.frozen_in_new [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->frozen_in_new, frozen_in_new);
     layer->frozen_in_new--;
-
   }
   {
     BITCODE_RC linewt;
@@ -29330,7 +28332,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.linewt [RC] set+1 %u != %u", layer->linewt, linewt);
     layer->linewt--;
-
   }
   {
     BITCODE_B locked;
@@ -29346,7 +28347,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.locked [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->locked, locked);
     layer->locked--;
-
   }
   {
     BITCODE_H ltype;
@@ -29370,7 +28370,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.ltype_rs [RS] set+1 %hu != %hu", layer->ltype_rs, ltype_rs);
     layer->ltype_rs--;
-
   }
   {
     BITCODE_H material;
@@ -29404,7 +28403,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.on [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->on, on);
     layer->on--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -29428,7 +28426,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.plotflag [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->plotflag, plotflag);
     layer->plotflag--;
-
   }
   {
     BITCODE_H plotstyle;
@@ -29452,7 +28449,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.used [RS] set+1 %hu != %hu", layer->used, used);
     layer->used--;
-
   }
   {
     BITCODE_H xref;
@@ -29476,7 +28472,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->xrefdep, xrefdep);
     layer->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -29492,7 +28487,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.xrefindex_plus1 [BS] set+1 %hu != %hu", layer->xrefindex_plus1, xrefindex_plus1);
     layer->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -29508,7 +28502,6 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->xrefref, xrefref);
     layer->xrefref--;
-
   }
   return failed;
 }
@@ -29517,6 +28510,7 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LAYER_CONTROL *restrict layer_control = obj->tio.object->tio.LAYER_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -29541,7 +28535,6 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
     else
       fail ("LAYER_CONTROL.num_entries [BS] set+1 %hu != %hu", layer_control->num_entries, num_entries);
     layer_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -29557,7 +28550,6 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
     else
       fail ("LAYER_CONTROL.objid [BL] set+1 %u != %u", layer_control->objid, objid);
     layer_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -29574,6 +28566,7 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LAYER_INDEX *restrict layer_index = obj->tio.object->tio.LAYER_INDEX;
+  failed = 0;
   {
     Dwg_LAYER_entry* entries;
     BITCODE_BL count = 0;
@@ -29608,7 +28601,6 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
     else
       fail ("LAYER_INDEX.num_entries [BL] set+1 %u != %u", layer_index->num_entries, num_entries);
     layer_index->num_entries--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -29632,7 +28624,6 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
     else
       fail ("LAYER_INDEX.timestamp1 [BL] set+1 %u != %u", layer_index->timestamp1, timestamp1);
     layer_index->timestamp1--;
-
   }
   {
     BITCODE_BL timestamp2;
@@ -29648,7 +28639,6 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
     else
       fail ("LAYER_INDEX.timestamp2 [BL] set+1 %u != %u", layer_index->timestamp2, timestamp2);
     layer_index->timestamp2--;
-
   }
   return failed;
 }
@@ -29657,6 +28647,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LAYOUT *restrict layout = obj->tio.object->tio.LAYOUT;
+  failed = 0;
   {
     BITCODE_H active_viewport;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "active_viewport", &active_viewport, NULL)
@@ -29695,7 +28686,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.bottom_margin [BD] set+1 %g != %g", layout->bottom_margin, bottom_margin);
     layout->bottom_margin--;
-
   }
   {
     BITCODE_T current_style_sheet;
@@ -29721,7 +28711,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.drawing_units [BD] set+1 %g != %g", layout->drawing_units, drawing_units);
     layout->drawing_units--;
-
   }
   {
     BITCODE_BD elevation;
@@ -29737,7 +28726,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.elevation [BD] set+1 %g != %g", layout->elevation, elevation);
     layout->elevation--;
-
   }
   {
     BITCODE_3DPOINT extent_max;
@@ -29769,7 +28757,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.flag [BS] set+1 %hu != %hu", layout->flag, flag);
     layout->flag--;
-
   }
   {
     BITCODE_3DPOINT ins_point;
@@ -29803,7 +28790,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.left_margin [BD] set+1 %g != %g", layout->left_margin, left_margin);
     layout->left_margin--;
-
   }
   {
     BITCODE_2DPOINT maximum_limits;
@@ -29843,7 +28829,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.num_viewports [BL] set+1 %u != %u", layout->num_viewports, num_viewports);
     layout->num_viewports--;
-
   }
   {
     BITCODE_BS orthoview_type;
@@ -29859,7 +28844,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.orthoview_type [BS] set+1 %hu != %hu", layout->orthoview_type, orthoview_type);
     layout->orthoview_type--;
-
   }
   {
     BITCODE_T page_setup_name;
@@ -29885,7 +28869,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.paper_height [BD] set+1 %g != %g", layout->paper_height, paper_height);
     layout->paper_height--;
-
   }
   {
     BITCODE_2BD paper_image_origin;
@@ -29919,7 +28902,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.paper_units [BD] set+1 %g != %g", layout->paper_units, paper_units);
     layout->paper_units--;
-
   }
   {
     BITCODE_BD paper_width;
@@ -29935,7 +28917,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.paper_width [BD] set+1 %g != %g", layout->paper_width, paper_width);
     layout->paper_width--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -29959,7 +28940,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.plot_layout_flags [BS] set+1 %hu != %hu", layout->plot_layout_flags, plot_layout_flags);
     layout->plot_layout_flags--;
-
   }
   {
     BITCODE_2BD plot_origin;
@@ -29983,7 +28963,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.plot_paper_unit [BS] set+1 %hu != %hu", layout->plot_paper_unit, plot_paper_unit);
     layout->plot_paper_unit--;
-
   }
   {
     BITCODE_BS plot_rotation;
@@ -29999,7 +28978,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.plot_rotation [BS] set+1 %hu != %hu", layout->plot_rotation, plot_rotation);
     layout->plot_rotation--;
-
   }
   {
     BITCODE_BS plot_type;
@@ -30015,7 +28993,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.plot_type [BS] set+1 %hu != %hu", layout->plot_type, plot_type);
     layout->plot_type--;
-
   }
   {
     BITCODE_TV plot_view_name;
@@ -30075,7 +29052,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.right_margin [BD] set+1 %g != %g", layout->right_margin, right_margin);
     layout->right_margin--;
-
   }
   {
     BITCODE_BD scale_factor;
@@ -30091,7 +29067,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.scale_factor [BD] set+1 %g != %g", layout->scale_factor, scale_factor);
     layout->scale_factor--;
-
   }
   {
     BITCODE_BS scale_type;
@@ -30107,7 +29082,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.scale_type [BS] set+1 %hu != %hu", layout->scale_type, scale_type);
     layout->scale_type--;
-
   }
   {
     BITCODE_BS shade_plot_customdpi;
@@ -30123,7 +29097,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.shade_plot_customdpi [BS] set+1 %hu != %hu", layout->shade_plot_customdpi, shade_plot_customdpi);
     layout->shade_plot_customdpi--;
-
   }
   {
     BITCODE_BS shade_plot_mode;
@@ -30139,7 +29112,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.shade_plot_mode [BS] set+1 %hu != %hu", layout->shade_plot_mode, shade_plot_mode);
     layout->shade_plot_mode--;
-
   }
   {
     BITCODE_BS shade_plot_reslevel;
@@ -30155,7 +29127,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.shade_plot_reslevel [BS] set+1 %hu != %hu", layout->shade_plot_reslevel, shade_plot_reslevel);
     layout->shade_plot_reslevel--;
-
   }
   {
     BITCODE_BS tab_order;
@@ -30171,7 +29142,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.tab_order [BS] set+1 %hu != %hu", layout->tab_order, tab_order);
     layout->tab_order--;
-
   }
   {
     BITCODE_BD top_margin;
@@ -30187,7 +29157,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.top_margin [BD] set+1 %g != %g", layout->top_margin, top_margin);
     layout->top_margin--;
-
   }
   {
     BITCODE_3DPOINT ucs_origin;
@@ -30238,6 +29207,7 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LIGHTLIST *restrict lightlist = obj->tio.object->tio.LIGHTLIST;
+  failed = 0;
   {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "class_version", &class_version, NULL)
@@ -30252,7 +29222,6 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
     else
       fail ("LIGHTLIST.class_version [BS] set+1 %hu != %hu", lightlist->class_version, class_version);
     lightlist->class_version--;
-
   }
   {
     BITCODE_H dictionary;
@@ -30296,7 +29265,6 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
     else
       fail ("LIGHTLIST.num_lights [BS] set+1 %hu != %hu", lightlist->num_lights, num_lights);
     lightlist->num_lights--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -30313,6 +29281,7 @@ static int test_LONG_TRANSACTION (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LONG_TRANSACTION *restrict long_transaction = obj->tio.object->tio.LONG_TRANSACTION;
+  failed = 0;
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (long_transaction, "LONG_TRANSACTION", "parent", &parent, NULL)
@@ -30328,6 +29297,7 @@ static int test_LTYPE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LTYPE *restrict ltype = obj->tio.object->tio.LTYPE;
+  failed = 0;
   {
     BITCODE_RC alignment;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "alignment", &alignment, NULL)
@@ -30342,7 +29312,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.alignment [RC] set+1 %u != %u", ltype->alignment, alignment);
     ltype->alignment--;
-
   }
   {
     Dwg_LTYPE_dash* dashes;
@@ -30396,7 +29365,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.flag [RC] set+1 %u != %u", ltype->flag, flag);
     ltype->flag--;
-
   }
   {
     BITCODE_B has_strings_area;
@@ -30412,7 +29380,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.has_strings_area [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->has_strings_area, has_strings_area);
     ltype->has_strings_area--;
-
   }
   {
     BITCODE_TV name;
@@ -30438,7 +29405,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.num_dashes [RC] set+1 %u != %u", ltype->num_dashes, num_dashes);
     ltype->num_dashes--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -30462,7 +29428,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.pattern_len [BD] set+1 %g != %g", ltype->pattern_len, pattern_len);
     ltype->pattern_len--;
-
   }
   {
     BITCODE_TF strings_area;
@@ -30486,7 +29451,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.used [RS] set+1 %hu != %hu", ltype->used, used);
     ltype->used--;
-
   }
   {
     BITCODE_B xrefdep;
@@ -30502,7 +29466,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->xrefdep, xrefdep);
     ltype->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -30518,7 +29481,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.xrefindex_plus1 [BS] set+1 %hu != %hu", ltype->xrefindex_plus1, xrefindex_plus1);
     ltype->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -30534,7 +29496,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->xrefref, xrefref);
     ltype->xrefref--;
-
   }
   return failed;
 }
@@ -30543,6 +29504,7 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_LTYPE_CONTROL *restrict ltype_control = obj->tio.object->tio.LTYPE_CONTROL;
+  failed = 0;
   {
     BITCODE_H byblock;
     if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "byblock", &byblock, NULL)
@@ -30583,7 +29545,6 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
     else
       fail ("LTYPE_CONTROL.num_entries [BS] set+1 %hu != %hu", ltype_control->num_entries, num_entries);
     ltype_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -30599,7 +29560,6 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
     else
       fail ("LTYPE_CONTROL.objid [BL] set+1 %u != %u", ltype_control->objid, objid);
     ltype_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -30616,6 +29576,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_MATERIAL *restrict material = obj->tio.object->tio.MATERIAL;
+  failed = 0;
   {
     BITCODE_CMC ambient_color;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "ambient_color", &ambient_color, NULL)
@@ -30638,7 +29599,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.ambient_color_factor [BD] set+1 %g != %g", material->ambient_color_factor, ambient_color_factor);
     material->ambient_color_factor--;
-
   }
   {
     BITCODE_BS ambient_color_flag;
@@ -30654,7 +29614,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.ambient_color_flag [BS] set+1 %hu != %hu", material->ambient_color_flag, ambient_color_flag);
     material->ambient_color_flag--;
-
   }
   {
     BITCODE_BS bumpmap_autotransform;
@@ -30670,7 +29629,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.bumpmap_autotransform [BS] set+1 %hu != %hu", material->bumpmap_autotransform, bumpmap_autotransform);
     material->bumpmap_autotransform--;
-
   }
   {
     BITCODE_BD bumpmap_blendfactor;
@@ -30686,7 +29644,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.bumpmap_blendfactor [BD] set+1 %g != %g", material->bumpmap_blendfactor, bumpmap_blendfactor);
     material->bumpmap_blendfactor--;
-
   }
   {
     BITCODE_T bumpmap_filename;
@@ -30712,7 +29669,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.bumpmap_projection [BS] set+1 %hu != %hu", material->bumpmap_projection, bumpmap_projection);
     material->bumpmap_projection--;
-
   }
   {
     BITCODE_BS bumpmap_source;
@@ -30728,7 +29684,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.bumpmap_source [BS] set+1 %hu != %hu", material->bumpmap_source, bumpmap_source);
     material->bumpmap_source--;
-
   }
   {
     BITCODE_BS bumpmap_tiling;
@@ -30744,7 +29699,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.bumpmap_tiling [BS] set+1 %hu != %hu", material->bumpmap_tiling, bumpmap_tiling);
     material->bumpmap_tiling--;
-
   }
   {
     BITCODE_BD* bumpmap_transmatrix;
@@ -30768,7 +29722,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.channel_flags [BL] set+1 %u != %u", material->channel_flags, channel_flags);
     material->channel_flags--;
-
   }
   {
     BITCODE_BD color_bleed_scale;
@@ -30784,7 +29737,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.color_bleed_scale [BD] set+1 %g != %g", material->color_bleed_scale, color_bleed_scale);
     material->color_bleed_scale--;
-
   }
   {
     BITCODE_T description;
@@ -30818,7 +29770,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.diffuse_color_factor [BD] set+1 %g != %g", material->diffuse_color_factor, diffuse_color_factor);
     material->diffuse_color_factor--;
-
   }
   {
     BITCODE_BS diffuse_color_flag;
@@ -30834,7 +29785,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.diffuse_color_flag [BS] set+1 %hu != %hu", material->diffuse_color_flag, diffuse_color_flag);
     material->diffuse_color_flag--;
-
   }
   {
     BITCODE_BS diffusemap_autotransform;
@@ -30850,7 +29800,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.diffusemap_autotransform [BS] set+1 %hu != %hu", material->diffusemap_autotransform, diffusemap_autotransform);
     material->diffusemap_autotransform--;
-
   }
   {
     BITCODE_BD diffusemap_blendfactor;
@@ -30866,7 +29815,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.diffusemap_blendfactor [BD] set+1 %g != %g", material->diffusemap_blendfactor, diffusemap_blendfactor);
     material->diffusemap_blendfactor--;
-
   }
   {
     BITCODE_T diffusemap_filename;
@@ -30892,7 +29840,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.diffusemap_projection [BS] set+1 %hu != %hu", material->diffusemap_projection, diffusemap_projection);
     material->diffusemap_projection--;
-
   }
   {
     BITCODE_BS diffusemap_source;
@@ -30908,7 +29855,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.diffusemap_source [BS] set+1 %hu != %hu", material->diffusemap_source, diffusemap_source);
     material->diffusemap_source--;
-
   }
   {
     BITCODE_BS diffusemap_tiling;
@@ -30924,7 +29870,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.diffusemap_tiling [BS] set+1 %hu != %hu", material->diffusemap_tiling, diffusemap_tiling);
     material->diffusemap_tiling--;
-
   }
   {
     BITCODE_BD* diffusemap_transmatrix;
@@ -30948,7 +29893,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.final_gather_mode [BS] set+1 %hu != %hu", material->final_gather_mode, final_gather_mode);
     material->final_gather_mode--;
-
   }
   {
     BITCODE_T genprocname;
@@ -30974,7 +29918,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.genproctableend [B] set+1 " FORMAT_B " != " FORMAT_B "", material->genproctableend, genproctableend);
     material->genproctableend--;
-
   }
   {
     BITCODE_B genprocvalbool;
@@ -30990,7 +29933,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.genprocvalbool [B] set+1 " FORMAT_B " != " FORMAT_B "", material->genprocvalbool, genprocvalbool);
     material->genprocvalbool--;
-
   }
   {
     BITCODE_CMC genprocvalcolorindex;
@@ -31024,7 +29966,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.genprocvalcolorrgb [BS] set+1 %hu != %hu", material->genprocvalcolorrgb, genprocvalcolorrgb);
     material->genprocvalcolorrgb--;
-
   }
   {
     BITCODE_BS genprocvalint;
@@ -31040,7 +29981,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.genprocvalint [BS] set+1 %hu != %hu", material->genprocvalint, genprocvalint);
     material->genprocvalint--;
-
   }
   {
     BITCODE_BD genprocvalreal;
@@ -31056,7 +29996,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.genprocvalreal [BD] set+1 %g != %g", material->genprocvalreal, genprocvalreal);
     material->genprocvalreal--;
-
   }
   {
     BITCODE_T genprocvaltext;
@@ -31082,7 +30021,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.global_illumination_mode [BS] set+1 %hu != %hu", material->global_illumination_mode, global_illumination_mode);
     material->global_illumination_mode--;
-
   }
   {
     BITCODE_BL illumination_model;
@@ -31098,7 +30036,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.illumination_model [BL] set+1 %u != %u", material->illumination_model, illumination_model);
     material->illumination_model--;
-
   }
   {
     BITCODE_BD indirect_dump_scale;
@@ -31114,7 +30051,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.indirect_dump_scale [BD] set+1 %g != %g", material->indirect_dump_scale, indirect_dump_scale);
     material->indirect_dump_scale--;
-
   }
   {
     BITCODE_BD luminance;
@@ -31130,7 +30066,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.luminance [BD] set+1 %g != %g", material->luminance, luminance);
     material->luminance--;
-
   }
   {
     BITCODE_BS luminance_mode;
@@ -31146,7 +30081,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.luminance_mode [BS] set+1 %hu != %hu", material->luminance_mode, luminance_mode);
     material->luminance_mode--;
-
   }
   {
     BITCODE_BS map_utile;
@@ -31162,7 +30096,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.map_utile [BS] set+1 %hu != %hu", material->map_utile, map_utile);
     material->map_utile--;
-
   }
   {
     BITCODE_B materials_anonymous;
@@ -31178,7 +30111,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.materials_anonymous [B] set+1 " FORMAT_B " != " FORMAT_B "", material->materials_anonymous, materials_anonymous);
     material->materials_anonymous--;
-
   }
   {
     BITCODE_T name;
@@ -31204,7 +30136,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_autotransform [BS] set+1 %hu != %hu", material->normalmap_autotransform, normalmap_autotransform);
     material->normalmap_autotransform--;
-
   }
   {
     BITCODE_BD normalmap_blendfactor;
@@ -31220,7 +30151,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_blendfactor [BD] set+1 %g != %g", material->normalmap_blendfactor, normalmap_blendfactor);
     material->normalmap_blendfactor--;
-
   }
   {
     BITCODE_T normalmap_filename;
@@ -31246,7 +30176,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_method [BS] set+1 %hu != %hu", material->normalmap_method, normalmap_method);
     material->normalmap_method--;
-
   }
   {
     BITCODE_BS normalmap_projection;
@@ -31262,7 +30191,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_projection [BS] set+1 %hu != %hu", material->normalmap_projection, normalmap_projection);
     material->normalmap_projection--;
-
   }
   {
     BITCODE_BS normalmap_source;
@@ -31278,7 +30206,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_source [BS] set+1 %hu != %hu", material->normalmap_source, normalmap_source);
     material->normalmap_source--;
-
   }
   {
     BITCODE_BD normalmap_strength;
@@ -31294,7 +30221,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_strength [BD] set+1 %g != %g", material->normalmap_strength, normalmap_strength);
     material->normalmap_strength--;
-
   }
   {
     BITCODE_BS normalmap_tiling;
@@ -31310,7 +30236,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_tiling [BS] set+1 %hu != %hu", material->normalmap_tiling, normalmap_tiling);
     material->normalmap_tiling--;
-
   }
   {
     BITCODE_BD* normalmap_transmatrix;
@@ -31334,7 +30259,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.opacity_percent [BD] set+1 %g != %g", material->opacity_percent, opacity_percent);
     material->opacity_percent--;
-
   }
   {
     BITCODE_BS opacitymap_autotransform;
@@ -31350,7 +30274,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.opacitymap_autotransform [BS] set+1 %hu != %hu", material->opacitymap_autotransform, opacitymap_autotransform);
     material->opacitymap_autotransform--;
-
   }
   {
     BITCODE_BD opacitymap_blendfactor;
@@ -31366,7 +30289,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.opacitymap_blendfactor [BD] set+1 %g != %g", material->opacitymap_blendfactor, opacitymap_blendfactor);
     material->opacitymap_blendfactor--;
-
   }
   {
     BITCODE_T opacitymap_filename;
@@ -31392,7 +30314,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.opacitymap_projection [BS] set+1 %hu != %hu", material->opacitymap_projection, opacitymap_projection);
     material->opacitymap_projection--;
-
   }
   {
     BITCODE_BS opacitymap_source;
@@ -31408,7 +30329,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.opacitymap_source [BS] set+1 %hu != %hu", material->opacitymap_source, opacitymap_source);
     material->opacitymap_source--;
-
   }
   {
     BITCODE_BS opacitymap_tiling;
@@ -31424,7 +30344,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.opacitymap_tiling [BS] set+1 %hu != %hu", material->opacitymap_tiling, opacitymap_tiling);
     material->opacitymap_tiling--;
-
   }
   {
     BITCODE_BD* opacitymap_transmatrix;
@@ -31456,7 +30375,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.reflectance_scale [BD] set+1 %g != %g", material->reflectance_scale, reflectance_scale);
     material->reflectance_scale--;
-
   }
   {
     BITCODE_BS reflectionmap_autotransform;
@@ -31472,7 +30390,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.reflectionmap_autotransform [BS] set+1 %hu != %hu", material->reflectionmap_autotransform, reflectionmap_autotransform);
     material->reflectionmap_autotransform--;
-
   }
   {
     BITCODE_BD reflectionmap_blendfactor;
@@ -31488,7 +30405,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.reflectionmap_blendfactor [BD] set+1 %g != %g", material->reflectionmap_blendfactor, reflectionmap_blendfactor);
     material->reflectionmap_blendfactor--;
-
   }
   {
     BITCODE_T reflectionmap_filename;
@@ -31514,7 +30430,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.reflectionmap_projection [BS] set+1 %hu != %hu", material->reflectionmap_projection, reflectionmap_projection);
     material->reflectionmap_projection--;
-
   }
   {
     BITCODE_BS reflectionmap_source;
@@ -31530,7 +30445,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.reflectionmap_source [BS] set+1 %hu != %hu", material->reflectionmap_source, reflectionmap_source);
     material->reflectionmap_source--;
-
   }
   {
     BITCODE_BS reflectionmap_tiling;
@@ -31546,7 +30460,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.reflectionmap_tiling [BS] set+1 %hu != %hu", material->reflectionmap_tiling, reflectionmap_tiling);
     material->reflectionmap_tiling--;
-
   }
   {
     BITCODE_BD* reflectionmap_transmatrix;
@@ -31570,7 +30483,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.reflectivity [BD] set+1 %g != %g", material->reflectivity, reflectivity);
     material->reflectivity--;
-
   }
   {
     BITCODE_BD refraction_index;
@@ -31586,7 +30498,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.refraction_index [BD] set+1 %g != %g", material->refraction_index, refraction_index);
     material->refraction_index--;
-
   }
   {
     BITCODE_BS refractionmap_autotransform;
@@ -31602,7 +30513,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.refractionmap_autotransform [BS] set+1 %hu != %hu", material->refractionmap_autotransform, refractionmap_autotransform);
     material->refractionmap_autotransform--;
-
   }
   {
     BITCODE_BD refractionmap_blendfactor;
@@ -31618,7 +30528,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.refractionmap_blendfactor [BD] set+1 %g != %g", material->refractionmap_blendfactor, refractionmap_blendfactor);
     material->refractionmap_blendfactor--;
-
   }
   {
     BITCODE_T refractionmap_filename;
@@ -31644,7 +30553,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.refractionmap_projection [BS] set+1 %hu != %hu", material->refractionmap_projection, refractionmap_projection);
     material->refractionmap_projection--;
-
   }
   {
     BITCODE_BS refractionmap_source;
@@ -31660,7 +30568,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.refractionmap_source [BS] set+1 %hu != %hu", material->refractionmap_source, refractionmap_source);
     material->refractionmap_source--;
-
   }
   {
     BITCODE_BS refractionmap_tiling;
@@ -31676,7 +30583,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.refractionmap_tiling [BS] set+1 %hu != %hu", material->refractionmap_tiling, refractionmap_tiling);
     material->refractionmap_tiling--;
-
   }
   {
     BITCODE_BD* refractionmap_transmatrix;
@@ -31700,7 +30606,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.self_illumination [BL] set+1 %u != %u", material->self_illumination, self_illumination);
     material->self_illumination--;
-
   }
   {
     BITCODE_CMC specular_color;
@@ -31724,7 +30629,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specular_color_factor [BD] set+1 %g != %g", material->specular_color_factor, specular_color_factor);
     material->specular_color_factor--;
-
   }
   {
     BITCODE_BS specular_color_flag;
@@ -31740,7 +30644,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specular_color_flag [BS] set+1 %hu != %hu", material->specular_color_flag, specular_color_flag);
     material->specular_color_flag--;
-
   }
   {
     BITCODE_BD specular_gloss_factor;
@@ -31756,7 +30659,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specular_gloss_factor [BD] set+1 %g != %g", material->specular_gloss_factor, specular_gloss_factor);
     material->specular_gloss_factor--;
-
   }
   {
     BITCODE_BS specularmap_autotransform;
@@ -31772,7 +30674,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specularmap_autotransform [BS] set+1 %hu != %hu", material->specularmap_autotransform, specularmap_autotransform);
     material->specularmap_autotransform--;
-
   }
   {
     BITCODE_BD specularmap_blendfactor;
@@ -31788,7 +30689,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specularmap_blendfactor [BD] set+1 %g != %g", material->specularmap_blendfactor, specularmap_blendfactor);
     material->specularmap_blendfactor--;
-
   }
   {
     BITCODE_T specularmap_filename;
@@ -31814,7 +30714,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specularmap_projection [BS] set+1 %hu != %hu", material->specularmap_projection, specularmap_projection);
     material->specularmap_projection--;
-
   }
   {
     BITCODE_BS specularmap_source;
@@ -31830,7 +30729,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specularmap_source [BS] set+1 %hu != %hu", material->specularmap_source, specularmap_source);
     material->specularmap_source--;
-
   }
   {
     BITCODE_BS specularmap_tiling;
@@ -31846,7 +30744,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.specularmap_tiling [BS] set+1 %hu != %hu", material->specularmap_tiling, specularmap_tiling);
     material->specularmap_tiling--;
-
   }
   {
     BITCODE_BD* specularmap_transmatrix;
@@ -31870,7 +30767,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.translucence [BD] set+1 %g != %g", material->translucence, translucence);
     material->translucence--;
-
   }
   {
     BITCODE_BD transmittance_scale;
@@ -31886,7 +30782,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.transmittance_scale [BD] set+1 %g != %g", material->transmittance_scale, transmittance_scale);
     material->transmittance_scale--;
-
   }
   {
     BITCODE_B two_sided_material;
@@ -31902,7 +30797,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.two_sided_material [B] set+1 " FORMAT_B " != " FORMAT_B "", material->two_sided_material, two_sided_material);
     material->two_sided_material--;
-
   }
   return failed;
 }
@@ -31911,6 +30805,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_MLEADERSTYLE *restrict mleaderstyle = obj->tio.object->tio.MLEADERSTYLE;
+  failed = 0;
   {
     BITCODE_BD align_space;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "align_space", &align_space, NULL)
@@ -31925,7 +30820,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.align_space [BD] set+1 %g != %g", mleaderstyle->align_space, align_space);
     mleaderstyle->align_space--;
-
   }
   {
     BITCODE_H arrow_head;
@@ -31949,7 +30843,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.arrow_head_size [BD] set+1 %g != %g", mleaderstyle->arrow_head_size, arrow_head_size);
     mleaderstyle->arrow_head_size--;
-
   }
   {
     BITCODE_BS attach_bottom;
@@ -31965,7 +30858,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.attach_bottom [BS] set+1 %hu != %hu", mleaderstyle->attach_bottom, attach_bottom);
     mleaderstyle->attach_bottom--;
-
   }
   {
     BITCODE_BS attach_dir;
@@ -31981,7 +30873,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.attach_dir [BS] set+1 %hu != %hu", mleaderstyle->attach_dir, attach_dir);
     mleaderstyle->attach_dir--;
-
   }
   {
     BITCODE_BS attach_left;
@@ -31997,7 +30888,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.attach_left [BS] set+1 %hu != %hu", mleaderstyle->attach_left, attach_left);
     mleaderstyle->attach_left--;
-
   }
   {
     BITCODE_BS attach_right;
@@ -32013,7 +30903,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.attach_right [BS] set+1 %hu != %hu", mleaderstyle->attach_right, attach_right);
     mleaderstyle->attach_right--;
-
   }
   {
     BITCODE_BS attach_top;
@@ -32029,7 +30918,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.attach_top [BS] set+1 %hu != %hu", mleaderstyle->attach_top, attach_top);
     mleaderstyle->attach_top--;
-
   }
   {
     BITCODE_H block;
@@ -32061,7 +30949,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.block_connection [BS] set+1 %hu != %hu", mleaderstyle->block_connection, block_connection);
     mleaderstyle->block_connection--;
-
   }
   {
     BITCODE_BD block_rotation;
@@ -32077,7 +30964,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.block_rotation [BD] set+1 %g != %g", mleaderstyle->block_rotation, block_rotation);
     mleaderstyle->block_rotation--;
-
   }
   {
     BITCODE_3BD block_scale;
@@ -32101,7 +30987,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.break_size [BD] set+1 %g != %g", mleaderstyle->break_size, break_size);
     mleaderstyle->break_size--;
-
   }
   {
     BITCODE_B changed;
@@ -32117,7 +31002,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.changed [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->changed, changed);
     mleaderstyle->changed--;
-
   }
   {
     BITCODE_BS class_version;
@@ -32133,7 +31017,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.class_version [BS] set+1 %hu != %hu", mleaderstyle->class_version, class_version);
     mleaderstyle->class_version--;
-
   }
   {
     BITCODE_BS content_type;
@@ -32149,7 +31032,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.content_type [BS] set+1 %hu != %hu", mleaderstyle->content_type, content_type);
     mleaderstyle->content_type--;
-
   }
   {
     BITCODE_T description;
@@ -32175,7 +31057,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.first_seg_angle [BD] set+1 %g != %g", mleaderstyle->first_seg_angle, first_seg_angle);
     mleaderstyle->first_seg_angle--;
-
   }
   {
     BITCODE_B has_dogleg;
@@ -32191,7 +31072,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.has_dogleg [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->has_dogleg, has_dogleg);
     mleaderstyle->has_dogleg--;
-
   }
   {
     BITCODE_B has_landing;
@@ -32207,7 +31087,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.has_landing [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->has_landing, has_landing);
     mleaderstyle->has_landing--;
-
   }
   {
     BITCODE_B is_annotative;
@@ -32223,7 +31102,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.is_annotative [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->is_annotative, is_annotative);
     mleaderstyle->is_annotative--;
-
   }
   {
     BITCODE_B is_new_format;
@@ -32239,7 +31117,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.is_new_format [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->is_new_format, is_new_format);
     mleaderstyle->is_new_format--;
-
   }
   {
     BITCODE_BD landing_dist;
@@ -32255,7 +31132,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.landing_dist [BD] set+1 %g != %g", mleaderstyle->landing_dist, landing_dist);
     mleaderstyle->landing_dist--;
-
   }
   {
     BITCODE_BD landing_gap;
@@ -32271,7 +31147,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.landing_gap [BD] set+1 %g != %g", mleaderstyle->landing_gap, landing_gap);
     mleaderstyle->landing_gap--;
-
   }
   {
     BITCODE_BS leader_order;
@@ -32287,7 +31162,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.leader_order [BS] set+1 %hu != %hu", mleaderstyle->leader_order, leader_order);
     mleaderstyle->leader_order--;
-
   }
   {
     BITCODE_CMC line_color;
@@ -32318,7 +31192,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.linewt [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", mleaderstyle->linewt, linewt);
     mleaderstyle->linewt--;
-
   }
   {
     BITCODE_BL max_points;
@@ -32334,7 +31207,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.max_points [BL] set+1 %u != %u", mleaderstyle->max_points, max_points);
     mleaderstyle->max_points--;
-
   }
   {
     BITCODE_BS mleader_order;
@@ -32350,7 +31222,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.mleader_order [BS] set+1 %hu != %hu", mleaderstyle->mleader_order, mleader_order);
     mleaderstyle->mleader_order--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -32374,7 +31245,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.scale [BD] set+1 %g != %g", mleaderstyle->scale, scale);
     mleaderstyle->scale--;
-
   }
   {
     BITCODE_BD second_seg_angle;
@@ -32390,7 +31260,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.second_seg_angle [BD] set+1 %g != %g", mleaderstyle->second_seg_angle, second_seg_angle);
     mleaderstyle->second_seg_angle--;
-
   }
   {
     BITCODE_BS text_align_type;
@@ -32406,7 +31275,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.text_align_type [BS] set+1 %hu != %hu", mleaderstyle->text_align_type, text_align_type);
     mleaderstyle->text_align_type--;
-
   }
   {
     BITCODE_B text_always_left;
@@ -32422,7 +31290,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.text_always_left [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->text_always_left, text_always_left);
     mleaderstyle->text_always_left--;
-
   }
   {
     BITCODE_BS text_angle_type;
@@ -32438,7 +31305,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.text_angle_type [BS] set+1 %hu != %hu", mleaderstyle->text_angle_type, text_angle_type);
     mleaderstyle->text_angle_type--;
-
   }
   {
     BITCODE_CMC text_color;
@@ -32472,7 +31338,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.text_extended [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->text_extended, text_extended);
     mleaderstyle->text_extended--;
-
   }
   {
     BITCODE_B text_frame;
@@ -32488,7 +31353,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.text_frame [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->text_frame, text_frame);
     mleaderstyle->text_frame--;
-
   }
   {
     BITCODE_BD text_height;
@@ -32504,7 +31368,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.text_height [BD] set+1 %g != %g", mleaderstyle->text_height, text_height);
     mleaderstyle->text_height--;
-
   }
   {
     BITCODE_H text_style;
@@ -32528,7 +31391,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.type [BS] set+1 %hu != %hu", mleaderstyle->type, type);
     mleaderstyle->type--;
-
   }
   {
     BITCODE_B use_block_rotation;
@@ -32544,7 +31406,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.use_block_rotation [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->use_block_rotation, use_block_rotation);
     mleaderstyle->use_block_rotation--;
-
   }
   {
     BITCODE_B use_block_scale;
@@ -32560,7 +31421,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     else
       fail ("MLEADERSTYLE.use_block_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->use_block_scale, use_block_scale);
     mleaderstyle->use_block_scale--;
-
   }
   return failed;
 }
@@ -32569,6 +31429,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_MLINESTYLE *restrict mlinestyle = obj->tio.object->tio.MLINESTYLE;
+  failed = 0;
   {
     BITCODE_T description;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "description", &description, NULL)
@@ -32593,7 +31454,6 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
     else
       fail ("MLINESTYLE.end_angle [BD] set+1 %g != %g", mlinestyle->end_angle, end_angle);
     mlinestyle->end_angle--;
-
   }
   {
     BITCODE_CMC fill_color;
@@ -32617,7 +31477,6 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
     else
       fail ("MLINESTYLE.flag [BS] set+1 %hu != %hu", mlinestyle->flag, flag);
     mlinestyle->flag--;
-
   }
   {
     Dwg_MLINESTYLE_line* lines;
@@ -32653,7 +31512,6 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
     else
       fail ("MLINESTYLE.num_lines [RC] set+1 %u != %u", mlinestyle->num_lines, num_lines);
     mlinestyle->num_lines--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -32677,7 +31535,6 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
     else
       fail ("MLINESTYLE.start_angle [BD] set+1 %g != %g", mlinestyle->start_angle, start_angle);
     mlinestyle->start_angle--;
-
   }
   return failed;
 }
@@ -32686,6 +31543,7 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_NAVISWORKSMODELDEF *restrict navisworksmodeldef = obj->tio.object->tio.NAVISWORKSMODELDEF;
+  failed = 0;
   {
     BITCODE_B host_drawing_visibility;
     if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility, NULL)
@@ -32700,7 +31558,6 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
     else
       fail ("NAVISWORKSMODELDEF.host_drawing_visibility [B] set+1 " FORMAT_B " != " FORMAT_B "", navisworksmodeldef->host_drawing_visibility, host_drawing_visibility);
     navisworksmodeldef->host_drawing_visibility--;
-
   }
   {
     BITCODE_3BD max_extent;
@@ -32750,7 +31607,6 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
     else
       fail ("NAVISWORKSMODELDEF.status [B] set+1 " FORMAT_B " != " FORMAT_B "", navisworksmodeldef->status, status);
     navisworksmodeldef->status--;
-
   }
   return failed;
 }
@@ -32759,6 +31615,7 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_OBJECTCONTEXTDATA *restrict objectcontextdata = obj->tio.object->tio.OBJECTCONTEXTDATA;
+  failed = 0;
   {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, NULL)
@@ -32773,7 +31630,6 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("OBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", objectcontextdata->class_version, class_version);
     objectcontextdata->class_version--;
-
   }
   {
     BITCODE_B defaultflag;
@@ -32789,7 +31645,6 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("OBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->defaultflag, defaultflag);
     objectcontextdata->defaultflag--;
-
   }
   {
     BITCODE_B has_file;
@@ -32805,7 +31660,6 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("OBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->has_file, has_file);
     objectcontextdata->has_file--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -32822,6 +31676,7 @@ static int test_OBJECT_PTR (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_OBJECT_PTR *restrict object_ptr = obj->tio.object->tio.OBJECT_PTR;
+  failed = 0;
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (object_ptr, "OBJECT_PTR", "parent", &parent, NULL)
@@ -32837,6 +31692,7 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_PERSSUBENTMANAGER *restrict perssubentmanager = obj->tio.object->tio.PERSSUBENTMANAGER;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "class_version", &class_version, NULL)
@@ -32851,7 +31707,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("PERSSUBENTMANAGER.class_version [BL] set+1 %u != %u", perssubentmanager->class_version, class_version);
     perssubentmanager->class_version--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -32875,7 +31730,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("PERSSUBENTMANAGER.unknown_bl1 [BL] set+1 %u != %u", perssubentmanager->unknown_bl1, unknown_bl1);
     perssubentmanager->unknown_bl1--;
-
   }
   {
     BITCODE_BL unknown_bl2;
@@ -32891,7 +31745,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("PERSSUBENTMANAGER.unknown_bl2 [BL] set+1 %u != %u", perssubentmanager->unknown_bl2, unknown_bl2);
     perssubentmanager->unknown_bl2--;
-
   }
   {
     BITCODE_BL unknown_bl3;
@@ -32907,7 +31760,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("PERSSUBENTMANAGER.unknown_bl3 [BL] set+1 %u != %u", perssubentmanager->unknown_bl3, unknown_bl3);
     perssubentmanager->unknown_bl3--;
-
   }
   {
     BITCODE_BL unknown_bl4;
@@ -32923,7 +31775,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("PERSSUBENTMANAGER.unknown_bl4 [BL] set+1 %u != %u", perssubentmanager->unknown_bl4, unknown_bl4);
     perssubentmanager->unknown_bl4--;
-
   }
   {
     BITCODE_BL unknown_bl5;
@@ -32939,7 +31790,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("PERSSUBENTMANAGER.unknown_bl5 [BL] set+1 %u != %u", perssubentmanager->unknown_bl5, unknown_bl5);
     perssubentmanager->unknown_bl5--;
-
   }
   {
     BITCODE_BL unknown_bl6;
@@ -32955,7 +31805,6 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("PERSSUBENTMANAGER.unknown_bl6 [BL] set+1 %u != %u", perssubentmanager->unknown_bl6, unknown_bl6);
     perssubentmanager->unknown_bl6--;
-
   }
   return failed;
 }
@@ -32964,6 +31813,7 @@ static int test_PLACEHOLDER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_PLACEHOLDER *restrict placeholder = obj->tio.object->tio.PLACEHOLDER;
+  failed = 0;
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (placeholder, "PLACEHOLDER", "parent", &parent, NULL)
@@ -32979,6 +31829,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_PLOTSETTINGS *restrict plotsettings = obj->tio.object->tio.PLOTSETTINGS;
+  failed = 0;
   {
     BITCODE_BD bottom_margin;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "bottom_margin", &bottom_margin, NULL)
@@ -32993,7 +31844,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.bottom_margin [BD] set+1 %g != %g", plotsettings->bottom_margin, bottom_margin);
     plotsettings->bottom_margin--;
-
   }
   {
     BITCODE_BD drawing_units;
@@ -33009,7 +31859,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.drawing_units [BD] set+1 %g != %g", plotsettings->drawing_units, drawing_units);
     plotsettings->drawing_units--;
-
   }
   {
     BITCODE_BD left_margin;
@@ -33025,7 +31874,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.left_margin [BD] set+1 %g != %g", plotsettings->left_margin, left_margin);
     plotsettings->left_margin--;
-
   }
   {
     BITCODE_T page_setup_name;
@@ -33051,7 +31899,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.paper_height [BD] set+1 %g != %g", plotsettings->paper_height, paper_height);
     plotsettings->paper_height--;
-
   }
   {
     BITCODE_2BD paper_image_origin;
@@ -33085,7 +31932,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.paper_units [BD] set+1 %g != %g", plotsettings->paper_units, paper_units);
     plotsettings->paper_units--;
-
   }
   {
     BITCODE_BD paper_width;
@@ -33101,7 +31947,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.paper_width [BD] set+1 %g != %g", plotsettings->paper_width, paper_width);
     plotsettings->paper_width--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -33125,7 +31970,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.plot_layout [BS] set+1 %hu != %hu", plotsettings->plot_layout, plot_layout);
     plotsettings->plot_layout--;
-
   }
   {
     BITCODE_2BD plot_origin;
@@ -33149,7 +31993,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.plot_paper_unit [BS] set+1 %hu != %hu", plotsettings->plot_paper_unit, plot_paper_unit);
     plotsettings->plot_paper_unit--;
-
   }
   {
     BITCODE_BS plot_rotation;
@@ -33165,7 +32008,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.plot_rotation [BS] set+1 %hu != %hu", plotsettings->plot_rotation, plot_rotation);
     plotsettings->plot_rotation--;
-
   }
   {
     BITCODE_BS plot_type;
@@ -33181,7 +32023,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.plot_type [BS] set+1 %hu != %hu", plotsettings->plot_type, plot_type);
     plotsettings->plot_type--;
-
   }
   {
     BITCODE_2BD plot_window_ll;
@@ -33231,7 +32072,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.right_margin [BD] set+1 %g != %g", plotsettings->right_margin, right_margin);
     plotsettings->right_margin--;
-
   }
   {
     BITCODE_BS shade_plot_customdpi;
@@ -33247,7 +32087,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.shade_plot_customdpi [BS] set+1 %hu != %hu", plotsettings->shade_plot_customdpi, shade_plot_customdpi);
     plotsettings->shade_plot_customdpi--;
-
   }
   {
     BITCODE_H shade_plot_id;
@@ -33271,7 +32110,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.shade_plot_mode [BS] set+1 %hu != %hu", plotsettings->shade_plot_mode, shade_plot_mode);
     plotsettings->shade_plot_mode--;
-
   }
   {
     BITCODE_BS shade_plot_reslevel;
@@ -33287,7 +32125,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.shade_plot_reslevel [BS] set+1 %hu != %hu", plotsettings->shade_plot_reslevel, shade_plot_reslevel);
     plotsettings->shade_plot_reslevel--;
-
   }
   {
     BITCODE_BD std_scale_factor;
@@ -33303,7 +32140,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.std_scale_factor [BD] set+1 %g != %g", plotsettings->std_scale_factor, std_scale_factor);
     plotsettings->std_scale_factor--;
-
   }
   {
     BITCODE_BS std_scale_type;
@@ -33319,7 +32155,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.std_scale_type [BS] set+1 %hu != %hu", plotsettings->std_scale_type, std_scale_type);
     plotsettings->std_scale_type--;
-
   }
   {
     BITCODE_H stylesheet;
@@ -33343,7 +32178,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.top_margin [BD] set+1 %g != %g", plotsettings->top_margin, top_margin);
     plotsettings->top_margin--;
-
   }
   {
     BITCODE_B use_std_scale;
@@ -33359,7 +32193,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.use_std_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", plotsettings->use_std_scale, use_std_scale);
     plotsettings->use_std_scale--;
-
   }
   return failed;
 }
@@ -33368,6 +32201,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_PROXY_OBJECT *restrict proxy_object = obj->tio.object->tio.PROXY_OBJECT;
+  failed = 0;
   {
     BITCODE_BL class_id;
     if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "class_id", &class_id, NULL)
@@ -33382,7 +32216,6 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     else
       fail ("PROXY_OBJECT.class_id [BL] set+1 %u != %u", proxy_object->class_id, class_id);
     proxy_object->class_id--;
-
   }
   {
     BITCODE_TV data;
@@ -33408,7 +32241,6 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     else
       fail ("PROXY_OBJECT.from_dxf [B] set+1 " FORMAT_B " != " FORMAT_B "", proxy_object->from_dxf, from_dxf);
     proxy_object->from_dxf--;
-
   }
   {
     BITCODE_BL maint_version;
@@ -33424,7 +32256,6 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     else
       fail ("PROXY_OBJECT.maint_version [BL] set+1 %u != %u", proxy_object->maint_version, maint_version);
     proxy_object->maint_version--;
-
   }
   {
     BITCODE_H* objid_object_handles;
@@ -33456,7 +32287,6 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     else
       fail ("PROXY_OBJECT.version [BL] set+1 %u != %u", proxy_object->version, version);
     proxy_object->version--;
-
   }
   return failed;
 }
@@ -33465,6 +32295,7 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_RASTERVARIABLES *restrict rastervariables = obj->tio.object->tio.RASTERVARIABLES;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (rastervariables, "RASTERVARIABLES", "class_version", &class_version, NULL)
@@ -33479,7 +32310,6 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
     else
       fail ("RASTERVARIABLES.class_version [BL] set+1 %u != %u", rastervariables->class_version, class_version);
     rastervariables->class_version--;
-
   }
   {
     BITCODE_BS display_frame;
@@ -33495,7 +32325,6 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
     else
       fail ("RASTERVARIABLES.display_frame [BS] set+1 %hu != %hu", rastervariables->display_frame, display_frame);
     rastervariables->display_frame--;
-
   }
   {
     BITCODE_BS display_quality;
@@ -33511,7 +32340,6 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
     else
       fail ("RASTERVARIABLES.display_quality [BS] set+1 %hu != %hu", rastervariables->display_quality, display_quality);
     rastervariables->display_quality--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -33535,7 +32363,6 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
     else
       fail ("RASTERVARIABLES.units [BS] set+1 %hu != %hu", rastervariables->units, units);
     rastervariables->units--;
-
   }
   return failed;
 }
@@ -33544,6 +32371,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_RENDERENVIRONMENT *restrict renderenvironment = obj->tio.object->tio.RENDERENVIRONMENT;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "class_version", &class_version, NULL)
@@ -33558,7 +32386,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.class_version [BL] set+1 %u != %u", renderenvironment->class_version, class_version);
     renderenvironment->class_version--;
-
   }
   {
     BITCODE_B environ_image_enabled;
@@ -33574,7 +32401,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.environ_image_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderenvironment->environ_image_enabled, environ_image_enabled);
     renderenvironment->environ_image_enabled--;
-
   }
   {
     BITCODE_T environ_image_filename;
@@ -33600,7 +32426,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.fog_background_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderenvironment->fog_background_enabled, fog_background_enabled);
     renderenvironment->fog_background_enabled--;
-
   }
   {
     BITCODE_CMC fog_color;
@@ -33624,7 +32449,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.fog_density_far [BD] set+1 %g != %g", renderenvironment->fog_density_far, fog_density_far);
     renderenvironment->fog_density_far--;
-
   }
   {
     BITCODE_BD fog_density_near;
@@ -33640,7 +32464,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.fog_density_near [BD] set+1 %g != %g", renderenvironment->fog_density_near, fog_density_near);
     renderenvironment->fog_density_near--;
-
   }
   {
     BITCODE_BD fog_distance_far;
@@ -33656,7 +32479,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.fog_distance_far [BD] set+1 %g != %g", renderenvironment->fog_distance_far, fog_distance_far);
     renderenvironment->fog_distance_far--;
-
   }
   {
     BITCODE_BD fog_distance_near;
@@ -33672,7 +32494,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.fog_distance_near [BD] set+1 %g != %g", renderenvironment->fog_distance_near, fog_distance_near);
     renderenvironment->fog_distance_near--;
-
   }
   {
     BITCODE_B fog_enabled;
@@ -33688,7 +32509,6 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
       fail ("RENDERENVIRONMENT.fog_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderenvironment->fog_enabled, fog_enabled);
     renderenvironment->fog_enabled--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -33705,6 +32525,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_RENDERGLOBAL *restrict renderglobal = obj->tio.object->tio.RENDERGLOBAL;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (renderglobal, "RENDERGLOBAL", "class_version", &class_version, NULL)
@@ -33719,7 +32540,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.class_version [BL] set+1 %u != %u", renderglobal->class_version, class_version);
     renderglobal->class_version--;
-
   }
   {
     BITCODE_BL destination;
@@ -33735,7 +32555,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.destination [BL] set+1 %u != %u", renderglobal->destination, destination);
     renderglobal->destination--;
-
   }
   {
     BITCODE_B highlevel_info;
@@ -33751,7 +32570,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.highlevel_info [B] set+1 " FORMAT_B " != " FORMAT_B "", renderglobal->highlevel_info, highlevel_info);
     renderglobal->highlevel_info--;
-
   }
   {
     BITCODE_BL image_height;
@@ -33767,7 +32585,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.image_height [BL] set+1 %u != %u", renderglobal->image_height, image_height);
     renderglobal->image_height--;
-
   }
   {
     BITCODE_BL image_width;
@@ -33783,7 +32600,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.image_width [BL] set+1 %u != %u", renderglobal->image_width, image_width);
     renderglobal->image_width--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -33807,7 +32623,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.predef_presets_first [B] set+1 " FORMAT_B " != " FORMAT_B "", renderglobal->predef_presets_first, predef_presets_first);
     renderglobal->predef_presets_first--;
-
   }
   {
     BITCODE_BL procedure;
@@ -33823,7 +32638,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.procedure [BL] set+1 %u != %u", renderglobal->procedure, procedure);
     renderglobal->procedure--;
-
   }
   {
     BITCODE_B save_enabled;
@@ -33839,7 +32653,6 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.save_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", renderglobal->save_enabled, save_enabled);
     renderglobal->save_enabled--;
-
   }
   {
     BITCODE_T save_filename;
@@ -33858,6 +32671,7 @@ static int test_SCALE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SCALE *restrict scale = obj->tio.object->tio.SCALE;
+  failed = 0;
   {
     BITCODE_BD drawing_units;
     if (dwg_dynapi_entity_value (scale, "SCALE", "drawing_units", &drawing_units, NULL)
@@ -33872,7 +32686,6 @@ static int test_SCALE (const Dwg_Object *obj)
     else
       fail ("SCALE.drawing_units [BD] set+1 %g != %g", scale->drawing_units, drawing_units);
     scale->drawing_units--;
-
   }
   {
     BITCODE_BS flag;
@@ -33888,7 +32701,6 @@ static int test_SCALE (const Dwg_Object *obj)
     else
       fail ("SCALE.flag [BS] set+1 %hu != %hu", scale->flag, flag);
     scale->flag--;
-
   }
   {
     BITCODE_B has_unit_scale;
@@ -33904,7 +32716,6 @@ static int test_SCALE (const Dwg_Object *obj)
     else
       fail ("SCALE.has_unit_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", scale->has_unit_scale, has_unit_scale);
     scale->has_unit_scale--;
-
   }
   {
     BITCODE_T name;
@@ -33930,7 +32741,6 @@ static int test_SCALE (const Dwg_Object *obj)
     else
       fail ("SCALE.paper_units [BD] set+1 %g != %g", scale->paper_units, paper_units);
     scale->paper_units--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -33947,6 +32757,7 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SORTENTSTABLE *restrict sortentstable = obj->tio.object->tio.SORTENTSTABLE;
+  failed = 0;
   {
     BITCODE_H dictionary;
     if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "dictionary", &dictionary, NULL)
@@ -33979,7 +32790,6 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
     else
       fail ("SORTENTSTABLE.num_ents [BL] set+1 %u != %u", sortentstable->num_ents, num_ents);
     sortentstable->num_ents--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -34006,6 +32816,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SPATIAL_FILTER *restrict spatial_filter = obj->tio.object->tio.SPATIAL_FILTER;
+  failed = 0;
   {
     BITCODE_BD back_clip_dist;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "back_clip_dist", &back_clip_dist, NULL)
@@ -34020,7 +32831,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.back_clip_dist [BD] set+1 %g != %g", spatial_filter->back_clip_dist, back_clip_dist);
     spatial_filter->back_clip_dist--;
-
   }
   {
     BITCODE_BS back_clip_on;
@@ -34036,7 +32846,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.back_clip_on [BS] set+1 %hu != %hu", spatial_filter->back_clip_on, back_clip_on);
     spatial_filter->back_clip_on--;
-
   }
   {
     BITCODE_3BD clip_bound_origin;
@@ -34068,7 +32877,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.display_boundary [BS] set+1 %hu != %hu", spatial_filter->display_boundary, display_boundary);
     spatial_filter->display_boundary--;
-
   }
   {
     BITCODE_BE extrusion;
@@ -34092,7 +32900,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.front_clip_dist [BD] set+1 %g != %g", spatial_filter->front_clip_dist, front_clip_dist);
     spatial_filter->front_clip_dist--;
-
   }
   {
     BITCODE_BS front_clip_on;
@@ -34108,7 +32915,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.front_clip_on [BS] set+1 %hu != %hu", spatial_filter->front_clip_on, front_clip_on);
     spatial_filter->front_clip_on--;
-
   }
   {
     BITCODE_BD* inverse_block_transform;
@@ -34132,7 +32938,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.num_points [BS] set+1 %hu != %hu", spatial_filter->num_points, num_points);
     spatial_filter->num_points--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -34159,6 +32964,7 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SPATIAL_INDEX *restrict spatial_index = obj->tio.object->tio.SPATIAL_INDEX;
+  failed = 0;
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "parent", &parent, NULL)
@@ -34181,7 +32987,6 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
     else
       fail ("SPATIAL_INDEX.timestamp1 [BL] set+1 %u != %u", spatial_index->timestamp1, timestamp1);
     spatial_index->timestamp1--;
-
   }
   {
     BITCODE_BL timestamp2;
@@ -34197,7 +33002,6 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
     else
       fail ("SPATIAL_INDEX.timestamp2 [BL] set+1 %u != %u", spatial_index->timestamp2, timestamp2);
     spatial_index->timestamp2--;
-
   }
   {
     BITCODE_TV unknown;
@@ -34216,6 +33020,7 @@ static int test_STYLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_STYLE *restrict style = obj->tio.object->tio.STYLE;
+  failed = 0;
   {
     BITCODE_T bigfont_name;
     if (dwg_dynapi_entity_value (style, "STYLE", "bigfont_name", &bigfont_name, NULL)
@@ -34248,7 +33053,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.fixed_height [BD] set+1 %g != %g", style->fixed_height, fixed_height);
     style->fixed_height--;
-
   }
   {
     BITCODE_RC flag;
@@ -34264,7 +33068,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.flag [RC] set+1 %u != %u", style->flag, flag);
     style->flag--;
-
   }
   {
     BITCODE_T font_name;
@@ -34290,7 +33093,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.generation [RC] set+1 %u != %u", style->generation, generation);
     style->generation--;
-
   }
   {
     BITCODE_BD last_height;
@@ -34306,7 +33108,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.last_height [BD] set+1 %g != %g", style->last_height, last_height);
     style->last_height--;
-
   }
   {
     BITCODE_TV name;
@@ -34332,7 +33133,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.oblique_ang [BD] set+1 %g != %g", style->oblique_ang, oblique_ang);
     style->oblique_ang--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -34356,7 +33156,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.shape_file [B] set+1 " FORMAT_B " != " FORMAT_B "", style->shape_file, shape_file);
     style->shape_file--;
-
   }
   {
     BITCODE_RS used;
@@ -34372,7 +33171,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.used [RS] set+1 %hu != %hu", style->used, used);
     style->used--;
-
   }
   {
     BITCODE_B vertical;
@@ -34388,7 +33186,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.vertical [B] set+1 " FORMAT_B " != " FORMAT_B "", style->vertical, vertical);
     style->vertical--;
-
   }
   {
     BITCODE_BD width_factor;
@@ -34404,7 +33201,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.width_factor [BD] set+1 %g != %g", style->width_factor, width_factor);
     style->width_factor--;
-
   }
   {
     BITCODE_B xrefdep;
@@ -34420,7 +33216,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", style->xrefdep, xrefdep);
     style->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -34436,7 +33231,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.xrefindex_plus1 [BS] set+1 %hu != %hu", style->xrefindex_plus1, xrefindex_plus1);
     style->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -34452,7 +33246,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", style->xrefref, xrefref);
     style->xrefref--;
-
   }
   return failed;
 }
@@ -34461,6 +33254,7 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_STYLE_CONTROL *restrict style_control = obj->tio.object->tio.STYLE_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -34485,7 +33279,6 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
     else
       fail ("STYLE_CONTROL.num_entries [BS] set+1 %hu != %hu", style_control->num_entries, num_entries);
     style_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -34501,7 +33294,6 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
     else
       fail ("STYLE_CONTROL.objid [BL] set+1 %u != %u", style_control->objid, objid);
     style_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -34518,6 +33310,7 @@ static int test_SUN (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SUN *restrict sun = obj->tio.object->tio.SUN;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (sun, "SUN", "class_version", &class_version, NULL)
@@ -34532,7 +33325,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.class_version [BL] set+1 %u != %u", sun->class_version, class_version);
     sun->class_version--;
-
   }
   {
     BITCODE_CMC color;
@@ -34556,7 +33348,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.has_shadow [B] set+1 " FORMAT_B " != " FORMAT_B "", sun->has_shadow, has_shadow);
     sun->has_shadow--;
-
   }
   {
     BITCODE_BD intensity;
@@ -34572,7 +33363,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.intensity [BD] set+1 %g != %g", sun->intensity, intensity);
     sun->intensity--;
-
   }
   {
     BITCODE_B is_dst;
@@ -34588,7 +33378,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.is_dst [B] set+1 " FORMAT_B " != " FORMAT_B "", sun->is_dst, is_dst);
     sun->is_dst--;
-
   }
   {
     BITCODE_B is_on;
@@ -34604,7 +33393,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.is_on [B] set+1 " FORMAT_B " != " FORMAT_B "", sun->is_on, is_on);
     sun->is_on--;
-
   }
   {
     BITCODE_BL julian_day;
@@ -34620,7 +33408,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.julian_day [BL] set+1 %u != %u", sun->julian_day, julian_day);
     sun->julian_day--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -34644,7 +33431,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.shadow_mapsize [BS] set+1 %hu != %hu", sun->shadow_mapsize, shadow_mapsize);
     sun->shadow_mapsize--;
-
   }
   {
     BITCODE_BS shadow_softness;
@@ -34660,7 +33446,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.shadow_softness [BS] set+1 %hu != %hu", sun->shadow_softness, shadow_softness);
     sun->shadow_softness--;
-
   }
   {
     BITCODE_BS shadow_type;
@@ -34676,7 +33461,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.shadow_type [BS] set+1 %hu != %hu", sun->shadow_type, shadow_type);
     sun->shadow_type--;
-
   }
   {
     BITCODE_H skyparams;
@@ -34700,7 +33484,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.time [BL] set+1 %u != %u", sun->time, time);
     sun->time--;
-
   }
   {
     BITCODE_BS unknown;
@@ -34716,7 +33499,6 @@ static int test_SUN (const Dwg_Object *obj)
     else
       fail ("SUN.unknown [BS] set+1 %hu != %hu", sun->unknown, unknown);
     sun->unknown--;
-
   }
   return failed;
 }
@@ -34725,6 +33507,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_SUNSTUDY *restrict sunstudy = obj->tio.object->tio.SUNSTUDY;
+  failed = 0;
   {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "class_version", &class_version, NULL)
@@ -34739,7 +33522,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.class_version [BL] set+1 %u != %u", sunstudy->class_version, class_version);
     sunstudy->class_version--;
-
   }
   {
     Dwg_SUNSTUDY_Dates* dates;
@@ -34775,7 +33557,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.end_time [BL] set+1 %u != %u", sunstudy->end_time, end_time);
     sunstudy->end_time--;
-
   }
   {
     BITCODE_B* hours;
@@ -34801,7 +33582,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.interval [BL] set+1 %u != %u", sunstudy->interval, interval);
     sunstudy->interval--;
-
   }
   {
     BITCODE_B label_viewports;
@@ -34817,7 +33597,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.label_viewports [B] set+1 " FORMAT_B " != " FORMAT_B "", sunstudy->label_viewports, label_viewports);
     sunstudy->label_viewports--;
-
   }
   {
     BITCODE_B lock_viewports;
@@ -34833,7 +33612,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.lock_viewports [B] set+1 " FORMAT_B " != " FORMAT_B "", sunstudy->lock_viewports, lock_viewports);
     sunstudy->lock_viewports--;
-
   }
   {
     BITCODE_BL num_dates;
@@ -34849,7 +33627,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.num_dates [BL] set+1 %u != %u", sunstudy->num_dates, num_dates);
     sunstudy->num_dates--;
-
   }
   {
     BITCODE_BL num_hours;
@@ -34865,7 +33642,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.num_hours [BL] set+1 %u != %u", sunstudy->num_hours, num_hours);
     sunstudy->num_hours--;
-
   }
   {
     BITCODE_BL numcols;
@@ -34881,7 +33657,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.numcols [BL] set+1 %u != %u", sunstudy->numcols, numcols);
     sunstudy->numcols--;
-
   }
   {
     BITCODE_BL numrows;
@@ -34897,7 +33672,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.numrows [BL] set+1 %u != %u", sunstudy->numrows, numrows);
     sunstudy->numrows--;
-
   }
   {
     BITCODE_BL numvports;
@@ -34913,7 +33687,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.numvports [BL] set+1 %u != %u", sunstudy->numvports, numvports);
     sunstudy->numvports--;
-
   }
   {
     BITCODE_BL output_type;
@@ -34929,7 +33702,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.output_type [BL] set+1 %u != %u", sunstudy->output_type, output_type);
     sunstudy->output_type--;
-
   }
   {
     BITCODE_H page_setup_wizard;
@@ -34961,7 +33733,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.select_dates_from_calendar [B] set+1 " FORMAT_B " != " FORMAT_B "", sunstudy->select_dates_from_calendar, select_dates_from_calendar);
     sunstudy->select_dates_from_calendar--;
-
   }
   {
     BITCODE_B select_range_of_dates;
@@ -34977,7 +33748,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.select_range_of_dates [B] set+1 " FORMAT_B " != " FORMAT_B "", sunstudy->select_range_of_dates, select_range_of_dates);
     sunstudy->select_range_of_dates--;
-
   }
   {
     BITCODE_T setup_name;
@@ -35003,7 +33773,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.shade_plot_type [BL] set+1 %u != %u", sunstudy->shade_plot_type, shade_plot_type);
     sunstudy->shade_plot_type--;
-
   }
   {
     BITCODE_T sheet_set_name;
@@ -35039,7 +33808,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.spacing [BD] set+1 %g != %g", sunstudy->spacing, spacing);
     sunstudy->spacing--;
-
   }
   {
     BITCODE_BL start_time;
@@ -35055,7 +33823,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.start_time [BL] set+1 %u != %u", sunstudy->start_time, start_time);
     sunstudy->start_time--;
-
   }
   {
     BITCODE_H text_style;
@@ -35079,7 +33846,6 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
       fail ("SUNSTUDY.use_subset [B] set+1 " FORMAT_B " != " FORMAT_B "", sunstudy->use_subset, use_subset);
     sunstudy->use_subset--;
-
   }
   {
     BITCODE_H view;
@@ -35104,6 +33870,7 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_TABLECONTENT *restrict tablecontent = obj->tio.object->tio.TABLECONTENT;
+  failed = 0;
   {
     Dwg_FormattedTableData fdata;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "fdata", &fdata, NULL)
@@ -35151,6 +33918,7 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_TABLEGEOMETRY *restrict tablegeometry = obj->tio.object->tio.TABLEGEOMETRY;
+  failed = 0;
   {
     Dwg_TABLEGEOMETRY_Cell* cells;
     BITCODE_BL count = 0;
@@ -35175,7 +33943,6 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
     else
       fail ("TABLEGEOMETRY.num_cells [BL] set+1 %u != %u", tablegeometry->num_cells, num_cells);
     tablegeometry->num_cells--;
-
   }
   {
     BITCODE_BL num_cols;
@@ -35191,7 +33958,6 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
     else
       fail ("TABLEGEOMETRY.num_cols [BL] set+1 %u != %u", tablegeometry->num_cols, num_cols);
     tablegeometry->num_cols--;
-
   }
   {
     BITCODE_BL num_rows;
@@ -35207,7 +33973,6 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
     else
       fail ("TABLEGEOMETRY.num_rows [BL] set+1 %u != %u", tablegeometry->num_rows, num_rows);
     tablegeometry->num_rows--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -35224,6 +33989,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_TABLESTYLE *restrict tablestyle = obj->tio.object->tio.TABLESTYLE;
+  failed = 0;
   {
     Dwg_TABLESTYLE_Cell* cells;
     BITCODE_BL count = 0;
@@ -35248,7 +34014,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.class_version [BS] set+1 %hu != %hu", tablestyle->class_version, class_version);
     tablestyle->class_version--;
-
   }
   {
     BITCODE_BS flags;
@@ -35264,7 +34029,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.flags [BS] set+1 %hu != %hu", tablestyle->flags, flags);
     tablestyle->flags--;
-
   }
   {
     BITCODE_BS flow_direction;
@@ -35280,7 +34044,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.flow_direction [BS] set+1 %hu != %hu", tablestyle->flow_direction, flow_direction);
     tablestyle->flow_direction--;
-
   }
   {
     BITCODE_B header_suppressed;
@@ -35296,7 +34059,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.header_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", tablestyle->header_suppressed, header_suppressed);
     tablestyle->header_suppressed--;
-
   }
   {
     BITCODE_BD horiz_cell_margin;
@@ -35312,7 +34074,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.horiz_cell_margin [BD] set+1 %g != %g", tablestyle->horiz_cell_margin, horiz_cell_margin);
     tablestyle->horiz_cell_margin--;
-
   }
   {
     BITCODE_T name;
@@ -35338,7 +34099,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.num_cells [BL] set+1 %u != %u", tablestyle->num_cells, num_cells);
     tablestyle->num_cells--;
-
   }
   {
     BITCODE_BL num_rowstyles;
@@ -35354,7 +34114,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.num_rowstyles [BL] set+1 %u != %u", tablestyle->num_rowstyles, num_rowstyles);
     tablestyle->num_rowstyles--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -35388,7 +34147,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.title_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", tablestyle->title_suppressed, title_suppressed);
     tablestyle->title_suppressed--;
-
   }
   {
     BITCODE_BD vert_cell_margin;
@@ -35404,7 +34162,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.vert_cell_margin [BD] set+1 %g != %g", tablestyle->vert_cell_margin, vert_cell_margin);
     tablestyle->vert_cell_margin--;
-
   }
   return failed;
 }
@@ -35413,6 +34170,7 @@ static int test_UCS (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_UCS *restrict ucs = obj->tio.object->tio.UCS;
+  failed = 0;
   {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (ucs, "UCS", "base_ucs", &base_ucs, NULL)
@@ -35435,7 +34193,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.elevation [BD] set+1 %g != %g", ucs->elevation, elevation);
     ucs->elevation--;
-
   }
   {
     BITCODE_RC flag;
@@ -35451,7 +34208,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.flag [RC] set+1 %u != %u", ucs->flag, flag);
     ucs->flag--;
-
   }
   {
     BITCODE_TV name;
@@ -35501,7 +34257,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.orthographic_type [BS] set+1 %hu != %hu", ucs->orthographic_type, orthographic_type);
     ucs->orthographic_type--;
-
   }
   {
     BITCODE_BS orthographic_view_type;
@@ -35517,7 +34272,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.orthographic_view_type [BS] set+1 %hu != %hu", ucs->orthographic_view_type, orthographic_view_type);
     ucs->orthographic_view_type--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -35541,7 +34295,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.used [RS] set+1 %hu != %hu", ucs->used, used);
     ucs->used--;
-
   }
   {
     BITCODE_3BD x_direction;
@@ -35565,7 +34318,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", ucs->xrefdep, xrefdep);
     ucs->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -35581,7 +34333,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.xrefindex_plus1 [BS] set+1 %hu != %hu", ucs->xrefindex_plus1, xrefindex_plus1);
     ucs->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -35597,7 +34348,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", ucs->xrefref, xrefref);
     ucs->xrefref--;
-
   }
   {
     BITCODE_3BD y_direction;
@@ -35614,6 +34364,7 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_UCS_CONTROL *restrict ucs_control = obj->tio.object->tio.UCS_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -35638,7 +34389,6 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
     else
       fail ("UCS_CONTROL.num_entries [BS] set+1 %hu != %hu", ucs_control->num_entries, num_entries);
     ucs_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -35654,7 +34404,6 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
     else
       fail ("UCS_CONTROL.objid [BL] set+1 %u != %u", ucs_control->objid, objid);
     ucs_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -35671,6 +34420,7 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_UNDERLAYDEFINITION *restrict underlaydefinition = obj->tio.object->tio.UNDERLAYDEFINITION;
+  failed = 0;
   {
     BITCODE_T filename;
     if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "filename", &filename, NULL)
@@ -35706,6 +34456,7 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VBA_PROJECT *restrict vba_project = obj->tio.object->tio.VBA_PROJECT;
+  failed = 0;
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "data", &data, NULL)
@@ -35728,7 +34479,6 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
     else
       fail ("VBA_PROJECT.data_size [RL] set+1 %u != %u", vba_project->data_size, data_size);
     vba_project->data_size--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -35745,6 +34495,7 @@ static int test_VIEW (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VIEW *restrict view = obj->tio.object->tio.VIEW;
+  failed = 0;
   {
     BITCODE_4BITS VIEWMODE;
     if (dwg_dynapi_entity_value (view, "VIEW", "VIEWMODE", &VIEWMODE, NULL)
@@ -35758,7 +34509,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.VIEWMODE [4BITS] set+1 " FORMAT_4BITS " != " FORMAT_4BITS "", view->VIEWMODE, VIEWMODE);
     view->VIEWMODE--;
-
   }
   {
     BITCODE_CMC ambient_color;
@@ -35782,7 +34532,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.associated_ucs [B] set+1 " FORMAT_B " != " FORMAT_B "", view->associated_ucs, associated_ucs);
     view->associated_ucs--;
-
   }
   {
     BITCODE_BD back_clip;
@@ -35798,7 +34547,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.back_clip [BD] set+1 %g != %g", view->back_clip, back_clip);
     view->back_clip--;
-
   }
   {
     BITCODE_H background;
@@ -35830,7 +34578,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.brightness [BD] set+1 %g != %g", view->brightness, brightness);
     view->brightness--;
-
   }
   {
     BITCODE_B camera_plottable;
@@ -35846,7 +34593,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.camera_plottable [B] set+1 " FORMAT_B " != " FORMAT_B "", view->camera_plottable, camera_plottable);
     view->camera_plottable--;
-
   }
   {
     BITCODE_2RD center;
@@ -35870,7 +34616,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.contrast [BD] set+1 %g != %g", view->contrast, contrast);
     view->contrast--;
-
   }
   {
     BITCODE_RC default_lightning_type;
@@ -35886,7 +34631,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.default_lightning_type [RC] set+1 %u != %u", view->default_lightning_type, default_lightning_type);
     view->default_lightning_type--;
-
   }
   {
     BITCODE_3BD direction;
@@ -35910,7 +34654,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.elevation [BD] set+1 %g != %g", view->elevation, elevation);
     view->elevation--;
-
   }
   {
     BITCODE_RC flag;
@@ -35926,7 +34669,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.flag [RC] set+1 %u != %u", view->flag, flag);
     view->flag--;
-
   }
   {
     BITCODE_BD front_clip;
@@ -35942,7 +34684,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.front_clip [BD] set+1 %g != %g", view->front_clip, front_clip);
     view->front_clip--;
-
   }
   {
     BITCODE_BD height;
@@ -35958,7 +34699,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.height [BD] set+1 %g != %g", view->height, height);
     view->height--;
-
   }
   {
     BITCODE_BD lens_length;
@@ -35974,7 +34714,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.lens_length [BD] set+1 %g != %g", view->lens_length, lens_length);
     view->lens_length--;
-
   }
   {
     BITCODE_H livesection;
@@ -36032,7 +34771,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.orthographic_view_type [BS] set+1 %hu != %hu", view->orthographic_view_type, orthographic_view_type);
     view->orthographic_view_type--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -36056,7 +34794,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.pspace_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", view->pspace_flag, pspace_flag);
     view->pspace_flag--;
-
   }
   {
     BITCODE_RC render_mode;
@@ -36072,7 +34809,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.render_mode [RC] set+1 %u != %u", view->render_mode, render_mode);
     view->render_mode--;
-
   }
   {
     BITCODE_H sun;
@@ -36104,7 +34840,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.twist_angle [BD] set+1 %g != %g", view->twist_angle, twist_angle);
     view->twist_angle--;
-
   }
   {
     BITCODE_B use_default_lights;
@@ -36120,7 +34855,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.use_default_lights [B] set+1 " FORMAT_B " != " FORMAT_B "", view->use_default_lights, use_default_lights);
     view->use_default_lights--;
-
   }
   {
     BITCODE_RS used;
@@ -36136,7 +34870,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.used [RS] set+1 %hu != %hu", view->used, used);
     view->used--;
-
   }
   {
     BITCODE_H visualstyle;
@@ -36160,7 +34893,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.width [BD] set+1 %g != %g", view->width, width);
     view->width--;
-
   }
   {
     BITCODE_3BD x_direction;
@@ -36184,7 +34916,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", view->xrefdep, xrefdep);
     view->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -36200,7 +34931,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.xrefindex_plus1 [BS] set+1 %hu != %hu", view->xrefindex_plus1, xrefindex_plus1);
     view->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -36216,7 +34946,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", view->xrefref, xrefref);
     view->xrefref--;
-
   }
   {
     BITCODE_3BD y_direction;
@@ -36233,6 +34962,7 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VIEW_CONTROL *restrict view_control = obj->tio.object->tio.VIEW_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -36257,7 +34987,6 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
     else
       fail ("VIEW_CONTROL.num_entries [BS] set+1 %hu != %hu", view_control->num_entries, num_entries);
     view_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -36273,7 +35002,6 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
     else
       fail ("VIEW_CONTROL.objid [BL] set+1 %u != %u", view_control->objid, objid);
     view_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -36290,6 +35018,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VISUALSTYLE *restrict visualstyle = obj->tio.object->tio.VISUALSTYLE;
+  failed = 0;
   {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "color", &color, NULL)
@@ -36312,7 +35041,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.color_ext [BS] set+1 %hu != %hu", visualstyle->color_ext, color_ext);
     visualstyle->color_ext--;
-
   }
   {
     BITCODE_T description;
@@ -36338,7 +35066,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_brightness [BD] set+1 %g != %g", visualstyle->display_brightness, display_brightness);
     visualstyle->display_brightness--;
-
   }
   {
     BITCODE_BS display_brightness_ext;
@@ -36354,7 +35081,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_brightness_ext [BS] set+1 %hu != %hu", visualstyle->display_brightness_ext, display_brightness_ext);
     visualstyle->display_brightness_ext--;
-
   }
   {
     BITCODE_BS display_shadow_type;
@@ -36370,7 +35096,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_shadow_type [BS] set+1 %hu != %hu", visualstyle->display_shadow_type, display_shadow_type);
     visualstyle->display_shadow_type--;
-
   }
   {
     BITCODE_BS display_shadow_type_ext;
@@ -36386,7 +35111,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_shadow_type_ext [BS] set+1 %hu != %hu", visualstyle->display_shadow_type_ext, display_shadow_type_ext);
     visualstyle->display_shadow_type_ext--;
-
   }
   {
     BITCODE_BS display_style;
@@ -36402,7 +35126,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_style [BS] set+1 %hu != %hu", visualstyle->display_style, display_style);
     visualstyle->display_style--;
-
   }
   {
     BITCODE_BS display_style_ext;
@@ -36418,7 +35141,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_style_ext [BS] set+1 %hu != %hu", visualstyle->display_style_ext, display_style_ext);
     visualstyle->display_style_ext--;
-
   }
   {
     BITCODE_CMC edge_color;
@@ -36442,7 +35164,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_color_ext, edge_color_ext);
     visualstyle->edge_color_ext--;
-
   }
   {
     BITCODE_BD edge_crease_angle;
@@ -36458,7 +35179,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_crease_angle [BD] set+1 %g != %g", visualstyle->edge_crease_angle, edge_crease_angle);
     visualstyle->edge_crease_angle--;
-
   }
   {
     BITCODE_BS edge_crease_angle_ext;
@@ -36474,7 +35194,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_crease_angle_ext [BS] set+1 %hu != %hu", visualstyle->edge_crease_angle_ext, edge_crease_angle_ext);
     visualstyle->edge_crease_angle_ext--;
-
   }
   {
     BITCODE_BS edge_halo_gap;
@@ -36490,7 +35209,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_halo_gap [BS] set+1 %hu != %hu", visualstyle->edge_halo_gap, edge_halo_gap);
     visualstyle->edge_halo_gap--;
-
   }
   {
     BITCODE_BS edge_halo_gap_ext;
@@ -36506,7 +35224,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_halo_gap_ext [BS] set+1 %hu != %hu", visualstyle->edge_halo_gap_ext, edge_halo_gap_ext);
     visualstyle->edge_halo_gap_ext--;
-
   }
   {
     BITCODE_B edge_hide_precision_flag;
@@ -36522,7 +35239,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_hide_precision_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->edge_hide_precision_flag, edge_hide_precision_flag);
     visualstyle->edge_hide_precision_flag--;
-
   }
   {
     BITCODE_BS edge_hide_precision_flag_ext;
@@ -36538,7 +35254,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_hide_precision_flag_ext [BS] set+1 %hu != %hu", visualstyle->edge_hide_precision_flag_ext, edge_hide_precision_flag_ext);
     visualstyle->edge_hide_precision_flag_ext--;
-
   }
   {
     BITCODE_CMC edge_intersection_color;
@@ -36562,7 +35277,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_intersection_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_intersection_color_ext, edge_intersection_color_ext);
     visualstyle->edge_intersection_color_ext--;
-
   }
   {
     BITCODE_BS edge_intersection_line_pattern;
@@ -36578,7 +35292,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_intersection_line_pattern [BS] set+1 %hu != %hu", visualstyle->edge_intersection_line_pattern, edge_intersection_line_pattern);
     visualstyle->edge_intersection_line_pattern--;
-
   }
   {
     BITCODE_BS edge_intersection_line_pattern_ext;
@@ -36594,7 +35307,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_intersection_line_pattern_ext [BS] set+1 %hu != %hu", visualstyle->edge_intersection_line_pattern_ext, edge_intersection_line_pattern_ext);
     visualstyle->edge_intersection_line_pattern_ext--;
-
   }
   {
     BITCODE_BS edge_jitter;
@@ -36610,7 +35322,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_jitter [BS] set+1 %hu != %hu", visualstyle->edge_jitter, edge_jitter);
     visualstyle->edge_jitter--;
-
   }
   {
     BITCODE_BS edge_jitter_ext;
@@ -36626,7 +35337,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_jitter_ext [BS] set+1 %hu != %hu", visualstyle->edge_jitter_ext, edge_jitter_ext);
     visualstyle->edge_jitter_ext--;
-
   }
   {
     BITCODE_BS edge_model;
@@ -36642,7 +35352,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_model [BS] set+1 %hu != %hu", visualstyle->edge_model, edge_model);
     visualstyle->edge_model--;
-
   }
   {
     BITCODE_BS edge_model_ext;
@@ -36658,7 +35367,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_model_ext [BS] set+1 %hu != %hu", visualstyle->edge_model_ext, edge_model_ext);
     visualstyle->edge_model_ext--;
-
   }
   {
     BITCODE_BS edge_modifier;
@@ -36674,7 +35382,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_modifier [BS] set+1 %hu != %hu", visualstyle->edge_modifier, edge_modifier);
     visualstyle->edge_modifier--;
-
   }
   {
     BITCODE_BS edge_modifier_ext;
@@ -36690,7 +35397,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_modifier_ext [BS] set+1 %hu != %hu", visualstyle->edge_modifier_ext, edge_modifier_ext);
     visualstyle->edge_modifier_ext--;
-
   }
   {
     BITCODE_CMC edge_obscured_color;
@@ -36714,7 +35420,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_obscured_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_obscured_color_ext, edge_obscured_color_ext);
     visualstyle->edge_obscured_color_ext--;
-
   }
   {
     BITCODE_BS edge_obscured_line_pattern;
@@ -36730,7 +35435,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_obscured_line_pattern [BS] set+1 %hu != %hu", visualstyle->edge_obscured_line_pattern, edge_obscured_line_pattern);
     visualstyle->edge_obscured_line_pattern--;
-
   }
   {
     BITCODE_BS edge_obscured_line_pattern_ext;
@@ -36746,7 +35450,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_obscured_line_pattern_ext [BS] set+1 %hu != %hu", visualstyle->edge_obscured_line_pattern_ext, edge_obscured_line_pattern_ext);
     visualstyle->edge_obscured_line_pattern_ext--;
-
   }
   {
     BITCODE_BD edge_opacity;
@@ -36762,7 +35465,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_opacity [BD] set+1 %g != %g", visualstyle->edge_opacity, edge_opacity);
     visualstyle->edge_opacity--;
-
   }
   {
     BITCODE_BS edge_opacity_ext;
@@ -36778,7 +35480,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_opacity_ext [BS] set+1 %hu != %hu", visualstyle->edge_opacity_ext, edge_opacity_ext);
     visualstyle->edge_opacity_ext--;
-
   }
   {
     BITCODE_BS edge_overhang;
@@ -36794,7 +35495,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_overhang [BS] set+1 %hu != %hu", visualstyle->edge_overhang, edge_overhang);
     visualstyle->edge_overhang--;
-
   }
   {
     BITCODE_BS edge_overhang_ext;
@@ -36810,7 +35510,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_overhang_ext [BS] set+1 %hu != %hu", visualstyle->edge_overhang_ext, edge_overhang_ext);
     visualstyle->edge_overhang_ext--;
-
   }
   {
     BITCODE_CMC edge_silhouette_color;
@@ -36834,7 +35533,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_silhouette_color_ext [BS] set+1 %hu != %hu", visualstyle->edge_silhouette_color_ext, edge_silhouette_color_ext);
     visualstyle->edge_silhouette_color_ext--;
-
   }
   {
     BITCODE_BS edge_silhouette_width;
@@ -36850,7 +35548,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_silhouette_width [BS] set+1 %hu != %hu", visualstyle->edge_silhouette_width, edge_silhouette_width);
     visualstyle->edge_silhouette_width--;
-
   }
   {
     BITCODE_BS edge_silhouette_width_ext;
@@ -36866,7 +35563,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_silhouette_width_ext [BS] set+1 %hu != %hu", visualstyle->edge_silhouette_width_ext, edge_silhouette_width_ext);
     visualstyle->edge_silhouette_width_ext--;
-
   }
   {
     BITCODE_BL edge_style;
@@ -36882,7 +35578,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_style [BL] set+1 %u != %u", visualstyle->edge_style, edge_style);
     visualstyle->edge_style--;
-
   }
   {
     BITCODE_BS edge_style_apply_flag;
@@ -36898,7 +35593,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_style_apply_flag [BS] set+1 %hu != %hu", visualstyle->edge_style_apply_flag, edge_style_apply_flag);
     visualstyle->edge_style_apply_flag--;
-
   }
   {
     BITCODE_BS edge_style_apply_flag_ext;
@@ -36914,7 +35608,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_style_apply_flag_ext [BS] set+1 %hu != %hu", visualstyle->edge_style_apply_flag_ext, edge_style_apply_flag_ext);
     visualstyle->edge_style_apply_flag_ext--;
-
   }
   {
     BITCODE_BS edge_style_ext;
@@ -36930,7 +35623,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_style_ext [BS] set+1 %hu != %hu", visualstyle->edge_style_ext, edge_style_ext);
     visualstyle->edge_style_ext--;
-
   }
   {
     BITCODE_BS edge_width;
@@ -36946,7 +35638,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_width [BS] set+1 %hu != %hu", visualstyle->edge_width, edge_width);
     visualstyle->edge_width--;
-
   }
   {
     BITCODE_BS edge_width_ext;
@@ -36962,7 +35653,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_width_ext [BS] set+1 %hu != %hu", visualstyle->edge_width_ext, edge_width_ext);
     visualstyle->edge_width_ext--;
-
   }
   {
     BITCODE_BS ext_lighting_model;
@@ -36978,7 +35668,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.ext_lighting_model [BS] set+1 %hu != %hu", visualstyle->ext_lighting_model, ext_lighting_model);
     visualstyle->ext_lighting_model--;
-
   }
   {
     BITCODE_BS face_color_mode;
@@ -36994,7 +35683,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_color_mode [BS] set+1 %hu != %hu", visualstyle->face_color_mode, face_color_mode);
     visualstyle->face_color_mode--;
-
   }
   {
     BITCODE_BS face_color_mode_ext;
@@ -37010,7 +35698,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_color_mode_ext [BS] set+1 %hu != %hu", visualstyle->face_color_mode_ext, face_color_mode_ext);
     visualstyle->face_color_mode_ext--;
-
   }
   {
     BITCODE_BS face_lighting_model;
@@ -37026,7 +35713,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_lighting_model [BS] set+1 %hu != %hu", visualstyle->face_lighting_model, face_lighting_model);
     visualstyle->face_lighting_model--;
-
   }
   {
     BITCODE_BS face_lighting_model_ext;
@@ -37042,7 +35728,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_lighting_model_ext [BS] set+1 %hu != %hu", visualstyle->face_lighting_model_ext, face_lighting_model_ext);
     visualstyle->face_lighting_model_ext--;
-
   }
   {
     BITCODE_BS face_lighting_quality;
@@ -37058,7 +35743,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_lighting_quality [BS] set+1 %hu != %hu", visualstyle->face_lighting_quality, face_lighting_quality);
     visualstyle->face_lighting_quality--;
-
   }
   {
     BITCODE_BS face_lighting_quality_ext;
@@ -37074,7 +35758,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_lighting_quality_ext [BS] set+1 %hu != %hu", visualstyle->face_lighting_quality_ext, face_lighting_quality_ext);
     visualstyle->face_lighting_quality_ext--;
-
   }
   {
     BITCODE_BS face_modifier;
@@ -37090,7 +35773,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_modifier [BS] set+1 %hu != %hu", visualstyle->face_modifier, face_modifier);
     visualstyle->face_modifier--;
-
   }
   {
     BITCODE_BS face_modifier_ext;
@@ -37106,7 +35788,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_modifier_ext [BS] set+1 %hu != %hu", visualstyle->face_modifier_ext, face_modifier_ext);
     visualstyle->face_modifier_ext--;
-
   }
   {
     BITCODE_CMC face_mono_color;
@@ -37130,7 +35811,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_mono_color_ext [BS] set+1 %hu != %hu", visualstyle->face_mono_color_ext, face_mono_color_ext);
     visualstyle->face_mono_color_ext--;
-
   }
   {
     BITCODE_BD face_opacity;
@@ -37146,7 +35826,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_opacity [BD] set+1 %g != %g", visualstyle->face_opacity, face_opacity);
     visualstyle->face_opacity--;
-
   }
   {
     BITCODE_BS face_opacity_ext;
@@ -37162,7 +35841,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_opacity_ext [BS] set+1 %hu != %hu", visualstyle->face_opacity_ext, face_opacity_ext);
     visualstyle->face_opacity_ext--;
-
   }
   {
     BITCODE_BD face_specular;
@@ -37178,7 +35856,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_specular [BD] set+1 %g != %g", visualstyle->face_specular, face_specular);
     visualstyle->face_specular--;
-
   }
   {
     BITCODE_BS face_specular_ext;
@@ -37194,7 +35871,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.face_specular_ext [BS] set+1 %hu != %hu", visualstyle->face_specular_ext, face_specular_ext);
     visualstyle->face_specular_ext--;
-
   }
   {
     BITCODE_B has_ext;
@@ -37210,7 +35886,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.has_ext [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->has_ext, has_ext);
     visualstyle->has_ext--;
-
   }
   {
     BITCODE_BS num_edge_isolines;
@@ -37226,7 +35901,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.num_edge_isolines [BS] set+1 %hu != %hu", visualstyle->num_edge_isolines, num_edge_isolines);
     visualstyle->num_edge_isolines--;
-
   }
   {
     BITCODE_BS num_edge_isolines_ext;
@@ -37242,7 +35916,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.num_edge_isolines_ext [BS] set+1 %hu != %hu", visualstyle->num_edge_isolines_ext, num_edge_isolines_ext);
     visualstyle->num_edge_isolines_ext--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -37266,7 +35939,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.style_type [BS] set+1 %hu != %hu", visualstyle->style_type, style_type);
     visualstyle->style_type--;
-
   }
   {
     BITCODE_B unknown_b;
@@ -37282,7 +35954,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.unknown_b [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->unknown_b, unknown_b);
     visualstyle->unknown_b--;
-
   }
   {
     BITCODE_BD unknown_float45;
@@ -37298,8 +35969,8 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.unknown_float45 [BD] set+1 %g != %g", visualstyle->unknown_float45, unknown_float45);
     visualstyle->unknown_float45--;
-
   }
+  failed = 0; /* unstable */
   return failed;
 }
 static int test_VPORT (const Dwg_Object *obj)
@@ -37307,6 +35978,7 @@ static int test_VPORT (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT *restrict vport = obj->tio.object->tio.VPORT;
+  failed = 0;
   {
     BITCODE_B FASTZOOM;
     if (dwg_dynapi_entity_value (vport, "VPORT", "FASTZOOM", &FASTZOOM, NULL)
@@ -37321,7 +35993,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.FASTZOOM [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->FASTZOOM, FASTZOOM);
     vport->FASTZOOM--;
-
   }
   {
     BITCODE_B GRIDMODE;
@@ -37337,7 +36008,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.GRIDMODE [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->GRIDMODE, GRIDMODE);
     vport->GRIDMODE--;
-
   }
   {
     BITCODE_2RD GRIDUNIT;
@@ -37361,7 +36031,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.SNAPANG [BD] set+1 %g != %g", vport->SNAPANG, SNAPANG);
     vport->SNAPANG--;
-
   }
   {
     BITCODE_2RD SNAPBASE;
@@ -37385,7 +36054,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.SNAPISOPAIR [BS] set+1 %hu != %hu", vport->SNAPISOPAIR, SNAPISOPAIR);
     vport->SNAPISOPAIR--;
-
   }
   {
     BITCODE_B SNAPMODE;
@@ -37401,7 +36069,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.SNAPMODE [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->SNAPMODE, SNAPMODE);
     vport->SNAPMODE--;
-
   }
   {
     BITCODE_B SNAPSTYLE;
@@ -37417,7 +36084,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.SNAPSTYLE [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->SNAPSTYLE, SNAPSTYLE);
     vport->SNAPSTYLE--;
-
   }
   {
     BITCODE_2RD SNAPUNIT;
@@ -37441,7 +36107,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.UCSFOLLOW [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->UCSFOLLOW, UCSFOLLOW);
     vport->UCSFOLLOW--;
-
   }
   {
     BITCODE_RC UCSICON;
@@ -37457,7 +36122,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.UCSICON [RC] set+1 %u != %u", vport->UCSICON, UCSICON);
     vport->UCSICON--;
-
   }
   {
     BITCODE_B UCSVP;
@@ -37473,7 +36137,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.UCSVP [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->UCSVP, UCSVP);
     vport->UCSVP--;
-
   }
   {
     BITCODE_2RD VIEWCTR;
@@ -37504,7 +36167,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.VIEWMODE [4BITS] set+1 " FORMAT_4BITS " != " FORMAT_4BITS "", vport->VIEWMODE, VIEWMODE);
     vport->VIEWMODE--;
-
   }
   {
     BITCODE_BD VIEWSIZE;
@@ -37520,7 +36182,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.VIEWSIZE [BD] set+1 %g != %g", vport->VIEWSIZE, VIEWSIZE);
     vport->VIEWSIZE--;
-
   }
   {
     BITCODE_CMC ambient_color;
@@ -37544,7 +36205,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.aspect_ratio [BD] set+1 %g != %g", vport->aspect_ratio, aspect_ratio);
     vport->aspect_ratio--;
-
   }
   {
     BITCODE_BD back_clip;
@@ -37560,7 +36220,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.back_clip [BD] set+1 %g != %g", vport->back_clip, back_clip);
     vport->back_clip--;
-
   }
   {
     BITCODE_H background;
@@ -37592,7 +36251,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.brightness [BD] set+1 %g != %g", vport->brightness, brightness);
     vport->brightness--;
-
   }
   {
     BITCODE_BS circle_zoom;
@@ -37608,7 +36266,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.circle_zoom [BS] set+1 %hu != %hu", vport->circle_zoom, circle_zoom);
     vport->circle_zoom--;
-
   }
   {
     BITCODE_BD contrast;
@@ -37624,7 +36281,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.contrast [BD] set+1 %g != %g", vport->contrast, contrast);
     vport->contrast--;
-
   }
   {
     BITCODE_RC default_lightning_type;
@@ -37640,7 +36296,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.default_lightning_type [RC] set+1 %u != %u", vport->default_lightning_type, default_lightning_type);
     vport->default_lightning_type--;
-
   }
   {
     BITCODE_RC flag;
@@ -37656,7 +36311,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.flag [RC] set+1 %u != %u", vport->flag, flag);
     vport->flag--;
-
   }
   {
     BITCODE_BD front_clip;
@@ -37672,7 +36326,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.front_clip [BD] set+1 %g != %g", vport->front_clip, front_clip);
     vport->front_clip--;
-
   }
   {
     BITCODE_BS grid_flags;
@@ -37688,7 +36341,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.grid_flags [BS] set+1 %hu != %hu", vport->grid_flags, grid_flags);
     vport->grid_flags--;
-
   }
   {
     BITCODE_BS grid_major;
@@ -37704,7 +36356,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.grid_major [BS] set+1 %hu != %hu", vport->grid_major, grid_major);
     vport->grid_major--;
-
   }
   {
     BITCODE_BD lens_length;
@@ -37720,7 +36371,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.lens_length [BD] set+1 %g != %g", vport->lens_length, lens_length);
     vport->lens_length--;
-
   }
   {
     BITCODE_2RD lower_left;
@@ -37778,7 +36428,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.render_mode [RC] set+1 %u != %u", vport->render_mode, render_mode);
     vport->render_mode--;
-
   }
   {
     BITCODE_H sun;
@@ -37802,7 +36451,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.ucs_elevation [BD] set+1 %g != %g", vport->ucs_elevation, ucs_elevation);
     vport->ucs_elevation--;
-
   }
   {
     BITCODE_3BD ucs_origin;
@@ -37826,7 +36474,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.ucs_orthografic_type [BS] set+1 %hu != %hu", vport->ucs_orthografic_type, ucs_orthografic_type);
     vport->ucs_orthografic_type--;
-
   }
   {
     BITCODE_3BD ucs_x_axis;
@@ -37858,7 +36505,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->unknown, unknown);
     vport->unknown--;
-
   }
   {
     BITCODE_2RD upper_right;
@@ -37882,7 +36528,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.use_default_lights [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->use_default_lights, use_default_lights);
     vport->use_default_lights--;
-
   }
   {
     BITCODE_RS used;
@@ -37898,7 +36543,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.used [RS] set+1 %hu != %hu", vport->used, used);
     vport->used--;
-
   }
   {
     BITCODE_3BD view_target;
@@ -37922,7 +36566,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.view_twist [BD] set+1 %g != %g", vport->view_twist, view_twist);
     vport->view_twist--;
-
   }
   {
     BITCODE_BD viewwidth;
@@ -37938,7 +36581,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.viewwidth [BD] set+1 %g != %g", vport->viewwidth, viewwidth);
     vport->viewwidth--;
-
   }
   {
     BITCODE_H visualstyle;
@@ -37962,7 +36604,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->xrefdep, xrefdep);
     vport->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -37978,7 +36619,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.xrefindex_plus1 [BS] set+1 %hu != %hu", vport->xrefindex_plus1, xrefindex_plus1);
     vport->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -37994,7 +36634,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->xrefref, xrefref);
     vport->xrefref--;
-
   }
   return failed;
 }
@@ -38003,6 +36642,7 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT_CONTROL *restrict vport_control = obj->tio.object->tio.VPORT_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -38027,7 +36667,6 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
     else
       fail ("VPORT_CONTROL.num_entries [BS] set+1 %hu != %hu", vport_control->num_entries, num_entries);
     vport_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -38043,7 +36682,6 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
     else
       fail ("VPORT_CONTROL.objid [BL] set+1 %u != %u", vport_control->objid, objid);
     vport_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -38060,6 +36698,7 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT_ENTITY_CONTROL *restrict vport_entity_control = obj->tio.object->tio.VPORT_ENTITY_CONTROL;
+  failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
@@ -38084,7 +36723,6 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_CONTROL.num_entries [BS] set+1 %hu != %hu", vport_entity_control->num_entries, num_entries);
     vport_entity_control->num_entries--;
-
   }
   {
     BITCODE_BL objid;
@@ -38100,7 +36738,6 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_CONTROL.objid [BL] set+1 %u != %u", vport_entity_control->objid, objid);
     vport_entity_control->objid--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -38117,6 +36754,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VPORT_ENTITY_HEADER *restrict vport_entity_header = obj->tio.object->tio.VPORT_ENTITY_HEADER;
+  failed = 0;
   {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, NULL)
@@ -38131,7 +36769,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_HEADER.flag [RC] set+1 %u != %u", vport_entity_header->flag, flag);
     vport_entity_header->flag--;
-
   }
   {
     BITCODE_B flag1;
@@ -38147,7 +36784,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_HEADER.flag1 [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->flag1, flag1);
     vport_entity_header->flag1--;
-
   }
   {
     BITCODE_TV name;
@@ -38181,7 +36817,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_HEADER.used [RS] set+1 %hu != %hu", vport_entity_header->used, used);
     vport_entity_header->used--;
-
   }
   {
     BITCODE_H vport_entity;
@@ -38213,7 +36848,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_HEADER.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->xrefdep, xrefdep);
     vport_entity_header->xrefdep--;
-
   }
   {
     BITCODE_BS xrefindex_plus1;
@@ -38229,7 +36863,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_HEADER.xrefindex_plus1 [BS] set+1 %hu != %hu", vport_entity_header->xrefindex_plus1, xrefindex_plus1);
     vport_entity_header->xrefindex_plus1--;
-
   }
   {
     BITCODE_B xrefref;
@@ -38245,7 +36878,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_HEADER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->xrefref, xrefref);
     vport_entity_header->xrefref--;
-
   }
   return failed;
 }
@@ -38254,6 +36886,7 @@ static int test_WIPEOUTVARIABLES (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_WIPEOUTVARIABLES *restrict wipeoutvariables = obj->tio.object->tio.WIPEOUTVARIABLES;
+  failed = 0;
   {
     BITCODE_BS display_frame;
     if (dwg_dynapi_entity_value (wipeoutvariables, "WIPEOUTVARIABLES", "display_frame", &display_frame, NULL)
@@ -38268,7 +36901,6 @@ static int test_WIPEOUTVARIABLES (const Dwg_Object *obj)
     else
       fail ("WIPEOUTVARIABLES.display_frame [BS] set+1 %hu != %hu", wipeoutvariables->display_frame, display_frame);
     wipeoutvariables->display_frame--;
-
   }
   {
     struct _dwg_object_object* parent;
@@ -38285,6 +36917,7 @@ static int test_XRECORD (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_XRECORD *restrict xrecord = obj->tio.object->tio.XRECORD;
+  failed = 0;
   {
     BITCODE_BS cloning_flags;
     if (dwg_dynapi_entity_value (xrecord, "XRECORD", "cloning_flags", &cloning_flags, NULL)
@@ -38299,7 +36932,6 @@ static int test_XRECORD (const Dwg_Object *obj)
     else
       fail ("XRECORD.cloning_flags [BS] set+1 %hu != %hu", xrecord->cloning_flags, cloning_flags);
     xrecord->cloning_flags--;
-
   }
   {
     BITCODE_BL num_objid_handles;
@@ -38315,7 +36947,6 @@ static int test_XRECORD (const Dwg_Object *obj)
     else
       fail ("XRECORD.num_objid_handles [BL] set+1 %u != %u", xrecord->num_objid_handles, num_objid_handles);
     xrecord->num_objid_handles--;
-
   }
   {
     BITCODE_BL num_xdata;
@@ -38331,7 +36962,6 @@ static int test_XRECORD (const Dwg_Object *obj)
     else
       fail ("XRECORD.num_xdata [BL] set+1 %u != %u", xrecord->num_xdata, num_xdata);
     xrecord->num_xdata--;
-
   }
   {
     BITCODE_H* objid_handles;
@@ -38375,7 +37005,6 @@ static int test_XRECORD (const Dwg_Object *obj)
     else
       fail ("XRECORD.xdata_size [BL] set+1 %u != %u", xrecord->xdata_size, xdata_size);
     xrecord->xdata_size--;
-
   }
   return failed;
 }
@@ -38385,7 +37014,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 37748 "dynapi_test.c"
+#line 37017 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -38985,7 +37614,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 38348 "dynapi_test.c"
+#line 37617 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
