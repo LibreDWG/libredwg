@@ -222,7 +222,8 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/Helix.dwg");
               error += test_code (tmp, cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY)
+          if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY ||
+              DWG_TYPE == DWG_TYPE_ASSOCPERSSUBENTMANAGER)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2004/Surface.dwg");

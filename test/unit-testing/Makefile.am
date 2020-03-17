@@ -44,6 +44,7 @@ testobjects = \
 	arc \
 	arc_dimension \
 	assocaligneddimactionbody \
+	assocperssubentmanager \
 	assocplanesurfaceactionbody \
 	assocdependency \
 	attdef \
