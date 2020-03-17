@@ -103,6 +103,8 @@ TESTDATA = \
     test-data/2004/Spline.dwg \
     test-data/2004/Spline.jpg \
     test-data/2004/Spline.txt \
+    test-data/2004/Surface.dwg \
+    test-data/2004/Surface.dxf \
     test-data/2004/Text.dwg \
     test-data/2004/Text.jpg \
     test-data/2004/Text.txt \

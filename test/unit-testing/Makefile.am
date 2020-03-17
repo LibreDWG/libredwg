@@ -33,7 +33,8 @@ hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo
 dynapi_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/bits.lo
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/classes.lo
 dxf_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/classes.lo

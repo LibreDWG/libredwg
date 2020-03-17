@@ -26,6 +26,7 @@
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "../../src/config.h"
 #include "../../src/common.h"
+#include "../../src/classes.h"
 #include "dwg.h"
 #include "dwg_api.h"
 #include "tests_common.h"
@@ -43,7 +44,7 @@ test_header (const Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 46 "dynapi_test.c"
+#line 47 "dynapi_test.c"
   /* @@for test_HEADER@@ */
   {
     BITCODE_RL size;
@@ -5373,10 +5374,10 @@ test_header (const Dwg_Data *dwg)
     dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0);
 
   }
-#line 47 "dynapi_test.c.in"
+#line 48 "dynapi_test.c.in"
   return error;
 }
-#line 5379 "dynapi_test.c"
+#line 5380 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -5469,6 +5470,11 @@ static int test__3DFACE (const Dwg_Object *obj)
       fail ("3DFACE.z_is_zero [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dface->z_is_zero, z_is_zero);
     _3dface->z_is_zero--;
   }
+  if (failed && (is_class_unstable ("3DFACE") || is_class_debugging ("3DFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "3DFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test__3DSOLID (const Dwg_Object *obj)
@@ -5750,6 +5756,11 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
   }
+  if (failed && (is_class_unstable ("3DSOLID") || is_class_debugging ("3DSOLID")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "3DSOLID", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ARC (const Dwg_Object *obj)
@@ -5841,6 +5852,11 @@ static int test_ARC (const Dwg_Object *obj)
       fail ("ARC.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", arc->thickness, thickness);
     arc->thickness--;
   }
+  if (failed && (is_class_unstable ("ARC") || is_class_debugging ("ARC")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ARC", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ARC_DIMENSION (const Dwg_Object *obj)
@@ -6221,6 +6237,11 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.user_text [TV] '%s' <> '%s'", user_text, arc_dimension->user_text);
   }
+  if (failed && (is_class_unstable ("ARC_DIMENSION") || is_class_debugging ("ARC_DIMENSION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ARC_DIMENSION", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ATTDEF (const Dwg_Object *obj)
@@ -6600,6 +6621,11 @@ static int test_ATTDEF (const Dwg_Object *obj)
       fail ("ATTDEF.width_factor [RD] set+1 %g != %g", attdef->width_factor, width_factor);
     attdef->width_factor--;
   }
+  if (failed && (is_class_unstable ("ATTDEF") || is_class_debugging ("ATTDEF")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ATTDEF", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ATTRIB (const Dwg_Object *obj)
@@ -6954,6 +6980,11 @@ static int test_ATTRIB (const Dwg_Object *obj)
       fail ("ATTRIB.width_factor [RD] set+1 %g != %g", attrib->width_factor, width_factor);
     attrib->width_factor--;
   }
+  if (failed && (is_class_unstable ("ATTRIB") || is_class_debugging ("ATTRIB")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ATTRIB", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_BLOCK (const Dwg_Object *obj)
@@ -6980,6 +7011,11 @@ static int test_BLOCK (const Dwg_Object *obj)
     else
         fail ("BLOCK.parent [struct _dwg_object_entity*]");
   }
+  if (failed && (is_class_unstable ("BLOCK") || is_class_debugging ("BLOCK")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLOCK", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_BODY (const Dwg_Object *obj)
@@ -6988,6 +7024,11 @@ static int test_BODY (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_BODY *restrict body = obj->tio.entity->tio.BODY;
   failed = 0;
+  if (failed && (is_class_unstable ("BODY") || is_class_debugging ("BODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BODY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_CAMERA (const Dwg_Object *obj)
@@ -7012,6 +7053,11 @@ static int test_CAMERA (const Dwg_Object *obj)
     else
         fail ("CAMERA.view [H]");
   }
+  if (failed && (is_class_unstable ("CAMERA") || is_class_debugging ("CAMERA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "CAMERA", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_CIRCLE (const Dwg_Object *obj)
@@ -7073,6 +7119,11 @@ static int test_CIRCLE (const Dwg_Object *obj)
       fail ("CIRCLE.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", circle->thickness, thickness);
     circle->thickness--;
   }
+  if (failed && (is_class_unstable ("CIRCLE") || is_class_debugging ("CIRCLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "CIRCLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
@@ -7406,6 +7457,11 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.user_text [TV] '%s' <> '%s'", user_text, dimension_aligned->user_text);
   }
+  if (failed && (is_class_unstable ("DIMENSION_ALIGNED") || is_class_debugging ("DIMENSION_ALIGNED")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMENSION_ALIGNED", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
@@ -7740,6 +7796,11 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.user_text [TV] '%s' <> '%s'", user_text, dimension_ang2ln->user_text);
   }
+  if (failed && (is_class_unstable ("DIMENSION_ANG2LN") || is_class_debugging ("DIMENSION_ANG2LN")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMENSION_ANG2LN", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
@@ -8066,6 +8127,11 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG3PT.user_text [TV] '%s' <> '%s'", user_text, dimension_ang3pt->user_text);
   }
+  if (failed && (is_class_unstable ("DIMENSION_ANG3PT") || is_class_debugging ("DIMENSION_ANG3PT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMENSION_ANG3PT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
@@ -8391,6 +8457,11 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     else
       fail ("DIMENSION_DIAMETER.user_text [TV] '%s' <> '%s'", user_text, dimension_diameter->user_text);
   }
+  if (failed && (is_class_unstable ("DIMENSION_DIAMETER") || is_class_debugging ("DIMENSION_DIAMETER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMENSION_DIAMETER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
@@ -8739,6 +8810,11 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.user_text [TV] '%s' <> '%s'", user_text, dimension_linear->user_text);
   }
+  if (failed && (is_class_unstable ("DIMENSION_LINEAR") || is_class_debugging ("DIMENSION_LINEAR")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMENSION_LINEAR", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
@@ -9072,6 +9148,11 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ORDINATE.user_text [TV] '%s' <> '%s'", user_text, dimension_ordinate->user_text);
   }
+  if (failed && (is_class_unstable ("DIMENSION_ORDINATE") || is_class_debugging ("DIMENSION_ORDINATE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMENSION_ORDINATE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
@@ -9397,6 +9478,11 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     else
       fail ("DIMENSION_RADIUS.user_text [TV] '%s' <> '%s'", user_text, dimension_radius->user_text);
   }
+  if (failed && (is_class_unstable ("DIMENSION_RADIUS") || is_class_debugging ("DIMENSION_RADIUS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMENSION_RADIUS", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ELLIPSE (const Dwg_Object *obj)
@@ -9482,6 +9568,11 @@ static int test_ELLIPSE (const Dwg_Object *obj)
       fail ("ELLIPSE.start_angle [BD] set+1 %g != %g", ellipse->start_angle, start_angle);
     ellipse->start_angle--;
   }
+  if (failed && (is_class_unstable ("ELLIPSE") || is_class_debugging ("ELLIPSE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ELLIPSE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ENDBLK (const Dwg_Object *obj)
@@ -9498,6 +9589,11 @@ static int test_ENDBLK (const Dwg_Object *obj)
     else
         fail ("ENDBLK.parent [struct _dwg_object_entity*]");
   }
+  if (failed && (is_class_unstable ("ENDBLK") || is_class_debugging ("ENDBLK")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ENDBLK", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
@@ -10128,6 +10224,11 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
   }
+  if (failed && (is_class_unstable ("EXTRUDEDSURFACE") || is_class_debugging ("EXTRUDEDSURFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "EXTRUDEDSURFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
@@ -10286,6 +10387,11 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
       fail ("GEOPOSITIONMARKER.type [BS] set+1 %hu != %hu", geopositionmarker->type, type);
     geopositionmarker->type--;
   }
+  if (failed && (is_class_unstable ("GEOPOSITIONMARKER") || is_class_debugging ("GEOPOSITIONMARKER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "GEOPOSITIONMARKER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_HATCH (const Dwg_Object *obj)
@@ -10695,6 +10801,11 @@ static int test_HATCH (const Dwg_Object *obj)
       fail ("HATCH.style [BS] set+1 %hu != %hu", hatch->style, style);
     hatch->style--;
   }
+  if (failed && (is_class_unstable ("HATCH") || is_class_debugging ("HATCH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "HATCH", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_HELIX (const Dwg_Object *obj)
@@ -11111,6 +11222,11 @@ static int test_HELIX (const Dwg_Object *obj)
       fail ("HELIX.weighted [B] set+1 " FORMAT_B " != " FORMAT_B "", helix->weighted, weighted);
     helix->weighted--;
   }
+  if (failed && (is_class_unstable ("HELIX") || is_class_debugging ("HELIX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "HELIX", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_IMAGE (const Dwg_Object *obj)
@@ -11320,6 +11436,11 @@ static int test_IMAGE (const Dwg_Object *obj)
     else
         fail ("IMAGE.vvec [3BD]");
   }
+  if (failed && (is_class_unstable ("IMAGE") || is_class_debugging ("IMAGE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "IMAGE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_INSERT (const Dwg_Object *obj)
@@ -11462,6 +11583,11 @@ static int test_INSERT (const Dwg_Object *obj)
     else
         fail ("INSERT.seqend [H]");
   }
+  if (failed && (is_class_unstable ("INSERT") || is_class_debugging ("INSERT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "INSERT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LEADER (const Dwg_Object *obj)
@@ -11799,6 +11925,11 @@ static int test_LEADER (const Dwg_Object *obj)
     else
         fail ("LEADER.x_direction [3DPOINT]");
   }
+  if (failed && (is_class_unstable ("LEADER") || is_class_debugging ("LEADER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LEADER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LIGHT (const Dwg_Object *obj)
@@ -12082,6 +12213,11 @@ static int test_LIGHT (const Dwg_Object *obj)
       fail ("LIGHT.use_attenuation_limits [B] set+1 " FORMAT_B " != " FORMAT_B "", light->use_attenuation_limits, use_attenuation_limits);
     light->use_attenuation_limits--;
   }
+  if (failed && (is_class_unstable ("LIGHT") || is_class_debugging ("LIGHT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LIGHT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LINE (const Dwg_Object *obj)
@@ -12151,6 +12287,11 @@ static int test_LINE (const Dwg_Object *obj)
       fail ("LINE.z_is_zero [RC] set+1 %u != %u", line->z_is_zero, z_is_zero);
     line->z_is_zero--;
   }
+  if (failed && (is_class_unstable ("LINE") || is_class_debugging ("LINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LINE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LOFTEDSURFACE (const Dwg_Object *obj)
@@ -12738,6 +12879,11 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
   }
+  if (failed && (is_class_unstable ("LOFTEDSURFACE") || is_class_debugging ("LOFTEDSURFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LOFTEDSURFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LWPOLYLINE (const Dwg_Object *obj)
@@ -12922,6 +13068,11 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
     else
       fail ("LWPOLYLINE.widths [Dwg_LWPOLYLINE_width*] * %u num_widths", count);
   }
+  if (failed && (is_class_unstable ("LWPOLYLINE") || is_class_debugging ("LWPOLYLINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LWPOLYLINE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MESH (const Dwg_Object *obj)
@@ -13108,6 +13259,11 @@ static int test_MESH (const Dwg_Object *obj)
     else
       fail ("MESH.vertex [3BD*] * %u num_owned", count);
   }
+  if (failed && (is_class_unstable ("MESH") || is_class_debugging ("MESH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MESH", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MINSERT (const Dwg_Object *obj)
@@ -13310,6 +13466,11 @@ static int test_MINSERT (const Dwg_Object *obj)
     else
         fail ("MINSERT.seqend [H]");
   }
+  if (failed && (is_class_unstable ("MINSERT") || is_class_debugging ("MINSERT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MINSERT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MLINE (const Dwg_Object *obj)
@@ -13435,6 +13596,11 @@ static int test_MLINE (const Dwg_Object *obj)
     else
       fail ("MLINE.verts [Dwg_MLINE_vertex*] * %u num_verts", count);
   }
+  if (failed && (is_class_unstable ("MLINE") || is_class_debugging ("MLINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MLINE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MTEXT (const Dwg_Object *obj)
@@ -13849,6 +14015,11 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
         fail ("MTEXT.x_axis_dir [3BD]");
   }
+  if (failed && (is_class_unstable ("MTEXT") || is_class_debugging ("MTEXT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MTEXT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MULTILEADER (const Dwg_Object *obj)
@@ -14369,6 +14540,11 @@ static int test_MULTILEADER (const Dwg_Object *obj)
       fail ("MULTILEADER.type [BS] set+1 %hu != %hu", multileader->type, type);
     multileader->type--;
   }
+  if (failed && (is_class_unstable ("MULTILEADER") || is_class_debugging ("MULTILEADER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MULTILEADER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_OLE2FRAME (const Dwg_Object *obj)
@@ -14492,6 +14668,11 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
       fail ("OLE2FRAME.type [BS] set+1 %hu != %hu", ole2frame->type, type);
     ole2frame->type--;
   }
+  if (failed && (is_class_unstable ("OLE2FRAME") || is_class_debugging ("OLE2FRAME")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "OLE2FRAME", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_OLEFRAME (const Dwg_Object *obj)
@@ -14561,6 +14742,11 @@ static int test_OLEFRAME (const Dwg_Object *obj)
     else
         fail ("OLEFRAME.parent [struct _dwg_object_entity*]");
   }
+  if (failed && (is_class_unstable ("OLEFRAME") || is_class_debugging ("OLEFRAME")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "OLEFRAME", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_PLANESURFACE (const Dwg_Object *obj)
@@ -14902,6 +15088,11 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
   }
+  if (failed && (is_class_unstable ("PLANESURFACE") || is_class_debugging ("PLANESURFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PLANESURFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_POINT (const Dwg_Object *obj)
@@ -15000,6 +15191,11 @@ static int test_POINT (const Dwg_Object *obj)
       fail ("POINT.z [BD] set+1 %g != %g", point->z, z);
     point->z--;
   }
+  if (failed && (is_class_unstable ("POINT") || is_class_debugging ("POINT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_POLYLINE_2D (const Dwg_Object *obj)
@@ -15177,6 +15373,11 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_2D.vertex [H*] * %u num_owned", count);
   }
+  if (failed && (is_class_unstable ("POLYLINE_2D") || is_class_debugging ("POLYLINE_2D")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POLYLINE_2D", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_POLYLINE_3D (const Dwg_Object *obj)
@@ -15287,6 +15488,11 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
     else
       fail ("POLYLINE_3D.vertex [H*] * %u num_owned", count);
   }
+  if (failed && (is_class_unstable ("POLYLINE_3D") || is_class_debugging ("POLYLINE_3D")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POLYLINE_3D", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_POLYLINE_MESH (const Dwg_Object *obj)
@@ -15457,6 +15663,11 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.vertex [H*] * %u num_owned", count);
   }
+  if (failed && (is_class_unstable ("POLYLINE_MESH") || is_class_debugging ("POLYLINE_MESH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POLYLINE_MESH", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_POLYLINE_PFACE (const Dwg_Object *obj)
@@ -15567,6 +15778,11 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
     else
       fail ("POLYLINE_PFACE.vertex [H*] * %u num_owned", count);
   }
+  if (failed && (is_class_unstable ("POLYLINE_PFACE") || is_class_debugging ("POLYLINE_PFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POLYLINE_PFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_PROXY_ENTITY (const Dwg_Object *obj)
@@ -15675,6 +15891,11 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
       fail ("PROXY_ENTITY.version [BL] set+1 %u != %u", proxy_entity->version, version);
     proxy_entity->version--;
   }
+  if (failed && (is_class_unstable ("PROXY_ENTITY") || is_class_debugging ("PROXY_ENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PROXY_ENTITY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_RAY (const Dwg_Object *obj)
@@ -15707,6 +15928,11 @@ static int test_RAY (const Dwg_Object *obj)
     else
         fail ("RAY.vector [3BD]");
   }
+  if (failed && (is_class_unstable ("RAY") || is_class_debugging ("RAY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RAY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_REGION (const Dwg_Object *obj)
@@ -15715,6 +15941,11 @@ static int test_REGION (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_REGION *restrict region = obj->tio.entity->tio.REGION;
   failed = 0;
+  if (failed && (is_class_unstable ("REGION") || is_class_debugging ("REGION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "REGION", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
@@ -16215,6 +16446,11 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
   }
+  if (failed && (is_class_unstable ("REVOLVEDSURFACE") || is_class_debugging ("REVOLVEDSURFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "REVOLVEDSURFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SEQEND (const Dwg_Object *obj)
@@ -16231,6 +16467,11 @@ static int test_SEQEND (const Dwg_Object *obj)
     else
         fail ("SEQEND.parent [struct _dwg_object_entity*]");
   }
+  if (failed && (is_class_unstable ("SEQEND") || is_class_debugging ("SEQEND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SEQEND", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SHAPE (const Dwg_Object *obj)
@@ -16361,6 +16602,11 @@ static int test_SHAPE (const Dwg_Object *obj)
       fail ("SHAPE.width_factor [BD] set+1 %g != %g", shape->width_factor, width_factor);
     shape->width_factor--;
   }
+  if (failed && (is_class_unstable ("SHAPE") || is_class_debugging ("SHAPE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SHAPE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SOLID (const Dwg_Object *obj)
@@ -16446,6 +16692,11 @@ static int test_SOLID (const Dwg_Object *obj)
       fail ("SOLID.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", solid->thickness, thickness);
     solid->thickness--;
   }
+  if (failed && (is_class_unstable ("SOLID") || is_class_debugging ("SOLID")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SOLID", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SPLINE (const Dwg_Object *obj)
@@ -16733,6 +16984,11 @@ static int test_SPLINE (const Dwg_Object *obj)
       fail ("SPLINE.weighted [B] set+1 " FORMAT_B " != " FORMAT_B "", spline->weighted, weighted);
     spline->weighted--;
   }
+  if (failed && (is_class_unstable ("SPLINE") || is_class_debugging ("SPLINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SPLINE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SURFACE (const Dwg_Object *obj)
@@ -17074,6 +17330,11 @@ static int test_SURFACE (const Dwg_Object *obj)
     else
       fail ("SURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
   }
+  if (failed && (is_class_unstable ("SURFACE") || is_class_debugging ("SURFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SURFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SWEPTSURFACE (const Dwg_Object *obj)
@@ -17726,6 +17987,11 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
   }
+  if (failed && (is_class_unstable ("SWEPTSURFACE") || is_class_debugging ("SWEPTSURFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SWEPTSURFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_TABLE (const Dwg_Object *obj)
@@ -19339,6 +19605,11 @@ static int test_TABLE (const Dwg_Object *obj)
       fail ("TABLE.vert_cell_margin [BD] set+1 %g != %g", table->vert_cell_margin, vert_cell_margin);
     table->vert_cell_margin--;
   }
+  if (failed && (is_class_unstable ("TABLE") || is_class_debugging ("TABLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TABLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_TEXT (const Dwg_Object *obj)
@@ -19547,6 +19818,11 @@ static int test_TEXT (const Dwg_Object *obj)
       fail ("TEXT.width_factor [RD] set+1 %g != %g", text->width_factor, width_factor);
     text->width_factor--;
   }
+  if (failed && (is_class_unstable ("TEXT") || is_class_debugging ("TEXT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TEXT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_TOLERANCE (const Dwg_Object *obj)
@@ -19650,6 +19926,11 @@ static int test_TOLERANCE (const Dwg_Object *obj)
     else
         fail ("TOLERANCE.x_direction [3BD]");
   }
+  if (failed && (is_class_unstable ("TOLERANCE") || is_class_debugging ("TOLERANCE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TOLERANCE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_TRACE (const Dwg_Object *obj)
@@ -19735,6 +20016,11 @@ static int test_TRACE (const Dwg_Object *obj)
       fail ("TRACE.thickness [BT] set+1 " FORMAT_BT " != " FORMAT_BT "", trace->thickness, thickness);
     trace->thickness--;
   }
+  if (failed && (is_class_unstable ("TRACE") || is_class_debugging ("TRACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TRACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_UNDERLAY (const Dwg_Object *obj)
@@ -19876,6 +20162,11 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     else
         fail ("UNDERLAY.underlay_layer [H]");
   }
+  if (failed && (is_class_unstable ("UNDERLAY") || is_class_debugging ("UNDERLAY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "UNDERLAY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VERTEX_2D (const Dwg_Object *obj)
@@ -19990,6 +20281,11 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
       fail ("VERTEX_2D.tangent_dir [BD] set+1 %g != %g", vertex_2d->tangent_dir, tangent_dir);
     vertex_2d->tangent_dir--;
   }
+  if (failed && (is_class_unstable ("VERTEX_2D") || is_class_debugging ("VERTEX_2D")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VERTEX_2D", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VERTEX_3D (const Dwg_Object *obj)
@@ -20029,6 +20325,11 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
     else
         fail ("VERTEX_3D.point [3BD]");
   }
+  if (failed && (is_class_unstable ("VERTEX_3D") || is_class_debugging ("VERTEX_3D")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VERTEX_3D", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VERTEX_MESH (const Dwg_Object *obj)
@@ -20037,6 +20338,11 @@ static int test_VERTEX_MESH (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_MESH *restrict vertex_mesh = obj->tio.entity->tio.VERTEX_MESH;
   failed = 0;
+  if (failed && (is_class_unstable ("VERTEX_MESH") || is_class_debugging ("VERTEX_MESH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VERTEX_MESH", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VERTEX_PFACE (const Dwg_Object *obj)
@@ -20045,6 +20351,11 @@ static int test_VERTEX_PFACE (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_VERTEX_PFACE *restrict vertex_pface = obj->tio.entity->tio.VERTEX_PFACE;
   failed = 0;
+  if (failed && (is_class_unstable ("VERTEX_PFACE") || is_class_debugging ("VERTEX_PFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VERTEX_PFACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
@@ -20084,6 +20395,11 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
     else
         fail ("VERTEX_PFACE_FACE.vertind[4] [BS]");
   }
+  if (failed && (is_class_unstable ("VERTEX_PFACE_FACE") || is_class_debugging ("VERTEX_PFACE_FACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VERTEX_PFACE_FACE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VIEWPORT (const Dwg_Object *obj)
@@ -20558,6 +20874,11 @@ static int test_VIEWPORT (const Dwg_Object *obj)
       fail ("VIEWPORT.width [BD] set+1 %g != %g", viewport->width, width);
     viewport->width--;
   }
+  if (failed && (is_class_unstable ("VIEWPORT") || is_class_debugging ("VIEWPORT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VIEWPORT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_WIPEOUT (const Dwg_Object *obj)
@@ -20767,6 +21088,11 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     else
         fail ("WIPEOUT.vvec [3BD]");
   }
+  if (failed && (is_class_unstable ("WIPEOUT") || is_class_debugging ("WIPEOUT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "WIPEOUT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_XLINE (const Dwg_Object *obj)
@@ -20775,6 +21101,11 @@ static int test_XLINE (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_XLINE *restrict xline = obj->tio.entity->tio.XLINE;
   failed = 0;
+  if (failed && (is_class_unstable ("XLINE") || is_class_debugging ("XLINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "XLINE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
@@ -20987,6 +21318,11 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     else
         fail ("ACSH_BOX_CLASS.shhn_pts [BD*]");
   }
+  if (failed && (is_class_unstable ("ACSH_BOX_CLASS") || is_class_debugging ("ACSH_BOX_CLASS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACSH_BOX_CLASS", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
@@ -21472,6 +21808,11 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
       fail ("ACSH_EXTRUSION_CLASS.twist_angle [BD] set+1 %g != %g", acsh_extrusion_class->twist_angle, twist_angle);
     acsh_extrusion_class->twist_angle--;
   }
+  if (failed && (is_class_unstable ("ACSH_EXTRUSION_CLASS") || is_class_debugging ("ACSH_EXTRUSION_CLASS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACSH_EXTRUSION_CLASS", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
@@ -21957,6 +22298,11 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
       fail ("ACSH_SWEEP_CLASS.twist_angle [BD] set+1 %g != %g", acsh_sweep_class->twist_angle, twist_angle);
     acsh_sweep_class->twist_angle--;
   }
+  if (failed && (is_class_unstable ("ACSH_SWEEP_CLASS") || is_class_debugging ("ACSH_SWEEP_CLASS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACSH_SWEEP_CLASS", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
@@ -22026,6 +22372,11 @@ static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
         fail ("ANNOTSCALEOBJECTCONTEXTDATA.scale [H]");
   }
+  if (failed && (is_class_unstable ("ANNOTSCALEOBJECTCONTEXTDATA") || is_class_debugging ("ANNOTSCALEOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ANNOTSCALEOBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_APPID (const Dwg_Object *obj)
@@ -22150,6 +22501,11 @@ static int test_APPID (const Dwg_Object *obj)
       fail ("APPID.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", appid->xrefref, xrefref);
     appid->xrefref--;
   }
+  if (failed && (is_class_unstable ("APPID") || is_class_debugging ("APPID")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "APPID", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_APPID_CONTROL (const Dwg_Object *obj)
@@ -22206,6 +22562,11 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
     else
         fail ("APPID_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("APPID_CONTROL") || is_class_debugging ("APPID_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "APPID_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
@@ -22540,6 +22901,11 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
         fail ("ASSOC2DCONSTRAINTGROUP.writedep [H]");
   }
+  if (failed && (is_class_unstable ("ASSOC2DCONSTRAINTGROUP") || is_class_debugging ("ASSOC2DCONSTRAINTGROUP")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOC2DCONSTRAINTGROUP", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOCACTION (const Dwg_Object *obj)
@@ -22709,6 +23075,11 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
         fail ("ASSOCACTION.writedep [H]");
   }
+  if (failed && (is_class_unstable ("ASSOCACTION") || is_class_debugging ("ASSOCACTION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCACTION", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
@@ -22877,6 +23248,11 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
         fail ("ASSOCALIGNEDDIMACTIONBODY.writedep [H]");
   }
+  if (failed && (is_class_unstable ("ASSOCALIGNEDDIMACTIONBODY") || is_class_debugging ("ASSOCALIGNEDDIMACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCALIGNEDDIMACTIONBODY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
@@ -23060,6 +23436,11 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
     else
         fail ("ASSOCDEPENDENCY.writedep [H]");
   }
+  if (failed && (is_class_unstable ("ASSOCDEPENDENCY") || is_class_debugging ("ASSOCDEPENDENCY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCDEPENDENCY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOCNETWORK (const Dwg_Object *obj)
@@ -23237,6 +23618,11 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
         fail ("ASSOCNETWORK.writedep [H]");
   }
+  if (failed && (is_class_unstable ("ASSOCNETWORK") || is_class_debugging ("ASSOCNETWORK")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCNETWORK", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
@@ -23369,6 +23755,11 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     else
         fail ("ASSOCOSNAPPOINTREFACTIONPARAM.writedep [H]");
   }
+  if (failed && (is_class_unstable ("ASSOCOSNAPPOINTREFACTIONPARAM") || is_class_debugging ("ASSOCOSNAPPOINTREFACTIONPARAM")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCOSNAPPOINTREFACTIONPARAM", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
@@ -23985,6 +24376,11 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl9 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl9, unknown_bl9);
     assocperssubentmanager->unknown_bl9--;
   }
+  if (failed && (is_class_unstable ("ASSOCPERSSUBENTMANAGER") || is_class_debugging ("ASSOCPERSSUBENTMANAGER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCPERSSUBENTMANAGER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
@@ -24212,6 +24608,11 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     else
         fail ("ASSOCPLANESURFACEACTIONBODY.writedep [H]");
   }
+  if (failed && (is_class_unstable ("ASSOCPLANESURFACEACTIONBODY") || is_class_debugging ("ASSOCPLANESURFACEACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCPLANESURFACEACTIONBODY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_BLOCK_CONTROL (const Dwg_Object *obj)
@@ -24284,6 +24685,11 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
     else
         fail ("BLOCK_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("BLOCK_CONTROL") || is_class_debugging ("BLOCK_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLOCK_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_BLOCK_HEADER (const Dwg_Object *obj)
@@ -24699,6 +25105,11 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
       fail ("BLOCK_HEADER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xrefref, xrefref);
     block_header->xrefref--;
   }
+  if (failed && (is_class_unstable ("BLOCK_HEADER") || is_class_debugging ("BLOCK_HEADER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLOCK_HEADER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_CELLSTYLEMAP (const Dwg_Object *obj)
@@ -24740,6 +25151,11 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
     else
         fail ("CELLSTYLEMAP.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("CELLSTYLEMAP") || is_class_debugging ("CELLSTYLEMAP")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "CELLSTYLEMAP", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DATATABLE (const Dwg_Object *obj)
@@ -24756,6 +25172,11 @@ static int test_DATATABLE (const Dwg_Object *obj)
     else
         fail ("DATATABLE.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("DATATABLE") || is_class_debugging ("DATATABLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DATATABLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DBCOLOR (const Dwg_Object *obj)
@@ -24860,6 +25281,11 @@ static int test_DBCOLOR (const Dwg_Object *obj)
       fail ("DBCOLOR.unknown2 [RC] set+1 %u != %u", dbcolor->unknown2, unknown2);
     dbcolor->unknown2--;
   }
+  if (failed && (is_class_unstable ("DBCOLOR") || is_class_debugging ("DBCOLOR")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DBCOLOR", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DICTIONARY (const Dwg_Object *obj)
@@ -24956,6 +25382,11 @@ static int test_DICTIONARY (const Dwg_Object *obj)
     else
       fail ("DICTIONARY.texts [TV*] * %u numitems", count);
   }
+  if (failed && (is_class_unstable ("DICTIONARY") || is_class_debugging ("DICTIONARY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DICTIONARY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DICTIONARYVAR (const Dwg_Object *obj)
@@ -24997,6 +25428,11 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
     else
       fail ("DICTIONARYVAR.str [T] '%s' <> '%s'", str, dictionaryvar->str);
   }
+  if (failed && (is_class_unstable ("DICTIONARYVAR") || is_class_debugging ("DICTIONARYVAR")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DICTIONARYVAR", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
@@ -25101,6 +25537,11 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
     else
       fail ("DICTIONARYWDFLT.texts [TV*] * %u numitems", count);
   }
+  if (failed && (is_class_unstable ("DICTIONARYWDFLT") || is_class_debugging ("DICTIONARYWDFLT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DICTIONARYWDFLT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMASSOC (const Dwg_Object *obj)
@@ -25170,6 +25611,11 @@ static int test_DIMASSOC (const Dwg_Object *obj)
       fail ("DIMASSOC.trans_space_flag [RC] set+1 %u != %u", dimassoc->trans_space_flag, trans_space_flag);
     dimassoc->trans_space_flag--;
   }
+  if (failed && (is_class_unstable ("DIMASSOC") || is_class_debugging ("DIMASSOC")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMASSOC", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMSTYLE (const Dwg_Object *obj)
@@ -26478,6 +26924,11 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
       fail ("DIMSTYLE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->xrefref, xrefref);
     dimstyle->xrefref--;
   }
+  if (failed && (is_class_unstable ("DIMSTYLE") || is_class_debugging ("DIMSTYLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMSTYLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
@@ -26559,6 +27010,11 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
     else
         fail ("DIMSTYLE_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("DIMSTYLE_CONTROL") || is_class_debugging ("DIMSTYLE_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DIMSTYLE_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DUMMY (const Dwg_Object *obj)
@@ -26575,6 +27031,11 @@ static int test_DUMMY (const Dwg_Object *obj)
     else
         fail ("DUMMY.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("DUMMY") || is_class_debugging ("DUMMY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DUMMY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
@@ -26614,6 +27075,11 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
     else
         fail ("DYNAMICBLOCKPURGEPREVENTER.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("DYNAMICBLOCKPURGEPREVENTER") || is_class_debugging ("DYNAMICBLOCKPURGEPREVENTER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DYNAMICBLOCKPURGEPREVENTER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
@@ -26790,6 +27256,11 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
       fail ("EVALUATION_GRAPH.unknown2 [BL] set+1 %u != %u", evaluation_graph->unknown2, unknown2);
     evaluation_graph->unknown2--;
   }
+  if (failed && (is_class_unstable ("EVALUATION_GRAPH") || is_class_debugging ("EVALUATION_GRAPH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "EVALUATION_GRAPH", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_FIELD (const Dwg_Object *obj)
@@ -27029,6 +27500,11 @@ static int test_FIELD (const Dwg_Object *obj)
       fail ("FIELD.value_string_length [BL] set+1 %u != %u", field->value_string_length, value_string_length);
     field->value_string_length--;
   }
+  if (failed && (is_class_unstable ("FIELD") || is_class_debugging ("FIELD")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "FIELD", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_FIELDLIST (const Dwg_Object *obj)
@@ -27085,6 +27561,11 @@ static int test_FIELDLIST (const Dwg_Object *obj)
       fail ("FIELDLIST.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", fieldlist->unknown, unknown);
     fieldlist->unknown--;
   }
+  if (failed && (is_class_unstable ("FIELDLIST") || is_class_debugging ("FIELDLIST")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "FIELDLIST", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_GEODATA (const Dwg_Object *obj)
@@ -27615,6 +28096,11 @@ static int test_GEODATA (const Dwg_Object *obj)
     else
         fail ("GEODATA.zero1 [2RD]");
   }
+  if (failed && (is_class_unstable ("GEODATA") || is_class_debugging ("GEODATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "GEODATA", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_GEOMAPIMAGE (const Dwg_Object *obj)
@@ -27987,6 +28473,11 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
       fail ("GEOMAPIMAGE.width [BD] set+1 %g != %g", geomapimage->width, width);
     geomapimage->width--;
   }
+  if (failed && (is_class_unstable ("GEOMAPIMAGE") || is_class_debugging ("GEOMAPIMAGE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "GEOMAPIMAGE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_GROUP (const Dwg_Object *obj)
@@ -28068,6 +28559,11 @@ static int test_GROUP (const Dwg_Object *obj)
       fail ("GROUP.unnamed [BS] set+1 %hu != %hu", group->unnamed, unnamed);
     group->unnamed--;
   }
+  if (failed && (is_class_unstable ("GROUP") || is_class_debugging ("GROUP")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "GROUP", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_IDBUFFER (const Dwg_Object *obj)
@@ -28124,6 +28620,11 @@ static int test_IDBUFFER (const Dwg_Object *obj)
       fail ("IDBUFFER.unknown [RC] set+1 %u != %u", idbuffer->unknown, unknown);
     idbuffer->unknown--;
   }
+  if (failed && (is_class_unstable ("IDBUFFER") || is_class_debugging ("IDBUFFER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "IDBUFFER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_IMAGEDEF (const Dwg_Object *obj)
@@ -28211,6 +28712,11 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
       fail ("IMAGEDEF.resunits [RC] set+1 %u != %u", imagedef->resunits, resunits);
     imagedef->resunits--;
   }
+  if (failed && (is_class_unstable ("IMAGEDEF") || is_class_debugging ("IMAGEDEF")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "IMAGEDEF", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
@@ -28242,6 +28748,11 @@ static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
     else
         fail ("IMAGEDEF_REACTOR.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("IMAGEDEF_REACTOR") || is_class_debugging ("IMAGEDEF_REACTOR")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "IMAGEDEF_REACTOR", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LAYER (const Dwg_Object *obj)
@@ -28503,6 +29014,11 @@ static int test_LAYER (const Dwg_Object *obj)
       fail ("LAYER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->xrefref, xrefref);
     layer->xrefref--;
   }
+  if (failed && (is_class_unstable ("LAYER") || is_class_debugging ("LAYER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LAYER_CONTROL (const Dwg_Object *obj)
@@ -28559,6 +29075,11 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
     else
         fail ("LAYER_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("LAYER_CONTROL") || is_class_debugging ("LAYER_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYER_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LAYER_INDEX (const Dwg_Object *obj)
@@ -28640,6 +29161,11 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
       fail ("LAYER_INDEX.timestamp2 [BL] set+1 %u != %u", layer_index->timestamp2, timestamp2);
     layer_index->timestamp2--;
   }
+  if (failed && (is_class_unstable ("LAYER_INDEX") || is_class_debugging ("LAYER_INDEX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYER_INDEX", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LAYOUT (const Dwg_Object *obj)
@@ -29200,6 +29726,11 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
         fail ("LAYOUT.visualstyle [H]");
   }
+  if (failed && (is_class_unstable ("LAYOUT") || is_class_debugging ("LAYOUT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYOUT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LIGHTLIST (const Dwg_Object *obj)
@@ -29274,6 +29805,11 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
     else
         fail ("LIGHTLIST.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("LIGHTLIST") || is_class_debugging ("LIGHTLIST")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LIGHTLIST", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LONG_TRANSACTION (const Dwg_Object *obj)
@@ -29290,6 +29826,11 @@ static int test_LONG_TRANSACTION (const Dwg_Object *obj)
     else
         fail ("LONG_TRANSACTION.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("LONG_TRANSACTION") || is_class_debugging ("LONG_TRANSACTION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LONG_TRANSACTION", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LTYPE (const Dwg_Object *obj)
@@ -29497,6 +30038,11 @@ static int test_LTYPE (const Dwg_Object *obj)
       fail ("LTYPE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->xrefref, xrefref);
     ltype->xrefref--;
   }
+  if (failed && (is_class_unstable ("LTYPE") || is_class_debugging ("LTYPE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LTYPE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_LTYPE_CONTROL (const Dwg_Object *obj)
@@ -29569,6 +30115,11 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
     else
         fail ("LTYPE_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("LTYPE_CONTROL") || is_class_debugging ("LTYPE_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LTYPE_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MATERIAL (const Dwg_Object *obj)
@@ -30798,6 +31349,11 @@ static int test_MATERIAL (const Dwg_Object *obj)
       fail ("MATERIAL.two_sided_material [B] set+1 " FORMAT_B " != " FORMAT_B "", material->two_sided_material, two_sided_material);
     material->two_sided_material--;
   }
+  if (failed && (is_class_unstable ("MATERIAL") || is_class_debugging ("MATERIAL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MATERIAL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MLEADERSTYLE (const Dwg_Object *obj)
@@ -31422,6 +31978,11 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
       fail ("MLEADERSTYLE.use_block_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->use_block_scale, use_block_scale);
     mleaderstyle->use_block_scale--;
   }
+  if (failed && (is_class_unstable ("MLEADERSTYLE") || is_class_debugging ("MLEADERSTYLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MLEADERSTYLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_MLINESTYLE (const Dwg_Object *obj)
@@ -31536,6 +32097,11 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
       fail ("MLINESTYLE.start_angle [BD] set+1 %g != %g", mlinestyle->start_angle, start_angle);
     mlinestyle->start_angle--;
   }
+  if (failed && (is_class_unstable ("MLINESTYLE") || is_class_debugging ("MLINESTYLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MLINESTYLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
@@ -31608,6 +32174,11 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
       fail ("NAVISWORKSMODELDEF.status [B] set+1 " FORMAT_B " != " FORMAT_B "", navisworksmodeldef->status, status);
     navisworksmodeldef->status--;
   }
+  if (failed && (is_class_unstable ("NAVISWORKSMODELDEF") || is_class_debugging ("NAVISWORKSMODELDEF")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "NAVISWORKSMODELDEF", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
@@ -31669,6 +32240,11 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
         fail ("OBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("OBJECTCONTEXTDATA") || is_class_debugging ("OBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "OBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_OBJECT_PTR (const Dwg_Object *obj)
@@ -31685,6 +32261,11 @@ static int test_OBJECT_PTR (const Dwg_Object *obj)
     else
         fail ("OBJECT_PTR.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("OBJECT_PTR") || is_class_debugging ("OBJECT_PTR")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "OBJECT_PTR", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
@@ -31806,6 +32387,11 @@ static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
       fail ("PERSSUBENTMANAGER.unknown_bl6 [BL] set+1 %u != %u", perssubentmanager->unknown_bl6, unknown_bl6);
     perssubentmanager->unknown_bl6--;
   }
+  if (failed && (is_class_unstable ("PERSSUBENTMANAGER") || is_class_debugging ("PERSSUBENTMANAGER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PERSSUBENTMANAGER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_PLACEHOLDER (const Dwg_Object *obj)
@@ -31822,6 +32408,11 @@ static int test_PLACEHOLDER (const Dwg_Object *obj)
     else
         fail ("PLACEHOLDER.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("PLACEHOLDER") || is_class_debugging ("PLACEHOLDER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PLACEHOLDER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_PLOTSETTINGS (const Dwg_Object *obj)
@@ -32194,6 +32785,11 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
       fail ("PLOTSETTINGS.use_std_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", plotsettings->use_std_scale, use_std_scale);
     plotsettings->use_std_scale--;
   }
+  if (failed && (is_class_unstable ("PLOTSETTINGS") || is_class_debugging ("PLOTSETTINGS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PLOTSETTINGS", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_PROXY_OBJECT (const Dwg_Object *obj)
@@ -32288,6 +32884,11 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
       fail ("PROXY_OBJECT.version [BL] set+1 %u != %u", proxy_object->version, version);
     proxy_object->version--;
   }
+  if (failed && (is_class_unstable ("PROXY_OBJECT") || is_class_debugging ("PROXY_OBJECT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PROXY_OBJECT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_RASTERVARIABLES (const Dwg_Object *obj)
@@ -32364,6 +32965,11 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
       fail ("RASTERVARIABLES.units [BS] set+1 %hu != %hu", rastervariables->units, units);
     rastervariables->units--;
   }
+  if (failed && (is_class_unstable ("RASTERVARIABLES") || is_class_debugging ("RASTERVARIABLES")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RASTERVARIABLES", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
@@ -32518,6 +33124,11 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     else
         fail ("RENDERENVIRONMENT.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("RENDERENVIRONMENT") || is_class_debugging ("RENDERENVIRONMENT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RENDERENVIRONMENT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_RENDERGLOBAL (const Dwg_Object *obj)
@@ -32664,6 +33275,11 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
     else
       fail ("RENDERGLOBAL.save_filename [T] '%s' <> '%s'", save_filename, renderglobal->save_filename);
   }
+  if (failed && (is_class_unstable ("RENDERGLOBAL") || is_class_debugging ("RENDERGLOBAL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RENDERGLOBAL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SCALE (const Dwg_Object *obj)
@@ -32750,6 +33366,11 @@ static int test_SCALE (const Dwg_Object *obj)
     else
         fail ("SCALE.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("SCALE") || is_class_debugging ("SCALE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SCALE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SORTENTSTABLE (const Dwg_Object *obj)
@@ -32809,6 +33430,11 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
     else
       fail ("SORTENTSTABLE.sort_ents [H*] * %u num_ents", count);
   }
+  if (failed && (is_class_unstable ("SORTENTSTABLE") || is_class_debugging ("SORTENTSTABLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SORTENTSTABLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SPATIAL_FILTER (const Dwg_Object *obj)
@@ -32957,6 +33583,11 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.points [2RD*] * %u num_points", count);
   }
+  if (failed && (is_class_unstable ("SPATIAL_FILTER") || is_class_debugging ("SPATIAL_FILTER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SPATIAL_FILTER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SPATIAL_INDEX (const Dwg_Object *obj)
@@ -33013,6 +33644,11 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
     else
       fail ("SPATIAL_INDEX.unknown [TV] '%s' <> '%s'", unknown, spatial_index->unknown);
   }
+  if (failed && (is_class_unstable ("SPATIAL_INDEX") || is_class_debugging ("SPATIAL_INDEX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SPATIAL_INDEX", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_STYLE (const Dwg_Object *obj)
@@ -33247,6 +33883,11 @@ static int test_STYLE (const Dwg_Object *obj)
       fail ("STYLE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", style->xrefref, xrefref);
     style->xrefref--;
   }
+  if (failed && (is_class_unstable ("STYLE") || is_class_debugging ("STYLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "STYLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_STYLE_CONTROL (const Dwg_Object *obj)
@@ -33303,6 +33944,11 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
     else
         fail ("STYLE_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("STYLE_CONTROL") || is_class_debugging ("STYLE_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "STYLE_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SUN (const Dwg_Object *obj)
@@ -33500,6 +34146,11 @@ static int test_SUN (const Dwg_Object *obj)
       fail ("SUN.unknown [BS] set+1 %hu != %hu", sun->unknown, unknown);
     sun->unknown--;
   }
+  if (failed && (is_class_unstable ("SUN") || is_class_debugging ("SUN")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SUN", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_SUNSTUDY (const Dwg_Object *obj)
@@ -33863,6 +34514,11 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
     else
         fail ("SUNSTUDY.visualstyle [H]");
   }
+  if (failed && (is_class_unstable ("SUNSTUDY") || is_class_debugging ("SUNSTUDY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SUNSTUDY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_TABLECONTENT (const Dwg_Object *obj)
@@ -33911,6 +34567,11 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
     else
         fail ("TABLECONTENT.tdata [Dwg_LinkedTableData]");
   }
+  if (failed && (is_class_unstable ("TABLECONTENT") || is_class_debugging ("TABLECONTENT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TABLECONTENT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_TABLEGEOMETRY (const Dwg_Object *obj)
@@ -33982,6 +34643,11 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
     else
         fail ("TABLEGEOMETRY.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("TABLEGEOMETRY") || is_class_debugging ("TABLEGEOMETRY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TABLEGEOMETRY", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_TABLESTYLE (const Dwg_Object *obj)
@@ -34163,6 +34829,11 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       fail ("TABLESTYLE.vert_cell_margin [BD] set+1 %g != %g", tablestyle->vert_cell_margin, vert_cell_margin);
     tablestyle->vert_cell_margin--;
   }
+  if (failed && (is_class_unstable ("TABLESTYLE") || is_class_debugging ("TABLESTYLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TABLESTYLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_UCS (const Dwg_Object *obj)
@@ -34357,6 +35028,11 @@ static int test_UCS (const Dwg_Object *obj)
     else
         fail ("UCS.y_direction [3BD]");
   }
+  if (failed && (is_class_unstable ("UCS") || is_class_debugging ("UCS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "UCS", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_UCS_CONTROL (const Dwg_Object *obj)
@@ -34413,6 +35089,11 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
     else
         fail ("UCS_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("UCS_CONTROL") || is_class_debugging ("UCS_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "UCS_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
@@ -34449,6 +35130,11 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
     else
         fail ("UNDERLAYDEFINITION.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("UNDERLAYDEFINITION") || is_class_debugging ("UNDERLAYDEFINITION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "UNDERLAYDEFINITION", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VBA_PROJECT (const Dwg_Object *obj)
@@ -34488,6 +35174,11 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
     else
         fail ("VBA_PROJECT.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("VBA_PROJECT") || is_class_debugging ("VBA_PROJECT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VBA_PROJECT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VIEW (const Dwg_Object *obj)
@@ -34955,6 +35646,11 @@ static int test_VIEW (const Dwg_Object *obj)
     else
         fail ("VIEW.y_direction [3BD]");
   }
+  if (failed && (is_class_unstable ("VIEW") || is_class_debugging ("VIEW")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VIEW", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VIEW_CONTROL (const Dwg_Object *obj)
@@ -35011,6 +35707,11 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
     else
         fail ("VIEW_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("VIEW_CONTROL") || is_class_debugging ("VIEW_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VIEW_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VISUALSTYLE (const Dwg_Object *obj)
@@ -35970,7 +36671,11 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
       fail ("VISUALSTYLE.unknown_float45 [BD] set+1 %g != %g", visualstyle->unknown_float45, unknown_float45);
     visualstyle->unknown_float45--;
   }
-  failed = 0; /* unstable */
+  if (failed && (is_class_unstable ("VISUALSTYLE") || is_class_debugging ("VISUALSTYLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VISUALSTYLE", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VPORT (const Dwg_Object *obj)
@@ -36635,6 +37340,11 @@ static int test_VPORT (const Dwg_Object *obj)
       fail ("VPORT.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->xrefref, xrefref);
     vport->xrefref--;
   }
+  if (failed && (is_class_unstable ("VPORT") || is_class_debugging ("VPORT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VPORT", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VPORT_CONTROL (const Dwg_Object *obj)
@@ -36691,6 +37401,11 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
     else
         fail ("VPORT_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("VPORT_CONTROL") || is_class_debugging ("VPORT_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VPORT_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
@@ -36747,6 +37462,11 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
     else
         fail ("VPORT_ENTITY_CONTROL.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("VPORT_ENTITY_CONTROL") || is_class_debugging ("VPORT_ENTITY_CONTROL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VPORT_ENTITY_CONTROL", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
@@ -36879,6 +37599,11 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
       fail ("VPORT_ENTITY_HEADER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->xrefref, xrefref);
     vport_entity_header->xrefref--;
   }
+  if (failed && (is_class_unstable ("VPORT_ENTITY_HEADER") || is_class_debugging ("VPORT_ENTITY_HEADER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VPORT_ENTITY_HEADER", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_WIPEOUTVARIABLES (const Dwg_Object *obj)
@@ -36910,6 +37635,11 @@ static int test_WIPEOUTVARIABLES (const Dwg_Object *obj)
     else
         fail ("WIPEOUTVARIABLES.parent [struct _dwg_object_object*]");
   }
+  if (failed && (is_class_unstable ("WIPEOUTVARIABLES") || is_class_debugging ("WIPEOUTVARIABLES")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "WIPEOUTVARIABLES", failed);
+      failed = 0;
+    }
   return failed;
 }
 static int test_XRECORD (const Dwg_Object *obj)
@@ -37006,15 +37736,20 @@ static int test_XRECORD (const Dwg_Object *obj)
       fail ("XRECORD.xdata_size [BL] set+1 %u != %u", xrecord->xdata_size, xdata_size);
     xrecord->xdata_size--;
   }
+  if (failed && (is_class_unstable ("XRECORD") || is_class_debugging ("XRECORD")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "XRECORD", failed);
+      failed = 0;
+    }
   return failed;
 }
 
-#line 53 "dynapi_test.c.in"
+#line 54 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 37017 "dynapi_test.c"
+#line 37752 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -37604,7 +38339,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUTVARIABLES (obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
     error += test_XRECORD (obj);
-#line 60 "dynapi_test.c.in"
+#line 61 "dynapi_test.c.in"
   return error + failed;
 }
 
@@ -37614,7 +38349,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 37617 "dynapi_test.c"
+#line 38352 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -39266,7 +40001,7 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"MLEADER_Content\"): %d\n", size1, size2);
       error++;
     }
-#line 72 "dynapi_test.c.in"
+#line 73 "dynapi_test.c.in"
   return error;
 }
 

@@ -1221,10 +1221,12 @@ EOF
         }
       }
     }
-    if ($name eq 'VISUALSTYLE') {
-      print $fh "  failed = 0; /* unstable */\n";
-    }
     print $fh <<"EOF";
+  if (failed && (is_class_unstable ("$name") || is_class_debugging ("$name")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "$name", failed);
+      failed = 0;
+    }
   return failed;
 }
 EOF
