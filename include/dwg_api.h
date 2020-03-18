@@ -2350,7 +2350,8 @@ dwg_obj_mlinestyle_set_desc (dwg_obj_mlinestyle *restrict mlinestyle,
                              const char *restrict desc, int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-int dwg_obj_mlinestyle_get_flag (const dwg_obj_mlinestyle *restrict mlinestyle,
+EXPORT int
+dwg_obj_mlinestyle_get_flag (const dwg_obj_mlinestyle *restrict mlinestyle,
                                  int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
