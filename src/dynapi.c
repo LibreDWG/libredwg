@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1304 "gen-dynapi.pl"
+#line 1310 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -7977,7 +7977,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 1387 "gen-dynapi.pl"
+#line 1393 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -8238,7 +8238,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
           char *utf8 = bit_convert_TU (wstr);
-          if (!utf8) // some conversion error, invalid wchar (nyi)
+          if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
             return false;
           *out = utf8;
           if (isnew)
@@ -8309,7 +8309,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
-            if (!utf8) // some conversion error, invalid wchar (nyi)
+            if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
             if (isnew)
@@ -8446,7 +8446,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
-            if (!utf8) // some conversion error, invalid wchar (nyi)
+            if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
             if (isnew)

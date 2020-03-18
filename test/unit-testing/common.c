@@ -380,7 +380,6 @@ test_code (const char *filename, int cov)
       output_test (&g_dwg);
       dwg_free (&g_dwg);
     }
-
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
   error = (error >= DWG_ERR_CRITICAL || numfailed () > 0) ? 1 : 0;
@@ -446,6 +445,7 @@ output_test (dwg_data *dwg)
   dwg_obj_block_control *_ctrl;
   dwg_object_ref *ref, **hdr_refs;
 
+  dwg_api_init_version (dwg);
   _hdr = dwg_get_block_header (dwg, &error);
   _ctrl = dwg_block_header_get_block_control (_hdr, &error);
 
@@ -816,7 +816,7 @@ api_common_entity (dwg_object *obj)
     if (ent->field)                                                           \
       {                                                                       \
         char *old = DWGAPI_ENT_NAME (ent, field) (ent, &error);               \
-        if (error || strcmp (old, value))                                     \
+        if (error || (old && strcmp (old, value)))                            \
           fail ("old API dwg_ent_" #ent "_get_" #field ": \"%s\"", old);      \
         if (_dwg_version >= R_2007)                                           \
           free (old);                                                         \
@@ -831,7 +831,7 @@ api_common_entity (dwg_object *obj)
     if (ent->field)                                                           \
       {                                                                       \
         char *old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);               \
-        if (error || strcmp (old, value))                                     \
+        if (error || (old && strcmp (old, value)))                            \
           fail ("old API dwg_obj_" #ent "_get_" #field ": \"%s\"", old);      \
         if (_dwg_version >= R_2007)                                           \
           free (old);                                                         \
@@ -841,14 +841,24 @@ api_common_entity (dwg_object *obj)
   }
 
 #define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type, value)                  \
-  CHK_ENTITY_TYPE (ent, name, field, type, value);                            \
-  if (DWGAPI_ENT_NAME (ent, field) (ent, &error) != value || error)           \
-    fail ("old API dwg_ent_" #ent "_get_" #field)
+  {                                                                           \
+    BITCODE_##type old;                                                       \
+    CHK_ENTITY_TYPE (ent, name, field, type, value);                          \
+    old = DWGAPI_ENT_NAME (ent, field) (ent, &error);                         \
+    if (error || old != value)                                                \
+      fail ("old API dwg_ent_" #ent "_get_" #field ": " FORMAT_##type " != "  \
+        FORMAT_##type, old, value);                                           \
+  }
 
 #define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type, value)                  \
-  CHK_ENTITY_TYPE (ent, name, field, type, value);                            \
-  if (DWGAPI_OBJ_NAME (ent, field) (ent, &error) != value || error)           \
-    fail ("old API dwg_obj_" #ent "_get_" #field)
+  {                                                                           \
+    BITCODE_##type old;                                                       \
+    CHK_ENTITY_TYPE (ent, name, field, type, value);                          \
+    old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);                         \
+    if (error || old != value)                                                \
+      fail ("old API dwg_obj_" #ent "_get_" #field ": " FORMAT_##type " != "  \
+        FORMAT_##type, old, value);                                           \
+  }
 
 #define CHK_ENTITY_2RD_W_OLD(ent, name, field, value)                         \
   CHK_ENTITY_2RD (ent, name, field, value);                                   \

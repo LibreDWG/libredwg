@@ -16,8 +16,9 @@ api_process (dwg_object *obj)
 
   dwg_obj_appid *appid = dwg_object_to_APPID (obj);
 
-  CHK_ENTITY_TYPE_W_OBJ (appid, APPID, flag, RC, flag);
-  CHK_ENTITY_UTF8TEXT (appid, APPID, name, name);
+  CHK_ENTITY_TYPE (appid, APPID, flag, RC, flag);
+  // the api variant returns a mask: appid->flag & 1 || appid->xrefref >> 6 || appid->xrefdep >> 4
+  CHK_ENTITY_UTF8TEXT_W_OBJ (appid, APPID, name, name);
   CHK_ENTITY_TYPE (appid, APPID, used, RS, used);
   CHK_ENTITY_TYPE (appid, APPID, xrefref, B, xrefref);
   CHK_ENTITY_TYPE (appid, APPID, xrefindex_plus1, BS, xrefindex_plus1);
