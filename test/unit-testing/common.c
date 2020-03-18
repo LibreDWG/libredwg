@@ -17,6 +17,8 @@
 #include "tests_common.h"
 
 dwg_data g_dwg;
+int g_counter;
+#define MAX_COUNTER 10
 
 /// test a DWG file
 int test_code (const char *filename, int cov);
@@ -27,13 +29,13 @@ int test_subdirs (const char *dirname, int cov);
 /// Return the name of a handle
 char *handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl);
 
-/// Declaration of function to iterate over objects of a block
+/// iterate over objects of a block
 void output_BLOCK_HEADER (dwg_object_ref *ref);
 
-/// Declaration for function that checks the dwg type and calls output_process
+/// Check the dwg type and calls output_process
 void output_object (dwg_object *obj);
 
-/// Function declaration for blocks to be iterated over
+/// blocks to be iterated over
 void output_test (dwg_data *dwg);
 
 void output_process (dwg_object *obj);
@@ -402,6 +404,7 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
 {
   dwg_object *hdr, *obj;
   int error;
+  g_counter = 0;
 
   if (!ref)
     {
@@ -464,24 +467,25 @@ output_test (dwg_data *dwg)
       // printf ("%s [%d]\n", obj->name, obj->index);
       if (obj->fixedtype == DWG_TYPE)
         {
-          output_object (obj);
+          g_counter++;
+          output_process (obj);
         }
     }
     /* also process blocks? we better find DWGs with these */
   if (!numpassed () && !numfailed ())
     {
       /* and now also all subtypes and entities in blocks */
-      unsigned int i;
+      unsigned int j;
       unsigned int num_hdr_objs = dwg_obj_block_control_get_num_entries(_ctrl, &error);
       if (error || !num_hdr_objs)
         return;
       hdr_refs = dwg_obj_block_control_get_block_headers(_ctrl, &error);
       if (error)
         return;
-      for (i = 0; i < num_hdr_objs; i++)
+      for (j = 0; j < num_hdr_objs; j++)
         {
-          if (hdr_refs[i])
-            output_BLOCK_HEADER (hdr_refs[i]);
+          if (hdr_refs[j])
+            output_BLOCK_HEADER (hdr_refs[j]);
         }
       free (hdr_refs);
     }
@@ -507,6 +511,7 @@ output_object (dwg_object *obj)
     }
   if (obj->fixedtype == DWG_TYPE)
     {
+      g_counter++;
       output_process (obj);
     }
 }
@@ -527,9 +532,9 @@ void
 print_api (dwg_object *obj)
 {
 #ifdef DWG_TYPE
-  printf ("Unit-testing type %d %s:\n", DWG_TYPE, obj->name);
+  printf ("Unit-testing type %d %s [%d]:\n", DWG_TYPE, obj->name, g_counter);
 #else
-  printf ("Test dwg_api and dynapi:\n");
+  printf ("Test dwg_api and dynapi [%d]:\n", g_counter);
 #endif
   api_process (obj);
 
@@ -537,7 +542,8 @@ print_api (dwg_object *obj)
     api_common_entity (obj);
   else if (obj->supertype == DWG_SUPERTYPE_OBJECT && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
     api_common_object (obj);
-  printf ("\n");
+  if (g_counter <= MAX_COUNTER)
+    printf ("\n");
 }
 
 #define CHK_COMMON_TYPE(ent, field, type, value)                              \
@@ -563,9 +569,16 @@ print_api (dwg_object *obj)
       {                                                                       \
         char *_hdlname = dwg_dynapi_handle_name (dwg, hdl);                   \
         if (hdl == (BITCODE_H)ent->parent->field)                             \
-          ok (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "", ARGS_REF (hdl));  \
+          {                                                                   \
+            if (g_counter > MAX_COUNTER)                                      \
+              pass ();                                                        \
+            else                                                              \
+              ok (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "",        \
+                  ARGS_REF (hdl));                                            \
+          }                                                                   \
         else                                                                  \
-          fail (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "", ARGS_REF (hdl)); \
+          fail (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "",          \
+                ARGS_REF (hdl));                                              \
         if (version >= R_2007)                                                \
           free (_hdlname);                                                    \
       }                                                                       \
@@ -584,11 +597,16 @@ print_api (dwg_object *obj)
           char *_hdlname = _hdl ? dwg_dynapi_handle_name (dwg, _hdl) : NULL;  \
           if (_hdl == ent->parent->field[_i])                                 \
             {                                                                 \
-              if (_hdl)                                                       \
-                ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",        \
-                    ARGS_REF (_hdl));                                         \
+              if (g_counter > MAX_COUNTER)                                    \
+                pass ();                                                      \
               else                                                            \
-                ok (#field "[%d]: NULL", _i);                                 \
+                {                                                             \
+                  if (_hdl)                                                   \
+                    ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",    \
+                        ARGS_REF (_hdl));                                     \
+                  else                                                        \
+                    ok (#field "[%d]: NULL", _i);                             \
+                }                                                             \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -596,7 +614,12 @@ print_api (dwg_object *obj)
                 fail (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",      \
                       ARGS_REF (_hdl));                                       \
               else                                                            \
-                ok (#field "[%d]: NULL", _i);                                 \
+                {                                                             \
+                  if (g_counter > MAX_COUNTER)                                \
+                    pass ();                                                  \
+                  else                                                        \
+                    ok (#field "[%d]: NULL", _i);                             \
+                }                                                             \
             }                                                                 \
           if (_hdlname && version >= R_2007)                                  \
             free (_hdlname);                                                  \
@@ -684,7 +707,12 @@ api_common_entity (dwg_object *obj)
 
 #define _CHK_ENTITY_UTF8TEXT(ent, name, field, value)                         \
   if (dwg_dynapi_entity_utf8text (ent, #name, #field, &value, &isnew, NULL))  \
-    ok (#name "." #field ":\t\"%s\"", value);                                 \
+    {                                                                         \
+      if (g_counter > MAX_COUNTER)                                            \
+        pass ();                                                              \
+      else                                                                    \
+        ok (#name "." #field ":\t\"%s\"", value);                             \
+    }                                                                         \
   else                                                                        \
     {                                                                         \
       Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;       \
@@ -705,7 +733,12 @@ api_common_entity (dwg_object *obj)
   else                                                                        \
     {                                                                         \
       if (value == ent->field)                                                \
-        ok (#name "." #field ":\t" FORMAT_##type, value);                     \
+        {                                                                     \
+          if (g_counter > MAX_COUNTER)                                                 \
+            pass ();                                                          \
+          else                                                                \
+            ok (#name "." #field ":\t" FORMAT_##type, value);                 \
+        }                                                                     \
       else                                                                    \
         fail (#name "." #field ":\t" FORMAT_##type " [" #type "]", value);    \
     }
@@ -716,7 +749,12 @@ api_common_entity (dwg_object *obj)
   else                                                                        \
     {                                                                         \
       if (memcmp (&value, &ent->field, sizeof (Dwg_Color)) == 0)              \
-        ok (#name "." #field ":\t" FORMAT_BSd, value.index);                  \
+        {                                                                     \
+          if (g_counter > MAX_COUNTER)                                                 \
+            pass ();                                                          \
+          else                                                                \
+            ok (#name "." #field ":\t" FORMAT_BSd, value.index);              \
+        }                                                                     \
       else                                                                    \
         fail (#name "." #field ":\t" FORMAT_BSd " [CMC]", value.index);       \
     }
@@ -733,8 +771,11 @@ api_common_entity (dwg_object *obj)
         char *_hdlname = dwg_dynapi_handle_name (obj->parent, hdl);           \
         if (hdl == ent->field)                                                \
           {                                                                   \
-            ok (#name "." #field ": %s " FORMAT_REF,                          \
-                _hdlname ? _hdlname : "", ARGS_REF (hdl));                    \
+            if (g_counter > MAX_COUNTER)                                               \
+              pass ();                                                        \
+            else                                                              \
+              ok (#name "." #field ": %s " FORMAT_REF,                        \
+                  _hdlname ? _hdlname : "", ARGS_REF (hdl));                  \
           }                                                                   \
         else                                                                  \
           {                                                                   \
@@ -760,8 +801,11 @@ api_common_entity (dwg_object *obj)
           char *_hdlname = dwg_dynapi_handle_name (obj->parent, _hdl);        \
           if (_hdl == ent->field[_i])                                         \
             {                                                                 \
-              ok (#name "." #field "[%d]: %s " FORMAT_REF, _i,                \
-                  _hdlname ? _hdlname : "", ARGS_REF (_hdl));                 \
+              if (g_counter > MAX_COUNTER)                                    \
+                pass ();                                                      \
+              else                                                            \
+                ok (#name "." #field "[%d]: %s " FORMAT_REF, _i,              \
+                    _hdlname ? _hdlname : "", ARGS_REF (_hdl));               \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -779,7 +823,12 @@ api_common_entity (dwg_object *obj)
   else                                                                        \
     {                                                                         \
       if (value.x == ent->field.x && value.y == ent->field.y)                 \
-        ok (#name "." #field ":\t(%f, %f)", value.x, value.y);                \
+        {                                                                     \
+          if (g_counter > MAX_COUNTER)                                        \
+            pass ();                                                          \
+          else                                                                \
+            ok (#name "." #field ":\t(%f, %f)", value.x, value.y);            \
+        }                                                                     \
       else                                                                    \
         fail (#name "." #field ":\t(%f, %f)", value.x, value.y);              \
     }
@@ -791,7 +840,13 @@ api_common_entity (dwg_object *obj)
     {                                                                         \
       if (value.x == ent->field.x && value.y == ent->field.y                  \
           && value.z == ent->field.z)                                         \
-        ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, value.z);   \
+        {                                                                     \
+          if (g_counter > MAX_COUNTER)                                        \
+            pass ();                                                          \
+          else                                                                \
+            ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y,         \
+                value.z);                                                     \
+        }                                                                     \
       else                                                                    \
         fail (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, value.z); \
     }
@@ -833,6 +888,8 @@ api_common_entity (dwg_object *obj)
         char *old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);               \
         if (error || (old && strcmp (old, value)))                            \
           fail ("old API dwg_obj_" #ent "_get_" #field ": \"%s\"", old);      \
+        else                                                                  \
+          pass ();                                                            \
         if (_dwg_version >= R_2007)                                           \
           free (old);                                                         \
       }                                                                       \
@@ -846,8 +903,11 @@ api_common_entity (dwg_object *obj)
     CHK_ENTITY_TYPE (ent, name, field, type, value);                          \
     old = DWGAPI_ENT_NAME (ent, field) (ent, &error);                         \
     if (error || old != value)                                                \
-      fail ("old API dwg_ent_" #ent "_get_" #field ": " FORMAT_##type " != "  \
-        FORMAT_##type, old, value);                                           \
+      fail ("old API dwg_ent_" #ent "_get_" #field ": " FORMAT_##type         \
+            " != " FORMAT_##type,                                             \
+            old, value);                                                      \
+    else                                                                      \
+      pass ();                                                                \
   }
 
 #define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type, value)                  \
@@ -858,6 +918,8 @@ api_common_entity (dwg_object *obj)
     if (error || old != value)                                                \
       fail ("old API dwg_obj_" #ent "_get_" #field ": " FORMAT_##type " != "  \
         FORMAT_##type, old, value);                                           \
+    else                                                                      \
+      pass ();                                                                \
   }
 
 #define CHK_ENTITY_2RD_W_OLD(ent, name, field, value)                         \
@@ -867,6 +929,8 @@ api_common_entity (dwg_object *obj)
     DWGAPI_ENT_NAME (ent, field) (ent, &_pt2d, &error);                       \
     if (error || memcmp (&value, &_pt2d, sizeof (value)))                     \
       fail ("old API dwg_ent_" #ent "_get_" #field);                          \
+    else                                                                      \
+      pass ();                                                                \
   }
 
 #define CHK_ENTITY_3RD_W_OLD(ent, name, field, value)                         \
@@ -876,6 +940,8 @@ api_common_entity (dwg_object *obj)
     DWGAPI_ENT_NAME (ent, field) (ent, &_pt3d, &error);                       \
     if (error || memcmp (&value, &_pt3d, sizeof (value)))                     \
       fail ("old API dwg_ent_" #ent "_get_" #field);                          \
+    else                                                                      \
+      pass ();                                                                \
   }
 
 #define CHK_SUBCLASS_TYPE(ptr, name, field, typ)                              \
@@ -886,10 +952,16 @@ api_common_entity (dwg_object *obj)
     else                                                                      \
       {                                                                       \
         if (ptr.field == value)                                               \
-          ok (#name "." #field ":\t" FORMAT_##typ, ptr.field);                \
+          {                                                                   \
+            if (g_counter > MAX_COUNTER)                                      \
+              pass ();                                                        \
+            else                                                              \
+              ok (#name "." #field ":\t" FORMAT_##typ, ptr.field);            \
+          }                                                                   \
         else                                                                  \
-          fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]", ptr.field);\
-        }                                                                     \
+          fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",            \
+                ptr.field);                                                   \
+      }                                                                       \
   }
 #define CHK_SUBCLASS_3RD(ptr, name, field)                                    \
   {                                                                           \
@@ -900,11 +972,16 @@ api_common_entity (dwg_object *obj)
       {                                                                       \
         if (value.x == ptr.field.x && value.y == ptr.field.y                  \
             && value.z == ptr.field.z)                                        \
-          ok (#name "." #field ":\t(%f, %f, %f)",                             \
-              value.x, value.y, value.z);                                     \
+          {                                                                   \
+            if (g_counter > MAX_COUNTER)                                      \
+              pass ();                                                        \
+            else                                                              \
+              ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y,       \
+                  value.z);                                                   \
+          }                                                                   \
         else                                                                  \
-          fail (#name "." #field ":\t(%f, %f, %f)",                           \
-                value.x, value.y, value.z);                                   \
+          fail (#name "." #field ":\t(%f, %f, %f)", value.x, value.y,         \
+                value.z);                                                     \
       }                                                                       \
   }
 #define CHK_SUBCLASS_2RD(ptr, name, field)                                    \
@@ -915,7 +992,12 @@ api_common_entity (dwg_object *obj)
     else                                                                      \
       {                                                                       \
         if (value.x == ptr.field.x && value.y == ptr.field.y)                 \
-          ok (#name "." #field ":\t(%f, %f)", value.x, value.y);              \
+          {                                                                   \
+            if (g_counter > MAX_COUNTER)                                      \
+              pass ();                                                        \
+            else                                                              \
+              ok (#name "." #field ":\t(%f, %f)", value.x, value.y);          \
+          }                                                                   \
         else                                                                  \
           fail (#name "." #field ":\t(%f, %f)", value.x, value.y);            \
       }                                                                       \
@@ -927,17 +1009,28 @@ api_common_entity (dwg_object *obj)
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        char *_hdlname = value ? dwg_dynapi_handle_name (obj->parent, value) : NULL; \
+        char *_hdlname                                                        \
+            = value ? dwg_dynapi_handle_name (obj->parent, value) : NULL;     \
         if (!value)                                                           \
           {                                                                   \
             if (!ptr.field)                                                   \
-              ok (#name "." #field ":\tNULL");                                \
+              {                                                               \
+                if (g_counter > MAX_COUNTER)                                  \
+                  pass ();                                                    \
+                else                                                          \
+                  ok (#name "." #field ":\tNULL");                            \
+              }                                                               \
             else                                                              \
               fail (#name "." #field ":\tNULL");                              \
           }                                                                   \
         else if (memcmp (&ptr.field, &value, sizeof value) == 0)              \
-          ok (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",          \
-              ARGS_REF (value));                                              \
+          {                                                                   \
+            if (g_counter > MAX_COUNTER)                                      \
+              pass ();                                                        \
+            else                                                              \
+              ok (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",      \
+                  ARGS_REF (value));                                          \
+          }                                                                   \
         else                                                                  \
           fail (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",        \
                 ARGS_REF (value));                                            \
@@ -949,7 +1042,12 @@ api_common_entity (dwg_object *obj)
   {                                                                           \
     BITCODE_TV value;                                                         \
     if (dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))        \
-      ok (#name "." #field ":\t\"%s\"", value);                               \
+      {                                                                       \
+        if (g_counter > MAX_COUNTER)                                          \
+          pass ();                                                            \
+        else                                                                  \
+          ok (#name "." #field ":\t\"%s\"", value);                           \
+      }                                                                       \
     else                                                                      \
       {                                                                       \
         if (dwg_version < R_2007)                                             \
@@ -962,7 +1060,13 @@ api_common_entity (dwg_object *obj)
   if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &ptr.field, NULL))     \
     fail (#name "." #field);                                                  \
   else                                                                        \
-    ok (#name "." #field ":\t%d", ptr.field.index)
+    {                                                                         \
+      if (g_counter > MAX_COUNTER)                                            \
+        pass ();                                                              \
+      else                                                                    \
+        ok (#name "." #field ":\t%d", ptr.field.index);                       \
+    }                                                                         \
+
 
 void
 api_common_object (dwg_object *obj)
