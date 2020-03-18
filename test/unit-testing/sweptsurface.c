@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_B acis_empty;
   BITCODE_B unknown;
   BITCODE_BS version;
-  BITCODE_BL num_blocks;
+  BITCODE_BL i, num_blocks;
   BITCODE_BL* block_size;
   char** encr_sat_data;
   BITCODE_RC* acis_data;
@@ -66,7 +66,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, acis_empty, B, acis_empty);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, version, BS, version);
-  CHK_ENTITY_UTF8TEXT (_obj, SWEPTSURFACE, acis_data, acis_data);
+  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, acis_data, TF, acis_data);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, wireframe_data_present, B, wireframe_data_present);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, point_present, B, point_present);
   CHK_ENTITY_3RD (_obj, SWEPTSURFACE, point, point);
@@ -79,7 +79,7 @@ api_process (dwg_object *obj)
   else
     {
       for (i = 0; i < num_wires; i++)
-        printf ("SWEPTSURFACE.wires[%u]: " FORMAT_BL "\n", i, wire[i].selection_marker);
+        printf ("SWEPTSURFACE.wires[%u]: " FORMAT_BL "\n", i, wires[i].selection_marker);
     }
   if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE", "silhouettes", &silhouettes, NULL))
     fail ("SWEPTSURFACE.silhouettes");
@@ -88,8 +88,6 @@ api_process (dwg_object *obj)
       for (i = 0; i < num_silhouettes; i++)
         printf ("SWEPTSURFACE.silhouettes[%u]: " FORMAT_BL "\n", i, silhouettes[i].vp_id);
     }
-  else
-    fail ("silhouettes");
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, unknown_2007, BL, unknown_2007);
@@ -106,7 +104,7 @@ api_process (dwg_object *obj)
                                 &sweep_entity_transmatrix, NULL))
     fail ("SWEPTSURFACE.sweep_entity_transmatrix");
   else
-    for (int i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
       {
         ok ("SWEPTSURFACE.sweep_entity_transmatrix[%d]: %f", i,
             sweep_entity_transmatrix[i]);
@@ -116,17 +114,17 @@ api_process (dwg_object *obj)
                                 &path_entity_transmatrix, NULL))
     fail ("SWEPTSURFACE.path_entity_transmatrix");
   else
-    for (int i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
       {
         ok ("SWEPTSURFACE.path_entity_transmatrix[%d]: %f", i,
-            path_entity_transmatrixx[i]);
+            path_entity_transmatrix[i]);
       }
   if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE",
                                 "sweep_entity_transmatrix1",
                                 &sweep_entity_transmatrix1, NULL))
     fail ("SWEPTSURFACE.sweep_entity_transmatrix1");
   else
-    for (int i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
       {
         ok ("SWEPTSURFACE.sweep_entity_transmatrix1[%d]: %f", i,
             sweep_entity_transmatrix1[i]);
@@ -136,10 +134,10 @@ api_process (dwg_object *obj)
                                 &path_entity_transmatrix1, NULL))
     fail ("SWEPTSURFACE.path_entity_transmatrix1");
   else
-    for (int i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
       {
         ok ("SWEPTSURFACE.path_entity_transmatrix1[%d]: %f", i,
-            path_entity_transmatrix1x[i]);
+            path_entity_transmatrix1[i]);
       }
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_entity_id, BL, sweep_entity_id);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweepdata_size, BL, sweepdata_size);
