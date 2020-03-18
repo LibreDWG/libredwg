@@ -87,7 +87,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
             if (dwg_dynapi_entity_utf8text (obj->tio.object->tio.APPID, name,
                                             f->name, &value, &isnew, &field))
               {
-                if (strEQ (value, f->value))
+                if (!value || strEQ (value, f->value))
                   ok ("%s.%s: %s", name, f->name, value);
                 else
                   fail ("%s.%s: %s [STRING %s]", name, f->name, value, field.type);
