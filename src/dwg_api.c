@@ -13753,7 +13753,7 @@ dwg_ent_polyline_pface_get_numfaces (
 }
 
 dwg_point_3d *
-dwg_obj_polyline_pface_get_points (const dwg_object *restrict obj,
+dwg_ent_polyline_pface_get_points (const dwg_object *restrict obj,
                                    int *restrict error)
 {
   if (obj && obj->type == DWG_TYPE_POLYLINE_PFACE)

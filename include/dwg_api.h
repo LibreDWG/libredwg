@@ -3834,8 +3834,9 @@ EXPORT BITCODE_BS dwg_ent_polyline_pface_get_numfaces (
     const dwg_ent_polyline_pface *restrict pface, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
+/* not implemented. use the dynapi instead */
 EXPORT dwg_point_3d *
-dwg_obj_polyline_pface_get_points (const dwg_object *restrict obj,
+dwg_ent_polyline_pface_get_points (const dwg_object *restrict obj,
                                    int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
