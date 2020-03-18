@@ -378,6 +378,9 @@ main (int argc, char *argv[])
         {
           char path[80];
           char *top_srcdir = getenv ("top_srcdir");
+          // fixup wrong alldxf_0.inc paths
+          if (len > 3 && dwgfile[0] == '.' && dwgfile[1] == '.' && dwgfile[2] == '/')
+            memmove (dwgfile, &dwgfile[3], len - 2); // include the final \0
           if (top_srcdir)
             {
               strcpy (path, top_srcdir);
