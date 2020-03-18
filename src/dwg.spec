@@ -2783,7 +2783,9 @@ DWG_OBJECT (LTYPE)
         FIELD_VALUE (has_strings_area) = 1;
     }
     PRE (R_13) {
-      DECODER { FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length); }
+      DECODER {
+        FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
+      }
     }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (dashes)

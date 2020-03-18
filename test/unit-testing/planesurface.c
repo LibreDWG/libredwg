@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD point;
   BITCODE_BL num_isolines;
   BITCODE_B isoline_present;
-  BITCODE_BL num_wires;
+  BITCODE_BL i, num_wires;
   Dwg_3DSOLID_wire * wires;
   BITCODE_BL num_silhouettes;
   Dwg_3DSOLID_silhouette * silhouettes;
@@ -29,7 +29,6 @@ api_process (dwg_object *obj)
   BITCODE_H history_id;
   BITCODE_B acis_empty_bit;
 
-  //? sweep_profile, taper_angle
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
@@ -37,11 +36,11 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_ent_loftedsurface *_obj = dwg_object_to_PLANESURFACE (obj);
+  dwg_ent_planesurface *_obj = dwg_object_to_PLANESURFACE (obj);
 
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, acis_empty, B, acis_empty);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, version, BS, version);
-  //CHK_ENTITY_UTF8TEXT (_obj, PLANESURFACE, acis_data, acis_data);
+  CHK_ENTITY_TYPE (_obj, PLANESURFACE, acis_data, TF, acis_data);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, wireframe_data_present, B, wireframe_data_present);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, point_present, B, point_present);
   CHK_ENTITY_3RD (_obj, PLANESURFACE, point, point);
@@ -54,7 +53,7 @@ api_process (dwg_object *obj)
   else
     {
       for (i = 0; i < num_wires; i++)
-        printf ("PLANESURFACE.wires[%u]: " FORMAT_BL "\n", i, wire[i].selection_marker);
+        printf ("PLANESURFACE.wires[%u]: " FORMAT_BL "\n", i, wires[i].selection_marker);
     }
   if (!dwg_dynapi_entity_value (_obj, "PLANESURFACE", "silhouettes", &silhouettes, NULL))
     fail ("PLANESURFACE.silhouettes");
@@ -63,8 +62,6 @@ api_process (dwg_object *obj)
       for (i = 0; i < num_silhouettes; i++)
         printf ("PLANESURFACE.silhouettes[%u]: " FORMAT_BL "\n", i, silhouettes[i].vp_id);
     }
-  else
-    fail ("silhouettes");
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_obj, PLANESURFACE, unknown_2007, BL, unknown_2007);
@@ -72,8 +69,6 @@ api_process (dwg_object *obj)
     }
 
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, modeler_format_version, BS, modeler_format_version);
-  //CHK_ENTITY_TYPE (_obj, PLANESURFACE, bindata_size, BL, bindata_size);
-  //CHK_ENTITY_TYPE (_obj, PLANESURFACE, bindata, TF, bindata); // 310|1
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, u_isolines, BS, u_isolines);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, v_isolines, BS, v_isolines);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, class_version, BL, class_version);

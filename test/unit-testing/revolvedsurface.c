@@ -29,10 +29,7 @@ api_process (dwg_object *obj)
   BITCODE_H history_id;
   BITCODE_B acis_empty_bit;
 
-  //? sweep_profile, taper_angle
   BITCODE_BS modeler_format_version;
-  BITCODE_BL bindata_size;
-  BITCODE_TF bindata;
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
   BITCODE_BL class_version;
@@ -56,7 +53,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_empty, B, acis_empty);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, version, BS, version);
-  //CHK_ENTITY_UTF8TEXT (_obj, REVOLVEDSURFACE, acis_data, acis_data);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_data, TF, acis_data);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, wireframe_data_present, B, wireframe_data_present);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, point_present, B, point_present);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, point, point);

@@ -54,9 +54,9 @@ testobjects = \
 	assocaligneddimactionbody \
 	assocdependency \
 	assocnetwork \
+	assocosnappointrefactionparam \
 	assocperssubentmanager \
 	assocplanesurfaceactionbody \
-	assocosnappointrefactionparam \
 	attdef \
 	attrib \
 	block \
@@ -64,7 +64,9 @@ testobjects = \
 	block_header \
 	body \
 	camera \
+	cellstylemap \
 	circle \
+	datatable \
 	dbcolor \
 	dictionary \
 	dictionaryvar \
@@ -106,6 +108,7 @@ testobjects = \
 	lightlist \
 	line \
 	loftedsurface \
+	long_transaction \
 	ltype \
 	ltype_control \
 	lwpolyline \
@@ -119,14 +122,18 @@ testobjects = \
 	multileader \
 	navisworksmodeldef \
 	objectcontextdata \
+	object_ptr \
+	oleframe \
 	ole2frame \
 	perssubentmanager \
+	placeholder \
 	plotsettings \
 	point \
 	polyline_2d \
 	polyline_3d \
 	polyline_mesh \
 	polyline_pface \
+	proxy_object \
 	rastervariables \
 	ray \
 	region \
@@ -148,6 +155,8 @@ testobjects = \
 	surface \
 	sweptsurface \
 	table \
+	tablecontent \
+	tablegeometry \
 	tablestyle \
 	text \
 	tolerance \
@@ -156,6 +165,9 @@ testobjects = \
 	ucs_control \
 	underlay \
 	underlaydefinition \
+	unknown_ent \
+	unknown_obj \
+	vba_project \
 	vertex_2d \
 	vertex_3d \
 	vertex_mesh \
@@ -169,14 +181,12 @@ testobjects = \
 	visualstyle \
 	vport \
 	vport_control \
+	vport_entity_control \
+	vport_entity_header \
 	wipeout \
 	wipeoutvariables \
 	xline \
 	xrecord
-
-# TODO:
-# 	object_ptr \
-# 	proxy_object
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.

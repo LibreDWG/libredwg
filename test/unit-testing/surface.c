@@ -40,7 +40,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, SURFACE, acis_empty, B, acis_empty);
   CHK_ENTITY_TYPE (_obj, SURFACE, version, BS, version);
-  CHK_ENTITY_UTF8TEXT (_obj, SURFACE, acis_data, acis_data);
+  CHK_ENTITY_TYPE (_obj, SURFACE, acis_data, TF, acis_data);
   CHK_ENTITY_TYPE (_obj, SURFACE, wireframe_data_present, B, wireframe_data_present);
   CHK_ENTITY_TYPE (_obj, SURFACE, point_present, B, point_present);
   CHK_ENTITY_3RD (_obj, SURFACE, point, point);

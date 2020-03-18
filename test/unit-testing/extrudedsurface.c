@@ -68,7 +68,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_empty, B, acis_empty);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, version, BS, version);
-  //CHK_ENTITY_UTF8TEXT (_obj, EXTRUDEDSURFACE, acis_data, acis_data);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_data, TF, acis_data);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, wireframe_data_present, B, wireframe_data_present);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, point_present, B, point_present);
   CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, point, point);
@@ -97,8 +97,8 @@ api_process (dwg_object *obj)
     }
 
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, modeler_format_version, BS, modeler_format_version);
-  //CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata_size, BL, bindata_size);
-  //CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata, TF, bindata); // 310|1
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata_size, BL, bindata_size);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata, TF, bindata); // 310|1
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, u_isolines, BS, u_isolines);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, v_isolines, BS, v_isolines);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, class_version, BL, class_version);

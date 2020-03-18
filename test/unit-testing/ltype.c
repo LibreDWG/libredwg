@@ -35,10 +35,26 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, description, description);
   CHK_ENTITY_TYPE (ltype, LTYPE, pattern_len, BD, pattern_len);
   CHK_ENTITY_TYPE (ltype, LTYPE, alignment, RC, alignment);
-  CHK_ENTITY_TYPE (ltype, LTYPE, num_dashes, RC, num_dashes);
-  //Dwg_LTYPE_dash* dashes;
-  //BITCODE_RD* dashes_r11;
+  CHK_ENTITY_TYPE (ltype, LTYPE, num_dashes, RCd, num_dashes);
+  if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes", &dashes, NULL))
+    fail ("LTYPE.dashes");
+  else
+    {
+      for (BITCODE_BL i = 0; i < num_dashes; i++)
+        {
+          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, length, BD);
+          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, complex_shapecode, BS);
+          CHK_SUBCLASS_H (dashes[i], LTYPE_dash, style);
+          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, x_offset, RD);
+          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, y_offset, RD);
+          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, scale, BD);
+          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, rotation, BD);
+          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, shape_flag, BS);
+          //if (dwg_version <= R_11)
+          //  ok ("dashes_r11[%u]: %f", i, dashes_r11[i]);
+        }
+    }
   CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B, has_strings_area);
-  //CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF, strings_area);
+  CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF, strings_area);
   CHK_ENTITY_H (ltype, LTYPE, extref_handle, extref_handle);
 }

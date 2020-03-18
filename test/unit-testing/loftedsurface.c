@@ -58,7 +58,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, acis_empty, B, acis_empty);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, version, BS, version);
-  //CHK_ENTITY_UTF8TEXT (_obj, LOFTEDSURFACE, acis_data, acis_data);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, acis_data, TF, acis_data);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, wireframe_data_present, B, wireframe_data_present);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, point_present, B, point_present);
   CHK_ENTITY_3RD (_obj, LOFTEDSURFACE, point, point);
