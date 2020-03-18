@@ -5691,7 +5691,14 @@ DWG_ENTITY (MULTILEADER)
   FIELD_BLd (linewt, 171);
   FIELD_B (has_landing, 290);
   FIELD_B (has_dogleg, 291);
-  FIELD_BD (landing_dist, 41);
+  FIELD_BD (landing_dist, 41); // FIXME unstable
+  DECODER {
+    if (bit_isnan (FIELD_VALUE (landing_dist)))
+      {
+        FIELD_VALUE (landing_dist) = 0.0;
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      }
+  }
   FIELD_BD (arrow_size, 42);
   FIELD_BS (style_content, 172);
   FIELD_BS (text_left, 173);
