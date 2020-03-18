@@ -15,20 +15,20 @@ api_process (dwg_object *obj)
   Dwg_MLINESTYLE_line* lines;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_mlinestyle *msty = dwg_object_to_MLINESTYLE (obj);
+  dwg_obj_mlinestyle *mlinestyle = dwg_object_to_MLINESTYLE (obj);
 
-  CHK_ENTITY_UTF8TEXT (msty, MLINESTYLE, name, name);
-  CHK_ENTITY_UTF8TEXT (msty, MLINESTYLE, description, description);
-  CHK_ENTITY_TYPE (msty, MLINESTYLE, flag, BS, flag);
-  CHK_ENTITY_MAX (msty, MLINESTYLE, flag, BS, 2047);
-  CHK_ENTITY_CMC (msty, MLINESTYLE, fill_color, fill_color);
-  CHK_ENTITY_TYPE (msty, MLINESTYLE, start_angle, BD, start_angle);
-  CHK_ENTITY_MAX (msty, MLINESTYLE, start_angle, BD, 6.284);
-  CHK_ENTITY_TYPE (msty, MLINESTYLE, end_angle, BD, end_angle);
-  CHK_ENTITY_MAX (msty, MLINESTYLE, end_angle, BD, 6.284);
-  CHK_ENTITY_TYPE (msty, MLINESTYLE, num_lines, RCd, num_lines);
+  CHK_ENTITY_UTF8TEXT_W_OBJ (mlinestyle, MLINESTYLE, name, name);
+  CHK_ENTITY_UTF8TEXT (mlinestyle, MLINESTYLE, description, description); // old API called desc
+  CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, flag, BS, flag);
+  CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, flag, BS, 2047);
+  CHK_ENTITY_CMC (mlinestyle, MLINESTYLE, fill_color, fill_color);
+  CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, start_angle, BD, start_angle);
+  CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, start_angle, BD, 6.284);
+  CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, end_angle, BD, end_angle);
+  CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, end_angle, BD, 6.284);
+  CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, num_lines, RCd, num_lines);
   
-  if (!dwg_dynapi_entity_value (msty, "MLINESTYLE", "lines", &lines, NULL))
+  if (!dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "lines", &lines, NULL))
     fail ("MLINESTYLE.lines");
   else
     {

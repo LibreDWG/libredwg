@@ -691,7 +691,7 @@ api_common_entity (dwg_object *obj)
       if (_dwg_version < R_2007)                                              \
         fail (#name "." #field ":\t\"%s\"", value);                           \
       else                                                                    \
-        fail (#name "." #field ":\t\"%ls\"", value);                          \
+        fail (#name "." #field ":\t\"%s\"...", value);                        \
     }
 
 #define CHK_ENTITY_UTF8TEXT(ent, name, field, value)                          \
@@ -802,15 +802,40 @@ api_common_entity (dwg_object *obj)
 
 #define _DWGAPI_ENT_NAME(name, field) dwg_ent_##name##_get_##field
 #define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME (ent, field)
+#define _DWGAPI_OBJ_NAME(name, field) dwg_obj_##name##_get_##field
+#define DWGAPI_OBJ_NAME(ent, field) _DWGAPI_OBJ_NAME (ent, field)
+#define DWGAPI_ENTOBJ_NAME(ent, field)                                  \
+  (ent->parent->dwg->object[ent->parent->objid].supertype == DWG_SUPERTYPE_OBJECT    \
+    ? _DWGAPI_OBJ_NAME (ent, field)                                     \
+    : _DWGAPI_ENT_NAME (ent, field))
 
 #define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field, value)                    \
   _CHK_ENTITY_UTF8TEXT (ent, name, field, value);                             \
   {                                                                           \
     Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;         \
-    if (_dwg_version < R_2007 && ent->field                                   \
-        && ((strcmp (DWGAPI_ENT_NAME (ent, field) (ent, &error), value)       \
-             || error)))                                                      \
-      fail ("old API dwg_ent_" #ent "_get_" #field ": \"%s\"", value);        \
+    if (ent->field)                                                           \
+      {                                                                       \
+        char *old = DWGAPI_ENT_NAME (ent, field) (ent, &error);               \
+        if (error || strcmp (old, value))                                     \
+          fail ("old API dwg_ent_" #ent "_get_" #field ": \"%s\"", old);      \
+        if (_dwg_version >= R_2007)                                           \
+          free (old);                                                         \
+      }                                                                       \
+    if (isnew)                                                                \
+      free (value);                                                           \
+  }
+#define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field, value)                    \
+  _CHK_ENTITY_UTF8TEXT (ent, name, field, value);                             \
+  {                                                                           \
+    Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;         \
+    if (ent->field)                                                           \
+      {                                                                       \
+        char *old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);               \
+        if (error || strcmp (old, value))                                     \
+          fail ("old API dwg_obj_" #ent "_get_" #field ": \"%s\"", old);      \
+        if (_dwg_version >= R_2007)                                           \
+          free (old);                                                         \
+      }                                                                       \
     if (isnew)                                                                \
       free (value);                                                           \
   }
@@ -818,7 +843,12 @@ api_common_entity (dwg_object *obj)
 #define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type, value)                  \
   CHK_ENTITY_TYPE (ent, name, field, type, value);                            \
   if (DWGAPI_ENT_NAME (ent, field) (ent, &error) != value || error)           \
-  fail ("old API dwg_ent_" #ent "_get_" #field)
+    fail ("old API dwg_ent_" #ent "_get_" #field)
+
+#define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type, value)                  \
+  CHK_ENTITY_TYPE (ent, name, field, type, value);                            \
+  if (DWGAPI_OBJ_NAME (ent, field) (ent, &error) != value || error)           \
+    fail ("old API dwg_obj_" #ent "_get_" #field)
 
 #define CHK_ENTITY_2RD_W_OLD(ent, name, field, value)                         \
   CHK_ENTITY_2RD (ent, name, field, value);                                   \

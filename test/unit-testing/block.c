@@ -9,9 +9,5 @@ api_process (dwg_object *obj)
   dwg_ent_block *block = dwg_object_to_BLOCK (obj);
   int isnew;
 
-  _CHK_ENTITY_UTF8TEXT (block, BLOCK, name, name);
-  if (strcmp (dwg_ent_block_get_name (block, &error), name))
-    fail ("old API dwg_ent_block_get_name");
-  if (isnew)
-    free (name);
+  CHK_ENTITY_UTF8TEXT_W_OLD (block, BLOCK, name, name);
 }

@@ -14,15 +14,15 @@ api_process (dwg_object *obj)
   BITCODE_RC unknown;
   BITCODE_H null_handle;
 
-  dwg_obj_appid *_obj = dwg_object_to_APPID (obj);
+  dwg_obj_appid *appid = dwg_object_to_APPID (obj);
 
-  CHK_ENTITY_TYPE (_obj, APPID, flag, RC, flag);
-  CHK_ENTITY_UTF8TEXT (_obj, APPID, name, name);
-  CHK_ENTITY_TYPE (_obj, APPID, used, RS, used);
-  CHK_ENTITY_TYPE (_obj, APPID, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (_obj, APPID, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (_obj, APPID, xrefdep, B, xrefdep);
+  CHK_ENTITY_TYPE_W_OBJ (appid, APPID, flag, RC, flag);
+  CHK_ENTITY_UTF8TEXT (appid, APPID, name, name);
+  CHK_ENTITY_TYPE (appid, APPID, used, RS, used);
+  CHK_ENTITY_TYPE (appid, APPID, xrefref, B, xrefref);
+  CHK_ENTITY_TYPE (appid, APPID, xrefindex_plus1, BS, xrefindex_plus1);
+  CHK_ENTITY_TYPE (appid, APPID, xrefdep, B, xrefdep);
 
-  CHK_ENTITY_TYPE (_obj, APPID, unknown, RC, unknown);
-  CHK_ENTITY_H (_obj, APPID, null_handle, null_handle);
+  CHK_ENTITY_TYPE (appid, APPID, unknown, RC, unknown);
+  CHK_ENTITY_H (appid, APPID, null_handle, null_handle);
 }

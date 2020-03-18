@@ -27,25 +27,25 @@ api_process (dwg_object *obj)
   BITCODE_H ltype;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_layer *_obj = dwg_object_to_LAYER (obj);
+  dwg_obj_layer *layer = dwg_object_to_LAYER (obj);
 
-  //CHK_ENTITY_TYPE (_obj, LAYER, flag, RC, flag);
-  CHK_ENTITY_UTF8TEXT (_obj, LAYER, name, name);
-  CHK_ENTITY_TYPE (_obj, LAYER, used, RS, used);
-  CHK_ENTITY_TYPE (_obj, LAYER, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (_obj, LAYER, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (_obj, LAYER, xrefdep, B, xrefdep);
+  //CHK_ENTITY_TYPE (layer, LAYER, flag, RC, flag);
+  CHK_ENTITY_UTF8TEXT_W_OBJ (layer, LAYER, name, name);
+  CHK_ENTITY_TYPE (layer, LAYER, used, RS, used);
+  CHK_ENTITY_TYPE (layer, LAYER, xrefref, B, xrefref);
+  CHK_ENTITY_TYPE (layer, LAYER, xrefindex_plus1, BS, xrefindex_plus1);
+  CHK_ENTITY_TYPE (layer, LAYER, xrefdep, B, xrefdep);
 
-  CHK_ENTITY_TYPE (_obj, LAYER, frozen, B, frozen);
-  CHK_ENTITY_TYPE (_obj, LAYER, on, B, on);
-  CHK_ENTITY_TYPE (_obj, LAYER, frozen_in_new, B, frozen_in_new);
-  CHK_ENTITY_TYPE (_obj, LAYER, locked, B, locked);
-  CHK_ENTITY_TYPE (_obj, LAYER, plotflag, B, plotflag);
-  CHK_ENTITY_TYPE (_obj, LAYER, linewt, RC, linewt);
-  CHK_ENTITY_CMC (_obj, LAYER, color, color);
-  CHK_ENTITY_TYPE (_obj, LAYER, ltype_rs, RS, ltype_rs);
-  CHK_ENTITY_H (_obj, LAYER, xref, xref);
-  CHK_ENTITY_H (_obj, LAYER, plotstyle, plotstyle);
-  CHK_ENTITY_H (_obj, LAYER, material, material);
-  CHK_ENTITY_H (_obj, LAYER, ltype, ltype);
+  CHK_ENTITY_TYPE (layer, LAYER, frozen, B, frozen);
+  CHK_ENTITY_TYPE (layer, LAYER, on, B, on);
+  CHK_ENTITY_TYPE (layer, LAYER, frozen_in_new, B, frozen_in_new);
+  CHK_ENTITY_TYPE (layer, LAYER, locked, B, locked);
+  CHK_ENTITY_TYPE (layer, LAYER, plotflag, B, plotflag);
+  CHK_ENTITY_TYPE (layer, LAYER, linewt, RC, linewt);
+  CHK_ENTITY_CMC (layer, LAYER, color, color);
+  CHK_ENTITY_TYPE (layer, LAYER, ltype_rs, RS, ltype_rs);
+  CHK_ENTITY_H (layer, LAYER, xref, xref);
+  CHK_ENTITY_H (layer, LAYER, plotstyle, plotstyle);
+  CHK_ENTITY_H (layer, LAYER, material, material);
+  CHK_ENTITY_H (layer, LAYER, ltype, ltype);
 }
