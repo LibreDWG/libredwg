@@ -488,6 +488,7 @@
         else                                                                  \
           {                                                                   \
             LOG_TRACE_TU (#nam, L"", dxf);                                    \
+            LOG_INSANE (" !has_strings\n")                                    \
           }                                                                   \
       }                                                                       \
   }

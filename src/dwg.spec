@@ -5490,12 +5490,22 @@ DWG_OBJECT_END
 // 20.4.92 page 221
 DWG_OBJECT (SCALE)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbScale)
   FIELD_BS (flag, 70);
-  FIELD_T (name, 300);
+  PRE (R_2007) {
+    FIELD_TV (name, 300);
+  }
   FIELD_BD (paper_units, 140);
   FIELD_BD (drawing_units, 141);
   FIELD_B (has_unit_scale, 290);
+  SINCE (R_2007) {
+#ifdef IS_DECODER
+    *str_dat = *dat;
+    obj->has_strings = 1;
+#endif
+    FIELD_T (name, 0);
+  }
 
   START_OBJECT_HANDLE_STREAM;
 

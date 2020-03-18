@@ -691,7 +691,7 @@ api_common_entity (dwg_object *obj)
       if (_dwg_version < R_2007)                                              \
         fail (#name "." #field ":\t\"%s\"", value);                           \
       else                                                                    \
-        fail (#name "." #field);                                              \
+        fail (#name "." #field ":\t\"%ls\"", value);                          \
     }
 
 #define CHK_ENTITY_UTF8TEXT(ent, name, field, value)                          \

@@ -3871,7 +3871,7 @@ pt2        (35.27188116753285, -22.39344715050545, 0.0) [11]
   return 0;
 }
 
-// if to check for the has_strings bit after bitsize
+// for all obj->type < 500. if to check for the has_strings bit after bitsize
 static int
 obj_has_strings (unsigned int type)
 {
