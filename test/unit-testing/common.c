@@ -169,14 +169,6 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/Leader.dwg");
               error += test_code (tmp, cov);
             }
-#if 0
-          if (DWG_TYPE == DWG_TYPE_VIEW)
-            {
-              strcpy (tmp, prefix);
-              strcat (tmp, "../test-big/2007/big.dwg");
-              error += test_code (tmp, cov);
-            }
-#endif
           if (DWG_TYPE == DWG_TYPE_HATCH)
             {
               strcpy (tmp, prefix);
@@ -368,8 +360,19 @@ test_code (const char *filename, int cov)
   int error;
 
 #ifdef DWG_TYPE
-  if (cov)
-    printf ("Testing with %s:\n", filename);
+  // only process if no coverage yet, or when we are crossing the unicode boundary.
+  if (strstr (filename, "2018") ||
+      strstr (filename, "2007") ||
+      (!numpassed () && !numfailed ()))
+    {
+      if (cov)
+        printf ("Testing with %s:\n", filename);
+    }
+  else if (cov)
+    {
+      printf ("Skipping %s:\n", filename);
+      return 0;
+    }
 #endif
   error = dwg_read_file (filename, &g_dwg);
   if (error < DWG_ERR_CRITICAL)
@@ -455,40 +458,17 @@ output_test (dwg_data *dwg)
     output_BLOCK_HEADER (ref);
 
 #ifdef DWG_TYPE
-  if (!numpassed () && !numfailed ())
+  obj = &dwg->object[0];
+  while ((obj = dwg_next_object (obj)))
     {
-      obj = &dwg->object[0];
-      while ((obj = dwg_next_object (obj)))
+      // printf ("%s [%d]\n", obj->name, obj->index);
+      if (obj->fixedtype == DWG_TYPE)
         {
-          // printf ("%s [%d]\n", obj->name, obj->index);
-          if (obj->fixedtype == DWG_TYPE)
-            {
-              output_object (obj);
-            }
+          output_object (obj);
         }
     }
     /* also process blocks? we better find DWGs with these */
-#  if 0
-  if (DWG_TYPE == DWG_TYPE_ATTDEF ||
-      DWG_TYPE == DWG_TYPE_BLOCK ||
-      DWG_TYPE == DWG_TYPE_BODY ||
-      DWG_TYPE == DWG_TYPE_CIRCLE ||
-      DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT ||
-      DWG_TYPE == DWG_TYPE_DIMENSION_DIAMETER ||
-      DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS ||
-      DWG_TYPE == DWG_TYPE_ENDBLK ||
-      DWG_TYPE == DWG_TYPE_MINSERT ||
-      DWG_TYPE == DWG_TYPE_OLE2FRAME ||
-      DWG_TYPE == DWG_TYPE_POLYLINE_2D ||
-      DWG_TYPE == DWG_TYPE_POLYLINE_MESH ||
-      DWG_TYPE == DWG_TYPE_SEQEND ||
-      DWG_TYPE == DWG_TYPE_SHAPE ||
-      DWG_TYPE == DWG_TYPE_SOLID ||
-      DWG_TYPE == DWG_TYPE_TRACE ||
-      DWG_TYPE == DWG_TYPE_VERTEX_2D ||
-      DWG_TYPE == DWG_TYPE_VERTEX_MESH ||
-      DWG_TYPE == DWG_TYPE_XRECORD
-      )
+  if (!numpassed () && !numfailed ())
     {
       /* and now also all subtypes and entities in blocks */
       unsigned int i;
@@ -505,7 +485,6 @@ output_test (dwg_data *dwg)
         }
       free (hdr_refs);
     }
-#  endif
 #endif
 }
 
