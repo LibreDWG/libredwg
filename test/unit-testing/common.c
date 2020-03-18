@@ -122,6 +122,7 @@ main (int argc, char *argv[])
           else
             error += test_code (*ptr, cov);
         }
+      // if no coverage
       if (!numpassed () && !numfailed ())
         {
           char tmp[80];
@@ -168,12 +169,14 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/Leader.dwg");
               error += test_code (tmp, cov);
             }
+#if 0
           if (DWG_TYPE == DWG_TYPE_VIEW)
             {
               strcpy (tmp, prefix);
-              strcat (tmp, "2007/big.dwg");
+              strcat (tmp, "../test-big/2007/big.dwg");
               error += test_code (tmp, cov);
             }
+#endif
           if (DWG_TYPE == DWG_TYPE_HATCH)
             {
               strcpy (tmp, prefix);
@@ -310,7 +313,7 @@ main (int argc, char *argv[])
         }
 #ifdef DWG_TYPE
       if (cov && !numpassed () && !numfailed ())
-        printf ("TODO no coverage for this type %d\n", DWG_TYPE);
+        printf ("TODO no coverage for %s\n", dwg_type_name (DWG_TYPE));
 #endif
     }
   else
