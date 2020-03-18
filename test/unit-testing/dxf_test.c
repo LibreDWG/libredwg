@@ -79,6 +79,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           continue;
         }
       vtype = get_base_value_type (f->code);
+      if (vtype == VT_REAL && (*fp->type == '2' || *fp->type == '3'))
+        goto VT_POINT3D;
       switch (vtype)
         {
         case VT_STRING:
@@ -97,7 +99,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case VT_POINT3D:
-          {
+        VT_POINT3D: {
             BITCODE_3BD pt;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &pt, &field))
