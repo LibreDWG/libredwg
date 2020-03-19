@@ -4297,6 +4297,96 @@ H,	DXF 330
 @end vtable
 @end indentedblock
 
+@strong{ASSOCEXTRUDEDSURFACEACTIONBODY} @anchor{ASSOCEXTRUDEDSURFACEACTIONBODY}
+@cindex object, ASSOCEXTRUDEDSURFACEACTIONBODY
+@vindex ASSOCEXTRUDEDSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item esab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCLOFTEDSURFACEACTIONBODY} @anchor{ASSOCLOFTEDSURFACEACTIONBODY}
+@cindex object, ASSOCLOFTEDSURFACEACTIONBODY
+@vindex ASSOCLOFTEDSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item lsab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCNETWORK} @anchor{ASSOCNETWORK}
 @cindex object, ASSOCNETWORK
 @vindex ASSOCNETWORK
@@ -4468,34 +4558,126 @@ B,	DXF 290
 @item parent
 struct _dwg_object_object*
 @item aab_status
-BL,	DXF 90
+BL
 @item pab_status
-BL,	DXF 90
+BL
 @item pab_l2
+BL
+@item num_deps
 BL,	DXF 90
-@item pab_l3
-BL,	DXF 90
-@item writedep
-H,	DXF 360
+@item writedeps
+H*,	DXF 360
 @item pab_l4
-BL,	DXF 90
+BL
 @item pab_l5
-BL,	DXF 90
-@item readdep
-H,	DXF 330
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
 @item sab_status
-BL,	DXF 90
+BL
 @item sab_b1
-B,	DXF 290
+B
 @item sab_l2
-BL,	DXF 90
+BL
 @item sab_b2
-B,	DXF 290
+B
 @item sab_s1
-BS,	DXF 70
+BS
 @item pbsab_status
-BL,	DXF 90
+BL
 @item psab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCREVOLVEDSURFACEACTIONBODY} @anchor{ASSOCREVOLVEDSURFACEACTIONBODY}
+@cindex object, ASSOCREVOLVEDSURFACEACTIONBODY
+@vindex ASSOCREVOLVEDSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item rsab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCSWEPTSURFACEACTIONBODY} @anchor{ASSOCSWEPTSURFACEACTIONBODY}
+@cindex object, ASSOCSWEPTSURFACEACTIONBODY
+@vindex ASSOCSWEPTSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item ssab_status
 BL,	DXF 90
 
 @end vtable

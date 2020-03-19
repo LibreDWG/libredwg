@@ -6018,6 +6018,27 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   FIELD_HANDLE (node, 3, 330);
 DWG_OBJECT_END
 
+#define AcDbAssocParamBasedActionBody_fields \
+  SUBCLASS (AcDbAssocActionBody) \
+  FIELD_BL (aab_status, 90); \
+  SUBCLASS (AcDbAssocParamBasedActionBody) \
+  FIELD_BL (pab_status, 90); \
+  FIELD_BL (pab_l2, 90); \
+  FIELD_BL (num_deps, 90); \
+  FIELD_BL (pab_l4, 90); \
+  FIELD_BL (pab_l5, 90)
+
+#define AcDbAssocPathBasedSurfaceActionBody_fields \
+  AcDbAssocParamBasedActionBody_fields; \
+  SUBCLASS (AcDbAssocSurfaceActionBody)	\
+  FIELD_BL (sab_status, 90); \
+  FIELD_B (sab_b1, 290); \
+  FIELD_BL (sab_l2, 90); \
+  FIELD_B (sab_b2, 290); \
+  FIELD_BS (sab_s1, 70); \
+  SUBCLASS (AcDbAssocPathBasedSurfaceActionBody) \
+  FIELD_BL (pbsab_status, 90)
+
 // (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
 // field names may change.
@@ -6025,28 +6046,14 @@ DWG_OBJECT_END
 // summary: 78/98=79.59%
 DWG_OBJECT (ASSOCPLANESURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocActionBody)
-  FIELD_BL (aab_status, 90); //1 or ownerid?
-  SUBCLASS (AcDbAssocParamBasedActionBody)
-  FIELD_BL (pab_status, 90);
-  FIELD_BL (pab_l2, 90);
-  FIELD_BL (pab_l3, 90);
-  FIELD_BL (pab_l4, 90);
-  FIELD_BL (pab_l5, 90);
-  SUBCLASS (AcDbAssocSurfaceActionBody)
-  FIELD_BL (sab_status, 90);
-  FIELD_B (sab_b1, 290);
-  FIELD_BL (sab_l2, 90);
-  FIELD_B (sab_b2, 290);
-  FIELD_BS (sab_s1, 70);
-  SUBCLASS (AcDbAssocPathBasedSurfaceActionBody)
-  FIELD_BL (pbsab_status, 90);
+  AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocPlaneSurfaceActionBody)
   FIELD_BL (psab_status, 90);
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (writedep, 0, 360);
-  FIELD_HANDLE (readdep, 0, 330);
+  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
+  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
+  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
@@ -6516,6 +6523,59 @@ DWG_OBJECT_END
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
+
+// (varies) DEBUGGING
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocExtrudedSurfaceActionBody)
+  FIELD_BL (esab_status, 90);
+
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
+  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
+  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
+DWG_OBJECT_END
+
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocLoftedSurfaceActionBody)
+  FIELD_BL (lsab_status, 90);
+
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
+  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
+  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
+DWG_OBJECT_END
+
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocRevolvedSurfaceActionBody)
+  FIELD_BL (rsab_status, 90);
+
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
+  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
+  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
+DWG_OBJECT_END
+
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocSweptSurfaceActionBody)
+  FIELD_BL (ssab_status, 90);
+
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
+  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
+  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
+DWG_OBJECT_END
 
 // DEBUGGING
 DWG_OBJECT (EVALUATION_GRAPH)

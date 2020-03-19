@@ -53,10 +53,14 @@ testobjects = \
 	assocaction \
 	assocaligneddimactionbody \
 	assocdependency \
+	assocextrudedsurfaceactionbody \
+	assocloftedsurfaceactionbody \
 	assocnetwork \
 	assocosnappointrefactionparam \
 	assocperssubentmanager \
 	assocplanesurfaceactionbody \
+	assocrevolvedsurfaceactionbody \
+	assocsweptsurfaceactionbody \
 	attdef \
 	attrib \
 	block \
