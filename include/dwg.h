@@ -414,7 +414,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_IMAGE,
   DWG_TYPE_IMAGEDEF,
   DWG_TYPE_IMAGEDEF_REACTOR,
-  DWG_TYPE_LAYER_FILTER,
+  //DWG_TYPE_LAYERFILTER,
   DWG_TYPE_LAYER_INDEX,
   DWG_TYPE_LAYOUTPRINTCONFIG,
   DWG_TYPE_LIGHT,
@@ -6364,7 +6364,7 @@ EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_add_GEOMAPIMAGE (Dwg_Object *obj);
 EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
-//EXPORT int dwg_add_LAYER_FILTER (Dwg_Object *obj);
+//EXPORT int dwg_add_LAYERFILTER (Dwg_Object *obj);
 //EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);

@@ -623,7 +623,7 @@ typedef struct _dwg_object_DATATABLE              dwg_obj_datatable;
 //typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM         dwg_obj_assocvertexactionparam;
 //typedef struct _dwg_object_DETAILVIEWSTYLE      dwg_obj_detailviewstyle;
 //typedef struct _dwg_object_DOCUMENTOPTIONS      dwg_obj_documentoptions;
-//typedef struct _dwg_object_LAYER_FILTER         dwg_obj_layer_filter;
+//typedef struct _dwg_object_LAYERFILTER         dwg_obj_layerfilter;
 //typedef struct _dwg_object_LAYOUTPRINTCONFIG    dwg_obj_layoutprintconfig;
 //typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA dwg_obj_leaderobjectcontextdata;
 //typedef struct _dwg_object_NPOCOLLECTION        dwg_obj_npocollection;
@@ -831,7 +831,7 @@ DWG_GETALL_OBJECT_DECL (DATATABLE)
 // DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 // DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 // DWG_GETALL_OBJECT_DECL (DOCUMENTOPTIONS)
-// DWG_GETALL_OBJECT_DECL (LAYER_FILTER)
+// DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 // DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
 // DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
 // DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
@@ -1253,7 +1253,7 @@ dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 // dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 // dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 // dwg_get_OBJECT_DECL (obj_documentoptions, DOCUMENTOPTIONS)
-// dwg_get_OBJECT_DECL (obj_layer_filter, LAYER_FILTER)
+// dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 // dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
 // dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
 // dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
