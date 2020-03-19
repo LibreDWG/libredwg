@@ -593,6 +593,7 @@ typedef struct _dwg_object_VBA_PROJECT            dwg_obj_vba_project;
 typedef struct _dwg_object_ACSH_SWEEP_CLASS       dwg_obj_acsh_sweep_class;
 typedef struct _dwg_object_ACSH_BOX_CLASS         dwg_obj_acsh_box_class;
 typedef struct _dwg_object_ACSH_EXTRUSION_CLASS   dwg_obj_acsh_extrusion_class;
+typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA dwg_obj_aldimobjectcontextdata;
 typedef struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA dwg_obj_annotscaleobjectcontextdata;
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP dwg_obj_assoc2dconstraintgroup;
 typedef struct _dwg_object_ASSOCACTION            dwg_obj_assocaction;
@@ -804,6 +805,7 @@ DWG_GETALL_OBJECT_DECL (VBA_PROJECT)
 DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_BOX_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
+DWG_GETALL_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (ANNOTSCALEOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (ASSOCACTION)
 DWG_GETALL_OBJECT_DECL (ASSOCNETWORK)
@@ -995,6 +997,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (UNDERLAYDEFINITION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BOX_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ANNOTSCALEOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCNETWORK)
@@ -1232,6 +1235,7 @@ dwg_get_OBJECT_DECL (obj_vba_project, VBA_PROJECT);
 dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_box_class, ACSH_BOX_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
+dwg_get_OBJECT_DECL (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_annotscaleobjectcontextdata, ANNOTSCALEOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
 dwg_get_OBJECT_DECL (obj_assocnetwork, ASSOCNETWORK);

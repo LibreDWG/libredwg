@@ -21959,6 +21959,286 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ALDIMOBJECTCONTEXTDATA *restrict aldimobjectcontextdata = obj->tio.object->tio.ALDIMOBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_3BD _11pt;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "_11pt", &_11pt, NULL)
+        && !memcmp (&_11pt, &aldimobjectcontextdata->_11pt, sizeof (aldimobjectcontextdata->_11pt)))
+        pass ();
+    else
+        fail ("ALDIMOBJECTCONTEXTDATA._11pt [3BD]");
+  }
+  {
+    BITCODE_B b280;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b280", &b280, NULL)
+        && b280 == aldimobjectcontextdata->b280)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b280 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b280, b280);
+    b280++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b280", &b280, 0)
+        && b280 == aldimobjectcontextdata->b280)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b280 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b280, b280);
+    aldimobjectcontextdata->b280--;
+  }
+  {
+    BITCODE_B b291;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b291", &b291, NULL)
+        && b291 == aldimobjectcontextdata->b291)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b291 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b291, b291);
+    b291++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b291", &b291, 0)
+        && b291 == aldimobjectcontextdata->b291)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b291 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b291, b291);
+    aldimobjectcontextdata->b291--;
+  }
+  {
+    BITCODE_B b292;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b292", &b292, NULL)
+        && b292 == aldimobjectcontextdata->b292)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b292 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b292, b292);
+    b292++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b292", &b292, 0)
+        && b292 == aldimobjectcontextdata->b292)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b292 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b292, b292);
+    aldimobjectcontextdata->b292--;
+  }
+  {
+    BITCODE_B b293;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b293", &b293, NULL)
+        && b293 == aldimobjectcontextdata->b293)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b293 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b293, b293);
+    b293++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b293", &b293, 0)
+        && b293 == aldimobjectcontextdata->b293)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b293 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b293, b293);
+    aldimobjectcontextdata->b293--;
+  }
+  {
+    BITCODE_B b294;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b294", &b294, NULL)
+        && b294 == aldimobjectcontextdata->b294)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b294 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b294, b294);
+    b294++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b294", &b294, 0)
+        && b294 == aldimobjectcontextdata->b294)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b294 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b294, b294);
+    aldimobjectcontextdata->b294--;
+  }
+  {
+    BITCODE_B b295;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b295", &b295, NULL)
+        && b295 == aldimobjectcontextdata->b295)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b295 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b295, b295);
+    b295++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b295", &b295, 0)
+        && b295 == aldimobjectcontextdata->b295)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b295 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b295, b295);
+    aldimobjectcontextdata->b295--;
+  }
+  {
+    BITCODE_B b296;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b296", &b296, NULL)
+        && b296 == aldimobjectcontextdata->b296)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b296 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b296, b296);
+    b296++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b296", &b296, 0)
+        && b296 == aldimobjectcontextdata->b296)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b296 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b296, b296);
+    aldimobjectcontextdata->b296--;
+  }
+  {
+    BITCODE_B b297;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b297", &b297, NULL)
+        && b297 == aldimobjectcontextdata->b297)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b297 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b297, b297);
+    b297++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b297", &b297, 0)
+        && b297 == aldimobjectcontextdata->b297)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b297 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b297, b297);
+    aldimobjectcontextdata->b297--;
+  }
+  {
+    BITCODE_B b298;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b298", &b298, NULL)
+        && b298 == aldimobjectcontextdata->b298)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b298 [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b298, b298);
+    b298++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "b298", &b298, 0)
+        && b298 == aldimobjectcontextdata->b298)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.b298 [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->b298, b298);
+    aldimobjectcontextdata->b298--;
+  }
+  {
+    BITCODE_BD bd140;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "bd140", &bd140, NULL)
+        && bd140 == aldimobjectcontextdata->bd140)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.bd140 [BD] %g != %g", aldimobjectcontextdata->bd140, bd140);
+    bd140++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "bd140", &bd140, 0)
+        && bd140 == aldimobjectcontextdata->bd140)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.bd140 [BD] set+1 %g != %g", aldimobjectcontextdata->bd140, bd140);
+    aldimobjectcontextdata->bd140--;
+  }
+  {
+    BITCODE_BS bs71;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "bs71", &bs71, NULL)
+        && bs71 == aldimobjectcontextdata->bs71)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.bs71 [BS] %hu != %hu", aldimobjectcontextdata->bs71, bs71);
+    bs71++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "bs71", &bs71, 0)
+        && bs71 == aldimobjectcontextdata->bs71)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.bs71 [BS] set+1 %hu != %hu", aldimobjectcontextdata->bs71, bs71);
+    aldimobjectcontextdata->bs71--;
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == aldimobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", aldimobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == aldimobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", aldimobjectcontextdata->class_version, class_version);
+    aldimobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_2RD def_pt;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "def_pt", &def_pt, NULL)
+        && !memcmp (&def_pt, &aldimobjectcontextdata->def_pt, sizeof (aldimobjectcontextdata->def_pt)))
+        pass ();
+    else
+        fail ("ALDIMOBJECTCONTEXTDATA.def_pt [2RD]");
+  }
+  {
+    BITCODE_B defaultflag;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
+        && defaultflag == aldimobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->defaultflag, defaultflag);
+    defaultflag++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
+        && defaultflag == aldimobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->defaultflag, defaultflag);
+    aldimobjectcontextdata->defaultflag--;
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "flag", &flag, NULL)
+        && flag == aldimobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.flag [BS] %hu != %hu", aldimobjectcontextdata->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "flag", &flag, 0)
+        && flag == aldimobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.flag [BS] set+1 %hu != %hu", aldimobjectcontextdata->flag, flag);
+    aldimobjectcontextdata->flag--;
+  }
+  {
+    BITCODE_B has_file;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
+        && has_file == aldimobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->has_file, has_file);
+    has_file++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "has_file", &has_file, 0)
+        && has_file == aldimobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->has_file, has_file);
+    aldimobjectcontextdata->has_file--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)aldimobjectcontextdata->name)
+           : !aldimobjectcontextdata->name)
+      pass ();
+    else
+      fail ("ALDIMOBJECTCONTEXTDATA.name [T] '%s' <> '%s'", name, aldimobjectcontextdata->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &aldimobjectcontextdata->parent, sizeof (aldimobjectcontextdata->parent)))
+        pass ();
+    else
+        fail ("ALDIMOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &aldimobjectcontextdata->scale, sizeof (aldimobjectcontextdata->scale)))
+        pass ();
+    else
+        fail ("ALDIMOBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("ALDIMOBJECTCONTEXTDATA") || is_class_debugging ("ALDIMOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ALDIMOBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
 {
   int error = 0;
@@ -38539,6 +38819,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_EXTRUSION_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
+    error += test_ALDIMOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
     error += test_ANNOTSCALEOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
@@ -38839,6 +39121,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_EXTRUSION_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
+    error += test_ALDIMOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
     error += test_ANNOTSCALEOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
@@ -39575,6 +39859,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ACSH_SWEEP_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_SWEEP_CLASS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ALDIMOBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("ALDIMOBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ALDIMOBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"ALDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA);

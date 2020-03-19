@@ -379,6 +379,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ACSH_REVOLVE_CLASS,
   DWG_TYPE_ACSH_SPHERE_CLASS,
   DWG_TYPE_ACSH_SWEEP_CLASS,
+  DWG_TYPE_ALDIMOBJECTCONTEXTDATA,
   DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA,
   DWG_TYPE_ARCALIGNEDTEXT,
   DWG_TYPE_ARC_DIMENSION,
@@ -5260,6 +5261,38 @@ typedef struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA
 } Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA;
 
 /**
+ * for ALDIM (AlignedDimension)
+ * R2010+
+ */
+typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA
+{
+  struct _dwg_object_object *parent;
+  // AcDbObjectContextData
+  BITCODE_BS class_version; /*!< r2010+ =4 */
+  BITCODE_B has_file;    /* 290 */
+  BITCODE_B defaultflag; /* no dxf */
+  // AcDbAnnotScaleObjectContextData
+  BITCODE_H scale;	/*!< DXF 340 */
+  // AcDbDimensionObjectContextData
+  BITCODE_T name;	/*!< DXF 2 */
+  BITCODE_2RD def_pt; 	/*!< DXF 10-20 */
+  BITCODE_B b293;	/*<! DXF 293 */ // 0
+  BITCODE_B b294;	/*!< DXF 294 */ // 1
+  BITCODE_BD bd140;	/*!< DXF 140 */ // 0.0
+  BITCODE_B b298;	/*!< DXF 298 */ // 0
+  BITCODE_B b291;	/*!< DXF 291 */ // 0
+  BITCODE_BS flag;	/*!< DXF 70 */ // 0
+  BITCODE_B b292;	/*!< DXF 292 */ // 0
+  BITCODE_BS bs71;	/*!< DXF 71 */ // 0
+  BITCODE_B b280;	/*!< DXF 280 */ // 0
+  BITCODE_B b295;	/*!< DXF 295 */ // 0
+  BITCODE_B b296;	/*!< DXF 296 */ // 0
+  BITCODE_B b297;	/*!< DXF 297 */ // 0
+  // AcDbAlignedDimensionObjectContextData
+  BITCODE_3BD _11pt;    /*!< DXF 11-31 */
+} Dwg_Object_ALDIMOBJECTCONTEXTDATA;
+
+/**
  -----------------------------------
  */
 
@@ -5346,7 +5379,7 @@ typedef struct _dwg_entity_eed
  */
 typedef struct _dwg_object_entity
 {
-  BITCODE_BL objid; /*<! link to the parent */
+  BITCODE_BL objid; /*!< link to the parent */
   union
   {
     Dwg_Entity_UNUSED *UNUSED;
@@ -5521,6 +5554,7 @@ typedef struct _dwg_object_object
     //TODO Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
     Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
     //Dwg_Object_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
+    Dwg_Object_ALDIMOBJECTCONTEXTDATA *ALDIMOBJECTCONTEXTDATA;
     Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA *ANNOTSCALEOBJECTCONTEXTDATA;
     Dwg_Object_ASSOC2DCONSTRAINTGROUP *ASSOC2DCONSTRAINTGROUP;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
@@ -6384,6 +6418,7 @@ EXPORT int dwg_add_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
 EXPORT int dwg_add_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 //EXPORT int dwg_add_ARCALIGNEDTEXT (Dwg_Object *obj);
 EXPORT int dwg_add_ARC_DIMENSION (Dwg_Object *obj);
+EXPORT int dwg_add_ALDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_add_ANNOTSCALEOBJECTCONTEXTDATA (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCEXTRUDEDSURFACEACTIONBODY (Dwg_Object *obj);

@@ -7583,6 +7583,37 @@ geoimage_height
 */
 DWG_OBJECT_END
 
+DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  FIELD_BS (class_version, 70); // 4
+  FIELD_B (has_file, 290);
+  //FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  FIELD_HANDLE (scale, 2, 340);
+  SUBCLASS (AcDbDimensionObjectContextData)
+  FIELD_T (name, 2);
+  FIELD_2RD (def_pt, 10);
+  //HOLE([140,159],11000000000000000000) len = 20
+   FIELD_B (b293, 293); // 0
+   FIELD_B (b294, 294); // 1
+   FIELD_BD (bd140, 140); // 0.0
+   FIELD_B (b298, 298); // 0
+   FIELD_B (b291, 291); // 0
+   FIELD_BS (flag, 70); // 0
+   FIELD_B (b292, 292); // 0
+   FIELD_BS (bs71, 71); // 0
+   FIELD_B (b280, 280); // 0
+   FIELD_B (b295, 295); // 0
+   FIELD_B (b296, 296); // 0
+   FIELD_B (b297, 297); // 0
+
+  SUBCLASS (AcDbAlignedDimensionObjectContextData)
+  FIELD_3BD (_11pt, 11);
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbObjectContextData)

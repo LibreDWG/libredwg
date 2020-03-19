@@ -74,6 +74,7 @@ static const Dwg_Object_Type _classes_debugging[] =
    DWG_TYPE_RENDERENVIRONMENT,
    DWG_TYPE_RENDERGLOBAL,
    DWG_TYPE_LIGHTLIST,
+   DWG_TYPE_ALDIMOBJECTCONTEXTDATA,
    DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA,
    DWG_TYPE_DATATABLE
   };
@@ -394,7 +395,7 @@ object_alias (char *restrict name)
   else if (strEQc (name, "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS"))
     strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
   else if (strEQc (name, "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
+    strcpy (name, "ALDIMOBJECTCONTEXTDATA");
   else if (strEQc (name, "EXACXREFPANELOBJECT"))
     strcpy (name, "XREFPANELOBJECT");
   // strip ACAD_ prefix

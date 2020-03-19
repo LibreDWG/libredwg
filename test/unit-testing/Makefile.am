@@ -44,6 +44,7 @@ testobjects = \
 	acsh_box_class \
 	acsh_extrusion_class \
 	acsh_sweep_class \
+	aldimobjectcontextdata \
 	annotscaleobjectcontextdata \
 	appid \
 	appid_control \

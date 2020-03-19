@@ -312,7 +312,16 @@ my $known = {
     @AcDbAssocPathBasedSurfaceActionBody,
     100 => 'AcDbAssocSweptSurfaceActionBody',
     90 => 'ssab_status',
-  ],
+    ],
+  ACDB_ALDIMOBJECTCONTEXTDATA_CLASS => [
+    90 => 'class_version',
+    290 => 'defaultflag',
+    340 => 'scale',
+    1 => 'name',
+    10 => 'def_pt',
+    20 => 'def_pt',
+    70 => 'flag',
+    ],
   ACDBASSOC2DCONSTRAINTGROUP => [
     90 => 'solution_status',
     90 => 'geometry_status',
