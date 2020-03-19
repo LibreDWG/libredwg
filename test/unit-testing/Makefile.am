@@ -211,6 +211,9 @@ dynapi_test.c: dynapi_test.c.in \
 	$(COMPILE) -c -E -o $@ $<
 
 TESTS = $(check_PROGRAMS)
+if HAVE_PERL
+TESTS += check-objects.pl
+endif
 TESTS_ENVIRONMENT = \
   top_srcdir="$(top_srcdir)" \
   ASAN_OPTIONS="detect_leaks=0"
