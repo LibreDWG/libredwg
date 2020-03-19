@@ -2781,9 +2781,7 @@ DWG_OBJECT (LTYPE)
     DECODER {
       if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x4)
         FIELD_VALUE (has_strings_area) = 1;
-    }
-    PRE (R_13) {
-      DECODER {
+      PRE (R_13) {
         FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
       }
     }
