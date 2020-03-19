@@ -71,16 +71,17 @@ testobjects = \
 	dictionary \
 	dictionaryvar \
 	dictionarywdflt \
-	dim_aligned \
-	dim_ang2ln \
-	dim_ang3pt \
-	dim_diameter \
-	dim_linear \
-	dim_ordinate \
-	dim_radius \
+	dimension_aligned \
+	dimension_ang2ln \
+	dimension_ang3pt \
+	dimension_diameter \
+	dimension_linear \
+	dimension_ordinate \
+	dimension_radius \
 	dimassoc \
 	dimstyle \
 	dimstyle_control \
+	dummy \
 	dynamicblockpurgepreventer \
 	ellipse \
 	endblk \
@@ -127,12 +128,14 @@ testobjects = \
 	ole2frame \
 	perssubentmanager \
 	placeholder \
+	planesurface \
 	plotsettings \
 	point \
 	polyline_2d \
 	polyline_3d \
 	polyline_mesh \
 	polyline_pface \
+	proxy_entity \
 	proxy_object \
 	rastervariables \
 	ray \
@@ -175,8 +178,6 @@ testobjects = \
 	vertex_pface_face \
 	view \
 	view_control \
-	vport_entity_control \
-	vport_entity_header \
 	viewport \
 	visualstyle \
 	vport \
@@ -233,7 +234,8 @@ EXTRA_DIST = \
 	tests_common.h \
 	common.c \
 	dynapi_test.c.in \
-	dynapi_test.c
+	dynapi_test.c \
+	check-objects.pl
 
 @VALGRIND_CHECK_RULES@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@

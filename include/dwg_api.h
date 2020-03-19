@@ -514,6 +514,7 @@ typedef struct _dwg_entity_SWEPTSURFACE           dwg_ent_sweptsurface;
 typedef struct _dwg_entity_SURFACE                dwg_ent_surface;
 typedef struct _dwg_entity_GEOPOSITIONMARKER      dwg_ent_geopositionmarker;
 typedef struct _dwg_entity_MESH                   dwg_ent_mesh;
+typedef struct _dwg_entity_PROXY_ENTITY           dwg_ent_proxy;
 typedef struct _dwg_entity_UNKNOWN_ENT            dwg_ent_unknown;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -548,6 +549,7 @@ typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy_object;
 // stable:
 typedef struct _dwg_object_DICTIONARYVAR          dwg_obj_dictionaryvar;
 typedef struct _dwg_object_DICTIONARYWDFLT        dwg_obj_dictionarywdflt;
+typedef struct _dwg_object_DUMMY                  dwg_obj_dummy;
 typedef struct _dwg_object_FIELD                  dwg_obj_field;
 typedef struct _dwg_object_FIELDLIST              dwg_obj_fieldlist;
 typedef struct _dwg_object_GROUP                  dwg_obj_group;
@@ -695,7 +697,7 @@ DWG_GETALL_ENTITY_DECL (TOLERANCE)
 DWG_GETALL_ENTITY_DECL (MLINE)
 DWG_GETALL_ENTITY_DECL (OLE2FRAME)
 DWG_GETALL_ENTITY_DECL (LWPOLYLINE)
-//DWG_GETALL_ENTITY_DECL (PROXY_ENTITY)
+DWG_GETALL_ENTITY_DECL (PROXY_ENTITY)
 DWG_GETALL_ENTITY_DECL (HATCH)
 DWG_GETALL_ENTITY_DECL (UNKNOWN_ENT)
 
@@ -753,6 +755,7 @@ DWG_GETALL_OBJECT_DECL (UNKNOWN_OBJ)
 // stable:
 DWG_GETALL_OBJECT_DECL (DICTIONARYVAR)
 DWG_GETALL_OBJECT_DECL (DICTIONARYWDFLT)
+DWG_GETALL_OBJECT_DECL (DUMMY)
 DWG_GETALL_OBJECT_DECL (FIELD)
 DWG_GETALL_OBJECT_DECL (FIELDLIST)
 DWG_GETALL_OBJECT_DECL (GROUP)
@@ -893,7 +896,7 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL (LEADER)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (TOLERANCE)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (MLINE)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (OLE2FRAME)
-//CAST_DWG_OBJECT_TO_ENTITY_DECL (PROXY_ENTITY)
+CAST_DWG_OBJECT_TO_ENTITY_DECL (PROXY_ENTITY)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (HATCH)
 CAST_DWG_OBJECT_TO_ENTITY_DECL (UNKNOWN_ENT)
 
@@ -954,6 +957,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (XRECORD)
 
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DICTIONARYVAR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DICTIONARYWDFLT)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DUMMY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (FIELD)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (FIELDLIST)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (IDBUFFER)
@@ -1125,7 +1129,7 @@ dwg_get_OBJECT_DECL (ent_tolerance, TOLERANCE);
 dwg_get_OBJECT_DECL (ent_mline, MLINE);
 dwg_get_OBJECT_DECL (ent_ole2frame, OLE2FRAME);
 dwg_get_OBJECT_DECL (ent_lwpline, LWPOLYLINE);
-//dwg_get_OBJECT_DECL (ent_proxy_entity, PROXY_ENTITY);
+dwg_get_OBJECT_DECL (ent_proxy, PROXY_ENTITY);
 dwg_get_OBJECT_DECL (ent_hatch, HATCH);
 dwg_get_OBJECT_DECL (ent_unknown, UNKNOWN_ENT);
 dwg_get_OBJECT_DECL (ent_image, IMAGE);
@@ -1174,6 +1178,7 @@ dwg_get_OBJECT_DECL (obj_unknown, UNKNOWN_OBJ);
 // stable:
 dwg_get_OBJECT_DECL (obj_dictionaryvar, DICTIONARYVAR);
 dwg_get_OBJECT_DECL (obj_dictionarywdflt, DICTIONARYWDFLT);
+dwg_get_OBJECT_DECL (obj_dummy, DUMMY);
 dwg_get_OBJECT_DECL (obj_field, FIELD);
 dwg_get_OBJECT_DECL (obj_fieldlist, FIELDLIST);
 dwg_get_OBJECT_DECL (obj_group, GROUP);
