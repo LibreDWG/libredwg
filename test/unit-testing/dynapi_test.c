@@ -16991,352 +16991,6 @@ static int test_SPLINE (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_SURFACE (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
-  Dwg_Entity_SURFACE *restrict surface = obj->tio.entity->tio.SURFACE;
-  failed = 0;
-  {
-    BITCODE_RC* acis_data;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_data", &acis_data, NULL)
-        && acis_data
-           ? strEQ ((char *)acis_data, (char *)surface->acis_data)
-           : !surface->acis_data)
-      pass ();
-    else
-      fail ("SURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, surface->acis_data);
-  }
-  {
-    BITCODE_B acis_empty;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_empty", &acis_empty, NULL)
-        && acis_empty == surface->acis_empty)
-      pass ();
-    else
-      fail ("SURFACE.acis_empty [B] " FORMAT_B " != " FORMAT_B "", surface->acis_empty, acis_empty);
-    acis_empty++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "acis_empty", &acis_empty, 0)
-        && acis_empty == surface->acis_empty)
-      pass ();
-    else
-      fail ("SURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty, acis_empty);
-    surface->acis_empty--;
-  }
-  {
-    BITCODE_B acis_empty2;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_empty2", &acis_empty2, NULL)
-        && acis_empty2 == surface->acis_empty2)
-      pass ();
-    else
-      fail ("SURFACE.acis_empty2 [B] " FORMAT_B " != " FORMAT_B "", surface->acis_empty2, acis_empty2);
-    acis_empty2++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "acis_empty2", &acis_empty2, 0)
-        && acis_empty2 == surface->acis_empty2)
-      pass ();
-    else
-      fail ("SURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty2, acis_empty2);
-    surface->acis_empty2--;
-  }
-  {
-    BITCODE_B acis_empty_bit;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "acis_empty_bit", &acis_empty_bit, NULL)
-        && acis_empty_bit == surface->acis_empty_bit)
-      pass ();
-    else
-      fail ("SURFACE.acis_empty_bit [B] " FORMAT_B " != " FORMAT_B "", surface->acis_empty_bit, acis_empty_bit);
-    acis_empty_bit++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "acis_empty_bit", &acis_empty_bit, 0)
-        && acis_empty_bit == surface->acis_empty_bit)
-      pass ();
-    else
-      fail ("SURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->acis_empty_bit, acis_empty_bit);
-    surface->acis_empty_bit--;
-  }
-  {
-    BITCODE_BL* block_size;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &surface->block_size, sizeof (surface->block_size)))
-        pass ();
-    else
-        fail ("SURFACE.block_size [BL*]");
-  }
-  {
-    BITCODE_BL class_version;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "class_version", &class_version, NULL)
-        && class_version == surface->class_version)
-      pass ();
-    else
-      fail ("SURFACE.class_version [BL] %u != %u", surface->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "class_version", &class_version, 0)
-        && class_version == surface->class_version)
-      pass ();
-    else
-      fail ("SURFACE.class_version [BL] set+1 %u != %u", surface->class_version, class_version);
-    surface->class_version--;
-  }
-  {
-    char ** encr_sat_data;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "encr_sat_data", &encr_sat_data, NULL)
-        && !memcmp (&encr_sat_data, &surface->encr_sat_data, sizeof (surface->encr_sat_data)))
-      pass ();
-    else
-      fail ("SURFACE.encr_sat_data [char **]");
-  }
-  {
-    struct _dwg_entity_3DSOLID* extra_acis_data;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &surface->extra_acis_data, sizeof (surface->extra_acis_data)))
-        pass ();
-    else
-        fail ("SURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
-  }
-  {
-    BITCODE_H history_id;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &surface->history_id, sizeof (surface->history_id)))
-        pass ();
-    else
-        fail ("SURFACE.history_id [H]");
-  }
-  {
-    BITCODE_B isoline_present;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "isoline_present", &isoline_present, NULL)
-        && isoline_present == surface->isoline_present)
-      pass ();
-    else
-      fail ("SURFACE.isoline_present [B] " FORMAT_B " != " FORMAT_B "", surface->isoline_present, isoline_present);
-    isoline_present++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "isoline_present", &isoline_present, 0)
-        && isoline_present == surface->isoline_present)
-      pass ();
-    else
-      fail ("SURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->isoline_present, isoline_present);
-    surface->isoline_present--;
-  }
-  {
-    BITCODE_BS modeler_format_version;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "modeler_format_version", &modeler_format_version, NULL)
-        && modeler_format_version == surface->modeler_format_version)
-      pass ();
-    else
-      fail ("SURFACE.modeler_format_version [BS] %hu != %hu", surface->modeler_format_version, modeler_format_version);
-    modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "modeler_format_version", &modeler_format_version, 0)
-        && modeler_format_version == surface->modeler_format_version)
-      pass ();
-    else
-      fail ("SURFACE.modeler_format_version [BS] set+1 %hu != %hu", surface->modeler_format_version, modeler_format_version);
-    surface->modeler_format_version--;
-  }
-  {
-    BITCODE_BL num_blocks;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_blocks", &num_blocks, NULL)
-        && num_blocks == surface->num_blocks)
-      pass ();
-    else
-      fail ("SURFACE.num_blocks [BL] %u != %u", surface->num_blocks, num_blocks);
-    num_blocks++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_blocks", &num_blocks, 0)
-        && num_blocks == surface->num_blocks)
-      pass ();
-    else
-      fail ("SURFACE.num_blocks [BL] set+1 %u != %u", surface->num_blocks, num_blocks);
-    surface->num_blocks--;
-  }
-  {
-    BITCODE_BL num_isolines;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_isolines", &num_isolines, NULL)
-        && num_isolines == surface->num_isolines)
-      pass ();
-    else
-      fail ("SURFACE.num_isolines [BL] %u != %u", surface->num_isolines, num_isolines);
-    num_isolines++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_isolines", &num_isolines, 0)
-        && num_isolines == surface->num_isolines)
-      pass ();
-    else
-      fail ("SURFACE.num_isolines [BL] set+1 %u != %u", surface->num_isolines, num_isolines);
-    surface->num_isolines--;
-  }
-  {
-    BITCODE_BL num_silhouettes;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_silhouettes", &num_silhouettes, NULL)
-        && num_silhouettes == surface->num_silhouettes)
-      pass ();
-    else
-      fail ("SURFACE.num_silhouettes [BL] %u != %u", surface->num_silhouettes, num_silhouettes);
-    num_silhouettes++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_silhouettes", &num_silhouettes, 0)
-        && num_silhouettes == surface->num_silhouettes)
-      pass ();
-    else
-      fail ("SURFACE.num_silhouettes [BL] set+1 %u != %u", surface->num_silhouettes, num_silhouettes);
-    surface->num_silhouettes--;
-  }
-  {
-    BITCODE_BL num_wires;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_wires", &num_wires, NULL)
-        && num_wires == surface->num_wires)
-      pass ();
-    else
-      fail ("SURFACE.num_wires [BL] %u != %u", surface->num_wires, num_wires);
-    num_wires++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "num_wires", &num_wires, 0)
-        && num_wires == surface->num_wires)
-      pass ();
-    else
-      fail ("SURFACE.num_wires [BL] set+1 %u != %u", surface->num_wires, num_wires);
-    surface->num_wires--;
-  }
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &surface->parent, sizeof (surface->parent)))
-        pass ();
-    else
-        fail ("SURFACE.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_3BD point;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "point", &point, NULL)
-        && !memcmp (&point, &surface->point, sizeof (surface->point)))
-        pass ();
-    else
-        fail ("SURFACE.point [3BD]");
-  }
-  {
-    BITCODE_B point_present;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "point_present", &point_present, NULL)
-        && point_present == surface->point_present)
-      pass ();
-    else
-      fail ("SURFACE.point_present [B] " FORMAT_B " != " FORMAT_B "", surface->point_present, point_present);
-    point_present++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "point_present", &point_present, 0)
-        && point_present == surface->point_present)
-      pass ();
-    else
-      fail ("SURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->point_present, point_present);
-    surface->point_present--;
-  }
-  {
-    Dwg_3DSOLID_silhouette* silhouettes;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_silhouettes", &count, NULL)
-        && dwg_dynapi_entity_value (surface, "SURFACE", "silhouettes", &silhouettes, NULL)
-        && silhouettes == surface->silhouettes)
-      pass ();
-    else
-      fail ("SURFACE.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
-  }
-  {
-    BITCODE_BS u_isolines;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "u_isolines", &u_isolines, NULL)
-        && u_isolines == surface->u_isolines)
-      pass ();
-    else
-      fail ("SURFACE.u_isolines [BS] %hu != %hu", surface->u_isolines, u_isolines);
-    u_isolines++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "u_isolines", &u_isolines, 0)
-        && u_isolines == surface->u_isolines)
-      pass ();
-    else
-      fail ("SURFACE.u_isolines [BS] set+1 %hu != %hu", surface->u_isolines, u_isolines);
-    surface->u_isolines--;
-  }
-  {
-    BITCODE_B unknown;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "unknown", &unknown, NULL)
-        && unknown == surface->unknown)
-      pass ();
-    else
-      fail ("SURFACE.unknown [B] " FORMAT_B " != " FORMAT_B "", surface->unknown, unknown);
-    unknown++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "unknown", &unknown, 0)
-        && unknown == surface->unknown)
-      pass ();
-    else
-      fail ("SURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->unknown, unknown);
-    surface->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == surface->unknown_2007)
-      pass ();
-    else
-      fail ("SURFACE.unknown_2007 [BL] %u != %u", surface->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == surface->unknown_2007)
-      pass ();
-    else
-      fail ("SURFACE.unknown_2007 [BL] set+1 %u != %u", surface->unknown_2007, unknown_2007);
-    surface->unknown_2007--;
-  }
-  {
-    BITCODE_BS v_isolines;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "v_isolines", &v_isolines, NULL)
-        && v_isolines == surface->v_isolines)
-      pass ();
-    else
-      fail ("SURFACE.v_isolines [BS] %hu != %hu", surface->v_isolines, v_isolines);
-    v_isolines++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "v_isolines", &v_isolines, 0)
-        && v_isolines == surface->v_isolines)
-      pass ();
-    else
-      fail ("SURFACE.v_isolines [BS] set+1 %hu != %hu", surface->v_isolines, v_isolines);
-    surface->v_isolines--;
-  }
-  {
-    BITCODE_BS version;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "version", &version, NULL)
-        && version == surface->version)
-      pass ();
-    else
-      fail ("SURFACE.version [BS] %hu != %hu", surface->version, version);
-    version++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "version", &version, 0)
-        && version == surface->version)
-      pass ();
-    else
-      fail ("SURFACE.version [BS] set+1 %hu != %hu", surface->version, version);
-    surface->version--;
-  }
-  {
-    BITCODE_B wireframe_data_present;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "wireframe_data_present", &wireframe_data_present, NULL)
-        && wireframe_data_present == surface->wireframe_data_present)
-      pass ();
-    else
-      fail ("SURFACE.wireframe_data_present [B] " FORMAT_B " != " FORMAT_B "", surface->wireframe_data_present, wireframe_data_present);
-    wireframe_data_present++;
-    if (dwg_dynapi_entity_set_value (surface, "SURFACE", "wireframe_data_present", &wireframe_data_present, 0)
-        && wireframe_data_present == surface->wireframe_data_present)
-      pass ();
-    else
-      fail ("SURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", surface->wireframe_data_present, wireframe_data_present);
-    surface->wireframe_data_present--;
-  }
-  {
-    Dwg_3DSOLID_wire* wires;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (surface, "SURFACE", "num_wires", &count, NULL)
-        && dwg_dynapi_entity_value (surface, "SURFACE", "wires", &wires, NULL)
-        && wires == surface->wires)
-      pass ();
-    else
-      fail ("SURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
-  }
-  if (failed && (is_class_unstable ("SURFACE") || is_class_debugging ("SURFACE")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "SURFACE", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_SWEPTSURFACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -37749,7 +37403,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 37752 "dynapi_test.c"
+#line 37406 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -37853,8 +37507,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SOLID(obj);
   else  if (obj->fixedtype == DWG_TYPE_SPLINE)
     error += test_SPLINE(obj);
-  else  if (obj->fixedtype == DWG_TYPE_SURFACE)
-    error += test_SURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
     error += test_SWEPTSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_TABLE)
@@ -38147,8 +37799,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SOLID (obj);
   else  if (obj->fixedtype == DWG_TYPE_SPLINE)
     error += test_SPLINE (obj);
-  else  if (obj->fixedtype == DWG_TYPE_SURFACE)
-    error += test_SURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
     error += test_SWEPTSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_TABLE)
@@ -38349,7 +37999,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 38352 "dynapi_test.c"
+#line 38002 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -38767,14 +38417,6 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_SPLINE): %d != "
                "dwg_dynapi_fields_size (\"SPLINE\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (Dwg_Entity_SURFACE);
-  size2 = dwg_dynapi_fields_size ("SURFACE");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(Dwg_Entity_SURFACE): %d != "
-               "dwg_dynapi_fields_size (\"SURFACE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_SWEPTSURFACE);

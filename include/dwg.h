@@ -444,7 +444,6 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SPATIAL_INDEX,
   DWG_TYPE_SUN,
   DWG_TYPE_SUNSTUDY,
-  DWG_TYPE_SURFACE, // or seperate subtypes? DXF has only SURFACE
   DWG_TYPE_PLANESURFACE,
   DWG_TYPE_EXTRUDEDSURFACE,
   DWG_TYPE_LOFTEDSURFACE,
@@ -4459,20 +4458,6 @@ typedef struct _dwg_entity_HELIX
 } Dwg_Entity_HELIX;
 
 /**
- Entity SURFACE (varies): maybe just PLANESURFACE?
-*/
-typedef struct _dwg_entity_SURFACE
-{
-  struct _dwg_object_entity *parent;
-  _3DSOLID_FIELDS;
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
-  BITCODE_BS u_isolines;         /*!< DXF 71 */
-  BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version;      /*!< DXF 90 */
-
-} Dwg_Entity_SURFACE;
-
-/**
  Entity EXTRUDEDSURFACE (varies)
  in DXF encrypted.
 */
@@ -5380,7 +5365,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
-    Dwg_Entity_SURFACE *SURFACE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
@@ -6380,7 +6364,6 @@ EXPORT int dwg_add_RENDERGLOBAL (Dwg_Object *obj);
 //EXPORT int dwg_add_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 //EXPORT int dwg_add_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_RTEXT (Dwg_Object *obj);
-EXPORT int dwg_add_SURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_LOFTEDSURFACE (Dwg_Object *obj);

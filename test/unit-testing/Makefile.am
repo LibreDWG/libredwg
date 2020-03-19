@@ -155,7 +155,6 @@ testobjects = \
 	style_control \
 	sun \
 	sunstudy \
-	surface \
 	sweptsurface \
 	table \
 	tablecontent \

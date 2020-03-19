@@ -3098,69 +3098,6 @@ Dwg_SPLINE_control_point*
 @end vtable
 @end indentedblock
 
-@strong{SURFACE} @anchor{SURFACE}
-@cindex entity, SURFACE
-@vindex SURFACE
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item acis_empty
-B
-@item unknown
-B
-@item version
-BS
-@item num_blocks
-BL
-@item block_size
-BL*
-@item encr_sat_data
-char **
-@item acis_data
-RC*
-@item wireframe_data_present
-B
-@item point_present
-B
-@item point
-3BD
-@item num_isolines
-BL
-@item isoline_present
-B
-@item num_wires
-BL
-@item wires
-Dwg_3DSOLID_wire*
-@item num_silhouettes
-BL
-@item silhouettes
-Dwg_3DSOLID_silhouette*
-@item acis_empty2
-B
-@item extra_acis_data
-struct _dwg_entity_3DSOLID*
-@item unknown_2007
-BL
-@item history_id
-H
-@item acis_empty_bit
-B
-@item modeler_format_version
-BS,	DXF 70
-@item u_isolines
-BS,	DXF 71
-@item v_isolines
-BS,	DXF 72
-@item class_version
-BL
-
-@end vtable
-@end indentedblock
-
 @strong{SWEPTSURFACE} @anchor{SWEPTSURFACE}
 @cindex entity, SWEPTSURFACE
 @vindex SWEPTSURFACE

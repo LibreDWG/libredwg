@@ -41,7 +41,6 @@ static const Dwg_Object_Type _classes_unstable[] =
 static const Dwg_Object_Type _classes_debugging[] =
   {
    DWG_TYPE_GEOPOSITIONMARKER,
-   DWG_TYPE_SURFACE,
    DWG_TYPE_PLANESURFACE,
    DWG_TYPE_EXTRUDEDSURFACE,
    DWG_TYPE_LOFTEDSURFACE,
@@ -272,7 +271,6 @@ static const struct _obj_type_name _dwg_type_name[] =
    { DWG_TYPE_SPATIAL_INDEX, "SPATIAL_INDEX" },
    { DWG_TYPE_SUN, "SUN" },
    { DWG_TYPE_SUNSTUDY, "SUNSTUDY" },
-   { DWG_TYPE_SURFACE, "SURFACE" }, // or seperate subtypes? DXF has only SURFACE
    { DWG_TYPE_PLANESURFACE, "PLANESURFACE" },
    { DWG_TYPE_EXTRUDEDSURFACE, "EXTRUDEDSURFACE" },
    { DWG_TYPE_LOFTEDSURFACE, "LOFTEDSURFACE" },
@@ -417,6 +415,8 @@ entity_alias (char *restrict name)
     strcpy (name, "VERTEX_2D"); // other VERTEX_* by flag?
   else if (len == strlen ("PDFUNDERLAY") && strEQc (&name[3], "UNDERLAY"))
     strcpy (name, "UNDERLAY");
+  else if (strEQc (name, "SURFACE"))
+    strcpy (name, "PLANESURFACE");
   // if (strEQc (name, "BLOCK"))
   //  strcpy (name, "BLOCK_HEADER");
   // else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
