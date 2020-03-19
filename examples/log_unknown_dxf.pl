@@ -33,7 +33,7 @@ calc. number of same-typed: value fields as num.
 =cut
 
 use strict;
-#use File::Basename qw(dirname);
+use File::Basename qw(dirname);
 
 # DXF types
 use constant UNKNOWN => 0;
@@ -46,9 +46,9 @@ use constant DBL     => 6;
 
 #require dirname(__FILE__)."/unstable.pm";
 my $dir = dirname(__FILE__);
-open my $f0, ">", "$dir/examples/alldxf_0.inc" || die "$!";
-open my $f1, ">", "$dir/examples/alldxf_1.inc" || die "$!";
-open my $f2, ">", "$dir/examples/alldxf_2.inc" || die "$!";
+open my $f0, ">", "$dir/alldxf_0.inc" or die "$!";
+open my $f1, ">", "$dir/alldxf_1.inc" or die "$!";
+open my $f2, ">", "$dir/alldxf_2.inc" or die "$!";
 my $i = 0;
 my (%skip, %dupl);
 
@@ -64,6 +64,28 @@ if (0) {
   }
   close $skip_fh;
 }
+
+my @AcDbAssocPathBasedSurfaceActionBody =
+  (100 => 'AcDbAssocActionBody',
+    90 => 'aab_status',
+    100 => 'AcDbAssocParamBasedActionBody',
+    90 => 'pab_status',
+    90 => 'pab_l2',
+    90 => 'num_deps',
+    360 => 'writedeps',
+    90 => 'pab_l4',
+    90 => 'pab_l5',
+    330 => 'readdeps',
+    1 => 'description',
+    100 => 'AcDbAssocSurfaceActionBody',
+    90 => 'sab_status',
+    290 => 'sab_b1',
+    90 => 'sab_l2',
+    290 => 'sab_b2',
+    70 => 'sab_s1',
+    100 => 'AcDbAssocPathBasedSurfaceActionBody',
+  90 => 'pbsab_status');
+
 
 # dxf names or obj names?
 # The name in the all*.inc files.
@@ -266,28 +288,30 @@ my $known = {
     90 => 'num_actions',
     330 => 'actions',
     ],
-  ACDBASSOCPLANESURFACEACTIONBODY = [
-    100 => 'AcDbAssocActionBody',
-    90 => 'aab_status',
-    100 => 'AcDbAssocParamBasedActionBody',
-    90 => 'pab_status',
-    90 => 'pab_l2',
-    90 => 'num_deps',
-    360 => 'writedeps',
-    90 => 'pab_l4',
-    90 => 'pab_l5',
-    330 => 'readdeps',
-    1 => 'description',
-    100 => 'AcDbAssocSurfaceActionBody',
-    90 => 'sab_status',
-    290 => 'sab_b1',
-    90 => 'sab_l2',
-    290 => 'sab_b2',
-    70 => 'sab_s1',
-    100 => 'AcDbAssocPathBasedSurfaceActionBody',
-    90 => 'pbsab_status',
+  ACDBASSOCPLANESURFACEACTIONBODY => [
+    @AcDbAssocPathBasedSurfaceActionBody,
     100 => 'AcDbAssocPlaneSurfaceActionBody',
     90 => 'psab_status',
+    ],
+  ACDBASSOCEXTRUDEDSURFACEACTIONBODY => [
+    @AcDbAssocPathBasedSurfaceActionBody,
+    100 => 'AcDbAssocExtrudedSurfaceActionBody',
+    90 => 'esab_status',
+  ],
+  ACDBASSOCLOFTEDSURFACEACTIONBODY => [
+    @AcDbAssocPathBasedSurfaceActionBody,
+    100 => 'AcDbAssocLoftedSurfaceActionBody',
+    90 => 'lsab_status',
+  ],
+  ACDBASSOCREVOLVEDSURFACEACTIONBODY => [
+    @AcDbAssocPathBasedSurfaceActionBody,
+    100 => 'AcDbAssocRevolvedSurfaceActionBody',
+    90 => 'rsab_status',
+  ],
+  ACDBASSOCSWEPTSURFACEACTIONBODY => [
+    @AcDbAssocPathBasedSurfaceActionBody,
+    100 => 'AcDbAssocSweptSurfaceActionBody',
+    90 => 'ssab_status',
   ],
   ACDBASSOC2DCONSTRAINTGROUP => [
     90 => 'solution_status',
@@ -1166,11 +1190,15 @@ while (<>) {
     next LINE; # -n
   }
   $dxf = substr($dxf, 1, -2);
-  if (!-f $dxf) {
-    if (!-f "../$dxf") {
-      warn "$dxf and ../$dxf not found";
+  my $fdxf = $dxf;
+  if (!-f $fdxf) {
+    if (!-f "../$fdxf") {
+      $fdxf = "$dir/../$dxf";
+      if (!-f "$fdxf") {
+        warn "$fdxf not found";
+      }
     } else {
-      $dxf = "../$dxf";
+      $fdxf = "../$fdxf";
     }
   }
   #next LINE if $F[0] =~ m|//{|; # skip duplicates
@@ -1188,20 +1216,21 @@ while (<>) {
     warn "skip empty $obj-$hdl-$num_bits $dxf\n";
     next LINE;
   }
+  # picat runs out of memory there
+  if ($num_bits > 30000) {
+    warn "skip overlarge $obj-$hdl-$num_bits $dxf\n";
+    next LINE;
+  }
+
   my $unknown = pack ("H*", $bytes);
   $unknown = join("", map { sprintf("\\%03o", $_) } unpack("C*", $unknown));
-  $unknown = substr($unknown, 0, $num_bits);
+  # $unknown = substr($unknown, 0, $num_bits);
 
   if (exists $dupl{"$obj-$unknown"}) {
     warn "skip duplicate $obj-$hdl-$num_bits $dxf\n";
     next LINE;
   } else {
     $dupl{"$obj-$unknown"}++;
-  }
-  # picat runs out of memory there
-  if ($obj eq "ACAD_TABLE" && $num_bits > 30000) {
-    warn "skip overlarge $obj-$hdl-$num_bits $dxf\n";
-    next LINE;
   }
   #warn "$dxf: $obj HANDLE($hdl)\n";
   # 9080187 5160203 9080187 201AA 51E0204 90C0202 35200204 20640A8 2D22020C 90A01D1
@@ -1210,7 +1239,7 @@ while (<>) {
   #  #warn "=> try HANDLE($hdl)\n";
   #}
 
-  open my $f, "$dxf" or next LINE;
+  open my $f, "$fdxf" or next LINE;
   my ($foundobj, $foundhdl, @FIELD, $in_entity);
   my ($react, $xdict, $seen100, @avail);
   if ($obj =~ /^(?:PDF|DWF|DGN)UNDERLAY/) {

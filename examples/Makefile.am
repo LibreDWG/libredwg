@@ -41,17 +41,17 @@ if HAVE_PERL
 # maintainer rules only
 regen-unknown:
 	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
-	-cd .. && ./logs-all.sh; \
+	-(cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
 	  cp $(abs_srcdir)/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r??.log *_20??.log DS_*.log; \
 	    do $(PERL) $(abs_srcdir)/log_unknown.pl "$$l" >>alldwg.tmp; done; \
-          grep -v '^//' alldwg.tmp | sort >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp
+          grep -v '^//' alldwg.tmp | sort >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp)
 	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
 	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
 	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
-	cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc
-	$(MAKE) unknown && $(LTEXEC) ./unknown && \
+	(cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc)
+	$(MAKE) -C .. unknown && \
 	  $(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
 
 #ACAD_EVALUATION_GRAPH.pi: unknown
