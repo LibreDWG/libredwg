@@ -39,24 +39,7 @@ all: $(check_PROGRAMS)
 
 if HAVE_PERL
 # maintainer rules only
-regen-unknown: $(srcdir)/alldwg.inc $(srcdir)/alldxf_0.inc $(srcdir)/bd-unknown.inc
-
-#ACAD_EVALUATION_GRAPH.pi: unknown
-#	$(MAKE) -C .. unknown
-
-$(srcdir)/bd-unknown.inc: $(srcdir)/bd-unknown.pl $(srcdir)/alldxf_0.inc \
-	                  ACAD_EVALUATION_GRAPH.pi
-	$(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
-
-$(srcdir)/alldxf_2.inc: $(srcdir)/alldxf_1.inc
-$(srcdir)/alldxf_1.inc: $(srcdir)/alldxf_0.inc
-$(srcdir)/alldxf_0.inc: $(srcdir)/alldwg.inc $(srcdir)/log_unknown_dxf.pl
-	test -f $(srcdir)/alldwg.inc || (echo make regen-unknown; false)
-	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
-	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
-	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
-	cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc
-$(srcdir)/alldwg.inc: $(srcdir)/log_unknown.pl
+regen-unknown:
 	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
 	-cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
@@ -64,6 +47,23 @@ $(srcdir)/alldwg.inc: $(srcdir)/log_unknown.pl
 	  for l in *_r??.log *_20??.log DS_*.log; \
 	    do $(PERL) $(abs_srcdir)/log_unknown.pl "$$l" >>alldwg.tmp; done; \
           grep -v '^//' alldwg.tmp | sort >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp
+	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
+	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
+	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
+	cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc
+	$(MAKE) unknown && $(LTEXEC) ./unknown && \
+	  $(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
+
+#ACAD_EVALUATION_GRAPH.pi: unknown
+#	$(MAKE) -C .. unknown
+
+$(srcdir)/bd-unknown.inc: $(srcdir)/bd-unknown.pl $(srcdir)/alldxf_0.inc \
+	                  ACAD_EVALUATION_GRAPH.pi
+
+$(srcdir)/alldxf_2.inc: $(srcdir)/alldxf_1.inc
+$(srcdir)/alldxf_1.inc: $(srcdir)/alldxf_0.inc
+$(srcdir)/alldxf_0.inc: $(srcdir)/alldwg.inc $(srcdir)/log_unknown_dxf.pl
+$(srcdir)/alldwg.inc: $(srcdir)/log_unknown.pl
 endif
 
 if HAVE_WINE

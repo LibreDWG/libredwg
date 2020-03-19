@@ -45,11 +45,11 @@ use constant HEXSTR  => 5;
 use constant DBL     => 6;
 
 #require dirname(__FILE__)."/unstable.pm";
-
+my $dir = dirname(__FILE__);
+open my $f0, ">", "$dir/examples/alldxf_0.inc" || die "$!";
+open my $f1, ">", "$dir/examples/alldxf_1.inc" || die "$!";
+open my $f2, ">", "$dir/examples/alldxf_2.inc" || die "$!";
 my $i = 0;
-open my $f0, ">", "examples/alldxf_0.inc" || die "$!";
-open my $f1, ">", "examples/alldxf_1.inc" || die "$!";
-open my $f2, ">", "examples/alldxf_2.inc" || die "$!";
 my (%skip, %dupl);
 
 if (0) {
