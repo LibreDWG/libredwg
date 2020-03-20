@@ -6,11 +6,13 @@ test -z "$top_builddir" && echo $top_builddir
 
 cd test/unit-testing || exit
 list="$(make -s list)"
+# shellcheck disable=SC2086
 make -s -j4 $list
 cd - || exit
 
 for t in $list
 do
+    echo "$t"
     # -a for all (no max 6), -n for no coverage checks
     @LTEXEC@ "test/unit-testing/$t" -an "$srcdir/test/test-data/"
 done

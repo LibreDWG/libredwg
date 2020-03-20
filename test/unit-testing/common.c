@@ -475,7 +475,7 @@ test_code (const char *filename, int cov)
   return error;
 }
 
-/// This function is used to iterate over the objects in a block
+/// Iterate over the objects in a block
 void
 output_BLOCK_HEADER (dwg_object_ref *ref)
 {
@@ -484,16 +484,10 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   g_counter = 0;
 
   if (!ref)
-    {
-      fprintf (stderr, "output_BLOCK_HEADER: null argument\n");
-      return;
-    }
+    return;
   hdr = dwg_ref_get_object (ref, &error);
   if (!hdr)
-    {
-      fprintf (stderr, "Found null reference object\n");
-      return;
-    }
+    return;
 
   obj = get_first_owned_entity (hdr);
   while (obj)
@@ -516,6 +510,7 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
 }
 
 /// Iterate over both modelspace and paperspace blocks
+/// And if nothing found, over all other blocks.
 void
 output_test (dwg_data *dwg)
 {
