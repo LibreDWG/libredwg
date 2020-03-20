@@ -386,7 +386,6 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
   strcpy (prev_dwgfile, dwgfile);
 
   // find the object
-  g_counter = 0;
   for (i = 0; i < dwg.num_objects; i++)
     {
       if (dwg.object[i].handle.value == dxf->handle)
@@ -412,10 +411,14 @@ main (int argc, char *argv[])
   struct _unknown_dxf *dxf;
   char *class = NULL;
   char *file = NULL;
+  char name[80];
+  char olddxf[80];
   // clang-format off
   #include "../../examples/alldxf_2.inc"
   // clang-format on
 
+  name[0] = '\0';
+  olddxf[0] = '\0';
   if (argc > 2 && !strcmp (argv[i], "--class"))
     {
       class = argv[i + 1];
@@ -424,9 +427,9 @@ main (int argc, char *argv[])
   if (argc - i >= 2 && !strcmp (argv[i], "--file"))
     file = argv[i + 1];
 
+  g_counter = 0;
   for (dxf = &unknown_dxf[0]; dxf->name; dxf++)
     {
-      char name[80];
       const char *dxffile = dxf->dxf;
       struct stat attrib;
       int len = strlen (dxffile);
@@ -435,6 +438,10 @@ main (int argc, char *argv[])
       *(s+2) = 'w';
       *(s+3) = 'g';
 
+      // display ok values only for the first 6 object types per file
+      if (strNE (name, dxf->name) && strNE (olddxf, dxf->dxf))
+        g_counter = 0;
+      strcpy (olddxf, dxf->dxf);
       strcpy (name, dxf->name);
       if (!is_dwg_object (name) && !is_dwg_entity (name))
         {
@@ -446,7 +453,8 @@ main (int argc, char *argv[])
               if (!is_dwg_entity (name) && !class)
                 {
                   free (dwgfile);
-                  fprintf (stderr, "Unknown %s\n", dxf->name);
+                  if (!g_counter) // use --enable-debug
+                    fprintf (stderr, "Unhandled %s\n", dxf->name);
                   continue;
                 }
             }

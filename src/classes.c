@@ -388,6 +388,8 @@ object_alias (char *restrict name)
     strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
   else if (strEQc (name, "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS"))
     strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
+  else if (strEQc (name, "ACDB_TEXTOBJECTCONTEXTDATA_CLASS"))
+    strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
   else if (strEQc (name, "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS"))
     strcpy (name, "ANNOTSCALEOBJECTCONTEXTDATA");
   else if (strEQc (name, "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS"))
