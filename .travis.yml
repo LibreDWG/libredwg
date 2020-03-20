@@ -49,9 +49,10 @@ script:
     fi
   - ./configure $CONF
   - make -j4
-  - make -j4 check
   - if [ x$DISTCHECK = x1 ]; then
-      make -j4 distcheck && sha256sum libredwg-*.tar.*;
+      make -j4 distcheck && sha256sum libredwg-*.tar.* ;
+    else
+      make -j4 check ;
     fi
 
 deploy:

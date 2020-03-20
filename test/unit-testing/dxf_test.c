@@ -30,6 +30,9 @@ static unsigned int loglevel;
 #include "dwg_api.h"
 #include "tests_common.h"
 
+int g_counter;
+#define MAX_COUNTER 10
+
 void object_alias (char *restrict name);
 void entity_alias (char *restrict name);
 
@@ -49,6 +52,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
 {
   int isnew;
   const struct _unknown_field *f = dxf->fields;
+  g_counter++;
 
   // check all fields against dxf->fields
   for (; f->value; f++)
@@ -68,13 +72,23 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
             {
               BITCODE_BS i = (BITCODE_BS)strtol (f->value, NULL, 10);
               if (i == color.index)
-                ok ("%s.%s: %s", name, f->name, f->value);
+                {
+                  if (g_counter > MAX_COUNTER)
+                    pass ();
+                  else
+                    ok ("%s.%s: %s", name, f->name, f->value);
+                }
               else if (field.type)
                 fail ("%s.%s: %d <=> %s [%s]", name, f->name,
                       (int)color.index, f->value, field.type);
               else
-                ok ("%s.%s: %d <=> %s [CMC] (TODO)", name, f->name,
-                    (int)color.index, f->value);
+                {
+                  if (g_counter > MAX_COUNTER)
+                    pass ();
+                  else
+                    ok ("%s.%s: %d <=> %s [CMC] (TODO)", name, f->name,
+                        (int)color.index, f->value);
+                }
             }
           continue;
         }
@@ -90,7 +104,12 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                                             f->name, &value, &isnew, &field))
               {
                 if (!value || strEQ (value, f->value))
-                  ok ("%s.%s: %s", name, f->name, value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %s", name, f->name, value);
+                  }
                 else
                   fail ("%s.%s: %s [STRING %s]", name, f->name, value, field.type);
               }
@@ -129,7 +148,13 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ptv = pt.x;
                   }
                 if (fabs (ptv - d) < 1e-6)
-                  ok ("%s.%s: %f [%s %d]", name, f->name, ptv, field.type, f->code);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %f [%s %d]", name, f->name, ptv, field.type,
+                          f->code);
+                  }
                 else
                   fail ("%s.%s: %f <=> %s [%s %d]", name, f->name, ptv,
                         f->value, field.type, f->code);
@@ -144,7 +169,12 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
               {
                 double d = strtod (f->value, NULL);
                 if (fabs (value - d) < 1e-6)
-                  ok ("%s.%s: %f", name, f->name, value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %f", name, f->name, value);
+                  }
                 else
                   fail ("%s.%s: %f <=> %s [REAL %s]", name, f->name, value,
                         f->value, field.type);
@@ -159,7 +189,12 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
               {
                 BITCODE_B i = (BITCODE_B)strtol (f->value, NULL, 10);
                 if (i == value)
-                  ok ("%s.%s: %d", name, f->name, value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %d", name, f->name, value);
+                  }
                 else
                   fail ("%s.%s: %d <=> %s [BOOL %s]", name, f->name, value,
                         f->value, field.type);
@@ -174,13 +209,23 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
               {
                 BITCODE_RC i = (BITCODE_RC)strtol (f->value, NULL, 10);
                 if (i == value)
-                  ok ("%s.%s: %d", name, f->name, value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %d", name, f->name, value);
+                  }
                 else if (field.type)
                   fail ("%s.%s: %d <=> %s [INT8 %s]", name, f->name, value,
                         f->value, field.type);
                 else
-                  ok ("%s.%s: %d <=> %s [INT8] (TODO)", name, f->name, value,
-                        f->value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %d <=> %s [INT8] (TODO)", name, f->name, value,
+                          f->value);
+                  }
               }
           }
           break;
@@ -192,13 +237,23 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
               {
                 BITCODE_BS i = (BITCODE_BS)strtol (f->value, NULL, 10);
                 if (i == value)
-                  ok ("%s.%s: %d", name, f->name, (int)value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %d", name, f->name, (int)value);
+                  }
                 else if (field.type)
                   fail ("%s.%s: %d <=> %s [INT16 %s]", name, f->name,
                         (int)value, f->value, field.type);
                 else
-                  ok ("%s.%s: %d <=> %s [INT16] (TODO)", name, f->name, (int)value,
-                      f->value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %d <=> %s [INT16] (TODO)", name, f->name, (int)value,
+                          f->value);
+                  }
               }
           }
           break;
@@ -211,15 +266,30 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                 long l = strtol (f->value, NULL, 10);
                 BITCODE_BL i = (BITCODE_BL)l;
                 if (strEQc (f->name, "rgb") && i == (value & 0xffffff))
-                  ok ("%s.%s: 0x%x", name, f->name, (unsigned)value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: 0x%x", name, f->name, (unsigned)value);
+                  }
                 else if (i == value)
-                  ok ("%s.%s: %u", name, f->name, (unsigned)value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %u", name, f->name, (unsigned)value);
+                  }
                 else if (field.type)
                   fail ("%s.%s: %u <=> %s [INT32 %s]", name, f->name, (unsigned)value,
                         f->value, field.type);
                 else
-                  ok ("%s.%s: %u <=> %s [INT32] (TODO)", name, f->name, (unsigned)value,
-                        f->value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %u <=> %s [INT32] (TODO)", name, f->name, (unsigned)value,
+                          f->value);
+                  }
               }
           }
           break;
@@ -231,12 +301,22 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
               {
                 BITCODE_BLL i = (BITCODE_BLL)strtol (f->value, NULL, 10);
                 if (i == value)
-                  ok ("%s.%s: %ld", name, f->name, (long)value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %ld", name, f->name, (long)value);
+                  }
                 else if (field.type)
                   fail ("%s.%s: %ld <=> %s [INT64]", name, f->name, (long)value, f->value);
                 else
-                  ok ("%s.%s: %ld <=> %s [INT64] (TODO)", name, f->name, (long)value,
-                        f->value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %ld <=> %s [INT64] (TODO)", name, f->name, (long)value,
+                          f->value);
+                  }
               }
           }
           break;
@@ -251,7 +331,12 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                 unsigned long l;
                 sscanf (f->value, "%lX", &l);
                 if (l == value->absolute_ref || l == value->handleref.value)
-                  ok ("%s.%s: %s", name, f->name, f->value);
+                  {
+                    if (g_counter > MAX_COUNTER)
+                      pass ();
+                    else
+                      ok ("%s.%s: %s", name, f->name, f->value);
+                  }
                 else
                   fail ("%s.%s: %lX <=> %s [H]", name, f->name, (unsigned long)value, f->value);
               }
@@ -301,6 +386,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
   strcpy (prev_dwgfile, dwgfile);
 
   // find the object
+  g_counter = 0;
   for (i = 0; i < dwg.num_objects; i++)
     {
       if (dwg.object[i].handle.value == dxf->handle)

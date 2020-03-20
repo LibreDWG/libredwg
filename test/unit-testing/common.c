@@ -18,7 +18,7 @@
 
 dwg_data g_dwg;
 int g_counter;
-#define MAX_COUNTER 10
+#define MAX_COUNTER 6
 
 /// test a DWG file
 int test_code (const char *filename, int cov);
