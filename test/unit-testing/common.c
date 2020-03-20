@@ -308,6 +308,33 @@ main (int argc, char *argv[])
               strcat (tmp, "2010/5151-024.dwg");
               error += test_code (tmp, cov);
             }
+          if (DWG_TYPE == DWG_TYPE_DATALINK)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/5151-019.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/5151-022.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/5151-023.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/5151-024.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_DATATABLE)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/fr05_b101_ref.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/TS1.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "r13/TS1.dwg");
+              error += test_code (tmp, cov);
+            }
           if (DWG_TYPE == DWG_TYPE_SORTENTSTABLE)
             {
               strcpy (tmp, prefix);

@@ -4859,6 +4859,63 @@ Dwg_CELLSTYLEMAP_Cell*
 @end vtable
 @end indentedblock
 
+@strong{DATALINK} @anchor{DATALINK}
+@cindex object, DATALINK
+@vindex DATALINK
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item appname
+T,	DXF 1
+@item description
+T,	DXF 300
+@item link
+T,	DXF 301
+@item cell
+T,	DXF 302
+@item bs90
+BS,	DXF 90
+@item bs91
+BS,	DXF 91
+@item bs92
+BS,	DXF 92
+@item year
+BS,	DXF 170
+@item month
+BS,	DXF 171
+@item day
+BS,	DXF 172
+@item hour
+BS,	DXF 173
+@item minute
+BS,	DXF 174
+@item seconds
+BS,	DXF 175
+@item bs176
+BS,	DXF 176
+@item bs171
+BS,	DXF 177
+@item bs93
+BS,	DXF 93
+@item t304
+T,	DXF 304
+@item num_deps
+BS,	DXF 94
+@item deps
+H*,	DXF 330
+@item writedep
+H,	DXF 360
+@item t305
+T,	DXF 305
+
+@end vtable
+@end indentedblock
+
 @strong{DATATABLE} @anchor{DATATABLE}
 @cindex object, DATATABLE
 @vindex DATATABLE

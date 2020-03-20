@@ -7722,6 +7722,35 @@ DWG_OBJECT (DATATABLE)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (DATALINK)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbDataLink)
+  FIELD_BS (class_version, 0); // 10
+  FIELD_T (appname, 1);
+  FIELD_T (description, 300);
+  FIELD_T (link, 301);
+  FIELD_T (cell, 302);
+  //FIELD_BS (bs90, 90); // 2
+  FIELD_BS (bs91, 91); // 1179649
+  FIELD_BS (bs92, 92); // 1
+  FIELD_BS (year, 170);
+  FIELD_BS (month, 171);
+  FIELD_BS (day, 172);
+  FIELD_BS (hour, 173);
+  FIELD_BS (minute, 174);
+  FIELD_BS (seconds, 175);
+  FIELD_BS (bs176, 176); // 0
+  FIELD_BS (bs171, 177); // 1
+  FIELD_BS (bs93, 93); // 0
+  FIELD_T (t304, 304);
+  FIELD_BS (num_deps, 94); // 2
+  HANDLE_VECTOR (deps, num_deps, 0, 330);
+  FIELD_HANDLE (writedep, 0, 360);
+  FIELD_T (t305, 305); // CUSTOMDATA
+  DEBUG_HERE_OBJ
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */

@@ -71,6 +71,7 @@ testobjects = \
 	camera \
 	cellstylemap \
 	circle \
+	datalink \
 	datatable \
 	dbcolor \
 	dictionary \

@@ -615,6 +615,7 @@ typedef struct _dwg_object_GEOMAPIMAGE            dwg_obj_geomapimage;
 typedef struct _dwg_object_LIGHTLIST              dwg_obj_lightlist;
 typedef struct _dwg_object_RENDERENVIRONMENT      dwg_obj_renderenvironment;
 typedef struct _dwg_object_RENDERGLOBAL           dwg_obj_renderglobal;
+typedef struct _dwg_object_DATALINK               dwg_obj_datalink;
 typedef struct _dwg_object_DATATABLE              dwg_obj_datatable;
 #endif
 // unhandled:
@@ -832,6 +833,7 @@ DWG_GETALL_OBJECT_DECL (GEOMAPIMAGE)
 DWG_GETALL_OBJECT_DECL (LIGHTLIST)
 DWG_GETALL_OBJECT_DECL (RENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
+DWG_GETALL_OBJECT_DECL (DATALINK)
 DWG_GETALL_OBJECT_DECL (DATATABLE)
 #endif
 // unhandled:
@@ -1037,6 +1039,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENVIRONMENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
 #endif
 
@@ -1268,6 +1271,7 @@ dwg_get_OBJECT_DECL (obj_geomapimage, GEOMAPIMAGE)
 dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_renderenvironment, RENDERENVIRONMENT);
 dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);
+dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
 dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 #endif
 // unhandled:

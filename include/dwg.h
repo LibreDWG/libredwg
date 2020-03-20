@@ -4739,6 +4739,37 @@ typedef struct _dwg_object_DATATABLE
 } Dwg_Object_DATATABLE;
 
 /**
+ Object DATALINK (varies)
+ */
+typedef struct _dwg_object_DATALINK
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS class_version; /*<! DXF 70 1 */
+  BITCODE_T appname;	/*<! DXF 1  */
+  BITCODE_T description;/*<! DXF 300  */
+  BITCODE_T link;	/*<! DXF 301  */
+  BITCODE_T cell;	/*<! DXF 302  */
+  BITCODE_BS bs90;	/*<! DXF 90  2 */
+  BITCODE_BS bs91;	/*<! DXF 91  1179649 */
+  BITCODE_BS bs92;	/*<! DXF 92  1 */
+  BITCODE_BS year;	/*<! DXF 170  */
+  BITCODE_BS month;	/*<! DXF 171  */
+  BITCODE_BS day;	/*<! DXF 172  */
+  BITCODE_BS hour;	/*<! DXF 173  */
+  BITCODE_BS minute;	/*<! DXF 174  */
+  BITCODE_BS seconds;	/*<! DXF 175  */
+  BITCODE_BS bs176;	/*<! DXF 176  0 */
+  BITCODE_BS bs171;	/*<! DXF 177  1 */
+  BITCODE_BS bs93;	/*<! DXF 93   0 */
+  BITCODE_T t304;	/*<! DXF 304  */
+  BITCODE_BS num_deps;	/*<! DXF 94   2 */
+  BITCODE_H *deps;	/*<! DXF 330  */
+  BITCODE_H writedep;	/*<! DXF 360  */
+  BITCODE_T t305;	/*<! DXF 305 CUSTOMDATA */
+  //...
+} Dwg_Object_DATALINK;
+
+/**
  Object DIMASSOC (varies) DEBUGGING
  --enable-debug only
  */
@@ -5647,7 +5678,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *ASSOCREVOLVEDSURFACEACTIONBODY;
     Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *ASSOCSWEPTSURFACEACTIONBODY;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
-    //Dwg_Object_DATALINK *DATALINK;
+    Dwg_Object_DATALINK *DATALINK;
     Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
     //Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
@@ -6517,7 +6548,7 @@ EXPORT int dwg_add_ASSOCSWEPTSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
-//EXPORT int dwg_add_DATALINK (Dwg_Object *obj);
+EXPORT int dwg_add_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
 //EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
