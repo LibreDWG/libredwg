@@ -408,19 +408,22 @@ test_subdirs (const char *dir, int cov)
   while (n--)
     {
       char *elem = namelist[n]->d_name;
+      char path[256];
+      path[255] = '\0';
+      strncpy (path, dir, 254);
+      strncat (path, "/", 254);
+      strncat (path, elem, 254);
+      path[255] = '\0';
+
       if (namelist[n]->d_type == DT_DIR && *elem != '.')
         {
-          char path[256];
-          path[255] = '\0';
-          strncpy (path, dir, 254);
-          strncat (path, "/", 254);
-          strncat (path, elem, 254);
-          path[255] = '\0';
           error += test_subdirs (path, cov);
         }
       if (namelist[n]->d_type == DT_REG &&
           (strstr (elem, ".dwg") || strstr (elem, ".DWG")))
-        error += test_code (elem, cov);
+        {
+          error += test_code (path, cov);
+        }
 
       free (namelist[n]);
     }

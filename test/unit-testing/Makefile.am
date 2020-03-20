@@ -238,7 +238,7 @@ CLEANFILES = *.o
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 update-ignorance:
-	printf '/%s\n' $(check_PROGRAMS) > .gitignore
+	printf '/%s\n' $(check_PROGRAMS) > $(srcdir)/.gitignore
 
 EXTRA_DIST = \
 	tests_common.h \
