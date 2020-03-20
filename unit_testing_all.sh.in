@@ -1,12 +1,16 @@
 #!/bin/sh
-abs_srcdir="@abs_srcdir@"
+srcdir="@srcdir@"
 top_builddir="@top_builddir@"
 # dummy to please shellcheck, needed for LTEXEC
 test -z "$top_builddir" && echo $top_builddir
 
 cd test/unit-testing || exit
-for t in $(make -s list)
-do
-    @LTEXEC@ "./$t" -n "$abs_srcdir/test-data/"
-done
+list="$(make -s list)"
+make -s -j4 $list
 cd - || exit
+
+for t in $list
+do
+    # -a for all (no max 6), -n for no coverage checks
+    @LTEXEC@ "test/unit-testing/$t" -an "$srcdir/test/test-data/"
+done

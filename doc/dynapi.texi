@@ -4869,7 +4869,7 @@ Dwg_CELLSTYLEMAP_Cell*
 @item parent
 struct _dwg_object_object*
 @item class_version
-BS,	DXF 70
+BS
 @item appname
 T,	DXF 1
 @item description
@@ -4879,7 +4879,7 @@ T,	DXF 301
 @item cell
 T,	DXF 302
 @item bs90
-BS,	DXF 90
+BS
 @item bs91
 BS,	DXF 91
 @item bs92

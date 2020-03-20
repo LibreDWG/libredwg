@@ -19,6 +19,7 @@
 dwg_data g_dwg;
 int g_counter;
 #define MAX_COUNTER 6
+int g_countmax = MAX_COUNTER;
 
 /// test a DWG file
 int test_code (const char *filename, int cov);
@@ -70,8 +71,20 @@ main (int argc, char *argv[])
       // don't warn/error on no coverage. for unit_testing_all.sh
       if (strEQc (argv[i], "-n"))
         {
-          i = 2;
           cov = 0;
+          i++;
+        }
+      // --all, not stopping at 6
+      else if (strEQc (argv[i], "-an"))
+        {
+          g_countmax = 1000;
+          cov = 0;
+          i++;
+        }
+      else if (strEQc (argv[i], "-a"))
+        {
+          g_countmax = 1000;
+          i++;
         }
       // process subdirs
       if (argc > i && *argv[i] != '-')
@@ -603,7 +616,7 @@ print_api (dwg_object *obj)
     api_common_entity (obj);
   else if (obj->supertype == DWG_SUPERTYPE_OBJECT && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
     api_common_object (obj);
-  if (g_counter <= MAX_COUNTER)
+  if (g_counter <= g_countmax)
     printf ("\n");
 }
 
@@ -631,7 +644,7 @@ print_api (dwg_object *obj)
         char *_hdlname = dwg_dynapi_handle_name (dwg, hdl);                   \
         if (hdl == (BITCODE_H)ent->parent->field)                             \
           {                                                                   \
-            if (g_counter > MAX_COUNTER)                                      \
+            if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
               ok (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "",        \
@@ -658,7 +671,7 @@ print_api (dwg_object *obj)
           char *_hdlname = _hdl ? dwg_dynapi_handle_name (dwg, _hdl) : NULL;  \
           if (_hdl == ent->parent->field[_i])                                 \
             {                                                                 \
-              if (g_counter > MAX_COUNTER)                                    \
+              if (g_counter > g_countmax)                                     \
                 pass ();                                                      \
               else                                                            \
                 {                                                             \
@@ -676,7 +689,7 @@ print_api (dwg_object *obj)
                       ARGS_REF (_hdl));                                       \
               else                                                            \
                 {                                                             \
-                  if (g_counter > MAX_COUNTER)                                \
+                  if (g_counter > g_countmax)                                 \
                     pass ();                                                  \
                   else                                                        \
                     ok (#field "[%d]: NULL", _i);                             \
@@ -769,7 +782,7 @@ api_common_entity (dwg_object *obj)
 #define _CHK_ENTITY_UTF8TEXT(ent, name, field, value)                         \
   if (dwg_dynapi_entity_utf8text (ent, #name, #field, &value, &isnew, NULL))  \
     {                                                                         \
-      if (g_counter > MAX_COUNTER)                                            \
+      if (g_counter > g_countmax)                                             \
         pass ();                                                              \
       else                                                                    \
         ok (#name "." #field ":\t\"%s\"", value);                             \
@@ -795,7 +808,7 @@ api_common_entity (dwg_object *obj)
     {                                                                         \
       if (value == ent->field)                                                \
         {                                                                     \
-          if (g_counter > MAX_COUNTER)                                                 \
+          if (g_counter > g_countmax)                                         \
             pass ();                                                          \
           else                                                                \
             ok (#name "." #field ":\t" FORMAT_##type, value);                 \
@@ -811,7 +824,7 @@ api_common_entity (dwg_object *obj)
     {                                                                         \
       if (memcmp (&value, &ent->field, sizeof (Dwg_Color)) == 0)              \
         {                                                                     \
-          if (g_counter > MAX_COUNTER)                                                 \
+          if (g_counter > g_countmax)                                         \
             pass ();                                                          \
           else                                                                \
             ok (#name "." #field ":\t" FORMAT_BSd, value.index);              \
@@ -832,7 +845,7 @@ api_common_entity (dwg_object *obj)
         char *_hdlname = dwg_dynapi_handle_name (obj->parent, hdl);           \
         if (hdl == ent->field)                                                \
           {                                                                   \
-            if (g_counter > MAX_COUNTER)                                               \
+            if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
               ok (#name "." #field ": %s " FORMAT_REF,                        \
@@ -862,7 +875,7 @@ api_common_entity (dwg_object *obj)
           char *_hdlname = dwg_dynapi_handle_name (obj->parent, _hdl);        \
           if (_hdl == ent->field[_i])                                         \
             {                                                                 \
-              if (g_counter > MAX_COUNTER)                                    \
+              if (g_counter > g_countmax)                                     \
                 pass ();                                                      \
               else                                                            \
                 ok (#name "." #field "[%d]: %s " FORMAT_REF, _i,              \
@@ -885,7 +898,7 @@ api_common_entity (dwg_object *obj)
     {                                                                         \
       if (value.x == ent->field.x && value.y == ent->field.y)                 \
         {                                                                     \
-          if (g_counter > MAX_COUNTER)                                        \
+          if (g_counter > g_countmax)                                         \
             pass ();                                                          \
           else                                                                \
             ok (#name "." #field ":\t(%f, %f)", value.x, value.y);            \
@@ -902,7 +915,7 @@ api_common_entity (dwg_object *obj)
       if (value.x == ent->field.x && value.y == ent->field.y                  \
           && value.z == ent->field.z)                                         \
         {                                                                     \
-          if (g_counter > MAX_COUNTER)                                        \
+          if (g_counter > g_countmax)                                         \
             pass ();                                                          \
           else                                                                \
             ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y,         \
@@ -1014,7 +1027,7 @@ api_common_entity (dwg_object *obj)
       {                                                                       \
         if (ptr.field == value)                                               \
           {                                                                   \
-            if (g_counter > MAX_COUNTER)                                      \
+            if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
               ok (#name "." #field ":\t" FORMAT_##typ, ptr.field);            \
@@ -1034,7 +1047,7 @@ api_common_entity (dwg_object *obj)
         if (value.x == ptr.field.x && value.y == ptr.field.y                  \
             && value.z == ptr.field.z)                                        \
           {                                                                   \
-            if (g_counter > MAX_COUNTER)                                      \
+            if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
               ok (#name "." #field ":\t(%f, %f, %f)", value.x, value.y,       \
@@ -1054,7 +1067,7 @@ api_common_entity (dwg_object *obj)
       {                                                                       \
         if (value.x == ptr.field.x && value.y == ptr.field.y)                 \
           {                                                                   \
-            if (g_counter > MAX_COUNTER)                                      \
+            if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
               ok (#name "." #field ":\t(%f, %f)", value.x, value.y);          \
@@ -1076,7 +1089,7 @@ api_common_entity (dwg_object *obj)
           {                                                                   \
             if (!ptr.field)                                                   \
               {                                                               \
-                if (g_counter > MAX_COUNTER)                                  \
+                if (g_counter > g_countmax)                                   \
                   pass ();                                                    \
                 else                                                          \
                   ok (#name "." #field ":\tNULL");                            \
@@ -1086,7 +1099,7 @@ api_common_entity (dwg_object *obj)
           }                                                                   \
         else if (memcmp (&ptr.field, &value, sizeof value) == 0)              \
           {                                                                   \
-            if (g_counter > MAX_COUNTER)                                      \
+            if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
               ok (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",      \
@@ -1104,7 +1117,7 @@ api_common_entity (dwg_object *obj)
     BITCODE_TV value;                                                         \
     if (dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))        \
       {                                                                       \
-        if (g_counter > MAX_COUNTER)                                          \
+        if (g_counter > g_countmax)                                           \
           pass ();                                                            \
         else                                                                  \
           ok (#name "." #field ":\t\"%s\"", value);                           \
@@ -1122,7 +1135,7 @@ api_common_entity (dwg_object *obj)
     fail (#name "." #field);                                                  \
   else                                                                        \
     {                                                                         \
-      if (g_counter > MAX_COUNTER)                                            \
+      if (g_counter > g_countmax)                                             \
         pass ();                                                              \
       else                                                                    \
         ok (#name "." #field ":\t%d", ptr.field.index);                       \
