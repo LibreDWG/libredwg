@@ -45,7 +45,6 @@ testobjects = \
 	acsh_extrusion_class \
 	acsh_sweep_class \
 	aldimobjectcontextdata \
-	annotscaleobjectcontextdata \
 	appid \
 	appid_control \
 	arc \
@@ -64,6 +63,7 @@ testobjects = \
 	assocsweptsurfaceactionbody \
 	attdef \
 	attrib \
+	blkrefobjectcontextdata \
 	block \
 	block_control \
 	block_header \
@@ -76,6 +76,7 @@ testobjects = \
 	dictionary \
 	dictionaryvar \
 	dictionarywdflt \
+	dimassoc \
 	dimension_aligned \
 	dimension_ang2ln \
 	dimension_ang3pt \
@@ -83,7 +84,6 @@ testobjects = \
 	dimension_linear \
 	dimension_ordinate \
 	dimension_radius \
-	dimassoc \
 	dimstyle \
 	dimstyle_control \
 	dummy \
@@ -121,16 +121,18 @@ testobjects = \
 	material \
 	mesh \
 	minsert \
+	mleaderobjectcontextdata \
 	mleaderstyle \
 	mline \
 	mlinestyle \
 	mtext \
+	mtextobjectcontextdata \
 	multileader \
 	navisworksmodeldef \
-	objectcontextdata \
 	object_ptr \
-	oleframe \
+	objectcontextdata \
 	ole2frame \
+	oleframe \
 	perssubentmanager \
 	placeholder \
 	planesurface \
@@ -166,6 +168,9 @@ testobjects = \
 	tablegeometry \
 	tablestyle \
 	text \
+	textobjectcontextdata \
+        leaderobjectcontextdata \
+        mtextattributeobjectcontextdata \
 	tolerance \
 	trace \
 	ucs \

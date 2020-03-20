@@ -259,10 +259,44 @@ main (int argc, char *argv[])
               strcat (tmp, "2013/JW.dwg");
               error += test_code (tmp, cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
+          if (DWG_TYPE == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Visualstyle.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2018/Visualstyle.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/ACI_20160321_A_30_east.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2000/Leader.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2004/Leader.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2013/gh55-ltype.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA ||
+              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/ACI_20160321_A_30_east.dwg");
+              error += test_code (tmp, cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2013/gh55-ltype.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2010/ACI_20160321_A_30_east.dwg");
               error += test_code (tmp, cov);
             }
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)

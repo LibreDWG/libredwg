@@ -7614,35 +7614,100 @@ DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
+DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbObjectContextData)
-  SINCE (R_2010) {
-    IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE (class_version) = 3;
-    }
-    FIELD_BS (class_version, 70);
-    VALUEOUTOFBOUNDS (class_version, 10)
-  }
+  FIELD_BS (class_version, 70);
+  VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_B (has_file, 290);
   FIELD_B (defaultflag, 0);
   SUBCLASS (AcDbAnnotScaleObjectContextData)
-  // 70
-  // 10
-  // 11
-  // 40
-  // 41
-  // 42
-  // 43
-  // 71
-  // 72
-  // 44
-  // 45
-  // 73
-  // 74
-  // 46
+  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
+  // ?? ...
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (scale, 5, 340); /* to SCALE */
+DWG_OBJECT_END
+
+DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  FIELD_BS (class_version, 70);
+  VALUEOUTOFBOUNDS (class_version, 10)
+  FIELD_B (has_file, 290);
+  FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
+  // ?? ...
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (MLEADEROBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  FIELD_BS (class_version, 70);
+  VALUEOUTOFBOUNDS (class_version, 10)
+  FIELD_B (has_file, 290);
+  FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
+  // ?? ...
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (TEXTOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  FIELD_BS (class_version, 70); // 4
+  FIELD_B (has_file, 290);
+  //FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  FIELD_HANDLE (scale, 2, 340);
+  FIELD_BS (flag, 70); // 0
+  FIELD_BD (rotation, 50); // 0.0 or 90.0
+  FIELD_2RD (insertion_pt, 10);
+  FIELD_2RD (alignment_pt, 11);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  FIELD_BS (class_version, 70);
+  VALUEOUTOFBOUNDS (class_version, 10)
+  FIELD_B (has_file, 290);
+  FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
+  // ?? ...
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  FIELD_BS (class_version, 70); // 4
+  FIELD_B (has_file, 290);
+  //FIELD_B (defaultflag, 0);
+  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  FIELD_HANDLE (scale, 2, 340);
+  FIELD_BS (flag, 70); // 6
+  FIELD_3RD (insertion_pt, 11);
+  FIELD_3RD (x_axis_dir, 10);
+  FIELD_BD (text_height, 40);
+  FIELD_BD (rect_width, 41);
+  //FIELD_BD (rect_height, 0); // 46
+  FIELD_BD (extents_width, 42);
+  FIELD_BD (extents_height, 43);
+  FIELD_BS (attachment, 71); // or column_type?
+  if (FIELD_VALUE (attachment))
+    {
+      FIELD_BS (drawing_dir, 72);
+      FIELD_BS (linespace_style, 73);
+      FIELD_BD (linespace_factor, 44);
+      FIELD_BD (bd45, 45);
+      FIELD_BS (bs74, 74);
+      FIELD_BD (bd46, 46);
+    }
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (LIGHTLIST)

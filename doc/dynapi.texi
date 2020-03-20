@@ -4095,27 +4095,6 @@ B,	DXF 297
 @end vtable
 @end indentedblock
 
-@strong{ANNOTSCALEOBJECTCONTEXTDATA} @anchor{ANNOTSCALEOBJECTCONTEXTDATA}
-@cindex object, ANNOTSCALEOBJECTCONTEXTDATA
-@vindex ANNOTSCALEOBJECTCONTEXTDATA
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item class_version
-BS,	DXF 70
-@item has_file
-B,	DXF 290
-@item defaultflag
-B
-@item scale
-H,	DXF 340
-
-@end vtable
-@end indentedblock
-
 @strong{APPID} @anchor{APPID}
 @cindex object, APPID
 @vindex APPID
@@ -4730,6 +4709,27 @@ BS
 BL
 @item ssab_status
 BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{BLKREFOBJECTCONTEXTDATA} @anchor{BLKREFOBJECTCONTEXTDATA}
+@cindex object, BLKREFOBJECTCONTEXTDATA
+@vindex BLKREFOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -5804,6 +5804,27 @@ H*
 @end vtable
 @end indentedblock
 
+@strong{LEADEROBJECTCONTEXTDATA} @anchor{LEADEROBJECTCONTEXTDATA}
+@cindex object, LEADEROBJECTCONTEXTDATA
+@vindex LEADEROBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
 @strong{LIGHTLIST} @anchor{LIGHTLIST}
 @cindex object, LIGHTLIST
 @vindex LIGHTLIST
@@ -6107,6 +6128,27 @@ BL,	DXF 94
 @end vtable
 @end indentedblock
 
+@strong{MLEADEROBJECTCONTEXTDATA} @anchor{MLEADEROBJECTCONTEXTDATA}
+@cindex object, MLEADEROBJECTCONTEXTDATA
+@vindex MLEADEROBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
 @strong{MLEADERSTYLE} @anchor{MLEADERSTYLE}
 @cindex object, MLEADERSTYLE
 @vindex MLEADERSTYLE
@@ -6235,6 +6277,78 @@ BD,	DXF 52
 RC,	DXF 71
 @item lines
 Dwg_MLINESTYLE_line*
+
+@end vtable
+@end indentedblock
+
+@strong{MTEXTATTRIBUTEOBJECTCONTEXTDATA} @anchor{MTEXTATTRIBUTEOBJECTCONTEXTDATA}
+@cindex object, MTEXTATTRIBUTEOBJECTCONTEXTDATA
+@vindex MTEXTATTRIBUTEOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
+@strong{MTEXTOBJECTCONTEXTDATA} @anchor{MTEXTOBJECTCONTEXTDATA}
+@cindex object, MTEXTOBJECTCONTEXTDATA
+@vindex MTEXTOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+@item flag
+BS,	DXF 70
+@item insertion_pt
+3BD,	DXF 11
+@item x_axis_dir
+3BD,	DXF 10
+@item text_height
+BD,	DXF 40
+@item rect_width
+BD,	DXF 41
+@item rect_height
+BD
+@item extents_height
+BD,	DXF 43
+@item extents_width
+BD,	DXF 42
+@item attachment
+BS,	DXF 71
+@item drawing_dir
+BS,	DXF 72
+@item linespace_style
+BS,	DXF 73
+@item linespace_factor
+BD,	DXF 44
+@item bd45
+BD,	DXF 45
+@item bs74
+BS,	DXF 74
+@item bd46
+BD,	DXF 46
 
 @end vtable
 @end indentedblock
@@ -6864,6 +6978,35 @@ Dwg_TABLESTYLE_rowstyles*
 BL
 @item cells
 Dwg_TABLESTYLE_Cell*
+
+@end vtable
+@end indentedblock
+
+@strong{TEXTOBJECTCONTEXTDATA} @anchor{TEXTOBJECTCONTEXTDATA}
+@cindex object, TEXTOBJECTCONTEXTDATA
+@vindex TEXTOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+@item flag
+BS,	DXF 70
+@item rotation
+BD,	DXF 50
+@item insertion_pt
+2RD,	DXF 10
+@item alignment_pt
+2RD,	DXF 11
 
 @end vtable
 @end indentedblock

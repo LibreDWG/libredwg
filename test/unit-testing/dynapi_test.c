@@ -22239,80 +22239,6 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA *restrict annotscaleobjectcontextdata = obj->tio.object->tio.ANNOTSCALEOBJECTCONTEXTDATA;
-  failed = 0;
-  {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
-        && class_version == annotscaleobjectcontextdata->class_version)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", annotscaleobjectcontextdata->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "class_version", &class_version, 0)
-        && class_version == annotscaleobjectcontextdata->class_version)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", annotscaleobjectcontextdata->class_version, class_version);
-    annotscaleobjectcontextdata->class_version--;
-  }
-  {
-    BITCODE_B defaultflag;
-    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
-        && defaultflag == annotscaleobjectcontextdata->defaultflag)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->defaultflag, defaultflag);
-    defaultflag++;
-    if (dwg_dynapi_entity_set_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
-        && defaultflag == annotscaleobjectcontextdata->defaultflag)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->defaultflag, defaultflag);
-    annotscaleobjectcontextdata->defaultflag--;
-  }
-  {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == annotscaleobjectcontextdata->has_file)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == annotscaleobjectcontextdata->has_file)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->has_file, has_file);
-    annotscaleobjectcontextdata->has_file--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &annotscaleobjectcontextdata->parent, sizeof (annotscaleobjectcontextdata->parent)))
-        pass ();
-    else
-        fail ("ANNOTSCALEOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H scale;
-    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &annotscaleobjectcontextdata->scale, sizeof (annotscaleobjectcontextdata->scale)))
-        pass ();
-    else
-        fail ("ANNOTSCALEOBJECTCONTEXTDATA.scale [H]");
-  }
-  if (failed && (is_class_unstable ("ANNOTSCALEOBJECTCONTEXTDATA") || is_class_debugging ("ANNOTSCALEOBJECTCONTEXTDATA")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "ANNOTSCALEOBJECTCONTEXTDATA", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_APPID (const Dwg_Object *obj)
 {
   int error = 0;
@@ -25543,6 +25469,80 @@ static int test_ASSOCSWEPTSURFACEACTIONBODY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ASSOCSWEPTSURFACEACTIONBODY") || is_class_debugging ("ASSOCSWEPTSURFACEACTIONBODY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCSWEPTSURFACEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BLKREFOBJECTCONTEXTDATA *restrict blkrefobjectcontextdata = obj->tio.object->tio.BLKREFOBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == blkrefobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", blkrefobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == blkrefobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", blkrefobjectcontextdata->class_version, class_version);
+    blkrefobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B defaultflag;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
+        && defaultflag == blkrefobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->defaultflag, defaultflag);
+    defaultflag++;
+    if (dwg_dynapi_entity_set_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
+        && defaultflag == blkrefobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->defaultflag, defaultflag);
+    blkrefobjectcontextdata->defaultflag--;
+  }
+  {
+    BITCODE_B has_file;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
+        && has_file == blkrefobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->has_file, has_file);
+    has_file++;
+    if (dwg_dynapi_entity_set_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "has_file", &has_file, 0)
+        && has_file == blkrefobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->has_file, has_file);
+    blkrefobjectcontextdata->has_file--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &blkrefobjectcontextdata->parent, sizeof (blkrefobjectcontextdata->parent)))
+        pass ();
+    else
+        fail ("BLKREFOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &blkrefobjectcontextdata->scale, sizeof (blkrefobjectcontextdata->scale)))
+        pass ();
+    else
+        fail ("BLKREFOBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("BLKREFOBJECTCONTEXTDATA") || is_class_debugging ("BLKREFOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLKREFOBJECTCONTEXTDATA", failed);
       failed = 0;
     }
   return failed;
@@ -30665,6 +30665,80 @@ static int test_LAYOUT (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_LEADEROBJECTCONTEXTDATA *restrict leaderobjectcontextdata = obj->tio.object->tio.LEADEROBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == leaderobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.class_version [BS] %hu != %hu", leaderobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == leaderobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", leaderobjectcontextdata->class_version, class_version);
+    leaderobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B defaultflag;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
+        && defaultflag == leaderobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->defaultflag, defaultflag);
+    defaultflag++;
+    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
+        && defaultflag == leaderobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->defaultflag, defaultflag);
+    leaderobjectcontextdata->defaultflag--;
+  }
+  {
+    BITCODE_B has_file;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "has_file", &has_file, NULL)
+        && has_file == leaderobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->has_file, has_file);
+    has_file++;
+    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "has_file", &has_file, 0)
+        && has_file == leaderobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->has_file, has_file);
+    leaderobjectcontextdata->has_file--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &leaderobjectcontextdata->parent, sizeof (leaderobjectcontextdata->parent)))
+        pass ();
+    else
+        fail ("LEADEROBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &leaderobjectcontextdata->scale, sizeof (leaderobjectcontextdata->scale)))
+        pass ();
+    else
+        fail ("LEADEROBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("LEADEROBJECTCONTEXTDATA") || is_class_debugging ("LEADEROBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LEADEROBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_LIGHTLIST (const Dwg_Object *obj)
 {
   int error = 0;
@@ -32288,6 +32362,80 @@ static int test_MATERIAL (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_MLEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_MLEADEROBJECTCONTEXTDATA *restrict mleaderobjectcontextdata = obj->tio.object->tio.MLEADEROBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == mleaderobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("MLEADEROBJECTCONTEXTDATA.class_version [BS] %hu != %hu", mleaderobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == mleaderobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("MLEADEROBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", mleaderobjectcontextdata->class_version, class_version);
+    mleaderobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B defaultflag;
+    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
+        && defaultflag == mleaderobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("MLEADEROBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->defaultflag, defaultflag);
+    defaultflag++;
+    if (dwg_dynapi_entity_set_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
+        && defaultflag == mleaderobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("MLEADEROBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->defaultflag, defaultflag);
+    mleaderobjectcontextdata->defaultflag--;
+  }
+  {
+    BITCODE_B has_file;
+    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "has_file", &has_file, NULL)
+        && has_file == mleaderobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("MLEADEROBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->has_file, has_file);
+    has_file++;
+    if (dwg_dynapi_entity_set_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "has_file", &has_file, 0)
+        && has_file == mleaderobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("MLEADEROBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->has_file, has_file);
+    mleaderobjectcontextdata->has_file--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &mleaderobjectcontextdata->parent, sizeof (mleaderobjectcontextdata->parent)))
+        pass ();
+    else
+        fail ("MLEADEROBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &mleaderobjectcontextdata->scale, sizeof (mleaderobjectcontextdata->scale)))
+        pass ();
+    else
+        fail ("MLEADEROBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("MLEADEROBJECTCONTEXTDATA") || is_class_debugging ("MLEADEROBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MLEADEROBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_MLEADERSTYLE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -33032,6 +33180,365 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("MLINESTYLE") || is_class_debugging ("MLINESTYLE")))
     {
       ok ("%s failed %d tests (TODO unstable)", "MLINESTYLE", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *restrict mtextattributeobjectcontextdata = obj->tio.object->tio.MTEXTATTRIBUTEOBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == mtextattributeobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", mtextattributeobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == mtextattributeobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", mtextattributeobjectcontextdata->class_version, class_version);
+    mtextattributeobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B defaultflag;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
+        && defaultflag == mtextattributeobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->defaultflag, defaultflag);
+    defaultflag++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
+        && defaultflag == mtextattributeobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->defaultflag, defaultflag);
+    mtextattributeobjectcontextdata->defaultflag--;
+  }
+  {
+    BITCODE_B has_file;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
+        && has_file == mtextattributeobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->has_file, has_file);
+    has_file++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "has_file", &has_file, 0)
+        && has_file == mtextattributeobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->has_file, has_file);
+    mtextattributeobjectcontextdata->has_file--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &mtextattributeobjectcontextdata->parent, sizeof (mtextattributeobjectcontextdata->parent)))
+        pass ();
+    else
+        fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &mtextattributeobjectcontextdata->scale, sizeof (mtextattributeobjectcontextdata->scale)))
+        pass ();
+    else
+        fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("MTEXTATTRIBUTEOBJECTCONTEXTDATA") || is_class_debugging ("MTEXTATTRIBUTEOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MTEXTATTRIBUTEOBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_MTEXTOBJECTCONTEXTDATA *restrict mtextobjectcontextdata = obj->tio.object->tio.MTEXTOBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_BS attachment;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "attachment", &attachment, NULL)
+        && attachment == mtextobjectcontextdata->attachment)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.attachment [BS] %hu != %hu", mtextobjectcontextdata->attachment, attachment);
+    attachment++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "attachment", &attachment, 0)
+        && attachment == mtextobjectcontextdata->attachment)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.attachment [BS] set+1 %hu != %hu", mtextobjectcontextdata->attachment, attachment);
+    mtextobjectcontextdata->attachment--;
+  }
+  {
+    BITCODE_BD bd45;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd45", &bd45, NULL)
+        && bd45 == mtextobjectcontextdata->bd45)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.bd45 [BD] %g != %g", mtextobjectcontextdata->bd45, bd45);
+    bd45++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd45", &bd45, 0)
+        && bd45 == mtextobjectcontextdata->bd45)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.bd45 [BD] set+1 %g != %g", mtextobjectcontextdata->bd45, bd45);
+    mtextobjectcontextdata->bd45--;
+  }
+  {
+    BITCODE_BD bd46;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd46", &bd46, NULL)
+        && bd46 == mtextobjectcontextdata->bd46)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.bd46 [BD] %g != %g", mtextobjectcontextdata->bd46, bd46);
+    bd46++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd46", &bd46, 0)
+        && bd46 == mtextobjectcontextdata->bd46)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.bd46 [BD] set+1 %g != %g", mtextobjectcontextdata->bd46, bd46);
+    mtextobjectcontextdata->bd46--;
+  }
+  {
+    BITCODE_BS bs74;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bs74", &bs74, NULL)
+        && bs74 == mtextobjectcontextdata->bs74)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.bs74 [BS] %hu != %hu", mtextobjectcontextdata->bs74, bs74);
+    bs74++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bs74", &bs74, 0)
+        && bs74 == mtextobjectcontextdata->bs74)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.bs74 [BS] set+1 %hu != %hu", mtextobjectcontextdata->bs74, bs74);
+    mtextobjectcontextdata->bs74--;
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == mtextobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", mtextobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == mtextobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", mtextobjectcontextdata->class_version, class_version);
+    mtextobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B defaultflag;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
+        && defaultflag == mtextobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->defaultflag, defaultflag);
+    defaultflag++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
+        && defaultflag == mtextobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->defaultflag, defaultflag);
+    mtextobjectcontextdata->defaultflag--;
+  }
+  {
+    BITCODE_BS drawing_dir;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "drawing_dir", &drawing_dir, NULL)
+        && drawing_dir == mtextobjectcontextdata->drawing_dir)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.drawing_dir [BS] %hu != %hu", mtextobjectcontextdata->drawing_dir, drawing_dir);
+    drawing_dir++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "drawing_dir", &drawing_dir, 0)
+        && drawing_dir == mtextobjectcontextdata->drawing_dir)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.drawing_dir [BS] set+1 %hu != %hu", mtextobjectcontextdata->drawing_dir, drawing_dir);
+    mtextobjectcontextdata->drawing_dir--;
+  }
+  {
+    BITCODE_BD extents_height;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "extents_height", &extents_height, NULL)
+        && extents_height == mtextobjectcontextdata->extents_height)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.extents_height [BD] %g != %g", mtextobjectcontextdata->extents_height, extents_height);
+    extents_height++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "extents_height", &extents_height, 0)
+        && extents_height == mtextobjectcontextdata->extents_height)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.extents_height [BD] set+1 %g != %g", mtextobjectcontextdata->extents_height, extents_height);
+    mtextobjectcontextdata->extents_height--;
+  }
+  {
+    BITCODE_BD extents_width;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "extents_width", &extents_width, NULL)
+        && extents_width == mtextobjectcontextdata->extents_width)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.extents_width [BD] %g != %g", mtextobjectcontextdata->extents_width, extents_width);
+    extents_width++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "extents_width", &extents_width, 0)
+        && extents_width == mtextobjectcontextdata->extents_width)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.extents_width [BD] set+1 %g != %g", mtextobjectcontextdata->extents_width, extents_width);
+    mtextobjectcontextdata->extents_width--;
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flag", &flag, NULL)
+        && flag == mtextobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.flag [BS] %hu != %hu", mtextobjectcontextdata->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flag", &flag, 0)
+        && flag == mtextobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.flag [BS] set+1 %hu != %hu", mtextobjectcontextdata->flag, flag);
+    mtextobjectcontextdata->flag--;
+  }
+  {
+    BITCODE_B has_file;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
+        && has_file == mtextobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->has_file, has_file);
+    has_file++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "has_file", &has_file, 0)
+        && has_file == mtextobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->has_file, has_file);
+    mtextobjectcontextdata->has_file--;
+  }
+  {
+    BITCODE_3BD insertion_pt;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
+        && !memcmp (&insertion_pt, &mtextobjectcontextdata->insertion_pt, sizeof (mtextobjectcontextdata->insertion_pt)))
+        pass ();
+    else
+        fail ("MTEXTOBJECTCONTEXTDATA.insertion_pt [3BD]");
+  }
+  {
+    BITCODE_BD linespace_factor;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_factor", &linespace_factor, NULL)
+        && linespace_factor == mtextobjectcontextdata->linespace_factor)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.linespace_factor [BD] %g != %g", mtextobjectcontextdata->linespace_factor, linespace_factor);
+    linespace_factor++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_factor", &linespace_factor, 0)
+        && linespace_factor == mtextobjectcontextdata->linespace_factor)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.linespace_factor [BD] set+1 %g != %g", mtextobjectcontextdata->linespace_factor, linespace_factor);
+    mtextobjectcontextdata->linespace_factor--;
+  }
+  {
+    BITCODE_BS linespace_style;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_style", &linespace_style, NULL)
+        && linespace_style == mtextobjectcontextdata->linespace_style)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.linespace_style [BS] %hu != %hu", mtextobjectcontextdata->linespace_style, linespace_style);
+    linespace_style++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_style", &linespace_style, 0)
+        && linespace_style == mtextobjectcontextdata->linespace_style)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.linespace_style [BS] set+1 %hu != %hu", mtextobjectcontextdata->linespace_style, linespace_style);
+    mtextobjectcontextdata->linespace_style--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &mtextobjectcontextdata->parent, sizeof (mtextobjectcontextdata->parent)))
+        pass ();
+    else
+        fail ("MTEXTOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD rect_height;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "rect_height", &rect_height, NULL)
+        && rect_height == mtextobjectcontextdata->rect_height)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.rect_height [BD] %g != %g", mtextobjectcontextdata->rect_height, rect_height);
+    rect_height++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "rect_height", &rect_height, 0)
+        && rect_height == mtextobjectcontextdata->rect_height)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.rect_height [BD] set+1 %g != %g", mtextobjectcontextdata->rect_height, rect_height);
+    mtextobjectcontextdata->rect_height--;
+  }
+  {
+    BITCODE_BD rect_width;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "rect_width", &rect_width, NULL)
+        && rect_width == mtextobjectcontextdata->rect_width)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.rect_width [BD] %g != %g", mtextobjectcontextdata->rect_width, rect_width);
+    rect_width++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "rect_width", &rect_width, 0)
+        && rect_width == mtextobjectcontextdata->rect_width)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.rect_width [BD] set+1 %g != %g", mtextobjectcontextdata->rect_width, rect_width);
+    mtextobjectcontextdata->rect_width--;
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &mtextobjectcontextdata->scale, sizeof (mtextobjectcontextdata->scale)))
+        pass ();
+    else
+        fail ("MTEXTOBJECTCONTEXTDATA.scale [H]");
+  }
+  {
+    BITCODE_BD text_height;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "text_height", &text_height, NULL)
+        && text_height == mtextobjectcontextdata->text_height)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.text_height [BD] %g != %g", mtextobjectcontextdata->text_height, text_height);
+    text_height++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "text_height", &text_height, 0)
+        && text_height == mtextobjectcontextdata->text_height)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.text_height [BD] set+1 %g != %g", mtextobjectcontextdata->text_height, text_height);
+    mtextobjectcontextdata->text_height--;
+  }
+  {
+    BITCODE_3BD x_axis_dir;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "x_axis_dir", &x_axis_dir, NULL)
+        && !memcmp (&x_axis_dir, &mtextobjectcontextdata->x_axis_dir, sizeof (mtextobjectcontextdata->x_axis_dir)))
+        pass ();
+    else
+        fail ("MTEXTOBJECTCONTEXTDATA.x_axis_dir [3BD]");
+  }
+  if (failed && (is_class_unstable ("MTEXTOBJECTCONTEXTDATA") || is_class_debugging ("MTEXTOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MTEXTOBJECTCONTEXTDATA", failed);
       failed = 0;
     }
   return failed;
@@ -35764,6 +36271,126 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("TABLESTYLE") || is_class_debugging ("TABLESTYLE")))
     {
       ok ("%s failed %d tests (TODO unstable)", "TABLESTYLE", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_TEXTOBJECTCONTEXTDATA *restrict textobjectcontextdata = obj->tio.object->tio.TEXTOBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_2RD alignment_pt;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "alignment_pt", &alignment_pt, NULL)
+        && !memcmp (&alignment_pt, &textobjectcontextdata->alignment_pt, sizeof (textobjectcontextdata->alignment_pt)))
+        pass ();
+    else
+        fail ("TEXTOBJECTCONTEXTDATA.alignment_pt [2RD]");
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == textobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", textobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == textobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", textobjectcontextdata->class_version, class_version);
+    textobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B defaultflag;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
+        && defaultflag == textobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->defaultflag, defaultflag);
+    defaultflag++;
+    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
+        && defaultflag == textobjectcontextdata->defaultflag)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->defaultflag, defaultflag);
+    textobjectcontextdata->defaultflag--;
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "flag", &flag, NULL)
+        && flag == textobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.flag [BS] %hu != %hu", textobjectcontextdata->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "flag", &flag, 0)
+        && flag == textobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.flag [BS] set+1 %hu != %hu", textobjectcontextdata->flag, flag);
+    textobjectcontextdata->flag--;
+  }
+  {
+    BITCODE_B has_file;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
+        && has_file == textobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->has_file, has_file);
+    has_file++;
+    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "has_file", &has_file, 0)
+        && has_file == textobjectcontextdata->has_file)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->has_file, has_file);
+    textobjectcontextdata->has_file--;
+  }
+  {
+    BITCODE_2RD insertion_pt;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
+        && !memcmp (&insertion_pt, &textobjectcontextdata->insertion_pt, sizeof (textobjectcontextdata->insertion_pt)))
+        pass ();
+    else
+        fail ("TEXTOBJECTCONTEXTDATA.insertion_pt [2RD]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &textobjectcontextdata->parent, sizeof (textobjectcontextdata->parent)))
+        pass ();
+    else
+        fail ("TEXTOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD rotation;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "rotation", &rotation, NULL)
+        && rotation == textobjectcontextdata->rotation)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.rotation [BD] %g != %g", textobjectcontextdata->rotation, rotation);
+    rotation++;
+    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "rotation", &rotation, 0)
+        && rotation == textobjectcontextdata->rotation)
+      pass ();
+    else
+      fail ("TEXTOBJECTCONTEXTDATA.rotation [BD] set+1 %g != %g", textobjectcontextdata->rotation, rotation);
+    textobjectcontextdata->rotation--;
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &textobjectcontextdata->scale, sizeof (textobjectcontextdata->scale)))
+        pass ();
+    else
+        fail ("TEXTOBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("TEXTOBJECTCONTEXTDATA") || is_class_debugging ("TEXTOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TEXTOBJECTCONTEXTDATA", failed);
       failed = 0;
     }
   return failed;
@@ -38821,8 +39448,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_SWEEP_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
     error += test_ALDIMOBJECTCONTEXTDATA(obj);
-  else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
-    error += test_ANNOTSCALEOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
     error += test_APPID(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID_CONTROL)
@@ -38851,6 +39476,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
+    error += test_BLKREFOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
     error += test_BLOCK_CONTROL(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
@@ -38903,6 +39530,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LAYER_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
     error += test_LAYOUT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
+    error += test_LEADEROBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
     error += test_LIGHTLIST(obj);
   else  if (obj->fixedtype == DWG_TYPE_LONG_TRANSACTION)
@@ -38913,10 +39542,16 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LTYPE_CONTROL(obj);
   else  if (obj->fixedtype == DWG_TYPE_MATERIAL)
     error += test_MATERIAL(obj);
+  else  if (obj->fixedtype == DWG_TYPE_MLEADEROBJECTCONTEXTDATA)
+    error += test_MLEADEROBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
     error += test_MLEADERSTYLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
     error += test_MLINESTYLE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+    error += test_MTEXTATTRIBUTEOBJECTCONTEXTDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+    error += test_MTEXTOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
@@ -38959,6 +39594,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TABLEGEOMETRY(obj);
   else  if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
     error += test_TABLESTYLE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
+    error += test_TEXTOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS)
     error += test_UCS(obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS_CONTROL)
@@ -39123,8 +39760,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_SWEEP_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
     error += test_ALDIMOBJECTCONTEXTDATA (obj);
-  else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
-    error += test_ANNOTSCALEOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
     error += test_APPID (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID_CONTROL)
@@ -39153,6 +39788,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
+    error += test_BLKREFOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
     error += test_BLOCK_CONTROL (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
@@ -39205,6 +39842,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LAYER_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
     error += test_LAYOUT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
+    error += test_LEADEROBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
     error += test_LIGHTLIST (obj);
   else  if (obj->fixedtype == DWG_TYPE_LONG_TRANSACTION)
@@ -39215,10 +39854,16 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LTYPE_CONTROL (obj);
   else  if (obj->fixedtype == DWG_TYPE_MATERIAL)
     error += test_MATERIAL (obj);
+  else  if (obj->fixedtype == DWG_TYPE_MLEADEROBJECTCONTEXTDATA)
+    error += test_MLEADEROBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
     error += test_MLEADERSTYLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
     error += test_MLINESTYLE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+    error += test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+    error += test_MTEXTOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF (obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
@@ -39261,6 +39906,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TABLEGEOMETRY (obj);
   else  if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
     error += test_TABLESTYLE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
+    error += test_TEXTOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS)
     error += test_UCS (obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS_CONTROL)
@@ -39869,14 +40516,6 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ALDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA);
-  size2 = dwg_dynapi_fields_size ("ANNOTSCALEOBJECTCONTEXTDATA");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA): %d != "
-               "dwg_dynapi_fields_size (\"ANNOTSCALEOBJECTCONTEXTDATA\"): %d\n", size1, size2);
-      error++;
-    }
   size1 = sizeof (struct _dwg_object_APPID);
   size2 = dwg_dynapi_fields_size ("APPID");
   if (size1 != size2)
@@ -39987,6 +40626,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCSWEPTSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_BLKREFOBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("BLKREFOBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_BLKREFOBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"BLKREFOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_BLOCK_CONTROL);
@@ -40197,6 +40844,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"LAYOUT\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_LEADEROBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("LEADEROBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_LEADEROBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"LEADEROBJECTCONTEXTDATA\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_LIGHTLIST);
   size2 = dwg_dynapi_fields_size ("LIGHTLIST");
   if (size1 != size2)
@@ -40237,6 +40892,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"MATERIAL\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_MLEADEROBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("MLEADEROBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_MLEADEROBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"MLEADEROBJECTCONTEXTDATA\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_MLEADERSTYLE);
   size2 = dwg_dynapi_fields_size ("MLEADERSTYLE");
   if (size1 != size2)
@@ -40251,6 +40914,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_MLINESTYLE): %d != "
                "dwg_dynapi_fields_size (\"MLINESTYLE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("MTEXTATTRIBUTEOBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"MTEXTATTRIBUTEOBJECTCONTEXTDATA\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_MTEXTOBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("MTEXTOBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_MTEXTOBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"MTEXTOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_NAVISWORKSMODELDEF);
@@ -40419,6 +41098,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_TABLESTYLE): %d != "
                "dwg_dynapi_fields_size (\"TABLESTYLE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_TEXTOBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("TEXTOBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_TEXTOBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"TEXTOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_UCS);
