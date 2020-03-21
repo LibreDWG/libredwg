@@ -6887,7 +6887,7 @@ static const Dwg_DYNAPI_field _dwg_ContentFormat_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DIMASSOC_Ref_fields[] = {
   { "parent",	"struct _dwg_object_DIMASSOC*", sizeof (void *),  OFF (struct _dwg_DIMASSOC_Ref, parent),
     1,1,0, 0 },
-  { "has_lastpt_ref",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, has_lastpt_ref),
+  { "has_lastpt_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_DIMASSOC_Ref, has_lastpt_ref),
     0,0,0, 75 },
   { "classname",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_DIMASSOC_Ref, classname),
     1,1,1, 1 },
@@ -6896,7 +6896,7 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_Ref_fields[] = {
   { "main_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, main_subent_type),
     0,0,0, 73 },
   { "rotated_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, rotated_type),
-    0,0,0, 71 },
+    0,0,0, 0 },
   { "main_gsmarker",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_DIMASSOC_Ref, main_gsmarker),
     0,0,0, 91 },
   { "intsect_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, intsect_subent_type),

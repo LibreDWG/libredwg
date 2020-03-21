@@ -4776,7 +4776,7 @@ typedef struct _dwg_object_DATALINK
 typedef struct _dwg_DIMASSOC_Ref
 {
   struct _dwg_object_DIMASSOC *parent;
-  BITCODE_BS has_lastpt_ref;  /*!< DXF 75 */
+  BITCODE_B  has_lastpt_ref;  /*!< DXF 75 */
   BITCODE_TV classname;       /*!< DXF 1 */
   BITCODE_RC osnap_type;      /*!< DXF 72 */
   BITCODE_BS main_subent_type; /*!< DXF 73 */

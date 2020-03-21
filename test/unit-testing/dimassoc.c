@@ -20,10 +20,10 @@ api_process (dwg_object *obj)
   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
     return;
 
-  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, associativity, BL, associativity);
+  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, associativity, BLx, associativity);
   CHK_ENTITY_MAX (dimassoc, DIMASSOC, associativity, BL, 15);
-  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, trans_space_flag, RC, trans_space_flag);
-  CHK_ENTITY_MAX (dimassoc, DIMASSOC, trans_space_flag, RC, 1);
+  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, trans_space_flag, RCd, trans_space_flag);
+  CHK_ENTITY_MAX (dimassoc, DIMASSOC, trans_space_flag, RCd, 1);
   if (!dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "ref", &ref, NULL))
     fail ("DIMASSOC.ref");
   for (int i = 0; i < 4; i++)
@@ -31,18 +31,18 @@ api_process (dwg_object *obj)
       // 0 1 2 3 => 1 2 4 8. skip unset bits
       if (!(associativity & (1<<i)))
         continue;
-      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, rotated_type, BS);
-      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, rotated_type, BS, 2);
+      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, has_lastpt_ref, B);
+      CHK_SUBCLASS_UTF8TEXT (ref[i], DIMASSOC_Ref, classname); // "AcDbOsnapPointRef"
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, osnap_type, RC);
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, osnap_type, RC, 13);
-      CHK_SUBCLASS_UTF8TEXT (ref[i], DIMASSOC_Ref, classname); // "AcDbOsnapPointRef"
+      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, unknown_bs, BS);
+      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, unknown_bs, BS, 2);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_subent_type, BS);
+      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_gsmarker, BL);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, intsect_subent_type, BS);
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, intsect_subent_type, BS, 2);
-      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_gsmarker, BL);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, osnap_dist, BD);
       CHK_SUBCLASS_3RD (ref[i], DIMASSOC_Ref, osnap_pt);
-      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, has_lastpt_ref, B);
       CHK_SUBCLASS_H (ref[i], DIMASSOC_Ref, mainobj);
       CHK_SUBCLASS_H (ref[i], DIMASSOC_Ref, intsectobj);
     }
