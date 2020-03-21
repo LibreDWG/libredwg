@@ -2003,24 +2003,24 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
 
       REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
       REPEAT_BLOCK
-        WIRESTRUCT_fields (wires[rcount1])
-        END_REPEAT_BLOCK
-        SET_PARENT_OBJ (wires)
+          WIRESTRUCT_fields (wires[rcount1])
+      END_REPEAT_BLOCK
+      SET_PARENT_OBJ (wires)
       END_REPEAT (wires);
 
       REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
       REPEAT_BLOCK
-        SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
-        SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
-        SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
-        SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
-        SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
-        SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
-        REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire)
-        REPEAT_BLOCK
-          WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
-        END_REPEAT_BLOCK
-        END_REPEAT (silhouettes[rcount1].wires);
+          SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
+          SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
+          SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
+          SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
+          SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
+          SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
+          REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire)
+          REPEAT_BLOCK
+              WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
+          END_REPEAT_BLOCK
+          END_REPEAT (silhouettes[rcount1].wires);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (silhouettes)
       END_REPEAT (silhouettes);
@@ -2770,21 +2770,21 @@ DWG_OBJECT (LTYPE)
   FIELD_RCu (num_dashes, 73);
   REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
   REPEAT_BLOCK
-    SUB_FIELD_BD (dashes[rcount1],length, 49);
-    SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
-    SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
-    SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
-    SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
-    SUB_FIELD_BD (dashes[rcount1],scale, 46);
-    SUB_FIELD_BD (dashes[rcount1],rotation, 50);
-    SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
-    DECODER {
-      if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x4)
-        FIELD_VALUE (has_strings_area) = 1;
-      PRE (R_13) {
-        FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
+      SUB_FIELD_BD (dashes[rcount1],length, 49);
+      SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
+      SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
+      SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
+      SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
+      SUB_FIELD_BD (dashes[rcount1],scale, 46);
+      SUB_FIELD_BD (dashes[rcount1],rotation, 50);
+      SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
+      DECODER {
+        if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x4)
+          FIELD_VALUE (has_strings_area) = 1;
+        PRE (R_13) {
+          FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
+        }
       }
-    }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (dashes)
   END_REPEAT (dashes);  // there's a 2nd loop below, don't free
@@ -3569,10 +3569,10 @@ DWG_OBJECT (MLINESTYLE)
   FIELD_RCu (num_lines, 71);
   REPEAT (num_lines, lines, Dwg_MLINESTYLE_line)
   REPEAT_BLOCK
-    SUB_FIELD_BD (lines[rcount1], offset, 49);
-    SUB_FIELD_CMC (lines[rcount1], color, 62,420); /*!< default: 0 */
-    PRE (R_2018)
-    {
+      SUB_FIELD_BD (lines[rcount1], offset, 49);
+      SUB_FIELD_CMC (lines[rcount1], color, 62,420); /*!< default: 0 */
+      PRE (R_2018)
+      {
 #if defined (IS_DXF) && !defined (IS_ENCODER)
         switch (FIELD_VALUE (lines[rcount1].lt.index)) {
         case 32767: VALUE_TFF ("BYLAYER", 6); break; /* default (SHRT_MAX) */
@@ -3585,10 +3585,10 @@ DWG_OBJECT (MLINESTYLE)
 #else
         SUB_FIELD_BSd (lines[rcount1], lt.index, 6);
 #endif
-    }
-    LATER_VERSIONS {
-      SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
-    }
+      }
+      LATER_VERSIONS {
+        SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
+      }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (lines)
   END_REPEAT (lines);
@@ -6878,16 +6878,16 @@ DWG_OBJECT (SUNSTUDY)
   VALUEOUTOFBOUNDS (num_dates, 10000)
   REPEAT (num_dates, dates, Dwg_SUNSTUDY_Dates)
   REPEAT_BLOCK
-    SUB_FIELD_BL (dates[rcount1], julian_day, 90);
-    SUB_FIELD_BL (dates[rcount1], time, 90);
+      SUB_FIELD_BL (dates[rcount1], julian_day, 90);
+      SUB_FIELD_BL (dates[rcount1], time, 90);
   END_REPEAT_BLOCK
   END_REPEAT (dates);
   FIELD_B (select_range_of_dates, 292);
   if (FIELD_VALUE (select_range_of_dates))
     {
-     FIELD_BL (start_time, 93);
-     FIELD_BL (end_time, 94);
-     FIELD_BL (interval, 95);
+       FIELD_BL (start_time, 93);
+       FIELD_BL (end_time, 94);
+       FIELD_BL (interval, 95);
     }
   FIELD_BL (num_hours, 91);
   VALUEOUTOFBOUNDS (num_hours, 10000)
