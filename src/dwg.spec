@@ -6165,7 +6165,6 @@ DWG_OBJECT (VISUALSTYLE)
   FIELD_BS (edge_silhouette_width, 79); // 3 or 5
   SINCE (R_2010) { FIELD_BS (edge_silhouette_width_ext, 176); } // 1
   UNTIL (R_2007) {
-    FIELD_B (unknown_b, 0);
     //FIELD_B (unknown_b, 0);
     DEBUG_HERE_OBJ
     //FIELD_BS (edge_intersection_line_pattern, 175); // 1 or 7

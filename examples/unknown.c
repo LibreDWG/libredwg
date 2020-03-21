@@ -765,6 +765,57 @@ cquote (char *restrict dest, const char *restrict src)
   return d;
 }
 
+static void
+pi_filename (char *restrict pi_fn, uint16_t i)
+{
+  if (i)
+    {
+      char tmp[36];
+      snprintf (tmp, 35, ".%hu", i);
+      tmp[35] = '\0';
+      strcat (pi_fn, tmp);
+    }
+  strcat (pi_fn, ".pi");
+}
+
+static int
+open_pi (FILE *pi, char *restrict class, char *pi_fn)
+{
+  if (!pi)
+    {
+      fprintf (stderr, "Failed to write %s\n", pi_fn);
+      return 1;
+    }
+  fprintf (pi,
+           "import unknown.\n\n"
+           "/* %s field packing problem.\n"
+           "   examples/unknown generated example, needs picat-lang.org.\n"
+           "   Usage: picat [-g go2] %s\n"
+           "*/\n",
+           class, pi_fn);
+  return 0;
+}
+
+static void
+close_pi (FILE *pi, long class_filled, long class_size, int k)
+{
+  int i;
+  // class_summary
+  fprintf (pi, "\n%% summary: %ld/%ld=%.1f%%\n\n", class_filled, class_size,
+           100.0 * class_filled / class_size);
+
+  for (i = 0; i < k; i++)
+    {
+      fprintf (pi, "go%d ?=> def(%d,Data).\n", i, i);
+    }
+  fprintf (pi, "\nmain => go0%s\n", k == 1 ? "." : ",");
+  for (i = 1; i < k; i++)
+    {
+      fprintf (pi, "        go%d%s\n", i, i == k - 1 ? "." : ",");
+    }
+  fclose (pi);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -815,9 +866,11 @@ main (int argc, char *argv[])
     {
       FILE *pi;
       char pi_fn[256];
+      char base_pi_fn[256];
       int k = 0;
       long class_filled = 0, class_size = 0;
       char *dn;
+      uint16_t i_pi = 0;
 
       class = classes[ic];
       // dirname should be examples/
@@ -835,20 +888,11 @@ main (int argc, char *argv[])
       else
           strcpy (pi_fn, "");
       strcat (pi_fn, class);
-      strcat (pi_fn, ".pi");
+      strcpy (base_pi_fn, pi_fn);
+      pi_filename (pi_fn, i_pi);
       pi = fopen (pi_fn, "w");
-      if (!pi)
-        {
-          fprintf (stderr, "Failed to write %s\n", pi_fn);
+      if (open_pi (pi, class, pi_fn))
           continue;
-        }
-      fprintf (pi,
-               "import unknown.\n\n"
-               "/* %s field packing problem.\n"
-               "   examples/unknown generated example, needs picat-lang.org.\n"
-               "   Usage: picat [-g go2] %s\n"
-               "*/\n",
-               class, pi_fn);
       for (i = 0; unknown_dxf[i].name; i++)
         {
           int num_fields;
@@ -1514,26 +1558,24 @@ main (int argc, char *argv[])
 
           // TODO: try likely field combinations and print the top 3.
           // See unknown.pi
-          // there are various heuristics, like the handle stream at the end
+          // there are various heuristics, like the handle and string stream at the end.
+          // points BD's being neighbors, ...
 
           free (dxf[i].found);
           free (dxf[i].possible);
           k++;
+          if (k >= 50)
+            {
+              strcpy (pi_fn, base_pi_fn);
+              pi_filename (pi_fn, ++i_pi);
+              close_pi (pi, class_filled, class_size, k);
+              k = 0;
+              pi = fopen (pi_fn, "w");
+              if (open_pi (pi, class, pi_fn))
+                continue;
+            }
         }
-      // class_summary
-      fprintf (pi, "\n%% summary: %ld/%ld=%.1f%%\n\n", class_filled,
-               class_size, 100.0 * class_filled / class_size);
-
-      for (i = 0; i < k; i++)
-        {
-          fprintf (pi, "go%d ?=> def(%d,Data).\n", i, i);
-        }
-      fprintf (pi, "\nmain => go0%s\n", k == 1 ? "." : ",");
-      for (i = 1; i < k; i++)
-        {
-          fprintf (pi, "        go%d%s\n", i, i == k - 1 ? "." : ",");
-        }
-      fclose (pi);
+      close_pi (pi, class_filled, class_size, k);
     }
 
   printf ("summary: %ld/%ld=%.2f%%\n", sum_filled, sum_size,

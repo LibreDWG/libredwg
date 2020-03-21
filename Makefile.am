@@ -86,9 +86,8 @@ else
 	  echo $(TIMEOUT_30) picat $$f; \
 	  $(TIMEOUT_30) $(PICAT) $$f >$$f.tmplog; \
 	  if test -n "`grep 'Most probable result:' $$f.tmplog`"; then \
-	    mv $$f.tmplog $$f.log; \
-	  fi; \
-	done; rm examples/[A-Z]*.pi.tmplog 2>/dev/null
+	    mv $$f.tmplog $$f.log; fi; done
+	-rm examples/[A-Z]*.pi.tmplog 2>/dev/null
 endif
 endif
 
