@@ -96,8 +96,18 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           continue;
         }
       vtype = get_base_value_type (f->code);
-      if (vtype == VT_REAL && (*fp->type == '2' || *fp->type == '3'))
+      if (vtype == VT_REAL && fp->size >= 16)
         goto VT_POINT3D;
+      if (vtype == VT_INT8 && fp->size == 1 && strEQc (fp->type, "B"))
+        goto VT_BOOL;
+      if (vtype == VT_BOOL && fp->size == 1 && strEQc (fp->type, "RC"))
+        goto VT_INT8;
+      if (vtype == VT_INT8 && fp->size == 2)
+        goto VT_INT16;
+      if (vtype == VT_INT16 && fp->size == 4)
+        goto VT_INT32;
+      if (vtype == VT_INT32 && fp->size == 8)
+        goto VT_INT64;
       switch (vtype)
         {
         case VT_STRING:
@@ -185,7 +195,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case VT_BOOL:
-          {
+        VT_BOOL: {
             BITCODE_B value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -205,7 +215,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case VT_INT8:
-          {
+        VT_INT8: {
             BITCODE_RC value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -233,7 +243,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case VT_INT16:
-          {
+        VT_INT16: {
             BITCODE_BS value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -261,7 +271,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case VT_INT32:
-          {
+        VT_INT32: {
             BITCODE_BL value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -297,7 +307,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case VT_INT64:
-          {
+        VT_INT64: {
             BITCODE_BLL value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))

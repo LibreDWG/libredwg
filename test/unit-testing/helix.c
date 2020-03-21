@@ -123,4 +123,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (helix, HELIX, turn_height, BD, turn_height);
   CHK_ENTITY_TYPE (helix, HELIX, handedness, B, handedness);
   CHK_ENTITY_TYPE (helix, HELIX, constraint_type, BS, constraint_type);
+  CHK_ENTITY_MAX (helix, HELIX, constraint_type, BS, 2);
 }
