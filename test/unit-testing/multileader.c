@@ -151,7 +151,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.location);
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.direction);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.rotation, BD);
-      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.rotation, BD, 6.284);
+      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.rotation, BD, MAX_ANGLE);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.width, BD);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_factor, BD);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_style, BS);
@@ -189,7 +189,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.location);
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.scale);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, blk.rotation, BD);
-      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.blk.rotation, BD, 6.284);
+      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.blk.rotation, BD, MAX_ANGLE);
       CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, blk.color);
       ok ("MULTILEADER.ctx.content.txt.transform:");
       for (i = 0; i < 16; i++)
@@ -225,7 +225,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_CMC (mleader, MULTILEADER, block_color, block_color);
   CHK_ENTITY_3RD (mleader, MULTILEADER, block_scale, block_scale);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, block_rotation, BD, block_rotation);
-  CHK_ENTITY_MAX (mleader, MULTILEADER, block_rotation, BD, 6.284);
+  CHK_ENTITY_MAX (mleader, MULTILEADER, block_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, style_attachment, BS, style_attachment);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, is_annotative, B, is_annotative);
 

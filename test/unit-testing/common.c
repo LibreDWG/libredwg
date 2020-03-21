@@ -21,6 +21,9 @@ int g_counter;
 #define MAX_COUNTER 6
 int g_countmax = MAX_COUNTER;
 
+// in radians. angles are not normalized. max observed: 10.307697 in ELLIPSE.end_angle
+#define MAX_ANGLE 12.57
+
 /// test a DWG file
 int test_code (const char *filename, int cov);
 

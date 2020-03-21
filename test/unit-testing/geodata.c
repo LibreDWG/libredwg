@@ -82,7 +82,7 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_deg, BD, north_dir_angle_deg);
       CHK_ENTITY_MAX (geodata, GEODATA, north_dir_angle_deg, BD, 360.0);
       CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_rad, BD, north_dir_angle_rad);
-      CHK_ENTITY_MAX (geodata, GEODATA, north_dir_angle_rad, BD, 6.284);
+      CHK_ENTITY_MAX (geodata, GEODATA, north_dir_angle_rad, BD, MAX_ANGLE);
     }
 
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_from_tag, observation_from_tag);

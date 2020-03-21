@@ -58,9 +58,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (light, LIGHT, attenuation_start_limit, BD, attenuation_start_limit);
   CHK_ENTITY_TYPE (light, LIGHT, attenuation_end_limit, BD, attenuation_end_limit);
   CHK_ENTITY_TYPE (light, LIGHT, hotspot_angle, BD, hotspot_angle);
-  CHK_ENTITY_MAX (light, LIGHT, hotspot_angle, BD, 6.284);
+  CHK_ENTITY_MAX (light, LIGHT, hotspot_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE (light, LIGHT, falloff_angle, BD, falloff_angle); // only with type=3
-  CHK_ENTITY_MAX (light, LIGHT, falloff_angle, BD, 6.284);
+  CHK_ENTITY_MAX (light, LIGHT, falloff_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE (light, LIGHT, cast_shadows, B, cast_shadows);
   CHK_ENTITY_TYPE (light, LIGHT, shadow_type, BS, shadow_type);
   CHK_ENTITY_MAX (light, LIGHT, shadow_type, BS, 1);

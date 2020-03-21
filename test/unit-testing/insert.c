@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (insert, INSERT, ins_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (insert, INSERT, scale, scale);
   CHK_ENTITY_TYPE_W_OLD (insert, INSERT, rotation, BD, rotation);
-  CHK_ENTITY_MAX (insert, INSERT, rotation, BD, 6.284);
+  CHK_ENTITY_MAX (insert, INSERT, rotation, BD, MAX_ANGLE);
   CHK_ENTITY_3RD_W_OLD (insert, INSERT, extrusion, ext);
   CHK_ENTITY_TYPE (insert, INSERT, scale_flag, BB, scale_flag);
   CHK_ENTITY_TYPE (insert, INSERT, has_attribs, B, has_attribs);

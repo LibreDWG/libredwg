@@ -39,9 +39,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, horiz_dir, BD, horiz_dir);
-  CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, text_rotation, BD, 6.284);
-  CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, ins_rotation, BD, 6.284);
-  CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, horiz_dir, BD, 6.284);
+  CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, text_rotation, BD, MAX_ANGLE);
+  CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, ins_rotation, BD, MAX_ANGLE);
+  CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, horiz_dir, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flip_arrow1, B, flip_arrow1);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flip_arrow2, B, flip_arrow2);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flag1, RC, flag1);

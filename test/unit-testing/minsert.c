@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, scale, scale);
   CHK_ENTITY_TYPE (minsert, MINSERT, scale_flag, BB, scale_flag);
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, rotation, BD, rotation);
-  CHK_ENTITY_MAX (minsert, MINSERT, rotation, BD, 6.284);
+  CHK_ENTITY_MAX (minsert, MINSERT, rotation, BD, MAX_ANGLE);
   CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, extrusion, ext);
   CHK_ENTITY_TYPE (minsert, MINSERT, has_attribs, B, has_attribs);
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_owned, BL, num_owned);

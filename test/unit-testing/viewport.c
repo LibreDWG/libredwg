@@ -50,7 +50,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, front_clip_z, BD, front_clip_z);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, back_clip_z, BD, back_clip_z);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, snap_angle, BD, snap_angle);
-  CHK_ENTITY_MAX (viewport, VIEWPORT, snap_angle, BD, 6.284);
+  CHK_ENTITY_MAX (viewport, VIEWPORT, snap_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, circle_zoom, BS, circle_zoom);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, grid_major, BS, grid_major);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, num_frozen_layers, BL, num_frozen_layers);

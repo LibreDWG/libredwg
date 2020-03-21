@@ -23,9 +23,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, flag, BS, 2047);
   CHK_ENTITY_CMC (mlinestyle, MLINESTYLE, fill_color, fill_color);
   CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, start_angle, BD, start_angle);
-  CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, start_angle, BD, 6.284);
+  CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, start_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, end_angle, BD, end_angle);
-  CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, end_angle, BD, 6.284);
+  CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, end_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, num_lines, RCd, num_lines);
   
   if (!dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "lines", &lines, NULL))
