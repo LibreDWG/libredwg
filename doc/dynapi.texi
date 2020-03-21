@@ -7940,24 +7940,26 @@ BD
 
 @item parent
 struct _dwg_object_DIMASSOC*
-@item rotated_type
-BS,	DXF 71
-@item osnap_type
-RC,	DXF 72
+@item has_lastpt_ref
+BS,	DXF 75
 @item classname
 TV,	DXF 1
+@item osnap_type
+RC,	DXF 72
 @item main_subent_type
 BS,	DXF 73
-@item intsect_subent_type
-BS,	DXF 74
+@item rotated_type
+BS,	DXF 71
 @item main_gsmarker
 BL,	DXF 91
+@item intsect_subent_type
+BS,	DXF 74
+@item unknown_bs
+BS
 @item osnap_dist
 BD,	DXF 40
 @item osnap_pt
 3BD,	DXF 10
-@item has_lastpt_ref
-B,	DXF 75
 @item mainobj
 H,	DXF 331
 @item intsectobj

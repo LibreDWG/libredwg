@@ -32,7 +32,8 @@ static unsigned int loglevel;
 
 int g_counter;
 #define MAX_COUNTER 10
-int g_max_count = MAX_COUNTER;
+int g_max_count;
+int g_all;
 
 void object_alias (char *restrict name);
 void entity_alias (char *restrict name);
@@ -63,6 +64,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
       enum RES_BUF_VALUE_TYPE vtype;
       if (!f->name || !*f->name)
         continue;
+      // TODO subclass
       if (!(fp = dwg_dynapi_entity_field (name, f->name)))
         continue;
       if (strEQc (fp->type, "CMC"))
@@ -410,7 +412,6 @@ main (int argc, char *argv[])
 {
   int i = 1, error = 0;
   struct _unknown_dxf *dxf;
-  int all = 0;
   char *class = NULL;
   char *file = NULL;
   char name[80];
@@ -419,6 +420,8 @@ main (int argc, char *argv[])
   #include "../../examples/alldxf_2.inc"
   // clang-format on
 
+  g_max_count = MAX_COUNTER;
+  g_all = 0;
   name[0] = '\0';
   olddxf[0] = '\0';
   if (argc > 2 && !strcmp (argv[i], "--class"))
@@ -430,7 +433,7 @@ main (int argc, char *argv[])
     file = argv[i + 1];
   if (argc - i >= 2 && !strcmp (argv[i], "-a"))
     {
-      all = 1;
+      g_all = 1;
       g_max_count = 1000;
     }
 

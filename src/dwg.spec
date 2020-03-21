@@ -6062,7 +6062,7 @@ DWG_OBJECT (DIMASSOC)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDimAssoc)
-  FIELD_BL (associativity, 90);
+  FIELD_BLx (associativity, 90);
   FIELD_RC (trans_space_flag, 70);
   REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref)
   REPEAT_BLOCK
@@ -6078,14 +6078,15 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
-      SUB_FIELD_BS (ref[rcount1], rotated_type, 71);
       SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
+      SUB_FIELD_BS (ref[rcount1], rotated_type, 71);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
       SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74);
-      if (FIELD_VALUE (ref[rcount1].main_subent_type))
+      SUB_FIELD_BS (ref[rcount1], unknown_bs, 0);
+      if (FIELD_VALUE (ref[rcount1].main_subent_type)) // 1 or 2
         SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 331);
       if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332);
+        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 1 or 2
       SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
       SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
   END_REPEAT_BLOCK

@@ -4776,17 +4776,18 @@ typedef struct _dwg_object_DATALINK
 typedef struct _dwg_DIMASSOC_Ref
 {
   struct _dwg_object_DIMASSOC *parent;
-  BITCODE_BS rotated_type;    /*!< DXF 71 */
-  BITCODE_RC osnap_type;      /*!< DXF 72 */
+  BITCODE_BS has_lastpt_ref;  /*!< DXF 75 */
   BITCODE_TV classname;       /*!< DXF 1 */
+  BITCODE_RC osnap_type;      /*!< DXF 72 */
   BITCODE_BS main_subent_type; /*!< DXF 73 */
-  BITCODE_BS intsect_subent_type; /*!< DXF 74 */
+  BITCODE_BS rotated_type;    /*!< DXF 71 */
   BITCODE_BL main_gsmarker;   /*!< DXF 91 */
+  BITCODE_BS intsect_subent_type; /*!< DXF 74 */
+  BITCODE_BS unknown_bs;
   BITCODE_BD osnap_dist;      /*!< DXF 40 */
   BITCODE_3BD osnap_pt;       /*!< DXF 10-30 */
-  BITCODE_B has_lastpt_ref;   /*!< DXF 75 */
-  BITCODE_H mainobj;          /*!< DXF 331 the geometry object */
-  BITCODE_H intsectobj;       /*!< DXF 332 the intersection object */
+  BITCODE_H mainobj;          /*!< DXF 331 the geometry object, 1 or 2 */
+  BITCODE_H intsectobj;       /*!< DXF 332 the intersection object, 1 or 2 */
 } Dwg_DIMASSOC_Ref;
 
 typedef struct _dwg_object_DIMASSOC
