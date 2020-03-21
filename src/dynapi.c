@@ -4553,7 +4553,13 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_fields[] = {
   { "ref",	"Dwg_DIMASSOC_Ref*", sizeof (Dwg_DIMASSOC_Ref*),  OFF (struct _dwg_object_DIMASSOC, ref),
     1,1,0, 0 },
   { "intsect_gsmarker",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_DIMASSOC, intsect_gsmarker),
-    0,0,0, 0 },
+    0,0,0, 92 },
+  { "dimensionobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, dimensionobj),
+    1,0,0, 330 },
+  { "xrefobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, xrefobj),
+    1,0,0, 301 },
+  { "intsectxrefobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMASSOC, intsectxrefobj),
+    1,0,0, 302 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DIMSTYLE: (sorted by offset) */

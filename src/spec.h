@@ -134,6 +134,7 @@
 #  define SUB_FIELD_BD(o, nam, dxf) FIELD_BD (o.nam, dxf)
 #  define SUB_FIELD_RD(o, nam, dxf) FIELD_RD (o.nam, dxf)
 #  define SUB_FIELD_2RD(o, nam, dxf) FIELD_2RD (o.nam, dxf)
+#  define SUB_FIELD_2BD(o, nam, dxf) FIELD_2BD (o.nam, dxf)
 #  define SUB_FIELD_2BD_1(o, nam, dxf) FIELD_2BD_1 (o.nam, dxf)
 #  define SUB_FIELD_3RD(o, nam, dxf) FIELD_3RD (o.nam, dxf)
 #  define SUB_FIELD_3BD(o, nam, dxf) FIELD_3BD (o.nam, dxf)

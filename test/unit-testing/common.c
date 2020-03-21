@@ -1140,7 +1140,10 @@ api_common_entity (dwg_object *obj)
         pass ();                                                              \
       else                                                                    \
         ok (#name "." #field ":\t%d", ptr.field.index);                       \
-    }                                                                         \
+    }
+#define CHK_SUBCLASS_MAX(ptr, name, field, type, _max)                        \
+  if (ptr.field > _max)                                                       \
+    fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, ptr.field)
 
 
 void

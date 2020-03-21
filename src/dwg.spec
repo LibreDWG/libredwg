@@ -6074,29 +6074,29 @@ DWG_OBJECT (DIMASSOC)
 #endif
           continue;
         }
-      LOG_TRACE ("rcount1: %d\n", rcount1);
+      LOG_TRACE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
-      SUB_FIELD_RC (ref[rcount1], osnap_type, 72);
-      if (FIELD_VALUE (ref[rcount1].main_subent_type))
-        SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 331);
-      if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332);
+      SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
       SUB_FIELD_BS (ref[rcount1], rotated_type, 71);
       SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
       SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74);
+      if (FIELD_VALUE (ref[rcount1].main_subent_type))
+        SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 331);
+      if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
+        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332);
       SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
       SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ref)
   END_REPEAT (ref)
-  //FIELD_BL (intsect_gsmarker, 92);
+  FIELD_BL (intsect_gsmarker, 92);
 
   START_OBJECT_HANDLE_STREAM;
-  //FIELD_HANDLE (dimensionobj, 4, 330);
-  //FIELD_HANDLE (xrefobj, 4, 301);
-  //FIELD_HANDLE (intsectxrefobj, 4, 302);
+  FIELD_HANDLE (dimensionobj, 4, 330);
+  FIELD_HANDLE (xrefobj, 4, 301);
+  FIELD_HANDLE (intsectxrefobj, 4, 302);
 
 DWG_OBJECT_END
 

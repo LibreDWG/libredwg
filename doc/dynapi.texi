@@ -5041,7 +5041,13 @@ RC,	DXF 70
 @item ref
 Dwg_DIMASSOC_Ref*
 @item intsect_gsmarker
-BL
+BL,	DXF 92
+@item dimensionobj
+H,	DXF 330
+@item xrefobj
+H,	DXF 301
+@item intsectxrefobj
+H,	DXF 302
 
 @end vtable
 @end indentedblock
