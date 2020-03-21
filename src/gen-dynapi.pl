@@ -275,6 +275,10 @@ sub dxf_in {
       $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
       $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
+    } elsif (@old && /^\s+SUB_FIELD_HANDLE\s*\($v,\s*(\w+),\s*\d+,\s*(\d+)\)/) {
+      my $type = $1;
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
     } elsif (@old && /^\s+SUB_FIELD_(.+?)\s*\($v,\s*(\w+),\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;

@@ -7795,7 +7795,7 @@ CMC
 @item linewt
 BLd,	DXF 92
 @item line_type
-H
+H,	DXF 340
 @item invisible
 B,	DXF 93
 @item double_line_spacing
@@ -7959,9 +7959,9 @@ BD,	DXF 40
 @item has_lastpt_ref
 B,	DXF 75
 @item mainobj
-H
+H,	DXF 331
 @item intsectobj
-H
+H,	DXF 332
 
 @end vtable
 @end indentedblock
@@ -8327,7 +8327,7 @@ struct _dwg_entity_MULTILEADER*
 @item is_default
 BL,	DXF 94
 @item arrowhead
-H
+H,	DXF 345
 
 @end vtable
 @end indentedblock
@@ -8341,7 +8341,7 @@ H
 @item parent
 struct _dwg_entity_MULTILEADER*
 @item attdef
-H
+H,	DXF 330
 @item label_text
 TV,	DXF 302
 @item ui_index
@@ -8451,7 +8451,7 @@ BD,	DXF 49
 @item complex_shapecode
 BS,	DXF 75
 @item style
-H
+H,	DXF 340
 @item x_offset
 RD,	DXF 44
 @item y_offset
@@ -8879,7 +8879,7 @@ CMC
 @item content_color
 CMC
 @item text_style
-H
+H,	DXF 7
 @item text_height
 BD,	DXF 140
 @item top_grid_color
