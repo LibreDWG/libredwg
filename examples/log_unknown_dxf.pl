@@ -1302,7 +1302,7 @@ while (<>) {
         for (@FIELD) {
           my $t = dxf_type($_->[0]);
           my $count = $sorted{"$t:$_->[1]"};
-          emit_field($f1, $count, @$_);
+          emit_field($f1, $obj, $count, @$_);
         }
         @FIELD = ();
         print $f1 "    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}\n};\n";
@@ -1476,7 +1476,7 @@ sub find_name {
 }
 
 sub emit_field {
-  my ($f, $count, $code, $v, $name, $hidden) = @_;
+  my ($f, $obj, $count, $code, $v, $name, $hidden) = @_;
   #warn "$code: $v\n";
   #return if $code == 100;
   $v =~ s/\\/\\\\/g;
@@ -1488,5 +1488,19 @@ sub emit_field {
   } else {
     print $f "    ";
   }
-  print $f "{ $code, \"$v\", NULL, 0, BITS_UNKNOWN, \"$name\", $count, {-1,-1,-1,-1,-1} },\n";
+  my $bits = 0;
+  my $type = "BITS_UNKNOWN";
+  # need stronger hints for some fields
+  if ("$obj.$name" eq "DIMASSOC.ref.osnap_type") {
+    $type = "BITS_RC";
+    $bits = 8;
+  }
+  elsif ("$obj.$name" eq "DIMASSOC.ref.has_lastpt_ref") {
+    $type = "BITS_B";
+    $bits = 1;
+  }
+  elsif ("$obj.$name" =~ /^DIMASSOC\.ref\.osnap/) {
+    $type = "BITS_BD";
+  }
+  print $f "{ $code, \"$v\", NULL, $bits, $type, \"$name\", $count, {-1,-1,-1,-1,-1} },\n";
 }

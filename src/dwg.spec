@@ -6078,11 +6078,11 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
+      SUB_FIELD_BS (ref[rcount1], unknown_bs, 0); // 1
       SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
-      SUB_FIELD_BS (ref[rcount1], rotated_type, 71);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
+      SUB_FIELD_BS (ref[rcount1], rotated_type, 71);
       SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74);
-      SUB_FIELD_BS (ref[rcount1], unknown_bs, 0);
       if (FIELD_VALUE (ref[rcount1].main_subent_type)) // 1 or 2
         SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 331);
       if (FIELD_VALUE (ref[rcount1].intsect_subent_type))

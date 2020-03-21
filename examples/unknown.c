@@ -492,7 +492,10 @@ bits_format (struct _unknown_field *g, const int version,
         bits_CMC (&dat, g);
     }
   else if (code < 80)
-    bits_BS (&dat, g);
+    if (code == 75 && strEQc (g->name, "ref.has_lastpt_ref"))
+      bits_B (&dat, g);
+    else
+      bits_BS (&dat, g);
   else if (80 <= code && code <= 99) // BL int32
     bits_BL (&dat, g);
   else if (code == 100)
