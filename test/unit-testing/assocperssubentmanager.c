@@ -53,6 +53,7 @@ api_process (dwg_object *obj)
     return;
  
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, class_version, BL, class_version);
+  CHK_ENTITY_MAX (_obj, ASSOCPERSSUBENTMANAGER, class_version, BL, 10);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl1, BL, unknown_bl1);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl2, BL, unknown_bl2);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl3, BL, unknown_bl3);

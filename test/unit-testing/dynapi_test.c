@@ -23984,12 +23984,14 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
   Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *restrict assocosnappointrefactionparam = obj->tio.object->tio.ASSOCOSNAPPOINTREFACTIONPARAM;
   failed = 0;
   {
-    BITCODE_H actionparam;
-    if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "actionparam", &actionparam, NULL)
-        && !memcmp (&actionparam, &assocosnappointrefactionparam->actionparam, sizeof (assocosnappointrefactionparam->actionparam)))
-        pass ();
+    BITCODE_H* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "actions", &actions, NULL)
+        && actions == assocosnappointrefactionparam->actions)
+      pass ();
     else
-        fail ("ASSOCOSNAPPOINTREFACTIONPARAM.actionparam [H]");
+      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.actions [H*] * %u num_actions", count);
   }
   {
     BITCODE_RS flags;
@@ -24017,19 +24019,19 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
       fail ("ASSOCOSNAPPOINTREFACTIONPARAM.name [T] '%s' <> '%s'", name, assocosnappointrefactionparam->name);
   }
   {
-    BITCODE_BS num_params;
-    if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "num_params", &num_params, NULL)
-        && num_params == assocosnappointrefactionparam->num_params)
+    BITCODE_BS num_actions;
+    if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "num_actions", &num_actions, NULL)
+        && num_actions == assocosnappointrefactionparam->num_actions)
       pass ();
     else
-      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.num_params [BS] %hu != %hu", assocosnappointrefactionparam->num_params, num_params);
-    num_params++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "num_params", &num_params, 0)
-        && num_params == assocosnappointrefactionparam->num_params)
+      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.num_actions [BS] %hu != %hu", assocosnappointrefactionparam->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "num_actions", &num_actions, 0)
+        && num_actions == assocosnappointrefactionparam->num_actions)
       pass ();
     else
-      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.num_params [BS] set+1 %hu != %hu", assocosnappointrefactionparam->num_params, num_params);
-    assocosnappointrefactionparam->num_params--;
+      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.num_actions [BS] set+1 %hu != %hu", assocosnappointrefactionparam->num_actions, num_actions);
+    assocosnappointrefactionparam->num_actions--;
   }
   {
     struct _dwg_object_object* parent;

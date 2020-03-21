@@ -65,6 +65,16 @@ if (0) {
   close $skip_fh;
 }
 
+my @ASSOCACTION_fields =
+  ( 90 => 'solution_status',
+    90 => 'geometry_status',
+    330 => 'readdep',
+    360 => 'writedep',
+    90 => 'constraint_status',
+    90 => 'dof',
+    90 => 'is_body_a_proxy'
+  );
+
 my @AcDbAssocPathBasedSurfaceActionBody =
   (100 => 'AcDbAssocActionBody',
     90 => 'aab_status',
@@ -234,13 +244,9 @@ my $known = {
     333 => 'shade_plot_id',
     ],
   ACDBASSOCACTION => [
-    #100 => 'AcDbAssocAction',
-    90 => 'is_body_a_proxy',
-    90 => 'status',
+    @ASSOCACTION_fields,
     90 => 'num_deps',
-    330 => 'readdep',
-    360 => 'writedep',
-    90 => 'unknown_assoc',
+    90 => 'status',
     ],
   ACDBASSOCDEPENDENCY => [
     #100 => 'AcDbAssocDependency',
@@ -260,15 +266,14 @@ my $known = {
     90 => 'depbodyid',
     ],
   ACDBASSOCALIGNEDDIMACTIONBODY => [
-    90 => 'status',
-    #100 => AcDbAssocParamBasedActionBody
-    90 => 'unknown1',
-    90 => 'unknown2',
-    90 => 'unknown3',
+    90 => 'aab_status',
+    #100 => 'AcDbAssocParamBasedActionBody',
+    90 => 'pab_status',
+    90 => 'pab_l2',
+    90 => 'num_deps',
     360 => 'writedep',
-    90 => 'unknown4',
-    90 => 'unknown5',
-    90 => 'unknown6',
+    90 => 'pab_l4',
+    90 => 'pab_l5',
     330 => 'readdep',
     #100 => ACDBASSOCALIGNEDDIMACTIONBODY,
     90 => 'dcm_status',
@@ -276,12 +281,7 @@ my $known = {
     330 => 'r_node',
     ],
   ACDBASSOCNETWORK => [
-    #100 => 'AcDbAssocAction',
-    90 => 'status',
-    90 => 'num_deps',
-    330 => 'readdep',
-    360 => 'writedep',
-    90 => 'unknown_assoc',
+    @ASSOCACTION_fields,
     #100 => 'AcDbAssocNetwork',
     90 => 'unknown_n1',
     90 => 'unknown_n2',
@@ -323,19 +323,17 @@ my $known = {
     70 => 'flag',
     ],
   ACDBASSOC2DCONSTRAINTGROUP => [
-    90 => 'solution_status',
-    90 => 'geometry_status',
-    90 => 'constraint_status',
-    90 => 'dof',
+    @ASSOCACTION_fields,
     10 => 'workplane',
     #...
     ],
   ACDBASSOCOSNAPPOINTREFACTIONPARAM => [
     90 => 'status',
     90 => 'flags',
-    90 => 'num_params',
+    90 => 'num_actions',
     360 => 'writedep',
-    330 => 'actionparam',
+    330 => 'actions',
+    #40 => 'unknown3',
     #...
     ],
   ACSH_BOX_CLASS => [

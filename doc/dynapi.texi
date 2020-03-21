@@ -4475,10 +4475,10 @@ T,	DXF 1
 RS,	DXF 90
 @item unknown3
 BD,	DXF 40
-@item num_params
+@item num_actions
 BS,	DXF 90
-@item actionparam
-H,	DXF 330
+@item actions
+H*,	DXF 330
 @item writedep
 H,	DXF 360
 

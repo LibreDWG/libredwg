@@ -9,16 +9,14 @@ api_process (dwg_object *obj)
   // AcDbAssocActionParam
   BITCODE_RC unknown;  // 01010101
   BITCODE_B unknown1;  //
-  BITCODE_BS status;   // 90: 0 uptodate, 1 changed_directly, 2 changed_transitive,
-                       // 3 ChangedNoDifference, 4 FailedToEvaluate, 5 Erased, 6 Suppressed
-                       // 7 Unresolved
+  BITCODE_BS status;   // 0-7
   BITCODE_T  name;     // 1 ""
   BITCODE_RS flags;    // 90 0
   // AcDbAssocCompoundActionParam
   BITCODE_BD unknown3; // 40 -1.0
-  BITCODE_BS num_params; // 90 1
-  BITCODE_H actionparam;  // 330
-  BITCODE_H writedep; // 360
+  BITCODE_BS num_actions; // 90 1
+  BITCODE_H* actions;
+  BITCODE_H writedep;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -31,8 +29,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, name, name);
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, flags, RS, flags);
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, unknown3, BD, unknown3);
-  CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, num_params, BS, num_params);
-  CHK_ENTITY_H (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, actionparam, actionparam);
+  CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, num_actions, BS, num_actions);
+  CHK_ENTITY_MAX (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, num_actions, BS, 1000);
+  CHK_ENTITY_HV (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, actions, actions, num_actions);
   CHK_ENTITY_H (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, writedep, writedep);
 #endif
 }

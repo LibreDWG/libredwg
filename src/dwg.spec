@@ -7181,8 +7181,8 @@ DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   FIELD_BS (flags, 90); //0 read/write deps
   //...
   DEBUG_HERE_OBJ
-  FIELD_BS (num_params, 90); //1
-  VALUEOUTOFBOUNDS (num_params, 1000)
+  FIELD_BS (num_actions, 90); //1
+  VALUEOUTOFBOUNDS (num_actions, 1000)
   DEBUG_HERE_OBJ
 
   bit_advance_position (dat, 122-118);
@@ -7191,7 +7191,7 @@ DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   FIELD_HANDLE (writedep, ANYCODE, 360); //122-129
   bit_advance_position (dat, 168-130);
   DEBUG_POS_OBJ
-  FIELD_HANDLE (actionparam, 4, 330); //168-175
+  HANDLE_VECTOR (actions, num_actions, 4, 330);
 
 DWG_OBJECT_END
 

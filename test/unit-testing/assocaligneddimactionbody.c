@@ -23,6 +23,7 @@ api_process (dwg_object *obj)
   dwg_obj_assocaligneddimactionbody *_obj = dwg_object_to_ASSOCALIGNEDDIMACTIONBODY (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCALIGNEDDIMACTIONBODY, aab_status, BL, aab_status);
+  CHK_ENTITY_MAX (_obj, ASSOCALIGNEDDIMACTIONBODY, aab_status, BL, 2);
   CHK_ENTITY_TYPE (_obj, ASSOCALIGNEDDIMACTIONBODY, pab_status, BL, pab_status);
   CHK_ENTITY_TYPE (_obj, ASSOCALIGNEDDIMACTIONBODY, pab_l2, BL, pab_l2);
   CHK_ENTITY_TYPE (_obj, ASSOCALIGNEDDIMACTIONBODY, pab_l3, BL, pab_l3);

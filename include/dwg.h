@@ -4910,9 +4910,9 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
   BITCODE_RS flags;    // 90 0
   // AcDbAssocCompoundActionParam
   BITCODE_BD unknown3; // 40 -1.0
-  BITCODE_BS num_params; // 90 1
-  BITCODE_H actionparam;  // 330
-  BITCODE_H writedep; // 360
+  BITCODE_BS num_actions; // 90 1
+  BITCODE_H *actions;  // 330
+  BITCODE_H writedep;  // 360
 } Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
 
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
