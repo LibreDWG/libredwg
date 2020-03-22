@@ -36,7 +36,8 @@ hash_test_LDADD = $(LDADD) \
 dynapi_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
 dxf_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/common.lo
+	$(top_builddir)/src/common.lo \
+	$(top_builddir)/src/dynapi.lo
 
 testobjects = \
 	3dface \
