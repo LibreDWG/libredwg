@@ -311,6 +311,15 @@ static char* _path_field(const char *path);
     {                                                                         \
       PREFIX fprintf (dat->fh, "[0, 0],\n");                                  \
     }
+#define SUB_FIELD_HANDLE_N(o, nam, handle_code, dxf)                          \
+  if (_obj->o.nam)                                                            \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, FORMAT_HREF ",\n", ARGS_HREF (_obj->o.nam));   \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "[0, 0],\n");                                  \
+    }
 #define VALUE_BINARY(buf, len, dxf)                                           \
   {                                                                           \
     fprintf (dat->fh, "\"");                                                  \
@@ -644,6 +653,23 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
+#define SUB_HANDLE_VECTOR(o,nam, size, code, dxf)                             \
+  KEY (nam);                                                                  \
+  if (_obj->o.nam)                                                            \
+    {                                                                         \
+      ARRAY;                                                                  \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          SUB_FIELD_HANDLE_N (o, nam[vcount], code, dxf);                     \
+        }                                                                     \
+      if (_obj->o.size)                                                       \
+        NOCOMMA;                                                              \
+      ENDARRAY;                                                               \
+    }                                                                         \
+  else                                                                        \
+    fprintf (dat->fh, "[],\n");                                               \
+
+
 // violates duplicate keys
 #define SUBCLASS(name) \
   PREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\",\n");
@@ -745,7 +771,13 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define SECTION_STRING_STREAM
 #define START_STRING_STREAM
 #define END_STRING_STREAM
-#define START_HANDLE_STREAM KEY (ownerhandle)
+#define START_HANDLE_STREAM
+#define START_OBJECT_HANDLE_STREAM                                          \
+  assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
+  KEY (ownerhandle);                                                        \
+  VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);           \
+  REACTORS (4);                                                             \
+  XDICOBJHANDLE (3)
 
 static void
 _prefix (Bit_Chain *dat)

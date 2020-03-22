@@ -3857,10 +3857,16 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 331:
-          if (i < 0) break;
-          o->ref[i].mainobj = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-          LOG_TRACE ("%s.ref[%d].mainobj = " FORMAT_REF " [H %d]\n",
-                       obj->name, i, ARGS_REF(o->ref[i].mainobj), pair->code);
+          {
+            BITCODE_BS n;
+            if (i < 0) break;
+            n = o->ref[i].num_mainobjs;
+            o->ref[i].mainobjs = realloc (o->ref[i].mainobjs, (n + 1) * sizeof (BITCODE_H));
+            o->ref[i].mainobjs[n] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+            LOG_TRACE ("%s.ref[%d].mainobjs[%d] = " FORMAT_REF " [H* %d]\n",
+                       obj->name, i, n, ARGS_REF(o->ref[i].mainobjs[n]), pair->code);
+            o->ref[i].num_mainobjs++;
+          }
           break;
         case 332:
           if (i < 0) break;

@@ -309,6 +309,9 @@ sub dxf_in {
     } elsif (/^\s+HANDLE_VECTOR(?:_N)?\s*\((\w+),.*?,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
+    } elsif (/^\s+SUB_HANDLE_VECTOR\s*\([^,]+?, (\w+), .+?, (\d+)\)/) {
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
     } elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+)\)/) { # HEADER_RC
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
@@ -1310,7 +1313,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1310 "gen-dynapi.pl"
+#line 1317 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1393,7 +1396,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1393 "gen-dynapi.pl"
+#line 1400 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

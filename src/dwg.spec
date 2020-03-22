@@ -6061,11 +6061,18 @@ DWG_OBJECT_END
 DWG_OBJECT (DIMASSOC)
 
   DECODE_UNKNOWN_BITS
+#ifdef IS_JSON
+  KEY (ownerhandle);
+#endif
+  VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);
+  REACTORS (4);
+  XDICOBJHANDLE (3);
+
   SUBCLASS (AcDbDimAssoc)
+  FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_BLx (associativity, 90);
   FIELD_RC (trans_space_flag, 70);
-  // missing from DWG, always 1
-  DECODER { FIELD_VALUE (rotated_type) = 1; }
+  // missing from DWG, always 0
   DXF { FIELD_BS (rotated_type, 71); }
   REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref)
   REPEAT_BLOCK
@@ -6081,25 +6088,24 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
-      SUB_FIELD_BS (ref[rcount1], unknown_bs, 0); // 1 or 2 (in DXF only once)
+      SUB_FIELD_BS (ref[rcount1], num_mainobjs, 0); // 1 or 2
+      SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_mainobjs, 100)
       SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
       SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
-      if (FIELD_VALUE (ref[rcount1].main_subent_type)) // 1 or 2
-        SUB_FIELD_HANDLE (ref[rcount1], mainobj, 4, 331);
+      SUB_HANDLE_VECTOR (ref[rcount1], mainobjs, num_mainobjs, 4, 331);
       if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1 or 2
+        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1 or 2 FIXME
       SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
       SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ref)
   END_REPEAT (ref)
-  FIELD_BL (intsect_gsmarker, 92);
+  //FIELD_BL (intsect_gsmarker, 92);
 
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (dimensionobj, 4, 330);
-  FIELD_HANDLE (xrefobj, 4, 301);
-  FIELD_HANDLE (intsectxrefobj, 4, 302);
+  START_HANDLE_STREAM;
+  FIELD_HANDLE (xrefobj, 4, 301); // TODO optional
+  FIELD_HANDLE (intsectxrefobj, 4, 302); // TODO multiple
 
 DWG_OBJECT_END
 

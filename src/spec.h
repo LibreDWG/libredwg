@@ -64,10 +64,25 @@
           _obj->field = 0;                                                    \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
         }
+#    define SUB_VALUEOUTOFBOUNDS(o,field, maxvalue)                           \
+      if (_IN_RANGE (_obj->o.field, maxvalue)                                 \
+          && _obj->o.field > maxvalue)                                        \
+        {                                                                     \
+          LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                  \
+                     (unsigned long)_obj->o.field);                           \
+          _obj->o.field = 0;                                                  \
+          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+        }
 #  else
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
       if (_IN_RANGE (_obj->field, maxvalue)                                   \
           && _obj->field > maxvalue)                                          \
+        {                                                                     \
+          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+        }
+#    define SUB_VALUEOUTOFBOUNDS(o,field, maxvalue)                           \
+      if (_IN_RANGE (_obj->o.field, maxvalue)                                 \
+          && _obj->o.field > maxvalue)                                        \
         {                                                                     \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
         }
@@ -141,6 +156,17 @@
 #  define SUB_FIELD_3BD_inl(o, nam, dxf) FIELD_3BD (o, dxf)
 #  define SUB_FIELD_3DPOINT(o, nam, dxf) FIELD_3BD (o.nam, dxf)
 //# define SUB_FIELD_ENC(o,nam,dxf1,dxf2) FIELD_ENC(o.nam, dxf1,dxf2)
+#endif
+#ifndef SUB_HANDLE_VECTOR
+#  define SUB_HANDLE_VECTOR(o, nam, sizefield, code, dxf)                     \
+  if (_obj->o.sizefield && _obj->o.nam)                                       \
+    {                                                                         \
+      BITCODE_BL _size = _obj->o.sizefield;                                   \
+      for (vcount = 0; vcount < _size; vcount++)                              \
+        {                                                                     \
+          SUB_FIELD_HANDLE (o, nam[vcount], code, dxf);                       \
+        }                                                                     \
+    }
 #endif
 // logging format overrides
 #ifndef FIELD_RLx

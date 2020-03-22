@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1310 "gen-dynapi.pl"
+#line 1317 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -6901,14 +6901,14 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_Ref_fields[] = {
     0,0,0, 91 },
   { "intsect_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, intsect_subent_type),
     0,0,0, 74 },
-  { "unknown_bs",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, unknown_bs),
+  { "num_mainobjs",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, num_mainobjs),
     0,0,0, 0 },
   { "osnap_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_DIMASSOC_Ref, osnap_dist),
     0,0,0, 40 },
   { "osnap_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_DIMASSOC_Ref, osnap_pt),
     1,0,0, 10 },
-  { "mainobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_Ref, mainobj),
-    1,0,0, 331 },
+  { "mainobjs",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_DIMASSOC_Ref, mainobjs),
+    1,1,0, 331 },
   { "intsectobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_Ref, intsectobj),
     1,0,0, 332 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
@@ -8303,7 +8303,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 1393 "gen-dynapi.pl"
+#line 1400 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

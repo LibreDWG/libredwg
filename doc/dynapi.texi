@@ -7954,14 +7954,14 @@ BS,	DXF 73
 BL,	DXF 91
 @item intsect_subent_type
 BS,	DXF 74
-@item unknown_bs
+@item num_mainobjs
 BS
 @item osnap_dist
 BD,	DXF 40
 @item osnap_pt
 3BD,	DXF 10
-@item mainobj
-H,	DXF 331
+@item mainobjs
+H*,	DXF 331
 @item intsectobj
 H,	DXF 332
 

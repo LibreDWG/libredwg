@@ -220,6 +220,15 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
     }
 #define HANDLE_VECTOR(name, sizefield, code, dxf)                             \
   HANDLE_VECTOR_N (name, FIELD_VALUE (sizefield), code, dxf)
+#define SUB_HANDLE_VECTOR(o,name, sizefield, code, dxf)                       \
+  if (_obj->o.name && _obj->o.sizefield)                                      \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.sizefield; vcount++)      \
+        {                                                                     \
+          SUB_FIELD_HANDLE (o,name[vcount], code, dxf);                       \
+        }                                                                     \
+      FREE_IF (_obj->o.name)                                                  \
+    }
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)
 #define FIELD_XDATA(name, size) dwg_free_xdata (_obj, _obj->size)

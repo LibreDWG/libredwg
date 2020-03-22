@@ -1012,6 +1012,18 @@
   VECTOR_CHKCOUNT_LV (nam, HANDLE, FIELD_VALUE (sizefield), hdl_dat)          \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
+#define SUB_HANDLE_VECTOR(o, nam, sizefield, code, dxf)                       \
+  if (_obj->o.sizefield > 0)                                                  \
+    {                                                                         \
+      BITCODE_BL _size = _obj->o.sizefield;                                   \
+      HANDLE_VECTOR_CHKCOUNT (nam, _size)                                     \
+      _obj->o.nam = (BITCODE_H *)calloc (_size, sizeof (BITCODE_H));          \
+      for (vcount = 0; vcount < _size; vcount++)                              \
+        {                                                                     \
+          SUB_FIELD_HANDLE (o, nam[vcount], code, dxf);                       \
+        }                                                                     \
+    }
+
 // count 1 bytes, until non-1 bytes or a terminating zero
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)                             \
   FIELD_VALUE (num_inserts) = 0;                                              \

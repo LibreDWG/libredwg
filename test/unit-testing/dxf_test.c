@@ -64,9 +64,24 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
       enum RES_BUF_VALUE_TYPE vtype;
       if (!f->name || !*f->name)
         continue;
-      // TODO subclass
-      if (!(fp = dwg_dynapi_entity_field (name, f->name)))
-        continue;
+      // subclass
+      if (strchr (f->name, '.'))
+        {
+          char *subclass = strdup (f->name);
+          char *rest = strchr (subclass, '.');
+          char *p;
+          *rest = '\0';
+          rest++;
+          if ((p = strchr (subclass, '['))) // ref[0].osnap_type
+            *p = '\0';
+          fp = dwg_dynapi_subclass_field (subclass, rest);
+          free (subclass);
+          if (!fp)
+            continue;
+        }
+      else
+        if (!(fp = dwg_dynapi_entity_field (name, f->name)))
+          continue;
       if (strEQc (fp->type, "CMC"))
         {
           BITCODE_CMC color;
