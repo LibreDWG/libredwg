@@ -457,21 +457,63 @@ my $known = {
     330 => 'dimensionobj',
     90 => 'associativity',
     70 => 'trans_space_flag',
-    71 => 'ref.rotated_type',
-    1 => 'ref.classname',
-    72 => 'ref.osnap_type',
-    331 => 'ref.mainobj',
-    73 => 'ref.main_subent_type',
-    91 => 'ref.main_gsmarker',
-    301 => 'ref.xrefobj',
-    40 => 'ref.osnap_dist',
-    10 => 'ref.osnap_pt.x',
-    20 => 'ref.osnap_pt.y',
-    30 => 'ref.osnap_pt.z',
-    75 => 'ref.has_lastpt_ref',
+    71 => 'rotated_type',
+    1 => 'ref[0].classname',
+    72 => 'ref[0].osnap_type',
+    331 => 'ref[0].mainobj',
+    73 => 'ref[0].main_subent_type',
+    91 => 'ref[0].main_gsmarker',
+    301 => 'ref[0].xrefobj',
+    40 => 'ref[0].osnap_dist',
+    10 => 'ref[0].osnap_pt.x',
+    20 => 'ref[0].osnap_pt.y',
+    30 => 'ref[0].osnap_pt.z',
+    75 => 'ref[0].has_lastpt_ref',
     # rarely:
-    332 => 'ref.intsectobj',
-    74 => 'ref.intsect_subent_type',
+    332 => 'ref[0].intsectobj',
+    74 => 'ref[0].intsect_subent_type',
+    1 => 'ref[1].classname',
+    72 => 'ref[1].osnap_type',
+    331 => 'ref[1].mainobj',
+    73 => 'ref[1].main_subent_type',
+    91 => 'ref[1].main_gsmarker',
+    301 => 'ref[1].xrefobj',
+    40 => 'ref[1].osnap_dist',
+    10 => 'ref[1].osnap_pt.x',
+    20 => 'ref[1].osnap_pt.y',
+    30 => 'ref[1].osnap_pt.z',
+    75 => 'ref[1].has_lastpt_ref',
+    # rarely:
+    332 => 'ref[1].intsectobj',
+    74 => 'ref[1].intsect_subent_type',
+    1 => 'ref[2].classname',
+    72 => 'ref[2].osnap_type',
+    331 => 'ref[2].mainobj',
+    73 => 'ref[2].main_subent_type',
+    91 => 'ref[2].main_gsmarker',
+    301 => 'ref[2].xrefobj',
+    40 => 'ref[2].osnap_dist',
+    10 => 'ref[2].osnap_pt.x',
+    20 => 'ref[2].osnap_pt.y',
+    30 => 'ref[2].osnap_pt.z',
+    75 => 'ref[2].has_lastpt_ref',
+    # rarely:
+    332 => 'ref[2].intsectobj',
+    74 => 'ref[2].intsect_subent_type',
+    1 => 'ref[3].classname',
+    72 => 'ref[3].osnap_type',
+    331 => 'ref[3].mainobj',
+    73 => 'ref[3].main_subent_type',
+    91 => 'ref[3].main_gsmarker',
+    301 => 'ref[3].xrefobj',
+    40 => 'ref[3].osnap_dist',
+    10 => 'ref[3].osnap_pt.x',
+    20 => 'ref[3].osnap_pt.y',
+    30 => 'ref[3].osnap_pt.z',
+    75 => 'ref[3].has_lastpt_ref',
+    # rarely:
+    332 => 'ref[3].intsectobj',
+    74 => 'ref[3].intsect_subent_type',
     92 => 'intsect_gsmarker',
     302 => 'intsectxrefobj',
     ],
@@ -1491,16 +1533,18 @@ sub emit_field {
   my $bits = 0;
   my $type = "BITS_UNKNOWN";
   # need stronger hints for some fields
-  if ("$obj.$name" eq "DIMASSOC.ref.osnap_type") {
-    $type = "BITS_RC";
-    $bits = 8;
-  }
-  elsif ("$obj.$name" eq "DIMASSOC.ref.has_lastpt_ref") {
-    $type = "BITS_B";
-    $bits = 1;
-  }
-  elsif ("$obj.$name" =~ /^DIMASSOC\.ref\.osnap/) {
-    $type = "BITS_BD";
+  if ($obj eq 'DIMASSOC') {
+    if ($name =~ /(osnap_type|trans_space_flag)$/) {
+      $type = "BITS_RC";
+      $bits = 8;
+    }
+    elsif ($name =~ /has_lastpt_ref/) {
+      $type = "BITS_B";
+      $bits = 1;
+    }
+    elsif ($name =~ /\.osnap_/) {
+      $type = "BITS_BD";
+    }
   }
   print $f "{ $code, \"$v\", NULL, $bits, $type, \"$name\", $count, {-1,-1,-1,-1,-1} },\n";
 }

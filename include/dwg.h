@@ -4780,7 +4780,6 @@ typedef struct _dwg_DIMASSOC_Ref
   BITCODE_TV classname;       /*!< DXF 1 */
   BITCODE_RC osnap_type;      /*!< DXF 72 */
   BITCODE_BS main_subent_type; /*!< DXF 73 */
-  BITCODE_BS rotated_type;    /*!< DXF 71 */
   BITCODE_BL main_gsmarker;   /*!< DXF 91 */
   BITCODE_BS intsect_subent_type; /*!< DXF 74 */
   BITCODE_BS unknown_bs;
@@ -4795,6 +4794,7 @@ typedef struct _dwg_object_DIMASSOC
   struct _dwg_object_object *parent;
   BITCODE_BL associativity;   /*!< DXF 90, bitmask 0-15*/
   BITCODE_RC trans_space_flag;/*!< DXF 70 boolean */
+  BITCODE_BS rotated_type;    /*!< DXF 71 1 or 2 */
   Dwg_DIMASSOC_Ref *ref;       /* 1-4x, with possible holes,
                                   depend. on associativity bitmask */
   BITCODE_BL intsect_gsmarker; /*!< DXF 92 */

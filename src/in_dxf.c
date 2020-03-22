@@ -3810,7 +3810,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
         case 0:
           break;
-        case 71: // not always
+        case 71: // always before each ref
           i++;
           while (!(o->associativity & (1<<i)) && i < 4) // popcount x
             i++;
@@ -3819,10 +3819,10 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_ERROR ("Invalid DIMASSOC_Ref index %d", i)
               return pair;
             }
-          o->ref[i].rotated_type = pair->value.i;
+          o->rotated_type = pair->value.i;
           have_rotated_type = 1; // early bump
-          LOG_TRACE ("%s.ref[%d].rotated_type = %d [BS %d]\n",
-                     obj->name, i, pair->value.i, pair->code);
+          LOG_TRACE ("%s.rotated_type = %d [BS %d]\n",
+                     obj->name, pair->value.i, pair->code);
           break;
         case 1:
           if (strNE (pair->value.s, "AcDbOsnapPointRef"))
@@ -3837,7 +3837,6 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           if (!have_rotated_type) // not already bumped
             {
-              o->ref[i].rotated_type = 1; // the default
               i++;
               while (!(o->associativity & (1<<i)) && i < 4) // popcount x
                 i++;

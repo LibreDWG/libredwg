@@ -26856,6 +26856,21 @@ static int test_DIMASSOC (const Dwg_Object *obj)
         fail ("DIMASSOC.ref [Dwg_DIMASSOC_Ref*]");
   }
   {
+    BITCODE_BS rotated_type;
+    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "rotated_type", &rotated_type, NULL)
+        && rotated_type == dimassoc->rotated_type)
+      pass ();
+    else
+      fail ("DIMASSOC.rotated_type [BS] %hu != %hu", dimassoc->rotated_type, rotated_type);
+    rotated_type++;
+    if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "rotated_type", &rotated_type, 0)
+        && rotated_type == dimassoc->rotated_type)
+      pass ();
+    else
+      fail ("DIMASSOC.rotated_type [BS] set+1 %hu != %hu", dimassoc->rotated_type, rotated_type);
+    dimassoc->rotated_type--;
+  }
+  {
     BITCODE_RC trans_space_flag;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "trans_space_flag", &trans_space_flag, NULL)
         && trans_space_flag == dimassoc->trans_space_flag)

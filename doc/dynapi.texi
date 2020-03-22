@@ -5038,6 +5038,8 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item trans_space_flag
 RC,	DXF 70
+@item rotated_type
+BS,	DXF 71
 @item ref
 Dwg_DIMASSOC_Ref*
 @item intsect_gsmarker
@@ -7948,8 +7950,6 @@ TV,	DXF 1
 RC,	DXF 72
 @item main_subent_type
 BS,	DXF 73
-@item rotated_type
-BS
 @item main_gsmarker
 BL,	DXF 91
 @item intsect_subent_type

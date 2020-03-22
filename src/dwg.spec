@@ -6064,6 +6064,9 @@ DWG_OBJECT (DIMASSOC)
   SUBCLASS (AcDbDimAssoc)
   FIELD_BLx (associativity, 90);
   FIELD_RC (trans_space_flag, 70);
+  // missing from DWG, always 1
+  DECODER { FIELD_VALUE (rotated_type) = 1; }
+  DXF { FIELD_BS (rotated_type, 71); }
   REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref)
   REPEAT_BLOCK
       // 0 1 2 3 => 1 2 4 8. skip unset bits
@@ -6078,7 +6081,7 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
-      SUB_FIELD_BS (ref[rcount1], unknown_bs, 0); // 0 (in DXF only once)
+      SUB_FIELD_BS (ref[rcount1], unknown_bs, 0); // 1 or 2 (in DXF only once)
       SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
       SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
