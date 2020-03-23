@@ -4211,6 +4211,8 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         has_wrong_bitsize = 1;
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
+    else
+      error |= obj_handle_stream (dat, obj, hdl_dat);
   }
 
   // clang-format off

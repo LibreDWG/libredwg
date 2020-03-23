@@ -5047,9 +5047,9 @@ BL,	DXF 92
 @item dimensionobj
 H,	DXF 330
 @item xrefobj
-H,	DXF 301
+H
 @item intsectxrefobj
-H,	DXF 302
+H
 
 @end vtable
 @end indentedblock

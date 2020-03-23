@@ -55,6 +55,8 @@
         obj->bitsize = obj->size * 8;
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
+    else
+      error |= obj_handle_stream (dat, obj, hdl_dat);
 #endif
     }
 

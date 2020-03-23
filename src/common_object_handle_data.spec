@@ -23,13 +23,19 @@
   }
 #endif
 
-  SINCE (R_14) {
-    FIELD_HANDLE (ownerhandle, 4, 330);
-  }
+#ifndef IS_FREE
+  // done later in the dwg.spec, because of num_entries
+  if (!dwg_obj_is_control (obj))
+#endif
+    {
+      SINCE (R_13) {
+        FIELD_HANDLE (ownerhandle, 4, 330);
+      }
 
 #ifndef IS_DXF
-  SINCE (R_13) {
-    REACTORS (4)
-    XDICOBJHANDLE (3)
-  }
+      SINCE (R_13) {
+        REACTORS (4)
+        XDICOBJHANDLE (3)
+      }
 #endif
+    }

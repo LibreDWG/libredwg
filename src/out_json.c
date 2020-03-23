@@ -773,6 +773,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 #define START_OBJECT_HANDLE_STREAM
+#define CONTROL_HANDLE_STREAM
 
 static void
 _prefix (Bit_Chain *dat)

@@ -2451,7 +2451,7 @@ DWG_OBJECT (BLOCK_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
   FIELD_HANDLE (paper_space, 3, 0);
@@ -2581,7 +2581,7 @@ DWG_OBJECT (LAYER_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2668,7 +2668,7 @@ DWG_OBJECT (STYLE_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2747,7 +2747,7 @@ DWG_OBJECT (LTYPE_CONTROL)
 
   FIELD_BS (num_entries, 70);
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (byblock, 3, 0);
   FIELD_HANDLE (bylayer, 3, 0);
@@ -2820,7 +2820,7 @@ DWG_OBJECT (VIEW_CONTROL)
     FIELD_BL (num_entries, 70);
   }
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2926,7 +2926,7 @@ DWG_OBJECT (UCS_CONTROL)
 
   FIELD_BS (num_entries, 70); //BS or BL?
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -2978,7 +2978,7 @@ DWG_OBJECT (VPORT_CONTROL)
     FIELD_BS (num_entries, 70);
   }
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -3196,7 +3196,7 @@ DWG_OBJECT (APPID_CONTROL)
 
   FIELD_BS (num_entries, 70);
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -3230,7 +3230,7 @@ DWG_OBJECT (DIMSTYLE_CONTROL)
       FIELD_RCu (num_morehandles, 71);
     }
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
 
@@ -3496,7 +3496,7 @@ DWG_OBJECT (VPORT_ENTITY_CONTROL)
 
   FIELD_BS (num_entries, 70);
 
-  START_OBJECT_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 4, 0);
 
 DWG_OBJECT_END
