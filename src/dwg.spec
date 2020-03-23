@@ -6061,21 +6061,8 @@ DWG_OBJECT_END
 DWG_OBJECT (DIMASSOC)
 
   DECODE_UNKNOWN_BITS
-  SINCE (R_2007)
-  {
-#ifdef IS_JSON
-    KEY (ownerhandle);
-#endif
-    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);
-    REACTORS (4);
-    XDICOBJHANDLE (3);
-  }
-
   SUBCLASS (AcDbDimAssoc)
-  SINCE (R_2007)
-  {
-    FIELD_HANDLE (dimensionobj, 4, 330);
-  }
+  FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_BLx (associativity, 90);
   FIELD_RC (trans_space_flag, 70);
   // missing from DWG, always 0
@@ -6109,17 +6096,9 @@ DWG_OBJECT (DIMASSOC)
   END_REPEAT (ref)
   //FIELD_BL (intsect_gsmarker, 92);
 
-  PRE (R_2007)
-  {
-    START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (dimensionobj, 4, 330);
-  }
-  SINCE (R_2007)
-  {
-    START_HANDLE_STREAM;
-  }
+  START_OBJECT_HANDLE_STREAM;
   //FIELD_HANDLE (xrefobj, 4, 301); // TODO optional
-  //FIELD_HANDLE (intsectxrefobj, 4, 302); // TODO multiple
+  // FIELD_HANDLE (intsectxrefobj, 4, 302); // TODO multiple
 
 DWG_OBJECT_END
 

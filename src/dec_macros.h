@@ -1125,7 +1125,6 @@
   }
 /* just checking. skip the has_strings bit. hdl_dat is already set */
 #define START_HANDLE_STREAM                                                   \
-  if (dat->version >= R_2007)                                                 \
     {                                                                         \
       vcount = 1 + bit_position (dat);                                        \
       if (obj->hdlpos != (unsigned long)vcount)                               \
@@ -1231,10 +1230,6 @@
   SINCE (R_13)                                                                \
   {                                                                           \
     START_HANDLE_STREAM;                                                      \
-    PRE (R_2007)                                                              \
-    {                                                                         \
-      error |= dwg_decode_common_entity_handle_data (dat, hdl_dat, obj);      \
-    }                                                                         \
   }
 
 /** Add the empty entity or object with its three structs to the DWG.
@@ -1291,17 +1286,18 @@
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
     int error = dwg_add_##token (obj);                                        \
+    Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007)                                                            \
       {                                                                       \
-        Bit_Chain obj_dat = *dat, str_dat = *dat, hdl_dat = *dat;             \
+        Bit_Chain obj_dat = *dat, str_dat = *dat;                             \
         error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,   \
                                               obj);                           \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        error = dwg_decode_##token##_private (dat, dat, dat, obj);            \
+        error = dwg_decode_##token##_private (dat, &hdl_dat, dat, obj);       \
       }                                                                       \
     return error;                                                             \
   }                                                                           \
@@ -1385,17 +1381,18 @@
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
     int error = dwg_add_##token (obj);                                        \
+    Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007)                                                            \
       {                                                                       \
-        Bit_Chain obj_dat = *dat, str_dat = *dat, hdl_dat = *dat;             \
+        Bit_Chain obj_dat = *dat, str_dat = *dat;                             \
         error = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat,   \
                                               obj);                           \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        error = dwg_decode_##token##_private (dat, dat, dat, obj);            \
+        error = dwg_decode_##token##_private (dat, &hdl_dat, dat, obj);       \
       }                                                                       \
     return error;                                                             \
   }                                                                           \

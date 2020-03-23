@@ -4060,6 +4060,8 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         has_wrong_bitsize = 1;
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
+    else
+      error |= obj_handle_stream (dat, obj, hdl_dat);
   }
   SINCE (R_2007)
   {
@@ -4112,9 +4114,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   #include "common_entity_data.spec"
   // clang-format on
 
-  SINCE (R_2007) {
-    dwg_decode_common_entity_handle_data (dat, hdl_dat, obj);
-  }
+  dwg_decode_common_entity_handle_data (dat, hdl_dat, obj);
 
   // elsewhere: object data, handles, padding bits, crc
   obj->common_size = bit_position (dat) - objectpos;
@@ -4154,6 +4154,8 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         has_wrong_bitsize = 1;
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
+    else
+      error |= obj_handle_stream (dat, obj, hdl_dat);
   }
   SINCE (R_2007)
   {
@@ -4223,6 +4225,10 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   SINCE (R_2013) { FIELD_B (has_ds_binary_data, 0); }
   obj->common_size = bit_position (dat) - objectpos;
   LOG_HANDLE ("--common_size: %lu\n", obj->common_size); // needed for unknown
+
+  FIELD_HANDLE (ownerhandle, 4, 0);
+  REACTORS (4);
+  XDICOBJHANDLE (3);
 
   return error;
 }
