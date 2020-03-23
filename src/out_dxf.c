@@ -120,7 +120,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
 // names on: 6 7 8. which else? there are more styles: plot, ...
 // rather skip unknown handles
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
-  if (dxf != 0 && _obj->nam)                                                  \
+  if (dxf != 0 && _obj->nam != NULL)                                          \
     {                                                                         \
       if (dxf == 6)                                                           \
         FIELD_HANDLE_NAME (nam, dxf, LTYPE)                                   \
@@ -730,6 +730,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
     SINCE (R_13) { error |= dxf_common_entity_handle_data (dat, obj); }
 
 #define DWG_ENTITY_END                                                        \
+  error |= dxf_write_eed (dat, (Dwg_Object_Object*)obj->tio.entity);          \
   return error;                                                               \
   }
 
@@ -778,8 +779,115 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 // then 330, SUBCLASS
 
 #define DWG_OBJECT_END                                                        \
+    error |= dxf_write_eed (dat, obj->tio.object);                            \
     return error;                                                             \
-  }
+}
+
+#undef DXF_3DSOLID
+#define DXF_3DSOLID dxf_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
+
+static char *
+cquote (char *restrict dest, const char *restrict src, const int len)
+{
+  char c;
+  char *d = dest;
+  const char* endp = dest + len;
+  char *s = (char *)src;
+  while ((c = *s++))
+    {
+      if (dest >= endp)
+        {
+          *dest = 0;
+          return d;
+        }
+      if (c == '\n' && dest+1 < endp)
+        {
+          *dest++ = '^';
+          *dest++ = 'J';
+        }
+      else if (c == '\r' && dest+1 < endp)
+        {
+          *dest++ = '^';
+          *dest++ = 'M';
+        }
+      else
+        *dest++ = c;
+    }
+  if (dest < endp)
+    *dest = 0; // add final delim, skipped above
+  return d;
+}
+
+/* \n => ^J */
+static void
+dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str)
+{
+  if (str)
+    {
+      if (strchr (str, '\n') || strchr (str, '\r'))
+        {
+          const int len = 2 * strlen (str) + 1;
+          char *_buf = alloca (len);
+          fprintf (dat->fh, "%s\r\n", cquote (_buf, str, len));
+          freea (_buf);
+        }
+      else
+        fprintf (dat->fh, "%s\r\n", str);
+    }
+  else
+    fprintf (dat->fh, "\r\n");
+}
+
+static int
+dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
+{
+  int error = 0;
+  for (BITCODE_BL i = 0; i < obj->num_eed; i++)
+    {
+      const Dwg_Eed* _obj = &obj->eed[i];
+      if (_obj->size)
+        {
+          // name of APPID
+          Dwg_Object *appid = dwg_resolve_handle (obj->dwg, _obj->handle.value);
+          if (appid && appid->fixedtype == DWG_TYPE_APPID)
+            VALUE_T (appid->tio.object->tio.APPID->name, 1001);
+        }
+      if (_obj->data)
+        {
+          const Dwg_Eed_Data *data = _obj->data;
+          const int dxf = data->code + 1000;
+          switch (data->code)
+            {
+            case 0: VALUE_T (data->u.eed_0.string, dxf); break;
+            case 2:
+              GROUP (dxf);
+              fprintf (dat->fh, "%6i", data->u.eed_2.byte);
+              //VALUE_RC (data->u.eed_2.byte, dxf);
+              break;
+            case 3:
+              GROUP (dxf);
+              fprintf (dat->fh, "%9li", (long)data->u.eed_3.layer);
+              //VALUE_RL (data->u.eed_3.layer, dxf);
+              break;
+            case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf); break;
+            case 5: break; // not in DXF. VALUE_RLL (data->u.eed_5.entity, dxf); break; (hex handle?)
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15: VALUE_3BD (data->u.eed_10.point, dxf); break;
+            case 40:
+            case 41:
+            case 42: VALUE_RD (data->u.eed_40.real, dxf); break;
+            case 70: VALUE_RS (data->u.eed_70.rs, dxf); break;
+            case 71: VALUE_RL (data->u.eed_71.rl, dxf); break;
+            default: VALUE_RC (0, dxf);
+            }
+        }
+    }
+  return error;
+}
 
 GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 static int
@@ -861,61 +969,6 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       rbuf = tmp;
     }
   return 0;
-}
-
-#undef DXF_3DSOLID
-#define DXF_3DSOLID dxf_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
-
-static char *
-cquote (char *restrict dest, const char *restrict src, const int len)
-{
-  char c;
-  char *d = dest;
-  const char* endp = dest + len;
-  char *s = (char *)src;
-  while ((c = *s++))
-    {
-      if (dest >= endp)
-        {
-          *dest = 0;
-          return d;
-        }
-      if (c == '\n' && dest+1 < endp)
-        {
-          *dest++ = '^';
-          *dest++ = 'J';
-        }
-      else if (c == '\r' && dest+1 < endp)
-        {
-          *dest++ = '^';
-          *dest++ = 'M';
-        }
-      else
-        *dest++ = c;
-    }
-  if (dest < endp)
-    *dest = 0; // add final delim, skipped above
-  return d;
-}
-
-/* \n => ^J */
-static void
-dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str)
-{
-  if (str)
-    {
-      if (strchr (str, '\n') || strchr (str, '\r'))
-        {
-          const int len = 2 * strlen (str) + 1;
-          char *_buf = alloca (len);
-          fprintf (dat->fh, "%s\r\n", cquote (_buf, str, len));
-          freea (_buf);
-        }
-      else
-        fprintf (dat->fh, "%s\r\n", str);
-    }
-  else
-    fprintf (dat->fh, "\r\n");
 }
 
 // r13+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
@@ -1668,6 +1721,10 @@ dxf_format (int code)
     return "%6i";
   if (code == 1071)
     return "%9li"; // int32_t
+  if (code == 1002) // RC
+    return "%6i";
+  if (code == 1003) // RL layer
+    return "%9li";
   if (code > 1000)
     return dxf_format (code - 1000);
 
@@ -2149,8 +2206,14 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
     error |= dwg_dxf_object (dat, obj, i);
   else
     {
-      LOG_ERROR ("BLOCK_HEADER.block_entity missing");
-      return DWG_ERR_INVALIDDWG;
+      SINCE (R_2004)
+        {
+          // first_owned_block
+          LOG_ERROR ("BLOCK_HEADER %s block_entity[0] missing", _hdr->name);
+          return DWG_ERR_INVALIDDWG;
+        }
+      else
+        LOG_WARN ("BLOCK_HEADER %s block_entity[0] missing", _hdr->name);
     }
   // Skip all *Model_Space entities, esp. new ones: UNDERLAY, MULTILEADER, ...
   // They are all under ENTITIES later.
@@ -2169,7 +2232,9 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
     }
   endblk = get_last_owned_block (hdr);
   if (endblk)
-    error |= dwg_dxf_ENDBLK (dat, endblk);
+    {
+      error |= dwg_dxf_ENDBLK (dat, endblk);
+    }
   else
     {
       LOG_WARN ("Empty ENDBLK for \"%s\" %lX", _hdr->name,

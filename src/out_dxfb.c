@@ -266,6 +266,12 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     GROUP (dxf);                                                              \
     fwrite (&c, sizeof (BITCODE_RC), 1, dat->fh);                             \
   }
+#define VALUE_3BD(value, dxf)                                                 \
+  {                                                                           \
+    VALUE_RD (value.x, dxf);                                                  \
+    VALUE_RD (value.y, dxf + 10);                                             \
+    VALUE_RD (value.z, dxf + 20);                                             \
+  }
 #define FIELD_RC(nam, dxf) VALUE_RC (_obj->nam, dxf)
 #define HEADER_RC(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
@@ -634,6 +640,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     }
 
 #define DWG_ENTITY_END                                                        \
+    error |= dxfb_write_eed (dat, (Dwg_Object_Object*)obj->tio.entity);       \
     return error;                                                             \
   }
 
@@ -681,8 +688,52 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))
 
 #define DWG_OBJECT_END                                                        \
+    error |= dxfb_write_eed (dat, obj->tio.object);                           \
     return error;                                                             \
   }
+
+static int
+dxfb_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
+{
+  int error = 0;
+  for (BITCODE_BL i = 0; i < obj->num_eed; i++)
+    {
+      const Dwg_Eed* _obj = &obj->eed[i];
+      if (_obj->size)
+        {
+          // name of APPID
+          Dwg_Object *appid = dwg_resolve_handle (obj->dwg, _obj->handle.value);
+          if (appid && appid->fixedtype == DWG_TYPE_APPID)
+            VALUE_T (appid->tio.object->tio.APPID->name, 1001);
+        }
+      if (_obj->data)
+        {
+          const Dwg_Eed_Data *data = _obj->data;
+          const int dxf = data->code + 1000;
+          switch (data->code)
+            {
+            case 0: VALUE_T (data->u.eed_0.string, dxf); break;
+            case 2: VALUE_RC (data->u.eed_2.byte, dxf); break;
+            case 3: VALUE_RL (data->u.eed_3.layer, dxf); break;
+            case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf); break;
+            case 5: break; // not in DXF. VALUE_RLL (data->u.eed_5.entity, dxf); break; (hex handle?)
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15: VALUE_3BD (data->u.eed_10.point, dxf); break;
+            case 40:
+            case 41:
+            case 42: VALUE_RD (data->u.eed_40.real, dxf); break;
+            case 70: VALUE_RS (data->u.eed_70.rs, dxf); break;
+            case 71: VALUE_RL (data->u.eed_71.rl, dxf); break;
+            default: VALUE_RC (0, dxf);
+            }
+        }
+    }
+  return error;
+}
 
 static void
 dxfb_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
