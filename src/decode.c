@@ -3977,7 +3977,7 @@ obj_has_strings (unsigned int type)
     }
 }
 
-/* restrict the hdl_dat stream. */
+/* init and restrict the hdl_dat stream. */
 int
 obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                    Bit_Chain *restrict hdl_dat)

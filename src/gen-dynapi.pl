@@ -358,6 +358,7 @@ $DXF{'HATCH'}->{'boundary_handles'} = 330; # special DXF logic
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
+$DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
 # $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
 # $DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
 # $DXF{'DIMENSION_ORDINATE'}->{'leader_endpt'} = 14;
