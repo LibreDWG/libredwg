@@ -336,7 +336,7 @@
 #ifndef START_OBJECT_HANDLE_STREAM
 #  define START_OBJECT_HANDLE_STREAM                                          \
     START_HANDLE_STREAM;                                                      \
-    assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
+    assert (obj->supertype == DWG_SUPERTYPE_OBJECT)
 #endif
 
 #ifndef COMMON_TABLE_FLAGS

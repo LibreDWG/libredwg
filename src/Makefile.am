@@ -65,6 +65,7 @@ EXTRA_HEADERS = \
         header_variables_dxf.spec \
         common_entity_data.spec \
         common_entity_handle_data.spec \
+        common_object_handle_data.spec \
         header.spec \
         auxheader.spec \
 	r2004_file_header.spec \

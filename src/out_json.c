@@ -772,12 +772,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 #define START_STRING_STREAM
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
-#define START_OBJECT_HANDLE_STREAM                                          \
-  assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
-  KEY (ownerhandle);                                                        \
-  VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);           \
-  REACTORS (4);                                                             \
-  XDICOBJHANDLE (3)
+#define START_OBJECT_HANDLE_STREAM
 
 static void
 _prefix (Bit_Chain *dat)
@@ -847,7 +842,8 @@ _prefix (Bit_Chain *dat)
     VALUE_H (obj->handle, 5);                                                 \
     _FIELD (size, RL, 0);                                                     \
     _FIELD (bitsize, BL, 0);                                                  \
-    error |= json_eed (dat, obj->tio.object);
+    error |= json_eed (dat, obj->tio.object);                                 \
+    error |= json_common_object_handle_data (dat, obj);
 
 #define DWG_OBJECT_END                                                        \
   return 0;                                                                   \
@@ -1023,6 +1019,22 @@ json_common_entity_data (Bit_Chain *restrict dat,
   #include "common_entity_data.spec"
   // clang-format on
 
+  return error;
+}
+
+static int
+json_common_object_handle_data (Bit_Chain *restrict dat,
+                                const Dwg_Object *restrict obj)
+{
+  Dwg_Object_Object *_obj;
+  Dwg_Data *dwg = obj->parent;
+  int error = 0;
+  BITCODE_BL vcount = 0;
+  _obj = obj->tio.object;
+
+  // clang-format off
+  #include "common_object_handle_data.spec"
+  // clang-format on
   return error;
 }
 

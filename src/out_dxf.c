@@ -725,7 +725,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
     SINCE (R_11)                                                              \
     {                                                                         \
       LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle));      \
-      fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value);               \
+      fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value);              \
     }                                                                         \
     SINCE (R_13) { error |= dxf_common_entity_handle_data (dat, obj); }
 
@@ -760,10 +760,11 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           RECORD (ACDBPLACEHOLDER);                                           \
         else if (obj->type != DWG_TYPE_BLOCK_HEADER)                          \
           RECORD (token);                                                     \
+                                                                              \
         SINCE (R_13)                                                          \
         {                                                                     \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
-          fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value);         \
+          fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value);        \
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \

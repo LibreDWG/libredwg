@@ -4138,6 +4138,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Object *obj = &dwg->object[_obj->objid];
   unsigned long objectpos = bit_position (dat);
   int has_wrong_bitsize = 0; // first possibly fatal problem
+  BITCODE_BL vcount;
 
   // obj->dat_address = dat->byte; // the data stream offset
   obj->bitsize_pos = objectpos; // absolute. needed for encode
@@ -4211,24 +4212,13 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
       }
   }
-  // documentation bug, same BL type as with entity
-  FIELD_BL (num_reactors, 0);
-  SINCE (R_2010)
-  {
-    if (_obj->num_reactors > 0x1000)
-      {
-        LOG_WARN ("Invalid num_reactors %ld", (long)_obj->num_reactors)
-        _obj->num_reactors = 0;
-      }
-  }
-  SINCE (R_2004) { FIELD_B (xdic_missing_flag, 0); }
-  SINCE (R_2013) { FIELD_B (has_ds_binary_data, 0); }
+
+  // clang-format off
+  #include "common_object_handle_data.spec"
+  // clang-format on
+
   obj->common_size = bit_position (dat) - objectpos;
   LOG_HANDLE ("--common_size: %lu\n", obj->common_size); // needed for unknown
-
-  FIELD_HANDLE (ownerhandle, 4, 0);
-  REACTORS (4);
-  XDICOBJHANDLE (3);
 
   return error;
 }

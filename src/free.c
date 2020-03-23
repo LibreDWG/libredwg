@@ -340,6 +340,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
         _obj = obj->tio.object->tio.token;                                    \
         LOG_HANDLE ("Free object " #token " [%d]\n", obj->index)              \
         error = dwg_free_##token##_private (dat, obj);                        \
+        dwg_free_common_object_data (obj);                                    \
         dwg_free_eed (obj);                                                   \
         FREE_IF (_obj);                                                       \
         FREE_IF (obj->tio.object);                                            \
@@ -393,6 +394,22 @@ dwg_free_common_entity_data (Dwg_Object *obj)
   SINCE (R_13) {
   #include "common_entity_handle_data.spec"
   }
+  // clang-format on
+}
+
+static void
+dwg_free_common_object_data (Dwg_Object *obj)
+{
+
+  Dwg_Data *dwg = obj->parent;
+  Bit_Chain *dat = &pdat;
+  Bit_Chain *hdl_dat = &pdat;
+  Dwg_Object_Object *_obj = obj->tio.object;
+  BITCODE_BL vcount;
+  int error = 0;
+
+  // clang-format off
+  #include "common_object_handle_data.spec"
   // clang-format on
 }
 
