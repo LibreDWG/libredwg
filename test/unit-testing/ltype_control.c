@@ -17,13 +17,24 @@ api_process (dwg_object *obj)
   entries = dwg_object_tablectrl_get_entries (obj, &error);
   if (!dwg_dynapi_entity_value (ctrl, "LTYPE_CONTROL", "entries", &hdls, NULL))
     fail ("LTYPE_CONTROL.entries");
-  for (i = 0; i < num_entries; i++)
-    {
-      if (hdls[i] == entries[i])
-        ok ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
-      else
-        fail ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
-    }
+  else
+    for (i = 0; i < num_entries; i++)
+      {
+        if (hdls[i] == entries[i])
+          {
+            if (entries[i])
+              ok ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+            else
+              ok ("LTYPE_CONTROL.entries[%d]: NULL", i);
+          }
+        else
+          {
+            if (entries[i])
+              fail ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+            else
+              fail ("LTYPE_CONTROL.entries[%d]: NULL", i);
+          }
+      }
   CHK_ENTITY_TYPE (ctrl, LTYPE_CONTROL, objid, BL, objid);  
   CHK_ENTITY_H (ctrl, LTYPE_CONTROL, bylayer, bylayer);
   CHK_ENTITY_H (ctrl, LTYPE_CONTROL, byblock, byblock);

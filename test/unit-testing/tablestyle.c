@@ -43,7 +43,8 @@ api_process (dwg_object *obj)
     fail ("TABLESTYLE.rowstyles");
   if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "cells", &cells, NULL))
     fail ("TABLESTYLE.cells");
-  for (i = 0; i < num_rowstyles; i++)
+  if (rowstyles)
+    for (i = 0; i < num_rowstyles; i++)
     {
       CHK_SUBCLASS_H (rowstyles[i], TABLESTYLE_rowstyles, text_style);
       CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, text_height, BD);
@@ -53,12 +54,13 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, has_bgcolor, B);
       if (rowstyles[i].num_borders != 6)
         fail ("TABLESTYLE.rowstyles[%d].num_borders %d != 6", i, rowstyles[i].num_borders);
-      for (int j = 0; j < 6; j++)
-        {
-          CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border, linewt, BSd);
-          CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border, visible, B);
-          CHK_SUBCLASS_CMC (rowstyles[i].borders[j], TABLESTYLE_border, color);
-        }
+      if (rowstyles[i].borders)
+        for (int j = 0; j < 6; j++)
+          {
+            CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border, linewt, BSd);
+            CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border, visible, B);
+            CHK_SUBCLASS_CMC (rowstyles[i].borders[j], TABLESTYLE_border, color);
+          }
       if (dwg_version >= R_2007)
         {
           CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, data_type, BL);

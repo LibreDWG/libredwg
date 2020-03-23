@@ -61,6 +61,11 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
   enum RES_BUF_VALUE_TYPE vtype;
   Dwg_Version_Type dwg_version = dwg->header.version;
 
+  if (!ptr)
+    {
+      fail ("test_subclass %s.%s: empty ptr", subclass, key);
+      return;
+    }
   if (strEQc (fp->type, "CMC"))
     {
       BITCODE_CMC color;
@@ -443,6 +448,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           fp = dwg_dynapi_subclass_field (subclass, key);
           if (!fp)
             {
+              free (subclass);
               free (subf);
               continue;
             }
@@ -458,7 +464,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
             { // embedded. no deref, and also no index offset. ptr = &ref.key
               ptr = &((char*)obj->tio.object->tio.APPID)[fp1->offset];
             }
-          test_subclass (dwg, ptr, f, fp, subclass, subf, key, sub_i);
+          if (ptr)
+            test_subclass (dwg, ptr, f, fp, subclass, subf, key, sub_i);
+          free (subclass);
           free (subf);
           continue;
         }
