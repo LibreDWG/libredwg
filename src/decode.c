@@ -3709,8 +3709,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
           LOG_POS;
           if (dat->byte >= dat->size)
             end = dat->byte;
-          if (_obj->supertype == DWG_SUPERTYPE_OBJECT && _obj->dxfname
-              && strEQc (_obj->dxfname, "MLEADERSTYLE"))
+          if (_obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
             { // check for is_new_format: has extended data for APPID
               // “ACAD_MLEADERVER”
               Dwg_Object_Ref ref;

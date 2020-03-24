@@ -645,8 +645,9 @@
 #define FIELD_CMC(color, dxf1, dxf2)                                          \
   {                                                                           \
     bit_read_CMC (dat, &_obj->color);                                         \
-    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf1);   \
-    LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)                            \
+    LOG_TRACE (#color ".index: %d [CMC.BS %d]", _obj->color.index, dxf1);     \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
+    LOG_TRACE ("\n");                                                         \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
@@ -662,7 +663,6 @@
             LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                     \
                      _obj->color.book_name);                                  \
           }                                                                   \
-        LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
   }
 #define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
@@ -1126,7 +1126,8 @@
 /* just checking. skip the has_strings bit. hdl_dat is already set */
 #define START_HANDLE_STREAM                                                   \
     {                                                                         \
-      vcount = 1 + bit_position (dat);                                        \
+      vcount = bit_position (dat);                                            \
+      if (dat->from_version >= R_2007) vcount++; /* has_strings bit */        \
       if (obj->hdlpos != (unsigned long)vcount)                               \
         {                                                                     \
           LOG_HANDLE (" handle stream: %+ld @%lu.%u %s (@%lu.%u "             \

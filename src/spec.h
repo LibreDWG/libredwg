@@ -342,11 +342,9 @@
 #ifndef CONTROL_HANDLE_STREAM
 #  define CONTROL_HANDLE_STREAM                                               \
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
-    *hdl_dat = *dat;                                                          \
+    PRE (R_2007) *hdl_dat = *dat;                                             \
     SINCE (R_13) {                                                            \
       VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);         \
-    }                                                                         \
-    SINCE (R_13) {                                                            \
       REACTORS (4)                                                            \
       XDICOBJHANDLE (3)                                                       \
     }
