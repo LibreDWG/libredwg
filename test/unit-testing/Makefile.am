@@ -75,6 +75,7 @@ testobjects = \
 	datalink \
 	datatable \
 	dbcolor \
+	detailviewstyle \
 	dictionary \
 	dictionaryvar \
 	dictionarywdflt \

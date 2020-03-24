@@ -26531,6 +26531,398 @@ static int test_DBCOLOR (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_DETAILVIEWSTYLE *restrict detailviewstyle = obj->tio.object->tio.DETAILVIEWSTYLE;
+  failed = 0;
+  {
+    BITCODE_H arrow_symbol;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "arrow_symbol", &arrow_symbol, NULL)
+        && !memcmp (&arrow_symbol, &detailviewstyle->arrow_symbol, sizeof (detailviewstyle->arrow_symbol)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.arrow_symbol [H]");
+  }
+  {
+    BITCODE_CMC arrow_symbol_color;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "arrow_symbol_color", &arrow_symbol_color, NULL)
+        && !memcmp (&arrow_symbol_color, &detailviewstyle->arrow_symbol_color, sizeof (detailviewstyle->arrow_symbol_color)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.arrow_symbol_color [CMC]");
+  }
+  {
+    BITCODE_BD arrow_symbol_size;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "arrow_symbol_size", &arrow_symbol_size, NULL)
+        && arrow_symbol_size == detailviewstyle->arrow_symbol_size)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.arrow_symbol_size [BD] %g != %g", detailviewstyle->arrow_symbol_size, arrow_symbol_size);
+    arrow_symbol_size++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "arrow_symbol_size", &arrow_symbol_size, 0)
+        && arrow_symbol_size == detailviewstyle->arrow_symbol_size)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.arrow_symbol_size [BD] set+1 %g != %g", detailviewstyle->arrow_symbol_size, arrow_symbol_size);
+    detailviewstyle->arrow_symbol_size--;
+  }
+  {
+    BITCODE_CMC borderline_color;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "borderline_color", &borderline_color, NULL)
+        && !memcmp (&borderline_color, &detailviewstyle->borderline_color, sizeof (detailviewstyle->borderline_color)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.borderline_color [CMC]");
+  }
+  {
+    BITCODE_H borderline_type;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "borderline_type", &borderline_type, NULL)
+        && !memcmp (&borderline_type, &detailviewstyle->borderline_type, sizeof (detailviewstyle->borderline_type)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.borderline_type [H]");
+  }
+  {
+    BITCODE_BD borderline_weight;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "borderline_weight", &borderline_weight, NULL)
+        && borderline_weight == detailviewstyle->borderline_weight)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.borderline_weight [BD] %g != %g", detailviewstyle->borderline_weight, borderline_weight);
+    borderline_weight++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "borderline_weight", &borderline_weight, 0)
+        && borderline_weight == detailviewstyle->borderline_weight)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.borderline_weight [BD] set+1 %g != %g", detailviewstyle->borderline_weight, borderline_weight);
+    detailviewstyle->borderline_weight--;
+  }
+  {
+    BITCODE_CMC boundary_line_color;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "boundary_line_color", &boundary_line_color, NULL)
+        && !memcmp (&boundary_line_color, &detailviewstyle->boundary_line_color, sizeof (detailviewstyle->boundary_line_color)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.boundary_line_color [CMC]");
+  }
+  {
+    BITCODE_H boundary_line_type;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "boundary_line_type", &boundary_line_type, NULL)
+        && !memcmp (&boundary_line_type, &detailviewstyle->boundary_line_type, sizeof (detailviewstyle->boundary_line_type)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.boundary_line_type [H]");
+  }
+  {
+    BITCODE_BS boundary_line_weight;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "boundary_line_weight", &boundary_line_weight, NULL)
+        && boundary_line_weight == detailviewstyle->boundary_line_weight)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.boundary_line_weight [BS] %hu != %hu", detailviewstyle->boundary_line_weight, boundary_line_weight);
+    boundary_line_weight++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "boundary_line_weight", &boundary_line_weight, 0)
+        && boundary_line_weight == detailviewstyle->boundary_line_weight)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.boundary_line_weight [BS] set+1 %hu != %hu", detailviewstyle->boundary_line_weight, boundary_line_weight);
+    detailviewstyle->boundary_line_weight--;
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "class_version", &class_version, NULL)
+        && class_version == detailviewstyle->class_version)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.class_version [BS] %hu != %hu", detailviewstyle->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "class_version", &class_version, 0)
+        && class_version == detailviewstyle->class_version)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.class_version [BS] set+1 %hu != %hu", detailviewstyle->class_version, class_version);
+    detailviewstyle->class_version--;
+  }
+  {
+    BITCODE_CMC connection_line_color;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "connection_line_color", &connection_line_color, NULL)
+        && !memcmp (&connection_line_color, &detailviewstyle->connection_line_color, sizeof (detailviewstyle->connection_line_color)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.connection_line_color [CMC]");
+  }
+  {
+    BITCODE_H connection_line_type;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "connection_line_type", &connection_line_type, NULL)
+        && !memcmp (&connection_line_type, &detailviewstyle->connection_line_type, sizeof (detailviewstyle->connection_line_type)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.connection_line_type [H]");
+  }
+  {
+    BITCODE_BS connection_line_weight;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "connection_line_weight", &connection_line_weight, NULL)
+        && connection_line_weight == detailviewstyle->connection_line_weight)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.connection_line_weight [BS] %hu != %hu", detailviewstyle->connection_line_weight, connection_line_weight);
+    connection_line_weight++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "connection_line_weight", &connection_line_weight, 0)
+        && connection_line_weight == detailviewstyle->connection_line_weight)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.connection_line_weight [BS] set+1 %hu != %hu", detailviewstyle->connection_line_weight, connection_line_weight);
+    detailviewstyle->connection_line_weight--;
+  }
+  {
+    BITCODE_CMC identifier_color;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_color", &identifier_color, NULL)
+        && !memcmp (&identifier_color, &detailviewstyle->identifier_color, sizeof (detailviewstyle->identifier_color)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.identifier_color [CMC]");
+  }
+  {
+    BITCODE_BD identifier_height;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_height", &identifier_height, NULL)
+        && identifier_height == detailviewstyle->identifier_height)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.identifier_height [BD] %g != %g", detailviewstyle->identifier_height, identifier_height);
+    identifier_height++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_height", &identifier_height, 0)
+        && identifier_height == detailviewstyle->identifier_height)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.identifier_height [BD] set+1 %g != %g", detailviewstyle->identifier_height, identifier_height);
+    detailviewstyle->identifier_height--;
+  }
+  {
+    BITCODE_BD identifier_offset;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_offset", &identifier_offset, NULL)
+        && identifier_offset == detailviewstyle->identifier_offset)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.identifier_offset [BD] %g != %g", detailviewstyle->identifier_offset, identifier_offset);
+    identifier_offset++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_offset", &identifier_offset, 0)
+        && identifier_offset == detailviewstyle->identifier_offset)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.identifier_offset [BD] set+1 %g != %g", detailviewstyle->identifier_offset, identifier_offset);
+    detailviewstyle->identifier_offset--;
+  }
+  {
+    BITCODE_BS identifier_placement;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_placement", &identifier_placement, NULL)
+        && identifier_placement == detailviewstyle->identifier_placement)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.identifier_placement [BS] %hu != %hu", detailviewstyle->identifier_placement, identifier_placement);
+    identifier_placement++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_placement", &identifier_placement, 0)
+        && identifier_placement == detailviewstyle->identifier_placement)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.identifier_placement [BS] set+1 %hu != %hu", detailviewstyle->identifier_placement, identifier_placement);
+    detailviewstyle->identifier_placement--;
+  }
+  {
+    BITCODE_H identifier_style;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_style", &identifier_style, NULL)
+        && !memcmp (&identifier_style, &detailviewstyle->identifier_style, sizeof (detailviewstyle->identifier_style)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.identifier_style [H]");
+  }
+  {
+    BITCODE_B is_modified_for_recompute;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "is_modified_for_recompute", &is_modified_for_recompute, NULL)
+        && is_modified_for_recompute == detailviewstyle->is_modified_for_recompute)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.is_modified_for_recompute [B] " FORMAT_B " != " FORMAT_B "", detailviewstyle->is_modified_for_recompute, is_modified_for_recompute);
+    is_modified_for_recompute++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "is_modified_for_recompute", &is_modified_for_recompute, 0)
+        && is_modified_for_recompute == detailviewstyle->is_modified_for_recompute)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.is_modified_for_recompute [B] set+1 " FORMAT_B " != " FORMAT_B "", detailviewstyle->is_modified_for_recompute, is_modified_for_recompute);
+    detailviewstyle->is_modified_for_recompute--;
+  }
+  {
+    BITCODE_B model_edge;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "model_edge", &model_edge, NULL)
+        && model_edge == detailviewstyle->model_edge)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.model_edge [B] " FORMAT_B " != " FORMAT_B "", detailviewstyle->model_edge, model_edge);
+    model_edge++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "model_edge", &model_edge, 0)
+        && model_edge == detailviewstyle->model_edge)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.model_edge [B] set+1 " FORMAT_B " != " FORMAT_B "", detailviewstyle->model_edge, model_edge);
+    detailviewstyle->model_edge--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)detailviewstyle->name)
+           : !detailviewstyle->name)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.name [T] '%s' <> '%s'", name, detailviewstyle->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "parent", &parent, NULL)
+        && !memcmp (&parent, &detailviewstyle->parent, sizeof (detailviewstyle->parent)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_B show_arrowheads;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "show_arrowheads", &show_arrowheads, NULL)
+        && show_arrowheads == detailviewstyle->show_arrowheads)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.show_arrowheads [B] " FORMAT_B " != " FORMAT_B "", detailviewstyle->show_arrowheads, show_arrowheads);
+    show_arrowheads++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "show_arrowheads", &show_arrowheads, 0)
+        && show_arrowheads == detailviewstyle->show_arrowheads)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.show_arrowheads [B] set+1 " FORMAT_B " != " FORMAT_B "", detailviewstyle->show_arrowheads, show_arrowheads);
+    detailviewstyle->show_arrowheads--;
+  }
+  {
+    BITCODE_B show_viewlabel;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "show_viewlabel", &show_viewlabel, NULL)
+        && show_viewlabel == detailviewstyle->show_viewlabel)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.show_viewlabel [B] " FORMAT_B " != " FORMAT_B "", detailviewstyle->show_viewlabel, show_viewlabel);
+    show_viewlabel++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "show_viewlabel", &show_viewlabel, 0)
+        && show_viewlabel == detailviewstyle->show_viewlabel)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.show_viewlabel [B] set+1 " FORMAT_B " != " FORMAT_B "", detailviewstyle->show_viewlabel, show_viewlabel);
+    detailviewstyle->show_viewlabel--;
+  }
+  {
+    BITCODE_BS viewlabel_alignment;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_alignment", &viewlabel_alignment, NULL)
+        && viewlabel_alignment == detailviewstyle->viewlabel_alignment)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_alignment [BS] %hu != %hu", detailviewstyle->viewlabel_alignment, viewlabel_alignment);
+    viewlabel_alignment++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_alignment", &viewlabel_alignment, 0)
+        && viewlabel_alignment == detailviewstyle->viewlabel_alignment)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_alignment [BS] set+1 %hu != %hu", detailviewstyle->viewlabel_alignment, viewlabel_alignment);
+    detailviewstyle->viewlabel_alignment--;
+  }
+  {
+    BITCODE_BS viewlabel_attachment;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_attachment", &viewlabel_attachment, NULL)
+        && viewlabel_attachment == detailviewstyle->viewlabel_attachment)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_attachment [BS] %hu != %hu", detailviewstyle->viewlabel_attachment, viewlabel_attachment);
+    viewlabel_attachment++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_attachment", &viewlabel_attachment, 0)
+        && viewlabel_attachment == detailviewstyle->viewlabel_attachment)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_attachment [BS] set+1 %hu != %hu", detailviewstyle->viewlabel_attachment, viewlabel_attachment);
+    detailviewstyle->viewlabel_attachment--;
+  }
+  {
+    BITCODE_T viewlabel_field;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_field", &viewlabel_field, NULL)
+        && viewlabel_field
+           ? strEQ ((char *)viewlabel_field, (char *)detailviewstyle->viewlabel_field)
+           : !detailviewstyle->viewlabel_field)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_field [T] '%s' <> '%s'", viewlabel_field, detailviewstyle->viewlabel_field);
+  }
+  {
+    BITCODE_BD viewlabel_offset;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_offset", &viewlabel_offset, NULL)
+        && viewlabel_offset == detailviewstyle->viewlabel_offset)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_offset [BD] %g != %g", detailviewstyle->viewlabel_offset, viewlabel_offset);
+    viewlabel_offset++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_offset", &viewlabel_offset, 0)
+        && viewlabel_offset == detailviewstyle->viewlabel_offset)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_offset [BD] set+1 %g != %g", detailviewstyle->viewlabel_offset, viewlabel_offset);
+    detailviewstyle->viewlabel_offset--;
+  }
+  {
+    BITCODE_BS viewlabel_pattern;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_pattern", &viewlabel_pattern, NULL)
+        && viewlabel_pattern == detailviewstyle->viewlabel_pattern)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_pattern [BS] %hu != %hu", detailviewstyle->viewlabel_pattern, viewlabel_pattern);
+    viewlabel_pattern++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_pattern", &viewlabel_pattern, 0)
+        && viewlabel_pattern == detailviewstyle->viewlabel_pattern)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_pattern [BS] set+1 %hu != %hu", detailviewstyle->viewlabel_pattern, viewlabel_pattern);
+    detailviewstyle->viewlabel_pattern--;
+  }
+  {
+    BITCODE_CMC viewlabel_text_color;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_text_color", &viewlabel_text_color, NULL)
+        && !memcmp (&viewlabel_text_color, &detailviewstyle->viewlabel_text_color, sizeof (detailviewstyle->viewlabel_text_color)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.viewlabel_text_color [CMC]");
+  }
+  {
+    BITCODE_BD viewlabel_text_height;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_text_height", &viewlabel_text_height, NULL)
+        && viewlabel_text_height == detailviewstyle->viewlabel_text_height)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_text_height [BD] %g != %g", detailviewstyle->viewlabel_text_height, viewlabel_text_height);
+    viewlabel_text_height++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_text_height", &viewlabel_text_height, 0)
+        && viewlabel_text_height == detailviewstyle->viewlabel_text_height)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewlabel_text_height [BD] set+1 %g != %g", detailviewstyle->viewlabel_text_height, viewlabel_text_height);
+    detailviewstyle->viewlabel_text_height--;
+  }
+  {
+    BITCODE_H viewlabel_text_style;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_text_style", &viewlabel_text_style, NULL)
+        && !memcmp (&viewlabel_text_style, &detailviewstyle->viewlabel_text_style, sizeof (detailviewstyle->viewlabel_text_style)))
+        pass ();
+    else
+        fail ("DETAILVIEWSTYLE.viewlabel_text_style [H]");
+  }
+  if (failed && (is_class_unstable ("DETAILVIEWSTYLE") || is_class_debugging ("DETAILVIEWSTYLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DETAILVIEWSTYLE", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_DICTIONARY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -39840,6 +40232,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DATATABLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_DBCOLOR)
     error += test_DBCOLOR(obj);
+  else  if (obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE)
+    error += test_DETAILVIEWSTYLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_DICTIONARY)
     error += test_DICTIONARY(obj);
   else  if (obj->fixedtype == DWG_TYPE_DICTIONARYVAR)
@@ -40154,6 +40548,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DATATABLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_DBCOLOR)
     error += test_DBCOLOR (obj);
+  else  if (obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE)
+    error += test_DETAILVIEWSTYLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_DICTIONARY)
     error += test_DICTIONARY (obj);
   else  if (obj->fixedtype == DWG_TYPE_DICTIONARYVAR)
@@ -41036,6 +41432,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_DBCOLOR): %d != "
                "dwg_dynapi_fields_size (\"DBCOLOR\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_DETAILVIEWSTYLE);
+  size2 = dwg_dynapi_fields_size ("DETAILVIEWSTYLE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_DETAILVIEWSTYLE): %d != "
+               "dwg_dynapi_fields_size (\"DETAILVIEWSTYLE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_DICTIONARY);

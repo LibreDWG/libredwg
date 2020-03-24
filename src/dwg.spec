@@ -7752,6 +7752,51 @@ DWG_OBJECT (DATALINK)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (DETAILVIEWSTYLE)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbModelDocViewStyle)
+  FIELD_BS (class_version, 70); // 0
+  FIELD_T (name, 3);
+  FIELD_B (is_modified_for_recompute, 290);
+  SUBCLASS (AcDbDetailViewStyle)
+  FIELD_BS (identifier_placement, 70);
+  FIELD_BS (model_edge, 90); // type, origin, direction
+  SINCE (R_2007) {
+    FIELD_B (show_arrowheads, 280);
+  }
+  // DXF: 90 280 71 340 62 40 340 62 40 340 42 40 300 40 280 71 340 90 62 71 340 62 40 90 40 90 300 71 340 90 62 340 90 62 280
+  // pi: 90 (r2007+: 280) 71 62 62 62 62 62 40 40 ?? 40 90 ?? 40 300 90 40 71 90 90 ?? 90 ??
+  FIELD_BS (connection_line_weight, 71);
+  DEBUG_HERE_OBJ
+  FIELD_CMC (connection_line_color, 62,420);
+  FIELD_CMC (identifier_color, 62,420);
+  FIELD_CMC (arrow_symbol_color, 62,420);
+  FIELD_CMC (boundary_line_color, 62,420);
+  FIELD_CMC (viewlabel_text_color, 62,420);
+
+  FIELD_BD (identifier_height, 40);
+  FIELD_BD (identifier_offset, 42);
+  FIELD_HANDLE (identifier_style, 5, 340); // textstyle
+  FIELD_HANDLE (arrow_symbol, 5, 340); // NULL
+  FIELD_BD (arrow_symbol_size, 40);
+  FIELD_BS (boundary_line_weight, 71);
+  FIELD_HANDLE (boundary_line_type, 5, 340); // ltype
+  FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
+  FIELD_HANDLE (connection_line_type, 5, 340); // ltype
+  FIELD_BD (viewlabel_text_height, 40);
+  FIELD_T (viewlabel_field, 300);
+  FIELD_BD (viewlabel_offset, 42);
+  FIELD_BS (viewlabel_attachment, 70);
+  FIELD_BS (viewlabel_alignment, 72);
+  FIELD_BS (viewlabel_pattern, 0);
+  FIELD_B (show_viewlabel, 280);
+  FIELD_BD (borderline_weight, 71);
+  FIELD_CMC (borderline_color, 62,420);
+  FIELD_HANDLE (borderline_type, 5, 340);
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */

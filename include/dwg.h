@@ -5402,6 +5402,44 @@ typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA
   // ...??
 } Dwg_Object_BLKREFOBJECTCONTEXTDATA;
 
+typedef struct _dwg_object_DETAILVIEWSTYLE
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BS class_version; /*!< DXF 70 0 */
+  BITCODE_T name;
+  //BITCODE_T description;
+  BITCODE_B is_modified_for_recompute;
+  BITCODE_H identifier_style;
+  BITCODE_CMC identifier_color;
+  BITCODE_BD identifier_height;
+  BITCODE_BD identifier_offset;
+  BITCODE_BS identifier_placement;
+  BITCODE_H arrow_symbol;
+  BITCODE_CMC arrow_symbol_color;
+  BITCODE_BD arrow_symbol_size;
+  BITCODE_B show_arrowheads;
+  BITCODE_BS boundary_line_weight;
+  BITCODE_CMC boundary_line_color;
+  BITCODE_H boundary_line_type;
+  BITCODE_BS connection_line_weight;
+  BITCODE_CMC connection_line_color;
+  BITCODE_H connection_line_type;
+  BITCODE_H viewlabel_text_style;
+  BITCODE_CMC viewlabel_text_color;
+  BITCODE_BD viewlabel_text_height;
+  BITCODE_T viewlabel_field;
+  BITCODE_BD viewlabel_offset;
+  BITCODE_BS viewlabel_attachment;
+  BITCODE_BS viewlabel_alignment;
+  BITCODE_BS viewlabel_pattern;
+  BITCODE_B show_viewlabel;
+  BITCODE_B model_edge;
+  BITCODE_BD borderline_weight;
+  BITCODE_CMC borderline_color;
+  BITCODE_H borderline_type;
+} Dwg_Object_DETAILVIEWSTYLE;
+
 
 /**
  -----------------------------------
@@ -5682,7 +5720,7 @@ typedef struct _dwg_object_object
     Dwg_Object_DATALINK *DATALINK;
     Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
-    //Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
+    Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DICTIONARY *DICTIONARY;
     Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
     Dwg_Object_DICTIONARYWDFLT *DICTIONARYWDFLT;
@@ -6551,7 +6589,7 @@ EXPORT int dwg_add_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 //EXPORT int dwg_add_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_add_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_add_DATATABLE (Dwg_Object *obj);
-//EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
+EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_add_GEOMAPIMAGE (Dwg_Object *obj);
 EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);

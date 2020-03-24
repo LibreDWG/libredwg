@@ -4956,6 +4956,81 @@ CMC
 @end vtable
 @end indentedblock
 
+@strong{DETAILVIEWSTYLE} @anchor{DETAILVIEWSTYLE}
+@cindex object, DETAILVIEWSTYLE
+@vindex DETAILVIEWSTYLE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item name
+T,	DXF 3
+@item is_modified_for_recompute
+B,	DXF 290
+@item identifier_style
+H,	DXF 340
+@item identifier_color
+CMC,	DXF 62
+@item identifier_height
+BD,	DXF 40
+@item identifier_offset
+BD,	DXF 42
+@item identifier_placement
+BS,	DXF 70
+@item arrow_symbol
+H,	DXF 340
+@item arrow_symbol_color
+CMC,	DXF 62
+@item arrow_symbol_size
+BD,	DXF 40
+@item show_arrowheads
+B,	DXF 280
+@item boundary_line_weight
+BS,	DXF 71
+@item boundary_line_color
+CMC,	DXF 62
+@item boundary_line_type
+H,	DXF 340
+@item connection_line_weight
+BS,	DXF 71
+@item connection_line_color
+CMC,	DXF 62
+@item connection_line_type
+H,	DXF 340
+@item viewlabel_text_style
+H,	DXF 340
+@item viewlabel_text_color
+CMC,	DXF 62
+@item viewlabel_text_height
+BD,	DXF 40
+@item viewlabel_field
+T,	DXF 300
+@item viewlabel_offset
+BD,	DXF 42
+@item viewlabel_attachment
+BS,	DXF 70
+@item viewlabel_alignment
+BS,	DXF 72
+@item viewlabel_pattern
+BS
+@item show_viewlabel
+B,	DXF 280
+@item model_edge
+B,	DXF 90
+@item borderline_weight
+BD,	DXF 71
+@item borderline_color
+CMC,	DXF 62
+@item borderline_type
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
 @strong{DICTIONARY} @anchor{DICTIONARY}
 @cindex object, DICTIONARY
 @vindex DICTIONARY

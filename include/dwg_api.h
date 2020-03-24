@@ -617,6 +617,7 @@ typedef struct _dwg_object_RENDERENVIRONMENT      dwg_obj_renderenvironment;
 typedef struct _dwg_object_RENDERGLOBAL           dwg_obj_renderglobal;
 typedef struct _dwg_object_DATALINK               dwg_obj_datalink;
 typedef struct _dwg_object_DATATABLE              dwg_obj_datatable;
+typedef struct _dwg_object_DETAILVIEWSTYLE        dwg_obj_detailviewstyle;
 #endif
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
@@ -631,7 +632,6 @@ typedef struct _dwg_object_DATATABLE              dwg_obj_datatable;
 //typedef struct _dwg_object_ASSOCGEOMDEPENDENCY  dwg_obj_assocgeomdependency;
 //typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM  dwg_obj_assocosnappointrefactionparam;
 //typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM         dwg_obj_assocvertexactionparam;
-//typedef struct _dwg_object_DETAILVIEWSTYLE      dwg_obj_detailviewstyle;
 //typedef struct _dwg_object_DOCUMENTOPTIONS      dwg_obj_documentoptions;
 //typedef struct _dwg_object_LAYERFILTER         dwg_obj_layerfilter;
 //typedef struct _dwg_object_LAYOUTPRINTCONFIG    dwg_obj_layoutprintconfig;
@@ -835,6 +835,7 @@ DWG_GETALL_OBJECT_DECL (RENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
 DWG_GETALL_OBJECT_DECL (DATALINK)
 DWG_GETALL_OBJECT_DECL (DATATABLE)
+DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 #endif
 // unhandled:
 // DWG_GETALL_OBJECT_DECL (ACDSRECORD)
@@ -849,7 +850,6 @@ DWG_GETALL_OBJECT_DECL (DATATABLE)
 // DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 // DWG_GETALL_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 // DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
-// DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 // DWG_GETALL_OBJECT_DECL (DOCUMENTOPTIONS)
 // DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 // DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
@@ -1041,6 +1041,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENVIRONMENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
 #endif
 
 
@@ -1273,6 +1274,7 @@ dwg_get_OBJECT_DECL (obj_renderenvironment, RENDERENVIRONMENT);
 dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);
 dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
 dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
+dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 #endif
 // unhandled:
 // dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD)
@@ -1287,7 +1289,6 @@ dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 // dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 // dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
 // dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-// dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 // dwg_get_OBJECT_DECL (obj_documentoptions, DOCUMENTOPTIONS)
 // dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 // dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
