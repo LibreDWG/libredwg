@@ -407,3 +407,130 @@ dwg_errstrings (int error)
     HANDLER (OUTPUT, "OUTOFMEM ");
   HANDLER (OUTPUT, "\n");
 }
+
+enum RES_BUF_VALUE_TYPE
+get_base_value_type (short gc)
+{
+  if (gc >= 300)
+    {
+      if (gc >= 440)
+        {
+          if (gc >= 1000) // 1000-1071
+            {
+              if (gc == 1004)
+                return VT_BINARY;
+              if (gc <= 1009)
+                return VT_STRING;
+              if (gc <= 1059)
+                return VT_REAL;
+              if (gc <= 1070)
+                return VT_INT16;
+              if (gc == 1071)
+                return VT_INT32;
+            }
+          else // 440-999
+            {
+              if (gc <= 459)
+                return VT_INT32;
+              if (gc <= 469)
+                return VT_REAL;
+              if (gc <= 479)
+                return VT_STRING;
+              if (gc <= 998)
+                return VT_INVALID;
+              if (gc == 999)
+                return VT_STRING; // lgtm [cpp/constant-comparison]
+            }
+        }
+      else // <440
+        {
+          if (gc >= 390) // 390-439
+            {
+              if (gc <= 399)
+                return VT_HANDLE;
+              if (gc <= 409)
+                return VT_INT16;
+              if (gc <= 419)
+                return VT_STRING;
+              if (gc <= 429)
+                return VT_INT32;
+              if (gc <= 439)
+                return VT_STRING; // lgtm [cpp/constant-comparison]
+            }
+          else // 330-389
+            {
+              if (gc <= 309)
+                return VT_STRING;
+              if (gc <= 319)
+                return VT_BINARY;
+              if (gc <= 329)
+                return VT_HANDLE;
+              if (gc <= 369)
+                return VT_OBJECTID;
+              if (gc <= 389)
+                return VT_INT16; // lgtm [cpp/constant-comparison]
+            }
+        }
+    }
+  else if (gc >= 105)
+    {
+      if (gc >= 210) // 210-299
+        {
+          if (gc <= 239)
+            return VT_REAL;
+          if (gc <= 269)
+            return VT_INVALID;
+          if (gc <= 279)
+            return VT_INT16;
+          if (gc <= 289)
+            return VT_INT8;
+          if (gc <= 299)
+            return VT_BOOL; // lgtm [cpp/constant-comparison]
+        }
+      else // 105-209
+        {
+          if (gc == 105)
+            return VT_HANDLE;
+          if (gc <= 109)
+            return VT_INVALID;
+          if (gc <= 149)
+            return VT_REAL;
+          if (gc <= 169) // e.g. REQUIREDVERSIONS 160 r2013+
+            return VT_INT64;
+          if (gc <= 179)
+            return VT_INT16;
+          if (gc <= 209)
+            return VT_INVALID; // lgtm [cpp/constant-comparison]
+        }
+    }
+  else // <105
+    {
+      if (gc >= 38) // 38-102
+        {
+          if (gc <= 59)
+            return VT_REAL;
+          if (gc <= 79)
+            return VT_INT16;
+          if (gc <= 99)
+            return VT_INT32;
+          if (gc <= 101)
+            return VT_STRING;
+          if (gc == 102)
+            return VT_STRING;
+        }
+      else // 0-37
+        {
+          if (gc < 0)
+            return VT_HANDLE;
+          if (gc <= 4)
+            return VT_STRING;
+          if (gc == 5)
+            return VT_HANDLE;
+          if (gc <= 9)
+            return VT_STRING; // but 9 never TU
+          if (gc <= 37)
+            return VT_POINT3D; // lgtm [cpp/constant-comparison]
+        }
+    }
+  return VT_INVALID;
+}

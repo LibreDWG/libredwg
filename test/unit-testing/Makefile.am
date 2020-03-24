@@ -19,7 +19,8 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD     = $(top_builddir)/src/libredwg.la
+LDADD     = $(top_builddir)/src/libredwg.la \
+	$(top_builddir)/src/classes.lo
 
 bits_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
@@ -34,69 +35,167 @@ hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/hash.lo
 dynapi_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
+dxf_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/common.lo
 
 testobjects = \
 	3dface \
 	3dsolid \
+	acsh_box_class \
+	acsh_extrusion_class \
+	acsh_sweep_class \
+	aldimobjectcontextdata \
+	appid \
+	appid_control \
 	arc \
 	arc_dimension \
+	assoc2dconstraintgroup \
+	assocaction \
+	assocaligneddimactionbody \
+	assocdependency \
+	assocextrudedsurfaceactionbody \
+	assocloftedsurfaceactionbody \
+	assocnetwork \
+	assocosnappointrefactionparam \
+	assocperssubentmanager \
+	assocplanesurfaceactionbody \
+	assocrevolvedsurfaceactionbody \
+	assocsweptsurfaceactionbody \
 	attdef \
 	attrib \
+	blkrefobjectcontextdata \
 	block \
+	block_control \
+	block_header \
 	body \
 	camera \
+	cellstylemap \
 	circle \
-	dim_aligned \
-	dim_ang2ln \
-	dim_ang3pt \
-	dim_diameter \
-	dim_linear \
-	dim_ordinate \
-	dim_radius \
+	datalink \
+	datatable \
+	dbcolor \
+	dictionary \
+	dictionaryvar \
+	dictionarywdflt \
+	dimassoc \
+	dimension_aligned \
+	dimension_ang2ln \
+	dimension_ang3pt \
+	dimension_diameter \
+	dimension_linear \
+	dimension_ordinate \
+	dimension_radius \
+	dimstyle \
+	dimstyle_control \
+	dummy \
+	dynamicblockpurgepreventer \
 	ellipse \
 	endblk \
+	evaluation_graph \
+	extrudedsurface \
+	field \
+	fieldlist \
 	geodata \
+	geomapimage \
+	geopositionmarker \
+	group \
 	hatch \
 	helix \
+	idbuffer \
 	image \
+	imagedef \
+	imagedef_reactor \
 	insert \
+	layer \
+	layer_control \
+	layer_index \
 	layout \
 	leader \
 	light \
+	lightlist \
 	line \
-	lwpline \
+	loftedsurface \
+	long_transaction \
+	ltype \
+	ltype_control \
+	lwpolyline \
+	material \
+	mesh \
 	minsert \
+	mleaderobjectcontextdata \
+	mleaderstyle \
 	mline \
+	mlinestyle \
 	mtext \
+	mtextobjectcontextdata \
 	multileader \
+	navisworksmodeldef \
+	object_ptr \
+	objectcontextdata \
 	ole2frame \
+	oleframe \
+	perssubentmanager \
+	placeholder \
+	planesurface \
 	plotsettings \
 	point \
 	polyline_2d \
 	polyline_3d \
 	polyline_mesh \
 	polyline_pface \
+	proxy_entity \
+	proxy_object \
+	rastervariables \
 	ray \
 	region \
+	renderenvironment \
+	renderglobal \
+	revolvedsurface \
+	scale \
 	seqend \
 	shape \
 	solid \
+	sortentstable \
+	spatial_filter \
+	spatial_index \
 	spline \
+	style \
+	style_control \
+	sun \
+	sunstudy \
+	sweptsurface \
 	table \
+	tablecontent \
+	tablegeometry \
 	tablestyle \
 	text \
+	textobjectcontextdata \
+        leaderobjectcontextdata \
+        mtextattributeobjectcontextdata \
 	tolerance \
 	trace \
+	ucs \
+	ucs_control \
 	underlay \
 	underlaydefinition \
+	unknown_ent \
+	unknown_obj \
+	vba_project \
 	vertex_2d \
 	vertex_3d \
 	vertex_mesh \
 	vertex_pface \
 	vertex_pface_face \
+	view \
+	view_control \
 	viewport \
 	visualstyle \
+	vport \
+	vport_control \
+	vport_entity_control \
+	vport_entity_header \
 	wipeout \
+	wipeoutvariables \
 	xline \
 	xrecord
 
@@ -107,15 +206,8 @@ check_PROGRAMS = \
 	decode_test \
 	hash_test \
 	dynapi_test \
+	dxf_test \
 	$(testobjects)
-
-#TODO:
-#	extrudedsurface \
-#	geopositionmarker \
-#	helix \
-#	revolvedsurface \
-#	surface \
-#	sweptsurface
 
 list:
 	echo $(testobjects) dynapi_test
@@ -130,7 +222,11 @@ dynapi_test.c: dynapi_test.c.in \
 	$(COMPILE) -c -E -o $@ $<
 
 TESTS = $(check_PROGRAMS)
+if HAVE_PERL
+TESTS += check-objects.pl
+endif
 TESTS_ENVIRONMENT = \
+  top_srcdir="$(top_srcdir)" \
   ASAN_OPTIONS="detect_leaks=0"
 
 bits_test.cbmc: bits_test.c $(top_srcdir)/src/bits.c
@@ -142,13 +238,14 @@ CLEANFILES = *.o
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 update-ignorance:
-	printf '/%s\n' $(check_PROGRAMS) > .gitignore
+	printf '/%s\n' $(check_PROGRAMS) > $(srcdir)/.gitignore
 
 EXTRA_DIST = \
 	tests_common.h \
 	common.c \
 	dynapi_test.c.in \
-	dynapi_test.c
+	dynapi_test.c \
+	check-objects.pl
 
 @VALGRIND_CHECK_RULES@
 VALGRIND_SUPPRESSIONS_FILE = @VALGRIND_SUPPRESSIONS_FILE@

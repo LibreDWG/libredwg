@@ -19,8 +19,7 @@ api_process (dwg_object *obj)
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT (obj);
   Dwg_Version_Type version = obj->parent->header.version;
 
-  if (strcmp (dwg_ent_mtext_get_text (mtext, &error), mtext->text))
-    fail ("old API dwg_ent_mtext_get_text");
+  CHK_ENTITY_UTF8TEXT_W_OLD (mtext, MTEXT, text, text);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, x_axis_dir, x_axis_dir);
@@ -31,7 +30,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, drawing_dir, BS, drawing_dir);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_height, BD, extents_ht);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_width, BD, extents_wid);
-  CHK_ENTITY_UTF8TEXT (mtext, MTEXT, text, text);
   CHK_ENTITY_H (mtext, MTEXT, style, style);
   if (version >= R_2000)
     {

@@ -4,7 +4,7 @@
 void
 api_process (dwg_object *obj)
 {
-  int error;
+  int error, isnew;
   dwg_point_3d center, view_target, view_direction;
   BITCODE_BD width;
   BITCODE_BD height;
@@ -50,11 +50,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, front_clip_z, BD, front_clip_z);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, back_clip_z, BD, back_clip_z);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, snap_angle, BD, snap_angle);
+  CHK_ENTITY_MAX (viewport, VIEWPORT, snap_angle, BD, 6.284);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, circle_zoom, BS, circle_zoom);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, grid_major, BS, grid_major);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, num_frozen_layers, BL, num_frozen_layers);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, status_flag, BL, status_flag);
-  CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, style_sheet, TV, style_sheet);
+  CHK_ENTITY_UTF8TEXT_W_OLD (viewport, VIEWPORT, style_sheet, style_sheet);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, render_mode, RC, render_mode);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_at_origin, B, ucs_at_origin);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_per_viewport, B, ucs_per_viewport);

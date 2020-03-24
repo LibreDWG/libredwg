@@ -147,15 +147,18 @@ decode (Bit_Chain *dat, int off, const int size)
       int i;
       char *s = bit_read_TV (dat);
       int p = (int)bit_position (dat);
-      for (i = 0; i < bs; i++)
-        if (!isprint (s[i]))
-          break;
-      if (i == bs)
+      if (s)
         {
-          printf ("%s TV @%d (%d)\n", s, pos, size);
-          pos = p;
+          for (i = 0; i < bs; i++)
+            if (!isprint (s[i]))
+              break;
+          if (i == bs)
+            {
+              printf ("%s TV @%d (%d)\n", s, pos, size);
+              pos = p;
+            }
+          free (s);
         }
-      free (s);
     }
 
   while (pos < size)

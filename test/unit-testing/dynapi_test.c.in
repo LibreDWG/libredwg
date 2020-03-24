@@ -25,6 +25,7 @@
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "../../src/config.h"
 #include "../../src/common.h"
+#include "../../src/classes.h"
 #include "dwg.h"
 #include "dwg_api.h"
 #include "tests_common.h"
@@ -42,22 +43,22 @@ test_header (const Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 46 "dynapi_test.c"
+#line 47 "dynapi_test.c"
   /* @@for test_HEADER@@ */
-#line 47 "dynapi_test.c.in"
+#line 48 "dynapi_test.c.in"
   return error;
 }
-#line 5379 "dynapi_test.c"
+#line 5380 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 
-#line 53 "dynapi_test.c.in"
+#line 54 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 37748 "dynapi_test.c"
+#line 37406 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
-#line 60 "dynapi_test.c.in"
+#line 61 "dynapi_test.c.in"
   return error + failed;
 }
 
@@ -67,9 +68,9 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 38348 "dynapi_test.c"
+#line 38002 "dynapi_test.c"
   /* @@for test_SIZES@@ */
-#line 72 "dynapi_test.c.in"
+#line 73 "dynapi_test.c.in"
   return error;
 }
 

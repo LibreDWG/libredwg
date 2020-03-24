@@ -151,21 +151,16 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.location);
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.direction);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.rotation, BD);
+      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.rotation, BD, 6.284);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.width, BD);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_factor, BD);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_style, BS);
-      if (ctx.content.txt.line_spacing_style > 2)
-        fail ("Invalid MLEADER txt.line_spacing_style " FORMAT_BS " > 2",
-              ctx.content.txt.line_spacing_style);
+      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.line_spacing_style, BS, 2);
       CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.color);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.alignment, BS);
-      if (ctx.content.txt.alignment > 3)
-        fail ("Invalid MLEADER txt.alignment " FORMAT_BS " > 2",
-              ctx.content.txt.alignment);
+      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.alignment, BS, 3);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.flow, BS);
-      if (ctx.content.txt.flow > 6)
-        fail ("Invalid MLEADER txt.flow " FORMAT_BS " > 6",
-              ctx.content.txt.flow);
+      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.flow, BS, 6);
       CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.bg_color);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_scale, BD); // FIXME! r2000
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_transparency, BL);
@@ -194,6 +189,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.location);
       CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.scale);
       CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, blk.rotation, BD);
+      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.blk.rotation, BD, 6.284);
       CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, blk.color);
       ok ("MULTILEADER.ctx.content.txt.transform:");
       for (i = 0; i < 16; i++)
@@ -229,6 +225,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_CMC (mleader, MULTILEADER, block_color, block_color);
   CHK_ENTITY_3RD (mleader, MULTILEADER, block_scale, block_scale);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, block_rotation, BD, block_rotation);
+  CHK_ENTITY_MAX (mleader, MULTILEADER, block_rotation, BD, 6.284);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, style_attachment, BS, style_attachment);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, is_annotative, B, is_annotative);
 
@@ -289,8 +286,7 @@ api_process (dwg_object *obj)
     {
       attach_dir = mleader->attach_dir;
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_dir, BS, attach_dir);
-      if (attach_dir > 1)
-        fail ("Invalid MULTILEADER.attach_dir " FORMAT_BS " > 1", attach_dir);
+      CHK_ENTITY_MAX (mleader, MULTILEADER, attach_dir, BS, 1);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_top, BS, attach_top);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_bottom, BS, attach_bottom);
     }

@@ -505,7 +505,7 @@ match_MLINESTYLE (const char *restrict filename,
   char *text;
   int found = 0;
   MATCH_OBJECT (MLINESTYLE, name, 2);
-  MATCH_OBJECT (MLINESTYLE, desc, 3);
+  MATCH_OBJECT (MLINESTYLE, description, 3);
   return found;
 }
 
@@ -645,7 +645,7 @@ match_TABLECONTENT (const char *restrict filename,
   const Dwg_Object_TABLECONTENT *_obj = obj->tio.object->tio.TABLECONTENT;
 
   MATCH_OBJECT (TABLECONTENT, ldata.name, 1);
-  MATCH_OBJECT (TABLECONTENT, ldata.desc, 300);
+  MATCH_OBJECT (TABLECONTENT, ldata.description, 300);
   for (i = 0; i < _obj->tdata.num_cols; i++)
     {
       MATCH_OBJECT (TABLECONTENT, tdata.cols[i].name, 300);
@@ -735,7 +735,7 @@ match_VISUALSTYLE (const char *restrict filename,
   int found = 0, i;
   const Dwg_Object_VISUALSTYLE *_obj = obj->tio.object->tio.VISUALSTYLE;
 
-  MATCH_OBJECT (VISUALSTYLE, desc, 1);
+  MATCH_OBJECT (VISUALSTYLE, description, 1);
   return found;
 }
 
@@ -759,7 +759,7 @@ match_SUNSTUDY (const char *restrict filename, const Dwg_Object *restrict obj)
   const Dwg_Object_SUNSTUDY *_obj = obj->tio.object->tio.SUNSTUDY;
 
   MATCH_OBJECT (SUNSTUDY, setup_name, 1);
-  MATCH_OBJECT (SUNSTUDY, desc, 2);
+  MATCH_OBJECT (SUNSTUDY, description, 2);
   MATCH_OBJECT (SUNSTUDY, sheet_set_name, 3);
   return found;
 }
@@ -798,7 +798,7 @@ match_MATERIAL (const char *restrict filename, const Dwg_Object *restrict obj)
   const Dwg_Object_MATERIAL *_obj = obj->tio.object->tio.MATERIAL;
 
   MATCH_OBJECT (MATERIAL, name, 1);
-  MATCH_OBJECT (MATERIAL, desc, 2);
+  MATCH_OBJECT (MATERIAL, description, 2);
   MATCH_OBJECT (MATERIAL, diffusemap_filename, 3);
   MATCH_OBJECT (MATERIAL, specularmap_filename, 4);
   MATCH_OBJECT (MATERIAL, reflectionmap_filename, 6);

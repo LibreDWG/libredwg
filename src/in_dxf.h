@@ -95,8 +95,6 @@ int is_table_name (const char *restrict name);
 int is_textlike (Dwg_Object *restrict obj);
 void in_postprocess_handles (Dwg_Object *restrict obj);
 void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned, BITCODE_H *owned);
-void entity_alias (char *restrict name);
-void object_alias (char *restrict name);
 BITCODE_RC dxf_find_lweight (const int lw);
 
 // for sscanf with BD we need to use %lf not %g

@@ -1647,7 +1647,7 @@ H
 B
 @item modeler_format_version
 BS
-@item size_bindata
+@item bindata_size
 BL
 @item bindata
 TF
@@ -3098,69 +3098,6 @@ Dwg_SPLINE_control_point*
 @end vtable
 @end indentedblock
 
-@strong{SURFACE} @anchor{SURFACE}
-@cindex entity, SURFACE
-@vindex SURFACE
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item acis_empty
-B
-@item unknown
-B
-@item version
-BS
-@item num_blocks
-BL
-@item block_size
-BL*
-@item encr_sat_data
-char **
-@item acis_data
-RC*
-@item wireframe_data_present
-B
-@item point_present
-B
-@item point
-3BD
-@item num_isolines
-BL
-@item isoline_present
-B
-@item num_wires
-BL
-@item wires
-Dwg_3DSOLID_wire*
-@item num_silhouettes
-BL
-@item silhouettes
-Dwg_3DSOLID_silhouette*
-@item acis_empty2
-B
-@item extra_acis_data
-struct _dwg_entity_3DSOLID*
-@item unknown_2007
-BL
-@item history_id
-H
-@item acis_empty_bit
-B
-@item modeler_format_version
-BS,	DXF 70
-@item u_isolines
-BS,	DXF 71
-@item v_isolines
-BS,	DXF 72
-@item class_version
-BL
-
-@end vtable
-@end indentedblock
-
 @strong{SWEPTSURFACE} @anchor{SWEPTSURFACE}
 @cindex entity, SWEPTSURFACE
 @vindex SWEPTSURFACE
@@ -4107,9 +4044,9 @@ B,	DXF 296
 @end vtable
 @end indentedblock
 
-@strong{ANNOTSCALEOBJECTCONTEXTDATA} @anchor{ANNOTSCALEOBJECTCONTEXTDATA}
-@cindex object, ANNOTSCALEOBJECTCONTEXTDATA
-@vindex ANNOTSCALEOBJECTCONTEXTDATA
+@strong{ALDIMOBJECTCONTEXTDATA} @anchor{ALDIMOBJECTCONTEXTDATA}
+@cindex object, ALDIMOBJECTCONTEXTDATA
+@vindex ALDIMOBJECTCONTEXTDATA
 
 @indentedblock
 @vtable @code
@@ -4124,6 +4061,36 @@ B,	DXF 290
 B
 @item scale
 H,	DXF 340
+@item name
+T,	DXF 2
+@item def_pt
+2RD,	DXF 10
+@item b293
+B,	DXF 293
+@item b294
+B,	DXF 294
+@item bd140
+BD,	DXF 140
+@item b298
+B,	DXF 298
+@item b291
+B,	DXF 291
+@item flag
+BS,	DXF 70
+@item b292
+B,	DXF 292
+@item bs71
+BS,	DXF 71
+@item b280
+B,	DXF 280
+@item b295
+B,	DXF 295
+@item b296
+B,	DXF 296
+@item b297
+B,	DXF 297
+@item _11pt
+3BD,	DXF 11
 
 @end vtable
 @end indentedblock
@@ -4360,6 +4327,96 @@ H,	DXF 330
 @end vtable
 @end indentedblock
 
+@strong{ASSOCEXTRUDEDSURFACEACTIONBODY} @anchor{ASSOCEXTRUDEDSURFACEACTIONBODY}
+@cindex object, ASSOCEXTRUDEDSURFACEACTIONBODY
+@vindex ASSOCEXTRUDEDSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item esab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCLOFTEDSURFACEACTIONBODY} @anchor{ASSOCLOFTEDSURFACEACTIONBODY}
+@cindex object, ASSOCLOFTEDSURFACEACTIONBODY
+@vindex ASSOCLOFTEDSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item lsab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCNETWORK} @anchor{ASSOCNETWORK}
 @cindex object, ASSOCNETWORK
 @vindex ASSOCNETWORK
@@ -4531,35 +4588,148 @@ B,	DXF 290
 @item parent
 struct _dwg_object_object*
 @item aab_status
-BL,	DXF 90
+BL
 @item pab_status
-BL,	DXF 90
+BL
 @item pab_l2
+BL
+@item num_deps
 BL,	DXF 90
-@item pab_l3
-BL,	DXF 90
-@item writedep
-H,	DXF 360
+@item writedeps
+H*,	DXF 360
 @item pab_l4
-BL,	DXF 90
+BL
 @item pab_l5
-BL,	DXF 90
-@item readdep
-H,	DXF 330
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
 @item sab_status
-BL,	DXF 90
+BL
 @item sab_b1
-B,	DXF 290
+B
 @item sab_l2
-BL,	DXF 90
+BL
 @item sab_b2
-B,	DXF 290
+B
 @item sab_s1
-BS,	DXF 70
+BS
 @item pbsab_status
-BL,	DXF 90
+BL
 @item psab_status
 BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCREVOLVEDSURFACEACTIONBODY} @anchor{ASSOCREVOLVEDSURFACEACTIONBODY}
+@cindex object, ASSOCREVOLVEDSURFACEACTIONBODY
+@vindex ASSOCREVOLVEDSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item rsab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCSWEPTSURFACEACTIONBODY} @anchor{ASSOCSWEPTSURFACEACTIONBODY}
+@cindex object, ASSOCSWEPTSURFACEACTIONBODY
+@vindex ASSOCSWEPTSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_status
+BL
+@item pab_status
+BL
+@item pab_l2
+BL
+@item num_deps
+BL,	DXF 90
+@item writedeps
+H*,	DXF 360
+@item pab_l4
+BL
+@item pab_l5
+BL
+@item readdeps
+H*,	DXF 360
+@item descriptions
+TV*,	DXF 1
+@item sab_status
+BL
+@item sab_b1
+B
+@item sab_l2
+BL
+@item sab_b2
+B
+@item sab_s1
+BS
+@item pbsab_status
+BL
+@item ssab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{BLKREFOBJECTCONTEXTDATA} @anchor{BLKREFOBJECTCONTEXTDATA}
+@cindex object, BLKREFOBJECTCONTEXTDATA
+@vindex BLKREFOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -4685,6 +4855,63 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item cells
 Dwg_CELLSTYLEMAP_Cell*
+
+@end vtable
+@end indentedblock
+
+@strong{DATALINK} @anchor{DATALINK}
+@cindex object, DATALINK
+@vindex DATALINK
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+@item appname
+T,	DXF 1
+@item description
+T,	DXF 300
+@item link
+T,	DXF 301
+@item cell
+T,	DXF 302
+@item bs90
+BS
+@item bs91
+BS,	DXF 91
+@item bs92
+BS,	DXF 92
+@item year
+BS,	DXF 170
+@item month
+BS,	DXF 171
+@item day
+BS,	DXF 172
+@item hour
+BS,	DXF 173
+@item minute
+BS,	DXF 174
+@item seconds
+BS,	DXF 175
+@item bs176
+BS,	DXF 176
+@item bs171
+BS,	DXF 177
+@item bs93
+BS,	DXF 93
+@item t304
+T,	DXF 304
+@item num_deps
+BS,	DXF 94
+@item deps
+H*,	DXF 330
+@item writedep
+H,	DXF 360
+@item t305
+T,	DXF 305
 
 @end vtable
 @end indentedblock
@@ -5634,6 +5861,27 @@ H*
 @end vtable
 @end indentedblock
 
+@strong{LEADEROBJECTCONTEXTDATA} @anchor{LEADEROBJECTCONTEXTDATA}
+@cindex object, LEADEROBJECTCONTEXTDATA
+@vindex LEADEROBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
 @strong{LIGHTLIST} @anchor{LIGHTLIST}
 @cindex object, LIGHTLIST
 @vindex LIGHTLIST
@@ -5755,7 +6003,7 @@ H
 struct _dwg_object_object*
 @item name
 T,	DXF 1
-@item desc
+@item description
 T,	DXF 2
 @item ambient_color_flag
 BS,	DXF 70
@@ -5937,6 +6185,27 @@ BL,	DXF 94
 @end vtable
 @end indentedblock
 
+@strong{MLEADEROBJECTCONTEXTDATA} @anchor{MLEADEROBJECTCONTEXTDATA}
+@cindex object, MLEADEROBJECTCONTEXTDATA
+@vindex MLEADEROBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
 @strong{MLEADERSTYLE} @anchor{MLEADERSTYLE}
 @cindex object, MLEADERSTYLE
 @vindex MLEADERSTYLE
@@ -6051,7 +6320,7 @@ B
 struct _dwg_object_object*
 @item name
 T,	DXF 2
-@item desc
+@item description
 T,	DXF 3
 @item flag
 BS,	DXF 70
@@ -6065,6 +6334,78 @@ BD,	DXF 52
 RC,	DXF 71
 @item lines
 Dwg_MLINESTYLE_line*
+
+@end vtable
+@end indentedblock
+
+@strong{MTEXTATTRIBUTEOBJECTCONTEXTDATA} @anchor{MTEXTATTRIBUTEOBJECTCONTEXTDATA}
+@cindex object, MTEXTATTRIBUTEOBJECTCONTEXTDATA
+@vindex MTEXTATTRIBUTEOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+
+@end vtable
+@end indentedblock
+
+@strong{MTEXTOBJECTCONTEXTDATA} @anchor{MTEXTOBJECTCONTEXTDATA}
+@cindex object, MTEXTOBJECTCONTEXTDATA
+@vindex MTEXTOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+@item flag
+BS,	DXF 70
+@item insertion_pt
+3BD,	DXF 11
+@item x_axis_dir
+3BD,	DXF 10
+@item text_height
+BD,	DXF 40
+@item rect_width
+BD,	DXF 41
+@item rect_height
+BD
+@item extents_height
+BD,	DXF 43
+@item extents_width
+BD,	DXF 42
+@item attachment
+BS,	DXF 71
+@item drawing_dir
+BS,	DXF 72
+@item linespace_style
+BS,	DXF 73
+@item linespace_factor
+BD,	DXF 44
+@item bd45
+BD,	DXF 45
+@item bs74
+BS,	DXF 74
+@item bd46
+BD,	DXF 46
 
 @end vtable
 @end indentedblock
@@ -6565,7 +6906,7 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item setup_name
 T,	DXF 1
-@item desc
+@item description
 T,	DXF 2
 @item output_type
 BL,	DXF 70
@@ -6694,6 +7035,35 @@ Dwg_TABLESTYLE_rowstyles*
 BL
 @item cells
 Dwg_TABLESTYLE_Cell*
+
+@end vtable
+@end indentedblock
+
+@strong{TEXTOBJECTCONTEXTDATA} @anchor{TEXTOBJECTCONTEXTDATA}
+@cindex object, TEXTOBJECTCONTEXTDATA
+@vindex TEXTOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item has_file
+B,	DXF 290
+@item defaultflag
+B
+@item scale
+H,	DXF 340
+@item flag
+BS,	DXF 70
+@item rotation
+BD,	DXF 50
+@item insertion_pt
+2RD,	DXF 10
+@item alignment_pt
+2RD,	DXF 11
 
 @end vtable
 @end indentedblock
@@ -6938,74 +7308,138 @@ BL
 
 @item parent
 struct _dwg_object_object*
-@item desc
+@item description
 T,	DXF 2
-@item type
+@item style_type
 BS,	DXF 70
+@item ext_lighting_model
+BS,	DXF 177
+@item has_ext
+B,	DXF 291
 @item face_lighting_model
 BS,	DXF 71
+@item face_lighting_model_ext
+BS
 @item face_lighting_quality
 BS,	DXF 72
+@item face_lighting_quality_ext
+BS
 @item face_color_mode
 BS,	DXF 73
+@item face_color_mode_ext
+BS
 @item face_opacity
 BD,	DXF 40
+@item face_opacity_ext
+BS
 @item face_specular
 BD,	DXF 41
+@item face_specular_ext
+BS
 @item face_modifier
 BS,	DXF 90
+@item face_modifier_ext
+BS
 @item color
-CMC,	DXF 62
+CMC
+@item color_ext
+BS
 @item face_mono_color
 CMC,	DXF 63
+@item face_mono_color_ext
+BS
 @item edge_model
 BS,	DXF 74
+@item edge_model_ext
+BS
 @item edge_style
 BL,	DXF 91
+@item edge_style_ext
+BS
 @item edge_intersection_color
 CMC,	DXF 64
+@item edge_intersection_color_ext
+BS
 @item edge_obscured_color
 CMC,	DXF 65
+@item edge_obscured_color_ext
+BS
 @item edge_obscured_line_pattern
 BS,	DXF 75
+@item edge_obscured_line_pattern_ext
+BS
 @item edge_intersection_line_pattern
 BS,	DXF 175
+@item edge_intersection_line_pattern_ext
+BS,	DXF 176
 @item edge_crease_angle
 BD,	DXF 42
+@item edge_crease_angle_ext
+BS
 @item edge_modifier
 BS,	DXF 92
+@item edge_modifier_ext
+BS
 @item edge_color
 CMC,	DXF 66
+@item edge_color_ext
+BS
 @item edge_opacity
 BD,	DXF 43
+@item edge_opacity_ext
+BS
 @item edge_width
 BS,	DXF 76
+@item edge_width_ext
+BS
 @item edge_overhang
 BS,	DXF 77
+@item edge_overhang_ext
+BS
 @item edge_jitter
 BS,	DXF 78
+@item edge_jitter_ext
+BS
 @item edge_silhouette_color
 CMC,	DXF 67
+@item edge_silhouette_color_ext
+BS
 @item edge_silhouette_width
 BS,	DXF 79
+@item edge_silhouette_width_ext
+BS
+@item unknown_b
+B
 @item edge_halo_gap
 BS,	DXF 170
+@item edge_halo_gap_ext
+BS
 @item num_edge_isolines
 BS,	DXF 171
+@item num_edge_isolines_ext
+BS
 @item edge_hide_precision_flag
-BS,	DXF 290
+B,	DXF 290
+@item edge_hide_precision_flag_ext
+BS
 @item edge_style_apply_flag
 BS,	DXF 174
+@item edge_style_apply_flag_ext
+BS
 @item display_style
 BS,	DXF 93
+@item display_style_ext
+BS
 @item display_brightness
 BD,	DXF 44
+@item display_brightness_ext
+BS
 @item display_shadow_type
 BS,	DXF 173
-@item is_internal_use_only
-BS,	DXF 291
+@item display_shadow_type_ext
+BS
 @item unknown_float45
-BS,	DXF 45
+BD,	DXF 45
 
 @end vtable
 @end indentedblock
@@ -7604,12 +8038,12 @@ BL
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_FIELD*
 @item key
 TV,	DXF 6
 @item value
 Dwg_TABLE_value
-@item parent
-struct _dwg_object_FIELD*
 
 @end vtable
 @end indentedblock
@@ -7866,12 +8300,12 @@ BD,	DXF 42
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_LAYER_INDEX*
 @item idxlong
 BL
 @item layername
 T,	DXF 8
-@item parent
-struct _dwg_object_LAYER_INDEX*
 
 @end vtable
 @end indentedblock
@@ -8048,7 +8482,7 @@ BD,	DXF 41
 
 @item name
 TV
-@item desc
+@item description
 TV
 
 @end vtable

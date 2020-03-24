@@ -157,6 +157,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (table, TABLE, scale, scale);
   CHK_ENTITY_TYPE (table, TABLE, data_flags, BB, data_flags);
   CHK_ENTITY_TYPE (table, TABLE, rotation, BD, rotation);
+  CHK_ENTITY_MAX (table, TABLE, rotation, BD, 6.284);
   CHK_ENTITY_3RD (table, TABLE, extrusion, extrusion);
   CHK_ENTITY_TYPE (table, TABLE, has_attribs, B, has_attribs);
   CHK_ENTITY_TYPE (table, TABLE, num_owned, BL, num_owned);

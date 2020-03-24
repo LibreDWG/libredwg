@@ -3,6 +3,11 @@
 
     make -C examples alldwg.inc
 
+=head1 DESCRIPTION
+
+Creates an C include file with all UNKNOWN_BITS of all unstable and
+debugging objects in all found DWG's.
+
 =cut
 no strict;
 my $td = "test/test-data";

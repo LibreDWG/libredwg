@@ -1044,6 +1044,7 @@ static int test_$xname (const Dwg_Object *obj)
   int error = 0;
   const Dwg_Object_$Entity *restrict obj_obj = obj->tio.$lentity;
   $struct *restrict $lname = obj->tio.$lentity->tio.$xname;
+  failed = 0;
 EOF
 
   for my $var (sort keys %{$ENT{$name}}) {
@@ -1094,7 +1095,7 @@ EOF
       fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar);
 EOF
       if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
-        print $fh "    $lname->$svar--;\n";
+        print $fh "    $lname->$svar--;";
       }
       print $fh "\n  }\n";
     } elsif ($type =~ /\*$/ and $type !~ /(RC\*|struct _dwg_object_)/
@@ -1221,6 +1222,11 @@ EOF
       }
     }
     print $fh <<"EOF";
+  if (failed && (is_class_unstable ("$name") || is_class_debugging ("$name")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "$name", failed);
+      failed = 0;
+    }
   return failed;
 }
 EOF
@@ -1300,7 +1306,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1304 "gen-dynapi.pl"
+#line 1310 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1383,7 +1389,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1387 "gen-dynapi.pl"
+#line 1393 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -1644,7 +1650,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
           char *utf8 = bit_convert_TU (wstr);
-          if (!utf8) // some conversion error, invalid wchar (nyi)
+          if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
             return false;
           *out = utf8;
           if (isnew)
@@ -1715,7 +1721,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
-            if (!utf8) // some conversion error, invalid wchar (nyi)
+            if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
             if (isnew)
@@ -1852,7 +1858,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
-            if (!utf8) // some conversion error, invalid wchar (nyi)
+            if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
             if (isnew)

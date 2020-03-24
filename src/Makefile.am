@@ -33,6 +33,7 @@ libredwg_la_SOURCES = \
         free.c \
         hash.c \
 	dynapi.c \
+	classes.c \
 	dwg_api.c \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
@@ -79,6 +80,7 @@ EXTRA_HEADERS = \
 	objects.inc \
 	spec.h \
 	common.h \
+	classes.h \
 	bits.h \
 	myalloca.h \
 	decode.h \

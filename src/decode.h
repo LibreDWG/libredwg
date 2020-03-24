@@ -24,24 +24,6 @@
 #include "bits.h"
 #include "dwg.h"
 
-enum RES_BUF_VALUE_TYPE
-{
-  VT_INVALID = 0,
-  VT_STRING = 1,
-  VT_POINT3D = 2,
-  VT_REAL = 3,
-  VT_INT16 = 4,
-  VT_INT32 = 5,
-  VT_INT8 = 6,
-  VT_BINARY = 7,
-  VT_HANDLE = 8,
-  VT_OBJECTID = 9,
-  VT_BOOL = 10,
-  VT_INT64 = 11, // BLL
-};
-
-enum RES_BUF_VALUE_TYPE get_base_value_type (short gc);
-
 int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,

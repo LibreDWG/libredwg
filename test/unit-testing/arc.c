@@ -15,5 +15,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (arc, ARC, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (arc, ARC, center, center);
   CHK_ENTITY_TYPE_W_OLD (arc, ARC, start_angle, BD, start_angle);
+  CHK_ENTITY_MAX (arc, ARC, start_angle, BD, 6.284);
   CHK_ENTITY_TYPE_W_OLD (arc, ARC, end_angle, BD, end_angle);
+  CHK_ENTITY_MAX (arc, ARC, end_angle, BD, 6.284);
 }

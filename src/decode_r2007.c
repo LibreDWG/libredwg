@@ -1292,7 +1292,10 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   LOG_TRACE (" has_strings: %d\n", (int)obj->has_strings);
   if (!obj->has_strings)
     {
-      str->size = 0;
+      // FIXME wrong bit
+      if (obj->fixedtype == DWG_TYPE_SCALE)
+        obj->has_strings = 1;
+      // str->size = 0;
       // bit_reset_chain (str);
       return 0;
     }

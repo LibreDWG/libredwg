@@ -514,7 +514,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 {
   if (dat->version >= R_2004)
     {
-      PREFIX fprintf (dat->fh, "\"%s\": {\n", key);
+      PREFIX fprintf (dat->fh, "\"%s\": {\n", _path_field (key));
       dat->bit++;
       if (color->index)
         {
@@ -536,7 +536,7 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
     }
   else
     {
-      PREFIX fprintf (dat->fh, "\"%s\": %d,\n", key, color->index);
+      PREFIX fprintf (dat->fh, "\"%s\": %d,\n", _path_field (key), color->index);
     }
 }
 

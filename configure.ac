@@ -54,7 +54,7 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_PROG_RANLIB
+dnl AC_PROG_RANLIB: in LT_INIT
 LT_INIT
 
 if test x$enable_shared = xyes; then
@@ -174,7 +174,13 @@ AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
 dnl Disable unwanted warnings here. These should be fixed before 1.0
 enable_Werror=no
 ax_enable_compile_warnings=yes
-AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],[-fvisibility=hidden])
+if test x$enable_shared = xyes -a x$ac_compiler_gnu = xyes; then
+  AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
+    [-fvisibility=hidden -fno-semantic-interposition])
+else
+  AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release]
+    [-fvisibility=hidden])
+fi
 dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-but-set-variable"
 dnl fi
