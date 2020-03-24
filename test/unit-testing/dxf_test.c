@@ -488,8 +488,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                     ok ("%s.%s: %s", name, f->name, f->value);
                 }
               else if (field.type)
-                fail ("%s.%s: %d <=> \"%s\" [%s]", name, f->name,
-                      (int)color.index, f->value, field.type);
+                fail ("%s.%s: %d <=> \"%s\" [%s %d]", name, f->name,
+                      (int)color.index, f->value, field.type, field.dxf);
               else
                 {
                   if (g_counter > g_max_count)
@@ -530,7 +530,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %s", name, f->name, value);
                   }
                 else
-                  fail ("%s.%s: %s [STRING %s]", name, f->name, value, field.type);
+                  fail ("%s.%s: %s [%s %d] STRING", name, f->name, value,
+                        field.type, field.dxf);
               }
             if (isnew)
               free (value);
@@ -595,8 +596,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %f", name, f->name, value);
                   }
                 else
-                  fail ("%s.%s: %f <=> \"%s\" [REAL %s]", name, f->name, value,
-                        f->value, field.type);
+                  fail ("%s.%s: %f <=> \"%s\" [%s %d] REAL", name, f->name,
+                        value, f->value, field.type, field.dxf);
               }
           }
           break;
@@ -615,8 +616,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %d", name, f->name, value);
                   }
                 else
-                  fail ("%s.%s: %d <=> \"%s\" [BOOL %s]", name, f->name, value,
-                        f->value, field.type);
+                  fail ("%s.%s: %d <=> \"%s\" [%s %d] BOOL", name, f->name,
+                        value, f->value, field.type, field.dxf);
               }
           }
           break;
@@ -635,14 +636,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %d", name, f->name, value);
                   }
                 else if (field.type)
-                  fail ("%s.%s: %d <=> \"%s\" [INT8 %s]", name, f->name, value,
-                        f->value, field.type);
+                  fail ("%s.%s: %d <=> \"%s\" [%s %d] INT8", name, f->name,
+                        value, f->value, field.type, field.dxf);
                 else
                   {
                     if (g_counter > g_max_count)
                       pass ();
                     else
-                      ok ("%s.%s: %d <=> \"%s\" [INT8] (TODO)", name, f->name, value,
+                      ok ("%s.%s: %d <=> \"%s\" INT8 (TODO)", name, f->name, value,
                           f->value);
                   }
               }
@@ -663,14 +664,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %d", name, f->name, (int)value);
                   }
                 else if (field.type)
-                  fail ("%s.%s: %d <=> \"%s\" [INT16 %s]", name, f->name,
-                        (int)value, f->value, field.type);
+                  fail ("%s.%s: %d <=> \"%s\" [%s %d] INT16", name, f->name,
+                        (int)value, f->value, field.type, field.dxf);
                 else
                   {
                     if (g_counter > g_max_count)
                       pass ();
                     else
-                      ok ("%s.%s: %d <=> \"%s\" [INT16] (TODO)", name, f->name, (int)value,
+                      ok ("%s.%s: %d <=> \"%s\" INT16 (TODO)", name, f->name, (int)value,
                           f->value);
                   }
               }
@@ -699,15 +700,15 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %u", name, f->name, (unsigned)value);
                   }
                 else if (field.type)
-                  fail ("%s.%s: %u <=> \"%s\" [INT32 %s]", name, f->name, (unsigned)value,
-                        f->value, field.type);
+                  fail ("%s.%s: %u <=> \"%s\" [%s %d] INT32", name, f->name,
+                        (unsigned)value, f->value, field.type, field.dxf);
                 else
                   {
                     if (g_counter > g_max_count)
                       pass ();
                     else
-                      ok ("%s.%s: %u <=> \"%s\" [INT32] (TODO)", name, f->name, (unsigned)value,
-                          f->value);
+                      ok ("%s.%s: %u <=> \"%s\" INT32 (TODO)", name, f->name,
+                          (unsigned)value, f->value);
                   }
               }
           }
@@ -727,13 +728,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %ld", name, f->name, (long)value);
                   }
                 else if (field.type)
-                  fail ("%s.%s: %ld <=> \"%s\" [INT64]", name, f->name, (long)value, f->value);
+                  fail ("%s.%s: %ld <=> \"%s\" [%s %d] INT64", name, f->name,
+                        (long)value, f->value, field.type, field.dxf);
                 else
                   {
                     if (g_counter > g_max_count)
                       pass ();
                     else
-                      ok ("%s.%s: %ld <=> \"%s\" [INT64] (TODO)", name, f->name, (long)value,
+                      ok ("%s.%s: %ld <=> \"%s\" INT64 (TODO)", name, f->name, (long)value,
                           f->value);
                   }
               }
@@ -757,7 +759,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %s", name, f->name, f->value);
                   }
                 else
-                  fail ("%s.%s: %lX <=> \"%s\" [H]", name, f->name, (unsigned long)value, f->value);
+                  fail ("%s.%s: %lX <=> \"%s\" [H %d]", name, f->name,
+                        (unsigned long)value, f->value, field.dxf);
               }
           }
           break;

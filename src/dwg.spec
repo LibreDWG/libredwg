@@ -7697,7 +7697,6 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   FIELD_3RD (x_axis_dir, 10);
   FIELD_BD (text_height, 40);
   FIELD_BD (rect_width, 41);
-  //FIELD_BD (rect_height, 0); // 46
   FIELD_BD (extents_width, 42);
   FIELD_BD (extents_height, 43);
   FIELD_BS (attachment, 71); // or column_type?
@@ -7708,7 +7707,7 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
       FIELD_BD (linespace_factor, 44);
       FIELD_BD (bd45, 45);
       FIELD_BS (bs74, 74);
-      FIELD_BD (bd46, 46);
+      FIELD_BD (rect_height, 46);
     }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -7817,13 +7816,13 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_BD (identifier_offset, 42); // 5.0
   FIELD_T (viewlabel_text, 300); // I, O, Q, S, X, Z
   // 40 90 62 40 40 62 40 62 40 300 71
-  FIELD_BD (identifier_position, 40);
+  FIELD_BD (arrow_symbol_size, 40);
   FIELD_BS (viewlabel_pattern, 90);
   FIELD_CMC (arrow_symbol_color, 62,420);
   FIELD_BL (hatch_pattern, 90);
   FIELD_CMC (bend_line_color, 62,420);
-  FIELD_BD (arrow_symbol_size, 40);
-  FIELD_BD (arrow_position, 40);
+  FIELD_BD (identifier_position, 40);
+  FIELD_BD (viewlabel_text_height, 40);
   FIELD_CMC (viewlabel_text_color, 62,420);
   FIELD_BD (bend_line_length, 40);
   DEBUG_HERE_OBJ
@@ -7839,7 +7838,7 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
   FIELD_BS (bend_line_weight, 0);
   FIELD_BD (end_line_length, 0);
-  FIELD_BD (viewlabel_text_height, 40);
+  FIELD_BD (arrow_position, 40);
   FIELD_T (viewlabel_field, 300);
   FIELD_BD (viewlabel_offset, 42);
   FIELD_BS (viewlabel_attachment, 70);

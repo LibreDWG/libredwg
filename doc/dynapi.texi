@@ -6482,7 +6482,7 @@ BD,	DXF 40
 @item rect_width
 BD,	DXF 41
 @item rect_height
-BD
+BD,	DXF 46
 @item extents_height
 BD,	DXF 43
 @item extents_width
@@ -6500,7 +6500,7 @@ BD,	DXF 45
 @item bs74
 BS,	DXF 74
 @item bd46
-BD,	DXF 46
+BD
 
 @end vtable
 @end indentedblock

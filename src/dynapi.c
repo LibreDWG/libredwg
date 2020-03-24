@@ -5769,7 +5769,7 @@ static const Dwg_DYNAPI_field _dwg_MTEXTOBJECTCONTEXTDATA_fields[] = {
   { "rect_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, rect_width),
     0,0,0, 41 },
   { "rect_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, rect_height),
-    0,0,0, 0 },
+    0,0,0, 46 },
   { "extents_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, extents_height),
     0,0,0, 43 },
   { "extents_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, extents_width),
@@ -5787,7 +5787,7 @@ static const Dwg_DYNAPI_field _dwg_MTEXTOBJECTCONTEXTDATA_fields[] = {
   { "bs74",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, bs74),
     0,0,0, 74 },
   { "bd46",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, bd46),
-    0,0,0, 46 },
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_NAVISWORKSMODELDEF: (sorted by offset) */
