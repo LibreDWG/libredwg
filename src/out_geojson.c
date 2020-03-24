@@ -105,6 +105,11 @@ static unsigned int cur_ver = 0;
     PREFIX fprintf (dat->fh, "{\n");                                          \
     dat->bit++;                                                               \
   }
+#define SECHASH                                                                  \
+  {                                                                           \
+    PREFIX fprintf (dat->fh, ",{\n");                                          \
+    dat->bit++;                                                               \
+  }
 #define SAMEHASH                                                              \
   {                                                                           \
     fprintf (dat->fh, "{\n");                                                 \
@@ -473,9 +478,25 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 }
 
 #define FEATURE(subclass, obj)                                                \
-  HASH;                                                                       \
-  dwg_geojson_feature (dat, obj, #subclass)
-#define ENDFEATURE ENDHASH
+  {                                                                                                              \
+    if (dat->fh != stdout )                                                                    \
+    {                                                                                                             \
+      HASH;                                                                                                \
+    }                                                                                                              \
+    else                                                                                                       \
+    {                                                                                                              \
+      if (dat->flag == 0) { dat->flag = 1; HASH; }                            \
+      else SECHASH;                                                                                \
+    }                                                                                                               \
+    dwg_geojson_feature (dat, obj, #subclass) ;                       \
+  }
+#define ENDFEATURE                                                            \
+  {                                                                                                     \
+    if (dat->fh == stdout)                                                          \
+      LASTENDHASH                                                                   \
+    else                                                                                            \
+      ENDHASH                                                                              \
+  }
 
 static int
 dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
@@ -778,12 +799,14 @@ geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL i;
 
   SECTION (features);
+  dat->flag = 0;
   for (i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *obj = &dwg->object[i];
       dwg_geojson_object (dat, obj);
     }
-  NOCOMMA;
+  if (dat->fh != stdout)
+    NOCOMMA;
   ENDSEC ();
   return 0;
 }
