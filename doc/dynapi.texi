@@ -6790,6 +6790,115 @@ B,	DXF 290
 @end vtable
 @end indentedblock
 
+@strong{SECTIONVIEWSTYLE} @anchor{SECTIONVIEWSTYLE}
+@cindex object, SECTIONVIEWSTYLE
+@vindex SECTIONVIEWSTYLE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item name
+T,	DXF 3
+@item description
+T,	DXF 300
+@item is_modified_for_recompute
+B,	DXF 290
+@item unknown_bb1
+BB
+@item unknown_bb2
+BB
+@item identifier_style
+H,	DXF 340
+@item identifier_color
+CMC,	DXF 62
+@item identifier_height
+BD,	DXF 40
+@item identifier_exclude_characters
+BL,	DXF 90
+@item identifier_position
+BD,	DXF 40
+@item identifier_offset
+BD,	DXF 42
+@item arrow_position
+BD,	DXF 40
+@item arrow_start_symbol
+H,	DXF 340
+@item arrow_end_symbol
+H,	DXF 340
+@item arrow_symbol_color
+CMC,	DXF 62
+@item arrow_symbol_size
+BD,	DXF 40
+@item arrow_symbol_extension_length
+BD,	DXF 40
+@item plane_line_weight
+BS,	DXF 71
+@item plane_line_color
+CMC,	DXF 62
+@item plane_line_type
+H,	DXF 340
+@item bend_line_weight
+BS
+@item bend_line_color
+CMC,	DXF 62
+@item bend_line_type
+H,	DXF 340
+@item bend_line_length
+BD,	DXF 40
+@item end_line_length
+BD
+@item viewlabel_text_style
+H,	DXF 340
+@item viewlabel_text_color
+CMC,	DXF 62
+@item viewlabel_text_height
+BD,	DXF 40
+@item viewlabel_text
+T,	DXF 300
+@item viewlabel_field
+T,	DXF 300
+@item viewlabel_offset
+BD,	DXF 42
+@item viewlabel_attachment
+BS,	DXF 70
+@item viewlabel_alignment
+BS,	DXF 72
+@item viewlabel_pattern
+BS,	DXF 90
+@item hatch_pattern
+BS,	DXF 90
+@item hatch_color
+CMC,	DXF 62
+@item hatch_bg_color
+CMC,	DXF 62
+@item hatch_scale
+BD
+@item hatch_angles
+BD
+@item hatch_transparency
+BS
+@item is_continuous_labeling
+B,	DXF 290
+@item show_arrowheads
+B,	DXF 290
+@item show_viewlabel
+B,	DXF 290
+@item show_all_plane_lines
+B,	DXF 290
+@item show_all_bend_indentifiers
+B,	DXF 290
+@item show_end_and_bend_lines
+B,	DXF 290
+@item show_hatching
+B
+
+@end vtable
+@end indentedblock
+
 @strong{SORTENTSTABLE} @anchor{SORTENTSTABLE}
 @cindex object, SORTENTSTABLE
 @vindex SORTENTSTABLE

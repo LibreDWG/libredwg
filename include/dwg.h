@@ -5440,6 +5440,60 @@ typedef struct _dwg_object_DETAILVIEWSTYLE
   BITCODE_H borderline_type;
 } Dwg_Object_DETAILVIEWSTYLE;
 
+typedef struct _dwg_object_SECTIONVIEWSTYLE
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BS class_version; /*!< DXF 70 0 */
+  BITCODE_T name;
+  BITCODE_T description;
+  BITCODE_B is_modified_for_recompute;
+
+  BITCODE_BB unknown_bb1;
+  BITCODE_BB unknown_bb2;
+  BITCODE_H identifier_style;
+  BITCODE_CMC identifier_color;
+  BITCODE_BD identifier_height;
+  BITCODE_BL identifier_exclude_characters;
+  BITCODE_BD identifier_position;
+  BITCODE_BD identifier_offset;
+  BITCODE_BD arrow_position;
+  BITCODE_H arrow_start_symbol;
+  BITCODE_H arrow_end_symbol;
+  BITCODE_CMC arrow_symbol_color;
+  BITCODE_BD arrow_symbol_size;
+  BITCODE_BD arrow_symbol_extension_length;
+  BITCODE_BS plane_line_weight;
+  BITCODE_CMC plane_line_color;
+  BITCODE_H plane_line_type;
+  BITCODE_BS bend_line_weight;
+  BITCODE_CMC bend_line_color;
+  BITCODE_H bend_line_type;
+  BITCODE_BD bend_line_length;
+  BITCODE_BD end_line_length;
+  BITCODE_H viewlabel_text_style;
+  BITCODE_CMC viewlabel_text_color;
+  BITCODE_BD viewlabel_text_height;
+  BITCODE_T viewlabel_text;
+  BITCODE_T viewlabel_field;
+  BITCODE_BD viewlabel_offset;
+  BITCODE_BS viewlabel_attachment;
+  BITCODE_BS viewlabel_alignment;
+  BITCODE_BS viewlabel_pattern;
+  BITCODE_BS hatch_pattern;
+  BITCODE_CMC hatch_color;
+  BITCODE_CMC hatch_bg_color;
+  BITCODE_BD hatch_scale;
+  BITCODE_BD hatch_angles;
+  BITCODE_BS hatch_transparency;
+  BITCODE_B is_continuous_labeling;
+  BITCODE_B show_arrowheads;
+  BITCODE_B show_viewlabel;
+  BITCODE_B show_all_plane_lines;
+  BITCODE_B show_all_bend_indentifiers;
+  BITCODE_B show_end_and_bend_lines;
+  BITCODE_B show_hatching;
+} Dwg_Object_SECTIONVIEWSTYLE;
 
 /**
  -----------------------------------
@@ -5767,7 +5821,7 @@ typedef struct _dwg_object_object
     //Dwg_Object_RAPIDRTRENDERSETTINGS *RAPIDRTRENDERSETTINGS;
     //TODO Dwg_Object_RTEXT *RTEXT;
     Dwg_Object_SCALE *SCALE;
-    //Dwg_Object_SECTIONVIEWSTYLE *SECTIONVIEWSTYLE;
+    Dwg_Object_SECTIONVIEWSTYLE *SECTIONVIEWSTYLE;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
@@ -6600,7 +6654,7 @@ EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_add_MESH (Dwg_Object *obj);
 //EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
 //EXPORT int dwg_add_POINTCLOUD (Dwg_Object *obj);
-//EXPORT int dwg_add_SECTIONVIEWSTYLE (Dwg_Object *obj);
+EXPORT int dwg_add_SECTIONVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
 //EXPORT int dwg_add_DOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_add_RENDERENVIRONMENT (Dwg_Object *obj);

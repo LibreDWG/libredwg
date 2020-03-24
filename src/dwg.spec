@@ -7797,6 +7797,64 @@ DWG_OBJECT (DETAILVIEWSTYLE)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// subclass: VIEWSTYLE_ModelDoc => "AcDbModelDocViewStyle"
+DWG_OBJECT (SECTIONVIEWSTYLE)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbModelDocViewStyle)
+  FIELD_BS (class_version, 70); // 0
+  FIELD_T (name, 3);
+  FIELD_B (is_modified_for_recompute, 290);
+  FIELD_T (description, 300);
+  FIELD_BL (identifier_exclude_characters, 90); // 102
+  SUBCLASS (AcDbSectionViewStyle)
+  // DXF: 100 70 3 290 3 90 100 70 71 90 71 340 62 40 340 340 62 40 300 40 90 40 90 71 340 90 62 340 90 62 40 40 40 71 340 62 40 90 40 90 300(field) 71 62 62 300 40 90 290 290 90 6 40 40 40 40 40
+  //pi: 70 3 290
+  FIELD_CMC (identifier_color, 62,420);
+  FIELD_BD (identifier_height, 40); // 5.0
+  FIELD_CMC (plane_line_color, 62,420);
+  FIELD_BD (identifier_offset, 42); // 5.0
+  FIELD_T (viewlabel_text, 300); // I, O, Q, S, X, Z
+  // 40 90 62 40 40 62 40 62 40 300 71
+  FIELD_BD (identifier_position, 40);
+  FIELD_BS (viewlabel_pattern, 90);
+  FIELD_CMC (arrow_symbol_color, 62,420);
+  FIELD_BL (hatch_pattern, 90);
+  FIELD_CMC (bend_line_color, 62,420);
+  FIELD_BD (arrow_symbol_size, 40);
+  FIELD_BD (arrow_position, 40);
+  FIELD_CMC (viewlabel_text_color, 62,420);
+  FIELD_BD (bend_line_length, 40);
+  DEBUG_HERE_OBJ
+  FIELD_CMC (hatch_color, 62,420);
+  FIELD_CMC (hatch_bg_color, 62,420);
+  FIELD_HANDLE (identifier_style, 5, 340); // textstyle
+  FIELD_HANDLE (arrow_start_symbol, 5, 340);
+  FIELD_HANDLE (arrow_end_symbol, 5, 340);
+  FIELD_BD (arrow_symbol_extension_length, 40);
+  FIELD_BS (plane_line_weight, 71);
+  FIELD_HANDLE (plane_line_type, 5, 340); // ltype
+  FIELD_HANDLE (bend_line_type, 5, 340); // ltype
+  FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
+  FIELD_BS (bend_line_weight, 0);
+  FIELD_BD (end_line_length, 0);
+  FIELD_BD (viewlabel_text_height, 40);
+  FIELD_T (viewlabel_field, 300);
+  FIELD_BD (viewlabel_offset, 42);
+  FIELD_BS (viewlabel_attachment, 70);
+  FIELD_BS (viewlabel_alignment, 72);
+  FIELD_BD (hatch_scale, 0);
+  FIELD_BD (hatch_angles, 0);
+  FIELD_BS (hatch_transparency, 0);
+  FIELD_B (is_continuous_labeling, 290);
+  FIELD_B (show_arrowheads, 290);
+  FIELD_B (show_viewlabel, 290);
+  FIELD_B (show_all_plane_lines, 290);
+  FIELD_B (show_all_bend_indentifiers, 290);
+  FIELD_B (show_end_and_bend_lines, 290);
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -7839,16 +7897,6 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   //1 AcDbAssocSingleEdgePersSubentId
   //290 0
   //FIELD_B (DependentOnCompoundObject, 90);
-DWG_OBJECT_END
-
-// subclass: VIEWSTYLE_ModelDoc => "AcDbModelDocViewStyle"
-
-DWG_OBJECT (DETAILVIEWSTYLE)
-  DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-DWG_OBJECT (SECTIONVIEWSTYLE)
-  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 // EXACXREFPANELOBJECT
@@ -7921,7 +7969,7 @@ DWG_OBJECT (ACSH_SPHERE_CLASS)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
-// UI class only? as ACAD_LAYERFILTERS in the DNO
+// as ACAD_LAYERFILTERS in the DNO
 DWG_OBJECT (LAYERFILTER)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbLayerFilter)

@@ -154,6 +154,7 @@ testobjects = \
 	renderglobal \
 	revolvedsurface \
 	scale \
+	sectionviewstyle \
 	seqend \
 	shape \
 	solid \

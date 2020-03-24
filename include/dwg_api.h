@@ -618,6 +618,7 @@ typedef struct _dwg_object_RENDERGLOBAL           dwg_obj_renderglobal;
 typedef struct _dwg_object_DATALINK               dwg_obj_datalink;
 typedef struct _dwg_object_DATATABLE              dwg_obj_datatable;
 typedef struct _dwg_object_DETAILVIEWSTYLE        dwg_obj_detailviewstyle;
+typedef struct _dwg_object_SECTIONVIEWSTYLE       dwg_obj_sectionviewstyle;
 #endif
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
@@ -642,7 +643,6 @@ typedef struct _dwg_object_DETAILVIEWSTYLE        dwg_obj_detailviewstyle;
 //typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT  dwg_obj_rapidrtrenderenvironment;
 //typedef struct _dwg_object_RAPIDRTRENDERSETTINGS     dwg_obj_rapidrtrendersettings;
 //typedef struct _dwg_object_RTEXT                dwg_obj_rtext;
-//typedef struct _dwg_object_SECTIONVIEWSTYLE     dwg_obj_sectionviewstyle;
 //typedef struct _dwg_object_XREFPANELOBJECT      dwg_obj_xrefpanelobject;
 
 typedef struct _dwg_object                        dwg_object;
@@ -836,6 +836,7 @@ DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
 DWG_GETALL_OBJECT_DECL (DATALINK)
 DWG_GETALL_OBJECT_DECL (DATATABLE)
 DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
+DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
 #endif
 // unhandled:
 // DWG_GETALL_OBJECT_DECL (ACDSRECORD)
@@ -860,7 +861,6 @@ DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 // DWG_GETALL_OBJECT_DECL (NPOCOLLECTION)
 // DWG_GETALL_OBJECT_DECL (POINTCLOUD)
 // DWG_GETALL_OBJECT_DECL (RTEXT)
-// DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
 // DWG_GETALL_OBJECT_DECL (XREFPANELOBJECT)
 
 /*******************************************************************
@@ -1042,6 +1042,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTIONVIEWSTYLE)
 #endif
 
 
@@ -1275,6 +1276,7 @@ dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);
 dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
 dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
+dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
 #endif
 // unhandled:
 // dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD)
@@ -1299,7 +1301,6 @@ dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 // dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)
 // dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
 // dwg_get_OBJECT_DECL (obj_rtext, RTEXT)
-// dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
 // dwg_get_OBJECT_DECL (obj_xrefpanelobject, XREFPANELOBJECT)
 
 /********************************************************************

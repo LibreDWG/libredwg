@@ -179,31 +179,32 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
   "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
   "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
-  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
-  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
-  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
-  "TEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 79 */
-  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
-  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
-  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 82 */
-  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 83 */
-  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 84 */
-  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 85 */
-  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 86 */
-  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 87 */
-  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 88 */
-  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 89 */
-  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0",	/* 90 */
-  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 91 */
-  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 92 */
-  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 93 */
+  "SECTIONVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
+  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
+  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
+  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
+  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
+  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
+  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
+  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
+  "TEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 80 */
+  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
+  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 82 */
+  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 83 */
+  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 84 */
+  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 85 */
+  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 86 */
+  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 87 */
+  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 88 */
+  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 89 */
+  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 90 */
+  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0",	/* 91 */
+  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 92 */
+  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 93 */
+  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 94 */
 
 };
 
@@ -5997,6 +5998,108 @@ static const Dwg_DYNAPI_field _dwg_SCALE_fields[] = {
     0,0,0, 290 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_object_SECTIONVIEWSTYLE: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_SECTIONVIEWSTYLE_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, parent),
+    1,1,0, 0 },
+  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, class_version),
+    0,0,0, 70 },
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, name),
+    1,1,1, 3 },
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, description),
+    1,1,1, 300 },
+  { "is_modified_for_recompute",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, is_modified_for_recompute),
+    0,0,0, 290 },
+  { "unknown_bb1",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, unknown_bb1),
+    0,0,0, 0 },
+  { "unknown_bb2",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, unknown_bb2),
+    0,0,0, 0 },
+  { "identifier_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, identifier_style),
+    1,0,0, 340 },
+  { "identifier_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, identifier_color),
+    1,0,0, 62 },
+  { "identifier_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, identifier_height),
+    0,0,0, 40 },
+  { "identifier_exclude_characters",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, identifier_exclude_characters),
+    0,0,0, 90 },
+  { "identifier_position",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, identifier_position),
+    0,0,0, 40 },
+  { "identifier_offset",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, identifier_offset),
+    0,0,0, 42 },
+  { "arrow_position",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_position),
+    0,0,0, 40 },
+  { "arrow_start_symbol",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_start_symbol),
+    1,0,0, 340 },
+  { "arrow_end_symbol",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_end_symbol),
+    1,0,0, 340 },
+  { "arrow_symbol_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_symbol_color),
+    1,0,0, 62 },
+  { "arrow_symbol_size",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_symbol_size),
+    0,0,0, 40 },
+  { "arrow_symbol_extension_length",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_symbol_extension_length),
+    0,0,0, 40 },
+  { "plane_line_weight",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, plane_line_weight),
+    0,0,0, 71 },
+  { "plane_line_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, plane_line_color),
+    1,0,0, 62 },
+  { "plane_line_type",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, plane_line_type),
+    1,0,0, 340 },
+  { "bend_line_weight",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, bend_line_weight),
+    0,0,0, 0 },
+  { "bend_line_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, bend_line_color),
+    1,0,0, 62 },
+  { "bend_line_type",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, bend_line_type),
+    1,0,0, 340 },
+  { "bend_line_length",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, bend_line_length),
+    0,0,0, 40 },
+  { "end_line_length",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, end_line_length),
+    0,0,0, 0 },
+  { "viewlabel_text_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_text_style),
+    1,0,0, 340 },
+  { "viewlabel_text_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_text_color),
+    1,0,0, 62 },
+  { "viewlabel_text_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_text_height),
+    0,0,0, 40 },
+  { "viewlabel_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_text),
+    1,1,1, 300 },
+  { "viewlabel_field",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_field),
+    1,1,1, 300 },
+  { "viewlabel_offset",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_offset),
+    0,0,0, 42 },
+  { "viewlabel_attachment",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_attachment),
+    0,0,0, 70 },
+  { "viewlabel_alignment",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_alignment),
+    0,0,0, 72 },
+  { "viewlabel_pattern",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, viewlabel_pattern),
+    0,0,0, 90 },
+  { "hatch_pattern",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, hatch_pattern),
+    0,0,0, 90 },
+  { "hatch_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, hatch_color),
+    1,0,0, 62 },
+  { "hatch_bg_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, hatch_bg_color),
+    1,0,0, 62 },
+  { "hatch_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, hatch_scale),
+    0,0,0, 0 },
+  { "hatch_angles",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, hatch_angles),
+    0,0,0, 0 },
+  { "hatch_transparency",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, hatch_transparency),
+    0,0,0, 0 },
+  { "is_continuous_labeling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, is_continuous_labeling),
+    0,0,0, 290 },
+  { "show_arrowheads",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, show_arrowheads),
+    0,0,0, 290 },
+  { "show_viewlabel",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, show_viewlabel),
+    0,0,0, 290 },
+  { "show_all_plane_lines",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, show_all_plane_lines),
+    0,0,0, 290 },
+  { "show_all_bend_indentifiers",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, show_all_bend_indentifiers),
+    0,0,0, 290 },
+  { "show_end_and_bend_lines",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, show_end_and_bend_lines),
+    0,0,0, 290 },
+  { "show_hatching",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, show_hatching),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_object_SORTENTSTABLE: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_SORTENTSTABLE_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_SORTENTSTABLE, parent),
@@ -8262,7 +8365,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "REVOLVEDSURFACE", DWG_TYPE_REVOLVEDSURFACE /*(592)*/, _dwg_REVOLVEDSURFACE_fields, sizeof (struct _dwg_entity_REVOLVEDSURFACE) },	/* 134 */
   { "RTEXT", DWG_TYPE_RTEXT /*(593)*/, NULL, 0 },	/* 135 */
   { "SCALE", DWG_TYPE_SCALE /*(594)*/, _dwg_SCALE_fields, sizeof (struct _dwg_object_SCALE) },	/* 136 */
-  { "SECTIONVIEWSTYLE", DWG_TYPE_SECTIONVIEWSTYLE /*(595)*/, NULL, 0 },	/* 137 */
+  { "SECTIONVIEWSTYLE", DWG_TYPE_SECTIONVIEWSTYLE /*(595)*/, _dwg_SECTIONVIEWSTYLE_fields, sizeof (struct _dwg_object_SECTIONVIEWSTYLE) },	/* 137 */
   { "SEQEND", DWG_TYPE_SEQEND /*(6)*/, _dwg_SEQEND_fields, sizeof (struct _dwg_entity_SEQEND) },	/* 138 */
   { "SHAPE", DWG_TYPE_SHAPE /*(33)*/, _dwg_SHAPE_fields, sizeof (struct _dwg_entity_SHAPE) },	/* 139 */
   { "SOLID", DWG_TYPE_SOLID /*(31)*/, _dwg_SOLID_fields, sizeof (struct _dwg_entity_SOLID) },	/* 140 */
