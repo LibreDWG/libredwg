@@ -4890,7 +4890,3 @@ unknown_dxf[4887].fields = unknown_dxf_4887;
 unknown_dxf[4888].fields = unknown_dxf_4888;
 unknown_dxf[4889].fields = unknown_dxf_4889;
 unknown_dxf[4890].fields = unknown_dxf_4890;
-unknown_dxf[4891].fields = unknown_dxf_4891;
-unknown_dxf[4892].fields = unknown_dxf_4892;
-unknown_dxf[4893].fields = unknown_dxf_4893;
-unknown_dxf[4894].fields = unknown_dxf_4894;
