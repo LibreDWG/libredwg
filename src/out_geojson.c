@@ -16,10 +16,9 @@
  */
 /* TODO: Arc, Circle, Ellipsis, Bulge (Curve) tessellation.
  *       ocs/ucs transforms, explode of inserts?
- *       NOCOMMA and \n not with stdout. stdout is line-buffered (#75),
- *       so NOCOMMA cannot backup past the previous \n to delete the comma.
+ *       NOCOMMA:
  *       We really have to add the comma before, not after, and special case
- * the first field, not the last to omit the comma.
+ *       the first field, not the last to omit the comma.
  */
 
 #include "config.h"
@@ -75,6 +74,11 @@ static unsigned int cur_ver = 0;
 #define ACTION geojson
 #define IS_PRINT
 
+// yet unused. more appropriate for out_json
+#define ISLAST (dat->opts & JSONLAST)
+#define SETLAST dat->opts |= JSONLAST
+#define CLEARLAST dat->opts &= ~JSONLAST
+
 #define PREFIX                                                                \
   for (int _i = 0; _i < dat->bit; _i++)                                       \
     {                                                                         \
@@ -126,7 +130,8 @@ static unsigned int cur_ver = 0;
     dat->bit++;                                                               \
   }
 #define ENDSEC() ENDARRAY
-#define NOCOMMA fseek (dat->fh, -2, SEEK_CUR)
+#define OLD_NOCOMMA fseek (dat->fh, -2, SEEK_CUR)
+#define NOCOMMA assert(0 = "NOCOMMA")
 #define PAIR_S(name, str)                                                     \
   {                                                                           \
     const int len = strlen (str);                                             \
@@ -292,11 +297,10 @@ static unsigned int cur_ver = 0;
   ARRAY;                                                                      \
   for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                       \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"" #name "\": " FORMAT_##type ",\n",         \
-                      _obj->name[vcount]);                                    \
+      PREFIX fprintf (dat->fh, "\"" #name "\": " FORMAT_##type "%s\n",        \
+                      _obj->name[vcount],                                     \
+                      vcount == (BITCODE_BL)size - 1 ? "" : ",");             \
     }                                                                         \
-  if (size)                                                                   \
-    NOCOMMA;                                                                  \
   ENDARRAY;
 
 #define FIELD_VECTOR_T(name, type, size, dxf)                                 \
@@ -305,8 +309,9 @@ static unsigned int cur_ver = 0;
   {                                                                           \
     for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
-                        _obj->name[vcount]);                                  \
+        PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\"%s\n",                 \
+                        _obj->name[vcount],                                   \
+                        vcount == (BITCODE_BL)_obj->size - 1 ? "" : ",");     \
       }                                                                       \
   }                                                                           \
   else                                                                        \
@@ -314,43 +319,23 @@ static unsigned int cur_ver = 0;
     for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
       FIELD_TEXT_TU (name, _obj->name[vcount]);                               \
   }                                                                           \
-  if (_obj->size)                                                             \
-    NOCOMMA;                                                                  \
   ENDARRAY;
 
 #define FIELD_VECTOR(name, type, size, dxf)                                   \
   FIELD_VECTOR_N (name, type, _obj->size, dxf)
 
-#define FIELD_2RD_VECTOR(name, size, dxf)                                     \
-  ARRAY;                                                                      \
-  for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
-    {                                                                         \
-      FIELD_2RD (name[vcount], dxf);                                          \
-    }                                                                         \
-  if (_obj->size)                                                             \
-    NOCOMMA;                                                                  \
-  ENDARRAY;
-
-#define FIELD_2DD_VECTOR(name, size, dxf)                                     \
-  ARRAY;                                                                      \
-  FIELD_2RD (name[0], 0);                                                     \
-  for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
-    {                                                                         \
-      FIELD_2DD (name[vcount], FIELD_VALUE (name[vcount - 1].x),              \
-                 FIELD_VALUE (name[vcount - 1].y), dxf);                      \
-    }                                                                         \
-  if (_obj->size)                                                             \
-    NOCOMMA;                                                                  \
-  ENDARRAY;
+#define FIELD_2RD_VECTOR(name, size, dxf)
+#define FIELD_2DD_VECTOR(name, size, dxf)
 
 #define FIELD_3DPOINT_VECTOR(name, size, dxf)                                 \
   ARRAY;                                                                      \
   for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
     {                                                                         \
-      FIELD_3DPOINT (name[vcount], dxf);                                      \
+      if (vcount == (BITCODE_BL)_obj->size - 1)                               \
+        LASTFIELD_3DPOINT (name[vcount], dxf)                                 \
+      else                                                                    \
+        FIELD_3DPOINT (name[vcount], dxf)                                     \
     }                                                                         \
-  if (_obj->size)                                                             \
-    NOCOMMA;                                                                  \
   ENDARRAY;
 
 #define WARN_UNSTABLE_CLASS                                                   \
@@ -475,10 +460,14 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 #define FEATURE(subclass, obj)                                                \
   HASH;                                                                       \
   dwg_geojson_feature (dat, obj, #subclass)
-#define ENDFEATURE ENDHASH
+#define ENDFEATURE                                                            \
+  if (is_last)                                                                \
+    LASTENDHASH                                                               \
+  else                                                                        \
+    ENDHASH
 
 static int
-dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_last)
 {
   BITCODE_BL j, last_j;
   Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
@@ -496,14 +485,14 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   LASTENDARRAY;
   ENDGEOMETRY;
   ENDFEATURE;
-  return 0;
+  return 1;
 }
 
 /* returns 0 if object could be printed
  */
 static int
 dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
-                           Dwg_Object *restrict obj)
+                           Dwg_Object *restrict obj, int is_last)
 {
   int i;
   char *dxfname;
@@ -512,7 +501,7 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 
   i = obj->type - 500;
   if (i < 0 || i >= (int)dwg->num_classes)
-    return DWG_ERR_INVALIDTYPE;
+    return 0;
 
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)
@@ -523,7 +512,7 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 
   if (strEQc (dxfname, "LWPOLYLINE"))
     {
-      return dwg_geojson_LWPOLYLINE (dat, obj);
+      return dwg_geojson_LWPOLYLINE (dat, obj, is_last);
     }
   /*
   if (strEQc (dxfname, "GEODATA"))
@@ -555,14 +544,14 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
       ENDGEOMETRY;
       ENDFEATURE;
-      return 0;
+      return 1;
     }
 
-  return DWG_ERR_UNHANDLEDCLASS;
+  return 0;
 }
 
-static void
-dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+static int
+dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_last)
 {
   switch (obj->type)
     {
@@ -578,8 +567,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
+        return 1;
       }
-      break;
     case DWG_TYPE_MINSERT:
       // a grid of INSERT's (named points)
       // dwg_geojson_MINSERT(dat, obj);
@@ -611,8 +600,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
+        return 1;
       }
-      break;
     case DWG_TYPE_POLYLINE_3D:
       {
         int error;
@@ -639,8 +628,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
+        return 1;
       }
-      break;
     case DWG_TYPE_ARC:
       // needs explosion of arc into lines
       // dwg_geojson_ARC(dat, obj);
@@ -663,8 +652,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
+        return 1;
       }
-      break;
     case DWG_TYPE_POINT:
       {
         Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
@@ -681,8 +670,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         ENDGEOMETRY;
         ENDFEATURE;
+        return 1;
       }
-      break;
     case DWG_TYPE__3DFACE:
       // dwg_geojson__3DFACE(dat, obj);
       LOG_TRACE ("3DFACE not yet supported")
@@ -743,8 +732,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
+        return 1;
       }
-      break;
     case DWG_TYPE_MTEXT:
       {
         // add Text property to a point
@@ -757,19 +746,19 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
+        return 1;
       }
-      break;
     case DWG_TYPE_MLINE:
       // dwg_geojson_MLINE(dat, obj);
       LOG_TRACE ("MLINE not yet supported")
       break;
     case DWG_TYPE_LWPOLYLINE:
-      (void)dwg_geojson_LWPOLYLINE (dat, obj);
-      break;
+      return dwg_geojson_LWPOLYLINE (dat, obj, is_last);
     default:
       if (obj->type != obj->parent->layout_type)
-        dwg_geojson_variable_type (obj->parent, dat, obj);
+        return dwg_geojson_variable_type (obj->parent, dat, obj, is_last);
     }
+  return 0;
 }
 
 static int
@@ -780,11 +769,21 @@ geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SECTION (features);
   for (i = 0; i < dwg->num_objects; i++)
     {
+      int is_last = i == dwg->num_objects - 1;
       Dwg_Object *obj = &dwg->object[i];
-      dwg_geojson_object (dat, obj);
+      int success = dwg_geojson_object (dat, obj, is_last);
+      if (is_last && !success) // did not write any: end with dummy
+        {
+          HASH
+          PAIR_S (type, "Feature");
+          KEY (properties);
+          SAMEHASH;
+          LASTPAIR_S (SubClasses, "Dummy");
+          LASTENDHASH
+          LASTENDHASH
+        }
     }
-  NOCOMMA;
-  ENDSEC ();
+  ENDSEC (); // because afterwards is always the final geocoding object
   return 0;
 }
 

@@ -92,6 +92,24 @@ for dwg in $DATA; do
     check_roundtrip
 done
 
+if [ -n "$JQ" ]
+then
+    # check pipe (nocomma)
+    dwg="$DATADIR/example_2000.dwg"
+    json="example_2000.json"
+    echo "dwgread -O geojson $DATADIR/example_2000.dwg | jq ."
+    if @LTEXEC@ ./dwgread -O geojson "$DATADIR/example_2000.dwg" | $JQ . >"$json.log" 2>&1
+    then
+        echo pipe ok
+        rm "./$json.log"
+    else
+        cat "$json.log"
+        i=$((i+1))
+    fi
+else
+    echo no jq, cannot check pipe
+fi
+
 if test "0" = "$i" ; then
     exit 0
 else
