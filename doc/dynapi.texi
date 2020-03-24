@@ -4180,12 +4180,20 @@ BL,	DXF 90
 B,	DXF 70
 @item workplane[3]
 3BD
-@item l6
+@item h1
+H,	DXF 360
+@item num_actions
 BL,	DXF 90
+@item actions
+H*,	DXF 360
 @item l7
 BL,	DXF 90
 @item l8
 BL,	DXF 90
+@item t1
+T,	DXF 1
+@item h2
+H,	DXF 330
 @item cl1
 BL,	DXF 90
 @item cs1
@@ -4194,6 +4202,8 @@ RC,	DXF 70
 BL,	DXF 90
 @item cl3
 BL,	DXF 90
+@item h3
+H,	DXF 330
 @item cl4
 BL,	DXF 90
 @item c1
@@ -4208,6 +4218,8 @@ BD,	DXF 40
 BD,	DXF 40
 @item w3
 BD,	DXF 40
+@item t2
+T,	DXF 1
 
 @end vtable
 @end indentedblock

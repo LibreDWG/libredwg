@@ -22436,6 +22436,16 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   Dwg_Object_ASSOC2DCONSTRAINTGROUP *restrict assoc2dconstraintgroup = obj->tio.object->tio.ASSOC2DCONSTRAINTGROUP;
   failed = 0;
   {
+    BITCODE_H* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "actions", &actions, NULL)
+        && actions == assoc2dconstraintgroup->actions)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.actions [H*] * %u num_actions", count);
+  }
+  {
     BITCODE_B b1;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "b1", &b1, NULL)
         && b1 == assoc2dconstraintgroup->b1)
@@ -22595,6 +22605,30 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->geometry_status--;
   }
   {
+    BITCODE_H h1;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h1", &h1, NULL)
+        && !memcmp (&h1, &assoc2dconstraintgroup->h1, sizeof (assoc2dconstraintgroup->h1)))
+        pass ();
+    else
+        fail ("ASSOC2DCONSTRAINTGROUP.h1 [H]");
+  }
+  {
+    BITCODE_H h2;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h2", &h2, NULL)
+        && !memcmp (&h2, &assoc2dconstraintgroup->h2, sizeof (assoc2dconstraintgroup->h2)))
+        pass ();
+    else
+        fail ("ASSOC2DCONSTRAINTGROUP.h2 [H]");
+  }
+  {
+    BITCODE_H h3;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h3", &h3, NULL)
+        && !memcmp (&h3, &assoc2dconstraintgroup->h3, sizeof (assoc2dconstraintgroup->h3)))
+        pass ();
+    else
+        fail ("ASSOC2DCONSTRAINTGROUP.h3 [H]");
+  }
+  {
     BITCODE_B is_body_a_proxy;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "is_body_a_proxy", &is_body_a_proxy, NULL)
         && is_body_a_proxy == assoc2dconstraintgroup->is_body_a_proxy)
@@ -22623,21 +22657,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.l5 [BL] set+1 %u != %u", assoc2dconstraintgroup->l5, l5);
     assoc2dconstraintgroup->l5--;
-  }
-  {
-    BITCODE_BL l6;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l6", &l6, NULL)
-        && l6 == assoc2dconstraintgroup->l6)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l6 [BL] %u != %u", assoc2dconstraintgroup->l6, l6);
-    l6++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l6", &l6, 0)
-        && l6 == assoc2dconstraintgroup->l6)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l6 [BL] set+1 %u != %u", assoc2dconstraintgroup->l6, l6);
-    assoc2dconstraintgroup->l6--;
   }
   {
     BITCODE_BL l7;
@@ -22670,6 +22689,21 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->l8--;
   }
   {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_actions", &num_actions, NULL)
+        && num_actions == assoc2dconstraintgroup->num_actions)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_actions [BL] %u != %u", assoc2dconstraintgroup->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_actions", &num_actions, 0)
+        && num_actions == assoc2dconstraintgroup->num_actions)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_actions [BL] set+1 %u != %u", assoc2dconstraintgroup->num_actions, num_actions);
+    assoc2dconstraintgroup->num_actions--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "parent", &parent, NULL)
         && !memcmp (&parent, &assoc2dconstraintgroup->parent, sizeof (assoc2dconstraintgroup->parent)))
@@ -22699,6 +22733,26 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.solution_status [BL] set+1 %u != %u", assoc2dconstraintgroup->solution_status, solution_status);
     assoc2dconstraintgroup->solution_status--;
+  }
+  {
+    BITCODE_T t1;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "t1", &t1, NULL)
+        && t1
+           ? strEQ ((char *)t1, (char *)assoc2dconstraintgroup->t1)
+           : !assoc2dconstraintgroup->t1)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.t1 [T] '%s' <> '%s'", t1, assoc2dconstraintgroup->t1);
+  }
+  {
+    BITCODE_T t2;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "t2", &t2, NULL)
+        && t2
+           ? strEQ ((char *)t2, (char *)assoc2dconstraintgroup->t2)
+           : !assoc2dconstraintgroup->t2)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.t2 [T] '%s' <> '%s'", t2, assoc2dconstraintgroup->t2);
   }
   {
     BITCODE_BD w1;

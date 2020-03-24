@@ -4924,16 +4924,19 @@ typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
   BITCODE_BL l5; //90 1
   BITCODE_B  b1; //70 0
   BITCODE_3BD workplane[3]; //3x10 workplane
-  // 360
-  BITCODE_BL l6; //90 2
-  // 360 360
+  BITCODE_H h1; // 360
+  BITCODE_BL num_actions;// 90
+  BITCODE_H* actions;    // 360
   BITCODE_BL l7; //90 9
   BITCODE_BL l8; //90 9
 
+  BITCODE_T t1; // AcConstrainedCircle
+  BITCODE_H h2; // 330
   BITCODE_BL cl1; //90 1
   BITCODE_RC cs1; //70 1
   BITCODE_BL cl2; //90 1
   BITCODE_BL cl3; //90 3
+  BITCODE_H h3; // 330
   BITCODE_BL cl4; //90 0
   BITCODE_3BD c1; //10 @134
   BITCODE_3BD c2; //10
@@ -4941,6 +4944,7 @@ typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
   BITCODE_BD w1; //40
   BITCODE_BD w2; //40
   BITCODE_BD w3; //40
+  BITCODE_T t2; // AcConstrainedImplicitPoint
 } Dwg_Object_ASSOC2DCONSTRAINTGROUP;
 
 /* or maybe the nodes are laid out like this */

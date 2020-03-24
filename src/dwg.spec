@@ -7258,19 +7258,20 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   FIELD_3BD (workplane[0], 10); // 0,0,0
   FIELD_3BD (workplane[1], 10); // 1,0,0
   FIELD_3BD (workplane[2], 10); // 0,1,0
-  // 360
-  FIELD_BL (l6, 90); //2
-  // 360, 360
+  FIELD_HANDLE (h1, 0, 360);
+  FIELD_BL (num_actions, 90); //2
+  HANDLE_VECTOR (actions, num_actions, 0, 360);
   FIELD_BL (l7, 90); //9
   FIELD_BL (l8, 90); //9
 
+  FIELD_T (t1, 1);
   //DXF { FIELD_TV ("AcConstrainedCircle", 1); }
-  //330
+  FIELD_HANDLE (h2, 0, 330);
   FIELD_BL (cl1, 90); //1
   FIELD_RC (cs1, 70); //1
   FIELD_BL (cl2, 90); //1
   FIELD_BL (cl3, 90); //3
-  //330
+  FIELD_HANDLE (h3, 0, 330);
   FIELD_BL (cl4, 90); //0
   FIELD_3BD (c1, 10); // @133
   FIELD_3BD (c2, 10);
@@ -7279,6 +7280,7 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   FIELD_BD (w2, 40);
   FIELD_BD (w3, 40);
 
+  FIELD_T (t2, 1);
   //DXF { FIELD_TV ("AcConstrainedImplicitPoint", 1); }
   // ...
   START_OBJECT_HANDLE_STREAM;
