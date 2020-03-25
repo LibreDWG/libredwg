@@ -2,11 +2,11 @@
 # STEP 1 build executable binary
 ############################
 
-FROM python:2.7.17-buster AS extracting
+FROM python:3.7.7-buster AS extracting
 LABEL maintainer="azoulayos@protonmail.com"
 RUN apt-get update &&\
-    apt-get install -y --no-install-recommends git autoconf libtool swig texinfo build-essential gcc python-libxml2 && \
-    LIBXML2VER=2.9.1 && \
+    apt-get install -y --no-install-recommends git autoconf libtool swig texinfo build-essential gcc python3-libxml2 && \
+    LIBXML2VER=2.9.9 && \
     mkdir libxmlInstall && cd libxmlInstall && \
     wget ftp://xmlsoft.org/libxml2/libxml2-$LIBXML2VER.tar.gz && \
     tar xf libxml2-$LIBXML2VER.tar.gz && \
