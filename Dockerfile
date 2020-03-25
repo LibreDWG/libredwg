@@ -30,8 +30,7 @@ RUN git clone git://git.sv.gnu.org/libredwg.git && \
 # STEP 2 copy the executable binary to thinest image
 ############################
 
-FROM bitnami/minideb:jessie
-LABEL maintainer="azoulayos@protonmail.com"
+FROM debian:stable-slim
 COPY --from=extracting /app/libredwg/ldwg/usr/local/bin/* /usr/local/bin/
 COPY --from=extracting /app/libredwg/ldwg/usr/local/include/* /usr/local/include/
 COPY --from=extracting /app/libredwg/ldwg/usr/local/lib/* /usr/local/lib/
