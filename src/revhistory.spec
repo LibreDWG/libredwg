@@ -22,7 +22,7 @@
   FIELD_RL (class_minor, 0);
   FIELD_RL (num_histories, 0);
   REPEAT (num_histories, histories, BITCODE_RL)
-  {
+  REPEAT_BLOCK
     FIELD_RL (histories[rcount1], 0);
-  }
+  END_REPEAT_BLOCK
   END_REPEAT (histories)

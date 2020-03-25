@@ -3652,6 +3652,12 @@ int DWG_FUNC_N (ACTION,_HATCH_gradientfill)(
 }
 #endif
 
+#ifdef IS_JSON
+#  define JSON_END_REPEAT(f)  ENDHASH
+#else
+#  define JSON_END_REPEAT(f)  END_REPEAT (f)
+#endif
+
 //(78 + varies) pg.136
 DWG_ENTITY (HATCH)
 
@@ -3692,10 +3698,8 @@ DWG_ENTITY (HATCH)
               LOG_ERROR ("Invalid HATCH.num_segs_or_paths " FORMAT_BL,
                         _obj->paths[rcount1].num_segs_or_paths);
               _obj->paths[rcount1].num_segs_or_paths = 0;
-#ifdef IS_JSON
-              NOCOMMA; ENDHASH;
-#endif
-              END_REPEAT (paths); return DWG_ERR_VALUEOUTOFBOUNDS;
+              JSON_END_REPEAT (paths);
+              return DWG_ERR_VALUEOUTOFBOUNDS;
             }
 #define segs paths[rcount1].segs
           REPEAT2 (paths[rcount1].num_segs_or_paths, segs, Dwg_HATCH_PathSeg)
@@ -3732,12 +3736,9 @@ DWG_ENTITY (HATCH)
                         {
                           LOG_ERROR ("Invalid HATCH.paths.segs.num_knots " FORMAT_BL,
                                     _obj->segs[rcount2].num_knots);
-#ifdef IS_JSON
-                          NOCOMMA; ENDHASH;
-                          NOCOMMA; ENDHASH;
-#endif
                           _obj->segs[rcount2].num_knots = 0;
-                          END_REPEAT (segs); END_REPEAT (paths);
+                          JSON_END_REPEAT (segs);
+                          JSON_END_REPEAT (paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
                       FIELD_VECTOR (segs[rcount2].knots, BD,
@@ -3746,12 +3747,9 @@ DWG_ENTITY (HATCH)
                         {
                           LOG_ERROR ("Invalid HATCH.paths.segs.num_control_points " FORMAT_BL,
                                     _obj->segs[rcount2].num_control_points);
-#ifdef IS_JSON
-                          NOCOMMA; ENDHASH;
-                          NOCOMMA; ENDHASH;
-#endif
                           _obj->segs[rcount2].num_control_points = 0;
-                          END_REPEAT (segs); END_REPEAT (paths);
+                          JSON_END_REPEAT (segs);
+                          JSON_END_REPEAT (paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
 #define control_points segs[rcount2].control_points
@@ -3767,9 +3765,10 @@ DWG_ENTITY (HATCH)
 #undef control_points
                       SINCE (R_2013) // r2014 really
                         {
-                          SUB_FIELD_BL (segs[rcount2], num_fitpts, 97);
-                          FIELD_2RD_VECTOR (segs[rcount2].fitpts,
-                                           segs[rcount2].num_fitpts, 11);
+#define seg segs[rcount2]
+                          SUB_FIELD_BL (seg, num_fitpts, 97);
+                          FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
+#undef seg
                         }
                       break;
                     default:
@@ -3777,11 +3776,8 @@ DWG_ENTITY (HATCH)
                                 FIELD_VALUE (segs[rcount2].type_status));
                       DEBUG_HERE_OBJ
                       _obj->segs[rcount2].type_status = 0;
-#ifdef IS_JSON
-                      NOCOMMA; ENDHASH;
-                      NOCOMMA; ENDHASH;
-#endif
-                      END_REPEAT (segs); END_REPEAT (paths);
+                      JSON_END_REPEAT (segs);
+                      JSON_END_REPEAT (paths);
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
           END_REPEAT_BLOCK
@@ -4080,7 +4076,7 @@ DWG_ENTITY (LWPOLYLINE)
   if (FIELD_VALUE (flag) & 32)
     FIELD_BL (num_widths, 0);
 
-  DXF {
+#ifdef IS_DXF
     REPEAT (num_points, points, BITCODE_2RD)
       {
         FIELD_2RD (points[rcount1], 10);
@@ -4102,15 +4098,15 @@ DWG_ENTITY (LWPOLYLINE)
         }
       }
     END_REPEAT (points)
-  } else {
-#ifndef IS_RELEASE
+#else
+#  ifndef IS_RELEASE
     if (FIELD_VALUE (num_points) > 20000) {
       LOG_ERROR ("Invalid LWPOLYLINE.num_points %ld", (long)FIELD_VALUE (num_points));
       _obj->num_points = 0;
       DEBUG_HERE_OBJ
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-#endif
+#  endif
     VERSIONS (R_13, R_14) {
       FIELD_2RD_VECTOR (points, num_points, 10);
     }
@@ -4128,7 +4124,7 @@ DWG_ENTITY (LWPOLYLINE)
         SUB_FIELD_BD (widths[rcount1],end, 41);
     END_REPEAT_BLOCK
     END_REPEAT (widths)
-  }
+#endif
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -4410,10 +4406,7 @@ DWG_OBJECT (FIELD)
       TABLE_value_fields (childval[rcount1].value)
       if (error & DWG_ERR_INVALIDTYPE)
         {
-#ifdef IS_JSON
-          NOCOMMA; ENDHASH;
-#endif
-          END_REPEAT (childval)
+          JSON_END_REPEAT (childval);
           return error;
         }
   END_REPEAT_BLOCK
@@ -4645,12 +4638,6 @@ DWG_OBJECT_END
       END_REPEAT_BLOCK \
       END_REPEAT (sty.border)
 
-#ifdef IS_JSON
-#  define JSON_ENDHASH  NOCOMMA; ENDHASH;
-#else
-#  define JSON_ENDHASH
-#endif
-
 // clang-format off
 #define row tdata.rows[rcount1]
 #define cell row.cells[rcount2]
@@ -4689,12 +4676,9 @@ DWG_OBJECT_END
               TABLE_value_fields (cell.customdata_items[rcount3].value); \
               if (error & DWG_ERR_INVALIDTYPE)	\
                 {			\
-                  JSON_ENDHASH		\
-                  JSON_ENDHASH		\
-                  JSON_ENDHASH		\
-                  END_REPEAT (cell.customdata_items)	\
-                  END_REPEAT (row.cells)	\
-                  END_REPEAT (tdata.rows)\
+                  JSON_END_REPEAT (cell.customdata_items);      \
+                  JSON_END_REPEAT (row.cells);                  \
+                  JSON_END_REPEAT (tdata.rows);                 \
                   return error;		\
                 }			\
           END_REPEAT_BLOCK		\
@@ -4718,12 +4702,9 @@ DWG_OBJECT_END
                   TABLE_value_fields (content.value)	\
                   if (error & DWG_ERR_INVALIDTYPE)	\
                     {					\
-                      JSON_ENDHASH          		\
-                      JSON_ENDHASH          		\
-                      JSON_ENDHASH          		\
-                      END_REPEAT (cell.cell_contents)	\
-                      END_REPEAT (row.cells)		\
-                      END_REPEAT (tdata.rows)		\
+                      JSON_END_REPEAT (cell.cell_contents);	\
+                      JSON_END_REPEAT (row.cells);		\
+                      JSON_END_REPEAT (tdata.rows);		\
                       return error;			\
                     }					\
                 }					\
@@ -4784,10 +4765,8 @@ DWG_OBJECT_END
           TABLE_value_fields (row.customdata_items[rcount3].value);	\
           if (error & DWG_ERR_INVALIDTYPE)		\
             {						\
-              JSON_ENDHASH                  		\
-              JSON_ENDHASH                  		\
-              END_REPEAT (row.customdata_items)		\
-              END_REPEAT (tdata.rows)			\
+              JSON_END_REPEAT (row.customdata_items);		\
+              JSON_END_REPEAT (tdata.rows);			\
               return error;				\
             }						\
       END_REPEAT_BLOCK					\
@@ -5017,10 +4996,7 @@ DWG_ENTITY (TABLE)
                 TABLE_value_fields (cells[rcount1].value)
                 if (error & DWG_ERR_INVALIDTYPE)
                   {
-  #ifdef IS_JSON
-                    NOCOMMA; ENDHASH;
-  #endif
-                    END_REPEAT (cells);
+                    JSON_END_REPEAT (cells);
                     return error;
                   }
               }

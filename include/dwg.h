@@ -6322,10 +6322,11 @@ typedef struct _dwg_struct
 #define DWG_OPTS_LOGLEVEL 0xf
 #define DWG_OPTS_MINIMAL  0x10
 #define DWG_OPTS_DXFB     0x20
+/* can be safely shared */
+#define DWG_OPTS_JSONLAST 0x20
 #define DWG_OPTS_INDXF    0x40
 #define DWG_OPTS_INJSON   0x80
 #define DWG_OPTS_IN       (DWG_OPTS_INDXF | DWG_OPTS_INJSON)
-#define DWG_OPTS_JSONLAST 0x100
 
 /*--------------------------------------------------
  * Exported Functions

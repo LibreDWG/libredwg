@@ -19,4 +19,5 @@
 #include "spec.h"
 
 FIELD_T16 (description, 0);
+SETLAST;
 FIELD_RS (MEASUREMENT, 0); // copied to header_vars

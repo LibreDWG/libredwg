@@ -37,29 +37,31 @@
    GCC46_DIAG_IGNORE (-Wformat-nonliteral) + GCC46_DIAG_RESTORE
    GCC30_DIAG_IGNORE (-Wformat-nonliteral) w/o
    GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
+   GCC30_DIAG_IGNORE (-Wshadow)
 */
 #if defined(__GNUC__)
-#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
+#  define CC_DIAG_PRAGMA(x) _Pragma (#x)
 #  define CLANG_DIAG_IGNORE(w)
 #  define CLANG_DIAG_RESTORE
 #elif defined(__clang__) || defined(__clang)
-#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
+#  define CC_DIAG_PRAGMA(x) _Pragma (#x)
 #  define CLANG_DIAG_IGNORE(x)                                                \
     _Pragma ("clang diagnostic push")                                         \
-        CC_DIAG_PRAGMA (clang diagnostic ignored #x)
+    CC_DIAG_PRAGMA (clang diagnostic ignored #x)
 #  define CLANG_DIAG_RESTORE _Pragma ("clang diagnostic pop")
+#  define GCC31_DIAG_IGNORE(w)
+#  define GCC30_DIAG_IGNORE(w)
 #else
-#  define GCC_DIAG_IGNORE(w)
+#  define CC_DIAG_IGNORE(w)
 #  define CLANG_DIAG_IGNORE(w)
 #  define CLANG_DIAG_RESTORE
 #endif
 /* for GCC46_DIAG_IGNORE (-Wdeprecated-declarations) inside functions */
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 460)         \
     || defined(__clang__) || defined(__clang)
-#  define GCC46_DIAG_PRAGMA(x) _Pragma (#  x)
 #  define GCC46_DIAG_IGNORE(x)                                                \
-    _Pragma ("GCC diagnostic push")                                           \
-        GCC46_DIAG_PRAGMA (GCC diagnostic ignored #x)
+     _Pragma ("GCC diagnostic push")                                          \
+     CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #  define GCC46_DIAG_RESTORE _Pragma ("GCC diagnostic pop")
 #else
 #  define GCC46_DIAG_IGNORE(w)
@@ -68,16 +70,14 @@
 /* for GCC31_DIAG_IGNORE (-Wdeprecated-declarations) outside functions */
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 310          \
      && ((__GNUC__ * 100) + __GNUC_MINOR__) < 460)
-#  define GCC31_DIAG_PRAGMA(x) _Pragma (#  x)
-#  define GCC31_DIAG_IGNORE(x) GCC31_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC31_DIAG_IGNORE(w)
 #endif
 /* For GCC30_DIAG_IGNORE (-Wformat-nonliteral) outside functions */
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 300          \
      && ((__GNUC__ * 100) + __GNUC_MINOR__) < 460)
-#  define GCC30_DIAG_PRAGMA(x) _Pragma (#  x)
-#  define GCC30_DIAG_IGNORE(x) GCC30_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC30_DIAG_IGNORE(w)
 #endif

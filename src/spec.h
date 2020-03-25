@@ -47,6 +47,12 @@
 #  define SET_PARENT_OBJ(field)
 #  define SET_PARENT_FIELD(field, what_parent, obj)
 
+#  ifndef ISLAST
+#    define ISLAST
+#    define SETLAST
+#    define CLEARLAST
+#  endif
+
 // for compile-time range checks with n=3,10,1000,5000,10000,20000,100000
 //#  define LOG2_APPROX(n) (size_t)((-0.344845 * (n) * (n)) + (2.024658 * (n)) - 1.674873)
 //#  define _IN_RANGE     (sizeof (_obj->field) >= LOG2_APPROX (maxvalue) / 8)

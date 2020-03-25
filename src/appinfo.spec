@@ -25,6 +25,7 @@
       FIELD_RL (num_strings, 0);     // 3
       FIELD_TU16 (comment, 0);
       FIELD_TU16 (product_info, 0);
+      SETLAST;
       FIELD_TU16 (version, 0);
     }
   else
@@ -38,6 +39,7 @@
       // "This file was last saved by an Open Design Alliance (ODA) application or an ODA licensed application."
       FIELD_TU16 (comment, 0);
       FIELD_TFFx (product_checksum, 16, 0);
+      SETLAST;
       FIELD_TU16 (product_info, 0); // XML ProductInformation with:
       // name: "AutoCAD"/"AutoCAD LT", build_version: "A.<num>...", "F.<num>...", "M.<num>..",
       //     registry_version, install_id_string: "ACAD-<num>:<num>", "ACADLT-<num>:<num>", registry_localeID

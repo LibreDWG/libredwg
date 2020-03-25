@@ -50,4 +50,5 @@
   END_REPEAT (props)
 
   FIELD_RL (unknown1, 0);
+  SETLAST;
   FIELD_RL (unknown2, 0);

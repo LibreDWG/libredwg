@@ -100,7 +100,17 @@ then
     echo "dwgread -O geojson $DATADIR/example_2000.dwg | jq ."
     if @LTEXEC@ ./dwgread -O geojson "$DATADIR/example_2000.dwg" | $JQ . >"$json.log" 2>&1
     then
-        echo pipe ok
+        echo pipe to geojson ok
+        rm "./$json.log"
+    else
+        cat "$json.log"
+        i=$((i+1))
+    fi
+
+    echo "dwgread -O json $DATADIR/example_2000.dwg | jq ."
+    if @LTEXEC@ ./dwgread -O json "$DATADIR/example_2000.dwg" | $JQ . >"$json.log" 2>&1
+    then
+        echo pipe to json ok
         rm "./$json.log"
     else
         cat "$json.log"

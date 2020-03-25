@@ -74,11 +74,6 @@ static unsigned int cur_ver = 0;
 #define ACTION geojson
 #define IS_PRINT
 
-// yet unused. more appropriate for out_json
-#define ISLAST (dat->opts & JSONLAST)
-#define SETLAST dat->opts |= JSONLAST
-#define CLEARLAST dat->opts &= ~JSONLAST
-
 #define PREFIX                                                                \
   for (int _i = 0; _i < dat->bit; _i++)                                       \
     {                                                                         \
