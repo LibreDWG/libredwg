@@ -633,7 +633,6 @@
       FIELD_BS (unknown_54, 0); /* (type 5/6 only) these do not seem to be required */
       FIELD_BS (unknown_55, 0);
       FIELD_BS (unknown_56, 0);
-      PRE (R_2007) { SETLAST; }
       FIELD_BS (unknown_57, 0);
     }
 
@@ -655,8 +654,6 @@
     FIELD_T (STYLESHEET, 1);
     FIELD_T (FINGERPRINTGUID, 1);
     FIELD_T (VERSIONGUID, 1);
-    SETLAST;
     FIELD_T (PROJECTNAME, 1);
-    CLEARLAST;
     END_STRING_STREAM
   }

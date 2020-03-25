@@ -47,10 +47,10 @@
 #  define SET_PARENT_OBJ(field)
 #  define SET_PARENT_FIELD(field, what_parent, obj)
 
-#  ifndef ISLAST
-#    define ISLAST
-#    define SETLAST
-#    define CLEARLAST
+#  ifndef ISFIRST
+#    define ISFIRST
+#    define SETFIRST
+#    define CLEARFIRST
 #  endif
 
 // for compile-time range checks with n=3,10,1000,5000,10000,20000,100000

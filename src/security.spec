@@ -27,5 +27,4 @@
   FIELD_RL (algo_id, 0);
   FIELD_RL (key_len, 0);
   FIELD_RL (encr_size, 0);
-  SETLAST;
   FIELD_BINARY (encr_buffer, FIELD_VALUE (encr_size), 0);

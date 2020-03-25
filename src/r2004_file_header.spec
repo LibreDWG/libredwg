@@ -61,6 +61,5 @@
 
   // well, the padding is also encrypted, but ODA didn't grok that
   // encrypted via 0
-  SETLAST;
   FIELD_TFF (padding, (int)sizeof(FIELD_VALUE (padding)), 0)
 

@@ -21,7 +21,7 @@
   // char version[6] handled separately. older releases just had a version[12]
 #ifdef IS_JSON
   KEY (zero_5);
-  fprintf (dat->fh, "[ %d, %d, %d, %d, %d ],\n",
+  fprintf (dat->fh, "[ %d, %d, %d, %d, %d ]",
           _obj->zero_5[0], _obj->zero_5[1], _obj->zero_5[2], _obj->zero_5[3],
           _obj->zero_5[4]);
 #else
@@ -42,7 +42,6 @@
     FIELD_RL (thumbnail_address, 0); //@0x0d
     FIELD_RC (dwg_version, 0);
     FIELD_RC (maint_version, 0);
-    PRE (R_2004) { SETLAST; }
     FIELD_RS (codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
   }
 
@@ -61,7 +60,6 @@
     FIELD_RL (rl_1c_address, 0); /* mostly 0 */
     FIELD_RL (summaryinfo_address, 0);
     FIELD_RL (vbaproj_address, 0);
-    SETLAST;
     FIELD_RL (rl_28_80, 0); /* mostly 128/0x80 */
     ENCODER {
       for (i = 0; i < 54; i++)

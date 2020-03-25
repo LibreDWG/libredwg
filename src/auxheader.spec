@@ -69,10 +69,8 @@
   FIELD_RL (zero_5, 0);
   FIELD_RL (zero_6, 0);
   FIELD_RL (zero_7, 0);
-  PRE (R_2018) { SETLAST; }
   FIELD_RL (zero_8, 0);
   //DEBUG_HERE;
   SINCE (R_2018) {
-    SETLAST;
     FIELD_VECTOR_INL (zero_18, RS, 3, 0)
   }

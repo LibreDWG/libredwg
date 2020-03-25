@@ -28,7 +28,6 @@
     FIELD_RLL (max32, 0);    // 0x32
     FIELD_RLL (max64, 0);    // 0x64
     FIELD_RLL (maxtbl, 0);   // 0x200
-    SETLAST;
     FIELD_RLL (maxrl, 0);    // 0xffffffff
   }
   LATER_VERSIONS {
@@ -44,7 +43,6 @@
     FIELD_RLL (maxtbl, 0);      // 0x200
     FIELD_RLL (maxtbl_hi, 0);   // 0x0
     FIELD_RLL (maxrl, 0);       // 0xffffffff
-    SETLAST;
     FIELD_RLL (maxrl_hi, 0);    // 0x0
   }
 

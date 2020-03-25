@@ -6049,11 +6049,11 @@ DWG_OBJECT (DIMASSOC)
       if (!(FIELD_VALUE (associativity) & (1<<rcount1)))
         {
 #ifdef IS_JSON
-          ENDHASH;
+          ENDHASH; PRINTFIRST
 #endif
           continue;
         }
-      LOG_TRACE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
+      LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13

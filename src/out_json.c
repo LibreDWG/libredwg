@@ -14,11 +14,6 @@
  * out_json.c: write as JSON
  * written by Reini Urban
  */
-/* TODO: NOCOMMA and \n not with stdout. stdout is line-buffered (#75),
- *       so NOCOMMA cannot backup past the previous \n to delete the comma.
- *       We really have to add the comma before, not after, and special case
- * the first field, not the last to omit the comma.
- */
 
 #include "config.h"
 #include <stdio.h>
@@ -59,53 +54,55 @@ static char* _path_field(const char *path);
 #define ACTION json
 #define IS_JSON
 
-#define ISLAST (dat->opts & DWG_OPTS_JSONLAST)
-#define SETLAST dat->opts |= DWG_OPTS_JSONLAST
-#define CLEARLAST dat->opts &= ~DWG_OPTS_JSONLAST
+#define ISFIRST (dat->opts & DWG_OPTS_JSONFIRST)
+#define SETFIRST dat->opts |= DWG_OPTS_JSONFIRST
+#define CLEARFIRST dat->opts &= ~DWG_OPTS_JSONFIRST
 
 #define PREFIX _prefix (dat);
+#define PRINTFIRST                                                            \
+  {                                                                           \
+    if (!ISFIRST)                                                             \
+      fprintf (dat->fh, ",\n");                                               \
+    else                                                                      \
+      CLEARFIRST;                                                             \
+  }
+#define FIRSTPREFIX PRINTFIRST PREFIX
+
+#define KEYs(nam) FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", nam)
+// strip path to field only
+#define KEY(nam) FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam))
+
 #define ARRAY                                                                 \
-  fprintf (dat->fh, "[\n");                                                   \
-  dat->bit++
+  {                                                                           \
+    fprintf (dat->fh, "[\n");                                                 \
+    SETFIRST;                                                                 \
+    dat->bit++;                                                               \
+  }
 #define ENDARRAY                                                              \
   {                                                                           \
     fprintf (dat->fh, "\n");                                                  \
     dat->bit--;                                                               \
-    PREFIX fprintf (dat->fh, "]%s\n", ISLAST ? "" : ",");                     \
+    PREFIX fprintf (dat->fh, "]");                                            \
   }
-#define LASTENDARRAY                                                          \
-  {                                                                           \
-    fprintf (dat->fh, "\n");                                                  \
-    dat->bit--;                                                               \
-    PREFIX fprintf (dat->fh, "]\n");                                          \
-  }
-#define KEYs(nam) PREFIX fprintf (dat->fh, "\"%s\": ", nam)
-// strip path to field only
-#define KEY(nam) PREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam))
 #define HASH                                                                  \
-  PREFIX fprintf (dat->fh, "{\n");                                            \
-  dat->bit++
-#define ENDHASH                                                               \
   {                                                                           \
-    fprintf (dat->fh, "\n");                                                  \
-    dat->bit--;                                                               \
-    PREFIX fprintf (dat->fh, "}%s\n", ISLAST ? "" : ",");                     \
+    fprintf (dat->fh, "{\n");                                                 \
+    SETFIRST;                                                                 \
+    dat->bit++;                                                               \
   }
-#define LASTENDHASH                                                           \
+#define ENDHASH                                                               \
   {                                                                           \
     fprintf (dat->fh, "\n");                                                  \
     dat->bit--;                                                               \
     PREFIX fprintf (dat->fh, "}");                                            \
   }
-#define OLD_NOCOMMA fseek (dat->fh, -2, SEEK_CUR)
-#define NOCOMMA assert(0 == "NOCOMMA")
 
 #define TABLE(nam)                                                            \
   KEY (nam);                                                                  \
   HASH
 #define ENDTAB()                                                              \
   ENDHASH
-// a namd hash
+// a named hash
 #define RECORD(nam)                                                           \
   KEY (nam);                                                                  \
   HASH
@@ -113,8 +110,8 @@ static char* _path_field(const char *path);
   ENDHASH
 // a named list
 #define SECTION(nam)                                                          \
-  PREFIX fprintf (dat->fh, "\"%s\": [\n", #nam);                              \
-  dat->bit++;
+  KEY (nam);                                                                  \
+  ARRAY
 #define ENDSEC() ENDARRAY
 
 #undef FORMAT_H
@@ -143,8 +140,9 @@ static char* _path_field(const char *path);
 #define FORMAT_BLx FORMAT_BL
 #define FORMAT_BLX FORMAT_BL
 #define FORMAT_4BITS FORMAT_RC
+
 #define VALUE(value, type, dxf)                                               \
-  fprintf (dat->fh, FORMAT_##type "%s\n", value, ISLAST ? "" : ",")
+  fprintf (dat->fh, FORMAT_##type, value)
 #define VALUE_B(value, dxf) VALUE (value, B, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
@@ -178,7 +176,7 @@ static char* _path_field(const char *path);
     VALUE_RD (pt.x, 0);                                                       \
     fprintf (dat->fh, ", ");                                                  \
     VALUE_RD (pt.y, 0);                                                       \
-    fprintf (dat->fh, " ]%s\n", ISLAST ? "" : ",");                           \
+    fprintf (dat->fh, " ]");                                                  \
   }
 #define VALUE_2DD(pt, d1, d2, dxf) VALUE_2RD (pt, dxf)
 #define VALUE_3RD(pt, dxf)                                                    \
@@ -189,7 +187,7 @@ static char* _path_field(const char *path);
     VALUE_RD (pt.y, 0);                                                       \
     fprintf (dat->fh, ", ");                                                  \
     VALUE_RD (pt.z, 0);                                                       \
-    fprintf (dat->fh, " ]%s\n", ISLAST ? "" : ",");                           \
+    fprintf (dat->fh, " ]");                                                  \
   }
 #define VALUE_3BD(pt, dxf) VALUE_3RD (pt, dxf)
 #define VALUE_TV(nam, dxf)
@@ -197,32 +195,30 @@ static char* _path_field(const char *path);
 #define FIELD(nam, type, dxf)                                                 \
   if (!memBEGINc (#nam, "num_"))                                              \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type "%s\n",               \
-                      _path_field(#nam), _obj->nam, ISLAST ? "" : ",");       \
+      FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type,                 \
+                           _path_field (#nam), _obj->nam);                    \
     }
 #define _FIELD(nam, type, value)                                              \
   {                                                                           \
-    PREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type "%s\n", obj->nam, \
-                    ISLAST ? "" : ",");                                       \
+    FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type, obj->nam);  \
   }
 #define ENT_FIELD(nam, type, value)                                           \
   {                                                                           \
-    PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type "%s\n",                 \
-                    _path_field(#nam), _ent->nam, ISLAST ? "" : ",");         \
+    FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type,                   \
+                         _path_field (#nam), _ent->nam);                      \
   }
 #define SUB_FIELD(o, nam, type, dxf)                                          \
   if (!memBEGINc (#nam, "num_"))                                              \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type "%s\n",               \
-                      _path_field (#nam), _obj->o.nam, ISLAST ? "" : ",");    \
+      FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type,                 \
+                           _path_field (#nam), _obj->o.nam);                  \
     }
 #define FIELD_CAST(nam, type, cast, dxf) FIELD (nam, cast, dxf)
 #define FIELD_TRACE(nam, type)
 #define FIELD_G_TRACE(nam, type, dxf)
 #define FIELD_TEXT(nam, str)                                                  \
   {                                                                           \
-    PREFIX                                                                    \
-    fprintf (dat->fh, "\"%s\": ", _path_field(#nam));                         \
+    FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam));             \
     VALUE_TEXT ((char*)str)                                                   \
   }
 
@@ -237,22 +233,20 @@ static char* _path_field(const char *path);
           {                                                                   \
             const int _len = 6 * len + 1;                                     \
             char *_buf = alloca (_len);                                       \
-            fprintf (dat->fh, "\"%s\"%s\n", json_cquote (_buf, str, _len),    \
-                     ISLAST ? "" : ",");                                      \
+            fprintf (dat->fh, "\"%s\"", json_cquote (_buf, str, _len));       \
             freea (_buf);                                                     \
           }                                                                   \
         else                                                                  \
           {                                                                   \
             const int _len = 6 * len + 1;                                     \
             char *_buf = malloc (_len);                                       \
-            fprintf (dat->fh, "\"%s\"%s\n", json_cquote (_buf, str, _len),    \
-                     ISLAST ? "" : ",");                                      \
+            fprintf (dat->fh, "\"%s\"", json_cquote (_buf, str, _len));       \
             free (_buf);                                                      \
           }                                                                   \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        fprintf (dat->fh, "\"%s\"%s\n", str ? str : "", ISLAST ? "" : ",");   \
+        fprintf (dat->fh, "\"%s\"", str ? str : "");                          \
       }                                                                       \
   }
 
@@ -264,14 +258,12 @@ static char* _path_field(const char *path);
             || wcschr ((wchar_t *)wstr, L'\n')))                              \
       {                                                                       \
         wchar_t *_buf = malloc (6 * wcslen ((wchar_t *)wstr) + 2);            \
-        fprintf (dat->fh, "\"%ls\"%s\n", wcquote (_buf, (wchar_t *)wstr),     \
-                 ISLAST ? "" : ",");                                          \
+        fprintf (dat->fh, "\"%ls\"", wcquote (_buf, (wchar_t *)wstr));        \
         free (_buf);                                                          \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        fprintf (dat->fh, "\"%ls\"%s\n", wstr ? (wchar_t *)wstr : L"",        \
-                 ISLAST ? "" : ",");                                          \
+        fprintf (dat->fh, "\"%ls\"", wstr ? (wchar_t *)wstr : L"");           \
       }
 #else
 #  define VALUE_TEXT_TU(wstr) print_wcquote (dat, (BITCODE_TU)wstr)
@@ -286,63 +278,58 @@ static char* _path_field(const char *path);
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   if (hdlptr)                                                                 \
     {                                                                         \
-      fprintf (dat->fh, FORMAT_HREF "%s\n", ARGS_HREF (hdlptr),               \
-               ISLAST ? "" : ",");                                            \
+      fprintf (dat->fh, FORMAT_HREF "", ARGS_HREF (hdlptr));                  \
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      fprintf (dat->fh, "[0, 0]%s\n", ISLAST ? "" : ",");                     \
+      fprintf (dat->fh, "[0, 0]");                                            \
     }
 #define VALUE_H(hdl, dxf) \
-  fprintf (dat->fh, FORMAT_H "%s\n", hdl.code, hdl.value, ISLAST ? "" : ",")
+  fprintf (dat->fh, FORMAT_H "", hdl.code, hdl.value)
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   {                                                                           \
     if (_obj->nam)                                                            \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "%s\n",               \
-                        _path_field (#nam), ARGS_HREF (_obj->nam),            \
-                        ISLAST ? "" : ",");                                   \
+        FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "",              \
+                             _path_field (#nam), ARGS_HREF (_obj->nam));      \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"%s\": [0, 0]%s\n", _path_field (#nam),    \
-                        ISLAST ? "" : ",");                                   \
+        FIRSTPREFIX fprintf (dat->fh, "\"%s\": [0, 0]", _path_field (#nam));  \
       }                                                                       \
   }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
   {                                                                           \
     if (_obj->o.nam)                                                          \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "%s\n",               \
-                        _path_field (#nam), ARGS_HREF (_obj->o.nam),          \
-                        ISLAST ? "" : ",");                                   \
+        FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "",              \
+                             _path_field (#nam), ARGS_HREF (_obj->o.nam));    \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        PREFIX fprintf (dat->fh, "\"%s\": [0, 0]%s\n", _path_field (#nam),    \
-                        ISLAST ? "" : ",");                                   \
+        FIRSTPREFIX fprintf (dat->fh, "\"%s\": [0, 0]", _path_field (#nam));  \
       }                                                                       \
   }
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE (nam, code, dxf)
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
+  PRINTFIRST;                                                                 \
   if (_obj->nam)                                                              \
     {                                                                         \
-      PREFIX fprintf (dat->fh, FORMAT_HREF "%s\n", ARGS_HREF (_obj->nam),     \
-                      ISLAST ? "" : ",");                                     \
+      PREFIX fprintf (dat->fh, FORMAT_HREF "", ARGS_HREF (_obj->nam));        \
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "[0, 0]%s\n", ISLAST ? "" : ",");              \
+      PREFIX fprintf (dat->fh, "[0, 0]");                                     \
     }
 #define SUB_FIELD_HANDLE_N(o, nam, handle_code, dxf)                          \
+  PRINTFIRST;                                                                 \
   if (_obj->o.nam)                                                            \
     {                                                                         \
-      PREFIX fprintf (dat->fh, FORMAT_HREF "%s\n", ARGS_HREF (_obj->o.nam),   \
-                      ISLAST ? "" : ",");                                     \
+      PREFIX fprintf (dat->fh, FORMAT_HREF "", ARGS_HREF (_obj->o.nam));      \
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "[0, 0]%s\n", ISLAST ? "" : ",");              \
+      PREFIX fprintf (dat->fh, "[0, 0]");                                     \
     }
 #define VALUE_BINARY(buf, len, dxf)                                           \
   {                                                                           \
@@ -354,7 +341,7 @@ static char* _path_field(const char *path);
             fprintf (dat->fh, "%02X", ((BITCODE_RC *)buf)[j]);                \
           }                                                                   \
       }                                                                       \
-    fprintf (dat->fh, "\"%s\n", ISLAST ? "" : ",");                           \
+    fprintf (dat->fh, "\"");                                                  \
   }
 #define FIELD_BINARY(nam, size, dxf)                                          \
   {                                                                           \
@@ -368,7 +355,7 @@ static char* _path_field(const char *path);
             fprintf (dat->fh, "%02X", ((BITCODE_RC *)_obj->nam)[j]);          \
           }                                                                   \
       }                                                                       \
-    fprintf (dat->fh, "\"%s\n", ISLAST ? "" : ",");                           \
+    fprintf (dat->fh, "\"");                                                  \
   }
 
 #define FIELD_B(nam, dxf) FIELD (nam, B, dxf)
@@ -382,16 +369,15 @@ static char* _path_field(const char *path);
     {                                                                         \
       if (!bit_isnan (_obj->nam))                                             \
         {                                                                     \
-          PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));           \
+          FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));      \
           _VALUE_RD (_obj->nam, dxf);                                         \
-          fprintf (dat->fh, "%s\n", ISLAST ? "" : ",");                       \
         }                                                                     \
     }
 #  define FIELD_2RD(nam, dxf)                                                 \
     {                                                                         \
       if (!bit_isnan (_obj->nam.x) && !bit_isnan (_obj->nam.y))               \
         {                                                                     \
-          PREFIX fprintf (dat->fh, "\"" #nam "\": ");                         \
+          FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                    \
           VALUE_2RD (_obj->nam, dxf);                                         \
         }                                                                     \
     }
@@ -400,7 +386,7 @@ static char* _path_field(const char *path);
       if (!bit_isnan (_obj->nam.x) && !bit_isnan (_obj->nam.y)                \
           && !bit_isnan (_obj->nam.z))                                        \
         {                                                                     \
-          PREFIX fprintf (dat->fh, "\"" #nam "\": ");                         \
+          FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                    \
           VALUE_3RD (_obj->nam, dxf);                                         \
         }                                                                     \
     }
@@ -408,33 +394,30 @@ static char* _path_field(const char *path);
     {                                                                         \
       if (!bit_isnan (_obj->o.nam))                                           \
         {                                                                     \
-          PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));           \
+          FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));      \
           _VALUE_RD (_obj->o.nam, dxf);                                       \
-          fprintf (dat->fh, "%s\n", ISLAST ? "" : ",");                       \
         }                                                                     \
     }
 #else /* IS_RELEASE */
 #  define FIELD_BD(nam, dxf)                                                  \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));               \
+      FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));          \
       _VALUE_RD (_obj->nam, dxf);                                             \
-      fprintf (dat->fh, "%s\n", ISLAST ? "" : ",");                           \
     }
 #  define FIELD_2RD(nam, dxf)                                                 \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": ");                             \
+      FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                        \
       VALUE_2RD (_obj->nam, dxf);                                             \
     }
-#  define FIELD_3RD(nam, dxf)                                                  \
+#  define FIELD_3RD(nam, dxf)                                                 \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"" #nam "\": ");                             \
+      FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                        \
       VALUE_3RD (_obj->nam, dxf);                                             \
     }
 #  define SUB_FIELD_BD(o, nam, dxf)                                           \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));               \
+      FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));          \
       _VALUE_RD (_obj->o.nam, dxf);                                           \
-      fprintf (dat->fh, "%s\n", ISLAST ? "" : ",");                           \
     }
 #endif
 
@@ -502,9 +485,8 @@ static char* _path_field(const char *path);
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        PREFIX;                                                               \
-        fprintf (dat->fh, "\"" #nam "\": \"%s\"%s\n", _obj->o.nam,            \
-                 ISLAST ? "" : ",");                                          \
+        PRINTFIRST;                                                           \
+        PREFIX fprintf (dat->fh, "\"" #nam "\": \"%s\"", _obj->o.nam);        \
       }                                                                       \
   }
 #define SUB_FIELD_B(o, nam, dxf) SUB_FIELD (o, nam, B, dxf)
@@ -547,37 +529,34 @@ static char* _path_field(const char *path);
 
 static void
 field_cmc (Bit_Chain *restrict dat, const char *restrict key,
-           const Dwg_Color *restrict color)
+           const Dwg_Color *restrict _obj)
 {
   if (dat->version >= R_2004)
     {
-      PREFIX fprintf (dat->fh, "\"%s\": {\n", _path_field (key));
-      dat->bit++;
-      if (color->index)
+      KEYs (key);
+      HASH;
+      if (_obj->index)
         {
-          PREFIX fprintf (dat->fh, "\"index\": %d%s\n", color->index,
-                          ISLAST ? "" : ",");
+          FIELD_BS (index, 62);
         }
-      PREFIX fprintf (dat->fh, "\"rgb\": \"%06x\"%s\n", (unsigned)color->rgb,
-                      ISLAST ? "" : ",");
-      if (color->flag)
+      FIRSTPREFIX fprintf (dat->fh, "\"rgb\": \"%06x\"", (unsigned)_obj->rgb);
+      if (_obj->flag)
         {
-          PREFIX fprintf (dat->fh, "\"flag\": %d%s\n", color->flag,
-                          ISLAST ? "" : ",");
+          FIELD_BS (flag, 62);
         }
-      if (color->flag > 0 && color->flag < 8)
+      if (_obj->flag > 0 && _obj->flag < 8)
         {
-          if (color->flag & 1)
-            _FIELD_TV_ALPHA (name, color->name)
-          if (color->flag & 2)
-            _FIELD_TV_ALPHA (book_name, color->book_name)
+          if (_obj->flag & 1)
+            _FIELD_TV_ALPHA (name, _obj->name)
+          if (_obj->flag & 2)
+            _FIELD_TV_ALPHA (book_name, _obj->book_name)
         }
-      ENDRECORD ();
+      ENDHASH;
     }
   else
     {
-      PREFIX fprintf (dat->fh, "\"%s\": %d%s\n", _path_field (key),
-                      color->index, ISLAST ? "" : ",");
+      FIRSTPREFIX fprintf (dat->fh, "\"%s\": %d", _path_field (key),
+                           _obj->index);
     }
 }
 
@@ -586,9 +565,9 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
   field_cmc (dat, #color, &_obj->o.color)
 
 #define FIELD_TIMEBLL(nam, dxf)                                               \
-  PREFIX fprintf (dat->fh,                                                    \
-                  "\"" #nam "\": [ " FORMAT_BL ", " FORMAT_BL " ]%s\n",       \
-                  _obj->nam.days, _obj->nam.ms, ISLAST ? "" : ",")
+  FIRSTPREFIX fprintf (dat->fh,                                               \
+                  "\"" #nam "\": [ " FORMAT_BL ", " FORMAT_BL " ]",           \
+                  _obj->nam.days, _obj->nam.ms)
 #define FIELD_TIMERLL(nam, dxf) FIELD_TIMEBLL (nam, dxf)
 
 // FIELD_VECTOR_N(nam, type, size):
@@ -601,40 +580,35 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
-          PREFIX fprintf (dat->fh, FORMAT_##type "%s\n", _obj->nam[vcount],   \
-                          vcount == (BITCODE_BL)size - 1 ? "" : ",");         \
+          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->nam[vcount]); \
         }                                                                     \
     }                                                                         \
+  else                                                                        \
+    FIRSTPREFIX                                                               \
   ENDARRAY;
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   KEY (nam);                                                                  \
   ARRAY;                                                                      \
   if (_obj->nam)                                                              \
     {                                                                         \
-      int _last = ISLAST;                                                     \
       BITCODE_BL _size = (BITCODE_BL)_obj->size;                              \
       PRE (R_2007)                                                            \
       {                                                                       \
         for (vcount = 0; vcount < _size; vcount++)                            \
           {                                                                   \
-            if (vcount == _size - 1)                                          \
-              SETLAST;                                                        \
-            PREFIX VALUE_TEXT (_obj->nam[vcount])                             \
+            FIRSTPREFIX VALUE_TEXT (_obj->nam[vcount])                        \
           }                                                                   \
       }                                                                       \
       else                                                                    \
       {                                                                       \
         for (vcount = 0; vcount < _size; vcount++)                            \
           {                                                                   \
-            if (vcount == _size - 1)                                          \
-              SETLAST;                                                        \
-            PREFIX VALUE_TEXT_TU (_obj->nam[vcount]);                         \
+            FIRSTPREFIX VALUE_TEXT_TU (_obj->nam[vcount]);                    \
           }                                                                   \
       }                                                                       \
-      CLEARLAST;                                                              \
-      if (_last)                                                              \
-        SETLAST;                                                              \
     }                                                                         \
+  else                                                                        \
+    FIRSTPREFIX                                                               \
   ENDARRAY;
 
 #define FIELD_VECTOR(nam, type, size, dxf)                                    \
@@ -644,69 +618,45 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)                                      \
   {                                                                           \
-    int _last = ISLAST;                                                       \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
     for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
       {                                                                       \
-        if (vcount == (BITCODE_BL)_obj->size - 1)                             \
-          SETLAST;                                                            \
-        VALUE_2RD (FIELD_VALUE (nam[vcount]), dxf);                           \
+        PRINTFIRST; VALUE_2RD (FIELD_VALUE (nam[vcount]), dxf);               \
       }                                                                       \
-    CLEARLAST;                                                                \
-    if (_last)                                                                \
-      SETLAST;                                                                \
     ENDARRAY;                                                                 \
   }
 
 #define FIELD_2DD_VECTOR(nam, size, dxf)                                      \
   {                                                                           \
-    int _last = ISLAST;                                                       \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
     for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
       {                                                                       \
-        if (vcount == (BITCODE_BL)_obj->size - 1)                             \
-          SETLAST;                                                            \
-        PREFIX VALUE_2RD (_obj->nam[vcount], dxf);                            \
+        FIRSTPREFIX VALUE_2RD (_obj->nam[vcount], dxf);                       \
       }                                                                       \
-    CLEARLAST;                                                                \
-    if (_last)                                                                \
-      SETLAST;                                                                \
     ENDARRAY;                                                                 \
   }
 
 #define FIELD_3DPOINT_VECTOR(nam, size, dxf)                                  \
   {                                                                           \
-    int _last = ISLAST;                                                       \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
     for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
       {                                                                       \
-        if (vcount == (BITCODE_BL)_obj->size - 1)                             \
-          SETLAST;                                                            \
-        PREFIX VALUE_3BD (FIELD_VALUE (nam[vcount]), dxf);                    \
+        FIRSTPREFIX VALUE_3BD (FIELD_VALUE (nam[vcount]), dxf);               \
       }                                                                       \
-    CLEARLAST;                                                                \
-    if (_last)                                                                \
-      SETLAST;                                                                \
     ENDARRAY;                                                                 \
   }
 
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
   {                                                                           \
-    int _last = ISLAST;                                                       \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
     for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                     \
       {                                                                       \
-        if (vcount == (BITCODE_BL)size - 1)                                   \
-          SETLAST;                                                            \
         FIELD_HANDLE_N (nam[vcount], vcount, code, dxf);                      \
       }                                                                       \
-    CLEARLAST;                                                                \
-    if (_last)                                                                \
-      SETLAST;                                                                \
     ENDARRAY;                                                                 \
   }
 
@@ -717,36 +667,24 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
   if (dat->version >= R_13 && obj->tio.object->num_reactors                   \
       && obj->tio.object->reactors)                                           \
     {                                                                         \
-      int _last = ISLAST;                                                     \
       KEY (reactors);                                                         \
       ARRAY;                                                                  \
       for (vcount = 0; vcount < obj->tio.object->num_reactors; vcount++)      \
         {                                                                     \
-          if (vcount == obj->tio.object->num_reactors - 1)                    \
-            SETLAST;                                                          \
-          PREFIX VALUE_HANDLE (obj->tio.object->reactors[vcount], reactors,   \
-                               code, 330);                                    \
+          FIRSTPREFIX VALUE_HANDLE (obj->tio.object->reactors[vcount], reactors, \
+                                    code, 330);                               \
         }                                                                     \
-      CLEARLAST;                                                              \
-      if (_last)                                                              \
-        SETLAST;                                                              \
       ENDARRAY;                                                               \
     }
 #define ENT_REACTORS(code)                                                    \
   if (dat->version >= R_13 && ent->num_reactors && ent->reactors)             \
     {                                                                         \
-      int _last = ISLAST;                                                     \
       KEY (reactors);                                                         \
       ARRAY;                                                                  \
       for (vcount = 0; vcount < ent->num_reactors; vcount++)                  \
         {                                                                     \
-          if (vcount == ent->num_reactors - 1)                                \
-            SETLAST;                                                          \
-          PREFIX VALUE_HANDLE (ent->reactors[vcount], reactors, code, 330);   \
+          FIRSTPREFIX VALUE_HANDLE (ent->reactors[vcount], reactors, code, 330);   \
         }                                                                     \
-      CLEARLAST;                                                              \
-      if (_last)                                                              \
-        SETLAST;                                                              \
       ENDARRAY;                                                               \
     }
 
@@ -754,40 +692,32 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
   KEY (nam);                                                                  \
   if (_obj->o.nam)                                                            \
     {                                                                         \
-      int _last = ISLAST;                                                     \
       ARRAY;                                                                  \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
         {                                                                     \
-          if (vcount == (BITCODE_BL)_obj->o.size - 1)                         \
-            SETLAST;                                                          \
           SUB_FIELD_HANDLE_N (o, nam[vcount], code, dxf);                     \
         }                                                                     \
-      CLEARLAST;                                                              \
-      if (_last)                                                              \
-        SETLAST;                                                              \
       ENDARRAY;                                                               \
     }                                                                         \
   else                                                                        \
-    fprintf (dat->fh, "[]%s\n", ISLAST ? "" : ",");
+    {                                                                         \
+      PRINTFIRST;                                                             \
+      fprintf (dat->fh, "[]");                                                \
+    }
 
 // violates duplicate keys
 #define SUBCLASS(name) \
-  PREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\"%s\n", ISLAST ? "" : ",");
+  FIRSTPREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\"");
 
 // FIXME: for KEY not the complete nam path, only the field.
 // e.g. verts[rcount1].lines[rcount2].segparms
 #define _REPEAT_N(times, nam, type, idx)                                      \
   if (_obj->nam)                                                              \
     {                                                                         \
-      GCC46_DIAG_IGNORE (-Wshadow)                                            \
-      int _rlast = ISLAST;                                                    \
-      GCC46_DIAG_RESTORE                                                      \
       KEY (nam);                                                              \
       ARRAY;                                                                  \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)   \
-        {                                                                     \
-          if (rcount##idx == (BITCODE_BL)times - 1)                           \
-            SETLAST;
+        {
 #define REPEAT_N(times, nam, type) _REPEAT_N(times, nam, type, 1)
 #define REPEAT_CN(times, nam, type) REPEAT_N(times, nam, type)
 #define _REPEAT_C(times, nam, type, idx) _REPEAT_N (_obj->times, nam, type, idx)
@@ -806,19 +736,13 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
 
 #undef REPEAT_BLOCK
 #define REPEAT_BLOCK                                                          \
-    HASH;
+    FIRSTPREFIX HASH;
 #undef END_REPEAT_BLOCK
 #define END_REPEAT_BLOCK                                                      \
-    CLEARLAST;                                                                \
-    if (_rlast)                                                               \
-      SETLAST;                                                                \
     ENDHASH;                                                                  \
   }
 #undef END_REPEAT
 #define END_REPEAT(nam)                                                       \
-      CLEARLAST;                                                              \
-      if (_rlast)                                                             \
-        SETLAST;                                                              \
       ENDARRAY;                                                               \
     }
 
@@ -952,12 +876,12 @@ json_eed (Bit_Chain *restrict dat,
   for (BITCODE_BL i = 0; i < obj->num_eed; i++)
     {
       const Dwg_Eed* _obj = &obj->eed[i];
-      HASH;
+      FIRSTPREFIX HASH;
       if (_obj->size)
         {
-          KEY (size); VALUE_RS (_obj->size, 0);
-          KEY (handle); // never the last
-          fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (_obj->handle));
+          FIELD (size, RS, 0);
+          KEY (handle);
+          fprintf (dat->fh, FORMAT_H, ARGS_H (_obj->handle));
         }
       if (_obj->data)
         {
@@ -994,12 +918,8 @@ json_eed (Bit_Chain *restrict dat,
             default: VALUE_RC (0, 0);
             }
         }
-      if (i == obj->num_eed - 1)
-        LASTENDHASH
-      else
-        ENDHASH
+      ENDHASH
     }
-  //NOCOMMA;
   ENDARRAY;
   return error;
 }
@@ -1009,17 +929,14 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
 {
   int error = 0;
   Dwg_Resbuf *rbuf = obj->xdata;
-  int was_last = ISLAST;
   KEY (xdata);
   ARRAY;
   for (BITCODE_BL i = 0; i < obj->num_xdata; i++)
     {
       enum RES_BUF_VALUE_TYPE type;
-      if (i == obj->num_xdata - 1)
-        SETLAST;
-      PREFIX ARRAY;
-      PREFIX VALUE_RS (rbuf->type, 0);
-      PREFIX
+      FIRSTPREFIX ARRAY;
+      FIRSTPREFIX VALUE_RS (rbuf->type, 0);
+      FIRSTPREFIX
       type = get_base_value_type (rbuf->type);
       switch (type)
         {
@@ -1065,29 +982,22 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
                      rbuf->type);
           break;
         case VT_POINT3D:
-          fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ],\n",
+          fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ]",
                    rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2]);
           LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", i, rbuf->value.pt[0],
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
-          fprintf (dat->fh, FORMAT_H ",\n", ARGS_H (rbuf->value.h));
+          fprintf (dat->fh, FORMAT_H "", ARGS_H (rbuf->value.h));
           break;
         case VT_INVALID:
         default:
           break;
         }
       rbuf = rbuf->next;
-      if (i == obj->num_xdata - 1)
-        LASTENDARRAY
-      else
-        ENDARRAY
+      ENDARRAY
     }
-  CLEARLAST;
-  if (was_last)
-    SETLAST;
-  //NOCOMMA;
   ENDARRAY;
   return error;
 }
@@ -1152,7 +1062,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
   uint16_t c;
   if (!ws)
     {
-      fprintf (dat->fh, "\"\",\n");
+      fprintf (dat->fh, "\"\"");
       return;
     }
   fprintf (dat->fh, "\"");
@@ -1195,7 +1105,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
       else
         fprintf (dat->fh, "%c", (char)(c & 0xff));
     }
-  fprintf (dat->fh, "\",\n");
+  fprintf (dat->fh, "\"");
 }
 
 #else
@@ -1575,13 +1485,10 @@ json_fileheader_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   RECORD (FILEHEADER); // single hash
   KEY (version);
-  fprintf (dat->fh, "\"%s\",\n", version_codes[dwg->header.version]);
-
+  fprintf (dat->fh, "\"%s\"", version_codes[dwg->header.version]);
   // clang-format off
   #include "header.spec"
   // clang-format on
-
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1603,7 +1510,6 @@ json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "header_variables.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1617,7 +1523,7 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (i = 0; i < dwg->num_classes; i++)
     {
       Dwg_Class *_obj = &dwg->dwg_class[i];
-      HASH;
+      FIRSTPREFIX HASH;
       FIELD_BS (number, 0);
       FIELD_TV (dxfname, 1);
       FIELD_T (cppname, 2);
@@ -1625,13 +1531,9 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       FIELD_BS (proxyflag, 90);
       FIELD_BL (num_instances, 91);
       FIELD_B (is_zombie, 280);
-      SETLAST;
       FIELD_BS (item_class_id, 281);
-      CLEARLAST;
-      if (i == dwg->num_classes - 1)
-        LASTENDHASH
-      else
-        ENDHASH
+      ENDHASH
+      CLEARFIRST;
     }
   ENDSEC ();
   return 0;
@@ -1642,17 +1544,16 @@ json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
 
+  CLEARFIRST;
   SECTION (OBJECTS);
   for (i = 0; i < dwg->num_objects; i++)
     {
       int error;
       Dwg_Object *obj = &dwg->object[i];
-      HASH;
+      FIRSTPREFIX HASH;
       error = dwg_json_object (dat, obj);
-      if (i == dwg->num_objects - 1)
-        LASTENDHASH
-      else
-        ENDHASH
+      ENDHASH
+      CLEARFIRST;
     }
   ENDSEC ();
   return 0;
@@ -1664,15 +1565,14 @@ static int
 json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL j;
+  CLEARFIRST;
   SECTION (HANDLES);
   for (j = 0; j < dwg->num_objects; j++)
     {
       Dwg_Object *obj = &dwg->object[j];
       // handle => abs. offset
       // TODO: The real HANDLES section omap has handleoffset (deleted holes) and addressoffset
-      PREFIX;
-      fprintf (dat->fh, "[ %lu, %lu ]%s\n", obj->handle.value, obj->address,
-               j == dwg->num_objects - 1 ? "" : ",");
+      FIRSTPREFIX fprintf (dat->fh, "[ %lu, %lu ]", obj->handle.value, obj->address);
     }
   ENDSEC ();
   return 0;
@@ -1691,12 +1591,10 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->chain += 16; /* skip the sentinel */
       KEY (THUMBNAILIMAGE);
       HASH;
-      PREFIX fprintf (dat->fh, "\"size\": %lu,\n", _obj->size);
-      SETLAST;
+      FIRSTPREFIX fprintf (dat->fh, "\"size\": %lu", _obj->size);
       FIELD_BINARY (chain, _obj->size, 310);
       if (dwg->header.from_version >= R_2004)
         _obj->chain -= 16; /* undo for free */
-      CLEARLAST;
       ENDHASH;
     }
   return 0;
@@ -1713,7 +1611,6 @@ json_section_r2004fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "r2004_file_header.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1730,7 +1627,6 @@ json_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "summaryinfo.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1748,7 +1644,6 @@ json_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   //#include "vbaproject.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1765,7 +1660,6 @@ json_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "appinfo.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1779,13 +1673,11 @@ json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RL rcount1;
 
   RECORD (AppInfoHistory); // single hash
-  SETLAST;
-  PREFIX fprintf (dat->fh, "\"size\": %d,\n", _obj->size);
+  FIRSTPREFIX fprintf (dat->fh, "\"size\": %d", _obj->size);
   FIELD_BINARY (unknown_bits, _obj->size, 0);
   // clang-format off
   //#include "appinfohistory.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1802,7 +1694,6 @@ json_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "filedeplist.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1819,7 +1710,6 @@ json_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "security.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1836,9 +1726,7 @@ json_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   FIELD_RL (class_version, 0);
   FIELD_RL (class_minor, 0);
   FIELD_RL (num_histories, 0);
-  SETLAST;
   FIELD_VECTOR (histories, RL, num_histories, 0)
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1855,7 +1743,6 @@ json_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "objfreespace.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1872,7 +1759,6 @@ json_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "template.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1889,7 +1775,6 @@ json_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "auxheader.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1908,7 +1793,6 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   //#include "2ndheader.spec"
   // clang-format on
-  CLEARLAST;
   ENDRECORD ();
   return 0;
 }
@@ -1921,8 +1805,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_Header *obj = &dwg->header;
   int error = 0;
 
-  fprintf (dat->fh, "{\n  \"created_by\": \"%s\",\n",
-           PACKAGE_STRING);
+  fprintf (dat->fh, "{\n  \"created_by\": \"%s\"", PACKAGE_STRING);
   dat->bit++; // ident
 
   if (!minimal)
@@ -1966,9 +1849,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= json_section_security (dat, dwg);
           error |= json_section_revhistory (dat, dwg);
           error |= json_section_objfreespace (dat, dwg);
-          SETLAST;
           error |= json_section_template (dat, dwg);
-          CLEARLAST;
         }
     }
 
