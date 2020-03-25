@@ -4,8 +4,8 @@
 
 FROM python:2.7.17-buster AS extracting
 LABEL maintainer="azoulayos@protonmail.com"
-RUN apt-get update && apt-get upgrade -y &&\
-    apt-get install -y git autoconf libtool swig texinfo build-essential gcc python-libxml2 && \
+RUN apt-get update &&\
+    apt-get install -y --no-install-recommends git autoconf libtool swig texinfo build-essential gcc python-libxml2 && \
     LIBXML2VER=2.9.1 && \
     mkdir libxmlInstall && cd libxmlInstall && \
     wget ftp://xmlsoft.org/libxml2/libxml2-$LIBXML2VER.tar.gz && \
@@ -36,5 +36,6 @@ COPY --from=extracting /app/libredwg/ldwg/usr/local/include/* /usr/local/include
 COPY --from=extracting /app/libredwg/ldwg/usr/local/lib/* /usr/local/lib/
 RUN ldconfig
 
+CMD [ "sh" ]
 
 
