@@ -619,6 +619,8 @@ typedef struct _dwg_object_DATALINK               dwg_obj_datalink;
 typedef struct _dwg_object_DATATABLE              dwg_obj_datatable;
 typedef struct _dwg_object_DETAILVIEWSTYLE        dwg_obj_detailviewstyle;
 typedef struct _dwg_object_SECTIONVIEWSTYLE       dwg_obj_sectionviewstyle;
+typedef struct _dwg_object_LAYERFILTER            dwg_obj_layerfilter;
+typedef struct _dwg_object_LAYOUTPRINTCONFIG      dwg_obj_layoutprintconfig;
 #endif
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
@@ -634,8 +636,6 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE       dwg_obj_sectionviewstyle;
 //typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM  dwg_obj_assocosnappointrefactionparam;
 //typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM         dwg_obj_assocvertexactionparam;
 //typedef struct _dwg_object_DOCUMENTOPTIONS      dwg_obj_documentoptions;
-//typedef struct _dwg_object_LAYERFILTER         dwg_obj_layerfilter;
-//typedef struct _dwg_object_LAYOUTPRINTCONFIG    dwg_obj_layoutprintconfig;
 //typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA dwg_obj_leaderobjectcontextdata;
 //typedef struct _dwg_object_NPOCOLLECTION        dwg_obj_npocollection;
 //typedef struct _dwg_object_POINTCLOUD           dwg_obj_pointcloud;
@@ -837,6 +837,8 @@ DWG_GETALL_OBJECT_DECL (DATALINK)
 DWG_GETALL_OBJECT_DECL (DATATABLE)
 DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
+DWG_GETALL_OBJECT_DECL (LAYERFILTER)
+DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
 #endif
 // unhandled:
 // DWG_GETALL_OBJECT_DECL (ACDSRECORD)
@@ -852,8 +854,6 @@ DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
 // DWG_GETALL_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 // DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 // DWG_GETALL_OBJECT_DECL (DOCUMENTOPTIONS)
-// DWG_GETALL_OBJECT_DECL (LAYERFILTER)
-// DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
 // DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
 // DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
@@ -1277,6 +1277,8 @@ dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
 dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
+dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
+dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
 #endif
 // unhandled:
 // dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD)
@@ -1292,8 +1294,6 @@ dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
 // dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
 // dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 // dwg_get_OBJECT_DECL (obj_documentoptions, DOCUMENTOPTIONS)
-// dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
-// dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
 // dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
 // dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
 // dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION)

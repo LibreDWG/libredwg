@@ -5803,6 +5803,25 @@ H,	DXF 6
 @end vtable
 @end indentedblock
 
+@strong{LAYERFILTER} @anchor{LAYERFILTER}
+@cindex object, LAYERFILTER
+@vindex LAYERFILTER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+@item name
+T,	DXF 2
+@item description
+T,	DXF 3
+
+@end vtable
+@end indentedblock
+
 @strong{LAYER_CONTROL} @anchor{LAYER_CONTROL}
 @cindex object, LAYER_CONTROL
 @vindex LAYER_CONTROL
@@ -5952,6 +5971,23 @@ H,	DXF 345
 BL
 @item viewports
 H*
+
+@end vtable
+@end indentedblock
+
+@strong{LAYOUTPRINTCONFIG} @anchor{LAYOUTPRINTCONFIG}
+@cindex object, LAYOUTPRINTCONFIG
+@vindex LAYOUTPRINTCONFIG
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+@item flag
+BS,	DXF 93
 
 @end vtable
 @end indentedblock

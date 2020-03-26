@@ -111,7 +111,9 @@ testobjects = \
 	layer \
 	layer_control \
 	layer_index \
+	layerfilter \
 	layout \
+	layoutprintconfig \
 	leader \
 	light \
 	lightlist \

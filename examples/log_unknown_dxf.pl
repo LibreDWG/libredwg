@@ -1571,6 +1571,13 @@ my $known = {
     290 => 'show_all_bend_indentifiers',
     290 => 'show_end_and_bend_lines',
     ],
+  LAYERFILTER => [
+    2 => 'name',
+    3 => 'description',
+    ],
+  LAYOUTPRINTCONFIG => [
+    93 => 'flag',
+    ],
 };
 
 my $firstline = "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n"

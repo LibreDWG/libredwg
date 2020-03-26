@@ -5499,6 +5499,24 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE
   BITCODE_B show_hatching;
 } Dwg_Object_SECTIONVIEWSTYLE;
 
+typedef struct _dwg_object_LAYERFILTER
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BS class_version; /*!< DXF 70 0 */
+  BITCODE_T name;
+  BITCODE_T description;
+  // ...
+} Dwg_Object_LAYERFILTER;
+
+typedef struct _dwg_object_LAYOUTPRINTCONFIG
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS class_version; /* 2 */
+  // ...
+  BITCODE_BS flag; /*!< DXF 93 0 */
+} Dwg_Object_LAYOUTPRINTCONFIG;
+
 /**
  -----------------------------------
  */
@@ -5796,7 +5814,9 @@ typedef struct _dwg_object_object
     Dwg_Object_IMAGEDEF *IMAGEDEF;
     Dwg_Object_IMAGEDEF_REACTOR *IMAGEDEF_REACTOR;
     Dwg_Object_LAYER_INDEX *LAYER_INDEX;
+    Dwg_Object_LAYERFILTER *LAYERFILTER;
     Dwg_Object_LAYOUT *LAYOUT;
+    Dwg_Object_LAYOUTPRINTCONFIG *LAYOUTPRINTCONFIG;
     Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_LONG_TRANSACTION *LONG_TRANSACTION;
     Dwg_Object_MATERIAL *MATERIAL;
@@ -6653,8 +6673,8 @@ EXPORT int dwg_add_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_add_GEOMAPIMAGE (Dwg_Object *obj);
 EXPORT int dwg_add_GEOPOSITIONMARKER (Dwg_Object *obj);
-//EXPORT int dwg_add_LAYERFILTER (Dwg_Object *obj);
-//EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
+EXPORT int dwg_add_LAYERFILTER (Dwg_Object *obj);
+EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_add_MESH (Dwg_Object *obj);

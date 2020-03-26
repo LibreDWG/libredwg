@@ -30749,6 +30749,62 @@ static int test_LAYER (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_LAYERFILTER (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_LAYERFILTER *restrict layerfilter = obj->tio.object->tio.LAYERFILTER;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "class_version", &class_version, NULL)
+        && class_version == layerfilter->class_version)
+      pass ();
+    else
+      fail ("LAYERFILTER.class_version [BS] %hu != %hu", layerfilter->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (layerfilter, "LAYERFILTER", "class_version", &class_version, 0)
+        && class_version == layerfilter->class_version)
+      pass ();
+    else
+      fail ("LAYERFILTER.class_version [BS] set+1 %hu != %hu", layerfilter->class_version, class_version);
+    layerfilter->class_version--;
+  }
+  {
+    BITCODE_T description;
+    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "description", &description, NULL)
+        && description
+           ? strEQ ((char *)description, (char *)layerfilter->description)
+           : !layerfilter->description)
+      pass ();
+    else
+      fail ("LAYERFILTER.description [T] '%s' <> '%s'", description, layerfilter->description);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)layerfilter->name)
+           : !layerfilter->name)
+      pass ();
+    else
+      fail ("LAYERFILTER.name [T] '%s' <> '%s'", name, layerfilter->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "parent", &parent, NULL)
+        && !memcmp (&parent, &layerfilter->parent, sizeof (layerfilter->parent)))
+        pass ();
+    else
+        fail ("LAYERFILTER.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("LAYERFILTER") || is_class_debugging ("LAYERFILTER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYERFILTER", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_LAYER_CONTROL (const Dwg_Object *obj)
 {
   int error = 0;
@@ -31457,6 +31513,57 @@ static int test_LAYOUT (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("LAYOUT") || is_class_debugging ("LAYOUT")))
     {
       ok ("%s failed %d tests (TODO unstable)", "LAYOUT", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_LAYOUTPRINTCONFIG (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_LAYOUTPRINTCONFIG *restrict layoutprintconfig = obj->tio.object->tio.LAYOUTPRINTCONFIG;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "class_version", &class_version, NULL)
+        && class_version == layoutprintconfig->class_version)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.class_version [BS] %hu != %hu", layoutprintconfig->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "class_version", &class_version, 0)
+        && class_version == layoutprintconfig->class_version)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.class_version [BS] set+1 %hu != %hu", layoutprintconfig->class_version, class_version);
+    layoutprintconfig->class_version--;
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "flag", &flag, NULL)
+        && flag == layoutprintconfig->flag)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.flag [BS] %hu != %hu", layoutprintconfig->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "flag", &flag, 0)
+        && flag == layoutprintconfig->flag)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.flag [BS] set+1 %hu != %hu", layoutprintconfig->flag, flag);
+    layoutprintconfig->flag--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "parent", &parent, NULL)
+        && !memcmp (&parent, &layoutprintconfig->parent, sizeof (layoutprintconfig->parent)))
+        pass ();
+    else
+        fail ("LAYOUTPRINTCONFIG.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("LAYOUTPRINTCONFIG") || is_class_debugging ("LAYOUTPRINTCONFIG")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYOUTPRINTCONFIG", failed);
       failed = 0;
     }
   return failed;
@@ -40734,7 +40841,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 37406 "dynapi_test.c"
+#line 40844 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -40954,12 +41061,16 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGEDEF_REACTOR(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
     error += test_LAYER(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYERFILTER)
+    error += test_LAYERFILTER(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_CONTROL)
     error += test_LAYER_CONTROL(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_INDEX)
     error += test_LAYER_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
     error += test_LAYOUT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYOUTPRINTCONFIG)
+    error += test_LAYOUTPRINTCONFIG(obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
     error += test_LEADEROBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
@@ -41272,12 +41383,16 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGEDEF_REACTOR (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
     error += test_LAYER (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYERFILTER)
+    error += test_LAYERFILTER (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_CONTROL)
     error += test_LAYER_CONTROL (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_INDEX)
     error += test_LAYER_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
     error += test_LAYOUT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYOUTPRINTCONFIG)
+    error += test_LAYOUTPRINTCONFIG (obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
     error += test_LEADEROBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
@@ -41382,7 +41497,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 38002 "dynapi_test.c"
+#line 41500 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -42274,6 +42389,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"LAYER\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_LAYERFILTER);
+  size2 = dwg_dynapi_fields_size ("LAYERFILTER");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_LAYERFILTER): %d != "
+               "dwg_dynapi_fields_size (\"LAYERFILTER\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_LAYER_CONTROL);
   size2 = dwg_dynapi_fields_size ("LAYER_CONTROL");
   if (size1 != size2)
@@ -42296,6 +42419,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_LAYOUT): %d != "
                "dwg_dynapi_fields_size (\"LAYOUT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_LAYOUTPRINTCONFIG);
+  size2 = dwg_dynapi_fields_size ("LAYOUTPRINTCONFIG");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_LAYOUTPRINTCONFIG): %d != "
+               "dwg_dynapi_fields_size (\"LAYOUTPRINTCONFIG\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_LEADEROBJECTCONTEXTDATA);
