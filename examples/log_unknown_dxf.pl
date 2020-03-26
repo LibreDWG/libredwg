@@ -52,8 +52,6 @@ open my $f2, ">", "$dir/alldxf_2.inc" or die "$!";
 my $i = 0;
 my (%skip, %dupl);
 
-`rm $dir/alldxf_[A-Z_]+.inc`;
-
 if (0) {
   open my $skip_fh, "<", "examples/alldwg.skip"
     or warn "examples/alldwg.skip missing";
@@ -1595,7 +1593,7 @@ print $f0 "// name, dxf, handle, bytes, is_entity, num_bits, commonsize, hdloff,
           "strsize, hdlsize, bitsize, fieldptr\n";
 print $f1a $firstline;
 print $f2 $firstline;
-my ($f1, $prevobj);
+my ($f, $f1, $prevdxf, $prevobj);
 
 LINE:
 while (<>) {
@@ -1655,16 +1653,26 @@ while (<>) {
   #  #warn "=> try HANDLE($hdl)\n";
   #}
 
-  open my $f, "$fdxf" or next LINE;
+  # linear search in dxf file for this obj-handle
+
+  if (!$f or $fdxf ne $prevdxf) {
+    close $f if $f;
+    open $f, "$fdxf" or next LINE;
+    $prevdxf = $fdxf;
+  }
   if ($obj ne $prevobj) {
+    # also enforce a new dxffile, as the prev obj might have been be after the current one
+    # and we cannot walk back.
+    undef $f;
     $prevobj = $obj;
     print $f1a "#include \"alldxf_$obj.inc\"\n";
     close $f1 if $f1;
-    open $f1, ">>", "$dir/alldxf_$obj.inc" or next LINE;
+    # objects ARE sorted
+    open $f1, ">", "$dir/alldxf_$obj.inc" or next LINE;
     print $f1 $firstline;
     print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
-  } else {
-    open $f1, ">>", "$dir/alldxf_$obj.inc" or next LINE;
+#  } else {
+#    open $f1, ">>", "$dir/alldxf_$obj.inc" or next LINE;
   }
 
   my ($foundobj, $foundhdl, @FIELD, $in_entity);
@@ -1676,6 +1684,7 @@ while (<>) {
     @avail = @{$known->{UNDERLAYDEFINITION}};
   }
   @avail = @{$known->{$obj}} if exists $known->{$obj};
+  # cannot walk back
   while (my $code = <$f>) {
     $code =~ s/\cM\cJ//;
     my $v = <$f>;
@@ -1777,9 +1786,10 @@ while (<>) {
       }
     }
   }
-  close $f;
+  # stay in there. only close on new obj or changed dxf
+  #close $f;
 }
-close $f0; close $f1; close $f1a; close $f2;
+close $f; close $f0; close $f1; close $f1a; close $f2;
 
 sub is_common_entity {
   my ($code, $v, $name) = @_;

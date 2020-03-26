@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_SWEEP_CLASS 2E2 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2030[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_243[] = {
   //{ 5, "2E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -98,7 +98,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2030[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 2E2 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2031[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_244[] = {
   //{ 5, "2E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -193,7 +193,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2031[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 2E2 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2032[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_245[] = {
   //{ 5, "2E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -288,7 +288,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2032[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 22C7 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2033[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_246[] = {
   //{ 5, "22C7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "22C8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -356,101 +356,6 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2033[] = {
     { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
     { 47, "0.0000000000030868", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 47, "48140.99121070132", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 47, "0.0000000000030868", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 47, "0.000000000015409", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 47, "-1.0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 47, "-101869.3557188664", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 47, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 47, "0.000000000015409", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 47, "630.0000000000001", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 47, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_align_start", 4, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "align_option", 3, {-1,-1,-1,-1,-1} },
-    { 71, "1", NULL, 0, BITS_UNKNOWN, "miter_option", 3, {-1,-1,-1,-1,-1} },
-    { 292, "1", NULL, 0, BITS_UNKNOWN, "bank", 4, {-1,-1,-1,-1,-1} },
-    { 293, "0", NULL, 0, BITS_UNKNOWN, "check_intersections", 2, {-1,-1,-1,-1,-1} },
-    { 294, "0", NULL, 0, BITS_UNKNOWN, "shsw_b294", 2, {-1,-1,-1,-1,-1} },
-    { 295, "1", NULL, 0, BITS_UNKNOWN, "shsw_b295", 4, {-1,-1,-1,-1,-1} },
-    { 296, "1", NULL, 0, BITS_UNKNOWN, "shsw_b296", 4, {-1,-1,-1,-1,-1} },
-    { 11, "0.0", NULL, 0, BITS_UNKNOWN, "pt2", 37, {-1,-1,-1,-1,-1} },
-    { 21, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShSweep", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_SWEEP_CLASS 22CC in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_2034[] = {
-  //{ 5, "22CC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "22CD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "class_version", 3, {-1,-1,-1,-1,-1} },
-    { 98, "33", NULL, 0, BITS_UNKNOWN, "ee_bl98", 3, {-1,-1,-1,-1,-1} },
-    { 99, "29", NULL, 0, BITS_UNKNOWN, "ee_bl99", 3, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistoryNode", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "shhn_bl90", 3, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 3, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_UNKNOWN, "shhn_pts", 10, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 42, "0.0", NULL, 0, BITS_UNKNOWN, "draft_angle", 37, {-1,-1,-1,-1,-1} },
-    { 43, "-10.0", NULL, 0, BITS_UNKNOWN, "start_draft_dist", 1, {-1,-1,-1,-1,-1} },
-    { 44, "0.0", NULL, 0, BITS_UNKNOWN, "end_draft_dist", 37, {-1,-1,-1,-1,-1} },
-    { 45, "1.0", NULL, 0, BITS_UNKNOWN, "scale_factor", 10, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "sweepentity_transform", 37, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "pathentity_transform", 37, {-1,-1,-1,-1,-1} },
-    { 48, "0.0", NULL, 0, BITS_UNKNOWN, "twist_angle", 37, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "align_angle", 37, {-1,-1,-1,-1,-1} },
-    { 50, "57.29577951308232", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 51, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 52, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 53, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 54, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 55, "57.29577951308232", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 62, "5", NULL, 0, BITS_UNKNOWN, "color", 1, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 347, "11", NULL, 0, BITS_UNKNOWN, "shhn_bl347", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShPrimitive", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShSweepBase", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "shsw_bl90", 3, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shsw_bl91", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_UNKNOWN, "basept", 37, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 92, "18", NULL, 0, BITS_UNKNOWN, "shsw_bl92", 1, {-1,-1,-1,-1,-1} },
-    { 90, "464", NULL, 0, BITS_UNKNOWN, "shsw_text_size", 1, {-1,-1,-1,-1,-1} },
-    { 310, "0D207FEDD7E179D001C4406B1D5DEF8C000000000002C20D00000000000000294029709B2CB249A2CF4000000000000F0BF32B814E08F3C6C0F4CC", NULL, 0, BITS_UNKNOWN, "shsw_text", 1, {-1,-1,-1,-1,-1} },
-    { 93, "19", NULL, 0, BITS_UNKNOWN, "shsw_bl93", 1, {-1,-1,-1,-1,-1} },
-    { 90, "408", NULL, 0, BITS_UNKNOWN, "shsw_text2_size", 1, {-1,-1,-1,-1,-1} },
-    { 310, "0D207FEDD7E179D001C4406B1D5DEF8C000400000002C20D006483FFB75F85E7402910C1AC554C7E700E0BA020000B08340A4CCC", NULL, 0, BITS_UNKNOWN, "shsw_text2", 1, {-1,-1,-1,-1,-1} },
-    { 42, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 44, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 45, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 48, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "49418.79131363257", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "-100987.3631515802", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 46, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 47, "1.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 37, {-1,-1,-1,-1,-1} },
-    { 47, "0.0000000000030868", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 47, "48170.99121070132", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 47, "0.0000000000030868", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 47, "0.000000000015409", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 47, "-1.0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
