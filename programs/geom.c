@@ -123,4 +123,5 @@ transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
   return;
 }
 
-// TODO: bulge -> arc for svg and ps
+// TODO: bulge -> arc for svg and ps.
+// Segmentation of arc,curves into plines for geojson.

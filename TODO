@@ -2,25 +2,23 @@
 * PROXY subentities, PROXY_ENTITY
 * CELLSTYLEMAP TABLE_Cell struct
 * Enabled, but un(der)tested:
-  GEODATA HELIX LONG_TRANSACTION PROXY_OBJECT DIMASSOC MULTILEADER
-  LIGHT DYNAMICBLOCKPURGEPREVENTER
-  DBCOLOR ASSOCDEPENDENCY ASSOCPLANESURFACEACTIONBODY
-  TABLESTYLE (r2010+ unhandled)
-* Unhandled (fields spec'ed but broken/untested): GEOPOSITIONMARKER
-  PLANESURFACE EXTRUDEDSURFACE
+  ASSOCDEPENDENCY ASSOC*SURFACEACTIONBODY DBCOLOR DIMASSOC GEODATA HELIX
+  OBJECT_PTR PERSSUBENTMANAGER  MULTILEADER LIGHT PROXY_OBJECT
+  PLOTSETTINGS VISUALSTYLE TABLESTYLE (works only pre-2010)
+* Unhandled (fields spec'ed but broken/untested):
+  GEOPOSITIONMARKER PLANESURFACE EXTRUDEDSURFACE
   LOFTEDSURFACE REVOLVEDSURFACE SWEPTSURFACE TABLE
   TABLECONTENT TABLEGEOMETRY CELLSTYLEMAP MATERIAL PLOTSETTINGS SUN
   SUNSTUDY VBA_PROJECT ASSOCACTION ASSOCNETWORK
   ASSOCALIGNEDDIMACTIONBODY ASSOCOSNAPPOINTREFACTIONPARAM
   ASSOCPERSSUBENTMANAGER ASSOC2DCONSTRAINTGROUP EVALUATION_GRAPH
-  ACSH_SWEEP_CLASS ACDBNAVISWORKSMODELDEF LIGHTLIST
+  ACSH_HISTORY_CLASS ACSH_SWEEP_CLASS ACDBNAVISWORKSMODELDEF
+  LIGHTLIST *OBJECTCONTEXTDATA ARC_DIMENSION ASSOCGEOMDEPENDENCY
+  ASSOCOSNAPPOINTREFACTIONPARAM ASSOCVERTEXACTIONPARAM DATATABLE
+  DATALINK DETAILVIEWSTYLE SECTIONVIEWSTYLE LAYOUTPRINTCONFIG
 * Unhandled (i.e. passed through, no DXF and fields):
-  ACSH_HISTORY_CLASS ARCALIGNEDTEXT ARC_DIMENSION
-  ASSOCGEOMDEPENDENCY ASSOCOSNAPPOINTREFACTIONPARAM
-  ASSOCVERTEXACTIONPARAM DATATABLE
-  DETAILVIEWSTYLE DOCUMENTOPTIONS GEODATA
-  LAYOUTPRINTCONFIG LEADEROBJECTCONTEXTDATA NPOCOLLECTION
-  POINTCLOUD RTEXT SECTIONVIEWSTYLE XREFPANELOBJECT
+  ARCALIGNEDTEXT  DOCUMENTOPTIONS NPOCOLLECTION
+  POINTCLOUD RTEXT XREFPANELOBJECT
 * add test coverage - i.e. an extended example_2018.dwg with all types,
   for the following missing entities:
   BODY CAMERA DIMENSION_ANG3PT DIMENSION_DIAMETER
@@ -55,6 +53,8 @@
 * encode for 2004+: move the local structs to the dwg, as union?
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * finish GeoJSON http://geojson.org/geojson-spec.html
+  ELLIPSE, ARC, CIRCLE: needs segmentation into lines
+  MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)
 * maybe dwgfilter, as from the osmctools, with keep and drop rules.
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.
@@ -62,8 +62,7 @@
 * add one of the easy OGR formats: gml, gpx. See the xmlsuite which does it also.
   See https://wiki.openstreetmap.org/wiki/Dxf2gpx
   https://grass.osgeo.org/grass74/manuals/v.in.dxf.html and dwg (teigha and opencad)
-* add geomutils to tessellate curves (e.g. GeoJSON),
-  add API funcs to find table elements (layer, ltype).
+* add more geom.c utils to tessellate curves (e.g. GeoJSON)
 * ACIS: Maybe convert binary SAB to ASCII SAT version 2 (ASM ShapeManager,
   forked from ACIS 7.0)
 * map DWG constraints to FreeCAD and SolveSpace constraints
@@ -75,8 +74,6 @@
   See the work/vapi branch.
 * add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
   Started with perl-tk
-* add unit-testing dwg coverage for the following entities:
-  body, minsert, shape, solid
 
 * fix the remaining leaks: indxf
 * finish documentation of the API functions, refman.
