@@ -3837,6 +3837,51 @@ H,	DXF 360
 
 All non-graphical objects with its fields. @xref{Common Object fields}
 
+@strong{ACMECOMMANDHISTORY} @anchor{ACMECOMMANDHISTORY}
+@cindex object, ACMECOMMANDHISTORY
+@vindex ACMECOMMANDHISTORY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+
+@end vtable
+@end indentedblock
+
+@strong{ACMESCOPE} @anchor{ACMESCOPE}
+@cindex object, ACMESCOPE
+@vindex ACMESCOPE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+
+@end vtable
+@end indentedblock
+
+@strong{ACMESTATEMGR} @anchor{ACMESTATEMGR}
+@cindex object, ACMESTATEMGR
+@vindex ACMESTATEMGR
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+
+@end vtable
+@end indentedblock
+
 @strong{ACSH_BOX_CLASS} @anchor{ACSH_BOX_CLASS}
 @cindex object, ACSH_BOX_CLASS
 @vindex ACSH_BOX_CLASS
@@ -3957,6 +4002,37 @@ B,	DXF 295
 B,	DXF 296
 @item pt2
 3BD,	DXF 11
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_HISTORY_CLASS} @anchor{ACSH_HISTORY_CLASS}
+@cindex object, ACSH_HISTORY_CLASS
+@vindex ACSH_HISTORY_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item shhn_bl90
+BL,	DXF 90
+@item shhn_bl91
+BL,	DXF 91
+@item shhn_pts
+BD*,	DXF 40
+@item color
+CMC,	DXF 62
+@item shhn_b92
+B,	DXF 92
+@item shhn_bl347
+BL,	DXF 347
 
 @end vtable
 @end indentedblock
@@ -4384,6 +4460,21 @@ BL,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{ASSOCGEOMDEPENDENCY} @anchor{ASSOCGEOMDEPENDENCY}
+@cindex object, ASSOCGEOMDEPENDENCY
+@vindex ASSOCGEOMDEPENDENCY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCLOFTEDSURFACEACTIONBODY} @anchor{ASSOCLOFTEDSURFACEACTIONBODY}
 @cindex object, ASSOCLOFTEDSURFACEACTIONBODY
 @vindex ASSOCLOFTEDSURFACEACTIONBODY
@@ -4721,6 +4812,39 @@ BS
 BL
 @item ssab_status
 BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCVERTEXACTIONPARAM} @anchor{ASSOCVERTEXACTIONPARAM}
+@cindex object, ASSOCVERTEXACTIONPARAM
+@vindex ASSOCVERTEXACTIONPARAM
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+@item unknown
+RC
+@item unknown1
+B
+@item status
+BS,	DXF 90
+@item name
+T,	DXF 1
+@item flags
+RS
+@item unknown3
+BD
+@item num_actions
+BS
+@item actions
+H*
+@item writedep
+H,	DXF 360
 
 @end vtable
 @end indentedblock
@@ -5375,6 +5499,21 @@ H*,	DXF 340
 @end vtable
 @end indentedblock
 
+@strong{DOCUMENTOPTIONS} @anchor{DOCUMENTOPTIONS}
+@cindex object, DOCUMENTOPTIONS
+@vindex DOCUMENTOPTIONS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+
+@end vtable
+@end indentedblock
+
 @strong{DUMMY} @anchor{DUMMY}
 @cindex object, DUMMY
 @vindex DUMMY
@@ -6020,7 +6159,7 @@ B,	DXF 290
 @item inspt_offset
 3DPOINT,	DXF 12
 @item endptproj
-3DPOINT
+3DPOINT,	DXF 13
 
 @end vtable
 @end indentedblock
@@ -6738,6 +6877,55 @@ B,	DXF 70
 TV
 @item objid_object_handles
 H*
+
+@end vtable
+@end indentedblock
+
+@strong{RAPIDRTRENDERSETTINGS} @anchor{RAPIDRTRENDERSETTINGS}
+@cindex object, RAPIDRTRENDERSETTINGS
+@vindex RAPIDRTRENDERSETTINGS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item fog_enabled
+B,	DXF 290
+@item fog_background_enabled
+B,	DXF 290
+@item b290_1
+B,	DXF 290
+@item environ_image_enabled
+B,	DXF 290
+@item environ_image_filename
+T,	DXF 1
+@item description
+T,	DXF 1
+@item bs90
+BS,	DXF 90
+@item bs90_0
+BS,	DXF 90
+@item rc70_1
+RC,	DXF 70
+@item bs90_1
+BS,	DXF 90
+@item bs90_2
+BS,	DXF 90
+@item rc70_2
+RC,	DXF 70
+@item rc70_3
+RC,	DXF 70
+@item fog_density_near
+BD,	DXF 40
+@item fog_density_far
+BD,	DXF 40
+@item b290_2
+B,	DXF 290
 
 @end vtable
 @end indentedblock

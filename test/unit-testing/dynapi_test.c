@@ -20762,6 +20762,114 @@ static int test_XLINE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ACMECOMMANDHISTORY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACMECOMMANDHISTORY *restrict acmecommandhistory = obj->tio.object->tio.ACMECOMMANDHISTORY;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (acmecommandhistory, "ACMECOMMANDHISTORY", "class_version", &class_version, NULL)
+        && class_version == acmecommandhistory->class_version)
+      pass ();
+    else
+      fail ("ACMECOMMANDHISTORY.class_version [BS] %hu != %hu", acmecommandhistory->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (acmecommandhistory, "ACMECOMMANDHISTORY", "class_version", &class_version, 0)
+        && class_version == acmecommandhistory->class_version)
+      pass ();
+    else
+      fail ("ACMECOMMANDHISTORY.class_version [BS] set+1 %hu != %hu", acmecommandhistory->class_version, class_version);
+    acmecommandhistory->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acmecommandhistory, "ACMECOMMANDHISTORY", "parent", &parent, NULL)
+        && !memcmp (&parent, &acmecommandhistory->parent, sizeof (acmecommandhistory->parent)))
+        pass ();
+    else
+        fail ("ACMECOMMANDHISTORY.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ACMECOMMANDHISTORY") || is_class_debugging ("ACMECOMMANDHISTORY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACMECOMMANDHISTORY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ACMESCOPE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACMESCOPE *restrict acmescope = obj->tio.object->tio.ACMESCOPE;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (acmescope, "ACMESCOPE", "class_version", &class_version, NULL)
+        && class_version == acmescope->class_version)
+      pass ();
+    else
+      fail ("ACMESCOPE.class_version [BS] %hu != %hu", acmescope->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (acmescope, "ACMESCOPE", "class_version", &class_version, 0)
+        && class_version == acmescope->class_version)
+      pass ();
+    else
+      fail ("ACMESCOPE.class_version [BS] set+1 %hu != %hu", acmescope->class_version, class_version);
+    acmescope->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acmescope, "ACMESCOPE", "parent", &parent, NULL)
+        && !memcmp (&parent, &acmescope->parent, sizeof (acmescope->parent)))
+        pass ();
+    else
+        fail ("ACMESCOPE.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ACMESCOPE") || is_class_debugging ("ACMESCOPE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACMESCOPE", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ACMESTATEMGR (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACMESTATEMGR *restrict acmestatemgr = obj->tio.object->tio.ACMESTATEMGR;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (acmestatemgr, "ACMESTATEMGR", "class_version", &class_version, NULL)
+        && class_version == acmestatemgr->class_version)
+      pass ();
+    else
+      fail ("ACMESTATEMGR.class_version [BS] %hu != %hu", acmestatemgr->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (acmestatemgr, "ACMESTATEMGR", "class_version", &class_version, 0)
+        && class_version == acmestatemgr->class_version)
+      pass ();
+    else
+      fail ("ACMESTATEMGR.class_version [BS] set+1 %hu != %hu", acmestatemgr->class_version, class_version);
+    acmestatemgr->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acmestatemgr, "ACMESTATEMGR", "parent", &parent, NULL)
+        && !memcmp (&parent, &acmestatemgr->parent, sizeof (acmestatemgr->parent)))
+        pass ();
+    else
+        fail ("ACMESTATEMGR.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ACMESTATEMGR") || is_class_debugging ("ACMESTATEMGR")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACMESTATEMGR", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
 {
   int error = 0;
@@ -21465,6 +21573,148 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ACSH_EXTRUSION_CLASS") || is_class_debugging ("ACSH_EXTRUSION_CLASS")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ACSH_EXTRUSION_CLASS", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACSH_HISTORY_CLASS *restrict acsh_history_class = obj->tio.object->tio.ACSH_HISTORY_CLASS;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "class_version", &class_version, NULL)
+        && class_version == acsh_history_class->class_version)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.class_version [BL] %u != %u", acsh_history_class->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "class_version", &class_version, 0)
+        && class_version == acsh_history_class->class_version)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.class_version [BL] set+1 %u != %u", acsh_history_class->class_version, class_version);
+    acsh_history_class->class_version--;
+  }
+  {
+    BITCODE_CMC color;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "color", &color, NULL)
+        && !memcmp (&color, &acsh_history_class->color, sizeof (acsh_history_class->color)))
+        pass ();
+    else
+        fail ("ACSH_HISTORY_CLASS.color [CMC]");
+  }
+  {
+    BITCODE_BL ee_bl98;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_bl98", &ee_bl98, NULL)
+        && ee_bl98 == acsh_history_class->ee_bl98)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.ee_bl98 [BL] %u != %u", acsh_history_class->ee_bl98, ee_bl98);
+    ee_bl98++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_bl98", &ee_bl98, 0)
+        && ee_bl98 == acsh_history_class->ee_bl98)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.ee_bl98 [BL] set+1 %u != %u", acsh_history_class->ee_bl98, ee_bl98);
+    acsh_history_class->ee_bl98--;
+  }
+  {
+    BITCODE_BL ee_bl99;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_bl99", &ee_bl99, NULL)
+        && ee_bl99 == acsh_history_class->ee_bl99)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.ee_bl99 [BL] %u != %u", acsh_history_class->ee_bl99, ee_bl99);
+    ee_bl99++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_bl99", &ee_bl99, 0)
+        && ee_bl99 == acsh_history_class->ee_bl99)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.ee_bl99 [BL] set+1 %u != %u", acsh_history_class->ee_bl99, ee_bl99);
+    acsh_history_class->ee_bl99--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "parent", &parent, NULL)
+        && !memcmp (&parent, &acsh_history_class->parent, sizeof (acsh_history_class->parent)))
+        pass ();
+    else
+        fail ("ACSH_HISTORY_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_B shhn_b92;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_b92", &shhn_b92, NULL)
+        && shhn_b92 == acsh_history_class->shhn_b92)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_b92 [B] " FORMAT_B " != " FORMAT_B "", acsh_history_class->shhn_b92, shhn_b92);
+    shhn_b92++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_b92", &shhn_b92, 0)
+        && shhn_b92 == acsh_history_class->shhn_b92)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_b92 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_history_class->shhn_b92, shhn_b92);
+    acsh_history_class->shhn_b92--;
+  }
+  {
+    BITCODE_BL shhn_bl347;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_bl347", &shhn_bl347, NULL)
+        && shhn_bl347 == acsh_history_class->shhn_bl347)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_bl347 [BL] %u != %u", acsh_history_class->shhn_bl347, shhn_bl347);
+    shhn_bl347++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_bl347", &shhn_bl347, 0)
+        && shhn_bl347 == acsh_history_class->shhn_bl347)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_bl347 [BL] set+1 %u != %u", acsh_history_class->shhn_bl347, shhn_bl347);
+    acsh_history_class->shhn_bl347--;
+  }
+  {
+    BITCODE_BL shhn_bl90;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_bl90", &shhn_bl90, NULL)
+        && shhn_bl90 == acsh_history_class->shhn_bl90)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_bl90 [BL] %u != %u", acsh_history_class->shhn_bl90, shhn_bl90);
+    shhn_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_bl90", &shhn_bl90, 0)
+        && shhn_bl90 == acsh_history_class->shhn_bl90)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_bl90 [BL] set+1 %u != %u", acsh_history_class->shhn_bl90, shhn_bl90);
+    acsh_history_class->shhn_bl90--;
+  }
+  {
+    BITCODE_BL shhn_bl91;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_bl91", &shhn_bl91, NULL)
+        && shhn_bl91 == acsh_history_class->shhn_bl91)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_bl91 [BL] %u != %u", acsh_history_class->shhn_bl91, shhn_bl91);
+    shhn_bl91++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_bl91", &shhn_bl91, 0)
+        && shhn_bl91 == acsh_history_class->shhn_bl91)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.shhn_bl91 [BL] set+1 %u != %u", acsh_history_class->shhn_bl91, shhn_bl91);
+    acsh_history_class->shhn_bl91--;
+  }
+  {
+    BITCODE_BD* shhn_pts;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "shhn_pts", &shhn_pts, NULL)
+        && !memcmp (&shhn_pts, &acsh_history_class->shhn_pts, sizeof (acsh_history_class->shhn_pts)))
+        pass ();
+    else
+        fail ("ACSH_HISTORY_CLASS.shhn_pts [BD*]");
+  }
+  if (failed && (is_class_unstable ("ACSH_HISTORY_CLASS") || is_class_debugging ("ACSH_HISTORY_CLASS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACSH_HISTORY_CLASS", failed);
       failed = 0;
     }
   return failed;
@@ -23603,6 +23853,42 @@ static int test_ASSOCEXTRUDEDSURFACEACTIONBODY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCGEOMDEPENDENCY *restrict assocgeomdependency = obj->tio.object->tio.ASSOCGEOMDEPENDENCY;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "class_version", &class_version, NULL)
+        && class_version == assocgeomdependency->class_version)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.class_version [BS] %hu != %hu", assocgeomdependency->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "class_version", &class_version, 0)
+        && class_version == assocgeomdependency->class_version)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.class_version [BS] set+1 %hu != %hu", assocgeomdependency->class_version, class_version);
+    assocgeomdependency->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocgeomdependency->parent, sizeof (assocgeomdependency->parent)))
+        pass ();
+    else
+        fail ("ASSOCGEOMDEPENDENCY.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCGEOMDEPENDENCY") || is_class_debugging ("ASSOCGEOMDEPENDENCY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCGEOMDEPENDENCY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCLOFTEDSURFACEACTIONBODY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -25525,6 +25811,160 @@ static int test_ASSOCSWEPTSURFACEACTIONBODY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ASSOCSWEPTSURFACEACTIONBODY") || is_class_debugging ("ASSOCSWEPTSURFACEACTIONBODY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCSWEPTSURFACEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCVERTEXACTIONPARAM (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCVERTEXACTIONPARAM *restrict assocvertexactionparam = obj->tio.object->tio.ASSOCVERTEXACTIONPARAM;
+  failed = 0;
+  {
+    BITCODE_H* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "actions", &actions, NULL)
+        && actions == assocvertexactionparam->actions)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.actions [H*] * %u num_actions", count);
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "class_version", &class_version, NULL)
+        && class_version == assocvertexactionparam->class_version)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.class_version [BS] %hu != %hu", assocvertexactionparam->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "class_version", &class_version, 0)
+        && class_version == assocvertexactionparam->class_version)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.class_version [BS] set+1 %hu != %hu", assocvertexactionparam->class_version, class_version);
+    assocvertexactionparam->class_version--;
+  }
+  {
+    BITCODE_RS flags;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "flags", &flags, NULL)
+        && flags == assocvertexactionparam->flags)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.flags [RS] %hu != %hu", assocvertexactionparam->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "flags", &flags, 0)
+        && flags == assocvertexactionparam->flags)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.flags [RS] set+1 %hu != %hu", assocvertexactionparam->flags, flags);
+    assocvertexactionparam->flags--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)assocvertexactionparam->name)
+           : !assocvertexactionparam->name)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.name [T] '%s' <> '%s'", name, assocvertexactionparam->name);
+  }
+  {
+    BITCODE_BS num_actions;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "num_actions", &num_actions, NULL)
+        && num_actions == assocvertexactionparam->num_actions)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.num_actions [BS] %hu != %hu", assocvertexactionparam->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "num_actions", &num_actions, 0)
+        && num_actions == assocvertexactionparam->num_actions)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.num_actions [BS] set+1 %hu != %hu", assocvertexactionparam->num_actions, num_actions);
+    assocvertexactionparam->num_actions--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocvertexactionparam->parent, sizeof (assocvertexactionparam->parent)))
+        pass ();
+    else
+        fail ("ASSOCVERTEXACTIONPARAM.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BS status;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "status", &status, NULL)
+        && status == assocvertexactionparam->status)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.status [BS] %hu != %hu", assocvertexactionparam->status, status);
+    status++;
+    if (dwg_dynapi_entity_set_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "status", &status, 0)
+        && status == assocvertexactionparam->status)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.status [BS] set+1 %hu != %hu", assocvertexactionparam->status, status);
+    assocvertexactionparam->status--;
+  }
+  {
+    BITCODE_RC unknown;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "unknown", &unknown, NULL)
+        && unknown == assocvertexactionparam->unknown)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.unknown [RC] %u != %u", assocvertexactionparam->unknown, unknown);
+    unknown++;
+    if (dwg_dynapi_entity_set_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "unknown", &unknown, 0)
+        && unknown == assocvertexactionparam->unknown)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.unknown [RC] set+1 %u != %u", assocvertexactionparam->unknown, unknown);
+    assocvertexactionparam->unknown--;
+  }
+  {
+    BITCODE_B unknown1;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "unknown1", &unknown1, NULL)
+        && unknown1 == assocvertexactionparam->unknown1)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.unknown1 [B] " FORMAT_B " != " FORMAT_B "", assocvertexactionparam->unknown1, unknown1);
+    unknown1++;
+    if (dwg_dynapi_entity_set_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "unknown1", &unknown1, 0)
+        && unknown1 == assocvertexactionparam->unknown1)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.unknown1 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocvertexactionparam->unknown1, unknown1);
+    assocvertexactionparam->unknown1--;
+  }
+  {
+    BITCODE_BD unknown3;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "unknown3", &unknown3, NULL)
+        && unknown3 == assocvertexactionparam->unknown3)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.unknown3 [BD] %g != %g", assocvertexactionparam->unknown3, unknown3);
+    unknown3++;
+    if (dwg_dynapi_entity_set_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "unknown3", &unknown3, 0)
+        && unknown3 == assocvertexactionparam->unknown3)
+      pass ();
+    else
+      fail ("ASSOCVERTEXACTIONPARAM.unknown3 [BD] set+1 %g != %g", assocvertexactionparam->unknown3, unknown3);
+    assocvertexactionparam->unknown3--;
+  }
+  {
+    BITCODE_H writedep;
+    if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "writedep", &writedep, NULL)
+        && !memcmp (&writedep, &assocvertexactionparam->writedep, sizeof (assocvertexactionparam->writedep)))
+        pass ();
+    else
+        fail ("ASSOCVERTEXACTIONPARAM.writedep [H]");
+  }
+  if (failed && (is_class_unstable ("ASSOCVERTEXACTIONPARAM") || is_class_debugging ("ASSOCVERTEXACTIONPARAM")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCVERTEXACTIONPARAM", failed);
       failed = 0;
     }
   return failed;
@@ -28741,6 +29181,42 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("DIMSTYLE_CONTROL") || is_class_debugging ("DIMSTYLE_CONTROL")))
     {
       ok ("%s failed %d tests (TODO unstable)", "DIMSTYLE_CONTROL", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_DOCUMENTOPTIONS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_DOCUMENTOPTIONS *restrict documentoptions = obj->tio.object->tio.DOCUMENTOPTIONS;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (documentoptions, "DOCUMENTOPTIONS", "class_version", &class_version, NULL)
+        && class_version == documentoptions->class_version)
+      pass ();
+    else
+      fail ("DOCUMENTOPTIONS.class_version [BS] %hu != %hu", documentoptions->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (documentoptions, "DOCUMENTOPTIONS", "class_version", &class_version, 0)
+        && class_version == documentoptions->class_version)
+      pass ();
+    else
+      fail ("DOCUMENTOPTIONS.class_version [BS] set+1 %hu != %hu", documentoptions->class_version, class_version);
+    documentoptions->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (documentoptions, "DOCUMENTOPTIONS", "parent", &parent, NULL)
+        && !memcmp (&parent, &documentoptions->parent, sizeof (documentoptions->parent)))
+        pass ();
+    else
+        fail ("DOCUMENTOPTIONS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("DOCUMENTOPTIONS") || is_class_debugging ("DOCUMENTOPTIONS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DOCUMENTOPTIONS", failed);
       failed = 0;
     }
   return failed;
@@ -35297,6 +35773,282 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_RAPIDRTRENDERSETTINGS *restrict rapidrtrendersettings = obj->tio.object->tio.RAPIDRTRENDERSETTINGS;
+  failed = 0;
+  {
+    BITCODE_B b290_1;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_1", &b290_1, NULL)
+        && b290_1 == rapidrtrendersettings->b290_1)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.b290_1 [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_1, b290_1);
+    b290_1++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_1", &b290_1, 0)
+        && b290_1 == rapidrtrendersettings->b290_1)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.b290_1 [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_1, b290_1);
+    rapidrtrendersettings->b290_1--;
+  }
+  {
+    BITCODE_B b290_2;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_2", &b290_2, NULL)
+        && b290_2 == rapidrtrendersettings->b290_2)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.b290_2 [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_2, b290_2);
+    b290_2++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_2", &b290_2, 0)
+        && b290_2 == rapidrtrendersettings->b290_2)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.b290_2 [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_2, b290_2);
+    rapidrtrendersettings->b290_2--;
+  }
+  {
+    BITCODE_BS bs90;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90", &bs90, NULL)
+        && bs90 == rapidrtrendersettings->bs90)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90 [BS] %hu != %hu", rapidrtrendersettings->bs90, bs90);
+    bs90++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90", &bs90, 0)
+        && bs90 == rapidrtrendersettings->bs90)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90, bs90);
+    rapidrtrendersettings->bs90--;
+  }
+  {
+    BITCODE_BS bs90_0;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_0", &bs90_0, NULL)
+        && bs90_0 == rapidrtrendersettings->bs90_0)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90_0 [BS] %hu != %hu", rapidrtrendersettings->bs90_0, bs90_0);
+    bs90_0++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_0", &bs90_0, 0)
+        && bs90_0 == rapidrtrendersettings->bs90_0)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90_0 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90_0, bs90_0);
+    rapidrtrendersettings->bs90_0--;
+  }
+  {
+    BITCODE_BS bs90_1;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_1", &bs90_1, NULL)
+        && bs90_1 == rapidrtrendersettings->bs90_1)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90_1 [BS] %hu != %hu", rapidrtrendersettings->bs90_1, bs90_1);
+    bs90_1++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_1", &bs90_1, 0)
+        && bs90_1 == rapidrtrendersettings->bs90_1)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90_1 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90_1, bs90_1);
+    rapidrtrendersettings->bs90_1--;
+  }
+  {
+    BITCODE_BS bs90_2;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_2", &bs90_2, NULL)
+        && bs90_2 == rapidrtrendersettings->bs90_2)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90_2 [BS] %hu != %hu", rapidrtrendersettings->bs90_2, bs90_2);
+    bs90_2++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_2", &bs90_2, 0)
+        && bs90_2 == rapidrtrendersettings->bs90_2)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.bs90_2 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90_2, bs90_2);
+    rapidrtrendersettings->bs90_2--;
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "class_version", &class_version, NULL)
+        && class_version == rapidrtrendersettings->class_version)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.class_version [BL] %u != %u", rapidrtrendersettings->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "class_version", &class_version, 0)
+        && class_version == rapidrtrendersettings->class_version)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.class_version [BL] set+1 %u != %u", rapidrtrendersettings->class_version, class_version);
+    rapidrtrendersettings->class_version--;
+  }
+  {
+    BITCODE_T description;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "description", &description, NULL)
+        && description
+           ? strEQ ((char *)description, (char *)rapidrtrendersettings->description)
+           : !rapidrtrendersettings->description)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.description [T] '%s' <> '%s'", description, rapidrtrendersettings->description);
+  }
+  {
+    BITCODE_B environ_image_enabled;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "environ_image_enabled", &environ_image_enabled, NULL)
+        && environ_image_enabled == rapidrtrendersettings->environ_image_enabled)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.environ_image_enabled [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->environ_image_enabled, environ_image_enabled);
+    environ_image_enabled++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "environ_image_enabled", &environ_image_enabled, 0)
+        && environ_image_enabled == rapidrtrendersettings->environ_image_enabled)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.environ_image_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->environ_image_enabled, environ_image_enabled);
+    rapidrtrendersettings->environ_image_enabled--;
+  }
+  {
+    BITCODE_T environ_image_filename;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
+        && environ_image_filename
+           ? strEQ ((char *)environ_image_filename, (char *)rapidrtrendersettings->environ_image_filename)
+           : !rapidrtrendersettings->environ_image_filename)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, rapidrtrendersettings->environ_image_filename);
+  }
+  {
+    BITCODE_B fog_background_enabled;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_background_enabled", &fog_background_enabled, NULL)
+        && fog_background_enabled == rapidrtrendersettings->fog_background_enabled)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_background_enabled [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->fog_background_enabled, fog_background_enabled);
+    fog_background_enabled++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_background_enabled", &fog_background_enabled, 0)
+        && fog_background_enabled == rapidrtrendersettings->fog_background_enabled)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_background_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->fog_background_enabled, fog_background_enabled);
+    rapidrtrendersettings->fog_background_enabled--;
+  }
+  {
+    BITCODE_BD fog_density_far;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_far", &fog_density_far, NULL)
+        && fog_density_far == rapidrtrendersettings->fog_density_far)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_density_far [BD] %g != %g", rapidrtrendersettings->fog_density_far, fog_density_far);
+    fog_density_far++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_far", &fog_density_far, 0)
+        && fog_density_far == rapidrtrendersettings->fog_density_far)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_density_far [BD] set+1 %g != %g", rapidrtrendersettings->fog_density_far, fog_density_far);
+    rapidrtrendersettings->fog_density_far--;
+  }
+  {
+    BITCODE_BD fog_density_near;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_near", &fog_density_near, NULL)
+        && fog_density_near == rapidrtrendersettings->fog_density_near)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_density_near [BD] %g != %g", rapidrtrendersettings->fog_density_near, fog_density_near);
+    fog_density_near++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_near", &fog_density_near, 0)
+        && fog_density_near == rapidrtrendersettings->fog_density_near)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_density_near [BD] set+1 %g != %g", rapidrtrendersettings->fog_density_near, fog_density_near);
+    rapidrtrendersettings->fog_density_near--;
+  }
+  {
+    BITCODE_B fog_enabled;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_enabled", &fog_enabled, NULL)
+        && fog_enabled == rapidrtrendersettings->fog_enabled)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_enabled [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->fog_enabled, fog_enabled);
+    fog_enabled++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_enabled", &fog_enabled, 0)
+        && fog_enabled == rapidrtrendersettings->fog_enabled)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.fog_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->fog_enabled, fog_enabled);
+    rapidrtrendersettings->fog_enabled--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)rapidrtrendersettings->name)
+           : !rapidrtrendersettings->name)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.name [T] '%s' <> '%s'", name, rapidrtrendersettings->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "parent", &parent, NULL)
+        && !memcmp (&parent, &rapidrtrendersettings->parent, sizeof (rapidrtrendersettings->parent)))
+        pass ();
+    else
+        fail ("RAPIDRTRENDERSETTINGS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_RC rc70_1;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_1", &rc70_1, NULL)
+        && rc70_1 == rapidrtrendersettings->rc70_1)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.rc70_1 [RC] %u != %u", rapidrtrendersettings->rc70_1, rc70_1);
+    rc70_1++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_1", &rc70_1, 0)
+        && rc70_1 == rapidrtrendersettings->rc70_1)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.rc70_1 [RC] set+1 %u != %u", rapidrtrendersettings->rc70_1, rc70_1);
+    rapidrtrendersettings->rc70_1--;
+  }
+  {
+    BITCODE_RC rc70_2;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_2", &rc70_2, NULL)
+        && rc70_2 == rapidrtrendersettings->rc70_2)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.rc70_2 [RC] %u != %u", rapidrtrendersettings->rc70_2, rc70_2);
+    rc70_2++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_2", &rc70_2, 0)
+        && rc70_2 == rapidrtrendersettings->rc70_2)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.rc70_2 [RC] set+1 %u != %u", rapidrtrendersettings->rc70_2, rc70_2);
+    rapidrtrendersettings->rc70_2--;
+  }
+  {
+    BITCODE_RC rc70_3;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_3", &rc70_3, NULL)
+        && rc70_3 == rapidrtrendersettings->rc70_3)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.rc70_3 [RC] %u != %u", rapidrtrendersettings->rc70_3, rc70_3);
+    rc70_3++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_3", &rc70_3, 0)
+        && rc70_3 == rapidrtrendersettings->rc70_3)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.rc70_3 [RC] set+1 %u != %u", rapidrtrendersettings->rc70_3, rc70_3);
+    rapidrtrendersettings->rc70_3--;
+  }
+  if (failed && (is_class_unstable ("RAPIDRTRENDERSETTINGS") || is_class_debugging ("RAPIDRTRENDERSETTINGS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RAPIDRTRENDERSETTINGS", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_RASTERVARIABLES (const Dwg_Object *obj)
 {
   int error = 0;
@@ -40905,7 +41657,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 40844 "dynapi_test.c"
+#line 41554 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -41037,10 +41789,18 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUT(obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
     error += test_XLINE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
+    error += test_ACMECOMMANDHISTORY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACMESCOPE)
+    error += test_ACMESCOPE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACMESTATEMGR)
+    error += test_ACMESTATEMGR(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_BOX_CLASS)
     error += test_ACSH_BOX_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
     error += test_ACSH_EXTRUSION_CLASS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_HISTORY_CLASS)
+    error += test_ACSH_HISTORY_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
@@ -41059,6 +41819,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCDEPENDENCY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY)
     error += test_ASSOCEXTRUDEDSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCGEOMDEPENDENCY)
+    error += test_ASSOCGEOMDEPENDENCY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY)
     error += test_ASSOCLOFTEDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK)
@@ -41073,6 +41835,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
+    error += test_ASSOCVERTEXACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
@@ -41101,6 +41865,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DIMSTYLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMSTYLE_CONTROL)
     error += test_DIMSTYLE_CONTROL(obj);
+  else  if (obj->fixedtype == DWG_TYPE_DOCUMENTOPTIONS)
+    error += test_DOCUMENTOPTIONS(obj);
   else  if (obj->fixedtype == DWG_TYPE_DUMMY)
     error += test_DUMMY(obj);
   else  if (obj->fixedtype == DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER)
@@ -41171,6 +41937,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLOTSETTINGS(obj);
   else  if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)
     error += test_PROXY_OBJECT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RAPIDRTRENDERSETTINGS)
+    error += test_RAPIDRTRENDERSETTINGS(obj);
   else  if (obj->fixedtype == DWG_TYPE_RASTERVARIABLES)
     error += test_RASTERVARIABLES(obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERENVIRONMENT)
@@ -41359,10 +42127,18 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUT (obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
     error += test_XLINE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
+    error += test_ACMECOMMANDHISTORY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACMESCOPE)
+    error += test_ACMESCOPE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACMESTATEMGR)
+    error += test_ACMESTATEMGR (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_BOX_CLASS)
     error += test_ACSH_BOX_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
     error += test_ACSH_EXTRUSION_CLASS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_HISTORY_CLASS)
+    error += test_ACSH_HISTORY_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
     error += test_ACSH_SWEEP_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
@@ -41381,6 +42157,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCDEPENDENCY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY)
     error += test_ASSOCEXTRUDEDSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCGEOMDEPENDENCY)
+    error += test_ASSOCGEOMDEPENDENCY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY)
     error += test_ASSOCLOFTEDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK)
@@ -41395,6 +42173,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
+    error += test_ASSOCVERTEXACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
@@ -41423,6 +42203,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DIMSTYLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMSTYLE_CONTROL)
     error += test_DIMSTYLE_CONTROL (obj);
+  else  if (obj->fixedtype == DWG_TYPE_DOCUMENTOPTIONS)
+    error += test_DOCUMENTOPTIONS (obj);
   else  if (obj->fixedtype == DWG_TYPE_DUMMY)
     error += test_DUMMY (obj);
   else  if (obj->fixedtype == DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER)
@@ -41493,6 +42275,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLOTSETTINGS (obj);
   else  if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)
     error += test_PROXY_OBJECT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_RAPIDRTRENDERSETTINGS)
+    error += test_RAPIDRTRENDERSETTINGS (obj);
   else  if (obj->fixedtype == DWG_TYPE_RASTERVARIABLES)
     error += test_RASTERVARIABLES (obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERENVIRONMENT)
@@ -41561,7 +42345,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 41500 "dynapi_test.c"
+#line 42242 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -42101,6 +42885,30 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"XLINE\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_ACMECOMMANDHISTORY);
+  size2 = dwg_dynapi_fields_size ("ACMECOMMANDHISTORY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACMECOMMANDHISTORY): %d != "
+               "dwg_dynapi_fields_size (\"ACMECOMMANDHISTORY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACMESCOPE);
+  size2 = dwg_dynapi_fields_size ("ACMESCOPE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACMESCOPE): %d != "
+               "dwg_dynapi_fields_size (\"ACMESCOPE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACMESTATEMGR);
+  size2 = dwg_dynapi_fields_size ("ACMESTATEMGR");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACMESTATEMGR): %d != "
+               "dwg_dynapi_fields_size (\"ACMESTATEMGR\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_ACSH_BOX_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_BOX_CLASS");
   if (size1 != size2)
@@ -42115,6 +42923,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ACSH_EXTRUSION_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_EXTRUSION_CLASS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACSH_HISTORY_CLASS);
+  size2 = dwg_dynapi_fields_size ("ACSH_HISTORY_CLASS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_HISTORY_CLASS): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_HISTORY_CLASS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ACSH_SWEEP_CLASS);
@@ -42189,6 +43005,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ASSOCEXTRUDEDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_ASSOCGEOMDEPENDENCY);
+  size2 = dwg_dynapi_fields_size ("ASSOCGEOMDEPENDENCY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCGEOMDEPENDENCY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCGEOMDEPENDENCY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCLOFTEDSURFACEACTIONBODY");
   if (size1 != size2)
@@ -42243,6 +43067,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCSWEPTSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCVERTEXACTIONPARAM);
+  size2 = dwg_dynapi_fields_size ("ASSOCVERTEXACTIONPARAM");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCVERTEXACTIONPARAM): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCVERTEXACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_BLKREFOBJECTCONTEXTDATA);
@@ -42355,6 +43187,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_DIMSTYLE_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"DIMSTYLE_CONTROL\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_DOCUMENTOPTIONS);
+  size2 = dwg_dynapi_fields_size ("DOCUMENTOPTIONS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_DOCUMENTOPTIONS): %d != "
+               "dwg_dynapi_fields_size (\"DOCUMENTOPTIONS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_DUMMY);
@@ -42635,6 +43475,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_PROXY_OBJECT): %d != "
                "dwg_dynapi_fields_size (\"PROXY_OBJECT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_RAPIDRTRENDERSETTINGS);
+  size2 = dwg_dynapi_fields_size ("RAPIDRTRENDERSETTINGS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_RAPIDRTRENDERSETTINGS): %d != "
+               "dwg_dynapi_fields_size (\"RAPIDRTRENDERSETTINGS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_RASTERVARIABLES);

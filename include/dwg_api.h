@@ -621,27 +621,26 @@ typedef struct _dwg_object_DETAILVIEWSTYLE        dwg_obj_detailviewstyle;
 typedef struct _dwg_object_SECTIONVIEWSTYLE       dwg_obj_sectionviewstyle;
 typedef struct _dwg_object_LAYERFILTER            dwg_obj_layerfilter;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG      dwg_obj_layoutprintconfig;
+typedef struct _dwg_object_ACMECOMMANDHISTORY     dwg_obj_acmecommandhistory;
+typedef struct _dwg_object_ACMESCOPE              dwg_obj_acmescope;
+typedef struct _dwg_object_ACMESTATEMGR           dwg_obj_acmestatemgr;
+typedef struct _dwg_object_ACSH_HISTORY_CLASS     dwg_obj_acsh_history_class;
+typedef struct _dwg_object_ASSOCGEOMDEPENDENCY    dwg_obj_assocgeomdependency;
+typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM         dwg_obj_assocvertexactionparam;
+typedef struct _dwg_object_DOCUMENTOPTIONS        dwg_obj_documentoptions;
+typedef struct _dwg_object_RAPIDRTRENDERSETTINGS  dwg_obj_rapidrtrendersettings;
 #endif
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
 //typedef struct _dwg_object_ACDSSCHEMA           dwg_obj_acdsschema;
 //typedef struct _dwg_object_ACDSSCOPE            dwg_obj_acdsscope;
-//typedef struct _dwg_object_ACMECOMMANDHISTORY   dwg_obj_acmecommandhistory;
-//typedef struct _dwg_object_ACMESTATEMGR         dwg_obj_acmestatemgr;
-//typedef struct _dwg_object_ACSH_HISTORY_CLASS   dwg_obj_acsh_history_class;
 //typedef struct _dwg_object_ACSH_REVOLVE_CLASS   dwg_obj_acsh_revolve_class;
 //typedef struct _dwg_object_ACSH_SPHERE_CLASS    dwg_obj_acsh_sphere_class;
 //typedef struct _dwg_object_ARCALIGNEDTEXT       dwg_obj_arcalignedtext;
-//typedef struct _dwg_object_ASSOCGEOMDEPENDENCY  dwg_obj_assocgeomdependency;
-//typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM  dwg_obj_assocosnappointrefactionparam;
-//typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM         dwg_obj_assocvertexactionparam;
-//typedef struct _dwg_object_DOCUMENTOPTIONS      dwg_obj_documentoptions;
-//typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA dwg_obj_leaderobjectcontextdata;
 //typedef struct _dwg_object_NPOCOLLECTION        dwg_obj_npocollection;
 //typedef struct _dwg_object_POINTCLOUD           dwg_obj_pointcloud;
 //typedef struct _dwg_object_MENTALRAYRENDERSETTINGS   dwg_obj_mentalrayrendersettings;
 //typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT  dwg_obj_rapidrtrenderenvironment;
-//typedef struct _dwg_object_RAPIDRTRENDERSETTINGS     dwg_obj_rapidrtrendersettings;
 //typedef struct _dwg_object_RTEXT                dwg_obj_rtext;
 //typedef struct _dwg_object_XREFPANELOBJECT      dwg_obj_xrefpanelobject;
 
@@ -839,29 +838,28 @@ DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
-#endif
 // unhandled:
 // DWG_GETALL_OBJECT_DECL (ACDSRECORD)
 // DWG_GETALL_OBJECT_DECL (ACDSSCHEMA)
 // DWG_GETALL_OBJECT_DECL (ACDSSCOPE)
-// DWG_GETALL_OBJECT_DECL (ACMECOMMANDHISTORY)
-// DWG_GETALL_OBJECT_DECL (ACMESTATEMGR)
-// DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
+DWG_GETALL_OBJECT_DECL (ACMECOMMANDHISTORY)
+DWG_GETALL_OBJECT_DECL (ACMESCOPE)
+DWG_GETALL_OBJECT_DECL (ACMESTATEMGR)
+DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
 // DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS)
 // DWG_GETALL_OBJECT_DECL (ACSH_SPHERE_CLASS)
 // DWG_GETALL_OBJECT_DECL (ARCALIGNEDTEXT)
-// DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
-// DWG_GETALL_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
-// DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
-// DWG_GETALL_OBJECT_DECL (DOCUMENTOPTIONS)
-// DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
+DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
+DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
+DWG_GETALL_OBJECT_DECL (DOCUMENTOPTIONS)
 // DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
-// DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
+DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (NPOCOLLECTION)
 // DWG_GETALL_OBJECT_DECL (POINTCLOUD)
 // DWG_GETALL_OBJECT_DECL (RTEXT)
 // DWG_GETALL_OBJECT_DECL (XREFPANELOBJECT)
+#endif
 
 /*******************************************************************
 *     Functions created from macro to cast dwg_object to entity     *
@@ -1043,6 +1041,29 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTIONVIEWSTYLE)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYERFILTER)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUTPRINTCONFIG)
+/// unhandled:
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSRECORD)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCHEMA)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCOPE)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMECOMMANDHISTORY)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESCOPE)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESTATEMGR)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SPHERE_CLASS)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (ARCALIGNEDTEXT)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DOCUMENTOPTIONS)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (NPOCOLLECTION)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUD)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (RTEXT)
+// CAST_DWG_OBJECT_TO_OBJECT_DECL (XREFPANELOBJECT)
 #endif
 
 
@@ -1279,29 +1300,28 @@ dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
-#endif
 // unhandled:
 // dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD)
 // dwg_get_OBJECT_DECL (obj_acdsschema, ACDSSCHEMA)
 // dwg_get_OBJECT_DECL (obj_acdsscope, ACDSSCOPE)
-// dwg_get_OBJECT_DECL (obj_acmecommandhistory, ACMECOMMANDHISTORY)
-// dwg_get_OBJECT_DECL (obj_acmestatemgr, ACMESTATEMGR)
-// dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
+dwg_get_OBJECT_DECL (obj_acmecommandhistory, ACMECOMMANDHISTORY)
+dwg_get_OBJECT_DECL (obj_acmescope, ACMESCOPE)
+dwg_get_OBJECT_DECL (obj_acmestatemgr, ACMESTATEMGR)
+dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
 // dwg_get_OBJECT_DECL (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS)
 // dwg_get_OBJECT_DECL (obj_acsh_sphere_class, ACSH_SPHERE_CLASS)
 // dwg_get_OBJECT_DECL (obj_arcalignedtext, ARCALIGNEDTEXT)
-// dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
-// dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
-// dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-// dwg_get_OBJECT_DECL (obj_documentoptions, DOCUMENTOPTIONS)
-// dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
+dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
+dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
+dwg_get_OBJECT_DECL (obj_documentoptions, DOCUMENTOPTIONS)
 // dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
 // dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION)
 // dwg_get_OBJECT_DECL (obj_pointcloud, POINTCLOUD)
 // dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)
-// dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
+dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
 // dwg_get_OBJECT_DECL (obj_rtext, RTEXT)
 // dwg_get_OBJECT_DECL (obj_xrefpanelobject, XREFPANELOBJECT)
+#endif
 
 /********************************************************************
  *                FUNCTIONS TYPE SPECIFIC                            *

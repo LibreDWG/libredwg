@@ -166,6 +166,15 @@ testobjects = \
 	spline \
 	style \
 	style_control \
+        acmecommandhistory \
+        acmescope \
+        acmestatemgr \
+        acsh_history_class \
+        assocgeomdependency \
+        assocosnappointrefactionparam \
+        assocvertexactionparam \
+        documentoptions \
+        rapidrtrendersettings \
 	sun \
 	sunstudy \
 	sweptsurface \
