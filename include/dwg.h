@@ -6752,6 +6752,7 @@ EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAYDEFINITION (Dwg_Object *obj);
@@ -6822,7 +6823,6 @@ EXPORT int dwg_add_SUN (Dwg_Object *obj);
 EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLE (Dwg_Object *obj);
 EXPORT int dwg_add_TABLECONTENT (Dwg_Object *obj);
-EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
 //EXPORT int dwg_add_XREFPANELOBJECT (Dwg_Object *obj);
 
 #endif /* DEBUG_CLASSES */

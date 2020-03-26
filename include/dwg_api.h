@@ -579,11 +579,11 @@ typedef struct _dwg_object_LONG_TRANSACTION       dwg_obj_long_transaction;
 typedef struct _dwg_object_OBJECT_PTR             dwg_obj_object_ptr;
 typedef struct _dwg_object_PERSSUBENTMANAGER      dwg_obj_perssubentmanager;
 typedef struct _dwg_object_UNDERLAYDEFINITION     dwg_obj_underlaydefinition;
+typedef struct _dwg_object_TABLEGEOMETRY          dwg_obj_tablegeometry;
 typedef struct _dwg_object_TABLESTYLE             dwg_obj_tablestyle;
 typedef struct _dwg_object_VISUALSTYLE            dwg_obj_visualstyle;
 #ifdef DEBUG_CLASSES
 typedef struct _dwg_object_TABLECONTENT           dwg_obj_tablecontent;
-typedef struct _dwg_object_TABLEGEOMETRY          dwg_obj_tablegeometry;
 typedef struct _dwg_object_CELLSTYLEMAP           dwg_obj_cellstylemap;
 typedef struct _dwg_object_MATERIAL               dwg_obj_material;
 typedef struct _dwg_object_PLOTSETTINGS           dwg_obj_plotsettings;
@@ -795,12 +795,12 @@ DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
 DWG_GETALL_OBJECT_DECL (PERSSUBENTMANAGER)
 DWG_GETALL_OBJECT_DECL (PROXY_OBJECT)
 DWG_GETALL_OBJECT_DECL (UNDERLAYDEFINITION)
+DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY)
 DWG_GETALL_OBJECT_DECL (TABLESTYLE)
 DWG_GETALL_OBJECT_DECL (VISUALSTYLE)
 
 #ifdef DEBUG_CLASSES
 DWG_GETALL_OBJECT_DECL (TABLECONTENT)
-DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY)
 DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (MATERIAL)
 DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
@@ -988,6 +988,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (SCALE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SORTENTSTABLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_FILTER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_INDEX)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLEGEOMETRY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VISUALSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (WIPEOUTVARIABLES)
@@ -1028,7 +1029,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (NAVISWORKSMODELDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (GEOMAPIMAGE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MATERIAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLEGEOMETRY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CELLSTYLEMAP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PLOTSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SUN)
@@ -1262,11 +1262,11 @@ dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
 dwg_get_OBJECT_DECL (obj_proxy_object, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_perssubentmanager, PERSSUBENTMANAGER);
 dwg_get_OBJECT_DECL (obj_underlaydefinition, UNDERLAYDEFINITION);
+dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
 dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
 dwg_get_OBJECT_DECL (obj_visualstyle, VISUALSTYLE);
 #ifdef DEBUG_CLASSES
 dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
-dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
 dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_material, MATERIAL);
 dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);

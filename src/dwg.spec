@@ -5301,7 +5301,10 @@ DWG_ENTITY_END
 #undef attr
 #undef merged
 
+#endif /* DEBUG_CLASSES */
+
 //pg.246 20.4.103
+//unstable
 DWG_OBJECT (TABLEGEOMETRY)
 
   DECODE_UNKNOWN_BITS
@@ -5341,8 +5344,6 @@ DWG_OBJECT (TABLEGEOMETRY)
   END_REPEAT (cells);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
-
-#endif /* DEBUG_CLASSES */
 
 // See TABLE and p20.4.101
 // Added with r2005

@@ -36,6 +36,7 @@ static const Dwg_Object_Type _classes_unstable[] =
    DWG_TYPE_PERSSUBENTMANAGER,
    DWG_TYPE_PLOTSETTINGS,
    DWG_TYPE_VISUALSTYLE,
+   DWG_TYPE_TABLEGEOMETRY,
    DWG_TYPE_TABLESTYLE
   };
 static const Dwg_Object_Type _classes_debugging[] =
@@ -49,7 +50,6 @@ static const Dwg_Object_Type _classes_debugging[] =
    DWG_TYPE_TABLE,
    DWG_TYPE_ARC_DIMENSION,
    DWG_TYPE_TABLECONTENT,
-   DWG_TYPE_TABLEGEOMETRY,
    DWG_TYPE_CELLSTYLEMAP,
    DWG_TYPE_MATERIAL,
    DWG_TYPE_SUN,
