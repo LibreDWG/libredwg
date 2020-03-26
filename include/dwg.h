@@ -5612,8 +5612,25 @@ typedef struct _dwg_object_ACSH_HISTORY_CLASS
 typedef struct _dwg_object_ASSOCGEOMDEPENDENCY
 {
   struct _dwg_object_object *parent;
-  BITCODE_BS class_version;
-  //?
+  // AcDbAssocDependency
+  BITCODE_BS class_version;			/*<! DXF 90 */
+  BITCODE_BS dependent_on_object_status;	/*<! DXF 90 */
+  BITCODE_B has_cached_value;			/*<! DXF 290 */
+  BITCODE_B is_actionevaluation_in_progress;  	/*<! DXF 290 */
+  BITCODE_B is_attached_to_object;		/*<! DXF 290 */
+  BITCODE_B is_delegating_to_owning_action;	/*<! DXF 290 */
+  BITCODE_BS bs90_2;	/*<! DXF 90 */
+  BITCODE_H h330_1;	/*<! DXF 330 */
+  BITCODE_B b290_5;	/*<! DXF 290 */
+  BITCODE_H h330_2;	/*<! DXF 330 */
+  BITCODE_H h330_3;	/*<! DXF 330 */
+  BITCODE_H h360;	/*<! DXF 360 */
+  BITCODE_BS bs90_3;	/*<! DXF 90 */
+  // AcDbAssocGeomDependency
+  BITCODE_BS bs90_4;	/*<! DXF 90 */
+  BITCODE_B b290_6;	/*<! DXF 290 */
+  BITCODE_T t;	/*<! DXF 1 */
+  BITCODE_B dependent_on_compound_object;   /*<! DXF 290 */
 } Dwg_Object_ASSOCGEOMDEPENDENCY;
 
 typedef struct _dwg_object_DOCUMENTOPTIONS

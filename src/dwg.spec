@@ -7891,42 +7891,50 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   DECODE_UNKNOWN_BITS
   //90 2 DependentOnObjectStatus (ok, NotInitializedYet, InvalidObjectId)
-  //90 0 Status
-  //290 1 HasCachedValue
-  //290 1 IsActionEvaluationInProgress
-  //290 1 IsAttachedToObject
-  //290 1 IsDelegatingToOwningAction
   //90 -10000
   //330 -> CIRCLE
-  //290 0
-  //330 0
-  //330 0
-  //360 0
-  //90 2
-  //AcDbAssocGeomDependency:
-  //90 0
-  //290 1
-  //1 AcDbAssocSingleEdgePersSubentId
-  //290 0
-  //FIELD_B (DependentOnCompoundObject, 90);
+  FIELD_BS (class_version, 90);
+  FIELD_BS (dependent_on_object_status, 90);
+  FIELD_B (has_cached_value, 290);
+  FIELD_B (is_actionevaluation_in_progress, 290);
+  FIELD_B (is_attached_to_object, 290);
+  FIELD_B (is_delegating_to_owning_action, 290);
+  FIELD_BS (bs90_2, 90);
+  FIELD_B (b290_5, 290);
+  FIELD_BS (bs90_3, 90);
+  // AcDbAssocGeomDependency
+  FIELD_BS (bs90_4, 90);
+  FIELD_B (b290_6, 290);
+  FIELD_T (t, 1);
+  FIELD_B (dependent_on_compound_object, 290);
+
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (h330_1, 4, 330);
+  FIELD_HANDLE (h330_2, 4, 330);
+  FIELD_HANDLE (h330_3, 4, 330);
+  FIELD_HANDLE (h360, 3, 360);
 DWG_OBJECT_END
 
 // AutoCAD Mechanical
 DWG_OBJECT (ACMESCOPE)
   DECODE_UNKNOWN_BITS
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ACMECOMMANDHISTORY)
   DECODE_UNKNOWN_BITS
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ACMESTATEMGR)
   DECODE_UNKNOWN_BITS
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (DOCUMENTOPTIONS)
   DECODE_UNKNOWN_BITS
   //size 161
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (RAPIDRTRENDERSETTINGS)
@@ -7953,6 +7961,7 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   FIELD_BD (fog_density_near, 40);
   FIELD_BD (fog_density_far, 40);
   FIELD_B (b290_2, 290);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES */

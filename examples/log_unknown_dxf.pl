@@ -520,6 +520,27 @@ my $known = {
     #40 => 'unknown3',
     #...
     ],
+  ACDBASSOCGEOMDEPENDENCY => [
+    # 100 AcDbAssocDependency
+    90 => 'class_version',
+    90 => 'dependent_on_object_status',
+    290 => 'has_cached_value',
+    290 => 'is_actionevaluation_in_progress',
+    290 => 'is_attached_to_object',
+    290 => 'b290_4',
+    90 => 'bs90_2',
+    330 => 'h330_1',
+    290 => 'b290_5',
+    330 => 'h330_2',
+    330 => 'h330_3',
+    360 => 'h360',
+    90 => 'bs90_3',
+    # 100 AcDbAssocGeomDependency
+    90 => 'bs90_4',
+    290 => 'b290_6',
+    1 => 't', # AcDbAssocSingleEdgePersSubentId
+    290 => 'dependent_on_compound_object',
+    ],
   ACSH_BOX_CLASS => [
     # 100 => AcDbEvalExpr
     90 => 'class_version',
@@ -1618,6 +1639,12 @@ my $known = {
     ],
   LAYOUTPRINTCONFIG => [
     93 => 'flag',
+    ],
+  ACMECOMMANDHISTORY => [
+    ],
+  ACMESCOPE => [
+    ],
+  ACMESTATEMGR => [
     ],
 };
 

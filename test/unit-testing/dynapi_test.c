@@ -23860,6 +23860,81 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
   Dwg_Object_ASSOCGEOMDEPENDENCY *restrict assocgeomdependency = obj->tio.object->tio.ASSOCGEOMDEPENDENCY;
   failed = 0;
   {
+    BITCODE_B b290_5;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "b290_5", &b290_5, NULL)
+        && b290_5 == assocgeomdependency->b290_5)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.b290_5 [B] " FORMAT_B " != " FORMAT_B "", assocgeomdependency->b290_5, b290_5);
+    b290_5++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "b290_5", &b290_5, 0)
+        && b290_5 == assocgeomdependency->b290_5)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.b290_5 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocgeomdependency->b290_5, b290_5);
+    assocgeomdependency->b290_5--;
+  }
+  {
+    BITCODE_B b290_6;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "b290_6", &b290_6, NULL)
+        && b290_6 == assocgeomdependency->b290_6)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.b290_6 [B] " FORMAT_B " != " FORMAT_B "", assocgeomdependency->b290_6, b290_6);
+    b290_6++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "b290_6", &b290_6, 0)
+        && b290_6 == assocgeomdependency->b290_6)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.b290_6 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocgeomdependency->b290_6, b290_6);
+    assocgeomdependency->b290_6--;
+  }
+  {
+    BITCODE_BS bs90_2;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "bs90_2", &bs90_2, NULL)
+        && bs90_2 == assocgeomdependency->bs90_2)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.bs90_2 [BS] %hu != %hu", assocgeomdependency->bs90_2, bs90_2);
+    bs90_2++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "bs90_2", &bs90_2, 0)
+        && bs90_2 == assocgeomdependency->bs90_2)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.bs90_2 [BS] set+1 %hu != %hu", assocgeomdependency->bs90_2, bs90_2);
+    assocgeomdependency->bs90_2--;
+  }
+  {
+    BITCODE_BS bs90_3;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "bs90_3", &bs90_3, NULL)
+        && bs90_3 == assocgeomdependency->bs90_3)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.bs90_3 [BS] %hu != %hu", assocgeomdependency->bs90_3, bs90_3);
+    bs90_3++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "bs90_3", &bs90_3, 0)
+        && bs90_3 == assocgeomdependency->bs90_3)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.bs90_3 [BS] set+1 %hu != %hu", assocgeomdependency->bs90_3, bs90_3);
+    assocgeomdependency->bs90_3--;
+  }
+  {
+    BITCODE_BS bs90_4;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "bs90_4", &bs90_4, NULL)
+        && bs90_4 == assocgeomdependency->bs90_4)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.bs90_4 [BS] %hu != %hu", assocgeomdependency->bs90_4, bs90_4);
+    bs90_4++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "bs90_4", &bs90_4, 0)
+        && bs90_4 == assocgeomdependency->bs90_4)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.bs90_4 [BS] set+1 %hu != %hu", assocgeomdependency->bs90_4, bs90_4);
+    assocgeomdependency->bs90_4--;
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "class_version", &class_version, NULL)
         && class_version == assocgeomdependency->class_version)
@@ -23875,12 +23950,144 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
     assocgeomdependency->class_version--;
   }
   {
+    BITCODE_B dependent_on_compound_object;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "dependent_on_compound_object", &dependent_on_compound_object, NULL)
+        && dependent_on_compound_object == assocgeomdependency->dependent_on_compound_object)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.dependent_on_compound_object [B] " FORMAT_B " != " FORMAT_B "", assocgeomdependency->dependent_on_compound_object, dependent_on_compound_object);
+    dependent_on_compound_object++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "dependent_on_compound_object", &dependent_on_compound_object, 0)
+        && dependent_on_compound_object == assocgeomdependency->dependent_on_compound_object)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.dependent_on_compound_object [B] set+1 " FORMAT_B " != " FORMAT_B "", assocgeomdependency->dependent_on_compound_object, dependent_on_compound_object);
+    assocgeomdependency->dependent_on_compound_object--;
+  }
+  {
+    BITCODE_BS dependent_on_object_status;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "dependent_on_object_status", &dependent_on_object_status, NULL)
+        && dependent_on_object_status == assocgeomdependency->dependent_on_object_status)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.dependent_on_object_status [BS] %hu != %hu", assocgeomdependency->dependent_on_object_status, dependent_on_object_status);
+    dependent_on_object_status++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "dependent_on_object_status", &dependent_on_object_status, 0)
+        && dependent_on_object_status == assocgeomdependency->dependent_on_object_status)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.dependent_on_object_status [BS] set+1 %hu != %hu", assocgeomdependency->dependent_on_object_status, dependent_on_object_status);
+    assocgeomdependency->dependent_on_object_status--;
+  }
+  {
+    BITCODE_H h330_1;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h330_1", &h330_1, NULL)
+        && !memcmp (&h330_1, &assocgeomdependency->h330_1, sizeof (assocgeomdependency->h330_1)))
+        pass ();
+    else
+        fail ("ASSOCGEOMDEPENDENCY.h330_1 [H]");
+  }
+  {
+    BITCODE_H h330_2;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h330_2", &h330_2, NULL)
+        && !memcmp (&h330_2, &assocgeomdependency->h330_2, sizeof (assocgeomdependency->h330_2)))
+        pass ();
+    else
+        fail ("ASSOCGEOMDEPENDENCY.h330_2 [H]");
+  }
+  {
+    BITCODE_H h330_3;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h330_3", &h330_3, NULL)
+        && !memcmp (&h330_3, &assocgeomdependency->h330_3, sizeof (assocgeomdependency->h330_3)))
+        pass ();
+    else
+        fail ("ASSOCGEOMDEPENDENCY.h330_3 [H]");
+  }
+  {
+    BITCODE_H h360;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h360", &h360, NULL)
+        && !memcmp (&h360, &assocgeomdependency->h360, sizeof (assocgeomdependency->h360)))
+        pass ();
+    else
+        fail ("ASSOCGEOMDEPENDENCY.h360 [H]");
+  }
+  {
+    BITCODE_B has_cached_value;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "has_cached_value", &has_cached_value, NULL)
+        && has_cached_value == assocgeomdependency->has_cached_value)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.has_cached_value [B] " FORMAT_B " != " FORMAT_B "", assocgeomdependency->has_cached_value, has_cached_value);
+    has_cached_value++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "has_cached_value", &has_cached_value, 0)
+        && has_cached_value == assocgeomdependency->has_cached_value)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.has_cached_value [B] set+1 " FORMAT_B " != " FORMAT_B "", assocgeomdependency->has_cached_value, has_cached_value);
+    assocgeomdependency->has_cached_value--;
+  }
+  {
+    BITCODE_B is_actionevaluation_in_progress;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "is_actionevaluation_in_progress", &is_actionevaluation_in_progress, NULL)
+        && is_actionevaluation_in_progress == assocgeomdependency->is_actionevaluation_in_progress)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.is_actionevaluation_in_progress [B] " FORMAT_B " != " FORMAT_B "", assocgeomdependency->is_actionevaluation_in_progress, is_actionevaluation_in_progress);
+    is_actionevaluation_in_progress++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "is_actionevaluation_in_progress", &is_actionevaluation_in_progress, 0)
+        && is_actionevaluation_in_progress == assocgeomdependency->is_actionevaluation_in_progress)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.is_actionevaluation_in_progress [B] set+1 " FORMAT_B " != " FORMAT_B "", assocgeomdependency->is_actionevaluation_in_progress, is_actionevaluation_in_progress);
+    assocgeomdependency->is_actionevaluation_in_progress--;
+  }
+  {
+    BITCODE_B is_attached_to_object;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "is_attached_to_object", &is_attached_to_object, NULL)
+        && is_attached_to_object == assocgeomdependency->is_attached_to_object)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.is_attached_to_object [B] " FORMAT_B " != " FORMAT_B "", assocgeomdependency->is_attached_to_object, is_attached_to_object);
+    is_attached_to_object++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "is_attached_to_object", &is_attached_to_object, 0)
+        && is_attached_to_object == assocgeomdependency->is_attached_to_object)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.is_attached_to_object [B] set+1 " FORMAT_B " != " FORMAT_B "", assocgeomdependency->is_attached_to_object, is_attached_to_object);
+    assocgeomdependency->is_attached_to_object--;
+  }
+  {
+    BITCODE_B is_delegating_to_owning_action;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "is_delegating_to_owning_action", &is_delegating_to_owning_action, NULL)
+        && is_delegating_to_owning_action == assocgeomdependency->is_delegating_to_owning_action)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.is_delegating_to_owning_action [B] " FORMAT_B " != " FORMAT_B "", assocgeomdependency->is_delegating_to_owning_action, is_delegating_to_owning_action);
+    is_delegating_to_owning_action++;
+    if (dwg_dynapi_entity_set_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "is_delegating_to_owning_action", &is_delegating_to_owning_action, 0)
+        && is_delegating_to_owning_action == assocgeomdependency->is_delegating_to_owning_action)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.is_delegating_to_owning_action [B] set+1 " FORMAT_B " != " FORMAT_B "", assocgeomdependency->is_delegating_to_owning_action, is_delegating_to_owning_action);
+    assocgeomdependency->is_delegating_to_owning_action--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "parent", &parent, NULL)
         && !memcmp (&parent, &assocgeomdependency->parent, sizeof (assocgeomdependency->parent)))
         pass ();
     else
         fail ("ASSOCGEOMDEPENDENCY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T t;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "t", &t, NULL)
+        && t
+           ? strEQ ((char *)t, (char *)assocgeomdependency->t)
+           : !assocgeomdependency->t)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.t [T] '%s' <> '%s'", t, assocgeomdependency->t);
   }
   if (failed && (is_class_unstable ("ASSOCGEOMDEPENDENCY") || is_class_debugging ("ASSOCGEOMDEPENDENCY")))
     {

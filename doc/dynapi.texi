@@ -4470,7 +4470,39 @@ BL,	DXF 90
 @item parent
 struct _dwg_object_object*
 @item class_version
-BS
+BS,	DXF 90
+@item dependent_on_object_status
+BS,	DXF 90
+@item has_cached_value
+B,	DXF 290
+@item is_actionevaluation_in_progress
+B,	DXF 290
+@item is_attached_to_object
+B,	DXF 290
+@item is_delegating_to_owning_action
+B,	DXF 290
+@item bs90_2
+BS,	DXF 90
+@item h330_1
+H,	DXF 330
+@item b290_5
+B,	DXF 290
+@item h330_2
+H,	DXF 330
+@item h330_3
+H,	DXF 330
+@item h360
+H,	DXF 360
+@item bs90_3
+BS,	DXF 90
+@item bs90_4
+BS,	DXF 90
+@item b290_6
+B,	DXF 290
+@item t
+T,	DXF 1
+@item dependent_on_compound_object
+B,	DXF 290
 
 @end vtable
 @end indentedblock

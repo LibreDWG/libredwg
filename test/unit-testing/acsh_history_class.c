@@ -27,6 +27,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, ee_bl99, BL, ee_bl99); //29
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl90, BL, shhn_bl90); //33
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl91, BL, shhn_bl91); //29
+  //FIXME
+#if 0
   // last 16x nums 40-55
   if (!dwg_dynapi_entity_value (_obj, "ACSH_HISTORY_CLASS", "shhn_pts", &shhn_pts, NULL))
     fail ("ACSH_HISTORY_CLASS.shhn_pts");
@@ -38,5 +40,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_b92, B, shhn_b92);
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl347, BL, shhn_bl347);
   // AcDbShPrimitive
+#endif
 #endif
 }
