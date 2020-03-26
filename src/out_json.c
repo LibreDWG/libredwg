@@ -83,6 +83,7 @@ static char* _path_field(const char *path);
     fprintf (dat->fh, "\n");                                                  \
     dat->bit--;                                                               \
     PREFIX fprintf (dat->fh, "]");                                            \
+    CLEARFIRST;                                                               \
   }
 #define HASH                                                                  \
   {                                                                           \
@@ -95,6 +96,7 @@ static char* _path_field(const char *path);
     fprintf (dat->fh, "\n");                                                  \
     dat->bit--;                                                               \
     PREFIX fprintf (dat->fh, "}");                                            \
+    CLEARFIRST;                                                               \
   }
 
 #define TABLE(nam)                                                            \
