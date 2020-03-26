@@ -35,11 +35,20 @@ bits_SOURCE  = bits.c
 bits_LDADD  = $(top_builddir)/src/bits.lo
 all: $(check_PROGRAMS)
 
-.PHONY: check-syntax regen-unknown dsymutil gcov
+.PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov
 
 if HAVE_PERL
 # maintainer rules only
 regen-unknown:
+	echo "use existing $(srcdir)/alldwg.inc"
+	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
+	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
+	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
+	(cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc)
+	$(MAKE) -C .. unknown && \
+	  $(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
+
+full-regen-unknown:
 	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
 	-(cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
@@ -57,13 +66,11 @@ regen-unknown:
 #ACAD_EVALUATION_GRAPH.pi: unknown
 #	$(MAKE) -C .. unknown
 
-$(srcdir)/bd-unknown.inc: $(srcdir)/bd-unknown.pl $(srcdir)/alldxf_0.inc \
-	                  ACAD_EVALUATION_GRAPH.pi
-
-$(srcdir)/alldxf_2.inc: $(srcdir)/alldxf_1.inc
-$(srcdir)/alldxf_1.inc: $(srcdir)/alldxf_0.inc
-$(srcdir)/alldxf_0.inc: $(srcdir)/alldwg.inc $(srcdir)/log_unknown_dxf.pl
-$(srcdir)/alldwg.inc: $(srcdir)/log_unknown.pl
+$(srcdir)/bd-unknown.inc: bd-unknown.pl alldxf_0.inc  ACAD_EVALUATION_GRAPH.pi
+$(srcdir)/alldxf_2.inc: alldxf_1.inc
+$(srcdir)/alldxf_1.inc: alldxf_0.inc
+$(srcdir)/alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
+$(srcdir)/alldwg.inc: log_unknown.pl
 endif
 
 if HAVE_WINE

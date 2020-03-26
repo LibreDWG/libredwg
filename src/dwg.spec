@@ -7765,10 +7765,12 @@ DWG_OBJECT_END
 
 DWG_OBJECT (DETAILVIEWSTYLE)
   DECODE_UNKNOWN_BITS
+
   SUBCLASS (AcDbModelDocViewStyle)
   FIELD_BS (class_version, 70); // 0
   FIELD_T (name, 3);
   FIELD_B (is_modified_for_recompute, 290);
+
   SUBCLASS (AcDbDetailViewStyle)
   FIELD_BS (identifier_placement, 70);
   FIELD_BS (model_edge, 90); // type, origin, direction
@@ -7817,6 +7819,7 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_B (is_modified_for_recompute, 290);
   FIELD_T (description, 300);
   FIELD_BL (identifier_exclude_characters, 90); // 102
+
   SUBCLASS (AcDbSectionViewStyle)
   // DXF: 100 70 3 290 3 90 100 70 71 90 71 340 62 40 340 340 62 40 300 40 90 40 90 71 340 90 62 340 90 62 40 40 40 71 340 62 40 90 40 90 300(field) 71 62 62 300 40 90 290 290 90 6 40 40 40 40 40
   //pi: 70 3 290
@@ -7893,6 +7896,7 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   //90 2 DependentOnObjectStatus (ok, NotInitializedYet, InvalidObjectId)
   //90 -10000
   //330 -> CIRCLE
+  SUBCLASS (AcDbAssocDependency)
   FIELD_BS (class_version, 90);
   FIELD_BS (dependent_on_object_status, 90);
   FIELD_B (has_cached_value, 290);
@@ -7902,7 +7906,7 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   FIELD_BS (bs90_2, 90);
   FIELD_B (b290_5, 290);
   FIELD_BS (bs90_3, 90);
-  // AcDbAssocGeomDependency
+  SUBCLASS (AcDbAssocGeomDependency)
   FIELD_BS (bs90_4, 90);
   FIELD_B (b290_6, 290);
   FIELD_T (t, 1);
@@ -7939,6 +7943,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbRenderSettings)
   FIELD_BS (class_version, 90);
   FIELD_T (name, 1);
   FIELD_B (fog_enabled, 290);
@@ -7951,7 +7956,7 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   FIELD_T (environ_image_filename, 1);
   FIELD_T (description, 1);
   FIELD_BS (bs90, 90);
-  // AcDbRapidRTRenderSettings
+  SUBCLASS (AcDbRapidRTRenderSettings)
   FIELD_BS (bs90_0, 90);
   FIELD_RC (rc70_1, 70);
   FIELD_BS (bs90_1, 90);
