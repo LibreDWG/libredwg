@@ -5,12 +5,12 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  dwg_point_3d origin, ext, x_direction, offset_to_block_ins_pt, endptproj;
+  dwg_point_3d origin, ext, x_direction, inspt_offset, endptproj;
   dwg_point_3d *points;
   BITCODE_B unknown_bit_1;
   BITCODE_BS path_type;
   BITCODE_BS annot_type;
-  BITCODE_BL num_points;
+  BITCODE_BL i, num_points;
   BITCODE_BD dimgap;
   BITCODE_BD box_height;
   BITCODE_BD box_width;
@@ -32,13 +32,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (leader, LEADER, origin, origin);
   CHK_ENTITY_3RD_W_OLD (leader, LEADER, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (leader, LEADER, x_direction, x_direction);
-  CHK_ENTITY_3RD_W_OLD (leader, LEADER, offset_to_block_ins_pt, offset_to_block_ins_pt);
+  CHK_ENTITY_3RD_W_OLD (leader, LEADER, inspt_offset, inspt_offset);
   CHK_ENTITY_3RD (leader, LEADER, endptproj, endptproj);
 
   CHK_ENTITY_TYPE (leader, LEADER, unknown_bit_1, B, unknown_bit_1);
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, path_type, BS, path_type);
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, annot_type, BS, annot_type);
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, num_points, BL, num_points);
+  if (!dwg_dynapi_entity_value (leader, "LEADER", "points", &points, NULL))
+    fail ("LEADER.points");
+  else
+    for (i = 0; i < leader->num_points; i++)
+      (void)points[i].z;
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, dimgap, BD, dimgap);
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, box_height, BD, box_height);
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, box_width, BD, box_width);

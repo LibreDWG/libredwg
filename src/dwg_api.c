@@ -10467,7 +10467,7 @@ dwg_ent_leader_get_x_direction (const dwg_ent_leader *restrict leader,
 /** Sets leader offset to block insert point
  */
 void
-dwg_ent_leader_set_offset_to_block_ins_pt (dwg_ent_leader *restrict leader,
+dwg_ent_leader_set_inspt_offset (dwg_ent_leader *restrict leader,
                                            const dwg_point_3d *restrict point,
                                            int *restrict error)
 {
@@ -10478,9 +10478,9 @@ dwg_ent_leader_set_offset_to_block_ins_pt (dwg_ent_leader *restrict leader,
   )
     {
       *error = 0;
-      leader->offset_to_block_ins_pt.x = point->x;
-      leader->offset_to_block_ins_pt.y = point->y;
-      leader->offset_to_block_ins_pt.z = point->z;
+      leader->inspt_offset.x = point->x;
+      leader->inspt_offset.y = point->y;
+      leader->inspt_offset.z = point->z;
     }
   else
     {
@@ -10492,7 +10492,7 @@ dwg_ent_leader_set_offset_to_block_ins_pt (dwg_ent_leader *restrict leader,
 /** Returns leader offset to block ins point
  */
 void
-dwg_ent_leader_get_offset_to_block_ins_pt (
+dwg_ent_leader_get_inspt_offset (
     const dwg_ent_leader *restrict leader, dwg_point_3d *restrict point,
     int *restrict error)
 {
@@ -10503,9 +10503,9 @@ dwg_ent_leader_get_offset_to_block_ins_pt (
   )
     {
       *error = 0;
-      point->x = leader->offset_to_block_ins_pt.x;
-      point->y = leader->offset_to_block_ins_pt.y;
-      point->z = leader->offset_to_block_ins_pt.z;
+      point->x = leader->inspt_offset.x;
+      point->y = leader->inspt_offset.y;
+      point->z = leader->inspt_offset.z;
     }
   else
     {

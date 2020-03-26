@@ -3184,11 +3184,11 @@ EXPORT void dwg_ent_leader_get_x_direction (
     const dwg_ent_leader *restrict leader, dwg_point_3d *restrict vector,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_leader_set_offset_to_block_ins_pt (
+EXPORT void dwg_ent_leader_set_inspt_offset (
     dwg_ent_leader *restrict leader, const dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT void dwg_ent_leader_get_offset_to_block_ins_pt (
+EXPORT void dwg_ent_leader_get_inspt_offset (
     const dwg_ent_leader *restrict leader, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 

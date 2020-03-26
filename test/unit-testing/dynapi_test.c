@@ -11779,6 +11779,14 @@ static int test_LEADER (const Dwg_Object *obj)
     leader->hookline_on--;
   }
   {
+    BITCODE_3DPOINT inspt_offset;
+    if (dwg_dynapi_entity_value (leader, "LEADER", "inspt_offset", &inspt_offset, NULL)
+        && !memcmp (&inspt_offset, &leader->inspt_offset, sizeof (leader->inspt_offset)))
+        pass ();
+    else
+        fail ("LEADER.inspt_offset [3DPOINT]");
+  }
+  {
     BITCODE_BL num_points;
     if (dwg_dynapi_entity_value (leader, "LEADER", "num_points", &num_points, NULL)
         && num_points == leader->num_points)
@@ -11792,14 +11800,6 @@ static int test_LEADER (const Dwg_Object *obj)
     else
       fail ("LEADER.num_points [BL] set+1 %u != %u", leader->num_points, num_points);
     leader->num_points--;
-  }
-  {
-    BITCODE_3DPOINT offset_to_block_ins_pt;
-    if (dwg_dynapi_entity_value (leader, "LEADER", "offset_to_block_ins_pt", &offset_to_block_ins_pt, NULL)
-        && !memcmp (&offset_to_block_ins_pt, &leader->offset_to_block_ins_pt, sizeof (leader->offset_to_block_ins_pt)))
-        pass ();
-    else
-        fail ("LEADER.offset_to_block_ins_pt [3DPOINT]");
   }
   {
     BITCODE_3DPOINT origin;
@@ -31575,6 +31575,21 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   Dwg_Object_LEADEROBJECTCONTEXTDATA *restrict leaderobjectcontextdata = obj->tio.object->tio.LEADEROBJECTCONTEXTDATA;
   failed = 0;
   {
+    BITCODE_B b290;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "b290", &b290, NULL)
+        && b290 == leaderobjectcontextdata->b290)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.b290 [B] " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->b290, b290);
+    b290++;
+    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "b290", &b290, 0)
+        && b290 == leaderobjectcontextdata->b290)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.b290 [B] set+1 " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->b290, b290);
+    leaderobjectcontextdata->b290--;
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "class_version", &class_version, NULL)
         && class_version == leaderobjectcontextdata->class_version)
@@ -31605,6 +31620,14 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
     leaderobjectcontextdata->defaultflag--;
   }
   {
+    BITCODE_3DPOINT endptproj;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "endptproj", &endptproj, NULL)
+        && !memcmp (&endptproj, &leaderobjectcontextdata->endptproj, sizeof (leaderobjectcontextdata->endptproj)))
+        pass ();
+    else
+        fail ("LEADEROBJECTCONTEXTDATA.endptproj [3DPOINT]");
+  }
+  {
     BITCODE_B has_file;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "has_file", &has_file, NULL)
         && has_file == leaderobjectcontextdata->has_file)
@@ -31620,6 +31643,29 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
     leaderobjectcontextdata->has_file--;
   }
   {
+    BITCODE_3DPOINT inspt_offset;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "inspt_offset", &inspt_offset, NULL)
+        && !memcmp (&inspt_offset, &leaderobjectcontextdata->inspt_offset, sizeof (leaderobjectcontextdata->inspt_offset)))
+        pass ();
+    else
+        fail ("LEADEROBJECTCONTEXTDATA.inspt_offset [3DPOINT]");
+  }
+  {
+    BITCODE_BL num_points;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "num_points", &num_points, NULL)
+        && num_points == leaderobjectcontextdata->num_points)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.num_points [BL] %u != %u", leaderobjectcontextdata->num_points, num_points);
+    num_points++;
+    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "num_points", &num_points, 0)
+        && num_points == leaderobjectcontextdata->num_points)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.num_points [BL] set+1 %u != %u", leaderobjectcontextdata->num_points, num_points);
+    leaderobjectcontextdata->num_points--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "parent", &parent, NULL)
         && !memcmp (&parent, &leaderobjectcontextdata->parent, sizeof (leaderobjectcontextdata->parent)))
@@ -31628,12 +31674,30 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("LEADEROBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
   }
   {
+    BITCODE_3DPOINT* points;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "num_points", &count, NULL)
+        && dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "points", &points, NULL)
+        && points == leaderobjectcontextdata->points)
+      pass ();
+    else
+      fail ("LEADEROBJECTCONTEXTDATA.points [3DPOINT*] * %u num_points", count);
+  }
+  {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "scale", &scale, NULL)
         && !memcmp (&scale, &leaderobjectcontextdata->scale, sizeof (leaderobjectcontextdata->scale)))
         pass ();
     else
         fail ("LEADEROBJECTCONTEXTDATA.scale [H]");
+  }
+  {
+    BITCODE_3DPOINT x_direction;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "x_direction", &x_direction, NULL)
+        && !memcmp (&x_direction, &leaderobjectcontextdata->x_direction, sizeof (leaderobjectcontextdata->x_direction)))
+        pass ();
+    else
+        fail ("LEADEROBJECTCONTEXTDATA.x_direction [3DPOINT]");
   }
   if (failed && (is_class_unstable ("LEADEROBJECTCONTEXTDATA") || is_class_debugging ("LEADEROBJECTCONTEXTDATA")))
     {

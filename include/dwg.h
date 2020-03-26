@@ -1834,7 +1834,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_3DPOINT origin;
   BITCODE_BE extrusion;
   BITCODE_3DPOINT x_direction;
-  BITCODE_3DPOINT offset_to_block_ins_pt;
+  BITCODE_3DPOINT inspt_offset;
   BITCODE_3DPOINT endptproj; /* R_14-R_2007 ? */
   BITCODE_BD dimgap;         /* R_13-R_14 only */
   BITCODE_BD box_height;
@@ -5391,8 +5391,13 @@ typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA
   BITCODE_BS class_version; /*!< r2010+ =3 */
   BITCODE_B has_file;
   BITCODE_B defaultflag;
-  BITCODE_H scale; /* DXF 340 */
-  // ...??
+  BITCODE_H scale; 	/*!< DXF 340 */
+  BITCODE_BL num_points;	/*< DXF 70 */
+  BITCODE_3DPOINT* points;	/*!< DXF 10 */
+  BITCODE_B b290;		/*!< DXF 290 */
+  BITCODE_3DPOINT x_direction;	/*!< DXF 11 */
+  BITCODE_3DPOINT inspt_offset;	/*!< DXF 12 */
+  BITCODE_3DPOINT endptproj;	/*!< DXF 13 */
 } Dwg_Object_LEADEROBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA
@@ -5745,7 +5750,7 @@ typedef struct _dwg_object_entity
  */
 typedef struct _dwg_object_object
 {
-  BITCODE_BL objid; /*<! link to the parent */
+  BITCODE_BL objid; /*!< link to the parent */
   union
   {
     Dwg_Object_BLOCK_CONTROL *BLOCK_CONTROL;

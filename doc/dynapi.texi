@@ -1991,7 +1991,7 @@ BL,	DXF 76
 BE,	DXF 210
 @item x_direction
 3DPOINT,	DXF 211
-@item offset_to_block_ins_pt
+@item inspt_offset
 3DPOINT,	DXF 212
 @item endptproj
 3DPOINT
@@ -6009,6 +6009,18 @@ B,	DXF 290
 B
 @item scale
 H,	DXF 340
+@item num_points
+BL,	DXF 70
+@item points
+3DPOINT*,	DXF 10
+@item b290
+B,	DXF 290
+@item x_direction
+3DPOINT,	DXF 11
+@item inspt_offset
+3DPOINT,	DXF 12
+@item endptproj
+3DPOINT
 
 @end vtable
 @end indentedblock

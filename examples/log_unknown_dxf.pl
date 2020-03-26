@@ -1080,7 +1080,15 @@ my $known = {
     290 => 'has_file',
     90 => 'defaultflag',
     100 => 'AcDbAnnotScaleObjectContextData',
-    340 => 'scale, 2',
+    340 => 'scale',
+    70 => 'num_points',
+    10 => 'points[0]',
+    10 => 'points[1]',
+    10 => 'points[2]',
+    11 => 'x_direction',
+    290 => 'b290', # arrowhead_on?
+    12 => 'inspt_offset',
+    13 => 'endptproj',
     ],
   ACDB_MLEADEROBJECTCONTEXTDATA_CLASS => [
     100 => 'AcDbObjectContextData',

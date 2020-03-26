@@ -2320,7 +2320,7 @@ DWG_ENTITY (LEADER)
   FIELD_3DPOINT (origin, 0);
   FIELD_3DPOINT (extrusion, 210);
   FIELD_3DPOINT (x_direction, 211);
-  FIELD_3DPOINT (offset_to_block_ins_pt, 212);
+  FIELD_3DPOINT (inspt_offset, 212);
 
   VERSIONS (R_14, R_2007) {
     FIELD_3DPOINT (endptproj, 0);
@@ -7613,9 +7613,15 @@ DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
   FIELD_B (has_file, 290);
   FIELD_B (defaultflag, 0);
   SUBCLASS (AcDbAnnotScaleObjectContextData)
-  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
-  // ?? ...
+  FIELD_BL (num_points, 70); /* 3 */
+  FIELD_3DPOINT_VECTOR (points, num_points, 10);
+  FIELD_3DPOINT (x_direction, 11);
+  FIELD_B (b290, 290); /* 1 */
+  FIELD_3DPOINT (inspt_offset, 12);
+  FIELD_3DPOINT (endptproj, 13);
+
   START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
 DWG_OBJECT_END
 
 DWG_OBJECT (MLEADEROBJECTCONTEXTDATA)
