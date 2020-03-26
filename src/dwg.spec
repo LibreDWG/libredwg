@@ -6625,12 +6625,11 @@ DWG_OBJECT (MATERIAL)
   return 0;
 #endif
 
-  DEBUG_HERE_OBJ; // TODO from here on the order of the fields is unknown
   FIELD_BS (ambient_color_flag, 70); // 0 Use current color, 1 Override
   FIELD_BD (ambient_color_factor, 40); // 0.0 - 1.0
   FIELD_CMC (ambient_color, 90,0);
 
-  DEBUG_HERE_OBJ;
+  DEBUG_HERE_OBJ; // TODO from here on the order of the fields is unknown
   FIELD_BS (diffuse_color_flag, 71); // 0 Use current color, 1 Override
   FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
   FIELD_CMC (diffuse_color, 91,0);

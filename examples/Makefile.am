@@ -80,7 +80,66 @@ endif
 
 TESTS = $(top_builddir)/programs/alive.test
 
-EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc
+alldxf_unknowns = \
+	alldxf_ACAD_EVALUATION_GRAPH.inc \
+	alldxf_ACAD_TABLE.inc \
+	alldxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACDBASSOC2DCONSTRAINTGROUP.inc \
+	alldxf_ACDBASSOCACTION.inc \
+	alldxf_ACDBASSOCALIGNEDDIMACTIONBODY.inc \
+	alldxf_ACDBASSOCDEPENDENCY.inc \
+	alldxf_ACDBASSOCEXTRUDEDSURFACEACTIONBODY.inc \
+	alldxf_ACDBASSOCGEOMDEPENDENCY.inc \
+	alldxf_ACDBASSOCLOFTEDSURFACEACTIONBODY.inc \
+	alldxf_ACDBASSOCNETWORK.inc \
+	alldxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM.inc \
+	alldxf_ACDBASSOCPERSSUBENTMANAGER.inc \
+	alldxf_ACDBASSOCPLANESURFACEACTIONBODY.inc \
+	alldxf_ACDBASSOCREVOLVEDSURFACEACTIONBODY.inc \
+	alldxf_ACDBASSOCSWEPTSURFACEACTIONBODY.inc \
+	alldxf_ACDBASSOCVERTEXACTIONPARAM.inc \
+	alldxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACDBDETAILVIEWSTYLE.inc \
+	alldxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACDBPERSSUBENTMANAGER.inc \
+	alldxf_ACDBSECTIONVIEWSTYLE.inc \
+	alldxf_ACDB_TEXTOBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACMECOMMANDHISTORY.inc \
+	alldxf_ACMESCOPE.inc \
+	alldxf_ACMESTATEMGR.inc \
+	alldxf_ACSH_BOX_CLASS.inc \
+	alldxf_ACSH_EXTRUSION_CLASS.inc \
+	alldxf_ACSH_HISTORY_CLASS.inc \
+	alldxf_ACSH_SWEEP_CLASS.inc \
+	alldxf_ARC_DIMENSION.inc \
+	alldxf_CELLSTYLEMAP.inc \
+	alldxf_CSACDOCUMENTOPTIONS.inc \
+	alldxf_DATALINK.inc \
+	alldxf_DATATABLE.inc \
+	alldxf_DBCOLOR.inc \
+	alldxf_DIMASSOC.inc \
+	alldxf_EXTRUDEDSURFACE.inc \
+	alldxf_GEODATA.inc \
+	alldxf_HELIX.inc \
+	alldxf_LAYOUTPRINTCONFIG.inc \
+	alldxf_LIGHT.inc \
+	alldxf_MATERIAL.inc \
+	alldxf_MESH.inc \
+	alldxf_MULTILEADER.inc \
+	alldxf_PLANESURFACE.inc \
+	alldxf_PLOTSETTINGS.inc \
+	alldxf_RAPIDRTRENDERSETTINGS.inc \
+	alldxf_REVOLVEDSURFACE.inc \
+	alldxf_SUN.inc \
+	alldxf_SWEPTSURFACE.inc \
+	alldxf_TABLEGEOMETRY.inc \
+	alldxf_TABLESTYLE.inc \
+	alldxf_VISUALSTYLE.inc
+
+EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc $(alldxf_unknowns)
 EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm
 EXTRA_DIST += load_dwg.py unknown.pi ACAD_EVALUATION_GRAPH.pi
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \

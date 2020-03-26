@@ -47,10 +47,12 @@ use constant DBL     => 6;
 #require dirname(__FILE__)."/unstable.pm";
 my $dir = dirname(__FILE__);
 open my $f0, ">", "$dir/alldxf_0.inc" or die "$!";
-open my $f1, ">", "$dir/alldxf_1.inc" or die "$!";
+open my $f1a, ">", "$dir/alldxf_1.inc" or die "$!";
 open my $f2, ">", "$dir/alldxf_2.inc" or die "$!";
 my $i = 0;
 my (%skip, %dupl);
+
+`rm $dir/alldxf_[A-Z_]+.inc`;
 
 if (0) {
   open my $skip_fh, "<", "examples/alldwg.skip"
@@ -150,7 +152,22 @@ my $known = {
     73 => 'diffusemap_projection',
     74 => 'diffusemap_tiling',
     75 => 'diffusemap_autotransform',
-    43 => 'diffusemap_transmatrix', #x16
+    43 => 'diffusemap_transmatrix[0]', #x16
+    43 => 'diffusemap_transmatrix[1]',
+    43 => 'diffusemap_transmatrix[2]',
+    43 => 'diffusemap_transmatrix[3]',
+    43 => 'diffusemap_transmatrix[4]',
+    43 => 'diffusemap_transmatrix[5]',
+    43 => 'diffusemap_transmatrix[6]',
+    43 => 'diffusemap_transmatrix[7]',
+    43 => 'diffusemap_transmatrix[8]',
+    43 => 'diffusemap_transmatrix[9]',
+    43 => 'diffusemap_transmatrix[10]',
+    43 => 'diffusemap_transmatrix[11]',
+    43 => 'diffusemap_transmatrix[12]',
+    43 => 'diffusemap_transmatrix[13]',
+    43 => 'diffusemap_transmatrix[14]',
+    43 => 'diffusemap_transmatrix[15]',
     44 => 'specular_gloss_factor',
     76 => 'specular_color_flag',
     45 => 'specular_color_factor',
@@ -161,14 +178,44 @@ my $known = {
     78 => 'specularmap_projection',
     74 => 'specularmap_tiling',
     170 => 'specularmap_autotransform',
-    47 => 'specularmap_transmatrix',
+    47 => 'specularmap_transmatrix[0]',
+    47 => 'specularmap_transmatrix[1]',
+    47 => 'specularmap_transmatrix[2]',
+    47 => 'specularmap_transmatrix[3]',
+    47 => 'specularmap_transmatrix[4]',
+    47 => 'specularmap_transmatrix[5]',
+    47 => 'specularmap_transmatrix[6]',
+    47 => 'specularmap_transmatrix[7]',
+    47 => 'specularmap_transmatrix[8]',
+    47 => 'specularmap_transmatrix[9]',
+    47 => 'specularmap_transmatrix[10]',
+    47 => 'specularmap_transmatrix[11]',
+    47 => 'specularmap_transmatrix[12]',
+    47 => 'specularmap_transmatrix[13]',
+    47 => 'specularmap_transmatrix[14]',
+    47 => 'specularmap_transmatrix[15]',
     171 => 'reflectionmap_source',
     6   => 'reflectionmap_filename',
     48  => 'reflectionmap_blendfactor',
     172 => 'reflectionmap_projection',
     173 => 'reflectionmap_tiling',
     174 => 'reflectionmap_autotransform',
-    49  => 'reflectionmap_transmatrix',
+    49  => 'reflectionmap_transmatrix[0]',
+    49 => 'reflectionmap_transmatrix[1]',
+    49 => 'reflectionmap_transmatrix[2]',
+    49 => 'reflectionmap_transmatrix[3]',
+    49 => 'reflectionmap_transmatrix[4]',
+    49 => 'reflectionmap_transmatrix[5]',
+    49 => 'reflectionmap_transmatrix[6]',
+    49 => 'reflectionmap_transmatrix[7]',
+    49 => 'reflectionmap_transmatrix[8]',
+    49 => 'reflectionmap_transmatrix[9]',
+    49 => 'reflectionmap_transmatrix[10]',
+    49 => 'reflectionmap_transmatrix[11]',
+    49 => 'reflectionmap_transmatrix[12]',
+    49 => 'reflectionmap_transmatrix[13]',
+    49 => 'reflectionmap_transmatrix[14]',
+    49 => 'reflectionmap_transmatrix[15]',
     140 => 'opacity_percent',
     175 => 'opacitymap_source',
     7   => 'opacitymap_filename',
@@ -176,14 +223,44 @@ my $known = {
     176 => 'opacitymap_projection',
     177 => 'opacitymap_tiling',
     178 => 'opacitymap_autotransform',
-    142 => 'opacitymap_transmatrix',
+    142 => 'opacitymap_transmatrix[0]',
+    142 => 'opacitymap_transmatrix[1]',
+    142 => 'opacitymap_transmatrix[2]',
+    142 => 'opacitymap_transmatrix[3]',
+    142 => 'opacitymap_transmatrix[4]',
+    142 => 'opacitymap_transmatrix[5]',
+    142 => 'opacitymap_transmatrix[6]',
+    142 => 'opacitymap_transmatrix[7]',
+    142 => 'opacitymap_transmatrix[8]',
+    142 => 'opacitymap_transmatrix[9]',
+    142 => 'opacitymap_transmatrix[10]',
+    142 => 'opacitymap_transmatrix[11]',
+    142 => 'opacitymap_transmatrix[12]',
+    142 => 'opacitymap_transmatrix[13]',
+    142 => 'opacitymap_transmatrix[14]',
+    142 => 'opacitymap_transmatrix[15]',
     179 => 'bumpmap_source',
     8   => 'bumpmap_filename',
     143 => 'bumpmap_blendfactor',
     270 => 'bumpmap_projection',
     271 => 'bumpmap_tiling',
     272 => 'bumpmap_autotransform',
-    144 => 'bumpmap_transmatrix',
+    144 => 'bumpmap_transmatrix[0]',
+    144 => 'bumpmap_transmatrix[1]',
+    144 => 'bumpmap_transmatrix[2]',
+    144 => 'bumpmap_transmatrix[3]',
+    144 => 'bumpmap_transmatrix[4]',
+    144 => 'bumpmap_transmatrix[5]',
+    144 => 'bumpmap_transmatrix[6]',
+    144 => 'bumpmap_transmatrix[7]',
+    144 => 'bumpmap_transmatrix[8]',
+    144 => 'bumpmap_transmatrix[9]',
+    144 => 'bumpmap_transmatrix[10]',
+    144 => 'bumpmap_transmatrix[11]',
+    144 => 'bumpmap_transmatrix[12]',
+    144 => 'bumpmap_transmatrix[13]',
+    144 => 'bumpmap_transmatrix[14]',
+    144 => 'bumpmap_transmatrix[15]',
     145 => 'refraction_index',
     273 => 'refractionmap_source',
     9   => 'refractionmap_filename',
@@ -191,7 +268,22 @@ my $known = {
     274 => 'refractionmap_projection',
     275 => 'refractionmap_tiling',
     276 => 'refractionmap_autotransform',
-    147 => 'refractionmap_transmatrix',
+    147 => 'refractionmap_transmatrix[0]',
+    147 => 'refractionmap_transmatrix[1]',
+    147 => 'refractionmap_transmatrix[2]',
+    147 => 'refractionmap_transmatrix[3]',
+    147 => 'refractionmap_transmatrix[4]',
+    147 => 'refractionmap_transmatrix[5]',
+    147 => 'refractionmap_transmatrix[6]',
+    147 => 'refractionmap_transmatrix[7]',
+    147 => 'refractionmap_transmatrix[8]',
+    147 => 'refractionmap_transmatrix[9]',
+    147 => 'refractionmap_transmatrix[10]',
+    147 => 'refractionmap_transmatrix[11]',
+    147 => 'refractionmap_transmatrix[12]',
+    147 => 'refractionmap_transmatrix[13]',
+    147 => 'refractionmap_transmatrix[14]',
+    147 => 'refractionmap_transmatrix[15]',
     460 => 'color_bleed_scale',
     461 => 'indirect_dump_scale',
     462 => 'reflectance_scale',
@@ -207,7 +299,22 @@ my $known = {
     73 => 'normalmap_projection',
     74 => 'normalmap_tiling',
     75 => 'normalmap_autotransform',
-    43 => 'normalmap_transmatrix',
+    43 => 'normalmap_transmatrix[0]',
+    43 => 'normalmap_transmatrix[1]',
+    43 => 'normalmap_transmatrix[2]',
+    43 => 'normalmap_transmatrix[3]',
+    43 => 'normalmap_transmatrix[4]',
+    43 => 'normalmap_transmatrix[5]',
+    43 => 'normalmap_transmatrix[6]',
+    43 => 'normalmap_transmatrix[7]',
+    43 => 'normalmap_transmatrix[8]',
+    43 => 'normalmap_transmatrix[9]',
+    43 => 'normalmap_transmatrix[10]',
+    43 => 'normalmap_transmatrix[11]',
+    43 => 'normalmap_transmatrix[12]',
+    43 => 'normalmap_transmatrix[13]',
+    43 => 'normalmap_transmatrix[14]',
+    43 => 'normalmap_transmatrix[15]',
     293 => 'materials_anonymous',
     272 => 'global_illumination_mode',
     273 => 'final_gather_mode',
@@ -1466,12 +1573,14 @@ my $known = {
     ],
 };
 
-print $f0 "// -*- c -*-\n";
+my $firstline = "/* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */\n"
+              . "/* generated by make regen-unknown, do not modify */\n\n";
+print $f0 $firstline;
 print $f0 "// name, dxf, handle, bytes, is_entity, num_bits, commonsize, hdloff, ".
           "strsize, hdlsize, bitsize, fieldptr\n";
-print $f1 "// -*- c -*-\n";
-print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
-print $f2 "// -*- c -*-\n";
+print $f1a $firstline;
+print $f2 $firstline;
+my ($f1, $prevobj);
 
 LINE:
 while (<>) {
@@ -1532,6 +1641,17 @@ while (<>) {
   #}
 
   open my $f, "$fdxf" or next LINE;
+  if ($obj ne $prevobj) {
+    $prevobj = $obj;
+    print $f1a "#include \"alldxf_$obj.inc\"\n";
+    close $f1 if $f1;
+    open $f1, ">>", "$dir/alldxf_$obj.inc" or next LINE;
+    print $f1 $firstline;
+    print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
+  } else {
+    open $f1, ">>", "$dir/alldxf_$obj.inc" or next LINE;
+  }
+
   my ($foundobj, $foundhdl, @FIELD, $in_entity);
   my ($react, $xdict, $seen100, @avail);
   if ($obj =~ /^(?:PDF|DWF|DGN)UNDERLAY/) {
@@ -1577,8 +1697,8 @@ while (<>) {
           $hdlsize, $bitsize;
 
         print $f1 "/* $obj $hdl in $dxf */\n";
-        print $f1 "static struct _unknown_field unknown_dxf_$i\[\] = {\n";
-        print $f2 "unknown_dxf\[$i\].fields = unknown_dxf_$i;\n";
+        print $f1 "static struct _unknown_field unknown_dxf_${obj}_${i}\[\] = {\n";
+        print $f2 "unknown_dxf\[$i\].fields = unknown_dxf_${obj}_${i};\n";
         @FIELD = ();
         $i++;
       }
@@ -1644,7 +1764,7 @@ while (<>) {
   }
   close $f;
 }
-close $f0; close $f1; close $f2;
+close $f0; close $f1; close $f1a; close $f2;
 
 sub is_common_entity {
   my ($code, $v, $name) = @_;
@@ -1721,12 +1841,12 @@ sub find_name {
   return undef if !$avail;
   my @f = @$avail;
   my $len = scalar @f;
-  for my $i (0..(2*$len)-1) {
-    my $c = $f[$i];
+  for my $j (0..(2*$len)-1) {
+    my $c = $f[$j];
     if ($c == $code) {
       # delete ($c,$n) from $avail
-      splice @$avail, $i, 2;
-      my $n = $f[$i+1];
+      splice @$avail, $j, 2;
+      my $n = $f[$j+1];
       return $n;
     }
   }
@@ -1754,7 +1874,7 @@ sub emit_field {
       $type = "BITS_RC";
       $bits = 8;
     }
-    elsif ($name =~ /has_lastpt_ref/) {
+    elsif ($name =~ /has_lastpt_ref/) { # weird dxf code
       $type = "BITS_B";
       $bits = 1;
     }
