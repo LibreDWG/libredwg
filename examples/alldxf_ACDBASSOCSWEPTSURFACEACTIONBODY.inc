@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCSWEPTSURFACEACTIONBODY 413 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCSWEPTSURFACEACTIONBODY_81[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCSWEPTSURFACEACTIONBODY_83[] = {
   //{ 5, "413", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "412", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

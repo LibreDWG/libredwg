@@ -8299,19 +8299,19 @@ struct _dwg_object_CELLSTYLEMAP*
 @vtable @code
 
 @item dist_top_left
-3BD
+3BD,	DXF 10
 @item dist_center
-3BD
+3BD,	DXF 11
 @item content_width
-BD
+BD,	DXF 43
 @item content_height
-BD
+BD,	DXF 44
 @item width
-BD
+BD,	DXF 45
 @item height
-BD
+BD,	DXF 46
 @item unknown
-BD
+BL,	DXF 95
 @item cell_parent
 struct _dwg_TableCell*
 @item geom_parent
@@ -9174,17 +9174,17 @@ T
 @indentedblock
 @vtable @code
 
-@item flag
+@item geom_data_flag
 BL,	DXF 93
 @item width_w_gap
 BD,	DXF 40
 @item height_w_gap
 BD,	DXF 41
-@item unknown
+@item tablegeometry
 H,	DXF 330
-@item num_geom_data
+@item num_geometry
 BL,	DXF 94
-@item geom_data
+@item geometry
 Dwg_CellContentGeometry*
 @item parent
 struct _dwg_object_TABLEGEOMETRY*
@@ -9478,15 +9478,15 @@ BL
 BL
 @item geom_data_flag
 BL
-@item unknown_d40
+@item width_w_gap
 BD
-@item unknown_d41
+@item height_w_gap
 BD
-@item has_cell_geom
-BL
-@item cell_geom_handle
+@item tablegeometry
 H
-@item geom_data
+@item num_geometry
+BL
+@item geometry
 Dwg_CellContentGeometry*
 @item style_parent
 struct _dwg_CellStyle*

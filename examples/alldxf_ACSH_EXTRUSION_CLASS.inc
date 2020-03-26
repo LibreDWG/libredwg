@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_EXTRUSION_CLASS 2168 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_238[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_240[] = {
   //{ 5, "2168", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2169", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

@@ -3199,7 +3199,7 @@ typedef struct _dwg_CellContentGeometry
   BITCODE_BD content_height;
   BITCODE_BD width;
   BITCODE_BD height;
-  BITCODE_BD unknown;
+  BITCODE_BL unknown; /* ODA bug, BD there. DXF 95 */
 
   struct _dwg_TableCell *cell_parent;
   struct _dwg_TABLEGEOMETRY_Cell *geom_parent;
@@ -3222,11 +3222,11 @@ typedef struct _dwg_TableCell
   BITCODE_BL style_id;
   BITCODE_BL has_geom_data;
   BITCODE_BL geom_data_flag;
-  BITCODE_BD unknown_d40;
-  BITCODE_BD unknown_d41;
-  BITCODE_BL has_cell_geom;
-  BITCODE_H cell_geom_handle;
-  Dwg_CellContentGeometry *geom_data;
+  BITCODE_BD width_w_gap;
+  BITCODE_BD height_w_gap;
+  BITCODE_H tablegeometry;
+  BITCODE_BL num_geometry;
+  Dwg_CellContentGeometry *geometry;
 
   struct _dwg_CellStyle *style_parent;
   struct _dwg_TableRow *row_parent;
@@ -3581,12 +3581,12 @@ typedef struct _dwg_object_CELLSTYLEMAP
 
 typedef struct _dwg_TABLEGEOMETRY_Cell
 {
-  BITCODE_BL flag;
+  BITCODE_BL geom_data_flag;
   BITCODE_BD width_w_gap;
   BITCODE_BD height_w_gap;
-  BITCODE_H unknown;
-  BITCODE_BL num_geom_data;
-  Dwg_CellContentGeometry *geom_data;
+  BITCODE_H tablegeometry;
+  BITCODE_BL num_geometry;
+  Dwg_CellContentGeometry *geometry;
 
   struct _dwg_object_TABLEGEOMETRY *parent;
 } Dwg_TABLEGEOMETRY_Cell;

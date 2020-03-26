@@ -4642,7 +4642,7 @@ DWG_OBJECT_END
 #define row tdata.rows[rcount1]
 #define cell row.cells[rcount2]
 #define content cell.cell_contents[rcount3]
-#define geom cell.geom_data[0]
+#define geom cell.geometry[0]
 #define attr content.attrs[rcount4]
 #define merged fdata.merged_cells[rcount1]
 
@@ -4735,24 +4735,22 @@ DWG_OBJECT_END
           if (FIELD_VALUE (cell.has_geom_data))		\
             {						\
               SUB_FIELD_BL (cell,geom_data_flag, 91);	\
-              SUB_FIELD_BD (cell,unknown_d40, 40);	\
-              SUB_FIELD_BD (cell,unknown_d41, 41);	\
-              SUB_FIELD_BL (cell,has_cell_geom, 0);	\
-              SUB_FIELD_HANDLE (cell,cell_geom_handle, ANYCODE, 0); \
-              if (FIELD_VALUE (cell.has_cell_geom))	\
-                {					\
-                  REPEAT_N (1, cell.geom_data, Dwg_CellContentGeometry)	\
-                  REPEAT_BLOCK				\
-                      SUB_FIELD_3BD (geom,dist_top_left, 0);	\
-                      SUB_FIELD_3BD (geom,dist_center, 0);	\
-                      SUB_FIELD_BD (geom,content_width, 0);	\
-                      SUB_FIELD_BD (geom,width, 0);	\
-                      SUB_FIELD_BD (geom,height, 0);	\
-                      SUB_FIELD_BD (geom,unknown, 0);	\
-                  END_REPEAT_BLOCK			\
-                  SET_PARENT_FIELD (cell.geom_data, cell_parent, &_obj->cell)	\
-                  END_REPEAT (cell.geom_data);		\
-                }					\
+              SUB_FIELD_BD (cell,width_w_gap, 40);	\
+              SUB_FIELD_BD (cell,height_w_gap, 41);	\
+              SUB_FIELD_BL (cell,num_geometry, 94);	\
+              SUB_FIELD_HANDLE (cell,tablegeometry, 4, 330); \
+              REPEAT (cell.num_geometry, cell.geometry, Dwg_CellContentGeometry) \
+              REPEAT_BLOCK \
+                  SUB_FIELD_3BD (geom,dist_top_left, 10); \
+                  SUB_FIELD_3BD (geom,dist_center, 11);	\
+                  SUB_FIELD_BD (geom,content_width, 43); \
+                  SUB_FIELD_BD (geom,content_height, 44); \
+                  SUB_FIELD_BD (geom,width, 45); \
+                  SUB_FIELD_BD (geom,height, 46); \
+                  SUB_FIELD_BL (geom,unknown, 95); \
+              END_REPEAT_BLOCK	\
+              SET_PARENT_FIELD (cell.geometry, cell_parent, &_obj->cell) \
+              END_REPEAT (cell.geometry); \
             }						\
       END_REPEAT_BLOCK					\
       SET_PARENT_FIELD (row.cells, row_parent, &_obj->row)	\
@@ -5317,30 +5315,31 @@ DWG_OBJECT (TABLEGEOMETRY)
   REPEAT (num_cells, cells, Dwg_TABLEGEOMETRY_Cell)
   REPEAT_BLOCK
       #define cell cells[rcount1]
-      SUB_FIELD_BL (cell,flag, 93);
+      SUB_FIELD_BL (cell,geom_data_flag, 93);
       SUB_FIELD_BD (cell,width_w_gap, 40);
       SUB_FIELD_BD (cell,height_w_gap, 41);
-      SUB_FIELD_HANDLE (cell,unknown, 3, 330);
-      SUB_FIELD_BL (cell,num_geom_data, 94);
-      VALUEOUTOFBOUNDS (cell.num_geom_data, 10000)
-      REPEAT2 (cell.num_geom_data, cell.geom_data, Dwg_CellContentGeometry)
+      SUB_FIELD_HANDLE (cell,tablegeometry, 4, 330);
+      SUB_FIELD_BL (cell,num_geometry, 94);
+      VALUEOUTOFBOUNDS (cell.num_geometry, 10000)
+      REPEAT2 (cell.num_geometry, cell.geometry, Dwg_CellContentGeometry)
       REPEAT_BLOCK
-          #define geom cell.geom_data[rcount2]
-          SUB_FIELD_3BD (geom,dist_top_left, 0);
-          SUB_FIELD_3BD (geom,dist_center, 0);
-          SUB_FIELD_BD (geom,content_width, 0);
-          SUB_FIELD_BD (geom,width, 0);
-          SUB_FIELD_BD (geom,height, 0);
-          SUB_FIELD_BD (geom,unknown, 0);
+          #define geom cell.geometry[rcount2]
+          SUB_FIELD_3BD (geom,dist_top_left, 10);
+          SUB_FIELD_3BD (geom,dist_center, 11);
+          SUB_FIELD_BD (geom,content_width, 43);
+          SUB_FIELD_BD (geom,content_height, 44);
+          SUB_FIELD_BD (geom,width, 45);
+          SUB_FIELD_BD (geom,height, 46);
+          SUB_FIELD_BL (geom,unknown, 95);
           #undef geom
       END_REPEAT_BLOCK
-      SET_PARENT_FIELD (cell.geom_data, geom_parent, &_obj->cell)
-      END_REPEAT (cell.geom_data);
+      SET_PARENT_FIELD (cell.geometry, geom_parent, &_obj->cell)
+      END_REPEAT (cell.geometry);
       #undef cell
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (cells)
   END_REPEAT (cells);
-
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES */

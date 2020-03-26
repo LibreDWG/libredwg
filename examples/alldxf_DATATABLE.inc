@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* DATATABLE 91 in test/test-data/2010/gh209_1.dxf */
-static struct _unknown_field unknown_dxf_DATATABLE_256[] = {
+static struct _unknown_field unknown_dxf_DATATABLE_258[] = {
   //{ 5, "91", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "8D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -85,7 +85,7 @@ static struct _unknown_field unknown_dxf_DATATABLE_256[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DATATABLE 17EF in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_DATATABLE_257[] = {
+static struct _unknown_field unknown_dxf_DATATABLE_259[] = {
   //{ 5, "17EF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "17EB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -167,7 +167,7 @@ static struct _unknown_field unknown_dxf_DATATABLE_257[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DATATABLE 1D5 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_DATATABLE_258[] = {
+static struct _unknown_field unknown_dxf_DATATABLE_260[] = {
   //{ 5, "1D5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

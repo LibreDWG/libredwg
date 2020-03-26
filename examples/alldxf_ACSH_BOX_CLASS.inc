@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_BOX_CLASS 2170 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_BOX_CLASS_237[] = {
+static struct _unknown_field unknown_dxf_ACSH_BOX_CLASS_239[] = {
   //{ 5, "2170", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2171", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

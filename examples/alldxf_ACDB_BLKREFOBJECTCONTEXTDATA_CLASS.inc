@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 5EEAE7 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_86[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_88[] = {
   //{ 5, "5EEAE7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EEAE6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -24,7 +24,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_86[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 5EEC77 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_87[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_89[] = {
   //{ 5, "5EEC77", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EEC76", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -45,7 +45,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_87[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 46D in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_88[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_90[] = {
   //{ 5, "46D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "46C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -66,7 +66,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_88[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 46D in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_89[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_91[] = {
   //{ 5, "46D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "46C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

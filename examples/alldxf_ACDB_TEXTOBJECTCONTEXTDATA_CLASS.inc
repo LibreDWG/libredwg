@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_TEXTOBJECTCONTEXTDATA_CLASS 60161F in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_TEXTOBJECTCONTEXTDATA_CLASS_235[] = {
+static struct _unknown_field unknown_dxf_ACDB_TEXTOBJECTCONTEXTDATA_CLASS_237[] = {
   //{ 5, "60161F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "6015F3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -23,7 +23,7 @@ static struct _unknown_field unknown_dxf_ACDB_TEXTOBJECTCONTEXTDATA_CLASS_235[] 
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_TEXTOBJECTCONTEXTDATA_CLASS 60161E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_TEXTOBJECTCONTEXTDATA_CLASS_236[] = {
+static struct _unknown_field unknown_dxf_ACDB_TEXTOBJECTCONTEXTDATA_CLASS_238[] = {
   //{ 5, "60161E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "6015EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_LEADEROBJECTCONTEXTDATA_CLASS F4E0 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_150[] = {
+static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_152[] = {
   //{ 5, "F4E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "F4DF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -37,74 +37,6 @@ static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_150[
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2000/Leader.dxf */
-static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_151[] = {
-  //{ 5, "783", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "782", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "782", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "3", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_file", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "3", NULL, 0, BITS_UNKNOWN, "num_points", 2, {-1,-1,-1,-1,-1} },
-    { 10, "9.574467973499224", NULL, 0, BITS_UNKNOWN, "points[0]", 1, {-1,-1,-1,-1,-1} },
-    { 20, "10.0703252287432", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 10, "12.43818642667787", NULL, 0, BITS_UNKNOWN, "points[1]", 1, {-1,-1,-1,-1,-1} },
-    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 10, "15.39139605215153", NULL, 0, BITS_UNKNOWN, "points[2]", 1, {-1,-1,-1,-1,-1} },
-    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 11, "1.0", NULL, 0, BITS_UNKNOWN, "x_direction", 1, {-1,-1,-1,-1,-1} },
-    { 21, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290", 1, {-1,-1,-1,-1,-1} },
-    { 12, "0.0", NULL, 0, BITS_UNKNOWN, "inspt_offset", 10, {-1,-1,-1,-1,-1} },
-    { 22, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 32, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 13, "0.0", NULL, 0, BITS_UNKNOWN, "endptproj", 10, {-1,-1,-1,-1,-1} },
-    { 23, "-0.09", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 33, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2004/Leader.dxf */
-static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_152[] = {
-  //{ 5, "783", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "782", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "782", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "3", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_file", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "3", NULL, 0, BITS_UNKNOWN, "num_points", 2, {-1,-1,-1,-1,-1} },
-    { 10, "9.574467973499224", NULL, 0, BITS_UNKNOWN, "points[0]", 1, {-1,-1,-1,-1,-1} },
-    { 20, "10.0703252287432", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 10, "12.43818642667787", NULL, 0, BITS_UNKNOWN, "points[1]", 1, {-1,-1,-1,-1,-1} },
-    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 10, "15.39139605215153", NULL, 0, BITS_UNKNOWN, "points[2]", 1, {-1,-1,-1,-1,-1} },
-    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 11, "1.0", NULL, 0, BITS_UNKNOWN, "x_direction", 1, {-1,-1,-1,-1,-1} },
-    { 21, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290", 1, {-1,-1,-1,-1,-1} },
-    { 12, "0.0", NULL, 0, BITS_UNKNOWN, "inspt_offset", 10, {-1,-1,-1,-1,-1} },
-    { 22, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 32, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 13, "0.0", NULL, 0, BITS_UNKNOWN, "endptproj", 10, {-1,-1,-1,-1,-1} },
-    { 23, "-0.09", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 33, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2007/Leader.dxf */
 static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_153[] = {
   //{ 5, "783", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -138,8 +70,76 @@ static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_153[
     { 33, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2013/Leader.dxf */
+/* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2004/Leader.dxf */
 static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_154[] = {
+  //{ 5, "783", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "782", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "782", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "3", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_file", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "3", NULL, 0, BITS_UNKNOWN, "num_points", 2, {-1,-1,-1,-1,-1} },
+    { 10, "9.574467973499224", NULL, 0, BITS_UNKNOWN, "points[0]", 1, {-1,-1,-1,-1,-1} },
+    { 20, "10.0703252287432", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 10, "12.43818642667787", NULL, 0, BITS_UNKNOWN, "points[1]", 1, {-1,-1,-1,-1,-1} },
+    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 10, "15.39139605215153", NULL, 0, BITS_UNKNOWN, "points[2]", 1, {-1,-1,-1,-1,-1} },
+    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 11, "1.0", NULL, 0, BITS_UNKNOWN, "x_direction", 1, {-1,-1,-1,-1,-1} },
+    { 21, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290", 1, {-1,-1,-1,-1,-1} },
+    { 12, "0.0", NULL, 0, BITS_UNKNOWN, "inspt_offset", 10, {-1,-1,-1,-1,-1} },
+    { 22, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 32, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 13, "0.0", NULL, 0, BITS_UNKNOWN, "endptproj", 10, {-1,-1,-1,-1,-1} },
+    { 23, "-0.09", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 33, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2007/Leader.dxf */
+static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_155[] = {
+  //{ 5, "783", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "782", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "782", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "3", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_file", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "3", NULL, 0, BITS_UNKNOWN, "num_points", 2, {-1,-1,-1,-1,-1} },
+    { 10, "9.574467973499224", NULL, 0, BITS_UNKNOWN, "points[0]", 1, {-1,-1,-1,-1,-1} },
+    { 20, "10.0703252287432", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 10, "12.43818642667787", NULL, 0, BITS_UNKNOWN, "points[1]", 1, {-1,-1,-1,-1,-1} },
+    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 10, "15.39139605215153", NULL, 0, BITS_UNKNOWN, "points[2]", 1, {-1,-1,-1,-1,-1} },
+    { 20, "12.75399576363243", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 11, "1.0", NULL, 0, BITS_UNKNOWN, "x_direction", 1, {-1,-1,-1,-1,-1} },
+    { 21, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290", 1, {-1,-1,-1,-1,-1} },
+    { 12, "0.0", NULL, 0, BITS_UNKNOWN, "inspt_offset", 10, {-1,-1,-1,-1,-1} },
+    { 22, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 32, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 13, "0.0", NULL, 0, BITS_UNKNOWN, "endptproj", 10, {-1,-1,-1,-1,-1} },
+    { 23, "-0.09", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 33, "0.0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2013/Leader.dxf */
+static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_156[] = {
   //{ 5, "783", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "782", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -173,7 +173,7 @@ static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_154[
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_LEADEROBJECTCONTEXTDATA_CLASS 783 in test/test-data/2018/Leader.dxf */
-static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_155[] = {
+static struct _unknown_field unknown_dxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS_157[] = {
   //{ 5, "783", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "782", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

@@ -1019,13 +1019,15 @@ my $known = {
     40 => 'cell.unknown_d40',
     41 => 'cell.unknown_d41',
     #0 => 'cell.has_cell_geom',
-    #0 => 'cell.cell_geom_handle',
-    #0 => 'geom.dist_top_left',
-    #0 => 'geom.dist_center',
-    #0 => 'geom.content_width',
-    #0 => 'geom.width',
-    #0 => 'geom.height',
-    #0 => 'geom.unknown',
+    330 => 'cell.tablegeometry',
+    94 => 'cell.num_geometry',
+    10 => 'geom.dist_top_left',
+    11 => 'geom.dist_center',
+    43 => 'geom.content_width',
+    44 => 'geom.content_height',
+    45 => 'geom.width',
+    46 => 'geom.height',
+    95 => 'geom.unknown',
     91 => 'row.custom_data',
     90 => 'row.num_customdata_items',
     300 => 'row.customdata_items.name',
@@ -1046,17 +1048,18 @@ my $known = {
     90 => 'num_rows',
     91 => 'num_cols',
     92 => 'num_cells',
-    93 => 'cell.flag',
-    40 => 'cell.width_w_gap',
-    41 => 'cell.height_w_gap',
-    330 => 'cell.unknown',
-    94 => 'cell.num_geom_data',
-    #0 => 'geom.dist_top_left',
-    #0 => 'geom.dist_center',
-    #0 => 'geom.content_width',
-    #0 => 'geom.width',
-    #0 => 'geom.height',
-    #0 => 'geom.unknown',
+    93 => 'cells.geom_data_flag',
+    40 => 'cells.width_w_gap',
+    41 => 'cells.height_w_gap',
+    330 => 'cells.tablegeometry',
+    94 => 'cells.num_geometry',
+    10 => 'cell.geometry.dist_top_left',
+    11 => 'cell.geometry.dist_center',
+    43 => 'cell.geometry.content_width',
+    44 => 'cell.geometry.content_height',
+    45 => 'cell.geometry.width',
+    46 => 'cell.geometry.height',
+    95 => 'cell.geometry.unknown',
     ],
   TABLESTYLE => [
     100 => 'AcDbTableStyle',
@@ -1693,7 +1696,7 @@ while (<>) {
     next LINE;
   }
   # picat runs out of memory there
-  if ($num_bits > 30000) {
+  if ($num_bits > 50000) {
     warn "skip overlarge $obj-$hdl-$num_bits $dxf\n";
     next LINE;
   }

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ARC_DIMENSION 399 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_247[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_249[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -66,7 +66,7 @@ static struct _unknown_field unknown_dxf_ARC_DIMENSION_247[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ARC_DIMENSION 399 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_248[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_250[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -132,7 +132,7 @@ static struct _unknown_field unknown_dxf_ARC_DIMENSION_248[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ARC_DIMENSION 399 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_249[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_251[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -199,7 +199,7 @@ static struct _unknown_field unknown_dxf_ARC_DIMENSION_249[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ARC_DIMENSION 399 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_250[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_252[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },

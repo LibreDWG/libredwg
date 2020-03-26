@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCGEOMDEPENDENCY 3E5 in test/test-data/2000/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_46[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_48[] = {
   //{ 5, "3E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -28,56 +28,6 @@ static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_46[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCGEOMDEPENDENCY 3E4 in test/test-data/2004/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_47[] = {
-  //{ 5, "3E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 5, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 5, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 5, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 5, {-1,-1,-1,-1,-1} },
-    { 90, "-10000", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3DE", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 2, {-1,-1,-1,-1,-1} },
-    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 360, "0", NULL, 0, BITS_UNKNOWN, "h360", 3, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocGeomDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "bs90_4", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 5, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbAssocSingleEdgePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCGEOMDEPENDENCY 3E4 in test/test-data/2007/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_48[] = {
-  //{ 5, "3E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 5, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 5, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 5, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 5, {-1,-1,-1,-1,-1} },
-    { 90, "-10000", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3DE", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 2, {-1,-1,-1,-1,-1} },
-    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 360, "0", NULL, 0, BITS_UNKNOWN, "h360", 3, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocGeomDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "bs90_4", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 5, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbAssocSingleEdgePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCGEOMDEPENDENCY 3E4 in test/test-data/2010/Constraints.dxf */
 static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_49[] = {
   //{ 5, "3E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
@@ -102,7 +52,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_49[] = {
     { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 2, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDBASSOCGEOMDEPENDENCY 3E4 in test/test-data/2013/Constraints.dxf */
+/* ACDBASSOCGEOMDEPENDENCY 3E4 in test/test-data/2007/Constraints.dxf */
 static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_50[] = {
   //{ 5, "3E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
@@ -127,63 +77,57 @@ static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_50[] = {
     { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 2, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2000.dxf */
+/* ACDBASSOCGEOMDEPENDENCY 3E4 in test/test-data/2010/Constraints.dxf */
 static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_51[] = {
-  //{ 5, "396", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+  //{ 5, "3E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "3E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 4, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 3, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 4, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 4, {-1,-1,-1,-1,-1} },
-    { 90, "2147483647", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
-    { 330, "37D", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 5, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 5, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 5, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 5, {-1,-1,-1,-1,-1} },
+    { 90, "-10000", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
+    { 330, "3DE", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 2, {-1,-1,-1,-1,-1} },
     { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 360, "0", NULL, 0, BITS_UNKNOWN, "h360", 3, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 2, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocGeomDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 90, "0", NULL, 0, BITS_UNKNOWN, "bs90_4", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbAssocSimplePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 90, "-1003", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 5, {-1,-1,-1,-1,-1} },
+    { 1, "AcDbAssocSingleEdgePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 2, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2004.dxf */
+/* ACDBASSOCGEOMDEPENDENCY 3E4 in test/test-data/2013/Constraints.dxf */
 static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_52[] = {
-  //{ 5, "396", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+  //{ 5, "3E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "3E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 4, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 3, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 4, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 4, {-1,-1,-1,-1,-1} },
-    { 90, "2147483647", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
-    { 330, "37D", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 5, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 5, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 5, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 5, {-1,-1,-1,-1,-1} },
+    { 90, "-10000", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
+    { 330, "3DE", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 2, {-1,-1,-1,-1,-1} },
     { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 360, "0", NULL, 0, BITS_UNKNOWN, "h360", 3, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 2, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocGeomDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 90, "0", NULL, 0, BITS_UNKNOWN, "bs90_4", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbAssocSimplePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 90, "-1003", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 5, {-1,-1,-1,-1,-1} },
+    { 1, "AcDbAssocSingleEdgePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 2, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2007.dxf */
+/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2000.dxf */
 static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_53[] = {
   //{ 5, "396", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
@@ -211,7 +155,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_53[] = {
     { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 3, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2010.dxf */
+/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2004.dxf */
 static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_54[] = {
   //{ 5, "396", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
@@ -239,8 +183,64 @@ static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_54[] = {
     { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 3, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2013.dxf */
+/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2007.dxf */
 static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_55[] = {
+  //{ 5, "396", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 4, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 4, {-1,-1,-1,-1,-1} },
+    { 90, "2147483647", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
+    { 330, "37D", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "h360", 3, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocGeomDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "bs90_4", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 4, {-1,-1,-1,-1,-1} },
+    { 1, "AcDbAssocSimplePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 90, "-1003", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2010.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_56[] = {
+  //{ 5, "396", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "dependent_on_object_status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "has_cached_value", 4, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "is_actionevaluation_in_progress", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_attached_to_object", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_delegating_to_owning_action", 4, {-1,-1,-1,-1,-1} },
+    { 90, "2147483647", NULL, 0, BITS_UNKNOWN, "bs90_2", 1, {-1,-1,-1,-1,-1} },
+    { 330, "37D", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "b290_5", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "h360", 3, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "bs90_3", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocGeomDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "bs90_4", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "b290_6", 4, {-1,-1,-1,-1,-1} },
+    { 1, "AcDbAssocSimplePersSubentId", NULL, 0, BITS_UNKNOWN, "t", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 90, "-1003", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "dependent_on_compound_object", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCGEOMDEPENDENCY 396 in test/test-data/example_2013.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCGEOMDEPENDENCY_57[] = {
   //{ 5, "396", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

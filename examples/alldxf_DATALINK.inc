@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* DATALINK 38482 in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_DATALINK_251[] = {
+static struct _unknown_field unknown_dxf_DATALINK_253[] = {
   //{ 5, "38482", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "FE4E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -65,7 +65,7 @@ static struct _unknown_field unknown_dxf_DATALINK_251[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DATALINK 3CEB8 in test/test-data/2010/5151-022.dxf */
-static struct _unknown_field unknown_dxf_DATALINK_252[] = {
+static struct _unknown_field unknown_dxf_DATALINK_254[] = {
   //{ 5, "3CEB8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "FE4E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -128,7 +128,7 @@ static struct _unknown_field unknown_dxf_DATALINK_252[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DATALINK 425A0 in test/test-data/2010/5151-023.dxf */
-static struct _unknown_field unknown_dxf_DATALINK_253[] = {
+static struct _unknown_field unknown_dxf_DATALINK_255[] = {
   //{ 5, "425A0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "FE4E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -191,7 +191,7 @@ static struct _unknown_field unknown_dxf_DATALINK_253[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DATALINK 428CD in test/test-data/2010/5151-024.dxf */
-static struct _unknown_field unknown_dxf_DATALINK_254[] = {
+static struct _unknown_field unknown_dxf_DATALINK_256[] = {
   //{ 5, "428CD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "FE4E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -254,7 +254,7 @@ static struct _unknown_field unknown_dxf_DATALINK_254[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DATALINK 201 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_DATALINK_255[] = {
+static struct _unknown_field unknown_dxf_DATALINK_257[] = {
   //{ 5, "201", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "200", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

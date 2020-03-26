@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* LIGHT 75E in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_280[] = {
+static struct _unknown_field unknown_dxf_LIGHT_283[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -43,7 +43,7 @@ static struct _unknown_field unknown_dxf_LIGHT_280[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_281[] = {
+static struct _unknown_field unknown_dxf_LIGHT_284[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -83,7 +83,7 @@ static struct _unknown_field unknown_dxf_LIGHT_281[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_282[] = {
+static struct _unknown_field unknown_dxf_LIGHT_285[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -123,7 +123,7 @@ static struct _unknown_field unknown_dxf_LIGHT_282[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_283[] = {
+static struct _unknown_field unknown_dxf_LIGHT_286[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -163,7 +163,7 @@ static struct _unknown_field unknown_dxf_LIGHT_283[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_284[] = {
+static struct _unknown_field unknown_dxf_LIGHT_287[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -203,7 +203,7 @@ static struct _unknown_field unknown_dxf_LIGHT_284[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2018.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_285[] = {
+static struct _unknown_field unknown_dxf_LIGHT_288[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -240,7 +240,7 @@ static struct _unknown_field unknown_dxf_LIGHT_285[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 367 in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_286[] = {
+static struct _unknown_field unknown_dxf_LIGHT_289[] = {
   //{ 5, "367", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "368", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -281,7 +281,7 @@ static struct _unknown_field unknown_dxf_LIGHT_286[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 367 in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_287[] = {
+static struct _unknown_field unknown_dxf_LIGHT_290[] = {
   //{ 5, "367", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "368", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },

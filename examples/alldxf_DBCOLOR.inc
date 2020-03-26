@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* DBCOLOR 1EB307 in test/test-data/2004/CascoUrbano.dxf */
-static struct _unknown_field unknown_dxf_DBCOLOR_259[] = {
+static struct _unknown_field unknown_dxf_DBCOLOR_261[] = {
   //{ 5, "1EB307", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "10346B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -90,7 +90,7 @@ static struct _unknown_field unknown_dxf_DBCOLOR_259[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DBCOLOR 20A in test/test-data/2004/dbcolor.dxf */
-static struct _unknown_field unknown_dxf_DBCOLOR_260[] = {
+static struct _unknown_field unknown_dxf_DBCOLOR_262[] = {
   //{ 5, "20A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "73", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -109,7 +109,7 @@ static struct _unknown_field unknown_dxf_DBCOLOR_260[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DBCOLOR 1F05B9 in test/test-data/2004/hatch_color_ref.dxf */
-static struct _unknown_field unknown_dxf_DBCOLOR_261[] = {
+static struct _unknown_field unknown_dxf_DBCOLOR_263[] = {
   //{ 5, "1F05B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "10346B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS 5EEC87 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_161[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_163[] = {
   //{ 5, "5EEC87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EEC86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -24,7 +24,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CL
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS 5EEC82 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_162[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_164[] = {
   //{ 5, "5EEC82", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EEC81", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -45,7 +45,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CL
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS 7100 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_163[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_165[] = {
   //{ 5, "7100", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "70FF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -66,7 +66,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CL
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS 472 in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_164[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_166[] = {
   //{ 5, "472", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "471", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -87,7 +87,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CL
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS 472 in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_165[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS_167[] = {
   //{ 5, "472", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "471", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
