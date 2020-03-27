@@ -2986,6 +2986,14 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "FileDepList_Files";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
   o->files = calloc (size, sizeof (Dwg_FileDepList_Files));
   o->num_files = size;
   for (int j = 0; j < size; j++)
@@ -3030,7 +3038,9 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           // clang-format on
         }
+      tokens->index--;
     }
+  tokens->index++;
   return 0;
 }
 
