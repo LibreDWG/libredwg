@@ -3789,6 +3789,185 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// returns with 0
+static Dxf_Pair *
+add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                        Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_TABLEGEOMETRY *o = obj->tio.object->tio.TABLEGEOMETRY;
+  BITCODE_H hdl;
+  BITCODE_BL num_cells = o->num_cells;
+  int i = -1, j = -1;
+
+  o->cells = xcalloc (num_cells, sizeof (Dwg_TABLEGEOMETRY_Cell));
+  if (!o->cells)
+    {
+      o->num_cells = 0;
+      return NULL;
+    }
+
+  while (pair != NULL && pair->code != 0)
+    {
+      switch (pair->code)
+        {
+        case 0:
+          break;
+        case 93:
+          i++; // the first
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          o->cells[i].geom_data_flag = pair->value.i;
+          LOG_TRACE ("%s.cells[%d].geom_data_flag = " FORMAT_BL " [BL %d]\n",
+                       obj->name, i, o->cells[i].geom_data_flag, pair->code);
+          break;
+        case 40:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          o->cells[i].width_w_gap = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].width_w_gap = %f [BD %d]\n",
+                       obj->name, i, pair->value.d, pair->code);
+          break;
+        case 41:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          o->cells[i].height_w_gap = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].height_w_gap = %f [BD %d]\n",
+                       obj->name, i, pair->value.d, pair->code);
+          break;
+        case 330:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          hdl = find_tablehandle (dwg, pair);
+          assert (hdl);
+          o->cells[i].tablegeometry = hdl;
+          LOG_TRACE ("%s.cells[%d].tablegeometry = " FORMAT_REF " [H %d]\n",
+                       obj->name, i, ARGS_REF(hdl), pair->code);
+          break;
+        case 94:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          o->cells[i].num_geometry = pair->value.i;
+          LOG_TRACE ("%s.cells[%d].num_geometry = " FORMAT_BL " [BL %d]\n",
+                       obj->name, i, o->cells[i].num_geometry, pair->code);
+          o->cells[i].geometry = xcalloc (pair->value.i, sizeof (Dwg_CellContentGeometry));
+          if (!o->cells[i].geometry)
+            {
+              o->cells[i].num_geometry = 0;
+              return NULL;
+            }
+          j = -1;
+          break;
+        case 10:
+          j++;
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].dist_top_left.x = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].dist_top_left.x = %f [BD %d]\n",
+                     obj->name, i, j, pair->value.d, pair->code);
+          break;
+        case 20:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].dist_top_left.y = pair->value.d;
+          break;
+        case 30:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].dist_top_left.z = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].dist_top_left = ( %f, %f, %f) "
+                     "[3BD 10]\n",
+                     obj->name, i, j, o->cells[i].geometry[j].dist_top_left.x,
+                     o->cells[i].geometry[j].dist_top_left.y, pair->value.d);
+          break;
+        case 11:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].dist_center.x = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].dist_center.x = %f [BD %d]\n",
+                     obj->name, i, j, pair->value.d, pair->code);
+          break;
+        case 21:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].dist_center.y = pair->value.d;
+          break;
+        case 31:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].dist_center.z = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].dist_center = ( %f, %f, %f) "
+                     "[3BD 10]\n",
+                     obj->name, i, j, o->cells[i].geometry[j].dist_center.x,
+                     o->cells[i].geometry[j].dist_center.y, pair->value.d);
+          break;
+        case 43:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].content_width = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].content_width = %f [BD %d]\n",
+                     obj->name, i, j, pair->value.d, pair->code);
+          break;
+        case 44:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].content_height = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].content_height = %f [BD %d]\n",
+                     obj->name, i, j, pair->value.d, pair->code);
+          break;
+        case 45:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].width = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].width = %f [BD %d]\n",
+                     obj->name, i, j, pair->value.d, pair->code);
+          break;
+        case 46:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].height = pair->value.d;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].height = %f [BD %d]\n",
+                     obj->name, i, j, pair->value.d, pair->code);
+          break;
+        case 95:
+          assert (i >= 0 && i < (int)num_cells);
+          assert (o->cells);
+          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
+          assert (o->cells[i].geometry);
+          o->cells[i].geometry[j].unknown = pair->value.i;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].unknown = %d [BL %d]\n",
+                     obj->name, i, j, pair->value.i, pair->code);
+          break;
+        default:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
+                     "TABLESTYLE");
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
 // starts with 71 or 75
 static Dxf_Pair *
 add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -7265,6 +7444,14 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   // for the unknown subfields: 7, 140, ...
                   pair = add_TABLESTYLE (obj, dat, pair);
+                  // returns with 0
+                  if (pair && pair->code == 0)
+                    goto start_loop;
+                }
+              else if (obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)
+                {
+                  // for the unknown subfields: 93, 40, ...
+                  pair = add_TABLEGEOMETRY_Cell (obj, dat, pair);
                   // returns with 0
                   if (pair && pair->code == 0)
                     goto start_loop;
