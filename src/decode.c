@@ -861,7 +861,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   const char *section_names[]
       = { "AcDb:Header", "AcDb:Classes", "AcDb:Handles",
-          "2NDHEADER",   "MEASUREMENT",  "AcDb:AuxHeader" };
+          "2NDHEADER",   "AcDb:Template",  "AcDb:AuxHeader" };
 
   {
     int i;

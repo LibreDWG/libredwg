@@ -274,6 +274,7 @@ void bit_write_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
 
 void bit_chain_init (Bit_Chain *dat, const int size);
 void bit_chain_alloc (Bit_Chain *dat);
+void bit_chain_free (Bit_Chain *dat);
 
 void bit_print (Bit_Chain *dat, long unsigned int size);
 

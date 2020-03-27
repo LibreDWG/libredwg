@@ -348,7 +348,10 @@
 #ifndef CONTROL_HANDLE_STREAM
 #  define CONTROL_HANDLE_STREAM                                               \
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
-    PRE (R_2007) *hdl_dat = *dat;                                             \
+    PRE (R_2007) {                                                            \
+      hdl_dat->byte = dat->byte;                                              \
+      hdl_dat->bit = dat->bit;                                                \
+    }                                                                         \
     SINCE (R_13) {                                                            \
       VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);         \
       REACTORS (4)                                                            \

@@ -2301,6 +2301,17 @@ bit_chain_alloc (Bit_Chain *dat)
 }
 
 void
+bit_chain_free (Bit_Chain *dat)
+{
+  if (dat->chain)
+    {
+      free (dat->chain);
+      dat->chain = NULL;
+    }
+  dat->size = 0;
+}
+
+void
 bit_print (Bit_Chain *dat, long unsigned int size)
 {
   unsigned char sig;
