@@ -819,6 +819,22 @@ encode_patch_RLsize (Bit_Chain *dat, long unsigned int pvzadr)
   return size;
 }
 
+/* if an error in this section should immediately return with a critical error,
+ * like INVALIDDWG */
+#if 0
+static bool
+is_section_critical (Dwg_Section_Type i)
+{
+  return (i == SECTION_OBJECTS || i == SECTION_HEADER || i == SECTION_CLASSES
+          || i == SECTION_HANDLES) ? true : false;
+}
+#endif
+static bool
+is_section_r13_critical (Dwg_Section_Type_R13 i)
+{
+  return i <= SECTION_HANDLES_R13 ? true : false;
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -1567,7 +1583,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dat->size = dat->byte;
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
 
-  /* Write section addresses
+  /* Patch section addresses
    */
   assert (section_address);
   dat->byte = section_address;
@@ -1575,22 +1591,34 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   LOG_INFO ("\n=======> section addresses: %4u\n", (unsigned)dat->byte);
   for (j = 0; j < dwg->header.num_sections; j++)
     {
-      bit_write_RC (dat, dwg->header.section[j].number);
-      bit_write_RL (dat, dwg->header.section[j].address);
-      bit_write_RL (dat, dwg->header.section[j].size);
       LOG_TRACE ("section[%u].number: %4d [RC] %s\n", j,
                  (int)dwg->header.section[j].number,
                  j < 6 ? section_names[j] : "")
       LOG_TRACE ("section[%u].offset: %4u [RL]\n", j,
                  (unsigned)dwg->header.section[j].address)
       LOG_TRACE ("section[%u].size:   %4u [RL]\n", j,
-                 (int)dwg->header.section[j].size)
-      if (dwg->header.section[j].address + dwg->header.section[j].size
+                 (int)dwg->header.section[j].size);
+      if ((unsigned long)dwg->header.section[j].address
+              + dwg->header.section[j].size
           > dat->size)
         {
-          LOG_ERROR ("section[%u] address or size overflow", j);
-          return DWG_ERR_INVALIDDWG;
+          if (is_section_r13_critical (j))
+            {
+              LOG_ERROR ("section[%u] %s address or size overflow", j,
+                         j < 6 ? section_names[j] : "");
+              return DWG_ERR_INVALIDDWG;
+            }
+          else
+            {
+              LOG_WARN ("section[%u] %s address or size overflow, skipped",
+                        j, j < 6 ? section_names[j] : "");
+              dwg->header.section[j].address = 0;
+              dwg->header.section[j].size = 0;
+            }
         }
+      bit_write_RC (dat, dwg->header.section[j].number);
+      bit_write_RL (dat, dwg->header.section[j].address);
+      bit_write_RL (dat, dwg->header.section[j].size);
     }
 
   /* Write CRC's
