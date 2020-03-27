@@ -1693,7 +1693,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   BITCODE_BL numitems; // check against existing texts[] size
                   const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
                   memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
-                  if (numitems != (BITCODE_BL)-1)
+                  if (numitems != (BITCODE_BL)-1 && numitems != size1)
                     {
                       // already have texts. if less we leak them
                       LOG_WARN ("Skip some itemhandles, only accept %d of %d",
