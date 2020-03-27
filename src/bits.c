@@ -346,13 +346,13 @@ bit_write_RC (Bit_Chain *dat, unsigned char value)
 
   if (dat->bit == 0)
     {
-      if (dat->byte >= dat->size)
+      while (dat->byte >= dat->size)
         bit_chain_alloc (dat);
       dat->chain[dat->byte] = value;
     }
   else
     {
-      if (dat->byte + 1 >= dat->size)
+      while (dat->byte + 1 >= dat->size)
         bit_chain_alloc (dat);
       byte = dat->chain[dat->byte];
       remainder = byte & (0xff << (8 - dat->bit));
@@ -2270,6 +2270,8 @@ void
 bit_chain_init (Bit_Chain *dat, const int size)
 {
   dat->chain = (unsigned char *)calloc (1, size);
+  if (!dat->chain)
+    abort();
   dat->size = (long unsigned int)size;
   dat->byte = 0;
   dat->bit = 0;
@@ -2291,6 +2293,8 @@ bit_chain_alloc (Bit_Chain *dat)
     {
       dat->chain
           = (unsigned char *)realloc (dat->chain, dat->size + CHAIN_BLOCK);
+      if (!dat->chain)
+        abort();
       memset (&dat->chain[dat->size], 0, CHAIN_BLOCK);
       dat->size += CHAIN_BLOCK;
     }
