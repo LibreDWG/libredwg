@@ -1537,7 +1537,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
             }
-          // all numfields are calculated from array sizes
+          // all numfields are calculated from actual array sizes
+          // for easier adding or deleting entries.
           else if (t->type == JSMN_PRIMITIVE
                    && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
             {
@@ -3482,11 +3483,13 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           LOG_ERROR ("Unexpected JSON key %s at %u of %ld tokens. %s:%d", key,
                      tokens.index, tokens.num_tokens, __FUNCTION__, __LINE__);
+          LOG_TRACE ("\n")
           free (tokens.tokens);
-          return DWG_ERR_INVALIDDWG;
+          return error | DWG_ERR_INVALIDTYPE;
         }
       if (error >= DWG_ERR_CRITICAL)
         {
+          LOG_TRACE ("\n")
           free (tokens.tokens);
           return error;
         }
