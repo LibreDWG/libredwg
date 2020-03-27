@@ -5303,10 +5303,9 @@ DWG_ENTITY_END
 #endif /* DEBUG_CLASSES */
 
 //pg.246 20.4.103
-//unstable
+// stable
 DWG_OBJECT (TABLEGEOMETRY)
 
-  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbTableGeometry)
   FIELD_BL (num_rows, 90);
   VALUEOUTOFBOUNDS (num_rows, 5000)

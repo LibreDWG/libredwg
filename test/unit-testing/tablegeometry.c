@@ -1,4 +1,3 @@
-// TODO DEBUGGING => unstable
 #define DWG_TYPE DWG_TYPE_TABLEGEOMETRY
 #include "common.c"
 
@@ -13,7 +12,6 @@ api_process (dwg_object *obj)
   Dwg_CellContentGeometry *geometry;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
   dwg_obj_tablegeometry *_obj = dwg_object_to_TABLEGEOMETRY (obj);
 
   CHK_ENTITY_TYPE (_obj, TABLEGEOMETRY, num_rows, BL, num_rows);
@@ -43,5 +41,4 @@ api_process (dwg_object *obj)
               CHK_SUBCLASS_TYPE (geometry[j], CellContentGeometry, unknown, BL);
             }
       }
-  //#endif
 }
