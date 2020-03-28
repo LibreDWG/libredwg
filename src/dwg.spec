@@ -6062,12 +6062,15 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_BS (ref[rcount1], num_mainobjs, 0); // 1 or 2
       SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_mainobjs, 100)
       SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
-      SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
-      SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
-      SUB_HANDLE_VECTOR (ref[rcount1], mainobjs, num_mainobjs, 4, 331);
-      if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-        SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1 or 2 FIXME
-      SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
+      if (FIELD_VALUE (ref[rcount1].main_subent_type))
+        {
+          SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
+          SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
+          SUB_HANDLE_VECTOR (ref[rcount1], mainobjs, num_mainobjs, 4, 331);
+          if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
+            SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1 or 2 FIXME
+          SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
+        }
       SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ref)

@@ -558,7 +558,7 @@ bit_read_BL (Bit_Chain *dat)
   if (two_bit_code == 0)
     return bit_read_RL (dat);
   else if (two_bit_code == 1)
-    return bit_read_RC (dat) & 0xFF;
+    return (BITCODE_BL)bit_read_RC (dat) & 0xFF;
   else if (two_bit_code == 2)
     return 0;
   else /* if (two_bit_code == 3) */
