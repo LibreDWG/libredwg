@@ -230,6 +230,9 @@
 #ifndef DXF_3DSOLID
 #  define DXF_3DSOLID
 #endif
+#ifndef JSON_3DSOLID
+#  define JSON_3DSOLID
+#endif
 #ifndef FIELD_2PT_TRACE
 #  define FIELD_2PT_TRACE(name, type, dxf)                                    \
     LOG_TRACE (#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n",     \

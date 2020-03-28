@@ -1791,12 +1791,13 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           FIELD_TFv (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
           FIELD_VALUE (block_size[0]) = 15;
           FIELD_RL (block_size[1], 0);
-          if (FIELD_VALUE (block_size[1]) > obj->size) {
-            LOG_ERROR ("Invalid ACIS 2 SAB block_size[1] %d. Max. %d",
-                      _obj->block_size[1], obj->size);
-            _obj->block_size[1] = 0;
-            return DWG_ERR_VALUEOUTOFBOUNDS;
-          }
+          if (FIELD_VALUE (block_size[1]) > obj->size)
+            {
+              LOG_ERROR ("Invalid ACIS 2 SAB block_size[1] %d. Max. %d",
+                         _obj->block_size[1], obj->size);
+              _obj->block_size[1] = 0;
+              return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
           // Binary SAB, unencrypted
           FIELD_TFv (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
           total_size = FIELD_VALUE (block_size[1]);
@@ -2054,6 +2055,9 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
   } \
   ENCODER { \
     ENCODE_3DSOLID \
+  } \
+  JSON { \
+    JSON_3DSOLID \
   } \
   FREE_3DSOLID
 

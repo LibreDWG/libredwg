@@ -44,8 +44,11 @@ static void print_wcquote (Bit_Chain *restrict dat,
                            dwg_wchar_t *restrict wstr);
 #endif
 
+static int json_3dsolid (Bit_Chain *restrict dat,
+                         const Dwg_Object *restrict obj,
+                         Dwg_Entity_3DSOLID *restrict _obj);
 static void _prefix (Bit_Chain *dat);
-static char* _path_field(const char *path);
+static char *_path_field (const char *path);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -338,23 +341,22 @@ static char* _path_field(const char *path);
     fprintf (dat->fh, "\"");                                                  \
     if (buf && len)                                                           \
       {                                                                       \
-        for (long j = 0; j < (long)len; j++)                                  \
+        for (long _j = 0; _j < (long)len; _j++)                               \
           {                                                                   \
-            fprintf (dat->fh, "%02X", ((BITCODE_RC *)buf)[j]);                \
+            fprintf (dat->fh, "%02X", ((BITCODE_RC *)buf)[_j]);               \
           }                                                                   \
       }                                                                       \
     fprintf (dat->fh, "\"");                                                  \
   }
 #define FIELD_BINARY(nam, size, dxf)                                          \
   {                                                                           \
-    long len = (long)size;                                                    \
     KEY (nam);                                                                \
     fprintf (dat->fh, "\"");                                                  \
     if (_obj->nam)                                                            \
       {                                                                       \
-        for (long j = 0; j < len; j++)                                        \
+        for (long _j = 0; _j < (long)size; _j++)                              \
           {                                                                   \
-            fprintf (dat->fh, "%02X", ((BITCODE_RC *)_obj->nam)[j]);          \
+            fprintf (dat->fh, "%02X", ((BITCODE_RC *)_obj->nam)[_j]);         \
           }                                                                   \
       }                                                                       \
     fprintf (dat->fh, "\"");                                                  \
@@ -856,6 +858,9 @@ _prefix (Bit_Chain *dat)
   return 0;                                                                   \
   }
 
+#undef JSON_3DSOLID
+#define JSON_3DSOLID json_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
+
 static char* _path_field(const char *path)
 {
   char *s = strrchr (path, ']');
@@ -1223,6 +1228,84 @@ json_cquote (char *restrict dest, const char *restrict src, const int len)
     }
   *dest = 0; // add final delim, skipped above
   return d;
+}
+
+static int
+json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+              Dwg_Entity_3DSOLID *restrict _obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  BITCODE_BL vcount, rcount1, rcount2;
+  BITCODE_BL i;
+  int error = 0;
+
+  FIELD_B (acis_empty, 0);
+  if (!FIELD_VALUE (acis_empty))
+    {
+      FIELD_B (unknown, 0);
+      FIELD_BS (version, 70);
+      // TODO array of \n split strings
+      FIELD_TV (acis_data, 1);
+      KEY (encr_sat_data);
+      ARRAY;
+      for (i = 0; i < FIELD_VALUE (num_blocks); i++)
+        {
+          VALUE_BINARY (FIELD_VALUE (encr_sat_data[i]), FIELD_VALUE (block_size[i]), 1);
+        }
+      ENDARRAY;
+
+      FIELD_B (wireframe_data_present, 0);
+      if (FIELD_VALUE (wireframe_data_present))
+        {
+          FIELD_B (point_present, 0);
+          if (FIELD_VALUE (point_present))
+            {
+              FIELD_3BD (point, 0);
+            }
+          FIELD_BL (num_isolines, 0);
+          FIELD_B (isoline_present, 0);
+          if (FIELD_VALUE (isoline_present))
+            {
+              FIELD_BL (num_wires, 0);
+              REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
+              REPEAT_BLOCK
+                  WIRESTRUCT_fields (wires[rcount1])
+              END_REPEAT_BLOCK
+              SET_PARENT_OBJ (wires)
+              END_REPEAT (wires);
+              FIELD_BL (num_silhouettes, 0);
+              REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
+              REPEAT_BLOCK
+                  SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
+                  SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
+                  SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
+                  SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
+                  SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
+                  SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
+                  REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire)
+                  REPEAT_BLOCK
+                      WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
+                  END_REPEAT_BLOCK
+                  SET_PARENT_OBJ (silhouettes[rcount1].wires)
+                  END_REPEAT (silhouettes[rcount1].wires);
+              END_REPEAT_BLOCK
+              SET_PARENT_OBJ (silhouettes)
+              END_REPEAT (silhouettes);
+            }
+        }
+
+      FIELD_B (acis_empty_bit, 0);
+      if (FIELD_VALUE (version) > 1)
+        {
+          SINCE (R_2007) { FIELD_BL (unknown_2007, 0); }
+        }
+      COMMON_ENTITY_HANDLE_DATA;
+      if (FIELD_VALUE (version) > 1)
+        {
+          SINCE (R_2007) { FIELD_HANDLE (history_id, 0, 350); }
+        }
+    }
+  return error;
 }
 
 /* returns 0 on success
