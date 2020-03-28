@@ -1242,15 +1242,32 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   FIELD_B (acis_empty, 0);
   if (!FIELD_VALUE (acis_empty))
     {
+      char *s, *p;
       FIELD_B (unknown, 0);
       FIELD_BS (version, 70);
-      // TODO array of \n split strings
-      FIELD_TV (acis_data, 1);
+      KEY (acis_data);
+      ARRAY;
+      s = p = (char*)_obj->acis_data;
+      for (; *p; p++)
+        {
+          char buf[256]; // acis lines are not much longer
+          if (*p == '\n' && p - s < 256)
+            {
+              FIRSTPREFIX fprintf (dat->fh, "\"%s\"", json_cquote (buf, s, p - s));
+              s = p + 1;
+            }
+        }
+      // the remainder
+      if (s != p && *s)
+        {
+          FIRSTPREFIX VALUE_TEXT (s);
+        }
+      ENDARRAY;
       KEY (encr_sat_data);
       ARRAY;
       for (i = 0; i < FIELD_VALUE (num_blocks); i++)
         {
-          VALUE_BINARY (FIELD_VALUE (encr_sat_data[i]), FIELD_VALUE (block_size[i]), 1);
+          FIRSTPREFIX VALUE_BINARY (FIELD_VALUE (encr_sat_data[i]), FIELD_VALUE (block_size[i]), 1);
         }
       ENDARRAY;
 
