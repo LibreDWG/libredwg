@@ -2250,7 +2250,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
     }
 
-  /* DXF: patchup size and bitsize */
+  /* DXF/JSON: patchup size and bitsize */
   /* Imported json sizes are unreliable when changing versions */
   if (!obj->size || dwg->opts & DWG_OPTS_INJSON)
     {
@@ -2259,10 +2259,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       assert (address);
       if (dat->byte > address)
         {
-          obj->size = dat->byte - address - 2; // excludes the CRC
+          obj->size = (dat->byte - address); // not counting the CRC
           if (dat->bit)
             obj->size++;
         }
+      if (dat->byte + 2 >= dat->size)
+        bit_chain_alloc (dat);
       // assert (obj->bitsize); // on errors
       if (!obj->bitsize ||
           (dwg->opts & DWG_OPTS_INJSON
@@ -2285,7 +2287,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       SINCE (R_2013)
       {
         if (!obj->handlestream_size && obj->bitsize)
-          obj->handlestream_size = obj->size * 8 - obj->bitsize;
+          obj->handlestream_size = (obj->size * 8) - obj->bitsize;
         bit_write_UMC (dat, obj->handlestream_size);
         LOG_TRACE ("-handlestream_size: %lu [UMC]\n", obj->handlestream_size);
       }
