@@ -2401,9 +2401,9 @@ bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes)
 }
 
 void
-bit_print_bits (unsigned char *bits, long unsigned int size)
+bit_print_bits (unsigned char *bits, long unsigned int bitsize)
 {
-  for (long unsigned int i = 0; i < size; i++)
+  for (long unsigned int i = 0; i < bitsize; i++)
     {
       unsigned char bit = i % 8;
       unsigned char result = (bits[i / 8] & (0x80 >> bit)) >> (7 - bit);
@@ -2414,9 +2414,9 @@ bit_print_bits (unsigned char *bits, long unsigned int size)
 }
 
 void
-bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int size)
+bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int bitsize)
 {
-  for (long unsigned int i = 0; i < size; i++)
+  for (long unsigned int i = 0; i < bitsize; i++)
     {
       unsigned char bit = i % 8;
       unsigned char result = (bits[i / 8] & (0x80 >> bit)) >> (7 - bit);
@@ -2427,20 +2427,20 @@ bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int size)
 }
 
 void
-bit_explore_chain (Bit_Chain *dat, long unsigned int size)
+bit_explore_chain (Bit_Chain *dat, long unsigned int datsize)
 {
   unsigned char sig;
   long unsigned int i, k;
 
-  if (size > dat->size)
-    size = dat->size;
+  if (datsize > dat->size)
+    datsize = dat->size;
 
   for (k = 0; k < 8; k++)
     {
       printf ("---------------------------------------------------------");
       dat->byte = 0;
       dat->bit = k;
-      for (i = 0; i < size - 1; i++)
+      for (i = 0; i < datsize - 1; i++)
         {
           if (i % 16 == 0)
             printf ("\n[0x%04X]: ", (unsigned int)i);

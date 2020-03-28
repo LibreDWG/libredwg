@@ -761,7 +761,7 @@
       tmp = bit_read_TF (dat, rs);                                            \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
         {                                                                     \
-          bit_fprint_bits (OUTPUT, tmp, 68);                                  \
+          bit_fprint_bits (OUTPUT, tmp, rs*8);                                \
           HANDLER (OUTPUT, "\n");                                             \
         }                                                                     \
       LOG_TRACE_TF (tmp, rs);                                                 \
