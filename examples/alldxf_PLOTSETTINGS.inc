@@ -3,52 +3,6 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* PLOTSETTINGS 14B9 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_366[] = {
-  //{ 5, "14B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "194", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "194", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbPlotSettings", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "page_setup_name", 3, {-1,-1,-1,-1,-1} },
-    { 2, "DWG To PDF.pc3", NULL, 0, BITS_UNKNOWN, "printer_cfg_file", 2, {-1,-1,-1,-1,-1} },
-    { 4, "ANSI_B_(11.00_x_17.00_Inches)", NULL, 0, BITS_UNKNOWN, "paper_size", 1, {-1,-1,-1,-1,-1} },
-    { 6, "", NULL, 0, BITS_UNKNOWN, "plotview", 3, {-1,-1,-1,-1,-1} },
-    { 40, "5.793749809265136", NULL, 0, BITS_UNKNOWN, "left_margin", 1, {-1,-1,-1,-1,-1} },
-    { 41, "17.79375076293945", NULL, 0, BITS_UNKNOWN, "bottom_margin", 1, {-1,-1,-1,-1,-1} },
-    { 42, "5.79376220703125", NULL, 0, BITS_UNKNOWN, "right_margin", 1, {-1,-1,-1,-1,-1} },
-    { 43, "17.79376220703125", NULL, 0, BITS_UNKNOWN, "top_margin", 1, {-1,-1,-1,-1,-1} },
-    { 44, "279.3999938964844", NULL, 0, BITS_UNKNOWN, "paper_width", 1, {-1,-1,-1,-1,-1} },
-    { 45, "431.7999877929687", NULL, 0, BITS_UNKNOWN, "paper_height", 1, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "plot_origin", 2, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 48, "12145.5893380329", NULL, 0, BITS_UNKNOWN, "plot_window_ll", 1, {-1,-1,-1,-1,-1} },
-    { 49, "1297.542026596246", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 140, "13579.51723941168", NULL, 0, BITS_UNKNOWN, "plot_window_ur", 1, {-1,-1,-1,-1,-1} },
-    { 141, "2465.242424270342", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "num_custom_print_scale", 1, {-1,-1,-1,-1,-1} },
-    { 143, "10.0", NULL, 0, BITS_UNKNOWN, "den_custom_print_scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "11936", NULL, 0, BITS_UNKNOWN, "plot_layout", 1, {-1,-1,-1,-1,-1} },
-    { 72, "0", NULL, 0, BITS_UNKNOWN, "plot_paper_units", 4, {-1,-1,-1,-1,-1} },
-    { 73, "1", NULL, 0, BITS_UNKNOWN, "plot_rotation", 1, {-1,-1,-1,-1,-1} },
-    { 74, "4", NULL, 0, BITS_UNKNOWN, "plot_type", 1, {-1,-1,-1,-1,-1} },
-    { 7, "Master PS.ctb", NULL, 0, BITS_UNKNOWN, "stylesheet", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 0, BITS_UNKNOWN, "std_scale_type", 4, {-1,-1,-1,-1,-1} },
-    { 147, "0.0531754095329567", NULL, 0, BITS_UNKNOWN, "std_scale_factor", 1, {-1,-1,-1,-1,-1} },
-    { 76, "0", NULL, 0, BITS_UNKNOWN, "shade_plot_mode", 4, {-1,-1,-1,-1,-1} },
-    { 77, "2", NULL, 0, BITS_UNKNOWN, "shade_plot_res_level", 1, {-1,-1,-1,-1,-1} },
-    { 78, "300", NULL, 0, BITS_UNKNOWN, "shade_plot_custom_dpi", 1, {-1,-1,-1,-1,-1} },
-    { 148, "-308497.9691860358", NULL, 0, BITS_UNKNOWN, "paper_image_origin", 1, {-1,-1,-1,-1,-1} },
-    { 149, "-32957.56747554464", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1001, "ACAD_PSEXT", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1000, "DWG To PDF.pc3", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-  //{ 1000, "DWG To PDF", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1000, "File", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1000, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-  //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* PLOTSETTINGS 14B9 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
 static struct _unknown_field unknown_dxf_PLOTSETTINGS_367[] = {
   //{ 5, "14B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -94,8 +48,54 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_367[] = {
   //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* PLOTSETTINGS 11C0 in test/test-data/2013/flipped.dxf */
+/* PLOTSETTINGS 14B9 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
 static struct _unknown_field unknown_dxf_PLOTSETTINGS_368[] = {
+  //{ 5, "14B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "194", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "194", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbPlotSettings", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1, "", NULL, 0, BITS_UNKNOWN, "page_setup_name", 3, {-1,-1,-1,-1,-1} },
+    { 2, "DWG To PDF.pc3", NULL, 0, BITS_UNKNOWN, "printer_cfg_file", 2, {-1,-1,-1,-1,-1} },
+    { 4, "ANSI_B_(11.00_x_17.00_Inches)", NULL, 0, BITS_UNKNOWN, "paper_size", 1, {-1,-1,-1,-1,-1} },
+    { 6, "", NULL, 0, BITS_UNKNOWN, "plotview", 3, {-1,-1,-1,-1,-1} },
+    { 40, "5.793749809265136", NULL, 0, BITS_UNKNOWN, "left_margin", 1, {-1,-1,-1,-1,-1} },
+    { 41, "17.79375076293945", NULL, 0, BITS_UNKNOWN, "bottom_margin", 1, {-1,-1,-1,-1,-1} },
+    { 42, "5.79376220703125", NULL, 0, BITS_UNKNOWN, "right_margin", 1, {-1,-1,-1,-1,-1} },
+    { 43, "17.79376220703125", NULL, 0, BITS_UNKNOWN, "top_margin", 1, {-1,-1,-1,-1,-1} },
+    { 44, "279.3999938964844", NULL, 0, BITS_UNKNOWN, "paper_width", 1, {-1,-1,-1,-1,-1} },
+    { 45, "431.7999877929687", NULL, 0, BITS_UNKNOWN, "paper_height", 1, {-1,-1,-1,-1,-1} },
+    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "plot_origin", 2, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 48, "12145.5893380329", NULL, 0, BITS_UNKNOWN, "plot_window_ll", 1, {-1,-1,-1,-1,-1} },
+    { 49, "1297.542026596246", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 140, "13579.51723941168", NULL, 0, BITS_UNKNOWN, "plot_window_ur", 1, {-1,-1,-1,-1,-1} },
+    { 141, "2465.242424270342", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "num_custom_print_scale", 1, {-1,-1,-1,-1,-1} },
+    { 143, "10.0", NULL, 0, BITS_UNKNOWN, "den_custom_print_scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "11936", NULL, 0, BITS_UNKNOWN, "plot_layout", 1, {-1,-1,-1,-1,-1} },
+    { 72, "0", NULL, 0, BITS_UNKNOWN, "plot_paper_units", 4, {-1,-1,-1,-1,-1} },
+    { 73, "1", NULL, 0, BITS_UNKNOWN, "plot_rotation", 1, {-1,-1,-1,-1,-1} },
+    { 74, "4", NULL, 0, BITS_UNKNOWN, "plot_type", 1, {-1,-1,-1,-1,-1} },
+    { 7, "Master PS.ctb", NULL, 0, BITS_UNKNOWN, "stylesheet", 1, {-1,-1,-1,-1,-1} },
+    { 75, "0", NULL, 0, BITS_UNKNOWN, "std_scale_type", 4, {-1,-1,-1,-1,-1} },
+    { 147, "0.0531754095329567", NULL, 0, BITS_UNKNOWN, "std_scale_factor", 1, {-1,-1,-1,-1,-1} },
+    { 76, "0", NULL, 0, BITS_UNKNOWN, "shade_plot_mode", 4, {-1,-1,-1,-1,-1} },
+    { 77, "2", NULL, 0, BITS_UNKNOWN, "shade_plot_res_level", 1, {-1,-1,-1,-1,-1} },
+    { 78, "300", NULL, 0, BITS_UNKNOWN, "shade_plot_custom_dpi", 1, {-1,-1,-1,-1,-1} },
+    { 148, "-308497.9691860358", NULL, 0, BITS_UNKNOWN, "paper_image_origin", 1, {-1,-1,-1,-1,-1} },
+    { 149, "-32957.56747554464", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1001, "ACAD_PSEXT", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1000, "DWG To PDF.pc3", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+  //{ 1000, "DWG To PDF", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1000, "File", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1000, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+  //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* PLOTSETTINGS 11C0 in test/test-data/2013/flipped.dxf */
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_369[] = {
   //{ 5, "11C0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -141,7 +141,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_368[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 3E0CB in test/test-data/2013/flipped_cleaned.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_369[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_370[] = {
   //{ 5, "3E0CB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "122E3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -187,7 +187,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_369[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 9A4 in test/test-data/2013/gh109_1.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_370[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_371[] = {
   //{ 5, "9A4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "9A3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

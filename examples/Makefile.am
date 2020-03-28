@@ -50,12 +50,13 @@ regen-unknown:
 
 full-regen-unknown:
 	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
+	-rm *_r??.log *_20??.log DS_*.log 2>/dev/null
 	-(cd .. && ./logs-all.sh; \
 	  rm alldwg.tmp 2>/dev/null; \
 	  cp $(abs_srcdir)/alldwg.inc examples/alldwg.inc~; \
 	  for l in *_r??.log *_20??.log DS_*.log; \
 	    do $(PERL) $(abs_srcdir)/log_unknown.pl "$$l" >>alldwg.tmp; done; \
-          grep -v '^//' alldwg.tmp | sort >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp)
+          grep -v '^//' alldwg.tmp | sort -u >$(abs_srcdir)/alldwg.inc; rm alldwg.tmp)
 	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
 	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
 	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null

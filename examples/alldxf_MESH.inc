@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* MESH 2D6 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_MESH_347[] = {
+static struct _unknown_field unknown_dxf_MESH_348[] = {
   //{ 5, "2D6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2355,7 +2355,7 @@ static struct _unknown_field unknown_dxf_MESH_347[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MESH 2D0 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_MESH_348[] = {
+static struct _unknown_field unknown_dxf_MESH_349[] = {
   //{ 5, "2D0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

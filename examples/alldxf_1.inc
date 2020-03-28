@@ -55,6 +55,5 @@
 #include "alldxf_REVOLVEDSURFACE.inc"
 #include "alldxf_SUN.inc"
 #include "alldxf_SWEPTSURFACE.inc"
-#include "alldxf_TABLEGEOMETRY.inc"
 #include "alldxf_TABLESTYLE.inc"
 #include "alldxf_VISUALSTYLE.inc"

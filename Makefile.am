@@ -55,7 +55,7 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
 
 .PHONY: check-dwg check-dxf check-json check-dwg-valgrind \
         regen-man man manual refman scan-build gcov \
-	unknown regen-unknown
+	unknown regen-unknown full-regen-unknown
 
 # automake bug, see GH #211
 distcheck-hook:
@@ -94,6 +94,8 @@ endif
 regen-dynapi: $(srcdir)/src/gen-dynapi.pl $(srcdir)/include/dwg.h
 	-$(PERL) $(srcdir)/src/gen-dynapi.pl
 regen-unknown:
+	$(MAKE) -C examples $@
+full-regen-unknown:
 	$(MAKE) -C examples $@
 regen-man:
 	$(MAKE) -C programs $@

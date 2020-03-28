@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* LIGHT 75E in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_283[] = {
+static struct _unknown_field unknown_dxf_LIGHT_284[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -43,7 +43,7 @@ static struct _unknown_field unknown_dxf_LIGHT_283[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_284[] = {
+static struct _unknown_field unknown_dxf_LIGHT_285[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -83,7 +83,7 @@ static struct _unknown_field unknown_dxf_LIGHT_284[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_285[] = {
+static struct _unknown_field unknown_dxf_LIGHT_286[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -123,46 +123,6 @@ static struct _unknown_field unknown_dxf_LIGHT_285[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 75E in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_286[] = {
-  //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 8, "*ADSK_SYSTEM_LIGHTS", NULL, 0, BITS_UNKNOWN, "layer", 1, {-1,-1,-1,-1,-1} },
-  //{ 160, "8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 310, "0800000000000000", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbLight", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 1, "Spotlight1", NULL, 0, BITS_UNKNOWN, "name", 1, {-1,-1,-1,-1,-1} },
-    { 70, "3", NULL, 0, BITS_UNKNOWN, "type", 1, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "status", 2, {-1,-1,-1,-1,-1} },
-    { 63, "5", NULL, 0, BITS_UNKNOWN, "color", 1, {-1,-1,-1,-1,-1} },
-    { 291, "0", NULL, 0, BITS_UNKNOWN, "plot_glyph", 2, {-1,-1,-1,-1,-1} },
-    { 40, "5.4", NULL, 0, BITS_UNKNOWN, "intensity", 1, {-1,-1,-1,-1,-1} },
-    { 10, "1861.377715175666", NULL, 0, BITS_UNKNOWN, "position", 1, {-1,-1,-1,-1,-1} },
-    { 20, "2318.490304971529", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 11, "2474.393801603597", NULL, 0, BITS_UNKNOWN, "target", 1, {-1,-1,-1,-1,-1} },
-    { 21, "2128.348974268964", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 72, "0", NULL, 0, BITS_UNKNOWN, "attenuation_type", 3, {-1,-1,-1,-1,-1} },
-    { 292, "0", NULL, 0, BITS_UNKNOWN, "use_attenuation_limits", 2, {-1,-1,-1,-1,-1} },
-    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "attenuation_start_limit", 1, {-1,-1,-1,-1,-1} },
-    { 42, "10.0", NULL, 0, BITS_UNKNOWN, "attenuation_end_limit", 1, {-1,-1,-1,-1,-1} },
-    { 50, "45.0", NULL, 0, BITS_UNKNOWN, "hotspot_angle", 1, {-1,-1,-1,-1,-1} },
-    { 51, "50.0", NULL, 0, BITS_UNKNOWN, "falloff_angle", 1, {-1,-1,-1,-1,-1} },
-    { 293, "1", NULL, 0, BITS_UNKNOWN, "cast_shadows", 2, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "shadow_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "256", NULL, 0, BITS_UNKNOWN, "shadow_map_size", 1, {-1,-1,-1,-1,-1} },
-    { 280, "1", NULL, 0, BITS_UNKNOWN, "shadow_map_softness", 2, {-1,-1,-1,-1,-1} },
-  //{ 1001, "ACAD", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1000, "AcDbSavedByObjectVersion", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* LIGHT 75E in test/test-data/example_2013.dxf */
 static struct _unknown_field unknown_dxf_LIGHT_287[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -202,8 +162,48 @@ static struct _unknown_field unknown_dxf_LIGHT_287[] = {
   //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* LIGHT 75E in test/test-data/example_2018.dxf */
+/* LIGHT 75E in test/test-data/example_2013.dxf */
 static struct _unknown_field unknown_dxf_LIGHT_288[] = {
+  //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 8, "*ADSK_SYSTEM_LIGHTS", NULL, 0, BITS_UNKNOWN, "layer", 1, {-1,-1,-1,-1,-1} },
+  //{ 160, "8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 310, "0800000000000000", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbLight", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
+    { 1, "Spotlight1", NULL, 0, BITS_UNKNOWN, "name", 1, {-1,-1,-1,-1,-1} },
+    { 70, "3", NULL, 0, BITS_UNKNOWN, "type", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "status", 2, {-1,-1,-1,-1,-1} },
+    { 63, "5", NULL, 0, BITS_UNKNOWN, "color", 1, {-1,-1,-1,-1,-1} },
+    { 291, "0", NULL, 0, BITS_UNKNOWN, "plot_glyph", 2, {-1,-1,-1,-1,-1} },
+    { 40, "5.4", NULL, 0, BITS_UNKNOWN, "intensity", 1, {-1,-1,-1,-1,-1} },
+    { 10, "1861.377715175666", NULL, 0, BITS_UNKNOWN, "position", 1, {-1,-1,-1,-1,-1} },
+    { 20, "2318.490304971529", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 11, "2474.393801603597", NULL, 0, BITS_UNKNOWN, "target", 1, {-1,-1,-1,-1,-1} },
+    { 21, "2128.348974268964", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 72, "0", NULL, 0, BITS_UNKNOWN, "attenuation_type", 3, {-1,-1,-1,-1,-1} },
+    { 292, "0", NULL, 0, BITS_UNKNOWN, "use_attenuation_limits", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "attenuation_start_limit", 1, {-1,-1,-1,-1,-1} },
+    { 42, "10.0", NULL, 0, BITS_UNKNOWN, "attenuation_end_limit", 1, {-1,-1,-1,-1,-1} },
+    { 50, "45.0", NULL, 0, BITS_UNKNOWN, "hotspot_angle", 1, {-1,-1,-1,-1,-1} },
+    { 51, "50.0", NULL, 0, BITS_UNKNOWN, "falloff_angle", 1, {-1,-1,-1,-1,-1} },
+    { 293, "1", NULL, 0, BITS_UNKNOWN, "cast_shadows", 2, {-1,-1,-1,-1,-1} },
+    { 73, "0", NULL, 0, BITS_UNKNOWN, "shadow_type", 3, {-1,-1,-1,-1,-1} },
+    { 91, "256", NULL, 0, BITS_UNKNOWN, "shadow_map_size", 1, {-1,-1,-1,-1,-1} },
+    { 280, "1", NULL, 0, BITS_UNKNOWN, "shadow_map_softness", 2, {-1,-1,-1,-1,-1} },
+  //{ 1001, "ACAD", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1000, "AcDbSavedByObjectVersion", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* LIGHT 75E in test/test-data/example_2018.dxf */
+static struct _unknown_field unknown_dxf_LIGHT_289[] = {
   //{ 5, "75E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "75F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -240,7 +240,7 @@ static struct _unknown_field unknown_dxf_LIGHT_288[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 367 in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_289[] = {
+static struct _unknown_field unknown_dxf_LIGHT_290[] = {
   //{ 5, "367", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "368", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -281,7 +281,7 @@ static struct _unknown_field unknown_dxf_LIGHT_289[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* LIGHT 367 in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_LIGHT_290[] = {
+static struct _unknown_field unknown_dxf_LIGHT_291[] = {
   //{ 5, "367", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "368", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },

@@ -1703,7 +1703,7 @@ while (<>) {
 
   my $unknown = pack ("H*", $bytes);
   $unknown = join("", map { sprintf("\\%03o", $_) } unpack("C*", $unknown));
-  # $unknown = substr($unknown, 0, $num_bits);
+  $unknown = substr($unknown, 0, $num_bits);
 
   if (exists $dupl{"$obj-$unknown"}) {
     warn "skip duplicate $obj-$hdl-$num_bits $dxf\n";
