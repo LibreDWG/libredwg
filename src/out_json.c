@@ -1248,19 +1248,26 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       KEY (acis_data);
       ARRAY;
       s = p = (char*)_obj->acis_data;
-      for (; *p; p++)
+      if (!p)
         {
-          char buf[256]; // acis lines are not much longer
-          if (*p == '\n' && p - s < 256)
-            {
-              FIRSTPREFIX fprintf (dat->fh, "\"%s\"", json_cquote (buf, s, p - s));
-              s = p + 1;
-            }
+          FIRSTPREFIX fprintf (dat->fh, "\"\"");
         }
-      // the remainder
-      if (s != p && *s)
-        {
-          FIRSTPREFIX VALUE_TEXT (s);
+      else
+        { // split lines by \n
+          for (; *p; p++)
+            {
+              char buf[256]; // acis lines are not much longer
+              if (*p == '\n' && p - s < 256)
+                {
+                  FIRSTPREFIX fprintf (dat->fh, "\"%s\"", json_cquote (buf, s, p - s));
+                  s = p + 1;
+                }
+            }
+          // the remainder
+          if (s != p && *s)
+            {
+              FIRSTPREFIX VALUE_TEXT (s);
+            }
         }
       ENDARRAY;
       KEY (encr_sat_data);
