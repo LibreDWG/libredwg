@@ -3494,6 +3494,7 @@ eed_need_size (BITCODE_BS need, BITCODE_BS have)
   return 0;
 }
 
+#undef LOG_POS
 #define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
 
 static int
@@ -5132,7 +5133,8 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   SINCE (R_2010) { obj->type = bit_read_BOT (dat); }
   else { obj->type = bit_read_BS (dat); }
-  LOG_INFO (", Type: %d [%s]\n", obj->type, dat->from_version >= R_2010 ? "BOT" : "BS");
+  LOG_INFO (", Type: %d [%s], Address: %lu\n", obj->type,
+            dat->from_version >= R_2010 ? "BOT" : "BS", obj->address);
   restartpos = bit_position (dat); // relative
 
   /* Check the type of the object

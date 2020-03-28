@@ -1247,18 +1247,20 @@ obj_stream_position (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
                      Bit_Chain *restrict str_dat)
 {
   unsigned long p1 = bit_position (dat);
+  /* all 3 now relative to obj */
+  unsigned long p2 = bit_position (hdl_dat);
   SINCE (R_2007)
-  {
-    /* all 3 now relative to obj */
-    unsigned long p2 = bit_position (hdl_dat);
-    unsigned long p3 = bit_position (str_dat);
-
-    if (p2 > p1)
-      return p3 > p2 ? p3 : p2;
-    else
-      return p3 > p1 ? p3 : p1;
-  }
-  else { return p1; }
+    { // but only since 2007 there is a seperate string stream
+      unsigned long p3 = bit_position (str_dat);
+      if (p2 > p1)
+        return p3 > p2 ? p3 : p2;
+      else
+        return p3 > p1 ? p3 : p1;
+    }
+  else
+    {
+      return (p2 > p1) ? p2 : p1;
+    }
 }
 
 int

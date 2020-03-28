@@ -18,7 +18,7 @@
 
 #include "spec.h"
 
-  // char version[6] handled separately. older releases just had a version[12]
+// char version[6] handled separately. older releases just had a version[12]
 #ifdef IS_JSON
   KEY (zero_5);
   fprintf (dat->fh, "[ %d, %d, %d, %d, %d ]",
