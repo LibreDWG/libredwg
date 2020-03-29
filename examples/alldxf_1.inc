@@ -47,6 +47,7 @@
 #include "alldxf_LAYOUTPRINTCONFIG.inc"
 #include "alldxf_LIGHT.inc"
 #include "alldxf_MATERIAL.inc"
+#include "alldxf_MENTALRAYRENDERSETTINGS.inc"
 #include "alldxf_MESH.inc"
 #include "alldxf_MULTILEADER.inc"
 #include "alldxf_PLANESURFACE.inc"

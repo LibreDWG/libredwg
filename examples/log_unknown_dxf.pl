@@ -1658,18 +1658,32 @@ print $f0 "// name, dxf, handle, bytes, is_entity, num_bits, commonsize, hdloff,
           "strsize, hdlsize, bitsize, fieldptr\n";
 print $f1a $firstline;
 print $f2 $firstline;
-my ($f, $f1, $prevdxf, $prevobj);
+my ($f, $f1, $foundobj, $prevdxf, $prevobj, $foundOBJECTS);
+my $seekfirstobj = 0;
 
 LINE:
 while (<>) {
   my @F = split(' ');
 
+  my $obj = substr($F[1],1,-2); # "MATERIAL",
+  my $log = substr($F[2],1,-2); # "xxx.log",
   my $dxf = $F[5];
-  if ($dxf eq 'NULL,' or $dxf !~ /\.dxf",/) {
+  my $fdxf = substr($dxf, 1, -2);
+  if ($dxf eq 'NULL,') {
+    if (-f "$dir/../$fdxf") {
+      warn "$dxf magically re-appeared\n";
+    } else {
+      if (!exists $skip{$log}) {
+        warn "skip no dxf for $log\n";
+        $skip{$log}++;
+      }
+      next LINE; # -n
+    }
+  }
+  if ($dxf !~ /\.dxf",/) {
+    warn "skip wrong dxf $dxf in $_\n";
     next LINE; # -n
   }
-  $dxf = substr($dxf, 1, -2);
-  my $fdxf = $dxf;
   if (!-f $fdxf) {
     if (!-f "../$fdxf") {
       $fdxf = "$dir/../$dxf";
@@ -1681,8 +1695,9 @@ while (<>) {
     }
   }
   #next LINE if $F[0] =~ m|//{|; # skip duplicates
-  my $obj   = substr($F[1],1,-2); # "MATERIAL",
-  my $hdl   = substr($F[3],2,-1); # 0xXXX,
+  my $dxf   = substr($dxf, 1, -2);
+  my $hdl   = "".substr($F[3],2,-1); # 0xXXX,
+  my $hexhdl = hex($hdl);
   my $bytes = substr($F[4],1,-2);
   my $is_entity  = substr($F[6],0,-1);
   my $num_bits   = substr($F[7],0,-1);
@@ -1720,15 +1735,22 @@ while (<>) {
 
   # linear search in dxf file for this obj-handle
 
+  my ($foundhdl, @FIELD, $in_entity);
+  my ($react, $xdict, $seen100, @avail);
+
   if (!$f or $fdxf ne $prevdxf) {
     close $f if $f;
+    $foundOBJECTS = $seekfirstobj ? 1 : 0;
+    $seekfirstobj = 0;
     open $f, "$fdxf" or next LINE;
     $prevdxf = $fdxf;
   }
   if ($obj ne $prevobj) {
+    # FIXME: Only needed when ENTITIES changes to OBJECTS. Within a SECTION
+    # the handles strictly rise.
+    seek $f, $seekfirstobj, 0;
     # also enforce a new dxffile, as the prev obj might have been be after the current one
     # and we cannot walk back.
-    undef $f;
     $prevobj = $obj;
     print $f1a "#include \"alldxf_$obj.inc\"\n";
     close $f1 if $f1;
@@ -1736,19 +1758,19 @@ while (<>) {
     open $f1, ">", "$dir/alldxf_$obj.inc" or next LINE;
     print $f1 $firstline;
     print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
+
+    if ($obj =~ /^(?:PDF|DWF|DGN)UNDERLAY/) {
+      @avail = @{$known->{UNDERLAY}};
+    }
+    elsif ($obj =~ /^(?:PDF|DWF|DGN)DEFINITION/) {
+      @avail = @{$known->{UNDERLAYDEFINITION}};
+    }
+    @avail = @{$known->{$obj}} if exists $known->{$obj};
+
 #  } else {
 #    open $f1, ">>", "$dir/alldxf_$obj.inc" or next LINE;
   }
 
-  my ($foundobj, $foundhdl, @FIELD, $in_entity);
-  my ($react, $xdict, $seen100, @avail);
-  if ($obj =~ /^(?:PDF|DWF|DGN)UNDERLAY/) {
-    @avail = @{$known->{UNDERLAY}};
-  }
-  elsif ($obj =~ /^(?:PDF|DWF|DGN)DEFINITION/) {
-    @avail = @{$known->{UNDERLAYDEFINITION}};
-  }
-  @avail = @{$known->{$obj}} if exists $known->{$obj};
   # cannot walk back
   while (my $code = <$f>) {
     $code =~ s/\cM\cJ//;
@@ -1756,7 +1778,8 @@ while (<>) {
     my $name = "";
     $v =~ s/\cM\cJ//;
     $v =~ s/^\s*//;
-    if ($code =~ /^ *0$/) {
+    $foundOBJECTS = ($code == '  2' && $v =~ /^(ENTITIES|OBJECTS)$/) ? 1 : 0;
+    if ($code eq '  0') { # next obj
       $foundobj = $v eq $obj;
       if ($foundhdl) {
         $foundhdl = 0;
@@ -1773,23 +1796,31 @@ while (<>) {
         }
         @FIELD = ();
         print $f1 "    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}\n};\n";
+        last;
       }
     }
-    if ($foundobj and $code =~ /^ *5$/) {
-      $name = "handle";
-      $foundhdl = $v eq $hdl;
-      if ($foundhdl) {
-        warn "found $obj $hdl in $dxf\n";
-        print $f0  "  { \"$obj\", \"$dxf\", 0x$hdl, /* $i */\n";
-        printf $f0  "    \"%s\", %d, %d, %d, %d, %d, %d, %d, NULL },\n",
-          $unknown, $is_entity, $num_bits, $commonsize, $hdloff, $strsize,
-          $hdlsize, $bitsize;
+    elsif ($code eq '  5') {
+      $seekfirstobj = tell $f if !$seekfirstobj && $foundOBJECTS;
+      if ($foundobj) {
+        $name = "handle";
+        $foundhdl = $v eq $hdl;
+        if ($foundhdl) {
+          warn "found $obj $hdl in $dxf\n";
+          print $f0  "  { \"$obj\", \"$dxf\", 0x$hdl, /* $i */\n";
+          printf $f0  "    \"%s\", %d, %d, %d, %d, %d, %d, %d, NULL },\n",
+            $unknown, $is_entity, $num_bits, $commonsize, $hdloff, $strsize,
+            $hdlsize, $bitsize;
 
-        print $f1 "/* $obj $hdl in $dxf */\n";
-        print $f1 "static struct _unknown_field unknown_dxf_${obj}_${i}\[\] = {\n";
-        print $f2 "unknown_dxf\[$i\].fields = unknown_dxf_${obj}_${i};\n";
-        @FIELD = ();
-        $i++;
+          print $f1 "/* $obj $hdl in $dxf */\n";
+          print $f1 "static struct _unknown_field unknown_dxf_${obj}_${i}\[\] = {\n";
+          print $f2 "unknown_dxf\[$i\].fields = unknown_dxf_${obj}_${i};\n";
+          @FIELD = ();
+          $i++;
+        }
+      }
+      elsif ($foundOBJECTS && hex($v) > $hexhdl) {
+        warn "not found $obj $hdl in $dxf\n";
+        last;
       }
     }
     if ($foundhdl) {

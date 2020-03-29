@@ -11,6 +11,7 @@ debugging objects in all found DWG's.
 =cut
 no strict;
 my $td = "test/test-data";
+my $tb = "test/test-big";
 
 # also triggered by objectmap (print) and free
 if (/ Hdlsize: (\d+)[, ]/) {
@@ -58,15 +59,21 @@ if (/Next object: / or /^Num objects:/) {
     }
   } else {
     $dxf = "$td/$d/$n.dxf";
+    if (!-f "../$dxf" && -f "../$tb/$d/$n.dxf") {
+      $dxf = "$tb/$d/$n.dxf";
+    }
     unless (-f $dxf || -f "../$dxf") {
       $dxf = "$td/${n}_${d}.dxf";
     }
   }
   next if $dxf =~ /work\.orig/; # skip temp. duplicates
-  $dxf = undef unless -f $dxf || -f "../$dxf";
+  unless (-f $dxf || -f "../$dxf") {
+    warn "//$dxf not found\n";
+    $dxf = undef;
+  }
   printf "    { \"$object\", \"$ARGV\", 0x$handle, \"$b\", %s, ".
     "$is_entity, $num_bits, $commonsize, $hdloff, $strsize, $hdlsize, $bitsize },\n",
-    $dxf ? "\"$dxf\"" : "NULL";
+    $dxf ? "\"$dxf\"" : 'NULL';
   $object = $b = $handle = undef;
   $num_bits = $commonsize = $hdloff = $strsize = $hdlsize = $bitsize = $is_entity = 0;
 }
