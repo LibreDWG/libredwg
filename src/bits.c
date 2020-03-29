@@ -1176,11 +1176,13 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 
   // TODO: little-endian only
   // x86_64 gcc-9.[0-2] miscompilation with val[i]: (%rbx) being dat+1
+  // we work aorund this one, but you never know what else is being miscompiled.
+  // apparently fixed in gcc-9.3
 #if defined(__GNUC__) && (__GNUC__ == 9) && (__GNUC_MINOR__ <= 2) \
   && (SIZEOF_SIZE_T == 8)                                         \
   && (defined(__x86_64__) || defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64))
   {
-#warning x86_64 gcc-9.2 codegen is seriously broken! better use an older version
+#warning x86_64 gcc-9.[0-2] codegen is seriously broken. better use 9.3 or an older version
     BITCODE_RC *restrict val;
     val = (BITCODE_RC *)&(handle->value);
     for (i = handle->size - 1; i >= 0; i--)
