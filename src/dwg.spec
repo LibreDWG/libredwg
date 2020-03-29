@@ -6047,6 +6047,7 @@ DWG_OBJECT (DIMASSOC)
   DXF { FIELD_BS (rotated_type, 71); }
   REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref)
   REPEAT_BLOCK
+      // TODO: there could be much more blocks, up to 5.
       // 0 1 2 3 => 1 2 4 8. skip unset bits
       if (!(FIELD_VALUE (associativity) & (1<<rcount1)))
         {
@@ -6061,14 +6062,14 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
       SUB_FIELD_BS (ref[rcount1], num_mainobjs, 0); // 1 or 2
       SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_mainobjs, 100)
-      SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
+      SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);  // if 0 not in DXF
       if (FIELD_VALUE (ref[rcount1].main_subent_type))
         {
           SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
           SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
           SUB_HANDLE_VECTOR (ref[rcount1], mainobjs, num_mainobjs, 4, 331);
           if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-            SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1 or 2 FIXME
+            SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1-3
           SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
         }
       SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
@@ -6079,7 +6080,7 @@ DWG_OBJECT (DIMASSOC)
 
   START_OBJECT_HANDLE_STREAM;
   //FIELD_HANDLE (xrefobj, 4, 301); // TODO optional
-  // FIELD_HANDLE (intsectxrefobj, 4, 302); // TODO multiple
+  //FIELD_HANDLE (intsectxrefobj, 4, 302); // TODO multiple
 
 DWG_OBJECT_END
 
