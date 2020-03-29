@@ -869,7 +869,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1133,7 +1133,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1198,7 +1198,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1265,7 +1265,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1330,7 +1330,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1393,7 +1393,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1460,7 +1460,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1525,7 +1525,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -8463,7 +8463,7 @@ BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD,	DXF 41
+3BD
 @item ins_rotation
 BD,	DXF 54
 @item attachment

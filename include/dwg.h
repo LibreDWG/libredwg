@@ -1309,7 +1309,7 @@ typedef struct _dwg_entity_LINE
     BITCODE_B flip_arrow1; \
     BITCODE_B flip_arrow2; \
     BITCODE_2RD clone_ins_pt; \
-    BITCODE_H dimstyle;       \
+    BITCODE_H dimstyle; \
     BITCODE_H block;
 
 typedef struct _dwg_DIMENSION_common

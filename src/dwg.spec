@@ -1078,8 +1078,8 @@ DWG_ENTITY_END
     DECODER { \
       BITCODE_RC flag = FIELD_VALUE (flag1); \
       flag &= 0xE0; /* clear the upper flag bits, and fix them: */ \
-      flag = (flag & 1) ? flag & 0x7F : flag | 0x80; /* clear bit 7 */ \
-      flag = (flag & 2) ? flag | 0x20 : flag & 0xDF; /* set bit 5 */ \
+      flag = (flag & 1) ? flag & 0x7F : flag | 0x80; /* bit 7 is inverse of bit 0 */ \
+      flag = (flag & 2) ? flag | 0x20 : flag & 0xDF; /* set bit 5 to bit 1 */ \
       if      (_obj->flag == DWG_TYPE_DIMENSION_ALIGNED)  flag |= 1; \
       else if (_obj->flag == DWG_TYPE_DIMENSION_ANG2LN)   flag |= 2; \
       else if (_obj->flag == DWG_TYPE_DIMENSION_DIAMETER) flag |= 3; \
@@ -1099,7 +1099,7 @@ DWG_ENTITY_END
     } \
     FIELD_BD (text_rotation, 53); \
     FIELD_BD (horiz_dir, 51); \
-    FIELD_3BD_1 (ins_scale, 41); \
+    FIELD_3BD_1 (ins_scale, 0); \
     FIELD_BD (ins_rotation, 54); \
     SINCE (R_2000) \
       { \

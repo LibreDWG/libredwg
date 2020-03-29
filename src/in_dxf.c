@@ -6031,6 +6031,7 @@ new_object (char *restrict name, char *restrict dxfname,
               if (strEQc (obj->name, "DIMENSION_ANG2LN")
                   || strEQc (obj->name, "DIMENSION"))
                 {
+                  // we rather checked the flag before
                   if (strEQc (subclass, "AcDbRotatedDimension"))
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
@@ -6041,6 +6042,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     }
                   else if (strEQc (subclass, "AcDbAlignedDimension"))
                     {
+                      // FIXME: could be DIMENSION_LINEAR also
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
                       obj->name = (char *)"DIMENSION_ALIGNED";
                       obj->dxfname = strdup (obj->name);
@@ -6071,6 +6073,11 @@ new_object (char *restrict name, char *restrict dxfname,
                     {
                       UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT)
                     }
+                }
+              if (strEQc (obj->name, "DIMENSION_ALIGNED")
+                  && strEQc (subclass, "AcDbRotatedDimension"))
+                {
+                  UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
                 }
               // set the real objname
               else if (strEQc (obj->name, "POLYLINE_2D"))
@@ -6423,6 +6430,45 @@ new_object (char *restrict name, char *restrict dxfname,
                   LOG_WARN ("Unhandled LAYOUT.70 in subclass %s", subclass);
                   _o->flag = pair->value.i;
                   LOG_TRACE ("LAYOUT.flag = %d [BS 70]", pair->value.i);
+                }
+              break;
+            }
+          else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)
+            {
+              Dwg_Entity_DIMENSION_ANG2LN *_o = obj->tio.entity->tio.DIMENSION_ANG2LN;
+              _o->flag = _o->flag1 = pair->value.i;
+              LOG_TRACE ("DIMENSION.flag = %d [RC 70]\n", pair->value.i);
+              _o->flag1 &= 0xE0; /* clear the upper flag bits, and fix them: */
+              _o->flag1 = (_o->flag1 & 1) ? _o->flag1 & 0x7F : _o->flag1 | 0x80;
+              _o->flag1 = (_o->flag1 & 2) ? _o->flag1 | 0x20 : _o->flag1 & 0xDF;
+              LOG_TRACE ("DIMENSION.flag1 => %d [RC]\n", _o->flag1);
+              switch (_o->flag & 31)
+                {
+                case 0: // rotated, horizontal or vertical
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_LINEAR);
+                  break;
+                case 1:
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ALIGNED);
+                  break;
+                case 2: // already?
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG2LN);
+                  break;
+                case 3:
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_DIAMETER);
+                  break;
+                case 4:
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_RADIUS);
+                  break;
+                case 5:
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT);
+                  break;
+                case 6:
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ORDINATE);
+                  break;
+                default:
+                  LOG_ERROR ("Invalid DIMENSION.flag %d", _o->flag & 31);
+                  error |= DWG_ERR_INVALIDTYPE;
+                  break;
                 }
               break;
             }
@@ -7483,6 +7529,17 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   pair = add_ent_preview (obj, dat, pair);
                   goto start_loop;
+                }
+              else if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED && pair->code == 52)
+                {
+                  BITCODE_BD ang = deg2rad (pair->value.d);
+                  free (obj->dxfname);
+                  UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
+                  dwg_dynapi_entity_set_value (_obj, "DIMENSION_LINEAR",
+                                               "ext_line_rotation", &ang, 1);
+                  LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n",
+                             name, "ext_line_rotation", ang, pair->value.d,
+                             "BD", 52);
                 }
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
