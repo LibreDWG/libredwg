@@ -75,7 +75,7 @@ static struct _unknown {
   const int bitsize;
 } unknowns[] =
   {
-   { "ACAD_EVALUATION_GRAPH", "example_2000.log", "40501406481013fffffffcffffffff3fffffffcffffffff980c0c80b8bee", "test/test-data/example_2000.dxf", 0x2E3, 0, 234, 60, -60, 0, 268 },
+   { "ACAD_EVALUATION_GRAPH", "example_2000.log", 0x2E3, "40501406481013fffffffcffffffff3fffffffcffffffff980c0c80b8bee", "test/test-data/example_2000.dxf", 0, 234, 60, -60, 0, 268 },
     /* the following types:
       5 ACDBASSOCGEOMDEPENDENCY
       3 ACDBASSOCNETWORK
@@ -202,7 +202,7 @@ bits_BD (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
   // some more not found BD values
   for (struct _bd *b = &bd[0]; b->value; b++)
     {
-      if (!strcmp (g->value, b->value))
+      if (strEQ (g->value, b->value))
         {
           bit_write_bits (dat, b->bin);
           return;

@@ -46,7 +46,7 @@ regen-unknown:
 	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
 	(cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc)
 	$(MAKE) -C .. unknown && \
-	  $(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
+	  $(PERL) $(srcdir)/bd-unknown.pl | sort | uniq -w 96 >$(srcdir)/bd-unknown.inc
 
 full-regen-unknown:
 	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
@@ -62,7 +62,7 @@ full-regen-unknown:
 	-mv $(srcdir)/alldxf_2.inc alldxf_2.inc~ 2>/dev/null
 	(cd .. && $(PERL) $(abs_srcdir)/log_unknown_dxf.pl $(abs_srcdir)/alldwg.inc)
 	$(MAKE) -C .. unknown && \
-	  $(PERL) $(srcdir)/bd-unknown.pl | sort | uniq >$(srcdir)/bd-unknown.inc
+	  $(PERL) $(srcdir)/bd-unknown.pl | sort | uniq -w 96 >$(srcdir)/bd-unknown.inc
 
 #ACAD_EVALUATION_GRAPH.pi: unknown
 #	$(MAKE) -C .. unknown

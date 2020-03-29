@@ -1664,7 +1664,7 @@ LINE:
 while (<>) {
   my @F = split(' ');
 
-  my $dxf = $F[4];
+  my $dxf = $F[5];
   if ($dxf eq 'NULL,' or $dxf !~ /\.dxf",/) {
     next LINE; # -n
   }
@@ -1682,8 +1682,8 @@ while (<>) {
   }
   #next LINE if $F[0] =~ m|//{|; # skip duplicates
   my $obj   = substr($F[1],1,-2); # "MATERIAL",
-  my $bytes = substr($F[3],1,-2);
-  my $hdl   = substr($F[5],2,-1); # 0xXXX,
+  my $hdl   = substr($F[3],2,-1); # 0xXXX,
+  my $bytes = substr($F[4],1,-2);
   my $is_entity  = substr($F[6],0,-1);
   my $num_bits   = substr($F[7],0,-1);
   my $commonsize = substr($F[8],0,-1);
