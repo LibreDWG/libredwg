@@ -1540,14 +1540,13 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
     case DWG_TYPE_TOLERANCE:
       return dwg_dxf_TOLERANCE (dat, obj);
     case DWG_TYPE_MLINE:
-#ifdef DEBUG_CLASSES
+#if 1 || defined DEBUG_CLASSES
       // TODO: looks good, but acad import crashes
       return dwg_dxf_MLINE (dat, obj);
 #else
       LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/%lX", obj->index,
                 obj->handle.value)
-      if (0)
-        dwg_dxf_MLINE (dat, obj);
+      if (0) dwg_dxf_MLINE (dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     case DWG_TYPE_BLOCK_CONTROL:
@@ -2222,10 +2221,11 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
   if ((hdr == mspace) || (hdr->index == mspace->index))
     obj = NULL;
   else
-    obj = get_first_owned_entity (hdr); // first_entity
+    obj = get_first_owned_entity (hdr); // first_entity or entities[0]
   while (obj)
     {
       if (obj->supertype == DWG_SUPERTYPE_ENTITY
+          && obj->fixedtype != DWG_TYPE_ENDBLK
           && obj->tio.entity->ownerhandle != NULL
           && obj->tio.entity->ownerhandle->absolute_ref != mspace_ref)
         error |= dwg_dxf_object (dat, obj, i);

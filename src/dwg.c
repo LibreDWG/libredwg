@@ -895,6 +895,20 @@ get_first_owned_entity (const Dwg_Object *hdr)
 
   if (R_13 <= version && version <= R_2000)
     {
+      /* Note: With r2000 the first_ and last_entity is totally unreliable.
+       * The first can be before, e.g. right the next after BLOCK_HEADER, and
+       * the last can be far behind the last or endblk. rather check the
+       * ownerhandle of all entities.
+       */
+      Dwg_Object *obj = (Dwg_Object *)hdr;
+      unsigned long owner = hdr->handle.value;
+      while ((obj = dwg_next_object (obj)))
+        if (obj->supertype == DWG_SUPERTYPE_ENTITY
+            && obj->fixedtype != DWG_TYPE_BLOCK
+            && obj->tio.entity
+            && obj->tio.entity->ownerhandle
+            && owner == obj->tio.entity->ownerhandle->absolute_ref)
+          return obj;
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
   else if (version >= R_2004)
@@ -1158,7 +1172,7 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
   return NULL;
 }
 
-/** Returns the next block object until last_entity/insert
+/** Returns the next block object until last_entity
  *  after current owned by the block hdr, or NULL.
  */
 EXPORT Dwg_Object *
@@ -1175,7 +1189,22 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
 
   if (R_13 <= version && version <= R_2000)
     {
-      if (!_hdr->last_entity || current->handle.value >= _hdr->last_entity->absolute_ref)
+      /* Note: With r2000 the first_ and last_entity is totally unreliable.
+       * The first can be before, e.g. right the next after BLOCK_HEADER, and
+       * the last can be far behind the last or endblk. rather check the
+       * ownerhandle of all entities.
+       */
+      Dwg_Object *obj = (Dwg_Object *)current;
+      unsigned long owner = hdr->handle.value;
+      while ((obj = dwg_next_object (obj)))
+        if (obj->supertype == DWG_SUPERTYPE_ENTITY
+            && obj->tio.entity
+            && obj->tio.entity->ownerhandle
+            && owner == obj->tio.entity->ownerhandle->absolute_ref)
+          return obj;
+
+      if (!_hdr->last_entity
+          || current->handle.value >= _hdr->last_entity->absolute_ref)
         return NULL;
       return dwg_next_object (current);
     }
@@ -1183,9 +1212,9 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
     {
       Dwg_Object_Ref *ref;
       _hdr->__iterator++;
-      if (_hdr->__iterator == _hdr->num_inserts)
+      if (_hdr->__iterator == _hdr->num_owned)
         return NULL;
-      ref = _hdr->inserts ? _hdr->inserts[_hdr->__iterator] : NULL;
+      ref = _hdr->entities ? _hdr->entities[_hdr->__iterator] : NULL;
       return ref ? ref->obj : NULL;
     }
   LOG_ERROR ("Unsupported version: %d\n", version);
