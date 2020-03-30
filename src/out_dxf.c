@@ -46,6 +46,10 @@ static unsigned int cur_ver = 0;
 static char buf[255];
 // static int is_sorted = 0;
 
+// imported
+char *dwg_obj_table_get_name (const Dwg_Object *restrict obj,
+                              int *restrict error);
+
 // private
 static int dxf_common_entity_handle_data (Bit_Chain *restrict dat,
                                           const Dwg_Object *restrict obj);
@@ -194,7 +198,7 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
   VALUE_BLL (dwg->header_vars.nam, dxf)
 
 #define SECTION(section)                                                      \
-  LOG_INFO ("Section " #section "\n")                                         \
+  LOG_INFO ("\nSection " #section "\n")                                       \
   fprintf (dat->fh, "  0\r\nSECTION\r\n  2\r\n" #section "\r\n")
 #define ENDSEC() fprintf (dat->fh, "  0\r\nENDSEC\r\n")
 #define TABLE(table) fprintf (dat->fh, "  0\r\nTABLE\r\n  2\r\n" #table "\r\n")
@@ -774,7 +778,19 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
         }                                                                     \
       }                                                                       \
-    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
+      {                                                                       \
+        if (dwg_obj_is_table (obj))                                           \
+          {                                                                   \
+            char *_name = dwg_obj_table_get_name (obj, &error);               \
+            LOG_TRACE ("Object handle: " FORMAT_H ", name: %s\n",             \
+                       ARGS_H (obj->handle), _name);                          \
+            SINCE (R_2007)                                                    \
+              free (_name);                                                   \
+          }                                                                   \
+        else                                                                  \
+          LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))   \
+      }
 
 // then 330, SUBCLASS
 
@@ -2235,12 +2251,14 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
   if (endblk)
     {
       error |= dwg_dxf_ENDBLK (dat, endblk);
+      LOG_INFO ("\n")
     }
   else
     {
       LOG_WARN ("Empty ENDBLK for \"%s\" %lX", _hdr->name,
                 hdr ? hdr->handle.value : 0);
       dxf_ENDBLK_empty (dat, hdr);
+      LOG_INFO ("\n")
     }
   return error;
 }
