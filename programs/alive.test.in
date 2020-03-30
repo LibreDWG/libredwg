@@ -35,9 +35,16 @@ PROGS=${PROGS:-"dwgread dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep dwgrewrite dxf2
 top_builddir="@top_builddir@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
+CFLAGS="@CFLAGS@"
 
 i=0
 rm -f ./*dwg*.log
+
+debugclasses=
+case "$CFLAGS" in
+    *-DDEBUG_CLASSES*) debugclasses=1 ;;
+    *) ;;
+esac
 
 #just check that it does not crash
 run ()
@@ -98,33 +105,36 @@ run ()
     then
         rm "./$log"
     else
+        todo=
         case $bprog in
-        dwggrep) ;;
-        dwgwrite)
-            case "$(uname -s)" in
-            CYGWIN*)tmpnum=$((i+1))
-                    echo "$(basename "$0"): TODO $prog $tmpnum failures"
-                    ls -l "$log" ;;
-            *)      i=$((i+1))
-                    echo "$prog failure $?"
-                    tail -n100 "$log" ;;
-            esac
-            ;;
-        dwgrewrite)
-            case "$(uname -s)" in
-            MINGW*) test -f core && rm core
-                    tmpnum=$((i+1))
-                    echo "$(basename "$0"): TODO $prog $tmpnum failures"
-                    ls -l "$log" ;;
-            *)      i=$((i+1))
-                    echo "$prog failure $?"
-                    tail -n100 "$log" ;;
-            esac
-            ;;
-        *)      i=$((i+1))
-                echo "$prog failure $?"
-                tail -n100 "$log" ;;
+            dwgwrite)
+                [ -z $debugclasses ] || todo=1
+                case "$(uname -s)" in
+                    CYGWIN*) todo=1 ;;
+                    *) ;;
+                esac
+                ;;
+            dwgrewrite)
+                case "$(uname -s)" in
+                    MINGW*) test -f core && rm core
+                            todo=1
+                            ;;
+                    *) ;;
+                esac
+                ;;
+            *)  ;;
         esac
+
+        if [ -z $todo ]
+        then
+            i=$((i+1))
+            echo "$prog failure $?"
+            tail -n100 "$log"
+        else
+            tmpnum=$((i+1))
+            echo "$(basename "$0"): TODO $prog $tmpnum failures"
+            ls -l "$log"
+        fi
     fi
     if [ x"$MINGW" != x ] && [ x"$OLDTESTPROG" != x ]; then
         TESTPROG="$OLDTESTPROG"
