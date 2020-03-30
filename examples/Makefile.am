@@ -136,6 +136,7 @@ alldxf_unknowns = \
 	alldxf_LIGHT.inc \
 	alldxf_MATERIAL.inc \
 	alldxf_MESH.inc \
+	alldxf_MENTALRAYRENDERSETTINGS.inc \
 	alldxf_MULTILEADER.inc \
 	alldxf_PLANESURFACE.inc \
 	alldxf_PLOTSETTINGS.inc \

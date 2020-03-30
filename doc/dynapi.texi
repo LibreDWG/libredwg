@@ -6499,6 +6499,125 @@ BL,	DXF 94
 @end vtable
 @end indentedblock
 
+@strong{MENTALRAYRENDERSETTINGS} @anchor{MENTALRAYRENDERSETTINGS}
+@cindex object, MENTALRAYRENDERSETTINGS
+@vindex MENTALRAYRENDERSETTINGS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item fog_enabled
+B,	DXF 290
+@item fog_background_enabled
+B,	DXF 290
+@item b290_1
+B,	DXF 290
+@item environ_image_enabled
+B,	DXF 290
+@item environ_image_filename
+T,	DXF 1
+@item description
+T,	DXF 1
+@item bs90
+BS,	DXF 90
+@item bs90_0
+BS,	DXF 90
+@item bs90_1
+BS,	DXF 90
+@item bs90_2
+BS,	DXF 90
+@item rc70_1
+RC,	DXF 70
+@item fog_density_near
+BD,	DXF 40
+@item fog_density_far
+BD,	DXF 40
+@item samples_distance_near
+BD,	DXF 40
+@item samples_distance_far
+BD,	DXF 40
+@item fog_distance_near
+BD,	DXF 40
+@item fog_distance_far
+BD,	DXF 40
+@item rc70_2
+RC,	DXF 70
+@item b290_3
+B,	DXF 290
+@item b290_4
+B,	DXF 290
+@item bs90_3
+BS,	DXF 90
+@item bs90_4
+BS,	DXF 90
+@item bs90_5
+BS,	DXF 90
+@item b290_5
+B,	DXF 290
+@item bs90_6
+BS,	DXF 90
+@item b290_6
+B,	DXF 290
+@item bd40_2
+BD,	DXF 40
+@item bs90_7
+BS,	DXF 90
+@item bs90_8
+BS,	DXF 90
+@item bs90_9
+BS,	DXF 90
+@item bs90_10
+BS,	DXF 90
+@item b290_7
+B,	DXF 290
+@item bs90_11
+BS,	DXF 90
+@item b290_8
+B,	DXF 290
+@item b290_9
+B,	DXF 290
+@item b290_10
+B,	DXF 290
+@item bd40_3
+BD,	DXF 40
+@item bd40_4
+BD,	DXF 40
+@item bd40_5
+BD,	DXF 40
+@item rc70_3
+RC,	DXF 70
+@item rc70_4
+RC,	DXF 70
+@item bd40_6
+BD,	DXF 40
+@item rc70_5
+RC,	DXF 70
+@item rc70_6
+RC,	DXF 70
+@item b290_11
+B,	DXF 290
+@item mrdescription
+T,	DXF 1
+@item bs90_12
+BS,	DXF 90
+@item rc70_7
+RC,	DXF 70
+@item bs90_13
+BS,	DXF 90
+@item b290_12
+B,	DXF 290
+@item bd40_7
+BD,	DXF 40
+
+@end vtable
+@end indentedblock
+
 @strong{MLEADEROBJECTCONTEXTDATA} @anchor{MLEADEROBJECTCONTEXTDATA}
 @cindex object, MLEADEROBJECTCONTEXTDATA
 @vindex MLEADEROBJECTCONTEXTDATA

@@ -172,49 +172,50 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
   "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
   "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "MLEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0",	/* 62 */
-  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "MTEXTATTRIBUTEOBJECTCONTEXTDATA" "",	/* 65 */
-  "MTEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "PERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "RAPIDRTRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0",	/* 74 */
-  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
-  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
-  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
-  "SECTIONVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
-  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
-  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
-  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 82 */
-  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 83 */
-  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 84 */
-  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 85 */
-  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 86 */
-  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 87 */
-  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 88 */
-  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 89 */
-  "TEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 90 */
-  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 91 */
-  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 92 */
-  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 93 */
-  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 94 */
-  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 95 */
-  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 96 */
-  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 97 */
-  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 98 */
-  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 99 */
-  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 100 */
-  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0",	/* 101 */
-  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 102 */
-  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 103 */
-  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 104 */
+  "MENTALRAYRENDERSETTINGS" "\0\0\0\0\0\0\0\0",	/* 62 */
+  "MLEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0",	/* 63 */
+  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "MTEXTATTRIBUTEOBJECTCONTEXTDATA" "",	/* 66 */
+  "MTEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0",	/* 67 */
+  "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
+  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "PERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
+  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
+  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
+  "RAPIDRTRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0",	/* 75 */
+  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
+  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
+  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
+  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
+  "SECTIONVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
+  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
+  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 82 */
+  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 83 */
+  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 84 */
+  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 85 */
+  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 86 */
+  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 87 */
+  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 88 */
+  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 89 */
+  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 90 */
+  "TEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 91 */
+  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 92 */
+  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 93 */
+  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 94 */
+  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 95 */
+  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 96 */
+  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 97 */
+  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 98 */
+  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 99 */
+  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 100 */
+  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 101 */
+  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0",	/* 102 */
+  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 103 */
+  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 104 */
+  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 105 */
 
 };
 
@@ -5766,6 +5767,118 @@ static const Dwg_DYNAPI_field _dwg_MATERIAL_fields[] = {
     0,0,0, 94 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_object_MENTALRAYRENDERSETTINGS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_MENTALRAYRENDERSETTINGS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, parent),
+    1,1,0, 0 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, class_version),
+    0,0,0, 90 },
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, name),
+    1,1,1, 1 },
+  { "fog_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, fog_enabled),
+    0,0,0, 290 },
+  { "fog_background_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, fog_background_enabled),
+    0,0,0, 290 },
+  { "b290_1",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_1),
+    0,0,0, 290 },
+  { "environ_image_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, environ_image_enabled),
+    0,0,0, 290 },
+  { "environ_image_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, environ_image_filename),
+    1,1,1, 1 },
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, description),
+    1,1,1, 1 },
+  { "bs90",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90),
+    0,0,0, 90 },
+  { "bs90_0",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_0),
+    0,0,0, 90 },
+  { "bs90_1",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_1),
+    0,0,0, 90 },
+  { "bs90_2",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_2),
+    0,0,0, 90 },
+  { "rc70_1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, rc70_1),
+    0,0,0, 70 },
+  { "fog_density_near",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, fog_density_near),
+    0,0,0, 40 },
+  { "fog_density_far",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, fog_density_far),
+    0,0,0, 40 },
+  { "samples_distance_near",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, samples_distance_near),
+    0,0,0, 40 },
+  { "samples_distance_far",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, samples_distance_far),
+    0,0,0, 40 },
+  { "fog_distance_near",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, fog_distance_near),
+    0,0,0, 40 },
+  { "fog_distance_far",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, fog_distance_far),
+    0,0,0, 40 },
+  { "rc70_2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, rc70_2),
+    0,0,0, 70 },
+  { "b290_3",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_3),
+    0,0,0, 290 },
+  { "b290_4",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_4),
+    0,0,0, 290 },
+  { "bs90_3",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_3),
+    0,0,0, 90 },
+  { "bs90_4",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_4),
+    0,0,0, 90 },
+  { "bs90_5",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_5),
+    0,0,0, 90 },
+  { "b290_5",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_5),
+    0,0,0, 290 },
+  { "bs90_6",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_6),
+    0,0,0, 90 },
+  { "b290_6",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_6),
+    0,0,0, 290 },
+  { "bd40_2",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bd40_2),
+    0,0,0, 40 },
+  { "bs90_7",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_7),
+    0,0,0, 90 },
+  { "bs90_8",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_8),
+    0,0,0, 90 },
+  { "bs90_9",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_9),
+    0,0,0, 90 },
+  { "bs90_10",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_10),
+    0,0,0, 90 },
+  { "b290_7",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_7),
+    0,0,0, 290 },
+  { "bs90_11",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_11),
+    0,0,0, 90 },
+  { "b290_8",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_8),
+    0,0,0, 290 },
+  { "b290_9",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_9),
+    0,0,0, 290 },
+  { "b290_10",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_10),
+    0,0,0, 290 },
+  { "bd40_3",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bd40_3),
+    0,0,0, 40 },
+  { "bd40_4",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bd40_4),
+    0,0,0, 40 },
+  { "bd40_5",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bd40_5),
+    0,0,0, 40 },
+  { "rc70_3",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, rc70_3),
+    0,0,0, 70 },
+  { "rc70_4",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, rc70_4),
+    0,0,0, 70 },
+  { "bd40_6",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bd40_6),
+    0,0,0, 40 },
+  { "rc70_5",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, rc70_5),
+    0,0,0, 70 },
+  { "rc70_6",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, rc70_6),
+    0,0,0, 70 },
+  { "b290_11",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_11),
+    0,0,0, 290 },
+  { "mrdescription",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, mrdescription),
+    1,1,1, 1 },
+  { "bs90_12",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_12),
+    0,0,0, 90 },
+  { "rc70_7",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, rc70_7),
+    0,0,0, 70 },
+  { "bs90_13",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bs90_13),
+    0,0,0, 90 },
+  { "b290_12",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, b290_12),
+    0,0,0, 290 },
+  { "bd40_7",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, bd40_7),
+    0,0,0, 40 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_MLEADEROBJECTCONTEXTDATA_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_MLEADEROBJECTCONTEXTDATA, parent),
@@ -8546,7 +8659,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "LTYPE_CONTROL", DWG_TYPE_LTYPE_CONTROL /*(56)*/, _dwg_LTYPE_CONTROL_fields, sizeof (struct _dwg_object_LTYPE_CONTROL) },	/* 95 */
   { "LWPOLYLINE", DWG_TYPE_LWPOLYLINE /*(77)*/, _dwg_LWPOLYLINE_fields, sizeof (struct _dwg_entity_LWPOLYLINE) },	/* 96 */
   { "MATERIAL", DWG_TYPE_MATERIAL /*(571)*/, _dwg_MATERIAL_fields, sizeof (struct _dwg_object_MATERIAL) },	/* 97 */
-  { "MENTALRAYRENDERSETTINGS", DWG_TYPE_MENTALRAYRENDERSETTINGS /*(572)*/, NULL, 0 },	/* 98 */
+  { "MENTALRAYRENDERSETTINGS", DWG_TYPE_MENTALRAYRENDERSETTINGS /*(572)*/, _dwg_MENTALRAYRENDERSETTINGS_fields, sizeof (struct _dwg_object_MENTALRAYRENDERSETTINGS) },	/* 98 */
   { "MESH", DWG_TYPE_MESH /*(573)*/, _dwg_MESH_fields, sizeof (struct _dwg_entity_MESH) },	/* 99 */
   { "MINSERT", DWG_TYPE_MINSERT /*(8)*/, _dwg_MINSERT_fields, sizeof (struct _dwg_entity_MINSERT) },	/* 100 */
   { "MLEADEROBJECTCONTEXTDATA", DWG_TYPE_MLEADEROBJECTCONTEXTDATA /*(574)*/, _dwg_MLEADEROBJECTCONTEXTDATA_fields, sizeof (struct _dwg_object_MLEADEROBJECTCONTEXTDATA) },	/* 101 */

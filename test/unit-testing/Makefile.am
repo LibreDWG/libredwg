@@ -124,6 +124,7 @@ testobjects = \
 	ltype_control \
 	lwpolyline \
 	material \
+	mentalrayrendersettings \
 	mesh \
 	minsert \
 	mleaderobjectcontextdata \

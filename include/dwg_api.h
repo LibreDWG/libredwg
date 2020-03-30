@@ -628,8 +628,8 @@ typedef struct _dwg_object_ACSH_HISTORY_CLASS     dwg_obj_acsh_history_class;
 typedef struct _dwg_object_ASSOCGEOMDEPENDENCY    dwg_obj_assocgeomdependency;
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM         dwg_obj_assocvertexactionparam;
 typedef struct _dwg_object_DOCUMENTOPTIONS        dwg_obj_documentoptions;
+typedef struct _dwg_object_MENTALRAYRENDERSETTINGS   dwg_obj_mentalrayrendersettings;
 typedef struct _dwg_object_RAPIDRTRENDERSETTINGS  dwg_obj_rapidrtrendersettings;
-#endif
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
 //typedef struct _dwg_object_ACDSSCHEMA           dwg_obj_acdsschema;
@@ -639,10 +639,10 @@ typedef struct _dwg_object_RAPIDRTRENDERSETTINGS  dwg_obj_rapidrtrendersettings;
 //typedef struct _dwg_object_ARCALIGNEDTEXT       dwg_obj_arcalignedtext;
 //typedef struct _dwg_object_NPOCOLLECTION        dwg_obj_npocollection;
 //typedef struct _dwg_object_POINTCLOUD           dwg_obj_pointcloud;
-//typedef struct _dwg_object_MENTALRAYRENDERSETTINGS   dwg_obj_mentalrayrendersettings;
 //typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT  dwg_obj_rapidrtrenderenvironment;
 //typedef struct _dwg_object_RTEXT                dwg_obj_rtext;
 //typedef struct _dwg_object_XREFPANELOBJECT      dwg_obj_xrefpanelobject;
+#endif
 
 typedef struct _dwg_object                        dwg_object;
 typedef struct _dwg_object_ref                    dwg_object_ref;
@@ -852,7 +852,7 @@ DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
 DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (DOCUMENTOPTIONS)
-// DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
+DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (NPOCOLLECTION)
@@ -1057,7 +1057,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DOCUMENTOPTIONS)
-// CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (NPOCOLLECTION)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUD)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
@@ -1314,7 +1314,7 @@ dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
 dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_documentoptions, DOCUMENTOPTIONS)
-// dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
+dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
 // dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION)
 // dwg_get_OBJECT_DECL (obj_pointcloud, POINTCLOUD)
 // dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)

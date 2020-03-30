@@ -5329,6 +5329,71 @@ typedef struct _dwg_object_RENDERGLOBAL
 } Dwg_Object_RENDERGLOBAL;
 
 /**
+ Class MENTALRAYRENDERSETTINGS (varies)
+ Debugging
+ */
+typedef struct _dwg_object_MENTALRAYRENDERSETTINGS
+{
+  struct _dwg_object_object *parent;
+  // AcDbRenderSettings
+  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
+  BITCODE_T name;		/*!< DXF 1 */
+  BITCODE_B fog_enabled;        /*!< DXF 290 */
+  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
+  BITCODE_B b290_1;                  /*!< DXF 290 */
+  BITCODE_B environ_image_enabled;   /*!< DXF 290 */
+  BITCODE_T environ_image_filename;  /*!< DXF 1 */
+  BITCODE_T description;	     /*!< DXF 1 */
+  BITCODE_BS bs90;
+  // AcDbMentalRayRenderSettings
+  BITCODE_BS bs90_0;
+  BITCODE_BS bs90_1;
+  BITCODE_BS bs90_2;
+  BITCODE_RC rc70_1;
+  BITCODE_BD fog_density_near;  /*!< DXF 40 */
+  BITCODE_BD fog_density_far;   /*!< DXF 40 */
+  BITCODE_BD samples_distance_near; /*!< DXF 40 */
+  BITCODE_BD samples_distance_far;  /*!< DXF 40 */
+  BITCODE_BD fog_distance_near; /*!< DXF 40 */
+  BITCODE_BD fog_distance_far;  /*!< DXF 40 */
+  BITCODE_RC rc70_2;
+  BITCODE_B b290_3;
+  BITCODE_B b290_4;
+  BITCODE_BS bs90_3; // 5
+  BITCODE_BS bs90_4; // 5
+  BITCODE_BS bs90_5; // 5
+  BITCODE_B b290_5;
+  BITCODE_BS bs90_6; // 500
+  BITCODE_B b290_6;
+  BITCODE_BD bd40_2; // 1.0
+  BITCODE_BS bs90_7; // 10000
+  BITCODE_BS bs90_8;  // 5
+  BITCODE_BS bs90_9;  // 5
+  BITCODE_BS bs90_10; // 5
+  BITCODE_B b290_7;   // 0
+  BITCODE_BS bs90_11;  // 200
+  BITCODE_B b290_8;   // 0
+  BITCODE_B b290_9;   // 0
+  BITCODE_B b290_10; // 0
+  BITCODE_BD bd40_3; // 1.0
+  BITCODE_BD bd40_4; // 1.0
+  BITCODE_BD bd40_5; // 1500.0
+  BITCODE_RC rc70_3; // 0
+  BITCODE_RC rc70_4; // 0
+  BITCODE_BD bd40_6; // 10.0
+  BITCODE_RC rc70_5; // 0
+  BITCODE_RC rc70_6; // 0
+  BITCODE_B b290_11; // 0
+  BITCODE_T mrdescription;	     /*!< DXF 1 */
+  BITCODE_BS bs90_12; // 32
+  BITCODE_RC rc70_7; // 0
+  BITCODE_BS bs90_13; // 1048
+  BITCODE_B b290_12; // 0
+  BITCODE_BD bd40_7; // 1.0
+
+} Dwg_Object_MENTALRAYRENDERSETTINGS;
+
+/**
  * Class AcDbAnnotScaleObjectContextData (varies)
  * for MTEXT, TEXT, MLEADER, LEADER, BLKREF, ALDIM (AlignedDimension), MTEXTATTRIBUTE, ...
  * R2010+
@@ -5971,7 +6036,7 @@ typedef struct _dwg_object_object
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_RENDERENVIRONMENT *RENDERENVIRONMENT;
     Dwg_Object_RENDERGLOBAL *RENDERGLOBAL;
-    //Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
+    Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
     //Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
     Dwg_Object_RAPIDRTRENDERSETTINGS *RAPIDRTRENDERSETTINGS;
     //TODO Dwg_Object_RTEXT *RTEXT;
@@ -6817,7 +6882,7 @@ EXPORT int dwg_add_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_add_DOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_add_RENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_add_RENDERGLOBAL (Dwg_Object *obj);
-//EXPORT int dwg_add_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_add_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_add_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_add_RTEXT (Dwg_Object *obj);

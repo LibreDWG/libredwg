@@ -7975,6 +7975,67 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (MENTALRAYRENDERSETTINGS)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbRenderSettings)
+  FIELD_BS (class_version, 90);
+  FIELD_T (name, 1);
+  FIELD_B (fog_enabled, 290);
+  FIELD_B (fog_background_enabled, 290);
+  FIELD_B (b290_1, 290);
+  //FIELD_CMC (fog_color, 280);
+  FIELD_B (environ_image_enabled, 290);
+  FIELD_T (environ_image_filename, 1);
+  FIELD_T (description, 1);
+  FIELD_BS (bs90, 90);
+  SUBCLASS (AcDbMentalRayRenderSettings)
+  FIELD_BS (bs90_0, 90);
+  FIELD_RC (rc70_1, 70);
+  FIELD_BS (bs90_1, 90);
+  FIELD_BS (bs90_2, 90);
+  FIELD_BD (fog_density_near, 40);
+  FIELD_BD (fog_density_far, 40);
+  FIELD_BD (samples_distance_near, 40);
+  FIELD_BD (samples_distance_far, 40);
+  FIELD_BD (fog_distance_near, 40);
+  FIELD_BD (fog_distance_far, 40);
+  FIELD_RC (rc70_2, 70);
+  FIELD_B (b290_3, 290);
+  FIELD_B (b290_4, 290);
+  FIELD_BS (bs90_3, 90);
+  FIELD_BS (bs90_4, 90);
+  FIELD_BS (bs90_5, 90);
+  FIELD_B (b290_5, 290);
+  FIELD_BS (bs90_6, 90);
+  FIELD_B (b290_6, 290);
+  FIELD_BD (bd40_2, 40);
+  FIELD_BS (bs90_7, 90);
+  FIELD_BS (bs90_8, 90);
+  FIELD_BS (bs90_9, 90);
+  FIELD_BS (bs90_10, 90);
+  FIELD_B (b290_7, 290);
+  FIELD_BS (bs90_11, 90);
+  FIELD_B (b290_8, 290);
+  FIELD_B (b290_9, 290);
+  FIELD_B (b290_10, 290);
+  FIELD_BD (bd40_3, 40);
+  FIELD_BD (bd40_4, 40);
+  FIELD_BD (bd40_5, 40);
+  FIELD_RC (rc70_3, 70);
+  FIELD_RC (rc70_4, 70);
+  FIELD_BD (bd40_6, 40);
+  FIELD_RC (rc70_5, 70);
+  FIELD_RC (rc70_6, 70);
+  FIELD_B (b290_11, 290);
+  FIELD_T (mrdescription, 1);
+  FIELD_BS (bs90_12, 90);
+  FIELD_RC (rc70_7, 70);
+  FIELD_BS (bs90_13, 90);
+  FIELD_B (b290_12, 290);
+  FIELD_BD (bd40_7, 40);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -8038,10 +8099,6 @@ DWG_OBJECT (ACSH_REVOLVE_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_SPHERE_CLASS)
-  DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-DWG_OBJECT (MENTALRAYRENDERSETTINGS)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
