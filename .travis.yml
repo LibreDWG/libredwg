@@ -44,12 +44,16 @@ install:
   - sh autogen.sh
 
 script:
-  - if [ x$ASAN = x1 ]; then
+  - if [ -n "$ASAN" ]; then
       CC="clang -fno-omit-frame-pointer -fsanitize=address,undefined" ;
     fi
   - ./configure $CONF
-  - make -j4
-  - if [ x$DISTCHECK = x1 ]; then
+  - if [ -n "$ASAN" ]; then
+      travis_wait make -j4 ;
+    else
+      make -j4 ;
+    fi
+  - if [ -n "$DISTCHECK" ]; then
       make -j4 distcheck && sha256sum libredwg-*.tar.* ;
     else
       make -j4 check ;
