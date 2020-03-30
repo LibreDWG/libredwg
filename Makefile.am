@@ -59,6 +59,7 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
 
 # automake bug, see GH #211
 distcheck-hook:
+	chmod u+w "$(distdir)/doc"
 	chmod u+w "$(srcdir)/doc"
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
