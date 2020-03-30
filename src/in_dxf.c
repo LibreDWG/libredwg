@@ -8163,11 +8163,15 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
       if (strEQc (field, "block_header"))
         hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "BLOCK");
       else if (strEQc (field, "style"))
-        hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "STYLE");
+        {
+          p.code = 7;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "STYLE");
+        }
       else if (strEQc (field, "dimstyle"))
-        hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "DIMSTYLE");
-      else if (strEQc (field, "block_header"))
-        hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "BLOCK");
+        {
+          p.code = 3;
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "DIMSTYLE");
+        }
       else if (is_entity && strEQc (field, "layer"))
         {
           p.code = 8;
