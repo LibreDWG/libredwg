@@ -45,11 +45,14 @@ install:
 
 script:
   - if [ -n "$ASAN" ]; then
-      CC="clang -fno-omit-frame-pointer -fsanitize=address,undefined" ;
+      CC="clang -O0 -fno-omit-frame-pointer -fsanitize=address,undefined" ;
     fi
   - ./configure $CONF
+  # starts swapping with only 8GB. seperate the biggest
   - if [ -n "$ASAN" ]; then
-      travis_wait make -j4 ;
+      make -C src decode.lo ;
+      make -C src encode.lo ;
+      travis_wait make;
     else
       make -j4 ;
     fi
