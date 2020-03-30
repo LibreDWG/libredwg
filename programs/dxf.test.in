@@ -180,11 +180,19 @@ check_roundtrip() {
             i=$((i+1))
             echo "expect=$expect" >"$log"
             echo "got=$got" >>"$log"
+            grep -E '^Add entity' "$log1" >"$log1".tmp
+            grep -E '^Add entity' "$log2" >"$log2".tmp
+            diff -bu0 "$log1".tmp "$log2".tmp | tee "$log"
+            rm "$log1" "$log2" "$log1".tmp "$log2".tmp 2>/dev/null
         else
             echo "$dxf" "roundtrip fail: $expect vs $got entities (TODO)"
             #i=$((i+1))
             echo "expect=$expect" >"$log"
             echo "got=$got" >>"$log"
+            grep -E '^Add entity' "$log1" >"$log1".tmp
+            grep -E '^Add entity' "$log2" >"$log2".tmp
+            diff -bu0 "$log1".tmp "$log2".tmp | grep -v "^@@" | tee "$log"
+            rm "$log1" "$log2" "$log1".tmp "$log2".tmp 2>/dev/null
         fi
     fi
 }
