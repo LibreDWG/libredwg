@@ -129,6 +129,10 @@ DWG_ENTITY_END
 /* (2/16) */
 DWG_ENTITY (ATTRIB)
 
+  DXF {
+    //TODO can be skipped with DXF if STANDARD
+    FIELD_HANDLE (style, 5, 7);
+  }
   SUBCLASS (AcDbText)
   PRE (R_13)
     {
@@ -191,9 +195,11 @@ DWG_ENTITY (ATTRIB)
         FIELD_BS (vert_alignment, 74);
     }
 
+  SUBCLASS (AcDbAttribute)
   SINCE (R_2010)
     {
-      FIELD_RC (class_version, 280); // 0 = r2010
+      int dxf = dat->version == R_2010 ? 280: 0;
+      FIELD_RC (class_version, dxf); // 0 = r2010
       VALUEOUTOFBOUNDS (class_version, 10)
     }
   SINCE (R_2018)
@@ -217,8 +223,6 @@ DWG_ENTITY (ATTRIB)
         }
     }
 
-  DXF { FIELD_HANDLE (style, 5, 7); }
-  SUBCLASS (AcDbAttribute)
   FIELD_T (tag, 2);
   FIELD_BS (field_length, 73);
   FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
@@ -236,6 +240,10 @@ DWG_ENTITY_END
 /* (3/15) */
 DWG_ENTITY (ATTDEF)
 
+  DXF {
+    //TODO can be skipped with DXF if STANDARD
+    FIELD_HANDLE (style, 5, 7);
+  }
   SUBCLASS (AcDbText)
   PRE (R_13)
     {
@@ -298,11 +306,15 @@ DWG_ENTITY (ATTDEF)
         FIELD_BS (vert_alignment, 74);
     }
 
+  SUBCLASS (AcDbAttributeDefinition);
   SINCE (R_2010)
     {
-      FIELD_RC (class_version, 280); // 0 = r2010
+      int dxf = dat->version == R_2010 ? 280: 0;
+      FIELD_RC (class_version, dxf); // 0 = r2010
       VALUEOUTOFBOUNDS (class_version, 10)
     }
+  DXF { FIELD_T (prompt, 3); }
+  DXF { FIELD_T (tag, 2); }
   IF_FREE_OR_SINCE (R_2018)
     {
       FIELD_RC (type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
@@ -324,11 +336,7 @@ DWG_ENTITY (ATTDEF)
         }
     }
 
-  DXF { FIELD_HANDLE (style, 5, 7); }
-  SUBCLASS (AcDbAttributeDefinition)
-  DXF { FIELD_T (prompt, 3); }
-  //DXF { SINCE (R_2010) { FIELD_RC (class_version, 280); }}
-  FIELD_T (tag, 2);
+  FIELD_T (tag, 0);
   FIELD_BS (field_length, 0); //DXF 73, unused
   FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
 
