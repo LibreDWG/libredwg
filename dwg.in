@@ -2,7 +2,13 @@
 # create -v3 logs and dwg's with dwgwrite from DXF or JSON)
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
+CFLAGS="@CFLAGS@"
+timeout="@TIMEOUT_30@"
 
+case "$CFLAGS" in
+    *-DDEBUG_CLASSES*) timeout= ;;
+    *) ;;
+esac
 make -s -j4 -C src
 make -s -j4 -C programs dwgwrite
 @DSYMUTIL@ programs/dwgwrite
@@ -58,7 +64,7 @@ for d in "$@"; do
         out="$b$dir.dwg"
         echo "programs/dwgwrite $args $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
-        @TIMEOUT_30@ @LTEXEC@ programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
+        $timeout @LTEXEC@ programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
         ;;
     esac
 done

@@ -2,7 +2,13 @@
 # create -v3 logs and json's from dwg's with dwgread -Ojson
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
+CFLAGS="@CFLAGS@"
+timeout="@TIMEOUT_10@"
 
+case "$CFLAGS" in
+    *-DDEBUG_CLASSES*) timeout= ;;
+    *) ;;
+esac
 make -s -C src
 make -s -C programs dwgread
 @DSYMUTIL@ programs/dwgread
@@ -37,7 +43,7 @@ for d in "$@"; do
         log="$b$dir.log"
         out="$b$dir.json"
         echo "programs/dwgread $v -Ojson -o $out $d 2>$log"
-        @TIMEOUT_10@ @LTEXEC@ programs/dwgread "$v" -Ojson -o "$out" "$d" 2>"$log"
+        $timeout @LTEXEC@ programs/dwgread "$v" -Ojson -o "$out" "$d" 2>"$log"
         ;;
     esac
 done
