@@ -929,7 +929,8 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
   if (R_13 <= version && version <= R_2000)
     {
       Dwg_Object *obj;
-      if (_hdr->last_entity == NULL || current == _hdr->last_entity->obj)
+      if (_hdr->last_entity == NULL
+          || current->handle.value >= _hdr->last_entity->absolute_ref)
         return NULL;
       obj = dwg_next_object (current);
       while (obj
@@ -1148,11 +1149,45 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
 
   if (version >= R_13)
     {
-      if (!_hdr->endblk_entity || current == _hdr->endblk_entity->obj)
+      if (!_hdr->endblk_entity || current->handle.value >= _hdr->endblk_entity->absolute_ref)
         return NULL;
       return dwg_next_object (current);
     }
 
+  LOG_ERROR ("Unsupported version: %d\n", version);
+  return NULL;
+}
+
+/** Returns the next block object until last_entity/insert
+ *  after current owned by the block hdr, or NULL.
+ */
+EXPORT Dwg_Object *
+get_next_owned_block_entity (const Dwg_Object *restrict hdr,
+                             const Dwg_Object *restrict current)
+{
+  unsigned int version = hdr->parent->header.version;
+  Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
+      return NULL;
+    }
+
+  if (R_13 <= version && version <= R_2000)
+    {
+      if (!_hdr->last_entity || current->handle.value >= _hdr->last_entity->absolute_ref)
+        return NULL;
+      return dwg_next_object (current);
+    }
+  if (version > R_2000)
+    {
+      Dwg_Object_Ref *ref;
+      _hdr->__iterator++;
+      if (_hdr->__iterator == _hdr->num_inserts)
+        return NULL;
+      ref = _hdr->inserts ? _hdr->inserts[_hdr->__iterator] : NULL;
+      return ref ? ref->obj : NULL;
+    }
   LOG_ERROR ("Unsupported version: %d\n", version);
   return NULL;
 }

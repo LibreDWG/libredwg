@@ -6658,6 +6658,8 @@ EXPORT Dwg_Object *get_first_owned_block (const Dwg_Object *hdr);
 EXPORT Dwg_Object *get_last_owned_block (const Dwg_Object *hdr);
 EXPORT Dwg_Object *get_next_owned_block (const Dwg_Object *restrict hdr,
                                          const Dwg_Object *restrict current);
+EXPORT Dwg_Object *get_next_owned_block_entity (const Dwg_Object *restrict hdr,
+                                                const Dwg_Object *restrict current);
 
 EXPORT Dwg_Object *dwg_resolve_handle (const Dwg_Data *restrict dwg,
                                        const unsigned long absref);
