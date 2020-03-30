@@ -28,8 +28,9 @@ endif
 if HAVE_MAKEINFO
 SUBDIRS += doc
 endif
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-release
 if DISABLE_BINDINGS
-AM_DISTCHECK_CONFIGURE_FLAGS = --disable-bindings
+AM_DISTCHECK_CONFIGURE_FLAGS += --disable-bindings
 endif
 
 include_HEADERS = \

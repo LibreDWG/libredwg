@@ -873,6 +873,13 @@ main (int argc, char *argv[])
       // display ok values only for the first 6 object types per file
       if (strNE (name, dxf->name) && strNE (olddxf, dxf->dxf))
         g_counter = 0;
+#ifdef IS_RELEASE
+      if (strstr (dxffile, "/test-big/"))
+        {
+          free (dwgfile);
+          continue;
+        }
+#endif
       strcpy (olddxf, dxf->dxf);
       strcpy (name, dxf->name);
       if (!is_dwg_object (name) && !is_dwg_entity (name))
@@ -901,7 +908,6 @@ main (int argc, char *argv[])
           free (dwgfile);
           continue;
         }
-
       if (stat (dwgfile, &attrib)) // not found
         {
           char path[80];

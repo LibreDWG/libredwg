@@ -54,7 +54,7 @@ script:
       make -j4 ;
     fi
   - if [ -n "$DISTCHECK" ]; then
-      make -j4 distcheck && sha256sum libredwg-*.tar.* ;
+      travis_wait make -j4 distcheck && sha256sum libredwg-*.tar.* ;
     else
       make -j4 check ;
     fi
