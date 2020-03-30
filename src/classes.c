@@ -337,6 +337,26 @@ Dwg_Object_Type dwg_name_type (const char *name)
   return DWG_TYPE_UNUSED;
 }
 
+bool
+is_type_stable (const Dwg_Object_Type type)
+{
+  // clang-format off
+  return !is_type_unstable (type)
+      && !is_type_debugging (type)
+      && !is_type_unstable (type)
+      && type != DWG_TYPE_UNKNOWN_OBJ
+      && type != DWG_TYPE_UNKNOWN_ENT
+      && type != DWG_TYPE_FREED;
+  // clang-format on
+}
+
+bool
+is_type_unstable_all (const Dwg_Object_Type type)
+{
+  return is_type_unstable (type)
+      || is_type_debugging (type);
+}
+
 bool is_type_unstable (const Dwg_Object_Type type)
 {
   // unsorted, only linear

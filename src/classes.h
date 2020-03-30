@@ -34,6 +34,8 @@ typedef enum DWG_CLASS_STABILITY {
 
 const char *dwg_type_name (const Dwg_Object_Type type);
 Dwg_Object_Type dwg_name_type (const char *name);
+bool is_type_stable (const Dwg_Object_Type type);
+bool is_type_unstable_all (const Dwg_Object_Type type);
 bool is_type_unstable (const Dwg_Object_Type type);
 bool is_type_debugging (const Dwg_Object_Type type);
 bool is_type_unhandled (const Dwg_Object_Type type);
