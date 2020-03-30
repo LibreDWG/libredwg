@@ -1285,6 +1285,13 @@ typedef struct _dwg_entity_LINE
 
 /**
  * Macro for common DIMENSION declaration
+ *
+ * flag 70: value & 31: 0-6 denote the type, + bitmask 32-128.
+ * 0: linear, 1: aligned, 2: ang2ln, 3: diamater, 4: radius
+ * 5: ang3pt, 6: ordinate.
+ * 32: block (2) used by this dimension only.
+ * 64: if set, ordinate is type X, else ordinate is type Y.
+ * 128: non-default dimension text location
  */
 #define DIMENSION_COMMON \
     struct _dwg_object_entity *parent; \
@@ -1294,8 +1301,8 @@ typedef struct _dwg_entity_LINE
     BITCODE_3BD def_pt; \
     BITCODE_2RD text_midpt; \
     BITCODE_BD elevation; \
-    BITCODE_RC flag; /* calculated, DXF only */ \
-    BITCODE_RC flag1; \
+    BITCODE_RC flag; /* calculated, DXF only 70 */ \
+    BITCODE_RC flag1; /* as in the DWG */ \
     BITCODE_TV user_text; \
     BITCODE_BD text_rotation; \
     BITCODE_BD horiz_dir; \
@@ -1310,11 +1317,11 @@ typedef struct _dwg_entity_LINE
     BITCODE_B flip_arrow2; \
     BITCODE_2RD clone_ins_pt; \
     BITCODE_H dimstyle; \
-    BITCODE_H block;
+    BITCODE_H block
 
 typedef struct _dwg_DIMENSION_common
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
 } Dwg_DIMENSION_common;
 
 /**
@@ -1322,7 +1329,7 @@ typedef struct _dwg_DIMENSION_common
  */
 typedef struct _dwg_entity_DIMENSION_ORDINATE
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_3BD feature_location_pt;
   BITCODE_3BD leader_endpt;
   BITCODE_RC flag2;
@@ -1333,7 +1340,7 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
  */
 typedef struct _dwg_entity_DIMENSION_LINEAR
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
   BITCODE_BD ext_line_rotation;
@@ -1345,7 +1352,7 @@ typedef struct _dwg_entity_DIMENSION_LINEAR
  */
 typedef struct _dwg_entity_DIMENSION_ALIGNED
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
   BITCODE_BD ext_line_rotation;
@@ -1356,7 +1363,7 @@ typedef struct _dwg_entity_DIMENSION_ALIGNED
  */
 typedef struct _dwg_entity_DIMENSION_ANG3PT
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
   BITCODE_3BD first_arc_pt;
@@ -1367,7 +1374,7 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
  */
 typedef struct _dwg_entity_DIMENSION_ANG2LN
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_2RD _16_pt;
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
@@ -1379,7 +1386,7 @@ typedef struct _dwg_entity_DIMENSION_ANG2LN
  */
 typedef struct _dwg_entity_DIMENSION_RADIUS
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_3BD first_arc_pt; /*!< DXF 15 */
   BITCODE_BD leader_len;    /*!< DXF 40 */
 } Dwg_Entity_DIMENSION_RADIUS;
@@ -1389,7 +1396,7 @@ typedef struct _dwg_entity_DIMENSION_RADIUS
  */
 typedef struct _dwg_entity_DIMENSION_DIAMETER
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_3BD first_arc_pt; /*!< DXF 15 */
   BITCODE_BD leader_len;    /*!< DXF 40 */
 } Dwg_Entity_DIMENSION_DIAMETER;
@@ -1399,7 +1406,7 @@ typedef struct _dwg_entity_DIMENSION_DIAMETER
  */
 typedef struct _dwg_entity_ARC_DIMENSION
 {
-  DIMENSION_COMMON
+  DIMENSION_COMMON;
   BITCODE_3BD _13_pt;
   BITCODE_3BD _14_pt;
   BITCODE_3BD _15_pt;
