@@ -44764,12 +44764,164 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Data);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Data");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Data): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Data\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_DataBlob);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_DataBlob");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_DataBlob): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_DataBlob\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_DataBlob01);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_DataBlob01");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_DataBlob01): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_DataBlob01\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_DataBlobRef);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_DataBlobRef");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_DataBlobRef): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_DataBlobRef\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_DataBlobRef_Page);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_DataBlobRef_Page");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_DataBlobRef_Page): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_DataBlobRef_Page\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_DataIndex);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_DataIndex");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_DataIndex): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_DataIndex\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_DataIndex_Entry);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_DataIndex_Entry");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_DataIndex_Entry): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_DataIndex_Entry\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Data_Record);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Data_Record");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Data_Record): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Data_Record\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Data_RecordHdr);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Data_RecordHdr");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Data_RecordHdr): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Data_RecordHdr\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Schema);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Schema");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Schema): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Schema\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_SchemaData);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_SchemaData");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_SchemaData): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_SchemaData\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_SchemaIndex);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_SchemaIndex");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_SchemaIndex): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_SchemaIndex\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_SchemaIndex_Prop);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_SchemaIndex_Prop");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_SchemaIndex_Prop): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_SchemaIndex_Prop\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Schema_Prop);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Schema_Prop");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Schema_Prop): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Schema_Prop\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Search);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Search");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Search): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Search\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Search_Data);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Search_Data");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Search_Data): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Search_Data\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Search_IdIdx);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Search_IdIdx");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Search_IdIdx): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Search_IdIdx\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Search_IdIdxs);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Search_IdIdxs");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Search_IdIdxs): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Search_IdIdxs\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_AcDsProtoype_Segment);
   size2 = dwg_dynapi_fields_size ("AcDsProtoype_Segment");
   if (size1 != size2)
     {
       fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Segment): %d != "
                "dwg_dynapi_fields_size (\"AcDsProtoype_Segment\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_AcDsProtoype_SegmentIndex);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_SegmentIndex");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_SegmentIndex): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_SegmentIndex\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_BorderStyle);

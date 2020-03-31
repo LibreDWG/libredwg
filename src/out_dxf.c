@@ -2364,9 +2364,9 @@ dxf_acds_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   //const char *section = "AcDsProtoype";
   struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
-  if (0 && _obj->segidx_numentries)
+  if (0 && _obj->num_segments)
     {
-      SECTION (ACSDSDATA);
+      SECTION (ACSDSDATA); // FIXME
       // 70
       // 71
       // 0 ACDSSCHEMA

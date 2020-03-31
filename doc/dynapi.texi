@@ -8363,6 +8363,332 @@ BL
 @end vtable
 @end indentedblock
 
+@strong{Dwg_AcDsProtoype_Data} @anchor{Dwg_AcDsProtoype_Data}
+@vindex Dwg_AcDsProtoype_Data
+
+@indentedblock
+@vtable @code
+
+@item record_hdrs
+Dwg_AcDsProtoype_Data_RecordHdr*
+@item records
+Dwg_AcDsProtoype_Data_Record*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_DataBlob} @anchor{Dwg_AcDsProtoype_DataBlob}
+@vindex Dwg_AcDsProtoype_DataBlob
+
+@indentedblock
+@vtable @code
+
+@item data_size
+uint64_t
+@item page_count
+BL
+@item record_size
+BL
+@item page_size
+BL
+@item unknown_1
+BL
+@item unknown_2
+BL
+@item ref
+Dwg_AcDsProtoype_DataBlobRef*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_DataBlob01} @anchor{Dwg_AcDsProtoype_DataBlob01}
+@vindex Dwg_AcDsProtoype_DataBlob01
+
+@indentedblock
+@vtable @code
+
+@item total_data_size
+uint64_t
+@item page_start_offset
+uint64_t
+@item page_index
+int32_t
+@item page_count
+int32_t
+@item page_data_size
+uint64_t
+@item page_data
+RC*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_DataBlobRef} @anchor{Dwg_AcDsProtoype_DataBlobRef}
+@vindex Dwg_AcDsProtoype_DataBlobRef
+
+@indentedblock
+@vtable @code
+
+@item total_data_size
+uint64_t
+@item num_pages
+BL
+@item record_size
+BL
+@item page_size
+BL
+@item unknown_1
+BL
+@item unknown_2
+BL
+@item pages
+Dwg_AcDsProtoype_DataBlobRef_Page*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_DataBlobRef_Page} @anchor{Dwg_AcDsProtoype_DataBlobRef_Page}
+@vindex Dwg_AcDsProtoype_DataBlobRef_Page
+
+@indentedblock
+@vtable @code
+
+@item segidx
+BL
+@item size
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_DataIndex} @anchor{Dwg_AcDsProtoype_DataIndex}
+@vindex Dwg_AcDsProtoype_DataIndex
+
+@indentedblock
+@vtable @code
+
+@item num_entries
+int32_t
+@item unknown
+int32_t
+@item entries
+Dwg_AcDsProtoype_DataIndex_Entry*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_DataIndex_Entry} @anchor{Dwg_AcDsProtoype_DataIndex_Entry}
+@vindex Dwg_AcDsProtoype_DataIndex_Entry
+
+@indentedblock
+@vtable @code
+
+@item segidx
+BL
+@item offset
+BL
+@item schidx
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Data_Record} @anchor{Dwg_AcDsProtoype_Data_Record}
+@vindex Dwg_AcDsProtoype_Data_Record
+
+@indentedblock
+@vtable @code
+
+@item data_size
+BL
+@item blob
+RC*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Data_RecordHdr} @anchor{Dwg_AcDsProtoype_Data_RecordHdr}
+@vindex Dwg_AcDsProtoype_Data_RecordHdr
+
+@indentedblock
+@vtable @code
+
+@item entry_size
+BL
+@item unknown
+BL
+@item handle
+uint64_t
+@item offset
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Schema} @anchor{Dwg_AcDsProtoype_Schema}
+@vindex Dwg_AcDsProtoype_Schema
+
+@indentedblock
+@vtable @code
+
+@item num_index
+BS
+@item index
+uint64_t*
+@item num_props
+BS
+@item props
+Dwg_AcDsProtoype_Schema_Prop*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_SchemaData} @anchor{Dwg_AcDsProtoype_SchemaData}
+@vindex Dwg_AcDsProtoype_SchemaData
+
+@indentedblock
+@vtable @code
+
+@item total_data_size
+BL
+@item flags
+BL
+@item schema
+Dwg_AcDsProtoype_DataBlob01*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_SchemaIndex} @anchor{Dwg_AcDsProtoype_SchemaIndex}
+@vindex Dwg_AcDsProtoype_SchemaIndex
+
+@indentedblock
+@vtable @code
+
+@item num_props
+BL
+@item unknown_1
+BL
+@item props
+Dwg_AcDsProtoype_SchemaIndex_Prop*
+@item tag
+uint64_t
+@item num_prop_entries
+BL
+@item unknown_2
+BL
+@item prop_entries
+Dwg_AcDsProtoype_SchemaIndex_Prop*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_SchemaIndex_Prop} @anchor{Dwg_AcDsProtoype_SchemaIndex_Prop}
+@vindex Dwg_AcDsProtoype_SchemaIndex_Prop
+
+@indentedblock
+@vtable @code
+
+@item index
+BL
+@item segidx
+BL
+@item offset
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Schema_Prop} @anchor{Dwg_AcDsProtoype_Schema_Prop}
+@vindex Dwg_AcDsProtoype_Schema_Prop
+
+@indentedblock
+@vtable @code
+
+@item flags
+BL
+@item namidx
+BL
+@item type
+BL
+@item u.custom_type_size
+BL
+@item u.unknown
+BL
+@item u.num_prop_values
+BS
+@item prop_values
+RC*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Search} @anchor{Dwg_AcDsProtoype_Search}
+@vindex Dwg_AcDsProtoype_Search
+
+@indentedblock
+@vtable @code
+
+@item num_search
+BL
+@item search
+Dwg_AcDsProtoype_Search_Data*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Search_Data} @anchor{Dwg_AcDsProtoype_Search_Data}
+@vindex Dwg_AcDsProtoype_Search_Data
+
+@indentedblock
+@vtable @code
+
+@item schema_namidx
+BL
+@item num_sortedidx
+BL
+@item sortedidx
+uint64_t*
+@item num_ididxs
+BL
+@item unknown
+BL
+@item ididxs
+Dwg_AcDsProtoype_Search_IdIdxs*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Search_IdIdx} @anchor{Dwg_AcDsProtoype_Search_IdIdx}
+@vindex Dwg_AcDsProtoype_Search_IdIdx
+
+@indentedblock
+@vtable @code
+
+@item handle
+uint64_t
+@item num_ididx
+BL
+@item ididx
+uint64_t
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_Search_IdIdxs} @anchor{Dwg_AcDsProtoype_Search_IdIdxs}
+@vindex Dwg_AcDsProtoype_Search_IdIdxs
+
+@indentedblock
+@vtable @code
+
+@item num_ididx
+BL
+@item ididx
+Dwg_AcDsProtoype_Search_IdIdx*
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_AcDsProtoype_Segment} @anchor{Dwg_AcDsProtoype_Segment}
 @vindex Dwg_AcDsProtoype_Segment
 
@@ -8371,9 +8697,11 @@ BL
 
 @item signature
 RL
-@item name[6]
-char
-@item segidx
+@item name[7]
+RC
+@item type
+RC
+@item segment_idx
 RL
 @item is_blob01
 RL
@@ -8389,8 +8717,36 @@ RL
 RL
 @item objdata_algn_offset
 RL
-@item padding[8]
-char
+@item padding[9]
+RC
+@item u.segidx
+Dwg_AcDsProtoype_SegmentIndex*
+@item u.datidx
+Dwg_AcDsProtoype_DataIndex
+@item u.data
+Dwg_AcDsProtoype_Data*
+@item u.blob01
+Dwg_AcDsProtoype_DataBlob
+@item u.schidx
+Dwg_AcDsProtoype_SchemaIndex*
+@item u.schdat
+Dwg_AcDsProtoype_SchemaData*
+@item u.search
+Dwg_AcDsProtoype_Search
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDsProtoype_SegmentIndex} @anchor{Dwg_AcDsProtoype_SegmentIndex}
+@vindex Dwg_AcDsProtoype_SegmentIndex
+
+@indentedblock
+@vtable @code
+
+@item offset
+uint64_t
+@item size
+BL
 
 @end vtable
 @end indentedblock
