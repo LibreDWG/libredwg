@@ -5670,7 +5670,7 @@ Dwg_FIELD_ChildValue*
 @item parent
 struct _dwg_object_object*
 @item num_fields
-BL
+BL,	DXF 90
 @item unknown
 B
 @item fields
@@ -8676,7 +8676,7 @@ RL
 @item cellstyle
 Dwg_CellStyle
 @item num_merged_cells
-BL
+BL,	DXF 90
 @item merged_cells
 Dwg_FormattedTableMerged*
 @item parent
@@ -9072,9 +9072,9 @@ BD,	DXF 41
 @vtable @code
 
 @item name
-TV
+T,	DXF 1
 @item description
-TV
+T,	DXF 300
 
 @end vtable
 @end indentedblock
@@ -9086,11 +9086,11 @@ TV
 @vtable @code
 
 @item num_cols
-BL
+BL,	DXF 90
 @item cols
 Dwg_TableDataColumn*
 @item num_rows
-BL
+BL,	DXF 90
 @item rows
 Dwg_TableRow*
 @item num_field_refs
@@ -9534,7 +9534,7 @@ struct _dwg_TableRow*
 @vtable @code
 
 @item flags
-BL,	DXF 93
+BL
 @item data_type
 BL,	DXF 90
 @item data_size

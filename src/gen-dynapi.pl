@@ -163,11 +163,26 @@ while (<$in>) {
 #$h{Dwg_Bitcode_2RD} = '2RD';
 #$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
+my @old;
+
+sub embedded_struct {
+  my ($pre, $subclass) = @_;
+  if ($f =~ /^$pre\.(\w+)$/) {
+    $f = $1;
+    if ($n ne $subclass) {
+      push @old, $n;
+      warn "$n pushed";
+      $n = $subclass;
+    }
+  } elsif ($n eq $subclass && $f !~ /\./) {
+    $n = pop @old;
+    warn "$n popped";
+  }
+}
 
 # parse a spec for its objects, subclasses and dxf values
 sub dxf_in {
   $in = shift;
-  my @old;
   my $v = qr /[\w\.\[\]]+/;
   my $vx = qr /[\w\.\[\]>-]+/;
   my $outdef;
@@ -279,17 +294,10 @@ sub dxf_in {
       } elsif ($n eq 'MLEADER_AnnotContext' && $f eq 'flags') {
         $n = 'MULTILEADER'; # pop back
       }
-      if ($f =~ /^body\.(\w+)$/) {
-        $f = $1;
-        if ($n ne 'ACTIONBODY') {
-          push @old, $n;
-          warn "$n pushed";
-          $n = 'ACTIONBODY';
-        }
-      } elsif ($n eq 'ACTIONBODY' && $f !~ /\./) {
-        $n = pop @old;
-        warn "$n popped";
-      }
+      embedded_struct ('body', 'ACTIONBODY');
+      embedded_struct ('ldata', 'LinkedData');
+      embedded_struct ('tdata', 'LinkedTableData');
+      embedded_struct ('fdata', 'FormattedTableData');
       # (scale.x, 41) as is
       $DXF{$n}->{$f} = $dxf if $dxf;
       $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';

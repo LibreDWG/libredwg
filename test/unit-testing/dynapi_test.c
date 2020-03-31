@@ -39335,26 +39335,6 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
         fail ("TABLECONTENT.ldata [Dwg_LinkedData]");
   }
   {
-    BITCODE_T ldata.description;
-    if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "ldata.description", &ldata.description, NULL)
-        && ldata.description
-           ? strEQ ((char *)ldata.description, (char *)tablecontent->ldata.description)
-           : !tablecontent->ldata.description)
-      pass ();
-    else
-      fail ("TABLECONTENT.ldata.description [T] '%s' <> '%s'", ldata.description, tablecontent->ldata.description);
-  }
-  {
-    BITCODE_T ldata.name;
-    if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "ldata.name", &ldata.name, NULL)
-        && ldata.name
-           ? strEQ ((char *)ldata.name, (char *)tablecontent->ldata.name)
-           : !tablecontent->ldata.name)
-      pass ();
-    else
-      fail ("TABLECONTENT.ldata.name [T] '%s' <> '%s'", ldata.name, tablecontent->ldata.name);
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "parent", &parent, NULL)
         && !memcmp (&parent, &tablecontent->parent, sizeof (tablecontent->parent)))

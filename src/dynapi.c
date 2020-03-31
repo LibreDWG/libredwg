@@ -7515,7 +7515,7 @@ static const Dwg_DYNAPI_field _dwg_FormattedTableData_fields[] = {
   { "cellstyle",	"Dwg_CellStyle", sizeof (Dwg_CellStyle),  OFF (struct _dwg_FormattedTableData, cellstyle),
     0,0,0, 0 },
   { "num_merged_cells",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_FormattedTableData, num_merged_cells),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "merged_cells",	"Dwg_FormattedTableMerged*", sizeof (Dwg_FormattedTableMerged*),  OFF (struct _dwg_FormattedTableData, merged_cells),
     1,1,0, 0 },
   { "parent",	"struct _dwg_object_TABLECONTENT*", sizeof (void *),  OFF (struct _dwg_FormattedTableData, parent),
@@ -7802,20 +7802,20 @@ static const Dwg_DYNAPI_field _dwg_LWPOLYLINE_width_fields[] = {
 };
 /* from typedef struct _dwg_LinkedData: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_LinkedData_fields[] = {
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_LinkedData, name),
-    1,1,1, 0 },
-  { "description",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_LinkedData, description),
-    1,1,1, 0 },
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_LinkedData, name),
+    1,1,1, 1 },
+  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_LinkedData, description),
+    1,1,1, 300 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_LinkedTableData: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_LinkedTableData_fields[] = {
   { "num_cols",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_LinkedTableData, num_cols),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "cols",	"Dwg_TableDataColumn*", sizeof (Dwg_TableDataColumn*),  OFF (struct _dwg_LinkedTableData, cols),
     1,1,0, 0 },
   { "num_rows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_LinkedTableData, num_rows),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "rows",	"Dwg_TableRow*", sizeof (Dwg_TableRow*),  OFF (struct _dwg_LinkedTableData, rows),
     1,1,0, 0 },
   { "num_field_refs",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_LinkedTableData, num_field_refs),
@@ -8157,7 +8157,7 @@ static const Dwg_DYNAPI_field _dwg_TABLE_CustomDataItem_fields[] = {
 /* from typedef struct _dwg_TABLE_value: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_TABLE_value_fields[] = {
   { "flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLE_value, flags),
-    0,0,0, 93 },
+    0,0,0, 0 },
   { "data_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLE_value, data_type),
     0,0,0, 90 },
   { "data_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLE_value, data_size),
