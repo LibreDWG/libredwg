@@ -2208,8 +2208,8 @@ dxf_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
 
 // a BLOCK_HEADER
 static int
-dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict mspace,
-                 const Dwg_Object *restrict hdr, int *restrict i)
+dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
+                 const Dwg_Object *restrict mspace, int *restrict i)
 {
   int error = 0;
   Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
@@ -2288,15 +2288,13 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
      scan all BLOCK_HEADER's and just skip *Model_Space. #81 BLOCK_HEADER -
      LAYOUT - BLOCK - ENDBLK
    */
-  {
-    for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
-      {
-        if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT
-            && dwg->object[i].type == DWG_TYPE_BLOCK_HEADER)
-          {
-            error |= dxf_block_write (dat, mspace, &dwg->object[i], &i);
-          }
-      }
+  for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
+    {
+      if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT
+          && dwg->object[i].type == DWG_TYPE_BLOCK_HEADER)
+        {
+          error |= dxf_block_write (dat, &dwg->object[i], mspace /* to be skipped*/, &i);
+        }
   }
 
   ENDSEC ();

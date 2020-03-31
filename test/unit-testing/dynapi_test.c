@@ -39335,6 +39335,26 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
         fail ("TABLECONTENT.ldata [Dwg_LinkedData]");
   }
   {
+    BITCODE_T ldata.description;
+    if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "ldata.description", &ldata.description, NULL)
+        && ldata.description
+           ? strEQ ((char *)ldata.description, (char *)tablecontent->ldata.description)
+           : !tablecontent->ldata.description)
+      pass ();
+    else
+      fail ("TABLECONTENT.ldata.description [T] '%s' <> '%s'", ldata.description, tablecontent->ldata.description);
+  }
+  {
+    BITCODE_T ldata.name;
+    if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "ldata.name", &ldata.name, NULL)
+        && ldata.name
+           ? strEQ ((char *)ldata.name, (char *)tablecontent->ldata.name)
+           : !tablecontent->ldata.name)
+      pass ();
+    else
+      fail ("TABLECONTENT.ldata.name [T] '%s' <> '%s'", ldata.name, tablecontent->ldata.name);
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "parent", &parent, NULL)
         && !memcmp (&parent, &tablecontent->parent, sizeof (tablecontent->parent)))
@@ -42660,7 +42680,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 42663 "dynapi_test.c"
+#line 42683 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -43352,7 +43372,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 43355 "dynapi_test.c"
+#line 43375 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

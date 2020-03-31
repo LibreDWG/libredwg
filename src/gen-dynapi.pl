@@ -266,11 +266,31 @@ sub dxf_in {
       $DXF{$n}->{$f} = $3 if $3;
       $SIZE{$n}->{$f} = $2;
       $ENT{$n}->{$f} = 'TF';
-    } elsif (/^\s+FIELD_(.+?)\s*\((\w+),\s*(\d+)\)/) {
+    } elsif (/^\s+FIELD_(.+?)\s*\(([\w\.]+),\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;
       my $dxf = $3;
+      # inlined unions
       $f =~ s/^(?:fmt|sty|name|value)\.//;
+      # inlined struct: ctx.
+      if ($f =~ /^ctx\.(\w+)$/) {
+        $f = $1;
+        $n = 'MLEADER_AnnotContext';
+      } elsif ($n eq 'MLEADER_AnnotContext' && $f eq 'flags') {
+        $n = 'MULTILEADER'; # pop back
+      }
+      if ($f =~ /^body\.(\w+)$/) {
+        $f = $1;
+        if ($n ne 'ACTIONBODY') {
+          push @old, $n;
+          warn "$n pushed";
+          $n = 'ACTIONBODY';
+        }
+      } elsif ($n eq 'ACTIONBODY' && $f !~ /\./) {
+        $n = pop @old;
+        warn "$n popped";
+      }
+      # (scale.x, 41) as is
       $DXF{$n}->{$f} = $dxf if $dxf;
       $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
@@ -365,6 +385,7 @@ $DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
 # $DXF{'DIMENSION_ORDINATE'}->{'flag2'} = 70;
 # $DXF{'DIMENSION_ORDINATE'}->{'dimstyle'} = 3;
 # $DXF{'DIMENSION_ORDINATE'}->{'block'} = 2;
+$DXF{$_}->{'class_version'} = 280 for qw(ATTRIB ATTDEF); #r2010 only
 $DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
 #$DXF{$_}->{'has_vertex'} = 66 for qw (POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
 $DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);
@@ -442,7 +463,7 @@ dxfin_spec "$srcdir/summaryinfo.spec";
   "LTYPE_dash" => "",
   "LWPOLYLINE_width" => "",
   "MLEADER_Content" => "",
-  "MLEADER_AnnotContext" => "",
+  "MLEADER_AnnotContext" => "AcDbObjectContextData",
   "MLINESTYLE_line" => "",
   "MLINE_line" => "",
   "MLINE_vertex" => "",
@@ -475,10 +496,11 @@ dxfin_spec "$srcdir/summaryinfo.spec";
   );
 
 # 300 CONTEXT_DATA{
+# unused
 my %SUBGROUP = (
-  AcDbObjectContextData => "CONTEXT_DATA{",
-  Dwg_LEADER  => "LEADER{",
-  Dwg_LEADER_Line => "LEADER_LINE{",
+  MLEADER_AnnotContext => "CONTEXT_DATA{",
+  LEADER  => "LEADER{",
+  LEADER_Line => "LEADER_LINE{",
   );
 
 # DXFNAME 0 => our name

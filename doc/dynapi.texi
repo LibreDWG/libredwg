@@ -8446,35 +8446,35 @@ struct _dwg_TABLEGEOMETRY_Cell*
 @vtable @code
 
 @item type
-BL
+BL,	DXF 90
 @item data_flags
-BS
+BS,	DXF 170
 @item property_override_flags
-BL
+BL,	DXF 91
 @item merge_flags
-BL
+BL,	DXF 92
 @item background_color
 CMC
 @item content_layout
-BL
+BL,	DXF 93
 @item content_format
 Dwg_ContentFormat
 @item margin_override_flags
-BS
+BS,	DXF 171
 @item vert_margin
-BD
+BD,	DXF 40
 @item horiz_margin
-BD
+BD,	DXF 40
 @item bottom_margin
-BD
+BD,	DXF 40
 @item right_margin
-BD
+BD,	DXF 40
 @item margin_horiz_spacing
-BD
+BD,	DXF 40
 @item margin_vert_spacing
-BD
+BD,	DXF 40
 @item num_borders
-BL
+BL,	DXF 94
 @item border
 Dwg_BorderStyle*
 @item tablerow_parent
@@ -8492,27 +8492,27 @@ struct _dwg_TableDataColumn*
 @vtable @code
 
 @item property_override_flags
-BL
+BL,	DXF 90
 @item property_flags
-BL
+BL,	DXF 91
 @item value_data_type
-BL
+BL,	DXF 92
 @item value_unit_type
-BL
+BL,	DXF 93
 @item value_format_string
-TV
+T,	DXF 300
 @item rotation
-BD
+BD,	DXF 40
 @item block_scale
-BD
+BD,	DXF 140
 @item cell_alignment
-BL
+BL,	DXF 94
 @item content_color
 CMC
 @item text_style
 H
 @item text_height
-BD
+BD,	DXF 92
 
 @end vtable
 @end indentedblock
@@ -9124,11 +9124,11 @@ BL,	DXF 90
 @vtable @code
 
 @item class_version
-BS
+BS,	DXF 70
 @item has_xdic_file
 B
 @item is_default
-B
+B,	DXF 290
 @item scale_handle
 H
 @item num_leaders
@@ -9138,41 +9138,41 @@ Dwg_LEADER_Node*
 @item attach_dir
 BS
 @item scale
-BD
+BD,	DXF 40
 @item content_base
-3BD
+3BD,	DXF 10
 @item text_height
-BD
+BD,	DXF 41
 @item arrow_size
-BD
+BD,	DXF 140
 @item landing_gap
-BD
+BD,	DXF 145
 @item text_left
-BS
+BS,	DXF 174
 @item text_right
-BS
+BS,	DXF 175
 @item text_alignment
-BS
+BS,	DXF 176
 @item attach_type
-BS
+BS,	DXF 177
 @item has_content_txt
-B
+B,	DXF 290
 @item has_content_blk
-B
+B,	DXF 296
 @item content
 Dwg_MLEADER_Content
 @item base
-3BD
+3BD,	DXF 110
 @item base_dir
-3BD
+3BD,	DXF 111
 @item base_vert
-3BD
+3BD,	DXF 112
 @item is_normal_reversed
-B
+B,	DXF 297
 @item text_top
-BS
+BS,	DXF 273
 @item text_bottom
-BS
+BS,	DXF 272
 
 @end vtable
 @end indentedblock
@@ -9534,9 +9534,9 @@ struct _dwg_TableRow*
 @vtable @code
 
 @item flags
-BL
+BL,	DXF 93
 @item data_type
-BL
+BL,	DXF 90
 @item data_size
 BL
 @item data_long
@@ -9544,7 +9544,7 @@ BL
 @item data_double
 BD
 @item data_string
-TV
+T
 @item data_date
 TF
 @item data_point
@@ -9552,11 +9552,11 @@ TF
 @item data_3dpoint
 3RD
 @item unit_type
-BL
+BL,	DXF 94
 @item format_string
-TV
+T,	DXF 300
 @item value_string
-TV
+T,	DXF 302
 
 @end vtable
 @end indentedblock
