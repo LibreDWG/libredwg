@@ -5082,7 +5082,7 @@ static const Dwg_DYNAPI_field _dwg_FIELDLIST_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_FIELDLIST, parent),
     1,1,0, 0 },
   { "num_fields",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_FIELDLIST, num_fields),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "unknown",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_FIELDLIST, unknown),
     0,0,0, 0 },
   { "fields",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_FIELDLIST, fields),
