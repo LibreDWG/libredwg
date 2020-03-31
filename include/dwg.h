@@ -6176,7 +6176,7 @@ typedef enum DWG_SECTION_TYPE /* since r2004+ */
   SECTION_SECURITY,                     /* AcDb:Security, if stored with a password */
   SECTION_VBAPROJECT,                   /* AcDb:VBAProject */
   SECTION_SIGNATURE,                    /* AcDb:Signature */
-  SECTION_PROTOTYPE,                    /* AcDb:AcDsPrototype_1b = 12 (ACIS datastorage) */
+  SECTION_DSPROTOTYPE,                  /* AcDb:AcDsPrototype_1b = 12 (ACIS datastorage) */
   SECTION_UNKNOWN,
 } Dwg_Section_Type;
 

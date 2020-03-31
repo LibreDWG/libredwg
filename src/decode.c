@@ -3262,7 +3262,7 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-datastorage_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+dsprototype_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
   struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
@@ -3280,14 +3280,14 @@ datastorage_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    Contains the SAB binary ACIS data, version 2
  */
 static int
-read_2004_section_protoype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+read_2004_section_dsprototype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
   const char *secname = "AcDsPrototype_1b";
 
   // compressed, pagesize 0x7400, type 13
-  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_PROTOTYPE);
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_DSPROTOTYPE);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", secname)
@@ -3300,7 +3300,7 @@ read_2004_section_protoype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
-  error |= datastorage_private (dat, dwg);
+  error |= dsprototype_private (dat, dwg);
 
   LOG_TRACE ("\n")
   if (sec_dat.chain)
@@ -3510,7 +3510,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->header.vbaproj_address)
     error |= read_2004_section_vbaproject (dat, dwg);
   //error |= read_2004_section_signature (dat, dwg);
-  error |= read_2004_section_protoype (dat, dwg);
+  error |= read_2004_section_dsprototype (dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and
    * type
