@@ -563,10 +563,11 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
   BITCODE_BSd index;  /* <0: turned off. 0: BYBLOCK, 256: BYLAYER */
   BITCODE_BS flag;    /* 1: name follows, 2: book name follows, ... */
+  BITCODE_BS raw;     /* flag << 8 + index */
   BITCODE_BL rgb;     /* DXF 420 */
   BITCODE_H  handle;
-  BITCODE_T  name;    /* DXF 430 */
-  BITCODE_T  book_name;
+  BITCODE_T  name;       /* DXF 430 */
+  BITCODE_T  book_name;  /* DXF 430 */
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
   BITCODE_RC alpha;      /* DXF 440. 0-255 */
 } Dwg_Color;
@@ -5881,6 +5882,7 @@ typedef struct _dwg_object_entity
 
   /* Common Entity Data */
   BITCODE_B   preview_exists;
+  BITCODE_B   preview_is_proxy; /* calculated */
   BITCODE_BLL preview_size;     /*!< DXF 160 for bitmaps, DXF 92 for PROXY vector data.
                                   e.g. INSERT, MULTILEADER */
   BITCODE_TF preview;           /*!< DXF 310 */
@@ -5905,7 +5907,7 @@ typedef struct _dwg_object_entity
   BITCODE_BS invisible;
   BITCODE_RC linewt;              /*!< r2000+, see dxf_cvt_lweight() */
 
-  /* preR13 entity fields: */
+  /* preR13 entity fields. TODO a union */
   BITCODE_RC flag_r11;
   BITCODE_RS kind_r11;
   BITCODE_RS opts_r11;
@@ -6075,6 +6077,39 @@ typedef struct _dwg_object_object
 } Dwg_Object_Object;
 
 /**
+ Classes
+ */
+typedef struct _dwg_class
+{
+  BITCODE_BS number; /*!< starting with 500 */
+  /* see http://images.autodesk.com/adsk/files/autocad_2012_pdf_dxf-reference_enu.pdf */
+  BITCODE_BS proxyflag; /*!<
+      erase allowed = 1,
+      transform allowed = 2,
+      color change allowed = 4,
+      layer change allowed = 8,
+      LTYPE change allowed = 16,
+      LTYPE.scale change allowed = 32,
+      visibility change allowed = 64,
+      cloning allowed = 128,
+      Lineweight change allowed = 256,
+      PLOTSTYLE Name change allowed = 512,
+      Disables proxy warning dialog = 1024,
+      is R13 format proxy = 32768 */
+  char *appname;
+  char *cppname;
+  char *dxfname; /*!< ASCII or UTF-8 */
+  BITCODE_TU dxfname_u; /*!< r2007+, always transformed to dxfname as UTF-8 */
+  BITCODE_B  is_zombie; /*!< i.e. was_proxy, not loaded class */
+  BITCODE_BS item_class_id; /*!< really is_entity. 1f2 for entities, 1f3 for objects */
+  BITCODE_BL num_instances; /*!< 91 instance count for a custom class */
+  BITCODE_BL dwg_version;
+  BITCODE_BL maint_version;
+  BITCODE_BL unknown_1; /*!< def: 0L */
+  BITCODE_BL unknown_2; /*!< def: 0L */
+} Dwg_Class;
+
+/**
  General DWG object with link to either entity or object, and as parent the DWG
  */
 typedef struct _dwg_object
@@ -6096,6 +6131,7 @@ typedef struct _dwg_object
 
   Dwg_Handle handle;
   struct _dwg_struct *parent;
+  Dwg_Class *klass;          /* the optional class of a variable object */
 
   BITCODE_RL bitsize;        /* common + object fields, but no handles */
   unsigned long bitsize_pos; /* bitsize offset in bits: r13-2007 */
@@ -6312,7 +6348,7 @@ typedef struct _dwg_struct
   } header;
 
   BITCODE_BS num_classes;    /*!< number of classes */
-  Dwg_Class * dwg_class;     /*!< array classes */
+  Dwg_Class * dwg_class;     /*!< array of classes */
   BITCODE_BL num_objects;    /*!< number of objects */
   Dwg_Object * object;       /*!< list of all objects and entities */
   BITCODE_BL num_entities;       /*!< number of entities in object */

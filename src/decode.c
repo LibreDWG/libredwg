@@ -2580,7 +2580,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_TRACE ("C++ class name:   %s [TV]\n", dwg->dwg_class[i].cppname)
               LOG_TRACE ("DXF record name:  %s [TV]\n", dwg->dwg_class[i].dxfname)
             }
-          dwg->dwg_class[i].is_zombie = bit_read_B (&sec_dat);
+          dwg->dwg_class[i].is_zombie = bit_read_B (&sec_dat); // now called proxy
           dwg->dwg_class[i].item_class_id = bit_read_BS (&sec_dat);
           LOG_TRACE ("Class ID:         0x%x [BS] "
                      "(0x1f3 for object, 0x1f2 for entity)\n",
@@ -4014,6 +4014,7 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
    called by COMMON_ENTITY_HANDLE_DATA in dwg.spec
 
    For EED check page 269, par 28 (Extended Object Data)
+   For proxy graphics check page 270, par 29 (Proxy Entity Graphics)
  */
 static int
 dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
@@ -4024,6 +4025,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Data *dwg = ent->dwg;
   Dwg_Object *obj = &dwg->object[ent->objid];
   Dwg_Object_Entity *_obj = ent;
+  Dwg_Class *klass = NULL;
   unsigned long objectpos = bit_position (dat);
   int has_wrong_bitsize = 0;
 

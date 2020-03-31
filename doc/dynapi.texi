@@ -9879,6 +9879,8 @@ H
 TF,	DXF 310
 @item preview_exists
 B
+@item preview_is_proxy
+B
 @item preview_size
 BLL,	DXF 160
 @item reactors

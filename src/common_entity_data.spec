@@ -3,20 +3,32 @@
   #include "spec.h"
   //Dwg_Object_Entity* _obj = ent;
 
+  // p20.4.1
   {
     // unsigned long pos = bit_position(dat);
     FIELD_B (preview_exists, 0);
     if (ent->preview_exists)
       {
-#ifndef IS_JSON
+        int dxf = 160;
+        // or DXF 92 for all PROXY vector preview data with klass->is_zombie
+        if (obj->klass && obj->klass->is_zombie)
+          {
+            dxf = 92;
+            DECODER {
+              ent->preview_is_proxy = 1;
+            }
+          }
+#if defined(IS_JSON) || defined(IS_PRINT)
+        FIELD_B (preview_is_proxy, 0);
+        FIELD_BLL (preview_size, dxf);
+#else
         VERSIONS (R_13, R_2007)
           {
-            // or DXF 92 for all PROXY vector preview data with classes
-            FIELD_CAST (preview_size, RL, BLL, 160);
+            FIELD_CAST (preview_size, RL, BLL, dxf);
           }
         SINCE (R_2010)
           {
-            FIELD_BLL (preview_size, 160);
+            FIELD_BLL (preview_size, dxf);
           }
 #endif
         if ((int)ent->preview_size >= 0 && ent->preview_size < 210210)
@@ -62,7 +74,6 @@
 
   // TODO: r13-r14: 6B flags + 6B common params
   FIELD_BB (entmode, 0);
-  // TODO: 2 more BB's
   FIELD_BL (num_reactors, 0); //ODA bug: BB as BS
 
   VERSIONS (R_13, R_14) //ODA bug
@@ -84,97 +95,71 @@
       FIELD_B (has_ds_binary_data, 0)
     }
 
-  // TODO:
-  // group 92 proxydata_size
-  // group 310 proxydata
-  // color as FIELD_ENC (DXF, ENCODE)
-
+  // no ENC type as it's only used once, here, and we would need to write
+  // handlers for all 3 importers, and 3 exporters.
   SINCE (R_2004) // ENC (entity color encoding)
     {
-#if 0 /* FIXME */
-      //FIELD_CMC (color, 62,420);
-      FIELD_ENC (color,62,420); // in ODA as CMC (B)
-#else
       BITCODE_BS flags;
 #ifdef IS_JSON
       field_cmc (dat, "color", &ent->color);
 #else
-      FIELD_BSx (color.flag, 0);
-      flags = ent->color.flag >> 8;
-      DECODER {
-        ent->color.rgb = 0L;
-        ent->color.index = ent->color.flag & 0x1ff; // or 0xff?
-        ent->color.flag = flags;
-        LOG_HANDLE (" color.index: %d [ENC 62]\n", ent->color.index);
-      }
-      FREE {
-         flags = ent->color.flag;
-      }
       DXF {
         // 0: byblock
-        if (FIELD_VALUE (color.index) != 256) // not bylayer
+        if (ent->color.index != 256) // not bylayer
           FIELD_BS (color.index, 62);
+      } else {
+        FIELD_BSx (color.raw, 0);
       }
-      if (flags & 0x40 && dat->version < R_2007)
-        { // r2004+ in handle stream
-          FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9
-        }
+      DECODER {
+        ent->color.flag = ent->color.raw >> 8;
+        ent->color.index = ent->color.raw & 0x1ff; // 256 / -1 needed for ByLayer
+        ent->color.rgb = 0L;
+        if (ent->color.index != ent->color.raw)
+          LOG_TRACE (" color.index: %d [ENC 62]\n", ent->color.index);
+        if (ent->color.flag > 1)
+          LOG_TRACE (" color.flag: 0x%x [ENC]\n", ent->color.flag);
+      }
+      flags = ent->color.flag;
       if (flags & 0x20)
         {
-          int type;
-          //BITCODE_BL alpha;
 #ifndef IS_DXF
-          FIELD_BL (color.alpha, 0);
+          FIELD_BLx (color.alpha, 0);
 #endif
-          /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
-          ent->color.alpha_type = ent->color.alpha & 0xff;
-          //alpha = ent->color.alpha >> 8;
-          //LOG_HANDLE ("alpha: %06x [BL 0]\n", ent->color.alpha);
-#ifdef IS_DECODER
-          LOG_TRACE (" color.alpha_type: %d\n", ent->color.alpha_type);
-#endif
-          if (ent->color.alpha_type == 3) {
-#ifdef IS_ENCODER
-            DXF { FIELD_BL (color.alpha >> 8, 440); }
-#else
-            DXF { FIELD_BL (color.alpha, 440); }
-#endif
-            //else LOG_TRACE ("color.alpha: %d [ENC 440]\n", ent->color.alpha >> 8);
+          DECODER {
+            /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
+            ent->color.alpha_type = ent->color.alpha >> 24;
+            ent->color.alpha = ent->color.alpha & 0xFF;
+            LOG_TRACE (" color.alpha_type: %d [ENV 440]\n", ent->color.alpha_type);
+          }
+          JSON {
+            FIELD_BB (color.alpha_type, 0);
           }
         }
-      if (flags & 0x80 && !(flags & 0x40)) // and not a reference
+      if (flags & 0x40)
         {
-          int type = ent->color.rgb >> 24; //?
-          FIELD_BL (color.rgb, 0); //ODA bug, documented as BS
-#if defined(IS_DECODER)
-          LOG_TRACE ("color.rgb: %06x [ENC.BL 420] (%d)\n", (unsigned)ent->color.rgb,
-                    (int32_t)(ent->color.rgb & 0x00ffffff));
-#elif defined(IS_ENCODER) && defined(IS_DXF)
-          DXF { FIELD_BL (color.rgb, 420); }
-#elif defined(IS_DXF)
-          DXF { FIELD_BL (color.rgb & 0x00ffffff, 420); }
-#endif
+          FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9
         }
-      /* FIXME: not with entities, only with CMC or dbcolor handle */
+      else if (flags & 0x80) // and not a reference
+        {
+          DXF {
+            VALUE_BL (ent->color.rgb & 0x00ffffff, 420);
+          } else {
+            FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
+          }
+        }
       if ((flags & 0x41) == 0x41)
         {
           FIELD_TV (color.name, 430);
-          //ent->color.name = bit_read_TV (dat);
-          //LOG_TRACE ("color.name: %s [ENC.TV 430]\n", ent->color.name);
         }
-      if ((flags & 0x42) == 0x42)
+      else if ((flags & 0x42) == 0x42)
         {
           FIELD_TV (color.book_name, 430);
-          //ent->color.book_name = bit_read_TV (dat);
-          //LOG_TRACE ("color.book_name: %s [ENC.TV 430]\n", ent->color.book_name);
         }
-#if !defined(IS_DECODER) && !defined(IS_FREE)
-      if (!(flags & 0xf0))
-        {
-          LOG_TRACE ("color.index: %u [ENC 62]\n", (unsigned)ent->color.index);
+      DXF {
+        if (flags & 0x20 && ent->color.alpha_type == 3) {
+          FIELD_BL (color.alpha, 440);
         }
-#endif
-#endif
+      }
 #endif
     }
   OTHER_VERSIONS

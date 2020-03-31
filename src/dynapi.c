@@ -8463,6 +8463,8 @@ static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
     1,1,0, 310 },
   { "preview_exists",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_entity, preview_exists),
     0,0,0, 0 },
+  { "preview_is_proxy",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_entity, preview_is_proxy),
+    0,0,0, 0 },
   { "preview_size",	"BLL", sizeof (BITCODE_BLL),  OFF (struct _dwg_object_entity, preview_size),
     0,0,0, 160 },
   { "reactors",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_entity, reactors),

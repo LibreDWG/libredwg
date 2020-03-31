@@ -71,6 +71,7 @@
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
+        obj->klass = klass; \
       } \
       return DWG_FUNC_N(action,_name) (dat, obj); \
     }
@@ -81,6 +82,7 @@
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
         obj->fixedtype = DWG_TYPE_##_name; \
+        obj->klass = klass; \
       } \
       return DWG_FUNC_N(action,_name) (dat, obj); \
     }
@@ -91,6 +93,7 @@
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
+        obj->klass = klass; \
       } \
       return DWG_FUNC_N(action,_name) (dat, obj); \
     }
@@ -102,6 +105,7 @@
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
+        obj->klass = klass; \
       } \
       return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
@@ -113,6 +117,7 @@
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
         obj->fixedtype = DWG_TYPE_##_name; \
+        obj->klass = klass; \
       } \
       return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
@@ -124,6 +129,7 @@
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
         obj->fixedtype = DWG_TYPE_##_name; \
+        obj->klass = klass; \
       } \
       return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
@@ -134,6 +140,7 @@
       if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
+        obj->klass = klass; \
       } \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
@@ -144,6 +151,7 @@
       if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_dxfname; \
+        obj->klass = klass; \
       } \
       return DWG_ERR_UNHANDLEDCLASS; \
     }
@@ -154,6 +162,7 @@
       if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
         obj->name = (char*) #_name; \
         obj->dxfname = (char*) #_name; \
+        obj->klass = klass; \
       } \
       return DWG_ERR_UNHANDLEDCLASS; \
     }

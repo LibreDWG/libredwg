@@ -413,8 +413,10 @@ $DXF{$n}->{'plotstyle'} = 390;
 $DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
+$DXF{$n}->{'preview_size'} = 160; # or 92
 
 $n = 'object_object';
+#dxfin_spec "$srcdir/common_object_handle_data.spec";
 $DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
