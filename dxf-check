@@ -46,12 +46,15 @@ if [ -f "$b.dwg" ]; then
     if [ -x $TeighaFileConverter ]; then
         echo TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
         $TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
-        cat "test/$b.dxf.err"
+        mv "test/$b.dxf.err" "$b.dxf.err"
+        cat "$b.dxf.err"
     else
+        rm "$b.dxf.err" 2>/dev/null
         echo TeighaFileConverter not installed
     fi
 
     ./log -v3 "$b.dwg"
     echo diff -bu "$b.log.orig" "$b.log"
     diff -bu "$b.log.orig" "$b.log"
+    test -f "$b.dxf.err" && cat "$b.dxf.err"
 fi

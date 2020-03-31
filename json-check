@@ -46,8 +46,8 @@ if [ -f "$b.dwg" ]; then
         echo TeighaFileConverter "test" "." "ACAD$r" DXF 0 1 "$b.dwg"
         $TeighaFileConverter "test" "." "ACAD$r" DXF 0 1 "$b.dwg"
         mv "./$b.dxf.err" "$b.json.err"
-        cat "$b.json.err"
     else
+        rm "$b.json.err" 2>/dev/null
         echo TeighaFileConverter not installed
     fi
 
@@ -56,4 +56,5 @@ if [ -f "$b.dwg" ]; then
     #diff -bu <(grep -B1 'Add entity ' $b.log.orig) <(grep -B1 'Add entity ' $b.log)
     echo "diff -bu $b.log.orig $b.log"
     diff -bu "$b.log.orig" "$b.log"
+    test -f "$b.json.err"  && cat "$b.json.err"
 fi
