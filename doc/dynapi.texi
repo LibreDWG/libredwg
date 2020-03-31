@@ -8363,6 +8363,38 @@ BL
 @end vtable
 @end indentedblock
 
+@strong{Dwg_AcDsProtoype_Segment} @anchor{Dwg_AcDsProtoype_Segment}
+@vindex Dwg_AcDsProtoype_Segment
+
+@indentedblock
+@vtable @code
+
+@item signature
+RL
+@item name[6]
+char
+@item segidx
+RL
+@item is_blob01
+RL
+@item segsize
+RL
+@item unknown_2
+RL
+@item ds_version
+RL
+@item unknown_3
+RL
+@item data_algn_offset
+RL
+@item objdata_algn_offset
+RL
+@item padding[8]
+char
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_BorderStyle} @anchor{Dwg_BorderStyle}
 @vindex Dwg_BorderStyle
 

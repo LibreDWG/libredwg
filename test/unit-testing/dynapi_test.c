@@ -44764,6 +44764,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_AcDsProtoype_Segment);
+  size2 = dwg_dynapi_fields_size ("AcDsProtoype_Segment");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDsProtoype_Segment): %d != "
+               "dwg_dynapi_fields_size (\"AcDsProtoype_Segment\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_BorderStyle);
   size2 = dwg_dynapi_fields_size ("BorderStyle");
   if (size1 != size2)

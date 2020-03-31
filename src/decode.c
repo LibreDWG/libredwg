@@ -3005,6 +3005,52 @@ read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
+#if 0
+static int
+signature_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  struct Dwg_Signature *_obj = &dwg->signature;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  // clang-format off
+  #include "signature.spec"
+  // clang-format on
+  return error;
+}
+
+/* Signature Section, not written nor documented by Teigha
+ */
+static int
+read_2004_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  const char *secname = "Signature";
+
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_SIGNATURE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", secname)
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return 0;
+    }
+
+  LOG_TRACE ("Signature (%lu)\n-------------------\n", sec_dat.size)
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  error |= signature_private (dat, dwg);
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+#endif
+
 /* VBAProject Section. TODO dwg_decode_ole2
  */
 static int
@@ -3216,6 +3262,54 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
+datastorage_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+
+  // clang-format off
+  #include "datastorage.spec"
+  // clang-format on
+
+  return error;
+}
+
+/* datastorage section. Optional, since r2013
+   Contains the SAB binary ACIS data, version 2
+ */
+static int
+read_2004_section_protoype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  const char *secname = "AcDsPrototype_1b";
+
+  // compressed, pagesize 0x7400, type 13
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_PROTOTYPE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", secname)
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return 0;
+    }
+
+  LOG_TRACE ("Datastorage (%lu)\n-------------------\n", sec_dat.size)
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  error |= datastorage_private (dat, dwg);
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+static int
 read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain sec_dat = { 0 };
@@ -3406,8 +3500,6 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= read_2004_section_handles (dat, dwg);
   if (dwg->header.thumbnail_address)
     error |= read_2004_section_preview (dat, dwg);
-  if (dwg->header.vbaproj_address)
-    error |= read_2004_section_vbaproject (dat, dwg);
   error |= read_2004_section_appinfo (dat, dwg);
   error |= read_2004_section_appinfohistory (dat, dwg);
   error |= read_2004_section_filedeplist (dat, dwg);
@@ -3415,6 +3507,10 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= read_2004_section_revhistory (dat, dwg);
   error |= read_2004_section_objfreespace (dat, dwg);
   error |= read_2004_section_template (dat, dwg);
+  if (dwg->header.vbaproj_address)
+    error |= read_2004_section_vbaproject (dat, dwg);
+  //error |= read_2004_section_signature (dat, dwg);
+  error |= read_2004_section_protoype (dat, dwg);
 
   /* Clean up. XXX? Need this to write the sections, at least the name and
    * type

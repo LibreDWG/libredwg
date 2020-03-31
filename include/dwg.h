@@ -6148,39 +6148,6 @@ typedef struct _dwg_object
 } Dwg_Object;
 
 /**
- Classes
- */
-typedef struct _dwg_class
-{
-  BITCODE_BS number; /*!< starting with 500 */
-  /* see http://images.autodesk.com/adsk/files/autocad_2012_pdf_dxf-reference_enu.pdf */
-  BITCODE_BS proxyflag; /*!<
-      erase allowed = 1,
-      transform allowed = 2,
-      color change allowed = 4,
-      layer change allowed = 8,
-      line type change allowed = 16,
-      line type scale change allowed = 32,
-      visibility change allowed = 64,
-      cloning allowed = 128,
-      Lineweight change allowed = 256,
-      Plot Style Name change allowed = 512,
-      Disables proxy warning dialog = 1024,
-      is R13 format proxy= 32768 */
-  char *appname;
-  char *cppname;
-  char *dxfname; /*!< ASCII or UTF-8 */
-  BITCODE_TU dxfname_u; /*!< r2007+, always transformed to dxfname as UTF-8 */
-  BITCODE_B  is_zombie; /*!< i.e. was_proxy, not loaded class */
-  BITCODE_BS item_class_id; /*!< really is_entity. 1f2 for entities, 1f3 for objects */
-  BITCODE_BL num_instances; /*!< 91 instance count for a custom class */
-  BITCODE_BL dwg_version;
-  BITCODE_BL maint_version;
-  BITCODE_BL unknown_1; /*!< def: 0L */
-  BITCODE_BL unknown_2; /*!< def: 0L */
-} Dwg_Class;
-
-/**
  Dwg_Chain similar to Bit_Chain in "bits.h". Used only for the Thumbnail thumbnail
  */
 typedef struct _dwg_chain
@@ -6209,7 +6176,7 @@ typedef enum DWG_SECTION_TYPE /* since r2004+ */
   SECTION_SECURITY,                     /* AcDb:Security, if stored with a password */
   SECTION_VBAPROJECT,                   /* AcDb:VBAProject */
   SECTION_SIGNATURE,                    /* AcDb:Signature */
-  SECTION_PROTOTYPE,                    /* AcDb:AcDsPrototype_1b = 12 */
+  SECTION_PROTOTYPE,                    /* AcDb:AcDsPrototype_1b = 12 (ACIS datastorage) */
   SECTION_UNKNOWN,
 } Dwg_Section_Type;
 
@@ -6315,6 +6282,21 @@ typedef struct _dwg_FileDepList_Files
   BITCODE_RS affects_graphics;
   BITCODE_RL refcount;
 } Dwg_FileDepList_Files;
+
+typedef struct _dwg_AcDsProtoype_Segment
+{
+  BITCODE_RL signature; /* always 0xd5ac */
+  char name[6]; /* segidx, datidx, _data_, schidx, schdat, search, blob01 */
+  BITCODE_RL segidx;
+  BITCODE_RL is_blob01;
+  BITCODE_RL segsize;
+  BITCODE_RL unknown_2;
+  BITCODE_RL ds_version; // datastorage revision
+  BITCODE_RL unknown_3;
+  BITCODE_RL data_algn_offset;
+  BITCODE_RL objdata_algn_offset;
+  char padding[8]; // always 8x 0x55
+} Dwg_AcDsProtoype_Segment;
 
 /**
  Main DWG struct
@@ -6542,6 +6524,26 @@ typedef struct _dwg_struct
     BITCODE_T16 description;
     BITCODE_RS MEASUREMENT;
   } template;
+
+  struct Dwg_AcDsProtoype
+  {
+    // header
+    BITCODE_RL file_signature;
+    BITCODE_RLd file_header_size;
+    BITCODE_RLd unknown_1; /* acis version? always 2 */
+    BITCODE_RLd version; /* always 2 */
+    BITCODE_RLd unknown_2; /* always 0 */
+    BITCODE_RLd ds_version; /* datastorage revision */
+    BITCODE_RLd segidx_offset;
+    BITCODE_RLd segidx_unknown;
+    BITCODE_RLd segidx_numentries;
+    BITCODE_RLd schidx_segidx;
+    BITCODE_RLd datidx_segidx;
+    BITCODE_RLd search_segidx;
+    BITCODE_RLd prev_save_idx;
+    BITCODE_RL file_size;
+    Dwg_AcDsProtoype_Segment *segments;
+  } datastorage;
 
   struct _dwg_second_header {
     BITCODE_RL size;

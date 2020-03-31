@@ -3336,6 +3336,61 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
+json_AcDsProtoype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                   jsmntokens_t *restrict tokens)
+{
+  const char *section = "AcDsProtoype";
+  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  int size;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  size = t->size;
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section,
+             tokens->index, size);
+  tokens->index++;
+  for (int i = 0; i < size; i++)
+    {
+      char key[80];
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      json_fixed_key (key, dat, tokens);
+      // t = &tokens->tokens[tokens->index];
+      // clang-format off
+      if (0) ;
+      FIELD_RLx (file_signature, 0)
+      FIELD_RLd (file_header_size, 0)
+      FIELD_RLd (unknown_1, 0)
+      FIELD_RLd (version, 0)
+      FIELD_RLd (unknown_2, 0)
+      FIELD_RLd (ds_version, 0)
+      FIELD_RLd (segidx_offset, 0)
+      FIELD_RLd (segidx_unknown, 0)
+      FIELD_RLd (segidx_numentries, 0)
+      FIELD_RLd (schidx_segidx, 0)
+      FIELD_RLd (datidx_segidx, 0)
+      FIELD_RLd (search_segidx, 0)
+      FIELD_RLd (prev_save_idx, 0)
+      FIELD_RL (file_size, 0)
+      else
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          json_advance_unknown (dat, tokens, 0);
+        }
+      // clang-format on
+    }
+
+  LOG_TRACE ("End of %s\n", section)
+  tokens->index--;
+  return 0;
+}
+
+static int
 json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                jsmntokens_t *restrict tokens)
 {
@@ -3548,6 +3603,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= json_RevHistory (dat, dwg, &tokens);
       else if (strEQc (key, "ObjFreeSpace"))
         error |= json_ObjFreeSpace (dat, dwg, &tokens);
+      else if (strEQc (key, "AcDsProtoype"))
+        error |= json_AcDsProtoype (dat, dwg, &tokens);
       else if (strEQc (key, "Template"))
         error |= json_Template (dat, dwg, &tokens);
       /* Only in json early versions <0.11 */

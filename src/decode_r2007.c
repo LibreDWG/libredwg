@@ -2052,6 +2052,89 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return error;
 }
 
+#if 0
+/* Signature Section, not written nor documented by Teigha
+ */
+static int
+read_2007_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                           r2007_section *restrict sections_map,
+                           r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  Bit_Chain *str_dat;
+  struct Dwg_Signature *_obj = &dwg->signature;
+  Dwg_Object *obj = NULL;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // compressed, page size: 0x7400
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_SIGNATURE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "Signature");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return 0;
+    }
+
+  LOG_TRACE ("Signature (%lu)\n-------------------\n", sec_dat.size)
+  old_dat = *dat;
+  str_dat = dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "signature.spec"
+  // clang-format on
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+#endif
+
+/* r2013+ datastorage Section, if saved with binary ACIS SAB data
+ */
+static int
+read_2007_section_prototype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                             r2007_section *restrict sections_map,
+                             r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  Bit_Chain *str_dat;
+  const char *secname = "AcDsPrototype_1b";
+  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  Dwg_Object *obj = NULL;
+  BITCODE_RL rcount1 = 0, rcount2 = 0;
+
+  // compressed, pagesize 0x7400, type 13
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_PROTOTYPE);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", secname);
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return 0;
+    }
+
+  LOG_TRACE ("Datastorage (%lu)\n-------------------\n", sec_dat.size)
+  old_dat = *dat;
+  str_dat = dat = &sec_dat; // restrict in size
+
+  // clang-format off
+  #include "datastorage.spec"
+  // clang-format on
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
 static int
 read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                            r2007_section *restrict sections_map,
@@ -2182,8 +2265,6 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                       pages_map);
   if (dwg->header.thumbnail_address)
     error |= read_2007_section_preview (dat, dwg, sections_map, pages_map);
-  if (dwg->header.vbaproj_address)
-    error |= read_2007_section_vbaproject (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_appinfohistory (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_filedeplist (dat, dwg, sections_map, pages_map);
@@ -2191,6 +2272,10 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   error |= read_2007_section_revhistory (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_objfreespace (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_template (dat, dwg, sections_map, pages_map);
+  if (dwg->header.vbaproj_address)
+    error |= read_2007_section_vbaproject (dat, dwg, sections_map, pages_map);
+  //error |= read_2007_section_signature (dat, dwg, sections_map, pages_map);
+  error |= read_2007_section_prototype (dat, dwg, sections_map, pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
 error:

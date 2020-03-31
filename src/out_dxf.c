@@ -2358,6 +2358,24 @@ dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
+// New ACDSDATA r2013+ section, with ACDSSCHEMA elements
+static int
+dxf_acds_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  //const char *section = "AcDsProtoype";
+  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  if (0 && _obj->segidx_numentries)
+    {
+      SECTION (ACSDSDATA);
+      // 70
+      // 71
+      // 0 ACDSSCHEMA
+      // TODO ...
+      ENDSEC ();
+    }
+  return 0;
+}
+
 GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 // TODO: Beware, there's also a new ACDSDATA section, with ACDSSCHEMA elements
 // and the Thumbnail_Data (per block?)
@@ -2374,6 +2392,7 @@ dxf_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   return 0;
 }
+
 
 AFL_GCC_TOOBIG
 int
@@ -2418,6 +2437,11 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       SINCE (R_13)
       {
         if (dxf_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
+          goto fail;
+      }
+      SINCE (R_2013)
+      {
+        if (dxf_acds_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;
       }
       SINCE (R_2000)

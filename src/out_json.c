@@ -1857,6 +1857,22 @@ json_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
+json_section_prototype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (AcDsProtoype); // single hash
+  // clang-format off
+  #include "datastorage.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
+static int
 json_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   struct Dwg_Template *_obj = &dwg->template;
@@ -1889,6 +1905,22 @@ json_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 #if 0
+static int
+json_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  struct Dwg_Signature *_obj = &dwg->signature;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL rcount1;
+
+  RECORD (Signature); // single hash
+  // clang-format off
+  #include "signature.spec"
+  // clang-format on
+  ENDRECORD ();
+  return 0;
+}
+
 static int
 json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1958,6 +1990,8 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= json_section_security (dat, dwg);
           error |= json_section_revhistory (dat, dwg);
           error |= json_section_objfreespace (dat, dwg);
+          error |= json_section_prototype (dat, dwg);
+          //error |= json_section_signature (dat, dwg);
           error |= json_section_template (dat, dwg);
         }
     }
