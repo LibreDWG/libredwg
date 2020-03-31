@@ -8086,6 +8086,17 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// read to AcDs, TODO
+static int
+dxf_acds_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  //Dxf_Pair *pair = dxf_read_pair (dat);
+  //unsigned written = 0;
+  LOG_WARN ("SECTION %s ignored for now", "ACDSDATA");
+  dxf_unknownsection_read (dat, dwg);
+  return 0;
+}
+
 static void
 resolve_postponed_header_refs (Dwg_Data *restrict dwg)
 {
@@ -8437,7 +8448,12 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               dxf_thumbnail_read (dat, dwg);
             }
-          else // if (strEQc (pair->value.s, "ACDSDATA"))
+          else if (strEQc (pair->value.s, "ACDSDATA"))
+            {
+              dxf_free_pair (pair);
+              dxf_acds_read (dat, dwg);
+            }
+          else // if (strEQc (pair->value.s, ""))
             {
               LOG_WARN ("SECTION %s ignored for now", pair->value.s);
               dxf_free_pair (pair);
