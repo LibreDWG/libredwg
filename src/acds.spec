@@ -12,8 +12,8 @@
 /*****************************************************************************/
 
 /*
- * datastorage.spec: AcDb:AcDsProtoype_1b section specification, containing
- *                   new SAB ACIS content.
+ * acds.spec: AcDb:AcDsProtoype_1b datastorage section specification,
+ *            containing new SAB ACIS content.
  * written by Reini Urban
  */
 
@@ -37,7 +37,7 @@
   DECODER {
     _obj->num_segments = 1; //FIXME poke the idx's
   }
-  REPEAT (num_segments, segments, Dwg_AcDsProtoype_Segment)
+  REPEAT (num_segments, segments, Dwg_AcDs_Segment)
   REPEAT_BLOCK
       SUB_FIELD (segments[rcount1],signature, RL, 0); /* always 0xd5ac */
       /* segidx, datidx, _data_, schidx, schdat, search, blob01 */
@@ -67,7 +67,7 @@
         else if (strEQc ((char*)_obj->segments[rcount1].name, "blob01"))
           _obj->segments[rcount1].type = 6;
         else
-          LOG_ERROR ("Invalid AcDsProtoype.segments.name %s", (char*)_obj->segments[rcount1].name);
+          LOG_ERROR ("Invalid AcDs.segments.name %s", (char*)_obj->segments[rcount1].name);
       }
       JSON {
         SUB_FIELD (segments[rcount1],type, RC, 0);

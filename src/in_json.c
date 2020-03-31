@@ -3336,11 +3336,11 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
-json_AcDsProtoype_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                            jsmntokens_t *restrict tokens,
-                            struct Dwg_AcDsProtoype *o, int size)
+json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                    jsmntokens_t *restrict tokens,
+                    struct Dwg_AcDs *o, int size)
 {
-  const char *section = "AcDsProtoype_Segment";
+  const char *section = "AcDs_Segment";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   if (t->type != JSMN_ARRAY)
     {
@@ -3350,12 +3350,12 @@ json_AcDsProtoype_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  o->segments = calloc (size, sizeof (Dwg_AcDsProtoype_Segment));
+  o->segments = calloc (size, sizeof (Dwg_AcDs_Segment));
   o->num_segments = size;
   for (int j = 0; j < size; j++)
     {
       int keys;
-      Dwg_AcDsProtoype_Segment *_obj = &o->segments[j];
+      Dwg_AcDs_Segment *_obj = &o->segments[j];
       tokens->index++;
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       t = &tokens->tokens[tokens->index];
@@ -3404,11 +3404,11 @@ json_AcDsProtoype_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
-json_AcDsProtoype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    jsmntokens_t *restrict tokens)
 {
-  const char *section = "AcDsProtoype";
-  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  const char *section = "AcDs";
+  struct Dwg_AcDs *_obj = &dwg->acds;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int error = 0;
   int size;
@@ -3451,7 +3451,7 @@ json_AcDsProtoype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (t->type != JSMN_ARRAY) // of OBJECTs
             json_advance_unknown (dat, tokens, 0);
           else if (t->size)
-            error |= json_AcDsProtoype_Segments (dat, dwg, tokens, _obj, t->size);
+            error |= json_AcDs_Segments (dat, dwg, tokens, _obj, t->size);
           else
             tokens->index++; // empty array
           if (error >= DWG_ERR_CRITICAL)
@@ -3683,8 +3683,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= json_RevHistory (dat, dwg, &tokens);
       else if (strEQc (key, "ObjFreeSpace"))
         error |= json_ObjFreeSpace (dat, dwg, &tokens);
-      else if (strEQc (key, "AcDsProtoype"))
-        error |= json_AcDsProtoype (dat, dwg, &tokens);
+      else if (strEQc (key, "AcDs"))
+        error |= json_AcDs (dat, dwg, &tokens);
       else if (strEQc (key, "Template"))
         error |= json_Template (dat, dwg, &tokens);
       /* Only in json early versions <0.11 */

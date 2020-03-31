@@ -8363,22 +8363,22 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Data} @anchor{Dwg_AcDsProtoype_Data}
-@vindex Dwg_AcDsProtoype_Data
+@strong{Dwg_AcDs_Data} @anchor{Dwg_AcDs_Data}
+@vindex Dwg_AcDs_Data
 
 @indentedblock
 @vtable @code
 
 @item record_hdrs
-Dwg_AcDsProtoype_Data_RecordHdr*
+Dwg_AcDs_Data_RecordHdr*
 @item records
-Dwg_AcDsProtoype_Data_Record*
+Dwg_AcDs_Data_Record*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_DataBlob} @anchor{Dwg_AcDsProtoype_DataBlob}
-@vindex Dwg_AcDsProtoype_DataBlob
+@strong{Dwg_AcDs_DataBlob} @anchor{Dwg_AcDs_DataBlob}
+@vindex Dwg_AcDs_DataBlob
 
 @indentedblock
 @vtable @code
@@ -8396,13 +8396,13 @@ BL
 @item unknown_2
 BL
 @item ref
-Dwg_AcDsProtoype_DataBlobRef*
+Dwg_AcDs_DataBlobRef*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_DataBlob01} @anchor{Dwg_AcDsProtoype_DataBlob01}
-@vindex Dwg_AcDsProtoype_DataBlob01
+@strong{Dwg_AcDs_DataBlob01} @anchor{Dwg_AcDs_DataBlob01}
+@vindex Dwg_AcDs_DataBlob01
 
 @indentedblock
 @vtable @code
@@ -8423,8 +8423,8 @@ RC*
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_DataBlobRef} @anchor{Dwg_AcDsProtoype_DataBlobRef}
-@vindex Dwg_AcDsProtoype_DataBlobRef
+@strong{Dwg_AcDs_DataBlobRef} @anchor{Dwg_AcDs_DataBlobRef}
+@vindex Dwg_AcDs_DataBlobRef
 
 @indentedblock
 @vtable @code
@@ -8442,13 +8442,13 @@ BL
 @item unknown_2
 BL
 @item pages
-Dwg_AcDsProtoype_DataBlobRef_Page*
+Dwg_AcDs_DataBlobRef_Page*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_DataBlobRef_Page} @anchor{Dwg_AcDsProtoype_DataBlobRef_Page}
-@vindex Dwg_AcDsProtoype_DataBlobRef_Page
+@strong{Dwg_AcDs_DataBlobRef_Page} @anchor{Dwg_AcDs_DataBlobRef_Page}
+@vindex Dwg_AcDs_DataBlobRef_Page
 
 @indentedblock
 @vtable @code
@@ -8461,8 +8461,8 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_DataIndex} @anchor{Dwg_AcDsProtoype_DataIndex}
-@vindex Dwg_AcDsProtoype_DataIndex
+@strong{Dwg_AcDs_DataIndex} @anchor{Dwg_AcDs_DataIndex}
+@vindex Dwg_AcDs_DataIndex
 
 @indentedblock
 @vtable @code
@@ -8472,13 +8472,13 @@ int32_t
 @item unknown
 int32_t
 @item entries
-Dwg_AcDsProtoype_DataIndex_Entry*
+Dwg_AcDs_DataIndex_Entry*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_DataIndex_Entry} @anchor{Dwg_AcDsProtoype_DataIndex_Entry}
-@vindex Dwg_AcDsProtoype_DataIndex_Entry
+@strong{Dwg_AcDs_DataIndex_Entry} @anchor{Dwg_AcDs_DataIndex_Entry}
+@vindex Dwg_AcDs_DataIndex_Entry
 
 @indentedblock
 @vtable @code
@@ -8493,8 +8493,8 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Data_Record} @anchor{Dwg_AcDsProtoype_Data_Record}
-@vindex Dwg_AcDsProtoype_Data_Record
+@strong{Dwg_AcDs_Data_Record} @anchor{Dwg_AcDs_Data_Record}
+@vindex Dwg_AcDs_Data_Record
 
 @indentedblock
 @vtable @code
@@ -8507,8 +8507,8 @@ RC*
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Data_RecordHdr} @anchor{Dwg_AcDsProtoype_Data_RecordHdr}
-@vindex Dwg_AcDsProtoype_Data_RecordHdr
+@strong{Dwg_AcDs_Data_RecordHdr} @anchor{Dwg_AcDs_Data_RecordHdr}
+@vindex Dwg_AcDs_Data_RecordHdr
 
 @indentedblock
 @vtable @code
@@ -8525,8 +8525,8 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Schema} @anchor{Dwg_AcDsProtoype_Schema}
-@vindex Dwg_AcDsProtoype_Schema
+@strong{Dwg_AcDs_Schema} @anchor{Dwg_AcDs_Schema}
+@vindex Dwg_AcDs_Schema
 
 @indentedblock
 @vtable @code
@@ -8538,13 +8538,13 @@ uint64_t*
 @item num_props
 BS
 @item props
-Dwg_AcDsProtoype_Schema_Prop*
+Dwg_AcDs_Schema_Prop*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_SchemaData} @anchor{Dwg_AcDsProtoype_SchemaData}
-@vindex Dwg_AcDsProtoype_SchemaData
+@strong{Dwg_AcDs_SchemaData} @anchor{Dwg_AcDs_SchemaData}
+@vindex Dwg_AcDs_SchemaData
 
 @indentedblock
 @vtable @code
@@ -8554,13 +8554,13 @@ BL
 @item flags
 BL
 @item schema
-Dwg_AcDsProtoype_DataBlob01*
+Dwg_AcDs_DataBlob01*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_SchemaIndex} @anchor{Dwg_AcDsProtoype_SchemaIndex}
-@vindex Dwg_AcDsProtoype_SchemaIndex
+@strong{Dwg_AcDs_SchemaIndex} @anchor{Dwg_AcDs_SchemaIndex}
+@vindex Dwg_AcDs_SchemaIndex
 
 @indentedblock
 @vtable @code
@@ -8570,7 +8570,7 @@ BL
 @item unknown_1
 BL
 @item props
-Dwg_AcDsProtoype_SchemaIndex_Prop*
+Dwg_AcDs_SchemaIndex_Prop*
 @item tag
 uint64_t
 @item num_prop_entries
@@ -8578,13 +8578,13 @@ BL
 @item unknown_2
 BL
 @item prop_entries
-Dwg_AcDsProtoype_SchemaIndex_Prop*
+Dwg_AcDs_SchemaIndex_Prop*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_SchemaIndex_Prop} @anchor{Dwg_AcDsProtoype_SchemaIndex_Prop}
-@vindex Dwg_AcDsProtoype_SchemaIndex_Prop
+@strong{Dwg_AcDs_SchemaIndex_Prop} @anchor{Dwg_AcDs_SchemaIndex_Prop}
+@vindex Dwg_AcDs_SchemaIndex_Prop
 
 @indentedblock
 @vtable @code
@@ -8599,8 +8599,8 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Schema_Prop} @anchor{Dwg_AcDsProtoype_Schema_Prop}
-@vindex Dwg_AcDsProtoype_Schema_Prop
+@strong{Dwg_AcDs_Schema_Prop} @anchor{Dwg_AcDs_Schema_Prop}
+@vindex Dwg_AcDs_Schema_Prop
 
 @indentedblock
 @vtable @code
@@ -8623,8 +8623,8 @@ RC*
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Search} @anchor{Dwg_AcDsProtoype_Search}
-@vindex Dwg_AcDsProtoype_Search
+@strong{Dwg_AcDs_Search} @anchor{Dwg_AcDs_Search}
+@vindex Dwg_AcDs_Search
 
 @indentedblock
 @vtable @code
@@ -8632,13 +8632,13 @@ RC*
 @item num_search
 BL
 @item search
-Dwg_AcDsProtoype_Search_Data*
+Dwg_AcDs_Search_Data*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Search_Data} @anchor{Dwg_AcDsProtoype_Search_Data}
-@vindex Dwg_AcDsProtoype_Search_Data
+@strong{Dwg_AcDs_Search_Data} @anchor{Dwg_AcDs_Search_Data}
+@vindex Dwg_AcDs_Search_Data
 
 @indentedblock
 @vtable @code
@@ -8654,13 +8654,13 @@ BL
 @item unknown
 BL
 @item ididxs
-Dwg_AcDsProtoype_Search_IdIdxs*
+Dwg_AcDs_Search_IdIdxs*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Search_IdIdx} @anchor{Dwg_AcDsProtoype_Search_IdIdx}
-@vindex Dwg_AcDsProtoype_Search_IdIdx
+@strong{Dwg_AcDs_Search_IdIdx} @anchor{Dwg_AcDs_Search_IdIdx}
+@vindex Dwg_AcDs_Search_IdIdx
 
 @indentedblock
 @vtable @code
@@ -8675,8 +8675,8 @@ uint64_t
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Search_IdIdxs} @anchor{Dwg_AcDsProtoype_Search_IdIdxs}
-@vindex Dwg_AcDsProtoype_Search_IdIdxs
+@strong{Dwg_AcDs_Search_IdIdxs} @anchor{Dwg_AcDs_Search_IdIdxs}
+@vindex Dwg_AcDs_Search_IdIdxs
 
 @indentedblock
 @vtable @code
@@ -8684,13 +8684,13 @@ uint64_t
 @item num_ididx
 BL
 @item ididx
-Dwg_AcDsProtoype_Search_IdIdx*
+Dwg_AcDs_Search_IdIdx*
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_Segment} @anchor{Dwg_AcDsProtoype_Segment}
-@vindex Dwg_AcDsProtoype_Segment
+@strong{Dwg_AcDs_Segment} @anchor{Dwg_AcDs_Segment}
+@vindex Dwg_AcDs_Segment
 
 @indentedblock
 @vtable @code
@@ -8720,25 +8720,25 @@ RL
 @item padding[9]
 RC
 @item u.segidx
-Dwg_AcDsProtoype_SegmentIndex*
+Dwg_AcDs_SegmentIndex*
 @item u.datidx
-Dwg_AcDsProtoype_DataIndex
+Dwg_AcDs_DataIndex
 @item u.data
-Dwg_AcDsProtoype_Data*
+Dwg_AcDs_Data*
 @item u.blob01
-Dwg_AcDsProtoype_DataBlob
+Dwg_AcDs_DataBlob
 @item u.schidx
-Dwg_AcDsProtoype_SchemaIndex*
+Dwg_AcDs_SchemaIndex*
 @item u.schdat
-Dwg_AcDsProtoype_SchemaData*
+Dwg_AcDs_SchemaData*
 @item u.search
-Dwg_AcDsProtoype_Search
+Dwg_AcDs_Search
 
 @end vtable
 @end indentedblock
 
-@strong{Dwg_AcDsProtoype_SegmentIndex} @anchor{Dwg_AcDsProtoype_SegmentIndex}
-@vindex Dwg_AcDsProtoype_SegmentIndex
+@strong{Dwg_AcDs_SegmentIndex} @anchor{Dwg_AcDs_SegmentIndex}
+@vindex Dwg_AcDs_SegmentIndex
 
 @indentedblock
 @vtable @code

@@ -7266,271 +7266,271 @@ static const Dwg_DYNAPI_field _dwg_ACTIONBODY_fields[] = {
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Data: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Data_fields[] = {
-  { "record_hdrs",	"Dwg_AcDsProtoype_Data_RecordHdr*", sizeof (Dwg_AcDsProtoype_Data_RecordHdr*),  OFF (struct _dwg_AcDsProtoype_Data, record_hdrs),
+/* from typedef struct _dwg_AcDs_Data: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Data_fields[] = {
+  { "record_hdrs",	"Dwg_AcDs_Data_RecordHdr*", sizeof (Dwg_AcDs_Data_RecordHdr*),  OFF (struct _dwg_AcDs_Data, record_hdrs),
     1,1,0, 0 },
-  { "records",	"Dwg_AcDsProtoype_Data_Record*", sizeof (Dwg_AcDsProtoype_Data_Record*),  OFF (struct _dwg_AcDsProtoype_Data, records),
-    1,1,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_AcDsProtoype_DataBlob: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_DataBlob_fields[] = {
-  { "data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_DataBlob, data_size),
-    0,0,0, 0 },
-  { "page_count",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlob, page_count),
-    0,0,0, 0 },
-  { "record_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlob, record_size),
-    0,0,0, 0 },
-  { "page_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlob, page_size),
-    0,0,0, 0 },
-  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlob, unknown_1),
-    0,0,0, 0 },
-  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlob, unknown_2),
-    0,0,0, 0 },
-  { "ref",	"Dwg_AcDsProtoype_DataBlobRef*", sizeof (Dwg_AcDsProtoype_DataBlobRef*),  OFF (struct _dwg_AcDsProtoype_DataBlob, ref),
+  { "records",	"Dwg_AcDs_Data_Record*", sizeof (Dwg_AcDs_Data_Record*),  OFF (struct _dwg_AcDs_Data, records),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_DataBlob01: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_DataBlob01_fields[] = {
-  { "total_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_DataBlob01, total_data_size),
+/* from typedef struct _dwg_AcDs_DataBlob: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_DataBlob_fields[] = {
+  { "data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob, data_size),
     0,0,0, 0 },
-  { "page_start_offset",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_DataBlob01, page_start_offset),
+  { "page_count",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, page_count),
     0,0,0, 0 },
-  { "page_index",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDsProtoype_DataBlob01, page_index),
+  { "record_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, record_size),
     0,0,0, 0 },
-  { "page_count",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDsProtoype_DataBlob01, page_count),
+  { "page_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, page_size),
     0,0,0, 0 },
-  { "page_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_DataBlob01, page_data_size),
+  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, unknown_1),
     0,0,0, 0 },
-  { "page_data",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDsProtoype_DataBlob01, page_data),
+  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, unknown_2),
+    0,0,0, 0 },
+  { "ref",	"Dwg_AcDs_DataBlobRef*", sizeof (Dwg_AcDs_DataBlobRef*),  OFF (struct _dwg_AcDs_DataBlob, ref),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_DataBlobRef: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_DataBlobRef_fields[] = {
-  { "total_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef, total_data_size),
+/* from typedef struct _dwg_AcDs_DataBlob01: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_DataBlob01_fields[] = {
+  { "total_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob01, total_data_size),
     0,0,0, 0 },
-  { "num_pages",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef, num_pages),
+  { "page_start_offset",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob01, page_start_offset),
     0,0,0, 0 },
-  { "record_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef, record_size),
+  { "page_index",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataBlob01, page_index),
     0,0,0, 0 },
-  { "page_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef, page_size),
+  { "page_count",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataBlob01, page_count),
     0,0,0, 0 },
-  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef, unknown_1),
+  { "page_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob01, page_data_size),
     0,0,0, 0 },
-  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef, unknown_2),
-    0,0,0, 0 },
-  { "pages",	"Dwg_AcDsProtoype_DataBlobRef_Page*", sizeof (Dwg_AcDsProtoype_DataBlobRef_Page*),  OFF (struct _dwg_AcDsProtoype_DataBlobRef, pages),
+  { "page_data",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDs_DataBlob01, page_data),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_DataBlobRef_Page: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_DataBlobRef_Page_fields[] = {
-  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef_Page, segidx),
+/* from typedef struct _dwg_AcDs_DataBlobRef: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_DataBlobRef_fields[] = {
+  { "total_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlobRef, total_data_size),
     0,0,0, 0 },
-  { "size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataBlobRef_Page, size),
+  { "num_pages",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, num_pages),
     0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_AcDsProtoype_DataIndex: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_DataIndex_fields[] = {
-  { "num_entries",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDsProtoype_DataIndex, num_entries),
+  { "record_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, record_size),
     0,0,0, 0 },
-  { "unknown",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDsProtoype_DataIndex, unknown),
+  { "page_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, page_size),
     0,0,0, 0 },
-  { "entries",	"Dwg_AcDsProtoype_DataIndex_Entry*", sizeof (Dwg_AcDsProtoype_DataIndex_Entry*),  OFF (struct _dwg_AcDsProtoype_DataIndex, entries),
+  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, unknown_1),
+    0,0,0, 0 },
+  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, unknown_2),
+    0,0,0, 0 },
+  { "pages",	"Dwg_AcDs_DataBlobRef_Page*", sizeof (Dwg_AcDs_DataBlobRef_Page*),  OFF (struct _dwg_AcDs_DataBlobRef, pages),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_DataIndex_Entry: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_DataIndex_Entry_fields[] = {
-  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataIndex_Entry, segidx),
+/* from typedef struct _dwg_AcDs_DataBlobRef_Page: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_DataBlobRef_Page_fields[] = {
+  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef_Page, segidx),
     0,0,0, 0 },
-  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataIndex_Entry, offset),
-    0,0,0, 0 },
-  { "schidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_DataIndex_Entry, schidx),
+  { "size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef_Page, size),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Data_Record: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Data_Record_fields[] = {
-  { "data_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Data_Record, data_size),
+/* from typedef struct _dwg_AcDs_DataIndex: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_DataIndex_fields[] = {
+  { "num_entries",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataIndex, num_entries),
     0,0,0, 0 },
-  { "blob",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDsProtoype_Data_Record, blob),
+  { "unknown",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataIndex, unknown),
+    0,0,0, 0 },
+  { "entries",	"Dwg_AcDs_DataIndex_Entry*", sizeof (Dwg_AcDs_DataIndex_Entry*),  OFF (struct _dwg_AcDs_DataIndex, entries),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Data_RecordHdr: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Data_RecordHdr_fields[] = {
-  { "entry_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Data_RecordHdr, entry_size),
+/* from typedef struct _dwg_AcDs_DataIndex_Entry: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_DataIndex_Entry_fields[] = {
+  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataIndex_Entry, segidx),
     0,0,0, 0 },
-  { "unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Data_RecordHdr, unknown),
+  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataIndex_Entry, offset),
     0,0,0, 0 },
-  { "handle",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_Data_RecordHdr, handle),
-    0,0,0, 0 },
-  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Data_RecordHdr, offset),
+  { "schidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataIndex_Entry, schidx),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Schema: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Schema_fields[] = {
-  { "num_index",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDsProtoype_Schema, num_index),
+/* from typedef struct _dwg_AcDs_Data_Record: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Data_Record_fields[] = {
+  { "data_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_Record, data_size),
     0,0,0, 0 },
-  { "index",	"uint64_t*", sizeof (uint64_t*),  OFF (struct _dwg_AcDsProtoype_Schema, index),
-    1,1,0, 0 },
-  { "num_props",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDsProtoype_Schema, num_props),
-    0,0,0, 0 },
-  { "props",	"Dwg_AcDsProtoype_Schema_Prop*", sizeof (Dwg_AcDsProtoype_Schema_Prop*),  OFF (struct _dwg_AcDsProtoype_Schema, props),
+  { "blob",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDs_Data_Record, blob),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_SchemaData: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_SchemaData_fields[] = {
-  { "total_data_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaData, total_data_size),
+/* from typedef struct _dwg_AcDs_Data_RecordHdr: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Data_RecordHdr_fields[] = {
+  { "entry_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, entry_size),
     0,0,0, 0 },
-  { "flags",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaData, flags),
+  { "unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, unknown),
     0,0,0, 0 },
-  { "schema",	"Dwg_AcDsProtoype_DataBlob01*", sizeof (Dwg_AcDsProtoype_DataBlob01*),  OFF (struct _dwg_AcDsProtoype_SchemaData, schema),
-    1,1,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_AcDsProtoype_SchemaIndex: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_SchemaIndex_fields[] = {
-  { "num_props",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex, num_props),
+  { "handle",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, handle),
     0,0,0, 0 },
-  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex, unknown_1),
-    0,0,0, 0 },
-  { "props",	"Dwg_AcDsProtoype_SchemaIndex_Prop*", sizeof (Dwg_AcDsProtoype_SchemaIndex_Prop*),  OFF (struct _dwg_AcDsProtoype_SchemaIndex, props),
-    1,1,0, 0 },
-  { "tag",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex, tag),
-    0,0,0, 0 },
-  { "num_prop_entries",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex, num_prop_entries),
-    0,0,0, 0 },
-  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex, unknown_2),
-    0,0,0, 0 },
-  { "prop_entries",	"Dwg_AcDsProtoype_SchemaIndex_Prop*", sizeof (Dwg_AcDsProtoype_SchemaIndex_Prop*),  OFF (struct _dwg_AcDsProtoype_SchemaIndex, prop_entries),
-    1,1,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_AcDsProtoype_SchemaIndex_Prop: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_SchemaIndex_Prop_fields[] = {
-  { "index",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex_Prop, index),
-    0,0,0, 0 },
-  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex_Prop, segidx),
-    0,0,0, 0 },
-  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SchemaIndex_Prop, offset),
+  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, offset),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Schema_Prop: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Schema_Prop_fields[] = {
-  { "flags",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Schema_Prop, flags),
+/* from typedef struct _dwg_AcDs_Schema: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Schema_fields[] = {
+  { "num_index",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDs_Schema, num_index),
     0,0,0, 0 },
-  { "namidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Schema_Prop, namidx),
+  { "index",	"uint64_t*", sizeof (uint64_t*),  OFF (struct _dwg_AcDs_Schema, index),
+    1,1,0, 0 },
+  { "num_props",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDs_Schema, num_props),
     0,0,0, 0 },
-  { "type",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Schema_Prop, type),
-    0,0,0, 0 },
-  { "u.custom_type_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Schema_Prop, u.custom_type_size),
-    0,0,0, 0 },
-  { "u.unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Schema_Prop, u.unknown),
-    0,0,0, 0 },
-  { "u.num_prop_values",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDsProtoype_Schema_Prop, u.num_prop_values),
-    0,0,0, 0 },
-  { "prop_values",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDsProtoype_Schema_Prop, prop_values),
+  { "props",	"Dwg_AcDs_Schema_Prop*", sizeof (Dwg_AcDs_Schema_Prop*),  OFF (struct _dwg_AcDs_Schema, props),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Search: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Search_fields[] = {
-  { "num_search",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Search, num_search),
+/* from typedef struct _dwg_AcDs_SchemaData: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_SchemaData_fields[] = {
+  { "total_data_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaData, total_data_size),
     0,0,0, 0 },
-  { "search",	"Dwg_AcDsProtoype_Search_Data*", sizeof (Dwg_AcDsProtoype_Search_Data*),  OFF (struct _dwg_AcDsProtoype_Search, search),
+  { "flags",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaData, flags),
+    0,0,0, 0 },
+  { "schema",	"Dwg_AcDs_DataBlob01*", sizeof (Dwg_AcDs_DataBlob01*),  OFF (struct _dwg_AcDs_SchemaData, schema),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Search_Data: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Search_Data_fields[] = {
-  { "schema_namidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Search_Data, schema_namidx),
+/* from typedef struct _dwg_AcDs_SchemaIndex: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_SchemaIndex_fields[] = {
+  { "num_props",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, num_props),
     0,0,0, 0 },
-  { "num_sortedidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Search_Data, num_sortedidx),
+  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, unknown_1),
     0,0,0, 0 },
-  { "sortedidx",	"uint64_t*", sizeof (uint64_t*),  OFF (struct _dwg_AcDsProtoype_Search_Data, sortedidx),
+  { "props",	"Dwg_AcDs_SchemaIndex_Prop*", sizeof (Dwg_AcDs_SchemaIndex_Prop*),  OFF (struct _dwg_AcDs_SchemaIndex, props),
     1,1,0, 0 },
-  { "num_ididxs",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Search_Data, num_ididxs),
+  { "tag",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_SchemaIndex, tag),
     0,0,0, 0 },
-  { "unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Search_Data, unknown),
+  { "num_prop_entries",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, num_prop_entries),
     0,0,0, 0 },
-  { "ididxs",	"Dwg_AcDsProtoype_Search_IdIdxs*", sizeof (Dwg_AcDsProtoype_Search_IdIdxs*),  OFF (struct _dwg_AcDsProtoype_Search_Data, ididxs),
-    1,1,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_AcDsProtoype_Search_IdIdx: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Search_IdIdx_fields[] = {
-  { "handle",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_Search_IdIdx, handle),
+  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, unknown_2),
     0,0,0, 0 },
-  { "num_ididx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Search_IdIdx, num_ididx),
-    0,0,0, 0 },
-  { "ididx",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_Search_IdIdx, ididx),
-    0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_AcDsProtoype_Search_IdIdxs: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Search_IdIdxs_fields[] = {
-  { "num_ididx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_Search_IdIdxs, num_ididx),
-    0,0,0, 0 },
-  { "ididx",	"Dwg_AcDsProtoype_Search_IdIdx*", sizeof (Dwg_AcDsProtoype_Search_IdIdx*),  OFF (struct _dwg_AcDsProtoype_Search_IdIdxs, ididx),
+  { "prop_entries",	"Dwg_AcDs_SchemaIndex_Prop*", sizeof (Dwg_AcDs_SchemaIndex_Prop*),  OFF (struct _dwg_AcDs_SchemaIndex, prop_entries),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_Segment: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_Segment_fields[] = {
-  { "signature",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, signature),
+/* from typedef struct _dwg_AcDs_SchemaIndex_Prop: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_SchemaIndex_Prop_fields[] = {
+  { "index",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, index),
     0,0,0, 0 },
-  { "name[7]",	"RC", 7 * sizeof (BITCODE_RC),  OFF (struct _dwg_AcDsProtoype_Segment, name),
+  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, segidx),
     0,0,0, 0 },
-  { "type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_AcDsProtoype_Segment, type),
-    0,0,0, 0 },
-  { "segment_idx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, segment_idx),
-    0,0,0, 0 },
-  { "is_blob01",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, is_blob01),
-    0,0,0, 0 },
-  { "segsize",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, segsize),
-    0,0,0, 0 },
-  { "unknown_2",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, unknown_2),
-    0,0,0, 0 },
-  { "ds_version",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, ds_version),
-    0,0,0, 0 },
-  { "unknown_3",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, unknown_3),
-    0,0,0, 0 },
-  { "data_algn_offset",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, data_algn_offset),
-    0,0,0, 0 },
-  { "objdata_algn_offset",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDsProtoype_Segment, objdata_algn_offset),
-    0,0,0, 0 },
-  { "padding[9]",	"RC", 9 * sizeof (BITCODE_RC),  OFF (struct _dwg_AcDsProtoype_Segment, padding),
-    0,0,0, 0 },
-  { "u.segidx",	"Dwg_AcDsProtoype_SegmentIndex*", sizeof (Dwg_AcDsProtoype_SegmentIndex*),  OFF (struct _dwg_AcDsProtoype_Segment, u.segidx),
-    1,1,0, 0 },
-  { "u.datidx",	"Dwg_AcDsProtoype_DataIndex", sizeof (Dwg_AcDsProtoype_DataIndex),  OFF (struct _dwg_AcDsProtoype_Segment, u.datidx),
-    0,0,0, 0 },
-  { "u.data",	"Dwg_AcDsProtoype_Data*", sizeof (Dwg_AcDsProtoype_Data*),  OFF (struct _dwg_AcDsProtoype_Segment, u.data),
-    1,1,0, 0 },
-  { "u.blob01",	"Dwg_AcDsProtoype_DataBlob", sizeof (Dwg_AcDsProtoype_DataBlob),  OFF (struct _dwg_AcDsProtoype_Segment, u.blob01),
-    0,0,0, 0 },
-  { "u.schidx",	"Dwg_AcDsProtoype_SchemaIndex*", sizeof (Dwg_AcDsProtoype_SchemaIndex*),  OFF (struct _dwg_AcDsProtoype_Segment, u.schidx),
-    1,1,0, 0 },
-  { "u.schdat",	"Dwg_AcDsProtoype_SchemaData*", sizeof (Dwg_AcDsProtoype_SchemaData*),  OFF (struct _dwg_AcDsProtoype_Segment, u.schdat),
-    1,1,0, 0 },
-  { "u.search",	"Dwg_AcDsProtoype_Search", sizeof (Dwg_AcDsProtoype_Search),  OFF (struct _dwg_AcDsProtoype_Segment, u.search),
+  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, offset),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_AcDsProtoype_SegmentIndex: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_AcDsProtoype_SegmentIndex_fields[] = {
-  { "offset",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDsProtoype_SegmentIndex, offset),
+/* from typedef struct _dwg_AcDs_Schema_Prop: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Schema_Prop_fields[] = {
+  { "flags",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, flags),
     0,0,0, 0 },
-  { "size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDsProtoype_SegmentIndex, size),
+  { "namidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, namidx),
+    0,0,0, 0 },
+  { "type",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, type),
+    0,0,0, 0 },
+  { "u.custom_type_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, u.custom_type_size),
+    0,0,0, 0 },
+  { "u.unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, u.unknown),
+    0,0,0, 0 },
+  { "u.num_prop_values",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDs_Schema_Prop, u.num_prop_values),
+    0,0,0, 0 },
+  { "prop_values",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDs_Schema_Prop, prop_values),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_AcDs_Search: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Search_fields[] = {
+  { "num_search",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search, num_search),
+    0,0,0, 0 },
+  { "search",	"Dwg_AcDs_Search_Data*", sizeof (Dwg_AcDs_Search_Data*),  OFF (struct _dwg_AcDs_Search, search),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_AcDs_Search_Data: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Search_Data_fields[] = {
+  { "schema_namidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, schema_namidx),
+    0,0,0, 0 },
+  { "num_sortedidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, num_sortedidx),
+    0,0,0, 0 },
+  { "sortedidx",	"uint64_t*", sizeof (uint64_t*),  OFF (struct _dwg_AcDs_Search_Data, sortedidx),
+    1,1,0, 0 },
+  { "num_ididxs",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, num_ididxs),
+    0,0,0, 0 },
+  { "unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, unknown),
+    0,0,0, 0 },
+  { "ididxs",	"Dwg_AcDs_Search_IdIdxs*", sizeof (Dwg_AcDs_Search_IdIdxs*),  OFF (struct _dwg_AcDs_Search_Data, ididxs),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_AcDs_Search_IdIdx: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Search_IdIdx_fields[] = {
+  { "handle",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_Search_IdIdx, handle),
+    0,0,0, 0 },
+  { "num_ididx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_IdIdx, num_ididx),
+    0,0,0, 0 },
+  { "ididx",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_Search_IdIdx, ididx),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_AcDs_Search_IdIdxs: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Search_IdIdxs_fields[] = {
+  { "num_ididx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_IdIdxs, num_ididx),
+    0,0,0, 0 },
+  { "ididx",	"Dwg_AcDs_Search_IdIdx*", sizeof (Dwg_AcDs_Search_IdIdx*),  OFF (struct _dwg_AcDs_Search_IdIdxs, ididx),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_AcDs_Segment: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_Segment_fields[] = {
+  { "signature",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, signature),
+    0,0,0, 0 },
+  { "name[7]",	"RC", 7 * sizeof (BITCODE_RC),  OFF (struct _dwg_AcDs_Segment, name),
+    0,0,0, 0 },
+  { "type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_AcDs_Segment, type),
+    0,0,0, 0 },
+  { "segment_idx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, segment_idx),
+    0,0,0, 0 },
+  { "is_blob01",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, is_blob01),
+    0,0,0, 0 },
+  { "segsize",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, segsize),
+    0,0,0, 0 },
+  { "unknown_2",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, unknown_2),
+    0,0,0, 0 },
+  { "ds_version",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, ds_version),
+    0,0,0, 0 },
+  { "unknown_3",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, unknown_3),
+    0,0,0, 0 },
+  { "data_algn_offset",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, data_algn_offset),
+    0,0,0, 0 },
+  { "objdata_algn_offset",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, objdata_algn_offset),
+    0,0,0, 0 },
+  { "padding[9]",	"RC", 9 * sizeof (BITCODE_RC),  OFF (struct _dwg_AcDs_Segment, padding),
+    0,0,0, 0 },
+  { "u.segidx",	"Dwg_AcDs_SegmentIndex*", sizeof (Dwg_AcDs_SegmentIndex*),  OFF (struct _dwg_AcDs_Segment, u.segidx),
+    1,1,0, 0 },
+  { "u.datidx",	"Dwg_AcDs_DataIndex", sizeof (Dwg_AcDs_DataIndex),  OFF (struct _dwg_AcDs_Segment, u.datidx),
+    0,0,0, 0 },
+  { "u.data",	"Dwg_AcDs_Data*", sizeof (Dwg_AcDs_Data*),  OFF (struct _dwg_AcDs_Segment, u.data),
+    1,1,0, 0 },
+  { "u.blob01",	"Dwg_AcDs_DataBlob", sizeof (Dwg_AcDs_DataBlob),  OFF (struct _dwg_AcDs_Segment, u.blob01),
+    0,0,0, 0 },
+  { "u.schidx",	"Dwg_AcDs_SchemaIndex*", sizeof (Dwg_AcDs_SchemaIndex*),  OFF (struct _dwg_AcDs_Segment, u.schidx),
+    1,1,0, 0 },
+  { "u.schdat",	"Dwg_AcDs_SchemaData*", sizeof (Dwg_AcDs_SchemaData*),  OFF (struct _dwg_AcDs_Segment, u.schdat),
+    1,1,0, 0 },
+  { "u.search",	"Dwg_AcDs_Search", sizeof (Dwg_AcDs_Search),  OFF (struct _dwg_AcDs_Segment, u.search),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_AcDs_SegmentIndex: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_SegmentIndex_fields[] = {
+  { "offset",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_SegmentIndex, offset),
+    0,0,0, 0 },
+  { "size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SegmentIndex, size),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -9023,26 +9023,26 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "3DSOLID_silhouette", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (Dwg_3DSOLID_silhouette) },	/* 0 */
   { "3DSOLID_wire", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_wire_fields, sizeof (Dwg_3DSOLID_wire) },	/* 1 */
   { "ACTIONBODY", 0, "AcDbAssocActionBody", _dwg_ACTIONBODY_fields, sizeof (Dwg_ACTIONBODY) },	/* 2 */
-  { "AcDsProtoype_Data", 0, NULL, _dwg_AcDsProtoype_Data_fields, sizeof (Dwg_AcDsProtoype_Data) },	/* 3 */
-  { "AcDsProtoype_DataBlob", 0, NULL, _dwg_AcDsProtoype_DataBlob_fields, sizeof (Dwg_AcDsProtoype_DataBlob) },	/* 4 */
-  { "AcDsProtoype_DataBlob01", 0, NULL, _dwg_AcDsProtoype_DataBlob01_fields, sizeof (Dwg_AcDsProtoype_DataBlob01) },	/* 5 */
-  { "AcDsProtoype_DataBlobRef", 0, NULL, _dwg_AcDsProtoype_DataBlobRef_fields, sizeof (Dwg_AcDsProtoype_DataBlobRef) },	/* 6 */
-  { "AcDsProtoype_DataBlobRef_Page", 0, NULL, _dwg_AcDsProtoype_DataBlobRef_Page_fields, sizeof (Dwg_AcDsProtoype_DataBlobRef_Page) },	/* 7 */
-  { "AcDsProtoype_DataIndex", 0, NULL, _dwg_AcDsProtoype_DataIndex_fields, sizeof (Dwg_AcDsProtoype_DataIndex) },	/* 8 */
-  { "AcDsProtoype_DataIndex_Entry", 0, NULL, _dwg_AcDsProtoype_DataIndex_Entry_fields, sizeof (Dwg_AcDsProtoype_DataIndex_Entry) },	/* 9 */
-  { "AcDsProtoype_Data_Record", 0, NULL, _dwg_AcDsProtoype_Data_Record_fields, sizeof (Dwg_AcDsProtoype_Data_Record) },	/* 10 */
-  { "AcDsProtoype_Data_RecordHdr", 0, NULL, _dwg_AcDsProtoype_Data_RecordHdr_fields, sizeof (Dwg_AcDsProtoype_Data_RecordHdr) },	/* 11 */
-  { "AcDsProtoype_Schema", 0, NULL, _dwg_AcDsProtoype_Schema_fields, sizeof (Dwg_AcDsProtoype_Schema) },	/* 12 */
-  { "AcDsProtoype_SchemaData", 0, NULL, _dwg_AcDsProtoype_SchemaData_fields, sizeof (Dwg_AcDsProtoype_SchemaData) },	/* 13 */
-  { "AcDsProtoype_SchemaIndex", 0, NULL, _dwg_AcDsProtoype_SchemaIndex_fields, sizeof (Dwg_AcDsProtoype_SchemaIndex) },	/* 14 */
-  { "AcDsProtoype_SchemaIndex_Prop", 0, NULL, _dwg_AcDsProtoype_SchemaIndex_Prop_fields, sizeof (Dwg_AcDsProtoype_SchemaIndex_Prop) },	/* 15 */
-  { "AcDsProtoype_Schema_Prop", 0, NULL, _dwg_AcDsProtoype_Schema_Prop_fields, sizeof (Dwg_AcDsProtoype_Schema_Prop) },	/* 16 */
-  { "AcDsProtoype_Search", 0, NULL, _dwg_AcDsProtoype_Search_fields, sizeof (Dwg_AcDsProtoype_Search) },	/* 17 */
-  { "AcDsProtoype_Search_Data", 0, NULL, _dwg_AcDsProtoype_Search_Data_fields, sizeof (Dwg_AcDsProtoype_Search_Data) },	/* 18 */
-  { "AcDsProtoype_Search_IdIdx", 0, NULL, _dwg_AcDsProtoype_Search_IdIdx_fields, sizeof (Dwg_AcDsProtoype_Search_IdIdx) },	/* 19 */
-  { "AcDsProtoype_Search_IdIdxs", 0, NULL, _dwg_AcDsProtoype_Search_IdIdxs_fields, sizeof (Dwg_AcDsProtoype_Search_IdIdxs) },	/* 20 */
-  { "AcDsProtoype_Segment", 0, NULL, _dwg_AcDsProtoype_Segment_fields, sizeof (Dwg_AcDsProtoype_Segment) },	/* 21 */
-  { "AcDsProtoype_SegmentIndex", 0, NULL, _dwg_AcDsProtoype_SegmentIndex_fields, sizeof (Dwg_AcDsProtoype_SegmentIndex) },	/* 22 */
+  { "AcDs_Data", 0, NULL, _dwg_AcDs_Data_fields, sizeof (Dwg_AcDs_Data) },	/* 3 */
+  { "AcDs_DataBlob", 0, NULL, _dwg_AcDs_DataBlob_fields, sizeof (Dwg_AcDs_DataBlob) },	/* 4 */
+  { "AcDs_DataBlob01", 0, NULL, _dwg_AcDs_DataBlob01_fields, sizeof (Dwg_AcDs_DataBlob01) },	/* 5 */
+  { "AcDs_DataBlobRef", 0, NULL, _dwg_AcDs_DataBlobRef_fields, sizeof (Dwg_AcDs_DataBlobRef) },	/* 6 */
+  { "AcDs_DataBlobRef_Page", 0, NULL, _dwg_AcDs_DataBlobRef_Page_fields, sizeof (Dwg_AcDs_DataBlobRef_Page) },	/* 7 */
+  { "AcDs_DataIndex", 0, NULL, _dwg_AcDs_DataIndex_fields, sizeof (Dwg_AcDs_DataIndex) },	/* 8 */
+  { "AcDs_DataIndex_Entry", 0, NULL, _dwg_AcDs_DataIndex_Entry_fields, sizeof (Dwg_AcDs_DataIndex_Entry) },	/* 9 */
+  { "AcDs_Data_Record", 0, NULL, _dwg_AcDs_Data_Record_fields, sizeof (Dwg_AcDs_Data_Record) },	/* 10 */
+  { "AcDs_Data_RecordHdr", 0, NULL, _dwg_AcDs_Data_RecordHdr_fields, sizeof (Dwg_AcDs_Data_RecordHdr) },	/* 11 */
+  { "AcDs_Schema", 0, NULL, _dwg_AcDs_Schema_fields, sizeof (Dwg_AcDs_Schema) },	/* 12 */
+  { "AcDs_SchemaData", 0, NULL, _dwg_AcDs_SchemaData_fields, sizeof (Dwg_AcDs_SchemaData) },	/* 13 */
+  { "AcDs_SchemaIndex", 0, NULL, _dwg_AcDs_SchemaIndex_fields, sizeof (Dwg_AcDs_SchemaIndex) },	/* 14 */
+  { "AcDs_SchemaIndex_Prop", 0, NULL, _dwg_AcDs_SchemaIndex_Prop_fields, sizeof (Dwg_AcDs_SchemaIndex_Prop) },	/* 15 */
+  { "AcDs_Schema_Prop", 0, NULL, _dwg_AcDs_Schema_Prop_fields, sizeof (Dwg_AcDs_Schema_Prop) },	/* 16 */
+  { "AcDs_Search", 0, NULL, _dwg_AcDs_Search_fields, sizeof (Dwg_AcDs_Search) },	/* 17 */
+  { "AcDs_Search_Data", 0, NULL, _dwg_AcDs_Search_Data_fields, sizeof (Dwg_AcDs_Search_Data) },	/* 18 */
+  { "AcDs_Search_IdIdx", 0, NULL, _dwg_AcDs_Search_IdIdx_fields, sizeof (Dwg_AcDs_Search_IdIdx) },	/* 19 */
+  { "AcDs_Search_IdIdxs", 0, NULL, _dwg_AcDs_Search_IdIdxs_fields, sizeof (Dwg_AcDs_Search_IdIdxs) },	/* 20 */
+  { "AcDs_Segment", 0, NULL, _dwg_AcDs_Segment_fields, sizeof (Dwg_AcDs_Segment) },	/* 21 */
+  { "AcDs_SegmentIndex", 0, NULL, _dwg_AcDs_SegmentIndex_fields, sizeof (Dwg_AcDs_SegmentIndex) },	/* 22 */
   { "BorderStyle", 0, NULL, _dwg_BorderStyle_fields, sizeof (Dwg_BorderStyle) },	/* 23 */
   { "CELLSTYLEMAP_Cell", (int)DWG_TYPE_CELLSTYLEMAP, NULL, _dwg_CELLSTYLEMAP_Cell_fields, sizeof (Dwg_CELLSTYLEMAP_Cell) },	/* 24 */
   { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 25 */

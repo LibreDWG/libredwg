@@ -877,16 +877,17 @@ dwg_free_security (Dwg_Data *dwg)
   // clang-format on
   return 0;
 }
+
 static int
-dwg_free_dsprototype (Dwg_Data *dwg)
+dwg_free_acds (Dwg_Data *dwg)
 {
-  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
   BITCODE_RL rcount1, rcount2;
 
   // clang-format off
-  #include "datastorage.spec"
+  #include "acds.spec"
   // clang-format on
   return 0;
 }
@@ -933,7 +934,7 @@ dwg_free (Dwg_Data *dwg)
       dwg_free_appinfo (dwg);
       dwg_free_filedeplist (dwg);
       dwg_free_security (dwg);
-      dwg_free_dsprototype (dwg);
+      dwg_free_acds (dwg);
       FREE_IF (dwg->vbaproject.unknown_bits);
       FREE_IF (dwg->revhistory.histories);
       FREE_IF (dwg->appinfohistory.unknown_bits);

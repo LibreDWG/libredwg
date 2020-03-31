@@ -2097,21 +2097,20 @@ read_2007_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 /* r2013+ datastorage Section, if saved with binary ACIS SAB data
  */
 static int
-read_2007_section_dsprototype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                               r2007_section *restrict sections_map,
-                               r2007_page *restrict pages_map)
+read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                        r2007_section *restrict sections_map,
+                        r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
   Bit_Chain *str_dat;
   const char *secname = "AcDsPrototype_1b";
-  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   // compressed, pagesize 0x7400, type 13
-  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
-                             SECTION_DSPROTOTYPE);
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map, SECTION_ACDS);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", secname);
@@ -2120,12 +2119,12 @@ read_2007_section_dsprototype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return 0;
     }
 
-  LOG_TRACE ("Datastorage (%lu)\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("AcDs datastorage (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
 
   // clang-format off
-  #include "datastorage.spec"
+  #include "acds.spec"
   // clang-format on
 
   LOG_TRACE ("\n")
@@ -2275,7 +2274,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (dwg->header.vbaproj_address)
     error |= read_2007_section_vbaproject (dat, dwg, sections_map, pages_map);
   //error |= read_2007_section_signature (dat, dwg, sections_map, pages_map);
-  error |= read_2007_section_dsprototype (dat, dwg, sections_map, pages_map);
+  error |= read_2007_section_acds (dat, dwg, sections_map, pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 
 error:

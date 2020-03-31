@@ -1857,16 +1857,16 @@ json_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-json_section_prototype (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+json_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  struct Dwg_AcDsProtoype *_obj = &dwg->datastorage;
+  struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_RL rcount1;
 
-  RECORD (AcDsProtoype); // single hash
+  RECORD (AcDs); // single hash
   // clang-format off
-  #include "datastorage.spec"
+  #include "acds.spec"
   // clang-format on
   ENDRECORD ();
   return 0;
@@ -1990,7 +1990,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= json_section_security (dat, dwg);
           error |= json_section_revhistory (dat, dwg);
           error |= json_section_objfreespace (dat, dwg);
-          error |= json_section_prototype (dat, dwg);
+          error |= json_section_acds (dat, dwg);
           //error |= json_section_signature (dat, dwg);
           error |= json_section_template (dat, dwg);
         }
