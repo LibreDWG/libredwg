@@ -167,31 +167,22 @@ check_roundtrip() {
         @LTEXEC@ ./dwg2dxf -y -v2 -o "$dxf" "$dwg" 2>"$log1" >/dev/null
         @LTEXEC@ ./dxf2dwg -y -v0 -o "$tgt" "$dxf" 2>/dev/null >/dev/null
         @LTEXEC@ ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
-        expect="$(grep -E -c '^Add entity' "$log1")"
+        # Unstable entities are skipped in out_dxf
+        expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (LIGHT|MULTILEADER|UNKNOWN_ENT)')"
         got="$(grep -E -c '^Add entity' "$log2")"
         rm "./$dxf" "./$tgt" 2>/dev/null
         if [ "$got" = "$expect" ]
         then
             echo "$dxf" roundtrip ok
             rm "$log1" "$log2" 2>/dev/null
-        elif [ "$got" = "0" ]
-        then
+        else
             echo "$dxf" "roundtrip fail: $expect vs $got entities"
             i=$((i+1))
             echo "expect=$expect" >"$log"
             echo "got=$got" >>"$log"
             grep -E '^Add entity' "$log1" >"$log1".tmp
             grep -E '^Add entity' "$log2" >"$log2".tmp
-            diff -bu0 "$log1".tmp "$log2".tmp | tee "$log"
-            rm "$log1" "$log2" "$log1".tmp "$log2".tmp 2>/dev/null
-        else
-            echo "$dxf" "roundtrip fail: $expect vs $got entities (TODO)"
-            #i=$((i+1))
-            echo "expect=$expect" >"$log"
-            echo "got=$got" >>"$log"
-            grep -E '^Add entity' "$log1" >"$log1".tmp
-            grep -E '^Add entity' "$log2" >"$log2".tmp
-            diff -bu0 "$log1".tmp "$log2".tmp | grep -v "^@@" | tee "$log"
+            diff -bu0 "$log1".tmp "$log2".tmp | grep -v '^@@' | tee "$log"
             rm "$log1" "$log2" "$log1".tmp "$log2".tmp 2>/dev/null
         fi
     fi
