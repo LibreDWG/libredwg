@@ -8384,17 +8384,17 @@ Dwg_AcDs_Data_Record*
 @vtable @code
 
 @item data_size
-uint64_t
+RLL
 @item page_count
-BL
+RL
 @item record_size
-BL
+RL
 @item page_size
-BL
+RL
 @item unknown_1
-BL
+RL
 @item unknown_2
-BL
+RL
 @item ref
 Dwg_AcDs_DataBlobRef*
 
@@ -8408,15 +8408,15 @@ Dwg_AcDs_DataBlobRef*
 @vtable @code
 
 @item total_data_size
-uint64_t
+RLL
 @item page_start_offset
-uint64_t
+RLL
 @item page_index
 int32_t
 @item page_count
 int32_t
 @item page_data_size
-uint64_t
+RLL
 @item page_data
 RC*
 
@@ -8430,17 +8430,17 @@ RC*
 @vtable @code
 
 @item total_data_size
-uint64_t
+RLL
 @item num_pages
-BL
+RL
 @item record_size
-BL
+RL
 @item page_size
-BL
+RL
 @item unknown_1
-BL
+RL
 @item unknown_2
-BL
+RL
 @item pages
 Dwg_AcDs_DataBlobRef_Page*
 
@@ -8454,9 +8454,9 @@ Dwg_AcDs_DataBlobRef_Page*
 @vtable @code
 
 @item segidx
-BL
+RL
 @item size
-BL
+RL
 
 @end vtable
 @end indentedblock
@@ -8468,9 +8468,9 @@ BL
 @vtable @code
 
 @item num_entries
-int32_t
+RL
 @item unknown
-int32_t
+RL
 @item entries
 Dwg_AcDs_DataIndex_Entry*
 
@@ -8484,11 +8484,11 @@ Dwg_AcDs_DataIndex_Entry*
 @vtable @code
 
 @item segidx
-BL
+RL
 @item offset
-BL
+RL
 @item schidx
-BL
+RL
 
 @end vtable
 @end indentedblock
@@ -8500,7 +8500,7 @@ BL
 @vtable @code
 
 @item data_size
-BL
+RL
 @item blob
 RC*
 
@@ -8514,13 +8514,13 @@ RC*
 @vtable @code
 
 @item entry_size
-BL
+RL
 @item unknown
-BL
+RL
 @item handle
-uint64_t
+RLL
 @item offset
-BL
+RL
 
 @end vtable
 @end indentedblock
@@ -8532,11 +8532,11 @@ BL
 @vtable @code
 
 @item num_index
-BS
+RS
 @item index
-uint64_t*
+RLL*
 @item num_props
-BS
+RS
 @item props
 Dwg_AcDs_Schema_Prop*
 
@@ -8549,12 +8549,32 @@ Dwg_AcDs_Schema_Prop*
 @indentedblock
 @vtable @code
 
-@item total_data_size
-BL
+@item num_uprops
+RL
+@item uprops
+Dwg_AcDs_SchemaData_UProp*
+@item num_schemas
+RL
+@item schemas
+Dwg_AcDs_Schema*
+@item num_propnames
+RL
+@item propnames
+TV*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDs_SchemaData_UProp} @anchor{Dwg_AcDs_SchemaData_UProp}
+@vindex Dwg_AcDs_SchemaData_UProp
+
+@indentedblock
+@vtable @code
+
+@item size
+RL
 @item flags
-BL
-@item schema
-Dwg_AcDs_DataBlob01*
+RL
 
 @end vtable
 @end indentedblock
@@ -8566,17 +8586,17 @@ Dwg_AcDs_DataBlob01*
 @vtable @code
 
 @item num_props
-BL
+RL
 @item unknown_1
-BL
+RL
 @item props
 Dwg_AcDs_SchemaIndex_Prop*
 @item tag
-uint64_t
+RLL
 @item num_prop_entries
-BL
+RL
 @item unknown_2
-BL
+RL
 @item prop_entries
 Dwg_AcDs_SchemaIndex_Prop*
 
@@ -8590,11 +8610,11 @@ Dwg_AcDs_SchemaIndex_Prop*
 @vtable @code
 
 @item index
-BL
+RL
 @item segidx
-BL
+RL
 @item offset
-BL
+RL
 
 @end vtable
 @end indentedblock
@@ -8606,18 +8626,20 @@ BL
 @vtable @code
 
 @item flags
-BL
+RL
 @item namidx
-BL
+RL
 @item type
-BL
-@item u.custom_type_size
-BL
-@item u.unknown
-BL
-@item u.num_prop_values
-BS
-@item prop_values
+RL
+@item type_size
+RL
+@item unknown_1
+RL
+@item unknown_2
+RL
+@item num_values
+RS
+@item values
 RC*
 
 @end vtable
@@ -8630,7 +8652,7 @@ RC*
 @vtable @code
 
 @item num_search
-BL
+RL
 @item search
 Dwg_AcDs_Search_Data*
 
@@ -8644,15 +8666,15 @@ Dwg_AcDs_Search_Data*
 @vtable @code
 
 @item schema_namidx
-BL
+RL
 @item num_sortedidx
-BL
+RL
 @item sortedidx
-uint64_t*
+RLL*
 @item num_ididxs
-BL
+RL
 @item unknown
-BL
+RL
 @item ididxs
 Dwg_AcDs_Search_IdIdxs*
 
@@ -8666,11 +8688,11 @@ Dwg_AcDs_Search_IdIdxs*
 @vtable @code
 
 @item handle
-uint64_t
+RLL
 @item num_ididx
-BL
+RL
 @item ididx
-uint64_t
+RLL*
 
 @end vtable
 @end indentedblock
@@ -8682,7 +8704,7 @@ uint64_t
 @vtable @code
 
 @item num_ididx
-BL
+RL
 @item ididx
 Dwg_AcDs_Search_IdIdx*
 
@@ -8700,7 +8722,7 @@ RL
 @item name[7]
 RC
 @item type
-RC
+RCd
 @item segment_idx
 RL
 @item is_blob01
@@ -8719,20 +8741,6 @@ RL
 RL
 @item padding[9]
 RC
-@item u.segidx
-Dwg_AcDs_SegmentIndex*
-@item u.datidx
-Dwg_AcDs_DataIndex
-@item u.data
-Dwg_AcDs_Data*
-@item u.blob01
-Dwg_AcDs_DataBlob
-@item u.schidx
-Dwg_AcDs_SchemaIndex*
-@item u.schdat
-Dwg_AcDs_SchemaData*
-@item u.search
-Dwg_AcDs_Search
 
 @end vtable
 @end indentedblock
@@ -8744,9 +8752,9 @@ Dwg_AcDs_Search
 @vtable @code
 
 @item offset
-uint64_t
+RLL
 @item size
-BL
+RL
 
 @end vtable
 @end indentedblock

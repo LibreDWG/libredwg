@@ -44852,6 +44852,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"AcDs_SchemaData\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_AcDs_SchemaData_UProp);
+  size2 = dwg_dynapi_fields_size ("AcDs_SchemaData_UProp");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_AcDs_SchemaData_UProp): %d != "
+               "dwg_dynapi_fields_size (\"AcDs_SchemaData_UProp\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_AcDs_SchemaIndex);
   size2 = dwg_dynapi_fields_size ("AcDs_SchemaIndex");
   if (size1 != size2)

@@ -460,6 +460,38 @@ static bool env_var_checked_p;
 #define FIELD_VECTOR_INL(nam, type, size, dxf)                                \
   FIELD_VECTOR_N (nam, type, size, dxf)
 
+#define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)                \
+  if (_obj->o.size > 0 && _obj->o.nam)                                        \
+    {                                                                         \
+      OVERFLOW_CHECK (nam, _obj->o.size)                                      \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          bit_write_##type (dat, _obj->nam[vcount]);                          \
+          switch (typesize)                                                   \
+            {                                                                 \
+            case 0:                                                           \
+              break;                                                          \
+            case 1:                                                           \
+              bit_write_RC (dat, _obj->o.name[vcount]);                       \
+              break;                                                          \
+            case 2:                                                           \
+              bit_write_RS (dat, _obj->o.name[vcount]);                       \
+              break;                                                          \
+            case 4:                                                           \
+              bit_write_RL (dat, _obj->o.name[vcount]);                       \
+              break;                                                          \
+            case 8:                                                           \
+              bit_write_RLL (dat, _obj->o.name[vcount]);                      \
+              break;                                                          \
+            default:                                                          \
+              LOG_ERROR ("Unkown SUB_FIELD_VECTOR_TYPE " #nam " typesize %d", \
+                         typesize);                                           \
+              break;                                                          \
+            }                                                                 \
+          LOG_TRACE (#nam "[%u]: %d\n", vcount, _obj->nam[vcount])            \
+        }                                                                     \
+    }
+
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   IF_ENCODE_SINCE_R13                                                         \
   {                                                                           \

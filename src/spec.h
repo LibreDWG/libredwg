@@ -133,11 +133,17 @@
 #ifndef SUB_FIELD_BSx
 #  define SUB_FIELD_BSx(o, nam, dxf) FIELD_BSx (o.nam, dxf)
 #endif
+#ifndef SUB_FIELD_RSx
+#  define SUB_FIELD_RSx(o, nam, dxf) FIELD_RSx (o.nam, dxf)
+#endif
 #ifndef SUB_FIELD_TU
 #  define SUB_FIELD_TU(o, nam, dxf) FIELD_TU (o.nam, dxf)
 #endif
 #ifndef SUB_FIELD_T
 #  define SUB_FIELD_T(o, nam, dxf) FIELD_T (o.nam, dxf)
+#endif
+#ifndef SUB_FIELD_TF
+#  define SUB_FIELD_TF(o, nam, len, dxf) FIELD_TF (o.nam, _obj->o.len, dxf)
 #endif
 #ifndef SUB_FIELD_BL
 #  define SUB_FIELD_B(o, nam, dxf) FIELDG (o.nam, B, dxf)
@@ -174,6 +180,50 @@
         }                                                                     \
     }
 #endif
+
+#ifndef SUB_FIELD_VECTOR
+#  define SUB_FIELD_VECTOR(o, nam, sizefield, type, dxf)                      \
+  if (_obj->o.sizefield && _obj->o.nam)                                       \
+    {                                                                         \
+      BITCODE_BL _size = _obj->o.sizefield;                                   \
+      for (vcount = 0; vcount < _size; vcount++)                              \
+        {                                                                     \
+          SUB_FIELD (o, nam[vcount], type, dxf);                              \
+        }                                                                     \
+    }
+#endif
+
+#ifndef SUB_FIELD_VECTOR_TYPESIZE
+#  define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)              \
+  if (_obj->o.size && _obj->o.nam)                                            \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+      {                                                                       \
+        switch (typesize)                                                     \
+          {                                                                   \
+          case 0:                                                             \
+            break;                                                            \
+          case 1:                                                             \
+            SUB_FIELD (o, nam[vcount], RC, dxf);                              \
+            break;                                                            \
+          case 2:                                                             \
+            SUB_FIELD (o, nam[vcount], RS, dxf);                              \
+            break;                                                            \
+          case 4:                                                             \
+            SUB_FIELD (o, nam[vcount], RL, dxf);                              \
+            break;                                                            \
+          case 8:                                                             \
+            SUB_FIELD (o, nam[vcount], RLL, dxf);                             \
+            break;                                                            \
+          default:                                                            \
+            LOG_ERROR ("Unkown SUB_FIELD_VECTOR_TYPE " #nam " typesize %d",   \
+                       typesize);                                             \
+            break;                                                            \
+          }                                                                   \
+      }                                                                       \
+    }
+#endif
+
 // logging format overrides
 #ifndef FIELD_RLx
 #  define FIELD_RLx(name, dxf) FIELD_RL (name, dxf)

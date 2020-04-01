@@ -19,6 +19,7 @@
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 #include <sys/types.h>
 #include <stdbool.h>
@@ -2094,6 +2095,23 @@ read_2007_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 #endif
 
+static int
+acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  struct Dwg_AcDs *_obj = &dwg->acds;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_BL rcount1 = 0, rcount2 = 0;
+  BITCODE_BL rcount3, rcount4, vcount;
+
+  // clang-format off
+  #include "acds.spec"
+  // clang-format on
+
+  return error;
+}
+
 /* r2013+ datastorage Section, if saved with binary ACIS SAB data
  */
 static int
@@ -2123,9 +2141,8 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
 
-  // clang-format off
-  #include "acds.spec"
-  // clang-format on
+  error |= acds_private (dat, dwg);
+  error &= ~DWG_ERR_SECTIONNOTFOUND;
 
   LOG_TRACE ("\n")
   if (sec_dat.chain)

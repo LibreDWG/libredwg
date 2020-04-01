@@ -884,7 +884,7 @@ dwg_free_acds (Dwg_Data *dwg)
   struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-  BITCODE_RL rcount1, rcount2;
+  BITCODE_RL rcount1, rcount2, rcount3, rcount4, vcount;
 
   // clang-format off
   #include "acds.spec"

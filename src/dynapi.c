@@ -7276,17 +7276,17 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Data_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_DataBlob: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_DataBlob_fields[] = {
-  { "data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob, data_size),
+  { "data_size",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_DataBlob, data_size),
     0,0,0, 0 },
-  { "page_count",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, page_count),
+  { "page_count",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlob, page_count),
     0,0,0, 0 },
-  { "record_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, record_size),
+  { "record_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlob, record_size),
     0,0,0, 0 },
-  { "page_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, page_size),
+  { "page_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlob, page_size),
     0,0,0, 0 },
-  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, unknown_1),
+  { "unknown_1",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlob, unknown_1),
     0,0,0, 0 },
-  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlob, unknown_2),
+  { "unknown_2",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlob, unknown_2),
     0,0,0, 0 },
   { "ref",	"Dwg_AcDs_DataBlobRef*", sizeof (Dwg_AcDs_DataBlobRef*),  OFF (struct _dwg_AcDs_DataBlob, ref),
     1,1,0, 0 },
@@ -7294,15 +7294,15 @@ static const Dwg_DYNAPI_field _dwg_AcDs_DataBlob_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_DataBlob01: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_DataBlob01_fields[] = {
-  { "total_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob01, total_data_size),
+  { "total_data_size",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_DataBlob01, total_data_size),
     0,0,0, 0 },
-  { "page_start_offset",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob01, page_start_offset),
+  { "page_start_offset",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_DataBlob01, page_start_offset),
     0,0,0, 0 },
   { "page_index",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataBlob01, page_index),
     0,0,0, 0 },
   { "page_count",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataBlob01, page_count),
     0,0,0, 0 },
-  { "page_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlob01, page_data_size),
+  { "page_data_size",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_DataBlob01, page_data_size),
     0,0,0, 0 },
   { "page_data",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDs_DataBlob01, page_data),
     1,1,0, 0 },
@@ -7310,17 +7310,17 @@ static const Dwg_DYNAPI_field _dwg_AcDs_DataBlob01_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_DataBlobRef: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_DataBlobRef_fields[] = {
-  { "total_data_size",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_DataBlobRef, total_data_size),
+  { "total_data_size",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_DataBlobRef, total_data_size),
     0,0,0, 0 },
-  { "num_pages",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, num_pages),
+  { "num_pages",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlobRef, num_pages),
     0,0,0, 0 },
-  { "record_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, record_size),
+  { "record_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlobRef, record_size),
     0,0,0, 0 },
-  { "page_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, page_size),
+  { "page_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlobRef, page_size),
     0,0,0, 0 },
-  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, unknown_1),
+  { "unknown_1",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlobRef, unknown_1),
     0,0,0, 0 },
-  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef, unknown_2),
+  { "unknown_2",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlobRef, unknown_2),
     0,0,0, 0 },
   { "pages",	"Dwg_AcDs_DataBlobRef_Page*", sizeof (Dwg_AcDs_DataBlobRef_Page*),  OFF (struct _dwg_AcDs_DataBlobRef, pages),
     1,1,0, 0 },
@@ -7328,17 +7328,17 @@ static const Dwg_DYNAPI_field _dwg_AcDs_DataBlobRef_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_DataBlobRef_Page: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_DataBlobRef_Page_fields[] = {
-  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef_Page, segidx),
+  { "segidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlobRef_Page, segidx),
     0,0,0, 0 },
-  { "size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataBlobRef_Page, size),
+  { "size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataBlobRef_Page, size),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_DataIndex: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_DataIndex_fields[] = {
-  { "num_entries",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataIndex, num_entries),
+  { "num_entries",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex, num_entries),
     0,0,0, 0 },
-  { "unknown",	"int32_t", sizeof (int32_t),  OFF (struct _dwg_AcDs_DataIndex, unknown),
+  { "unknown",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex, unknown),
     0,0,0, 0 },
   { "entries",	"Dwg_AcDs_DataIndex_Entry*", sizeof (Dwg_AcDs_DataIndex_Entry*),  OFF (struct _dwg_AcDs_DataIndex, entries),
     1,1,0, 0 },
@@ -7346,17 +7346,17 @@ static const Dwg_DYNAPI_field _dwg_AcDs_DataIndex_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_DataIndex_Entry: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_DataIndex_Entry_fields[] = {
-  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataIndex_Entry, segidx),
+  { "segidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex_Entry, segidx),
     0,0,0, 0 },
-  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataIndex_Entry, offset),
+  { "offset",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex_Entry, offset),
     0,0,0, 0 },
-  { "schidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_DataIndex_Entry, schidx),
+  { "schidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex_Entry, schidx),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_Data_Record: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Data_Record_fields[] = {
-  { "data_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_Record, data_size),
+  { "data_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Data_Record, data_size),
     0,0,0, 0 },
   { "blob",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDs_Data_Record, blob),
     1,1,0, 0 },
@@ -7364,23 +7364,23 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Data_Record_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_Data_RecordHdr: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Data_RecordHdr_fields[] = {
-  { "entry_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, entry_size),
+  { "entry_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Data_RecordHdr, entry_size),
     0,0,0, 0 },
-  { "unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, unknown),
+  { "unknown",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Data_RecordHdr, unknown),
     0,0,0, 0 },
-  { "handle",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, handle),
+  { "handle",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_Data_RecordHdr, handle),
     0,0,0, 0 },
-  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Data_RecordHdr, offset),
+  { "offset",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Data_RecordHdr, offset),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_Schema: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Schema_fields[] = {
-  { "num_index",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDs_Schema, num_index),
+  { "num_index",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_AcDs_Schema, num_index),
     0,0,0, 0 },
-  { "index",	"uint64_t*", sizeof (uint64_t*),  OFF (struct _dwg_AcDs_Schema, index),
+  { "index",	"RLL*", sizeof (BITCODE_RLL*),  OFF (struct _dwg_AcDs_Schema, index),
     1,1,0, 0 },
-  { "num_props",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDs_Schema, num_props),
+  { "num_props",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_AcDs_Schema, num_props),
     0,0,0, 0 },
   { "props",	"Dwg_AcDs_Schema_Prop*", sizeof (Dwg_AcDs_Schema_Prop*),  OFF (struct _dwg_AcDs_Schema, props),
     1,1,0, 0 },
@@ -7388,27 +7388,41 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Schema_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_SchemaData: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_SchemaData_fields[] = {
-  { "total_data_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaData, total_data_size),
+  { "num_uprops",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaData, num_uprops),
     0,0,0, 0 },
-  { "flags",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaData, flags),
-    0,0,0, 0 },
-  { "schema",	"Dwg_AcDs_DataBlob01*", sizeof (Dwg_AcDs_DataBlob01*),  OFF (struct _dwg_AcDs_SchemaData, schema),
+  { "uprops",	"Dwg_AcDs_SchemaData_UProp*", sizeof (Dwg_AcDs_SchemaData_UProp*),  OFF (struct _dwg_AcDs_SchemaData, uprops),
     1,1,0, 0 },
+  { "num_schemas",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaData, num_schemas),
+    0,0,0, 0 },
+  { "schemas",	"Dwg_AcDs_Schema*", sizeof (Dwg_AcDs_Schema*),  OFF (struct _dwg_AcDs_SchemaData, schemas),
+    1,1,0, 0 },
+  { "num_propnames",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaData, num_propnames),
+    0,0,0, 0 },
+  { "propnames",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_AcDs_SchemaData, propnames),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_AcDs_SchemaData_UProp: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_AcDs_SchemaData_UProp_fields[] = {
+  { "size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaData_UProp, size),
+    0,0,0, 0 },
+  { "flags",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaData_UProp, flags),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_SchemaIndex: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_SchemaIndex_fields[] = {
-  { "num_props",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, num_props),
+  { "num_props",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex, num_props),
     0,0,0, 0 },
-  { "unknown_1",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, unknown_1),
+  { "unknown_1",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex, unknown_1),
     0,0,0, 0 },
   { "props",	"Dwg_AcDs_SchemaIndex_Prop*", sizeof (Dwg_AcDs_SchemaIndex_Prop*),  OFF (struct _dwg_AcDs_SchemaIndex, props),
     1,1,0, 0 },
-  { "tag",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_SchemaIndex, tag),
+  { "tag",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_SchemaIndex, tag),
     0,0,0, 0 },
-  { "num_prop_entries",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, num_prop_entries),
+  { "num_prop_entries",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex, num_prop_entries),
     0,0,0, 0 },
-  { "unknown_2",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex, unknown_2),
+  { "unknown_2",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex, unknown_2),
     0,0,0, 0 },
   { "prop_entries",	"Dwg_AcDs_SchemaIndex_Prop*", sizeof (Dwg_AcDs_SchemaIndex_Prop*),  OFF (struct _dwg_AcDs_SchemaIndex, prop_entries),
     1,1,0, 0 },
@@ -7416,35 +7430,37 @@ static const Dwg_DYNAPI_field _dwg_AcDs_SchemaIndex_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_SchemaIndex_Prop: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_SchemaIndex_Prop_fields[] = {
-  { "index",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, index),
+  { "index",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, index),
     0,0,0, 0 },
-  { "segidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, segidx),
+  { "segidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, segidx),
     0,0,0, 0 },
-  { "offset",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, offset),
+  { "offset",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex_Prop, offset),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_Schema_Prop: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Schema_Prop_fields[] = {
-  { "flags",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, flags),
+  { "flags",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Schema_Prop, flags),
     0,0,0, 0 },
-  { "namidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, namidx),
+  { "namidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Schema_Prop, namidx),
     0,0,0, 0 },
-  { "type",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, type),
+  { "type",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Schema_Prop, type),
     0,0,0, 0 },
-  { "u.custom_type_size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, u.custom_type_size),
+  { "type_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Schema_Prop, type_size),
     0,0,0, 0 },
-  { "u.unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Schema_Prop, u.unknown),
+  { "unknown_1",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Schema_Prop, unknown_1),
     0,0,0, 0 },
-  { "u.num_prop_values",	"BS", sizeof (uint16_t),  OFF (struct _dwg_AcDs_Schema_Prop, u.num_prop_values),
+  { "unknown_2",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Schema_Prop, unknown_2),
     0,0,0, 0 },
-  { "prop_values",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDs_Schema_Prop, prop_values),
+  { "num_values",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_AcDs_Schema_Prop, num_values),
+    0,0,0, 0 },
+  { "values",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_AcDs_Schema_Prop, values),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_Search: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Search_fields[] = {
-  { "num_search",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search, num_search),
+  { "num_search",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search, num_search),
     0,0,0, 0 },
   { "search",	"Dwg_AcDs_Search_Data*", sizeof (Dwg_AcDs_Search_Data*),  OFF (struct _dwg_AcDs_Search, search),
     1,1,0, 0 },
@@ -7452,15 +7468,15 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Search_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_Search_Data: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Search_Data_fields[] = {
-  { "schema_namidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, schema_namidx),
+  { "schema_namidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_Data, schema_namidx),
     0,0,0, 0 },
-  { "num_sortedidx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, num_sortedidx),
+  { "num_sortedidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_Data, num_sortedidx),
     0,0,0, 0 },
-  { "sortedidx",	"uint64_t*", sizeof (uint64_t*),  OFF (struct _dwg_AcDs_Search_Data, sortedidx),
+  { "sortedidx",	"RLL*", sizeof (BITCODE_RLL*),  OFF (struct _dwg_AcDs_Search_Data, sortedidx),
     1,1,0, 0 },
-  { "num_ididxs",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, num_ididxs),
+  { "num_ididxs",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_Data, num_ididxs),
     0,0,0, 0 },
-  { "unknown",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_Data, unknown),
+  { "unknown",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_Data, unknown),
     0,0,0, 0 },
   { "ididxs",	"Dwg_AcDs_Search_IdIdxs*", sizeof (Dwg_AcDs_Search_IdIdxs*),  OFF (struct _dwg_AcDs_Search_Data, ididxs),
     1,1,0, 0 },
@@ -7468,17 +7484,17 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Search_Data_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_Search_IdIdx: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Search_IdIdx_fields[] = {
-  { "handle",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_Search_IdIdx, handle),
+  { "handle",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_Search_IdIdx, handle),
     0,0,0, 0 },
-  { "num_ididx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_IdIdx, num_ididx),
+  { "num_ididx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_IdIdx, num_ididx),
     0,0,0, 0 },
-  { "ididx",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_Search_IdIdx, ididx),
-    0,0,0, 0 },
+  { "ididx",	"RLL*", sizeof (BITCODE_RLL*),  OFF (struct _dwg_AcDs_Search_IdIdx, ididx),
+    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_Search_IdIdxs: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Search_IdIdxs_fields[] = {
-  { "num_ididx",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_Search_IdIdxs, num_ididx),
+  { "num_ididx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_IdIdxs, num_ididx),
     0,0,0, 0 },
   { "ididx",	"Dwg_AcDs_Search_IdIdx*", sizeof (Dwg_AcDs_Search_IdIdx*),  OFF (struct _dwg_AcDs_Search_IdIdxs, ididx),
     1,1,0, 0 },
@@ -7490,7 +7506,7 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Segment_fields[] = {
     0,0,0, 0 },
   { "name[7]",	"RC", 7 * sizeof (BITCODE_RC),  OFF (struct _dwg_AcDs_Segment, name),
     0,0,0, 0 },
-  { "type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_AcDs_Segment, type),
+  { "type",	"RCd", sizeof (BITCODE_RCd),  OFF (struct _dwg_AcDs_Segment, type),
     0,0,0, 0 },
   { "segment_idx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, segment_idx),
     0,0,0, 0 },
@@ -7510,27 +7526,13 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Segment_fields[] = {
     0,0,0, 0 },
   { "padding[9]",	"RC", 9 * sizeof (BITCODE_RC),  OFF (struct _dwg_AcDs_Segment, padding),
     0,0,0, 0 },
-  { "u.segidx",	"Dwg_AcDs_SegmentIndex*", sizeof (Dwg_AcDs_SegmentIndex*),  OFF (struct _dwg_AcDs_Segment, u.segidx),
-    1,1,0, 0 },
-  { "u.datidx",	"Dwg_AcDs_DataIndex", sizeof (Dwg_AcDs_DataIndex),  OFF (struct _dwg_AcDs_Segment, u.datidx),
-    0,0,0, 0 },
-  { "u.data",	"Dwg_AcDs_Data*", sizeof (Dwg_AcDs_Data*),  OFF (struct _dwg_AcDs_Segment, u.data),
-    1,1,0, 0 },
-  { "u.blob01",	"Dwg_AcDs_DataBlob", sizeof (Dwg_AcDs_DataBlob),  OFF (struct _dwg_AcDs_Segment, u.blob01),
-    0,0,0, 0 },
-  { "u.schidx",	"Dwg_AcDs_SchemaIndex*", sizeof (Dwg_AcDs_SchemaIndex*),  OFF (struct _dwg_AcDs_Segment, u.schidx),
-    1,1,0, 0 },
-  { "u.schdat",	"Dwg_AcDs_SchemaData*", sizeof (Dwg_AcDs_SchemaData*),  OFF (struct _dwg_AcDs_Segment, u.schdat),
-    1,1,0, 0 },
-  { "u.search",	"Dwg_AcDs_Search", sizeof (Dwg_AcDs_Search),  OFF (struct _dwg_AcDs_Segment, u.search),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_AcDs_SegmentIndex: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_SegmentIndex_fields[] = {
-  { "offset",	"uint64_t", sizeof (uint64_t),  OFF (struct _dwg_AcDs_SegmentIndex, offset),
+  { "offset",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_SegmentIndex, offset),
     0,0,0, 0 },
-  { "size",	"BL", sizeof (uint32_t),  OFF (struct _dwg_AcDs_SegmentIndex, size),
+  { "size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SegmentIndex, size),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -9034,68 +9036,69 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "AcDs_Data_RecordHdr", 0, NULL, _dwg_AcDs_Data_RecordHdr_fields, sizeof (Dwg_AcDs_Data_RecordHdr) },	/* 11 */
   { "AcDs_Schema", 0, NULL, _dwg_AcDs_Schema_fields, sizeof (Dwg_AcDs_Schema) },	/* 12 */
   { "AcDs_SchemaData", 0, NULL, _dwg_AcDs_SchemaData_fields, sizeof (Dwg_AcDs_SchemaData) },	/* 13 */
-  { "AcDs_SchemaIndex", 0, NULL, _dwg_AcDs_SchemaIndex_fields, sizeof (Dwg_AcDs_SchemaIndex) },	/* 14 */
-  { "AcDs_SchemaIndex_Prop", 0, NULL, _dwg_AcDs_SchemaIndex_Prop_fields, sizeof (Dwg_AcDs_SchemaIndex_Prop) },	/* 15 */
-  { "AcDs_Schema_Prop", 0, NULL, _dwg_AcDs_Schema_Prop_fields, sizeof (Dwg_AcDs_Schema_Prop) },	/* 16 */
-  { "AcDs_Search", 0, NULL, _dwg_AcDs_Search_fields, sizeof (Dwg_AcDs_Search) },	/* 17 */
-  { "AcDs_Search_Data", 0, NULL, _dwg_AcDs_Search_Data_fields, sizeof (Dwg_AcDs_Search_Data) },	/* 18 */
-  { "AcDs_Search_IdIdx", 0, NULL, _dwg_AcDs_Search_IdIdx_fields, sizeof (Dwg_AcDs_Search_IdIdx) },	/* 19 */
-  { "AcDs_Search_IdIdxs", 0, NULL, _dwg_AcDs_Search_IdIdxs_fields, sizeof (Dwg_AcDs_Search_IdIdxs) },	/* 20 */
-  { "AcDs_Segment", 0, NULL, _dwg_AcDs_Segment_fields, sizeof (Dwg_AcDs_Segment) },	/* 21 */
-  { "AcDs_SegmentIndex", 0, NULL, _dwg_AcDs_SegmentIndex_fields, sizeof (Dwg_AcDs_SegmentIndex) },	/* 22 */
-  { "BorderStyle", 0, NULL, _dwg_BorderStyle_fields, sizeof (Dwg_BorderStyle) },	/* 23 */
-  { "CELLSTYLEMAP_Cell", (int)DWG_TYPE_CELLSTYLEMAP, NULL, _dwg_CELLSTYLEMAP_Cell_fields, sizeof (Dwg_CELLSTYLEMAP_Cell) },	/* 24 */
-  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 25 */
-  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (Dwg_CellStyle) },	/* 26 */
-  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (Dwg_ContentFormat) },	/* 27 */
-  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (Dwg_DIMASSOC_Ref) },	/* 28 */
-  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (Dwg_DIMENSION_common) },	/* 29 */
-  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (Dwg_EVAL_Node) },	/* 30 */
-  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (Dwg_FIELD_ChildValue) },	/* 31 */
-  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (Dwg_FileDepList_Files) },	/* 32 */
-  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (Dwg_FormattedTableData) },	/* 33 */
-  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (Dwg_FormattedTableMerged) },	/* 34 */
-  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (Dwg_GEODATA_meshface) },	/* 35 */
-  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (Dwg_GEODATA_meshpt) },	/* 36 */
-  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (Dwg_HATCH_Color) },	/* 37 */
-  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (Dwg_HATCH_ControlPoint) },	/* 38 */
-  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (Dwg_HATCH_DefLine) },	/* 39 */
-  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (Dwg_HATCH_Path) },	/* 40 */
-  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (Dwg_HATCH_PathSeg) },	/* 41 */
-  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (Dwg_HATCH_PolylinePath) },	/* 42 */
-  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (Dwg_LAYER_entry) },	/* 43 */
-  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (Dwg_LEADER_ArrowHead) },	/* 44 */
-  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (Dwg_LEADER_BlockLabel) },	/* 45 */
-  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (Dwg_LEADER_Break) },	/* 46 */
-  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (Dwg_LEADER_Line) },	/* 47 */
-  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (Dwg_LEADER_Node) },	/* 48 */
-  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (Dwg_LTYPE_dash) },	/* 49 */
-  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 50 */
-  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 51 */
-  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 52 */
-  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 53 */
-  { "MLEADER_AnnotContext", 0, "AcDbObjectContextData", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 54 */
-  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 55 */
-  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 56 */
-  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 57 */
-  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 58 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 59 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 60 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 61 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 62 */
-  { "TABLESTYLE_Cell", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_Cell_fields, sizeof (Dwg_TABLESTYLE_Cell) },	/* 63 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 64 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 65 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 66 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 67 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 68 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 69 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 70 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 71 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 72 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 73 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 74 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 75 */
+  { "AcDs_SchemaData_UProp", 0, NULL, _dwg_AcDs_SchemaData_UProp_fields, sizeof (Dwg_AcDs_SchemaData_UProp) },	/* 14 */
+  { "AcDs_SchemaIndex", 0, NULL, _dwg_AcDs_SchemaIndex_fields, sizeof (Dwg_AcDs_SchemaIndex) },	/* 15 */
+  { "AcDs_SchemaIndex_Prop", 0, NULL, _dwg_AcDs_SchemaIndex_Prop_fields, sizeof (Dwg_AcDs_SchemaIndex_Prop) },	/* 16 */
+  { "AcDs_Schema_Prop", 0, NULL, _dwg_AcDs_Schema_Prop_fields, sizeof (Dwg_AcDs_Schema_Prop) },	/* 17 */
+  { "AcDs_Search", 0, NULL, _dwg_AcDs_Search_fields, sizeof (Dwg_AcDs_Search) },	/* 18 */
+  { "AcDs_Search_Data", 0, NULL, _dwg_AcDs_Search_Data_fields, sizeof (Dwg_AcDs_Search_Data) },	/* 19 */
+  { "AcDs_Search_IdIdx", 0, NULL, _dwg_AcDs_Search_IdIdx_fields, sizeof (Dwg_AcDs_Search_IdIdx) },	/* 20 */
+  { "AcDs_Search_IdIdxs", 0, NULL, _dwg_AcDs_Search_IdIdxs_fields, sizeof (Dwg_AcDs_Search_IdIdxs) },	/* 21 */
+  { "AcDs_Segment", 0, NULL, _dwg_AcDs_Segment_fields, sizeof (Dwg_AcDs_Segment) },	/* 22 */
+  { "AcDs_SegmentIndex", 0, NULL, _dwg_AcDs_SegmentIndex_fields, sizeof (Dwg_AcDs_SegmentIndex) },	/* 23 */
+  { "BorderStyle", 0, NULL, _dwg_BorderStyle_fields, sizeof (Dwg_BorderStyle) },	/* 24 */
+  { "CELLSTYLEMAP_Cell", (int)DWG_TYPE_CELLSTYLEMAP, NULL, _dwg_CELLSTYLEMAP_Cell_fields, sizeof (Dwg_CELLSTYLEMAP_Cell) },	/* 25 */
+  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 26 */
+  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (Dwg_CellStyle) },	/* 27 */
+  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (Dwg_ContentFormat) },	/* 28 */
+  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (Dwg_DIMASSOC_Ref) },	/* 29 */
+  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (Dwg_DIMENSION_common) },	/* 30 */
+  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (Dwg_EVAL_Node) },	/* 31 */
+  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (Dwg_FIELD_ChildValue) },	/* 32 */
+  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (Dwg_FileDepList_Files) },	/* 33 */
+  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (Dwg_FormattedTableData) },	/* 34 */
+  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (Dwg_FormattedTableMerged) },	/* 35 */
+  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (Dwg_GEODATA_meshface) },	/* 36 */
+  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (Dwg_GEODATA_meshpt) },	/* 37 */
+  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (Dwg_HATCH_Color) },	/* 38 */
+  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (Dwg_HATCH_ControlPoint) },	/* 39 */
+  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (Dwg_HATCH_DefLine) },	/* 40 */
+  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (Dwg_HATCH_Path) },	/* 41 */
+  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (Dwg_HATCH_PathSeg) },	/* 42 */
+  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (Dwg_HATCH_PolylinePath) },	/* 43 */
+  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (Dwg_LAYER_entry) },	/* 44 */
+  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (Dwg_LEADER_ArrowHead) },	/* 45 */
+  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (Dwg_LEADER_BlockLabel) },	/* 46 */
+  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (Dwg_LEADER_Break) },	/* 47 */
+  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (Dwg_LEADER_Line) },	/* 48 */
+  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (Dwg_LEADER_Node) },	/* 49 */
+  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (Dwg_LTYPE_dash) },	/* 50 */
+  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 51 */
+  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 52 */
+  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 53 */
+  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 54 */
+  { "MLEADER_AnnotContext", 0, "AcDbObjectContextData", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 55 */
+  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 56 */
+  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 57 */
+  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 58 */
+  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 59 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 60 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 61 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 62 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 63 */
+  { "TABLESTYLE_Cell", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_Cell_fields, sizeof (Dwg_TABLESTYLE_Cell) },	/* 64 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 65 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 66 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 67 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 68 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 69 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 70 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 71 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 72 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 73 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 74 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 75 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 76 */
 
 };
 

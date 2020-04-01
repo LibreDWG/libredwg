@@ -6285,35 +6285,35 @@ typedef struct _dwg_FileDepList_Files
 
 typedef struct _dwg_AcDs_SegmentIndex
 {
-  uint64_t offset;
-  uint32_t size;
+  BITCODE_RLL offset;
+  BITCODE_RL size;
 } Dwg_AcDs_SegmentIndex;
 
 typedef struct _dwg_AcDs_DataIndex_Entry
 {
-  uint32_t segidx;
-  uint32_t offset;
-  uint32_t schidx;
+  BITCODE_RL segidx;
+  BITCODE_RL offset;
+  BITCODE_RL schidx;
 } Dwg_AcDs_DataIndex_Entry;
 
 typedef struct _dwg_AcDs_DataIndex
 {
-  int32_t num_entries;
-  int32_t unknown; // always 0
+  BITCODE_RL num_entries;
+  BITCODE_RL unknown; // always 0, probably RLL above
   Dwg_AcDs_DataIndex_Entry *entries;
 } Dwg_AcDs_DataIndex;
 
 typedef struct _dwg_AcDs_Data_RecordHdr
 {
-  uint32_t entry_size;
-  uint32_t unknown; // mostly 1
-  uint64_t handle;
-  uint32_t offset;
+  BITCODE_RL entry_size;
+  BITCODE_RL unknown; // mostly 1
+  BITCODE_RLL handle;
+  BITCODE_RL offset;
 } Dwg_AcDs_Data_RecordHdr;
 
 typedef struct _dwg_AcDs_Data_Record
 {
-  uint32_t data_size;
+  BITCODE_RL data_size;
   BITCODE_RC *blob;
 } Dwg_AcDs_Data_Record;
 
@@ -6325,120 +6325,128 @@ typedef struct _dwg_AcDs_Data
 
 typedef struct _dwg_AcDs_DataBlobRef_Page
 {
-  uint32_t segidx;
-  uint32_t size;
+  BITCODE_RL segidx;
+  BITCODE_RL size;
 } Dwg_AcDs_DataBlobRef_Page;
 
 typedef struct _dwg_AcDs_DataBlobRef
 {
-  uint64_t total_data_size;
-  uint32_t num_pages;
-  uint32_t record_size;
-  uint32_t page_size;
-  uint32_t unknown_1; // ODA writes 1
-  uint32_t unknown_2; // ODA writes 0
+  BITCODE_RLL total_data_size;
+  BITCODE_RL num_pages;
+  BITCODE_RL record_size;
+  BITCODE_RL page_size;
+  BITCODE_RL unknown_1; // ODA writes 1
+  BITCODE_RL unknown_2; // ODA writes 0
   Dwg_AcDs_DataBlobRef_Page *pages;
 } Dwg_AcDs_DataBlobRef;
 
 typedef struct _dwg_AcDs_DataBlob
 {
-  uint64_t data_size;
-  uint32_t page_count;
-  uint32_t record_size;
-  uint32_t page_size;
-  uint32_t unknown_1; // ODA writes 1
-  uint32_t unknown_2; // ODA writes 0
+  BITCODE_RLL data_size;
+  BITCODE_RL page_count;
+  BITCODE_RL record_size;
+  BITCODE_RL page_size;
+  BITCODE_RL unknown_1; // ODA writes 1
+  BITCODE_RL unknown_2; // ODA writes 0
   Dwg_AcDs_DataBlobRef *ref; // only one, optional
 } Dwg_AcDs_DataBlob;
 
 typedef struct _dwg_AcDs_DataBlob01
 {
-  uint64_t total_data_size;
-  uint64_t page_start_offset;
+  BITCODE_RLL total_data_size;
+  BITCODE_RLL page_start_offset;
   int32_t page_index;
   int32_t page_count;
-  uint64_t page_data_size;
+  BITCODE_RLL page_data_size;
   BITCODE_RC *page_data;
 } Dwg_AcDs_DataBlob01;
 
 // 24.2.2.5
 typedef struct _dwg_AcDs_SchemaIndex_Prop
 {
-  uint32_t index;
-  uint32_t segidx;
-  uint32_t offset;
+  BITCODE_RL index;
+  BITCODE_RL segidx;
+  BITCODE_RL offset;
 } Dwg_AcDs_SchemaIndex_Prop;
 
 // 24.2.2.5
 typedef struct _dwg_AcDs_SchemaIndex
 {
-  uint32_t num_props; // or uint64
-  uint32_t unknown_1;
+  BITCODE_RL num_props; // or uint64
+  BITCODE_RL unknown_1;
   Dwg_AcDs_SchemaIndex_Prop *props;
-  uint64_t tag; /* 0x0af10c */
-  uint32_t num_prop_entries;
-  uint32_t unknown_2; /* 0 */
+  BITCODE_RLL tag; /* 0x0af10c */
+  BITCODE_RL num_prop_entries;
+  BITCODE_RL unknown_2; /* 0 */
   Dwg_AcDs_SchemaIndex_Prop *prop_entries;
 } Dwg_AcDs_SchemaIndex;
 
 // 24.2.2.6.1.1
 typedef struct _dwg_AcDs_Schema_Prop
 {
-  uint32_t flags;  /*<! DXF 91 */
-  uint32_t namidx; /*<! DXF 2 */
-  uint32_t type;   /*<! DXF 280, 0-15 */
-  union {
-    uint32_t custom_type_size;
-    uint32_t unknown;
-    uint16_t num_prop_values;
-  } u;
-  BITCODE_RC *prop_values;
+  BITCODE_RL flags;  /*<! DXF 91 */
+  BITCODE_RL namidx; /*<! DXF 2 */
+  BITCODE_RL type;   /*<! DXF 280, 0-15 */
+  BITCODE_RL type_size;
+  BITCODE_RL unknown_1;
+  BITCODE_RL unknown_2;
+  BITCODE_RS num_values;
+  BITCODE_RC *values;
 } Dwg_AcDs_Schema_Prop;
 
 // 24.2.2.6.1
 typedef struct _dwg_AcDs_Schema
 {
-  uint16_t num_index;
-  uint64_t *index;
-  uint16_t num_props;
+  BITCODE_RS num_index;
+  BITCODE_RLL *index;
+  BITCODE_RS num_props;
   Dwg_AcDs_Schema_Prop *props;
 } Dwg_AcDs_Schema;
 
 // 24.2.2.6
+typedef struct _dwg_AcDs_SchemaData_UProp
+{
+  BITCODE_RL size;
+  BITCODE_RL flags;
+} Dwg_AcDs_SchemaData_UProp;
+
 typedef struct _dwg_AcDs_SchemaData
 {
-  uint32_t total_data_size;
-  uint32_t flags;
-  Dwg_AcDs_DataBlob01 *schema;
+  BITCODE_RL num_uprops; // computed, see schidx
+  Dwg_AcDs_SchemaData_UProp *uprops;
+  BITCODE_RL num_schemas; // computed, see schidx
+  Dwg_AcDs_Schema *schemas;
+  BITCODE_RL num_propnames;
+  BITCODE_TV *propnames;
 } Dwg_AcDs_SchemaData;
 
 typedef struct _dwg_AcDs_Search_IdIdx
 {
-  uint64_t handle;
-  uint32_t num_ididx;
-  uint64_t ididx;
+  BITCODE_RLL handle;
+  BITCODE_RL num_ididx;
+  BITCODE_RLL *ididx;
 } Dwg_AcDs_Search_IdIdx;
 
 typedef struct _dwg_AcDs_Search_IdIdxs
 {
-  uint32_t num_ididx;
+  BITCODE_RL num_ididx;
   Dwg_AcDs_Search_IdIdx *ididx;
 } Dwg_AcDs_Search_IdIdxs;
 
 // 24.2.2.7.1
 typedef struct _dwg_AcDs_Search_Data
 {
-  uint32_t schema_namidx;
-  uint32_t num_sortedidx;
-  uint64_t *sortedidx;
-  uint32_t num_ididxs;
-  uint32_t unknown;
+  BITCODE_RL schema_namidx;
+  BITCODE_RL num_sortedidx;
+  BITCODE_RLL *sortedidx;
+  BITCODE_RL num_ididxs;
+  BITCODE_RL unknown;
   Dwg_AcDs_Search_IdIdxs *ididxs;
 } Dwg_AcDs_Search_Data;
 
 typedef struct _dwg_AcDs_Search
 {
-  uint32_t num_search;
+  BITCODE_RL num_search;
   Dwg_AcDs_Search_Data *search;
 } Dwg_AcDs_Search;
 
@@ -6446,7 +6454,7 @@ typedef struct _dwg_AcDs_Segment
 {
   BITCODE_RL signature; /* always 0xd5ac */
   BITCODE_RC name[7]; /* segidx, datidx, _data_, schidx, schdat, search, blob01 */
-  BITCODE_RC type; /* computed 0-6 */
+  BITCODE_RCd type; /* computed 0-6 or -1 */
   BITCODE_RL segment_idx;
   BITCODE_RL is_blob01;
   BITCODE_RL segsize;
@@ -6456,15 +6464,6 @@ typedef struct _dwg_AcDs_Segment
   BITCODE_RL data_algn_offset;
   BITCODE_RL objdata_algn_offset;
   BITCODE_RC padding[9]; // always 8x 0x55
-  union {
-    Dwg_AcDs_SegmentIndex *segidx;
-    Dwg_AcDs_DataIndex datidx;
-    Dwg_AcDs_Data *data;
-    Dwg_AcDs_DataBlob blob01;
-    Dwg_AcDs_SchemaIndex *schidx;
-    Dwg_AcDs_SchemaData *schdat;
-    Dwg_AcDs_Search search;
-  } u;
 } Dwg_AcDs_Segment;
 
 /**
@@ -6698,20 +6697,27 @@ typedef struct _dwg_struct
   {
     // header
     BITCODE_RL file_signature;
-    BITCODE_RLd file_header_size;
-    BITCODE_RLd unknown_1; /* acis version? always 2 */
-    BITCODE_RLd version; /* always 2 */
-    BITCODE_RLd unknown_2; /* always 0 */
-    BITCODE_RLd ds_version; /* datastorage revision */
-    BITCODE_RLd segidx_offset;
-    BITCODE_RLd segidx_unknown;
-    BITCODE_RLd segidx_num_entries;
-    BITCODE_RLd schidx_segidx;
-    BITCODE_RLd datidx_segidx;
-    BITCODE_RLd search_segidx;
-    BITCODE_RLd prev_save_idx;
+    BITCODE_RL file_header_size;
+    BITCODE_RL unknown_1; /* acis version? always 2 */
+    BITCODE_RL version; /* always 2 */
+    BITCODE_RL unknown_2; /* always 0 */
+    BITCODE_RL ds_version; /* datastorage revision */
+    BITCODE_RL segidx_offset;
+    BITCODE_RL segidx_unknown;
+    BITCODE_RL num_segidx;
+    BITCODE_RL schidx_segidx;
+    BITCODE_RL datidx_segidx;
+    BITCODE_RL search_segidx;
+    BITCODE_RL prvsav_segidx;
     BITCODE_RL file_size;
-    BITCODE_BL num_segments; // computed
+    BITCODE_BL total_segments; // computed
+    Dwg_AcDs_SegmentIndex *segidx;
+    Dwg_AcDs_DataIndex datidx;
+    Dwg_AcDs_Data *data;
+    Dwg_AcDs_DataBlob blob01;
+    Dwg_AcDs_SchemaIndex schidx;
+    Dwg_AcDs_SchemaData schdat;
+    Dwg_AcDs_Search search;
     Dwg_AcDs_Segment *segments;
   } acds;
 

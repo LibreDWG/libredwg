@@ -3336,6 +3336,65 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
+json_AcDs_SegmentIndex (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                        jsmntokens_t *restrict tokens,
+                        struct Dwg_AcDs *o, int size)
+{
+  const char *section = "AcDs_SegmentIndex";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  o->segidx = calloc (size, sizeof (Dwg_AcDs_SegmentIndex));
+  o->num_segidx = size;
+  for (int j = 0; j < size; j++)
+    {
+      int keys;
+      Dwg_AcDs_SegmentIndex *_obj = &o->segidx[j];
+      tokens->index++;
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      t = &tokens->tokens[tokens->index];
+      keys = t->size;
+      if (t->type != JSMN_OBJECT)
+        {
+          LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                     t_typename[t->type], tokens->index, tokens->num_tokens,
+                     section);
+          json_advance_unknown (dat, tokens, 0);
+          return DWG_ERR_INVALIDTYPE;
+        }
+      assert (t->type == JSMN_OBJECT);
+      tokens->index++;
+      for (int k = 0; k < keys; k++)
+        {
+          char key[80];
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          json_fixed_key (key, dat, tokens);
+          t = &tokens->tokens[tokens->index];
+          // clang-format off
+          if (strEQc (key, "index"))
+            ; // ignore
+          FIELD_RLL (offset, 0)
+          FIELD_RL (size, 0)
+          else
+            {
+              LOG_ERROR ("Unknown %s.%s ignored", section, key);
+              json_advance_unknown (dat, tokens, 0);
+            }
+          // clang-format on
+        }
+      tokens->index--;
+    }
+  tokens->index++;
+  return 0;
+}
+
+static int
 json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     jsmntokens_t *restrict tokens,
                     struct Dwg_AcDs *o, int size)
@@ -3351,7 +3410,7 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return DWG_ERR_INVALIDTYPE;
     }
   o->segments = calloc (size, sizeof (Dwg_AcDs_Segment));
-  o->num_segments = size;
+  //o->num_segidx = size;
   for (int j = 0; j < size; j++)
     {
       int keys;
@@ -3377,7 +3436,8 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           json_fixed_key (key, dat, tokens);
           t = &tokens->tokens[tokens->index];
           // clang-format off
-          if (0) ; // else
+          if (strEQc (key, "index"))
+            ; // ignore
           FIELD_RLx (signature, 0)
           FIELD_TFF (name, 6, 0)
           FIELD_RL (segment_idx, 0)
@@ -3440,12 +3500,23 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RLd (ds_version, 0)
       FIELD_RLd (segidx_offset, 0)
       FIELD_RLd (segidx_unknown, 0)
-      FIELD_RLd (segidx_num_entries, 0)
+      FIELD_RLd (num_segidx, 0)
       FIELD_RLd (schidx_segidx, 0)
       FIELD_RLd (datidx_segidx, 0)
       FIELD_RLd (search_segidx, 0)
-      FIELD_RLd (prev_save_idx, 0)
+      FIELD_RLd (prvsav_segidx, 0)
       FIELD_RL (file_size, 0)
+      else if (strEQc (key, "segidx"))
+        {
+          if (t->type != JSMN_ARRAY) // of OBJECTs
+            json_advance_unknown (dat, tokens, 0);
+          else if (t->size)
+            error |= json_AcDs_SegmentIndex (dat, dwg, tokens, _obj, t->size);
+          else
+            tokens->index++; // empty array
+          if (error >= DWG_ERR_CRITICAL)
+            return error;
+        }
       else if (strEQc (key, "segments"))
         {
           if (t->type != JSMN_ARRAY) // of OBJECTs

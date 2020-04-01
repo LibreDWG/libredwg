@@ -1384,8 +1384,8 @@ dwg_section_type (const char* restrict name)
       return SECTION_HANDLES;
     }
   else if (strEQc (name, "AcDb:AcDsPrototype_1b"))
-    {
-      return SECTION_ACDS; // 0xc or 0xd!
+    { // r2013+
+      return SECTION_ACDS; // 0xc or 0xd
     }
   else if (strEQc (name, "AcDb:AuxHeader"))
     {

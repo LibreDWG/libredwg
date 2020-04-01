@@ -940,6 +940,37 @@
 #define FIELD_VECTOR(name, type, size, dxf)                                   \
   FIELD_VECTOR_N (name, type, _obj->size, dxf)
 
+#define SUB_FIELD_VECTOR_TYPESIZE(o, name, size, typesize, dxf)               \
+  if (_obj->o.size > 0)                                                       \
+    {                                                                         \
+      _obj->o.name = calloc (_obj->o.size, typesize);                         \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          switch (typesize)                                                   \
+            {                                                                 \
+            case 0:                                                           \
+              break;                                                          \
+            case 1:                                                           \
+              _obj->o.name[vcount] = bit_read_RC (dat);                       \
+              break;                                                          \
+            case 2:                                                           \
+              _obj->o.name[vcount] = bit_read_RS (dat);                       \
+              break;                                                          \
+            case 4:                                                           \
+              _obj->o.name[vcount] = bit_read_RL (dat);                       \
+              break;                                                          \
+            case 8:                                                           \
+              _obj->o.name[vcount] = bit_read_RLL (dat);                      \
+              break;                                                          \
+            default:                                                          \
+              LOG_ERROR ("Unkown FIELD_VECTOR_TYPE " #name " typesize %d",    \
+                         typesize);                                           \
+              break;                                                          \
+            }                                                                 \
+          LOG_TRACE (#name "[%u]: %d\n", vcount, (int)_obj->o.name[vcount])   \
+        }                                                                     \
+    }
+
 #define FIELD_2RD_VECTOR(name, size, dxf)                                     \
   VECTOR_CHKCOUNT_LV (name, 2RD, _obj->size, dat)                             \
   if (_obj->size > 0)                                                         \

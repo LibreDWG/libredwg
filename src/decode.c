@@ -3267,6 +3267,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
+  BITCODE_BL rcount3, rcount4, vcount;
   int error = 0;
 
   // clang-format off
@@ -3296,11 +3297,12 @@ read_2004_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return 0;
     }
 
-  LOG_TRACE ("Datastorage (%lu)\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("AcDs datastorage (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
 
   error |= acds_private (dat, dwg);
+  error &= ~DWG_ERR_SECTIONNOTFOUND;
 
   LOG_TRACE ("\n")
   if (sec_dat.chain)
