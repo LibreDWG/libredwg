@@ -615,6 +615,44 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
     FIRSTPREFIX                                                               \
   ENDARRAY;
 
+#define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)                \
+  KEY (nam);                                                                  \
+  ARRAY;                                                                      \
+  if (_obj->o.size && _obj->o.nam)                                            \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          switch (typesize)                                                   \
+            {                                                                 \
+            case 0:                                                           \
+              break;                                                          \
+            case 1:                                                           \
+              FIRSTPREFIX fprintf (dat->fh, FORMAT_RC,                        \
+                                   (BITCODE_RC)_obj->o.nam[vcount]);          \
+              break;                                                          \
+            case 2:                                                           \
+              FIRSTPREFIX fprintf (dat->fh, FORMAT_RS,                        \
+                                   (BITCODE_RS)_obj->o.nam[vcount]);          \
+              break;                                                          \
+            case 4:                                                           \
+              FIRSTPREFIX fprintf (dat->fh, FORMAT_RL,                        \
+                                   (BITCODE_RL)_obj->o.nam[vcount]);          \
+              break;                                                          \
+            case 8:                                                           \
+              FIRSTPREFIX fprintf (dat->fh, FORMAT_RLL,                       \
+                                   (BITCODE_RLL)_obj->o.nam[vcount]);         \
+              break;                                                          \
+            default:                                                          \
+              LOG_ERROR ("Unkown SUB_FIELD_VECTOR_TYPESIZE " #nam             \
+                         " typesize %d", typesize);                           \
+              break;                                                          \
+            }                                                                 \
+        }                                                                     \
+    }                                                                         \
+  else                                                                        \
+    FIRSTPREFIX                                                               \
+  ENDARRAY;
+
 #define FIELD_VECTOR(nam, type, size, dxf)                                    \
   FIELD_VECTOR_N (nam, type, _obj->size, dxf)
 #define FIELD_VECTOR_INL(nam, type, size, dxf)                                \

@@ -46,13 +46,11 @@
   dat->byte = _obj->segidx_offset;
   _obj->segments = calloc (_obj->num_segidx, sizeof (Dwg_AcDs_Segment));
 #endif
-#ifdef IS_JSON
-  RECORD (segidx);
-#endif
+#ifndef IS_JSON
   SUB_FIELD_RSx (segments[0],signature, 0); /* always 0xD5AC (ACD5 in the TF) */
   FIELD_TFF (segments[0].name, 6, 0); /* always segidx */
   DECODER { _obj->segments[0].type = 0; }
-  JSON { SUB_FIELD (segments[0],type, RC, 0); }
+  //JSON { SUB_FIELD (segments[0],type, RC, 0); }
   SUB_FIELD (segments[0],segment_idx, RL, 0);
   SUB_FIELD (segments[0],is_blob01, RL, 0);
   SUB_FIELD (segments[0],segsize, RL, 0);
@@ -62,6 +60,7 @@
   SUB_FIELD (segments[0],data_algn_offset, RL, 0);
   SUB_FIELD (segments[0],objdata_algn_offset, RL, 0);
   FIELD_TFF (segments[0].padding, 8, 0); // always 8x 0x55
+#endif
 
   REPEAT (num_segidx, segidx, Dwg_AcDs_SegmentIndex)
   REPEAT_BLOCK
@@ -72,9 +71,8 @@
       SUB_FIELD_RL (segidx[rcount1],size, 0);
       DECODER { if (_obj->segidx[rcount1].offset) _obj->total_segments++; }
   END_REPEAT_BLOCK
-  //END_REPEAT (segidx) // still needed, later
 #ifdef IS_JSON
-  ENDRECORD()
+  END_REPEAT (segidx) // still needed, later
 #endif
 
   _REPEAT_NF (_obj->num_segidx, segments, Dwg_AcDs_Segment, 1)
@@ -289,4 +287,6 @@
       }
   END_REPEAT_BLOCK
   END_REPEAT (segments)
-  END_REPEAT (segidx) // for free
+#ifdef IS_FREE
+  END_REPEAT (segidx)
+#endif

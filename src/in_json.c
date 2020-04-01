@@ -3378,7 +3378,7 @@ json_AcDs_SegmentIndex (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           t = &tokens->tokens[tokens->index];
           // clang-format off
           if (strEQc (key, "index"))
-            ; // ignore
+            tokens->index++; // ignore
           FIELD_RLL (offset, 0)
           FIELD_RL (size, 0)
           else
@@ -3437,9 +3437,10 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           t = &tokens->tokens[tokens->index];
           // clang-format off
           if (strEQc (key, "index"))
-            ; // ignore
+            tokens->index++; // ignore
           FIELD_RLx (signature, 0)
           FIELD_TFF (name, 6, 0)
+          FIELD_RL (type, 0)
           FIELD_RL (segment_idx, 0)
           FIELD_RL (is_blob01, 0)
           FIELD_RL (segsize, 0)
@@ -3449,7 +3450,7 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           FIELD_RL (data_algn_offset, 0)
           FIELD_RL (objdata_algn_offset, 0)
           FIELD_TFF (padding, 8, 0)
-          FIELD_RL (type, 0)
+          // todo: support the various types
           else
             {
               LOG_ERROR ("Unknown %s.%s ignored", section, key);
@@ -3489,7 +3490,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       char key[80];
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       json_fixed_key (key, dat, tokens);
-      // t = &tokens->tokens[tokens->index];
+      t = &tokens->tokens[tokens->index];
       // clang-format off
       if (0) ;
       FIELD_RLx (file_signature, 0)
@@ -3506,6 +3507,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RLd (search_segidx, 0)
       FIELD_RLd (prvsav_segidx, 0)
       FIELD_RL (file_size, 0)
+      // clang-format on
       else if (strEQc (key, "segidx"))
         {
           if (t->type != JSMN_ARRAY) // of OBJECTs
@@ -3533,7 +3535,6 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
           json_advance_unknown (dat, tokens, 0);
         }
-      // clang-format on
     }
 
   LOG_TRACE ("End of %s\n", section)
