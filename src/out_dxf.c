@@ -2306,23 +2306,33 @@ static int
 dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  int i;
-  Dwg_Object *mspace = dwg_model_space_object (dwg);
-  if (!mspace)
+  Dwg_Object *hdr = dwg_model_space_object (dwg);
+  Dwg_Object *obj;
+  if (!hdr)
     return DWG_ERR_INVALIDDWG;
 
   SECTION (ENTITIES);
-  for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
+#if 1
+  obj = get_first_owned_entity (hdr); // first_entity or entities[0]
+  while (obj)
+    {
+      int i = obj->index;
+      error |= dwg_dxf_object (dat, obj, &i);
+      obj = get_next_owned_block_entity (hdr, obj); // until last_entity
+    }
+#else
+  for (int i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
     {
       Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype == DWG_SUPERTYPE_ENTITY && obj->type != DWG_TYPE_BLOCK
           && obj->type != DWG_TYPE_ENDBLK)
         {
           Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
-          if (!owner || (owner && owner->obj == mspace))
+          if (!owner || (owner && owner->obj == hdr))
             error |= dwg_dxf_object (dat, obj, &i);
         }
     }
+#endif
   ENDSEC ();
   return error;
 }
