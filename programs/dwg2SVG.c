@@ -57,6 +57,7 @@
 #include "suffix.inc"
 
 static int opts = 0;
+static int mspace = 0; // only mspace, even when pspace is defined
 Dwg_Data g_dwg;
 double model_xmin, model_ymin, model_xmax, model_ymax;
 double page_width, page_height, scale;
@@ -81,15 +82,16 @@ help (void)
   printf ("\nUsage: dwg2SVG [OPTION]... DWGFILE >SVGFILE\n");
   printf ("Converts some 2D elements of the DWG to a SVG.\n"
           "\n");
-  // TODO: -p for paperspace only, -m for modelspace only
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
+  printf ("           --mspace         only model-space, no paper-space\n");
   printf ("           --force-free     force free\n");
   printf ("           --help           display this help and exit\n");
   printf ("           --version        output version information and exit\n"
           "\n");
 #else
   printf ("  -v[0-9]     verbosity\n");
+  printf ("  -m          only model-space, no paper-space\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
@@ -671,13 +673,14 @@ output_INSERT (Dwg_Object *obj)
     }
 }
 
-static void
+static int
 output_object (Dwg_Object *obj)
 {
+  int num = 1;
   if (!obj)
     {
       fprintf (stderr, "object is NULL\n");
-      return;
+      return 0;
     }
 
   switch (obj->type)
@@ -725,39 +728,42 @@ output_object (Dwg_Object *obj)
     case DWG_TYPE_VIEWPORT:
       break;
     default:
+      num = 0;
       if (obj->supertype == DWG_SUPERTYPE_ENTITY)
         fprintf (stderr, "%s ignored\n", obj->name);
       // all other non-graphical objects are silently ignored
       break;
     }
+  return num;
 }
 
-static void
+static int
 output_BLOCK_HEADER (Dwg_Object_Ref *ref)
 {
   Dwg_Object *obj;
   Dwg_Object_BLOCK_HEADER *hdr;
   int is_g = 0;
+  int num = 0;
 
   if (!ref) // silently ignore empty pspaces
-    return;
+    return 0;
   if (!ref->obj)
-    return;
+    return 0;
   obj = ref->obj;
   if (obj->type != DWG_TYPE_BLOCK_HEADER)
     {
       fprintf (stderr, "Argument not a BLOCK_HEADER reference\n");
-      return;
+      return 0;
     }
   if (!obj->tio.object)
     { // TODO could be an assert also
       fprintf (stderr, "Found null obj->tio.object\n");
-      return;
+      return 0;
     }
   if (!obj->tio.object->tio.BLOCK_HEADER)
     { // TODO could be an assert also
       fprintf (stderr, "Found null obj->tio.object->tio.BLOCK_HEADER\n");
-      return;
+      return 0;
     }
 
   hdr = obj->tio.object->tio.BLOCK_HEADER;
@@ -795,18 +801,20 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
   obj = get_first_owned_entity (ref->obj);
   while (obj)
     {
-      output_object (obj);
+      num += output_object (obj);
       obj = get_next_owned_entity (ref->obj, obj);
     }
 
   if (is_g)
     printf ("\t</g>\n");
+  return num;
 }
 
 static void
 output_SVG (Dwg_Data *dwg)
 {
   BITCODE_BS i;
+  int num = 0;
   Dwg_Object *obj;
   Dwg_Object_Ref *ref;
   Dwg_Object_BLOCK_CONTROL *block_control;
@@ -833,7 +841,7 @@ output_SVG (Dwg_Data *dwg)
   // optional, for xmllint
   // <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   //   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-  // But we use jing with relaxng, which is better. Just LaTeXML ships a broken rng
+  // But we use jing with relaxng, which is better. Just LaTeXML shipped a broken rng
   printf ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
           "<svg\n"
           "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
@@ -844,9 +852,9 @@ output_SVG (Dwg_Data *dwg)
           "   viewBox=\"%f %f %f %f\">\n",
           model_xmin, model_ymin, page_width, page_height);
 
-  if ((ref = dwg_model_space_ref (dwg)))
-    output_BLOCK_HEADER (ref);
-  if ((ref = dwg_paper_space_ref (dwg)))
+  if (!mspace && (ref = dwg_paper_space_ref (dwg)))
+    num = output_BLOCK_HEADER (ref); // how many paper-space entities we did print
+  if (!num && (ref = dwg_model_space_ref (dwg)))
     output_BLOCK_HEADER (ref);
   printf ("\t<defs>\n");
   for (i = 0; i < dwg->block_control.num_entries; i++)
@@ -869,6 +877,7 @@ main (int argc, char *argv[])
   int option_index = 0;
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
+          { "mspace", 0, 0, 0 },
           { "force-free", 0, 0, 0 },
           { "help", 0, 0, 0 },
           { "version", 0, 0, 0 },
@@ -880,10 +889,10 @@ main (int argc, char *argv[])
 
   while
 #ifdef HAVE_GETOPT_LONG
-      ((c = getopt_long (argc, argv, ":v::h", long_options, &option_index))
+      ((c = getopt_long (argc, argv, ":v:m::h", long_options, &option_index))
        != -1)
 #else
-      ((c = getopt (argc, argv, ":v::hi")) != -1)
+      ((c = getopt (argc, argv, ":v:m::hi")) != -1)
 #endif
     {
       if (c == -1)
@@ -922,6 +931,8 @@ main (int argc, char *argv[])
             return help ();
           if (!strcmp (long_options[option_index].name, "force-free"))
             force_free = 1;
+          if (!strcmp (long_options[option_index].name, "mspace"))
+            mspace = 1;
           break;
 #else
         case 'i':

@@ -855,14 +855,21 @@ With @code{-i} replaces the DWG in-place. This only makes sense with an JQ expre
 
 @item @file{dwg2SVG}
 @cindex dwg2SVG
-Convert a DWG to a limited SVG. All paperspace and modelspace enties of type:
-TEXT, LINE, CIRCLE, ARC, POLYLINE_2D, LWPOLYLINE, INSERT.
+Convert a DWG to a limited SVG. All paperspace or modelspace enties of type:
+TEXT, LINE, CIRCLE, ARC, POLYLINE_2D, LWPOLYLINE, INSERT, ELLIPSE (unrotated),
+SOLID, 3DFACE, RAY, XLINE.
 
-Limitations: Many other graphical entities and properties are still missing.
+With @code{-m} or @code{--mspace} all paper-space entities are
+ignored, and only model-space is printed. The default is to print all
+paper-space entities. But if there are none, print all model-space
+entities instead.
+
+Limitations: Many other graphical entities and some properties are still missing.
 
 @item @file{dwg2ps}
 @cindex dwg2ps
-Convert a DWG to a very limited Postscript file. All paperspace and modelspace enties of type LINE.
+Convert a DWG to a very limited Postscript file. All paperspace and modelspace entities of type LINE,
+POLYLINE_2D, LWPOLYLINE, ARC and CIRCLE.
 
 This requires installation of pslib @uref{http://pslib.sourceforge.net/doc/pslib.html}.
 
