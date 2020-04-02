@@ -4856,36 +4856,48 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       BITCODE_RS flag = *flagp;
       *flagp = flag = pair->value.i;
       _o->flag = flag;
-      LOG_TRACE ("SPLINE.flag = %d [RS 70]\n", flag);
+      LOG_TRACE ("SPLINE.flag = %d [70]\n", flag);
       if (flag & 1)
         {
           _o->closed_b = 1;
-          LOG_TRACE ("SPLINE.closed_b = 1 [B 0] (1st bit)\n");
+          LOG_TRACE ("SPLINE.closed_b = 1 [B 0] (bit 0)\n");
         }
       if (flag & 2)
         {
           _o->periodic = 1;
-          LOG_TRACE ("SPLINE.periodic = 1 [B 0] (2nd bit)\n");
+          LOG_TRACE ("SPLINE.periodic = 1 [B 0] (bit 1)\n");
         }
       if (flag & 4)
         {
           _o->rational = 1;
-          LOG_TRACE ("SPLINE.rational = 1 [B 0] (3rd bit)\n");
+          LOG_TRACE ("SPLINE.rational = 1 [B 0] (bit 2)\n");
         }
-      if (flag & 8)
+      if (flag & 16)
         {
           _o->weighted = 1;
-          LOG_TRACE ("SPLINE.weighted = 1 [B 0] (4th bit)\n");
+          LOG_TRACE ("SPLINE.weighted = 1 [B 0] (bit 4)\n");
         }
+      /*
       if (flag & 1024)
         {
-          _o->scenario = 2; // bezier: planar, not rational (8+32)
-          LOG_TRACE ("SPLINE.scenario = 2 [B 0] (bezier)\n");
+          //_o->scenario = 1;
+          LOG_TRACE ("SPLINE.scenario = 2 [BL 0] (spline)\n");
         }
+      else
+        {
+          _o->scenario = 2; // bezier: planar, not rational (8+32)
+          LOG_TRACE ("SPLINE.scenario = 2 [BL 0] (bezier)\n");
+        }
+      */
       return 1; // found
     }
-  else if (pair->code == 72 && _o->scenario & 1)
+  else if (pair->code == 44)
     {
+      _o->scenario = 2;
+    }
+  else if (pair->code == 72)
+    {
+      _o->scenario = 1;
       _o->num_knots = pair->value.i;
       *jp = 0;
       _o->knots = xcalloc (_o->num_knots, sizeof (BITCODE_BD));
