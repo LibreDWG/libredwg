@@ -2212,10 +2212,10 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
                  const Dwg_Object *restrict mspace, int *restrict i)
 {
   int error = 0;
-  Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
   const Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
-  Dwg_Object *restrict endblk;
+  Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
+  Dwg_Object *restrict endblk = NULL;
   unsigned long int mspace_ref = mspace->handle.value;
 
   if (obj)
@@ -2232,7 +2232,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
         LOG_WARN ("BLOCK_HEADER %s block_entity[0] missing", _hdr->name);
     }
   // Skip all *Model_Space entities, esp. new ones: UNDERLAY, MULTILEADER, ...
-  // They are all under ENTITIES later.
+  // They are all under ENTITIES later. But WIPEOUT is here...
   // Note: the objects may vary (e.g. example_2000), but the index not
   if ((hdr == mspace) || (hdr->index == mspace->index))
     obj = NULL;
@@ -2242,8 +2242,9 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
     {
       if (obj->supertype == DWG_SUPERTYPE_ENTITY
           && obj->fixedtype != DWG_TYPE_ENDBLK
-          && obj->tio.entity->ownerhandle != NULL
-          && obj->tio.entity->ownerhandle->absolute_ref != mspace_ref)
+          && (obj->tio.entity->entmode != 2 ||
+              (obj->tio.entity->ownerhandle != NULL
+               && obj->tio.entity->ownerhandle->absolute_ref != mspace_ref)))
         error |= dwg_dxf_object (dat, obj, i);
       obj = get_next_owned_block_entity (hdr, obj); // until last_entity
     }

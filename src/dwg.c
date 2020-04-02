@@ -895,20 +895,27 @@ get_first_owned_entity (const Dwg_Object *hdr)
 
   if (R_13 <= version && version <= R_2000)
     {
-      /* Note: With r2000 the first_ and last_entity is totally unreliable.
+      /* With r2000 we rather follow the next_entity chain */
+#if 0
+      /* Note: With r2000 the first_ and last_entity may be unreliable.
        * The first can be before, e.g. right the next after BLOCK_HEADER, and
        * the last can be far behind the last or endblk. rather check the
-       * ownerhandle of all entities.
+       * ownerhandle of all entities then.
        */
-      Dwg_Object *obj = (Dwg_Object *)hdr;
-      unsigned long owner = hdr->handle.value;
-      while ((obj = dwg_next_object (obj)))
-        if (obj->supertype == DWG_SUPERTYPE_ENTITY
-            && obj->fixedtype != DWG_TYPE_BLOCK
-            && obj->tio.entity
-            && obj->tio.entity->ownerhandle
-            && owner == obj->tio.entity->ownerhandle->absolute_ref)
-          return obj;
+      if (_hdr->last_entity && _hdr->first_entity
+          && _hdr->last_entity->absolute_ref < _hdr->first_entity->absolute_ref)
+        {
+          Dwg_Object *obj = (Dwg_Object *)hdr;
+          unsigned long owner = hdr->handle.value;
+          while ((obj = dwg_next_object (obj)))
+            if (obj->supertype == DWG_SUPERTYPE_ENTITY
+                && obj->fixedtype != DWG_TYPE_BLOCK
+                && obj->tio.entity
+                && obj->tio.entity->ownerhandle
+                && owner == obj->tio.entity->ownerhandle->absolute_ref)
+              return obj;
+        }
+#endif
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
   else if (version >= R_2004)
@@ -1189,24 +1196,14 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
 
   if (R_13 <= version && version <= R_2000)
     {
-      /* Note: With r2000 the first_ and last_entity is totally unreliable.
-       * The first can be before, e.g. right the next after BLOCK_HEADER, and
-       * the last can be far behind the last or endblk. rather check the
-       * ownerhandle of all entities.
-       */
-      Dwg_Object *obj = (Dwg_Object *)current;
-      unsigned long owner = hdr->handle.value;
-      while ((obj = dwg_next_object (obj)))
-        if (obj->supertype == DWG_SUPERTYPE_ENTITY
-            && obj->tio.entity
-            && obj->tio.entity->ownerhandle
-            && owner == obj->tio.entity->ownerhandle->absolute_ref)
-          return obj;
-
+      /* With r2000 we rather follow the next_entity chain. It may jump around the linked list. */
       if (!_hdr->last_entity
-          || current->handle.value >= _hdr->last_entity->absolute_ref)
+          || current->handle.value == _hdr->last_entity->absolute_ref)
         return NULL;
-      return dwg_next_object (current);
+      if (current->tio.entity->next_entity && current->tio.entity->next_entity->absolute_ref)
+        return dwg_ref_object_silent (hdr->parent, current->tio.entity->next_entity);
+      else
+        return dwg_next_object (current);
     }
   if (version > R_2000)
     {
