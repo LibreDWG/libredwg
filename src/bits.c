@@ -26,6 +26,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <math.h>
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
 #  include <wchar.h>
 #endif
@@ -988,15 +989,9 @@ bit_read_MS (Bit_Chain *dat)
 void
 bit_write_MS (Bit_Chain *dat, BITCODE_MS value)
 {
+  bit_write_RS (dat, value);
   if (value > 0x7fff)
-    {
-      bit_write_RS (dat, value);
-      bit_write_RS (dat, value >> 15);
-    }
-  else
-    {
-      bit_write_RS (dat, value);
-    }
+    bit_write_RS (dat, value >> 15);
 }
 
 /** Read bit-extrusion.
@@ -1082,7 +1077,7 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
 {
   BITCODE_BB bits = 0;
 
-  if (value == default_value)
+  if (fabs (value - default_value) < 1e-12)
     bit_write_BB (dat, 0);
   else
     {

@@ -4053,7 +4053,7 @@ DWG_OBJECT (LAYOUT)
 
 DWG_OBJECT_END
 
-//pg.147
+//20.4.85 p.211
 DWG_ENTITY (LWPOLYLINE)
 
   SUBCLASS (AcDbPolyline)
@@ -4062,7 +4062,8 @@ DWG_ENTITY (LWPOLYLINE)
   VALUE_BS ((FIELD_VALUE (flag) & 128) + (FIELD_VALUE (flag) & 512 ? 1 : 0),
             70); //1 closed, 128 plinegen
 #else
-  FIELD_BS (flag, 70); //512 closed, 128 plinegen
+  FIELD_BS (flag, 70); // 512 closed, 128 plinegen, 4 constwidth, 8 elevation, 2 thickness
+                       // 1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 numwidths
 #endif
 
   if (FIELD_VALUE (flag) & 4)

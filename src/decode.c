@@ -5226,9 +5226,14 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   if (obj->size > dat->size)
     {
       LOG_TRACE ("\n");
-      LOG_ERROR ("Invalid object size. Would overflow");
+      LOG_WARN ("Invalid object size %u > %ld. Would overflow", obj->size,
+                 dat->size);
+#if 1
+      obj->size = dat->size;
+#else
       *dat = abs_dat;
       return DWG_ERR_VALUEOUTOFBOUNDS;
+#endif
     }
   dat->size = obj->size;
 
