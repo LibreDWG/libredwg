@@ -1979,8 +1979,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc (dat);
 
-  // TODO: calculate size from the fields. either <0x7fff or more.
-  // patch it afterwards and check old<>new size if enough space allocated.
+  // First write an aproximate size here.
+  // Then calculate size from the fields. Either <0x7fff or more.
+  // Patch it afterwards and check old<>new size if enough space allocated.
   bit_write_MS (dat, obj->size);
   obj->address = dat->byte;
   PRE (R_2010)
@@ -2326,9 +2327,23 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       bit_set_position (dat, address * 8);
       if (obj->size > 0x7fff && old_size < 0x7fff)
         {
-          // with overlarge sizes >0x7fff memmove dat by one
-          LOG_WARN ("Experimental overlarge size %u > 0x7fff @%lu", (unsigned)obj->size, dat->byte);
-          memmove (&dat->chain[dat->byte + 1], &dat->chain[dat->byte], obj->size);
+          // with overlarge sizes >0x7fff memmove dat right by 2, one more RS added.
+          LOG_INFO ("overlarge size %u > 0x7fff @%lu\n", (unsigned)obj->size, dat->byte);
+          memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte], obj->size);
+          obj->size += 2;
+          obj->bitsize += 16;
+          obj->bitsize_pos += 16;
+          pos += 16;
+        }
+      if (obj->size <= 0x7fff && old_size > 0x7fff)
+        {
+          // with old overlarge sizes >0x7fff memmove dat left by 2, one RS removed.
+          LOG_INFO ("was overlarge size %u < 0x7fff @%lu\n", (unsigned)old_size, dat->byte);
+          memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2], obj->size);
+          obj->size -= 2;
+          obj->bitsize -= 16;
+          obj->bitsize_pos -= 16;
+          pos -= 16;
         }
       bit_write_MS (dat, obj->size);
       LOG_TRACE ("-size: %u [MS] @%lu\n", obj->size, address);

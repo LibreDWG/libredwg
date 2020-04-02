@@ -962,21 +962,21 @@ BITCODE_MS
 bit_read_MS (Bit_Chain *dat)
 {
   int i, j;
-  BITCODE_RS word[2];
+  BITCODE_RS word[2] = {0, 0};
   BITCODE_MS result;
 
   result = 0;
-  for (i = 1, j = 0; i > -1; i--, j += 15)
+  for (i = 1, j = 0; i >= 0; i--, j += 15)
     {
       word[i] = bit_read_RS (dat);
       if (!(word[i] & 0x8000))
         {
-          result |= (((BITCODE_MS)word[i]) << j);
-          return (BITCODE_MS)result;
+          result |= ((BITCODE_MS)word[i] << j);
+          return result;
         }
       else
         word[i] &= 0x7fff;
-      result |= ((BITCODE_MS)word[i]) << j;
+      result |= ((BITCODE_MS)word[i] << j);
     }
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR ("bit_read_MS: error parsing modular short, i=%d,j=%d", i, j)
