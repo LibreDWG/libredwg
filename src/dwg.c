@@ -896,26 +896,6 @@ get_first_owned_entity (const Dwg_Object *hdr)
   if (R_13 <= version && version <= R_2000)
     {
       /* With r2000 we rather follow the next_entity chain */
-#if 0
-      /* Note: With r2000 the first_ and last_entity may be unreliable.
-       * The first can be before, e.g. right the next after BLOCK_HEADER, and
-       * the last can be far behind the last or endblk. rather check the
-       * ownerhandle of all entities then.
-       */
-      if (_hdr->last_entity && _hdr->first_entity
-          && _hdr->last_entity->absolute_ref < _hdr->first_entity->absolute_ref)
-        {
-          Dwg_Object *obj = (Dwg_Object *)hdr;
-          unsigned long owner = hdr->handle.value;
-          while ((obj = dwg_next_object (obj)))
-            if (obj->supertype == DWG_SUPERTYPE_ENTITY
-                && obj->fixedtype != DWG_TYPE_BLOCK
-                && obj->tio.entity
-                && obj->tio.entity->ownerhandle
-                && owner == obj->tio.entity->ownerhandle->absolute_ref)
-              return obj;
-        }
-#endif
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
   else if (version >= R_2004)
@@ -930,6 +910,35 @@ get_first_owned_entity (const Dwg_Object *hdr)
   // TODO: preR13 block table
   LOG_ERROR ("Unsupported version: %d\n", version);
   return NULL;
+}
+
+/** Returns the next entity or NULL.
+ */
+EXPORT Dwg_Object *
+dwg_next_entity (const Dwg_Object *restrict obj)
+{
+  Dwg_Object_Ref *restrict next;
+
+  if (obj->supertype != DWG_SUPERTYPE_ENTITY)
+    return NULL;
+  if (obj->parent->header.version < R_2004)
+    {
+      next = obj->tio.entity->next_entity;
+      if (next && next->absolute_ref)
+        return dwg_ref_object_silent (obj->parent, next);
+      else
+        goto next_obj;
+    }
+  else
+    {
+    next_obj:
+      obj = dwg_next_object (obj);
+      while (obj && obj->supertype != DWG_SUPERTYPE_ENTITY)
+        {
+          obj = dwg_next_object (obj);
+        }
+      return (Dwg_Object*)obj;
+    }
 }
 
 /** Returns the next entity owned by the block hdr, or NULL.
@@ -953,7 +962,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
       if (_hdr->last_entity == NULL
           || current->handle.value >= _hdr->last_entity->absolute_ref)
         return NULL;
-      obj = dwg_next_object (current);
+      obj = dwg_next_entity (current);
       while (obj
              && (obj->supertype != DWG_SUPERTYPE_ENTITY
                  || obj->type == DWG_TYPE_ATTDEF
@@ -964,7 +973,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
                  || obj->type == DWG_TYPE_VERTEX_PFACE
                  || obj->type == DWG_TYPE_VERTEX_PFACE_FACE))
         {
-          obj = dwg_next_object (obj);
+          obj = dwg_next_entity (obj);
           // this may happen with r2000 attribs
           if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY
               && obj->tio.entity != NULL
@@ -1153,7 +1162,7 @@ get_first_owned_block (const Dwg_Object *hdr)
 }
 
 /** Returns the next block object after current owned by the block hdr, or
- * NULL.
+ *  NULL.
  */
 EXPORT Dwg_Object *
 get_next_owned_block (const Dwg_Object *restrict hdr,
@@ -1200,10 +1209,7 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
       if (!_hdr->last_entity
           || current->handle.value == _hdr->last_entity->absolute_ref)
         return NULL;
-      if (current->tio.entity->next_entity && current->tio.entity->next_entity->absolute_ref)
-        return dwg_ref_object_silent (hdr->parent, current->tio.entity->next_entity);
-      else
-        return dwg_next_object (current);
+      return dwg_next_entity (current);
     }
   if (version > R_2000)
     {
