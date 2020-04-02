@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -41,6 +41,8 @@
 #  include <pcre2.h>
 #endif
 
+static const int verbose = 0;
+
 #include "dwg.h"
 #include "logging.h"
 #include "common.h"
@@ -67,6 +69,7 @@ int options
     = PCRE2_MULTILINE | PCRE2_NO_AUTO_CAPTURE | PCRE2_NO_DOTSTAR_ANCHOR;
 int opt_count = 0;
 int opt_text = 0;
+int opt_blocks = 0;
 int opt_tables = 0;
 int opt_filename = 1;
 short numdxf = 0;
@@ -134,9 +137,8 @@ help (void)
       "  -y, --type NAME           Search only NAME entities or objects.\n");
   printf ("  -d, --dxf NUM             Search only DXF group NUM fields.\n");
   printf ("  -t, --text                Search only in TEXT-like entities.\n");
-#if 0
-  printf("  -b, --tables              Search only in table names.\n");
-#endif
+  printf ("  -b, --blocks              Search also in all block definitions.\n");
+  printf("       --tables              Search only in table names.\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("      --help                Display this help and exit\n");
   printf ("      --version             Output version information and exit\n"
@@ -405,6 +407,27 @@ match_VIEWPORT (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_ENTITY (VIEWPORT, style_sheet, 1);
   return found;
 }
+static int
+match_LEADER (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  //MATCH_ENTITY (LEADER, text, 1);
+  return found;
+}
+static int
+match_MULTILEADER (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Entity_MULTILEADER *_obj = obj->tio.entity->tio.MULTILEADER;
+  if (_obj->ctx.has_content_txt)
+    {
+      MATCH_ENTITY (MULTILEADER, ctx.content.txt.default_text, 304);
+    }
+  // SUB_FIELD_T (blocklabels[rcount1],label_text, 302);
+  return found;
+}
 
 static int
 match_3DSOLID (const char *restrict filename, const Dwg_Object *restrict obj)
@@ -459,8 +482,12 @@ match_STYLE (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (STYLE, font_name, 3);
-  MATCH_OBJECT (STYLE, bigfont_name, 4);
+  MATCH_OBJECT (STYLE, name, 2);
+  if (!opt_tables)
+    {
+      MATCH_OBJECT (STYLE, font_name, 3);
+      MATCH_OBJECT (STYLE, bigfont_name, 4);
+    }
   return found;
 }
 
@@ -469,8 +496,52 @@ match_LTYPE (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
+  MATCH_OBJECT (LTYPE, name, 2);
   MATCH_OBJECT (LTYPE, description, 3);
-  MATCH_OBJECT (LTYPE, strings_area, 3);
+  if (!opt_tables)
+    {
+      MATCH_OBJECT (LTYPE, strings_area, 3);
+    }
+  return found;
+}
+static int
+match_LAYER (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (LAYER, name, 2);
+  return found;
+}
+static int
+match_VIEW (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (VIEW, name, 2);
+  return found;
+}
+static int
+match_VPORT (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (VPORT, name, 2);
+  return found;
+}
+static int
+match_UCS (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (UCS, name, 2);
+  return found;
+}
+static int
+match_VPORT_ENTITY_HEADER (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (VPORT_ENTITY_HEADER, name, 2);
   return found;
 }
 
@@ -479,13 +550,17 @@ match_DIMSTYLE (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (DIMSTYLE, DIMPOST, 3);
-  MATCH_OBJECT (DIMSTYLE, DIMAPOST, 4);
-  MATCH_OBJECT (DIMSTYLE, DIMBLK_T, 5);
-  MATCH_OBJECT (DIMSTYLE, DIMBLK1_T, 6);
-  MATCH_OBJECT (DIMSTYLE, DIMBLK2_T, 7);
-  MATCH_OBJECT (DIMSTYLE, DIMMZS, 0);
-  MATCH_OBJECT (DIMSTYLE, DIMALTMZS, 0);
+  MATCH_OBJECT (DIMSTYLE, name, 2);
+  if (!opt_tables)
+    {
+      MATCH_OBJECT (DIMSTYLE, DIMPOST, 3);
+      MATCH_OBJECT (DIMSTYLE, DIMAPOST, 4);
+      MATCH_OBJECT (DIMSTYLE, DIMBLK_T, 5);
+      MATCH_OBJECT (DIMSTYLE, DIMBLK1_T, 6);
+      MATCH_OBJECT (DIMSTYLE, DIMBLK2_T, 7);
+      MATCH_OBJECT (DIMSTYLE, DIMMZS, 0);
+      MATCH_OBJECT (DIMSTYLE, DIMALTMZS, 0);
+    }
   return found;
 }
 
@@ -528,6 +603,14 @@ match_HATCH (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_ENTITY (HATCH, gradient_name, 470);
   return found;
 }
+static int
+match_TOLERANCE (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (TOLERANCE, text_string, 1);
+  return found;
+}
 
 static int
 match_IMAGEDEF (const char *restrict filename, const Dwg_Object *restrict obj)
@@ -543,8 +626,7 @@ match_SCALE (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0, i;
-  const Dwg_Object_SCALE *_obj = obj->tio.object->tio.SCALE;
-
+  //const Dwg_Object_SCALE *_obj = obj->tio.object->tio.SCALE;
   MATCH_OBJECT (SCALE, name, 1);
   return found;
 }
@@ -557,7 +639,6 @@ match_LAYER_INDEX (const char *restrict filename,
   int found = 0;
   BITCODE_BL i;
   const Dwg_Object_LAYER_INDEX *_obj = obj->tio.object->tio.LAYER_INDEX;
-
   for (i = 0; i < _obj->num_entries; i++)
     {
       MATCH_OBJECT (LAYER_INDEX, entries[i].layername, 8);
@@ -686,7 +767,7 @@ match_GEODATA (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
+  //const Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
 
   MATCH_OBJECT (GEODATA, coord_system_def, 0);
   MATCH_OBJECT (GEODATA, geo_rss_tag, 302);
@@ -705,8 +786,7 @@ match_GEOPOSITIONMARKER (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  const Dwg_Entity_GEOPOSITIONMARKER *_obj
-      = obj->tio.entity->tio.GEOPOSITIONMARKER;
+  //const Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
 
   MATCH_ENTITY (GEOPOSITIONMARKER, text, 1);
   MATCH_ENTITY (GEOPOSITIONMARKER, notes, 3);
@@ -719,8 +799,7 @@ match_UNDERLAYDEFINITION (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  const Dwg_Object_UNDERLAYDEFINITION *_obj
-      = obj->tio.object->tio.UNDERLAYDEFINITION;
+  //const Dwg_Object_UNDERLAYDEFINITION *_obj = obj->tio.object->tio.UNDERLAYDEFINITION;
 
   MATCH_OBJECT (UNDERLAYDEFINITION, filename, 1);
   MATCH_OBJECT (UNDERLAYDEFINITION, name, 2);
@@ -733,19 +812,27 @@ match_VISUALSTYLE (const char *restrict filename,
 {
   char *text;
   int found = 0, i;
-  const Dwg_Object_VISUALSTYLE *_obj = obj->tio.object->tio.VISUALSTYLE;
-
+  //const Dwg_Object_VISUALSTYLE *_obj = obj->tio.object->tio.VISUALSTYLE;
   MATCH_OBJECT (VISUALSTYLE, description, 1);
   return found;
 }
 
 static int
+match_TABLESTYLE (const char *restrict filename,
+                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0, i;
+  //const Dwg_Object_TABLESTYLE *_obj = obj->tio.object->tio.TABLESTYLE;
+  MATCH_OBJECT (TABLESTYLE, name, 2);
+  return found;
+}
+static int
 match_LIGHT (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Entity_LIGHT *_obj = obj->tio.entity->tio.LIGHT;
-
+  //const Dwg_Entity_LIGHT *_obj = obj->tio.entity->tio.LIGHT;
   MATCH_ENTITY (LIGHT, name, 1);
   // MATCH_ENTITY (LIGHT, web_file, 1);
   return found;
@@ -756,8 +843,7 @@ match_SUNSTUDY (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Object_SUNSTUDY *_obj = obj->tio.object->tio.SUNSTUDY;
-
+  //const Dwg_Object_SUNSTUDY *_obj = obj->tio.object->tio.SUNSTUDY;
   MATCH_OBJECT (SUNSTUDY, setup_name, 1);
   MATCH_OBJECT (SUNSTUDY, description, 2);
   MATCH_OBJECT (SUNSTUDY, sheet_set_name, 3);
@@ -783,8 +869,7 @@ match_DBCOLOR (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Object_DBCOLOR *_obj = obj->tio.object->tio.DBCOLOR;
-
+  //const Dwg_Object_DBCOLOR *_obj = obj->tio.object->tio.DBCOLOR;
   MATCH_OBJECT (DBCOLOR, name, 430);
   MATCH_OBJECT (DBCOLOR, catalog, 430);
   return found;
@@ -795,8 +880,7 @@ match_MATERIAL (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Object_MATERIAL *_obj = obj->tio.object->tio.MATERIAL;
-
+  //const Dwg_Object_MATERIAL *_obj = obj->tio.object->tio.MATERIAL;
   MATCH_OBJECT (MATERIAL, name, 1);
   MATCH_OBJECT (MATERIAL, description, 2);
   MATCH_OBJECT (MATERIAL, diffusemap_filename, 3);
@@ -818,8 +902,7 @@ match_PLOTSETTINGS (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  const Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
-
+  //const Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
   MATCH_OBJECT (PLOTSETTINGS, page_setup_name, 1);
   MATCH_OBJECT (PLOTSETTINGS, printer_cfg_file, 2);
   MATCH_OBJECT (PLOTSETTINGS, paper_size, 4);
@@ -832,33 +915,192 @@ match_ASSOCACTION (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  const Dwg_Object_ASSOCACTION *_obj = obj->tio.object->tio.ASSOCACTION;
   MATCH_OBJECT (ASSOCACTION, body.evaluatorid, 0);
   MATCH_OBJECT (ASSOCACTION, body.expression, 0);
   return found;
 }
-
+static int
+match_DIMASSOC (const char *restrict filename,
+                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_DIMASSOC *_obj = obj->tio.object->tio.DIMASSOC;
+  for (BITCODE_BL i = 0; i < 4; i++)
+    {
+      if (_obj->ref[i].classname)
+        {
+          MATCH_OBJECT (DIMASSOC, ref[i].classname, 0);
+        }
+    }
+  return found;
+}
 static int
 match_ASSOCOSNAPPOINTREFACTIONPARAM (const char *restrict filename,
                                      const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *_obj
-      = obj->tio.object->tio.ASSOCOSNAPPOINTREFACTIONPARAM;
   MATCH_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM, name, 1);
   return found;
 }
-
+static int
+match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
+                                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCPLANESURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCPLANESURFACEACTIONBODY;
+  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
+    {
+      MATCH_OBJECT (ASSOCPLANESURFACEACTIONBODY, descriptions[i], 1);
+    }
+  return found;
+}
+static int
+match_ASSOCEXTRUDEDSURFACEACTIONBODY (const char *restrict filename,
+                                      const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCEXTRUDEDSURFACEACTIONBODY;
+  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
+    {
+      MATCH_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY, descriptions[i], 1);
+    }
+  return found;
+}
+static int
+match_ASSOCLOFTEDSURFACEACTIONBODY (const char *restrict filename,
+                                    const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCLOFTEDSURFACEACTIONBODY;
+  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
+    {
+      MATCH_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY, descriptions[i], 1);
+    }
+  return found;
+}
+static int
+match_ASSOCREVOLVEDSURFACEACTIONBODY (const char *restrict filename,
+                                      const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCREVOLVEDSURFACEACTIONBODY;
+  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
+    {
+      MATCH_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY, descriptions[i], 1);
+    }
+  return found;
+}
+static int
+match_ASSOCSWEPTSURFACEACTIONBODY (const char *restrict filename,
+                                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCSWEPTSURFACEACTIONBODY;
+  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
+    {
+      MATCH_OBJECT (ASSOCSWEPTSURFACEACTIONBODY, descriptions[i], 1);
+    }
+  return found;
+}
 static int
 match_NAVISWORKSMODELDEF (const char *restrict filename,
                           const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  const Dwg_Object_NAVISWORKSMODELDEF *_obj
-      = obj->tio.object->tio.NAVISWORKSMODELDEF;
   MATCH_OBJECT (NAVISWORKSMODELDEF, path, 1);
+  return found;
+}
+
+static int
+match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
+{
+  int found = 0;
+  char *text;
+
+  if (!dwg)
+    return 0;
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      const Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_OBJECT)
+        continue;
+      if (obj->type == DWG_TYPE_BLOCK_HEADER) // processed later, --tables finds BLOCK
+        continue;
+      if (numtype) // search for allowed --type and skip if not
+        {
+          int typeok = 0;
+          for (int j = 0; j < numtype; j++)
+            {
+              if (obj->dxfname && !strcmp (type[j], obj->dxfname))
+                {
+                  typeok = 1;
+                  break;
+                }
+            }
+          if (!typeok) // next obj
+            continue;
+        }
+
+#define ELSEMATCH(OBJECT)                                               \
+  else if (obj->fixedtype == DWG_TYPE_##OBJECT)                         \
+    found += match_##OBJECT (filename, obj);
+
+      if (obj->type == DWG_TYPE_LAYER)
+        found += match_LAYER (filename, obj);
+      ELSEMATCH (LTYPE)
+      ELSEMATCH (STYLE)
+      ELSEMATCH (VIEW)
+      ELSEMATCH (VPORT)
+      ELSEMATCH (DIMSTYLE)
+      ELSEMATCH (UCS)
+      ELSEMATCH (VPORT_ENTITY_HEADER)
+      if (opt_tables)
+        continue;
+
+      if (obj->fixedtype == DWG_TYPE_DICTIONARY
+          || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
+        found += match_DICTIONARY (filename, obj);
+      ELSEMATCH (GROUP)
+      ELSEMATCH (MLINESTYLE)
+      ELSEMATCH (DICTIONARYVAR)
+      ELSEMATCH (IMAGEDEF)
+      ELSEMATCH (LAYER_INDEX)
+      ELSEMATCH (LAYOUT)
+      ELSEMATCH (SCALE)
+      ELSEMATCH (FIELD)
+      ELSEMATCH (TABLECONTENT)
+      ELSEMATCH (GEODATA)
+      ELSEMATCH (UNDERLAYDEFINITION)
+      ELSEMATCH (VISUALSTYLE)
+      ELSEMATCH (TABLESTYLE)
+      ELSEMATCH (SUNSTUDY)
+      ELSEMATCH (LIGHTLIST)
+      ELSEMATCH (DBCOLOR)
+      ELSEMATCH (MATERIAL)
+      ELSEMATCH (PLOTSETTINGS)
+      ELSEMATCH (DIMASSOC)
+      ELSEMATCH (ASSOCACTION)
+      ELSEMATCH (ASSOCOSNAPPOINTREFACTIONPARAM)
+      ELSEMATCH (ASSOCPLANESURFACEACTIONBODY)
+      ELSEMATCH (ASSOCEXTRUDEDSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCLOFTEDSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCREVOLVEDSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCSWEPTSURFACEACTIONBODY)
+      ELSEMATCH (NAVISWORKSMODELDEF)
+    }
   return found;
 }
 
@@ -867,8 +1109,8 @@ match_BLOCK_HEADER (const char *restrict filename,
                     Dwg_Object_Ref *restrict ref)
 {
   int found = 0;
-  Dwg_Object *hdr;
-  Dwg_Object *obj;
+  const Dwg_Object *hdr;
+  const Dwg_Object *obj;
   char *text;
 
   if (!ref)
@@ -878,13 +1120,21 @@ match_BLOCK_HEADER (const char *restrict filename,
       || hdr->type != DWG_TYPE_BLOCK_HEADER)
     return 0;
 
+  MATCH_OBJECT (BLOCK_HEADER, name, 2);
+  if (opt_tables)
+    return found;
   MATCH_OBJECT (BLOCK_HEADER, xref_pname, 1);
   MATCH_OBJECT (BLOCK_HEADER, description, 4);
 
-  // fprintf(stderr, "HDR: %d, HANDLE: %X\n", hdr->address, hdr->handle.value);
+  if (verbose)
+    fprintf(stderr, "HDR: %d, HANDLE: %lX\n", hdr->index, hdr->handle.value);
   for (obj = get_first_owned_entity (hdr); obj;
-       obj = get_next_owned_entity (hdr, obj)) // no subentities
+       obj = get_next_owned_entity (hdr, obj)) // without subentities
     {
+      if (!obj)
+        break;
+      if (verbose)
+        fprintf(stderr, "%s [%d], HANDLE: %lX\n", obj->name, obj->index, obj->handle.value);
       if (numtype) // search for allowed --type and skip if not
         {
           int typeok = 0;
@@ -899,188 +1149,128 @@ match_BLOCK_HEADER (const char *restrict filename,
           if (!typeok) // next obj
             continue;
         }
-      if (!opt_tables)
-        { // opt_text:
-          if (obj->type == DWG_TYPE_TEXT)
-            found += match_TEXT (filename, obj);
-          /*else if (obj->type == DWG_TYPE_ATTRIB)
-            found += match_ATTRIB(filename, obj);*/
-          else if (obj->type == DWG_TYPE_ATTDEF)
-            found += match_ATTDEF (filename, obj);
-          else if (obj->type == DWG_TYPE_MTEXT)
-            found += match_MTEXT (filename, obj);
-          else if (obj->type == DWG_TYPE_INSERT)
-            {
-              const Dwg_Data *dwg = obj->parent;
-              Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
-              if (_obj->has_attribs)
-                {
-                  if (dwg->header.version >= R_13
-                      && dwg->header.version <= R_2000)
-                    {
-                      Dwg_Object *last_attrib = _obj->last_attrib->obj;
-                      Dwg_Object *o = _obj->first_attrib
-                                          ? _obj->first_attrib->obj
-                                          : NULL;
-                      while (o && o->type == DWG_TYPE_ATTRIB)
-                        {
-                          found += match_ATTRIB (filename, o);
-                          o = dwg_next_object (o);
-                          if (o == last_attrib)
-                            break;
-                        }
-                    }
-                  else if (dwg->header.version >= R_2004)
-                    {
-                      Dwg_Object *o;
-                      for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
-                        {
-                          o = _obj->attrib_handles[j]
-                                  ? _obj->attrib_handles[j]->obj
-                                  : NULL;
-                          if (o && o->type == DWG_TYPE_ATTRIB)
-                            found += match_ATTRIB (filename, o);
-                        }
-                    }
-                }
-            }
-          else if (obj->type == DWG_TYPE_MINSERT)
-            {
-              const Dwg_Data *dwg = obj->parent;
-              Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
-              if (_obj->has_attribs)
-                {
-                  if (dwg->header.version >= R_13
-                      && dwg->header.version <= R_2000)
-                    {
-                      Dwg_Object *last_attrib = _obj->last_attrib->obj;
-                      Dwg_Object *o = _obj->first_attrib
-                                          ? _obj->first_attrib->obj
-                                          : NULL;
-                      while (o && o->type == DWG_TYPE_ATTRIB)
-                        {
-                          found += match_ATTRIB (filename, o);
-                          o = dwg_next_object (o);
-                          if (o == last_attrib)
-                            break;
-                        }
-                    }
-                  else if (dwg->header.version >= R_2004)
-                    {
-                      Dwg_Object *o;
-                      for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
-                        {
-                          o = _obj->attrib_handles[j]
-                                  ? _obj->attrib_handles[j]->obj
-                                  : NULL;
-                          if (o && o->type == DWG_TYPE_ATTRIB)
-                            found += match_ATTRIB (filename, o);
-                        }
-                    }
-                }
-            }
-          if (!opt_text)
-            {
-              if (obj->type == DWG_TYPE_BLOCK)
-                found += match_BLOCK (filename, obj);
-              else if (obj->type == DWG_TYPE_DIMENSION_ORDINATE
-                       || obj->type == DWG_TYPE_DIMENSION_LINEAR
-                       || obj->type == DWG_TYPE_DIMENSION_ALIGNED
-                       || obj->type == DWG_TYPE_DIMENSION_ANG3PT
-                       || obj->type == DWG_TYPE_DIMENSION_ANG2LN
-                       || obj->type == DWG_TYPE_DIMENSION_RADIUS
-                       || obj->type == DWG_TYPE_DIMENSION_DIAMETER)
-                found += match_DIMENSION (filename, obj);
-              else if (obj->type == DWG_TYPE_VIEWPORT)
-                found += match_VIEWPORT (filename, obj);
-              else if (obj->type == DWG_TYPE__3DSOLID
-                       || obj->type == DWG_TYPE_BODY
-                       || obj->type == DWG_TYPE_REGION)
-                found += match_3DSOLID (filename, obj);
-              // tables??
-              else if (obj->type == DWG_TYPE_STYLE)
-                found += match_STYLE (filename, obj);
-              else if (obj->type == DWG_TYPE_LTYPE)
-                found += match_LTYPE (filename, obj);
-              else if (obj->type == DWG_TYPE_DIMSTYLE)
-                found += match_DIMSTYLE (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_DICTIONARY
-                       || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
-                found += match_DICTIONARY (filename, obj);
 
-              else if (obj->fixedtype == DWG_TYPE_GROUP)
-                found += match_GROUP (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
-                found += match_MLINESTYLE (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_DICTIONARYVAR)
-                found += match_DICTIONARYVAR (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_HATCH)
-                found += match_HATCH (filename, obj);
-              else if (obj->type == DWG_TYPE_IMAGEDEF)
-                found += match_IMAGEDEF (filename, obj);
-              else if (obj->type == DWG_TYPE_LAYER_INDEX)
-                found += match_LAYER_INDEX (filename, obj);
-              else if (obj->type == DWG_TYPE_LAYOUT)
-                found += match_LAYOUT (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_SCALE)
-                found += match_SCALE (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_FIELD)
-                found += match_FIELD (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_TABLE)
-                found += match_TABLE (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_TABLECONTENT)
-                found += match_TABLECONTENT (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_GEODATA)
-                found += match_GEODATA (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_GEOPOSITIONMARKER)
-                found += match_GEOPOSITIONMARKER (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_UNDERLAYDEFINITION)
-                found += match_UNDERLAYDEFINITION (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_VISUALSTYLE)
-                found += match_VISUALSTYLE (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_LIGHT)
-                found += match_LIGHT (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_SUNSTUDY)
-                found += match_SUNSTUDY (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
-                found += match_LIGHTLIST (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_DBCOLOR)
-                found += match_DBCOLOR (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_MATERIAL)
-                found += match_MATERIAL (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
-                found += match_PLOTSETTINGS (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_ASSOCACTION)
-                found += match_ASSOCACTION (filename, obj);
-              else if (obj->fixedtype
-                       == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
-                found += match_ASSOCOSNAPPOINTREFACTIONPARAM (filename, obj);
-              else if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
-                found += match_NAVISWORKSMODELDEF (filename, obj);
+      if (obj->type == DWG_TYPE_TEXT)
+        found += match_TEXT (filename, obj);
+#ifdef WITH_SUBENTS
+      ELSEMATCH (ATTRIB)
+#endif
+      ELSEMATCH (ATTDEF)
+      ELSEMATCH (MTEXT)
+      else if (obj->type == DWG_TYPE_INSERT)
+        {
+#ifndef WITH_SUBENTS
+          const Dwg_Data *dwg = obj->parent;
+          Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+          if (_obj->has_attribs)
+            {
+              if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
+                {
+                  Dwg_Object *last_attrib = _obj->last_attrib->obj;
+                  Dwg_Object *o
+                      = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+                  while (o && o->type == DWG_TYPE_ATTRIB)
+                    {
+                      found += match_ATTRIB (filename, o);
+                      o = dwg_next_entity (o);
+                      if (o == last_attrib)
+                        break;
+                    }
+                }
+              else if (dwg->header.version >= R_2004)
+                {
+                  Dwg_Object *o;
+                  for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
+                    {
+                      o = _obj->attrib_handles[j]
+                              ? _obj->attrib_handles[j]->obj
+                              : NULL;
+                      if (o && o->type == DWG_TYPE_ATTRIB)
+                        found += match_ATTRIB (filename, o);
+                    }
+                }
             }
+#endif
+        }
+      else if (obj->type == DWG_TYPE_MINSERT)
+        {
+#ifndef WITH_SUBENTS
+          const Dwg_Data *dwg = obj->parent;
+          Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+          if (_obj->has_attribs)
+            {
+              if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
+                {
+                  Dwg_Object *last_attrib = _obj->last_attrib->obj;
+                  Dwg_Object *o
+                      = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+                  while (o && o->type == DWG_TYPE_ATTRIB)
+                    {
+                      found += match_ATTRIB (filename, o);
+                      o = dwg_next_entity (o);
+                      if (o == last_attrib)
+                        break;
+                    }
+                }
+              else if (dwg->header.version >= R_2004)
+                {
+                  Dwg_Object *o;
+                  for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
+                    {
+                      o = _obj->attrib_handles[j]
+                              ? _obj->attrib_handles[j]->obj
+                              : NULL;
+                      if (o && o->type == DWG_TYPE_ATTRIB)
+                        found += match_ATTRIB (filename, o);
+                    }
+                }
+            }
+#endif
         }
       if (!opt_text)
         {
-          if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+          if (obj->type == DWG_TYPE_DIMENSION_ORDINATE
+              || obj->type == DWG_TYPE_DIMENSION_LINEAR
+              || obj->type == DWG_TYPE_DIMENSION_ALIGNED
+              || obj->type == DWG_TYPE_DIMENSION_ANG3PT
+              || obj->type == DWG_TYPE_DIMENSION_ANG2LN
+              || obj->type == DWG_TYPE_DIMENSION_RADIUS
+              || obj->type == DWG_TYPE_DIMENSION_DIAMETER)
+            found += match_DIMENSION (filename, obj);
+          ELSEMATCH (VIEWPORT)
+          else if (obj->type == DWG_TYPE__3DSOLID || obj->type == DWG_TYPE_BODY
+                   || obj->type == DWG_TYPE_REGION)
+            found += match_3DSOLID (filename, obj);
+
+          ELSEMATCH (BLOCK)
+          ELSEMATCH (HATCH)
+          ELSEMATCH (TOLERANCE)
+          ELSEMATCH (TABLE)
+          ELSEMATCH (GEOPOSITIONMARKER)
+          ELSEMATCH (LEADER)
+          ELSEMATCH (MULTILEADER)
+          ELSEMATCH (LIGHT)
+        }
+
+      if (!opt_text)
+        {
+          // common entity names
+          MATCH_TABLE (ENTITY, layer, LAYER, 8);
+          MATCH_TABLE (ENTITY, ltype, LTYPE, 8);
+          if (obj->parent->header.version >= R_2000)
             {
-              // common entity names
-              MATCH_TABLE (ENTITY, layer, LAYER, 8);
-              MATCH_TABLE (ENTITY, ltype, LTYPE, 8);
-              if (obj->parent->header.version >= R_2000)
-                {
-                  MATCH_TABLE (ENTITY, plotstyle, PLOTSTYLE, 8);
-                }
-              if (obj->parent->header.version >= R_2007)
-                {
-                  MATCH_TABLE (ENTITY, material, MATERIAL, 8);
-                  MATCH_TABLE (ENTITY, shadow, DICTIONARY, 8);
-                }
-              if (obj->parent->header.version >= R_2010)
-                {
-                  MATCH_TABLE (ENTITY, full_visualstyle, VISUALSTYLE, 8);
-                  MATCH_TABLE (ENTITY, face_visualstyle, VISUALSTYLE, 8);
-                  MATCH_TABLE (ENTITY, edge_visualstyle, VISUALSTYLE, 8);
-                }
+              MATCH_TABLE (ENTITY, plotstyle, PLOTSTYLE, 8);
+            }
+          if (obj->parent->header.version >= R_2007)
+            {
+              MATCH_TABLE (ENTITY, material, MATERIAL, 8);
+              MATCH_TABLE (ENTITY, shadow, DICTIONARY, 8);
+            }
+          if (obj->parent->header.version >= R_2010)
+            {
+              MATCH_TABLE (ENTITY, full_visualstyle, VISUALSTYLE, 8);
+              MATCH_TABLE (ENTITY, face_visualstyle, VISUALSTYLE, 8);
+              MATCH_TABLE (ENTITY, edge_visualstyle, VISUALSTYLE, 8);
             }
         }
     }
@@ -1113,7 +1303,8 @@ main (int argc, char *argv[])
           { "count", 0, 0, 'c' },     { "no-filename", 0, 0, 'h' },
           { "recursive", 0, 0, 'r' }, { "recursive", 0, 0, 'R' },
           { "type", 1, 0, 'y' },      { "dxf", 1, 0, 'd' },
-          { "text", 0, 0, 't' },      { "tables", 0, 0, 'b' },
+          { "text", 0, 0, 't' },      { "blocks", 0, 0, 'b' },
+          { "tables", 0, 0, 0 },
           { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
 #endif
@@ -1142,6 +1333,8 @@ main (int argc, char *argv[])
             return help ();
           if (!strcmp (long_options[option_index].name, "version"))
             return opt_version ();
+          if (!strcmp (long_options[option_index].name, "tables"))
+            opt_tables = 1;
           break;
 #else
         case 'v':
@@ -1169,7 +1362,7 @@ main (int argc, char *argv[])
           opt_text = 1;
           break;
         case 'b':
-          opt_tables = 1;
+          opt_blocks = 1;
           break;
         case 'y':
           if (numtype >= 10)
@@ -1252,8 +1445,6 @@ main (int argc, char *argv[])
   // for all filenames...
   for (j = i + 1; j < argc; j++)
     {
-      long k;
-
       filename = argv[j];
       memset (&dwg, 0, sizeof (Dwg_Data));
       dwg.opts = 0;
@@ -1265,12 +1456,19 @@ main (int argc, char *argv[])
           continue;
         }
 
-      count += match_BLOCK_HEADER (filename, dwg_model_space_ref (&dwg));
-      for (k = 0; k < dwg.block_control.num_entries; k++)
+      if (!opt_text)
+        count += match_OBJECTS (filename, &dwg);
+      if (!opt_tables)
+        count += match_BLOCK_HEADER (filename, dwg_model_space_ref (&dwg));
+      if (opt_blocks)
         {
-          count += match_BLOCK_HEADER (filename, dwg.block_control.entries[k]);
+          for (long k = 0; k < dwg.block_control.num_entries; k++)
+            {
+              count += match_BLOCK_HEADER (filename, dwg.block_control.entries[k]);
+            }
         }
-      count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
+      if (!opt_tables)
+        count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
 
       fflush (stdout);
       if (j < argc)

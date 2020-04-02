@@ -163,7 +163,7 @@ done
 case $PROGS in
   *dwggrep*)
     echo "@LTEXEC@ ./dwggrep -i -c tekst ${DATADIR}/example_*.dwg"
-    if test x"$(@LTEXEC@ ./dwggrep -i -c tekst "${DATADIR}"/example_*.dwg)" != x"24"; then
+    if test "$(@LTEXEC@ ./dwggrep -i -c tekst "${DATADIR}"/example_*.dwg)" != "24"; then
       i=$((i+1))
       echo "dwggrep failure $?"
     fi
