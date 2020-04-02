@@ -6442,28 +6442,36 @@ new_object (char *restrict name, char *restrict dxfname,
               _o->flag1 = (_o->flag1 & 1) ? _o->flag1 & 0x7F : _o->flag1 | 0x80;
               _o->flag1 = (_o->flag1 & 2) ? _o->flag1 | 0x20 : _o->flag1 & 0xDF;
               LOG_TRACE ("DIMENSION.flag1 => %d [RC]\n", _o->flag1);
+              // Skip this flag logic, it is unreliable. Detecting subclasses is far better.
               switch (_o->flag & 31)
                 {
                 case 0: // rotated, horizontal or vertical
-                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_LINEAR);
+                  LOG_TRACE ("Looks like %s\n", "DIMENSION_LINEAR");
+                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_LINEAR);
                   break;
                 case 1:
-                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ALIGNED);
+                  LOG_TRACE ("Looks like %s\n", "DIMENSION_ALIGNED");
+                  //UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ALIGNED);
                   break;
                 case 2: // already?
-                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG2LN);
+                  LOG_TRACE ("Looks like %s\n", "DIMENSION_ANG2LN");
+                  //UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG2LN);
                   break;
                 case 3:
-                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_DIAMETER);
+                  LOG_TRACE ("Looks like %s\n", "DIMENSION_DIAMETER");
+                  //UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_DIAMETER);
                   break;
                 case 4:
-                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_RADIUS);
+                  LOG_TRACE ("Looks like %s\n", "DIMENSION_RADIUS");
+                  //UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_RADIUS);
                   break;
                 case 5:
-                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT);
+                  LOG_TRACE ("Looks like %s\n", "DIMENSION_ANG3PT");
+                  //UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT);
                   break;
                 case 6:
-                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ORDINATE);
+                  LOG_TRACE ("Looks like DIMENSION_LINEAR\n");
+                  //UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ORDINATE);
                   break;
                 default:
                   LOG_ERROR ("Invalid DIMENSION.flag %d", _o->flag & 31);

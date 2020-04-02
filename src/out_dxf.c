@@ -19,8 +19,8 @@
 TODO:
 * down-conversions from unsupported entities on older DXF versions.
   Since r13:
-    Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE,
-BLOCK_RECORD. Add CLASSES for those.
+  Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE,
+            BLOCK_RECORD. Add CLASSES for those.
 */
 
 #include "config.h"
