@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2020 Free Software Foundation, Inc.                   */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -73,8 +73,7 @@ help (void)
 #else
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -O fmt      fmt: DXF, DXFB, JSON, GeoJSON\n");
-  printf (
-      "              Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
+  printf ("              Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf ("  -o outfile  also defines the output fmt. Default: stdout\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"

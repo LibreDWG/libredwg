@@ -3779,6 +3779,9 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   LOG_TRACE ("\n")
+  if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
+    postprocess_entity_linkedlist (dwg);
+
   free (tokens.tokens);
   return error;
 }

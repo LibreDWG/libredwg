@@ -5657,6 +5657,170 @@ in_postprocess_handles (Dwg_Object *restrict obj)
     }
 }
 
+// For 4 don't share this relative ref. it's private. Only the NULL HDL
+static Dwg_Object_Ref *
+dwg_add_handleref_force (Dwg_Data *restrict dwg, const BITCODE_RC code,
+                         const unsigned long absref,
+                         const Dwg_Object *restrict obj)
+{
+  Dwg_Object_Ref *ref;
+  if (code == 4)
+    {
+      if (absref == 0) // Only the NULL HDL is shared
+        return dwg_add_handleref (dwg, 4, 0, NULL);
+      else
+        ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+    }
+  else // share this
+    ref  = dwg_new_ref (dwg);
+  if (!ref)
+    {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  dwg_add_handle (&ref->handleref, code, absref, obj);
+  ref->absolute_ref = absref;
+  return ref;
+}
+
+/* Set prev_ and next_entity handles from all block headers.
+   Needed after decode or import, to <= r2000 */
+int
+postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
+{
+  int changes = 0;
+  if (dwg->header.version > R_2000 || dwg->header.from_version <= R_2000)
+    return 0;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  LOG_TRACE ("\npostprocess_entity_linkedlist:\n");
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+        {
+          Dwg_Object_BLOCK_HEADER *_obj = obj->tio.object->tio.BLOCK_HEADER;
+          if (!_obj)
+            continue;
+          LOG_TRACE ("BLOCK_HEADER %s: %u\n", _obj->name,
+                     (unsigned)_obj->num_owned);
+          if (!_obj->entities)
+            {
+              _obj->first_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+              _obj->last_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+            }
+          // link from first_entity to last_entity
+          for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
+            {
+              Dwg_Object_Ref *hdl = _obj->entities[j];
+              Dwg_Object *o = dwg_ref_object (dwg, hdl);
+              Dwg_Object_Entity *ent = o ? o->tio.entity : NULL;
+              Dwg_Object_Ref *prev = j > 0 ? _obj->entities[j - 1] : NULL;
+              Dwg_Object_Ref *next
+                  = j + 1 < _obj->num_owned ? _obj->entities[j + 1] : NULL;
+              unsigned long prev_ref = prev ? prev->absolute_ref : 0;
+              unsigned long next_ref = next ? next->absolute_ref : 0;
+
+              if (!o)
+                continue;
+              if (o->supertype != DWG_SUPERTYPE_ENTITY)
+                {
+                  LOG_ERROR ("Illegal BLOCK_HEADER %s.entities[%d] %s",
+                             _obj->name, j, obj->name);
+                  changes++;
+                  continue;
+                }
+              // only log changes
+              if (prev_ref == 0L && next_ref == 0L && !ent->nolinks)
+                {
+                  LOG_TRACE ("nolinks: 1\n");
+                  ent->nolinks = 1;
+                  changes++;
+                }
+              else if (prev_ref && next_ref && ent->nolinks)
+                {
+                  LOG_TRACE ("nolinks: 0\n");
+                  ent->nolinks = 0;
+                  changes++;
+                }
+              if (j == 0) // first: prev_entity must be NULL
+                {
+                  if (!_obj->first_entity)
+                    {
+                      LOG_TRACE ("first_entity: %lX\n", hdl->absolute_ref);
+                      _obj->first_entity = dwg_add_handleref_force (
+                          dwg, 4, hdl->absolute_ref, o);
+                    }
+                  else if (_obj->first_entity->absolute_ref
+                           != hdl->absolute_ref)
+                    {
+                      LOG_WARN ("Fixup wrong BLOCK_HEADER %s.first_entity "
+                                "from %lX to %lX",
+                                _obj->name, _obj->first_entity->absolute_ref,
+                                hdl->absolute_ref);
+                      changes++;
+                      _obj->first_entity = dwg_add_handleref_force (
+                          dwg, 4, hdl->absolute_ref, o);
+                    }
+                }
+              if (ent->prev_entity == NULL)
+                {
+                  LOG_TRACE ("prev_entity: %lX  ", prev_ref);
+                  ent->prev_entity
+                      = dwg_add_handleref_force (dwg, 4, prev_ref, o);
+                }
+              else if (ent->prev_entity->absolute_ref != prev_ref)
+                {
+                  LOG_WARN ("Fixup wrong BLOCK_HEADER "
+                            "%s.entities[%d].prev_entity from %lX to %lX",
+                            _obj->name, j, ent->prev_entity->absolute_ref,
+                            prev_ref);
+                  changes++;
+                  ent->prev_entity
+                      = dwg_add_handleref_force (dwg, 4, prev_ref, o);
+                }
+              if (ent->next_entity == NULL)
+                {
+                  LOG_TRACE ("next_entity: %lX\n", next_ref);
+                  ent->next_entity
+                      = dwg_add_handleref_force (dwg, 4, next_ref, o);
+                }
+              else if (ent->next_entity->absolute_ref != next_ref)
+                {
+                  LOG_WARN ("Fixup wrong BLOCK_HEADER "
+                            "%s.entities[%d].next_entity from %lX to %lX",
+                            _obj->name, j, ent->next_entity->absolute_ref,
+                            next_ref);
+                  changes++;
+                  ent->next_entity
+                      = dwg_add_handleref_force (dwg, 4, next_ref, o);
+                }
+              if (j == _obj->num_owned - 1) // last: next_entity must be NULL
+                {
+                  if (!_obj->last_entity)
+                    {
+                      LOG_TRACE ("last_entity: %lX\n", hdl->absolute_ref);
+                      _obj->last_entity = dwg_add_handleref_force (
+                          dwg, 4, hdl->absolute_ref, o);
+                    }
+                  else if (_obj->last_entity->absolute_ref
+                           != hdl->absolute_ref)
+                    {
+                      LOG_WARN ("Fixup wrong BLOCK_HEADER %s.last_entity from "
+                                "%lX to %lX",
+                                _obj->name, _obj->last_entity->absolute_ref,
+                                hdl->absolute_ref);
+                      changes++;
+                      _obj->last_entity = dwg_add_handleref_force (
+                          dwg, 4, hdl->absolute_ref, o);
+                    }
+                }
+            }
+        }
+    }
+  LOG_TRACE ("\n");
+  return changes;
+}
+
 /* For tables, entities and objects.
  */
 static Dxf_Pair *
@@ -8478,6 +8642,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   free_array_hdls (header_hdls);
   free_array_hdls (eed_hdls);
   free_array_hdls (obj_hdls);
+  if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
+    postprocess_entity_linkedlist (dwg);
   LOG_TRACE ("import from DXF\n");
   return dwg->num_objects ? 1 : 0;
 }

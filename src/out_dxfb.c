@@ -36,6 +36,9 @@ static unsigned int loglevel;
 static unsigned int cur_ver = 0;
 static char buf[4096];
 
+// imported
+int postprocess_entity_linkedlist (Dwg_Data *restrict dwg);
+
 // private
 static int dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
                                            const Dwg_Object *restrict obj);
@@ -1977,6 +1980,9 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
+  if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
+    postprocess_entity_linkedlist (dwg);
+
   fprintf (dat->fh, "AutoCAD Binary DXF\r\n%c%c", 0x1a, 0);
   VALUE_TV (PACKAGE_STRING, 999);
 

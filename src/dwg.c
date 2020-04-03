@@ -338,6 +338,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 #endif /* DISABLE_DXF */
 
 #ifdef USE_WRITE
+/** Encode the DWG struct into dat (in memory).
+  * Needs 2x DWG heap, dwg + dat.
+  */
 EXPORT int
 dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 {
@@ -356,7 +359,9 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   if (dwg->opts & DWG_OPTS_INJSON)
     dat.from_version = dat.version;
 
-  // Encode the DWG struct into dat (in memory). Needs 2x DWG heap, dwg + dat.
+  if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
+    postprocess_entity_linkedlist ((Dwg_Data *)dwg);
+
   dat.size = 0;
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
   if (error >= DWG_ERR_CRITICAL)
@@ -1545,6 +1550,8 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
   return 0;
 }
 
+
+
 // Returns an existing ref with the same ownership (hard/soft, owner/pointer)
 // or creates it. May return a freshly allocated ref via dwg_new_ref.
 EXPORT Dwg_Object_Ref *
@@ -1570,7 +1577,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
             return refi;
         }
     }
-  // else create a new ref
+  // else create a new global ref
   ref = dwg_new_ref (dwg);
   dwg_add_handle (&ref->handleref, code, absref, obj);
   ref->absolute_ref = absref;

@@ -61,8 +61,8 @@
   VERSIONS (R_13, R_2000)
     {
       if (!FIELD_VALUE (nolinks))
-        { //TODO: in R13, R14 these are optional. Look at page 53 in the spec
-          //      for condition.
+        { // TODO: in R13, R14 these are optional. Look at page 53 in the spec
+          //       for condition.
           FIELD_HANDLE (prev_entity, 4, 0);
           FIELD_HANDLE (next_entity, 4, 0);
         }

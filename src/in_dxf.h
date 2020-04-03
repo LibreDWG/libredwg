@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -95,6 +95,10 @@ int is_table_name (const char *restrict name);
 int is_textlike (Dwg_Object *restrict obj);
 void in_postprocess_handles (Dwg_Object *restrict obj);
 void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned, BITCODE_H *owned);
+/* Set prev_ and next_entity handles from all block headers.
+   Needed after decode or import, to <= r2000 */
+int postprocess_entity_linkedlist (Dwg_Data *restrict dwg);
+
 BITCODE_RC dxf_find_lweight (const int lw);
 
 // for sscanf with BD we need to use %lf not %g
