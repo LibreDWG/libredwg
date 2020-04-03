@@ -1222,23 +1222,27 @@ classes_section:
           //  ? dwg->object[dwg->num_objects - 1].handle.value : 0;
 
           oldpos = dat->byte;
-          // the offset from the previous handle. default: 1, unsigned
+          // The offset from the previous handle. default: 1, unsigned.
+          // Basically how many objects have been deleted here.
           handleoff = bit_read_UMC (dat);
-          // the offset from the previous address. default: obj->size, signed
+          // The offset from the previous address. default: obj->size, signed.
           offset = bit_read_MC (dat);
-          if (!handleoff || handleoff > max_handles - last_handle)
+
+          if ((handleoff == 0) || (handleoff > (max_handles - last_handle)))
             {
               BITCODE_MC prevsize = dwg->num_objects
-                ? dwg->object[dwg->num_objects - 1].size + 4 : 0L;
-              LOG_WARN ("Ignore invalid handleoff (@%lu)", oldpos);
+                ? dwg->object[dwg->num_objects - 1].size : 0L;
+              LOG_WARN ("handleoff %lu looks wrong, max_handles %u - last_handle %lu = %lu (@%lu)",
+                        handleoff, (unsigned)max_handles, last_handle, max_handles - last_handle,
+                        oldpos);
               if (offset == 1 ||
                   (offset > 0 && offset < prevsize && prevsize > 0) ||
                   (offset < 0 && labs((long)offset) < prevsize && prevsize > 0))
                 {
                   if (offset != prevsize)
-                    LOG_ERROR ("Invalid offset: %ld [MC]", offset);
-                  offset = prevsize;
-                  LOG_WARN ("Recover invalid offset to %ld", offset);
+                    LOG_WARN ("offset %ld looks wrong, should be prevsize %ld", offset, prevsize);
+                  // offset = prevsize;
+                  // LOG_WARN ("Recover invalid offset to %ld", offset);
                 }
             }
           last_offset += offset;
