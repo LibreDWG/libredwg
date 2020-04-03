@@ -2898,6 +2898,12 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         case VT_STRING:
           PRE (R_2007)
           {
+            if (rbuf->value.str.size && dat->from_version >= R_2007)
+              {
+                BITCODE_TV new = bit_embed_TU (rbuf->value.str.u.wdata);
+                free (rbuf->value.str.u.wdata);
+                rbuf->value.str.u.data = new;  // shares location with u.wdata
+              }
             if (dat->byte + 3 + rbuf->value.str.size > end)
               break;
             bit_write_RS (dat, rbuf->value.str.size);
@@ -2914,6 +2920,12 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             if (dat->byte + 2 + (2 * rbuf->value.str.size) > end
                 || rbuf->value.str.size < 0)
               break;
+            if (rbuf->value.str.size && dat->from_version < R_2007)
+              {
+                BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data);
+                free (rbuf->value.str.u.data);
+                rbuf->value.str.u.wdata = new; // shares location with u.data
+              }
             bit_write_RS (dat, rbuf->value.str.size);
             for (i = 0; i < rbuf->value.str.size; i++)
               bit_write_RS (dat, rbuf->value.str.u.wdata[i]);

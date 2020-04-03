@@ -4585,7 +4585,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case VT_STRING:
       if (!pair->value.s)
         goto invalid;
-      PRE (R_2007)
+      PRE (R_2007) // TODO: nice would be the proper target version. dat->version
       {
         Dwg_Data *dwg = obj->parent;
         rbuf->value.str.size = strlen (pair->value.s);
