@@ -1649,13 +1649,15 @@ DWG_ENTITY (SPLINE)
     FIELD_B (weighted, 0);
 
     DECODER {
-      FIELD_VALUE (flag) = 8 + //planar
-        FIELD_VALUE (closed_b) +
-        (FIELD_VALUE (periodic) << 1) +
-        (FIELD_VALUE (rational) << 2) +
-        (FIELD_VALUE (weighted) << 4) +
-        ((FIELD_VALUE (splineflags1) & ~5) << 7);
-      LOG_TRACE ("flag: %d [70]\n", FIELD_VALUE (flag));
+      // not 32
+      FIELD_VALUE (flag) = 8 +          /* planar */
+        FIELD_VALUE (closed_b) +        /* 1 */
+        (FIELD_VALUE (periodic) << 1) + /* 2 */
+        (FIELD_VALUE (rational) << 2) + /* 4 */
+        (FIELD_VALUE (weighted) << 4);  /* 16 */
+        // ignore method fit points and closed bits
+        /*((FIELD_VALUE (splineflags1) & ~5) << 7)*/
+      LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
     }
     FIELD_VECTOR (knots, BD, num_knots, 40);
     REPEAT (num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
@@ -1671,10 +1673,11 @@ DWG_ENTITY (SPLINE)
   }
   else { // bezier spline, scenario 2
     DECODER {
+      // flag 32 in DXF
       FIELD_VALUE (flag) = 8 + 32 + // planar, not rational
         // ignore method fit points and closed bits
         ((FIELD_VALUE (splineflags1) & ~5) << 7);
-      LOG_TRACE ("flag: %d [70]\n", FIELD_VALUE (flag));
+      LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
     }
     FIELD_BD (fit_tol, 44); // def: 0.0000001
     FIELD_3BD (beg_tan_vec, 12);

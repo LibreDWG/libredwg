@@ -3841,7 +3841,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       obj->eed[idx].raw = bit_read_TF (dat, size);
       LOG_TRACE ("EED[%u] raw: %d\n", idx, size);
       LOG_TRACE_TF (obj->eed[idx].raw, size);
-      LOG_TRACE ("\n");
+      //LOG_TRACE ("\n");
       dat->byte = sav_byte;
       LOG_POS
 
@@ -4205,8 +4205,8 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     LOG_WARN ("Skip eed")
   else
     error |= dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
-  LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)
-  LOG_TRACE ("\n")
+  LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
+  //LOG_TRACE ("\n")
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 

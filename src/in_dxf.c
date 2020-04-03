@@ -4843,6 +4843,8 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// only need to process conflicting SPLINE DXF codes here. the rest is done via dynapi.
+// TODO: also for HELIX (where SPLINE is a subclass), pass obj then.
 static int
 add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
             Dxf_Pair *restrict pair, int *restrict jp,
@@ -4860,44 +4862,38 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       if (flag & 1)
         {
           _o->closed_b = 1;
-          LOG_TRACE ("SPLINE.closed_b = 1 [B 0] (bit 0)\n");
+          LOG_TRACE ("=> SPLINE.closed_b = 1 [B 0] (bit 0)\n");
         }
       if (flag & 2)
         {
           _o->periodic = 1;
-          LOG_TRACE ("SPLINE.periodic = 1 [B 0] (bit 1)\n");
+          LOG_TRACE ("=> SPLINE.periodic = 1 [B 0] (bit 1)\n");
         }
       if (flag & 4)
         {
           _o->rational = 1;
-          LOG_TRACE ("SPLINE.rational = 1 [B 0] (bit 2)\n");
+          LOG_TRACE ("=> SPLINE.rational = 1 [B 0] (bit 2)\n");
         }
       if (flag & 16)
         {
           _o->weighted = 1;
-          LOG_TRACE ("SPLINE.weighted = 1 [B 0] (bit 4)\n");
+          LOG_TRACE ("=> SPLINE.weighted = 1 [B 0] (bit 4)\n");
         }
-      /*
-      if (flag & 1024)
-        {
-          //_o->scenario = 1;
-          LOG_TRACE ("SPLINE.scenario = 2 [BL 0] (spline)\n");
-        }
+      if (flag & 32)
+        _o->scenario = 2; // bezier: planar
       else
-        {
-          _o->scenario = 2; // bezier: planar, not rational (8+32)
-          LOG_TRACE ("SPLINE.scenario = 2 [BL 0] (bezier)\n");
-        }
-      */
+        _o->scenario = 1;
+      LOG_TRACE ("=> SPLINE.scenario = %d [BL 0]\n", _o->scenario);
       return 1; // found
     }
-  else if (pair->code == 44)
+  else if (pair->code == 71)
     {
-      _o->scenario = 2;
+      _o->degree = pair->value.i;
+      LOG_TRACE ("SPLINE.degree = %d [BL 71]\n", _o->degree);
+      return 1; // found
     }
-  else if (pair->code == 72)
+  else if (pair->code == 72 && _o->scenario & 1)
     {
-      _o->scenario = 1;
       _o->num_knots = pair->value.i;
       *jp = 0;
       _o->knots = xcalloc (_o->num_knots, sizeof (BITCODE_BD));

@@ -1,7 +1,7 @@
 #!/bin/bash
 # dwg -> dxf
 # dxf -> dwg2
-# teigha dwg2 -> dxf
+# teigha dwg2 -> dxf2
 d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"

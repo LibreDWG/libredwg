@@ -564,7 +564,7 @@ case $host_os in
   darwin*)  DSYMUTIL=dsymutil ;;
   mingw*)   DSYMUTIL=rem ;;
   windows*) DSYMUTIL=rem ;;
-  *) DSYMUTIL=: ;;
+  *) DSYMUTIL='#' ;;
 esac
 AC_SUBST([DSYMUTIL])
 
