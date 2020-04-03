@@ -4348,6 +4348,7 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
       return DWG_ERR_OUTOFMEM;
     }
   dwg->object_ref[dwg->num_object_refs++] = ref;
+  ref->handleref.is_global = 1;
   return 0;
 }
 

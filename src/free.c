@@ -93,10 +93,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 // But with INDXF skip the NULL HDL, it is global and shared there.
 // obj is the relative base object here and there.
 #define VALUE_HANDLE(ref, nam, _code, dxf)                                    \
-  if (ref                                                                     \
-      && (!(dat->opts & DWG_OPTS_IN)                                          \
-          && ref->handleref.size == 0 && ref->absolute_ref == 0 && !ref->obj) \
-      && !(ref->handleref.size || (obj && ref->handleref.code > 5)))          \
+  if (ref && !ref->handleref.is_global)                                       \
     {                                                                         \
       free (ref);                                                             \
       ref = NULL;                                                             \

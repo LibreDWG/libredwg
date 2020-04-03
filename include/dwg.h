@@ -528,6 +528,7 @@ typedef struct _dwg_handle
   BITCODE_RC code; /*!< OFFSETOBJHANDLE if > 6 */
   BITCODE_RC size;
   unsigned long value;
+  BITCODE_B is_global; // to be freed or not
 } Dwg_Handle;
 
 #define FORMAT_H "%u.%u.%lX"

@@ -5657,32 +5657,6 @@ in_postprocess_handles (Dwg_Object *restrict obj)
     }
 }
 
-// For 4 don't share this relative ref. it's private. Only the NULL HDL
-static Dwg_Object_Ref *
-dwg_add_handleref_force (Dwg_Data *restrict dwg, const BITCODE_RC code,
-                         const unsigned long absref,
-                         const Dwg_Object *restrict obj)
-{
-  Dwg_Object_Ref *ref;
-  if (code == 4)
-    {
-      if (absref == 0) // Only the NULL HDL is shared
-        return dwg_add_handleref (dwg, 4, 0, NULL);
-      else
-        ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
-    }
-  else // share this
-    ref  = dwg_new_ref (dwg);
-  if (!ref)
-    {
-      LOG_ERROR ("Out of memory");
-      return NULL;
-    }
-  dwg_add_handle (&ref->handleref, code, absref, obj);
-  ref->absolute_ref = absref;
-  return ref;
-}
-
 /* Set prev_ and next_entity handles from all block headers.
    Needed after decode or import, to <= r2000 */
 int
@@ -5747,8 +5721,8 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                   if (!_obj->first_entity)
                     {
                       LOG_TRACE ("first_entity: %lX\n", hdl->absolute_ref);
-                      _obj->first_entity = dwg_add_handleref_force (
-                          dwg, 4, hdl->absolute_ref, o);
+                      _obj->first_entity
+                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                   else if (_obj->first_entity->absolute_ref
                            != hdl->absolute_ref)
@@ -5758,15 +5732,14 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                                 _obj->name, _obj->first_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
-                      _obj->first_entity = dwg_add_handleref_force (
-                          dwg, 4, hdl->absolute_ref, o);
+                      _obj->first_entity
+                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                 }
               if (ent->prev_entity == NULL)
                 {
                   LOG_TRACE ("prev_entity: %lX  ", prev_ref);
-                  ent->prev_entity
-                      = dwg_add_handleref_force (dwg, 4, prev_ref, o);
+                  ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
                 }
               else if (ent->prev_entity->absolute_ref != prev_ref)
                 {
@@ -5775,14 +5748,12 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                             _obj->name, j, ent->prev_entity->absolute_ref,
                             prev_ref);
                   changes++;
-                  ent->prev_entity
-                      = dwg_add_handleref_force (dwg, 4, prev_ref, o);
+                  ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
                 }
               if (ent->next_entity == NULL)
                 {
                   LOG_TRACE ("next_entity: %lX\n", next_ref);
-                  ent->next_entity
-                      = dwg_add_handleref_force (dwg, 4, next_ref, o);
+                  ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
                 }
               else if (ent->next_entity->absolute_ref != next_ref)
                 {
@@ -5791,16 +5762,15 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                             _obj->name, j, ent->next_entity->absolute_ref,
                             next_ref);
                   changes++;
-                  ent->next_entity
-                      = dwg_add_handleref_force (dwg, 4, next_ref, o);
+                  ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
                 }
               if (j == _obj->num_owned - 1) // last: next_entity must be NULL
                 {
                   if (!_obj->last_entity)
                     {
                       LOG_TRACE ("last_entity: %lX\n", hdl->absolute_ref);
-                      _obj->last_entity = dwg_add_handleref_force (
-                          dwg, 4, hdl->absolute_ref, o);
+                      _obj->last_entity
+                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                   else if (_obj->last_entity->absolute_ref
                            != hdl->absolute_ref)
@@ -5810,8 +5780,8 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                                 _obj->name, _obj->last_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
-                      _obj->last_entity = dwg_add_handleref_force (
-                          dwg, 4, hdl->absolute_ref, o);
+                      _obj->last_entity
+                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                 }
             }
