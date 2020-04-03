@@ -34,29 +34,27 @@ check_roundtrip() {
     then
         json="$(basename "$dwg" .dwg).json"
         tgt="$(basename "$dwg")"
-        log1="$(basename "$dwg" .dwg).log1"
-        log2="$(basename "$dwg" .dwg).log2"
+        log1="$(basename "$dwg" .dwg).log.orig"
+        log2="$(basename "$dwg" .dwg).log"
         @LTEXEC@ ./dwgread -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null
         @LTEXEC@ ./dwgwrite -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null
         @LTEXEC@ ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
-        expect="$(grep -E -c '^Add entity' "$log1")"
-        got="$(grep -E -c '^Add entity' "$log2")"
+        expect1="$(grep -E -c '^Add entity' "$log1")"
+        got1="$(grep -E -c '^Add entity' "$log2")"
+        expect2="$(grep -E -c '^Add object' "$log1")"
+        got2="$(grep -E -c '^Add object' "$log2")"
         rm "./$json" "./$tgt" 2>/dev/null
-        if [ "$got" = "$expect" ]
+        if [ "$got1" = "$expect1" ] && [ "$got2" = "$expect2" ]
         then
             echo "$json roundtrip ok"
             rm "./$log1" "./$log2" 2>/dev/null
-        elif [ "$got" = "0" ]
-        then
-            echo "$json" "roundtrip fail: $expect vs $got entities"
-            i=$((i+1))
-            echo "expect=$expect" >"$log"
-            echo "got=$got" >>"$log"
         else
-            echo "$json" "roundtrip fail: $expect vs $got entities"
+            echo "$json" "roundtrip fail: $expect1 vs $got1 entities, $expect2 vs $got2 objects"
             i=$((i+1))
-            echo "expect=$expect" >"$log"
-            echo "got=$got" >>"$log"
+            echo "expect entities: $expect1" >"$log"
+            echo "got    entities: $got1"    >>"$log"
+            echo "expect objects:  $expect2" >>"$log"
+            echo "got    objects:  $got2"    >>"$log"
         fi
     fi
 }

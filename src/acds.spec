@@ -282,7 +282,9 @@
       case 6: // blob01
         //break;
       default:
+#ifndef IS_FREE
         LOG_WARN ("AcDs %s segment yet unhandled", _obj->segments[rcount1].name)
+#endif
         break;
       }
   END_REPEAT_BLOCK

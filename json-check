@@ -52,9 +52,29 @@ if [ -f "$b.dwg" ]; then
     fi
 
     ./log -v3 "$b.dwg"
-    # bash only
-    #diff -bu <(grep -B1 'Add entity ' $b.log.orig) <(grep -B1 'Add entity ' $b.log)
-    echo "diff -bu $b.log.orig $b.log"
-    diff -bu "$b.log.orig" "$b.log"
+    log1="$b.log.orig"
+    log2="$b.log"
+    echo diff -bu "log1" "$log2"
+    diff -bu "$log1" "$log2"
+
     test -f "$b.json.err"  && cat "$b.json.err"
+
+    if [ -f "$log1" ] && [ -f "$log2" ]; then
+        grep -E '^Add entity' "$log1" >"$log1.tmp"
+        grep -E '^Add entity' "$log2" >"$log2.tmp"
+        if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
+            echo entities roundtrip ok
+            rm "$log1.tmp" "$log2.tmp" 2>/dev/null
+        else
+            diff -bu0 "$log1.tmp" "$log2.tmp" | grep -v '^@@'
+        fi
+        grep -E '^Add object' "$log1" >"$log1.tmp"
+        grep -E '^Add object' "$log2" >"$log2.tmp"
+        if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
+            echo objects roundtrip ok
+            rm "$log1.tmp" "$log2.tmp" 2>/dev/null
+        else
+            diff -bu0 "$log1.tmp" "$log2.tmp" | grep -v '^@@'
+        fi
+    fi
 fi

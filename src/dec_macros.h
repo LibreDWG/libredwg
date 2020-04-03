@@ -1275,7 +1275,7 @@
   {                                                                           \
     Dwg_Object_Entity *_ent;                                                  \
     Dwg_Entity_##token *_obj;                                                 \
-    LOG_INFO ("Add entity " #token " ")                                       \
+    LOG_INFO ("Add entity " #token " [%d] ", obj->index)                      \
     obj->parent->num_entities++;                                              \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
     if (!(int)obj->fixedtype)                                                 \
@@ -1374,7 +1374,7 @@
   EXPORT int dwg_add_##token (Dwg_Object *obj)                                \
   {                                                                           \
     Dwg_Object_##token *_obj;                                                 \
-    LOG_INFO ("Add object " #token " ")                                       \
+    LOG_INFO ("Add object " #token " [%d] ", obj->index)                      \
     obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
     obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                 \
     if (!obj->tio.object)                                                     \
@@ -1438,7 +1438,7 @@
     int error = 0;                                                            \
     Dwg_Object_##token *_obj = NULL;                                          \
     Dwg_Data *dwg = obj->parent;                                              \
-    LOG_INFO ("Decode object " #token "\n")                                   \
+    LOG_INFO ("Decode object " #token "\n")                                 \
     if (strNE (#token, "TABLECONTENT") || obj->fixedtype != DWG_TYPE_TABLE)   \
       {                                                                       \
         _obj = obj->tio.object->tio.token;                                    \
