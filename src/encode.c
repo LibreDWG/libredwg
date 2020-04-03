@@ -440,7 +440,9 @@ static bool env_var_checked_p;
       OVERFLOW_CHECK_LV (nam, _obj->size)                                     \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          PRE (R_2007)                                                        \
+          if (dat->version != dat->from_version)                              \
+            FIELD_##type (nam[vcount], dxf)                                   \
+          else if (dat->version < R_2007)                                     \
           {                                                                   \
             bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);                \
             LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]\n", (int)vcount,            \
