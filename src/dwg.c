@@ -1510,7 +1510,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
   int offset = obj ? (absref - (int)obj->handle.value) : 0;
   hdl->code = code;
   hdl->value = absref;
-  if (obj && !offset && absref) // only if same obj
+  if (obj && (code == 0 || !offset) && absref) // only if same obj
     {
       LOG_HANDLE ("object_map{%lX} = %u\n", absref, obj->index);
       assert (obj->parent);

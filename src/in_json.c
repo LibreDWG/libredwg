@@ -510,7 +510,7 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       size = json_long (dat, tokens);
       value = json_long (dat, tokens);
       absref = json_long (dat, tokens);
-      ref = dwg_add_handleref (dwg, code, absref, code >= 6 ? obj : NULL);
+      ref = dwg_add_handleref (dwg, code, absref, (!code || code >= 6) ? obj : NULL);
       if ((BITCODE_RC)size != ref->handleref.size || (unsigned long)value != ref->handleref.value)
         {
           // FIXME internal in_json problem only
@@ -524,7 +524,7 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   else
     {
       absref = json_long (dat, tokens);
-      ref = dwg_add_handleref (dwg, code, absref, code >= 6 ? obj : NULL);
+      ref = dwg_add_handleref (dwg, code, absref, (!code || code >= 6) ? obj : NULL);
     }
   if (i < 0)
     LOG_TRACE ("%s: " FORMAT_REF " [H]\n", name, ARGS_REF (ref))
