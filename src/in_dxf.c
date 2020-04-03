@@ -5663,8 +5663,10 @@ int
 postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
 {
   int changes = 0;
+  int is_uni = 0;
   if (dwg->header.version > R_2000 || dwg->header.from_version <= R_2000)
     return 0;
+  is_uni = dwg->header.version >= R_2007;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("\npostprocess_entity_linkedlist:\n");
   for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
@@ -5673,9 +5675,11 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
       if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_obj = obj->tio.object->tio.BLOCK_HEADER;
+          char *_objname;
           if (!_obj)
             continue;
-          LOG_TRACE ("BLOCK_HEADER %s: %u\n", _obj->name,
+          _objname = is_uni ? bit_convert_TU ((BITCODE_TU)_obj->name) : _obj->name;
+          LOG_TRACE ("BLOCK_HEADER %s: %u\n", _objname,
                      (unsigned)_obj->num_owned);
           if (!_obj->entities)
             {
@@ -5686,7 +5690,7 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
           for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
             {
               Dwg_Object_Ref *hdl = _obj->entities[j];
-              Dwg_Object *o = dwg_ref_object (dwg, hdl);
+              Dwg_Object *o = dwg_ref_object (dwg, hdl); // may fail!
               Dwg_Object_Entity *ent = o ? o->tio.entity : NULL;
               Dwg_Object_Ref *prev = j > 0 ? _obj->entities[j - 1] : NULL;
               Dwg_Object_Ref *next
@@ -5699,8 +5703,10 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
               if (o->supertype != DWG_SUPERTYPE_ENTITY)
                 {
                   LOG_ERROR ("Illegal BLOCK_HEADER %s.entities[%d] %s",
-                             _obj->name, j, obj->name);
+                             _objname, j, obj->name);
                   changes++;
+                  if (is_uni)
+                    free (_objname);
                   continue;
                 }
               // only log changes
@@ -5720,7 +5726,7 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                 {
                   if (!_obj->first_entity)
                     {
-                      LOG_TRACE ("first_entity: %lX\n", hdl->absolute_ref);
+                      LOG_TRACE ("first_entity: %4lX\n", hdl->absolute_ref);
                       _obj->first_entity
                           = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
@@ -5728,8 +5734,8 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                            != hdl->absolute_ref)
                     {
                       LOG_WARN ("Fixup wrong BLOCK_HEADER %s.first_entity "
-                                "from %lX to %lX",
-                                _obj->name, _obj->first_entity->absolute_ref,
+                                "from %4lX to %4lX",
+                                _objname, _obj->first_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
                       _obj->first_entity
@@ -5738,28 +5744,28 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                 }
               if (ent->prev_entity == NULL)
                 {
-                  LOG_TRACE ("prev_entity: %lX  ", prev_ref);
+                  LOG_TRACE (" %4lX: prev_entity %4lX, ", hdl->absolute_ref, prev_ref);
                   ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
                 }
               else if (ent->prev_entity->absolute_ref != prev_ref)
                 {
                   LOG_WARN ("Fixup wrong BLOCK_HEADER "
-                            "%s.entities[%d].prev_entity from %lX to %lX",
-                            _obj->name, j, ent->prev_entity->absolute_ref,
+                            "%s.entities[%d].prev_entity from %4lX to %4lX",
+                            _objname, j, ent->prev_entity->absolute_ref,
                             prev_ref);
                   changes++;
                   ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
                 }
               if (ent->next_entity == NULL)
                 {
-                  LOG_TRACE ("next_entity: %lX\n", next_ref);
+                  LOG_TRACE (" next_entity %4lX\n", next_ref);
                   ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
                 }
               else if (ent->next_entity->absolute_ref != next_ref)
                 {
                   LOG_WARN ("Fixup wrong BLOCK_HEADER "
-                            "%s.entities[%d].next_entity from %lX to %lX",
-                            _obj->name, j, ent->next_entity->absolute_ref,
+                            "%s.entities[%d].next_entity from %4lX to %4lX",
+                            _objname, j, ent->next_entity->absolute_ref,
                             next_ref);
                   changes++;
                   ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
@@ -5768,7 +5774,7 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                 {
                   if (!_obj->last_entity)
                     {
-                      LOG_TRACE ("last_entity: %lX\n", hdl->absolute_ref);
+                      LOG_TRACE ("last_entity: %4lX\n", hdl->absolute_ref);
                       _obj->last_entity
                           = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
@@ -5776,8 +5782,8 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                            != hdl->absolute_ref)
                     {
                       LOG_WARN ("Fixup wrong BLOCK_HEADER %s.last_entity from "
-                                "%lX to %lX",
-                                _obj->name, _obj->last_entity->absolute_ref,
+                                "%4lX to %4lX",
+                                _objname, _obj->last_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
                       _obj->last_entity
@@ -5785,6 +5791,8 @@ postprocess_entity_linkedlist (Dwg_Data *restrict dwg)
                     }
                 }
             }
+          if (is_uni)
+            free (_objname);
         }
     }
   LOG_TRACE ("\n");
