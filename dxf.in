@@ -16,14 +16,13 @@ v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
 out=
-args=
+args=-y
 
 for d in "$@"; do
     case $d in
         -v*) v="$d"
              ;;
-        -y)  args=-y
-             ;;
+        -y)  ;;
         *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]

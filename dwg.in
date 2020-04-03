@@ -15,14 +15,13 @@ make -s -j4 -C programs dwgwrite
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
-args=
+args=-y
 out=
 ob="$b"
 
 for d in "$@"; do
     case $d in
-        -y) args="$args -y"
-             ;;
+        -y) ;; # the default
         -Ijson) args="$args $d"
                 ext=json
                 ;;
