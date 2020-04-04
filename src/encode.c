@@ -2264,10 +2264,42 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           int is_entity;
           Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
+          if (klass)
+            is_entity = klass->item_class_id == 0x1f2
+                        && obj->supertype == DWG_SUPERTYPE_ENTITY;
+          else
+            is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
 
           assert (address);
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
+          // But we cannot write unknown bits into another version. Write a DUMMY instead.
+          if (dwg->header.version != dwg->header.from_version)
+            {
+              obj->type = DWG_TYPE_DUMMY; // TODO or PLACEHOLDER if available
+              obj->size = 0;
+              obj->bitsize = 0;
+              // patch away common data: ownerhandle, num_eed and num_reactors
+              if (is_entity)
+                { // isn't there a better way, like PROXY? to at least preserve
+                  // the next_entity chain
+                  BITCODE_H owner = obj->tio.entity->ownerhandle;
+                  LOG_WARN ("fixup entity as DUMMY, Type %d\n", obj->type);
+                  obj->tio.object->xdicobjhandle = NULL;
+                  obj->tio.object->num_eed = 0;
+                  obj->tio.object->num_reactors = 0;
+                  obj->tio.object->ownerhandle = owner;
+                  is_entity = 0;
+                }
+              else
+                {
+                  obj->tio.object->num_eed = 0;
+                  obj->tio.object->num_reactors = 0;
+                  LOG_INFO ("fixup as DUMMY, Type %d\n", obj->type);
+                }
+              obj->hdlpos = 0;
+            }
+
           bit_write_MS (dat, obj->size); // unknown blobs have a known size
           if (dat->version >= R_2010)
             {
@@ -2277,18 +2309,14 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           else
             bit_write_BS (dat, obj->type);
 
-          if (klass)
-            is_entity = klass->item_class_id == 0x1f2
-                        && obj->supertype == DWG_SUPERTYPE_ENTITY;
-          else
-            is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (is_entity)
             error = dwg_encode_UNKNOWN_ENT (dat, obj);
           else
             error = dwg_encode_UNKNOWN_OBJ (dat, obj);
 
-          if (obj->unknown_bits && obj->num_unknown_bits) // cannot calculate
+          if (dwg->header.version == dwg->header.from_version
+              && obj->unknown_bits && obj->num_unknown_bits) // cannot calculate
             {
               int len = obj->num_unknown_bits / 8;
               const int mod = obj->num_unknown_bits % 8;
@@ -2815,6 +2843,7 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
   hdl_dat->from_version = dat->from_version;
   hdl_dat->version = dat->version;
   hdl_dat->opts = dat->opts;
+
   {
     Dwg_Object *_obj = obj;
     VERSIONS (R_2000, R_2007)

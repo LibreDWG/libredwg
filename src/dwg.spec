@@ -5938,9 +5938,9 @@ DWG_OBJECT (UNKNOWN_OBJ)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
-// just a dummy dwg filer, ignored for dxf
+// just a dummy dwg filer, ignored for dxf.
+// for now we use it as empty PROXY_OBJECT
 DWG_OBJECT (DUMMY)
-  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 #endif /* IS_DXF */

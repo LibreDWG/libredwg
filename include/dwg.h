@@ -2435,12 +2435,11 @@ typedef struct _dwg_entity_OLE2FRAME
 } Dwg_Entity_OLE2FRAME;
 
 /**
- DUMMY (75) object
+ DUMMY (75) object, placeholder for unsupported types on encode.
  */
 typedef struct _dwg_object_DUMMY
 {
   struct _dwg_object_object *parent;
-  /* ??? not seen */
 } Dwg_Object_DUMMY;
 
 /**
