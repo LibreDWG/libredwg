@@ -1104,10 +1104,6 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 
 // TODO add 340
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
-  SINCE (R_14)                                                                \
-  {                                                                           \
-    /* TODO: ACAD_XDICTIONARY */                                              \
-  }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100);                                  \
@@ -1142,11 +1138,6 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
   FIELD_RC (flag, 70);
 
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
-  SINCE (R_14)                                                                \
-  {                                                                           \
-    /* TODO: ACAD_XDICTIONARY */                                              \
-    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
-  }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100);                                  \
