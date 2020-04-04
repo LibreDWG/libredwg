@@ -3649,6 +3649,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
   dwg->dirty_refs = 1;
+  // set the target version earlier (than e.g. in DXF)
   // we cannot write >= R_2004 yet. avoid widestrings for now
   dat->version = dwg->header.version = R_2000;
 

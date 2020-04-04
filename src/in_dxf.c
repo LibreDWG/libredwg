@@ -463,6 +463,17 @@ free_array_hdls (array_hdls *hdls)
   free (hdls);
 }
 
+// push to entities and entries handles array
+#define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
+  {                                                                           \
+    _obj->hvfield                                                             \
+        = realloc (_obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H)); \
+    _obj->hvfield[_obj->numfield] = ref;                                      \
+    LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,     \
+               ARGS_REF (_obj->hvfield[_obj->numfield]));                     \
+    _obj->numfield++;                                                         \
+  }
+
 #define DXF_CHECK_ENDSEC                                                      \
   if (pair != NULL                                                            \
       && (dat->byte >= dat->size                                              \
@@ -8020,8 +8031,9 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// register this block entity, e.g. ModelSpace with the BLOCK_HEADER
 static void
-postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
+add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
                           Dwg_Object_Ref *restrict ownerhandle)
 {
   Dwg_Data *dwg = obj->parent;
@@ -8031,21 +8043,37 @@ postprocess_BLOCK_HEADER (Dwg_Object *restrict obj,
   if (!ctrl || ctrl->type != DWG_TYPE_BLOCK_HEADER)
     return;
   _ctrl = ctrl->tio.object->tio.BLOCK_HEADER;
+  if (obj->supertype != DWG_SUPERTYPE_ENTITY)
+    return;
+  LOG_TRACE ("add_to_BLOCK_HEADER %s: %s [%lX]\n", _ctrl->name,
+             obj->name, obj->handle.value);
   if (obj->type == DWG_TYPE_ENDBLK)
     {
       if (!_ctrl->endblk_entity)
         _ctrl->endblk_entity = dwg_add_handleref (dwg, 3, obj->handle.value, ctrl);
+      return;
     }
-  else if (obj->type == DWG_TYPE_BLOCK)
+ if (obj->type == DWG_TYPE_BLOCK)
     {
       if (!_ctrl->block_entity)
         _ctrl->block_entity
             = dwg_add_handleref (dwg, 3, obj->handle.value, ctrl);
+      return;
     }
-  else if (!_ctrl->first_entity)
-    _ctrl->first_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-  else // always overwrite
-    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+  if (!_ctrl->first_entity)
+   _ctrl->last_entity =  _ctrl->first_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+  else
+    // always overwrite. and it is global, so we can reuse it.
+    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+  PUSH_HV (_ctrl, num_owned, entities, _ctrl->last_entity);
+  /*
+  _ctrl->entities
+      = realloc (_ctrl->entities, (_ctrl->num_owned + 1) * sizeof (BITCODE_H));
+  _ctrl->entities[_ctrl->num_owned] = _ctrl->last_entity;
+  LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", "entities", _ctrl->num_owned,
+             ARGS_REF (_ctrl->entities[_ctrl->num_owned]));
+  _ctrl->num_owned++;
+  */
 }
 
 static int
@@ -8057,6 +8085,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dwg->header_vars.BLOCK_RECORD_MSPACE->absolute_ref : 0x1F;
   unsigned long pspace = dwg->header_vars.BLOCK_RECORD_PSPACE ?
     dwg->header_vars.BLOCK_RECORD_PSPACE->absolute_ref : 0UL;
+  BITCODE_H mspace_ref = dwg_model_space_ref (dwg);
 
   while (pair != NULL && pair->code == 0 && pair->value.s)
     {
@@ -8082,10 +8111,13 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     ent->entmode = 2;
                   else if (pspace && ent->ownerhandle->absolute_ref == pspace)
                     ent->entmode = 1;
-                  postprocess_BLOCK_HEADER (obj, ent->ownerhandle);
+                  add_to_BLOCK_HEADER (obj, ent->ownerhandle);
                 }
               else
-                ent->entmode = 2;
+                {
+                  ent->entmode = 2;
+                  add_to_BLOCK_HEADER (obj, mspace_ref);
+                }
 
               strncpy (name, pair->value.s, 79);
               name[79] = '\0';
