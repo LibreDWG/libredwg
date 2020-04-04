@@ -38,6 +38,12 @@
   ENT_XDICOBJHANDLE (3)
 #endif
   SUBCLASS (AcDbEntity)
+#ifdef IS_DXF
+  // PaperSpace0 BLOCK may have entmode 0
+  if (ent->entmode == 1 ||
+      (ent->entmode == 0 && ent->ownerhandle == obj->parent->header_vars.BLOCK_RECORD_PSPACE))
+    FIELD_BB (entmode, 67); // is paperspace
+#endif
 
   VERSIONS (R_13, R_14)
     {
