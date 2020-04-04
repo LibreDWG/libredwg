@@ -2076,7 +2076,8 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
   JSON { \
     JSON_3DSOLID \
   } \
-  FREE_3DSOLID
+  FREE_3DSOLID \
+  COMMON_ENTITY_HANDLE_DATA
 
 /*(37)*/
 DWG_ENTITY (REGION)
@@ -2374,7 +2375,6 @@ DWG_ENTITY (LEADER)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-
   SINCE (R_13) {
     FIELD_HANDLE (associated_annotation, 2, 340);
   }

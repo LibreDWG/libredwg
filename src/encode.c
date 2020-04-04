@@ -2845,7 +2845,7 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
     Dwg_Object_Object *_obj = obj->tio.object;
     FIELD_BL (num_reactors, 0);
     SINCE (R_2004) { FIELD_B (xdic_missing_flag, 0); }
-    SINCE (R_2013) { FIELD_B (has_ds_binary_data, 0); }
+    SINCE (R_2013) { FIELD_B (has_ds_binary_data, 0); } // AcDs DATA
   }
   return error;
 }
