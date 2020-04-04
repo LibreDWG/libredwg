@@ -668,8 +668,10 @@
 #define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
   {                                                                           \
     bit_read_CMC (dat, &_obj->o.color);                                       \
-    LOG_TRACE (#o "." #color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf1); \
-    LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)                            \
+    LOG_TRACE (#o "." #color ".index: %d [CMC.BS %d]", _obj->o.color.index,   \
+               dxf1);                                                         \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
+    LOG_TRACE ("\n");                                                         \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#o "." #color ".rgb: 0x%06x [CMC.BL %d]\n",                \
@@ -678,12 +680,13 @@
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
           {                                                                   \
-            LOG_TRACE (#o "." #color ".name: %s [CMC.TV]\n", _obj->o.color.name);\
+            LOG_TRACE (#o "." #color ".name: %s [CMC.TV]\n",                  \
+                       _obj->o.color.name);                                   \
           }                                                                   \
         if (_obj->o.color.flag & 2)                                           \
           {                                                                   \
             LOG_TRACE (#o "." #color ".bookname: %s [CMC.TV]\n",              \
-                     _obj->o.color.book_name);                                \
+                       _obj->o.color.book_name);                              \
           }                                                                   \
       }                                                                       \
   }

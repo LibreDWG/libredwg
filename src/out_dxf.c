@@ -496,7 +496,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       }                                                                       \
     if (dat->version >= R_2004 && dxf2 > 0 && _obj->color.index != 256)       \
       {                                                                       \
-        VALUE_RS (_obj->color.rgb >> 24, dxf1);                               \
+        /*VALUE_RS (_obj->color.rgb >> 24, dxf1);*/                           \
         VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf2);                        \
       }                                                                       \
   }
