@@ -6374,11 +6374,11 @@ typedef struct _dwg_AcDs_SchemaIndex_Prop
 typedef struct _dwg_AcDs_SchemaIndex
 {
   BITCODE_RL num_props; // or uint64
-  BITCODE_RL unknown_1;
+  BITCODE_RL si_unknown_1;
   Dwg_AcDs_SchemaIndex_Prop *props;
   BITCODE_RLL tag; /* 0x0af10c */
   BITCODE_RL num_prop_entries;
-  BITCODE_RL unknown_2; /* 0 */
+  BITCODE_RL si_unknown_2; /* 0 */
   Dwg_AcDs_SchemaIndex_Prop *prop_entries;
 } Dwg_AcDs_SchemaIndex;
 

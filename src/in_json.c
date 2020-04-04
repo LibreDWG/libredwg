@@ -91,6 +91,12 @@ static Bit_Chain *g_dat;
     _obj->nam = (BITCODE_##type)json_long (dat, tokens);                      \
     LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)                       \
   }
+#define SUB_FIELD_LONG(o,nam, type)                                           \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    _obj->o.nam = (BITCODE_##type)json_long (dat, tokens);                    \
+    LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->o.nam)                     \
+  }
 #define _FIELD_LONGT(nam, type, fmt)                                          \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
@@ -135,7 +141,7 @@ static Bit_Chain *g_dat;
           _obj->nam = json_string (dat, tokens);                              \
       }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, 0);                                  \
+      json_advance_unknown (dat, tokens, t->type, 0);                                  \
   }
 #define FIELD_T32(nam, dxf)                                                   \
   else if (strEQc (key, #nam))                                                \
@@ -147,7 +153,7 @@ static Bit_Chain *g_dat;
         _obj->nam = (BITCODE_T32)json_wstring (dat, tokens);                  \
       }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, 0);                                  \
+      json_advance_unknown (dat, tokens, t->type, 0);                                  \
   }
 #define FIELD_TU16(nam, dxf)                                                  \
   else if (strEQc (key, #nam))                                                \
@@ -159,7 +165,7 @@ static Bit_Chain *g_dat;
         _obj->nam = (BITCODE_TU)json_wstring (dat, tokens);                   \
       }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, 0);                                  \
+      json_advance_unknown (dat, tokens, t->type, 0);                                  \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   else if (strEQc (key, #nam))                                                \
@@ -235,19 +241,20 @@ static Bit_Chain *g_dat;
 // on STRING (key) get next
 static int
 json_advance_unknown (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
-                      int depth)
+                      jsmntype_t type, int depth)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int error = 0;
   JSON_TOKENS_CHECK_OVERFLOW_ERR
-  if (depth > 300)
+  if (depth > 25)
     {
       LOG_ERROR ("JSON recursion limit");
       return DWG_ERR_INVALIDDWG;
     }
-  LOG_TRACE ("Skip JSON %s %.*s at %u of %ld tokens\n", t_typename[t->type],
-             t->end - t->start, &dat->chain[t->start], tokens->index,
-             tokens->num_tokens);
+  if (!depth || ((dat->opts & DWG_OPTS_LOGLEVEL) >= 3))
+    LOG_TRACE ("Skip JSON %s %.*s at %u of %ld tokens\n", t_typename[t->type],
+               t->end - t->start, &dat->chain[t->start], tokens->index,
+               tokens->num_tokens);
   switch (t->type)
     {
     case JSMN_OBJECT:
@@ -256,8 +263,10 @@ json_advance_unknown (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       for (int i = 0; i < t->size; i++)
         {
-          error |= json_advance_unknown (dat, tokens, depth + 1);
+          if (t->type == JSMN_OBJECT) tokens->index++; // skip the key also
+          error |= json_advance_unknown (dat, tokens, t->type, depth + 1);
         }
+      tokens->index--;
       return error;
     case JSMN_STRING:
     case JSMN_PRIMITIVE:
@@ -281,7 +290,7 @@ json_fixed_key (char *key, Bit_Chain *restrict dat,
   if (t->type != JSMN_STRING)
     {
       LOG_ERROR ("Expected JSON STRING");
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return;
     }
   if (len >= 80)
@@ -317,7 +326,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   if (t->type != JSMN_STRING)
     {
       LOG_ERROR ("Expected JSON STRING");
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return NULL;
     }
   // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
@@ -359,7 +368,7 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   if (t->type != JSMN_STRING)
     {
       LOG_ERROR ("Expected JSON STRING");
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return NULL;
     }
   tokens->index++;
@@ -385,7 +394,7 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   if (t->type != JSMN_STRING)
     {
       LOG_ERROR ("Expected JSON STRING");
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return NULL;
     }
   for (unsigned i = 0; i < blen; i++)
@@ -411,7 +420,7 @@ json_float (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   if (t->type != JSMN_PRIMITIVE)
     {
       LOG_ERROR ("Expected JSON PRIMITIVE");
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return (double)NAN;
     }
   tokens->index++;
@@ -426,7 +435,7 @@ json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   if (t->type != JSMN_PRIMITIVE)
     {
       LOG_ERROR ("Expected JSON PRIMITIVE");
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return 0;
     }
   tokens->index++;
@@ -630,6 +639,15 @@ json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
              date->ms);
 }
 
+static void*
+json_records (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
+              const char *subclass, BITCODE_BL *num)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  json_advance_unknown (dat, tokens, t->type, 0);
+  return NULL;
+}
+
 static int
 json_created_by (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                  jsmntokens_t *restrict tokens)
@@ -639,7 +657,7 @@ json_created_by (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   if (t->type != JSMN_STRING)
     {
       LOG_ERROR ("Expected %s STRING", "created_by");
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   created_by = json_string (dat, tokens);
@@ -664,7 +682,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section,
@@ -769,7 +787,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section,
@@ -787,7 +805,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (!f)
         {
           LOG_WARN ("Unknown key HEADER.%s", key)
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
           continue;
         }
       else if (t->type == JSMN_PRIMITIVE
@@ -887,7 +905,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -929,7 +947,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               "Unexpected %s at %u of %ld tokens, expected %s OBJECT. %s:%d",
               t_typename[t->type], tokens->index, tokens->num_tokens, section,
               __FUNCTION__, __LINE__);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
           return DWG_ERR_INVALIDTYPE;
         }
       keys = t->size;
@@ -988,7 +1006,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               LOG_WARN ("Unknown CLASS key %s %.*s", key, t->end - t->start,
                          &dat->chain[t->start])
-              json_advance_unknown (dat, tokens, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
             }
         }
     }
@@ -1328,7 +1346,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           old->next = rbuf;
         }
       else
-        json_advance_unknown (dat, tokens, 0);
+        json_advance_unknown (dat, tokens, t->type, 0);
     }
   if (obj->xdata_size != size)
     {
@@ -1952,7 +1970,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                  t_typename[t->type], tokens->index,
                                  tokens->num_tokens, subclass, __FUNCTION__,
                                  __LINE__);
-                      json_advance_unknown (dat, tokens, 0);
+                      json_advance_unknown (dat, tokens, t->type, 0);
                       return DWG_ERR_INVALIDTYPE;
                     }
                   LOG_TRACE ("%s.%s[%d]:\n", name, key, k);
@@ -2078,7 +2096,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
                 }
               else
-                json_advance_unknown (dat, tokens, 0);
+                json_advance_unknown (dat, tokens, t->type, 0);
               break;
             }
         }
@@ -2159,7 +2177,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -2234,7 +2252,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               "Unexpected %s at %u of %ld tokens, expected %s OBJECT. %s:%d",
               t_typename[t->type], tokens->index, tokens->num_tokens, section,
               __FUNCTION__, __LINE__);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
           return DWG_ERR_INVALIDTYPE;
         }
       keys = t->size;
@@ -2265,7 +2283,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   // exhaust the rest
                   for (; j < keys; j++)
                     {
-                      json_advance_unknown (dat, tokens, 0); // value
+                      json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                     }
                   tokens->index--;
@@ -2283,7 +2301,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   // exhaust the rest
                   for (; j < keys; j++)
                     {
-                      json_advance_unknown (dat, tokens, 0); // value
+                      json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                       JSON_TOKENS_CHECK_OVERFLOW_ERR
                     }
@@ -2323,7 +2341,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   // exhaust the rest
                   for (; j < keys; j++)
                     {
-                      json_advance_unknown (dat, tokens, 0); // value
+                      json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                       JSON_TOKENS_CHECK_OVERFLOW_ERR
                     }
@@ -2342,7 +2360,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   // exhaust the rest
                   for (; j < keys; j++)
                     {
-                      json_advance_unknown (dat, tokens, 0); // value
+                      json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                       JSON_TOKENS_CHECK_OVERFLOW_ERR
                     }
@@ -2368,7 +2386,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (!obj || !fields)
             {
               LOG_ERROR ("Required object or entity key missing");
-              json_advance_unknown (dat, tokens, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
               return DWG_ERR_INVALIDDWG;
             }
           else if (strEQc (key, "dxfname"))
@@ -2587,7 +2605,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               LOG_ERROR ("Unknown %s.%s %.*s ignored\n", name, key,
                          t->end - t->start, &dat->chain[t->start]);
-              json_advance_unknown (dat, tokens, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
             }
         }
     }
@@ -2608,7 +2626,7 @@ json_HANDLES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -2645,7 +2663,7 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -2674,7 +2692,7 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_TRACE ("%s\n", key)
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
     }
 
@@ -2696,7 +2714,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -2774,7 +2792,7 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -2845,7 +2863,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -2865,7 +2883,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (t->type == JSMN_PRIMITIVE)
             tokens->index++;
           else
-            json_advance_unknown (dat, tokens, 0);
+            json_advance_unknown (dat, tokens, t->type, 0);
         }
       else if (strEQc (key, "props"))
         {
@@ -2875,7 +2893,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   "Unexpected %s at %u of %ld tokens, expected %s.%s ARRAY",
                   t_typename[t->type], tokens->index, tokens->num_tokens,
                   section, key);
-              json_advance_unknown (dat, tokens, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
               return DWG_ERR_INVALIDTYPE;
             }
           size1 = t->size;
@@ -2893,7 +2911,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s.%s OBJECT",
                              t_typename[t->type], tokens->index, tokens->num_tokens,
                              section, key);
-                  json_advance_unknown (dat, tokens, 0);
+                  json_advance_unknown (dat, tokens, t->type, 0);
                   return DWG_ERR_INVALIDTYPE;
                 }
               tokens->index++; // OBJECT of 2: key, value. TODO: array of 2
@@ -2905,7 +2923,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               else if (t->type == JSMN_PRIMITIVE)
                 tokens->index++;
               else
-                json_advance_unknown (dat, tokens, 0);
+                json_advance_unknown (dat, tokens, t->type, 0);
 
               json_fixed_key (key, dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -2915,9 +2933,10 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               else if (t->type == JSMN_PRIMITIVE)
                 tokens->index++;
               else
-                json_advance_unknown (dat, tokens, 0);
-              LOG_TRACE ("props[%d] = (%s,%s)\n", j, _obj->props[j].key,
-                         _obj->props[j].value)
+                json_advance_unknown (dat, tokens, t->type, 0);
+              if (_obj->props[j].key || _obj->props[j].value)
+                LOG_TRACE ("props[%d] = (%s,%s)\n", j, _obj->props[j].key,
+                           _obj->props[j].value)
             }
         }
       // clang-format off
@@ -2937,7 +2956,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
       // clang-format on
     }
@@ -2960,7 +2979,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -2989,7 +3008,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
       // clang-format on
     }
@@ -3012,7 +3031,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -3033,7 +3052,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
       // clang-format on
     }
@@ -3055,7 +3074,7 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   o->files = calloc (size, sizeof (Dwg_FileDepList_Files));
@@ -3073,7 +3092,7 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                      t_typename[t->type], tokens->index, tokens->num_tokens,
                      section);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
           return DWG_ERR_INVALIDTYPE;
         }
       assert (t->type == JSMN_OBJECT);
@@ -3098,7 +3117,7 @@ json_FileDepList_Files (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else
             {
               LOG_ERROR ("Unknown %s.%s ignored", section, key);
-              json_advance_unknown (dat, tokens, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
             }
           // clang-format on
         }
@@ -3123,7 +3142,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -3140,7 +3159,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (strEQc (key, "features")) // TV[]
         {
           if (t->type != JSMN_ARRAY)
-            json_advance_unknown (dat, tokens, 0);
+            json_advance_unknown (dat, tokens, t->type, 0);
           else
             {
               int size1 = t->size;
@@ -3159,14 +3178,14 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   else if (t->type == JSMN_PRIMITIVE)
                     tokens->index++;
                   else
-                    json_advance_unknown (dat, tokens, 0);
+                    json_advance_unknown (dat, tokens, t->type, 0);
                 }
             }
         }
       else if (strEQc (key, "files"))
         {
           if (t->type != JSMN_ARRAY) // of OBJECTs
-            json_advance_unknown (dat, tokens, 0);
+            json_advance_unknown (dat, tokens, t->type, 0);
           else if (t->size)
             error |= json_FileDepList_Files (dat, dwg, tokens, _obj, t->size);
           else
@@ -3177,7 +3196,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
     }
 
@@ -3199,7 +3218,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -3226,7 +3245,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
       // clang-format on
     }
@@ -3249,7 +3268,7 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -3271,7 +3290,7 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
       // clang-format on
     }
@@ -3294,7 +3313,7 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -3325,7 +3344,7 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
       // clang-format on
     }
@@ -3347,7 +3366,7 @@ json_AcDs_SegmentIndex (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   o->segidx = calloc (size, sizeof (Dwg_AcDs_SegmentIndex));
@@ -3365,7 +3384,7 @@ json_AcDs_SegmentIndex (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                      t_typename[t->type], tokens->index, tokens->num_tokens,
                      section);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
           return DWG_ERR_INVALIDTYPE;
         }
       assert (t->type == JSMN_OBJECT);
@@ -3384,7 +3403,7 @@ json_AcDs_SegmentIndex (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else
             {
               LOG_ERROR ("Unknown %s.%s ignored", section, key);
-              json_advance_unknown (dat, tokens, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
             }
           // clang-format on
         }
@@ -3406,7 +3425,7 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   o->segments = calloc (size, sizeof (Dwg_AcDs_Segment));
@@ -3424,7 +3443,7 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                      t_typename[t->type], tokens->index, tokens->num_tokens,
                      section);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
           return DWG_ERR_INVALIDTYPE;
         }
       assert (t->type == JSMN_OBJECT);
@@ -3450,11 +3469,45 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           FIELD_RL (data_algn_offset, 0)
           FIELD_RL (objdata_algn_offset, 0)
           FIELD_TFF (padding, 8, 0)
-          // todo: support the various types
+          else if (_obj->type == 3) {
+            /* if (0) {}
+               SUB_FIELD_LONG (o,schidx.unknown_1, 0) */
+            if (strEQc (key, "si_unknown_1"))
+              {
+                o->schidx.si_unknown_1 = (BITCODE_RL)json_long (dat, tokens);
+                LOG_TRACE ("schidx.unknown_1: " FORMAT_RL "\n", o->schidx.si_unknown_1);
+              }
+            else if (strEQc (key, "si_unknown_2"))
+              {
+                o->schidx.si_unknown_2 = (BITCODE_RL)json_long (dat, tokens);
+                LOG_TRACE ("schidx.unknown_2: " FORMAT_RL "\n", o->schidx.si_unknown_2);
+              }
+            else if (strEQc (key, "tag"))
+              {
+                o->schidx.tag = (BITCODE_RLL)json_long (dat, tokens);
+                LOG_TRACE ("schidx.tag: " FORMAT_RLL "\n", o->schidx.tag);
+              }
+            else if (strEQc (key, "props"))
+              {
+                o->schidx.props = (Dwg_AcDs_SchemaIndex_Prop*)json_records (dat, tokens,
+                                      "AcDs_SchemaIndex_Prop", &o->schidx.num_props);
+              }
+            else if (strEQc (key, "prop_entries"))
+              {
+                o->schidx.prop_entries = (Dwg_AcDs_SchemaIndex_Prop*)json_records (dat, tokens,
+                                      "AcDs_SchemaIndex_Prop", &o->schidx.num_prop_entries);
+              }
+            else
+              {
+                LOG_ERROR ("Unknown %s.%s ignored", section, key);
+                json_advance_unknown (dat, tokens, t->type, 0);
+              }
+          }
+          // todo: support more types
           else
             {
               LOG_ERROR ("Unknown %s.%s ignored", section, key);
-              json_advance_unknown (dat, tokens, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
             }
           // clang-format on
         }
@@ -3478,7 +3531,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
                  t_typename[t->type], tokens->index, tokens->num_tokens,
                  section);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -3511,7 +3564,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else if (strEQc (key, "segidx"))
         {
           if (t->type != JSMN_ARRAY) // of OBJECTs
-            json_advance_unknown (dat, tokens, 0);
+            json_advance_unknown (dat, tokens, t->type, 0);
           else if (t->size)
             error |= json_AcDs_SegmentIndex (dat, dwg, tokens, _obj, t->size);
           else
@@ -3522,7 +3575,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else if (strEQc (key, "segments"))
         {
           if (t->type != JSMN_ARRAY) // of OBJECTs
-            json_advance_unknown (dat, tokens, 0);
+            json_advance_unknown (dat, tokens, t->type, 0);
           else if (t->size)
             error |= json_AcDs_Segments (dat, dwg, tokens, _obj, t->size);
           else
@@ -3533,7 +3586,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
     }
 
@@ -3554,7 +3607,7 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_ERROR ("Unexpected %s OBJECT at %u of %ld tokens, got %s", section,
                  tokens->index, tokens->num_tokens, t_typename[t->type]);
-      json_advance_unknown (dat, tokens, 0);
+      json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
   size = t->size;
@@ -3581,7 +3634,7 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         {
           LOG_TRACE ("%s\n", key);
-          json_advance_unknown (dat, tokens, 0);
+          json_advance_unknown (dat, tokens, t->type, 0);
         }
     }
 

@@ -82,7 +82,9 @@
 #ifdef IS_JSON
           KEY (index); VALUE_RL (rcount1, 0);
 #endif
+#ifdef IS_DECODER
           LOG_TRACE ("\nsegments[%d] offset: %ld\n", rcount1, _obj->segidx[rcount1].offset)
+#endif
           dat->byte = _obj->segidx[rcount1].offset;
         }
       else
@@ -176,7 +178,7 @@
         if (_obj->schidx_segidx != rcount1)
           LOG_WARN ("Possibly wrong schidx_segidx %d for %d", _obj->schidx_segidx, rcount1);
         SUB_FIELD_RL (schidx,num_props, 0); // or RLL
-        SUB_FIELD_RL (schidx,unknown_1, 0);
+        SUB_FIELD_RL (schidx,si_unknown_1, 0);
         REPEAT2 (schidx.num_props, schidx.props, Dwg_AcDs_SchemaIndex_Prop)
         REPEAT_BLOCK
             SUB_FIELD_RL (schidx.props[rcount2],index, 0);
@@ -186,7 +188,7 @@
         END_REPEAT (schidx.props)
         SUB_FIELD_RLL (schidx,tag, 0); /* 0x0af10c */
         SUB_FIELD_RL (schidx,num_prop_entries, 0); // or RLL
-        SUB_FIELD_RL (schidx,unknown_2, 0);
+        SUB_FIELD_RL (schidx,si_unknown_2, 0);
         REPEAT2 (schidx.num_prop_entries, schidx.prop_entries, Dwg_AcDs_SchemaIndex_Prop)
         REPEAT_BLOCK
             SUB_FIELD_RL (schidx.prop_entries[rcount2],index, 0);

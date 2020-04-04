@@ -8587,7 +8587,7 @@ RL
 
 @item num_props
 RL
-@item unknown_1
+@item si_unknown_1
 RL
 @item props
 Dwg_AcDs_SchemaIndex_Prop*
@@ -8595,7 +8595,7 @@ Dwg_AcDs_SchemaIndex_Prop*
 RLL
 @item num_prop_entries
 RL
-@item unknown_2
+@item si_unknown_2
 RL
 @item prop_entries
 Dwg_AcDs_SchemaIndex_Prop*
@@ -10208,7 +10208,7 @@ Dwg_Eed*
 @item elevation_r11
 RD
 @item entmode
-BB
+BB,	DXF 67
 @item extra_r11
 RC
 @item face_visualstyle
