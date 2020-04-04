@@ -38,9 +38,12 @@ for d in "$@"; do
             then
                 d="$srcdir/test/test-data/$d";
             else
-                if [ -f "$srcdir/test/test-data/$d.dwg" ]
+                if [ -f "$srcdir/test/test-data/$d.json" ]
                 then
-                    d="$srcdir/test/test-data/$d.dwg"
+                    d="$srcdir/test/test-data/$d.json"
+                elif [ -f "$srcdir/test/test-data/$d.dxf" ]
+                then
+                    d="$srcdir/test/test-data/$d.dxf"
                 fi
             fi
         fi
