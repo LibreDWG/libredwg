@@ -15807,14 +15807,42 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     proxy_entity->class_id--;
   }
   {
-    BITCODE_TV data;
+    BITCODE_TF data;
     if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "data", &data, NULL)
-        && data
-           ? strEQ ((char *)data, (char *)proxy_entity->data)
-           : !proxy_entity->data)
+        && !memcmp (&data, &proxy_entity->data, sizeof (proxy_entity->data)))
+        pass ();
+    else
+        fail ("PROXY_ENTITY.data [TF]");
+  }
+  {
+    BITCODE_BL data_numbits;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "data_numbits", &data_numbits, NULL)
+        && data_numbits == proxy_entity->data_numbits)
       pass ();
     else
-      fail ("PROXY_ENTITY.data [TV] '%s' <> '%s'", data, proxy_entity->data);
+      fail ("PROXY_ENTITY.data_numbits [BL] %u != %u", proxy_entity->data_numbits, data_numbits);
+    data_numbits++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "data_numbits", &data_numbits, 0)
+        && data_numbits == proxy_entity->data_numbits)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.data_numbits [BL] set+1 %u != %u", proxy_entity->data_numbits, data_numbits);
+    proxy_entity->data_numbits--;
+  }
+  {
+    BITCODE_BL data_size;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "data_size", &data_size, NULL)
+        && data_size == proxy_entity->data_size)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.data_size [BL] %u != %u", proxy_entity->data_size, data_size);
+    data_size++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "data_size", &data_size, 0)
+        && data_size == proxy_entity->data_size)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.data_size [BL] set+1 %u != %u", proxy_entity->data_size, data_size);
+    proxy_entity->data_size--;
   }
   {
     BITCODE_B from_dxf;
@@ -15847,12 +15875,29 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     proxy_entity->maint_version--;
   }
   {
-    BITCODE_H* objid_object_handles;
-    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "objid_object_handles", &objid_object_handles, NULL)
-        && !memcmp (&objid_object_handles, &proxy_entity->objid_object_handles, sizeof (proxy_entity->objid_object_handles)))
-        pass ();
+    BITCODE_BL num_objids;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "num_objids", &num_objids, NULL)
+        && num_objids == proxy_entity->num_objids)
+      pass ();
     else
-        fail ("PROXY_ENTITY.objid_object_handles [H*]");
+      fail ("PROXY_ENTITY.num_objids [BL] %u != %u", proxy_entity->num_objids, num_objids);
+    num_objids++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "num_objids", &num_objids, 0)
+        && num_objids == proxy_entity->num_objids)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.num_objids [BL] set+1 %u != %u", proxy_entity->num_objids, num_objids);
+    proxy_entity->num_objids--;
+  }
+  {
+    BITCODE_H* objids;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "num_objids", &count, NULL)
+        && dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "objids", &objids, NULL)
+        && objids == proxy_entity->objids)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.objids [H*] * %u num_objids", count);
   }
   {
     struct _dwg_object_entity* parent;
@@ -15861,20 +15906,6 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         pass ();
     else
         fail ("PROXY_ENTITY.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_MS size;
-    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "size", &size, NULL)
-        && size == proxy_entity->size)
-      pass ();
-    else
-      fail ("PROXY_ENTITY.size [MS] " FORMAT_MS " != " FORMAT_MS "", proxy_entity->size, size);
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "size", &size, 0)
-        && size == proxy_entity->size)
-      pass ();
-    else
-      fail ("PROXY_ENTITY.size [MS] set+1 " FORMAT_MS " != " FORMAT_MS "", proxy_entity->size, size);
-    proxy_entity->size--;
   }
   {
     BITCODE_BL version;
@@ -36699,14 +36730,42 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     proxy_object->class_id--;
   }
   {
-    BITCODE_TV data;
+    BITCODE_TF data;
     if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "data", &data, NULL)
-        && data
-           ? strEQ ((char *)data, (char *)proxy_object->data)
-           : !proxy_object->data)
+        && !memcmp (&data, &proxy_object->data, sizeof (proxy_object->data)))
+        pass ();
+    else
+        fail ("PROXY_OBJECT.data [TF]");
+  }
+  {
+    BITCODE_BL data_numbits;
+    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "data_numbits", &data_numbits, NULL)
+        && data_numbits == proxy_object->data_numbits)
       pass ();
     else
-      fail ("PROXY_OBJECT.data [TV] '%s' <> '%s'", data, proxy_object->data);
+      fail ("PROXY_OBJECT.data_numbits [BL] %u != %u", proxy_object->data_numbits, data_numbits);
+    data_numbits++;
+    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "data_numbits", &data_numbits, 0)
+        && data_numbits == proxy_object->data_numbits)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.data_numbits [BL] set+1 %u != %u", proxy_object->data_numbits, data_numbits);
+    proxy_object->data_numbits--;
+  }
+  {
+    BITCODE_BL data_size;
+    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "data_size", &data_size, NULL)
+        && data_size == proxy_object->data_size)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.data_size [BL] %u != %u", proxy_object->data_size, data_size);
+    data_size++;
+    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "data_size", &data_size, 0)
+        && data_size == proxy_object->data_size)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.data_size [BL] set+1 %u != %u", proxy_object->data_size, data_size);
+    proxy_object->data_size--;
   }
   {
     BITCODE_B from_dxf;
@@ -36739,12 +36798,29 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     proxy_object->maint_version--;
   }
   {
-    BITCODE_H* objid_object_handles;
-    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "objid_object_handles", &objid_object_handles, NULL)
-        && !memcmp (&objid_object_handles, &proxy_object->objid_object_handles, sizeof (proxy_object->objid_object_handles)))
-        pass ();
+    BITCODE_BL num_objids;
+    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "num_objids", &num_objids, NULL)
+        && num_objids == proxy_object->num_objids)
+      pass ();
     else
-        fail ("PROXY_OBJECT.objid_object_handles [H*]");
+      fail ("PROXY_OBJECT.num_objids [BL] %u != %u", proxy_object->num_objids, num_objids);
+    num_objids++;
+    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "num_objids", &num_objids, 0)
+        && num_objids == proxy_object->num_objids)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.num_objids [BL] set+1 %u != %u", proxy_object->num_objids, num_objids);
+    proxy_object->num_objids--;
+  }
+  {
+    BITCODE_H* objids;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "num_objids", &count, NULL)
+        && dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "objids", &objids, NULL)
+        && objids == proxy_object->objids)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.objids [H*] * %u num_objids", count);
   }
   {
     struct _dwg_object_object* parent;

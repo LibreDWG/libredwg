@@ -1154,25 +1154,27 @@ bit_write_BT (Bit_Chain *dat, double value)
 int
 bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
-  int i;
-
+  unsigned long pos = dat->byte;
   handle->code = bit_read_RC (dat);
+  if (pos == dat->byte)
+    return DWG_ERR_INVALIDHANDLE;
   handle->size = handle->code & 0x0f;
   handle->code = (handle->code & 0xf0) >> 4;
-
+  handle->is_global = 0;
   handle->value = 0;
+
   if (handle->size > sizeof(BITCODE_RC *) || handle->code > 14)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_WARN ("Invalid handle-reference, longer than 8 bytes: " FORMAT_H,
-                ARGS_H (*handle))
+                ARGS_H (*handle));
       return DWG_ERR_INVALIDHANDLE;
     }
 
   // TODO: little-endian only
   // x86_64 gcc-9.[0-2] miscompilation with val[i]: (%rbx) being dat+1
   // we work aorund this one, but you never know what else is being miscompiled.
-  // apparently fixed in gcc-9.3
+  // apparently fixed in gcc-9.3, but 9.3 is still broken for cperl.
 #if defined(__GNUC__) && (__GNUC__ == 9) && (__GNUC_MINOR__ <= 2) \
   && (SIZEOF_SIZE_T == 8)                                         \
   && (defined(__x86_64__) || defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64))
@@ -1180,7 +1182,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 #warning x86_64 gcc-9.[0-2] codegen is seriously broken. better use 9.3 or an older version
     BITCODE_RC *restrict val;
     val = (BITCODE_RC *)&(handle->value);
-    for (i = handle->size - 1; i >= 0; i--)
+    for (int i = handle->size - 1; i >= 0; i--)
       {
         BITCODE_RC c = bit_read_RC (dat);
         val[i] = c;
@@ -1190,7 +1192,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   {
     BITCODE_RC *restrict val;
     val = (BITCODE_RC *)&(handle->value);
-    for (i = handle->size - 1; i >= 0; i--)
+    for (int i = handle->size - 1; i >= 0; i--)
       val[i] = bit_read_RC (dat);
   }
 #endif

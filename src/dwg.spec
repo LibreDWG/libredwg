@@ -4243,7 +4243,8 @@ DWG_ENTITY_END
 //(498) pg.149 r2000+
 DWG_ENTITY (PROXY_ENTITY)
 
-  DECODE_UNKNOWN_BITS
+  //DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbProxyEntity)
   FIELD_BL (class_id, 91);
   PRE (R_2018)
   {
@@ -4259,22 +4260,65 @@ DWG_ENTITY (PROXY_ENTITY)
     FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
   }
 
-  LOG_INFO ("TODO PROXY_ENTITY data\n");
-  /*
-  //TODO: figure out how to deal with the arbitrary size vector databits
-  //      described on the spec
-  FIELD_RC (*data);
-  */
+  DECODER {
+    unsigned char opts = dat->opts;
+    _obj->data_numbits = (dat->size * 8) - bit_position (dat);
+    _obj->data_size = dat->size - dat->byte;
+    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
+    LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
+    dat->opts &= 0xf0;
+    FIELD_TF (data, _obj->data_size, 310);
+    dat->opts = opts;
+  }
+  JSON {
+    FIELD_BL (data_numbits, 0);
+    FIELD_BL (data_size, 93);
+  }
+  DXF_OR_PRINT {
+    // preview 92/310 is also proxy data
+    FIELD_BL (data_size, 93);
+  }
+#ifndef IS_DECODER
+  FIELD_TF (data, _obj->data_size, 310);
+#endif
+#if defined IS_DECODER || defined IS_ENCODER
+  {
+    int bits = _obj->data_numbits - (_obj->data_size * 8);
+    assert (bits > -8 && bits <= 0);
+    if (bits < 0)
+      // back off a few bits, we wrote too much
+      bit_advance_position (dat, bits);
+  }
+#endif
 
   COMMON_ENTITY_HANDLE_DATA;
-  //FIELD_MS (size, 0);
+#ifdef IS_DECODER
+  {
+    unsigned long pos = bit_position (hdl_dat);
+    unsigned char opts = dat->opts;
+    dat->opts &= 0xf0;
+    _obj->num_objids = 0;
+    while (hdl_dat->byte < hdl_dat->size)
+      {
+        Dwg_Handle hdl;
+        if (bit_read_H (hdl_dat, &hdl))
+          break;
+        else
+          _obj->num_objids++;
+      }
+    dat->opts = opts;
+    bit_set_position (hdl_dat, pos);
+  }
+#endif
+  HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
 
 DWG_ENTITY_END
 
 //(499) pg.149 r2000+
 DWG_OBJECT (PROXY_OBJECT)
 
-  DECODE_UNKNOWN_BITS
+  //DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbProxyObject)
   FIELD_BL (class_id, 91);
   PRE (R_2018)
   {
@@ -4290,14 +4334,57 @@ DWG_OBJECT (PROXY_OBJECT)
     FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
   }
 
-  LOG_INFO ("TODO PROXY_OBJECT data\n");
-  /*
-  //TODO: save at least the remaining bytes
-  //TODO: figure out how to deal with the arbitrary size vector databits
-  FIELD_RC (*data);
-  */
+  DECODER {
+    unsigned char opts = dat->opts;
+    _obj->data_numbits = (dat->size * 8) - bit_position (dat);
+    _obj->data_size = dat->size - dat->byte;
+    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
+    LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
+    dat->opts &= 0xf0;
+    FIELD_TF (data, _obj->data_size, 310);
+    dat->opts = opts;
+  }
+  JSON {
+    FIELD_BL (data_numbits, 0);
+    FIELD_BL (data_size, 93);
+  }
+  DXF_OR_PRINT {
+    // preview 92/310 is also proxy data
+    FIELD_BL (data_size, 93);
+  }
+#ifndef IS_DECODER
+  FIELD_TF (data, _obj->data_size, 310);
+#endif
+#if defined IS_DECODER || defined IS_ENCODER
+  {
+    int bits = _obj->data_numbits - (_obj->data_size * 8);
+    assert (bits > -8 && bits <= 0);
+    if (bits < 0)
+      // back off a few bits, we wrote too much
+      bit_advance_position (dat, bits);
+  }
+#endif
 
   START_OBJECT_HANDLE_STREAM;
+#ifdef IS_DECODER
+  {
+    unsigned long pos = bit_position (hdl_dat);
+    unsigned char opts = dat->opts;
+    dat->opts &= 0xf0;
+    _obj->num_objids = 0;
+    while (hdl_dat->byte < hdl_dat->size)
+      {
+        Dwg_Handle hdl;
+        if (bit_read_H (hdl_dat, &hdl))
+          break;
+        else
+          _obj->num_objids++;
+      }
+    dat->opts = opts;
+    bit_set_position (hdl_dat, pos);
+  }
+#endif
+  HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
 
 DWG_OBJECT_END
 

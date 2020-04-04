@@ -2813,12 +2813,16 @@ BL,	DXF 71
 BL,	DXF 97
 @item from_dxf
 B,	DXF 70
+@item data_numbits
+BL
+@item data_size
+BL,	DXF 93
 @item data
-TV
-@item objid_object_handles
-H*
-@item size
-MS
+TF,	DXF 310
+@item num_objids
+BL
+@item objids
+H*,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -7024,10 +7028,16 @@ BL,	DXF 71
 BL,	DXF 97
 @item from_dxf
 B,	DXF 70
+@item data_numbits
+BL
+@item data_size
+BL,	DXF 93
 @item data
-TV
-@item objid_object_handles
-H*
+TF,	DXF 310
+@item num_objids
+BL
+@item objids
+H*,	DXF 340
 
 @end vtable
 @end indentedblock

@@ -407,10 +407,10 @@ object_alias (char *restrict name)
   // check aliases (dxfname => name)
   if (len == strlen ("PDFDEFINITION") && strEQc (&name[3], "DEFINITION"))
     strcpy (name, "UNDERLAYDEFINITION");
+  else if (strEQc (name, "ACAD_PROXY_OBJECT"))
+    strcpy (name, "PROXY_OBJECT");
   else if (strEQc (name, "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION"))
     strcpy (name, "DYNAMICBLOCKPURGEPREVENTER");
-  else if (strEQc (name, "PROXY"))
-    strcpy (name, "PROXY_OBJECT");
   else if (strEQc (name, "CSACDOCUMENTOPTIONS"))
     strcpy (name, "DOCUMENTOPTIONS");
   else if (strEQc (name, "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS"))

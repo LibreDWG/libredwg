@@ -876,7 +876,7 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
   dwg_get_OBJECT (obj_geodata, GEODATA)
   dwg_get_OBJECT (obj_long_transaction, LONG_TRANSACTION)
   dwg_get_OBJECT (obj_object_ptr, OBJECT_PTR)
-  dwg_get_OBJECT (obj_proxy_object, PROXY_OBJECT)
+  dwg_get_OBJECT (obj_proxy, PROXY_OBJECT)
   dwg_get_OBJECT (obj_perssubentmanager, PERSSUBENTMANAGER)
   dwg_get_OBJECT (obj_underlaydefinition, UNDERLAYDEFINITION)
   dwg_get_OBJECT (obj_tablegeometry, TABLEGEOMETRY)
@@ -11660,7 +11660,7 @@ dwg_obj_proxy_set_from_dxf (dwg_obj_proxy *restrict proxy,
     }
 }
 
-char *
+BITCODE_RC *
 dwg_obj_proxy_get_data (const dwg_obj_proxy *restrict proxy,
                         int *restrict error)
 {
@@ -11679,12 +11679,12 @@ dwg_obj_proxy_get_data (const dwg_obj_proxy *restrict proxy,
 
 void
 dwg_obj_proxy_set_data (dwg_obj_proxy *restrict proxy,
-                        const char *restrict data, int *restrict error)
+                        const BITCODE_RC *restrict data, int *restrict error)
 {
   if (proxy)
     {
       *error = 0;
-      proxy->data = (char *)data;
+      proxy->data = (BITCODE_RC*)data;
     }
   else
     {
@@ -11694,13 +11694,13 @@ dwg_obj_proxy_set_data (dwg_obj_proxy *restrict proxy,
 }
 
 dwg_object_ref **
-dwg_obj_proxy_get_objid_object_handles (const dwg_obj_proxy *restrict proxy,
-                                        int *restrict error)
+dwg_obj_proxy_get_objids (const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
 {
   if (proxy)
     {
       *error = 0;
-      return proxy->objid_object_handles;
+      return proxy->objids;
     }
   else
     {

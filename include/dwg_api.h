@@ -544,7 +544,7 @@ typedef struct _dwg_object_VPORT_ENTITY_HEADER    dwg_obj_vport_entity_header;
 typedef struct _dwg_object_DICTIONARY             dwg_obj_dictionary;
 typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
 typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy;
-typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy_object;
+//typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy_object;
 // stable:
 typedef struct _dwg_object_DICTIONARYVAR          dwg_obj_dictionaryvar;
 typedef struct _dwg_object_DICTIONARYWDFLT        dwg_obj_dictionarywdflt;
@@ -1259,7 +1259,7 @@ dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
 dwg_get_OBJECT_DECL (obj_geodata, GEODATA);
 dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
 dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
-dwg_get_OBJECT_DECL (obj_proxy_object, PROXY_OBJECT);
+dwg_get_OBJECT_DECL (obj_proxy, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_perssubentmanager, PERSSUBENTMANAGER);
 dwg_get_OBJECT_DECL (obj_underlaydefinition, UNDERLAYDEFINITION);
 dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
@@ -3494,17 +3494,17 @@ EXPORT void dwg_obj_proxy_set_from_dxf (dwg_obj_proxy *restrict proxy,
                                         int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
-EXPORT char *dwg_obj_proxy_get_data (const dwg_obj_proxy *restrict proxy,
+EXPORT BITCODE_RC* dwg_obj_proxy_get_data (const dwg_obj_proxy *restrict proxy,
                                      int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_obj_proxy_set_data (dwg_obj_proxy *restrict proxy,
-                                    const char *data, int *restrict error)
+                                    const BITCODE_RC* data, int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
 EXPORT dwg_object_ref **
-dwg_obj_proxy_get_objid_object_handles (const dwg_obj_proxy *restrict proxy,
-                                        int *restrict error)
+dwg_obj_proxy_get_objids (const dwg_obj_proxy *restrict proxy,
+                          int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 /********************************************************************
