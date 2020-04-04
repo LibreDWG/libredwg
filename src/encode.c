@@ -47,6 +47,7 @@
 // from dynapi
 bool is_dwg_object (const char *name);
 bool is_dwg_entity (const char *name);
+int dwg_dynapi_entity_size (const char *restrict name);
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -2273,29 +2274,84 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (address);
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
-          // But we cannot write unknown bits into another version. Write a DUMMY instead.
+
+          // But we cannot write unknown bits into another version. Write a
+          // DUMMY or POINT instead. Later maybe PROXY
           if (dwg->header.version != dwg->header.from_version)
             {
-              obj->type = DWG_TYPE_DUMMY; // TODO or PLACEHOLDER if available
               obj->size = 0;
               obj->bitsize = 0;
-              // patch away common data: ownerhandle, num_eed and num_reactors
+              // TODO free the old to avoid leaks
               if (is_entity)
-                { // isn't there a better way, like PROXY? to at least preserve
-                  // the next_entity chain
-                  BITCODE_H owner = obj->tio.entity->ownerhandle;
-                  LOG_WARN ("fixup entity as DUMMY, Type %d\n", obj->type);
-                  obj->tio.object->xdicobjhandle = NULL;
-                  obj->tio.object->num_eed = 0;
-                  obj->tio.object->num_reactors = 0;
-                  obj->tio.object->ownerhandle = owner;
-                  is_entity = 0;
+                { // better than DUMMY to preserve the next_entity chain.
+                  // TODO much better would be PROXY_ENTITY
+                  Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
+                  LOG_WARN ("fixup entity as POINT, Type %d\n", obj->type);
+                  //TODO dwg_free_##token##_private (dat, obj); // keeping eed and common
+                  if (obj->tio.entity->num_reactors)
+                    {
+                      free (obj->tio.entity->reactors);
+                      obj->tio.entity->num_reactors = 0;
+                      obj->tio.entity->reactors = NULL;
+                    }
+                  free (obj->unknown_bits);
+                  obj->tio.entity->tio.POINT = _obj
+                    = realloc (_obj, sizeof (Dwg_Entity_POINT));
+                  //memset (_obj, 0, sizeof (Dwg_Entity_POINT)); // asan cries
+                  _obj->parent = obj->tio.entity;
+                  _obj->x = 0.0;
+                  _obj->y = 0.0;
+                  _obj->z = 0.0;
+                  _obj->thickness = 1e25; // let it stand out
+                  _obj->extrusion.x = 0.0;
+                  _obj->extrusion.y = 0.0;
+                  _obj->extrusion.z = 1.0;
+                  _obj->x_ang = 0.0;
+                  obj->type = DWG_TYPE_POINT;
+                  obj->fixedtype = DWG_TYPE_POINT;
+                  if (dwg->opts & DWG_OPTS_INJSON)
+                    {
+                      free (obj->name);
+                      obj->name = strdup ("POINT");
+                    }
+                  else
+                    obj->name = (char*)"POINT";
+                  if (dwg->opts & DWG_OPTS_IN)
+                    {
+                      free (obj->dxfname);
+                      obj->dxfname = strdup ("POINT");
+                    }
+                  else
+                    obj->dxfname = (char*)"POINT";
                 }
               else
                 {
-                  obj->tio.object->num_eed = 0;
-                  obj->tio.object->num_reactors = 0;
+                  // patch away some common data: reactors. keep owner and xdicobj
+                  obj->type = DWG_TYPE_DUMMY; // TODO or PLACEHOLDER if available, or even PROXY_OBJECT
+                  obj->fixedtype = DWG_TYPE_DUMMY;
+                  if (obj->tio.object->num_reactors)
+                    {
+                      free (obj->tio.object->reactors);
+                      obj->tio.object->num_reactors = 0;
+                      obj->tio.object->reactors = NULL;
+                    }
+                  //TODO dwg_free_##token##_private (dat, obj); // keeping eed and common
                   LOG_INFO ("fixup as DUMMY, Type %d\n", obj->type);
+                  free (obj->unknown_bits);
+                  if (dwg->opts & DWG_OPTS_INJSON)
+                    {
+                      free (obj->name);
+                      obj->name = strdup ("DUMMY");
+                    }
+                  else
+                    obj->name = (char*)"DUMMY";
+                  if (dwg->opts & DWG_OPTS_IN)
+                    {
+                      free (obj->dxfname);
+                      obj->dxfname = strdup ("DUMMY");
+                    }
+                  else
+                    obj->dxfname = (char*)"DUMMY";
                 }
               obj->hdlpos = 0;
             }
@@ -2310,7 +2366,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             bit_write_BS (dat, obj->type);
 
           // properly dwg_decode_object/_entity for eed, reactors, xdic
-          if (is_entity)
+          if (obj->type == DWG_TYPE_POINT)
+            error = dwg_encode_POINT (dat, obj);
+          else if (obj->type == DWG_TYPE_DUMMY)
+            error = dwg_encode_DUMMY (dat, obj);
+          else if (is_entity)
             error = dwg_encode_UNKNOWN_ENT (dat, obj);
           else
             error = dwg_encode_UNKNOWN_OBJ (dat, obj);
