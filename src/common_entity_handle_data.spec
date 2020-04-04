@@ -88,6 +88,12 @@
 #endif
       if (FIELD_VALUE (ltype_flags) == 3)
         FIELD_HANDLE (ltype, 5, 6);
+#ifdef IS_DXF
+      if (FIELD_VALUE (linewt) != 29) {
+        int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
+        KEY (linewt); VALUE_RC ((signed char)lw, 370);
+      }
+#endif
     }
 
   SINCE (R_2007)

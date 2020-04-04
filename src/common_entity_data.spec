@@ -202,12 +202,8 @@
   }
 
   SINCE (R_2000) {
-    DXF {
-      if (FIELD_VALUE (linewt) != 29) {
-        int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
-        KEY (linewt); VALUE_RC ((signed char)lw, 370);
-      }
-    } else {
-      FIELD_RC (linewt, 370);
-    }
+    // DXF later after 6, see common_entity_handle_data
+#ifndef IS_DXF
+    FIELD_RC (linewt, 370);
+#endif
   }
