@@ -4264,11 +4264,26 @@ DWG_ENTITY (PROXY_ENTITY)
     unsigned char opts = dat->opts;
     _obj->data_numbits = (dat->size * 8) - bit_position (dat);
     _obj->data_size = dat->size - dat->byte;
+    if (dat->size > obj->size)
+      {
+        LOG_TRACE ("dat not restricted, dat->size %lu > obj->size %u\n",
+                   dat->size, obj->size);
+        _obj->data_numbits = ((obj->address * 8) + obj->bitsize) - bit_position (dat);
+        _obj->data_size = _obj->data_numbits % 8;
+        if (_obj->data_numbits) _obj->data_size++;
+      }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
     dat->opts &= 0xf0;
     FIELD_TF (data, _obj->data_size, 310);
     dat->opts = opts;
+  }
+  ENCODER {
+    // write is always aligned
+    if ((dwg->opts & DWG_OPTS_INDXF) && !_obj->data_numbits)
+      _obj->data_numbits = 8 * _obj->data_size;
+    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
+    LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
   }
   JSON {
     FIELD_BL (data_numbits, 0);
@@ -4284,6 +4299,9 @@ DWG_ENTITY (PROXY_ENTITY)
 #if defined IS_DECODER || defined IS_ENCODER
   {
     int bits = _obj->data_numbits - (_obj->data_size * 8);
+    if (!(bits > -8 && bits <= 0))
+      LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
+                 _obj->data_numbits, _obj->data_size, bits);
     assert (bits > -8 && bits <= 0);
     if (bits < 0)
       // back off a few bits, we wrote too much
@@ -4338,11 +4356,27 @@ DWG_OBJECT (PROXY_OBJECT)
     unsigned char opts = dat->opts;
     _obj->data_numbits = (dat->size * 8) - bit_position (dat);
     _obj->data_size = dat->size - dat->byte;
+    if (dat->size > obj->size)
+      {
+        LOG_TRACE ("dat not restricted, dat->size %lu > obj->size %u\n",
+                   dat->size, obj->size);
+        _obj->data_numbits
+            = ((obj->address * 8) + obj->bitsize) - bit_position (dat);
+        _obj->data_size = _obj->data_numbits % 8;
+        if (_obj->data_numbits) _obj->data_size++;
+      }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
     dat->opts &= 0xf0;
     FIELD_TF (data, _obj->data_size, 310);
     dat->opts = opts;
+  }
+  ENCODER {
+    // write is always aligned
+    if ((dwg->opts & DWG_OPTS_INDXF) && !_obj->data_numbits)
+      _obj->data_numbits = 8 * _obj->data_size;
+    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
+    LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
   }
   JSON {
     FIELD_BL (data_numbits, 0);
@@ -4358,6 +4392,9 @@ DWG_OBJECT (PROXY_OBJECT)
 #if defined IS_DECODER || defined IS_ENCODER
   {
     int bits = _obj->data_numbits - (_obj->data_size * 8);
+    if (!(bits > -8 && bits <= 0))
+      LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
+                 _obj->data_numbits, _obj->data_size, bits);
     assert (bits > -8 && bits <= 0);
     if (bits < 0)
       // back off a few bits, we wrote too much
