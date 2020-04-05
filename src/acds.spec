@@ -72,7 +72,7 @@
       DECODER { if (_obj->segidx[rcount1].offset) _obj->total_segments++; }
   END_REPEAT_BLOCK
 #ifdef IS_JSON
-  END_REPEAT (segidx) // still needed, later
+  END_REPEAT (segidx) // still needed, free later
 #endif
 
   _REPEAT_NF (_obj->num_segidx, segments, Dwg_AcDs_Segment, 1)
@@ -83,7 +83,8 @@
           KEY (index); VALUE_RL (rcount1, 0);
 #endif
 #ifdef IS_DECODER
-          LOG_TRACE ("\nsegments[%d] offset: %ld\n", rcount1, _obj->segidx[rcount1].offset)
+          LOG_TRACE ("\nsegments[%d] offset: " FORMAT_RLL "\n", rcount1,
+                     _obj->segidx[rcount1].offset)
 #endif
           dat->byte = _obj->segidx[rcount1].offset;
         }
@@ -162,7 +163,7 @@
         if (_obj->datidx_segidx != rcount1)
           LOG_WARN ("Possibly wrong datidx_segidx %d for %d", _obj->datidx_segidx, rcount1);
         SUB_FIELD_RL (datidx,num_entries, 0);
-        SUB_FIELD_RL (datidx,unknown, 0);
+        SUB_FIELD_RL (datidx,di_unknown, 0);
         REPEAT2 (datidx.num_entries, datidx.entries, Dwg_AcDs_DataIndex_Entry)
         REPEAT_BLOCK
 #ifdef IS_JSON
@@ -186,7 +187,7 @@
             SUB_FIELD_RL (schidx.props[rcount2],offset, 0);
         END_REPEAT_BLOCK
         END_REPEAT (schidx.props)
-        SUB_FIELD_RLL (schidx,tag, 0); /* 0x0af10c */
+        SUB_FIELD_RLL (schidx,si_tag, 0); /* 0x0af10c */
         SUB_FIELD_RL (schidx,num_prop_entries, 0); // or RLL
         SUB_FIELD_RL (schidx,si_unknown_2, 0);
         REPEAT2 (schidx.num_prop_entries, schidx.prop_entries, Dwg_AcDs_SchemaIndex_Prop)

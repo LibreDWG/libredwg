@@ -234,6 +234,13 @@ static Bit_Chain *g_dat;
                  tokens->num_tokens);                                         \
       return;                                                                 \
     }
+#define JSON_TOKENS_CHECK_OVERFLOW_NULL                                       \
+  if (tokens->index >= (unsigned int)tokens->num_tokens)                      \
+    {                                                                         \
+      LOG_ERROR ("Unexpected end of JSON at %u of %ld tokens", tokens->index, \
+                 tokens->num_tokens);                                         \
+      return NULL;                                                            \
+    }
 
 // advance until next known first-level type
 // on OBJECT to end of OBJECT
@@ -639,13 +646,110 @@ json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
              date->ms);
 }
 
+// array of subclass objects
 static void*
 json_records (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
-              const char *subclass, BITCODE_BL *num)
+              void *_obj, const char *subclass, BITCODE_BL *nump)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Expected %s ARRAY of OBJECTs", subclass);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      *nump = 0;
+      return NULL;
+    }
+  // see subclass arrays, _set_struct_field
   json_advance_unknown (dat, tokens, t->type, 0);
   return NULL;
+}
+
+// of primitives only
+static void*
+json_vector (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
+             const char *key, const char *type, BITCODE_BL *nump)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  BITCODE_BL *a_bl;
+  BITCODE_RLL *a_rll;
+  BITCODE_BD *a_bd;
+  BITCODE_TV *a_tv;
+  void *arr;
+  int len = t->size;
+  int size, is_str = 0, is_float = 0;
+
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Expected %s ARRAY", "key");
+      json_advance_unknown (dat, tokens, t->type, 0);
+      *nump = 0;
+      return NULL;
+    }
+  if (strEQc (type, "BL"))
+    {
+      size = sizeof (BITCODE_BL);
+      a_bl = arr = len ? calloc (len, size) : NULL;
+    }
+  else if (strEQc (type, "RLL"))
+    {
+      size = sizeof (BITCODE_RLL);
+      a_rll = arr = len ? calloc (len, size) : NULL;
+    }
+  else if (strEQc (type, "BD"))
+    {
+      is_float = 1;
+      size = sizeof (BITCODE_BD);
+      a_bd = arr = len ? calloc (len, size) : NULL;
+    }
+  else if (strEQc (type, "TV"))
+    {
+      is_str = 1;
+      size = sizeof (BITCODE_TV);
+      a_tv = arr = len ? calloc (len, size) : NULL;
+    }
+  else
+    {
+      LOG_ERROR ("Unhandled json_vector type %s", type);
+      return NULL;
+    }
+  // json_set_numfield (_obj, fields, key, size1);
+  *nump = len;
+  if (!len)
+    LOG_TRACE ("%s: [%s] empty\n", key, type);
+  tokens->index++;
+  for (int k = 0; k < len; k++)
+    {
+      JSON_TOKENS_CHECK_OVERFLOW_NULL;
+      t = &tokens->tokens[tokens->index];
+      if (t->type != JSMN_PRIMITIVE)
+        {
+          LOG_ERROR ("Expected %s PRIMITIVE", "key");
+          json_advance_unknown (dat, tokens, t->type, 0);
+          return arr;
+        }
+      if (is_str)
+        {
+          a_tv[k] = json_string (dat, tokens);
+          LOG_TRACE ("%s[%d]: %s [%s]\n", key, k, a_tv[k], type);
+        }
+      else if (is_float)
+        {
+          a_bd[k] = json_float (dat, tokens);
+          LOG_TRACE ("%s[%d]: %f [%s]\n", key, k, a_bd[k], type);
+        }
+      else if (strEQc (type, "RLL"))
+        {
+          a_rll[k] = json_long (dat, tokens);
+          LOG_TRACE ("%s[%d]: " FORMAT_RLL " [%s]\n", key, k, a_rll[k], type);
+        }
+      else if (strEQc (type, "BL"))
+        {
+          a_bl[k] = json_long (dat, tokens);
+          LOG_TRACE ("%s[%d]: " FORMAT_BL " [%s]\n", key, k, a_bl[k], type);
+        }
+    }
+  //dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
+  return (void*)arr;
 }
 
 static int
@@ -3389,6 +3493,7 @@ json_AcDs_SegmentIndex (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       assert (t->type == JSMN_OBJECT);
       tokens->index++;
+      LOG_TRACE ("segidx[%d]:\n", j);
       for (int k = 0; k < keys; k++)
         {
           char key[80];
@@ -3448,6 +3553,7 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       assert (t->type == JSMN_OBJECT);
       tokens->index++;
+      LOG_TRACE ("segments[%d]:\n", j);
       for (int k = 0; k < keys; k++)
         {
           char key[80];
@@ -3469,40 +3575,73 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           FIELD_RL (data_algn_offset, 0)
           FIELD_RL (objdata_algn_offset, 0)
           FIELD_TFF (padding, 8, 0)
-          else if (_obj->type == 3) {
-            /* if (0) {}
-               SUB_FIELD_LONG (o,schidx.unknown_1, 0) */
-            if (strEQc (key, "si_unknown_1"))
-              {
-                o->schidx.si_unknown_1 = (BITCODE_RL)json_long (dat, tokens);
-                LOG_TRACE ("schidx.unknown_1: " FORMAT_RL "\n", o->schidx.si_unknown_1);
-              }
-            else if (strEQc (key, "si_unknown_2"))
-              {
-                o->schidx.si_unknown_2 = (BITCODE_RL)json_long (dat, tokens);
-                LOG_TRACE ("schidx.unknown_2: " FORMAT_RL "\n", o->schidx.si_unknown_2);
-              }
-            else if (strEQc (key, "tag"))
-              {
-                o->schidx.tag = (BITCODE_RLL)json_long (dat, tokens);
-                LOG_TRACE ("schidx.tag: " FORMAT_RLL "\n", o->schidx.tag);
-              }
-            else if (strEQc (key, "props"))
-              {
-                o->schidx.props = (Dwg_AcDs_SchemaIndex_Prop*)json_records (dat, tokens,
-                                      "AcDs_SchemaIndex_Prop", &o->schidx.num_props);
-              }
-            else if (strEQc (key, "prop_entries"))
-              {
-                o->schidx.prop_entries = (Dwg_AcDs_SchemaIndex_Prop*)json_records (dat, tokens,
-                                      "AcDs_SchemaIndex_Prop", &o->schidx.num_prop_entries);
-              }
-            else
-              {
-                LOG_ERROR ("Unknown %s.%s ignored", section, key);
-                json_advance_unknown (dat, tokens, t->type, 0);
-              }
-          }
+          else if (strEQc (key, "datidx.entries"))
+            {
+              o->datidx.entries = (Dwg_AcDs_DataIndex_Entry*)json_records (dat, tokens,
+                  o, "AcDs_DataIndex_Entry", &o->datidx.num_entries);
+            }
+          else if (strEQc (key, "di_unknown"))
+            {
+              o->datidx.di_unknown = (BITCODE_RL)json_long (dat, tokens);
+              LOG_TRACE ("datidx.di_unknown_1: " FORMAT_RL "\n", o->datidx.di_unknown);
+            }
+          else if (strEQc (key, "si_unknown_1"))
+            {
+              o->schidx.si_unknown_1 = (BITCODE_RL)json_long (dat, tokens);
+              LOG_TRACE ("schidx.unknown_1: " FORMAT_RL "\n", o->schidx.si_unknown_1);
+            }
+          else if (strEQc (key, "si_unknown_2"))
+            {
+              o->schidx.si_unknown_2 = (BITCODE_RL)json_long (dat, tokens);
+              LOG_TRACE ("schidx.unknown_2: " FORMAT_RL "\n", o->schidx.si_unknown_2);
+            }
+          else if (strEQc (key, "si_tag"))
+            {
+              o->schidx.si_tag = (BITCODE_RLL)json_long (dat, tokens);
+              LOG_TRACE ("schidx.si_tag: " FORMAT_RLL "\n", o->schidx.si_tag);
+            }
+          else if (strEQc (key, "schidx.props"))
+            {
+              o->schidx.props = (Dwg_AcDs_SchemaIndex_Prop*)json_records (dat, tokens,
+                                    o, "AcDs_SchemaIndex_Prop", &o->schidx.num_props);
+            }
+          else if (strEQc (key, "schidx.prop_entries"))
+            {
+              o->schidx.prop_entries = (Dwg_AcDs_SchemaIndex_Prop*)json_records (dat, tokens,
+                                           o, "AcDs_SchemaIndex_Prop", &o->schidx.num_prop_entries);
+            }
+          else if (strEQc (key, "schdat.uprops"))
+            {
+              o->schdat.uprops = (Dwg_AcDs_SchemaData_UProp*)json_records (dat, tokens,
+                                     o, "AcDs_SchemaData_UProp", &o->schdat.num_uprops);
+            }
+          else if (strEQc (key, "schdat.schemas"))
+            {
+              o->schdat.schemas = (Dwg_AcDs_Schema*)json_records (dat, tokens,
+                                      o, "AcDs_Schema", &o->schdat.num_schemas);
+            }
+          else if (strEQc (key, "schdat.propnames"))
+            {
+              o->schdat.propnames = (BITCODE_TV*)json_vector (dat, tokens,
+                                      key, "TV", &o->schdat.num_propnames);
+            }
+          else if (strEQc (key, "search.search"))
+            {
+              o->search.search = (Dwg_AcDs_Search_Data*)json_records (dat, tokens,
+                                     o, "AcDs_Search_Data", &o->search.num_search);
+            }
+          /*
+          else if (strEQc (key, "schema.index"))
+            {
+              o->schdat.schema.index = (BITCODE_RLL*)json_vector (dat, tokens,
+                                    o, key, "RLL", &o->schdat.schemas[i].num_index);
+            }
+          else if (strEQc (key, "schema.props"))
+            {
+              o->schdat.schemas[i].props = (Dwg_AcDs_SchemaIndex_Prop*)json_records (dat, tokens,
+                                      o, "AcDs_SchemaIndex_Prop", &o->schdat.schemas[i].num_props);
+            }
+          */
           // todo: support more types
           else
             {

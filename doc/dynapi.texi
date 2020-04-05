@@ -8479,7 +8479,7 @@ RL
 
 @item num_entries
 RL
-@item unknown
+@item di_unknown
 RL
 @item entries
 Dwg_AcDs_DataIndex_Entry*
@@ -8601,7 +8601,7 @@ RL
 RL
 @item props
 Dwg_AcDs_SchemaIndex_Prop*
-@item tag
+@item si_tag
 RLL
 @item num_prop_entries
 RL

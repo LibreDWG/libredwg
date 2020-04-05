@@ -6304,7 +6304,7 @@ typedef struct _dwg_AcDs_DataIndex_Entry
 typedef struct _dwg_AcDs_DataIndex
 {
   BITCODE_RL num_entries;
-  BITCODE_RL unknown; // always 0, probably RLL above
+  BITCODE_RL di_unknown; // always 0, probably RLL above
   Dwg_AcDs_DataIndex_Entry *entries;
 } Dwg_AcDs_DataIndex;
 
@@ -6380,7 +6380,7 @@ typedef struct _dwg_AcDs_SchemaIndex
   BITCODE_RL num_props; // or uint64
   BITCODE_RL si_unknown_1;
   Dwg_AcDs_SchemaIndex_Prop *props;
-  BITCODE_RLL tag; /* 0x0af10c */
+  BITCODE_RLL si_tag; /* 0x0af10c */
   BITCODE_RL num_prop_entries;
   BITCODE_RL si_unknown_2; /* 0 */
   Dwg_AcDs_SchemaIndex_Prop *prop_entries;

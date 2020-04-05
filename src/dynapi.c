@@ -7348,7 +7348,7 @@ static const Dwg_DYNAPI_field _dwg_AcDs_DataBlobRef_Page_fields[] = {
 static const Dwg_DYNAPI_field _dwg_AcDs_DataIndex_fields[] = {
   { "num_entries",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex, num_entries),
     0,0,0, 0 },
-  { "unknown",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex, unknown),
+  { "di_unknown",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_DataIndex, di_unknown),
     0,0,0, 0 },
   { "entries",	"Dwg_AcDs_DataIndex_Entry*", sizeof (Dwg_AcDs_DataIndex_Entry*),  OFF (struct _dwg_AcDs_DataIndex, entries),
     1,1,0, 0 },
@@ -7428,7 +7428,7 @@ static const Dwg_DYNAPI_field _dwg_AcDs_SchemaIndex_fields[] = {
     0,0,0, 0 },
   { "props",	"Dwg_AcDs_SchemaIndex_Prop*", sizeof (Dwg_AcDs_SchemaIndex_Prop*),  OFF (struct _dwg_AcDs_SchemaIndex, props),
     1,1,0, 0 },
-  { "tag",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_SchemaIndex, tag),
+  { "si_tag",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_AcDs_SchemaIndex, si_tag),
     0,0,0, 0 },
   { "num_prop_entries",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_SchemaIndex, num_prop_entries),
     0,0,0, 0 },

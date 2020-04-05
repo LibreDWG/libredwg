@@ -2030,9 +2030,9 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= json_section_security (dat, dwg);
           error |= json_section_revhistory (dat, dwg);
           error |= json_section_objfreespace (dat, dwg);
-          error |= json_section_acds (dat, dwg);
           //error |= json_section_signature (dat, dwg);
           error |= json_section_template (dat, dwg);
+          error |= json_section_acds (dat, dwg);
         }
     }
 
