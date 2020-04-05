@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -23,6 +23,9 @@
 
 #include "bits.h"
 #include "dwg.h"
+
+/* only when the versions mismatch */
+#define ENCODE_UNKNOWN_AS_DUMMY
 
 int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,

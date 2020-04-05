@@ -2275,7 +2275,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
 
-#if 0
+#ifdef ENCODE_UNKNOWN_AS_DUMMY
           // But we cannot write unknown bits into another version.
           // Write a DUMMY or POINT instead. Later maybe PROXY. This leaks and is controversial
           if (dwg->header.version != dwg->header.from_version)
@@ -2367,7 +2367,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           else
             bit_write_BS (dat, obj->type);
 
-#if 0
+#ifdef ENCODE_UNKNOWN_AS_DUMMY
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (obj->type == DWG_TYPE_POINT)
             error = dwg_encode_POINT (dat, obj);
