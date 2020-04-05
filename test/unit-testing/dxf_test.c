@@ -10,6 +10,7 @@
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
+
 /* compare against dxf values, generated from examples/unknown */
 /* written by: Reini Urban */
 
@@ -835,6 +836,7 @@ main (int argc, char *argv[])
   char *file = NULL;
   char name[80];
   char olddxf[80];
+  int big = 0;
   // clang-format off
   #include "../../examples/alldxf_2.inc"
   // clang-format on
@@ -855,8 +857,14 @@ main (int argc, char *argv[])
     }
   if (argc - i >= 1 && !strcmp (argv[i], "-a"))
     {
+      ++i;
       g_all = 1;
       g_max_count = 1000;
+    }
+  if (argc - i >= 1 && !strcmp (argv[i], "--big"))
+    {
+      ++i;
+      big = 1;
     }
 
   g_counter = 0;
@@ -873,13 +881,12 @@ main (int argc, char *argv[])
       // display ok values only for the first 6 object types per file
       if (strNE (name, dxf->name) && strNE (olddxf, dxf->dxf))
         g_counter = 0;
-#ifdef IS_RELEASE
-      if (strstr (dxffile, "/test-big/"))
+      if (!big && strstr (dxffile, "/test-big/"))
         {
           free (dwgfile);
           continue;
         }
-#endif
+
       strcpy (olddxf, dxf->dxf);
       strcpy (name, dxf->name);
       if (!is_dwg_object (name) && !is_dwg_entity (name))
