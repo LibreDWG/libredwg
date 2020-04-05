@@ -47,7 +47,6 @@ static char buf[255];
 // static int is_sorted = 0;
 
 // imported
-int postprocess_entity_linkedlist (Dwg_Data *restrict dwg);
 char *dwg_obj_table_get_name (const Dwg_Object *restrict obj,
                               int *restrict error);
 
@@ -2408,7 +2407,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
-    postprocess_entity_linkedlist (dwg);
+    dwg_fixup_BLOCKS_entities (dwg);
 
   VALUE_TV (PACKAGE_STRING, 999);
 

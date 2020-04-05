@@ -1900,7 +1900,7 @@ json_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1, rcount2, rcount3, rcount4, vcount;
+  BITCODE_RL rcount1, rcount2, rcount3 = 0, rcount4, vcount;
 
   RECORD (AcDs); // single hash
   {

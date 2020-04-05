@@ -2103,7 +2103,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_BL rcount1 = 0, rcount2 = 0;
-  BITCODE_BL rcount3, rcount4, vcount;
+  BITCODE_BL rcount3 = 0, rcount4, vcount;
 
   // clang-format off
   #include "acds.spec"

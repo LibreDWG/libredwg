@@ -141,7 +141,7 @@ static Bit_Chain *g_dat;
           _obj->nam = json_string (dat, tokens);                              \
       }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, t->type, 0);                                  \
+      json_advance_unknown (dat, tokens, t->type, 0);                         \
   }
 #define FIELD_T32(nam, dxf)                                                   \
   else if (strEQc (key, #nam))                                                \
@@ -153,7 +153,7 @@ static Bit_Chain *g_dat;
         _obj->nam = (BITCODE_T32)json_wstring (dat, tokens);                  \
       }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, t->type, 0);                                  \
+      json_advance_unknown (dat, tokens, t->type, 0);                         \
   }
 #define FIELD_TU16(nam, dxf)                                                  \
   else if (strEQc (key, #nam))                                                \
@@ -165,7 +165,7 @@ static Bit_Chain *g_dat;
         _obj->nam = (BITCODE_TU)json_wstring (dat, tokens);                   \
       }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, t->type, 0);                                  \
+      json_advance_unknown (dat, tokens, t->type, 0);                         \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   else if (strEQc (key, #nam))                                                \
@@ -347,8 +347,9 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
           len += 8;
           if (len > 6 * (t->end - t->start))
             {
-              LOG_ERROR ("bit_utf8_to_TV loop len=%d vs %d \"%.*s\"", len, t->end - t->start,
-                         t->end - t->start, &dat->chain[t->start]);
+              LOG_ERROR ("bit_utf8_to_TV loop len=%d vs %d \"%.*s\"", len,
+                         t->end - t->start, t->end - t->start,
+                         &dat->chain[t->start]);
               len = t->end - t->start;
               goto normal;
             }
@@ -3972,7 +3973,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   LOG_TRACE ("\n")
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
-    postprocess_entity_linkedlist (dwg);
+    dwg_fixup_BLOCKS_entities (dwg);
 
   free (tokens.tokens);
   return error;

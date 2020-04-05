@@ -361,7 +361,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
     dat.from_version = dat.version;
 
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
-    postprocess_entity_linkedlist ((Dwg_Data *)dwg);
+    dwg_fixup_BLOCKS_entities ((Dwg_Data *)dwg);
 
   dat.size = 0;
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
