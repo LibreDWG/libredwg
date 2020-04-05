@@ -273,7 +273,6 @@ json_advance_unknown (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
           if (t->type == JSMN_OBJECT) tokens->index++; // skip the key also
           error |= json_advance_unknown (dat, tokens, t->type, depth + 1);
         }
-      tokens->index--;
       return error;
     case JSMN_STRING:
     case JSMN_PRIMITIVE:
@@ -3708,8 +3707,8 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             error |= json_AcDs_SegmentIndex (dat, dwg, tokens, _obj, t->size);
           else
             tokens->index++; // empty array
-          if (error >= DWG_ERR_CRITICAL)
-            return error;
+          //if (error >= DWG_ERR_CRITICAL)
+          //  return error;
         }
       else if (strEQc (key, "segments"))
         {
@@ -3719,8 +3718,8 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             error |= json_AcDs_Segments (dat, dwg, tokens, _obj, t->size);
           else
             tokens->index++; // empty array
-          if (error >= DWG_ERR_CRITICAL)
-            return error;
+          //if (error >= DWG_ERR_CRITICAL)
+          //  return error;
         }
       else
         {
