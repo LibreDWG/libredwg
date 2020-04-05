@@ -22,9 +22,17 @@ api_process (dwg_object *obj)
   for (i = 0; i < num_ents; i++)
     {
       if (hdls[i] == ents[i])
-        ok ("SORTENTSTABLE.ents[%d]: " FORMAT_REF, i, ARGS_REF (ents[i]));
+        {
+          if (ents[i])
+            ok ("SORTENTSTABLE.ents[%d]: " FORMAT_REF, i, ARGS_REF (ents[i]));
+          else
+            ok ("SORTENTSTABLE.ents[%d]: NULL", i);
+        }
       else
         fail ("SORTENTSTABLE.ents[%d]: " FORMAT_REF, i, ARGS_REF (ents[i]));
-      ok ("SORTENTSTABLE.sort_ents[%d]: " FORMAT_REF, i, ARGS_REF (sort_ents[i]));
+      if (sort_ents[i])
+        ok ("SORTENTSTABLE.sort_ents[%d]: " FORMAT_REF, i, ARGS_REF (sort_ents[i]));
+      else
+        ok ("SORTENTSTABLE.sort_ents[%d]: NULL", i);
     }
 }
