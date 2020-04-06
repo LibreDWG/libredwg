@@ -27,6 +27,10 @@
 /* only when the versions mismatch */
 #define ENCODE_UNKNOWN_AS_DUMMY
 
+#ifdef IN_DXF_H
+#error in_dxf.h must be included after __FILE__ because of FORMAT_BD
+#endif
+
 int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
                                     uint32_t size);

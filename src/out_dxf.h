@@ -21,6 +21,10 @@
 #include "dwg.h"
 #include "bits.h"
 
+#ifdef IN_DXF_H
+#error in_dxf.h must be included after out_dxf.h because of FORMAT_BD
+#endif
+
 const char *dxf_format (int code) RETURNS_NONNULL;
 const char *dxf_codepage (int code, Dwg_Data *dwg)  RETURNS_NONNULL;
 int dxf_is_sorted_INSERT (const Dwg_Object *restrict obj);

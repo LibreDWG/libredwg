@@ -33,6 +33,7 @@
 #include "common.h"
 #include "bits.h"
 #include "suffix.inc"
+#include "decode.h"
 #include "in_json.h"
 #include "in_dxf.h"
 

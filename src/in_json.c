@@ -28,8 +28,13 @@
 #include "hash.h"
 #include "decode.h"
 #include "dynapi.h"
-#include "in_dxf.h"
 #include "in_json.h"
+
+static unsigned int loglevel;
+#define DWG_LOGLEVEL loglevel
+#include "logging.h"
+
+#include "in_dxf.h"
 
 // not exported
 #define JSMN_STATIC
@@ -53,10 +58,6 @@ typedef struct jsmntokens
 // synced with enum jsmntype_t
 static const char *const t_typename[]
     = { "UNDEFINED", "OBJECT", "ARRAY", "STRING", "PRIMITIVE" };
-
-static unsigned int loglevel;
-#define DWG_LOGLEVEL loglevel
-#include "logging.h"
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;

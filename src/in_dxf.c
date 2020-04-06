@@ -37,7 +37,6 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
-#include "in_dxf.h"
 #include "out_dxf.h"
 #include "decode.h"
 #include "encode.h"
@@ -45,6 +44,12 @@
 #include "hash.h"
 #include "classes.h"
 #include "free.h"
+
+static unsigned int loglevel;
+#define DWG_LOGLEVEL loglevel
+#include "logging.h"
+
+#include "in_dxf.h"
 
 #ifndef _DWG_API_H_
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
@@ -54,10 +59,6 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
-
-static unsigned int loglevel;
-#define DWG_LOGLEVEL loglevel
-#include "logging.h"
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;

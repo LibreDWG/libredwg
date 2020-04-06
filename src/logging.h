@@ -25,6 +25,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef IN_DXF_H
+#error in_dxf.h must be included after logging.h because of FORMAT_BD
+#endif
+
 /*
  * If more logging levels are necessary, put them in the right place and
  * update the numbering, keeping it a 0,1,...n sequence, where n corresponds

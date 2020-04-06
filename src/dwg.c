@@ -40,9 +40,6 @@
 #ifdef USE_WRITE
 #  include "encode.h"
 #endif
-#ifndef DISABLE_DXF
-#  include "in_dxf.h"
-#endif
 #include "free.h"
 
 /* The logging level per .o */
@@ -54,6 +51,15 @@ static bool env_var_checked_p;
 #endif /* USE_TRACING */
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
+
+/*------------------------------------------------------------------------------
+ * Imports bypassing its headers.
+ * We dont want to import in_dxf.h as it is redefining FORMAT_BD.
+ */
+#ifndef DISABLE_DXF
+EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+#endif
 
 /*------------------------------------------------------------------------------
  * Internal functions

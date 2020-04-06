@@ -27,6 +27,10 @@
 #  include <ctype.h>
 #endif
 
+#ifdef IN_DXF_H
+#error in_dxf.h must be included after dec_macros.h because of FORMAT_BD
+#endif
+
 // needed by decode and decode_r2007
 #define ACTION decode
 #define IS_DECODER
