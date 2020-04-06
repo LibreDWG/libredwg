@@ -387,6 +387,11 @@ bool is_type_unhandled (const Dwg_Object_Type type)
     }
   return false;
 }
+
+bool is_class_stable (const char* name)
+{
+  return is_type_stable (dwg_name_type (name));
+}
 bool is_class_unstable (const char* name)
 {
   return is_type_unstable (dwg_name_type (name));

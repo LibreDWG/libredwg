@@ -7567,6 +7567,8 @@ new_object (char *restrict name, char *restrict dxfname,
                              name, "ext_line_rotation", ang, pair->value.d,
                              "BD", 52);
                 }
+              else if (is_class_stable (obj->name))
+                LOG_ERROR ("Unknown DXF code %d for %s", pair->code, name)
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
             }
