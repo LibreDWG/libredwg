@@ -6,7 +6,7 @@ CFLAGS="@CFLAGS@"
 timeout="@TIMEOUT_10@"
 
 case "$CFLAGS" in
-    *-DDEBUG_CLASSES*) timeout= ;;
+    *-DDEBUG_CLASSES*) timeout="" ;;
     *) ;;
 esac
 make -s -C src
