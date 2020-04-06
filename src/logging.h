@@ -78,6 +78,18 @@
       }                                                                       \
   }
 
+// speed up fuzzing, avoid unnecessary branches
+#ifdef __AFL_COMPILER
+#  undef DWG_LOGLEVEL
+#  define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+#  undef LOG
+#  undef LOG_WARN
+#  undef LOG_ERROR
+#  define LOG(args...) {}
+#  define LOG_WARN(args...) {}
+#  define LOG_ERROR(args...) {}
+#endif
+
 #define LOG_INFO(args...) LOG (INFO, args)
 #define LOG_TRACE(args...) LOG (TRACE, args)
 #define LOG_HANDLE(args...) LOG (HANDLE, args)
