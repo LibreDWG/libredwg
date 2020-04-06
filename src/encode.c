@@ -2424,6 +2424,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           // with overlarge sizes >0x7fff memmove dat right by 2, one more RS added.
           LOG_INFO ("overlarge size %u > 0x7fff @%lu\n", (unsigned)obj->size, dat->byte);
+          if (dat->byte + obj->size + 2 >= dat->size)
+            bit_chain_alloc (dat);
           memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte], obj->size);
           obj->size += 2;
           obj->bitsize += 16;
