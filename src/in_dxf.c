@@ -3481,8 +3481,6 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, pair->value.d, pair->code);
               break;
             case 296:
-              if (ctx->has_content_txt)
-                goto unknown_mleader;
               ctx->has_content_blk = pair->value.i;
               LOG_TRACE ("%s.ctx.has_content_blk = %i [B %d]\n", obj->name,
                          pair->value.i, pair->code);
@@ -4903,7 +4901,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       LOG_TRACE ("SPLINE.degree = %d [BL 71]\n", _o->degree);
       return 1; // found
     }
-  else if (pair->code == 72 && _o->scenario & 1)
+  else if (pair->code == 72)
     {
       _o->num_knots = pair->value.i;
       *jp = 0;
@@ -4916,7 +4914,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       LOG_TRACE ("SPLINE.num_knots = %d [BS 72]\n", _o->num_knots);
       return 1; // found
     }
-  else if (pair->code == 73 && _o->scenario & 1)
+  else if (pair->code == 73)
     {
       _o->num_ctrl_pts = pair->value.i;
       *jp = 0;
@@ -4930,7 +4928,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       LOG_TRACE ("SPLINE.num_ctrl_pts = %d [BS 73]\n", _o->num_ctrl_pts);
       return 1; // found
     }
-  else if (pair->code == 74 && _o->scenario & 2)
+  else if (pair->code == 74)
     {
       _o->num_fit_pts = pair->value.i;
       *jp = 0;
@@ -4941,12 +4939,12 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
           return 0;
         }
       j = 0;
-      _o->scenario = 2;
+      //_o->scenario = 2;
       _o->flag |= 1024;
       LOG_TRACE ("SPLINE.num_fit_pts = %d [BS 74]\n", _o->num_fit_pts);
       return 1; // found
     }
-  else if (pair->code == 40 && _o->scenario & 1) // knots[] BD*
+  else if (pair->code == 40) // knots[] BD*
     {
       if (!_o->knots || j >= (int)_o->num_knots)
         {
@@ -4961,7 +4959,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
         *jp = 0;
       return 1; // found
     }
-  else if (pair->code == 10 && _o->scenario & 1) // ctrl_pts[].x 3BD
+  else if (pair->code == 10) // ctrl_pts[].x 3BD
     {
       if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
@@ -4973,7 +4971,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       _o->ctrl_pts[j].x = pair->value.d;
       return 1; // found
     }
-  else if (pair->code == 20 && _o->scenario & 1) // ctrl_pts[].y 3BD
+  else if (pair->code == 20) // ctrl_pts[].y 3BD
     {
       if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
@@ -4984,7 +4982,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       _o->ctrl_pts[j].y = pair->value.d;
       return 1; // found
     }
-  else if (pair->code == 30 && _o->scenario & 1) // ctrl_pts[].z 3BD
+  else if (pair->code == 30) // ctrl_pts[].z 3BD
     {
       if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
@@ -5001,7 +4999,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
         *jp = 0;
       return 1; // found
     }
-  else if (pair->code == 41 && _o->scenario & 1) // ctrl_pts[].z 3BD
+  else if (pair->code == 41) // ctrl_pts[].z 3BD
     { 
       if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
@@ -5016,7 +5014,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       *jp = j;
       return 1; // found
     }
-  else if (pair->code == 11 && _o->scenario & 2) // fit_pts[].x 3BD
+  else if (pair->code == 11) // fit_pts[].x 3BD
     {
       if (!_o->fit_pts || j >= _o->num_fit_pts)
         {
@@ -5027,7 +5025,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       _o->fit_pts[j].x = pair->value.d;
       return 1; // found
     }
-  else if (pair->code == 21 && _o->scenario & 2) // fit_pts[].y 3BD
+  else if (pair->code == 21) // fit_pts[].y 3BD
     {
       if (!_o->fit_pts || j >= _o->num_fit_pts)
         {
@@ -5038,7 +5036,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
       _o->fit_pts[j].y = pair->value.d;
       return 1; // found
     }
-  else if (pair->code == 31 && _o->scenario & 2) // fit_pts[].z 3BD
+  else if (pair->code == 31) // fit_pts[].z 3BD
     {
       if (!_o->fit_pts || j >= _o->num_fit_pts)
         {
