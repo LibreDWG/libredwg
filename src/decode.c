@@ -5692,25 +5692,19 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (num_bits < 0)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
-  //*pre_bits = pos % 8;
   obj->num_unknown_bits = (BITCODE_RL)num_bits;
   num_bytes = num_bits / 8;
   if (num_bits % 8)
-    {
-      num_bytes++;
-      dat->size++; // allow overshoot by one byte (for missing bits)
-    }
+    num_bytes++;
 
-  obj->unknown_bits = bit_read_TF (dat, num_bytes);
-  // [num_bits (commonsize, hdlpos, strsize)]
+  obj->unknown_bits = bit_read_bits (dat, num_bits);
+  // [num_bits (commonsize, hdlpos, strsize) num_bytes TF]
   LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) %d TF]: ", num_bits,
              obj->common_size, obj->bitsize - obj->common_size,
              (int)obj->stringstream_size, num_bytes);
   LOG_TRACE_TF (obj->unknown_bits, num_bytes);
   LOG_TRACE ("\n");
   bit_set_position (dat, pos);
-  if (num_bits % 8)
-    dat->size--;
   return 0;
 }
 

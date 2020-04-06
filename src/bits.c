@@ -1391,6 +1391,36 @@ bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
   return (BITCODE_TF)chain;
 }
 
+/** Read fixed text with zero-termination.
+ *  After usage, the allocated memory must be properly freed.
+ *  preR11
+ */
+ATTRIBUTE_MALLOC
+BITCODE_TF
+bit_read_bits (Bit_Chain *dat, unsigned long bits)
+{
+  unsigned bytes = bits / 8;
+  int rest = bits % 8;
+  BITCODE_RC *restrict chain = calloc (bytes + (rest ? 2 : 1), 1);
+
+  bit_read_fixed (dat, chain, bytes);
+  chain[bytes] = '\0';
+  if (rest)
+    {
+      // protect against the last bit_advance error
+      dat->size++;
+      chain[bytes + 1] = '\0';
+      for (int i = 0; i < rest; i++)
+        {
+          BITCODE_RC last = bit_read_B (dat);
+          chain[bytes] |= last << i;
+        }
+      dat->size--;
+      // we are now in overflow state
+    }
+  return (BITCODE_TF)chain;
+}
+
 /** Write fixed-length text.
  */
 void

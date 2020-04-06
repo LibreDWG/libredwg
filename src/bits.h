@@ -209,6 +209,7 @@ void bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
 
 /* read fixed-length ASCII string */
 BITCODE_TF bit_read_TF (Bit_Chain *dat, unsigned int length) ATTRIBUTE_MALLOC;
+BITCODE_TF bit_read_bits (Bit_Chain *dat, unsigned long bits) ATTRIBUTE_MALLOC;
 
 void bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
                    unsigned int length);
