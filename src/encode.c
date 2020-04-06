@@ -2731,7 +2731,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
   Dwg_Object_Entity *_obj = ent;
   Dwg_Data *dwg = ent->dwg;
 
-  if (!obj || !dat)
+  if (!obj || !dat || !ent)
     return DWG_ERR_INVALIDDWG;
 
   hdl_dat->from_version = dat->from_version;
@@ -2921,8 +2921,8 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
       // the handle stream offset
       obj->hdlpos = bit_position (dat) + obj->bitsize;
     SINCE (R_2007) { obj_string_stream (dat, obj, str_dat); }
-    if (!_obj)
-      return DWG_ERR_INVALIDTYPE;
+    if (!_obj || !obj->tio.object)
+      return DWG_ERR_INVALIDDWG;
 
     bit_write_H (dat, &obj->handle);
     LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle));
