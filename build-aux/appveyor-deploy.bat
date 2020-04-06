@@ -20,6 +20,8 @@ cd %DESTDIR%
 copy ..\README README.txt
 move /y bin\libredwg-0.dll libredwg-0.dll
 rmdir bin
+rem libssp-0.dll needed for -fstack-protector
+copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libssp-0.dll *.*
 copy ..\programs\.libs\*.exe *.*
 mkdir examples
 copy ..\examples\.libs\*.exe examples
