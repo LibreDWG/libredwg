@@ -4940,6 +4940,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
           _o->num_fit_pts = 0;
           return 0;
         }
+      j = 0;
       _o->scenario = 2;
       _o->flag |= 1024;
       LOG_TRACE ("SPLINE.num_fit_pts = %d [BS 74]\n", _o->num_fit_pts);
@@ -4947,7 +4948,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 40 && _o->scenario & 1) // knots[] BD*
     {
-      if (*jp >= (int)_o->num_knots)
+      if (!_o->knots || j >= (int)_o->num_knots)
         {
           LOG_ERROR ("SPLINE.knots[%d] overflow, max %d", *jp, _o->num_knots);
           return 1; // found
@@ -4962,7 +4963,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 10 && _o->scenario & 1) // ctrl_pts[].x 3BD
     {
-      if (*jp >= (int)_o->num_ctrl_pts)
+      if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
           LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", *jp,
                      _o->num_ctrl_pts);
@@ -4974,7 +4975,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 20 && _o->scenario & 1) // ctrl_pts[].y 3BD
     {
-      if (j >= (int)_o->num_ctrl_pts)
+      if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
           LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
                      _o->num_ctrl_pts);
@@ -4985,7 +4986,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 30 && _o->scenario & 1) // ctrl_pts[].z 3BD
     {
-      if (j >= (int)_o->num_ctrl_pts)
+      if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
           LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
                      _o->num_ctrl_pts);
@@ -5002,7 +5003,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 41 && _o->scenario & 1) // ctrl_pts[].z 3BD
     { 
-      if (j >= (int)_o->num_ctrl_pts)
+      if (!_o->ctrl_pts || j >= (int)_o->num_ctrl_pts)
         {
           LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
                      _o->num_ctrl_pts);
@@ -5017,7 +5018,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 11 && _o->scenario & 2) // fit_pts[].x 3BD
     {
-      if (j >= _o->num_fit_pts)
+      if (!_o->fit_pts || j >= _o->num_fit_pts)
         {
           LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", j,
                      _o->num_fit_pts);
@@ -5028,7 +5029,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 21 && _o->scenario & 2) // fit_pts[].y 3BD
     {
-      if (j >= _o->num_fit_pts)
+      if (!_o->fit_pts || j >= _o->num_fit_pts)
         {
           LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", j,
                      _o->num_fit_pts);
@@ -5039,7 +5040,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict _o, Bit_Chain *restrict dat,
     }
   else if (pair->code == 31 && _o->scenario & 2) // fit_pts[].z 3BD
     {
-      if (j >= _o->num_fit_pts)
+      if (!_o->fit_pts || j >= _o->num_fit_pts)
         {
           LOG_ERROR ("SPLINE.fit_pts[%d] overflow, max %d", j,
                      _o->num_fit_pts);
