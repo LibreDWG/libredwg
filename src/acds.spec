@@ -47,19 +47,22 @@
   _obj->segments = calloc (_obj->num_segidx, sizeof (Dwg_AcDs_Segment));
 #endif
 #ifndef IS_JSON
-  SUB_FIELD_RSx (segments[0],signature, 0); /* always 0xD5AC (ACD5 in the TF) */
-  FIELD_TFF (segments[0].name, 6, 0); /* always segidx */
-  DECODER { _obj->segments[0].type = 0; }
-  //JSON { SUB_FIELD (segments[0],type, RC, 0); }
-  SUB_FIELD (segments[0],segment_idx, RL, 0);
-  SUB_FIELD (segments[0],is_blob01, RL, 0);
-  SUB_FIELD (segments[0],segsize, RL, 0);
-  SUB_FIELD (segments[0],unknown_2, RL, 0);
-  SUB_FIELD (segments[0],ds_version, RL, 0); // datastorage revision
-  SUB_FIELD (segments[0],unknown_3, RL, 0);
-  SUB_FIELD (segments[0],data_algn_offset, RL, 0);
-  SUB_FIELD (segments[0],objdata_algn_offset, RL, 0);
-  FIELD_TFF (segments[0].padding, 8, 0); // always 8x 0x55
+  if (FIELD_VALUE(num_segidx))
+    {
+      SUB_FIELD_RSx (segments[0],signature, 0); /* always 0xD5AC (ACD5 in the TF) */
+      FIELD_TFF (segments[0].name, 6, 0);       /* always segidx */
+      DECODER { _obj->segments[0].type = 0; }
+      JSON { SUB_FIELD (segments[0],type, RC, 0); }
+      SUB_FIELD (segments[0],segment_idx, RL, 0);
+      SUB_FIELD (segments[0],is_blob01, RL, 0);
+      SUB_FIELD (segments[0],segsize, RL, 0);
+      SUB_FIELD (segments[0],unknown_2, RL, 0);
+      SUB_FIELD (segments[0],ds_version, RL, 0); // datastorage revision
+      SUB_FIELD (segments[0],unknown_3, RL, 0);
+      SUB_FIELD (segments[0],data_algn_offset, RL, 0);
+      SUB_FIELD (segments[0],objdata_algn_offset, RL, 0);
+      FIELD_TFF (segments[0].padding, 8, 0); // always 8x 0x55
+    }
 #endif
 
   REPEAT (num_segidx, segidx, Dwg_AcDs_SegmentIndex)
