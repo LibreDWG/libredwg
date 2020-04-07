@@ -2935,7 +2935,7 @@ DWG_OBJECT (VIEW)
         }
     }
   SINCE (R_2007) {
-    FIELD_HANDLE (livesection, 4, 334);
+    FIELD_HANDLE (livesection, 4, 334); // a SECTION?
   }
 
 DWG_OBJECT_END
@@ -8017,6 +8017,27 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_ENTITY (SECTION)
+
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSection)
+  FIELD_BL (state, 90);
+  FIELD_BL (flags, 91);
+  FIELD_T (name, 1);
+  FIELD_3BD (vert_dir, 10);
+  FIELD_BD (top_height, 40);
+  FIELD_BD (bottom_height, 41);
+  FIELD_RC (indicator_alpha, 70);
+  FIELD_CMC (indicator_color, 63,411);
+  FIELD_BL (num_verts, 92);
+  FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
+  FIELD_BL (num_blverts, 93);
+  FIELD_3DPOINT_VECTOR (verts, num_blverts, 12);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (geomsettings, 5, 360);
+DWG_ENTITY_END
+
 // as ACAD_LAYERFILTERS in the DNO
 DWG_OBJECT (LAYERFILTER)
   DECODE_UNKNOWN_BITS
@@ -8190,11 +8211,6 @@ DWG_OBJECT_END
   CENTERMARK CENTERLINE
   SECTIONOBJECT
 */
-
-DWG_ENTITY (SECTION)
-  DECODE_UNKNOWN_BITS
-  COMMON_ENTITY_HANDLE_DATA;
-DWG_ENTITY_END
 
 // r2000+ expresstools. abbrev. ATEXT
 DWG_OBJECT (ARCALIGNEDTEXT)

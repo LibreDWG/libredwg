@@ -87,25 +87,26 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
   "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
   "REVOLVEDSURFACE" "\0\0\0",	/* 47 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 52 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 58 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 61 */
-  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 62 */
-  "VERTEX_PFACE_FACE" "\0",	/* 63 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
+  "SECTION" "\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
+  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 53 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 59 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 62 */
+  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 63 */
+  "VERTEX_PFACE_FACE" "\0",	/* 64 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
@@ -2848,6 +2849,38 @@ static const Dwg_DYNAPI_field _dwg_REVOLVEDSURFACE_fields[] = {
     0,0,0, 290 },
   { "close_to_axis",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_REVOLVEDSURFACE, close_to_axis),
     0,0,0, 291 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_SECTION: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_SECTION_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SECTION, parent),
+    1,1,0, 0 },
+  { "state",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, state),
+    0,0,0, 90 },
+  { "flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, flags),
+    0,0,0, 91 },
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_SECTION, name),
+    1,1,1, 1 },
+  { "vert_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_SECTION, vert_dir),
+    1,0,0, 10 },
+  { "top_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SECTION, top_height),
+    0,0,0, 40 },
+  { "bottom_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SECTION, bottom_height),
+    0,0,0, 41 },
+  { "indicator_alpha",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_SECTION, indicator_alpha),
+    0,0,0, 70 },
+  { "indicator_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_entity_SECTION, indicator_color),
+    1,0,0, 63 },
+  { "num_verts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, num_verts),
+    0,0,0, 92 },
+  { "verts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTION, verts),
+    1,1,0, 12 },
+  { "num_blverts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, num_blverts),
+    0,0,0, 93 },
+  { "blverts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTION, blverts),
+    1,1,0, 0 },
+  { "geomsettings",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SECTION, geomsettings),
+    1,0,0, 360 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_SEQEND: (sorted by offset) */
@@ -8980,53 +9013,54 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "REVOLVEDSURFACE", DWG_TYPE_REVOLVEDSURFACE /*(592)*/, _dwg_REVOLVEDSURFACE_fields, sizeof (struct _dwg_entity_REVOLVEDSURFACE) },	/* 134 */
   { "RTEXT", DWG_TYPE_RTEXT /*(593)*/, NULL, 0 },	/* 135 */
   { "SCALE", DWG_TYPE_SCALE /*(594)*/, _dwg_SCALE_fields, sizeof (struct _dwg_object_SCALE) },	/* 136 */
-  { "SECTIONVIEWSTYLE", DWG_TYPE_SECTIONVIEWSTYLE /*(595)*/, _dwg_SECTIONVIEWSTYLE_fields, sizeof (struct _dwg_object_SECTIONVIEWSTYLE) },	/* 137 */
-  { "SEQEND", DWG_TYPE_SEQEND /*(6)*/, _dwg_SEQEND_fields, sizeof (struct _dwg_entity_SEQEND) },	/* 138 */
-  { "SHAPE", DWG_TYPE_SHAPE /*(33)*/, _dwg_SHAPE_fields, sizeof (struct _dwg_entity_SHAPE) },	/* 139 */
-  { "SOLID", DWG_TYPE_SOLID /*(31)*/, _dwg_SOLID_fields, sizeof (struct _dwg_entity_SOLID) },	/* 140 */
-  { "SORTENTSTABLE", DWG_TYPE_SORTENTSTABLE /*(596)*/, _dwg_SORTENTSTABLE_fields, sizeof (struct _dwg_object_SORTENTSTABLE) },	/* 141 */
-  { "SPATIAL_FILTER", DWG_TYPE_SPATIAL_FILTER /*(597)*/, _dwg_SPATIAL_FILTER_fields, sizeof (struct _dwg_object_SPATIAL_FILTER) },	/* 142 */
-  { "SPATIAL_INDEX", DWG_TYPE_SPATIAL_INDEX /*(598)*/, _dwg_SPATIAL_INDEX_fields, sizeof (struct _dwg_object_SPATIAL_INDEX) },	/* 143 */
-  { "SPLINE", DWG_TYPE_SPLINE /*(36)*/, _dwg_SPLINE_fields, sizeof (struct _dwg_entity_SPLINE) },	/* 144 */
-  { "STYLE", DWG_TYPE_STYLE /*(53)*/, _dwg_STYLE_fields, sizeof (struct _dwg_object_STYLE) },	/* 145 */
-  { "STYLE_CONTROL", DWG_TYPE_STYLE_CONTROL /*(52)*/, _dwg_STYLE_CONTROL_fields, sizeof (struct _dwg_object_STYLE_CONTROL) },	/* 146 */
-  { "SUN", DWG_TYPE_SUN /*(599)*/, _dwg_SUN_fields, sizeof (struct _dwg_object_SUN) },	/* 147 */
-  { "SUNSTUDY", DWG_TYPE_SUNSTUDY /*(600)*/, _dwg_SUNSTUDY_fields, sizeof (struct _dwg_object_SUNSTUDY) },	/* 148 */
-  { "SWEPTSURFACE", DWG_TYPE_SWEPTSURFACE /*(601)*/, _dwg_SWEPTSURFACE_fields, sizeof (struct _dwg_entity_SWEPTSURFACE) },	/* 149 */
-  { "TABLE", DWG_TYPE_TABLE /*(602)*/, _dwg_TABLE_fields, sizeof (struct _dwg_entity_TABLE) },	/* 150 */
-  { "TABLECONTENT", DWG_TYPE_TABLECONTENT /*(603)*/, _dwg_TABLECONTENT_fields, sizeof (struct _dwg_object_TABLECONTENT) },	/* 151 */
-  { "TABLEGEOMETRY", DWG_TYPE_TABLEGEOMETRY /*(604)*/, _dwg_TABLEGEOMETRY_fields, sizeof (struct _dwg_object_TABLEGEOMETRY) },	/* 152 */
-  { "TABLESTYLE", DWG_TYPE_TABLESTYLE /*(605)*/, _dwg_TABLESTYLE_fields, sizeof (struct _dwg_object_TABLESTYLE) },	/* 153 */
-  { "TEXT", DWG_TYPE_TEXT /*(1)*/, _dwg_TEXT_fields, sizeof (struct _dwg_entity_TEXT) },	/* 154 */
-  { "TEXTOBJECTCONTEXTDATA", DWG_TYPE_TEXTOBJECTCONTEXTDATA /*(606)*/, _dwg_TEXTOBJECTCONTEXTDATA_fields, sizeof (struct _dwg_object_TEXTOBJECTCONTEXTDATA) },	/* 155 */
-  { "TOLERANCE", DWG_TYPE_TOLERANCE /*(46)*/, _dwg_TOLERANCE_fields, sizeof (struct _dwg_entity_TOLERANCE) },	/* 156 */
-  { "TRACE", DWG_TYPE_TRACE /*(32)*/, _dwg_TRACE_fields, sizeof (struct _dwg_entity_TRACE) },	/* 157 */
-  { "UCS", DWG_TYPE_UCS /*(63)*/, _dwg_UCS_fields, sizeof (struct _dwg_object_UCS) },	/* 158 */
-  { "UCS_CONTROL", DWG_TYPE_UCS_CONTROL /*(62)*/, _dwg_UCS_CONTROL_fields, sizeof (struct _dwg_object_UCS_CONTROL) },	/* 159 */
-  { "UNDERLAY", DWG_TYPE_UNDERLAY /*(607)*/, _dwg_UNDERLAY_fields, sizeof (struct _dwg_entity_UNDERLAY) },	/* 160 */
-  { "UNDERLAYDEFINITION", DWG_TYPE_UNDERLAYDEFINITION /*(608)*/, _dwg_UNDERLAYDEFINITION_fields, sizeof (struct _dwg_object_UNDERLAYDEFINITION) },	/* 161 */
-  { "UNKNOWN_ENT", DWG_TYPE_UNKNOWN_ENT /*(65534)*/, _dwg_UNKNOWN_ENT_fields, sizeof (struct _dwg_entity_UNKNOWN_ENT) },	/* 162 */
-  { "UNKNOWN_OBJ", DWG_TYPE_UNKNOWN_OBJ /*(65535)*/, _dwg_UNKNOWN_OBJ_fields, sizeof (struct _dwg_object_UNKNOWN_OBJ) },	/* 163 */
-  { "UNUSED", DWG_TYPE_UNUSED /*(0)*/, NULL, 0 },	/* 164 */
-  { "VBA_PROJECT", DWG_TYPE_VBA_PROJECT /*(81)*/, _dwg_VBA_PROJECT_fields, sizeof (struct _dwg_object_VBA_PROJECT) },	/* 165 */
-  { "VERTEX_2D", DWG_TYPE_VERTEX_2D /*(10)*/, _dwg_VERTEX_2D_fields, sizeof (struct _dwg_entity_VERTEX_2D) },	/* 166 */
-  { "VERTEX_3D", DWG_TYPE_VERTEX_3D /*(11)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 167 */
-  { "VERTEX_MESH", DWG_TYPE_VERTEX_MESH /*(12)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 168 */
-  { "VERTEX_PFACE", DWG_TYPE_VERTEX_PFACE /*(13)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 169 */
-  { "VERTEX_PFACE_FACE", DWG_TYPE_VERTEX_PFACE_FACE /*(14)*/, _dwg_VERTEX_PFACE_FACE_fields, sizeof (struct _dwg_entity_VERTEX_PFACE_FACE) },	/* 170 */
-  { "VIEW", DWG_TYPE_VIEW /*(61)*/, _dwg_VIEW_fields, sizeof (struct _dwg_object_VIEW) },	/* 171 */
-  { "VIEWPORT", DWG_TYPE_VIEWPORT /*(34)*/, _dwg_VIEWPORT_fields, sizeof (struct _dwg_entity_VIEWPORT) },	/* 172 */
-  { "VIEW_CONTROL", DWG_TYPE_VIEW_CONTROL /*(60)*/, _dwg_VIEW_CONTROL_fields, sizeof (struct _dwg_object_VIEW_CONTROL) },	/* 173 */
-  { "VISUALSTYLE", DWG_TYPE_VISUALSTYLE /*(609)*/, _dwg_VISUALSTYLE_fields, sizeof (struct _dwg_object_VISUALSTYLE) },	/* 174 */
-  { "VPORT", DWG_TYPE_VPORT /*(65)*/, _dwg_VPORT_fields, sizeof (struct _dwg_object_VPORT) },	/* 175 */
-  { "VPORT_CONTROL", DWG_TYPE_VPORT_CONTROL /*(64)*/, _dwg_VPORT_CONTROL_fields, sizeof (struct _dwg_object_VPORT_CONTROL) },	/* 176 */
-  { "VPORT_ENTITY_CONTROL", DWG_TYPE_VPORT_ENTITY_CONTROL /*(70)*/, _dwg_VPORT_ENTITY_CONTROL_fields, sizeof (struct _dwg_object_VPORT_ENTITY_CONTROL) },	/* 177 */
-  { "VPORT_ENTITY_HEADER", DWG_TYPE_VPORT_ENTITY_HEADER /*(71)*/, _dwg_VPORT_ENTITY_HEADER_fields, sizeof (struct _dwg_object_VPORT_ENTITY_HEADER) },	/* 178 */
-  { "WIPEOUT", DWG_TYPE_WIPEOUT /*(610)*/, _dwg_WIPEOUT_fields, sizeof (struct _dwg_entity_WIPEOUT) },	/* 179 */
-  { "WIPEOUTVARIABLES", DWG_TYPE_WIPEOUTVARIABLES /*(611)*/, _dwg_WIPEOUTVARIABLES_fields, sizeof (struct _dwg_object_WIPEOUTVARIABLES) },	/* 180 */
-  { "XLINE", DWG_TYPE_XLINE /*(41)*/, _dwg_RAY_fields, sizeof (struct _dwg_entity_RAY) },	/* 181 */
-  { "XRECORD", DWG_TYPE_XRECORD /*(79)*/, _dwg_XRECORD_fields, sizeof (struct _dwg_object_XRECORD) },	/* 182 */
-  { "XREFPANELOBJECT", DWG_TYPE_XREFPANELOBJECT /*(612)*/, NULL, 0 },	/* 183 */
+  { "SECTION", DWG_TYPE_SECTION /*(595)*/, _dwg_SECTION_fields, sizeof (struct _dwg_entity_SECTION) },	/* 137 */
+  { "SECTIONVIEWSTYLE", DWG_TYPE_SECTIONVIEWSTYLE /*(596)*/, _dwg_SECTIONVIEWSTYLE_fields, sizeof (struct _dwg_object_SECTIONVIEWSTYLE) },	/* 138 */
+  { "SEQEND", DWG_TYPE_SEQEND /*(6)*/, _dwg_SEQEND_fields, sizeof (struct _dwg_entity_SEQEND) },	/* 139 */
+  { "SHAPE", DWG_TYPE_SHAPE /*(33)*/, _dwg_SHAPE_fields, sizeof (struct _dwg_entity_SHAPE) },	/* 140 */
+  { "SOLID", DWG_TYPE_SOLID /*(31)*/, _dwg_SOLID_fields, sizeof (struct _dwg_entity_SOLID) },	/* 141 */
+  { "SORTENTSTABLE", DWG_TYPE_SORTENTSTABLE /*(597)*/, _dwg_SORTENTSTABLE_fields, sizeof (struct _dwg_object_SORTENTSTABLE) },	/* 142 */
+  { "SPATIAL_FILTER", DWG_TYPE_SPATIAL_FILTER /*(598)*/, _dwg_SPATIAL_FILTER_fields, sizeof (struct _dwg_object_SPATIAL_FILTER) },	/* 143 */
+  { "SPATIAL_INDEX", DWG_TYPE_SPATIAL_INDEX /*(599)*/, _dwg_SPATIAL_INDEX_fields, sizeof (struct _dwg_object_SPATIAL_INDEX) },	/* 144 */
+  { "SPLINE", DWG_TYPE_SPLINE /*(36)*/, _dwg_SPLINE_fields, sizeof (struct _dwg_entity_SPLINE) },	/* 145 */
+  { "STYLE", DWG_TYPE_STYLE /*(53)*/, _dwg_STYLE_fields, sizeof (struct _dwg_object_STYLE) },	/* 146 */
+  { "STYLE_CONTROL", DWG_TYPE_STYLE_CONTROL /*(52)*/, _dwg_STYLE_CONTROL_fields, sizeof (struct _dwg_object_STYLE_CONTROL) },	/* 147 */
+  { "SUN", DWG_TYPE_SUN /*(600)*/, _dwg_SUN_fields, sizeof (struct _dwg_object_SUN) },	/* 148 */
+  { "SUNSTUDY", DWG_TYPE_SUNSTUDY /*(601)*/, _dwg_SUNSTUDY_fields, sizeof (struct _dwg_object_SUNSTUDY) },	/* 149 */
+  { "SWEPTSURFACE", DWG_TYPE_SWEPTSURFACE /*(602)*/, _dwg_SWEPTSURFACE_fields, sizeof (struct _dwg_entity_SWEPTSURFACE) },	/* 150 */
+  { "TABLE", DWG_TYPE_TABLE /*(603)*/, _dwg_TABLE_fields, sizeof (struct _dwg_entity_TABLE) },	/* 151 */
+  { "TABLECONTENT", DWG_TYPE_TABLECONTENT /*(604)*/, _dwg_TABLECONTENT_fields, sizeof (struct _dwg_object_TABLECONTENT) },	/* 152 */
+  { "TABLEGEOMETRY", DWG_TYPE_TABLEGEOMETRY /*(605)*/, _dwg_TABLEGEOMETRY_fields, sizeof (struct _dwg_object_TABLEGEOMETRY) },	/* 153 */
+  { "TABLESTYLE", DWG_TYPE_TABLESTYLE /*(606)*/, _dwg_TABLESTYLE_fields, sizeof (struct _dwg_object_TABLESTYLE) },	/* 154 */
+  { "TEXT", DWG_TYPE_TEXT /*(1)*/, _dwg_TEXT_fields, sizeof (struct _dwg_entity_TEXT) },	/* 155 */
+  { "TEXTOBJECTCONTEXTDATA", DWG_TYPE_TEXTOBJECTCONTEXTDATA /*(607)*/, _dwg_TEXTOBJECTCONTEXTDATA_fields, sizeof (struct _dwg_object_TEXTOBJECTCONTEXTDATA) },	/* 156 */
+  { "TOLERANCE", DWG_TYPE_TOLERANCE /*(46)*/, _dwg_TOLERANCE_fields, sizeof (struct _dwg_entity_TOLERANCE) },	/* 157 */
+  { "TRACE", DWG_TYPE_TRACE /*(32)*/, _dwg_TRACE_fields, sizeof (struct _dwg_entity_TRACE) },	/* 158 */
+  { "UCS", DWG_TYPE_UCS /*(63)*/, _dwg_UCS_fields, sizeof (struct _dwg_object_UCS) },	/* 159 */
+  { "UCS_CONTROL", DWG_TYPE_UCS_CONTROL /*(62)*/, _dwg_UCS_CONTROL_fields, sizeof (struct _dwg_object_UCS_CONTROL) },	/* 160 */
+  { "UNDERLAY", DWG_TYPE_UNDERLAY /*(608)*/, _dwg_UNDERLAY_fields, sizeof (struct _dwg_entity_UNDERLAY) },	/* 161 */
+  { "UNDERLAYDEFINITION", DWG_TYPE_UNDERLAYDEFINITION /*(609)*/, _dwg_UNDERLAYDEFINITION_fields, sizeof (struct _dwg_object_UNDERLAYDEFINITION) },	/* 162 */
+  { "UNKNOWN_ENT", DWG_TYPE_UNKNOWN_ENT /*(65534)*/, _dwg_UNKNOWN_ENT_fields, sizeof (struct _dwg_entity_UNKNOWN_ENT) },	/* 163 */
+  { "UNKNOWN_OBJ", DWG_TYPE_UNKNOWN_OBJ /*(65535)*/, _dwg_UNKNOWN_OBJ_fields, sizeof (struct _dwg_object_UNKNOWN_OBJ) },	/* 164 */
+  { "UNUSED", DWG_TYPE_UNUSED /*(0)*/, NULL, 0 },	/* 165 */
+  { "VBA_PROJECT", DWG_TYPE_VBA_PROJECT /*(81)*/, _dwg_VBA_PROJECT_fields, sizeof (struct _dwg_object_VBA_PROJECT) },	/* 166 */
+  { "VERTEX_2D", DWG_TYPE_VERTEX_2D /*(10)*/, _dwg_VERTEX_2D_fields, sizeof (struct _dwg_entity_VERTEX_2D) },	/* 167 */
+  { "VERTEX_3D", DWG_TYPE_VERTEX_3D /*(11)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 168 */
+  { "VERTEX_MESH", DWG_TYPE_VERTEX_MESH /*(12)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 169 */
+  { "VERTEX_PFACE", DWG_TYPE_VERTEX_PFACE /*(13)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 170 */
+  { "VERTEX_PFACE_FACE", DWG_TYPE_VERTEX_PFACE_FACE /*(14)*/, _dwg_VERTEX_PFACE_FACE_fields, sizeof (struct _dwg_entity_VERTEX_PFACE_FACE) },	/* 171 */
+  { "VIEW", DWG_TYPE_VIEW /*(61)*/, _dwg_VIEW_fields, sizeof (struct _dwg_object_VIEW) },	/* 172 */
+  { "VIEWPORT", DWG_TYPE_VIEWPORT /*(34)*/, _dwg_VIEWPORT_fields, sizeof (struct _dwg_entity_VIEWPORT) },	/* 173 */
+  { "VIEW_CONTROL", DWG_TYPE_VIEW_CONTROL /*(60)*/, _dwg_VIEW_CONTROL_fields, sizeof (struct _dwg_object_VIEW_CONTROL) },	/* 174 */
+  { "VISUALSTYLE", DWG_TYPE_VISUALSTYLE /*(610)*/, _dwg_VISUALSTYLE_fields, sizeof (struct _dwg_object_VISUALSTYLE) },	/* 175 */
+  { "VPORT", DWG_TYPE_VPORT /*(65)*/, _dwg_VPORT_fields, sizeof (struct _dwg_object_VPORT) },	/* 176 */
+  { "VPORT_CONTROL", DWG_TYPE_VPORT_CONTROL /*(64)*/, _dwg_VPORT_CONTROL_fields, sizeof (struct _dwg_object_VPORT_CONTROL) },	/* 177 */
+  { "VPORT_ENTITY_CONTROL", DWG_TYPE_VPORT_ENTITY_CONTROL /*(70)*/, _dwg_VPORT_ENTITY_CONTROL_fields, sizeof (struct _dwg_object_VPORT_ENTITY_CONTROL) },	/* 178 */
+  { "VPORT_ENTITY_HEADER", DWG_TYPE_VPORT_ENTITY_HEADER /*(71)*/, _dwg_VPORT_ENTITY_HEADER_fields, sizeof (struct _dwg_object_VPORT_ENTITY_HEADER) },	/* 179 */
+  { "WIPEOUT", DWG_TYPE_WIPEOUT /*(611)*/, _dwg_WIPEOUT_fields, sizeof (struct _dwg_entity_WIPEOUT) },	/* 180 */
+  { "WIPEOUTVARIABLES", DWG_TYPE_WIPEOUTVARIABLES /*(612)*/, _dwg_WIPEOUTVARIABLES_fields, sizeof (struct _dwg_object_WIPEOUTVARIABLES) },	/* 181 */
+  { "XLINE", DWG_TYPE_XLINE /*(41)*/, _dwg_RAY_fields, sizeof (struct _dwg_entity_RAY) },	/* 182 */
+  { "XRECORD", DWG_TYPE_XRECORD /*(79)*/, _dwg_XRECORD_fields, sizeof (struct _dwg_object_XRECORD) },	/* 183 */
+  { "XREFPANELOBJECT", DWG_TYPE_XREFPANELOBJECT /*(613)*/, NULL, 0 },	/* 184 */
 
 };
 

@@ -126,6 +126,7 @@ DWG_GETALL_ENTITY (PLANESURFACE)
 DWG_GETALL_ENTITY (REVOLVEDSURFACE)
 DWG_GETALL_ENTITY (SWEPTSURFACE)
 DWG_GETALL_ENTITY (MESH)
+DWG_GETALL_ENTITY (SECTION)
 
 /********************************************************************
  *     Functions to return NULL-terminated array of all objects     *
@@ -343,6 +344,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LOFTEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MESH)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SECTION)
 
 #endif /* __AFL_COMPILER */
 
@@ -817,6 +819,7 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
   dwg_get_OBJECT (ent_geopositionmarker, GEOPOSITIONMARKER)
   dwg_get_OBJECT (ent_table, TABLE)
   dwg_get_OBJECT (ent_mesh, MESH)
+  dwg_get_OBJECT (ent_section, SECTION)
 #  endif
 
   dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL)

@@ -451,6 +451,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_REVOLVEDSURFACE,
   DWG_TYPE_RTEXT,
   DWG_TYPE_SCALE,
+  DWG_TYPE_SECTION,
   DWG_TYPE_SECTIONVIEWSTYLE,
   DWG_TYPE_SORTENTSTABLE,
   DWG_TYPE_SPATIAL_FILTER,
@@ -4668,6 +4669,27 @@ typedef struct _dwg_entity_MESH
 
 } Dwg_Entity_MESH;
 
+// since r2007+ ? maybe it's the livesection ptr from VIEW
+typedef struct _dwg_entity_SECTION
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BL state;		/*!< DXF 90 */
+  BITCODE_BL flags;		/*!< DXF 91 */
+  BITCODE_T name;		/*!< DXF 1 */
+  BITCODE_3BD vert_dir;		/*!< DXF 10 */
+  BITCODE_BD top_height;	/*!< DXF 40 */
+  BITCODE_BD bottom_height;	/*!< DXF 41 */
+  BITCODE_RC indicator_alpha;	/*!< DXF 70 */
+  BITCODE_CMC indicator_color;	/*!< DXF 63, 411 */
+  BITCODE_BL num_verts;		/*!< DXF 92 */
+  BITCODE_3BD *verts;		/*!< DXF 11 */
+  BITCODE_BL num_blverts;	/*!< DXF 93 */
+  BITCODE_3BD *blverts;		/*!< DXF 12 */
+  BITCODE_H geomsettings;	/*!< DXF 360 */
+
+} Dwg_Entity_SECTION;
+
+
 /**
  Object SUN (varies) UNKNOWN FIELDS
  wrongly documented by ACAD DXF as entity
@@ -5877,6 +5899,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_WIPEOUT *WIPEOUT;
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_MESH *MESH;
+    Dwg_Entity_SECTION *SECTION;
 
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
@@ -7097,6 +7120,8 @@ EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_add_MESH (Dwg_Object *obj);
+EXPORT int dwg_add_SECTION (Dwg_Object *obj);
+EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
 EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
 //EXPORT int dwg_add_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_add_SECTIONVIEWSTYLE (Dwg_Object *obj);

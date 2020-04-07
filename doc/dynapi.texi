@@ -2978,6 +2978,45 @@ B,	DXF 291
 @end vtable
 @end indentedblock
 
+@strong{SECTION} @anchor{SECTION}
+@cindex entity, SECTION
+@vindex SECTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item state
+BL,	DXF 90
+@item flags
+BL,	DXF 91
+@item name
+T,	DXF 1
+@item vert_dir
+3BD,	DXF 10
+@item top_height
+BD,	DXF 40
+@item bottom_height
+BD,	DXF 41
+@item indicator_alpha
+RC,	DXF 70
+@item indicator_color
+CMC,	DXF 63
+@item num_verts
+BL,	DXF 92
+@item verts
+3BD*,	DXF 12
+@item num_blverts
+BL,	DXF 93
+@item blverts
+3BD*
+@item geomsettings
+H,	DXF 360
+
+@end vtable
+@end indentedblock
+
 @strong{SEQEND} @anchor{SEQEND}
 @cindex entity, SEQEND
 @vindex SEQEND
