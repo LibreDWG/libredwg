@@ -107,7 +107,7 @@
 #endif
 
       SUB_FIELD_RSx (segments[rcount1],signature, 0); /* always 0xD5AC (ACD5 in the TF) */
-      /* segidx, datidx, _data_, schidx, schdat, search, blob01, prvsav */
+      /* segidx, datidx, _data_, schidx, schdat, search, blob01, prvsav, freesp */
       FIELD_TFF (segments[rcount1].name, 6, 0);
       DECODER {
         _obj->segments[rcount1].name[6] = '\0';
@@ -128,6 +128,8 @@
           _obj->segments[rcount1].type = 6;
         else if (strEQc ((char*)_obj->segments[rcount1].name, "prvsav")) // ODA undocumented
           _obj->segments[rcount1].type = 7;
+        else if (strEQc ((char*)_obj->segments[rcount1].name, "freesp")) // ODA undocumented
+          _obj->segments[rcount1].type = 8;
         else
           {
             LOG_ERROR ("Invalid AcDs.segments[%d].name %s", rcount1,
@@ -282,6 +284,8 @@
         if (_obj->prvsav_segidx != rcount1)
           LOG_WARN ("Possibly wrong prvsav_segidx %d for %d", _obj->prvsav_segidx, rcount1);
         // fallthru
+        //break;
+      case 8: // freesp
         //break;
       case 2: // _data_
         //break;
