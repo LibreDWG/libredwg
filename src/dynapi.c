@@ -6814,7 +6814,7 @@ static const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
   { "width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_VIEW, width),
     0,0,0, 41 },
   { "center",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_object_VIEW, center),
-    1,0,0, 20 },
+    1,0,0, 10 },
   { "target",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_VIEW, target),
     1,0,0, 12 },
   { "direction",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_VIEW, direction),

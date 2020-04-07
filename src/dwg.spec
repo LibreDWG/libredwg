@@ -2866,7 +2866,7 @@ DWG_OBJECT (VIEW)
   {
     FIELD_BD (height, 40);
     FIELD_BD (width, 41);
-    FIELD_2RD (center, 20);
+    FIELD_2RD (center, 10);
     FIELD_3BD (target, 12);
     FIELD_3BD (direction, 11);
     FIELD_BD (twist_angle, 50);
@@ -5937,7 +5937,7 @@ DWG_OBJECT (MLEADERSTYLE)
       FIELD_BS (attach_top, 273);
       FIELD_BS (attach_bottom, 272);
     }
-  //SINCE (R_2013) DXF 298
+  //SINCE (R_2013) DXF 298, value 1
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (line_type, 5, 340);

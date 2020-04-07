@@ -7816,7 +7816,7 @@ BD,	DXF 40
 @item width
 BD,	DXF 41
 @item center
-2RD,	DXF 20
+2RD,	DXF 10
 @item target
 3BD,	DXF 12
 @item direction
