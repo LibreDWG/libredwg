@@ -6510,7 +6510,9 @@ new_object (char *restrict name, char *restrict dxfname,
           if (pair->code >= 420 && pair->code <= 427)
             {
               const char *fname = NULL;
-              if (pair->code == 421
+              if (pair->code == 420 && strEQc (name, "LAYER"))
+                fname = "color";
+              else if (pair->code == 421
                   && (strEQc (name, "VPORT") || strEQc (name, "VIEWPORT")
                       || strEQc (name, "VIEW")))
                 fname = "ambient_color";
@@ -6890,6 +6892,9 @@ new_object (char *restrict name, char *restrict dxfname,
                       "MLEADERSTYLE.block_scale = (%f, %f, %f) [3BD 47]\n",
                       o->block_scale.x, o->block_scale.y, o->block_scale.z);
                 }
+              else if (pair->code == 298) // r2013+
+                LOG_TRACE ("Unknown DXF code %d for %s = %d [B %d]\n",
+                           pair->code, name, pair->value.i, pair->code)
               else
                 goto search_field;
             }
@@ -7551,13 +7556,20 @@ new_object (char *restrict name, char *restrict dxfname,
                 ;
               else if (pair->code == 30 && strEQc (name, "POLYLINE_3D"))
                 ;
+              else if ((pair->code == 290 ||
+                        pair->code == 2)
+                       &&
+                       ((obj->fixedtype == DWG_TYPE_REGION) || 
+                        (obj->fixedtype == DWG_TYPE_BODY) ||
+                        (obj->fixedtype == DWG_TYPE__3DSOLID)))
+                LOG_TRACE ("Unknown DXF code %d for %s\n", pair->code, name)
               else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY && pair->code == 92)
                 {
                   pair = add_ent_preview (obj, dat, pair);
                   goto start_loop;
                 }
               else if (obj->fixedtype == DWG_TYPE_LAYER
-                       && ((pair->code == 420)
+                       && ((pair->code == 348) || (pair->code == 420)
                            || (pair->code == 430) | (pair->code == 440)))
                 {
                   Dwg_Object_LAYER *o = obj->tio.object->tio.LAYER;
@@ -7591,6 +7603,9 @@ new_object (char *restrict name, char *restrict dxfname,
                       LOG_TRACE ("%s.color.name = %s [%s %d]\n", name,
                                  pair->value.s, "CMC", pair->code);
                     }
+                  else if (pair->code == 348)
+                    LOG_TRACE ("Unknown DXF code %d for %s\n", pair->code, name);
+                  goto next_pair;
                 }
               else if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED && pair->code == 52)
                 {
