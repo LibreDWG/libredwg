@@ -7045,8 +7045,11 @@ new_object (char *restrict name, char *restrict dxfname,
                           goto next_pair;
                         }
                       else if (f->dxf == pair->code)
-                        LOG_TRACE ("Warning: Ignore %s.%s VECTOR [%s %d]\n",
+                        {
+                          LOG_WARN ("Ignore %s.%s VECTOR [%s %d]",
                                    name, f->name, f->type, pair->code);
+                          goto next_pair;
+                        }
                     }
                   else if (f->dxf == pair->code) // matching DXF code
                     {
@@ -7568,6 +7571,23 @@ new_object (char *restrict name, char *restrict dxfname,
                   pair = add_ent_preview (obj, dat, pair);
                   goto start_loop;
                 }
+              else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY &&
+                       (pair->code == 90 || pair->code == 91 || pair->code == 71
+                        || pair->code == 94)) // unknown r14
+                {
+                  Dwg_Entity_PROXY_ENTITY *o = obj->tio.entity->tio.PROXY_ENTITY;
+                  if (dwg->header.version <= R_14)
+                    {
+                      if (pair->code == 90)
+                        o->class_id = pair->value.i;
+                      else if (pair->code == 91)
+                        o->version = pair->value.i;
+                    }
+                  else if (pair->code == 91)
+                    o->class_id = pair->value.i;
+                  else if (pair->code == 71) //r2018+
+                    o->version = pair->value.i;
+                }
               else if (obj->fixedtype == DWG_TYPE_LAYER
                        && ((pair->code == 348) || (pair->code == 420)
                            || (pair->code == 430) | (pair->code == 440)))
@@ -7606,6 +7626,14 @@ new_object (char *restrict name, char *restrict dxfname,
                   else if (pair->code == 348)
                     LOG_TRACE ("Unknown DXF code %d for %s\n", pair->code, name);
                   goto next_pair;
+                }
+              else if (obj->fixedtype == DWG_TYPE_DIMSTYLE && pair->code == 287)
+                {
+                  // <= r14
+                  Dwg_Object_DIMSTYLE *o = obj->tio.object->tio.DIMSTYLE;
+                  o->DIMFIT = pair->value.i;
+                  LOG_TRACE ("%s.DIMFIT = %d [%s %d]\n", name,
+                             pair->value.i, "RC", pair->code);
                 }
               else if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED && pair->code == 52)
                 {

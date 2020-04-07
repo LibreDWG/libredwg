@@ -2808,7 +2808,7 @@ struct _dwg_object_entity*
 @item class_id
 BL,	DXF 91
 @item version
-BL,	DXF 71
+BL,	DXF 95
 @item maint_version
 BL,	DXF 97
 @item from_dxf

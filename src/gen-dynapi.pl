@@ -386,6 +386,8 @@ $DXF{'HATCH'}->{'boundary_handles'} = 330; # special DXF logic
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
+# $DXF{'DIMSTYLE'}->{'DIMFIT'} = 287;   # <= r14 only
+$DXF{'PROXY_ENTITY'}->{'version'} = 95; # or 91 <= r14
 $DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
 # $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
 # $DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;

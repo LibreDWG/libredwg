@@ -4243,10 +4243,16 @@ DWG_ENTITY (PROXY_ENTITY)
 
   //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbProxyEntity)
-  FIELD_BL (class_id, 91);
+  UNTIL (R_14) {
+    FIELD_BL (class_id, 90);
+  }
+  LATER_VERSIONS {
+    FIELD_BL (class_id, 91);
+  }
   PRE (R_2018)
   {
-    FIELD_BL (version, 95); // i.e. version << 8 + maint_version
+    int dxf = dat->version <= R_14 ? 91: 95;
+    FIELD_BL (version, dxf); // i.e. version << 8 + maint_version
   }
   SINCE (R_2018)
   { // if encode from earlier: maint_version = version<<16 + acad version

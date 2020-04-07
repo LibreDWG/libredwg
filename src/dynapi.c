@@ -2707,7 +2707,7 @@ static const Dwg_DYNAPI_field _dwg_PROXY_ENTITY_fields[] = {
   { "class_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, class_id),
     0,0,0, 91 },
   { "version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, version),
-    0,0,0, 71 },
+    0,0,0, 95 },
   { "maint_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, maint_version),
     0,0,0, 97 },
   { "from_dxf",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_PROXY_ENTITY, from_dxf),
