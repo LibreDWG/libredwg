@@ -7556,6 +7556,42 @@ new_object (char *restrict name, char *restrict dxfname,
                   pair = add_ent_preview (obj, dat, pair);
                   goto start_loop;
                 }
+              else if (obj->fixedtype == DWG_TYPE_LAYER
+                       && ((pair->code == 420)
+                           || (pair->code == 430) | (pair->code == 440)))
+                {
+                  Dwg_Object_LAYER *o = obj->tio.object->tio.LAYER;
+                  if (pair->code == 420)
+                    {
+                      o->color.rgb = pair->value.l;
+                      o->color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                      if (o->color.alpha)
+                        o->color.alpha_type = 3;
+                      LOG_TRACE ("%s.color.rgb = %08X [%s %d]\n", name,
+                                 pair->value.u, "CMC", pair->code);
+                    }
+                  else if (pair->code == 440)
+                    {
+                      o->color.flag |= 0x20;
+                      o->color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                      o->color.alpha_type = pair->value.u >> 8;
+                      if (o->color.alpha && !o->color.alpha_type)
+                        o->color.alpha_type = 3;
+                      LOG_TRACE ("%s.color.alpha = %08X [%s %d]\n", name,
+                                 pair->value.u, "CMC", pair->code);
+                    }
+                  else if (pair->code == 430)
+                    {
+                      o->color.flag |= 0x10;
+                      if (dwg->header.version >= R_2007)
+                        o->color.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+                      else
+                        o->color.name = strdup (pair->value.s);
+                      // TODO: book_name or name?
+                      LOG_TRACE ("%s.color.name = %s [%s %d]\n", name,
+                                 pair->value.s, "CMC", pair->code);
+                    }
+                }
               else if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED && pair->code == 52)
                 {
                   BITCODE_BD ang = deg2rad (pair->value.d);
