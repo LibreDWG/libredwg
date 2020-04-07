@@ -7568,7 +7568,11 @@ new_object (char *restrict name, char *restrict dxfname,
                              "BD", 52);
                 }
               else if (is_class_stable (obj->name))
-                LOG_ERROR ("Unknown DXF code %d for %s", pair->code, name)
+                {
+                  LOG_ERROR ("Unknown DXF code %d for %s", pair->code, name)
+                  dxf_free_pair (pair);
+                  return NULL;
+                }
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
             }
@@ -7644,6 +7648,8 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               // until 0 table or 0 ENDTAB
               pair = new_object (table, dxfname, dat, dwg, ctrl_id, i++);
+              if (!pair)
+                return DWG_ERR_INVALIDDWG;
               // undo BLOCK_CONTROL.entries and LTYPE_CONTROL.entries
               if (strEQc (table, "BLOCK_RECORD"))
                 {
@@ -7766,6 +7772,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               entity_alias (name);
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, i++);
+              if (!pair)
+                return DWG_ERR_INVALIDDWG;
               obj = &dwg->object[idx];
               if (obj->type == DWG_TYPE_BLOCK)
                 {
@@ -7960,7 +7968,9 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           char *dxfname = strdup (pair->value.s);
           dxf_free_pair (pair);
           pair = new_object (name, dxfname, dat, dwg, 0, 0);
-          if (pair != NULL && pair->code == 0 && pair->value.s)
+          if (!pair)
+            return DWG_ERR_INVALIDDWG;
+          if (pair->code == 0 && pair->value.s)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
               Dwg_Object_Entity *ent = obj->tio.entity;
@@ -8010,6 +8020,8 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               char *dxfname = strdup (pair->value.s);
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, 0);
+              if (!pair)
+                return DWG_ERR_INVALIDDWG;
             }
           else
             DXF_RETURN_ENDSEC (0)
@@ -8046,6 +8058,8 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, 0);
+              if (!pair)
+                return DWG_ERR_INVALIDDWG;
             }
           else
             DXF_RETURN_ENDSEC (0)
@@ -8357,6 +8371,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   Dxf_Pair *pair;
+  int error = 0;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   num_dxf_objs = 0;
@@ -8411,7 +8426,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "HEADER"))
             {
               dxf_free_pair (pair);
-              dxf_header_read (dat, dwg);
+              error = dxf_header_read (dat, dwg);
+              if (error > DWG_ERR_CRITICAL)
+                goto error;
               dxf_fixup_header (dwg);
               // skip minimal DXF
               /*
@@ -8425,13 +8442,17 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "CLASSES"))
             {
               dxf_free_pair (pair);
-              dxf_classes_read (dat, dwg);
+              error = dxf_classes_read (dat, dwg);
+              if (error > DWG_ERR_CRITICAL)
+                return error;
             }
           else if (strEQc (pair->value.s, "TABLES"))
             {
               BITCODE_H hdl;
               dxf_free_pair (pair);
-              dxf_tables_read (dat, dwg);
+              error = dxf_tables_read (dat, dwg);
+              if (error > DWG_ERR_CRITICAL)
+                goto error;
 
               resolve_postponed_header_refs (dwg);
               resolve_postponed_eed_refs (dwg);
@@ -8459,7 +8480,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               BITCODE_H hdl;
               dxf_free_pair (pair);
-              dxf_blocks_read (dat, dwg);
+              error = dxf_blocks_read (dat, dwg);
+              if (error > DWG_ERR_CRITICAL)
+                goto error;
 
               // resolve_postponed_header_refs (dwg);
               if (!dwg->header_vars.BLOCK_RECORD_PSPACE
@@ -8476,29 +8499,33 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "ENTITIES"))
             {
               dxf_free_pair (pair);
-              dxf_entities_read (dat, dwg);
+              error = dxf_entities_read (dat, dwg);
+              if (error > DWG_ERR_CRITICAL)
+                goto error;
             }
           else if (strEQc (pair->value.s, "OBJECTS"))
             {
               dxf_free_pair (pair);
-              dxf_objects_read (dat, dwg);
+              error = dxf_objects_read (dat, dwg);
+              if (error > DWG_ERR_CRITICAL)
+                goto error;
               resolve_header_dicts (dwg);
             }
           else if (strEQc (pair->value.s, "THUMBNAILIMAGE"))
             {
               dxf_free_pair (pair);
-              dxf_thumbnail_read (dat, dwg);
+              error = dxf_thumbnail_read (dat, dwg);
             }
           else if (strEQc (pair->value.s, "ACDSDATA"))
             {
               dxf_free_pair (pair);
-              dxf_acds_read (dat, dwg);
+              error = dxf_acds_read (dat, dwg);
             }
           else // if (strEQc (pair->value.s, ""))
             {
               LOG_WARN ("SECTION %s ignored for now", pair->value.s);
               dxf_free_pair (pair);
-              dxf_unknownsection_read (dat, dwg);
+              error = dxf_unknownsection_read (dat, dwg);
             }
         }
     }
@@ -8514,7 +8541,17 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
   LOG_TRACE ("import from DXF\n");
-  return dwg->num_objects ? 1 : 0;
+  if (error > DWG_ERR_CRITICAL)
+    return error;
+  else
+    return dwg->num_objects ? 1 : 0;
+
+ error:
+  dwg->dirty_refs = 0;
+  free_array_hdls (header_hdls);
+  free_array_hdls (eed_hdls);
+  free_array_hdls (obj_hdls);
+  return error;  
 }
 
 int

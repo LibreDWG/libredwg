@@ -2572,14 +2572,12 @@ DWG_OBJECT (BLOCK_HEADER)
           FIELD_HANDLE (last_entity, 4, 0);
         }
     }
-
   IF_FREE_OR_SINCE (R_2004)
     {
       if (FIELD_VALUE (num_owned) < 0xf00000) {
         HANDLE_VECTOR (entities, num_owned, 4, 0);
       }
     }
-
   SINCE (R_13) {
     FIELD_HANDLE (endblk_entity, 3, 0);
   }
