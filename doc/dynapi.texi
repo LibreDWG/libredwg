@@ -2522,6 +2522,25 @@ B,	DXF 295
 @end vtable
 @end indentedblock
 
+@strong{NAVISWORKSMODEL} @anchor{NAVISWORKSMODEL}
+@cindex entity, NAVISWORKSMODEL
+@vindex NAVISWORKSMODEL
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item defhandle
+H,	DXF 340
+@item transmatrix
+BD*,	DXF 40
+@item unitfactor
+BD,	DXF 40
+
+@end vtable
+@end indentedblock
+
 @strong{OLE2FRAME} @anchor{OLE2FRAME}
 @cindex entity, OLE2FRAME
 @vindex OLE2FRAME

@@ -242,6 +242,8 @@
   DEBUGGING_CLASS     (ACTION, ARC_DIMENSION)     /* ent */
   DEBUGGING_CLASS     (ACTION, MESH)              /* ent */
   DEBUGGING_CLASS     (ACTION, SECTION)     	  /* ent */
+  DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
+                                                     dxfname COORDINATION_MODEL? */
   DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"
   DEBUGGING_CLASS     (ACTION, CELLSTYLEMAP) // broken
   DEBUGGING_CLASS     (ACTION, MATERIAL)     // working on

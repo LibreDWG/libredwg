@@ -127,6 +127,7 @@ DWG_GETALL_ENTITY (REVOLVEDSURFACE)
 DWG_GETALL_ENTITY (SWEPTSURFACE)
 DWG_GETALL_ENTITY (MESH)
 DWG_GETALL_ENTITY (SECTION)
+DWG_GETALL_ENTITY (NAVISWORKSMODEL)
 
 /********************************************************************
  *     Functions to return NULL-terminated array of all objects     *
@@ -345,6 +346,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MESH)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SECTION)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NAVISWORKSMODEL)
 
 #endif /* __AFL_COMPILER */
 
@@ -820,6 +822,7 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
   dwg_get_OBJECT (ent_table, TABLE)
   dwg_get_OBJECT (ent_mesh, MESH)
   dwg_get_OBJECT (ent_section, SECTION)
+  dwg_get_OBJECT (ent_navisworksmodel, NAVISWORKSMODEL)
 #  endif
 
   dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL)

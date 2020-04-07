@@ -58,6 +58,7 @@ static const Dwg_Object_Type _classes_debugging[] =
    DWG_TYPE_ACSH_SWEEP_CLASS,
    DWG_TYPE_ACSH_EXTRUSION_CLASS,
    DWG_TYPE_GEOMAPIMAGE,
+   DWG_TYPE_NAVISWORKSMODEL,
    DWG_TYPE_NAVISWORKSMODELDEF,
    DWG_TYPE_ASSOCACTION,
    DWG_TYPE_ASSOCNETWORK,
@@ -272,6 +273,7 @@ static const struct _obj_type_name _dwg_type_name[] =
    { DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA, "MTEXTATTRIBUTEOBJECTCONTEXTDATA" },
    { DWG_TYPE_MTEXTOBJECTCONTEXTDATA, "MTEXTOBJECTCONTEXTDATA" },
    { DWG_TYPE_MULTILEADER, "MULTILEADER" },
+   { DWG_TYPE_NAVISWORKSMODEL, "NAVISWORKSMODEL" },
    { DWG_TYPE_NAVISWORKSMODELDEF, "NAVISWORKSMODELDEF" },
    { DWG_TYPE_NPOCOLLECTION, "NPOCOLLECTION" },
    { DWG_TYPE_OBJECTCONTEXTDATA, "OBJECTCONTEXTDATA" },
@@ -463,6 +465,8 @@ entity_alias (char *restrict name)
     strcpy (name, "UNDERLAY");
   else if (strEQc (name, "SURFACE"))
     strcpy (name, "PLANESURFACE");
+  else if (strEQc (name, "COORDINATION_MODEL")) //??
+    strcpy (name, "NAVISWORKSMODEL");
   // if (strEQc (name, "BLOCK"))
   //  strcpy (name, "BLOCK_HEADER");
   // else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))

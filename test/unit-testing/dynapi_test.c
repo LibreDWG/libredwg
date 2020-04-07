@@ -14547,6 +14547,60 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_NAVISWORKSMODEL (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_NAVISWORKSMODEL *restrict navisworksmodel = obj->tio.entity->tio.NAVISWORKSMODEL;
+  failed = 0;
+  {
+    BITCODE_H defhandle;
+    if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "defhandle", &defhandle, NULL)
+        && !memcmp (&defhandle, &navisworksmodel->defhandle, sizeof (navisworksmodel->defhandle)))
+        pass ();
+    else
+        fail ("NAVISWORKSMODEL.defhandle [H]");
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "parent", &parent, NULL)
+        && !memcmp (&parent, &navisworksmodel->parent, sizeof (navisworksmodel->parent)))
+        pass ();
+    else
+        fail ("NAVISWORKSMODEL.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_BD* transmatrix;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "num_transmatrix", &count, NULL)
+        && dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "transmatrix", &transmatrix, NULL)
+        && transmatrix == navisworksmodel->transmatrix)
+      pass ();
+    else
+      fail ("NAVISWORKSMODEL.transmatrix [BD*] * %u num_transmatrix", count);
+  }
+  {
+    BITCODE_BD unitfactor;
+    if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "unitfactor", &unitfactor, NULL)
+        && unitfactor == navisworksmodel->unitfactor)
+      pass ();
+    else
+      fail ("NAVISWORKSMODEL.unitfactor [BD] %g != %g", navisworksmodel->unitfactor, unitfactor);
+    unitfactor++;
+    if (dwg_dynapi_entity_set_value (navisworksmodel, "NAVISWORKSMODEL", "unitfactor", &unitfactor, 0)
+        && unitfactor == navisworksmodel->unitfactor)
+      pass ();
+    else
+      fail ("NAVISWORKSMODEL.unitfactor [BD] set+1 %g != %g", navisworksmodel->unitfactor, unitfactor);
+    navisworksmodel->unitfactor--;
+  }
+  if (failed && (is_class_unstable ("NAVISWORKSMODEL") || is_class_debugging ("NAVISWORKSMODEL")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "NAVISWORKSMODEL", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_OLE2FRAME (const Dwg_Object *obj)
 {
   int error = 0;
@@ -42916,7 +42970,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 42683 "dynapi_test.c"
+#line 42973 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -42988,6 +43042,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXT(obj);
   else  if (obj->fixedtype == DWG_TYPE_MULTILEADER)
     error += test_MULTILEADER(obj);
+  else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODEL)
+    error += test_NAVISWORKSMODEL(obj);
   else  if (obj->fixedtype == DWG_TYPE_OLE2FRAME)
     error += test_OLE2FRAME(obj);
   else  if (obj->fixedtype == DWG_TYPE_OLEFRAME)
@@ -43330,6 +43386,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXT (obj);
   else  if (obj->fixedtype == DWG_TYPE_MULTILEADER)
     error += test_MULTILEADER (obj);
+  else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODEL)
+    error += test_NAVISWORKSMODEL (obj);
   else  if (obj->fixedtype == DWG_TYPE_OLE2FRAME)
     error += test_OLE2FRAME (obj);
   else  if (obj->fixedtype == DWG_TYPE_OLEFRAME)
@@ -43612,7 +43670,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 43375 "dynapi_test.c"
+#line 43673 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -43892,6 +43950,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_MULTILEADER): %d != "
                "dwg_dynapi_fields_size (\"MULTILEADER\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_NAVISWORKSMODEL);
+  size2 = dwg_dynapi_fields_size ("NAVISWORKSMODEL");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_NAVISWORKSMODEL): %d != "
+               "dwg_dynapi_fields_size (\"NAVISWORKSMODEL\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_OLE2FRAME);

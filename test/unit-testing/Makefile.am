@@ -134,6 +134,7 @@ testobjects = \
 	mtext \
 	mtextobjectcontextdata \
 	multileader \
+	navisworksmodel \
 	navisworksmodeldef \
 	object_ptr \
 	objectcontextdata \

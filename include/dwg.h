@@ -435,6 +435,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,
   DWG_TYPE_MTEXTOBJECTCONTEXTDATA,
   DWG_TYPE_MULTILEADER,
+  DWG_TYPE_NAVISWORKSMODEL,
   DWG_TYPE_NAVISWORKSMODELDEF,
   DWG_TYPE_NPOCOLLECTION,
   DWG_TYPE_OBJECTCONTEXTDATA,
@@ -5278,6 +5279,18 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
 
 } Dwg_Object_ACSH_EXTRUSION_CLASS;
 
+// called COORDINATION_MODEL in the DXF docs
+typedef struct _dwg_entity_NAVISWORKSMODEL
+{
+  struct _dwg_object_entity *parent;
+
+  // AcDbNavisworksModel
+  BITCODE_H defhandle;		/*!< DXF 340 */
+  BITCODE_BD *transmatrix;	/*!< DXF 40 */
+  BITCODE_BD unitfactor;	/*!< DXF 40 */
+
+} Dwg_Entity_NAVISWORKSMODEL;
+
 typedef struct _dwg_object_NAVISWORKSMODELDEF
 {
   struct _dwg_object_object *parent;
@@ -5900,6 +5913,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_MESH *MESH;
     Dwg_Entity_SECTION *SECTION;
+    Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
 
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
@@ -7082,7 +7096,6 @@ EXPORT int dwg_add_VBA_PROJECT (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_add_ASSOCNETWORK (Dwg_Object *obj);
-EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
 //EXPORT int dwg_add_ACDSRECORD (Dwg_Object *obj);
 //EXPORT int dwg_add_ACDSSCHEMA (Dwg_Object *obj);
 int dwg_add_ACMECOMMANDHISTORY (Dwg_Object *obj);
@@ -7121,6 +7134,7 @@ EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_add_MESH (Dwg_Object *obj);
 EXPORT int dwg_add_SECTION (Dwg_Object *obj);
+EXPORT int dwg_add_NAVISWORKSMODEL (Dwg_Object *obj);
 EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
 EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);
 //EXPORT int dwg_add_POINTCLOUD (Dwg_Object *obj);
