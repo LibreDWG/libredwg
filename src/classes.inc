@@ -241,7 +241,7 @@
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
   DEBUGGING_CLASS     (ACTION, ARC_DIMENSION)     /* ent */
   DEBUGGING_CLASS     (ACTION, MESH)              /* ent */
-  DEBUGGING_CLASS     (ACTION, SECTION)     	  /* ent */
+  DEBUGGING_CLASS     (ACTION, SECTIONOBJECT)     /* ent */
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
                                                      dxfname COORDINATION_MODEL? */
   DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"
@@ -316,7 +316,6 @@
    XREF
    CENTERMARK
    CENTERLINE
-   SECTIONOBJECT
 */
 
 /* Teigha does not export:

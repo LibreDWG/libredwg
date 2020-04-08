@@ -16538,182 +16538,205 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_SECTION (const Dwg_Object *obj)
+static int test_SECTIONOBJECT (const Dwg_Object *obj)
 {
   int error = 0;
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
-  Dwg_Entity_SECTION *restrict section = obj->tio.entity->tio.SECTION;
+  Dwg_Entity_SECTIONOBJECT *restrict sectionobject = obj->tio.entity->tio.SECTIONOBJECT;
   failed = 0;
   {
     BITCODE_3BD* blverts;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (section, "SECTION", "num_blverts", &count, NULL)
-        && dwg_dynapi_entity_value (section, "SECTION", "blverts", &blverts, NULL)
-        && blverts == section->blverts)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "num_blverts", &count, NULL)
+        && dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "blverts", &blverts, NULL)
+        && blverts == sectionobject->blverts)
       pass ();
     else
-      fail ("SECTION.blverts [3BD*] * %u num_blverts", count);
+      fail ("SECTIONOBJECT.blverts [3BD*] * %u num_blverts", count);
   }
   {
     BITCODE_BD bottom_height;
-    if (dwg_dynapi_entity_value (section, "SECTION", "bottom_height", &bottom_height, NULL)
-        && bottom_height == section->bottom_height)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "bottom_height", &bottom_height, NULL)
+        && bottom_height == sectionobject->bottom_height)
       pass ();
     else
-      fail ("SECTION.bottom_height [BD] %g != %g", section->bottom_height, bottom_height);
+      fail ("SECTIONOBJECT.bottom_height [BD] %g != %g", sectionobject->bottom_height, bottom_height);
     bottom_height++;
-    if (dwg_dynapi_entity_set_value (section, "SECTION", "bottom_height", &bottom_height, 0)
-        && bottom_height == section->bottom_height)
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "bottom_height", &bottom_height, 0)
+        && bottom_height == sectionobject->bottom_height)
       pass ();
     else
-      fail ("SECTION.bottom_height [BD] set+1 %g != %g", section->bottom_height, bottom_height);
-    section->bottom_height--;
+      fail ("SECTIONOBJECT.bottom_height [BD] set+1 %g != %g", sectionobject->bottom_height, bottom_height);
+    sectionobject->bottom_height--;
   }
   {
     BITCODE_BL flags;
-    if (dwg_dynapi_entity_value (section, "SECTION", "flags", &flags, NULL)
-        && flags == section->flags)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "flags", &flags, NULL)
+        && flags == sectionobject->flags)
       pass ();
     else
-      fail ("SECTION.flags [BL] %u != %u", section->flags, flags);
+      fail ("SECTIONOBJECT.flags [BL] %u != %u", sectionobject->flags, flags);
     flags++;
-    if (dwg_dynapi_entity_set_value (section, "SECTION", "flags", &flags, 0)
-        && flags == section->flags)
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "flags", &flags, 0)
+        && flags == sectionobject->flags)
       pass ();
     else
-      fail ("SECTION.flags [BL] set+1 %u != %u", section->flags, flags);
-    section->flags--;
-  }
-  {
-    BITCODE_H geomsetting;
-    if (dwg_dynapi_entity_value (section, "SECTION", "geomsetting", &geomsetting, NULL)
-        && !memcmp (&geomsetting, &section->geomsetting, sizeof (section->geomsetting)))
-        pass ();
-    else
-        fail ("SECTION.geomsetting [H]");
+      fail ("SECTIONOBJECT.flags [BL] set+1 %u != %u", sectionobject->flags, flags);
+    sectionobject->flags--;
   }
   {
     BITCODE_RC indicator_alpha;
-    if (dwg_dynapi_entity_value (section, "SECTION", "indicator_alpha", &indicator_alpha, NULL)
-        && indicator_alpha == section->indicator_alpha)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "indicator_alpha", &indicator_alpha, NULL)
+        && indicator_alpha == sectionobject->indicator_alpha)
       pass ();
     else
-      fail ("SECTION.indicator_alpha [RC] %u != %u", section->indicator_alpha, indicator_alpha);
+      fail ("SECTIONOBJECT.indicator_alpha [RC] %u != %u", sectionobject->indicator_alpha, indicator_alpha);
     indicator_alpha++;
-    if (dwg_dynapi_entity_set_value (section, "SECTION", "indicator_alpha", &indicator_alpha, 0)
-        && indicator_alpha == section->indicator_alpha)
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "indicator_alpha", &indicator_alpha, 0)
+        && indicator_alpha == sectionobject->indicator_alpha)
       pass ();
     else
-      fail ("SECTION.indicator_alpha [RC] set+1 %u != %u", section->indicator_alpha, indicator_alpha);
-    section->indicator_alpha--;
+      fail ("SECTIONOBJECT.indicator_alpha [RC] set+1 %u != %u", sectionobject->indicator_alpha, indicator_alpha);
+    sectionobject->indicator_alpha--;
   }
   {
     BITCODE_CMC indicator_color;
-    if (dwg_dynapi_entity_value (section, "SECTION", "indicator_color", &indicator_color, NULL)
-        && !memcmp (&indicator_color, &section->indicator_color, sizeof (section->indicator_color)))
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "indicator_color", &indicator_color, NULL)
+        && !memcmp (&indicator_color, &sectionobject->indicator_color, sizeof (sectionobject->indicator_color)))
         pass ();
     else
-        fail ("SECTION.indicator_color [CMC]");
+        fail ("SECTIONOBJECT.indicator_color [CMC]");
+  }
+  {
+    BITCODE_B is_live;
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "is_live", &is_live, NULL)
+        && is_live == sectionobject->is_live)
+      pass ();
+    else
+      fail ("SECTIONOBJECT.is_live [B] " FORMAT_B " != " FORMAT_B "", sectionobject->is_live, is_live);
+    is_live++;
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "is_live", &is_live, 0)
+        && is_live == sectionobject->is_live)
+      pass ();
+    else
+      fail ("SECTIONOBJECT.is_live [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionobject->is_live, is_live);
+    sectionobject->is_live--;
   }
   {
     BITCODE_T name;
-    if (dwg_dynapi_entity_value (section, "SECTION", "name", &name, NULL)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "name", &name, NULL)
         && name
-           ? strEQ ((char *)name, (char *)section->name)
-           : !section->name)
+           ? strEQ ((char *)name, (char *)sectionobject->name)
+           : !sectionobject->name)
       pass ();
     else
-      fail ("SECTION.name [T] '%s' <> '%s'", name, section->name);
+      fail ("SECTIONOBJECT.name [T] '%s' <> '%s'", name, sectionobject->name);
   }
   {
     BITCODE_BL num_blverts;
-    if (dwg_dynapi_entity_value (section, "SECTION", "num_blverts", &num_blverts, NULL)
-        && num_blverts == section->num_blverts)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "num_blverts", &num_blverts, NULL)
+        && num_blverts == sectionobject->num_blverts)
       pass ();
     else
-      fail ("SECTION.num_blverts [BL] %u != %u", section->num_blverts, num_blverts);
+      fail ("SECTIONOBJECT.num_blverts [BL] %u != %u", sectionobject->num_blverts, num_blverts);
     num_blverts++;
-    if (dwg_dynapi_entity_set_value (section, "SECTION", "num_blverts", &num_blverts, 0)
-        && num_blverts == section->num_blverts)
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "num_blverts", &num_blverts, 0)
+        && num_blverts == sectionobject->num_blverts)
       pass ();
     else
-      fail ("SECTION.num_blverts [BL] set+1 %u != %u", section->num_blverts, num_blverts);
-    section->num_blverts--;
+      fail ("SECTIONOBJECT.num_blverts [BL] set+1 %u != %u", sectionobject->num_blverts, num_blverts);
+    sectionobject->num_blverts--;
   }
   {
     BITCODE_BL num_verts;
-    if (dwg_dynapi_entity_value (section, "SECTION", "num_verts", &num_verts, NULL)
-        && num_verts == section->num_verts)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "num_verts", &num_verts, NULL)
+        && num_verts == sectionobject->num_verts)
       pass ();
     else
-      fail ("SECTION.num_verts [BL] %u != %u", section->num_verts, num_verts);
+      fail ("SECTIONOBJECT.num_verts [BL] %u != %u", sectionobject->num_verts, num_verts);
     num_verts++;
-    if (dwg_dynapi_entity_set_value (section, "SECTION", "num_verts", &num_verts, 0)
-        && num_verts == section->num_verts)
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "num_verts", &num_verts, 0)
+        && num_verts == sectionobject->num_verts)
       pass ();
     else
-      fail ("SECTION.num_verts [BL] set+1 %u != %u", section->num_verts, num_verts);
-    section->num_verts--;
+      fail ("SECTIONOBJECT.num_verts [BL] set+1 %u != %u", sectionobject->num_verts, num_verts);
+    sectionobject->num_verts--;
   }
   {
     struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (section, "SECTION", "parent", &parent, NULL)
-        && !memcmp (&parent, &section->parent, sizeof (section->parent)))
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "parent", &parent, NULL)
+        && !memcmp (&parent, &sectionobject->parent, sizeof (sectionobject->parent)))
         pass ();
     else
-        fail ("SECTION.parent [struct _dwg_object_entity*]");
+        fail ("SECTIONOBJECT.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_H setting;
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "setting", &setting, NULL)
+        && !memcmp (&setting, &sectionobject->setting, sizeof (sectionobject->setting)))
+        pass ();
+    else
+        fail ("SECTIONOBJECT.setting [H]");
   }
   {
     BITCODE_BL state;
-    if (dwg_dynapi_entity_value (section, "SECTION", "state", &state, NULL)
-        && state == section->state)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "state", &state, NULL)
+        && state == sectionobject->state)
       pass ();
     else
-      fail ("SECTION.state [BL] %u != %u", section->state, state);
+      fail ("SECTIONOBJECT.state [BL] %u != %u", sectionobject->state, state);
     state++;
-    if (dwg_dynapi_entity_set_value (section, "SECTION", "state", &state, 0)
-        && state == section->state)
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "state", &state, 0)
+        && state == sectionobject->state)
       pass ();
     else
-      fail ("SECTION.state [BL] set+1 %u != %u", section->state, state);
-    section->state--;
+      fail ("SECTIONOBJECT.state [BL] set+1 %u != %u", sectionobject->state, state);
+    sectionobject->state--;
   }
   {
     BITCODE_BD top_height;
-    if (dwg_dynapi_entity_value (section, "SECTION", "top_height", &top_height, NULL)
-        && top_height == section->top_height)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "top_height", &top_height, NULL)
+        && top_height == sectionobject->top_height)
       pass ();
     else
-      fail ("SECTION.top_height [BD] %g != %g", section->top_height, top_height);
+      fail ("SECTIONOBJECT.top_height [BD] %g != %g", sectionobject->top_height, top_height);
     top_height++;
-    if (dwg_dynapi_entity_set_value (section, "SECTION", "top_height", &top_height, 0)
-        && top_height == section->top_height)
+    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "top_height", &top_height, 0)
+        && top_height == sectionobject->top_height)
       pass ();
     else
-      fail ("SECTION.top_height [BD] set+1 %g != %g", section->top_height, top_height);
-    section->top_height--;
+      fail ("SECTIONOBJECT.top_height [BD] set+1 %g != %g", sectionobject->top_height, top_height);
+    sectionobject->top_height--;
   }
   {
     BITCODE_3BD vert_dir;
-    if (dwg_dynapi_entity_value (section, "SECTION", "vert_dir", &vert_dir, NULL)
-        && !memcmp (&vert_dir, &section->vert_dir, sizeof (section->vert_dir)))
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "vert_dir", &vert_dir, NULL)
+        && !memcmp (&vert_dir, &sectionobject->vert_dir, sizeof (sectionobject->vert_dir)))
         pass ();
     else
-        fail ("SECTION.vert_dir [3BD]");
+        fail ("SECTIONOBJECT.vert_dir [3BD]");
   }
   {
     BITCODE_3BD* verts;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (section, "SECTION", "num_verts", &count, NULL)
-        && dwg_dynapi_entity_value (section, "SECTION", "verts", &verts, NULL)
-        && verts == section->verts)
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "num_verts", &count, NULL)
+        && dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "verts", &verts, NULL)
+        && verts == sectionobject->verts)
       pass ();
     else
-      fail ("SECTION.verts [3BD*] * %u num_verts", count);
+      fail ("SECTIONOBJECT.verts [3BD*] * %u num_verts", count);
   }
-  if (failed && (is_class_unstable ("SECTION") || is_class_debugging ("SECTION")))
+  {
+    BITCODE_3BD viewing_dir;
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "viewing_dir", &viewing_dir, NULL)
+        && !memcmp (&viewing_dir, &sectionobject->viewing_dir, sizeof (sectionobject->viewing_dir)))
+        pass ();
+    else
+        fail ("SECTIONOBJECT.viewing_dir [3BD]");
+  }
+  if (failed && (is_class_unstable ("SECTIONOBJECT") || is_class_debugging ("SECTIONOBJECT")))
     {
-      ok ("%s failed %d tests (TODO unstable)", "SECTION", failed);
+      ok ("%s failed %d tests (TODO unstable)", "SECTIONOBJECT", failed);
       failed = 0;
     }
   return failed;
@@ -43068,8 +43091,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_REGION(obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE(obj);
-  else  if (obj->fixedtype == DWG_TYPE_SECTION)
-    error += test_SECTION(obj);
+  else  if (obj->fixedtype == DWG_TYPE_SECTIONOBJECT)
+    error += test_SECTIONOBJECT(obj);
   else  if (obj->fixedtype == DWG_TYPE_SEQEND)
     error += test_SEQEND(obj);
   else  if (obj->fixedtype == DWG_TYPE_SHAPE)
@@ -43412,8 +43435,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_REGION (obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE (obj);
-  else  if (obj->fixedtype == DWG_TYPE_SECTION)
-    error += test_SECTION (obj);
+  else  if (obj->fixedtype == DWG_TYPE_SECTIONOBJECT)
+    error += test_SECTIONOBJECT (obj);
   else  if (obj->fixedtype == DWG_TYPE_SEQEND)
     error += test_SEQEND (obj);
   else  if (obj->fixedtype == DWG_TYPE_SHAPE)
@@ -44066,12 +44089,12 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"REVOLVEDSURFACE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (Dwg_Entity_SECTION);
-  size2 = dwg_dynapi_fields_size ("SECTION");
+  size1 = sizeof (Dwg_Entity_SECTIONOBJECT);
+  size2 = dwg_dynapi_fields_size ("SECTIONOBJECT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(Dwg_Entity_SECTION): %d != "
-               "dwg_dynapi_fields_size (\"SECTION\"): %d\n", size1, size2);
+      fprintf (stderr, "sizeof(Dwg_Entity_SECTIONOBJECT): %d != "
+               "dwg_dynapi_fields_size (\"SECTIONOBJECT\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_SEQEND);

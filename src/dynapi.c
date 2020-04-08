@@ -88,7 +88,7 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
   "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
   "REVOLVEDSURFACE" "\0\0\0",	/* 48 */
-  "SECTION" "\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "SECTIONOBJECT" "\0\0\0\0\0",	/* 49 */
   "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
   "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
   "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
@@ -2864,35 +2864,39 @@ static const Dwg_DYNAPI_field _dwg_REVOLVEDSURFACE_fields[] = {
     0,0,0, 291 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_entity_SECTION: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_SECTION_fields[] = {
-  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SECTION, parent),
+/* from typedef struct _dwg_entity_SECTIONOBJECT: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_SECTIONOBJECT_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SECTIONOBJECT, parent),
     1,1,0, 0 },
-  { "state",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, state),
+  { "state",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTIONOBJECT, state),
     0,0,0, 90 },
-  { "flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, flags),
+  { "flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTIONOBJECT, flags),
     0,0,0, 91 },
-  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_SECTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_SECTIONOBJECT, name),
     1,1,1, 1 },
-  { "vert_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_SECTION, vert_dir),
+  { "viewing_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_SECTIONOBJECT, viewing_dir),
+    1,0,0, 0 },
+  { "vert_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_SECTIONOBJECT, vert_dir),
     1,0,0, 10 },
-  { "top_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SECTION, top_height),
+  { "top_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SECTIONOBJECT, top_height),
     0,0,0, 40 },
-  { "bottom_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SECTION, bottom_height),
+  { "bottom_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SECTIONOBJECT, bottom_height),
     0,0,0, 41 },
-  { "indicator_alpha",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_SECTION, indicator_alpha),
+  { "is_live",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_SECTIONOBJECT, is_live),
+    0,0,0, 0 },
+  { "indicator_alpha",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_SECTIONOBJECT, indicator_alpha),
     0,0,0, 70 },
-  { "indicator_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_entity_SECTION, indicator_color),
+  { "indicator_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_entity_SECTIONOBJECT, indicator_color),
     1,0,0, 63 },
-  { "num_verts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, num_verts),
+  { "num_verts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTIONOBJECT, num_verts),
     0,0,0, 92 },
-  { "verts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTION, verts),
-    1,1,0, 12 },
-  { "num_blverts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTION, num_blverts),
+  { "verts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTIONOBJECT, verts),
+    1,1,0, 11 },
+  { "num_blverts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_SECTIONOBJECT, num_blverts),
     0,0,0, 93 },
-  { "blverts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTION, blverts),
-    1,1,0, 0 },
-  { "geomsetting",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SECTION, geomsetting),
+  { "blverts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTIONOBJECT, blverts),
+    1,1,0, 12 },
+  { "setting",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SECTIONOBJECT, setting),
     1,0,0, 360 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -9028,7 +9032,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "REVOLVEDSURFACE", DWG_TYPE_REVOLVEDSURFACE /*(594)*/, _dwg_REVOLVEDSURFACE_fields, sizeof (struct _dwg_entity_REVOLVEDSURFACE) },	/* 136 */
   { "RTEXT", DWG_TYPE_RTEXT /*(595)*/, NULL, 0 },	/* 137 */
   { "SCALE", DWG_TYPE_SCALE /*(596)*/, _dwg_SCALE_fields, sizeof (struct _dwg_object_SCALE) },	/* 138 */
-  { "SECTION", DWG_TYPE_SECTION /*(597)*/, _dwg_SECTION_fields, sizeof (struct _dwg_entity_SECTION) },	/* 139 */
+  { "SECTIONOBJECT", DWG_TYPE_SECTIONOBJECT /*(597)*/, _dwg_SECTIONOBJECT_fields, sizeof (struct _dwg_entity_SECTIONOBJECT) },	/* 139 */
   { "SECTIONVIEWSTYLE", DWG_TYPE_SECTIONVIEWSTYLE /*(598)*/, _dwg_SECTIONVIEWSTYLE_fields, sizeof (struct _dwg_object_SECTIONVIEWSTYLE) },	/* 140 */
   { "SEQEND", DWG_TYPE_SEQEND /*(6)*/, _dwg_SEQEND_fields, sizeof (struct _dwg_entity_SEQEND) },	/* 141 */
   { "SHAPE", DWG_TYPE_SHAPE /*(33)*/, _dwg_SHAPE_fields, sizeof (struct _dwg_entity_SHAPE) },	/* 142 */

@@ -513,7 +513,7 @@ typedef struct _dwg_entity_REVOLVEDSURFACE        dwg_ent_revolvedsurface;
 typedef struct _dwg_entity_SWEPTSURFACE           dwg_ent_sweptsurface;
 typedef struct _dwg_entity_GEOPOSITIONMARKER      dwg_ent_geopositionmarker;
 typedef struct _dwg_entity_MESH                   dwg_ent_mesh;
-typedef struct _dwg_entity_SECTION                dwg_ent_section;
+typedef struct _dwg_entity_SECTIONOBJECT          dwg_ent_sectionobject;
 typedef struct _dwg_entity_NAVISWORKSMODEL        dwg_ent_navisworksmodel;
 typedef struct _dwg_entity_PROXY_ENTITY           dwg_ent_proxy;
 typedef struct _dwg_entity_UNKNOWN_ENT            dwg_ent_unknown;
@@ -730,7 +730,7 @@ DWG_GETALL_ENTITY_DECL (REVOLVEDSURFACE)
 DWG_GETALL_ENTITY_DECL (SWEPTSURFACE)
 DWG_GETALL_ENTITY_DECL (TABLE)
 DWG_GETALL_ENTITY_DECL (MESH)
-DWG_GETALL_ENTITY_DECL (SECTION)
+DWG_GETALL_ENTITY_DECL (SECTIONOBJECT)
 DWG_GETALL_ENTITY_DECL (NAVISWORKSMODEL)
 
 /********************************************************************
@@ -941,7 +941,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (REVOLVEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SWEPTSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (TABLE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MESH)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SECTION)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SECTIONOBJECT)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (NAVISWORKSMODEL)
 
 /*******************************************************************
@@ -1208,7 +1208,7 @@ dwg_get_OBJECT_DECL (ent_sweptsurface, SWEPTSURFACE);
 dwg_get_OBJECT_DECL (ent_geopositionmarker, GEOPOSITIONMARKER);
 dwg_get_OBJECT_DECL (ent_table, TABLE);
 dwg_get_OBJECT_DECL (ent_mesh, MESH);
-dwg_get_OBJECT_DECL (ent_section, SECTION);
+dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 dwg_get_OBJECT_DECL (ent_navisworksmodel, NAVISWORKSMODEL);
 #endif
 
