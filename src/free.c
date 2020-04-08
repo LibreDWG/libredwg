@@ -472,6 +472,7 @@ dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     case DWG_TYPE_ACDSRECORD:
     case DWG_TYPE_ACDSSCHEMA:
     case DWG_TYPE_ACSH_REVOLVE_CLASS:
+    case DWG_TYPE_ACSH_PYRAMID_CLASS:
     case DWG_TYPE_ACSH_SPHERE_CLASS:
     case DWG_TYPE_ARCALIGNEDTEXT:
     case DWG_TYPE_NPOCOLLECTION:

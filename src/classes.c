@@ -103,6 +103,7 @@ static const Dwg_Object_Type _classes_unhandled[] =
   {
    DWG_TYPE_ACDSRECORD,
    DWG_TYPE_ACDSSCHEMA,
+   DWG_TYPE_ACSH_PYRAMID_CLASS,
    DWG_TYPE_ACSH_REVOLVE_CLASS,
    DWG_TYPE_ACSH_SPHERE_CLASS,
    DWG_TYPE_ARCALIGNEDTEXT,
@@ -214,6 +215,7 @@ static const struct _obj_type_name _dwg_type_name[] =
    { DWG_TYPE_ACSH_BOX_CLASS, "ACSH_BOX_CLASS" },
    { DWG_TYPE_ACSH_EXTRUSION_CLASS, "ACSH_EXTRUSION_CLASS" },
    { DWG_TYPE_ACSH_HISTORY_CLASS, "ACSH_HISTORY_CLASS" },
+   { DWG_TYPE_ACSH_PYRAMID_CLASS, "ACSH_PYRAMID_CLASS" },
    { DWG_TYPE_ACSH_REVOLVE_CLASS, "ACSH_REVOLVE_CLASS" },
    { DWG_TYPE_ACSH_SPHERE_CLASS, "ACSH_SPHERE_CLASS" },
    { DWG_TYPE_ACSH_SWEEP_CLASS, "ACSH_SWEEP_CLASS" },
@@ -321,7 +323,8 @@ static const struct _obj_type_name _dwg_type_name[] =
 const char *dwg_type_name (const Dwg_Object_Type type)
 {
   const struct _obj_type_name *s = (struct _obj_type_name *)_dwg_type_name;
-  // linear, TODO better binary search
+  // linear, TODO better binary search. Or a switch jumptable, as in free.
+  // just 12 unhandled are missing in objects.inc
   for (; s->type != DWG_TYPE_UNKNOWN_OBJ; s++)
     {
       if (type == s->type)
