@@ -62,8 +62,9 @@ run ()
     dwg2dxf)    arg="-y $arg" ;;
     dwggrep)    arg="-i tekst $arg" ;;
     dxf2dwg)    arg="-y -v2 ${DATADIR}/$dwg.dxf" ;;
-    dwgread)    arg="-v2 -o $dwg.json $arg" ;;
     dwgwrite)   arg="-y -v2 $dwg.json" ;;
+    dwgread)    arg="-v2 -o $dwg.json $arg" ;;
+    dxfwrite)   arg="-y -v2 $dwg.json" ;;
     #dwgrewrite) arg="-v2 $arg" ;;
     *)          arg="-v2 $arg" ;;
     esac

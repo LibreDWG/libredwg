@@ -55,10 +55,11 @@ bin_PROGRAMS      += dwgrewrite
 dist_man1_MANS    += $(srcdir)/dwgrewrite.1
 dwgrewrite_SOURCES = dwgrewrite.c
 if !DISABLE_DXF
-bin_PROGRAMS      += dxf2dwg dwgwrite
-dist_man1_MANS    += $(srcdir)/dxf2dwg.1 $(srcdir)/dwgwrite.1
+bin_PROGRAMS      += dxf2dwg dwgwrite dxfwrite
+dist_man1_MANS    += $(srcdir)/dxf2dwg.1 $(srcdir)/dwgwrite.1 $(srcdir)/dxfwrite.1
 dxf2dwg_SOURCES    = dxf2dwg.c
 dwgwrite_SOURCES   = dwgwrite.c
+dxfwrite_SOURCES   = dxfwrite.c
 endif
 endif
 

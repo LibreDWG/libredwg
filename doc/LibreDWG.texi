@@ -786,6 +786,12 @@ Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}, @px
 optionally via @code{--as-rNNNN} as another version. Experimental.
 For now can only create r13-r2000 DWG files.
 
+@item @file{dxfwrite}
+@cindex dxfwrite
+
+Create a DXF from a given input file (@code{DWG}, @pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
+optionally via @code{--as-rNNNN} as another version. Highly experimental.
+
 @item @file{dwg2dxf}
 @cindex dwg2dxf
 Converts DWG files to DXF, optionally via @code{--as-rNNNN} as another
