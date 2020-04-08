@@ -49,7 +49,7 @@ JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check json-check \
-	     log.in svg.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
+	     log.in svg.in rw.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
@@ -120,7 +120,7 @@ TESTS =
 if HAVE_SHELLCHECK
 # fragile, serial-tests only. SPEC_LOG_COMPILER does not work there,
 # and parallel cannot do srcdir TESTS
-TESTS += log dwg dxf json svg logs-all.sh dynapi_test_all.sh unit_testing_all.sh \
+TESTS += log dwg dxf json svg rw logs-all.sh dynapi_test_all.sh unit_testing_all.sh \
 	 $(srcdir)/json-check $(srcdir)/dxf-check \
 	 $(srcdir)/dxf-allcvt.sh $(srcdir)/test-dxf.sh $(srcdir)/unknown.sh \
          programs/dwgfilter \
@@ -205,7 +205,7 @@ $(BUILT_SOURCES):
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf example_*.dxf.log
-DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh unit_testing_all.sh log json dwg dxf svg libredwg.pc
+DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh unit_testing_all.sh log json dwg dxf svg rw libredwg.pc
 MAINTAINERCLEANFILES  = *~ *.log *.dxf *.json *.dwg cover_db .analysis
 
 maintainer-clean-local:

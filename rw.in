@@ -1,0 +1,51 @@
+#!/bin/sh
+# create -v3 logs and dwg's with dwgrewrite
+srcdir="@srcdir@"
+top_builddir="@top_builddir@"
+CFLAGS="@CFLAGS@"
+timeout="@TIMEOUT_30@"
+
+case "$CFLAGS" in
+    *-DDEBUG_CLASSES*) timeout= ;;
+    *) ;;
+esac
+make -s -j4 -C src
+make -s -j4 -C programs dwgrewrite
+@DSYMUTIL@ programs/dwgrewrite
+v=-v3
+# dummy to please shellcheck
+test -z "$v" && echo $top_builddir
+ob="$b"
+
+for d in "$@"; do
+    case $d in
+        -v*) v="$d"
+             ;;
+        *)
+        if [ ! -f "$d" ]; then
+            if [ -f "$srcdir/test/test-data/$d" ]
+            then
+                d="$srcdir/test/test-data/$d";
+            else
+                if [ -f "$srcdir/test/test-data/$d.dwg" ]
+                then
+                    d="$srcdir/test/test-data/$d.dwg"
+                fi
+            fi
+        fi
+        xd=$(dirname "$d")
+        dir="_$(basename "$xd")"
+        if [ "$dir" = "_test-data" ]; then dir=""; fi
+        if [ "$dir" = "_td" ]; then dir=""; fi
+        if [ "$dir" = "_." ]; then dir=""; fi
+        b=$(basename "$d" .dwg)
+        log="$b$dir.rw.log"
+        echo "$timeout @LTEXEC@ programs/dwgrewrite $v $d 2>$log"
+        # shellcheck disable=SC2086
+        $timeout @LTEXEC@ programs/dwgrewrite "$v" "$d" 2>"$log"
+        tail "$log"
+        ;;
+    esac
+done
+v=
+b=$ob
