@@ -6643,6 +6643,29 @@ DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   }
 DWG_OBJECT_END
 
+// sectionplane, r2007+
+DWG_ENTITY (SECTIONOBJECT)
+
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSection)
+  FIELD_BL (state, 90);
+  FIELD_BL (flags, 91);
+  FIELD_T (name, 1);
+  FIELD_3BD (vert_dir, 10);
+  FIELD_BD (top_height, 40);
+  FIELD_BD (bottom_height, 41);
+  FIELD_BL (indicator_alpha, 70);
+  FIELD_CMC (indicator_color, 62,420); //dxf doc bug: 63, 411
+  FIELD_BL (num_verts, 92);
+  FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
+  FIELD_BL (num_blverts, 93);
+  FIELD_3DPOINT_VECTOR (blverts, num_blverts, 12);
+  //FIELD_B (is_live, 0);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (setting, 5, 360);
+DWG_ENTITY_END
+
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
@@ -8031,29 +8054,6 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
 
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
-
-// sectionplane, r2007+
-DWG_ENTITY (SECTIONOBJECT)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbSection)
-  FIELD_BL (state, 90);
-  FIELD_BL (flags, 91);
-  FIELD_T (name, 1);
-  FIELD_3BD (vert_dir, 10);
-  FIELD_BD (top_height, 40);
-  FIELD_BD (bottom_height, 41);
-  FIELD_B (is_live, 0);
-  FIELD_RC (indicator_alpha, 70);
-  FIELD_CMC (indicator_color, 63,411);
-  FIELD_BL (num_verts, 92);
-  FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
-  FIELD_BL (num_blverts, 93);
-  FIELD_3DPOINT_VECTOR (blverts, num_blverts, 12);
-
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (setting, 5, 360);
-DWG_ENTITY_END
 
 // as ACAD_LAYERFILTERS in the NOD
 DWG_OBJECT (LAYERFILTER)

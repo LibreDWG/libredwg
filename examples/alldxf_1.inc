@@ -54,6 +54,7 @@
 #include "alldxf_PLOTSETTINGS.inc"
 #include "alldxf_RAPIDRTRENDERSETTINGS.inc"
 #include "alldxf_REVOLVEDSURFACE.inc"
+#include "alldxf_SECTIONOBJECT.inc"
 #include "alldxf_SUN.inc"
 #include "alldxf_SWEPTSURFACE.inc"
 #include "alldxf_TABLESTYLE.inc"

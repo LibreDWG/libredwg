@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* TABLESTYLE 7F in test/test-data/2000/2.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1397[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1398[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "7E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -92,7 +92,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1397[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2000/3.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1398[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1399[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "7E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -181,7 +181,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1398[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2007/400306127-Red_silicone_wire.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1399[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1400[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "35AD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -282,7 +282,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1399[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2000/4.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1400[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1401[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "7E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -371,7 +371,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1400[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 3823E in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1401[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1402[] = {
   //{ 5, "3823E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "384C0", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -474,7 +474,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1401[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 3824D in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1402[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1403[] = {
   //{ 5, "3824D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "384C4", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -578,7 +578,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1402[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE F4B0 in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1403[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1404[] = {
   //{ 5, "F4B0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "F4F7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -680,7 +680,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1403[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 3CEAB in test/test-data/2010/5151-022.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1404[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1405[] = {
   //{ 5, "3CEAB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3D12D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -783,7 +783,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1404[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 3CEBA in test/test-data/2010/5151-022.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1405[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1406[] = {
   //{ 5, "3CEBA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3D131", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -887,7 +887,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1405[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 42593 in test/test-data/2010/5151-023.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1406[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1407[] = {
   //{ 5, "42593", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42818", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -990,7 +990,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1406[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 425A2 in test/test-data/2010/5151-023.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1407[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1408[] = {
   //{ 5, "425A2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4281C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1094,7 +1094,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1407[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 428C0 in test/test-data/2010/5151-024.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1408[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1409[] = {
   //{ 5, "428C0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42B45", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1197,7 +1197,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1408[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 428CF in test/test-data/2010/5151-024.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1409[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1410[] = {
   //{ 5, "428CF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42B49", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1301,7 +1301,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1409[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2000/5.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1410[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1411[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "7E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1390,114 +1390,6 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1410[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1411[] = {
-  //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 330, "5F1181", NULL, 0, BITS_UNKNOWN, "reactors[1]", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F1353", NULL, 0, BITS_UNKNOWN, "reactors[2]", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FE51C", NULL, 0, BITS_UNKNOWN, "reactors[3]", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FFAE3", NULL, 0, BITS_UNKNOWN, "reactors[4]", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FFB25", NULL, 0, BITS_UNKNOWN, "reactors[5]", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FFB26", NULL, 0, BITS_UNKNOWN, "reactors[6]", 1, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 330, "86", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbTableStyle", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 3, "Standard", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 40, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
-    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 170, "2", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
-    { 140, "0.25", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
-    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
-    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* TABLESTYLE 87 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
 static struct _unknown_field unknown_dxf_TABLESTYLE_1412[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1605,8 +1497,116 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1412[] = {
     { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* TABLESTYLE 7F in test/test-data/2013/AISHa.dxf */
+/* TABLESTYLE 87 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
 static struct _unknown_field unknown_dxf_TABLESTYLE_1413[] = {
+  //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 330, "5F1181", NULL, 0, BITS_UNKNOWN, "reactors[1]", 1, {-1,-1,-1,-1,-1} },
+    { 330, "5F1353", NULL, 0, BITS_UNKNOWN, "reactors[2]", 1, {-1,-1,-1,-1,-1} },
+    { 330, "5FE51C", NULL, 0, BITS_UNKNOWN, "reactors[3]", 1, {-1,-1,-1,-1,-1} },
+    { 330, "5FFAE3", NULL, 0, BITS_UNKNOWN, "reactors[4]", 1, {-1,-1,-1,-1,-1} },
+    { 330, "5FFB25", NULL, 0, BITS_UNKNOWN, "reactors[5]", 1, {-1,-1,-1,-1,-1} },
+    { 330, "5FFB26", NULL, 0, BITS_UNKNOWN, "reactors[6]", 1, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 330, "86", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbTableStyle", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 3, "Standard", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 70, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 71, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 40, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
+    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 170, "2", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
+    { 140, "0.25", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
+    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* TABLESTYLE 7F in test/test-data/2013/AISHa.dxf */
+static struct _unknown_field unknown_dxf_TABLESTYLE_1414[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "162", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1708,7 +1708,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1413[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2007/Arc.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1414[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1415[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1809,7 +1809,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1414[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2018/Arc.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1415[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1416[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1910,7 +1910,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1415[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2004/BoxUnion.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1416[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1417[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "162", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2002,7 +2002,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1416[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 10346D in test/test-data/2004/CascoUrbano.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1417[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1418[] = {
   //{ 5, "10346D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1EB310", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2094,98 +2094,6 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1417[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2000/Constraints.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1418[] = {
-  //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 330, "86", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbTableStyle", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 3, "Standard", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 40, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
-    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 170, "2", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
-    { 140, "0.25", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
-    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
-    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
-    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* TABLESTYLE 87 in test/test-data/2004/Constraints.dxf */
 static struct _unknown_field unknown_dxf_TABLESTYLE_1419[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2277,7 +2185,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1419[] = {
     { 69, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* TABLESTYLE 87 in test/test-data/2010/Constraints.dxf */
+/* TABLESTYLE 87 in test/test-data/2004/Constraints.dxf */
 static struct _unknown_field unknown_dxf_TABLESTYLE_1420[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2288,98 +2196,88 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1420[] = {
     { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 330, "86", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbTableStyle", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
     { 3, "Standard", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 70, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
+    { 71, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 40, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 41, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
+    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
     { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 170, "2", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
     { 140, "0.25", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
     { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
-    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 28, {-1,-1,-1,-1,-1} },
     { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
-    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
     { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 28, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* TABLESTYLE 87 in test/test-data/2013/Constraints.dxf */
+/* TABLESTYLE 87 in test/test-data/2010/Constraints.dxf */
 static struct _unknown_field unknown_dxf_TABLESTYLE_1421[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2481,8 +2379,110 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1421[] = {
     { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* TABLESTYLE 87 in test/test-data/2018/Constraints.dxf */
+/* TABLESTYLE 87 in test/test-data/2013/Constraints.dxf */
 static struct _unknown_field unknown_dxf_TABLESTYLE_1422[] = {
+  //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 330, "86", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbTableStyle", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 3, "Standard", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 70, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 71, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 40, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "0.06", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
+    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 170, "2", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
+    { 140, "0.25", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 7, "Standard", NULL, 0, BITS_UNKNOWN, "ltype", 4, {-1,-1,-1,-1,-1} },
+    { 140, "0.18", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 170, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 62, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 63, "7", NULL, 0, BITS_UNKNOWN, "color", 3, {-1,-1,-1,-1,-1} },
+    { 283, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 90, "512", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 1, "", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 274, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 284, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 64, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 275, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 285, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 65, "0", NULL, 0, BITS_UNKNOWN, "color", 32, {-1,-1,-1,-1,-1} },
+    { 276, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 286, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 66, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 277, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 287, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 67, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 278, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 288, "1", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
+    { 68, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 279, "-2", NULL, 0, BITS_UNKNOWN, "", 18, {-1,-1,-1,-1,-1} },
+    { 289, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 69, "0", NULL, 0, BITS_UNKNOWN, "", 32, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* TABLESTYLE 87 in test/test-data/2018/Constraints.dxf */
+static struct _unknown_field unknown_dxf_TABLESTYLE_1423[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2583,7 +2583,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1422[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE A7 in test/test-data/2007/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1423[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1424[] = {
   //{ 5, "A7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "FF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2684,7 +2684,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1423[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE A7 in test/test-data/2013/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1424[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1425[] = {
   //{ 5, "A7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "FF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2786,7 +2786,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1424[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE A7 in test/test-data/2018/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1425[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1426[] = {
   //{ 5, "A7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "A6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2887,7 +2887,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1425[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2013/Donut.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1426[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1427[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2989,7 +2989,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1426[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1427[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1428[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "7E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3081,7 +3081,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1427[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 124 in test/test-data/DS_line_R2000.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1428[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1429[] = {
   //{ 5, "124", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "281", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3173,7 +3173,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1428[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 3C in test/test-data/DS_line_R2013.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1429[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1430[] = {
   //{ 5, "3C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "10F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3275,7 +3275,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1429[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 29B in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1430[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1431[] = {
   //{ 5, "29B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "9BA", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3368,7 +3368,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1430[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 29B in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1431[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1432[] = {
   //{ 5, "29B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EFC", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3461,7 +3461,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1431[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 29B in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1432[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1433[] = {
   //{ 5, "29B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EAB", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3563,7 +3563,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1432[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 29B in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1433[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1434[] = {
   //{ 5, "29B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E5A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3666,7 +3666,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1433[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 29B in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1434[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1435[] = {
   //{ 5, "29B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E3F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3769,7 +3769,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1434[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 29B in test/test-data/example_2018.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1435[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1436[] = {
   //{ 5, "29B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "9B3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3872,7 +3872,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1435[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1436[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1437[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3974,7 +3974,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1436[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 366D3 in test/test-data/2013/flipped_cleaned.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1437[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1438[] = {
   //{ 5, "366D3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4156E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4076,7 +4076,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1437[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 74B in test/test-data/2004/fr05_b101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1438[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1439[] = {
   //{ 5, "74B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "7A2", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4168,7 +4168,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1438[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 74C in test/test-data/2004/fr05_b101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1439[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1440[] = {
   //{ 5, "74C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "7A4", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4261,7 +4261,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1439[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 483 in test/test-data/2004/fr05_f101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1440[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1441[] = {
   //{ 5, "483", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4DA", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4353,7 +4353,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1440[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 484 in test/test-data/2004/fr05_f101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1441[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1442[] = {
   //{ 5, "484", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4DC", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4446,7 +4446,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1441[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 57A in test/test-data/2004/fr05_s101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1442[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1443[] = {
   //{ 5, "57A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5D1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4538,7 +4538,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1442[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 57B in test/test-data/2004/fr05_s101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1443[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1444[] = {
   //{ 5, "57B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5D3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4631,7 +4631,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1443[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 3D6 in test/test-data/2004/fr05_x101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1444[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1445[] = {
   //{ 5, "3D6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4723,7 +4723,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1444[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 3D7 in test/test-data/2004/fr05_x101_ref.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1445[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1446[] = {
   //{ 5, "3D7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4816,7 +4816,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1445[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2013/gh109_1.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1446[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1447[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "232", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4918,7 +4918,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1446[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 47 in test/test-data/2010/gh209_1.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1447[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1448[] = {
   //{ 5, "47", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "48", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5020,7 +5020,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1447[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1448[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1449[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "162", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5122,7 +5122,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1448[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-big/2007/HARTA_E_PRISHTINES.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1449[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1450[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "162", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5223,7 +5223,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1449[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 65 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1450[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1451[] = {
   //{ 5, "65", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "79F3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5325,7 +5325,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1450[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2000/MLeader.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1451[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1452[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "162", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5417,7 +5417,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1451[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2010/MLeader.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1452[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1453[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "162", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5519,7 +5519,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1452[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 1820 in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1453[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1454[] = {
   //{ 5, "1820", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "185F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5621,7 +5621,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1453[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE C17 in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1454[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1455[] = {
   //{ 5, "C17", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "D2D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5725,7 +5725,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1454[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 4F52 in test/test-data/2007/SALLE_DES_MACHINES.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1455[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1456[] = {
   //{ 5, "4F52", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4F96", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5826,7 +5826,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1455[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE D1 in test/test-data/sample_2004.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1456[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1457[] = {
   //{ 5, "D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "148", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5918,7 +5918,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1456[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE D1 in test/test-data/sample_2007.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1457[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1458[] = {
   //{ 5, "D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "199", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6019,7 +6019,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1457[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE D1 in test/test-data/sample_2010.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1458[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1459[] = {
   //{ 5, "D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1E2", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6121,7 +6121,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1458[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE D1 in test/test-data/sample_2013.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1459[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1460[] = {
   //{ 5, "D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "22A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6223,7 +6223,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1459[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE D1 in test/test-data/sample_2018.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1460[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1461[] = {
   //{ 5, "D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "124", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6325,7 +6325,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1460[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 1D8 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1461[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1462[] = {
   //{ 5, "1D8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2A3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6427,7 +6427,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1461[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1462[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1463[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "17C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6533,7 +6533,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1462[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 2525ED7A in test/test-big/2004/Suelo_urbano022_PGOU_Cullera.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1463[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1464[] = {
   //{ 5, "2525ED7A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2525ED79", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6625,7 +6625,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1463[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 7F in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1464[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1465[] = {
   //{ 5, "7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "162", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6727,7 +6727,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1464[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1465[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1466[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "104", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6820,7 +6820,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1465[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 98 in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1466[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1467[] = {
   //{ 5, "98", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "159", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6912,7 +6912,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1466[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 98 in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1467[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1468[] = {
   //{ 5, "98", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "159", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -7014,7 +7014,7 @@ static struct _unknown_field unknown_dxf_TABLESTYLE_1467[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* TABLESTYLE 87 in test/test-data/2000/work.dxf */
-static struct _unknown_field unknown_dxf_TABLESTYLE_1468[] = {
+static struct _unknown_field unknown_dxf_TABLESTYLE_1469[] = {
   //{ 5, "87", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

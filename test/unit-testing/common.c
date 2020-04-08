@@ -381,6 +381,12 @@ main (int argc, char *argv[])
               strcat (tmp, "2000/5.dwg");
               error += test_code (tmp, cov);
             }
+          if (DWG_TYPE == DWG_TYPE_SECTIONOBJECT)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2018/LiveSection.dwg");
+              error += test_code (tmp, cov);
+            }
         }
 #ifdef DWG_TYPE
       if (cov && !numpassed () && !numfailed ())

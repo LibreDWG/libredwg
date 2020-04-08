@@ -4027,6 +4027,34 @@ typedef struct _dwg_object_WIPEOUTVARIABLES
   BITCODE_BS display_frame;    /*!< DXF 70  */
 } Dwg_Object_WIPEOUTVARIABLES;
 
+/* SECTIONPLANE, r2007+, Unstable
+ * Looks like the livesection ptr from VIEW
+ */
+typedef struct _dwg_entity_SECTIONOBJECT
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BL state;		/*!< DXF 90. Plane=1, Boundary=2, Volume=4 */
+  BITCODE_BL flags;		/*!< DXF 91. hitflags: sectionline=1, sectionlinetop=2, sectionlinebottom=4,
+                                  backline=8, backlinetop=16, backlinebottom=32, verticallinetop=64,
+                                  verticallinebottom=128.
+                                  heightflags: HeightAboveSectionLine=1, HeightBelowSectionLine=2
+                                 */
+  BITCODE_T name;		/*!< DXF 1 */
+  //BITCODE_3BD viewing_dir;	/*!< normal of the 1st segment plane */
+  BITCODE_3BD vert_dir;	        /*!< DXF 10. normal to the segment line, on the plane */
+  BITCODE_BD top_height;	/*!< DXF 40 */
+  BITCODE_BD bottom_height;	/*!< DXF 41 */
+  //BITCODE_B is_live;
+  BITCODE_RC indicator_alpha;	/*!< DXF 70 */
+  BITCODE_CMC indicator_color;	/*!< DXF 62/420 (but documented as 63/411) */
+  BITCODE_BL num_verts;		/*!< DXF 92 */
+  BITCODE_3BD *verts;		/*!< DXF 11 */
+  BITCODE_BL num_blverts;	/*!< DXF 93 */
+  BITCODE_3BD *blverts;		/*!< DXF 12 */
+  BITCODE_H setting;		/*!< DXF 360 */
+
+} Dwg_Entity_SECTIONOBJECT;
+
 /**
  Class VISUALSTYLE (varies)
  R2007+
@@ -4670,33 +4698,6 @@ typedef struct _dwg_entity_MESH
   BITCODE_BD* crease;   	/*!< DXF 140 */
 
 } Dwg_Entity_MESH;
-
-// SECTIONPLANE, r2007+
-// looks like the livesection ptr from VIEW
-typedef struct _dwg_entity_SECTIONOBJECT
-{
-  struct _dwg_object_entity *parent;
-  BITCODE_BL state;		/*!< DXF 90. Plane=1, Boundary=2, Volume=4 */
-  BITCODE_BL flags;		/*!< DXF 91. hitflags: sectionline=1, sectionlinetop=2, sectionlinebottom=4,
-                                  backline=8, backlinetop=16, backlinebottom=32, verticallinetop=64,
-                                  verticallinebottom=128.
-                                  heightflags: HeightAboveSectionLine=1, HeightBelowSectionLine=2
-                                 */
-  BITCODE_T name;		/*!< DXF 1 */
-  BITCODE_3BD viewing_dir;	/*!< normal of the 1st segment plane */
-  BITCODE_3BD vert_dir;	        /*!< DXF 10. normal to the segment line, on the plane */
-  BITCODE_BD top_height;	/*!< DXF 40 */
-  BITCODE_BD bottom_height;	/*!< DXF 41 */
-  BITCODE_B is_live;
-  BITCODE_RC indicator_alpha;	/*!< DXF 70 */
-  BITCODE_CMC indicator_color;	/*!< DXF 63, 411 */
-  BITCODE_BL num_verts;		/*!< DXF 92 */
-  BITCODE_3BD *verts;		/*!< DXF 11 */
-  BITCODE_BL num_blverts;	/*!< DXF 93 */
-  BITCODE_3BD *blverts;		/*!< DXF 12 */
-  BITCODE_H setting;		/*!< DXF 360 */
-
-} Dwg_Entity_SECTIONOBJECT;
 
 /**
  Object SUN (varies) UNKNOWN FIELDS
@@ -5907,6 +5908,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_LIGHT *LIGHT;
     Dwg_Entity_LWPOLYLINE *LWPOLYLINE;
     Dwg_Entity_MULTILEADER *MULTILEADER;
+    Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
@@ -5919,7 +5921,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_WIPEOUT *WIPEOUT;
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_MESH *MESH;
-    Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
     Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
 
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
@@ -7090,6 +7091,7 @@ EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_add_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
@@ -7140,7 +7142,6 @@ EXPORT int dwg_add_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_add_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_add_MESH (Dwg_Object *obj);
-EXPORT int dwg_add_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_add_NAVISWORKSMODEL (Dwg_Object *obj);
 EXPORT int dwg_add_NAVISWORKSMODELDEF (Dwg_Object *obj);
 EXPORT int dwg_add_NPOCOLLECTION (Dwg_Object *obj);

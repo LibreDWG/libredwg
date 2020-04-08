@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* VISUALSTYLE 35A in test/test-data/2000/2.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1469[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1470[] = {
   //{ 5, "35A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -53,7 +53,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1469[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 35A in test/test-data/2000/3.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1470[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1471[] = {
   //{ 5, "35A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -103,7 +103,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1470[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 100 in test/test-data/2007/400306127-Red_silicone_wire.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1471[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1472[] = {
   //{ 5, "100", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "14782", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -153,7 +153,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1471[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F1 in test/test-data/2007/400306127-Red_silicone_wire.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1472[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1473[] = {
   //{ 5, "F1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "14764", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -203,7 +203,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1472[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F2 in test/test-data/2007/400306127-Red_silicone_wire.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1473[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1474[] = {
   //{ 5, "F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "14766", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -253,7 +253,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1473[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F3 in test/test-data/2007/400306127-Red_silicone_wire.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1474[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1475[] = {
   //{ 5, "F3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "14768", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -303,7 +303,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1474[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F4 in test/test-data/2007/400306127-Red_silicone_wire.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1475[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1476[] = {
   //{ 5, "F4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1476A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -353,7 +353,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1475[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 35A in test/test-data/2000/4.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1476[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1477[] = {
   //{ 5, "35A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -403,7 +403,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1476[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F497 in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1477[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1478[] = {
   //{ 5, "F497", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "384D1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -480,7 +480,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1477[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F498 in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1478[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1479[] = {
   //{ 5, "F498", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "384D3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -557,7 +557,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1478[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F499 in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1479[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1480[] = {
   //{ 5, "F499", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "384D5", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -634,7 +634,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1479[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F49A in test/test-data/2010/5151-019.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1480[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1481[] = {
   //{ 5, "F49A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "384D7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -711,7 +711,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1480[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F497 in test/test-data/2010/5151-022.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1481[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1482[] = {
   //{ 5, "F497", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3D13E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -788,7 +788,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1481[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F498 in test/test-data/2010/5151-022.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1482[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1483[] = {
   //{ 5, "F498", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3D140", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -865,7 +865,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1482[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F499 in test/test-data/2010/5151-022.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1483[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1484[] = {
   //{ 5, "F499", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3D142", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -942,7 +942,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1483[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F49A in test/test-data/2010/5151-022.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1484[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1485[] = {
   //{ 5, "F49A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3D144", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1019,7 +1019,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1484[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F497 in test/test-data/2010/5151-023.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1485[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1486[] = {
   //{ 5, "F497", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42829", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1096,7 +1096,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1485[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F498 in test/test-data/2010/5151-023.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1486[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1487[] = {
   //{ 5, "F498", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4282B", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1173,7 +1173,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1486[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F499 in test/test-data/2010/5151-023.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1487[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1488[] = {
   //{ 5, "F499", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4282D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1250,7 +1250,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1487[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F49A in test/test-data/2010/5151-023.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1488[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1489[] = {
   //{ 5, "F49A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4282F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1327,7 +1327,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1488[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F497 in test/test-data/2010/5151-024.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1489[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1490[] = {
   //{ 5, "F497", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42B56", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1404,7 +1404,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1489[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F498 in test/test-data/2010/5151-024.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1490[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1491[] = {
   //{ 5, "F498", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42B58", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1481,7 +1481,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1490[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F499 in test/test-data/2010/5151-024.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1491[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1492[] = {
   //{ 5, "F499", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42B5A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1558,7 +1558,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1491[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE F49A in test/test-data/2010/5151-024.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1492[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1493[] = {
   //{ 5, "F49A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "42B5C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1635,7 +1635,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1492[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 35A in test/test-data/2000/5.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1493[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1494[] = {
   //{ 5, "35A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1685,7 +1685,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1493[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1494[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1495[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "601DEA", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1762,7 +1762,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1494[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1495[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1496[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "601DEC", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1839,7 +1839,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1495[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1496[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1497[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1973,7 +1973,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1496[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1497[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1498[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2107,7 +2107,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1497[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2013/AISHa.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1498[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1499[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2241,7 +2241,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1498[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2013/AISHa.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1499[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1500[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2375,7 +2375,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1499[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Arc.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1500[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1501[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "293", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2425,7 +2425,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1500[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Arc.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1501[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1502[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "295", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2475,7 +2475,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1501[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2018/Arc.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1502[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1503[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2608,7 +2608,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1502[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2018/Arc.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1503[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1504[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2741,7 +2741,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1503[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2004/BoxUnion.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1504[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1505[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "315", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2792,7 +2792,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1504[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2004/BoxUnion.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1505[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1506[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "317", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2843,7 +2843,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1505[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF0 in test/test-data/2004/CascoUrbano.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1506[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1507[] = {
   //{ 5, "128FF0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F2CB4", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2894,7 +2894,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1506[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF1 in test/test-data/2004/CascoUrbano.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1507[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1508[] = {
   //{ 5, "128FF1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F2CB6", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2945,7 +2945,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1507[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF2 in test/test-data/2004/CascoUrbano.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1508[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1509[] = {
   //{ 5, "128FF2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F2CB8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2996,7 +2996,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1508[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF3 in test/test-data/2004/CascoUrbano.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1509[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1510[] = {
   //{ 5, "128FF3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F2CBA", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3047,7 +3047,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1509[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/circle.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1510[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1511[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "286", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3097,7 +3097,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1510[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/circle.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1511[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1512[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "288", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3147,7 +3147,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1511[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2000/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1512[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1513[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "6CD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3197,7 +3197,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1512[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2000/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1513[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1514[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "6CF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3247,7 +3247,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1513[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1514[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1515[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "685", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3298,7 +3298,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1514[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1515[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1516[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "687", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3349,7 +3349,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1515[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1516[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1517[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "63C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3400,7 +3400,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1516[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1517[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1518[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "63E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3451,7 +3451,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1517[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2010/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1518[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1519[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5F8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3528,7 +3528,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1518[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2010/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1519[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1520[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5FA", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3605,7 +3605,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1519[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE A3 in test/test-data/2013/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1520[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1521[] = {
   //{ 5, "A3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3739,7 +3739,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1520[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2018/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1521[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1522[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3873,7 +3873,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1521[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2018/Constraints.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1522[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1523[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4007,7 +4007,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1522[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 170 in test/test-data/2007/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1523[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1524[] = {
   //{ 5, "170", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "28B", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4057,7 +4057,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1523[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 171 in test/test-data/2007/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1524[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1525[] = {
   //{ 5, "171", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "28D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4107,7 +4107,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1524[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 170 in test/test-data/2013/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1525[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1526[] = {
   //{ 5, "170", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "95", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4243,7 +4243,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1525[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 171 in test/test-data/2013/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1526[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1527[] = {
   //{ 5, "171", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "95", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4379,7 +4379,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1526[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 170 in test/test-data/2018/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1527[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1528[] = {
   //{ 5, "170", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "95", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4512,7 +4512,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1527[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 171 in test/test-data/2018/ConstructionLine.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1528[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1529[] = {
   //{ 5, "171", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "95", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4645,7 +4645,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1528[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/dbcolor.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1529[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1530[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "292", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4696,7 +4696,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1529[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/dbcolor.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1530[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1531[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "294", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4747,7 +4747,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1530[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Donut.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1531[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1532[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "297", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4797,7 +4797,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1531[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Donut.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1532[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1533[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "299", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -4847,7 +4847,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1532[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2013/Donut.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1533[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1534[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4983,7 +4983,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1533[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2013/Donut.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1534[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1535[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5119,7 +5119,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1534[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 550B1D in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1535[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1536[] = {
   //{ 5, "550B1D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5170,7 +5170,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1535[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 10A in test/test-data/DS_line_R2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1536[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1537[] = {
   //{ 5, "10A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "298", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5220,7 +5220,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1536[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 10B in test/test-data/DS_line_R2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1537[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1538[] = {
   //{ 5, "10B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "29A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5270,7 +5270,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1537[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 10C in test/test-data/DS_line_R2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1538[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1539[] = {
   //{ 5, "10C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "29C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5320,7 +5320,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1538[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 10D in test/test-data/DS_line_R2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1539[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1540[] = {
   //{ 5, "10D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "29E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5370,7 +5370,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1539[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2B in test/test-data/DS_line_R2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1540[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1541[] = {
   //{ 5, "2B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5507,7 +5507,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1540[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2C in test/test-data/DS_line_R2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1541[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1542[] = {
   //{ 5, "2C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5644,7 +5644,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1541[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2D in test/test-data/DS_line_R2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1542[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1543[] = {
   //{ 5, "2D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5781,7 +5781,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1542[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2E in test/test-data/DS_line_R2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1543[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1544[] = {
   //{ 5, "2E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5918,7 +5918,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1543[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Ellipse.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1544[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1545[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "28B", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -5968,7 +5968,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1544[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Ellipse.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1545[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1546[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "28D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6018,7 +6018,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1545[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 282 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1546[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1547[] = {
   //{ 5, "282", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "C01", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6068,7 +6068,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1546[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 283 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1547[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1548[] = {
   //{ 5, "283", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "C03", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6118,7 +6118,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1547[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 284 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1548[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1549[] = {
   //{ 5, "284", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "C05", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6168,7 +6168,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1548[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 285 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1549[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1550[] = {
   //{ 5, "285", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "C07", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6218,7 +6218,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1549[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 282 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1550[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1551[] = {
   //{ 5, "282", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "F0F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6269,7 +6269,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1550[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 283 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1551[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1552[] = {
   //{ 5, "283", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "F11", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6320,7 +6320,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1551[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 284 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1552[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1553[] = {
   //{ 5, "284", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "F13", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6371,7 +6371,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1552[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 285 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1553[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1554[] = {
   //{ 5, "285", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "F15", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6422,7 +6422,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1553[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 282 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1554[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1555[] = {
   //{ 5, "282", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EBB", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6473,7 +6473,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1554[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 283 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1555[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1556[] = {
   //{ 5, "283", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EBD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6524,7 +6524,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1555[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 284 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1556[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1557[] = {
   //{ 5, "284", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EBF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6575,7 +6575,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1556[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 285 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1557[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1558[] = {
   //{ 5, "285", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EC1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6626,7 +6626,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1557[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 282 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1558[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1559[] = {
   //{ 5, "282", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E6A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6703,7 +6703,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1558[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 283 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1559[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1560[] = {
   //{ 5, "283", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E6C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6780,7 +6780,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1559[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 284 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1560[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1561[] = {
   //{ 5, "284", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E6E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6857,7 +6857,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1560[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 285 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1561[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1562[] = {
   //{ 5, "285", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E70", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6934,7 +6934,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1561[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 282 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1562[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1563[] = {
   //{ 5, "282", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "281", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7071,7 +7071,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1562[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 283 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1563[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1564[] = {
   //{ 5, "283", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "281", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7208,7 +7208,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1563[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 284 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1564[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1565[] = {
   //{ 5, "284", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "281", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7345,7 +7345,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1564[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 285 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1565[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1566[] = {
   //{ 5, "285", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "281", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7482,7 +7482,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1565[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 284 in test/test-data/example_2018.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1566[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1567[] = {
   //{ 5, "284", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "281", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7616,7 +7616,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1566[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 285 in test/test-data/example_2018.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1567[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1568[] = {
   //{ 5, "285", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "281", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7750,7 +7750,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1567[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 181 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1568[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1569[] = {
   //{ 5, "181", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7887,7 +7887,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1568[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 41488 in test/test-data/2013/flipped_cleaned.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1569[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1570[] = {
   //{ 5, "41488", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41487", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8024,7 +8024,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1569[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 41489 in test/test-data/2013/flipped_cleaned.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1570[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1571[] = {
   //{ 5, "41489", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41487", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8161,7 +8161,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1570[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4148A in test/test-data/2013/flipped_cleaned.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1571[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1572[] = {
   //{ 5, "4148A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41487", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8298,7 +8298,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1571[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4148B in test/test-data/2013/flipped_cleaned.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1572[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1573[] = {
   //{ 5, "4148B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41487", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8435,7 +8435,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1572[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 76B in test/test-data/2004/fr05_b101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1573[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1574[] = {
   //{ 5, "76B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "86C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8486,7 +8486,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1573[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 76C in test/test-data/2004/fr05_b101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1574[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1575[] = {
   //{ 5, "76C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "86E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8537,7 +8537,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1574[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 76D in test/test-data/2004/fr05_b101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1575[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1576[] = {
   //{ 5, "76D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "870", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8588,7 +8588,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1575[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 76E in test/test-data/2004/fr05_b101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1576[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1577[] = {
   //{ 5, "76E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "872", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8639,7 +8639,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1576[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4A1 in test/test-data/2004/fr05_f101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1577[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1578[] = {
   //{ 5, "4A1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5A5", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8690,7 +8690,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1577[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4A2 in test/test-data/2004/fr05_f101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1578[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1579[] = {
   //{ 5, "4A2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5A7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8741,7 +8741,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1578[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4A3 in test/test-data/2004/fr05_f101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1579[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1580[] = {
   //{ 5, "4A3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5A9", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8792,7 +8792,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1579[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4A4 in test/test-data/2004/fr05_f101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1580[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1581[] = {
   //{ 5, "4A4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5AB", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8843,7 +8843,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1580[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 598 in test/test-data/2004/fr05_s101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1581[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1582[] = {
   //{ 5, "598", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "698", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8894,7 +8894,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1581[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 599 in test/test-data/2004/fr05_s101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1582[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1583[] = {
   //{ 5, "599", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "69A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8945,7 +8945,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1582[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 59A in test/test-data/2004/fr05_s101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1583[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1584[] = {
   //{ 5, "59A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "69C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -8996,7 +8996,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1583[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 59B in test/test-data/2004/fr05_s101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1584[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1585[] = {
   //{ 5, "59B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "69E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9047,7 +9047,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1584[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 3F6 in test/test-data/2004/fr05_x101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1585[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1586[] = {
   //{ 5, "3F6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4F8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9098,7 +9098,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1585[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 3F7 in test/test-data/2004/fr05_x101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1586[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1587[] = {
   //{ 5, "3F7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FA", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9149,7 +9149,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1586[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 3F8 in test/test-data/2004/fr05_x101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1587[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1588[] = {
   //{ 5, "3F8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FC", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9200,7 +9200,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1587[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 3F9 in test/test-data/2004/fr05_x101_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1588[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1589[] = {
   //{ 5, "3F9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FE", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9251,7 +9251,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1588[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 23A in test/test-data/2013/gh109_1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1589[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1590[] = {
   //{ 5, "23A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9388,7 +9388,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1589[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2C in test/test-data/2010/gh209_1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1590[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1591[] = {
   //{ 5, "2C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "DE", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9465,7 +9465,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1590[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 49 in test/test-data/2010/gh209_1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1591[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1592[] = {
   //{ 5, "49", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E0", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9542,7 +9542,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1591[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4A in test/test-data/2010/gh209_1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1592[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1593[] = {
   //{ 5, "4A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E2", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -9619,7 +9619,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1592[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 16D1 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1593[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1594[] = {
   //{ 5, "16D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9756,7 +9756,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1593[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1594[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1595[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9893,7 +9893,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1594[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1595[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1596[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10030,7 +10030,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1595[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-big/2007/HARTA_E_PRISHTINES.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1596[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1597[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1AB0D7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10081,7 +10081,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1596[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-big/2007/HARTA_E_PRISHTINES.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1597[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1598[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1AB0D9", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10132,7 +10132,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1597[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF0 in test/test-data/2004/hatch_color_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1598[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1599[] = {
   //{ 5, "128FF0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F3035", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10183,7 +10183,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1598[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF1 in test/test-data/2004/hatch_color_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1599[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1600[] = {
   //{ 5, "128FF1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F3037", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10234,7 +10234,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1599[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF2 in test/test-data/2004/hatch_color_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1600[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1601[] = {
   //{ 5, "128FF2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F3039", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10285,7 +10285,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1600[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 128FF3 in test/test-data/2004/hatch_color_ref.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1601[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1602[] = {
   //{ 5, "128FF3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F303B", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10336,7 +10336,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1601[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/HatchG.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1602[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1603[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "376", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10387,7 +10387,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1602[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/HatchG.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1603[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1604[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "378", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10438,7 +10438,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1603[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2000/Helix.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1604[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1605[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10488,7 +10488,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1604[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2000/Helix.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1605[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1606[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10538,7 +10538,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1605[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/Helix.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1606[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1607[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10588,7 +10588,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1606[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/Helix.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1607[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1608[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10638,7 +10638,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1607[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Helix.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1608[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1609[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "28C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10688,7 +10688,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1608[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Helix.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1609[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1610[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "28E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10738,7 +10738,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1609[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1FA in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1610[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1611[] = {
   //{ 5, "1FA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10875,7 +10875,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1610[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1FB in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1611[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1612[] = {
   //{ 5, "1FB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11012,7 +11012,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1611[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2A in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1612[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1613[] = {
   //{ 5, "2A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11149,7 +11149,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1612[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2B in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1613[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1614[] = {
   //{ 5, "2B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11286,7 +11286,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1613[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2C in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1614[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1615[] = {
   //{ 5, "2C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11423,7 +11423,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1614[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2D in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1615[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1616[] = {
   //{ 5, "2D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11560,7 +11560,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1615[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2000/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1616[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1617[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "A66", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -11610,7 +11610,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1616[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2000/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1617[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1618[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "A68", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -11660,7 +11660,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1617[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1618[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1619[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "8FD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -11711,7 +11711,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1618[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1619[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1620[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "8FF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -11762,7 +11762,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1619[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1620[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1621[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "940", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -11813,7 +11813,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1620[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1621[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1622[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "942", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -11864,7 +11864,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1621[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2010/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1622[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1623[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "A5C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -11941,7 +11941,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1622[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2010/Leader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1623[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1624[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "A5E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12018,7 +12018,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1623[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Line.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1624[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1625[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2A0", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12068,7 +12068,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1624[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Line.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1625[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1626[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2A2", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12117,8 +12117,142 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1625[] = {
   //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
+/* VISUALSTYLE 227 in test/test-data/2018/LiveSection.dxf */
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1627[] = {
+  //{ 5, "227", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "99", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbVisualStyle", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 2, "", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "10", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 177, "3", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 291, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 70, "58", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "0.3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "30.0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "7", NULL, 0, BITS_UNKNOWN, "color", 4, {-1,-1,-1,-1,-1} },
+    { 420, "16777215", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "7", NULL, 0, BITS_UNKNOWN, "color", 4, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "257", NULL, 0, BITS_UNKNOWN, "color", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "1.0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "7", NULL, 0, BITS_UNKNOWN, "color", 4, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "1.0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "6", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "7", NULL, 0, BITS_UNKNOWN, "color", 4, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "5", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "50", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "1.0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "18", NULL, 0, BITS_UNKNOWN, "color", 1, {-1,-1,-1,-1,-1} },
+    { 420, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "50", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "5", NULL, 0, BITS_UNKNOWN, "color", 2, {-1,-1,-1,-1,-1} },
+    { 420, "255", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "50", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "50", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "50", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 90, "50", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 62, "256", NULL, 0, BITS_UNKNOWN, "color", 1, {-1,-1,-1,-1,-1} },
+    { 176, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 40, "1.0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 1, "strokes_ogs.tif", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "1.0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 40, "1.0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
+    { 176, "1", NULL, 0, BITS_UNKNOWN, "", 62, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
 /* VISUALSTYLE 173 in test/test-data/2004/material.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1626[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1628[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3CB", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12169,7 +12303,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1626[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/material.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1627[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1629[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3CD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12220,7 +12354,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1627[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2000/MLeader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1628[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1630[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "35B", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12270,7 +12404,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1628[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2000/MLeader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1629[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1631[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "35D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12320,7 +12454,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1629[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2004/MLeader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1630[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1632[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A5", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12371,7 +12505,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1630[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2004/MLeader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1631[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1633[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12422,7 +12556,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1631[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2010/MLeader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1632[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1634[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "430", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12499,7 +12633,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1632[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2010/MLeader.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1633[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1635[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "432", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12576,7 +12710,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1633[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/Multiline.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1634[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1636[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12626,7 +12760,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1634[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/Multiline.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1635[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1637[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12676,7 +12810,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1635[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1DB6 in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1636[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1638[] = {
   //{ 5, "1DB6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C05", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12810,7 +12944,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1636[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Polyline.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1637[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1639[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "27F", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12860,7 +12994,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1637[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Polyline.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1638[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1640[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "281", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -12910,7 +13044,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1638[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2000/PolyLine3D.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1639[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1641[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12960,7 +13094,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1639[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2000/PolyLine3D.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1640[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1642[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13010,7 +13144,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1640[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2004/pos.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1641[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1643[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13061,7 +13195,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1641[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2004/pos.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1642[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1644[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13112,7 +13246,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1642[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2004/Publish.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1643[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1645[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "9B1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13163,7 +13297,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1643[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2004/Publish.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1644[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1646[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "9B3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13214,7 +13348,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1644[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/RAY.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1645[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1647[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13264,7 +13398,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1645[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/RAY.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1646[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1648[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13314,7 +13448,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1646[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/RAY.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1647[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1649[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "294", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13364,7 +13498,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1647[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/RAY.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1648[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1650[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "296", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13414,7 +13548,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1648[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4F38 in test/test-data/2007/SALLE_DES_MACHINES.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1649[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1651[] = {
   //{ 5, "4F38", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FF7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13465,7 +13599,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1649[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4F39 in test/test-data/2007/SALLE_DES_MACHINES.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1650[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1652[] = {
   //{ 5, "4F39", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FF9", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13516,7 +13650,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1650[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4F3A in test/test-data/2007/SALLE_DES_MACHINES.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1651[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1653[] = {
   //{ 5, "4F3A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FFB", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13567,7 +13701,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1651[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 4F3B in test/test-data/2007/SALLE_DES_MACHINES.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1652[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1654[] = {
   //{ 5, "4F3B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FFD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13618,7 +13752,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1652[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B8 in test/test-data/sample_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1653[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1655[] = {
   //{ 5, "B8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "156", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13669,7 +13803,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1653[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B9 in test/test-data/sample_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1654[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1656[] = {
   //{ 5, "B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "158", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13720,7 +13854,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1654[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BA in test/test-data/sample_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1655[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1657[] = {
   //{ 5, "BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "15A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13771,7 +13905,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1655[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BB in test/test-data/sample_2004.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1656[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1658[] = {
   //{ 5, "BB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "15C", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13822,7 +13956,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1656[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B8 in test/test-data/sample_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1657[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1659[] = {
   //{ 5, "B8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1A4", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13873,7 +14007,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1657[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B9 in test/test-data/sample_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1658[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1660[] = {
   //{ 5, "B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1A6", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13924,7 +14058,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1658[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BA in test/test-data/sample_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1659[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1661[] = {
   //{ 5, "BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13975,7 +14109,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1659[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BB in test/test-data/sample_2007.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1660[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1662[] = {
   //{ 5, "BB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1AA", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -14026,7 +14160,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1660[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B8 in test/test-data/sample_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1661[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1663[] = {
   //{ 5, "B8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1ED", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -14103,7 +14237,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1661[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B9 in test/test-data/sample_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1662[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1664[] = {
   //{ 5, "B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1EF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -14180,7 +14314,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1662[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BA in test/test-data/sample_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1663[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1665[] = {
   //{ 5, "BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -14257,7 +14391,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1663[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BB in test/test-data/sample_2010.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1664[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1666[] = {
   //{ 5, "BB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -14334,7 +14468,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1664[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B8 in test/test-data/sample_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1665[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1667[] = {
   //{ 5, "B8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "B7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -14471,7 +14605,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1665[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B9 in test/test-data/sample_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1666[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1668[] = {
   //{ 5, "B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "B7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -14608,7 +14742,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1666[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BA in test/test-data/sample_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1667[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1669[] = {
   //{ 5, "BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "B7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -14745,7 +14879,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1667[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE BB in test/test-data/sample_2013.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1668[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1670[] = {
   //{ 5, "BB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "B7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -14882,7 +15016,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1668[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE B8 in test/test-data/sample_2018.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1669[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1671[] = {
   //{ 5, "B8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "B7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15016,7 +15150,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1669[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2A8 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1670[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1672[] = {
   //{ 5, "2A8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15150,7 +15284,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1670[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2A9 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1671[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1673[] = {
   //{ 5, "2A9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15284,7 +15418,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1671[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2525ED40 in test/test-big/2004/Suelo_urbano022_PGOU_Cullera.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1672[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1674[] = {
   //{ 5, "2525ED40", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2525ED3F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15335,7 +15469,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1672[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2525ED41 in test/test-big/2004/Suelo_urbano022_PGOU_Cullera.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1673[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1675[] = {
   //{ 5, "2525ED41", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2525ED3F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15386,7 +15520,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1673[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2525ED42 in test/test-big/2004/Suelo_urbano022_PGOU_Cullera.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1674[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1676[] = {
   //{ 5, "2525ED42", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2525ED3F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15437,7 +15571,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1674[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 2525ED43 in test/test-big/2004/Suelo_urbano022_PGOU_Cullera.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1675[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1677[] = {
   //{ 5, "2525ED43", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2525ED3F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15488,7 +15622,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1675[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1676[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1678[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5E1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15539,7 +15673,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1676[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1677[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1679[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5E3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15590,7 +15724,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1677[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1F2 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1678[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1680[] = {
   //{ 5, "1F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15724,7 +15858,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1678[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/Text.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1679[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1681[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15774,7 +15908,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1679[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/Text.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1680[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1682[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15824,7 +15958,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1680[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2007/Text.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1681[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1683[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "288", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15874,7 +16008,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1681[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2007/Text.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1682[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1684[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "28A", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15924,7 +16058,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1682[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2004/Truecolor.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1683[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1685[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "373", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15975,7 +16109,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1683[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2004/Truecolor.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1684[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1686[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "375", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16026,7 +16160,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1684[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 9A in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1685[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1687[] = {
   //{ 5, "9A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2DC", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16076,7 +16210,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1685[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 9B in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1686[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1688[] = {
   //{ 5, "9B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2DE", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16126,7 +16260,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1686[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 9C in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1687[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1689[] = {
   //{ 5, "9C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2E0", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16176,7 +16310,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1687[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 9D in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1688[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1690[] = {
   //{ 5, "9D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2E2", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16226,7 +16360,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1688[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E4 in test/test-data/2004/Underlay.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1689[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1691[] = {
   //{ 5, "1E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "7EF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16277,7 +16411,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1689[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1E5 in test/test-data/2004/Underlay.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1690[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1692[] = {
   //{ 5, "1E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "7F1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16328,7 +16462,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1690[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1DB in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1691[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1693[] = {
   //{ 5, "1DB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4F9", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16379,7 +16513,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1691[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1DC in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1692[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1694[] = {
   //{ 5, "1DC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4FB", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -16430,7 +16564,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1692[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1DB in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1693[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1695[] = {
   //{ 5, "1DB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "E6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -16564,7 +16698,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1693[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 1DC in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1694[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1696[] = {
   //{ 5, "1DC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "E6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -16698,7 +16832,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1694[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 173 in test/test-data/2000/work.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1695[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1697[] = {
   //{ 5, "173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -16748,7 +16882,7 @@ static struct _unknown_field unknown_dxf_VISUALSTYLE_1695[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* VISUALSTYLE 174 in test/test-data/2000/work.dxf */
-static struct _unknown_field unknown_dxf_VISUALSTYLE_1696[] = {
+static struct _unknown_field unknown_dxf_VISUALSTYLE_1698[] = {
   //{ 5, "174", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "99", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

@@ -3012,20 +3012,16 @@ BL,	DXF 90
 BL,	DXF 91
 @item name
 T,	DXF 1
-@item viewing_dir
-3BD
 @item vert_dir
 3BD,	DXF 10
 @item top_height
 BD,	DXF 40
 @item bottom_height
 BD,	DXF 41
-@item is_live
-B
 @item indicator_alpha
 RC,	DXF 70
 @item indicator_color
-CMC,	DXF 63
+CMC,	DXF 62
 @item num_verts
 BL,	DXF 92
 @item verts

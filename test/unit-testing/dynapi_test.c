@@ -16608,21 +16608,6 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
         fail ("SECTIONOBJECT.indicator_color [CMC]");
   }
   {
-    BITCODE_B is_live;
-    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "is_live", &is_live, NULL)
-        && is_live == sectionobject->is_live)
-      pass ();
-    else
-      fail ("SECTIONOBJECT.is_live [B] " FORMAT_B " != " FORMAT_B "", sectionobject->is_live, is_live);
-    is_live++;
-    if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "is_live", &is_live, 0)
-        && is_live == sectionobject->is_live)
-      pass ();
-    else
-      fail ("SECTIONOBJECT.is_live [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionobject->is_live, is_live);
-    sectionobject->is_live--;
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "name", &name, NULL)
         && name
@@ -16725,14 +16710,6 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
       pass ();
     else
       fail ("SECTIONOBJECT.verts [3BD*] * %u num_verts", count);
-  }
-  {
-    BITCODE_3BD viewing_dir;
-    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "viewing_dir", &viewing_dir, NULL)
-        && !memcmp (&viewing_dir, &sectionobject->viewing_dir, sizeof (sectionobject->viewing_dir)))
-        pass ();
-    else
-        fail ("SECTIONOBJECT.viewing_dir [3BD]");
   }
   if (failed && (is_class_unstable ("SECTIONOBJECT") || is_class_debugging ("SECTIONOBJECT")))
     {
