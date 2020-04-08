@@ -446,6 +446,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       LOG_INFO ("no THUMBNAIL Image Data\n")
       return NULL;
     }
+  dat->byte = 0;
   dat->bit = 0;
   dat->version = dwg->header.version;
   dat->from_version = dwg->header.from_version;

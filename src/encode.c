@@ -1250,10 +1250,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
 
   {
-    BITCODE_RL size;
-    dwg_bmp (dwg, &size);
-    if (size > dwg->thumbnail.size)
-      LOG_ERROR ("BMP size overflow: %i > %lu\n", size, dwg->thumbnail.size);
+    BITCODE_RL bmpsize;
+    dwg_bmp (dwg, &bmpsize);
+    if (bmpsize > dwg->thumbnail.size)
+      LOG_ERROR ("BMP size overflow: %i > %lu\n", bmpsize, dwg->thumbnail.size);
   }
   LOG_TRACE ("         Thumbnail (end): %4u\n", (unsigned)dat->byte);
 
