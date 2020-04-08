@@ -2401,13 +2401,14 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       BITCODE_BL pos = bit_position (dat);
       BITCODE_RL old_size = obj->size; 
       assert (address);
-      if (dat->byte > address)
+      if (dat->byte > obj->address)
         {
-          obj->size = (dat->byte - address) + 2; // the CRC is included in the size
+          // The size and CRC fields are not included in the obj->size
+          obj->size = dat->byte - obj->address;
           if (dat->bit)
             obj->size++;
         }
-      if (dat->byte + 2 >= dat->size)
+      if (dat->byte >= dat->size)
         bit_chain_alloc (dat);
       // assert (obj->bitsize); // on errors
       if (!obj->bitsize ||
