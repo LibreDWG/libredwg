@@ -50,9 +50,9 @@ script:
   - ./configure $CONF
   # starts swapping with only 8GB. seperate the biggest
   - if [ -n "$ASAN" ]; then
-      make -C src decode.lo ;
-      make -C src encode.lo ;
-      travis_wait make;
+      travis_wait make -C src decode.lo ;
+      travis_wait make -C src encode.lo ;
+      travis_wait make -j4 ;
     else
       make -j4 ;
     fi
