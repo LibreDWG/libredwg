@@ -40,7 +40,7 @@ refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h .
 refman-pdf: html/index.html
 	$(MAKE) -C latex
 
-CLEANFILES = Doxyfile footer
+CLEANFILES = Doxyfile footer LibreDWG.info LibreDWG.pdf
 all-local: Doxyfile footer
 clean-local:
 	rm -rf $(builddir)/doc/refman
