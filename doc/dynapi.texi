@@ -3030,7 +3030,7 @@ BL,	DXF 92
 BL,	DXF 93
 @item blverts
 3BD*
-@item geomsettings
+@item geomsetting
 H,	DXF 360
 
 @end vtable

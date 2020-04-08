@@ -16585,12 +16585,12 @@ static int test_SECTION (const Dwg_Object *obj)
     section->flags--;
   }
   {
-    BITCODE_H geomsettings;
-    if (dwg_dynapi_entity_value (section, "SECTION", "geomsettings", &geomsettings, NULL)
-        && !memcmp (&geomsettings, &section->geomsettings, sizeof (section->geomsettings)))
+    BITCODE_H geomsetting;
+    if (dwg_dynapi_entity_value (section, "SECTION", "geomsetting", &geomsetting, NULL)
+        && !memcmp (&geomsetting, &section->geomsetting, sizeof (section->geomsetting)))
         pass ();
     else
-        fail ("SECTION.geomsettings [H]");
+        fail ("SECTION.geomsetting [H]");
   }
   {
     BITCODE_RC indicator_alpha;

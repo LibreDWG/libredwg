@@ -892,6 +892,39 @@ api_common_entity (dwg_object *obj)
         }                                                                     \
     }
 
+// i must be defined as type of num
+#define CHK_ENTITY_VECTOR(ent, name, field, arr, num)                         \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &arr, NULL))              \
+    fail (#name "." #field);                                                  \
+  else if (!arr)                                                              \
+    pass ();                                                                  \
+  else                                                                        \
+    {                                                                         \
+      for (i = 0; i < (num); i++)                                             \
+        {                                                                     \
+          ok ("%s.%s[%d]:", #name, #field, i);                                \
+          if (memcmp (&ent->field[i], &arr[i], sizeof (arr[i])))              \
+            fail ("%s.%s[%d]:", #name, #field, i);                            \
+        }                                                                     \
+    }
+
+// i must be defined as type of num
+#define CHK_ENTITY_3DPOINTS(ent, name, field, arr, num)                       \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &arr, NULL))              \
+    fail (#name "." #field);                                                  \
+  else if (!arr)                                                              \
+    pass ();                                                                  \
+  else                                                                        \
+    {                                                                         \
+      for (i = 0; i < (num); i++)                                             \
+        {                                                                     \
+          ok ("%s.%s[%d]: (%f, %f, %f)", #name, #field, i, arr[i].x,          \
+              arr[i].y, arr[i].z);                                            \
+          if (memcmp (&ent->field[i], &arr[i], sizeof (arr[i])))             \
+            fail ("%s.%s[%d]: memcmp", #name, #field, i);                     \
+        }                                                                     \
+    }
+
 #define CHK_ENTITY_2RD(ent, name, field, value)                               \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &value, NULL))            \
     fail (#name "." #field);                                                  \

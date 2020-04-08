@@ -2892,7 +2892,7 @@ static const Dwg_DYNAPI_field _dwg_SECTION_fields[] = {
     0,0,0, 93 },
   { "blverts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTION, blverts),
     1,1,0, 0 },
-  { "geomsettings",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SECTION, geomsettings),
+  { "geomsetting",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SECTION, geomsetting),
     1,0,0, 360 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

@@ -8050,7 +8050,7 @@ DWG_ENTITY (SECTION)
   FIELD_3DPOINT_VECTOR (verts, num_blverts, 12);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (geomsettings, 5, 360);
+  FIELD_HANDLE (geomsetting, 5, 360);
 DWG_ENTITY_END
 
 // as ACAD_LAYERFILTERS in the NOD

@@ -4686,7 +4686,7 @@ typedef struct _dwg_entity_SECTION
   BITCODE_3BD *verts;		/*!< DXF 11 */
   BITCODE_BL num_blverts;	/*!< DXF 93 */
   BITCODE_3BD *blverts;		/*!< DXF 12 */
-  BITCODE_H geomsettings;	/*!< DXF 360 */
+  BITCODE_H geomsetting;	/*!< DXF 360 */
 
 } Dwg_Entity_SECTION;
 

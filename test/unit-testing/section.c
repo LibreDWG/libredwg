@@ -14,11 +14,11 @@ api_process (dwg_object *obj)
   BITCODE_BD bottom_height;
   BITCODE_RC indicator_alpha;
   BITCODE_CMC indicator_color;
-  BITCODE_BL num_verts;
+  BITCODE_BL i, num_verts;
   BITCODE_3BD *verts;
   BITCODE_BL num_blverts;
   BITCODE_3BD *blverts;
-  BITCODE_H geomsettings;
+  BITCODE_H geomsetting;
 
   dwg_ent_section *_obj = dwg_object_to_SECTION (obj);
 
@@ -34,9 +34,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SECTION, indicator_alpha, RC, indicator_alpha);
   CHK_ENTITY_CMC (_obj, SECTION, indicator_color, indicator_color);
   CHK_ENTITY_TYPE (_obj, SECTION, num_verts, BL, num_verts);
-  //CHK_ENTITY_TYPE (_obj, SECTION, *verts, 3BD, *verts);
+  CHK_ENTITY_3DPOINTS (_obj, SECTION, verts, verts, num_verts);
   CHK_ENTITY_TYPE (_obj, SECTION, num_blverts, BL, num_blverts);
-  //CHK_ENTITY_TYPE (_obj, SECTION, *blverts, 3BD, *blverts);
-  CHK_ENTITY_H (_obj, SECTION, geomsettings, geomsettings);
+  CHK_ENTITY_3DPOINTS (_obj, SECTION, blverts, blverts, num_blverts);
+  CHK_ENTITY_H (_obj, SECTION, geomsetting, geomsetting);
 #endif
 }
