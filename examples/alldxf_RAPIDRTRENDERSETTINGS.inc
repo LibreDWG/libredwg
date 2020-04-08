@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* RAPIDRTRENDERSETTINGS B8B8E110 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1378[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1379[] = {
   //{ 5, "B8B8E110", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -32,7 +32,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1378[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS A0E in test/test-data/2013/gh109_1.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1379[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1380[] = {
   //{ 5, "A0E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "A0D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -64,7 +64,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1379[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 18DA in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1380[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1381[] = {
   //{ 5, "18DA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "18D9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -93,7 +93,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1380[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 18DB in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1381[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1382[] = {
   //{ 5, "18DB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "18D9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -122,7 +122,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1381[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 79B9 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1382[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1383[] = {
   //{ 5, "79B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "79B8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -151,7 +151,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1382[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 79BA in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1383[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1384[] = {
   //{ 5, "79BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "79B8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -180,7 +180,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1383[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 3170 in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1384[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1385[] = {
   //{ 5, "3170", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "316F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -209,7 +209,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1384[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 3171 in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1385[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1386[] = {
   //{ 5, "3171", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "316F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -238,7 +238,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1385[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 4068 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1386[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1387[] = {
   //{ 5, "4068", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4067", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -267,7 +267,7 @@ static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1386[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* RAPIDRTRENDERSETTINGS 4069 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1387[] = {
+static struct _unknown_field unknown_dxf_RAPIDRTRENDERSETTINGS_1388[] = {
   //{ 5, "4069", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4067", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

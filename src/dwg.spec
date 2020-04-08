@@ -7980,12 +7980,13 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_T (name, 3);
   FIELD_B (is_modified_for_recompute, 290);
   FIELD_T (description, 300);
-  FIELD_BL (identifier_exclude_characters, 90); // 102
-
   SUBCLASS (AcDbSectionViewStyle)
+  FIELD_BS (identifier_exclude_characters, 90); // 102
+  DEBUG_HERE_OBJ
   // DXF: 100 70 3 290 3 90 100 70 71 90 71 340 62 40 340 340 62 40 300 40 90 40 90 71 340 90 62 340 90 62 40 40 40 71 340 62 40 90 40 90 300(field) 71 62 62 300 40 90 290 290 90 6 40 40 40 40 40
   //pi: 70 3 290
   FIELD_CMC (identifier_color, 62,420);
+  DEBUG_HERE_OBJ
   FIELD_BD (identifier_height, 40); // 5.0
   FIELD_CMC (plane_line_color, 62,420);
   FIELD_BD (identifier_offset, 42); // 5.0

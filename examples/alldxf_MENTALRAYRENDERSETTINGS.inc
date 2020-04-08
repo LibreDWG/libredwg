@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* MENTALRAYRENDERSETTINGS BABA213C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_MENTALRAYRENDERSETTINGS_1340[] = {
+static struct _unknown_field unknown_dxf_MENTALRAYRENDERSETTINGS_1341[] = {
   //{ 5, "BABA213C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

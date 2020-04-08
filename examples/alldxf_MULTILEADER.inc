@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* MULTILEADER 5CE680 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1345[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1346[] = {
   //{ 5, "5CE680", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5CE685", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -133,7 +133,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1345[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 5CE680 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1346[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1347[] = {
   //{ 5, "5CE680", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "5CE685", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -264,7 +264,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1346[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 640 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1347[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1348[] = {
   //{ 5, "640", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "CED", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -387,7 +387,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1347[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 640 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1348[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1349[] = {
   //{ 5, "640", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "FFD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -510,7 +510,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1348[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 640 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1349[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1350[] = {
   //{ 5, "640", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EF3", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -634,7 +634,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1349[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 640 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1350[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1351[] = {
   //{ 5, "640", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EA1", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -763,7 +763,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1350[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 640 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1351[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1352[] = {
   //{ 5, "640", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -890,7 +890,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1351[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 124F4 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1352[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1353[] = {
   //{ 5, "124F4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "D2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1015,7 +1015,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1352[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 732 in test/test-data/2000/Leader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1353[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1354[] = {
   //{ 5, "732", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1134,7 +1134,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1353[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 732 in test/test-data/2004/Leader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1354[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1355[] = {
   //{ 5, "732", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1253,7 +1253,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1354[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 732 in test/test-data/2007/Leader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1355[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1356[] = {
   //{ 5, "732", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1372,7 +1372,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1355[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 732 in test/test-data/2010/Leader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1356[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1357[] = {
   //{ 5, "732", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1496,7 +1496,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1356[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 732 in test/test-data/2013/Leader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1357[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1358[] = {
   //{ 5, "732", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1621,7 +1621,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1357[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 732 in test/test-data/2018/Leader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1358[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1359[] = {
   //{ 5, "732", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1747,7 +1747,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1358[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 274 in test/test-data/2000/MLeader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1359[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1360[] = {
   //{ 5, "274", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "278", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1921,7 +1921,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1359[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 274 in test/test-data/2004/MLeader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1360[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1361[] = {
   //{ 5, "274", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "278", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2095,7 +2095,7 @@ static struct _unknown_field unknown_dxf_MULTILEADER_1360[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MULTILEADER 274 in test/test-data/2010/MLeader.dxf */
-static struct _unknown_field unknown_dxf_MULTILEADER_1361[] = {
+static struct _unknown_field unknown_dxf_MULTILEADER_1362[] = {
   //{ 5, "274", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "278", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },

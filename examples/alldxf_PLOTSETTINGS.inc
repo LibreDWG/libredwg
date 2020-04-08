@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* PLOTSETTINGS 14B9 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1363[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1364[] = {
   //{ 5, "14B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "194", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -49,7 +49,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1363[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 14B9 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1364[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1365[] = {
   //{ 5, "14B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "194", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -95,7 +95,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1364[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 101E3 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1365[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1366[] = {
   //{ 5, "101E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -141,7 +141,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1365[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 1A7C5 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1366[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1367[] = {
   //{ 5, "1A7C5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -187,7 +187,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1366[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 31DBA in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1367[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1368[] = {
   //{ 5, "31DBA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -233,7 +233,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1367[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 31F0C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1368[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1369[] = {
   //{ 5, "31F0C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -279,7 +279,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1368[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 322C9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1369[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1370[] = {
   //{ 5, "322C9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -325,7 +325,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1369[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 322D2 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1370[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1371[] = {
   //{ 5, "322D2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -371,7 +371,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1370[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS BE01C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1371[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1372[] = {
   //{ 5, "BE01C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -417,7 +417,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1371[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS BE035 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1372[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1373[] = {
   //{ 5, "BE035", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -463,7 +463,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1372[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS BE040 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1373[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1374[] = {
   //{ 5, "BE040", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -509,7 +509,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1373[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 11C0 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1374[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1375[] = {
   //{ 5, "11C0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -555,7 +555,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1374[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 1291 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1375[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1376[] = {
   //{ 5, "1291", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -601,7 +601,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1375[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 3E0CB in test/test-data/2013/flipped_cleaned.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1376[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1377[] = {
   //{ 5, "3E0CB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "122E3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -647,7 +647,7 @@ static struct _unknown_field unknown_dxf_PLOTSETTINGS_1376[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLOTSETTINGS 9A4 in test/test-data/2013/gh109_1.dxf */
-static struct _unknown_field unknown_dxf_PLOTSETTINGS_1377[] = {
+static struct _unknown_field unknown_dxf_PLOTSETTINGS_1378[] = {
   //{ 5, "9A4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "9A3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

@@ -2094,8 +2094,94 @@ static struct _unknown_field unknown_dxf_MATERIAL_1321[] = {
     { 274, "2", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* MATERIAL 205 in test/test-data/2004/material.dxf */
+/* MATERIAL 98 in test/test-data/2018/LiveSection.dxf */
 static struct _unknown_field unknown_dxf_MATERIAL_1322[] = {
+  //{ 5, "98", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 360, "110", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 330, "72", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbMaterial", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1, "Global", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 43, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 49, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 49, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 142, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 144, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0208000000566244", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 48, {-1,-1,-1,-1,-1} },
+    { 144, "1.0", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
+    { 94, "63", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1001, "ACAD", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1070, "-1", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1070, "3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+  //{ 1000, "", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+  //{ 1071, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+  //{ 1070, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* MATERIAL 205 in test/test-data/2004/material.dxf */
+static struct _unknown_field unknown_dxf_MATERIAL_1323[] = {
   //{ 5, "205", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "206", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2163,7 +2249,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1322[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 210 in test/test-data/2004/material.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1323[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1324[] = {
   //{ 5, "210", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "211", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2231,7 +2317,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1323[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL EC in test/test-data/2000/MLeader.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1324[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1325[] = {
   //{ 5, "EC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2245,7 +2331,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1324[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL EC in test/test-data/2010/MLeader.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1325[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1326[] = {
   //{ 5, "EC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1F7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2260,7 +2346,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1325[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL BED in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1326[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1327[] = {
   //{ 5, "BED", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "BEE", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2375,7 +2461,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1326[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 4F1F in test/test-data/2007/SALLE_DES_MACHINES.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1327[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1328[] = {
   //{ 5, "4F1F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4F20", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -2490,121 +2576,6 @@ static struct _unknown_field unknown_dxf_MATERIAL_1327[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 9F in test/test-data/sample_2004.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1328[] = {
-  //{ 5, "9F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "A0", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "6A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 330, "6A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbMaterial", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 1, "ByLayer", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 72, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 43, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 77, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 47, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 47, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 171, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 49, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 49, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 175, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 142, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 179, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 144, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 144, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 147, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
-    { 147, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* MATERIAL 9F in test/test-data/sample_2007.dxf */
 static struct _unknown_field unknown_dxf_MATERIAL_1329[] = {
   //{ 5, "9F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2719,7 +2690,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1329[] = {
     { 147, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* MATERIAL 9F in test/test-data/sample_2010.dxf */
+/* MATERIAL 9F in test/test-data/sample_2007.dxf */
 static struct _unknown_field unknown_dxf_MATERIAL_1330[] = {
   //{ 5, "9F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2834,7 +2805,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1330[] = {
     { 147, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* MATERIAL 9F in test/test-data/sample_2013.dxf */
+/* MATERIAL 9F in test/test-data/sample_2010.dxf */
 static struct _unknown_field unknown_dxf_MATERIAL_1331[] = {
   //{ 5, "9F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2949,8 +2920,123 @@ static struct _unknown_field unknown_dxf_MATERIAL_1331[] = {
     { 147, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* MATERIAL 96 in test/test-data/2013/stelprdb1144445.dxf */
+/* MATERIAL 9F in test/test-data/sample_2013.dxf */
 static struct _unknown_field unknown_dxf_MATERIAL_1332[] = {
+  //{ 5, "9F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 360, "A0", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "6A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 330, "6A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbMaterial", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1, "ByLayer", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 72, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
+    { 43, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 77, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
+    { 47, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 47, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 171, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
+    { 49, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 49, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 175, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
+    { 142, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 142, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 179, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
+    { 144, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 144, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 147, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0008202099737533", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "0.0", NULL, 0, BITS_UNKNOWN, "", 72, {-1,-1,-1,-1,-1} },
+    { 147, "1.0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* MATERIAL 96 in test/test-data/2013/stelprdb1144445.dxf */
+static struct _unknown_field unknown_dxf_MATERIAL_1333[] = {
   //{ 5, "96", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "72", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2962,7 +3048,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1332[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 2525ED27 in test/test-big/2004/Suelo_urbano022_PGOU_Cullera.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1333[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1334[] = {
   //{ 5, "2525ED27", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2525ED26", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3083,7 +3169,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1333[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 35A in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1334[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1335[] = {
   //{ 5, "35A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "35B", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3151,7 +3237,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1334[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 35A in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1335[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1336[] = {
   //{ 5, "35A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "35B", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3222,7 +3308,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1335[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 96 in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1336[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1337[] = {
   //{ 5, "96", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2D7", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3236,7 +3322,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1336[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL E3 in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1337[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1338[] = {
   //{ 5, "E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1EE", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3250,7 +3336,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1337[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL E3 in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1338[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1339[] = {
   //{ 5, "E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "1EE", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3265,7 +3351,7 @@ static struct _unknown_field unknown_dxf_MATERIAL_1338[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* MATERIAL 96 in test/test-data/2000/work.dxf */
-static struct _unknown_field unknown_dxf_MATERIAL_1339[] = {
+static struct _unknown_field unknown_dxf_MATERIAL_1340[] = {
   //{ 5, "96", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "72", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
