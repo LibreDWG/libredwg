@@ -6,9 +6,9 @@
 # (by default: copies are made only if necessary).
 #
 # Tested with:
-# - autoconf (GNU Autoconf) 2.65
-# - automake (GNU automake) 1.11.1
-# - ltmain.sh (GNU libtool) 2.2.6b
+# - autoconf (GNU Autoconf) 2.65, 2.69
+# - automake (GNU automake) 1.14 - 1.16.1
+# - ltmain.sh (GNU libtool) 2.2.6b - 2.4.6
 
 set -x
 rm -rf autom4te.cache config.status

@@ -20,7 +20,7 @@
 TEXINFO_TEX_DIR = $(abs_builddir)/latex
 TEXINPUTS="$(TEXINPUTS)$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
-# Note: automake has a distcheck bug in .texi.info
+# Note: automake has a distcheck bug in .texi.info: GH #211
 LibreDWG_TEXINFOS = fdl.texi dynapi.texi
 
 if HAVE_MAKEINFO

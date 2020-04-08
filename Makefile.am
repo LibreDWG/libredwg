@@ -58,10 +58,14 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
         regen-man man manual refman scan-build gcov \
 	unknown regen-unknown full-regen-unknown
 
-# automake bug, see GH #211
-distcheck-hook:
-	chmod u+w "$(distdir)/doc"
-	chmod u+w "$(srcdir)/doc"
+dist-hook:
+	echo dist-hook distdir="$(distdir)"
+	echo $(VERSION) > $(distdir)/.tarball-version
+# automake bug, GH #211 (howto enable skip_mode_fix? tried now info-in-builddir)
+#distcheck-hook:
+#	echo distcheck-hook distdir="$(distdir)"
+#	chmod u+w "$(distdir)/doc"
+#	chmod u+w "$(distdir)/doc/LibreDWG.info"
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
 UNKNOWN_SKIP = examples/alldwg.skip
@@ -197,8 +201,6 @@ endif
 
 $(BUILT_SOURCES):
 	echo $(VERSION) > $@-t && mv $@-t $@
-dist-hook:
-	echo $(VERSION) > $(distdir)/.tarball-version
 
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \

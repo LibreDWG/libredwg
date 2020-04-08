@@ -18,7 +18,8 @@ dnl for older systems use this:
 dnl AM_INIT_AUTOMAKE([1.11.6 gnu no-define])
 dnl parallel-tests:
 dnl: error: using '$(srcdir)' in TESTS is currently broken: '$(srcdir)/libredwg.spec'
-AM_INIT_AUTOMAKE([1.12.2 gnu no-define serial-tests dist-xz])
+dnl info-in-builddir might be an option for GH #211
+AM_INIT_AUTOMAKE([1.14 gnu no-define serial-tests dist-xz info-in-builddir])
 
 # Keep this in sync with what is passed in AC_INIT
 TARBALL_VERSION_FILE=".tarball-version"
