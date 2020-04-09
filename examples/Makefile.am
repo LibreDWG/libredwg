@@ -142,6 +142,9 @@ alldxf_unknowns = \
 	alldxf_PLOTSETTINGS.inc \
 	alldxf_RAPIDRTRENDERSETTINGS.inc \
 	alldxf_REVOLVEDSURFACE.inc \
+	alldxf_SECTIONOBJECT.inc \
+	alldxf_SECTION_MANAGER.inc \
+	alldxf_SECTION_SETTINGS.inc \
 	alldxf_SUN.inc \
 	alldxf_SWEPTSURFACE.inc \
 	alldxf_TABLEGEOMETRY.inc \

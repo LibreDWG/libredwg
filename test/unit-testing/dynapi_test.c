@@ -38474,6 +38474,381 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_SECTION_MANAGER (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_SECTION_MANAGER *restrict section_manager = obj->tio.object->tio.SECTION_MANAGER;
+  failed = 0;
+  {
+    BITCODE_B is_live;
+    if (dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "is_live", &is_live, NULL)
+        && is_live == section_manager->is_live)
+      pass ();
+    else
+      fail ("SECTION_MANAGER.is_live [B] " FORMAT_B " != " FORMAT_B "", section_manager->is_live, is_live);
+    is_live++;
+    if (dwg_dynapi_entity_set_value (section_manager, "SECTION_MANAGER", "is_live", &is_live, 0)
+        && is_live == section_manager->is_live)
+      pass ();
+    else
+      fail ("SECTION_MANAGER.is_live [B] set+1 " FORMAT_B " != " FORMAT_B "", section_manager->is_live, is_live);
+    section_manager->is_live--;
+  }
+  {
+    BITCODE_BL num_sections;
+    if (dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "num_sections", &num_sections, NULL)
+        && num_sections == section_manager->num_sections)
+      pass ();
+    else
+      fail ("SECTION_MANAGER.num_sections [BL] %u != %u", section_manager->num_sections, num_sections);
+    num_sections++;
+    if (dwg_dynapi_entity_set_value (section_manager, "SECTION_MANAGER", "num_sections", &num_sections, 0)
+        && num_sections == section_manager->num_sections)
+      pass ();
+    else
+      fail ("SECTION_MANAGER.num_sections [BL] set+1 %u != %u", section_manager->num_sections, num_sections);
+    section_manager->num_sections--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "parent", &parent, NULL)
+        && !memcmp (&parent, &section_manager->parent, sizeof (section_manager->parent)))
+        pass ();
+    else
+        fail ("SECTION_MANAGER.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H* sections;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "num_sections", &count, NULL)
+        && dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "sections", &sections, NULL)
+        && sections == section_manager->sections)
+      pass ();
+    else
+      fail ("SECTION_MANAGER.sections [H*] * %u num_sections", count);
+  }
+  if (failed && (is_class_unstable ("SECTION_MANAGER") || is_class_debugging ("SECTION_MANAGER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SECTION_MANAGER", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_SECTION_SETTINGS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_SECTION_SETTINGS *restrict section_settings = obj->tio.object->tio.SECTION_SETTINGS;
+  failed = 0;
+  {
+    BITCODE_CMC color;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "color", &color, NULL)
+        && !memcmp (&color, &section_settings->color, sizeof (section_settings->color)))
+        pass ();
+    else
+        fail ("SECTION_SETTINGS.color [CMC]");
+  }
+  {
+    BITCODE_H destblock;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "destblock", &destblock, NULL)
+        && !memcmp (&destblock, &section_settings->destblock, sizeof (section_settings->destblock)))
+        pass ();
+    else
+        fail ("SECTION_SETTINGS.destblock [H]");
+  }
+  {
+    BITCODE_T destfile;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "destfile", &destfile, NULL)
+        && destfile
+           ? strEQ ((char *)destfile, (char *)section_settings->destfile)
+           : !section_settings->destfile)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.destfile [T] '%s' <> '%s'", destfile, section_settings->destfile);
+  }
+  {
+    BITCODE_B division_lines;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "division_lines", &division_lines, NULL)
+        && division_lines == section_settings->division_lines)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.division_lines [B] " FORMAT_B " != " FORMAT_B "", section_settings->division_lines, division_lines);
+    division_lines++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "division_lines", &division_lines, 0)
+        && division_lines == section_settings->division_lines)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.division_lines [B] set+1 " FORMAT_B " != " FORMAT_B "", section_settings->division_lines, division_lines);
+    section_settings->division_lines--;
+  }
+  {
+    BITCODE_BS edge_transparency;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "edge_transparency", &edge_transparency, NULL)
+        && edge_transparency == section_settings->edge_transparency)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.edge_transparency [BS] %hu != %hu", section_settings->edge_transparency, edge_transparency);
+    edge_transparency++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "edge_transparency", &edge_transparency, 0)
+        && edge_transparency == section_settings->edge_transparency)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.edge_transparency [BS] set+1 %hu != %hu", section_settings->edge_transparency, edge_transparency);
+    section_settings->edge_transparency--;
+  }
+  {
+    BITCODE_BS face_transparency;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "face_transparency", &face_transparency, NULL)
+        && face_transparency == section_settings->face_transparency)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.face_transparency [BS] %hu != %hu", section_settings->face_transparency, face_transparency);
+    face_transparency++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "face_transparency", &face_transparency, 0)
+        && face_transparency == section_settings->face_transparency)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.face_transparency [BS] set+1 %hu != %hu", section_settings->face_transparency, face_transparency);
+    section_settings->face_transparency--;
+  }
+  {
+    BITCODE_BS generation;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "generation", &generation, NULL)
+        && generation == section_settings->generation)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.generation [BS] %hu != %hu", section_settings->generation, generation);
+    generation++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "generation", &generation, 0)
+        && generation == section_settings->generation)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.generation [BS] set+1 %hu != %hu", section_settings->generation, generation);
+    section_settings->generation--;
+  }
+  {
+    BITCODE_BS geometry;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "geometry", &geometry, NULL)
+        && geometry == section_settings->geometry)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.geometry [BS] %hu != %hu", section_settings->geometry, geometry);
+    geometry++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "geometry", &geometry, 0)
+        && geometry == section_settings->geometry)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.geometry [BS] set+1 %hu != %hu", section_settings->geometry, geometry);
+    section_settings->geometry--;
+  }
+  {
+    BITCODE_BD hatch_angle;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "hatch_angle", &hatch_angle, NULL)
+        && hatch_angle == section_settings->hatch_angle)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_angle [BD] %g != %g", section_settings->hatch_angle, hatch_angle);
+    hatch_angle++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "hatch_angle", &hatch_angle, 0)
+        && hatch_angle == section_settings->hatch_angle)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_angle [BD] set+1 %g != %g", section_settings->hatch_angle, hatch_angle);
+    section_settings->hatch_angle--;
+  }
+  {
+    BITCODE_H hatch_pattern;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "hatch_pattern", &hatch_pattern, NULL)
+        && !memcmp (&hatch_pattern, &section_settings->hatch_pattern, sizeof (section_settings->hatch_pattern)))
+        pass ();
+    else
+        fail ("SECTION_SETTINGS.hatch_pattern [H]");
+  }
+  {
+    BITCODE_BD hatch_scale;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "hatch_scale", &hatch_scale, NULL)
+        && hatch_scale == section_settings->hatch_scale)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_scale [BD] %g != %g", section_settings->hatch_scale, hatch_scale);
+    hatch_scale++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "hatch_scale", &hatch_scale, 0)
+        && hatch_scale == section_settings->hatch_scale)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_scale [BD] set+1 %g != %g", section_settings->hatch_scale, hatch_scale);
+    section_settings->hatch_scale--;
+  }
+  {
+    BITCODE_BD hatch_spacing;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "hatch_spacing", &hatch_spacing, NULL)
+        && hatch_spacing == section_settings->hatch_spacing)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_spacing [BD] %g != %g", section_settings->hatch_spacing, hatch_spacing);
+    hatch_spacing++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "hatch_spacing", &hatch_spacing, 0)
+        && hatch_spacing == section_settings->hatch_spacing)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_spacing [BD] set+1 %g != %g", section_settings->hatch_spacing, hatch_spacing);
+    section_settings->hatch_spacing--;
+  }
+  {
+    BITCODE_B hatch_visibility;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "hatch_visibility", &hatch_visibility, NULL)
+        && hatch_visibility == section_settings->hatch_visibility)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_visibility [B] " FORMAT_B " != " FORMAT_B "", section_settings->hatch_visibility, hatch_visibility);
+    hatch_visibility++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "hatch_visibility", &hatch_visibility, 0)
+        && hatch_visibility == section_settings->hatch_visibility)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hatch_visibility [B] set+1 " FORMAT_B " != " FORMAT_B "", section_settings->hatch_visibility, hatch_visibility);
+    section_settings->hatch_visibility--;
+  }
+  {
+    BITCODE_B hidden_line;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "hidden_line", &hidden_line, NULL)
+        && hidden_line == section_settings->hidden_line)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hidden_line [B] " FORMAT_B " != " FORMAT_B "", section_settings->hidden_line, hidden_line);
+    hidden_line++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "hidden_line", &hidden_line, 0)
+        && hidden_line == section_settings->hidden_line)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.hidden_line [B] set+1 " FORMAT_B " != " FORMAT_B "", section_settings->hidden_line, hidden_line);
+    section_settings->hidden_line--;
+  }
+  {
+    BITCODE_H layer;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "layer", &layer, NULL)
+        && !memcmp (&layer, &section_settings->layer, sizeof (section_settings->layer)))
+        pass ();
+    else
+        fail ("SECTION_SETTINGS.layer [H]");
+  }
+  {
+    BITCODE_RC linewt;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "linewt", &linewt, NULL)
+        && linewt == section_settings->linewt)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.linewt [RC] %u != %u", section_settings->linewt, linewt);
+    linewt++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "linewt", &linewt, 0)
+        && linewt == section_settings->linewt)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.linewt [RC] set+1 %u != %u", section_settings->linewt, linewt);
+    section_settings->linewt--;
+  }
+  {
+    BITCODE_H ltype;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "ltype", &ltype, NULL)
+        && !memcmp (&ltype, &section_settings->ltype, sizeof (section_settings->ltype)))
+        pass ();
+    else
+        fail ("SECTION_SETTINGS.ltype [H]");
+  }
+  {
+    BITCODE_BD ltype_scale;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "ltype_scale", &ltype_scale, NULL)
+        && ltype_scale == section_settings->ltype_scale)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.ltype_scale [BD] %g != %g", section_settings->ltype_scale, ltype_scale);
+    ltype_scale++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "ltype_scale", &ltype_scale, 0)
+        && ltype_scale == section_settings->ltype_scale)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.ltype_scale [BD] set+1 %g != %g", section_settings->ltype_scale, ltype_scale);
+    section_settings->ltype_scale--;
+  }
+  {
+    BITCODE_BL num_sources;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "num_sources", &num_sources, NULL)
+        && num_sources == section_settings->num_sources)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.num_sources [BL] %u != %u", section_settings->num_sources, num_sources);
+    num_sources++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "num_sources", &num_sources, 0)
+        && num_sources == section_settings->num_sources)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.num_sources [BL] set+1 %u != %u", section_settings->num_sources, num_sources);
+    section_settings->num_sources--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "parent", &parent, NULL)
+        && !memcmp (&parent, &section_settings->parent, sizeof (section_settings->parent)))
+        pass ();
+    else
+        fail ("SECTION_SETTINGS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H plotstyle;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "plotstyle", &plotstyle, NULL)
+        && !memcmp (&plotstyle, &section_settings->plotstyle, sizeof (section_settings->plotstyle)))
+        pass ();
+    else
+        fail ("SECTION_SETTINGS.plotstyle [H]");
+  }
+  {
+    BITCODE_H* sources;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "num_sources", &count, NULL)
+        && dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "sources", &sources, NULL)
+        && sources == section_settings->sources)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.sources [H*] * %u num_sources", count);
+  }
+  {
+    BITCODE_BS type;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "type", &type, NULL)
+        && type == section_settings->type)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.type [BS] %hu != %hu", section_settings->type, type);
+    type++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "type", &type, 0)
+        && type == section_settings->type)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.type [BS] set+1 %hu != %hu", section_settings->type, type);
+    section_settings->type--;
+  }
+  {
+    BITCODE_B visibility;
+    if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "visibility", &visibility, NULL)
+        && visibility == section_settings->visibility)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.visibility [B] " FORMAT_B " != " FORMAT_B "", section_settings->visibility, visibility);
+    visibility++;
+    if (dwg_dynapi_entity_set_value (section_settings, "SECTION_SETTINGS", "visibility", &visibility, 0)
+        && visibility == section_settings->visibility)
+      pass ();
+    else
+      fail ("SECTION_SETTINGS.visibility [B] set+1 " FORMAT_B " != " FORMAT_B "", section_settings->visibility, visibility);
+    section_settings->visibility--;
+  }
+  if (failed && (is_class_unstable ("SECTION_SETTINGS") || is_class_debugging ("SECTION_SETTINGS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SECTION_SETTINGS", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_SORTENTSTABLE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -42970,7 +43345,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 42973 "dynapi_test.c"
+#line 43348 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -43268,6 +43643,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SCALE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
     error += test_SECTIONVIEWSTYLE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_SECTION_MANAGER)
+    error += test_SECTION_MANAGER(obj);
+  else  if (obj->fixedtype == DWG_TYPE_SECTION_SETTINGS)
+    error += test_SECTION_SETTINGS(obj);
   else  if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
     error += test_SORTENTSTABLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SPATIAL_FILTER)
@@ -43612,6 +43991,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SCALE (obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
     error += test_SECTIONVIEWSTYLE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_SECTION_MANAGER)
+    error += test_SECTION_MANAGER (obj);
+  else  if (obj->fixedtype == DWG_TYPE_SECTION_SETTINGS)
+    error += test_SECTION_SETTINGS (obj);
   else  if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
     error += test_SORTENTSTABLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_SPATIAL_FILTER)
@@ -43670,7 +44053,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 43673 "dynapi_test.c"
+#line 44056 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -44872,6 +45255,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_SECTIONVIEWSTYLE): %d != "
                "dwg_dynapi_fields_size (\"SECTIONVIEWSTYLE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_SECTION_MANAGER);
+  size2 = dwg_dynapi_fields_size ("SECTION_MANAGER");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_SECTION_MANAGER): %d != "
+               "dwg_dynapi_fields_size (\"SECTION_MANAGER\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_SECTION_SETTINGS);
+  size2 = dwg_dynapi_fields_size ("SECTION_SETTINGS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_SECTION_SETTINGS): %d != "
+               "dwg_dynapi_fields_size (\"SECTION_SETTINGS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_SORTENTSTABLE);

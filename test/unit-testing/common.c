@@ -381,7 +381,9 @@ main (int argc, char *argv[])
               strcat (tmp, "2000/5.dwg");
               error += test_code (tmp, cov);
             }
-          if (DWG_TYPE == DWG_TYPE_SECTIONOBJECT)
+          if (DWG_TYPE == DWG_TYPE_SECTIONOBJECT ||
+              DWG_TYPE == DWG_TYPE_SECTION_MANAGER ||
+              DWG_TYPE == DWG_TYPE_SECTION_SETTINGS)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2018/LiveSection.dwg");

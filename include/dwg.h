@@ -455,6 +455,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SCALE,
   DWG_TYPE_SECTIONOBJECT,
   DWG_TYPE_SECTIONVIEWSTYLE,
+  DWG_TYPE_SECTION_MANAGER,
+  DWG_TYPE_SECTION_SETTINGS,
   DWG_TYPE_SORTENTSTABLE,
   DWG_TYPE_SPATIAL_FILTER,
   DWG_TYPE_SPATIAL_INDEX,
@@ -5674,6 +5676,46 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE
   BITCODE_B show_hatching;
 } Dwg_Object_SECTIONVIEWSTYLE;
 
+typedef struct _dwg_object_SECTION_MANAGER
+{
+  struct _dwg_object_object *parent;
+  BITCODE_B is_live;
+  BITCODE_BL num_sections; 		/*!< DXF 70 1 */
+  BITCODE_H *sections;
+} Dwg_Object_SECTION_MANAGER;
+
+typedef struct _dwg_object_SECTION_SETTINGS
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS type;      	/*!< DXF 90. type: live=1, 2d=2, 3d=4.  */
+  BITCODE_BS geometry;  	/*!< intersectionboundary=1, intersectionfill=2, fg_geom=4, bg_geom=8
+                                     curvetangencylines=16 */
+  BITCODE_BS generation;  	/*!< DXF 91? source and destination flags:
+                                     sourceall=1, sourceselected=2.
+                                     destnewblock=16, destreplaceblock=32, destfile=64
+                                 */
+  BITCODE_BL num_sources;
+  BITCODE_H *sources;
+  BITCODE_H destblock;
+  BITCODE_T destfile;
+  BITCODE_B visibility;
+  BITCODE_CMC color;
+  BITCODE_H layer;
+  BITCODE_H ltype;
+  BITCODE_BD ltype_scale;
+  BITCODE_H plotstyle;
+  BITCODE_RC linewt;
+  BITCODE_BS face_transparency;
+  BITCODE_BS edge_transparency;
+  BITCODE_B hatch_visibility;
+  BITCODE_H hatch_pattern;
+  BITCODE_BD hatch_angle;
+  BITCODE_BD hatch_spacing;
+  BITCODE_BD hatch_scale;
+  BITCODE_B hidden_line;
+  BITCODE_B division_lines;
+} Dwg_Object_SECTION_SETTINGS;
+
 typedef struct _dwg_object_LAYERFILTER
 {
   struct _dwg_object_object *parent;
@@ -6093,6 +6135,8 @@ typedef struct _dwg_object_object
     Dwg_Object_RAPIDRTRENDERSETTINGS *RAPIDRTRENDERSETTINGS;
     //TODO Dwg_Object_RTEXT *RTEXT;
     Dwg_Object_SCALE *SCALE;
+    Dwg_Object_SECTION_MANAGER *SECTION_MANAGER;
+    Dwg_Object_SECTION_SETTINGS *SECTION_SETTINGS;
     Dwg_Object_SECTIONVIEWSTYLE *SECTIONVIEWSTYLE;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
@@ -7160,6 +7204,8 @@ EXPORT int dwg_add_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_LOFTEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_REVOLVEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_SWEPTSURFACE (Dwg_Object *obj);
+EXPORT int dwg_add_SECTION_MANAGER (Dwg_Object *obj);
+EXPORT int dwg_add_SECTION_SETTINGS (Dwg_Object *obj);
 EXPORT int dwg_add_SUN (Dwg_Object *obj);
 EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLE (Dwg_Object *obj);

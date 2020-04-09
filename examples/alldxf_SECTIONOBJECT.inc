@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* SECTIONOBJECT 228 in test/test-data/2018/LiveSection.dxf */
-static struct _unknown_field unknown_dxf_SECTIONOBJECT_1390[] = {
+static struct _unknown_field unknown_dxf_SECTIONOBJECT_1391[] = {
   //{ 5, "228", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

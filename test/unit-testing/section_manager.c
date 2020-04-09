@@ -1,0 +1,19 @@
+// DEBUGGING
+#define DWG_TYPE DWG_TYPE_SECTION_MANAGER
+#include "common.c"
+
+void
+api_process (dwg_object *obj)
+{
+  int error, isnew;
+  BITCODE_BL num_sections;
+  BITCODE_H *sections;
+
+#ifdef DEBUG_CLASSES
+  dwg_obj_section_manager *_obj = dwg_object_to_SECTION_MANAGER (obj);
+
+  CHK_ENTITY_TYPE (_obj, SECTION_MANAGER, num_sections, BL, num_sections);
+  CHK_ENTITY_MAX (_obj, SECTION_MANAGER, num_sections, BL, 2000);
+  CHK_ENTITY_HV (_obj, SECTION_MANAGER, sections, sections, num_sections);
+#endif
+}

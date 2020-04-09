@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* SUN 80 in test/test-data/DS_line_R2013.dxf */
-static struct _unknown_field unknown_dxf_SUN_1391[] = {
+static struct _unknown_field unknown_dxf_SUN_1393[] = {
   //{ 5, "80", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "29", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -25,7 +25,7 @@ static struct _unknown_field unknown_dxf_SUN_1391[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* SUN D1 in test/test-data/DS_line_R2013.dxf */
-static struct _unknown_field unknown_dxf_SUN_1392[] = {
+static struct _unknown_field unknown_dxf_SUN_1394[] = {
   //{ 5, "D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "CF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -47,7 +47,7 @@ static struct _unknown_field unknown_dxf_SUN_1392[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* SUN 761 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_SUN_1393[] = {
+static struct _unknown_field unknown_dxf_SUN_1395[] = {
   //{ 5, "761", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "25A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -69,7 +69,7 @@ static struct _unknown_field unknown_dxf_SUN_1393[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* SUN 761 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_SUN_1394[] = {
+static struct _unknown_field unknown_dxf_SUN_1396[] = {
   //{ 5, "761", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "25A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -91,7 +91,7 @@ static struct _unknown_field unknown_dxf_SUN_1394[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* SUN 761 in test/test-data/example_2018.dxf */
-static struct _unknown_field unknown_dxf_SUN_1395[] = {
+static struct _unknown_field unknown_dxf_SUN_1397[] = {
   //{ 5, "761", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "25A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -110,7 +110,7 @@ static struct _unknown_field unknown_dxf_SUN_1395[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* SUN 2E in test/test-data/2010/gh209_1.dxf */
-static struct _unknown_field unknown_dxf_SUN_1396[] = {
+static struct _unknown_field unknown_dxf_SUN_1398[] = {
   //{ 5, "2E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSun", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

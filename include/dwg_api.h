@@ -623,6 +623,8 @@ typedef struct _dwg_object_DETAILVIEWSTYLE        dwg_obj_detailviewstyle;
 typedef struct _dwg_object_SECTIONVIEWSTYLE       dwg_obj_sectionviewstyle;
 typedef struct _dwg_object_LAYERFILTER            dwg_obj_layerfilter;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG      dwg_obj_layoutprintconfig;
+typedef struct _dwg_object_SECTION_MANAGER        dwg_obj_section_manager;
+typedef struct _dwg_object_SECTION_SETTINGS       dwg_obj_section_settings;
 typedef struct _dwg_object_ACMECOMMANDHISTORY     dwg_obj_acmecommandhistory;
 typedef struct _dwg_object_ACMESCOPE              dwg_obj_acmescope;
 typedef struct _dwg_object_ACMESTATEMGR           dwg_obj_acmestatemgr;
@@ -842,6 +844,8 @@ DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
+DWG_GETALL_OBJECT_DECL (SECTION_MANAGER)
+DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS)
 // unhandled:
 // DWG_GETALL_OBJECT_DECL (ACDSRECORD)
 // DWG_GETALL_OBJECT_DECL (ACDSSCHEMA)
@@ -1049,6 +1053,8 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTIONVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYERFILTER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUTPRINTCONFIG)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_MANAGER)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_SETTINGS)
 /// unhandled:
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSRECORD)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCHEMA)
@@ -1308,6 +1314,8 @@ dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
+dwg_get_OBJECT_DECL (obj_section_manager, SECTION_MANAGER)
+dwg_get_OBJECT_DECL (obj_section_settings, SECTION_SETTINGS)
 // unhandled:
 // dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD)
 // dwg_get_OBJECT_DECL (obj_acdsschema, ACDSSCHEMA)

@@ -8055,6 +8055,51 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (SECTION_MANAGER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSectionManager)
+  //DEBUG_HERE_OBJ
+  FIELD_B (is_live, 0);
+  FIELD_BS (num_sections, 70);
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (sections, num_sections, 5, 0);
+DWG_OBJECT_END
+
+DWG_OBJECT (SECTION_SETTINGS)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSectionSettings)
+  FIELD_BS (type, 90);
+  FIELD_BS (geometry, 91);
+  if (FIELD_VALUE(type) == 1) { // live
+    DEBUG_HERE_OBJ
+    FIELD_BS (generation, 0);
+    FIELD_BL (num_sources, 0);
+    FIELD_T (destfile, 0);
+    FIELD_B (visibility, 0);
+    FIELD_CMC (color, 0,0);
+    FIELD_BD (ltype_scale, 0);
+    FIELD_RC (linewt, 0);
+    FIELD_BS (face_transparency, 0);
+    FIELD_BS (edge_transparency, 0);
+    FIELD_B (hatch_visibility, 0);
+    FIELD_BD (hatch_angle, 0);
+    FIELD_BD (hatch_spacing, 0);
+    FIELD_BD (hatch_scale, 0);
+    FIELD_B (hidden_line, 0);
+    FIELD_B (division_lines, 0);
+  }
+
+  START_OBJECT_HANDLE_STREAM;
+  if (FIELD_VALUE(type) == 1) { // live
+    HANDLE_VECTOR (sources, num_sources, ANYCODE, 0);
+    FIELD_HANDLE (destblock, ANYCODE, 0);
+    FIELD_HANDLE (layer, ANYCODE, 0);
+    FIELD_HANDLE (ltype, ANYCODE, 0);
+    FIELD_HANDLE (plotstyle, ANYCODE, 0);
+    FIELD_HANDLE (hatch_pattern, ANYCODE, 0);
+  }
+DWG_OBJECT_END
+
 // as ACAD_LAYERFILTERS in the NOD
 DWG_OBJECT (LAYERFILTER)
   DECODE_UNKNOWN_BITS

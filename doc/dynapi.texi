@@ -7366,6 +7366,84 @@ B
 @end vtable
 @end indentedblock
 
+@strong{SECTION_MANAGER} @anchor{SECTION_MANAGER}
+@cindex object, SECTION_MANAGER
+@vindex SECTION_MANAGER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_live
+B
+@item num_sections
+BL,	DXF 70
+@item sections
+H*
+
+@end vtable
+@end indentedblock
+
+@strong{SECTION_SETTINGS} @anchor{SECTION_SETTINGS}
+@cindex object, SECTION_SETTINGS
+@vindex SECTION_SETTINGS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item type
+BS,	DXF 90
+@item geometry
+BS,	DXF 91
+@item generation
+BS
+@item num_sources
+BL
+@item sources
+H*
+@item destblock
+H
+@item destfile
+T
+@item visibility
+B
+@item color
+CMC
+@item layer
+H
+@item ltype
+H
+@item ltype_scale
+BD
+@item plotstyle
+H
+@item linewt
+RC
+@item face_transparency
+BS
+@item edge_transparency
+BS
+@item hatch_visibility
+B
+@item hatch_pattern
+H
+@item hatch_angle
+BD
+@item hatch_spacing
+BD
+@item hatch_scale
+BD
+@item hidden_line
+B
+@item division_lines
+B
+
+@end vtable
+@end indentedblock
+
 @strong{SORTENTSTABLE} @anchor{SORTENTSTABLE}
 @cindex object, SORTENTSTABLE
 @vindex SORTENTSTABLE

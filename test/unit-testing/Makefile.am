@@ -158,6 +158,8 @@ testobjects = \
 	renderglobal \
 	revolvedsurface \
 	scale \
+	section_manager \
+	section_settings \
 	sectionobject \
 	sectionviewstyle \
 	seqend \
