@@ -6660,11 +6660,19 @@ DWG_ENTITY (SECTIONOBJECT)
   FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
   FIELD_BL (num_blverts, 93);
   FIELD_3DPOINT_VECTOR (blverts, num_blverts, 12);
-  //FIELD_B (is_live, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (setting, 5, 360);
 DWG_ENTITY_END
+
+DWG_OBJECT (SECTION_MANAGER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSectionManager)
+  FIELD_B (is_live, 0);
+  FIELD_BS (num_sections, 70);
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (sections, num_sections, 5, 0);
+DWG_OBJECT_END
 
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
@@ -8053,16 +8061,6 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_B (show_end_and_bend_lines, 290);
 
   START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (SECTION_MANAGER)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbSectionManager)
-  //DEBUG_HERE_OBJ
-  FIELD_B (is_live, 0);
-  FIELD_BS (num_sections, 70);
-  START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (sections, num_sections, 5, 0);
 DWG_OBJECT_END
 
 DWG_OBJECT (SECTION_SETTINGS)

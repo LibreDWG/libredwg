@@ -7378,7 +7378,7 @@ struct _dwg_object_object*
 @item is_live
 B
 @item num_sections
-BL,	DXF 70
+BS,	DXF 70
 @item sections
 H*
 

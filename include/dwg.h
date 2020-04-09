@@ -4046,7 +4046,6 @@ typedef struct _dwg_entity_SECTIONOBJECT
   BITCODE_3BD vert_dir;	        /*!< DXF 10. normal to the segment line, on the plane */
   BITCODE_BD top_height;	/*!< DXF 40 */
   BITCODE_BD bottom_height;	/*!< DXF 41 */
-  //BITCODE_B is_live;
   BITCODE_RC indicator_alpha;	/*!< DXF 70 */
   BITCODE_CMC indicator_color;	/*!< DXF 62/420 (but documented as 63/411) */
   BITCODE_BL num_verts;		/*!< DXF 92 */
@@ -5676,14 +5675,16 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE
   BITCODE_B show_hatching;
 } Dwg_Object_SECTIONVIEWSTYLE;
 
+// Unstable
 typedef struct _dwg_object_SECTION_MANAGER
 {
   struct _dwg_object_object *parent;
   BITCODE_B is_live;
-  BITCODE_BL num_sections; 		/*!< DXF 70 1 */
+  BITCODE_BS num_sections; 		/*!< DXF 70 1 */
   BITCODE_H *sections;
 } Dwg_Object_SECTION_MANAGER;
 
+// Debugging
 typedef struct _dwg_object_SECTION_SETTINGS
 {
   struct _dwg_object_object *parent;
@@ -7136,6 +7137,7 @@ EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_add_SECTIONOBJECT (Dwg_Object *obj);
+EXPORT int dwg_add_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_add_TABLESTYLE (Dwg_Object *obj);
 EXPORT int dwg_add_UNDERLAY (Dwg_Object *obj);
@@ -7204,7 +7206,6 @@ EXPORT int dwg_add_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_LOFTEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_REVOLVEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_add_SWEPTSURFACE (Dwg_Object *obj);
-EXPORT int dwg_add_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_add_SECTION_SETTINGS (Dwg_Object *obj);
 EXPORT int dwg_add_SUN (Dwg_Object *obj);
 EXPORT int dwg_add_SUNSTUDY (Dwg_Object *obj);

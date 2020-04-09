@@ -38496,18 +38496,18 @@ static int test_SECTION_MANAGER (const Dwg_Object *obj)
     section_manager->is_live--;
   }
   {
-    BITCODE_BL num_sections;
+    BITCODE_BS num_sections;
     if (dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "num_sections", &num_sections, NULL)
         && num_sections == section_manager->num_sections)
       pass ();
     else
-      fail ("SECTION_MANAGER.num_sections [BL] %u != %u", section_manager->num_sections, num_sections);
+      fail ("SECTION_MANAGER.num_sections [BS] %hu != %hu", section_manager->num_sections, num_sections);
     num_sections++;
     if (dwg_dynapi_entity_set_value (section_manager, "SECTION_MANAGER", "num_sections", &num_sections, 0)
         && num_sections == section_manager->num_sections)
       pass ();
     else
-      fail ("SECTION_MANAGER.num_sections [BL] set+1 %u != %u", section_manager->num_sections, num_sections);
+      fail ("SECTION_MANAGER.num_sections [BS] set+1 %hu != %hu", section_manager->num_sections, num_sections);
     section_manager->num_sections--;
   }
   {
