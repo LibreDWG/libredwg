@@ -637,7 +637,6 @@ typedef struct _dwg_object_VBA_PROJECT            dwg_obj_vba_project;
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
 //typedef struct _dwg_object_ACDSSCHEMA           dwg_obj_acdsschema;
-//typedef struct _dwg_object_ACDSSCOPE            dwg_obj_acdsscope;
 //typedef struct _dwg_object_ACSH_PYRAMID_CLASS   dwg_obj_acsh_pyramid_class;
 //typedef struct _dwg_object_ACSH_REVOLVE_CLASS   dwg_obj_acsh_revolve_class;
 //typedef struct _dwg_object_ACSH_SPHERE_CLASS    dwg_obj_acsh_sphere_class;
@@ -849,7 +848,6 @@ DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS)
 // unhandled:
 // DWG_GETALL_OBJECT_DECL (ACDSRECORD)
 // DWG_GETALL_OBJECT_DECL (ACDSSCHEMA)
-// DWG_GETALL_OBJECT_DECL (ACDSSCOPE)
 DWG_GETALL_OBJECT_DECL (ACMECOMMANDHISTORY)
 DWG_GETALL_OBJECT_DECL (ACMESCOPE)
 DWG_GETALL_OBJECT_DECL (ACMESTATEMGR)
@@ -1059,7 +1057,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT)
 /// unhandled:
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSRECORD)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCHEMA)
-// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCOPE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMECOMMANDHISTORY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESCOPE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESTATEMGR)
@@ -1321,7 +1318,6 @@ dwg_get_OBJECT_DECL (obj_vba_project, VBA_PROJECT);
 // unhandled:
 // dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD)
 // dwg_get_OBJECT_DECL (obj_acdsschema, ACDSSCHEMA)
-// dwg_get_OBJECT_DECL (obj_acdsscope, ACDSSCOPE)
 dwg_get_OBJECT_DECL (obj_acmecommandhistory, ACMECOMMANDHISTORY)
 dwg_get_OBJECT_DECL (obj_acmescope, ACMESCOPE)
 dwg_get_OBJECT_DECL (obj_acmestatemgr, ACMESTATEMGR)
