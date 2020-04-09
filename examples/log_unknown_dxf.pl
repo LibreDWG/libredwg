@@ -1794,7 +1794,7 @@ while (<>) {
   # linear search in dxf file for this obj-handle
 
   my ($foundhdl, @FIELD, $in_entity);
-  my ($react, $xdict, $seen100, @avail);
+  my ($react, $xdict, $seen100, @avail, @availcopy);
 
   if (!$f or $fdxf ne $prevdxf) {
     close $f if $f;
@@ -1817,17 +1817,18 @@ while (<>) {
     print $f1 $firstline;
     print $f1 "// code, value, bits, pre_bits, num_bits, type, name, num, pos[]\n";
 
-    if ($obj =~ /^(?:PDF|DWF|DGN)UNDERLAY/) {
-      @avail = @{$known->{UNDERLAY}};
-    }
-    elsif ($obj =~ /^(?:PDF|DWF|DGN)DEFINITION/) {
-      @avail = @{$known->{UNDERLAYDEFINITION}};
-    }
-    @avail = @{$known->{$obj}} if exists $known->{$obj};
-
 #  } else {
 #    open $f1, ">>", "$dir/alldxf_$obj.inc" or next LINE;
   }
+  
+  if ($obj =~ /^(?:PDF|DWF|DGN)UNDERLAY/) {
+    @avail = @{$known->{UNDERLAY}};
+  }
+  elsif ($obj =~ /^(?:PDF|DWF|DGN)DEFINITION/) {
+    @avail = @{$known->{UNDERLAYDEFINITION}};
+  }
+  @avail = @{$known->{$obj}} if exists $known->{$obj};
+  @availcopy = @avail;
 
   # cannot walk back
   while (my $code = <$f>) {
@@ -1873,6 +1874,7 @@ while (<>) {
           print $f1 "static struct _unknown_field unknown_dxf_${obj}_${i}\[\] = {\n";
           print $f2 "unknown_dxf\[$i\].fields = unknown_dxf_${obj}_${i};\n";
           @FIELD = ();
+          @avail = @availcopy;
           $i++;
         }
       }
@@ -1922,6 +1924,7 @@ while (<>) {
         $name = "catalog";
       } elsif ($x = find_name($code, $obj, \@avail, \@FIELD)) {
         $name = $x;
+        @avail = @availcopy unless @avail; # if exhausted via loop, restart
       } elsif ($code == 8) {
         $name = "layer";
       } elsif ($code >= 60 && $code <= 65) {
@@ -2017,8 +2020,8 @@ sub dxf_type {
 
 sub find_name {
   my ($code, $obj, $avail, $fieldsref) = @_;
-  return undef if !$avail;
   my @f = @$avail;
+  return undef if !@f;
   my $len = scalar @f;
   for my $j (0..(2*$len)-1) {
     my $c = $f[$j];
