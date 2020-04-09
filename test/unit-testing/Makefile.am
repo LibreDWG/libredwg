@@ -42,8 +42,12 @@ dxf_test_LDADD = $(LDADD) \
 testobjects = \
 	3dface \
 	3dsolid \
+	acmecommandhistory \
+	acmescope \
+	acmestatemgr \
 	acsh_box_class \
 	acsh_extrusion_class \
+	acsh_history_class \
 	acsh_sweep_class \
 	aldimobjectcontextdata \
 	appid \
@@ -55,13 +59,16 @@ testobjects = \
 	assocaligneddimactionbody \
 	assocdependency \
 	assocextrudedsurfaceactionbody \
+	assocgeomdependency \
 	assocloftedsurfaceactionbody \
 	assocnetwork \
+	assocosnappointrefactionparam \
 	assocosnappointrefactionparam \
 	assocperssubentmanager \
 	assocplanesurfaceactionbody \
 	assocrevolvedsurfaceactionbody \
 	assocsweptsurfaceactionbody \
+	assocvertexactionparam \
 	attdef \
 	attrib \
 	blkrefobjectcontextdata \
@@ -72,6 +79,7 @@ testobjects = \
 	camera \
 	cellstylemap \
 	circle \
+	csacdocumentoptions \
 	datalink \
 	datatable \
 	dbcolor \
@@ -115,6 +123,7 @@ testobjects = \
 	layout \
 	layoutprintconfig \
 	leader \
+	leaderobjectcontextdata \
 	light \
 	lightlist \
 	line \
@@ -132,6 +141,7 @@ testobjects = \
 	mline \
 	mlinestyle \
 	mtext \
+	mtextattributeobjectcontextdata \
 	mtextobjectcontextdata \
 	multileader \
 	navisworksmodel \
@@ -151,6 +161,7 @@ testobjects = \
 	polyline_pface \
 	proxy_entity \
 	proxy_object \
+	rapidrtrendersettings \
 	rastervariables \
 	ray \
 	region \
@@ -171,15 +182,6 @@ testobjects = \
 	spline \
 	style \
 	style_control \
-        acmecommandhistory \
-        acmescope \
-        acmestatemgr \
-        acsh_history_class \
-        assocgeomdependency \
-        assocosnappointrefactionparam \
-        assocvertexactionparam \
-        documentoptions \
-        rapidrtrendersettings \
 	sun \
 	sunstudy \
 	sweptsurface \
@@ -189,8 +191,6 @@ testobjects = \
 	tablestyle \
 	text \
 	textobjectcontextdata \
-        leaderobjectcontextdata \
-        mtextattributeobjectcontextdata \
 	tolerance \
 	trace \
 	ucs \

@@ -27058,6 +27058,42 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_CSACDOCUMENTOPTIONS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_CSACDOCUMENTOPTIONS *restrict csacdocumentoptions = obj->tio.object->tio.CSACDOCUMENTOPTIONS;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (csacdocumentoptions, "CSACDOCUMENTOPTIONS", "class_version", &class_version, NULL)
+        && class_version == csacdocumentoptions->class_version)
+      pass ();
+    else
+      fail ("CSACDOCUMENTOPTIONS.class_version [BS] %hu != %hu", csacdocumentoptions->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (csacdocumentoptions, "CSACDOCUMENTOPTIONS", "class_version", &class_version, 0)
+        && class_version == csacdocumentoptions->class_version)
+      pass ();
+    else
+      fail ("CSACDOCUMENTOPTIONS.class_version [BS] set+1 %hu != %hu", csacdocumentoptions->class_version, class_version);
+    csacdocumentoptions->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (csacdocumentoptions, "CSACDOCUMENTOPTIONS", "parent", &parent, NULL)
+        && !memcmp (&parent, &csacdocumentoptions->parent, sizeof (csacdocumentoptions->parent)))
+        pass ();
+    else
+        fail ("CSACDOCUMENTOPTIONS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("CSACDOCUMENTOPTIONS") || is_class_debugging ("CSACDOCUMENTOPTIONS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "CSACDOCUMENTOPTIONS", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_DATALINK (const Dwg_Object *obj)
 {
   int error = 0;
@@ -29653,42 +29689,6 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("DIMSTYLE_CONTROL") || is_class_debugging ("DIMSTYLE_CONTROL")))
     {
       ok ("%s failed %d tests (TODO unstable)", "DIMSTYLE_CONTROL", failed);
-      failed = 0;
-    }
-  return failed;
-}
-static int test_DOCUMENTOPTIONS (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_DOCUMENTOPTIONS *restrict documentoptions = obj->tio.object->tio.DOCUMENTOPTIONS;
-  failed = 0;
-  {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (documentoptions, "DOCUMENTOPTIONS", "class_version", &class_version, NULL)
-        && class_version == documentoptions->class_version)
-      pass ();
-    else
-      fail ("DOCUMENTOPTIONS.class_version [BS] %hu != %hu", documentoptions->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (documentoptions, "DOCUMENTOPTIONS", "class_version", &class_version, 0)
-        && class_version == documentoptions->class_version)
-      pass ();
-    else
-      fail ("DOCUMENTOPTIONS.class_version [BS] set+1 %hu != %hu", documentoptions->class_version, class_version);
-    documentoptions->class_version--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (documentoptions, "DOCUMENTOPTIONS", "parent", &parent, NULL)
-        && !memcmp (&parent, &documentoptions->parent, sizeof (documentoptions->parent)))
-        pass ();
-    else
-        fail ("DOCUMENTOPTIONS.parent [struct _dwg_object_object*]");
-  }
-  if (failed && (is_class_unstable ("DOCUMENTOPTIONS") || is_class_debugging ("DOCUMENTOPTIONS")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "DOCUMENTOPTIONS", failed);
       failed = 0;
     }
   return failed;
@@ -43537,6 +43537,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLOCK_HEADER(obj);
   else  if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
     error += test_CELLSTYLEMAP(obj);
+  else  if (obj->fixedtype == DWG_TYPE_CSACDOCUMENTOPTIONS)
+    error += test_CSACDOCUMENTOPTIONS(obj);
   else  if (obj->fixedtype == DWG_TYPE_DATALINK)
     error += test_DATALINK(obj);
   else  if (obj->fixedtype == DWG_TYPE_DATATABLE)
@@ -43557,8 +43559,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DIMSTYLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMSTYLE_CONTROL)
     error += test_DIMSTYLE_CONTROL(obj);
-  else  if (obj->fixedtype == DWG_TYPE_DOCUMENTOPTIONS)
-    error += test_DOCUMENTOPTIONS(obj);
   else  if (obj->fixedtype == DWG_TYPE_DUMMY)
     error += test_DUMMY(obj);
   else  if (obj->fixedtype == DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER)
@@ -43885,6 +43885,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLOCK_HEADER (obj);
   else  if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
     error += test_CELLSTYLEMAP (obj);
+  else  if (obj->fixedtype == DWG_TYPE_CSACDOCUMENTOPTIONS)
+    error += test_CSACDOCUMENTOPTIONS (obj);
   else  if (obj->fixedtype == DWG_TYPE_DATALINK)
     error += test_DATALINK (obj);
   else  if (obj->fixedtype == DWG_TYPE_DATATABLE)
@@ -43905,8 +43907,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DIMSTYLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMSTYLE_CONTROL)
     error += test_DIMSTYLE_CONTROL (obj);
-  else  if (obj->fixedtype == DWG_TYPE_DOCUMENTOPTIONS)
-    error += test_DOCUMENTOPTIONS (obj);
   else  if (obj->fixedtype == DWG_TYPE_DUMMY)
     error += test_DUMMY (obj);
   else  if (obj->fixedtype == DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER)
@@ -44833,6 +44833,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"CELLSTYLEMAP\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_CSACDOCUMENTOPTIONS);
+  size2 = dwg_dynapi_fields_size ("CSACDOCUMENTOPTIONS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_CSACDOCUMENTOPTIONS): %d != "
+               "dwg_dynapi_fields_size (\"CSACDOCUMENTOPTIONS\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_DATALINK);
   size2 = dwg_dynapi_fields_size ("DATALINK");
   if (size1 != size2)
@@ -44911,14 +44919,6 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_DIMSTYLE_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"DIMSTYLE_CONTROL\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_object_DOCUMENTOPTIONS);
-  size2 = dwg_dynapi_fields_size ("DOCUMENTOPTIONS");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_object_DOCUMENTOPTIONS): %d != "
-               "dwg_dynapi_fields_size (\"DOCUMENTOPTIONS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_DUMMY);

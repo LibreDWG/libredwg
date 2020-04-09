@@ -570,70 +570,70 @@ typedef struct _dwg_object_SPATIAL_INDEX          dwg_obj_spatial_index;
 typedef struct _dwg_object_WIPEOUTVARIABLES       dwg_obj_wipeoutvariables;
 typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
 // unstable:
-typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY dwg_obj_assocaligneddimactionbody;
-typedef struct _dwg_object_ASSOCDEPENDENCY        dwg_obj_assocdependency;
-typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY dwg_obj_assocplanesurfaceactionbody;
-typedef struct _dwg_object_DBCOLOR                dwg_obj_dbcolor;
-typedef struct _dwg_object_DIMASSOC               dwg_obj_dimassoc;
-typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER dwg_obj_dynamicblockpurgepreventer;
-typedef struct _dwg_object_GEODATA                dwg_obj_geodata;
-typedef struct _dwg_object_LONG_TRANSACTION       dwg_obj_long_transaction;
-typedef struct _dwg_object_OBJECT_PTR             dwg_obj_object_ptr;
-typedef struct _dwg_object_PERSSUBENTMANAGER      dwg_obj_perssubentmanager;
-typedef struct _dwg_object_SECTION_MANAGER        dwg_obj_section_manager;
-typedef struct _dwg_object_TABLEGEOMETRY          dwg_obj_tablegeometry;
-typedef struct _dwg_object_TABLESTYLE             dwg_obj_tablestyle;
-typedef struct _dwg_object_UNDERLAYDEFINITION     dwg_obj_underlaydefinition;
-typedef struct _dwg_object_VISUALSTYLE            dwg_obj_visualstyle;
+typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY       dwg_obj_assocaligneddimactionbody;
+typedef struct _dwg_object_ASSOCDEPENDENCY                 dwg_obj_assocdependency;
+typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY     dwg_obj_assocplanesurfaceactionbody;
+typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
+typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
+typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockpurgepreventer;
+typedef struct _dwg_object_GEODATA                         dwg_obj_geodata;
+typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transaction;
+typedef struct _dwg_object_OBJECT_PTR                      dwg_obj_object_ptr;
+typedef struct _dwg_object_PERSSUBENTMANAGER               dwg_obj_perssubentmanager;
+typedef struct _dwg_object_SECTION_MANAGER                 dwg_obj_section_manager;
+typedef struct _dwg_object_TABLEGEOMETRY                   dwg_obj_tablegeometry;
+typedef struct _dwg_object_TABLESTYLE                      dwg_obj_tablestyle;
+typedef struct _dwg_object_UNDERLAYDEFINITION              dwg_obj_underlaydefinition;
+typedef struct _dwg_object_VISUALSTYLE                     dwg_obj_visualstyle;
 // DEBUG_CLASSES
-typedef struct _dwg_object_ACMECOMMANDHISTORY     dwg_obj_acmecommandhistory;
-typedef struct _dwg_object_ACMESCOPE              dwg_obj_acmescope;
-typedef struct _dwg_object_ACMESTATEMGR           dwg_obj_acmestatemgr;
-typedef struct _dwg_object_ACSH_BOX_CLASS         dwg_obj_acsh_box_class;
-typedef struct _dwg_object_ACSH_EXTRUSION_CLASS   dwg_obj_acsh_extrusion_class;
-typedef struct _dwg_object_ACSH_HISTORY_CLASS     dwg_obj_acsh_history_class;
-typedef struct _dwg_object_ACSH_SWEEP_CLASS       dwg_obj_acsh_sweep_class;
-typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA dwg_obj_aldimobjectcontextdata;
-typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP dwg_obj_assoc2dconstraintgroup;
-typedef struct _dwg_object_ASSOCACTION            dwg_obj_assocaction;
-typedef struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY dwg_obj_assocextrudedsurfaceactionbody;
-typedef struct _dwg_object_ASSOCGEOMDEPENDENCY            dwg_obj_assocgeomdependency;
-typedef struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY   dwg_obj_assocloftedsurfaceactionbody;
-typedef struct _dwg_object_ASSOCNETWORK                   dwg_obj_assocnetwork;
-typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM  dwg_obj_assocosnappointrefactionparam;
-typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER         dwg_obj_assocperssubentmanager;
-typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY dwg_obj_assocrevolvedsurfaceactionbody;
-typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY    dwg_obj_assocsweptsurfaceactionbody;
-typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM         dwg_obj_assocvertexactionparam;
-typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA        dwg_obj_blkrefobjectcontextdata;
-typedef struct _dwg_object_CELLSTYLEMAP           dwg_obj_cellstylemap;
-typedef struct _dwg_object_DATALINK               dwg_obj_datalink;
-typedef struct _dwg_object_DATATABLE              dwg_obj_datatable;
-typedef struct _dwg_object_DETAILVIEWSTYLE        dwg_obj_detailviewstyle;
-typedef struct _dwg_object_DOCUMENTOPTIONS        dwg_obj_documentoptions;
-typedef struct _dwg_object_EVALUATION_GRAPH       dwg_obj_evaluation_graph;
-typedef struct _dwg_object_GEOMAPIMAGE            dwg_obj_geomapimage;
-typedef struct _dwg_object_LAYERFILTER            dwg_obj_layerfilter;
-typedef struct _dwg_object_LAYOUTPRINTCONFIG      dwg_obj_layoutprintconfig;
-typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA  dwg_obj_leaderobjectcontextdata;
-typedef struct _dwg_object_LIGHTLIST              dwg_obj_lightlist;
-typedef struct _dwg_object_MATERIAL               dwg_obj_material;
-typedef struct _dwg_object_MENTALRAYRENDERSETTINGS   dwg_obj_mentalrayrendersettings;
-typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA  dwg_obj_mleaderobjectcontextdata;
-typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA  dwg_obj_mtextattributeobjectcontextdata;
-typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA  dwg_obj_mtextobjectcontextdata;
-typedef struct _dwg_object_NAVISWORKSMODELDEF     dwg_obj_navisworksmodeldef;
-typedef struct _dwg_object_PLOTSETTINGS           dwg_obj_plotsettings;
-typedef struct _dwg_object_RAPIDRTRENDERSETTINGS  dwg_obj_rapidrtrendersettings;
-typedef struct _dwg_object_RENDERENVIRONMENT      dwg_obj_renderenvironment;
-typedef struct _dwg_object_RENDERGLOBAL           dwg_obj_renderglobal;
-typedef struct _dwg_object_SECTIONVIEWSTYLE       dwg_obj_sectionviewstyle;
-typedef struct _dwg_object_SECTION_SETTINGS       dwg_obj_section_settings;
-typedef struct _dwg_object_SUN                    dwg_obj_sun;
-typedef struct _dwg_object_SUNSTUDY               dwg_obj_sunstudy;
-typedef struct _dwg_object_TABLECONTENT           dwg_obj_tablecontent;
-typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA  dwg_obj_textobjectcontextdata;
-typedef struct _dwg_object_VBA_PROJECT            dwg_obj_vba_project;
+typedef struct _dwg_object_ACMECOMMANDHISTORY              dwg_obj_acmecommandhistory;
+typedef struct _dwg_object_ACMESCOPE                       dwg_obj_acmescope;
+typedef struct _dwg_object_ACMESTATEMGR                    dwg_obj_acmestatemgr;
+typedef struct _dwg_object_ACSH_BOX_CLASS                  dwg_obj_acsh_box_class;
+typedef struct _dwg_object_ACSH_EXTRUSION_CLASS            dwg_obj_acsh_extrusion_class;
+typedef struct _dwg_object_ACSH_HISTORY_CLASS              dwg_obj_acsh_history_class;
+typedef struct _dwg_object_ACSH_SWEEP_CLASS                dwg_obj_acsh_sweep_class;
+typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA          dwg_obj_aldimobjectcontextdata;
+typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP          dwg_obj_assoc2dconstraintgroup;
+typedef struct _dwg_object_ASSOCACTION                     dwg_obj_assocaction;
+typedef struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY  dwg_obj_assocextrudedsurfaceactionbody;
+typedef struct _dwg_object_ASSOCGEOMDEPENDENCY             dwg_obj_assocgeomdependency;
+typedef struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY    dwg_obj_assocloftedsurfaceactionbody;
+typedef struct _dwg_object_ASSOCNETWORK                    dwg_obj_assocnetwork;
+typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM   dwg_obj_assocosnappointrefactionparam;
+typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER          dwg_obj_assocperssubentmanager;
+typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY  dwg_obj_assocrevolvedsurfaceactionbody;
+typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY     dwg_obj_assocsweptsurfaceactionbody;
+typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM          dwg_obj_assocvertexactionparam;
+typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA         dwg_obj_blkrefobjectcontextdata;
+typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
+typedef struct _dwg_object_CSACDOCUMENTOPTIONS             dwg_obj_csacdocumentoptions;
+typedef struct _dwg_object_DATALINK                        dwg_obj_datalink;
+typedef struct _dwg_object_DATATABLE                       dwg_obj_datatable;
+typedef struct _dwg_object_DETAILVIEWSTYLE                 dwg_obj_detailviewstyle;
+typedef struct _dwg_object_EVALUATION_GRAPH                dwg_obj_evaluation_graph;
+typedef struct _dwg_object_GEOMAPIMAGE                     dwg_obj_geomapimage;
+typedef struct _dwg_object_LAYERFILTER                     dwg_obj_layerfilter;
+typedef struct _dwg_object_LAYOUTPRINTCONFIG               dwg_obj_layoutprintconfig;
+typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA         dwg_obj_leaderobjectcontextdata;
+typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
+typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
+typedef struct _dwg_object_MENTALRAYRENDERSETTINGS         dwg_obj_mentalrayrendersettings;
+typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA        dwg_obj_mleaderobjectcontextdata;
+typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA dwg_obj_mtextattributeobjectcontextdata;
+typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA          dwg_obj_mtextobjectcontextdata;
+typedef struct _dwg_object_NAVISWORKSMODELDEF              dwg_obj_navisworksmodeldef;
+typedef struct _dwg_object_PLOTSETTINGS                    dwg_obj_plotsettings;
+typedef struct _dwg_object_RAPIDRTRENDERSETTINGS           dwg_obj_rapidrtrendersettings;
+typedef struct _dwg_object_RENDERENVIRONMENT               dwg_obj_renderenvironment;
+typedef struct _dwg_object_RENDERGLOBAL                    dwg_obj_renderglobal;
+typedef struct _dwg_object_SECTIONVIEWSTYLE                dwg_obj_sectionviewstyle;
+typedef struct _dwg_object_SECTION_SETTINGS                dwg_obj_section_settings;
+typedef struct _dwg_object_SUN                             dwg_obj_sun;
+typedef struct _dwg_object_SUNSTUDY                        dwg_obj_sunstudy;
+typedef struct _dwg_object_TABLECONTENT                    dwg_obj_tablecontent;
+typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA           dwg_obj_textobjectcontextdata;
+typedef struct _dwg_object_VBA_PROJECT                     dwg_obj_vba_project;
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
 //typedef struct _dwg_object_ACDSSCHEMA           dwg_obj_acdsschema;
@@ -858,7 +858,7 @@ DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
 // DWG_GETALL_OBJECT_DECL (ARCALIGNEDTEXT)
 DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
-DWG_GETALL_OBJECT_DECL (DOCUMENTOPTIONS)
+DWG_GETALL_OBJECT_DECL (CSACDOCUMENTOPTIONS)
 DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
@@ -1067,7 +1067,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ARCALIGNEDTEXT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (DOCUMENTOPTIONS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (CSACDOCUMENTOPTIONS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (NPOCOLLECTION)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUD)
@@ -1328,7 +1328,7 @@ dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
 // dwg_get_OBJECT_DECL (obj_arcalignedtext, ARCALIGNEDTEXT)
 dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-dwg_get_OBJECT_DECL (obj_documentoptions, DOCUMENTOPTIONS)
+dwg_get_OBJECT_DECL (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)
 dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
 // dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION)
 // dwg_get_OBJECT_DECL (obj_pointcloud, POINTCLOUD)

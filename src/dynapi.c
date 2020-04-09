@@ -140,17 +140,17 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "BLOCK_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
   "BLOCK_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
   "CELLSTYLEMAP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
-  "DATALINK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
-  "DATATABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
-  "DBCOLOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "DETAILVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
-  "DICTIONARY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "DICTIONARYVAR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "DICTIONARYWDFLT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
-  "DIMASSOC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
-  "DIMSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
-  "DIMSTYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "DOCUMENTOPTIONS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
+  "CSACDOCUMENTOPTIONS" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
+  "DATALINK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
+  "DATATABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
+  "DBCOLOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "DETAILVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
+  "DICTIONARY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
+  "DICTIONARYVAR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
+  "DICTIONARYWDFLT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
+  "DIMASSOC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
+  "DIMSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
+  "DIMSTYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
   "DUMMY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
   "DYNAMICBLOCKPURGEPREVENTER" "\0\0\0\0\0",	/* 40 */
   "EVALUATION_GRAPH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
@@ -4609,6 +4609,14 @@ static const Dwg_DYNAPI_field _dwg_CELLSTYLEMAP_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_object_CSACDOCUMENTOPTIONS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_CSACDOCUMENTOPTIONS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_CSACDOCUMENTOPTIONS, parent),
+    1,1,0, 0 },
+  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_CSACDOCUMENTOPTIONS, class_version),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_object_DATALINK: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_DATALINK_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_DATALINK, parent),
@@ -5033,14 +5041,6 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_CONTROL_fields[] = {
     0,0,0, 71 },
   { "morehandles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_DIMSTYLE_CONTROL, morehandles),
     1,1,0, 340 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_object_DOCUMENTOPTIONS: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_DOCUMENTOPTIONS_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_DOCUMENTOPTIONS, parent),
-    1,1,0, 0 },
-  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_DOCUMENTOPTIONS, class_version),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DUMMY: (sorted by offset) */
@@ -8999,24 +8999,24 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "CAMERA", DWG_TYPE_CAMERA /*(542)*/, _dwg_CAMERA_fields, sizeof (struct _dwg_entity_CAMERA) },	/* 41 */
   { "CELLSTYLEMAP", DWG_TYPE_CELLSTYLEMAP /*(543)*/, _dwg_CELLSTYLEMAP_fields, sizeof (struct _dwg_object_CELLSTYLEMAP) },	/* 42 */
   { "CIRCLE", DWG_TYPE_CIRCLE /*(18)*/, _dwg_CIRCLE_fields, sizeof (struct _dwg_entity_CIRCLE) },	/* 43 */
-  { "DATALINK", DWG_TYPE_DATALINK /*(544)*/, _dwg_DATALINK_fields, sizeof (struct _dwg_object_DATALINK) },	/* 44 */
-  { "DATATABLE", DWG_TYPE_DATATABLE /*(545)*/, _dwg_DATATABLE_fields, sizeof (struct _dwg_object_DATATABLE) },	/* 45 */
-  { "DBCOLOR", DWG_TYPE_DBCOLOR /*(546)*/, _dwg_DBCOLOR_fields, sizeof (struct _dwg_object_DBCOLOR) },	/* 46 */
-  { "DETAILVIEWSTYLE", DWG_TYPE_DETAILVIEWSTYLE /*(547)*/, _dwg_DETAILVIEWSTYLE_fields, sizeof (struct _dwg_object_DETAILVIEWSTYLE) },	/* 47 */
-  { "DICTIONARY", DWG_TYPE_DICTIONARY /*(42)*/, _dwg_DICTIONARY_fields, sizeof (struct _dwg_object_DICTIONARY) },	/* 48 */
-  { "DICTIONARYVAR", DWG_TYPE_DICTIONARYVAR /*(548)*/, _dwg_DICTIONARYVAR_fields, sizeof (struct _dwg_object_DICTIONARYVAR) },	/* 49 */
-  { "DICTIONARYWDFLT", DWG_TYPE_DICTIONARYWDFLT /*(549)*/, _dwg_DICTIONARYWDFLT_fields, sizeof (struct _dwg_object_DICTIONARYWDFLT) },	/* 50 */
-  { "DIMASSOC", DWG_TYPE_DIMASSOC /*(550)*/, _dwg_DIMASSOC_fields, sizeof (struct _dwg_object_DIMASSOC) },	/* 51 */
-  { "DIMENSION_ALIGNED", DWG_TYPE_DIMENSION_ALIGNED /*(22)*/, _dwg_DIMENSION_ALIGNED_fields, sizeof (struct _dwg_entity_DIMENSION_ALIGNED) },	/* 52 */
-  { "DIMENSION_ANG2LN", DWG_TYPE_DIMENSION_ANG2LN /*(24)*/, _dwg_DIMENSION_ANG2LN_fields, sizeof (struct _dwg_entity_DIMENSION_ANG2LN) },	/* 53 */
-  { "DIMENSION_ANG3PT", DWG_TYPE_DIMENSION_ANG3PT /*(23)*/, _dwg_DIMENSION_ANG3PT_fields, sizeof (struct _dwg_entity_DIMENSION_ANG3PT) },	/* 54 */
-  { "DIMENSION_DIAMETER", DWG_TYPE_DIMENSION_DIAMETER /*(26)*/, _dwg_DIMENSION_DIAMETER_fields, sizeof (struct _dwg_entity_DIMENSION_DIAMETER) },	/* 55 */
-  { "DIMENSION_LINEAR", DWG_TYPE_DIMENSION_LINEAR /*(21)*/, _dwg_DIMENSION_LINEAR_fields, sizeof (struct _dwg_entity_DIMENSION_LINEAR) },	/* 56 */
-  { "DIMENSION_ORDINATE", DWG_TYPE_DIMENSION_ORDINATE /*(20)*/, _dwg_DIMENSION_ORDINATE_fields, sizeof (struct _dwg_entity_DIMENSION_ORDINATE) },	/* 57 */
-  { "DIMENSION_RADIUS", DWG_TYPE_DIMENSION_RADIUS /*(25)*/, _dwg_DIMENSION_RADIUS_fields, sizeof (struct _dwg_entity_DIMENSION_RADIUS) },	/* 58 */
-  { "DIMSTYLE", DWG_TYPE_DIMSTYLE /*(69)*/, _dwg_DIMSTYLE_fields, sizeof (struct _dwg_object_DIMSTYLE) },	/* 59 */
-  { "DIMSTYLE_CONTROL", DWG_TYPE_DIMSTYLE_CONTROL /*(68)*/, _dwg_DIMSTYLE_CONTROL_fields, sizeof (struct _dwg_object_DIMSTYLE_CONTROL) },	/* 60 */
-  { "DOCUMENTOPTIONS", DWG_TYPE_DOCUMENTOPTIONS /*(551)*/, _dwg_DOCUMENTOPTIONS_fields, sizeof (struct _dwg_object_DOCUMENTOPTIONS) },	/* 61 */
+  { "CSACDOCUMENTOPTIONS", DWG_TYPE_CSACDOCUMENTOPTIONS /*(544)*/, _dwg_CSACDOCUMENTOPTIONS_fields, sizeof (struct _dwg_object_CSACDOCUMENTOPTIONS) },	/* 44 */
+  { "DATALINK", DWG_TYPE_DATALINK /*(545)*/, _dwg_DATALINK_fields, sizeof (struct _dwg_object_DATALINK) },	/* 45 */
+  { "DATATABLE", DWG_TYPE_DATATABLE /*(546)*/, _dwg_DATATABLE_fields, sizeof (struct _dwg_object_DATATABLE) },	/* 46 */
+  { "DBCOLOR", DWG_TYPE_DBCOLOR /*(547)*/, _dwg_DBCOLOR_fields, sizeof (struct _dwg_object_DBCOLOR) },	/* 47 */
+  { "DETAILVIEWSTYLE", DWG_TYPE_DETAILVIEWSTYLE /*(548)*/, _dwg_DETAILVIEWSTYLE_fields, sizeof (struct _dwg_object_DETAILVIEWSTYLE) },	/* 48 */
+  { "DICTIONARY", DWG_TYPE_DICTIONARY /*(42)*/, _dwg_DICTIONARY_fields, sizeof (struct _dwg_object_DICTIONARY) },	/* 49 */
+  { "DICTIONARYVAR", DWG_TYPE_DICTIONARYVAR /*(549)*/, _dwg_DICTIONARYVAR_fields, sizeof (struct _dwg_object_DICTIONARYVAR) },	/* 50 */
+  { "DICTIONARYWDFLT", DWG_TYPE_DICTIONARYWDFLT /*(550)*/, _dwg_DICTIONARYWDFLT_fields, sizeof (struct _dwg_object_DICTIONARYWDFLT) },	/* 51 */
+  { "DIMASSOC", DWG_TYPE_DIMASSOC /*(551)*/, _dwg_DIMASSOC_fields, sizeof (struct _dwg_object_DIMASSOC) },	/* 52 */
+  { "DIMENSION_ALIGNED", DWG_TYPE_DIMENSION_ALIGNED /*(22)*/, _dwg_DIMENSION_ALIGNED_fields, sizeof (struct _dwg_entity_DIMENSION_ALIGNED) },	/* 53 */
+  { "DIMENSION_ANG2LN", DWG_TYPE_DIMENSION_ANG2LN /*(24)*/, _dwg_DIMENSION_ANG2LN_fields, sizeof (struct _dwg_entity_DIMENSION_ANG2LN) },	/* 54 */
+  { "DIMENSION_ANG3PT", DWG_TYPE_DIMENSION_ANG3PT /*(23)*/, _dwg_DIMENSION_ANG3PT_fields, sizeof (struct _dwg_entity_DIMENSION_ANG3PT) },	/* 55 */
+  { "DIMENSION_DIAMETER", DWG_TYPE_DIMENSION_DIAMETER /*(26)*/, _dwg_DIMENSION_DIAMETER_fields, sizeof (struct _dwg_entity_DIMENSION_DIAMETER) },	/* 56 */
+  { "DIMENSION_LINEAR", DWG_TYPE_DIMENSION_LINEAR /*(21)*/, _dwg_DIMENSION_LINEAR_fields, sizeof (struct _dwg_entity_DIMENSION_LINEAR) },	/* 57 */
+  { "DIMENSION_ORDINATE", DWG_TYPE_DIMENSION_ORDINATE /*(20)*/, _dwg_DIMENSION_ORDINATE_fields, sizeof (struct _dwg_entity_DIMENSION_ORDINATE) },	/* 58 */
+  { "DIMENSION_RADIUS", DWG_TYPE_DIMENSION_RADIUS /*(25)*/, _dwg_DIMENSION_RADIUS_fields, sizeof (struct _dwg_entity_DIMENSION_RADIUS) },	/* 59 */
+  { "DIMSTYLE", DWG_TYPE_DIMSTYLE /*(69)*/, _dwg_DIMSTYLE_fields, sizeof (struct _dwg_object_DIMSTYLE) },	/* 60 */
+  { "DIMSTYLE_CONTROL", DWG_TYPE_DIMSTYLE_CONTROL /*(68)*/, _dwg_DIMSTYLE_CONTROL_fields, sizeof (struct _dwg_object_DIMSTYLE_CONTROL) },	/* 61 */
   { "DUMMY", DWG_TYPE_DUMMY /*(75)*/, _dwg_DUMMY_fields, sizeof (struct _dwg_object_DUMMY) },	/* 62 */
   { "DYNAMICBLOCKPURGEPREVENTER", DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER /*(552)*/, _dwg_DYNAMICBLOCKPURGEPREVENTER_fields, sizeof (struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER) },	/* 63 */
   { "ELLIPSE", DWG_TYPE_ELLIPSE /*(35)*/, _dwg_ELLIPSE_fields, sizeof (struct _dwg_entity_ELLIPSE) },	/* 64 */

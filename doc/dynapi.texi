@@ -5089,6 +5089,21 @@ Dwg_CELLSTYLEMAP_Cell*
 @end vtable
 @end indentedblock
 
+@strong{CSACDOCUMENTOPTIONS} @anchor{CSACDOCUMENTOPTIONS}
+@cindex object, CSACDOCUMENTOPTIONS
+@vindex CSACDOCUMENTOPTIONS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+
+@end vtable
+@end indentedblock
+
 @strong{DATALINK} @anchor{DATALINK}
 @cindex object, DATALINK
 @vindex DATALINK
@@ -5589,21 +5604,6 @@ BL
 RC,	DXF 71
 @item morehandles
 H*,	DXF 340
-
-@end vtable
-@end indentedblock
-
-@strong{DOCUMENTOPTIONS} @anchor{DOCUMENTOPTIONS}
-@cindex object, DOCUMENTOPTIONS
-@vindex DOCUMENTOPTIONS
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item class_version
-BS
 
 @end vtable
 @end indentedblock
