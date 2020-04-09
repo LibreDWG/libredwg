@@ -4429,8 +4429,8 @@ DWG_OBJECT (PROXY_OBJECT)
 
 DWG_OBJECT_END
 
+#if 0
 DWG_OBJECT (OBJECTCONTEXTDATA)
-
   SUBCLASS (AcDbObjectContextData)
   SINCE (R_2010) {
     IF_ENCODE_FROM_EARLIER {
@@ -4444,8 +4444,8 @@ DWG_OBJECT (OBJECTCONTEXTDATA)
   FIELD_B (defaultflag, 0);
 
   START_OBJECT_HANDLE_STREAM;
-
 DWG_OBJECT_END
+#endif
 
 // 20.4.99 Value, page 241. for FIELD and TABLE
 #define TABLE_value_fields(value)                                             \
@@ -6343,30 +6343,20 @@ DWG_OBJECT (VISUALSTYLE)
     }
   }
 #endif
-
   START_OBJECT_HANDLE_STREAM;
   //FIELD_HANDLE (dictionary, 5, 0);
 DWG_OBJECT_END
 
-// (varies) In Work
-/* Container for all properties relating to a generic light.  A
-   dictionary of these objects is resident in the database, in the
-   named object dictionary as ACAD_LIGHTS (Object LIGHTLIST). They are
-   indexed by the name of the setting objects. In the user interface,
-   the contents of this dictionary correspond to user-defined light
-   properties (displayed on a property palette accessible by selection
-   of the light using a variety of methods.
-   SpotLight, PointLight, DistantLight. dbLight.h
+/* LIGHT: SpotLight, PointLight, DistantLight. dbLight.h
  */
 DWG_ENTITY (LIGHT)
 
-  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbLight);
-  FIELD_BL (class_version, 90); //1
+  FIELD_BL (class_version, 90);
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_T (name, 1);
   FIELD_BS (type, 70);
-  FIELD_B (status, 290); //127
+  FIELD_B (status, 290);
 #ifdef IS_DXF
   UNTIL (R_2000) {
     FIELD_BL (color.rgb, 90);
@@ -6376,7 +6366,7 @@ DWG_ENTITY (LIGHT)
 #else
   FIELD_CMC (color, 63,421);
 #endif
-  FIELD_B (plot_glyph, 291); //0
+  FIELD_B (plot_glyph, 291);
 
 #if 0
     FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
@@ -6404,10 +6394,10 @@ DWG_ENTITY (LIGHT)
   FIELD_BD (attenuation_end_limit, 42);
   FIELD_BD (hotspot_angle, 50);
   FIELD_BD (falloff_angle, 51);
-  FIELD_B (cast_shadows, 293); // 1
-  FIELD_BS (shadow_type, 73);   // 0-1
-  FIELD_BS (shadow_map_size, 91); //256 11
-  FIELD_RC (shadow_map_softness, 280); // 1-4
+  FIELD_B (cast_shadows, 293);
+  FIELD_BS (shadow_type, 73);
+  FIELD_BS (shadow_map_size, 91);
+  FIELD_RC (shadow_map_softness, 280);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (lights_layer, 5, 0);

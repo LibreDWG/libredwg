@@ -63,7 +63,7 @@ if [ -f "$b.dwg" ]; then
 
     if [ -f "$log1" ] && [ -f "$log2" ]; then
         # Really interesting is the Section BLOCKS here. vs BLOCK_HEADER
-        grep -E '^Add entity' "$log1" | grep -E -v 'entity (LIGHT|MULTILEADER|UNKNOWN_ENT)' >"$log1.tmp"
+        grep -E '^Add entity' "$log1" | grep -E -v 'entity (MULTILEADER|UNKNOWN_ENT)' >"$log1.tmp"
         grep -E '^Add entity' "$log2" >"$log2.tmp"
         if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo entities roundtrip ok

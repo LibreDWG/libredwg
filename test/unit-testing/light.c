@@ -1,4 +1,4 @@
-// TODO unstable
+// stable
 #define DWG_TYPE DWG_TYPE_LIGHT
 #include "common.c"
 
@@ -26,7 +26,7 @@ api_process (dwg_object *obj)
   BITCODE_BS shadow_map_size;
   BITCODE_RC shadow_map_softness;
   BITCODE_H lights_layer;
-#ifdef DEBUG_CLASSES
+#if 0
   /* yet unknown: */
   BITCODE_BS lamp_color_type;
   BITCODE_BD lamp_color_temp;
@@ -59,15 +59,17 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (light, LIGHT, attenuation_end_limit, BD, attenuation_end_limit);
   CHK_ENTITY_TYPE (light, LIGHT, hotspot_angle, BD, hotspot_angle);
   CHK_ENTITY_MAX (light, LIGHT, hotspot_angle, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE (light, LIGHT, falloff_angle, BD, falloff_angle); // only with type=3
+  CHK_ENTITY_TYPE (light, LIGHT, falloff_angle, BD, falloff_angle);
   CHK_ENTITY_MAX (light, LIGHT, falloff_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE (light, LIGHT, cast_shadows, B, cast_shadows);
   CHK_ENTITY_TYPE (light, LIGHT, shadow_type, BS, shadow_type);
   CHK_ENTITY_MAX (light, LIGHT, shadow_type, BS, 1);
   CHK_ENTITY_TYPE (light, LIGHT, shadow_map_size, BS, shadow_map_size);
+  CHK_ENTITY_MAX (light, LIGHT, shadow_map_size, BS, 256);
   CHK_ENTITY_TYPE (light, LIGHT, shadow_map_softness, RC, shadow_map_softness);
   CHK_ENTITY_H (light, LIGHT, lights_layer, lights_layer);
-#ifdef DEBUG_CLASSES
+
+#if 0
   CHK_ENTITY_TYPE (light, LIGHT, lamp_color_type, BS, lamp_color_type);
   CHK_ENTITY_MAX (light, LIGHT, lamp_color_type, BS, 1);
   CHK_ENTITY_TYPE (light, LIGHT, lamp_color_temp, BD, lamp_color_temp);

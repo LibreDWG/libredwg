@@ -36331,72 +36331,6 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_OBJECTCONTEXTDATA *restrict objectcontextdata = obj->tio.object->tio.OBJECTCONTEXTDATA;
-  failed = 0;
-  {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, NULL)
-        && class_version == objectcontextdata->class_version)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.class_version [BS] %hu != %hu", objectcontextdata->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, 0)
-        && class_version == objectcontextdata->class_version)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", objectcontextdata->class_version, class_version);
-    objectcontextdata->class_version--;
-  }
-  {
-    BITCODE_B defaultflag;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "defaultflag", &defaultflag, NULL)
-        && defaultflag == objectcontextdata->defaultflag)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.defaultflag [B] " FORMAT_B " != " FORMAT_B "", objectcontextdata->defaultflag, defaultflag);
-    defaultflag++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "defaultflag", &defaultflag, 0)
-        && defaultflag == objectcontextdata->defaultflag)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.defaultflag [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->defaultflag, defaultflag);
-    objectcontextdata->defaultflag--;
-  }
-  {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == objectcontextdata->has_file)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", objectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == objectcontextdata->has_file)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->has_file, has_file);
-    objectcontextdata->has_file--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &objectcontextdata->parent, sizeof (objectcontextdata->parent)))
-        pass ();
-    else
-        fail ("OBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
-  }
-  if (failed && (is_class_unstable ("OBJECTCONTEXTDATA") || is_class_debugging ("OBJECTCONTEXTDATA")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "OBJECTCONTEXTDATA", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_OBJECT_PTR (const Dwg_Object *obj)
 {
   int error = 0;
@@ -43345,7 +43279,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 43348 "dynapi_test.c"
+#line 43282 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -43619,8 +43553,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXTOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF(obj);
-  else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
-    error += test_OBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR(obj);
   else  if (obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
@@ -43967,8 +43899,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXTOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF (obj);
-  else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
-    error += test_OBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR (obj);
   else  if (obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
@@ -44053,7 +43983,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 44056 "dynapi_test.c"
+#line 43986 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -45159,14 +45089,6 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_NAVISWORKSMODELDEF): %d != "
                "dwg_dynapi_fields_size (\"NAVISWORKSMODELDEF\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_object_OBJECTCONTEXTDATA);
-  size2 = dwg_dynapi_fields_size ("OBJECTCONTEXTDATA");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_object_OBJECTCONTEXTDATA): %d != "
-               "dwg_dynapi_fields_size (\"OBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_OBJECT_PTR);

@@ -560,7 +560,6 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR       dwg_obj_imagedef_reactor;
 typedef struct _dwg_object_LAYER_INDEX            dwg_obj_layer_index;
 typedef struct _dwg_object_LAYOUT                 dwg_obj_layout;
 typedef struct _dwg_object_MLEADERSTYLE           dwg_obj_mleaderstyle;
-typedef struct _dwg_object_OBJECTCONTEXTDATA      dwg_obj_objectcontextdata;
 typedef struct _dwg_object_PLACEHOLDER            dwg_obj_placeholder;
 typedef struct _dwg_object_RASTERVARIABLES        dwg_obj_rastervariables;
 typedef struct _dwg_object_SCALE                  dwg_obj_scale;
@@ -778,7 +777,6 @@ DWG_GETALL_OBJECT_DECL (IMAGEDEF_REACTOR)
 DWG_GETALL_OBJECT_DECL (LAYER_INDEX)
 DWG_GETALL_OBJECT_DECL (LAYOUT)
 DWG_GETALL_OBJECT_DECL (MLEADERSTYLE)
-DWG_GETALL_OBJECT_DECL (OBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (PLACEHOLDER)
 DWG_GETALL_OBJECT_DECL (RASTERVARIABLES)
 DWG_GETALL_OBJECT_DECL (SCALE)
@@ -999,7 +997,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGEDEF_REACTOR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LONG_TRANSACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSSUBENTMANAGER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RASTERVARIABLES)
@@ -1195,15 +1192,16 @@ dwg_get_OBJECT_DECL (ent_ole2frame, OLE2FRAME);
 dwg_get_OBJECT_DECL (ent_lwpline, LWPOLYLINE);
 dwg_get_OBJECT_DECL (ent_proxy, PROXY_ENTITY);
 dwg_get_OBJECT_DECL (ent_hatch, HATCH);
-dwg_get_OBJECT_DECL (ent_unknown, UNKNOWN_ENT);
 dwg_get_OBJECT_DECL (ent_image, IMAGE);
-dwg_get_OBJECT_DECL (ent_camera, CAMERA);
-dwg_get_OBJECT_DECL (ent_helix, HELIX);
 dwg_get_OBJECT_DECL (ent_light, LIGHT);
-dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
-dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 dwg_get_OBJECT_DECL (ent_underlay, UNDERLAY);
 dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
+dwg_get_OBJECT_DECL (ent_unknown, UNKNOWN_ENT);
+//unstable:
+dwg_get_OBJECT_DECL (ent_camera, CAMERA);
+dwg_get_OBJECT_DECL (ent_helix, HELIX);
+dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
+dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 #ifdef DEBUG_CLASSES
 dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
 dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
@@ -1253,7 +1251,6 @@ dwg_get_OBJECT_DECL (obj_imagedef_reactor, REACTOR);
 dwg_get_OBJECT_DECL (obj_layer_index, LAYER_INDEX);
 dwg_get_OBJECT_DECL (obj_layout, LAYOUT);
 dwg_get_OBJECT_DECL (obj_mleaderstyle, MLEADERSTYLE);
-dwg_get_OBJECT_DECL (obj_objectcontextdata, OBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_placeholder, PLACEHOLDER);
 dwg_get_OBJECT_DECL (obj_rastervariables, RASTERVARIABLES);
 dwg_get_OBJECT_DECL (obj_scale, SCALE);

@@ -6928,25 +6928,6 @@ B,	DXF 290
 @end vtable
 @end indentedblock
 
-@strong{OBJECTCONTEXTDATA} @anchor{OBJECTCONTEXTDATA}
-@cindex object, OBJECTCONTEXTDATA
-@vindex OBJECTCONTEXTDATA
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item class_version
-BS,	DXF 70
-@item has_file
-B,	DXF 290
-@item defaultflag
-B
-
-@end vtable
-@end indentedblock
-
 @strong{OBJECT_PTR} @anchor{OBJECT_PTR}
 @cindex object, OBJECT_PTR
 @vindex OBJECT_PTR

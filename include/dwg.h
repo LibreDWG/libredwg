@@ -439,7 +439,6 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NAVISWORKSMODEL,
   DWG_TYPE_NAVISWORKSMODELDEF,
   DWG_TYPE_NPOCOLLECTION,
-  DWG_TYPE_OBJECTCONTEXTDATA,
   DWG_TYPE_OBJECT_PTR,
   DWG_TYPE_PERSSUBENTMANAGER,
   DWG_TYPE_PLANESURFACE,
@@ -3907,19 +3906,6 @@ typedef struct _dwg_entity_LWPOLYLINE
 } Dwg_Entity_LWPOLYLINE;
 
 /**
- * 20.4.89 Class AcDbObjectContextData (varies)
- * R2010+
- */
-typedef struct _dwg_object_OBJECTCONTEXTDATA
-{
-  struct _dwg_object_object *parent;
-
-  BITCODE_BS class_version; /*!< r2010+ =3 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
-} Dwg_Object_OBJECTCONTEXTDATA;
-
-/**
  Class RASTERVARIABLES (varies)
  (used in conjunction with IMAGE entities)
  */
@@ -4383,7 +4369,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BD hotspot_angle; 	  /*!< DXF 50 */
   BITCODE_BD falloff_angle; 	  /*!< DXF 51, with type=spot */
   BITCODE_B cast_shadows;   	  /*!< DXF 293 */
-  BITCODE_BS shadow_type;   	  /*!< DXF 73, ray_traced=0, shadow+maps=1 */
+  BITCODE_BS shadow_type;   	  /*!< DXF 73, ray_traced=0, shadow_maps=1 */
   BITCODE_BS shadow_map_size;     /*!< DXF 91 256 */
   BITCODE_RC shadow_map_softness; /*!< DXF 280 0-255 */
   BITCODE_H lights_layer;
@@ -5448,18 +5434,20 @@ typedef struct _dwg_object_MENTALRAYRENDERSETTINGS
  * Class AcDbAnnotScaleObjectContextData (varies)
  * for MTEXT, TEXT, MLEADER, LEADER, BLKREF, ALDIM (AlignedDimension), MTEXTATTRIBUTE, ...
  * R2010+
+ * 20.4.89 SubClass AcDbObjectContextData (varies)
  */
+#define AcDbObjectContextData_fields                                          \
+  struct _dwg_object_object *parent;                                          \
+  BITCODE_BS class_version; /*!< r2010+ =4 */                                 \
+  BITCODE_B has_file;       /* 290 */                                         \
+  BITCODE_B defaultflag     /* no dxf */
 
 /**
  * R2010+
  */
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
 {
-  struct _dwg_object_object *parent;
-  // AcDbObjectContextData
-  BITCODE_BS class_version; /*!< r2010+ =4 */
-  BITCODE_B has_file;    /* 290 */
-  BITCODE_B defaultflag; /* no dxf */
+  AcDbObjectContextData_fields;
   // AcDbAnnotScaleObjectContextData
   BITCODE_H scale;	/*!< DXF 340 */
   BITCODE_BS flag;	/*<! DXF 70 */ // 0
@@ -5473,11 +5461,7 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
  */
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
 {
-  struct _dwg_object_object *parent;
-  // AcDbObjectContextData
-  BITCODE_BS class_version; /*!< r2010+ =4 */
-  BITCODE_B has_file;    /* 290 */
-  BITCODE_B defaultflag; /* no dxf */
+  AcDbObjectContextData_fields;
   // AcDbAnnotScaleObjectContextData
   BITCODE_H scale;	/*!< DXF 340 */
   BITCODE_BS flag;      	/*<! DXF 70 */
@@ -5508,11 +5492,7 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
  */
 typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA
 {
-  struct _dwg_object_object *parent;
-  // AcDbObjectContextData
-  BITCODE_BS class_version; /*!< r2010+ =4 */
-  BITCODE_B has_file;    /* 290 */
-  BITCODE_B defaultflag; /* no dxf */
+  AcDbObjectContextData_fields;
   // AcDbAnnotScaleObjectContextData
   BITCODE_H scale;	/*!< DXF 340 */
   // AcDbDimensionObjectContextData
@@ -5536,33 +5516,21 @@ typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA
 
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA
 {
-  struct _dwg_object_object *parent;
-
-  BITCODE_BS class_version; /*!< r2010+ =3 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
+  AcDbObjectContextData_fields;
   BITCODE_H scale; /* DXF 340 */
   // ...??
 } Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA
 {
-  struct _dwg_object_object *parent;
-
-  BITCODE_BS class_version; /*!< r2010+ =3 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
+  AcDbObjectContextData_fields;
   BITCODE_H scale; /* DXF 340 */
   // ...??
 } Dwg_Object_MLEADEROBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA
 {
-  struct _dwg_object_object *parent;
-
-  BITCODE_BS class_version; /*!< r2010+ =3 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
+  AcDbObjectContextData_fields;
   BITCODE_H scale; 	/*!< DXF 340 */
   BITCODE_BL num_points;	/*< DXF 70 */
   BITCODE_3DPOINT* points;	/*!< DXF 10 */
@@ -5574,11 +5542,7 @@ typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA
 
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA
 {
-  struct _dwg_object_object *parent;
-
-  BITCODE_BS class_version; /*!< r2010+ =3 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
+  AcDbObjectContextData_fields;
   BITCODE_H scale; /* DXF 340 */
   // ...??
 } Dwg_Object_BLKREFOBJECTCONTEXTDATA;
@@ -6124,7 +6088,6 @@ typedef struct _dwg_object_object
     Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
     Dwg_Object_TEXTOBJECTCONTEXTDATA *TEXTOBJECTCONTEXTDATA;
-    Dwg_Object_OBJECTCONTEXTDATA *OBJECTCONTEXTDATA;
     Dwg_Object_PERSSUBENTMANAGER *PERSSUBENTMANAGER;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
     Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
@@ -7114,7 +7077,6 @@ EXPORT int dwg_add_IMAGEDEF (Dwg_Object *obj);
 EXPORT int dwg_add_IMAGEDEF_REACTOR (Dwg_Object *obj);
 EXPORT int dwg_add_LAYER_INDEX (Dwg_Object *obj);
 EXPORT int dwg_add_MLEADERSTYLE (Dwg_Object *obj);
-EXPORT int dwg_add_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_add_RASTERVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_add_SCALE (Dwg_Object *obj);
 EXPORT int dwg_add_SORTENTSTABLE (Dwg_Object *obj);

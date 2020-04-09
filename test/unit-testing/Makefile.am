@@ -147,7 +147,6 @@ testobjects = \
 	navisworksmodel \
 	navisworksmodeldef \
 	object_ptr \
-	objectcontextdata \
 	ole2frame \
 	oleframe \
 	perssubentmanager \

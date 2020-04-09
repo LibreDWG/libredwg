@@ -6512,6 +6512,8 @@ new_object (char *restrict name, char *restrict dxfname,
               const char *fname = NULL;
               if (pair->code == 420 && strEQc (name, "LAYER"))
                 fname = "color";
+              else if (pair->code == 421 && strEQc (name, "LIGHT"))
+                fname = "color";
               else if (pair->code == 421
                   && (strEQc (name, "VPORT") || strEQc (name, "VIEWPORT")
                       || strEQc (name, "VIEW")))

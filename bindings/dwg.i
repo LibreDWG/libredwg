@@ -281,7 +281,6 @@ EXPORT Dwg_Object_IMAGEDEF_REACTOR** dwg_getall_IMAGEDEF_REACTOR (Dwg_Data *dwg)
 EXPORT Dwg_Object_LAYER_INDEX** dwg_getall_LAYER_INDEX (Dwg_Data *dwg);
 EXPORT Dwg_Object_LAYOUT** dwg_getall_LAYOUT (Dwg_Data *dwg);
 EXPORT Dwg_Object_MLEADERSTYLE** dwg_getall_MLEADERSTYLE (Dwg_Data *dwg);
-EXPORT Dwg_Object_OBJECTCONTEXTDATA** dwg_getall_OBJECTCONTEXTDATA (Dwg_Data *dwg);
 EXPORT Dwg_Object_PLACEHOLDER** dwg_getall_PLACEHOLDER (Dwg_Data *dwg);
 EXPORT Dwg_Object_PROXY_OBJECT** dwg_getall_PROXY_OBJECT (Dwg_Data *dwg);
 EXPORT Dwg_Object_RASTERVARIABLES** dwg_getall_RASTERVARIABLES (Dwg_Data *dwg);
@@ -312,7 +311,6 @@ EXPORT Dwg_Object_VISUALSTYLE** dwg_getall_VISUALSTYLE (Dwg_Data *dwg);
 EXPORT Dwg_Object_ACSH_BOX_CLASS** dwg_getall_ACSH_BOX_CLASS (Dwg_Data *dwg);
 EXPORT Dwg_Object_ACSH_EXTRUSION_CLASS** dwg_getall_ACSH_EXTRUSION_CLASS (Dwg_Data *dwg);
 EXPORT Dwg_Object_ACSH_SWEEP_CLASS** dwg_getall_ACSH_SWEEP_CLASS (Dwg_Data *dwg);
-EXPORT Dwg_Object_ALDIMOBJECTCONTEXTDATA** dwg_getall_ALDIMOBJECTCONTEXTDATA (Dwg_Data *dwg);
 EXPORT Dwg_Object_ASSOC2DCONSTRAINTGROUP** dwg_getall_ASSOC2DCONSTRAINTGROUP (Dwg_Data *dwg);
 EXPORT Dwg_Object_ASSOCACTION** dwg_getall_ASSOCACTION (Dwg_Data *dwg);
 EXPORT Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY** dwg_getall_ASSOCEXTRUDEDSURFACEACTIONBODY (Dwg_Data *dwg);
@@ -492,7 +490,6 @@ EXPORT Dwg_Object_IMAGEDEF_REACTOR* dwg_object_to_IMAGEDEF_REACTOR (Dwg_Object *
 EXPORT Dwg_Object_LAYER_INDEX* dwg_object_to_LAYER_INDEX (Dwg_Object *obj);
 EXPORT Dwg_Object_LONG_TRANSACTION* dwg_object_to_LONG_TRANSACTION (Dwg_Object *obj);
 EXPORT Dwg_Object_MLEADERSTYLE* dwg_object_to_MLEADERSTYLE (Dwg_Object *obj);
-EXPORT Dwg_Object_OBJECTCONTEXTDATA* dwg_object_to_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT Dwg_Object_OBJECT_PTR* dwg_object_to_OBJECT_PTR (Dwg_Object *obj);
 EXPORT Dwg_Object_PERSSUBENTMANAGER* dwg_object_to_PERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT Dwg_Object_RASTERVARIABLES* dwg_object_to_RASTERVARIABLES (Dwg_Object *obj);
