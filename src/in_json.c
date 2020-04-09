@@ -295,8 +295,11 @@ static void
 json_fixed_key (char *key, Bit_Chain *restrict dat,
                 jsmntokens_t *restrict tokens)
 {
-  const jsmntok_t *t = &tokens->tokens[tokens->index];
-  int len = t->end - t->start;
+  const jsmntok_t *t;
+  int len;
+  JSON_TOKENS_CHECK_OVERFLOW_VOID
+  t = &tokens->tokens[tokens->index];
+  len = t->end - t->start;
   *key = 0;
   if (t->type != JSMN_STRING)
     {
