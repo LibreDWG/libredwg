@@ -192,6 +192,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
         if (dwg_dynapi_subclass_value (ptr, subclass, key, &value, &field))
           {
             double d = strtod (f->value, NULL);
+            if (f->code >= 50 && f->code < 59)
+              d = deg2rad (d);
             if (fabs (value - d) < 1e-6)
               {
                 if (g_counter > g_max_count)
@@ -589,6 +591,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                                          f->name, &value, &field))
               {
                 double d = strtod (f->value, NULL);
+                if (f->code >= 50 && f->code < 59)
+                  d = deg2rad (d);
                 if (fabs (value - d) < 1e-6)
                   {
                     if (g_counter > g_max_count)
