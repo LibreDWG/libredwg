@@ -6367,9 +6367,16 @@ DWG_ENTITY (LIGHT)
   FIELD_T (name, 1);
   FIELD_BS (type, 70);
   FIELD_B (status, 290); //127
-
+#ifdef IS_DXF
+  UNTIL (R_2000) {
+    FIELD_BL (color.rgb, 90);
+  } else {
+    FIELD_CMC (color, 63,421);
+  }
+#else
   FIELD_CMC (color, 63,421);
-  FIELD_B (plot_glyph, 291);
+#endif
+  FIELD_B (plot_glyph, 291); //0
 
 #if 0
     FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
@@ -6394,14 +6401,13 @@ DWG_ENTITY (LIGHT)
   FIELD_BS (attenuation_type, 72);
   FIELD_B (use_attenuation_limits, 292);
   FIELD_BD (attenuation_start_limit, 41);
-  FIELD_BS (shadow_map_size, 91); //256 11
   FIELD_BD (attenuation_end_limit, 42);
   FIELD_BD (hotspot_angle, 50);
-  if (FIELD_VALUE (type == 3))
-    FIELD_BD (falloff_angle, 51);
-  FIELD_B (cast_shadows, 293);
-  FIELD_BS (shadow_type, 73);   // 0 or 1
-  FIELD_RC (shadow_map_softness, 280);
+  FIELD_BD (falloff_angle, 51);
+  FIELD_B (cast_shadows, 293); // 1
+  FIELD_BS (shadow_type, 73);   // 0-1
+  FIELD_BS (shadow_map_size, 91); //256 11
+  FIELD_RC (shadow_map_softness, 280); // 1-4
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (lights_layer, 5, 0);

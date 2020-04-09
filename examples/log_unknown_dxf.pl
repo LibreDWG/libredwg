@@ -690,6 +690,7 @@ my $known = {
     1 => 'name',
     70 => 'type',
     290 => 'status',
+    90 => 'color.rgb', #r2000 only
     63 => 'color',
     291 => 'plot_glyph',
     40 => 'intensity',
