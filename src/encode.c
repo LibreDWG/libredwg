@@ -875,7 +875,7 @@ int dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                            unsigned long address);
 
 static int dwg_encode_xdata (Bit_Chain *restrict dat,
-                             Dwg_Object_XRECORD *restrict obj, int size);
+                             Dwg_Object_XRECORD *restrict obj, unsigned size);
 
 /*--------------------------------------------------------------------------------
  * Public functions
@@ -2976,7 +2976,7 @@ AFL_GCC_POP
 
 static int
 dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
-                  int xdata_size)
+                  unsigned xdata_size)
 {
   Dwg_Resbuf *rbuf = _obj->xdata;
   enum RES_BUF_VALUE_TYPE type;
@@ -2987,6 +2987,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
   unsigned long start = dat->byte, end = start + xdata_size;
   Dwg_Data *dwg = _obj->parent->dwg;
   Dwg_Object *obj = &dwg->object[_obj->parent->objid];
+
   if (dat->opts & DWG_OPTS_IN) // loosen the overflow checks on dxf/json imports
     end += xdata_size;
 
@@ -3003,20 +3004,31 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           {
             if (rbuf->value.str.size && dat->from_version >= R_2007)
               {
-                BITCODE_TV new = bit_embed_TU (rbuf->value.str.u.wdata);
-                free (rbuf->value.str.u.wdata);
-                rbuf->value.str.u.data = new;  // shares location with u.wdata
+                BITCODE_TV new = bit_embed_TU_size (rbuf->value.str.u.wdata,
+                                                    rbuf->value.str.size);
+                bit_write_RS (dat, rbuf->value.str.size);
+                bit_write_RC (dat, rbuf->value.str.codepage);
+                if (rbuf->value.str.u.data)
+                  bit_write_TF (dat, (BITCODE_TF)new, strlen(new));
+                else
+                  bit_write_TF (dat, (BITCODE_TF)"", 0);
+                LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]", j,
+                           rbuf->value.str.u.data, rbuf->type);
+                free (new);
               }
-            if (dat->byte + 3 + rbuf->value.str.size > end)
-              break;
-            bit_write_RS (dat, rbuf->value.str.size);
-            bit_write_RC (dat, rbuf->value.str.codepage);
-            if (rbuf->value.str.u.data)
-              bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
             else
-              bit_write_TF (dat, (BITCODE_TF)"", 0);
-            LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]", j,
-                       rbuf->value.str.u.data, rbuf->type);
+              {
+                if (dat->byte + 3 + rbuf->value.str.size > end)
+                  break;
+                bit_write_RS (dat, rbuf->value.str.size);
+                bit_write_RC (dat, rbuf->value.str.codepage);
+                if (rbuf->value.str.u.data)
+                  bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
+                else
+                  bit_write_TF (dat, (BITCODE_TF)"", 0);
+                LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]", j,
+                           rbuf->value.str.u.data, rbuf->type);
+              }
             LOG_POS;
           }
           LATER_VERSIONS
@@ -3026,14 +3038,21 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
               break;
             if (rbuf->value.str.size && dat->from_version < R_2007)
               {
+                // TODO: same len when converted to TU? normally yes
                 BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data);
-                free (rbuf->value.str.u.data);
-                rbuf->value.str.u.wdata = new; // shares location with u.data
+                bit_write_RS (dat, rbuf->value.str.size);
+                for (i = 0; i < rbuf->value.str.size; i++)
+                  bit_write_RS (dat, new[i]);
+                LOG_TRACE_TU ("xdata", new, rbuf->type);
+                free (new);
               }
-            bit_write_RS (dat, rbuf->value.str.size);
-            for (i = 0; i < rbuf->value.str.size; i++)
-              bit_write_RS (dat, rbuf->value.str.u.wdata[i]);
-            LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
+            else
+              {
+                bit_write_RS (dat, rbuf->value.str.size);
+                for (i = 0; i < rbuf->value.str.size; i++)
+                  bit_write_RS (dat, rbuf->value.str.u.wdata[i]);
+                LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
+              }
             LOG_POS;
           }
           break;
@@ -3117,23 +3136,26 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
         break;
       if (dat->byte >= end)
         {
-          LOG_WARN ("xdata overflow %d", xdata_size);
+          LOG_WARN ("xdata overflow %u", xdata_size);
           break;
         }
       j++;
     }
-  if (dat->opts & DWG_OPTS_IN) // imprecise xdata_size: calculate
+  if (_obj->xdata_size != dat->byte - start)
     {
-      _obj->xdata_size = dat->byte - start;
-      LOG_TRACE ("-xdata_size: " FORMAT_BL "\n", _obj->xdata_size);
-      return error;
-    }
-  else if (_obj->xdata_size != dat->byte - start)
-    {
-      LOG_WARN ("xdata Written %lu, expected " FORMAT_BL, dat->byte - start,
-                _obj->xdata_size);
-      _obj->xdata_size = dat->byte - start;
-      return error ? error : 1;
+      if (dat->opts & DWG_OPTS_IN) // imprecise xdata_size: calculate
+        {
+          _obj->xdata_size = dat->byte - start;
+          LOG_TRACE ("-xdata_size: " FORMAT_BL " (calculated)\n", _obj->xdata_size);
+          return error;
+        }
+      else
+        {
+          LOG_WARN ("xdata Written %lu, expected " FORMAT_BL, dat->byte - start,
+                    _obj->xdata_size);
+          _obj->xdata_size = dat->byte - start;
+          return error ? error : 1;
+        }
     }
   return 0;
 }

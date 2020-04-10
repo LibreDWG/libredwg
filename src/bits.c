@@ -1491,44 +1491,62 @@ static int heX (unsigned char c)
   return c >= 10 ? 'A' + c - 10 : '0' + c;
 }
 
+/* converts TU to ASCII with embedded \U+XXXX.
+   max len widechars.
+ */
+char *
+bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
+{
+  char *str;
+  int read, write, size;
+  uint16_t c = 0;
+
+  if (!wstr)
+    return NULL;
+  size = len + 1;
+  str = malloc (size);
+  read = write = 0;
+  while (read < len - 1)
+    {
+      c = *wstr++;
+      read++;
+      if (c < 256)
+        {
+          str[write++] = c & 0xFF;
+        }
+      else
+        {
+          if (write + 7 > size)
+            {
+              size += 8;
+              str = realloc (str, size);
+            }
+          str[write++] = '\\';
+          str[write++] = 'U';
+          str[write++] = '+';
+          str[write++] = heX (c >> 12);
+          str[write++] = heX (c >> 8);
+          str[write++] = heX (c >> 4);
+          str[write++] = heX (c);
+        }
+    }
+  str[write] = '\0';
+  return str;
+}
+
 /* converts TU to ASCII with embedded \U+XXXX */
 char *
 bit_embed_TU (BITCODE_TU restrict wstr)
 {
   BITCODE_TU tmp = wstr;
-  char *str;
-  int i, len = 0;
+  int len = 0;
   uint16_t c = 0;
 
   if (!wstr)
     return NULL;
   while ((c = *tmp++))
-    {
-      len++;
-      if (c >= 256)
-        len += 7;
-    }
-  str = malloc (len + 1);
-  i = 0;
-  while ((c = *wstr++))
-    {
-      if (c < 256)
-        {
-          str[i++] = c & 0xFF;
-        }
-      else
-        {
-          str[i++] = '\\';
-          str[i++] = 'U';
-          str[i++] = '+';
-          str[i++] = heX (c >> 12);
-          str[i++] = heX (c >> 8);
-          str[i++] = heX (c >> 4);
-          str[i++] = heX (c);
-        }
-    }
-  str[i] = '\0';
-  return str;
+    len++;
+  return bit_embed_TU_size (wstr, len + 1);
 }
 
 /** Write ASCIIZ text.
@@ -1620,7 +1638,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
 }
 
 /** Read UCS-2 unicode text. no supplementary planes
- * See also bfr_read_string()
+ *  See also bfr_read_string()
  */
 BITCODE_TU
 bit_read_TU (Bit_Chain *restrict dat)

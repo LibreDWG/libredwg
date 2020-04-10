@@ -5551,9 +5551,22 @@ DWG_OBJECT (XRECORD)
       FIELD_BS (cloning_flags, 280);
     }
   }
-  FIELD_BL (xdata_size, 0);
-  //VALUEOUTOFBOUNDS (xdata_size, 0xf0000)
-  FIELD_XDATA (xdata, xdata_size);
+  ENCODER {
+    unsigned long pos = bit_position (dat);
+    unsigned xdata_size = _obj->xdata_size;
+    FIELD_BL (xdata_size, 0);
+    FIELD_XDATA (xdata, xdata_size);
+    if (xdata_size != _obj->xdata_size)
+      { // easiest is to write both again.
+        // else do BL patching with very unlikely bitwise memmove
+        bit_set_position (dat, pos);
+        FIELD_BL (xdata_size, 0);
+        FIELD_XDATA (xdata, xdata_size);
+      }
+  } else {
+    FIELD_BL (xdata_size, 0);
+    FIELD_XDATA (xdata, xdata_size);
+  }
 #ifndef IS_DXF
   SINCE (R_2000) {
     FIELD_BS (cloning_flags, 280);

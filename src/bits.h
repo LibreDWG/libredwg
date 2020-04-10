@@ -237,6 +237,7 @@ void bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain);
 
 /* Converts UCS-2 to ASCII (with \U+XXXX), returning a copy. */
 EXPORT char *bit_embed_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
+EXPORT char *bit_embed_TU_size (BITCODE_TU restrict wstr, const int len) ATTRIBUTE_MALLOC;
 /* Converts UCS-2 to UTF-8, returning a copy. */
 EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 
