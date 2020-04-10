@@ -43,6 +43,7 @@
 #include "dwg.h"
 #include "encode.h"
 #include "decode.h"
+#include "free.h"
 
 // from dynapi
 bool is_dwg_object (const char *name);
@@ -1959,6 +1960,41 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+static BITCODE_BL
+add_DUMMY_eed (Dwg_Object *obj)
+{
+  Dwg_Object_Entity *ent = obj->tio.entity;
+  const BITCODE_BL num_eed = ent->num_eed;
+  Dwg_Eed_Data *data;
+  const bool is_tu = obj->parent->header.version >= R_2007;
+  const int len = strlen (obj->name);
+  const int size = is_tu ? 3 + ((len + 1) * 2) : len + 5;
+
+  if (num_eed) // replace it
+    dwg_free_eed (obj);
+  ent->num_eed = 1;
+  ent->eed = calloc (1, sizeof (Dwg_Eed));
+  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size, 1);
+  ent->eed[0].size = size;
+  // TODO: add LibreDWG appid
+  dwg_add_handle (&ent->eed[0].handle, 5, 0x12, NULL);
+  data->code = 0; // RC
+  if (is_tu) // probably never used, write DUMMY placeholder to R_2007
+    {
+      BITCODE_TU wstr = bit_utf8_to_TU (obj->name);
+      data->u.eed_0_r2007.length = len * 2; // RS
+      memcpy (data->u.eed_0_r2007.string, wstr, (len + 1) * 2);
+    }
+  else
+    {
+      data->u.eed_0.length = len;  // RC
+      data->u.eed_0.codepage = 30; // RS
+      memcpy (data->u.eed_0.string, obj->name, len + 1);
+    }
+  LOG_TRACE ("EED[0]: code: 0, string: %s\n", obj->name);
+  return 1;
+}
+
 int
 dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                        unsigned long address)
@@ -2295,6 +2331,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                       obj->tio.entity->num_reactors = 0;
                       obj->tio.entity->reactors = NULL;
                     }
+                  add_DUMMY_eed (obj);
                   free (obj->unknown_bits);
                   obj->tio.entity->tio.POINT = _obj
                     = realloc (_obj, sizeof (Dwg_Entity_POINT));
@@ -2327,6 +2364,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
+                  add_DUMMY_eed (obj);
                   // patch away some common data: reactors. keep owner and xdicobj
                   obj->type = DWG_TYPE_DUMMY; // TODO or PLACEHOLDER if available, or even PROXY_OBJECT
                   obj->fixedtype = DWG_TYPE_DUMMY;
