@@ -1,4 +1,4 @@
-#!/bin/sh
+#!@BASH@
 # create -v4 logs for DWGs, you can override -v?
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
@@ -10,10 +10,15 @@ v=-v4
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
 ob="$b"
+log=
 
 for d in "$@"; do
+    # we do use bash
+    # shellcheck disable=SC2039
     case $d in
         -v*) v="$d"
+             ;;
+        -l*) log="${d:2}"
              ;;
         *)
         if [ ! -f "$d" ]; then
@@ -33,10 +38,11 @@ for d in "$@"; do
         if [ "$dir" = "_td" ]; then dir=""; fi
         if [ "$dir" = "_." ]; then dir=""; fi
         b=$(basename "$d" .dwg)
-        log="$b$dir.log"
+        [ -z "$log" ] && log="$b$dir.log"
         echo "programs/dwgread $v $d 2>$log"
         # (sleep 12s; killall dwgread 2>/dev/null) &
         @TIMEOUT_10@ @LTEXEC@ programs/dwgread "$v" "$d" 2>"$log"
+        log=
         ;;
     esac
 done

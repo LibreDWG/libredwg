@@ -57,6 +57,7 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 dnl AC_PROG_RANLIB: in LT_INIT
 LT_INIT
+AC_CHECK_PROGS([BASH], [bash])
 
 if test x$enable_shared = xyes; then
    AC_DEFINE([ENABLE_SHARED],1,[Define to 1 if a shared library will be built])
