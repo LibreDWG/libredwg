@@ -605,13 +605,18 @@ main (int argc, char const *argv[])
     fail ("bit_read_TV");
   bit_set_position (&bitchain, pos);
   free (str);
+  for (int i = 0; i < 6; i++)
+    bit_write_B (&bitchain, 0); // padding for the T BS, to have aligned strings at 67
+  pos = bit_position (&bitchain); // 526
 
   {
     BITCODE_T wstr;
     const uint16_t exp[] = {'T', 'e', 'i', 'g', 'h', 'a', 0x2122, 0};
-    bitchain.version = R_2007; // @65.0
+    bitchain.version = R_2007; // @65.6
     bit_write_T (&bitchain, (char *)"Teigha\\U+2122"); // convert to unicode
-    if (bitchain.byte == 82 && bitchain.bit == 2)
+    if (bitchain.byte == 83 && bitchain.bit == 0 &&    // containing the ending 0L
+        bitchain.chain[79] == 0x22 &&
+        bitchain.chain[80] == 0x21)
       pass ();
     else
       fail ("bit_write_T => TU @%ld.%d", bitchain.byte, bitchain.bit);
@@ -623,30 +628,31 @@ main (int argc, char const *argv[])
     if (wstr && !memcmp (wstr, exp, sizeof (exp)))
       pass ();
     else
-      fail ("bit_read_T => TU");
+      fail ("bit_read_T => TU @%ld.%d", bitchain.byte, bitchain.bit);
     bit_set_position (&bitchain, pos);
     free (wstr);
 
     bit_write_T (&bitchain, (char*)exp); // convert to ASCII via embed
-    if (bitchain.byte == 80 && bitchain.bit == 2)
+    if (bitchain.byte == 81 && bitchain.bit == 0)
       pass ();
     else
-      fail ("bit_write_T => TV @%ld.%d", bitchain.byte, bitchain.bit);
+      fail ("bit_write_T => TV \"%s\" @%ld.%d", &bitchain.chain[67],
+            bitchain.byte, bitchain.bit);
 
-    bit_set_position (&bitchain, 65 * 8);
-    bitchain.from_version = R_2000;
-    bitchain.version = R_2007;
-    wstr = bit_read_T (&bitchain);
-    if (wstr && !strcmp (wstr, "Teigha\\U+2122"))
+    bit_set_position (&bitchain, pos);
+    bitchain.version = R_2000;
+    bitchain.from_version = R_2007;
+    str = bit_read_T (&bitchain);
+    if (str && !strcmp (str, "Teigha\\U+2122"))
       pass ();
     else
-      fail ("bit_read_T => TV");
+      fail ("bit_read_T => TV \"%s\" @%ld.%d", str, bitchain.byte, bitchain.bit);
     bitchain.from_version = bitchain.version = R_2004;
-    free (wstr);
+    free (str);
   }
 
   bit_write_L (&bitchain, 20);
-  if (bitchain.byte == 84 && bitchain.bit == 2)
+  if (bitchain.byte == 99 && bitchain.bit == 0)
     pass ();
   else
     fail ("bit_write_L @%ld.%d", bitchain.byte, bitchain.bit);
@@ -667,7 +673,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
     bit_write_CMC (&bitchain, &color);
-    if (bitchain.byte == 85 && bitchain.bit == 4)
+    if (bitchain.byte == 100 && bitchain.bit == 2)
       pass ();
     else
       fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
@@ -700,7 +706,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
     bit_write_CMC (&bitchain, &color);
-    if (bitchain.byte == 107 && bitchain.bit == 2)
+    if (bitchain.byte == 122 && bitchain.bit == 0)
       pass ();
     else
       fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
@@ -732,18 +738,18 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel (&bitchain, sentinel);
-    if (bitchain.byte == 124)
+    if (bitchain.byte == 139)
       pass ();
     else
       {
         fail ("bit_search_sentinel %lu", bitchain.byte);
-        bitchain.byte = 124;
+        bitchain.byte = 139;
       }
   }
   {
     unsigned int check
         = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 124L);
-    if (check == 0xA583)
+    if (check == 0x7C16)
       pass ();
     else
       fail ("bit_calc_CRC %04X", check);
