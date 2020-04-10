@@ -2975,22 +2975,26 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 AFL_GCC_POP
 
 static int
-dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
+dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                   int xdata_size)
 {
-  Dwg_Resbuf *rbuf = obj->xdata;
+  Dwg_Resbuf *rbuf = _obj->xdata;
   enum RES_BUF_VALUE_TYPE type;
+  int error = 0;
   int i;
   unsigned j = 0;
-  BITCODE_BL num_xdata = obj->num_xdata;
+  BITCODE_BL num_xdata = _obj->num_xdata;
   unsigned long start = dat->byte, end = start + xdata_size;
-  int error = 0;
+  Dwg_Data *dwg = _obj->parent->dwg;
+  Dwg_Object *obj = &dwg->object[_obj->parent->objid];
+  if (dat->opts & DWG_OPTS_IN) // loosen the overflow checks on dxf/json imports
+    end += xdata_size;
 
   while (rbuf)
     {
-      LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS]\n", num_xdata,
-                  rbuf->type)
       bit_write_RS (dat, rbuf->type);
+      LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS] @%lu.%u\n", j,
+                  rbuf->type, dat->byte - obj->address, dat->bit)
       type = get_base_value_type (rbuf->type);
       switch (type)
         {
@@ -3011,8 +3015,9 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
               bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
             else
               bit_write_TF (dat, (BITCODE_TF)"", 0);
-            LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", j,
+            LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]", j,
                        rbuf->value.str.u.data, rbuf->type);
+            LOG_POS;
           }
           LATER_VERSIONS
           {
@@ -3029,41 +3034,47 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             for (i = 0; i < rbuf->value.str.size; i++)
               bit_write_RS (dat, rbuf->value.str.u.wdata[i]);
             LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
+            LOG_POS;
           }
           break;
         case VT_REAL:
           if (dat->byte + 8 > end)
             break;
           bit_write_RD (dat, rbuf->value.dbl);
-          LOG_TRACE ("xdata[%u]: %f [RD %d]\n", j, rbuf->value.dbl,
+          LOG_TRACE ("xdata[%u]: %f [RD %d]", j, rbuf->value.dbl,
                      rbuf->type);
+          LOG_POS;
           break;
         case VT_BOOL:
         case VT_INT8:
           bit_write_RC (dat, rbuf->value.i8);
-          LOG_TRACE ("xdata[%u]: %d [RC %d]\n", j, (int)rbuf->value.i8,
+          LOG_TRACE ("xdata[%u]: %d [RC %d]", j, (int)rbuf->value.i8,
                      rbuf->type);
+          LOG_POS;
           break;
         case VT_INT16:
           if (dat->byte + 2 > end)
             break;
           bit_write_RS (dat, rbuf->value.i16);
-          LOG_TRACE ("xdata[%u]: %d [RS %d]\n", j, (int)rbuf->value.i16,
+          LOG_TRACE ("xdata[%u]: %d [RS %d]", j, (int)rbuf->value.i16,
                      rbuf->type);
+          LOG_POS;
           break;
         case VT_INT32:
           if (dat->byte + 4 > end)
             break;
           bit_write_RL (dat, rbuf->value.i32);
-          LOG_TRACE ("xdata[%d]: %ld [RL %d]\n", j, (long)rbuf->value.i32,
+          LOG_TRACE ("xdata[%d]: %ld [RL %d]", j, (long)rbuf->value.i32,
                      rbuf->type);
+          LOG_POS;
           break;
         case VT_INT64:
           if (dat->byte + 8 > end)
             break;
           bit_write_BLL (dat, rbuf->value.i64);
-          LOG_TRACE ("xdata[%u]: " FORMAT_BLL " [BLL %d]\n", j,
+          LOG_TRACE ("xdata[%u]: " FORMAT_BLL " [BLL %d]", j,
                      rbuf->value.i64, rbuf->type);
+          LOG_POS;
           break;
         case VT_POINT3D:
           if (dat->byte + 24 > end)
@@ -3071,8 +3082,9 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           bit_write_RD (dat, rbuf->value.pt[0]);
           bit_write_RD (dat, rbuf->value.pt[1]);
           bit_write_RD (dat, rbuf->value.pt[2]);
-          LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", j, rbuf->value.pt[0],
+          LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]", j, rbuf->value.pt[0],
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
+          LOG_POS;
           break;
         case VT_BINARY:
           if (dat->byte + rbuf->value.str.size > end)
@@ -3082,6 +3094,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           LOG_TRACE ("xdata[%u]: [TF %d %d] ", j, rbuf->value.str.size,
                      rbuf->type);
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
+          LOG_POS;
           break;
         case VT_HANDLE:
         case VT_OBJECTID:
@@ -3089,8 +3102,9 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
             break;
           for (i = 0; i < 8; i++)
             bit_write_RC (dat, rbuf->value.hdl[i]);
-          LOG_TRACE ("xdata[%u]: " FORMAT_H " [H %d]\n", j,
+          LOG_TRACE ("xdata[%u]: " FORMAT_H " [H %d]", j,
                      ARGS_H (rbuf->value.h), rbuf->type);
+          LOG_POS;
           break;
         case VT_INVALID:
         default:
@@ -3099,17 +3113,26 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           break;
         }
       rbuf = rbuf->next;
-      if (j > obj->num_xdata)
+      if (j > _obj->num_xdata)
         break;
-      if (dat->byte - start >= (unsigned long)xdata_size)
-        break;
+      if (dat->byte >= end)
+        {
+          LOG_WARN ("xdata overflow %d", xdata_size);
+          break;
+        }
       j++;
     }
-  if (obj->xdata_size != dat->byte - start)
+  if (dat->opts & DWG_OPTS_IN) // imprecise xdata_size: calculate
     {
-      LOG_WARN ("xdata Written %lu, expected %d", dat->byte - start,
-                obj->xdata_size);
-      obj->xdata_size = dat->byte - start;
+      _obj->xdata_size = dat->byte - start;
+      LOG_TRACE ("-xdata_size: " FORMAT_BL "\n", _obj->xdata_size);
+      return error;
+    }
+  else if (_obj->xdata_size != dat->byte - start)
+    {
+      LOG_WARN ("xdata Written %lu, expected " FORMAT_BL, dat->byte - start,
+                _obj->xdata_size);
+      _obj->xdata_size = dat->byte - start;
       return error ? error : 1;
     }
   return 0;
