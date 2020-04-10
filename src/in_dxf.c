@@ -3567,9 +3567,22 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 93:
               if (!ctx->has_content_blk)
                 goto unknown_mleader;
-              ctx->content.blk.color.index = pair->value.i;
-              LOG_TRACE ("%s.ctx.content.blk.color.index = %d [CMC %d]\n",
-                         obj->name, pair->value.i, pair->code);
+              if (pair->value.u > 256)
+                {
+                  ctx->content.blk.color.index = 256;
+                  ctx->content.blk.color.rgb = pair->value.u & 0xFFFFFF;
+                  ctx->content.blk.color.alpha = pair->value.u & 0xFF000000;
+                  LOG_TRACE (
+                      "%s.leaders[].lines[%d].color.rgb = %06X [CMC %d]\n",
+                      obj->name, i, pair->value.u, pair->code);
+                }
+              else
+                {
+                  ctx->content.blk.color.index = pair->value.i;
+                  LOG_TRACE (
+                      "%s.leaders[].lines[%d].color.index = %d [CMC %d]\n",
+                      obj->name, i, pair->value.i, pair->code);
+                }
               break;
             case 47:
               if (!ctx->has_content_blk)
@@ -7142,7 +7155,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           BITCODE_CMC color;
                           dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                                    &color, NULL);
-                          if (pair->code < 100)
+                          if (pair->code < 90)
                             {
                               color.index = pair->value.i;
                               LOG_TRACE ("%s.%s.index = %d [%s %d]\n", name,
