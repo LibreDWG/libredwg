@@ -43,6 +43,7 @@
 #include "dwg.h"
 #include "encode.h"
 #include "decode.h"
+#include "classes.h"
 #include "free.h"
 
 // from dynapi
@@ -1803,6 +1804,80 @@ dxf_encode_alias (char *restrict name)
     return NULL;
 }
 
+// follow to the DICT and disable the link in its itemhandle(s)
+// only needed until we can write all object types (at least the ones from the NOD)
+static void
+disable_dictlink (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
+                  const char *name)
+{
+  Dwg_Object_DICTIONARY *_obj;
+  Dwg_Object_Ref *nullhdl;
+  Dwg_Object *dict = dwg_ref_object_silent (dwg, ref);
+
+  if (!dict || (dict->fixedtype != DWG_TYPE_DICTIONARY))
+    return;
+  nullhdl = dwg_add_handleref (dwg, 0, 0, NULL);
+  _obj = dict->tio.object->tio.DICTIONARY;
+  for (BITCODE_BL i = 0; i < _obj->numitems; i++)
+    {
+      Dwg_Object *o = dwg_ref_object_silent (dwg, _obj->itemhandles[i]);
+      if (o && !is_type_stable (o->fixedtype))
+        {
+          LOG_TRACE ("Disable link to %s " FORMAT_REF " for NOD.%s\n", o->name,
+                     ARGS_REF (_obj->itemhandles[i]), name);
+          _obj->itemhandles[i] = nullhdl;
+        }
+    }
+  return;
+}
+
+// NOD: ACAD_TABLESTYLE => DICT name[0] - itemhandles[0] => TABLESTYLE (Unstable)
+// AcDbVariableDictionary: CTABLESTYLE => DICTVAR str
+// only needed until we can write all object types (at least the ones from the NOD)
+static void
+fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dict
+{
+  Dwg_Object_DICTIONARY *_obj;
+  if (obj->handle.value != 0xC)
+    return;
+  _obj = obj->tio.object->tio.DICTIONARY;
+  // => DICTIONARY with name of current style, and link to it.
+  // If the link target is disabled (unstable, unhandled or such), disable it.
+  for (BITCODE_BL i = 0; i < _obj->numitems; i++)
+    {
+// TODO TUcmp
+#define DISABLE_NODSTYLE(name)                         \
+        if (!is_type_stable (DWG_TYPE_##name)          \
+            && strEQc (_obj->texts[i], "ACAD_" #name)) \
+          disable_dictlink (dwg, _obj->itemhandles[i], "ACAD_" #name)
+
+      DISABLE_NODSTYLE (ASSOCNETWORK);
+      else
+      DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER);
+      else
+      DISABLE_NODSTYLE (DETAILVIEWSTYLE);
+      else
+      DISABLE_NODSTYLE (MATERIAL);
+      else
+      DISABLE_NODSTYLE (MLEADERSTYLE);
+      else
+      DISABLE_NODSTYLE (MLINESTYLE);
+      else
+      DISABLE_NODSTYLE (PERSUBENTMGR);
+      else
+      DISABLE_NODSTYLE (PLOTSETTINGS);
+      //else
+      //DISABLE_NODSTYLE (PLOTSTYLENAME);
+      else
+      DISABLE_NODSTYLE (SECTIONVIEWSTYLE);
+      else
+      DISABLE_NODSTYLE (TABLESTYLE);
+      else
+      DISABLE_NODSTYLE (VISUALSTYLE);
+    }
+#undef DISABLE_NODSTYLE
+}
+
 Dwg_Class *
 dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
 {
@@ -2211,6 +2286,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_XLINE (dat, obj);
       break;
     case DWG_TYPE_DICTIONARY:
+      fixup_NOD (dwg, obj); // named object dict
       error = dwg_encode_DICTIONARY (dat, obj);
       break;
     case DWG_TYPE_MTEXT:
