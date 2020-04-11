@@ -6109,7 +6109,7 @@ DWG_OBJECT_END
 
 // (varies) UNSTABLE
 // works ok on all example_20* but this coverage seems limited
-DWG_OBJECT (PERSSUBENTMANAGER)
+DWG_OBJECT (PERSUBENTMGR)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbPersSubentManager)

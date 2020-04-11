@@ -578,7 +578,7 @@ typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockp
 typedef struct _dwg_object_GEODATA                         dwg_obj_geodata;
 typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transaction;
 typedef struct _dwg_object_OBJECT_PTR                      dwg_obj_object_ptr;
-typedef struct _dwg_object_PERSSUBENTMANAGER               dwg_obj_perssubentmanager;
+typedef struct _dwg_object_PERSUBENTMGR                    dwg_obj_persubentmgr;
 typedef struct _dwg_object_SECTION_MANAGER                 dwg_obj_section_manager;
 typedef struct _dwg_object_TABLEGEOMETRY                   dwg_obj_tablegeometry;
 typedef struct _dwg_object_TABLESTYLE                      dwg_obj_tablestyle;
@@ -795,7 +795,7 @@ DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
 DWG_GETALL_OBJECT_DECL (GEODATA)
 DWG_GETALL_OBJECT_DECL (LONG_TRANSACTION)
 DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
-DWG_GETALL_OBJECT_DECL (PERSSUBENTMANAGER)
+DWG_GETALL_OBJECT_DECL (PERSUBENTMGR)
 DWG_GETALL_OBJECT_DECL (PROXY_OBJECT)
 DWG_GETALL_OBJECT_DECL (SECTION_MANAGER)
 DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY)
@@ -998,7 +998,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LONG_TRANSACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSSUBENTMANAGER)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSUBENTMGR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RASTERVARIABLES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SCALE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_MANAGER)
@@ -1269,7 +1269,7 @@ dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
 dwg_get_OBJECT_DECL (obj_geodata, GEODATA);
 dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
 dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
-dwg_get_OBJECT_DECL (obj_perssubentmanager, PERSSUBENTMANAGER);
+dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
 dwg_get_OBJECT_DECL (obj_proxy, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_section_manager, SECTION_MANAGER)
 dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);

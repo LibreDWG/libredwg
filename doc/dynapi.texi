@@ -6941,9 +6941,9 @@ struct _dwg_object_object*
 @end vtable
 @end indentedblock
 
-@strong{PERSSUBENTMANAGER} @anchor{PERSSUBENTMANAGER}
-@cindex object, PERSSUBENTMANAGER
-@vindex PERSSUBENTMANAGER
+@strong{PERSUBENTMGR} @anchor{PERSUBENTMGR}
+@cindex object, PERSUBENTMGR
+@vindex PERSUBENTMGR
 
 @indentedblock
 @vtable @code

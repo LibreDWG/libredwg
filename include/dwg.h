@@ -440,7 +440,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NAVISWORKSMODELDEF,
   DWG_TYPE_NPOCOLLECTION,
   DWG_TYPE_OBJECT_PTR,
-  DWG_TYPE_PERSSUBENTMANAGER,
+  DWG_TYPE_PERSUBENTMGR,
   DWG_TYPE_PLANESURFACE,
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_POINTCLOUD,
@@ -5032,7 +5032,7 @@ typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER
   BITCODE_H  block;
 } Dwg_Object_DYNAMICBLOCKPURGEPREVENTER;
 
-typedef struct _dwg_object_PERSSUBENTMANAGER
+typedef struct _dwg_object_PERSUBENTMGR
 {
   struct _dwg_object_object *parent;
   BITCODE_BL class_version; /*!< DXF 90 2 */
@@ -5042,7 +5042,7 @@ typedef struct _dwg_object_PERSSUBENTMANAGER
   BITCODE_BL unknown_bl4;   /*!< DXF 90 0 */
   BITCODE_BL unknown_bl5;   /*!< DXF 90 1 */
   BITCODE_BL unknown_bl6;   /*!< DXF 90 1 */
-} Dwg_Object_PERSSUBENTMANAGER;
+} Dwg_Object_PERSUBENTMGR;
 
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 {
@@ -6088,7 +6088,7 @@ typedef struct _dwg_object_object
     Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
     Dwg_Object_TEXTOBJECTCONTEXTDATA *TEXTOBJECTCONTEXTDATA;
-    Dwg_Object_PERSSUBENTMANAGER *PERSSUBENTMANAGER;
+    Dwg_Object_PERSUBENTMGR *PERSUBENTMGR;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
     Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
     Dwg_Object_PROXY_OBJECT *PROXY_OBJECT;
@@ -7097,7 +7097,7 @@ EXPORT int dwg_add_HELIX (Dwg_Object *obj);
 EXPORT int dwg_add_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_add_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_add_OBJECT_PTR (Dwg_Object *obj);
-EXPORT int dwg_add_PERSSUBENTMANAGER (Dwg_Object *obj);
+EXPORT int dwg_add_PERSUBENTMGR (Dwg_Object *obj);
 EXPORT int dwg_add_PLOTSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_add_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_add_SECTION_MANAGER (Dwg_Object *obj);

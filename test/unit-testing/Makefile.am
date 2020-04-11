@@ -149,7 +149,7 @@ testobjects = \
 	object_ptr \
 	ole2frame \
 	oleframe \
-	perssubentmanager \
+	persubentmgr \
 	placeholder \
 	planesurface \
 	plotsettings \

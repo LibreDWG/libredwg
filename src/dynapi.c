@@ -182,7 +182,7 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "MTEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0",	/* 67 */
   "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
   "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "PERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "PERSUBENTMGR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
   "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
   "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
   "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
@@ -6142,23 +6142,23 @@ static const Dwg_DYNAPI_field _dwg_OBJECT_PTR_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_PERSSUBENTMANAGER: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_PERSSUBENTMANAGER_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_PERSSUBENTMANAGER, parent),
+/* from typedef struct _dwg_object_PERSUBENTMGR: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_PERSUBENTMGR_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_PERSUBENTMGR, parent),
     1,1,0, 0 },
-  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSSUBENTMANAGER, class_version),
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSUBENTMGR, class_version),
     0,0,0, 90 },
-  { "unknown_bl1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSSUBENTMANAGER, unknown_bl1),
+  { "unknown_bl1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSUBENTMGR, unknown_bl1),
     0,0,0, 90 },
-  { "unknown_bl2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSSUBENTMANAGER, unknown_bl2),
+  { "unknown_bl2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSUBENTMGR, unknown_bl2),
     0,0,0, 90 },
-  { "unknown_bl3",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSSUBENTMANAGER, unknown_bl3),
+  { "unknown_bl3",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSUBENTMGR, unknown_bl3),
     0,0,0, 90 },
-  { "unknown_bl4",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSSUBENTMANAGER, unknown_bl4),
+  { "unknown_bl4",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSUBENTMGR, unknown_bl4),
     0,0,0, 90 },
-  { "unknown_bl5",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSSUBENTMANAGER, unknown_bl5),
+  { "unknown_bl5",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSUBENTMGR, unknown_bl5),
     0,0,0, 90 },
-  { "unknown_bl6",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSSUBENTMANAGER, unknown_bl6),
+  { "unknown_bl6",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PERSUBENTMGR, unknown_bl6),
     0,0,0, 90 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -9058,7 +9058,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "OBJECT_PTR", DWG_TYPE_OBJECT_PTR /*(583)*/, _dwg_OBJECT_PTR_fields, sizeof (struct _dwg_object_OBJECT_PTR) },	/* 113 */
   { "OLE2FRAME", DWG_TYPE_OLE2FRAME /*(74)*/, _dwg_OLE2FRAME_fields, sizeof (struct _dwg_entity_OLE2FRAME) },	/* 114 */
   { "OLEFRAME", DWG_TYPE_OLEFRAME /*(43)*/, _dwg_OLEFRAME_fields, sizeof (struct _dwg_entity_OLEFRAME) },	/* 115 */
-  { "PERSSUBENTMANAGER", DWG_TYPE_PERSSUBENTMANAGER /*(584)*/, _dwg_PERSSUBENTMANAGER_fields, sizeof (struct _dwg_object_PERSSUBENTMANAGER) },	/* 116 */
+  { "PERSUBENTMGR", DWG_TYPE_PERSUBENTMGR /*(584)*/, _dwg_PERSUBENTMGR_fields, sizeof (struct _dwg_object_PERSUBENTMGR) },	/* 116 */
   { "PLACEHOLDER", DWG_TYPE_PLACEHOLDER /*(80)*/, _dwg_PLACEHOLDER_fields, sizeof (struct _dwg_object_PLACEHOLDER) },	/* 117 */
   { "PLANESURFACE", DWG_TYPE_PLANESURFACE /*(585)*/, _dwg_PLANESURFACE_fields, sizeof (struct _dwg_entity_PLANESURFACE) },	/* 118 */
   { "PLOTSETTINGS", DWG_TYPE_PLOTSETTINGS /*(586)*/, _dwg_PLOTSETTINGS_fields, sizeof (struct _dwg_object_PLOTSETTINGS) },	/* 119 */

@@ -300,7 +300,7 @@ EXPORT Dwg_Object_DYNAMICBLOCKPURGEPREVENTER** dwg_getall_DYNAMICBLOCKPURGEPREVE
 EXPORT Dwg_Object_GEODATA** dwg_getall_GEODATA (Dwg_Data *dwg);
 EXPORT Dwg_Object_LONG_TRANSACTION** dwg_getall_LONG_TRANSACTION (Dwg_Data *dwg);
 EXPORT Dwg_Object_OBJECT_PTR** dwg_getall_OBJECT_PTR (Dwg_Data *dwg);
-EXPORT Dwg_Object_PERSSUBENTMANAGER** dwg_getall_PERSSUBENTMANAGER (Dwg_Data *dwg);
+EXPORT Dwg_Object_PERSUBENTMGR** dwg_getall_PERSUBENTMGR (Dwg_Data *dwg);
 EXPORT Dwg_Object_PROXY_OBJECT** dwg_getall_PROXY_OBJECT (Dwg_Data *dwg);
 EXPORT Dwg_Object_SECTION_MANAGER** dwg_getall_SECTION_MANAGER (Dwg_Data *dwg);
 EXPORT Dwg_Object_TABLEGEOMETRY** dwg_getall_TABLEGEOMETRY (Dwg_Data *dwg);
@@ -491,7 +491,7 @@ EXPORT Dwg_Object_LAYER_INDEX* dwg_object_to_LAYER_INDEX (Dwg_Object *obj);
 EXPORT Dwg_Object_LONG_TRANSACTION* dwg_object_to_LONG_TRANSACTION (Dwg_Object *obj);
 EXPORT Dwg_Object_MLEADERSTYLE* dwg_object_to_MLEADERSTYLE (Dwg_Object *obj);
 EXPORT Dwg_Object_OBJECT_PTR* dwg_object_to_OBJECT_PTR (Dwg_Object *obj);
-EXPORT Dwg_Object_PERSSUBENTMANAGER* dwg_object_to_PERSSUBENTMANAGER (Dwg_Object *obj);
+EXPORT Dwg_Object_PERSUBENTMGR* dwg_object_to_PERSUBENTMGR (Dwg_Object *obj);
 EXPORT Dwg_Object_RASTERVARIABLES* dwg_object_to_RASTERVARIABLES (Dwg_Object *obj);
 EXPORT Dwg_Object_SCALE* dwg_object_to_SCALE (Dwg_Object *obj);
 EXPORT Dwg_Object_SECTION_MANAGER* dwg_object_to_SECTION_MANAGER (Dwg_Object *obj);

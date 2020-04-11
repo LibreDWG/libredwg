@@ -4185,10 +4185,10 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
-add_PERSSUBENTMANAGER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                        Dxf_Pair *restrict pair)
 {
-  Dwg_Object_PERSSUBENTMANAGER *o = obj->tio.object->tio.PERSSUBENTMANAGER;
+  Dwg_Object_PERSUBENTMGR *o = obj->tio.object->tio.PERSUBENTMGR;
   Dwg_Data *dwg = obj->parent;
 
   EXPECT_INT_DXF ("class_version", 90, BL);
@@ -6154,13 +6154,13 @@ new_object (char *restrict name, char *restrict dxfname,
                       UPGRADE_ENTITY (VERTEX_2D, VERTEX_PFACE_FACE)
                     }
                 }
-              // with PERSSUBENTMANAGER
-              else if (obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER
+              // with PERSUBENTMGR
+              else if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR
                        && strEQc (subclass, "AcDbPersSubentManager"))
                 {
                   dxf_free_pair (pair);
                   pair = dxf_read_pair (dat);
-                  pair = add_PERSSUBENTMANAGER (obj, dat, pair); // NULL for success
+                  pair = add_PERSUBENTMGR (obj, dat, pair); // NULL for success
                   if (!pair)
                     goto next_pair;
                   else
@@ -6662,9 +6662,9 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               LOG_TRACE ("OLE2FRAME.data_size = %ld [BL 90]\n", pair->value.l);
             }
-          else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
+          else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
             {
-              pair = add_PERSSUBENTMANAGER (obj, dat, pair); // NULL for success
+              pair = add_PERSUBENTMGR (obj, dat, pair); // NULL for success
               if (!pair)
                 goto next_pair;
               else

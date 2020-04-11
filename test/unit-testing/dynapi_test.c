@@ -36352,128 +36352,128 @@ static int test_OBJECT_PTR (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_PERSSUBENTMANAGER (const Dwg_Object *obj)
+static int test_PERSUBENTMGR (const Dwg_Object *obj)
 {
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_PERSSUBENTMANAGER *restrict perssubentmanager = obj->tio.object->tio.PERSSUBENTMANAGER;
+  Dwg_Object_PERSUBENTMGR *restrict persubentmgr = obj->tio.object->tio.PERSUBENTMGR;
   failed = 0;
   {
     BITCODE_BL class_version;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "class_version", &class_version, NULL)
-        && class_version == perssubentmanager->class_version)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "class_version", &class_version, NULL)
+        && class_version == persubentmgr->class_version)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.class_version [BL] %u != %u", perssubentmanager->class_version, class_version);
+      fail ("PERSUBENTMGR.class_version [BL] %u != %u", persubentmgr->class_version, class_version);
     class_version++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "class_version", &class_version, 0)
-        && class_version == perssubentmanager->class_version)
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "class_version", &class_version, 0)
+        && class_version == persubentmgr->class_version)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.class_version [BL] set+1 %u != %u", perssubentmanager->class_version, class_version);
-    perssubentmanager->class_version--;
+      fail ("PERSUBENTMGR.class_version [BL] set+1 %u != %u", persubentmgr->class_version, class_version);
+    persubentmgr->class_version--;
   }
   {
     struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "parent", &parent, NULL)
-        && !memcmp (&parent, &perssubentmanager->parent, sizeof (perssubentmanager->parent)))
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "parent", &parent, NULL)
+        && !memcmp (&parent, &persubentmgr->parent, sizeof (persubentmgr->parent)))
         pass ();
     else
-        fail ("PERSSUBENTMANAGER.parent [struct _dwg_object_object*]");
+        fail ("PERSUBENTMGR.parent [struct _dwg_object_object*]");
   }
   {
     BITCODE_BL unknown_bl1;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, NULL)
-        && unknown_bl1 == perssubentmanager->unknown_bl1)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl1", &unknown_bl1, NULL)
+        && unknown_bl1 == persubentmgr->unknown_bl1)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl1 [BL] %u != %u", perssubentmanager->unknown_bl1, unknown_bl1);
+      fail ("PERSUBENTMGR.unknown_bl1 [BL] %u != %u", persubentmgr->unknown_bl1, unknown_bl1);
     unknown_bl1++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, 0)
-        && unknown_bl1 == perssubentmanager->unknown_bl1)
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl1", &unknown_bl1, 0)
+        && unknown_bl1 == persubentmgr->unknown_bl1)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl1 [BL] set+1 %u != %u", perssubentmanager->unknown_bl1, unknown_bl1);
-    perssubentmanager->unknown_bl1--;
+      fail ("PERSUBENTMGR.unknown_bl1 [BL] set+1 %u != %u", persubentmgr->unknown_bl1, unknown_bl1);
+    persubentmgr->unknown_bl1--;
   }
   {
     BITCODE_BL unknown_bl2;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, NULL)
-        && unknown_bl2 == perssubentmanager->unknown_bl2)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl2", &unknown_bl2, NULL)
+        && unknown_bl2 == persubentmgr->unknown_bl2)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl2 [BL] %u != %u", perssubentmanager->unknown_bl2, unknown_bl2);
+      fail ("PERSUBENTMGR.unknown_bl2 [BL] %u != %u", persubentmgr->unknown_bl2, unknown_bl2);
     unknown_bl2++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, 0)
-        && unknown_bl2 == perssubentmanager->unknown_bl2)
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl2", &unknown_bl2, 0)
+        && unknown_bl2 == persubentmgr->unknown_bl2)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl2 [BL] set+1 %u != %u", perssubentmanager->unknown_bl2, unknown_bl2);
-    perssubentmanager->unknown_bl2--;
+      fail ("PERSUBENTMGR.unknown_bl2 [BL] set+1 %u != %u", persubentmgr->unknown_bl2, unknown_bl2);
+    persubentmgr->unknown_bl2--;
   }
   {
     BITCODE_BL unknown_bl3;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, NULL)
-        && unknown_bl3 == perssubentmanager->unknown_bl3)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl3", &unknown_bl3, NULL)
+        && unknown_bl3 == persubentmgr->unknown_bl3)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl3 [BL] %u != %u", perssubentmanager->unknown_bl3, unknown_bl3);
+      fail ("PERSUBENTMGR.unknown_bl3 [BL] %u != %u", persubentmgr->unknown_bl3, unknown_bl3);
     unknown_bl3++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, 0)
-        && unknown_bl3 == perssubentmanager->unknown_bl3)
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl3", &unknown_bl3, 0)
+        && unknown_bl3 == persubentmgr->unknown_bl3)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl3 [BL] set+1 %u != %u", perssubentmanager->unknown_bl3, unknown_bl3);
-    perssubentmanager->unknown_bl3--;
+      fail ("PERSUBENTMGR.unknown_bl3 [BL] set+1 %u != %u", persubentmgr->unknown_bl3, unknown_bl3);
+    persubentmgr->unknown_bl3--;
   }
   {
     BITCODE_BL unknown_bl4;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4, NULL)
-        && unknown_bl4 == perssubentmanager->unknown_bl4)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl4", &unknown_bl4, NULL)
+        && unknown_bl4 == persubentmgr->unknown_bl4)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl4 [BL] %u != %u", perssubentmanager->unknown_bl4, unknown_bl4);
+      fail ("PERSUBENTMGR.unknown_bl4 [BL] %u != %u", persubentmgr->unknown_bl4, unknown_bl4);
     unknown_bl4++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4, 0)
-        && unknown_bl4 == perssubentmanager->unknown_bl4)
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl4", &unknown_bl4, 0)
+        && unknown_bl4 == persubentmgr->unknown_bl4)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl4 [BL] set+1 %u != %u", perssubentmanager->unknown_bl4, unknown_bl4);
-    perssubentmanager->unknown_bl4--;
+      fail ("PERSUBENTMGR.unknown_bl4 [BL] set+1 %u != %u", persubentmgr->unknown_bl4, unknown_bl4);
+    persubentmgr->unknown_bl4--;
   }
   {
     BITCODE_BL unknown_bl5;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl5", &unknown_bl5, NULL)
-        && unknown_bl5 == perssubentmanager->unknown_bl5)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl5", &unknown_bl5, NULL)
+        && unknown_bl5 == persubentmgr->unknown_bl5)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl5 [BL] %u != %u", perssubentmanager->unknown_bl5, unknown_bl5);
+      fail ("PERSUBENTMGR.unknown_bl5 [BL] %u != %u", persubentmgr->unknown_bl5, unknown_bl5);
     unknown_bl5++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl5", &unknown_bl5, 0)
-        && unknown_bl5 == perssubentmanager->unknown_bl5)
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl5", &unknown_bl5, 0)
+        && unknown_bl5 == persubentmgr->unknown_bl5)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl5 [BL] set+1 %u != %u", perssubentmanager->unknown_bl5, unknown_bl5);
-    perssubentmanager->unknown_bl5--;
+      fail ("PERSUBENTMGR.unknown_bl5 [BL] set+1 %u != %u", persubentmgr->unknown_bl5, unknown_bl5);
+    persubentmgr->unknown_bl5--;
   }
   {
     BITCODE_BL unknown_bl6;
-    if (dwg_dynapi_entity_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6, NULL)
-        && unknown_bl6 == perssubentmanager->unknown_bl6)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl6", &unknown_bl6, NULL)
+        && unknown_bl6 == persubentmgr->unknown_bl6)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl6 [BL] %u != %u", perssubentmanager->unknown_bl6, unknown_bl6);
+      fail ("PERSUBENTMGR.unknown_bl6 [BL] %u != %u", persubentmgr->unknown_bl6, unknown_bl6);
     unknown_bl6++;
-    if (dwg_dynapi_entity_set_value (perssubentmanager, "PERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6, 0)
-        && unknown_bl6 == perssubentmanager->unknown_bl6)
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl6", &unknown_bl6, 0)
+        && unknown_bl6 == persubentmgr->unknown_bl6)
       pass ();
     else
-      fail ("PERSSUBENTMANAGER.unknown_bl6 [BL] set+1 %u != %u", perssubentmanager->unknown_bl6, unknown_bl6);
-    perssubentmanager->unknown_bl6--;
+      fail ("PERSUBENTMGR.unknown_bl6 [BL] set+1 %u != %u", persubentmgr->unknown_bl6, unknown_bl6);
+    persubentmgr->unknown_bl6--;
   }
-  if (failed && (is_class_unstable ("PERSSUBENTMANAGER") || is_class_debugging ("PERSSUBENTMANAGER")))
+  if (failed && (is_class_unstable ("PERSUBENTMGR") || is_class_debugging ("PERSUBENTMGR")))
     {
-      ok ("%s failed %d tests (TODO unstable)", "PERSSUBENTMANAGER", failed);
+      ok ("%s failed %d tests (TODO unstable)", "PERSUBENTMGR", failed);
       failed = 0;
     }
   return failed;
@@ -43555,8 +43555,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_NAVISWORKSMODELDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR(obj);
-  else  if (obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
-    error += test_PERSSUBENTMANAGER(obj);
+  else  if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
+    error += test_PERSUBENTMGR(obj);
   else  if (obj->fixedtype == DWG_TYPE_PLACEHOLDER)
     error += test_PLACEHOLDER(obj);
   else  if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
@@ -43901,8 +43901,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_NAVISWORKSMODELDEF (obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR (obj);
-  else  if (obj->fixedtype == DWG_TYPE_PERSSUBENTMANAGER)
-    error += test_PERSSUBENTMANAGER (obj);
+  else  if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
+    error += test_PERSUBENTMGR (obj);
   else  if (obj->fixedtype == DWG_TYPE_PLACEHOLDER)
     error += test_PLACEHOLDER (obj);
   else  if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
@@ -45099,12 +45099,12 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"OBJECT_PTR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_PERSSUBENTMANAGER);
-  size2 = dwg_dynapi_fields_size ("PERSSUBENTMANAGER");
+  size1 = sizeof (struct _dwg_object_PERSUBENTMGR);
+  size2 = dwg_dynapi_fields_size ("PERSUBENTMGR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_PERSSUBENTMANAGER): %d != "
-               "dwg_dynapi_fields_size (\"PERSSUBENTMANAGER\"): %d\n", size1, size2);
+      fprintf (stderr, "sizeof(struct _dwg_object_PERSUBENTMGR): %d != "
+               "dwg_dynapi_fields_size (\"PERSUBENTMGR\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_PLACEHOLDER);
