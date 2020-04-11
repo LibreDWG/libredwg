@@ -4770,7 +4770,7 @@ static const Dwg_DYNAPI_field _dwg_DICTIONARY_fields[] = {
     0,0,0, 281 },
   { "hard_owner",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DICTIONARY, hard_owner),
     0,0,0, 280 },
-  { "texts",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_object_DICTIONARY, texts),
+  { "texts",	"T*", sizeof (BITCODE_T*),  OFF (struct _dwg_object_DICTIONARY, texts),
     1,1,0, 3 },
   { "itemhandles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_DICTIONARY, itemhandles),
     1,1,0, 350 },

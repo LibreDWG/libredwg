@@ -5292,7 +5292,7 @@ BS,	DXF 281
 @item hard_owner
 RC,	DXF 280
 @item texts
-TV*,	DXF 3
+T*,	DXF 3
 @item itemhandles
 H*,	DXF 350
 @item cloning_r14

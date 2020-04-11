@@ -1804,30 +1804,23 @@ dxf_encode_alias (char *restrict name)
     return NULL;
 }
 
-// follow to the DICT and disable the link in its itemhandle(s)
+// delete this NOD entry
 // only needed until we can write all object types (at least the ones from the NOD)
 static void
-disable_dictlink (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
-                  const char *name)
+remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
 {
-  Dwg_Object_DICTIONARY *_obj;
-  Dwg_Object_Ref *nullhdl;
-  Dwg_Object *dict = dwg_ref_object_silent (dwg, ref);
-
-  if (!dict || (dict->fixedtype != DWG_TYPE_DICTIONARY))
-    return;
-  nullhdl = dwg_add_handleref (dwg, 0, 0, NULL);
-  _obj = dict->tio.object->tio.DICTIONARY;
-  for (BITCODE_BL i = 0; i < _obj->numitems; i++)
+  int last = _obj->numitems - 1;
+  LOG_TRACE ("Disable link to " FORMAT_REF " for NOD.%s\n",
+             ARGS_REF (_obj->itemhandles[i]), name);
+  if (i < last)
     {
-      Dwg_Object *o = dwg_ref_object_silent (dwg, _obj->itemhandles[i]);
-      if (o && !is_type_stable (o->fixedtype))
-        {
-          LOG_TRACE ("Disable link to %s " FORMAT_REF " for NOD.%s\n", o->name,
-                     ARGS_REF (_obj->itemhandles[i]), name);
-          _obj->itemhandles[i] = nullhdl;
-        }
+      free (_obj->texts[i]);
+      if (!_obj->itemhandles[i]->handleref.is_global)
+        free (_obj->itemhandles[i]);
+      memmove (&_obj->texts[i], &_obj->texts[i+1], (last - i) * sizeof (BITCODE_T));
+      memmove (&_obj->itemhandles[i], &_obj->itemhandles[i+1], (last - i) * sizeof (BITCODE_H));
     }
+  _obj->numitems--;
   return;
 }
 
@@ -1838,42 +1831,40 @@ static void
 fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dict
 {
   Dwg_Object_DICTIONARY *_obj;
+  int is_tu = dwg->header.version >= R_2007;
   if (obj->handle.value != 0xC)
     return;
   _obj = obj->tio.object->tio.DICTIONARY;
   // => DICTIONARY with name of current style, and link to it.
-  // If the link target is disabled (unstable, unhandled or such), disable it.
+  // If the link target is disabled (unstable, unhandled or such), remove it from the NOD.
+#define DISABLE_NODSTYLE(name)                                                \
+  if (!is_type_stable (DWG_TYPE_##name))                                      \
+    {                                                                         \
+      if (is_tu)                                                              \
+        {                                                                     \
+          char *u8 = bit_convert_TU ((BITCODE_TU)_obj->texts[i]);             \
+          if (strEQc (u8, "ACAD_" #name))                                     \
+            remove_NOD_item (_obj, i, "ACAD_" #name);                         \
+          free (u8);                                                          \
+        }                                                                     \
+      else if (strEQc (_obj->texts[i], "ACAD_" #name))                        \
+        remove_NOD_item (_obj, i, "ACAD_" #name);                             \
+    }
+  
   for (BITCODE_BL i = 0; i < _obj->numitems; i++)
     {
-// TODO TUcmp
-#define DISABLE_NODSTYLE(name)                         \
-        if (!is_type_stable (DWG_TYPE_##name)          \
-            && strEQc (_obj->texts[i], "ACAD_" #name)) \
-          disable_dictlink (dwg, _obj->itemhandles[i], "ACAD_" #name)
-
-      DISABLE_NODSTYLE (ASSOCNETWORK);
-      else
-      DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER);
-      else
-      DISABLE_NODSTYLE (DETAILVIEWSTYLE);
-      else
-      DISABLE_NODSTYLE (MATERIAL);
-      else
-      DISABLE_NODSTYLE (MLEADERSTYLE);
-      else
-      DISABLE_NODSTYLE (MLINESTYLE);
-      else
-      DISABLE_NODSTYLE (PERSUBENTMGR);
-      else
-      DISABLE_NODSTYLE (PLOTSETTINGS);
-      //else
-      //DISABLE_NODSTYLE (PLOTSTYLENAME);
-      else
-      DISABLE_NODSTYLE (SECTIONVIEWSTYLE);
-      else
-      DISABLE_NODSTYLE (TABLESTYLE);
-      else
-      DISABLE_NODSTYLE (VISUALSTYLE);
+      DISABLE_NODSTYLE (ASSOCNETWORK)
+      else DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER)
+      else DISABLE_NODSTYLE (DETAILVIEWSTYLE)
+      else DISABLE_NODSTYLE (MATERIAL)
+      else DISABLE_NODSTYLE (MLEADERSTYLE)
+      else DISABLE_NODSTYLE (MLINESTYLE)
+      else DISABLE_NODSTYLE (PERSUBENTMGR)
+      else DISABLE_NODSTYLE (PLOTSETTINGS)
+      // else DISABLE_NODSTYLE (PLOTSTYLENAME)
+      else DISABLE_NODSTYLE (SECTIONVIEWSTYLE)
+      else DISABLE_NODSTYLE (TABLESTYLE)
+      else DISABLE_NODSTYLE (VISUALSTYLE)
     }
 #undef DISABLE_NODSTYLE
 }

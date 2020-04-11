@@ -1759,7 +1759,7 @@ typedef struct _dwg_object_DICTIONARY
   BITCODE_BL numitems;    /*!< no DXF */
   BITCODE_BS cloning;     /*!< DXF 281 */
   BITCODE_RC hard_owner;  /*!< DXF 330 */
-  BITCODE_TV* texts;      /*!< DXF 3 */
+  BITCODE_T* texts;       /*!< DXF 3 */
   BITCODE_H* itemhandles; /*!< DXF 350/360, pairwise with texts */
 
   BITCODE_RC cloning_r14; /*!< r14 only */

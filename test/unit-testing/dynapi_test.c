@@ -28010,14 +28010,14 @@ static int test_DICTIONARY (const Dwg_Object *obj)
         fail ("DICTIONARY.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_TV* texts;
+    BITCODE_T* texts;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "numitems", &count, NULL)
         && dwg_dynapi_entity_value (dictionary, "DICTIONARY", "texts", &texts, NULL)
         && texts == dictionary->texts)
       pass ();
     else
-      fail ("DICTIONARY.texts [TV*] * %u numitems", count);
+      fail ("DICTIONARY.texts [T*] * %u numitems", count);
   }
   if (failed && (is_class_unstable ("DICTIONARY") || is_class_debugging ("DICTIONARY")))
     {

@@ -1952,7 +1952,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               //memcpy (&((char *)_obj)[f->offset], &hdls, sizeof (hdls));
               dwg_dynapi_field_set_value (dwg, _obj, f, &hdls, 1);
             }
-          else if (t->type == JSMN_ARRAY && strEQc (f->type, "TV*"))
+          else if (t->type == JSMN_ARRAY
+                   && (strEQc (f->type, "T*") || strEQc (f->type, "TV*")))
             {
               int skip = 0;
               BITCODE_BL size1 = t->size;
@@ -1971,7 +1972,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   else
                     size1 = t->size;
                 }
-              elems = size1 ? calloc (size1, sizeof (BITCODE_TV)) : NULL;
+              elems = size1 ? calloc (size1, sizeof (BITCODE_T)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
               for (int k = 0; k < t->size; k++)
