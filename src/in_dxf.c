@@ -4268,15 +4268,18 @@ find_prev_entity (Dwg_Object *obj)
   return NULL;
 }
 
+/* if it has an absolute ownerhandle */
 static int
-is_obj_absref (Dwg_Object *obj)
+is_obj_absowner (Dwg_Object *obj)
 {
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+    return 0;
   /* With DICTIONARY it may vary */
-  if (obj->type < DWG_TYPE_GROUP && // needs to be absolute 4.1.X
+  if (obj->type < DWG_TYPE_GROUP // needs to be absolute 4.1.X
       /* obj->fixedtype != DWG_TYPE_DICTIONARY && */
-      obj->fixedtype != DWG_TYPE_XRECORD)
+      && obj->fixedtype != DWG_TYPE_XRECORD)
     return 1;
-  else if (obj->fixedtype == DWG_TYPE_LAYOUT)
+  if (obj->fixedtype == DWG_TYPE_LAYOUT)
     return 1;
   else // may have relative ref: 8.0.0
     return 0;
@@ -4396,7 +4399,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 330: // TODO: most likely {ACAD_REACTORS
             {
               BITCODE_H owh;
-              if (is_obj_absref (obj))
+              if (is_obj_absowner (obj))
                 owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
               else // relative
                 owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
@@ -6293,7 +6296,7 @@ new_object (char *restrict name, char *restrict dxfname,
                        || !obj->tio.object->ownerhandle))
             {
               BITCODE_H owh;
-              if (is_obj_absref (obj))
+              if (is_obj_absowner (obj))
                 owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
               else // relative
                 owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
