@@ -7966,7 +7966,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       if (i == 1)
                         {
                           _hdr->first_entity = dwg_add_handleref (
-                              dwg, 4, obj->handle.value, blkhdr);
+                              dwg, 4, obj->handle.value, NULL);
                           LOG_TRACE ("BLOCK_HEADER.first_entity = " FORMAT_REF
                                      " [H] (blocks)\n",
                                      ARGS_REF (_hdr->first_entity));
@@ -7974,7 +7974,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       else
                         {
                           _hdr->last_entity = dwg_add_handleref (
-                              dwg, 4, obj->handle.value, blkhdr);
+                              dwg, 4, obj->handle.value, NULL);
                           LOG_TRACE ("BLOCK_HEADER.last_entity = " FORMAT_REF
                                      " [H] (blocks)\n",
                                      ARGS_REF (_hdr->last_entity));
@@ -8022,10 +8022,10 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
       return;
     }
   if (!_ctrl->first_entity)
-   _ctrl->last_entity =  _ctrl->first_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+   _ctrl->last_entity =  _ctrl->first_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
   else
     // always overwrite. and it is global, so we can reuse it.
-    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, ctrl);
+    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
   PUSH_HV (_ctrl, num_owned, entities, _ctrl->last_entity);
   /*
   _ctrl->entities
