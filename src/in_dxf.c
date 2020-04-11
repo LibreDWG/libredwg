@@ -4420,8 +4420,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               assert (j >= 0);
               assert (j < _o->num_morehandles);
               _o->morehandles[j]
-                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
-              LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [H 330]\n",
+                  = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
+              LOG_TRACE ("%s.morehandles[%d] = " FORMAT_REF " [H 340]\n",
                          ctrlname, j, ARGS_REF (_o->morehandles[j]));
               j++;
             }
