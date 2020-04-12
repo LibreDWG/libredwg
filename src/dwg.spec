@@ -2773,9 +2773,12 @@ DWG_OBJECT (LTYPE_CONTROL)
 
 DWG_OBJECT_END
 
-/* (57/5) */
+/* (57/5) 
+ * Unstable, ACAD import errors
+ */
 DWG_OBJECT (LTYPE)
 
+  DECODE_UNKNOWN_BITS
   COMMON_TABLE_FLAGS (Linetype)
 
   PRE (R_13) {
@@ -2786,6 +2789,7 @@ DWG_OBJECT (LTYPE)
     FIELD_BD (pattern_len, 40); // total length
   }
   FIELD_RC (alignment, 72);
+  FIELD_HANDLE (extref, 5, 0);
   FIELD_RCu (num_dashes, 73);
   REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
   REPEAT_BLOCK
@@ -2806,7 +2810,7 @@ DWG_OBJECT (LTYPE)
       }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (dashes)
-  END_REPEAT (dashes);  // there's a 2nd loop below, don't free
+  END_REPEAT (dashes);
 
   UNTIL (R_2004) {
     JSON {
@@ -2823,8 +2827,6 @@ DWG_OBJECT (LTYPE)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (extref_handle, 5, 0);
-
 DWG_OBJECT_END
 
 //(58): Unknown

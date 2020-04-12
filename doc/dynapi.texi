@@ -6335,7 +6335,7 @@ RD*
 B
 @item strings_area
 TF
-@item extref_handle
+@item extref
 H
 
 @end vtable

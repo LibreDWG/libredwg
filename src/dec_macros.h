@@ -366,8 +366,10 @@
 #define FIELD_RCu(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_RC (dat);                                            \
-    LOG_TRACE (#nam ": %u [RC %d]\n", (unsigned)((unsigned char)_obj->nam),   \
+    LOG_TRACE (#nam ": %u [RC %d]", (unsigned)((unsigned char)_obj->nam),     \
                dxf);                                                          \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
   }
 #define FIELD_RCx(nam, dxf)                                                   \
   {                                                                           \
@@ -404,30 +406,38 @@
   {                                                                           \
     SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = bit_read_TF (dat, (int)len);                                  \
-    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam,                \
+    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]", _obj->nam,                  \
                (unsigned long)len);                                           \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
     SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (int)len);                      \
-    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]\n", _obj->nam,                \
+    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]", _obj->nam,                  \
                (unsigned long)len);                                           \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
     SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
     bit_read_fixed (dat, _obj->nam, (int)len);                                \
-    LOG_TRACE (#nam ": \"%s\" [TFF %d " #dxf "]\n", _obj->nam, (int)len);     \
+    LOG_TRACE (#nam ": \"%s\" [TFF %d " #dxf "]", _obj->nam, (int)len);       \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   {                                                                           \
     SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
     bit_read_fixed (dat, (BITCODE_RC*)_obj->nam, (int)len);                   \
-    LOG_TRACE (#nam ": [TFFx %d " #dxf "]\n  ", (int)len);                    \
+    LOG_TRACE (#nam ": [TFFx %d " #dxf "]", (int)len);                        \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF ((BITCODE_RC*)_obj->nam, (int)len);                          \
   }
 #define FIELD_T16(nam, dxf) FIELDG (nam, T16, dxf)

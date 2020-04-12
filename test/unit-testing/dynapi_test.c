@@ -32806,12 +32806,12 @@ static int test_LTYPE (const Dwg_Object *obj)
       fail ("LTYPE.description [T] '%s' <> '%s'", description, ltype->description);
   }
   {
-    BITCODE_H extref_handle;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "extref_handle", &extref_handle, NULL)
-        && !memcmp (&extref_handle, &ltype->extref_handle, sizeof (ltype->extref_handle)))
+    BITCODE_H extref;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "extref", &extref, NULL)
+        && !memcmp (&extref, &ltype->extref, sizeof (ltype->extref)))
         pass ();
     else
-        fail ("LTYPE.extref_handle [H]");
+        fail ("LTYPE.extref [H]");
   }
   {
     BITCODE_RC flag;

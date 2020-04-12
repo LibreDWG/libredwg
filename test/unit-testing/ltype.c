@@ -20,7 +20,7 @@ api_process (dwg_object *obj)
   BITCODE_RD* dashes_r11;
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
-  BITCODE_H extref_handle;
+  BITCODE_H extref;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_ltype *ltype = dwg_object_to_LTYPE (obj);
@@ -56,5 +56,5 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B, has_strings_area);
   CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF, strings_area);
-  CHK_ENTITY_H (ltype, LTYPE, extref_handle, extref_handle);
+  CHK_ENTITY_H (ltype, LTYPE, extref, extref);
 }

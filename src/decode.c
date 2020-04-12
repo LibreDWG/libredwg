@@ -4093,7 +4093,7 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   hdl_dat->byte = bit8;
   hdl_dat->bit = obj->bitsize % 8;
   // bit_reset_chain (hdl_dat); //but keep the same start
-  if (!obj->handlestream_size)
+  if (!obj->handlestream_size) // with strings we already did calc. it
     {
       obj->handlestream_size = (obj->size * 8) - obj->bitsize;
       LOG_TRACE (" Hdlsize: %lu,", obj->handlestream_size);
@@ -4101,9 +4101,9 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   hdl_dat->size = obj->size;
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
     {
-      long unsigned int pos = (dat->byte * 8) + obj->bitsize + obj->handlestream_size;
+      long unsigned int end = obj->bitsize + obj->handlestream_size;
       LOG_HANDLE (" hdl_dat: @%lu.%u - @%lu.%lu (%lu)", bit8, hdl_dat->bit,
-                  pos / 8, pos % 8, hdl_dat->size);
+                  end / 8, end % 8, hdl_dat->size);
     }
   LOG_TRACE ("\n")
   return 0;

@@ -5612,7 +5612,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     0,0,0, 0 },
   { "strings_area",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_LTYPE, strings_area),
     1,1,0, 0 },
-  { "extref_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE, extref_handle),
+  { "extref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE, extref),
     1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
