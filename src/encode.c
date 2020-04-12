@@ -73,7 +73,6 @@ static bool env_var_checked_p;
 #define IS_ENCODER
 
 #define ANYCODE -1
-#define REFS_PER_REALLOC 100
 
 #define LOG_POS                                                           \
   LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit)\
@@ -887,6 +886,15 @@ int dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 static int dwg_encode_xdata (Bit_Chain *restrict dat,
                              Dwg_Object_XRECORD *restrict obj, unsigned size);
+static unsigned long add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index);
+static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
+static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+
+/* Imported */
+BITCODE_H
+dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
+                             const char *restrict table);
+void set_handle_size (Dwg_Handle *restrict hdl);
 
 /*--------------------------------------------------------------------------------
  * Public functions
@@ -926,6 +934,306 @@ static bool
 is_section_r13_critical (Dwg_Section_Type_R13 i)
 {
   return i <= SECTION_HANDLES_R13 ? true : false;
+}
+
+/* Limitations: */
+
+static unsigned long
+add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
+{
+  BITCODE_H appid = dwg_find_tablehandle_silent (dwg, "LibreDWG", "APPID");
+  BITCODE_H appctl;
+  Dwg_Object *obj;
+  Dwg_Object_APPID *_obj;
+  Dwg_Object_APPID_CONTROL *o;
+  unsigned long ref;
+  int error = 0;
+
+  if (appid)
+    return appid->absolute_ref;
+
+#if 1
+  if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
+    appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
+  ref = dwg->object[dwg->num_objects - 1].handle.value + 1;
+  // add APPID
+  dwg_add_object (dwg);
+  obj = &dwg->object[dwg->num_objects - 1];
+  error = dwg_add_APPID (obj);
+  _obj = obj->tio.object->tio.APPID;
+  obj->handle.value = ref;
+  set_handle_size (&obj->handle);
+  _obj->name = strdup ("LibreDWG");
+  _obj->xrefref = 1;
+  obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, appctl->absolute_ref, NULL);
+  obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+  _obj->null_handle = dwg_add_handleref (dwg, 5, 0, NULL);
+  // size, bitsize done by encode
+
+  // add to APPID_CONTROL
+  obj = dwg_ref_object (dwg, appctl);
+  o = obj->tio.object->tio.APPID_CONTROL;
+  PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, ref, NULL));
+  /*
+  o->entries = realloc (o->entries, (o->num_entries + 1) * sizeof (BITCODE_H));
+  o->entries[o->num_entries] = dwg_add_handleref (dwg, 2, ref, NULL);
+  LOG_TRACE ("APPID_CONTROL.entries[%d] = " FORMAT_REF " [H]\n",
+             o->num_entries, ARGS_REF (o->entries[o->num_entries]));
+  o->num_entries++;
+  */
+  return ref;
+#endif
+
+  return 0x12; // APPID.ACAD
+}
+
+static BITCODE_BL
+add_DUMMY_eed (Dwg_Object *obj)
+{
+  Dwg_Object_Entity *ent = obj->tio.entity;
+  const BITCODE_BL num_eed = ent->num_eed;
+  Dwg_Data *dwg = obj->parent;
+  BITCODE_H appid;
+  Dwg_Eed_Data *data;
+  const bool is_tu = dwg->header.version >= R_2007;
+  int i = 1;
+  char *name = obj->dxfname;
+  int len;
+  int size;
+  int off = 0;
+
+  if (num_eed) // replace it
+    dwg_free_eed (obj);
+  ent->num_eed = 1;
+  ent->eed = calloc (2, sizeof (Dwg_Eed));
+  len = strlen (name);
+  size = is_tu ? 3 + ((len + 1) * 2) : len + 5;
+  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size, 1);
+  ent->eed[0].size = size;
+  appid = dwg_find_tablehandle_silent (dwg, "LibreDWG", "APPID");
+  if (!appid)
+    return 0;
+  dwg_add_handle (&ent->eed[0].handle, 5, appid->absolute_ref, NULL);
+  data->code = 0; // RC
+  if (is_tu) // probably never used, write DUMMY placeholder to R_2007
+    {
+      BITCODE_TU wstr = bit_utf8_to_TU (name);
+      data->u.eed_0_r2007.length = len * 2; // RS
+      memcpy (data->u.eed_0_r2007.string, wstr, (len + 1) * 2);
+    }
+  else
+    {
+      data->u.eed_0.length = len;  // RC
+      data->u.eed_0.codepage = 30; // RS
+      memcpy (data->u.eed_0.string, name, len + 1);
+    }
+  LOG_TRACE ("-EED[0]: code: 0, string: %s (len: %d)\n", name, len);
+
+  if (!obj->num_unknown_bits)
+    return 1;
+  // unknown_bits in chunks of 256
+  len = obj->num_unknown_bits / 8;
+  if (obj->num_unknown_bits % 8)
+    len++;
+  size = (len / 256) + 1;
+  if (size > 1) // we already reserved for two eeds
+    {
+      ent->eed = realloc (ent->eed, (1 + size) * sizeof (Dwg_Eed));
+      memset (&ent->eed[1], 0, size * sizeof (Dwg_Eed));
+    }
+  do
+    {
+      int l = len > 255 ? 255 : len;
+      ent->num_eed++;
+      ent->eed[i].size = 0;
+      ent->eed[0].size += l + 2;
+      data = ent->eed[i].data = (Dwg_Eed_Data *)calloc (l + 2, 1);
+      data->code = 4;           // RC
+      data->u.eed_4.length = l; // also just an RC. max 256, how odd
+      memcpy (data->u.eed_4.data, &obj->unknown_bits[off], data->u.eed_4.length);
+      LOG_TRACE ("-EED[%d]: code: 4, unknown_bits: %d\n", i, data->u.eed_4.length);
+      if (len > 255)
+        {
+          len -= 256;
+          off += 256;
+          i++;
+        }
+      else
+        break;
+    }
+  while (1);
+  return i;
+}
+
+#ifdef ENCODE_UNKNOWN_AS_DUMMY
+/** We cannot write unknown bits into another version.
+ *  Write a DUMMY or POINT instead. Later maybe PROXY. This leaks and is
+ *  controversial.
+ */
+static void
+encode_unknown_as_dummy (Dwg_Object *obj, BITCODE_BS placeholder_type)
+{
+  Dwg_Data *dwg = obj->parent;
+  int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+  
+  obj->size = 0;
+  obj->bitsize = 0;
+
+  // TODO free the old to avoid leaks
+  if (is_entity)
+    { // POINT is better than DUMMY to preserve the next_entity chain.
+      // TODO much better would be PROXY_ENTITY
+      Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
+      LOG_WARN ("fixup entity as POINT, Type %d\n", obj->type);
+      // TODO dwg_free_##token##_private (dat, obj); // keeping eed and
+      // common
+      if (obj->tio.entity->num_reactors)
+        {
+          free (obj->tio.entity->reactors);
+          obj->tio.entity->num_reactors = 0;
+          obj->tio.entity->reactors = NULL;
+        }
+      add_DUMMY_eed (obj);
+      free (obj->unknown_bits);
+      obj->tio.entity->tio.POINT = _obj
+          = realloc (_obj, sizeof (Dwg_Entity_POINT));
+      // memset (_obj, 0, sizeof (Dwg_Entity_POINT)); // asan cries
+      _obj->parent = obj->tio.entity;
+      _obj->x = 0.0;
+      _obj->y = 0.0;
+      _obj->z = 0.0;
+      _obj->thickness = 1e25; // let it stand out
+      _obj->extrusion.x = 0.0;
+      _obj->extrusion.y = 0.0;
+      _obj->extrusion.z = 1.0;
+      _obj->x_ang = 0.0;
+      obj->type = DWG_TYPE_POINT;
+      obj->fixedtype = DWG_TYPE_POINT;
+      if (dwg->opts & DWG_OPTS_INJSON)
+        {
+          free (obj->name);
+          obj->name = strdup ("POINT");
+        }
+      else
+        obj->name = (char *)"POINT";
+      if (dwg->opts & DWG_OPTS_IN)
+        {
+          free (obj->dxfname);
+          obj->dxfname = strdup ("POINT");
+        }
+      else
+        obj->dxfname = (char *)"POINT";
+    }
+  else
+    {
+      BITCODE_BS klass_id = 0;
+      const char *name;
+      const char *dxfname;
+
+      add_DUMMY_eed (obj);
+      // if PLACEHOLDER is available, or even PROXY_OBJECT.
+      // PLOTSETTINGS uses PLACEHOLDER though
+      if (placeholder_type)
+        {
+          obj->type = placeholder_type;
+          obj->fixedtype = DWG_TYPE_PLACEHOLDER;
+          name = "PLACEHOLDER";
+          dxfname = "ACDBPLACEHOLDER";
+        }
+      else
+        {
+          obj->type = DWG_TYPE_DUMMY;
+          obj->fixedtype = DWG_TYPE_DUMMY;
+          name = "DUMMY";
+          dxfname = "DUMMY";
+        }
+      // keep owner, xdicobj, reactors
+      if (dwg->opts & DWG_OPTS_INJSON)
+        {
+          free (obj->name);
+          obj->name = strdup (name);
+        }
+      else
+        obj->name = (char *)name;
+      if (dwg->opts & DWG_OPTS_IN)
+        {
+          free (obj->dxfname);
+          obj->dxfname = strdup (dxfname);
+        }
+      else
+        obj->dxfname = (char *)dxfname;
+      // TODO dwg_free_##token##_private (dat, obj); // keeping eed and
+      // common
+      LOG_INFO ("fixup as %s, Type %d\n", name, obj->type);
+      free (obj->unknown_bits);
+    }
+  obj->hdlpos = 0;
+}
+#endif
+
+// delete this NOD entry
+// only needed until we can write all object types (at least the ones from the NOD)
+static void
+remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
+{
+  int last = _obj->numitems - 1;
+  LOG_TRACE ("Disable link to " FORMAT_REF " for NOD.%s\n",
+             ARGS_REF (_obj->itemhandles[i]), name);
+  if (i < last)
+    {
+      free (_obj->texts[i]);
+      if (!_obj->itemhandles[i]->handleref.is_global)
+        free (_obj->itemhandles[i]);
+      memmove (&_obj->texts[i], &_obj->texts[i+1], (last - i) * sizeof (BITCODE_T));
+      memmove (&_obj->itemhandles[i], &_obj->itemhandles[i+1], (last - i) * sizeof (BITCODE_H));
+    }
+  _obj->numitems--;
+  return;
+}
+
+// NOD: ACAD_TABLESTYLE => DICT name[0] - itemhandles[0] => TABLESTYLE (Unstable)
+// AcDbVariableDictionary: CTABLESTYLE => DICTVAR str
+// only needed until we can write all object types (at least the ones from the NOD)
+static void
+fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dict
+{
+  Dwg_Object_DICTIONARY *_obj;
+  int is_tu = dwg->header.version >= R_2007;
+  if (obj->handle.value != 0xC)
+    return;
+  _obj = obj->tio.object->tio.DICTIONARY;
+  // => DICTIONARY with name of current style, and link to it.
+  // If the link target is disabled (unstable, unhandled or such), remove it from the NOD.
+#define DISABLE_NODSTYLE(name)                                                \
+  if (!is_type_stable (DWG_TYPE_##name))                                      \
+    {                                                                         \
+      if (is_tu)                                                              \
+        {                                                                     \
+          char *u8 = bit_convert_TU ((BITCODE_TU)_obj->texts[i]);             \
+          if (strEQc (u8, "ACAD_" #name))                                     \
+            remove_NOD_item (_obj, i, "ACAD_" #name);                         \
+          free (u8);                                                          \
+        }                                                                     \
+      else if (strEQc (_obj->texts[i], "ACAD_" #name))                        \
+        remove_NOD_item (_obj, i, "ACAD_" #name);                             \
+    }
+  
+  for (BITCODE_BL i = 0; i < _obj->numitems; i++)
+    {
+      DISABLE_NODSTYLE (ASSOCNETWORK)
+      else DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER)
+      else DISABLE_NODSTYLE (DETAILVIEWSTYLE)
+      else DISABLE_NODSTYLE (MATERIAL)
+      else DISABLE_NODSTYLE (MLEADERSTYLE)
+      else DISABLE_NODSTYLE (MLINESTYLE)
+      else DISABLE_NODSTYLE (PERSUBENTMGR)
+      else DISABLE_NODSTYLE (PLOTSETTINGS)
+      // else DISABLE_NODSTYLE (PLOTSTYLENAME)
+      else DISABLE_NODSTYLE (SECTIONVIEWSTYLE)
+      else DISABLE_NODSTYLE (TABLESTYLE)
+      else DISABLE_NODSTYLE (VISUALSTYLE)
+    }
+#undef DISABLE_NODSTYLE
 }
 
 /**
@@ -970,6 +1278,64 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
 #endif /* USE_TRACING */
 
+  if (dwg->header.version != dwg->header.from_version)
+    LOG_TRACE ("Encode version %s (%s) from version %s (%s)\n",
+               version_codes[dwg->header.version],
+               dwg_version_type (dwg->header.version),
+               version_codes[dwg->header.from_version],
+               dwg_version_type (dwg->header.from_version))
+  else
+    LOG_TRACE ("Encode version %s (%s)\n", version_codes[dwg->header.version],
+               dwg_version_type (dwg->header.version))
+
+#ifdef ENCODE_UNKNOWN_AS_DUMMY
+  // We cannot write unknown bits into another version.
+  // Write a PLACEHOLDER?DUMMY or POINT instead. Later maybe PROXY.
+   // This leaks and is controversial.
+  if (dwg->header.version != dwg->header.from_version
+      || (dwg->opts & DWG_OPTS_INDXF))
+    {
+      int fixup = 0;
+      // Scan for invalid/unstable/unsupported objects and entities
+      // and eliminate or replace them with placeholders.
+      LOG_TRACE ("Scan for unsupported objects\n");
+      for (i = 0; i < dwg->num_objects; i++)
+        {
+          if (dwg->object[i].fixedtype == DWG_TYPE_UNKNOWN_OBJ ||
+              dwg->object[i].fixedtype == DWG_TYPE_UNKNOWN_ENT)
+            {
+              fixup++;
+              break;
+            }
+        }
+      if (fixup)
+        {
+          unsigned long new_appid;
+          BITCODE_BS placeholder_type = 0;
+          LOG_TRACE ("Found unsupported objects, add APPID.LibreDWG\n");
+          new_appid = add_LibreDWG_APPID (dwg, 0);
+          fixup = 0;
+          dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type);
+          for (i = 0; i < dwg->num_objects; i++)
+            {
+              Dwg_Object *obj = &dwg->object[i];
+              if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ ||
+                  obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+                {
+                  fixup++;                  
+                  // replace entities with points, objects with placeholders
+                  encode_unknown_as_dummy (obj, placeholder_type);
+                }
+              // what to do with links to MATERIAL/...
+              if (obj->handle.value == 0xC)
+                fixup_NOD (dwg, obj); // named object dict
+            }
+          LOG_TRACE ("Fixed %d unsupported objects\n", fixup);
+        }
+    }
+#endif
+
+  
   bit_chain_alloc (dat);
   hdl_dat = dat; // splitted later in objects/entities
 
@@ -978,12 +1344,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   strcpy ((char *)dat->chain,
           version_codes[dwg->header.version]); // Chain version
-  if (dwg->header.version != dwg->header.from_version)
-    LOG_TRACE ("Encode version %s from version %s\n",
-               version_codes[dwg->header.version],
-               version_codes[dwg->header.from_version])
-  else
-    LOG_TRACE ("Encode version %s\n", version_codes[dwg->header.version])
   dat->byte += 6;
 
   {
@@ -1813,71 +2173,6 @@ dxf_encode_alias (char *restrict name)
     return NULL;
 }
 
-// delete this NOD entry
-// only needed until we can write all object types (at least the ones from the NOD)
-static void
-remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
-{
-  int last = _obj->numitems - 1;
-  LOG_TRACE ("Disable link to " FORMAT_REF " for NOD.%s\n",
-             ARGS_REF (_obj->itemhandles[i]), name);
-  if (i < last)
-    {
-      free (_obj->texts[i]);
-      if (!_obj->itemhandles[i]->handleref.is_global)
-        free (_obj->itemhandles[i]);
-      memmove (&_obj->texts[i], &_obj->texts[i+1], (last - i) * sizeof (BITCODE_T));
-      memmove (&_obj->itemhandles[i], &_obj->itemhandles[i+1], (last - i) * sizeof (BITCODE_H));
-    }
-  _obj->numitems--;
-  return;
-}
-
-// NOD: ACAD_TABLESTYLE => DICT name[0] - itemhandles[0] => TABLESTYLE (Unstable)
-// AcDbVariableDictionary: CTABLESTYLE => DICTVAR str
-// only needed until we can write all object types (at least the ones from the NOD)
-static void
-fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dict
-{
-  Dwg_Object_DICTIONARY *_obj;
-  int is_tu = dwg->header.version >= R_2007;
-  if (obj->handle.value != 0xC)
-    return;
-  _obj = obj->tio.object->tio.DICTIONARY;
-  // => DICTIONARY with name of current style, and link to it.
-  // If the link target is disabled (unstable, unhandled or such), remove it from the NOD.
-#define DISABLE_NODSTYLE(name)                                                \
-  if (!is_type_stable (DWG_TYPE_##name))                                      \
-    {                                                                         \
-      if (is_tu)                                                              \
-        {                                                                     \
-          char *u8 = bit_convert_TU ((BITCODE_TU)_obj->texts[i]);             \
-          if (strEQc (u8, "ACAD_" #name))                                     \
-            remove_NOD_item (_obj, i, "ACAD_" #name);                         \
-          free (u8);                                                          \
-        }                                                                     \
-      else if (strEQc (_obj->texts[i], "ACAD_" #name))                        \
-        remove_NOD_item (_obj, i, "ACAD_" #name);                             \
-    }
-  
-  for (BITCODE_BL i = 0; i < _obj->numitems; i++)
-    {
-      DISABLE_NODSTYLE (ASSOCNETWORK)
-      else DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER)
-      else DISABLE_NODSTYLE (DETAILVIEWSTYLE)
-      else DISABLE_NODSTYLE (MATERIAL)
-      else DISABLE_NODSTYLE (MLEADERSTYLE)
-      else DISABLE_NODSTYLE (MLINESTYLE)
-      else DISABLE_NODSTYLE (PERSUBENTMGR)
-      else DISABLE_NODSTYLE (PLOTSETTINGS)
-      // else DISABLE_NODSTYLE (PLOTSTYLENAME)
-      else DISABLE_NODSTYLE (SECTIONVIEWSTYLE)
-      else DISABLE_NODSTYLE (TABLESTYLE)
-      else DISABLE_NODSTYLE (VISUALSTYLE)
-    }
-#undef DISABLE_NODSTYLE
-}
-
 Dwg_Class *
 dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
 {
@@ -2033,143 +2328,6 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 #undef WARN_UNSTABLE_CLASS
 
   return DWG_ERR_UNHANDLEDCLASS;
-}
-
-static unsigned
-add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
-{
-  // add new object with new handle, which best should be lower than the current handle.
-  // because we are still adding objects to the DB.
-  BITCODE_H appid = dwg_find_tablehandle (dwg, "LibreDWG", "APPID");
-  BITCODE_H appctl;
-  Dwg_Object *obj;
-  Dwg_Object_APPID *_obj;
-  Dwg_Object_APPID_CONTROL *o;
-  unsigned long ref = dwg->object[index].handle.value;
-  int error = 0;
-
-  if (appid)
-    return appid->absolute_ref;
-#if 1
-  if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
-    appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
-  // find free handle. or a handleoffset > 1 in the object map.
-  for (BITCODE_RL i = index - 1; i > 0; i--)
-    {
-      unsigned long prev = dwg->object[i].handle.value;
-      if (prev < ref - 1)
-        {
-          ref = prev + 1; // this handle is free to use
-          LOG_TRACE ("Free handle found %lX", ref)
-          break;
-        }
-      ref = prev;
-    }
-  if (ref < 2)
-    {
-      LOG_WARN ("Could not add APPID.LibreDWG, no free handle found to insert into")
-      return 0x12;
-    }
-  // add APPID
-  dwg_add_object (dwg);
-  obj = &dwg->object[dwg->num_objects - 1];
-  error = dwg_add_APPID (obj);
-  _obj = obj->tio.object->tio.APPID;
-  obj->handle.value = ref;
-  _obj->name = strdup ("LibreDWG");
-  _obj->xrefref = 1;
-  obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, appctl->absolute_ref, NULL);
-  obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
-  _obj->null_handle = dwg_add_handleref (dwg, 5, 0, NULL);
-  // size, bitsize done by encode
-
-  // add to APPID_CONTROL
-  obj = dwg_ref_object (dwg, appctl);
-  o = obj->tio.object->tio.APPID_CONTROL;
-  // PUSH_HV:
-  o->entries = realloc (o->entries, (o->num_entries + 1) * sizeof (BITCODE_H));
-  o->entries[o->num_entries] = dwg_add_handleref (dwg, 2, ref, NULL);
-  LOG_TRACE ("APPID_CONTROL.entries[%d] = " FORMAT_REF " [H]\n",
-             o->num_entries, ARGS_REF (o->entries[o->num_entries]));
-  o->num_entries++;
-  return ref;
-#endif
-
-  return 0x12; // the handle. for now just APPID.ACAD with r2000
-}
-
-static BITCODE_BL
-add_DUMMY_eed (Dwg_Object *obj)
-{
-  Dwg_Object_Entity *ent = obj->tio.entity;
-  const BITCODE_BL num_eed = ent->num_eed;
-  Dwg_Data *dwg = obj->parent;
-  Dwg_Eed_Data *data;
-  const bool is_tu = dwg->header.version >= R_2007;
-  int i = 1;
-  char *name = obj->dxfname;
-  int len;
-  int size;
-  int off = 0;
-
-  if (num_eed) // replace it
-    dwg_free_eed (obj);
-  ent->num_eed = 1;
-  ent->eed = calloc (2, sizeof (Dwg_Eed));
-  len = strlen (name);
-  size = is_tu ? 3 + ((len + 1) * 2) : len + 5;
-  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size, 1);
-  ent->eed[0].size = size;
-  dwg_add_handle (&ent->eed[0].handle, 5, add_LibreDWG_APPID (dwg, obj->index), NULL);
-  data->code = 0; // RC
-  if (is_tu) // probably never used, write DUMMY placeholder to R_2007
-    {
-      BITCODE_TU wstr = bit_utf8_to_TU (name);
-      data->u.eed_0_r2007.length = len * 2; // RS
-      memcpy (data->u.eed_0_r2007.string, wstr, (len + 1) * 2);
-    }
-  else
-    {
-      data->u.eed_0.length = len;  // RC
-      data->u.eed_0.codepage = 30; // RS
-      memcpy (data->u.eed_0.string, name, len + 1);
-    }
-  LOG_TRACE ("-EED[0]: code: 0, string: %s (len: %d)\n", name, len);
-
-  if (!obj->num_unknown_bits)
-    return 1;
-  // unknown_bits in chunks of 256
-  len = obj->num_unknown_bits / 8;
-  if (obj->num_unknown_bits % 8)
-    len++;
-  size = (len / 256) + 1;
-  if (size > 1) // we already reserved for two eeds
-    {
-      ent->eed = realloc (ent->eed, (1 + size) * sizeof (Dwg_Eed));
-      memset (&ent->eed[1], 0, size * sizeof (Dwg_Eed));
-    }
-  do
-    {
-      int l = len > 255 ? 255 : len;
-      ent->num_eed++;
-      ent->eed[i].size = 0;
-      ent->eed[0].size += l + 2;
-      data = ent->eed[i].data = (Dwg_Eed_Data *)calloc (l + 2, 1);
-      data->code = 4;           // RC
-      data->u.eed_4.length = l; // also just an RC. max 256, how odd
-      memcpy (data->u.eed_4.data, &obj->unknown_bits[off], data->u.eed_4.length);
-      LOG_TRACE ("-EED[%d]: code: 4, unknown_bits: %d\n", i, data->u.eed_4.length);
-      if (len > 255)
-        {
-          len -= 256;
-          off += 256;
-          i++;
-        }
-      else
-        break;
-    }
-  while (1);
-  return i;
 }
 
 int
@@ -2340,7 +2498,6 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_XLINE (dat, obj);
       break;
     case DWG_TYPE_DICTIONARY:
-      fixup_NOD (dwg, obj); // named object dict
       error = dwg_encode_DICTIONARY (dat, obj);
       break;
     case DWG_TYPE_MTEXT:
@@ -2489,103 +2646,6 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
           dat->bit = 0;
 
-#ifdef ENCODE_UNKNOWN_AS_DUMMY
-          // But we cannot write unknown bits into another version.
-          // Write a DUMMY or POINT instead. Later maybe PROXY. This leaks and is controversial
-          if (dwg->header.version != dwg->header.from_version)
-            {
-              obj->size = 0;
-              obj->bitsize = 0;
-              // TODO free the old to avoid leaks
-              if (is_entity)
-                { // POINT is better than DUMMY to preserve the next_entity chain.
-                  // TODO much better would be PROXY_ENTITY
-                  Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
-                  LOG_WARN ("fixup entity as POINT, Type %d\n", obj->type);
-                  //TODO dwg_free_##token##_private (dat, obj); // keeping eed and common
-                  if (obj->tio.entity->num_reactors)
-                    {
-                      free (obj->tio.entity->reactors);
-                      obj->tio.entity->num_reactors = 0;
-                      obj->tio.entity->reactors = NULL;
-                    }
-                  add_DUMMY_eed (obj);
-                  free (obj->unknown_bits);
-                  obj->tio.entity->tio.POINT = _obj
-                    = realloc (_obj, sizeof (Dwg_Entity_POINT));
-                  //memset (_obj, 0, sizeof (Dwg_Entity_POINT)); // asan cries
-                  _obj->parent = obj->tio.entity;
-                  _obj->x = 0.0;
-                  _obj->y = 0.0;
-                  _obj->z = 0.0;
-                  _obj->thickness = 1e25; // let it stand out
-                  _obj->extrusion.x = 0.0;
-                  _obj->extrusion.y = 0.0;
-                  _obj->extrusion.z = 1.0;
-                  _obj->x_ang = 0.0;
-                  obj->type = DWG_TYPE_POINT;
-                  obj->fixedtype = DWG_TYPE_POINT;
-                  if (dwg->opts & DWG_OPTS_INJSON)
-                    {
-                      free (obj->name);
-                      obj->name = strdup ("POINT");
-                    }
-                  else
-                    obj->name = (char*)"POINT";
-                  if (dwg->opts & DWG_OPTS_IN)
-                    {
-                      free (obj->dxfname);
-                      obj->dxfname = strdup ("POINT");
-                    }
-                  else
-                    obj->dxfname = (char*)"POINT";
-                }
-              else
-                {
-                  BITCODE_BS klass_id = 0;
-                  const char *name;
-                  const char *dxfname;
-
-                  add_DUMMY_eed (obj);
-                  // if PLACEHOLDER is available, or even PROXY_OBJECT.
-                  // PLOTSETTINGS uses PLACEHOLDER though
-                  if (dwg_find_class (dwg, "ACDBPLACEHOLDER", &klass_id))
-                    {
-                        obj->type = klass_id;
-                        obj->fixedtype = DWG_TYPE_PLACEHOLDER;
-                        name = "PLACEHOLDER";
-                        dxfname = "ACDBPLACEHOLDER";
-                    }
-                  else
-                    {
-                      obj->type = DWG_TYPE_DUMMY;
-                      obj->fixedtype = DWG_TYPE_DUMMY;
-                      name = "DUMMY";
-                      dxfname = "DUMMY";
-                    }
-                  // keep owner, xdicobj, reactors
-                  if (dwg->opts & DWG_OPTS_INJSON)
-                    {
-                      free (obj->name);
-                      obj->name = strdup (name);
-                    }
-                  else
-                    obj->name = (char*)name;
-                  if (dwg->opts & DWG_OPTS_IN)
-                    {
-                      free (obj->dxfname);
-                      obj->dxfname = strdup (dxfname);
-                    }
-                  else
-                    obj->dxfname = (char*)dxfname;
-                  //TODO dwg_free_##token##_private (dat, obj); // keeping eed and common
-                  LOG_INFO ("fixup as %s, Type %d\n", name, obj->type);
-                  free (obj->unknown_bits);
-                }
-              obj->hdlpos = 0;
-            }
-#endif
-
           bit_write_MS (dat, obj->size); // unknown blobs have a known size
           if (dat->version >= R_2010)
             {
@@ -2595,10 +2655,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           else
             bit_write_BS (dat, obj->type);
 
-#ifdef ENCODE_UNKNOWN_AS_DUMMY
+#if 0
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (obj->type == DWG_TYPE_POINT)
             error = dwg_encode_POINT (dat, obj);
+          else if (obj->fixedtype == DWG_TYPE_PLACEHOLDER)
+            error = dwg_encode_PLACEHOLDER (dat, obj);
           else if (obj->type == DWG_TYPE_DUMMY)
             error = dwg_encode_DUMMY (dat, obj);
           else

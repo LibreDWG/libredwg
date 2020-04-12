@@ -44,4 +44,15 @@ uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat
 Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 char *encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data, int *restrict idx);
 
+// push to entities and entries handles array
+#define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
+  {                                                                           \
+    _obj->hvfield                                                             \
+        = realloc (_obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H)); \
+    _obj->hvfield[_obj->numfield] = ref;                                      \
+    LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,     \
+               ARGS_REF (_obj->hvfield[_obj->numfield]));                     \
+    _obj->numfield++;                                                         \
+  }
+
 #endif

@@ -2367,13 +2367,16 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   tokens->index++;
   JSON_TOKENS_CHECK_OVERFLOW_ERR
   if (dwg->num_objects == 0)
-    dwg->object = calloc (size, sizeof (Dwg_Object));
-  else
     {
-      dwg->object = realloc (dwg->object,
-                             (dwg->num_objects + size) * sizeof (Dwg_Object));
-      memset (&dwg->object[dwg->num_objects], 0, size);
+      // faster version of dwg_add_object()
+      // round up to next REFS_PER_REALLOC
+      int rounded = size;
+      if (rounded % REFS_PER_REALLOC)
+        rounded += REFS_PER_REALLOC - (rounded % REFS_PER_REALLOC);
+      dwg->object = calloc (rounded, sizeof (Dwg_Object));
     }
+  else
+    dwg_add_object (dwg);
   if (!dwg->object)
     {
       LOG_ERROR ("Out of memory");

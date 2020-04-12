@@ -28,6 +28,8 @@
 #error in_dxf.h must be included after decode.h because of FORMAT_BD
 #endif
 
+#define REFS_PER_REALLOC 128
+
 int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,

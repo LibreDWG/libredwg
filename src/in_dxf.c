@@ -463,17 +463,6 @@ free_array_hdls (array_hdls *hdls)
   free (hdls);
 }
 
-// push to entities and entries handles array
-#define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
-  {                                                                           \
-    _obj->hvfield                                                             \
-        = realloc (_obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H)); \
-    _obj->hvfield[_obj->numfield] = ref;                                      \
-    LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,     \
-               ARGS_REF (_obj->hvfield[_obj->numfield]));                     \
-    _obj->numfield++;                                                         \
-  }
-
 #define DXF_CHECK_ENDSEC                                                      \
   if (pair != NULL                                                            \
       && (dat->byte >= dat->size                                              \

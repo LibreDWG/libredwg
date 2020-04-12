@@ -1488,7 +1488,7 @@ dxf_revcvt_lweight (const int lw)
   return 0;
 }
 
-static void
+void
 set_handle_size (Dwg_Handle *restrict hdl)
 {
   if (hdl->value)

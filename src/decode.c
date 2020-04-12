@@ -58,8 +58,6 @@ static bool env_var_checked_p;
 #include "logging.h"
 #include "dec_macros.h"
 
-#define REFS_PER_REALLOC 128
-
 #define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
 #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
 
@@ -224,7 +222,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 #define WE_CAN                                                                \
   "This version of LibreDWG is only capable of decoding "                     \
-  "version R13-R2018 (code: AC1012-AC1032) DWG files.\n"
+  "version r13-r2018 (code: AC1012-AC1032) DWG files.\n"
 
   PRE (R_13)
   {
