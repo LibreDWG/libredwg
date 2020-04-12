@@ -64,7 +64,7 @@ for d in "$@"; do
         b=$(basename "$d" .$ext)
         log="$b$dir.$ext.log"
         out="$b$dir.dwg"
-        [ "$ext" = "dxf" ] && timeout="env ASAN_OPTIONS=detect_leaks=0 $timeout"
+        [ "$ext" = "dxf" ] && timeout="env ASAN_OPTIONS=detect_leaks=0 @TIMEOUT_30@"
         echo "$timeout @LTEXEC@ programs/dwgwrite $args $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
         $timeout @LTEXEC@ programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
