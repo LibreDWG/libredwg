@@ -632,7 +632,7 @@ static bool env_var_checked_p;
   if (!obj->bitsize || dwg->opts & DWG_OPTS_INJSON)                           \
     {                                                                         \
       LOG_TRACE ("-bitsize calc from HANDLE_STREAM @%lu.%u (%lu)\n",          \
-                 dat->byte, dat->bit, obj->address);                          \
+                 dat->byte - obj->address, dat->bit, obj->address);           \
       obj->bitsize = bit_position (dat) - (obj->address * 8);                 \
       obj->was_bitsize_set = 1;                                               \
     }                                                                         \
@@ -642,10 +642,16 @@ static bool env_var_checked_p;
     unsigned long _hpos = bit_position (hdl_dat);                             \
     if (_hpos > 0)                                                            \
       {                                                                       \
+        /* save away special accumulated hdls, need to write common first */  \
+        Bit_Chain dat1 = *hdl_dat;                                            \
+        Bit_Chain dat2;                                                       \
+        bit_chain_init (&dat2, 12);                                           \
+        hdl_dat = &dat2;                                                      \
         ENCODE_COMMON_OBJECT_HANDLES                                          \
-        obj_flush_hdlstream (obj, dat, hdl_dat);                              \
-        if (hdl_dat != dat)                                                   \
-          bit_chain_free (hdl_dat);                                           \
+        obj_flush_hdlstream (obj, dat, hdl_dat); /* common */                 \
+        obj_flush_hdlstream (obj, dat, &dat1); /* special accumulated */      \
+        bit_chain_free (&dat1);                                               \
+        bit_chain_free (&dat2);                                               \
         hdl_dat = dat;                                                        \
       }                                                                       \
     else                                                                      \
@@ -664,11 +670,14 @@ obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 {
   unsigned long datpos = bit_position (dat);
   unsigned long hdlpos = bit_position (hdl_dat);
-  LOG_TRACE ("Flush handle stream %lu to %lu, hdlpos=%lu\n", hdlpos,
-             datpos, obj->hdlpos);
+  unsigned long objpos = obj->address * 8;
+  LOG_TRACE ("Flush handle stream of size %lu to @%lu.%lu\n", hdlpos,
+             (datpos  - objpos) / 8, (datpos  - objpos) % 8);
+  bit_set_position (hdl_dat, 0);
   for (unsigned long i = 0; i < hdlpos; i++)
     {
-      // TODO optimize. But it just happens on very few objects: DIMASSOC, ACAD_TABLE, ...
+      // TODO optimize. But it just happens on very few objects: DIMASSOC,
+      // LTYPE, ACAD_TABLE, ... with like 32 bits
       bit_write_B (dat, bit_read_B (hdl_dat));
     }
 }
@@ -2570,7 +2579,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
            && !obj->was_bitsize_set))
         {
           LOG_TRACE ("-bitsize calc from address (no handle) @%lu.%u\n",
-                     dat->byte, dat->bit);
+                     dat->byte - obj->address, dat->bit);
           obj->bitsize = pos - (obj->address * 8);
         }
       bit_set_position (dat, address * 8);
