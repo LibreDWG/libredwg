@@ -2343,7 +2343,7 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_BSd DIMLWD;
   BITCODE_BSd DIMLWE;
 
-  BITCODE_H extref_handle;
+  BITCODE_H extref;
   BITCODE_H DIMTXSTY;
 
   BITCODE_H DIMLDRBLK;

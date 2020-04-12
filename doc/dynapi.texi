@@ -5559,7 +5559,7 @@ T
 BSd,	DXF 371
 @item DIMLWE
 BSd,	DXF 372
-@item extref_handle
+@item extref
 H
 @item DIMTXSTY
 H,	DXF 340

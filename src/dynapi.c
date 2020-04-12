@@ -5006,7 +5006,7 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_fields[] = {
     0,0,0, 371 },
   { "DIMLWE",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_object_DIMSTYLE, DIMLWE),
     0,0,0, 372 },
-  { "extref_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMSTYLE, extref_handle),
+  { "extref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMSTYLE, extref),
     1,0,0, 0 },
   { "DIMTXSTY",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_DIMSTYLE, DIMTXSTY),
     1,0,0, 340 },

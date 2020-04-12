@@ -29500,12 +29500,12 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     dimstyle->DIMZIN--;
   }
   {
-    BITCODE_H extref_handle;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "extref_handle", &extref_handle, NULL)
-        && !memcmp (&extref_handle, &dimstyle->extref_handle, sizeof (dimstyle->extref_handle)))
+    BITCODE_H extref;
+    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "extref", &extref, NULL)
+        && !memcmp (&extref, &dimstyle->extref, sizeof (dimstyle->extref)))
         pass ();
     else
-        fail ("DIMSTYLE.extref_handle [H]");
+        fail ("DIMSTYLE.extref [H]");
   }
   {
     BITCODE_RC flag;

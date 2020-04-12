@@ -3489,7 +3489,7 @@ DWG_OBJECT (DIMSTYLE)
                         FIELD_VALUE (xrefref) << 6;
 
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (extref_handle, 5, 0);
+    FIELD_HANDLE (extref, 5, 0);
     FIELD_HANDLE (DIMTXSTY, 5, 340); /* Text style (DIMTXSTY) */
   }
 
