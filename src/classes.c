@@ -414,6 +414,22 @@ bool is_class_unhandled (const char* name)
   return is_type_unhandled (dwg_name_type (name));
 }
 
+bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname, BITCODE_BS *numberp)
+{
+  // linear search is good enough, with ~20 classes
+  for (BITCODE_BS i = 0; i < dwg->num_classes; i++)
+    {
+      // ->dxfname is always ASCII, dxfname_u is the TU counterpart
+      if (strEQ (dwg->dwg_class[i].dxfname, dxfname))
+        {
+          if (numberp)
+            *numberp = dwg->dwg_class[i].number;
+          return true;
+        }
+    }
+  return false;
+}
+
 void
 object_alias (char *restrict name)
 {

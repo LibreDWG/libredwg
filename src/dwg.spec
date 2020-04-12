@@ -6586,6 +6586,8 @@ DWG_OBJECT (PLOTSETTINGS)
   FIELD_BD (paper_width, 44); // in mm
   FIELD_BD (paper_height, 45); // in mm
   FIELD_2BD_1 (plot_origin, 46); // + 47
+  //wrong
+  DEBUG_HERE_OBJ;
   FIELD_2BD_1 (plot_window_ll, 48); // + 49
   FIELD_2BD_1 (plot_window_ur, 140); // + 141
   FIELD_BD (paper_units, 142);

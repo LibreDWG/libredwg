@@ -2036,11 +2036,65 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 }
 
 static unsigned
-add_LibreDWG_APPID (Dwg_Data *dwg)
+add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
 {
-  // TODO add new object with new handle, which best should be lower than the current handle.
+  // add new object with new handle, which best should be lower than the current handle.
   // because we are still adding objects to the DB.
+  BITCODE_H appid = dwg_find_tablehandle (dwg, "LibreDWG", "APPID");
+  BITCODE_H appctl;
+  Dwg_Object *obj;
+  Dwg_Object_APPID *_obj;
+  Dwg_Object_APPID_CONTROL *o;
+  unsigned long ref = dwg->object[index].handle.value;
+  int error = 0;
+
+  if (appid)
+    return appid->absolute_ref;
+#if 1
+  if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
+    appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
+  // find free handle. or a handleoffset > 1 in the object map.
+  for (BITCODE_RL i = index - 1; i > 0; i--)
+    {
+      unsigned long prev = dwg->object[i].handle.value;
+      if (prev < ref - 1)
+        {
+          ref = prev + 1; // this handle is free to use
+          LOG_TRACE ("Free handle found %lX", ref)
+          break;
+        }
+      ref = prev;
+    }
+  if (ref < 2)
+    {
+      LOG_WARN ("Could not add APPID.LibreDWG, no free handle found to insert into")
+      return 0x12;
+    }
+  // add APPID
+  dwg_add_object (dwg);
+  obj = &dwg->object[dwg->num_objects - 1];
+  error = dwg_add_APPID (obj);
+  _obj = obj->tio.object->tio.APPID;
+  obj->handle.value = ref;
+  _obj->name = strdup ("LibreDWG");
+  _obj->xrefref = 1;
+  obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, appctl->absolute_ref, NULL);
+  obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+  _obj->null_handle = dwg_add_handleref (dwg, 5, 0, NULL);
+  // size, bitsize done by encode
+
   // add to APPID_CONTROL
+  obj = dwg_ref_object (dwg, appctl);
+  o = obj->tio.object->tio.APPID_CONTROL;
+  // PUSH_HV:
+  o->entries = realloc (o->entries, (o->num_entries + 1) * sizeof (BITCODE_H));
+  o->entries[o->num_entries] = dwg_add_handleref (dwg, 2, ref, NULL);
+  LOG_TRACE ("APPID_CONTROL.entries[%d] = " FORMAT_REF " [H]\n",
+             o->num_entries, ARGS_REF (o->entries[o->num_entries]));
+  o->num_entries++;
+  return ref;
+#endif
+
   return 0x12; // the handle. for now just APPID.ACAD with r2000
 }
 
@@ -2066,7 +2120,7 @@ add_DUMMY_eed (Dwg_Object *obj)
   size = is_tu ? 3 + ((len + 1) * 2) : len + 5;
   data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size, 1);
   ent->eed[0].size = size;
-  dwg_add_handle (&ent->eed[0].handle, 5, add_LibreDWG_APPID (dwg), NULL);
+  dwg_add_handle (&ent->eed[0].handle, 5, add_LibreDWG_APPID (dwg, obj->index), NULL);
   data->code = 0; // RC
   if (is_tu) // probably never used, write DUMMY placeholder to R_2007
     {
@@ -2444,7 +2498,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               obj->bitsize = 0;
               // TODO free the old to avoid leaks
               if (is_entity)
-                { // better than DUMMY to preserve the next_entity chain.
+                { // POINT is better than DUMMY to preserve the next_entity chain.
                   // TODO much better would be PROXY_ENTITY
                   Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
                   LOG_WARN ("fixup entity as POINT, Type %d\n", obj->type);
@@ -2488,33 +2542,45 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
+                  BITCODE_BS klass_id = 0;
+                  const char *name;
+                  const char *dxfname;
+
                   add_DUMMY_eed (obj);
-                  // patch away some common data: reactors. keep owner and xdicobj
-                  obj->type = DWG_TYPE_DUMMY; // TODO or PLACEHOLDER if available, or even PROXY_OBJECT
-                  obj->fixedtype = DWG_TYPE_DUMMY;
-                  if (obj->tio.object->num_reactors)
+                  // if PLACEHOLDER is available, or even PROXY_OBJECT.
+                  // PLOTSETTINGS uses PLACEHOLDER though
+                  if (dwg_find_class (dwg, "ACDBPLACEHOLDER", &klass_id))
                     {
-                      free (obj->tio.object->reactors);
-                      obj->tio.object->num_reactors = 0;
-                      obj->tio.object->reactors = NULL;
+                        obj->type = klass_id;
+                        obj->fixedtype = DWG_TYPE_PLACEHOLDER;
+                        name = "PLACEHOLDER";
+                        dxfname = "ACDBPLACEHOLDER";
                     }
-                  //TODO dwg_free_##token##_private (dat, obj); // keeping eed and common
-                  LOG_INFO ("fixup as DUMMY, Type %d\n", obj->type);
-                  free (obj->unknown_bits);
+                  else
+                    {
+                      obj->type = DWG_TYPE_DUMMY;
+                      obj->fixedtype = DWG_TYPE_DUMMY;
+                      name = "DUMMY";
+                      dxfname = "DUMMY";
+                    }
+                  // keep owner, xdicobj, reactors
                   if (dwg->opts & DWG_OPTS_INJSON)
                     {
                       free (obj->name);
-                      obj->name = strdup ("DUMMY");
+                      obj->name = strdup (name);
                     }
                   else
-                    obj->name = (char*)"DUMMY";
+                    obj->name = (char*)name;
                   if (dwg->opts & DWG_OPTS_IN)
                     {
                       free (obj->dxfname);
-                      obj->dxfname = strdup ("DUMMY");
+                      obj->dxfname = strdup (dxfname);
                     }
                   else
-                    obj->dxfname = (char*)"DUMMY";
+                    obj->dxfname = (char*)dxfname;
+                  //TODO dwg_free_##token##_private (dat, obj); // keeping eed and common
+                  LOG_INFO ("fixup as %s, Type %d\n", name, obj->type);
+                  free (obj->unknown_bits);
                 }
               obj->hdlpos = 0;
             }
