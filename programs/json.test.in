@@ -44,7 +44,7 @@ check_roundtrip() {
         expect2="$(grep -E -c '^Add object' "$log1")"
         got2="$(grep -E -c '^Add object' "$log2")"
         rm "./$json" "./$tgt" 2>/dev/null
-        if [ "$got1" = "$expect1" ] && [ "$got2" = "$expect2" ]
+        if [ "$got1" -eq "$expect1" ] && [ "$got2" -ge "$expect2" ]
         then
             echo "$json roundtrip ok"
             rm "./$log1" "./$log2" 2>/dev/null

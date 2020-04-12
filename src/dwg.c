@@ -64,10 +64,12 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 /*------------------------------------------------------------------------------
  * Internal functions
  */
-// used only by in_dxf.c for now
+// used in in_dxf.c, encode.c
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
+// used in encode.c
+void set_handle_size (Dwg_Handle *restrict hdl);
 
 /*------------------------------------------------------------------------------
  * Private functions
@@ -1520,10 +1522,11 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
   hdl->value = absref;
   if (obj && (code == 0 || !offset) && absref) // only if same obj
     {
+      Dwg_Data *dwg = obj->parent;
       LOG_HANDLE ("object_map{%lX} = %u\n", absref, obj->index);
-      assert (obj->parent);
-      assert (obj->parent->object_map);
-      hash_set (obj->parent->object_map, absref, (uint32_t)obj->index);
+      assert (dwg);
+      assert (dwg->object_map);
+      hash_set (dwg->object_map, absref, (uint32_t)obj->index);
     }
 
   set_handle_size (hdl);

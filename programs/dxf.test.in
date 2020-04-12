@@ -170,7 +170,7 @@ check_roundtrip() {
         expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (MULTILEADER|UNKNOWN_ENT)')"
         got="$(grep -E -c '^Add entity' "$log2")"
         rm "./$dxf" "./$tgt" 2>/dev/null
-        if [ "$got" = "$expect" ]
+        if [ "$got" -eq "$expect" ]
         then
             echo "$dxf" roundtrip ok
             rm "$log1" "$log2" 2>/dev/null

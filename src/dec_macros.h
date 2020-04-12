@@ -1313,6 +1313,12 @@
         else                                                                  \
           obj->name = (char *)#token;                                         \
       }                                                                       \
+    if (obj->parent->opts & DWG_OPTS_IN)                                      \
+      {                                                                       \
+        obj->dxfname = strdup (obj->dxfname);                                 \
+        if (obj->parent->opts & DWG_OPTS_INJSON)                              \
+          obj->name = strdup (obj->name);                                     \
+      }                                                                       \
     _ent = obj->tio.entity = calloc (1, sizeof (Dwg_Object_Entity));          \
     if (!_ent)                                                                \
       return DWG_ERR_OUTOFMEM;                                                \
@@ -1416,6 +1422,12 @@
           obj->dxfname = (char *)"ACDBPLACEHOLDER";                           \
         else                                                                  \
           obj->dxfname = (char *)#token;                                      \
+      }                                                                       \
+    if (obj->parent->opts & DWG_OPTS_IN)                                      \
+      {                                                                       \
+        obj->dxfname = strdup (obj->dxfname);                                 \
+        if (obj->parent->opts & DWG_OPTS_INJSON)                              \
+          obj->name = strdup (obj->name);                                     \
       }                                                                       \
     _obj->parent = obj->tio.object;                                           \
     obj->tio.object->dwg = obj->parent;                                       \

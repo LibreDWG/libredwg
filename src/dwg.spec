@@ -1869,10 +1869,8 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
       FIELD_B (acis_empty_bit, 0);
       if (!FIELD_VALUE (acis_empty_bit))
         {
-          LOG_ERROR ("TODO: Implement parsing of ACIS data at the end "
-                    "of 3dsolid object parsing (acis_empty_bit==0).");
+          // TODO: Implement parsing of ACIS data at the end
         }
-
       if (FIELD_VALUE (version) > 1) {
         SINCE (R_2007) {
           FIELD_BL (unknown_2007, 0);
