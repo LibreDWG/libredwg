@@ -2792,8 +2792,8 @@ DWG_OBJECT (LTYPE)
   REPEAT_BLOCK
       SUB_FIELD_BD (dashes[rcount1],length, 49);
       DXF {
-        SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
-        if (_obj->dashes[rcount1].shape_flag)
+        SUB_FIELD_BS (dashes[rcount1],shape_flag, 74);
+        if (_obj->dashes[rcount1].shape_flag) // eg BATTING
           {
             SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
             SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
@@ -2801,9 +2801,9 @@ DWG_OBJECT (LTYPE)
             SUB_FIELD_BD (dashes[rcount1],rotation, 50); // absolute or relative
             SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
             SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
-            if (_obj->dashes[rcount1].shape_flag == 2)
+            if (_obj->dashes[rcount1].shape_flag & 2) // 10
               {
-                VALUE_TFF ("", 9) // TODO which text?
+                SUB_FIELD_T (dashes[rcount1],text, 9);
               }
           }
       } else {
@@ -2813,10 +2813,10 @@ DWG_OBJECT (LTYPE)
         SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
         SUB_FIELD_BD (dashes[rcount1],scale, 46);
         SUB_FIELD_BD (dashes[rcount1],rotation, 50);
-        SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
+        SUB_FIELD_BS (dashes[rcount1],shape_flag, 74);
       }
       DECODER {
-        if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x4)
+        if (FIELD_VALUE (dashes[rcount1].shape_flag) & 2)
           FIELD_VALUE (has_strings_area) = 1;
         PRE (R_13) {
           FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
@@ -2833,11 +2833,34 @@ DWG_OBJECT (LTYPE)
     }
     else {
       FIELD_BINARY (strings_area, 256, 0);
+      DECODER {
+        for (rcount1 = 0; rcount1 < _obj->num_dashes; rcount1++)
+          {
+            if (_obj->dashes[rcount1].shape_flag & 2)
+              {
+                static int dash_i = 0;
+                _obj->dashes[rcount1].text = (char*)&_obj->strings_area[dash_i];
+                dash_i += strlen (_obj->dashes[rcount1].text) + 1;
+              }
+          }
+      }
     }
   }
   LATER_VERSIONS {
-    if (FIELD_VALUE (has_strings_area))
+    if (FIELD_VALUE (has_strings_area)) {
       FIELD_BINARY (strings_area, 512, 0);
+      DECODER {
+        for (rcount1 = 0; rcount1 < _obj->num_dashes; rcount1++)
+          {
+            if (_obj->dashes[rcount1].shape_flag & 2)
+              {
+                static int dash_i = 0;
+                _obj->dashes[rcount1].text = (char*)&_obj->strings_area[dash_i];
+                dash_i += bit_wcs2len ((BITCODE_TU)_obj->dashes[rcount1].text) + 2;
+              }
+          }
+      }
+    }
   }
 
   START_OBJECT_HANDLE_STREAM;

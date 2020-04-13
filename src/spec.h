@@ -142,6 +142,9 @@
 #ifndef SUB_FIELD_T
 #  define SUB_FIELD_T(o, nam, dxf) FIELD_T (o.nam, dxf)
 #endif
+#ifndef SUB_FIELD_TV
+#  define SUB_FIELD_TV(o, nam, dxf) FIELD_TV (o.nam, dxf)
+#endif
 #ifndef SUB_FIELD_TF
 #  define SUB_FIELD_TF(o, nam, len, dxf) FIELD_TF (o.nam, _obj->o.len, dxf)
 #endif

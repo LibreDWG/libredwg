@@ -8169,6 +8169,8 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_dash_fields[] = {
     0,0,0, 50 },
   { "shape_flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_LTYPE_dash, shape_flag),
     0,0,0, 74 },
+  { "text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_LTYPE_dash, text),
+    1,1,1, 9 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_LWPOLYLINE_width: (sorted by offset) */

@@ -1534,6 +1534,35 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
   return str;
 }
 
+/* len of wide string */
+int
+bit_wcs2len (BITCODE_TU restrict wstr)
+{
+  BITCODE_TU tmp = wstr;
+  int len = 0;
+
+  if (!wstr)
+    return 0;
+  while (*tmp++)
+    len++;
+  return len;
+}
+
+/* len of wide string */
+BITCODE_TU
+bit_wcs2cpy (const BITCODE_TU restrict dest, BITCODE_TU restrict src)
+{
+  BITCODE_TU tmp = dest;
+  int len = 0;
+
+  if (!dest)
+    return src;
+  while ((*tmp++ = *src++))
+    ;
+  *tmp++ = 0;
+  return dest;
+}
+
 /* converts TU to ASCII with embedded \U+XXXX */
 char *
 bit_embed_TU (BITCODE_TU restrict wstr)

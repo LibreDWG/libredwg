@@ -2072,6 +2072,7 @@ typedef struct _dwg_LTYPE_dash {
   BITCODE_BD rotation;
   BITCODE_BS shape_flag; /* 1: text rotated 0, 2: complex_shapecode is index,
                             4: complex_shapecode is index into strings_area. */
+  BITCODE_T  text;       /* DXF 9, only if shape_flag & 2. e.g. GAS_LINE */
 } Dwg_LTYPE_dash;
 
 typedef struct _dwg_object_LTYPE

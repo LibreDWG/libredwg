@@ -9570,6 +9570,8 @@ BD,	DXF 46
 BD,	DXF 50
 @item shape_flag
 BS,	DXF 74
+@item text
+T,	DXF 9
 
 @end vtable
 @end indentedblock

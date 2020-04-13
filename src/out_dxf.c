@@ -83,7 +83,10 @@ static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
     {                                                                         \
       char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                           \
       GROUP (dxf);                                                            \
-      fprintf (dat->fh, "%s\r\n", u8);                                        \
+      if (u8)                                                                 \
+        fprintf (dat->fh, "%s\r\n", u8);                                      \
+      else                                                                    \
+        fprintf (dat->fh, "\r\n");                                            \
       free (u8);                                                              \
     }
 #define VALUE_TFF(str, dxf)                                                   \

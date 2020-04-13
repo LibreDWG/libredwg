@@ -1474,6 +1474,8 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Object_LTYPE *_o = obj->tio.object->tio.LTYPE;
   Dwg_Data *dwg = obj->parent;
   int num_dashes = (int)_o->num_dashes;
+  int is_tu = 0;
+
   _o->dashes = xcalloc (_o->num_dashes, sizeof (Dwg_LTYPE_dash));
   if (!_o->dashes)
     {
@@ -1497,9 +1499,9 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 74)
         {
           _o->dashes[j].shape_flag = pair->value.i;
-          LOG_TRACE ("LTYPE.dashes[%d].shape_flag = 0%x [RSx 74]\n", j,
+          LOG_TRACE ("LTYPE.dashes[%d].shape_flag = %d [BS 74]\n", j,
                      pair->value.i);
-          if (_o->dashes[j].shape_flag & 0x4)
+          if (_o->dashes[j].shape_flag & 2)
             _o->has_strings_area = 1;
         }
       else if (pair->code == 75)
@@ -1508,7 +1510,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             j++;
           assert (j < num_dashes);
           _o->dashes[j].complex_shapecode = pair->value.i;
-          LOG_TRACE ("LTYPE.dashes[%d].complex_shapecode = %d [RS 75]\n", j,
+          LOG_TRACE ("LTYPE.dashes[%d].complex_shapecode = %d [BS 75]\n", j,
                      pair->value.i);
         }
       else if (pair->code == 340)
@@ -1543,6 +1545,26 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           _o->dashes[j].rotation = deg2rad (pair->value.d);
           LOG_TRACE ("LTYPE.dashes[%d].rotation = %f [BD 50]\n", j,
                      _o->dashes[j].rotation);
+        }
+      else if (pair->code == 9)
+        {
+          static int dash_i = 0;
+          is_tu = obj->parent->header.version >= R_2007;
+          _o->dashes[j].text = is_tu ? (char*)bit_utf8_to_TU (pair->value.s) : pair->value.s;
+          LOG_TRACE ("LTYPE.dashes[%d].text = %s [T 9]\n", j, pair->value.s);
+          // write into strings_area
+          if (!_o->strings_area)
+            _o->strings_area = xcalloc (is_tu ? 512 : 256, 1);
+          if (is_tu)
+            {
+              bit_wcs2cpy ((BITCODE_TU)&_o->strings_area[dash_i], (BITCODE_TU)_o->dashes[j].text);
+              dash_i += (strlen (pair->value.s) * 2) + 2;
+            }
+          else
+            {
+              strcpy ((char*)&_o->strings_area[dash_i], _o->dashes[j].text);
+              dash_i += strlen (pair->value.s) + 1;
+            }
         }
       else
         break; // not a Dwg_LTYPE_dash
