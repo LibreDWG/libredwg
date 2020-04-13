@@ -876,15 +876,18 @@ static int
 dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
 {
   int error = 0;
+  Dwg_Data *dwg = obj->dwg;
   for (BITCODE_BL i = 0; i < obj->num_eed; i++)
     {
       const Dwg_Eed* _obj = &obj->eed[i];
       if (_obj->size)
         {
           // name of APPID
-          Dwg_Object *appid = dwg_resolve_handle (obj->dwg, _obj->handle.value);
+          Dwg_Object *appid = dwg_resolve_handle (dwg, _obj->handle.value);
           if (appid && appid->fixedtype == DWG_TYPE_APPID)
-            VALUE_T (appid->tio.object->tio.APPID->name, 1001);
+            VALUE_T (appid->tio.object->tio.APPID->name, 1001)
+          else
+            VALUE_TFF ("ACAD", 1001);
         }
       if (_obj->data)
         {
@@ -892,15 +895,21 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
           const int dxf = data->code + 1000;
           switch (data->code)
             {
-            case 0: VALUE_T (data->u.eed_0.string, dxf); break;
+            case 0:
+              if (dwg->header.from_version >= R_2007)
+                VALUE_TU (data->u.eed_0_r2007.string, 1000)
+              else
+                VALUE_TV (data->u.eed_0.string, 1000)
+              break;
             case 2:
-              GROUP (dxf);
-              fprintf (dat->fh, "%6i", data->u.eed_2.byte);
-              //VALUE_RC (data->u.eed_2.byte, dxf);
+              if (data->u.eed_2.byte)
+                VALUE_TFF ("}", 1002)
+              else
+                VALUE_TFF ("{", 1002)
               break;
             case 3:
               GROUP (dxf);
-              fprintf (dat->fh, "%9li", (long)data->u.eed_3.layer);
+              fprintf (dat->fh, "%9li\r\n", (long)data->u.eed_3.layer);
               //VALUE_RL (data->u.eed_3.layer, dxf);
               break;
             case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf); break;
