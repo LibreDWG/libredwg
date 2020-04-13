@@ -1288,7 +1288,7 @@
 */
 
 #define DWG_ENTITY(token)                                                     \
-  EXPORT int dwg_add_##token (Dwg_Object *obj)                                \
+  EXPORT int dwg_setup_##token (Dwg_Object *obj)                              \
   {                                                                           \
     Dwg_Object_Entity *_ent;                                                  \
     Dwg_Entity_##token *_obj;                                                 \
@@ -1298,6 +1298,10 @@
     if (!(int)obj->fixedtype)                                                 \
       {                                                                       \
         obj->fixedtype = DWG_TYPE_##token;                                    \
+      }                                                                       \
+    if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
+      {                                                                       \
+        obj->type = DWG_TYPE_##token;                                         \
       }                                                                       \
     if (!obj->dxfname)                                                        \
       {                                                                       \
@@ -1335,12 +1339,12 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj);                                              \
                                                                               \
-  /**Call dwg_add_##token and write the fields from the bitstream dat to the  \
+  /**Call dwg_setup_##token and write the fields from the bitstream dat to the  \
    * entity or object. */                                                     \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
-    int error = dwg_add_##token (obj);                                        \
+    int error = dwg_setup_##token (obj);                                        \
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
@@ -1394,7 +1398,7 @@
   }
 
 #define DWG_OBJECT(token)                                                     \
-  EXPORT int dwg_add_##token (Dwg_Object *obj)                                \
+  EXPORT int dwg_setup_##token (Dwg_Object *obj)                                \
   {                                                                           \
     Dwg_Object_##token *_obj;                                                 \
     LOG_INFO ("Add object " #token " [%d] ", obj->index)                      \
@@ -1415,6 +1419,10 @@
       {                                                                       \
         obj->fixedtype = DWG_TYPE_##token;                                    \
         obj->name = (char *)#token;                                           \
+      }                                                                       \
+    if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
+      {                                                                       \
+        obj->type = DWG_TYPE_##token;                                         \
       }                                                                       \
     if (!obj->dxfname)                                                        \
       {                                                                       \
@@ -1441,7 +1449,7 @@
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
-    int error = dwg_add_##token (obj);                                        \
+    int error = dwg_setup_##token (obj);                                        \
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \

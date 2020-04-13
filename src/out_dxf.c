@@ -2199,7 +2199,7 @@ dxf_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
   // Dwg_Entity_ENDBLK *_obj;
   obj->parent = dwg;
   obj->index = dwg->num_objects;
-  dwg_add_ENDBLK (obj);
+  dwg_setup_ENDBLK (obj);
   obj->tio.entity->ownerhandle = calloc (1, sizeof (Dwg_Object_Ref));
   obj->tio.entity->ownerhandle->obj = (Dwg_Object *)hdr;
   obj->tio.entity->ownerhandle->handleref = hdr->handle;

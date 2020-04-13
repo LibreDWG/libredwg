@@ -962,9 +962,9 @@ add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
   // add APPID
   dwg_add_object (dwg);
   obj = &dwg->object[dwg->num_objects - 1];
-  error = dwg_add_APPID (obj);
+  error = dwg_setup_APPID (obj);
   dwg_add_handle (&obj->handle, 0, ref, obj);
-  obj->type = obj->fixedtype = DWG_TYPE_APPID;
+  //obj->type = obj->fixedtype = DWG_TYPE_APPID;
   _obj = obj->tio.object->tio.APPID;
   // precise size, bitsize done by encode
   obj->size = 25;
