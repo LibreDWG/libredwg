@@ -6070,7 +6070,7 @@ DWG_ENTITY_END
  */
 DWG_ENTITY (UNKNOWN_ENT)
   DECODE_UNKNOWN_BITS
-  COMMON_ENTITY_HANDLE_DATA; // including this
+  //COMMON_ENTITY_HANDLE_DATA; // including this
 DWG_ENTITY_END
 
 /* container to hold a raw class object (varies) */

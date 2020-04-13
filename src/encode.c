@@ -2673,9 +2673,28 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
           // from json and dwg can write to these. from dxf not.
           if (is_entity)
-            error = dwg_encode_UNKNOWN_ENT (dat, obj);
+            {
+              if (obj->bitsize && dwg->header.version == dwg->header.from_version)
+                obj->was_bitsize_set = 1;
+              error = dwg_encode_UNKNOWN_ENT (dat, obj);
+            }
           else
-            error = dwg_encode_UNKNOWN_OBJ (dat, obj);
+            {
+              // skip START_OBJECT_HANDLE_STREAM (see DWG_OBJECT_END)
+              // unknown_bits already includes that.
+              if (!obj->hdlpos)
+                {
+                  if (obj->bitsize)
+                    {
+                      obj->hdlpos = (obj->address * 8) + obj->bitsize;
+                      if (dwg->header.version == dwg->header.from_version)
+                        obj->was_bitsize_set = 1;
+                    }
+                  else
+                    obj->hdlpos = (obj->address * 8) + obj->num_unknown_bits;
+                }
+              error = dwg_encode_UNKNOWN_OBJ (dat, obj);
+            }
 
           if (dwg->header.version == dwg->header.from_version
               && obj->unknown_bits && obj->num_unknown_bits) // cannot calculate
