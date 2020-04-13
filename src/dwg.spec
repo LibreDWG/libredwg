@@ -2782,21 +2782,39 @@ DWG_OBJECT (LTYPE)
   }
   LATER_VERSIONS {
     FIELD_T (description, 3);
-    FIELD_BD (pattern_len, 40); // total length
+    FIELD_BD (pattern_len, 0); // total length
   }
   FIELD_RC (alignment, 72);
   FIELD_HANDLE (extref, 5, 0);
   FIELD_RCu (num_dashes, 73);
+  DXF { FIELD_BD (pattern_len, 40); }
   REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
   REPEAT_BLOCK
       SUB_FIELD_BD (dashes[rcount1],length, 49);
-      SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
-      SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
-      SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
-      SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
-      SUB_FIELD_BD (dashes[rcount1],scale, 46);
-      SUB_FIELD_BD (dashes[rcount1],rotation, 50);
-      SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
+      DXF {
+        SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
+        if (_obj->dashes[rcount1].shape_flag)
+          {
+            SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
+            SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
+            SUB_FIELD_BD (dashes[rcount1],scale, 46);
+            SUB_FIELD_BD (dashes[rcount1],rotation, 50); // absolute or relative
+            SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
+            SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
+            if (_obj->dashes[rcount1].shape_flag == 2)
+              {
+                VALUE_TFF ("", 9) // TODO which text?
+              }
+          }
+      } else {
+        SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
+        SUB_FIELD_HANDLE (dashes[rcount1],style, 5, 340);
+        SUB_FIELD_RD (dashes[rcount1],x_offset, 44);
+        SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
+        SUB_FIELD_BD (dashes[rcount1],scale, 46);
+        SUB_FIELD_BD (dashes[rcount1],rotation, 50);
+        SUB_FIELD_BSx (dashes[rcount1],shape_flag, 74);
+      }
       DECODER {
         if (FIELD_VALUE (dashes[rcount1].shape_flag) & 0x4)
           FIELD_VALUE (has_strings_area) = 1;
