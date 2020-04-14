@@ -53,31 +53,26 @@ static unsigned int loglevel;
 void
 bit_advance_position (Bit_Chain *dat, long advance)
 {
-  long endpos = (long)dat->bit + advance;
-  if (dat->byte >= dat->size - 1 && endpos > 7)
-    {
-      // but allow pointing to the very end.
-      if (dat->byte != dat->size - 1 || dat->bit != 0)
-        {
-          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at pos %lu, size %lu, advance by %ld",
-                     __FUNCTION__, dat->byte, dat->size, advance)
-        }
-      dat->byte = dat->size - 1;
-      dat->bit = 0;
-      return;
-    }
-  if ((long)dat->byte + (endpos / 8) < 0)
+  const unsigned long pos  = bit_position (dat);
+  const unsigned long endpos = dat->size * 8;
+  long bits = (long)dat->bit + advance;
+  if (pos + advance > endpos)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("buffer underflow at pos %lu, size %lu, advance by %ld",
-                 dat->byte, dat->size, advance)
+      LOG_ERROR ("%s buffer overflow at pos %lu.%u, size %lu, advance by %ld",
+                 __FUNCTION__, dat->byte, dat->bit, dat->size, advance);
+    }
+  else if ((long)pos + advance < 0)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("buffer underflow at pos %lu.%u, size %lu, advance by %ld",
+                 dat->byte, dat->bit, dat->size, advance)
       dat->byte = 0;
       dat->bit = 0;
       return;
     }
-  dat->byte += (endpos >> 3);
-  dat->bit = endpos & 7;
+  dat->byte += (bits >> 3);
+  dat->bit = bits & 7;
 }
 
 /* Absolute get in bits
@@ -116,21 +111,23 @@ bit_reset_chain (Bit_Chain *dat)
 }
 
 #ifdef DWG_ABORT
-#  define CHK_OVERFLOW(func,retval)                                           \
+#  define CHK_OVERFLOW(func, retval)                                          \
     if (dat->byte >= dat->size)                                               \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %lu", func, dat->byte)              \
+        LOG_ERROR ("%s buffer overflow at %lu >= %lu", func, dat->byte,       \
+                   dat->size)                                                 \
         if (++errors > DWG_ABORT_LIMIT)                                       \
           abort ();                                                           \
         return retval;                                                        \
       }
 #else
-#  define CHK_OVERFLOW(func,retval)                                           \
+#  define CHK_OVERFLOW(func, retval)                                          \
     if (dat->byte >= dat->size)                                               \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %lu", func, dat->byte)              \
+        LOG_ERROR ("%s buffer overflow at %lu >= %lu", func, dat->byte,       \
+                   dat->size)                                                 \
         return retval;                                                        \
       }
 #endif
