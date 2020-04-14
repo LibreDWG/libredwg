@@ -2775,6 +2775,7 @@ DWG_OBJECT_END
  * Unstable, ACAD import errors
  */
 DWG_OBJECT (LTYPE)
+
   COMMON_TABLE_FLAGS (Linetype)
 
   PRE (R_13) {

@@ -50,6 +50,7 @@ doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check json-check \
 	     log.in svg.in rw.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
+	     cmp-objs.pl \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILE)

@@ -54,9 +54,9 @@
       }
 #ifdef IS_DXF
       switch (FIELD_VALUE (ltype_flags)) {
-      case 0: VALUE_TV ("BYLAYER", 6); break;
-      case 1: VALUE_TV ("BYBLOCK", 6); break;
-      case 2: VALUE_TV ("CONTINUOUS", 6); break;
+      case 0: VALUE_TV ("ByLayer", 6); break;
+      case 1: VALUE_TV ("ByBlock", 6); break;
+      case 2: VALUE_TV ("Continuous", 6); break;
       default: break;
       }
 #endif
@@ -80,9 +80,9 @@
 
 #ifdef IS_DXF
       switch (FIELD_VALUE (ltype_flags)) {
-      case 0: VALUE_TV ("BYLAYER", 6); break;
-      case 1: VALUE_TV ("BYBLOCK", 6); break;
-      case 2: VALUE_TV ("CONTINUOUS", 6); break;
+      case 0: VALUE_TV ("ByLayer", 6); break;
+      case 1: VALUE_TV ("ByBlock", 6); break;
+      case 2: VALUE_TV ("Continuous", 6); break;
       default: break;
       }
 #endif

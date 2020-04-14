@@ -203,6 +203,7 @@
 
   SINCE (R_2000) {
     // DXF later after 6, see common_entity_handle_data
+    // Ideally CMC 60 should be deferred after layer 8, before linewt 370 also
 #ifndef IS_DXF
     FIELD_RC (linewt, 370);
 #endif
