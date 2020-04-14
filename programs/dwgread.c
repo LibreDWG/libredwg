@@ -258,6 +258,7 @@ main (int argc, char *argv[])
         dat.fh = fopen (outfile, "w");
       else
         dat.fh = stdout;
+      fprintf (stderr, "\n");
       dat.version = dat.from_version = dwg.header.version;
       // TODO --as-rNNNN version? for now not.
       // we want the native dump, converters are separate.

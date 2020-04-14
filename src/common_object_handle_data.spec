@@ -23,7 +23,7 @@
   }
 #endif
 
-#ifndef IS_FREE
+#if !defined(IS_FREE) && !defined(IS_JSON)
   // done later in the dwg.spec, because of num_entries
   if (!dwg_obj_is_control (obj))
 #endif
