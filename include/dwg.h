@@ -2360,6 +2360,7 @@ typedef struct _dwg_object_DIMSTYLE
 /**
  VPORT_ENTITY_CONTROL (70) table object (r11-r2000)
  The table header of all vport entities (unused in newer versions)
+ Called VXTable
  */
 typedef struct _dwg_object_VPORT_ENTITY_CONTROL
 {
@@ -2368,6 +2369,7 @@ typedef struct _dwg_object_VPORT_ENTITY_CONTROL
 
 /**
  VPORT_ENTITY_HEADER (71) table object (r11-r2000)
+ Called VXTableRecord
  */
 typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
