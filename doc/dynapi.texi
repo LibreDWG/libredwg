@@ -8358,8 +8358,10 @@ B
 B,	DXF 70
 @item extref
 H
-@item viewport
-H
+@item num_viewports
+BL
+@item viewports
+H*
 
 @end vtable
 @end indentedblock

@@ -2376,7 +2376,8 @@ typedef struct _dwg_object_VPORT_ENTITY_HEADER
   COMMON_TABLE_FIELDS();
   BITCODE_B flag1;
   BITCODE_H extref;
-  BITCODE_H viewport;
+  BITCODE_BL num_viewports; // calculated
+  BITCODE_H *viewports;
 } Dwg_Object_VPORT_ENTITY_HEADER;
 
 /**

@@ -43054,6 +43054,21 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
       fail ("VPORT_ENTITY_HEADER.name [TV] '%s' <> '%s'", name, vport_entity_header->name);
   }
   {
+    BITCODE_BL num_viewports;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "num_viewports", &num_viewports, NULL)
+        && num_viewports == vport_entity_header->num_viewports)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.num_viewports [BL] %u != %u", vport_entity_header->num_viewports, num_viewports);
+    num_viewports++;
+    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "num_viewports", &num_viewports, 0)
+        && num_viewports == vport_entity_header->num_viewports)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.num_viewports [BL] set+1 %u != %u", vport_entity_header->num_viewports, num_viewports);
+    vport_entity_header->num_viewports--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "parent", &parent, NULL)
         && !memcmp (&parent, &vport_entity_header->parent, sizeof (vport_entity_header->parent)))
@@ -43077,12 +43092,14 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     vport_entity_header->used--;
   }
   {
-    BITCODE_H viewport;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "viewport", &viewport, NULL)
-        && !memcmp (&viewport, &vport_entity_header->viewport, sizeof (vport_entity_header->viewport)))
-        pass ();
+    BITCODE_H* viewports;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "num_viewports", &count, NULL)
+        && dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "viewports", &viewports, NULL)
+        && viewports == vport_entity_header->viewports)
+      pass ();
     else
-        fail ("VPORT_ENTITY_HEADER.viewport [H]");
+      fail ("VPORT_ENTITY_HEADER.viewports [H*] * %u num_viewports", count);
   }
   {
     BITCODE_B xrefdep;
@@ -43279,7 +43296,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 43282 "dynapi_test.c"
+#line 43284 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -43983,7 +44000,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 43986 "dynapi_test.c"
+#line 43988 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

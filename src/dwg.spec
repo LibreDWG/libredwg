@@ -3540,8 +3540,28 @@ DWG_OBJECT (VPORT_ENTITY_HEADER)
 
     START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (extref, 5, 0);
-    FIELD_HANDLE (viewport, 4, 0);
-    // TODO sometimes more of them until NULLHDL
+    DECODER
+    {
+      FIELD_VALUE (viewports) = (BITCODE_H *)calloc (3, sizeof (BITCODE_H));
+      vcount = 0;
+      do
+        {
+          FIELD_HANDLE_N (viewports[vcount], vcount, ANYCODE, 0);
+          vcount++;
+          if (vcount > 3)
+            _obj->viewports = (BITCODE_H *)realloc (
+                _obj->viewports, (vcount + 1) * sizeof (BITCODE_H));
+        }
+      while (_obj->viewports[vcount-1]
+             && !(_obj->viewports[vcount-1]->handleref.code == 5
+                  && _obj->viewports[vcount-1]->handleref.size == 0));
+      _obj->viewports[vcount] = NULL;
+      _obj->num_viewports = vcount;
+    }
+    else
+    {
+      HANDLE_VECTOR (viewports, num_viewports, ANYCODE, 0); // 4.x until 5.0.0
+    }
   }
 
 DWG_OBJECT_END
