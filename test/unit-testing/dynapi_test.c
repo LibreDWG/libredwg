@@ -5586,6 +5586,21 @@ static int test__3DSOLID (const Dwg_Object *obj)
     _3dsolid->isoline_present--;
   }
   {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "isolines", &isolines, NULL)
+        && isolines == _3dsolid->isolines)
+      pass ();
+    else
+      fail ("3DSOLID.isolines [BL] %u != %u", _3dsolid->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "isolines", &isolines, 0)
+        && isolines == _3dsolid->isolines)
+      pass ();
+    else
+      fail ("3DSOLID.isolines [BL] set+1 %u != %u", _3dsolid->isolines, isolines);
+    _3dsolid->isolines--;
+  }
+  {
     BITCODE_BL num_blocks;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "num_blocks", &num_blocks, NULL)
         && num_blocks == _3dsolid->num_blocks)
@@ -5599,21 +5614,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.num_blocks [BL] set+1 %u != %u", _3dsolid->num_blocks, num_blocks);
     _3dsolid->num_blocks--;
-  }
-  {
-    BITCODE_BL num_isolines;
-    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "num_isolines", &num_isolines, NULL)
-        && num_isolines == _3dsolid->num_isolines)
-      pass ();
-    else
-      fail ("3DSOLID.num_isolines [BL] %u != %u", _3dsolid->num_isolines, num_isolines);
-    num_isolines++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_isolines", &num_isolines, 0)
-        && num_isolines == _3dsolid->num_isolines)
-      pass ();
-    else
-      fail ("3DSOLID.num_isolines [BL] set+1 %u != %u", _3dsolid->num_isolines, num_isolines);
-    _3dsolid->num_isolines--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -9863,6 +9863,21 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     extrudedsurface->isoline_present--;
   }
   {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "isolines", &isolines, NULL)
+        && isolines == extrudedsurface->isolines)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.isolines [BL] %u != %u", extrudedsurface->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "isolines", &isolines, 0)
+        && isolines == extrudedsurface->isolines)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.isolines [BL] set+1 %u != %u", extrudedsurface->isolines, isolines);
+    extrudedsurface->isolines--;
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == extrudedsurface->modeler_format_version)
@@ -9891,21 +9906,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.num_blocks [BL] set+1 %u != %u", extrudedsurface->num_blocks, num_blocks);
     extrudedsurface->num_blocks--;
-  }
-  {
-    BITCODE_BL num_isolines;
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "num_isolines", &num_isolines, NULL)
-        && num_isolines == extrudedsurface->num_isolines)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.num_isolines [BL] %u != %u", extrudedsurface->num_isolines, num_isolines);
-    num_isolines++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_isolines", &num_isolines, 0)
-        && num_isolines == extrudedsurface->num_isolines)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.num_isolines [BL] set+1 %u != %u", extrudedsurface->num_isolines, num_isolines);
-    extrudedsurface->num_isolines--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -12498,6 +12498,21 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     loftedsurface->isoline_present--;
   }
   {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "isolines", &isolines, NULL)
+        && isolines == loftedsurface->isolines)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.isolines [BL] %u != %u", loftedsurface->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "isolines", &isolines, 0)
+        && isolines == loftedsurface->isolines)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.isolines [BL] set+1 %u != %u", loftedsurface->isolines, isolines);
+    loftedsurface->isolines--;
+  }
+  {
     BITCODE_BD* loft_entity_transmatrix;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "loft_entity_transmatrix", &loft_entity_transmatrix, NULL)
         && !memcmp (&loft_entity_transmatrix, &loftedsurface->loft_entity_transmatrix, sizeof (loftedsurface->loft_entity_transmatrix)))
@@ -12579,21 +12594,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_guide_curves [BS] set+1 %hu != %hu", loftedsurface->num_guide_curves, num_guide_curves);
     loftedsurface->num_guide_curves--;
-  }
-  {
-    BITCODE_BL num_isolines;
-    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "num_isolines", &num_isolines, NULL)
-        && num_isolines == loftedsurface->num_isolines)
-      pass ();
-    else
-      fail ("LOFTEDSURFACE.num_isolines [BL] %u != %u", loftedsurface->num_isolines, num_isolines);
-    num_isolines++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_isolines", &num_isolines, 0)
-        && num_isolines == loftedsurface->num_isolines)
-      pass ();
-    else
-      fail ("LOFTEDSURFACE.num_isolines [BL] set+1 %u != %u", loftedsurface->num_isolines, num_isolines);
-    loftedsurface->num_isolines--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -14927,6 +14927,21 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     planesurface->isoline_present--;
   }
   {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "isolines", &isolines, NULL)
+        && isolines == planesurface->isolines)
+      pass ();
+    else
+      fail ("PLANESURFACE.isolines [BL] %u != %u", planesurface->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "isolines", &isolines, 0)
+        && isolines == planesurface->isolines)
+      pass ();
+    else
+      fail ("PLANESURFACE.isolines [BL] set+1 %u != %u", planesurface->isolines, isolines);
+    planesurface->isolines--;
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == planesurface->modeler_format_version)
@@ -14955,21 +14970,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.num_blocks [BL] set+1 %u != %u", planesurface->num_blocks, num_blocks);
     planesurface->num_blocks--;
-  }
-  {
-    BITCODE_BL num_isolines;
-    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "num_isolines", &num_isolines, NULL)
-        && num_isolines == planesurface->num_isolines)
-      pass ();
-    else
-      fail ("PLANESURFACE.num_isolines [BL] %u != %u", planesurface->num_isolines, num_isolines);
-    num_isolines++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_isolines", &num_isolines, 0)
-        && num_isolines == planesurface->num_isolines)
-      pass ();
-    else
-      fail ("PLANESURFACE.num_isolines [BL] set+1 %u != %u", planesurface->num_isolines, num_isolines);
-    planesurface->num_isolines--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -16248,6 +16248,21 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     revolvedsurface->isoline_present--;
   }
   {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "isolines", &isolines, NULL)
+        && isolines == revolvedsurface->isolines)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.isolines [BL] %u != %u", revolvedsurface->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "isolines", &isolines, 0)
+        && isolines == revolvedsurface->isolines)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.isolines [BL] set+1 %u != %u", revolvedsurface->isolines, isolines);
+    revolvedsurface->isolines--;
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == revolvedsurface->modeler_format_version)
@@ -16276,21 +16291,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.num_blocks [BL] set+1 %u != %u", revolvedsurface->num_blocks, num_blocks);
     revolvedsurface->num_blocks--;
-  }
-  {
-    BITCODE_BL num_isolines;
-    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "num_isolines", &num_isolines, NULL)
-        && num_isolines == revolvedsurface->num_isolines)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.num_isolines [BL] %u != %u", revolvedsurface->num_isolines, num_isolines);
-    num_isolines++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_isolines", &num_isolines, 0)
-        && num_isolines == revolvedsurface->num_isolines)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.num_isolines [BL] set+1 %u != %u", revolvedsurface->num_isolines, num_isolines);
-    revolvedsurface->num_isolines--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -17485,6 +17485,21 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     sweptsurface->isoline_present--;
   }
   {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "isolines", &isolines, NULL)
+        && isolines == sweptsurface->isolines)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.isolines [BL] %u != %u", sweptsurface->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "isolines", &isolines, 0)
+        && isolines == sweptsurface->isolines)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.isolines [BL] set+1 %u != %u", sweptsurface->isolines, isolines);
+    sweptsurface->isolines--;
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == sweptsurface->modeler_format_version)
@@ -17513,21 +17528,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.num_blocks [BL] set+1 %u != %u", sweptsurface->num_blocks, num_blocks);
     sweptsurface->num_blocks--;
-  }
-  {
-    BITCODE_BL num_isolines;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "num_isolines", &num_isolines, NULL)
-        && num_isolines == sweptsurface->num_isolines)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.num_isolines [BL] %u != %u", sweptsurface->num_isolines, num_isolines);
-    num_isolines++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_isolines", &num_isolines, 0)
-        && num_isolines == sweptsurface->num_isolines)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.num_isolines [BL] set+1 %u != %u", sweptsurface->num_isolines, num_isolines);
-    sweptsurface->num_isolines--;
   }
   {
     BITCODE_BL num_silhouettes;

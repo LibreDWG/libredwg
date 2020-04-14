@@ -1680,7 +1680,7 @@ typedef struct _dwg_3DSOLID_silhouette
   BITCODE_B wireframe_data_present; \
   BITCODE_B point_present; \
   BITCODE_3BD point; \
-  BITCODE_BL num_isolines; \
+  BITCODE_BL isolines; \
   BITCODE_B isoline_present; \
   BITCODE_BL num_wires; \
   Dwg_3DSOLID_wire * wires; \

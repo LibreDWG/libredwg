@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   BITCODE_B wireframe_data_present;
   BITCODE_B point_present;
   BITCODE_3BD point;
-  BITCODE_BL num_isolines;
+  BITCODE_BL isolines;
   BITCODE_B isoline_present;
   BITCODE_BL i, num_wires;
   Dwg_3DSOLID_wire * wires;
@@ -45,7 +45,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, point_present, B, point_present);
   CHK_ENTITY_3RD (_obj, PLANESURFACE, point, point);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, isoline_present, B, isoline_present);
-  CHK_ENTITY_TYPE (_obj, PLANESURFACE, num_isolines, BL, num_isolines);
+  CHK_ENTITY_TYPE (_obj, PLANESURFACE, isolines, BL, isolines);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, num_wires, BL, num_wires);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, num_silhouettes, BL, num_silhouettes);
   if (!dwg_dynapi_entity_value (_obj, "PLANESURFACE", "wires", &wires, NULL))

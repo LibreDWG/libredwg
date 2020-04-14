@@ -1324,7 +1324,7 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               FIELD_3BD (point, 0);
             }
-          FIELD_BL (num_isolines, 0);
+          FIELD_BL (isolines, 0);
           FIELD_B (isoline_present, 0);
           if (FIELD_VALUE (isoline_present))
             {

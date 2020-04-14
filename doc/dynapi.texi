@@ -786,7 +786,7 @@ B
 B
 @item point
 3BD
-@item num_isolines
+@item isolines
 BL
 @item isoline_present
 B
@@ -1623,7 +1623,7 @@ B
 B
 @item point
 3BD
-@item num_isolines
+@item isolines
 BL
 @item isoline_present
 B
@@ -2134,7 +2134,7 @@ B
 B
 @item point
 3BD
-@item num_isolines
+@item isolines
 BL
 @item isoline_present
 B
@@ -2622,7 +2622,7 @@ B
 B
 @item point
 3BD
-@item num_isolines
+@item isolines
 BL
 @item isoline_present
 B
@@ -2939,7 +2939,7 @@ B
 B
 @item point
 3BD
-@item num_isolines
+@item isolines
 BL
 @item isoline_present
 B
@@ -3189,7 +3189,7 @@ B
 B
 @item point
 3BD
-@item num_isolines
+@item isolines
 BL
 @item isoline_present
 B

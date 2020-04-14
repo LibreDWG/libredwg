@@ -1834,7 +1834,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_VALUE (point.y) = 0;
               FIELD_VALUE (point.z) = 0;
             }
-          FIELD_BL (num_isolines, 0);
+          FIELD_BL (isolines, 0);
           FIELD_B (isoline_present, 0);
           if (FIELD_VALUE (isoline_present))
             {

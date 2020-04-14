@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL i;
   BITCODE_BS version;
-  BITCODE_BL block_size, num_isolines, num_wires, num_sil, unknown_2007;
+  BITCODE_BL block_size, isolines, num_wires, num_sil, unknown_2007;
   unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
@@ -48,8 +48,8 @@ api_process (dwg_object *obj)
   if (dwg_ent_body_get_isoline_present (body, &error) != isoline_present
       || error)
     fail ("old API dwg_ent_body_get_isoline_present");
-  CHK_ENTITY_TYPE (body, BODY, num_isolines, BL, num_isolines);
-  if (dwg_ent_body_get_num_isolines (body, &error) != num_isolines || error)
+  CHK_ENTITY_TYPE (body, BODY, isolines, BL, isolines);
+  if (dwg_ent_body_get_num_isolines (body, &error) != isolines || error)
     fail ("old API dwg_ent_body_get_num_isolines");
   CHK_ENTITY_TYPE (body, BODY, num_wires, BL, num_wires);
   if (dwg_ent_body_get_num_wires (body, &error) != num_wires || error)

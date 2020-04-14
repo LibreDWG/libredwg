@@ -16284,7 +16284,7 @@ dwg_ent_3dsolid_set_point (dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/** Returns the _dwg_entity_3DSOLID::num_isolines
+/** Returns the _dwg_entity_3DSOLID::isolines
  */
 BITCODE_BL
 dwg_ent_3dsolid_get_num_isolines (const dwg_ent_3dsolid *restrict _3dsolid,
@@ -16293,7 +16293,7 @@ dwg_ent_3dsolid_get_num_isolines (const dwg_ent_3dsolid *restrict _3dsolid,
   if (_3dsolid)
     {
       *error = 0;
-      return _3dsolid->num_isolines;
+      return _3dsolid->isolines;
     }
   else
     {
@@ -16313,7 +16313,7 @@ dwg_ent_3dsolid_set_num_isolines (dwg_ent_3dsolid *restrict _3dsolid,
   if (_3dsolid)
     {
       *error = 0;
-      _3dsolid->num_isolines = num;
+      _3dsolid->isolines = num;
     }
   else
     {
