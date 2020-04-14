@@ -1819,70 +1819,6 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           FIELD_TFv (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
           total_size = FIELD_VALUE (block_size[1]);
         }
-
-      FIELD_B (wireframe_data_present, 0);
-      if (FIELD_VALUE (wireframe_data_present))
-        {
-          FIELD_B (point_present, 0);
-          if (FIELD_VALUE (point_present))
-            {
-              FIELD_3BD (point, 0);
-            }
-          else
-            {
-              FIELD_VALUE (point.x) = 0;
-              FIELD_VALUE (point.y) = 0;
-              FIELD_VALUE (point.z) = 0;
-            }
-          FIELD_BL (isolines, 0);
-          FIELD_B (isoline_present, 0);
-          if (FIELD_VALUE (isoline_present))
-            {
-              FIELD_BL (num_wires, 0);
-              REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
-              REPEAT_BLOCK
-                  WIRESTRUCT_fields (wires[rcount1])
-              END_REPEAT_BLOCK
-              SET_PARENT_OBJ (wires)
-              END_REPEAT (wires);
-              FIELD_BL (num_silhouettes, 0);
-              REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
-              REPEAT_BLOCK
-                  SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
-                  SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
-                  SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
-                  SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
-                  SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
-                  SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
-                  REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire)
-                  REPEAT_BLOCK
-                      WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
-                  END_REPEAT_BLOCK
-                  SET_PARENT_OBJ (silhouettes[rcount1].wires)
-                  END_REPEAT (silhouettes[rcount1].wires);
-              END_REPEAT_BLOCK
-              SET_PARENT_OBJ (silhouettes)
-              END_REPEAT (silhouettes);
-            }
-        }
-
-      FIELD_B (acis_empty_bit, 0);
-      if (!FIELD_VALUE (acis_empty_bit))
-        {
-          // TODO: Implement parsing of ACIS data at the end
-        }
-      if (FIELD_VALUE (version) > 1) {
-        SINCE (R_2007) {
-          FIELD_BL (unknown_2007, 0);
-        }
-      }
-
-      COMMON_ENTITY_HANDLE_DATA;
-      if (FIELD_VALUE (version) > 1) {
-        SINCE (R_2007) {
-          FIELD_HANDLE (history_id, ANYCODE, 350);
-        }
-      }
     }
   return error;
 }
@@ -1892,7 +1828,6 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
 #endif //#if IS_DECODER
 
 #ifdef IS_ENCODER
-
 #define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);
 static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                            Dwg_Object *restrict obj,
@@ -1950,6 +1885,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_BL (block_size[i], 0);
               FIELD_TF (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
             }
+          FIELD_BL (block_size[num_blocks], 0);
         }
       else //if (FIELD_VALUE (version)==2)
         {
@@ -1996,18 +1932,18 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
 #endif //#if IS_ENCODER
 
 #ifdef IS_FREE
+#undef FREE_3DSOLID
+#define FREE_3DSOLID {} free_3dsolid (obj, (Dwg_Entity_3DSOLID *)_obj);
 static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
 {
   int error = 0;
-  BITCODE_BL i;
-  BITCODE_BL vcount, rcount1, rcount2;
   Bit_Chain *dat = &pdat;
 
   if (!FIELD_VALUE (acis_empty))
     {
       if (FIELD_VALUE (encr_sat_data))
         {
-          for (i=0; i <= FIELD_VALUE (num_blocks); i++)
+          for (BITCODE_BL i = 0; i <= FIELD_VALUE (num_blocks); i++)
             {
               if (FIELD_VALUE (encr_sat_data[i]) != NULL)
                 FIELD_TF (encr_sat_data[i], block_size[i], 0);
@@ -2016,50 +1952,77 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
       FREE_IF (FIELD_VALUE (encr_sat_data));
       FREE_IF (FIELD_VALUE (block_size));
       FREE_IF (FIELD_VALUE (acis_data));
-
-      REPEAT (num_wires, wires, Dwg_3DSOLID_wire)
-      REPEAT_BLOCK
-          WIRESTRUCT_fields (wires[rcount1])
-      END_REPEAT_BLOCK
-      SET_PARENT_OBJ (wires)
-      END_REPEAT (wires);
-
-      REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)
-      REPEAT_BLOCK
-          SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);
-          SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);
-          SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
-          SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
-          SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
-          SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
-          REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire)
-          REPEAT_BLOCK
-              WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
-          END_REPEAT_BLOCK
-          END_REPEAT (silhouettes[rcount1].wires);
-      END_REPEAT_BLOCK
-      SET_PARENT_OBJ (silhouettes)
-      END_REPEAT (silhouettes);
     }
-
-  FIELD_B (acis_empty_bit, 0);
-  if (FIELD_VALUE (version) > 1) {
-    SINCE (R_2007) {
-      FIELD_BL (unknown_2007, 0);
-    }
-  }
-  COMMON_ENTITY_HANDLE_DATA;
-
-  if (FIELD_VALUE (version) > 1) {
-    SINCE (R_2007) {
-      FIELD_HANDLE (history_id, ANYCODE, 350);
-    }
-  }
   return error;
 }
-#undef FREE_3DSOLID
-#define FREE_3DSOLID free_3dsolid (obj, (Dwg_Entity_3DSOLID *)_obj)
+#else
+#define FREE_3DSOLID {}
 #endif
+
+#define COMMON_3DSOLID                                                                             \
+  FIELD_B (wireframe_data_present, 0);                                                             \
+  if (FIELD_VALUE (wireframe_data_present))                                                        \
+    {                                                                                              \
+      FIELD_B (point_present, 0);                                                                  \
+      if (FIELD_VALUE (point_present))                                                             \
+        {                                                                                          \
+          FIELD_3BD (point, 0);                                                                    \
+        }                                                                                          \
+      else                                                                                         \
+        {                                                                                          \
+          FIELD_VALUE (point.x) = 0;                                                               \
+          FIELD_VALUE (point.y) = 0;                                                               \
+          FIELD_VALUE (point.z) = 0;                                                               \
+        }                                                                                          \
+      FIELD_BL (isolines, 0);                                                                      \
+      FIELD_B (isoline_present, 0);                                                                \
+      if (FIELD_VALUE (isoline_present))                                                           \
+        {                                                                                          \
+          FIELD_BL (num_wires, 0);                                                                 \
+          REPEAT (num_wires, wires, Dwg_3DSOLID_wire)                                              \
+          REPEAT_BLOCK                                                                             \
+              WIRESTRUCT_fields (wires[rcount1])                                                   \
+          END_REPEAT_BLOCK                                                                         \
+          SET_PARENT_OBJ (wires)                                                                   \
+          END_REPEAT (wires);                                                                      \
+          FIELD_BL (num_silhouettes, 0);                                                           \
+          REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)                            \
+          REPEAT_BLOCK                                                                             \
+              SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);                                       \
+              SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);                                  \
+              SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);                         \
+              SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);                                  \
+              SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);                               \
+              SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);                                   \
+              REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire) \
+              REPEAT_BLOCK                                                                         \
+                  WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])                          \
+              END_REPEAT_BLOCK                                                                     \
+              SET_PARENT_OBJ (silhouettes[rcount1].wires)                                          \
+              END_REPEAT (silhouettes[rcount1].wires);                                             \
+          END_REPEAT_BLOCK                                                                         \
+          SET_PARENT_OBJ (silhouettes)                                                             \
+          END_REPEAT (silhouettes);                                                                \
+        }                                                                                          \
+      }                                                                                            \
+                                                                                                   \
+    FIELD_B (acis_empty_bit, 0);                                                                   \
+    if (!FIELD_VALUE (acis_empty_bit))                                                             \
+      {                                                                                            \
+        /* TODO: Implement parsing of ACIS data at the end  */                                     \
+      }                                                                                            \
+    if (FIELD_VALUE (version) > 1) {                                                               \
+      SINCE (R_2007) {                                                                             \
+        FIELD_BL (unknown_2007, 0);                                                                \
+      }                                                                                            \
+    }                                                                                              \
+                                                                                                   \
+    COMMON_ENTITY_HANDLE_DATA;                                                                     \
+    if (FIELD_VALUE (version) > 1) {                                                               \
+      SINCE (R_2007) {                                                                             \
+        FIELD_HANDLE (history_id, ANYCODE, 350);                                                   \
+      }                                                                                            \
+    }
 
 #define ACTION_3DSOLID \
   DXF_OR_PRINT { \
@@ -2075,7 +2038,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
     JSON_3DSOLID \
   } \
   FREE_3DSOLID \
-  COMMON_ENTITY_HANDLE_DATA
+  COMMON_3DSOLID
 
 /*(37)*/
 DWG_ENTITY (REGION)

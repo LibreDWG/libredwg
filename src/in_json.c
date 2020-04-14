@@ -2083,6 +2083,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   block_size[k] = (BITCODE_BL)len;
                   LOG_TRACE ("block_size[%d]: %lu [BL]\n", k, len);
                 }
+              block_size[num_blocks] = 0;
               LOG_TRACE ("block_size[%d]: 0 [BL]\n", num_blocks);
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_blocks", &num_blocks, true);
               dwg_dynapi_entity_set_value (_obj, obj->name, "block_size", &block_size, true);
