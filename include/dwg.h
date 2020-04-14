@@ -2375,7 +2375,7 @@ typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
   COMMON_TABLE_FIELDS();
   BITCODE_B flag1;
-  BITCODE_H xref_handle;
+  BITCODE_H extref;
   BITCODE_H vport_entity;
 } Dwg_Object_VPORT_ENTITY_HEADER;
 

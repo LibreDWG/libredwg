@@ -8356,7 +8356,7 @@ BS
 B
 @item flag1
 B,	DXF 70
-@item xref_handle
+@item extref
 H
 @item vport_entity
 H

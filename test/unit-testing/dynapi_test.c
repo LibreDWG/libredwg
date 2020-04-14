@@ -43006,6 +43006,14 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   Dwg_Object_VPORT_ENTITY_HEADER *restrict vport_entity_header = obj->tio.object->tio.VPORT_ENTITY_HEADER;
   failed = 0;
   {
+    BITCODE_H extref;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "extref", &extref, NULL)
+        && !memcmp (&extref, &vport_entity_header->extref, sizeof (vport_entity_header->extref)))
+        pass ();
+    else
+        fail ("VPORT_ENTITY_HEADER.extref [H]");
+  }
+  {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, NULL)
         && flag == vport_entity_header->flag)
@@ -43075,14 +43083,6 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
         pass ();
     else
         fail ("VPORT_ENTITY_HEADER.vport_entity [H]");
-  }
-  {
-    BITCODE_H xref_handle;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xref_handle", &xref_handle, NULL)
-        && !memcmp (&xref_handle, &vport_entity_header->xref_handle, sizeof (vport_entity_header->xref_handle)))
-        pass ();
-    else
-        fail ("VPORT_ENTITY_HEADER.xref_handle [H]");
   }
   {
     BITCODE_B xrefdep;

@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BS xrefindex_plus1;
   BITCODE_B xrefdep;
   BITCODE_B flag1;
-  BITCODE_H xref_handle;
+  BITCODE_H extref;
   BITCODE_H vport_entity;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -26,6 +26,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, xrefdep, B, xrefdep);
 
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, flag1, B, flag1);
-  CHK_ENTITY_H (_obj, VPORT_ENTITY_HEADER, xref_handle, xref_handle);
+  CHK_ENTITY_H (_obj, VPORT_ENTITY_HEADER, extref, extref);
   CHK_ENTITY_H (_obj, VPORT_ENTITY_HEADER, vport_entity, vport_entity);
 }
