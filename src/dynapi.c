@@ -7276,7 +7276,7 @@ static const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_HEADER_fields[] = {
     0,0,0, 70 },
   { "extref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, extref),
     1,0,0, 0 },
-  { "vport_entity",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, vport_entity),
+  { "viewport",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, viewport),
     1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

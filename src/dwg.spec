@@ -3540,7 +3540,7 @@ DWG_OBJECT (VPORT_ENTITY_HEADER)
 
     START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (extref, 5, 0);
-    FIELD_HANDLE (vport_entity, 4, 0);
+    FIELD_HANDLE (viewport, 4, 0);
     // TODO sometimes more of them until NULLHDL
   }
 

@@ -43077,12 +43077,12 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     vport_entity_header->used--;
   }
   {
-    BITCODE_H vport_entity;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "vport_entity", &vport_entity, NULL)
-        && !memcmp (&vport_entity, &vport_entity_header->vport_entity, sizeof (vport_entity_header->vport_entity)))
+    BITCODE_H viewport;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "viewport", &viewport, NULL)
+        && !memcmp (&viewport, &vport_entity_header->viewport, sizeof (vport_entity_header->viewport)))
         pass ();
     else
-        fail ("VPORT_ENTITY_HEADER.vport_entity [H]");
+        fail ("VPORT_ENTITY_HEADER.viewport [H]");
   }
   {
     BITCODE_B xrefdep;

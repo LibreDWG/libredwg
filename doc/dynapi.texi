@@ -8358,7 +8358,7 @@ B
 B,	DXF 70
 @item extref
 H
-@item vport_entity
+@item viewport
 H
 
 @end vtable
