@@ -373,12 +373,6 @@ sub dxfin_spec {
   close $in;
 }
 dxfin_spec "$srcdir/dwg.spec";
-$DXF{'3DSOLID'}->{'version'} = 70;
-$DXF{'REGION'}->{'version'} = 70;
-$DXF{'BODY'}->{'version'} = 70;
-$DXF{'3DSOLID'}->{'encr_sat_data'} = 1;
-$DXF{'REGION'}->{'encr_sat_data'} = 1;
-$DXF{'BODY'}->{'encr_sat_data'} = 1;
 $DXF{'BLOCK'}->{'name'} = 2; # and 3
 $DXF{'INSERT'}->{'block_header'} = 2;
 $DXF{'MINSERT'}->{'block_header'} = 2;
@@ -399,6 +393,11 @@ $DXF{$_}->{'class_version'} = 280 for qw(ATTRIB ATTDEF); #r2010 only
 $DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
 #$DXF{$_}->{'has_vertex'} = 66 for qw (POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
 $DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);
+my @solids = qw(3DSOLID REGSION BODY
+                EXTRUDEDSURFACE LOFTEDSURFACE REVOLVEDSURFACE SWEPTSURFACE PLANESURFACE);
+$DXF{$_}->{'version'} = 70 for @solids;
+$DXF{$_}->{'encr_sat_data'} = 1 for @solids;
+$DXF{$_}->{'history_id'} = 350 for @solids;
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;

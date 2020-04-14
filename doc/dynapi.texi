@@ -805,7 +805,7 @@ struct _dwg_entity_3DSOLID*
 @item unknown_2007
 BL
 @item history_id
-H
+H,	DXF 350
 @item acis_empty_bit
 B
 
@@ -1608,13 +1608,13 @@ B
 @item unknown
 B
 @item version
-BS
+BS,	DXF 70
 @item num_blocks
 BL
 @item block_size
 BL*
 @item encr_sat_data
-char **
+char **,	DXF 1
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -1642,7 +1642,7 @@ struct _dwg_entity_3DSOLID*
 @item unknown_2007
 BL
 @item history_id
-H
+H,	DXF 350
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -2119,13 +2119,13 @@ B
 @item unknown
 B
 @item version
-BS
+BS,	DXF 70
 @item num_blocks
 BL
 @item block_size
 BL*
 @item encr_sat_data
-char **
+char **,	DXF 1
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -2153,7 +2153,7 @@ struct _dwg_entity_3DSOLID*
 @item unknown_2007
 BL
 @item history_id
-H
+H,	DXF 350
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -2607,13 +2607,13 @@ B
 @item unknown
 B
 @item version
-BS
+BS,	DXF 70
 @item num_blocks
 BL
 @item block_size
 BL*
 @item encr_sat_data
-char **
+char **,	DXF 1
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -2641,7 +2641,7 @@ struct _dwg_entity_3DSOLID*
 @item unknown_2007
 BL
 @item history_id
-H
+H,	DXF 350
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -2924,13 +2924,13 @@ B
 @item unknown
 B
 @item version
-BS
+BS,	DXF 70
 @item num_blocks
 BL
 @item block_size
 BL*
 @item encr_sat_data
-char **
+char **,	DXF 1
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -2958,7 +2958,7 @@ struct _dwg_entity_3DSOLID*
 @item unknown_2007
 BL
 @item history_id
-H
+H,	DXF 350
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -3174,13 +3174,13 @@ B
 @item unknown
 B
 @item version
-BS
+BS,	DXF 70
 @item num_blocks
 BL
 @item block_size
 BL*
 @item encr_sat_data
-char **
+char **,	DXF 1
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -3208,7 +3208,7 @@ struct _dwg_entity_3DSOLID*
 @item unknown_2007
 BL
 @item history_id
-H
+H,	DXF 350
 @item acis_empty_bit
 B
 @item modeler_format_version

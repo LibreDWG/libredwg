@@ -1808,6 +1808,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           FIELD_TFv (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
           FIELD_VALUE (block_size[0]) = 15;
           FIELD_RL (block_size[1], 0);
+          //TODO AcDs blob
           if (FIELD_VALUE (block_size[1]) > obj->size)
             {
               LOG_ERROR ("Invalid ACIS 2 SAB block_size[1] %d. Max. %d",
@@ -1907,6 +1908,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_VALUE (block_size[1]) = strlen ((char*)FIELD_VALUE (acis_data));
               LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[1]));
             }
+          //TODO AcDs blob
           if (!FIELD_VALUE (block_size[1]))
             {
               if (FIELD_VALUE (acis_data))
@@ -2019,8 +2021,9 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
                                                                                                    \
     COMMON_ENTITY_HANDLE_DATA;                                                                     \
     if (FIELD_VALUE (version) > 1) {                                                               \
+      SUBCLASS (AcDb3dSolid);                                                                      \
       SINCE (R_2007) {                                                                             \
-        FIELD_HANDLE (history_id, ANYCODE, 350);                                                   \
+        FIELD_HANDLE (history_id, 4, 350);                                                         \
       }                                                                                            \
     }
 
@@ -2042,19 +2045,16 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
 
 /*(37)*/
 DWG_ENTITY (REGION)
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
 DWG_ENTITY_END
 
 /*(38)*/
 DWG_ENTITY (_3DSOLID)
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
 DWG_ENTITY_END
 
 /*(39)*/
 DWG_ENTITY (BODY)
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
 DWG_ENTITY_END
 
@@ -7110,7 +7110,6 @@ DWG_ENTITY_END
 DWG_ENTITY (EXTRUDEDSURFACE)
 
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
   //FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS (AcDbSurface)
