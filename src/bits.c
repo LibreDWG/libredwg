@@ -1531,7 +1531,8 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
   return str;
 }
 
-/* len of wide string */
+#ifndef HAVE_NATIVE_WCHAR2
+/* len of wide string (unix-only) */
 int
 bit_wcs2len (BITCODE_TU restrict wstr)
 {
@@ -1540,25 +1541,28 @@ bit_wcs2len (BITCODE_TU restrict wstr)
 
   if (!wstr)
     return 0;
+  // only if aligned
   while (*tmp++)
     len++;
   return len;
 }
 
-/* len of wide string */
+/* copy wide string (unix-only) */
 BITCODE_TU
-bit_wcs2cpy (const BITCODE_TU restrict dest, BITCODE_TU restrict src)
+bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
 {
-  BITCODE_TU tmp = dest;
-  int len = 0;
+  BITCODE_TU d, s;
 
   if (!dest)
     return src;
-  while ((*tmp++ = *src++))
+  d = (BITCODE_TU)dest;
+  s = (BITCODE_TU)src;
+  while ((*d++ = *s++))
     ;
-  *tmp++ = 0;
+  *s++ = 0;
   return dest;
 }
+#endif
 
 /* converts TU to ASCII with embedded \U+XXXX */
 char *
