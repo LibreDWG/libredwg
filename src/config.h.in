@@ -162,6 +162,9 @@
 /* Define to 1 if you have the 'm' library (-lm). */
 #undef HAVE_LIBM
 
+/* Define to 1 if -lplot is available */
+#undef HAVE_LIBPLOT
+
 /* Define to 1 if you have the <libps/pslib.h> header file. */
 #undef HAVE_LIBPS_PSLIB_H
 
@@ -195,6 +198,9 @@
 
 /* Define to 1 if you have the <pcre2.h> header file. */
 #undef HAVE_PCRE2_H
+
+/* Define to 1 if you have the <plot.h> header file. */
+#undef HAVE_PLOT_H
 
 /* If available, contains the Python version number currently in use. */
 #undef HAVE_PYTHON
