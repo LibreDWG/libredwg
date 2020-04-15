@@ -6371,6 +6371,21 @@ new_object (char *restrict name, char *restrict dxfname,
               break;
             }
           // fall through
+        case 341:
+          if (pair->code == 341 && strEQc (name, "VIEWPORT"))
+            {
+              Dwg_Entity_VIEWPORT *_o = obj->tio.entity->tio.VIEWPORT;
+              int code = dwg->header.version >= R_2004 ? 4 : 5;
+              BITCODE_H hdl = dwg_add_handleref (dwg, code, pair->value.u, obj);
+              LOG_TRACE ("VIEWPORT.frozen_layers[%d] = " FORMAT_REF " [H* 341]\n",
+                         _o->num_frozen_layers, ARGS_REF (hdl));
+              _o->frozen_layers = realloc (_o->frozen_layers,
+                                    (_o->num_frozen_layers + 1) * sizeof (BITCODE_H));
+              _o->frozen_layers[_o->num_frozen_layers] = hdl;
+              _o->num_frozen_layers++;
+              break;
+            }
+          // fall through
         case 2:
           if (ctrl_id && pair->code == 2)
             {
@@ -7128,7 +7143,35 @@ new_object (char *restrict name, char *restrict dxfname,
                             {
                               if (pair->code > 300)
                                 {
-                                  ref = dwg_add_handleref (dwg, 5,
+                                  int code = 5; //default: soft pointer
+                                  if (obj->fixedtype == DWG_TYPE_VIEWPORT)
+                                    {
+                                      switch (pair->code)
+                                        {
+                                        case 340:
+                                        case 332:
+                                        case 333: code = 4; break;
+                                        case 361: code = 3; break;
+                                        default: break;
+                                        }
+                                    }
+                                  else if (strEQc (f->name, "history_id"))
+                                    code = 4;
+                                  else if (strEQc (f->name, "background"))
+                                    code = 4;
+                                  else if (strEQc (f->name, "dimensionobj"))
+                                    code = 4;
+                                  else if (strEQc (f->name, "active_viewport")
+                                           || strEQc (f->name, "host_block"))
+                                    code = 4;
+                                  else if (strEQc (f->name, "writedep")
+                                           || strEQc (f->name, "readdep"))
+                                    code = 4;
+                                  else if (strEQc (f->name, "imagedefreactor"))
+                                    code = 3;
+                                  else if (strEQc (f->name, "table_style"))
+                                    code = 3;
+                                  ref = dwg_add_handleref (dwg, code,
                                                            pair->value.u, obj);
                                   LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",
                                              name, f->name, ARGS_REF (ref),

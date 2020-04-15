@@ -1588,6 +1588,30 @@ DWG_ENTITY (VIEWPORT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
+  VERSIONS (R_13, R_14) {
+    FIELD_HANDLE (vport_entity_header, 5, 0);
+  }
+  VERSION (R_2000) {
+    HANDLE_VECTOR (frozen_layers, num_frozen_layers, 5, 341);
+    FIELD_HANDLE (clip_boundary, 5, 340);
+  }
+  SINCE (R_2004) {
+    HANDLE_VECTOR (frozen_layers, num_frozen_layers, 4, 341);
+    FIELD_HANDLE (clip_boundary, 5, 340);
+  }
+  VERSION (R_2000) {
+    FIELD_HANDLE (vport_entity_header, 5, 0);
+  }
+  SINCE (R_2000) {
+    FIELD_HANDLE (named_ucs, 5, 345);
+    FIELD_HANDLE (base_ucs, 5, 346);
+  }
+  SINCE (R_2007) {
+    FIELD_HANDLE (background, 4, 332);
+    FIELD_HANDLE (visualstyle, 5, 348);
+    FIELD_HANDLE (shadeplot, 4, 333);
+    FIELD_HANDLE (sun, 3, 361);
+  }
 
 DWG_ENTITY_END
 

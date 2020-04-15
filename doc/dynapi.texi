@@ -3839,6 +3839,24 @@ BD,	DXF 141
 BD,	DXF 142
 @item ambient_color
 CMC,	DXF 63
+@item vport_entity_header
+H
+@item frozen_layers
+H*,	DXF 341
+@item clip_boundary
+H,	DXF 340
+@item named_ucs
+H,	DXF 345
+@item base_ucs
+H,	DXF 346
+@item background
+H,	DXF 332
+@item visualstyle
+H,	DXF 348
+@item shadeplot
+H,	DXF 333
+@item sun
+H,	DXF 361
 
 @end vtable
 @end indentedblock

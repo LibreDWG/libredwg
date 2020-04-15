@@ -20351,6 +20351,22 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     viewport->back_clip_z--;
   }
   {
+    BITCODE_H background;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "background", &background, NULL)
+        && !memcmp (&background, &viewport->background, sizeof (viewport->background)))
+        pass ();
+    else
+        fail ("VIEWPORT.background [H]");
+  }
+  {
+    BITCODE_H base_ucs;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "base_ucs", &base_ucs, NULL)
+        && !memcmp (&base_ucs, &viewport->base_ucs, sizeof (viewport->base_ucs)))
+        pass ();
+    else
+        fail ("VIEWPORT.base_ucs [H]");
+  }
+  {
     BITCODE_BD brightness;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "brightness", &brightness, NULL)
         && brightness == viewport->brightness)
@@ -20387,6 +20403,14 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.circle_zoom [BS] set+1 %hu != %hu", viewport->circle_zoom, circle_zoom);
     viewport->circle_zoom--;
+  }
+  {
+    BITCODE_H clip_boundary;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "clip_boundary", &clip_boundary, NULL)
+        && !memcmp (&clip_boundary, &viewport->clip_boundary, sizeof (viewport->clip_boundary)))
+        pass ();
+    else
+        fail ("VIEWPORT.clip_boundary [H]");
   }
   {
     BITCODE_BD contrast;
@@ -20432,6 +20456,16 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.front_clip_z [BD] set+1 %g != %g", viewport->front_clip_z, front_clip_z);
     viewport->front_clip_z--;
+  }
+  {
+    BITCODE_H* frozen_layers;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "num_frozen_layers", &count, NULL)
+        && dwg_dynapi_entity_value (viewport, "VIEWPORT", "frozen_layers", &frozen_layers, NULL)
+        && frozen_layers == viewport->frozen_layers)
+      pass ();
+    else
+      fail ("VIEWPORT.frozen_layers [H*] * %u num_frozen_layers", count);
   }
   {
     BITCODE_BS grid_major;
@@ -20502,6 +20536,14 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     viewport->lens_length--;
   }
   {
+    BITCODE_H named_ucs;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "named_ucs", &named_ucs, NULL)
+        && !memcmp (&named_ucs, &viewport->named_ucs, sizeof (viewport->named_ucs)))
+        pass ();
+    else
+        fail ("VIEWPORT.named_ucs [H]");
+  }
+  {
     BITCODE_BL num_frozen_layers;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "num_frozen_layers", &num_frozen_layers, NULL)
         && num_frozen_layers == viewport->num_frozen_layers)
@@ -20553,6 +20595,14 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.render_mode [RC] set+1 %u != %u", viewport->render_mode, render_mode);
     viewport->render_mode--;
+  }
+  {
+    BITCODE_H shadeplot;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "shadeplot", &shadeplot, NULL)
+        && !memcmp (&shadeplot, &viewport->shadeplot, sizeof (viewport->shadeplot)))
+        pass ();
+    else
+        fail ("VIEWPORT.shadeplot [H]");
   }
   {
     BITCODE_BS shadeplot_mode;
@@ -20624,6 +20674,14 @@ static int test_VIEWPORT (const Dwg_Object *obj)
       pass ();
     else
       fail ("VIEWPORT.style_sheet [T] '%s' <> '%s'", style_sheet, viewport->style_sheet);
+  }
+  {
+    BITCODE_H sun;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "sun", &sun, NULL)
+        && !memcmp (&sun, &viewport->sun, sizeof (viewport->sun)))
+        pass ();
+    else
+        fail ("VIEWPORT.sun [H]");
   }
   {
     BITCODE_B ucs_at_origin;
@@ -20777,6 +20835,22 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.view_twist [BD] set+1 %g != %g", viewport->view_twist, view_twist);
     viewport->view_twist--;
+  }
+  {
+    BITCODE_H visualstyle;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "visualstyle", &visualstyle, NULL)
+        && !memcmp (&visualstyle, &viewport->visualstyle, sizeof (viewport->visualstyle)))
+        pass ();
+    else
+        fail ("VIEWPORT.visualstyle [H]");
+  }
+  {
+    BITCODE_H vport_entity_header;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "vport_entity_header", &vport_entity_header, NULL)
+        && !memcmp (&vport_entity_header, &viewport->vport_entity_header, sizeof (viewport->vport_entity_header)))
+        pass ();
+    else
+        fail ("VIEWPORT.vport_entity_header [H]");
   }
   {
     BITCODE_BD width;
@@ -43296,7 +43370,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 43284 "dynapi_test.c"
+#line 43373 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -44000,7 +44074,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 43988 "dynapi_test.c"
+#line 44077 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

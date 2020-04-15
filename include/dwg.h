@@ -1577,6 +1577,15 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
+  BITCODE_H vport_entity_header;
+  BITCODE_H *frozen_layers;
+  BITCODE_H clip_boundary;
+  BITCODE_H named_ucs;
+  BITCODE_H base_ucs;
+  BITCODE_H background;
+  BITCODE_H visualstyle;
+  BITCODE_H shadeplot;
+  BITCODE_H sun;
 } Dwg_Entity_VIEWPORT;
 
 /**

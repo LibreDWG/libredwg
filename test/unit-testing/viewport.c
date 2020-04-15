@@ -34,6 +34,15 @@ api_process (dwg_object *obj)
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
+  BITCODE_H vport_entity_header;
+  BITCODE_H *frozen_layers;
+  BITCODE_H clip_boundary;
+  BITCODE_H named_ucs;
+  BITCODE_H base_ucs;
+  BITCODE_H background;
+  BITCODE_H visualstyle;
+  BITCODE_H shadeplot;
+  BITCODE_H sun;
 
   dwg_ent_viewport *viewport = dwg_object_to_VIEWPORT (obj);
 
@@ -70,4 +79,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, brightness, BD, brightness);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, contrast, BD, contrast);
   CHK_ENTITY_CMC (viewport, VIEWPORT, ambient_color, ambient_color);
+  CHK_ENTITY_H (viewport, VIEWPORT, vport_entity_header, vport_entity_header);
+  CHK_ENTITY_HV (viewport, VIEWPORT, frozen_layers, frozen_layers, num_frozen_layers);
+  CHK_ENTITY_H (viewport, VIEWPORT, clip_boundary, clip_boundary);
+  CHK_ENTITY_H (viewport, VIEWPORT, named_ucs, named_ucs);
+  CHK_ENTITY_H (viewport, VIEWPORT, base_ucs, base_ucs);
+  CHK_ENTITY_H (viewport, VIEWPORT, background, background);
+  CHK_ENTITY_H (viewport, VIEWPORT, visualstyle, visualstyle);
+  CHK_ENTITY_H (viewport, VIEWPORT, shadeplot, shadeplot);
+  CHK_ENTITY_H (viewport, VIEWPORT, sun, sun);
 }
