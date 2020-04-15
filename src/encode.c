@@ -627,8 +627,11 @@ static bool env_var_checked_p;
 
 #define START_HANDLE_STREAM                                                   \
   LOG_INSANE ("HANDLE_STREAM @%lu.%u\n", dat->byte - obj->address, dat->bit)  \
-  /* DD sizes can vary */                                                     \
-  if (!obj->bitsize || dwg->opts & DWG_OPTS_INJSON)                           \
+  if (!obj->bitsize ||                                                        \
+       /* DD sizes can vary, but let unknown_bits asis */                     \
+       ((dwg->opts & DWG_OPTS_INJSON)                                         \
+        && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ                             \
+        && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT))                           \
     {                                                                         \
       LOG_TRACE ("-bitsize calc from HANDLE_STREAM @%lu.%u (%lu)\n",          \
                  dat->byte - obj->address, dat->bit, obj->address);           \
@@ -2708,6 +2711,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE_TF (obj->unknown_bits, len);
               if (mod)
                 bit_advance_position (dat, mod - 8);
+              obj->was_bitsize_set = 1;
             }
         }
     }
@@ -2731,7 +2735,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       // assert (obj->bitsize); // on errors
       if (!obj->bitsize ||
           (dwg->opts & DWG_OPTS_INJSON
-           // and not calculated from HANDLE_STREAM already
+           // and not calculated from HANDLE_STREAM or via unknown_bits already
            && !obj->was_bitsize_set))
         {
           LOG_TRACE ("-bitsize calc from address (no handle) @%lu.%u\n",
