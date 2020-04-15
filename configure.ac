@@ -83,6 +83,19 @@ AC_C_RESTRICT
 dnl Checks for libraries
 AM_ICONV
 
+dnl GNU plotutils
+AC_CHECK_LIB([plot],[pl_newplparams],
+  [libredwg_have_libplot=yes])
+if test yes = "$libredwg_have_libplot"; then
+  AC_DEFINE([HAVE_LIBPLOT],1,[Define to 1 if -lplot is available])
+  PLOT_CFLAGS=`pkg-config libplot --cflags`
+  PLOT_LIBS=`pkg-config libplot --libs`
+  test -z "$PLOT_LIBS" && PLOT_LIBS="-lplot"
+fi
+AC_SUBST([PLOT_CFLAGS])
+AC_SUBST([PLOT_LIBS])
+
+dnl extra lib from sourceforge, deprecated
 AC_CHECK_LIB([ps -lm],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
@@ -162,11 +175,17 @@ main(void)
 fi
 
 # Don't bother testing for libps headers if libps is not available.
-if test yes = "$libredwg_have_libps" ; then
+if test xyes = x$libredwg_have_libps ; then
   AC_CHECK_HEADERS([libps/pslib.h])
 fi
-AM_CONDITIONAL([HAVE_LIBPS],[test "x$libredwg_have_libps" = xyes &&
-                             test "x$ac_cv_header_libps_pslib_h" = xyes])
+AM_CONDITIONAL([HAVE_LIBPS],[test x$libredwg_have_libps = xyes &&
+                             test x$ac_cv_header_libps_pslib_h = xyes])
+
+if test xyes = x$libredwg_have_libplot ; then
+  AC_CHECK_HEADERS([plot.h])
+fi
+AM_CONDITIONAL([HAVE_LIBPLOT],[test x$libredwg_have_libplot = xyes &&
+                               test x$ac_cv_header_plot_h = xyes])
 
 if test yes = "$libredwg_have_libpcre2"; then
   AC_CHECK_HEADERS([pcre2.h],[],[],[#define PCRE2_CODE_UNIT_WIDTH 8])
@@ -925,6 +944,8 @@ else
   GEOJSONLINT="$GEOJSONHINT"
 fi
 AC_SUBST([GEOJSONLINT])
+AC_CHECK_PROGS([PLOT], [plot])
+AM_CONDITIONAL([HAVE_PLOT], [test -n "$PLOT"])
 
 dnl SVG validation
 AC_CHECK_PROGS([JING], [jing])

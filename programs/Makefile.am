@@ -26,11 +26,12 @@ bin_PROGRAMS    = dwgread
 noinst_PROGRAMS =
 dist_man1_MANS  = $(srcdir)/dwgread.1
 if !DISABLE_DXF
-bin_PROGRAMS   += dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
+bin_PROGRAMS   += dwgbmp dwg2dxf dwgplot dwg2SVG dwglayers dwggrep
 dist_bin_SCRIPTS = dwgfilter
 dist_man1_MANS += $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
-	          $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 \
-		  $(srcdir)/dwggrep.1 $(srcdir)/dwgfilter.1
+	          $(srcdir)/dwgplot.1 $(srcdir)/dwg2SVG.1 \
+	          $(srcdir)/dwglayers.1 $(srcdir)/dwggrep.1 \
+	          $(srcdir)/dwgfilter.1
 endif
 
 if !DISABLE_DXF
@@ -47,6 +48,11 @@ dwgbmp_SOURCES     = dwgbmp.c
 dwg2dxf_SOURCES    = dwg2dxf.c
 dwglayers_SOURCES  = dwglayers.c
 dwg2SVG_SOURCES    = dwg2SVG.c escape.c
+dwgplot_SOURCES    = dwgplot.c escape.c
+if HAVE_LIBPLOT
+dwgplot_CFLAGS     = $(AM_CFLAGS) $(CFLAGS) $(PLOT_CFLAGS)
+dwgplot_LDADD      = $(LDADD) $(PLOT_LIBS)
+endif
 dwggrep_SOURCES    = dwggrep.c
 dwggrep_CFLAGS     = $(AM_CFLAGS) $(CFLAGS) $(PCRE2_CFLAGS)
 dwggrep_LDADD      = $(LDADD) $(PCRE2_LIBS)
