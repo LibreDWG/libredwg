@@ -4381,10 +4381,8 @@ dwg_decode_handleref (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-
   if (bit_read_H (dat, &ref->handleref))
     {
-      LOG_WARN ("Invalid handleref: " FORMAT_REF, ARGS_REF (ref))
       free (ref);
       return NULL;
     }
@@ -4437,19 +4435,19 @@ dwg_decode_handleref (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
    */
   switch (ref->handleref.code)
     {
-    case 0x06:
+    case 6:
       ref->absolute_ref = (obj->handle.value + 1);
       break;
-    case 0x08:
+    case 8:
       ref->absolute_ref = (obj->handle.value - 1);
       break;
-    case 0x0A:
+    case 10:
       ref->absolute_ref = (obj->handle.value + ref->handleref.value);
       break;
-    case 0x0C:
+    case 12:
       ref->absolute_ref = (obj->handle.value - ref->handleref.value);
       break;
-    case 0x0E: // eg 2007 REGION.history_id (some very high number)
+    case 14: // eg 2007 REGION.history_id (some very high number)
       ref->absolute_ref = obj->handle.value;
       break;
     case 2:
@@ -4498,14 +4496,8 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-
-  err = bit_read_H (dat, &ref->handleref);
-  if (err)
+  if (bit_read_H (dat, &ref->handleref))
     {
-      /*
-      LOG_WARN ("Invalid handleref error: 0x%x. Wanted code %d, got (" FORMAT_H
-      ")", err, code, ARGS_H(ref->handleref))
-      */
       free (ref);
       return NULL;
     }

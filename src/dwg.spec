@@ -3542,21 +3542,31 @@ DWG_OBJECT (VPORT_ENTITY_HEADER)
     FIELD_HANDLE (extref, 5, 0);
     DECODER
     {
+      int _i = -1;
+      unsigned long _pos = bit_position (hdl_dat);
+      unsigned long _endpos = (hdl_dat->size - 1) * 8; // H reads an RC at first
       FIELD_VALUE (viewports) = (BITCODE_H *)calloc (3, sizeof (BITCODE_H));
-      vcount = 0;
       do
         {
-          FIELD_HANDLE_N (viewports[vcount], vcount, ANYCODE, 0);
-          vcount++;
-          if (vcount > 3)
+          _i++;
+          if (_i > 2)
             _obj->viewports = (BITCODE_H *)realloc (
-                _obj->viewports, (vcount + 1) * sizeof (BITCODE_H));
+                _obj->viewports, (_i + 1) * sizeof (BITCODE_H));
+          FIELD_HANDLE_N (viewports[_i], _i, ANYCODE, 0); // 4 or 5
+          if (!_obj->viewports[_i])
+            {
+              _i--;
+              break;
+            }
+          _pos = bit_position (hdl_dat);
         }
-      while (_obj->viewports[vcount-1]
-             && !(_obj->viewports[vcount-1]->handleref.code == 5
-                  && _obj->viewports[vcount-1]->handleref.size == 0));
-      _obj->viewports[vcount] = NULL;
-      _obj->num_viewports = vcount;
+      // it either ends with NULL (don't preserve) or 5.0.0 (preserve)
+      while (!(_obj->viewports[_i]->handleref.code == 5
+               && _obj->viewports[_i]->handleref.size == 0)
+             && _pos <= _endpos);
+      _obj->num_viewports = _i + 1;
+      if (!_obj->num_viewports)
+        free (_obj->viewports);
     }
     else
     {
