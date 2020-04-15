@@ -11,6 +11,9 @@
 #include <dirent.h>
 #include "../../src/common.h"
 #include "../../src/classes.h"
+static unsigned int loglevel;
+#define DWG_LOGLEVEL loglevel
+#include "../../src/logging.h"
 
 #include "dwg.h"
 #include "dwg_api.h"
@@ -68,6 +71,11 @@ main (int argc, char *argv[])
   char *dir = NULL;
   int error = 0;
   int i = 1, cov = 1;
+  //#ifdef USE_TRACING
+  char *probe = getenv ("LIBREDWG_TRACE");
+  if (probe)
+    loglevel = atoi (probe);
+  //#endif
 
   if (argc > i)
     {
@@ -535,18 +543,27 @@ output_test (dwg_data *dwg)
   _hdr = dwg_get_block_header (dwg, &error);
   _ctrl = dwg_block_header_get_block_control (_hdr, &error);
 
+#ifndef DWG_TYPE
   /* process all owned entities */
   ref = dwg_obj_block_control_get_model_space (_ctrl, &error);
   if (!error)
-    output_BLOCK_HEADER (ref);
+    {
+      LOG_INFO ("mspace\n");
+      output_BLOCK_HEADER (ref);
+    }
   ref = dwg_obj_block_control_get_paper_space (_ctrl, &error);
   if (!error)
-    output_BLOCK_HEADER (ref);
+    {
+      LOG_INFO ("pspace\n");
+      output_BLOCK_HEADER (ref);
+    }
+#endif
 
 #ifdef DWG_TYPE
   obj = &dwg->object[0];
   while ((obj = dwg_next_object (obj)))
     {
+      LOG_INFO ("  %s [%d]\n", obj->name, obj->index);
       // printf ("%s [%d]\n", obj->name, obj->index);
       if (obj->fixedtype == DWG_TYPE)
         {
@@ -592,6 +609,7 @@ output_object (dwg_object *obj)
       printf ("object is NULL\n");
       return;
     }
+  LOG_INFO ("  %s [%d]\n", obj->name, obj->index);
   if (obj->fixedtype == DWG_TYPE)
     {
       g_counter++;
