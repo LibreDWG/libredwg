@@ -1532,37 +1532,75 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
 }
 
 #ifndef HAVE_NATIVE_WCHAR2
+
 /* len of wide string (unix-only) */
 int
 bit_wcs2len (BITCODE_TU restrict wstr)
 {
-  BITCODE_TU tmp = wstr;
-  int len = 0;
+  int len;
 
   if (!wstr)
     return 0;
-  // only if aligned
-  while (*tmp++)
-    len++;
-  return len;
+  len = 0;
+#  ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  // for strict alignment CPU's like sparc only. also for UBSAN.
+  if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char *)wstr;
+      uint16_t c = (b[0] << 8) + b[1];
+      while (c)
+        {
+          len++;
+          b += 2;
+          c = (b[0] << 8) + b[1];
+        }
+      return len;
+    }
+  else
+#  endif
+  {
+    BITCODE_TU c = wstr;
+    while (*c++)
+      {
+        len++;
+      }
+    return len;
+  }
 }
 
 /* copy wide string (unix-only) */
 BITCODE_TU
 bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
 {
-  BITCODE_TU d, s;
+  BITCODE_TU d;
 
   if (!dest)
     return src;
   d = (BITCODE_TU)dest;
-  s = (BITCODE_TU)src;
-  while ((*d++ = *s++))
-    ;
-  *s++ = 0;
-  return dest;
+#  ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  // for strict alignment CPU's like sparc only. also for UBSAN.
+  if ((uintptr_t)src % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char *)src;
+      *d = (b[0] << 8) + b[1];
+      while (*d)
+        {
+          b += 2;
+          *d = (b[0] << 8) + b[1];
+        }
+      return dest;
+    }
+  else
+#  endif
+  {
+    BITCODE_TU s = (BITCODE_TU)src;
+    while ((*d++ = *s++))
+      ;
+    return dest;
+  }
 }
-#endif
+
+#endif /* HAVE_NATIVE_WCHAR2 */
 
 /* converts TU to ASCII with embedded \U+XXXX */
 char *
@@ -1853,15 +1891,7 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
   unsigned int length;
 
   if (chain)
-    {
-#if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-      length = wcslen (chain) + 1;
-#else
-      for (length = 0; chain[length]; length++)
-        ;
-      length++;
-#endif
-    }
+    length = bit_wcs2len (chain) + 1;
   else
     length = 0;
 
