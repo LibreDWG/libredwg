@@ -6921,6 +6921,12 @@ new_object (char *restrict name, char *restrict dxfname,
                       "MLEADERSTYLE.block_scale = (%f, %f, %f) [3BD 47]\n",
                       o->block_scale.x, o->block_scale.y, o->block_scale.z);
                 }
+              else if (pair->code == 297) // set is_new_format if this exists
+                {
+                  LOG_TRACE ("MLEADERSTYLE.text_always_left = %d [B 297] => is_new_format\n",
+                             pair->value.i);
+                  o->is_new_format = 1;
+                }
               else if (pair->code == 298) // r2013+
                 LOG_TRACE ("Unknown DXF code %d for %s = %d [B %d]\n",
                            pair->code, name, pair->value.i, pair->code)

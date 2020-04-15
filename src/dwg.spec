@@ -5965,6 +5965,10 @@ DWG_OBJECT (MLEADERSTYLE)
   //is_new_format: if the object has extended data for APPID “ACAD_MLEADERVER”.
   if (FIELD_VALUE (is_new_format) || dat->version >= R_2010) {
     FIELD_B (text_always_left, 297);
+    JSON {
+      _obj->is_new_format = 1;
+      FIELD_B (is_new_format, 0);
+    }
   }
   FIELD_BD (align_space, 46);
   FIELD_CMC (block_color, 94,0);
