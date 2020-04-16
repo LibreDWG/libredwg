@@ -6244,7 +6244,7 @@ static const Dwg_DYNAPI_field _dwg_PLOTSETTINGS_fields[] = {
     0,0,0, 78 },
   { "paper_image_origin",	"2BD_1", sizeof (BITCODE_2BD_1),  OFF (struct _dwg_object_PLOTSETTINGS, paper_image_origin),
     1,0,0, 148 },
-  { "shade_plot_id",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_PLOTSETTINGS, shade_plot_id),
+  { "shadeplot",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_PLOTSETTINGS, shadeplot),
     1,0,0, 333 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

@@ -36838,14 +36838,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     plotsettings->shade_plot_customdpi--;
   }
   {
-    BITCODE_H shade_plot_id;
-    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "shade_plot_id", &shade_plot_id, NULL)
-        && !memcmp (&shade_plot_id, &plotsettings->shade_plot_id, sizeof (plotsettings->shade_plot_id)))
-        pass ();
-    else
-        fail ("PLOTSETTINGS.shade_plot_id [H]");
-  }
-  {
     BITCODE_BS shade_plot_mode;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "shade_plot_mode", &shade_plot_mode, NULL)
         && shade_plot_mode == plotsettings->shade_plot_mode)
@@ -36874,6 +36866,14 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.shade_plot_reslevel [BS] set+1 %hu != %hu", plotsettings->shade_plot_reslevel, shade_plot_reslevel);
     plotsettings->shade_plot_reslevel--;
+  }
+  {
+    BITCODE_H shadeplot;
+    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "shadeplot", &shadeplot, NULL)
+        && !memcmp (&shadeplot, &plotsettings->shadeplot, sizeof (plotsettings->shadeplot)))
+        pass ();
+    else
+        fail ("PLOTSETTINGS.shadeplot [H]");
   }
   {
     BITCODE_BD std_scale_factor;

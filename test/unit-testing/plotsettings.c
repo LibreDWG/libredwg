@@ -22,7 +22,7 @@ api_process (dwg_object *obj)
   BITCODE_BD paper_units;
   BITCODE_BD drawing_units;
   BITCODE_BS plot_layout;
-  BITCODE_BS plot_paper_unit; /* 0-2 */
+  BITCODE_BS plot_paper_unit;  /* 0-2 */
   BITCODE_BS plot_rotation;    /* 0-3 */
   BITCODE_BS plot_type;        /* 0-5 */
   BITCODE_H stylesheet;
@@ -33,7 +33,7 @@ api_process (dwg_object *obj)
   BITCODE_BS shade_plot_reslevel; /* 0-5 */
   BITCODE_BS  shade_plot_customdpi; /* 100-32767 */
   BITCODE_2BD_1 paper_image_origin;
-  BITCODE_H   shade_plot_id;
+  BITCODE_H   shadeplot;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -72,6 +72,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (plt, PLOTSETTINGS, shade_plot_reslevel, BS, 5);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shade_plot_customdpi, BS, shade_plot_customdpi);
   CHK_ENTITY_2RD (plt, PLOTSETTINGS, paper_image_origin, paper_image_origin);
-  CHK_ENTITY_H (plt, PLOTSETTINGS, shade_plot_id, shade_plot_id);
+  CHK_ENTITY_H (plt, PLOTSETTINGS, shadeplot, shadeplot);
 #endif
 }

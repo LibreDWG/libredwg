@@ -4344,7 +4344,7 @@ typedef struct _dwg_object_PLOTSETTINGS
                                                 3 presentation, 4 maximum, 5 custom */
   BITCODE_BS  shade_plot_customdpi; /*!< DXF 78, 100-32767 */
   BITCODE_2BD_1 paper_image_origin;  /*!< DXF 148 + 149 */
-  BITCODE_H   shade_plot_id;         /*!< DXF 333  optional */
+  BITCODE_H   shadeplot;             /*!< DXF 333 optional. As in VIEWPORT */
 } Dwg_Object_PLOTSETTINGS;
 
 /**

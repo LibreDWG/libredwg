@@ -6679,7 +6679,7 @@ DWG_OBJECT (PLOTSETTINGS)
       FIELD_BS (shade_plot_reslevel, 77); /*!< 0 draft, 1 preview, 2 nomal,
                                                3 presentation, 4 maximum, 5 custom */
       FIELD_BS (shade_plot_customdpi, 78); /*!< 100-32767 */
-      FIELD_HANDLE (shade_plot_id, 0, 333); // optional
+      FIELD_HANDLE (shadeplot, 4, 333); // optional, mostly NULL. 4 with VIEWPORT.
     }
 DWG_OBJECT_END
 
