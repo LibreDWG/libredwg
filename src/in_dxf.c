@@ -6470,6 +6470,20 @@ new_object (char *restrict name, char *restrict dxfname,
               dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
                                            &pair->value, 1);
               LOG_TRACE ("%s.flag = %d [RC 70]\n", name, pair->value.i);
+              if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
+                {
+                  BITCODE_B flag0 = pair->value.i & 1;
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "flag0",
+                                               &flag0, 1);
+                  LOG_TRACE ("%s.flag0 = %d [B]\n", name, flag0);
+                }
+              else if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_HEADER)
+                {
+                  BITCODE_B flag1 = pair->value.i & 2 ? 1 : 0;
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "flag1",
+                                               &flag1, 1);
+                  LOG_TRACE ("%s.flag1 = %d [B]\n", name, flag1);
+                }
               break;
             }
           else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_LAYOUT)
@@ -6491,6 +6505,17 @@ new_object (char *restrict name, char *restrict dxfname,
                   _o->flag = pair->value.i;
                   LOG_TRACE ("LAYOUT.flag = %d [BS 70]", pair->value.i);
                 }
+              break;
+            }
+          else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
+            {
+              Dwg_Entity_LWPOLYLINE *_o = obj->tio.entity->tio.LWPOLYLINE;
+              _o->flag = pair->value.i;
+              // 1 => 512 closed
+              // 128: plinegen
+              if (_o->flag & 1)
+                _o->flag = (_o->flag - 1) + 512;
+              LOG_TRACE ("LWPOLYLINE.flag => %d [BS 70]\n", flag);
               break;
             }
           else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)

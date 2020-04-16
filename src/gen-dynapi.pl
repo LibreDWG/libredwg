@@ -383,6 +383,7 @@ $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
 # $DXF{'DIMSTYLE'}->{'DIMFIT'} = 287;   # <= r14 only
 $DXF{'PROXY_ENTITY'}->{'version'} = 95; # or 91 <= r14
 $DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
+$DXF{'DIMSTYLE'}->{'flag'} = 70;
 # $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
 # $DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
 # $DXF{'DIMENSION_ORDINATE'}->{'leader_endpt'} = 14;

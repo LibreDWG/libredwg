@@ -29597,6 +29597,21 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     dimstyle->flag--;
   }
   {
+    BITCODE_B flag0;
+    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "flag0", &flag0, NULL)
+        && flag0 == dimstyle->flag0)
+      pass ();
+    else
+      fail ("DIMSTYLE.flag0 [B] " FORMAT_B " != " FORMAT_B "", dimstyle->flag0, flag0);
+    flag0++;
+    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "flag0", &flag0, 0)
+        && flag0 == dimstyle->flag0)
+      pass ();
+    else
+      fail ("DIMSTYLE.flag0 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->flag0, flag0);
+    dimstyle->flag0--;
+  }
+  {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "name", &name, NULL)
         && name
@@ -43370,7 +43385,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 43373 "dynapi_test.c"
+#line 43388 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -44074,7 +44089,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 44077 "dynapi_test.c"
+#line 44092 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

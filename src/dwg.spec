@@ -2569,7 +2569,7 @@ DWG_OBJECT (BLOCK_HEADER)
   IF_FREE_OR_SINCE (R_2000)
     {
       if (FIELD_VALUE (num_inserts) && FIELD_VALUE (num_inserts) < 0xf00000) {
-        HANDLE_VECTOR (inserts, num_inserts, ANYCODE, 0);
+        HANDLE_VECTOR (inserts, num_inserts, 4, 0);
       }
       FIELD_HANDLE (layout, 5, 340);
     }
@@ -3285,6 +3285,11 @@ DWG_OBJECT_END
 /* (69/10) */
 DWG_OBJECT (DIMSTYLE)
 
+  DXF {
+    FIELD_VALUE (flag) = FIELD_VALUE (flag0) |
+                         FIELD_VALUE (xrefdep) << 4 |
+                         FIELD_VALUE (xrefref) << 6;
+  }
   COMMON_TABLE_FLAGS (DimStyle)
 
   PRE (R_13)
@@ -3510,16 +3515,15 @@ DWG_OBJECT (DIMSTYLE)
 
   SINCE (R_13)
   {
-    FIELD_B (flag, 70); // Bit 0 of 70
-    FIELD_VALUE (flag) = FIELD_VALUE (flag) |
-                        FIELD_VALUE (xrefdep) << 4 |
-                        FIELD_VALUE (xrefref) << 6;
+    FIELD_B (flag0, 0); // Bit 0 of 70
+    FIELD_VALUE (flag) = FIELD_VALUE (flag0) |
+                         FIELD_VALUE (xrefdep) << 4 |
+                         FIELD_VALUE (xrefref) << 6;
 
     START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (extref, 5, 0);
     FIELD_HANDLE (DIMTXSTY, 5, 340); /* Text style (DIMTXSTY) */
   }
-
   IF_FREE_OR_SINCE (R_2000)
     {
       FIELD_HANDLE (DIMLDRBLK, 5, 341); /* Leader arrow (DIMLDRBLK)*/
@@ -3527,12 +3531,11 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_HANDLE (DIMBLK1, 5, 343); /* Arrow 1 */
       FIELD_HANDLE (DIMBLK2, 5, 344); /* Arrow 2 */
     }
-
   IF_FREE_OR_SINCE (R_2007)
     {
-      FIELD_HANDLE (DIMLTYPE, ANYCODE, 345);
-      FIELD_HANDLE (DIMLTEX1, ANYCODE, 346);
-      FIELD_HANDLE (DIMLTEX2, ANYCODE, 347);
+      FIELD_HANDLE (DIMLTYPE, 5, 345);
+      FIELD_HANDLE (DIMLTEX1, 5, 346);
+      FIELD_HANDLE (DIMLTEX2, 5, 347);
     }
 
 DWG_OBJECT_END
@@ -4124,8 +4127,8 @@ DWG_ENTITY (LWPOLYLINE)
   SUBCLASS (AcDbPolyline)
 #ifdef IS_DXF
   FIELD_BL (num_points, 90);
-  VALUE_BS ((FIELD_VALUE (flag) & 128) + (FIELD_VALUE (flag) & 512 ? 1 : 0),
-            70); //1 closed, 128 plinegen
+  //1 closed, 128 plinegen
+  VALUE_BS ((FIELD_VALUE (flag) & 128) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
 #else
   FIELD_BS (flag, 70); // 512 closed, 128 plinegen, 4 constwidth, 8 elevation, 2 thickness
                        // 1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 numwidths

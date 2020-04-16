@@ -6,6 +6,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BITCODE_RC flag;
+  BITCODE_B flag0;
   BITCODE_TV name;
   BITCODE_RS used;
   BITCODE_B xrefref;
@@ -107,6 +108,7 @@ api_process (dwg_object *obj)
   dwg_obj_dimstyle *_obj = dwg_object_to_DIMSTYLE (obj);
 
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, flag, RC, flag);
+  CHK_ENTITY_TYPE (_obj, DIMSTYLE, flag0, B, flag0);
   CHK_ENTITY_UTF8TEXT (_obj, DIMSTYLE, name, name);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, used, RS, used);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, xrefref, B, xrefref);

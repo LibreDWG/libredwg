@@ -2352,6 +2352,7 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_T  DIMMZS;    /*!< r2010+ */
   BITCODE_BSd DIMLWD;
   BITCODE_BSd DIMLWE;
+  BITCODE_B flag0;
 
   BITCODE_H extref;
   BITCODE_H DIMTXSTY;

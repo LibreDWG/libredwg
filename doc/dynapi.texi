@@ -5577,6 +5577,8 @@ T
 BSd,	DXF 371
 @item DIMLWE
 BSd,	DXF 372
+@item flag0
+B
 @item extref
 H
 @item DIMTXSTY
