@@ -2142,12 +2142,24 @@ DWG_OBJECT (DICTIONARY)
       }
       END_REPEAT (texts)
     }
+#elif defined (IS_JSON)
+  // use a simple map: "items": { "text": [ handle ], ... }
+  // the texts are all unique
+  RECORD (items);
+  if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
+    for (rcount1 = 0; rcount1 < _obj->numitems; rcount1++)
+      {
+        KEYs (_obj->texts[rcount1]);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
+      }
+  }
+  ENDRECORD()
 #else
   FIELD_VECTOR_T (texts, T, numitems, 3);
 #endif
 
   START_OBJECT_HANDLE_STREAM;
-#ifndef IS_DXF
+#if !defined(IS_DXF) && !defined (IS_JSON)
   // or DXF 360 if hard_owner
   HANDLE_VECTOR_N (itemhandles, FIELD_VALUE (numitems), 2, 350);
 #endif
@@ -2189,12 +2201,24 @@ DWG_OBJECT (DICTIONARYWDFLT)
       }
       END_REPEAT (texts)
     }
+#elif defined (IS_JSON)
+  // use a simple map: "items": { "text": [ handle ], ... }
+  // the texts are all unique
+  RECORD (items);
+  if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
+    for (rcount1 = 0; rcount1 < _obj->numitems; rcount1++)
+      {
+        KEYs (_obj->texts[rcount1]);
+        VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
+      }
+  }
+  ENDRECORD()
 #else
   FIELD_VECTOR_T (texts, T, numitems, 3);
 #endif
 
   START_OBJECT_HANDLE_STREAM;
-#ifndef IS_DXF
+#if !defined(IS_DXF) && !defined (IS_JSON)
   IF_FREE_OR_SINCE (R_2000)
     {
       HANDLE_VECTOR_N (itemhandles, FIELD_VALUE (numitems), 2, 350);

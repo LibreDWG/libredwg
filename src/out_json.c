@@ -781,10 +781,10 @@ field_cmc (Bit_Chain *restrict dat, const char *restrict key,
     FIRSTPREFIX HASH;
 #undef END_REPEAT_BLOCK
 #define END_REPEAT_BLOCK                                                      \
-    ENDHASH;                                                                  \
-  }
+    ENDHASH;
 #undef END_REPEAT
 #define END_REPEAT(nam)                                                       \
+      }                                                                       \
       ENDARRAY;                                                               \
     }
 

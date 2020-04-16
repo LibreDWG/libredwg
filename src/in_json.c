@@ -1579,7 +1579,7 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_owned");
   else if (strEQc (key, "vertex"))
     strcpy (s, "num_owned");
-  else if (strEQc (key, "itemhandles"))
+  else if (strEQc (key, "items"))
     strcpy (s, "numitems");
   else if (strEQc (key, "entities"))
     strcpy (s, "num_owned");
@@ -1593,8 +1593,6 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_deps");
   else if (strEQc (key, "writedeps"))
     strcpy (s, "num_deps");
-  else if (strEQc (key, "texts"))
-    strcpy (s, "numitems");
   else if (strEQc (key, "encr_sat_data"))
     strcpy (s, "num_blocks");
   else if (strEQc (key, "styles")) // conflicts? only for LTYPE
@@ -1763,11 +1761,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           // all numfields are calculated from actual array sizes
           // for easier adding or deleting entries.
-          else if (t->type == JSMN_PRIMITIVE
-                   && (memBEGINc (key, "num_") || strEQc (key, "numitems")))
+          else if (t->type == JSMN_PRIMITIVE && (memBEGINc (key, "num_")))
             {
               tokens->index++;
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
+              /*
               if (strEQc (key, "numitems"))
                 {
                   int32_t num;
@@ -1783,7 +1781,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   LOG_TRACE ("%s: %.*s => -1 (init)\n", key, t->end - t->start, &dat->chain[t->start]);
                 }
               else
-                LOG_TRACE ("%s: %.*s (ignored)\n", key, t->end - t->start, &dat->chain[t->start]);
+              */
+              LOG_TRACE ("%s: %.*s (ignored)\n", key, t->end - t->start, &dat->chain[t->start]);
             }
           else if (t->type == JSMN_PRIMITIVE
                    && (strEQc (f->type, "RC") || strEQc (f->type, "B")
@@ -1916,6 +1915,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               BITCODE_BL size1 = t->size;
               BITCODE_H *hdls;
+              /*
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "itemhandles"))
                 {
                   BITCODE_BL numitems; // check against existing texts[] size
@@ -1929,6 +1929,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       size1 = numitems;
                     }
                 }
+              */
               hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
@@ -1958,6 +1959,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               int skip = 0;
               BITCODE_BL size1 = t->size;
               BITCODE_TV *elems;
+              /*
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "texts"))
                 {
                   BITCODE_BL numitems;
@@ -1972,6 +1974,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   else
                     size1 = t->size;
                 }
+              */
               elems = size1 ? calloc (size1, sizeof (BITCODE_T)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
@@ -2286,6 +2289,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error | (f->name ? 1 : 0); // found or not
 }
 
+/*
 // check both texts[] and itemhandles[]
 static void
 in_postprocess_DICTIONARY (Dwg_Object *obj)
@@ -2346,6 +2350,7 @@ in_postprocess_DICTIONARYWDFLT (Dwg_Object *obj)
       _obj->numitems = 0;
     }
 }
+*/
 
 static int
 json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
@@ -2420,6 +2425,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               in_postprocess_SEQEND (oldobj, 0, NULL);
             }
+          /*
           else if (oldobj->fixedtype == DWG_TYPE_DICTIONARY)
             {
               in_postprocess_DICTIONARY (oldobj);
@@ -2428,6 +2434,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               in_postprocess_DICTIONARYWDFLT (oldobj);
             }
+          */
         }
 
       memset (obj, 0, sizeof (Dwg_Object));
@@ -2770,6 +2777,26 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                                 "MLEADER", &key[4], sf))
                         continue;
                     }
+                }
+              else if (t->type == JSMN_OBJECT && memBEGINc (name, "DICTIONARY") && strEQc (key, "items"))
+                {
+                  Dwg_Object_DICTIONARY *o = obj->tio.object->tio.DICTIONARY;
+                  o->numitems = t->size;
+                  o->texts = o->numitems ? calloc (o->numitems, sizeof (BITCODE_T)) : NULL;
+                  o->itemhandles = o->numitems ? calloc (o->numitems, sizeof (BITCODE_H)) : NULL;
+                  tokens->index++;
+                  for (int k = 0; k < (int)o->numitems; k++)
+                    {
+                      JSON_TOKENS_CHECK_OVERFLOW_ERR;
+                      t = &tokens->tokens[tokens->index];
+                      o->texts[k] = json_string (dat, tokens);
+                      LOG_TRACE ("texts[%d]: %.*s\t => ", k, t->end - t->start, &dat->chain[t->start]);
+                      JSON_TOKENS_CHECK_OVERFLOW_ERR;
+                      o->itemhandles[k] = json_HANDLE (dat, dwg, tokens, "itemhandles", obj, k);
+                    }
+                  if (!o->numitems)
+                    LOG_TRACE ("%s.%s empty\n", name, key);
+                  continue;
                 }
               // or starts with an embedded subclass, like TABLE_value "value.xxx"
               if (strchr (key, '.'))
