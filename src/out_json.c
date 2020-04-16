@@ -463,6 +463,17 @@ static char *_path_field (const char *path);
         FIELD_TEXT (nam, str);                                                \
       }                                                                       \
   }
+#define VALUE_T(str)                                                          \
+  {                                                                           \
+    if (dat->version >= R_2007)                                               \
+      {                                                                       \
+        VALUE_TEXT_TU (str);                                                  \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        VALUE_TEXT (str);                                                     \
+      }                                                                       \
+  }
 #define _FIELD_TV_ALPHA(nam, str)                                             \
   if ((str) && isalpha (*(str)))                                              \
     {                                                                         \

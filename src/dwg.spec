@@ -2149,7 +2149,9 @@ DWG_OBJECT (DICTIONARY)
   if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
     for (rcount1 = 0; rcount1 < _obj->numitems; rcount1++)
       {
-        KEYs (_obj->texts[rcount1]);
+        FIRSTPREFIX
+        VALUE_T (_obj->texts[rcount1]);
+        fprintf (dat->fh, ": ");
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
       }
   }
@@ -2208,7 +2210,9 @@ DWG_OBJECT (DICTIONARYWDFLT)
   if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
     for (rcount1 = 0; rcount1 < _obj->numitems; rcount1++)
       {
-        KEYs (_obj->texts[rcount1]);
+        FIRSTPREFIX
+        VALUE_T (_obj->texts[rcount1]);
+        fprintf (dat->fh, ": ");
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
       }
   }

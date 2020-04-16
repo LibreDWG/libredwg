@@ -347,6 +347,18 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       JSON_TOKENS_CHECK_OVERFLOW_NULL
       return NULL;
     }
+  /*
+  if (dat->version >= R_2007)
+    {
+      unsigned char old = dat->chain[t->end];
+      dat->chain[t->end] = '\0';
+      key = (BITCODE_T)bit_utf8_to_TU ((char*)&dat->chain[t->start]);
+      dat->chain[t->end] = old;
+      tokens->index++;
+      JSON_TOKENS_CHECK_OVERFLOW(key)
+      return key;
+    }
+  */
   // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
   if (memchr (&dat->chain[t->start], '\\', len))
     {
@@ -1915,9 +1927,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               BITCODE_BL size1 = t->size;
               BITCODE_H *hdls;
-              /*
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "itemhandles"))
                 {
+                  LOG_ERROR ("Illegal old json format");
+                  return DWG_ERR_INVALIDDWG;
+                  /*
                   BITCODE_BL numitems; // check against existing texts[] size
                   const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
                   memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
@@ -1928,8 +1942,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                 numitems, (int)size1)
                       size1 = numitems;
                     }
+                  */
                 }
-              */
               hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
@@ -1959,9 +1973,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               int skip = 0;
               BITCODE_BL size1 = t->size;
               BITCODE_TV *elems;
-              /*
               if (memBEGINc (name, "DICTIONARY") && strEQc (key, "texts"))
                 {
+                  LOG_ERROR ("Illegal old json format");
+                  return DWG_ERR_INVALIDDWG;
+                  /*
                   BITCODE_BL numitems;
                   const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
                   memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
@@ -1973,8 +1989,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     }
                   else
                     size1 = t->size;
+                  */
                 }
-              */
               elems = size1 ? calloc (size1, sizeof (BITCODE_T)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
               tokens->index++;
