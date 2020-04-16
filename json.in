@@ -3,7 +3,7 @@
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
 CFLAGS="@CFLAGS@"
-timeout="@TIMEOUT_10@"
+timeout="@TIMEOUT_30@"
 
 case "$CFLAGS" in
     *-DDEBUG_CLASSES*) timeout="" ;;
