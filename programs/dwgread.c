@@ -233,25 +233,9 @@ main (int argc, char *argv[])
     }
 
   if (error >= DWG_ERR_CRITICAL)
-    {
-      fprintf (stderr, "ERROR 0x%x\n", error);
-      if (error && opts > 2)
-        dwg_errstrings (error);
-      goto done;
-    }
+    goto done;
 
-  if (!fmt)
-    {
-      if (opts > 1)
-        {
-          fprintf (stderr, "SUCCESS 0x%x\n", error);
-          if (error && opts > 2)
-            dwg_errstrings (error);
-        }
-      else
-        fprintf (stderr, "SUCCESS\n");
-    }
-  else
+  if (fmt)
     {
       Bit_Chain dat = { 0 };
       if (outfile)
@@ -292,26 +276,7 @@ main (int argc, char *argv[])
         fprintf (stderr, "Invalid output format '%s'\n", fmt);
 
       if (outfile)
-        {
-          fclose (dat.fh);
-          if (error >= DWG_ERR_CRITICAL)
-            {
-              fprintf (stderr, "ERROR 0x%x\n", error);
-              if (error && opts > 2)
-                dwg_errstrings (error);
-            }
-          else
-            {
-              if (opts > 1)
-                {
-                  fprintf (stderr, "SUCCESS 0x%x\n", error);
-                  if (error && opts > 2)
-                    dwg_errstrings (error);
-                }
-              else
-                fprintf (stderr, "SUCCESS\n");
-            }
-        }
+        fclose (dat.fh);
     }
 
  done:
@@ -335,6 +300,24 @@ main (int argc, char *argv[])
   )
     {
       dwg_free (&dwg);
+    }
+
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fprintf (stderr, "ERROR 0x%x\n", error);
+      if (error && opts > 2)
+        dwg_errstrings (error);
+    }
+  else
+    {
+      if (opts > 1)
+        {
+          fprintf (stderr, "SUCCESS 0x%x\n", error);
+          if (error && opts > 2)
+            dwg_errstrings (error);
+        }
+      else
+        fprintf (stderr, "SUCCESS\n");
     }
 
   return error >= DWG_ERR_CRITICAL ? 1 : 0;

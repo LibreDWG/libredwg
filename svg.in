@@ -36,8 +36,9 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         log="$b$dir.svg.log"
         out="$b$dir.svg"
-        echo programs/dwg2SVG "$v" "$d" \>"$out" 2\>"$log"
+        echo @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG "$v" "$d" \>"$out" 2\>"$log"
         @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG "$v" "$d" >"$out" 2>"$log"
+        tail -n2 "$log"
         echo "@RUN_JING@ $out"
         @RUN_JING@ "$out"
         ;;

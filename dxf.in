@@ -43,9 +43,10 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         log="$b$dir.log"
         out="$b$dir.dxf"
-        echo "programs/dwg2dxf $args $v -o $out $d 2>$log"
+        echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
         $timeout @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
+        tail -n2 "$log"
         ;;
     esac
 done

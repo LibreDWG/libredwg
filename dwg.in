@@ -68,6 +68,7 @@ for d in "$@"; do
         echo "$timeout @LTEXEC@ programs/dwgwrite $args $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
         $timeout @LTEXEC@ programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
+        tail -n2 "$log"
         ;;
     esac
 done

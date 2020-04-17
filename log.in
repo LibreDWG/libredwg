@@ -1,4 +1,5 @@
 #!@BASH@
+# -*- mode: sh -*-
 # create -v4 logs for DWGs, you can override -v?
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
@@ -39,9 +40,10 @@ for d in "$@"; do
         if [ "$dir" = "_." ]; then dir=""; fi
         b=$(basename "$d" .dwg)
         [ -z "$log" ] && log="$b$dir.log"
-        echo "programs/dwgread $v $d 2>$log"
+        echo "@TIMEOUT_10@ @LTEXEC@ programs/dwgread $v $d 2>$log"
         # (sleep 12s; killall dwgread 2>/dev/null) &
         @TIMEOUT_10@ @LTEXEC@ programs/dwgread "$v" "$d" 2>"$log"
+        tail -n2 "$log"
         log=
         ;;
     esac
