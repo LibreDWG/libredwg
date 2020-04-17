@@ -1589,8 +1589,6 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_owned");
   else if (strEQc (key, "attribs"))
     strcpy (s, "num_owned");
-  else if (strEQc (key, "vertex"))
-    strcpy (s, "num_owned");
   else if (strEQc (key, "items"))
     strcpy (s, "numitems");
   else if (strEQc (key, "entities"))
@@ -1626,6 +1624,12 @@ search:
           free (s);
           return f;
         }
+    }
+  // or num_owner
+  if (strEQc (key, "vertex"))
+    {
+      strcpy (s, "num_owned");
+      goto search;
     }
   // there are two of them
   if (strEQc (key, "paths") && strNE (s, "num_segs_or_paths"))

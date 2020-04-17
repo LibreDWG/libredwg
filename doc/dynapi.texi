@@ -2259,11 +2259,11 @@ B,	DXF 72
 @item num_subdiv_vertex
 BL,	DXF 91
 @item subdiv_vertex
-3BD*,	DXF 10
+3DPOINT*,	DXF 10
 @item num_vertex
 BL,	DXF 92
 @item vertex
-3BD*,	DXF 10
+3DPOINT*,	DXF 10
 @item num_faces
 BL,	DXF 93
 @item faces

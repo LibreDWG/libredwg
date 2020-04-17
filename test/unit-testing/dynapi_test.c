@@ -13225,24 +13225,24 @@ static int test_MESH (const Dwg_Object *obj)
         fail ("MESH.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_3BD* subdiv_vertex;
+    BITCODE_3DPOINT* subdiv_vertex;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (mesh, "MESH", "num_subdiv_vertex", &count, NULL)
         && dwg_dynapi_entity_value (mesh, "MESH", "subdiv_vertex", &subdiv_vertex, NULL)
         && subdiv_vertex == mesh->subdiv_vertex)
       pass ();
     else
-      fail ("MESH.subdiv_vertex [3BD*] * %u num_subdiv_vertex", count);
+      fail ("MESH.subdiv_vertex [3DPOINT*] * %u num_subdiv_vertex", count);
   }
   {
-    BITCODE_3BD* vertex;
+    BITCODE_3DPOINT* vertex;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (mesh, "MESH", "num_owned", &count, NULL)
         && dwg_dynapi_entity_value (mesh, "MESH", "vertex", &vertex, NULL)
         && vertex == mesh->vertex)
       pass ();
     else
-      fail ("MESH.vertex [3BD*] * %u num_owned", count);
+      fail ("MESH.vertex [3DPOINT*] * %u num_owned", count);
   }
   if (failed && (is_class_unstable ("MESH") || is_class_debugging ("MESH")))
     {

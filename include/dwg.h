@@ -4684,9 +4684,9 @@ typedef struct _dwg_entity_MESH
   BITCODE_BS dlevel; 		/*!< DXF 71 (2) */
   BITCODE_B is_watertight; 	/*!< DXF 72 (0) */
   BITCODE_BL num_subdiv_vertex; /*!< DXF 91 (0) */
-  BITCODE_3BD* subdiv_vertex; 	/*!< DXF 10 ?? */
+  BITCODE_3DPOINT* subdiv_vertex;/*!< DXF 10 ?? */
   BITCODE_BL num_vertex;  	/*!< DXF 92 (14) */
-  BITCODE_3BD* vertex; 		/*!< DXF 10 */
+  BITCODE_3DPOINT* vertex; 	/*!< DXF 10 */
   BITCODE_BL num_faces;  	/*!< DXF 93 (30) */
   BITCODE_BL* faces;  	        /*!< DXF 90 */
   BITCODE_BL num_edges;  	/*!< DXF 94 (19) */

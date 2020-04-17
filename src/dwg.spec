@@ -6781,7 +6781,6 @@ DWG_OBJECT_END
 // undocumented fields, unstable, but looks stable.
 // types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
 DWG_ENTITY (MESH)
-  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbSubDMesh)
   FIELD_BS (dlevel, 71);       // 2
   FIELD_B (is_watertight, 72); // 0
