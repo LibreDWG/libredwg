@@ -6778,6 +6778,34 @@ DWG_OBJECT (SECTION_MANAGER)
   HANDLE_VECTOR (sections, num_sections, 5, 0);
 DWG_OBJECT_END
 
+// undocumented fields, unstable, but looks stable.
+// types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
+DWG_ENTITY (MESH)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSubDMesh)
+  FIELD_BS (dlevel, 71);       // 2
+  FIELD_B (is_watertight, 72); // 0
+  FIELD_BL (num_subdiv_vertex, 91); //0
+  FIELD_3DPOINT_VECTOR (subdiv_vertex, num_subdiv_vertex, 10);
+  FIELD_BL (num_vertex, 92); //14 @14
+  FIELD_3DPOINT_VECTOR (vertex, num_vertex, 10);
+  FIELD_BL (num_faces, 93); // 30
+  FIELD_VECTOR (faces, BL, num_faces, 90);
+
+  FIELD_BL (num_edges, 94); // 19
+  REPEAT (num_edges, edges, Dwg_MESH_edge)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (edges[rcount1], from, 90);
+      SUB_FIELD_BL (edges[rcount1], to, 90);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (edges);
+  END_REPEAT (edges);
+  //FIELD_VECTOR (edges, Dwg_MESH_edge, num_edges * 2, 90);
+  FIELD_BL (num_crease, 95); // 19
+  FIELD_VECTOR (crease, BD, num_crease, 140);
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
+
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
@@ -7802,42 +7830,6 @@ DWG_ENTITY (ARC_DIMENSION)
   FIELD_BD (ins_scale.x, 41);
   FIELD_RC (flag2, 71);
 
-  COMMON_ENTITY_HANDLE_DATA;
-DWG_ENTITY_END
-
-// varies: UNKNOWN FIELDS
-// types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
-DWG_ENTITY (MESH)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbSubDMesh)
-  FIELD_BS (dlevel, 71);       // 2
-  FIELD_B (is_watertight, 72); // 0
-  FIELD_BL (num_subdiv_vertex, 91); //0 
-  VALUEOUTOFBOUNDS (num_subdiv_vertex, 5000)
-  FIELD_3DPOINT_VECTOR (subdiv_vertex, num_subdiv_vertex, 10);
-  FIELD_BL (num_vertex, 92); //14 @14
-  VALUEOUTOFBOUNDS (num_vertex, 5000)
-  FIELD_3DPOINT_VECTOR (vertex, num_vertex, 10);
-  FIELD_BL (num_faces, 93); // 30
-  VALUEOUTOFBOUNDS (num_faces, 5000)
-  FIELD_VECTOR (faces, BL, num_faces, 90);
-
-  FIELD_BL (num_edges, 94); // 19
-  VALUEOUTOFBOUNDS (num_edges, 5000)
-  REPEAT (num_edges, edges, Dwg_MESH_edge)
-  REPEAT_BLOCK
-      SUB_FIELD_BL (edges[rcount1], from, 90);
-      SUB_FIELD_BL (edges[rcount1], to, 90);
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ (edges);
-  END_REPEAT (edges);
-  //FIELD_VECTOR (edges, Dwg_MESH_edge, num_edges, 90);
-  FIELD_BL (num_crease, 95); // 19
-  VALUEOUTOFBOUNDS (num_crease, 5000);
-  FIELD_VECTOR (crease, BD, num_crease, 140);
-  /* 90 ?
-     ? BD crease
-  */
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 

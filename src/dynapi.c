@@ -2245,8 +2245,6 @@ static const Dwg_DYNAPI_field _dwg_LWPOLYLINE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_MESH_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_MESH, parent),
     1,1,0, 0 },
-  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_MESH, class_version),
-    0,0,0, 90 },
   { "dlevel",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_MESH, dlevel),
     0,0,0, 71 },
   { "is_watertight",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_MESH, is_watertight),

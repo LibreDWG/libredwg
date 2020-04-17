@@ -218,6 +218,7 @@
   UNSTABLE_CLASS     (ACTION, DBCOLOR)
   UNSTABLE_CLASS     (ACTION, GEODATA)
   UNSTABLE_CLASS     (ACTION, HELIX)             /* ent */
+  UNSTABLE_CLASS     (ACTION, MESH)              /* ent */
   UNSTABLE_CLASS     (ACTION, OBJECT_PTR)
   UNSTABLE_CLASS_CPP (ACTION, OBJECT_PTR, CAseDLPNTableRecord)
   UNSTABLE_CLASS_DXF (ACTION, PROXY_OBJECT, PROXY)
@@ -240,7 +241,6 @@
   DEBUGGING_CLASS     (ACTION, SWEPTSURFACE)      /* ent */
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
   DEBUGGING_CLASS     (ACTION, ARC_DIMENSION)     /* ent */
-  DEBUGGING_CLASS     (ACTION, MESH)              /* ent */
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
                                                      dxfname COORDINATION_MODEL? */
   DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"

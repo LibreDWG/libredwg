@@ -4670,7 +4670,6 @@ typedef struct _dwg_entity_SWEPTSURFACE
 /**
  Entity MESH (varies)
  Types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
- --enable-debug only, unknown fields
 */
 typedef struct _dwg_MESH_edge
 {
@@ -4682,7 +4681,6 @@ typedef struct _dwg_MESH_edge
 typedef struct _dwg_entity_MESH
 {
   struct _dwg_object_entity *parent;
-  BITCODE_BS class_version;	/*!< DXF 90 */
   BITCODE_BS dlevel; 		/*!< DXF 71 (2) */
   BITCODE_B is_watertight; 	/*!< DXF 72 (0) */
   BITCODE_BL num_subdiv_vertex; /*!< DXF 91 (0) */
@@ -4695,7 +4693,6 @@ typedef struct _dwg_entity_MESH
   Dwg_MESH_edge* edges;   	/*!< DXF 90 */
   BITCODE_BL num_crease;  	/*!< DXF 95 (19) */
   BITCODE_BD* crease;   	/*!< DXF 140 */
-
 } Dwg_Entity_MESH;
 
 /**
@@ -7109,6 +7106,7 @@ EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_GEODATA (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHT (Dwg_Object *obj);
+EXPORT int dwg_setup_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
@@ -7164,7 +7162,6 @@ EXPORT int dwg_setup_LAYERFILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
-EXPORT int dwg_setup_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODEL (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODELDEF (Dwg_Object *obj);
 EXPORT int dwg_setup_NPOCOLLECTION (Dwg_Object *obj);

@@ -13082,21 +13082,6 @@ static int test_MESH (const Dwg_Object *obj)
   Dwg_Entity_MESH *restrict mesh = obj->tio.entity->tio.MESH;
   failed = 0;
   {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (mesh, "MESH", "class_version", &class_version, NULL)
-        && class_version == mesh->class_version)
-      pass ();
-    else
-      fail ("MESH.class_version [BS] %hu != %hu", mesh->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (mesh, "MESH", "class_version", &class_version, 0)
-        && class_version == mesh->class_version)
-      pass ();
-    else
-      fail ("MESH.class_version [BS] set+1 %hu != %hu", mesh->class_version, class_version);
-    mesh->class_version--;
-  }
-  {
     BITCODE_BD* crease;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (mesh, "MESH", "num_crease", &count, NULL)

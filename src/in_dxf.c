@@ -2086,11 +2086,20 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               j++;
             }
-          else if (vector == 95) //??
+          else if (vector == 95)
             {
-              o->class_version = pair->value.u;
-              LOG_TRACE ("MESH.class_version = %u [BL %d]\n", pair->value.u,
+              o->num_crease = pair->value.u;
+              LOG_TRACE ("MESH.num_crease = %u [BL %d]\n", pair->value.u,
                          pair->code);
+              if (pair->value.u) // from face - to face
+                {
+                  o->crease = xcalloc (o->num_crease, sizeof (double));
+                  if (!o->crease)
+                    {
+                      o->num_crease = 0;
+                      return NULL;
+                    }
+                }
             }
           else
             goto mesh_error;
