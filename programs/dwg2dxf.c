@@ -279,7 +279,7 @@ main (int argc, char *argv[])
       dat.from_version = dwg.header.from_version;
 
       if (minimal)
-        dwg.opts |= 0x10;
+        dwg.opts |= DWG_OPTS_MINIMAL;
       {
         struct stat attrib;
         if (!stat (filename_out, &attrib)) // exists

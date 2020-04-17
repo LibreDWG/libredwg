@@ -43,7 +43,6 @@ static volatile const char *__afl_persistent_sig = "##SIG_AFL_PERSISTENT##";
 #endif
 
 static int opts = 1;
-int overwrite = 0;
 
 static int help (void);
 
@@ -75,6 +74,8 @@ help (void)
   printf (
       "           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dxffile, --file        \n");
+  printf ("  -m, --minimal             only $ACADVER, HANDSEED and "
+          "ENTITIES\n");
   printf ("  -b, --binary              create a binary DXF\n");
   printf ("  -y, --overwrite           overwrite existing files\n");
   printf ("           --help           display this help and exit\n");
@@ -92,6 +93,7 @@ help (void)
   printf ("  -I fmt      fmt: DXF, DXFB\n");
   printf ("              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dxffile\n");
+  printf ("  -m          minimal, only $ACADVER, HANDSEED and ENTITIES\n");
   printf ("  -b          create a binary DXF\n");
   printf ("  -y          overwrite existing files\n");
   printf ("  -h          display this help and exit\n");
@@ -116,7 +118,9 @@ main (int argc, char *argv[])
   const char *version = NULL;
   Dwg_Version_Type dwg_version = R_INVALID;
   int c;
+  int overwrite = 0;
   int binary = 0;
+  int minimal = 0;
   int force_free = 0;
   int free_outfile = 0;
 #ifdef HAVE_GETOPT_LONG
@@ -124,7 +128,8 @@ main (int argc, char *argv[])
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
           { "format", 1, 0, 'I' },    { "file", 1, 0, 'o' },
-          { "as", 1, 0, 'a' },        { "binary", 0, 0, 'b' },
+          { "as", 1, 0, 'a' },
+          { "minimal", 0, 0, 'm' },   { "binary", 0, 0, 'b' },
           { "overwrite", 0, 0, 'y' }, { "version", 0, 0, 0 },
           { "force-free", 0, 0, 0 },  { "help", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
@@ -136,10 +141,10 @@ main (int argc, char *argv[])
   while
 #ifdef HAVE_GETOPT_LONG
       ((c
-        = getopt_long (argc, argv, "yba:v::I:o:h", long_options, &option_index))
+        = getopt_long (argc, argv, "ymba:v::I:o:h", long_options, &option_index))
        != -1)
 #else
-      ((c = getopt (argc, argv, "yba:v::I:o:hi")) != -1)
+      ((c = getopt (argc, argv, "ymba:v::I:o:hi")) != -1)
 #endif
     {
       if (c == -1)
@@ -193,6 +198,9 @@ main (int argc, char *argv[])
           break;
         case 'b':
           binary = 1;
+          break;
+        case 'm':
+          minimal = 1;
           break;
         case 'o':
           outfile = optarg;
@@ -350,6 +358,9 @@ main (int argc, char *argv[])
     dwg.header.version = dwg.header.from_version;
   if (version)
     dat.version = dwg.header.version = dwg_version;
+  if (minimal)
+    dwg.opts |= DWG_OPTS_MINIMAL;
+  dwg.opts |= opts;
 
   if (!outfile)
     {
@@ -358,7 +369,8 @@ main (int argc, char *argv[])
     }
 
   if (opts > 1)
-    fprintf (stderr, "Writing %sDXF file %s\n", binary ? "binary " : "", outfile);
+    fprintf (stderr, "Writing %s%sDXF file %s\n", minimal ? "minimal " : "",
+             binary ? "binary " : "", outfile);
 
   {
     struct stat attrib;
@@ -380,11 +392,7 @@ main (int argc, char *argv[])
             )
               {
                 unlink (outfile);
-                dwg.opts |= opts;
                 dat.fh = fopen (outfile, "wb");
-                error = binary
-                  ? dwg_write_dxfb (&dat, &dwg)
-                  : dwg_write_dxf (&dat, &dwg);
               }
             else if ( // for fuzzing mainly
 #ifdef _WIN32
@@ -394,11 +402,7 @@ main (int argc, char *argv[])
 #endif
                      )
               {
-                dwg.opts |= opts;
                 dat.fh = fopen (outfile, "wb");
-                error = binary
-                  ? dwg_write_dxfb (&dat, &dwg)
-                  : dwg_write_dxf (&dat, &dwg);
               }
             else
               {
@@ -408,16 +412,18 @@ main (int argc, char *argv[])
               }
           }
       }
-    else
-      {
-        dwg.opts |= opts;
-        dat.fh = fopen (outfile, "wb");
-        error = binary
-          ? dwg_write_dxfb (&dat, &dwg)
-          : dwg_write_dxf (&dat, &dwg);
-      }
   }
-
+  if (!dat.fh)
+    {
+      fprintf (stderr, "WRITE ERROR %s\n", outfile);
+      error |= DWG_ERR_IOERROR;
+    }
+  else
+    {
+      error |= binary
+        ? dwg_write_dxfb (&dat, &dwg)
+        : dwg_write_dxf (&dat, &dwg);
+    }
   if (dat.fh)
     fclose (dat.fh);
 
