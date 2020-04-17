@@ -29,7 +29,6 @@ static const Dwg_Object_Type _classes_unstable[] =
    DWG_TYPE_DIMASSOC,
    DWG_TYPE_GEODATA,
    DWG_TYPE_HELIX,
-   DWG_TYPE_MESH,
    DWG_TYPE_MULTILEADER,
    DWG_TYPE_OBJECT_PTR,
    DWG_TYPE_PERSUBENTMGR,
