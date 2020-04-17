@@ -324,7 +324,7 @@ static bool env_var_checked_p;
                 FIELD_VALUE (nam.z));
 
 #define OVERFLOW_CHECK(nam, size)                                             \
-  if ((long)(size) > 0xff00L || !_obj->nam)                                   \
+  if ((long)(size) > 0xff00L || (!_obj->nam && size) || (_obj->nam && !size)) \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " %ld", (long)size);                         \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -337,7 +337,7 @@ static bool env_var_checked_p;
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define OVERFLOW_NULL_CHECK_LV(nam, size)                                     \
-  if ((long)(size) > 0xff00L || (!_obj->nam && size))                         \
+  if ((long)(size) > 0xff00L || (!_obj->nam && size) || (_obj->nam && !size)) \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " %ld, set to 0", (long)size);               \
       size = 0;                                                               \
