@@ -2009,7 +2009,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
           REPEAT_BLOCK                                                                             \
               WIRESTRUCT_fields (wires[rcount1])                                                   \
           END_REPEAT_BLOCK                                                                         \
-          SET_PARENT_OBJ (wires)                                                                   \
+          SET_PARENT (wires, (Dwg_Entity__3DSOLID*)_obj)                                           \
           END_REPEAT (wires);                                                                      \
           FIELD_BL (num_silhouettes, 0);                                                           \
           REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)                            \
@@ -2024,10 +2024,10 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
               REPEAT_BLOCK                                                                         \
                   WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])                          \
               END_REPEAT_BLOCK                                                                     \
-              SET_PARENT_OBJ (silhouettes[rcount1].wires)                                          \
+              SET_PARENT (silhouettes[rcount1].wires, (Dwg_Entity__3DSOLID*)_obj)                  \
               END_REPEAT (silhouettes[rcount1].wires);                                             \
           END_REPEAT_BLOCK                                                                         \
-          SET_PARENT_OBJ (silhouettes)                                                             \
+          SET_PARENT (silhouettes, (Dwg_Entity__3DSOLID*)_obj)                                     \
           END_REPEAT (silhouettes);                                                                \
         }                                                                                          \
       }                                                                                            \
