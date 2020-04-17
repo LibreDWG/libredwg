@@ -13082,18 +13082,18 @@ static int test_MESH (const Dwg_Object *obj)
   Dwg_Entity_MESH *restrict mesh = obj->tio.entity->tio.MESH;
   failed = 0;
   {
-    BITCODE_BL class_version;
+    BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (mesh, "MESH", "class_version", &class_version, NULL)
         && class_version == mesh->class_version)
       pass ();
     else
-      fail ("MESH.class_version [BL] %u != %u", mesh->class_version, class_version);
+      fail ("MESH.class_version [BS] %hu != %hu", mesh->class_version, class_version);
     class_version++;
     if (dwg_dynapi_entity_set_value (mesh, "MESH", "class_version", &class_version, 0)
         && class_version == mesh->class_version)
       pass ();
     else
-      fail ("MESH.class_version [BL] set+1 %u != %u", mesh->class_version, class_version);
+      fail ("MESH.class_version [BS] set+1 %hu != %hu", mesh->class_version, class_version);
     mesh->class_version--;
   }
   {
@@ -13107,18 +13107,18 @@ static int test_MESH (const Dwg_Object *obj)
       fail ("MESH.crease [BD*] * %u num_crease", count);
   }
   {
-    BITCODE_RC dlevel;
+    BITCODE_BS dlevel;
     if (dwg_dynapi_entity_value (mesh, "MESH", "dlevel", &dlevel, NULL)
         && dlevel == mesh->dlevel)
       pass ();
     else
-      fail ("MESH.dlevel [RC] %u != %u", mesh->dlevel, dlevel);
+      fail ("MESH.dlevel [BS] %hu != %hu", mesh->dlevel, dlevel);
     dlevel++;
     if (dwg_dynapi_entity_set_value (mesh, "MESH", "dlevel", &dlevel, 0)
         && dlevel == mesh->dlevel)
       pass ();
     else
-      fail ("MESH.dlevel [RC] set+1 %u != %u", mesh->dlevel, dlevel);
+      fail ("MESH.dlevel [BS] set+1 %hu != %hu", mesh->dlevel, dlevel);
     mesh->dlevel--;
   }
   {
@@ -13142,18 +13142,18 @@ static int test_MESH (const Dwg_Object *obj)
       fail ("MESH.faces [BL*] * %u num_faces", count);
   }
   {
-    BITCODE_RC is_watertight;
+    BITCODE_B is_watertight;
     if (dwg_dynapi_entity_value (mesh, "MESH", "is_watertight", &is_watertight, NULL)
         && is_watertight == mesh->is_watertight)
       pass ();
     else
-      fail ("MESH.is_watertight [RC] %u != %u", mesh->is_watertight, is_watertight);
+      fail ("MESH.is_watertight [B] " FORMAT_B " != " FORMAT_B "", mesh->is_watertight, is_watertight);
     is_watertight++;
     if (dwg_dynapi_entity_set_value (mesh, "MESH", "is_watertight", &is_watertight, 0)
         && is_watertight == mesh->is_watertight)
       pass ();
     else
-      fail ("MESH.is_watertight [RC] set+1 %u != %u", mesh->is_watertight, is_watertight);
+      fail ("MESH.is_watertight [B] set+1 " FORMAT_B " != " FORMAT_B "", mesh->is_watertight, is_watertight);
     mesh->is_watertight--;
   }
   {

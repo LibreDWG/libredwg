@@ -2253,11 +2253,11 @@ Dwg_LWPOLYLINE_width*
 @item parent
 struct _dwg_object_entity*
 @item class_version
-BL,	DXF 90
+BS,	DXF 90
 @item dlevel
-RC,	DXF 71
+BS,	DXF 71
 @item is_watertight
-RC,	DXF 72
+B,	DXF 72
 @item num_subdiv_vertex
 BL,	DXF 91
 @item subdiv_vertex

@@ -7809,25 +7809,21 @@ DWG_ENTITY_END
 // types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
 DWG_ENTITY (MESH)
   DECODE_UNKNOWN_BITS
-  FIELD_BL (class_version, 90);
-  VALUEOUTOFBOUNDS (class_version, 10)
   SUBCLASS (AcDbSubDMesh)
-  FIELD_RC (dlevel, 71); // 2
-  FIELD_RC (is_watertight, 72); // 0
-
-  FIELD_BL (num_subdiv_vertex, 91); //?
+  FIELD_BS (dlevel, 71);       // 2
+  FIELD_B (is_watertight, 72); // 0
+  FIELD_BL (num_subdiv_vertex, 91); //0 
   VALUEOUTOFBOUNDS (num_subdiv_vertex, 5000)
   FIELD_3DPOINT_VECTOR (subdiv_vertex, num_subdiv_vertex, 10);
-
-  FIELD_BL (num_vertex, 92);
+  FIELD_BL (num_vertex, 92); //14 @14
   VALUEOUTOFBOUNDS (num_vertex, 5000)
   FIELD_3DPOINT_VECTOR (vertex, num_vertex, 10);
-  FIELD_BL (num_faces, 93);
+  FIELD_BL (num_faces, 93); // 30
   VALUEOUTOFBOUNDS (num_faces, 5000)
   FIELD_VECTOR (faces, BL, num_faces, 90);
-  FIELD_BL (num_edges, 94);
-  VALUEOUTOFBOUNDS (num_edges, 5000)
 
+  FIELD_BL (num_edges, 94); // 19
+  VALUEOUTOFBOUNDS (num_edges, 5000)
   REPEAT (num_edges, edges, Dwg_MESH_edge)
   REPEAT_BLOCK
       SUB_FIELD_BL (edges[rcount1], from, 90);
@@ -7836,8 +7832,8 @@ DWG_ENTITY (MESH)
   SET_PARENT_OBJ (edges);
   END_REPEAT (edges);
   //FIELD_VECTOR (edges, Dwg_MESH_edge, num_edges, 90);
-  FIELD_BL (num_crease, 95);
-  VALUEOUTOFBOUNDS (num_crease, 5000)
+  FIELD_BL (num_crease, 95); // 19
+  VALUEOUTOFBOUNDS (num_crease, 5000);
   FIELD_VECTOR (crease, BD, num_crease, 140);
   /* 90 ?
      ? BD crease
