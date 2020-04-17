@@ -842,8 +842,17 @@ dwg_block_control (Dwg_Data *dwg)
 {
   if (!dwg->block_control.parent)
     {
-      LOG_ERROR ("dwg->block_control missing");
-      return NULL;
+      Dwg_Object *obj;
+      Dwg_Object_Ref *ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
+      if (!ctrl || !(obj = dwg_ref_object (dwg, ctrl)) || obj->type != DWG_TYPE_BLOCK_CONTROL)
+        {
+          LOG_ERROR ("dwg.block_control and HEADER.BLOCK_CONTROL_OBJECT missing");
+          return NULL;
+        }
+      else
+        {
+          dwg->block_control = *obj->tio.object->tio.BLOCK_CONTROL;
+        }
     }
   return &(dwg->block_control);
 }
