@@ -458,8 +458,8 @@ json_float (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       JSON_TOKENS_CHECK_OVERFLOW(NAN)
       return (double)NAN;
     }
-  tokens->index++;
   JSON_TOKENS_CHECK_OVERFLOW(NAN)
+  tokens->index++;
   return strtod ((char *)&dat->chain[t->start], NULL);
 }
 
@@ -475,8 +475,8 @@ json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       JSON_TOKENS_CHECK_OVERFLOW(0)
       return 0;
     }
-  tokens->index++;
   JSON_TOKENS_CHECK_OVERFLOW(0)
+  tokens->index++;
   return strtol ((char *)&dat->chain[t->start], NULL, 10);
 }
 
@@ -510,12 +510,10 @@ json_2DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       LOG_ERROR ("JSON 2DPOINT must be ARRAY of size 2")
       return;
     }
+  JSON_TOKENS_CHECK_OVERFLOW_VOID
   tokens->index++;
-  JSON_TOKENS_CHECK_OVERFLOW_VOID
   pt->x = json_float (dat, tokens);
-  JSON_TOKENS_CHECK_OVERFLOW_VOID
   pt->y = json_float (dat, tokens);
-  JSON_TOKENS_CHECK_OVERFLOW_VOID
   LOG_TRACE ("%s (%f, %f) [%s]\n", name, pt->x, pt->y, type);
 }
 
@@ -530,12 +528,10 @@ json_TIMERLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       LOG_ERROR ("JSON TIMERLL must be ARRAY of size 2")
       return;
     }
+  JSON_TOKENS_CHECK_OVERFLOW_VOID
   tokens->index++;
-  JSON_TOKENS_CHECK_OVERFLOW_VOID
   tl->days = json_long (dat, tokens);
-  JSON_TOKENS_CHECK_OVERFLOW_VOID
   tl->ms = json_long (dat, tokens);
-  JSON_TOKENS_CHECK_OVERFLOW_VOID
   LOG_TRACE ("%s (%u, %u) [%s]\n", name, (unsigned)tl->days, (unsigned)tl->ms,
              type);
 }
@@ -554,18 +550,14 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ] or [ code, size, value, absref ]")
       return NULL;
     }
+  JSON_TOKENS_CHECK_OVERFLOW_NULL
   tokens->index++;
-  JSON_TOKENS_CHECK_OVERFLOW_NULL
   code = json_long (dat, tokens);
-  JSON_TOKENS_CHECK_OVERFLOW_NULL
   if (t->size == 4)
     {
       size = json_long (dat, tokens);
-      JSON_TOKENS_CHECK_OVERFLOW_NULL
       value = json_long (dat, tokens);
-      JSON_TOKENS_CHECK_OVERFLOW_NULL
       absref = json_long (dat, tokens);
-      JSON_TOKENS_CHECK_OVERFLOW_NULL
       ref = dwg_add_handleref (dwg, code, absref, (!code || code >= 6) ? obj : NULL);
       if ((BITCODE_RC)size != ref->handleref.size || (unsigned long)value != ref->handleref.value)
         {
@@ -580,7 +572,6 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   else
     {
       absref = json_long (dat, tokens);
-      JSON_TOKENS_CHECK_OVERFLOW_NULL
       ref = dwg_add_handleref (dwg, code, absref, (!code || code >= 6) ? obj : NULL);
     }
   if (i < 0)
