@@ -1042,9 +1042,7 @@
         {                                                                     \
           FIELD_3DPOINT (name[vcount], dxf);                                  \
         }                                                                     \
-    }                                                                         \
-  else                                                                        \
-    return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
 
 // shortest handle: 8 bit
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
