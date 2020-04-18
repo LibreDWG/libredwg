@@ -6540,8 +6540,10 @@ typedef struct _dwg_struct
 {
   struct Dwg_Header
   {
-    Dwg_Version_Type version;          /* calculated from the header magic */
-    Dwg_Version_Type from_version;     /* option. set by --as (convert from) */
+    Dwg_Version_Type version;          /* option. set by --as (convert to) */
+    Dwg_Version_Type from_version;     /* calculated from the header magic */
+    unsigned char    is_tu;            /* How a string is stored, independent of version >= R_2007. See GH #230 */
+
     BITCODE_RC   zero_5[5];
     BITCODE_RC   is_maint;
     BITCODE_RC   zero_one_or_three;

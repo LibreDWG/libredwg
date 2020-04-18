@@ -35,6 +35,37 @@
 #define ACTION decode
 #define IS_DECODER
 
+// redeclare versions to be from, not target
+#undef VERSION
+#undef NOT_VERSION
+#undef VERSIONS
+#undef PRE
+#undef SINCE
+#undef UNTIL
+#undef RESET_VER
+#define VERSION(v)                                                            \
+  cur_ver = v;                                                                \
+  if (dat->from_version == v)
+#define NOT_VERSION(v)                                                        \
+  cur_ver = v;                                                                \
+  if (dat->from_version != v)
+#define VERSIONS(v1, v2)                                                      \
+  cur_ver = v1;                                                               \
+  if (dat->from_version >= v1 && dat->from_version <= v2)
+#define OTHER_VERSIONS else
+#define PRE(v)                                                                \
+  cur_ver = v;                                                                \
+  if (dat->from_version < v)
+#define SINCE(v)                                                              \
+  cur_ver = v;                                                                \
+  if (dat->from_version >= v)
+#define PRIOR_VERSIONS else
+#define UNTIL(v)                                                              \
+  cur_ver = v;                                                                \
+  if (dat->from_version <= v)
+#define LATER_VERSIONS else
+#define RESET_VER cur_ver = dat->from_version;
+
 #define VALUE(value, type, dxf)                                               \
   LOG_TRACE (FORMAT_##type " [" #type " %d]\n", value, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
@@ -449,7 +480,7 @@
 #define FIELD_TU32(nam, dxf)                                                  \
   {                                                                           \
     _obj->nam = bit_read_TU32 (dat);                                          \
-    if (dat->version < R_2007)                                                \
+    if (dat->from_version < R_2007)                                           \
       {                                                                       \
         LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf)               \
       }                                                                       \
@@ -461,7 +492,7 @@
 #define FIELD_T32(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_T32 (dat);                                           \
-    if (dat->version < R_2007)                                                \
+    if (dat->from_version < R_2007)                                           \
       {                                                                       \
         LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);               \
       }                                                                       \
@@ -485,7 +516,7 @@
 // clang-format on
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
-    if (dat->version < R_2007)                                                \
+    if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
         LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam, dxf);                   \
@@ -662,7 +693,7 @@
     LOG_TRACE (#color ".index: %d [CMC.BS %d]", _obj->color.index, dxf1);     \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
     LOG_TRACE ("\n");                                                         \
-    if (dat->version >= R_2004)                                               \
+    if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
                    (unsigned)_obj->color.rgb, dxf2);                          \
@@ -686,7 +717,7 @@
                dxf1);                                                         \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
     LOG_TRACE ("\n");                                                         \
-    if (dat->version >= R_2004)                                               \
+    if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         LOG_TRACE (#o "." #color ".rgb: 0x%06x [CMC.BL %d]\n",                \
                    (unsigned)_obj->o.color.rgb, dxf2);                        \
@@ -708,7 +739,7 @@
   {                                                                           \
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->color);                       \
     LOG_TRACE (#color ".index: %d [ENC.BS %d]\n", _obj->color.index, dxf1);   \
-    if (dat->version >= R_2004)                                               \
+    if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         if (_obj->color.flag)                                                 \
           LOG_TRACE (#color ".flag: 0x%x\n", (unsigned)_obj->color.flag);     \
@@ -728,7 +759,7 @@
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->o.color);                     \
     LOG_TRACE (#o "." #color ".index: %d [ENC.BS %d]\n", _obj->o.color.index, \
                dxf1);                                                         \
-    if (dat->version >= R_2004)                                               \
+    if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         if (_obj->o.color.flag)                                               \
           LOG_TRACE (#o "." #color ".flag: 0x%x\n",                           \
@@ -922,7 +953,7 @@
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _VECTOR_CHKCOUNT (name, _obj->size,                                     \
-                        dat->version >= R_2007 ? 18 : 2, dat)                 \
+                        dat->from_version >= R_2007 ? 18 : 2, dat)            \
       _obj->name = calloc (_obj->size, sizeof (char *));                      \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \

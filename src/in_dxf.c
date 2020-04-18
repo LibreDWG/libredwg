@@ -225,6 +225,7 @@ dxf_read_rd (Bit_Chain *dat)
 }
 
 // TODO: TV only, no unicode. We encode only r2000 so far.
+// check dwg->header.is_tu if we need to write to TU
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {
@@ -624,7 +625,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
-  int is_utf = 1;
+  int is_tu = 1;
   int i = 0;
   Dxf_Pair *pair;
 
@@ -664,11 +665,14 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dwg->header.version = dwg->header.from_version = v;
-                  dat->version = dat->from_version = dwg->header.version;
-                  is_utf = dat->version >= R_2007;
-                  LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
-                  if (is_utf && dwg->num_objects && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
+                  dat->from_version = dwg->header.from_version = v;
+                  is_tu = dat->from_version >= R_2007;
+                  LOG_TRACE ("HEADER.from_version = dat->from_version = %s\n", version);
+                  if (!dwg->header.version)
+                    dwg->header.version = dat->version = dat->from_version;
+                  else
+                    LOG_TRACE ("HEADER.version = %s\n", version_codes[dat->version]);
+                  if (is_tu && dwg->num_objects && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
                       Dwg_Object_BLOCK_HEADER *_o = dwg->object[0].tio.object->tio.BLOCK_HEADER;
                       free (_o->name);
@@ -4315,7 +4319,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   Dxf_Pair *pair = NULL;
   Dwg_Object_LTYPE_CONTROL *_obj = NULL; // the largest
   int j = 0;
-  int is_utf = dwg->header.version >= R_2007 ? 1 : 0;
+  int is_tu = dwg->header.version >= R_2007 ? 1 : 0;
   char *fieldname;
   char ctrlname[80];
   char *dxfname;
@@ -4484,7 +4488,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                     pair->value.u = 0;
                   dwg_dynapi_entity_set_value (_obj, obj->name,
                                                "num_morehandles", &pair->value,
-                                               is_utf);
+                                               is_tu);
                   LOG_TRACE ("%s.num_morehandles = %u [BL 71]\n", ctrlname,
                              pair->value.u);
                   dwg_dynapi_entity_set_value (_obj, obj->name, "morehandles",
@@ -4644,9 +4648,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       {
         int length = rbuf->value.str.size = strlen (pair->value.s);
         if (length > 0)
-          {
-            rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s);
-          }
+          rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s);
         xdata_size += 2 + 2 * rbuf->value.str.size;
       }
       break;
@@ -5710,7 +5712,7 @@ new_object (char *restrict name, char *restrict dxfname,
             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             BITCODE_BL ctrl_id, BITCODE_BL i)
 {
-  const int is_utf = 1;
+  const int is_tu = 1;
   Dwg_Object *obj;
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object_APPID *_obj = NULL; // the smallest
@@ -6694,7 +6696,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   LOG_TRACE ("%s.%s.rgb = %06X [CMC %d]\n", name, fname,
                              pair->value.u, pair->code);
                   dwg_dynapi_entity_set_value (_obj, obj->name, fname, &color,
-                                               is_utf);
+                                               is_tu);
                   break;
                 }
             }
@@ -7466,7 +7468,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                      pair->value.s, "CMC", pair->code);
                         }
                       dwg_dynapi_common_set_value (_obj, f->name, &color,
-                                                   is_utf);
+                                                   is_tu);
                       goto next_pair; // found, early exit
                     }
                   else if (f->dxf == pair->code)

@@ -141,6 +141,8 @@
 #define TODO_ENCODER HANDLER (OUTPUT, "TODO: Encoder\n");
 #define TODO_DECODER HANDLER (OUTPUT, "TODO: Decoder\n");
 
+// exporters are more common in the spec format, in_json and in_dxf are not using it.
+// so default to the encode-to format. dec_macros needs to override them.
 #define VERSION(v)                                                            \
   cur_ver = v;                                                                \
   if (dat->version == v)

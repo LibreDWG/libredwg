@@ -193,16 +193,16 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   strncpy (version, (const char *)dat->chain, 6);
   version[6] = '\0';
 
-  dwg->header.version = 0;
+  dwg->header.from_version = 0;
   for (i = 0; i < R_AFTER; i++)
     {
       if (strEQ (version, version_codes[(Dwg_Version_Type)i]))
         {
-          dwg->header.version = (Dwg_Version_Type)i;
+          dwg->header.from_version = (Dwg_Version_Type)i;
           break;
         }
     }
-  if (!dwg->header.version)
+  if (!dwg->header.from_version)
     {
       if (strncmp (version, "AC", 2)) // let's ignore MC0.0 for now
         {
@@ -214,11 +214,13 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       return DWG_ERR_INVALIDDWG;
     }
-  dat->version = dwg->header.version;
-  dwg->header.from_version = dat->version;
-  dat->from_version = dat->version;
+  dat->from_version = dwg->header.from_version;
+  if (!dwg->header.version) // target version not set
+    {
+      dat->version = dwg->header.version = dat->from_version;
+    }
   LOG_INFO ("This file's version code is: %s (%s)\n", version,
-            dwg_version_type(dat->version))
+            dwg_version_type(dat->from_version))
 
 #define WE_CAN                                                                \
   "This version of LibreDWG is only capable of decoding "                     \

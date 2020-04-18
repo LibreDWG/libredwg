@@ -854,30 +854,33 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       t = &tokens->tokens[tokens->index];
       if (strEQc (key, "version"))
         {
+          Dwg_Version_Type v;
           version[0] = '\0';
           json_fixed_key (version, dat, tokens);
           // set version's
-          for (Dwg_Version_Type v = 0; v <= R_AFTER; v++)
+          for (v = 0; v <= R_AFTER; v++)
             {
               if (strEQ (version, version_codes[v]))
                 {
                   dat->from_version = dwg->header.from_version = v;
-                  // is_utf = dat->version >= R_2007;
-                  LOG_TRACE ("HEADER.version = dat->version = %s\n", version);
-                  /*
-                    if (is_utf && dwg->num_objects && dwg->object[0].fixedtype
-                    == DWG_TYPE_BLOCK_HEADER)
+                  // is_tu = dat->version >= R_2007;
+                  LOG_TRACE ("FILEHEADER.from_version = %s (%s)\n",
+                             version, dwg_version_type (v));
+                  if (!dwg->header.version) // not already set
+                    dwg->header.version = dat->version = dat->from_version;
+                  else
                     {
-                    Dwg_Object_BLOCK_HEADER *_o =
-                    dwg->object[0].tio.object->tio.BLOCK_HEADER; free
-                    (_o->name); _o->name = (char*)bit_utf8_to_TU
-                    ((char*)"*Model_Space");
+                      dat->version = dwg->header.version;
+                      LOG_TRACE ("FILEHEADER.version = %s (%s)\n", version_codes[dat->version],
+                                 dwg_version_type (dat->version));
                     }
-                  */
                   break;
                 }
-              if (v == R_AFTER)
-                LOG_ERROR ("Invalid FILEHEADER.version %s", version);
+            }
+          if (v == R_AFTER)
+            {
+              LOG_ERROR ("Invalid FILEHEADER.version %s", version);
+              exit (1);
             }
         }
       // FIELD_VECTOR_INL (zero_5, RL, 5, 0)
@@ -1280,7 +1283,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                     case 0:
                       {
-                        //FIXME: wstring case, which we cannot write yet
+                        //FIXME: wstring case, needed for dxfwrite
                         char *s = json_string (dat, tokens);
                         int len = strlen (s);
                         if (eed_need_size (dat, obj->eed, i, len + 1 + 1 + 2, &have))
@@ -3975,8 +3978,10 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   dwg->dirty_refs = 1;
   // set the target version earlier (than e.g. in DXF)
-  // we cannot write >= R_2004 yet. avoid widestrings for now
-  dat->version = dwg->header.version = R_2000;
+  // we cannot write DWG >= R_2004 yet. avoid widestrings for now
+  /* if (!dwg->header.version)
+    dwg->header.version = dat->version = R_2000;
+  */
 
   jsmn_init (&parser); // reset pos to 0
   error = jsmn_parse (&parser, (char *)dat->chain, dat->size, tokens.tokens,

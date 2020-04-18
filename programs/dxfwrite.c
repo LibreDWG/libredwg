@@ -69,7 +69,7 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r12, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
+  printf ("                r12, r13, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -I fmt,  --format fmt     DWG, DXF, DXFB, JSON\n");
   printf (
       "           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
@@ -85,12 +85,12 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r12, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
+  printf ("                r12, r13, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
   /*
   printf ("              Planned versions:\n");
-  printf ("                r9, r10, r11\n");
+  printf ("                r9, r10, r11, r12\n");
   */
-  printf ("  -I fmt      fmt: DXF, DXFB\n");
+  printf ("  -I fmt      fmt: DWG, DXF, DXFB, JSON\n");
   printf ("              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dxffile\n");
   printf ("  -m          minimal, only $ACADVER, HANDSEED and ENTITIES\n");
@@ -205,7 +205,7 @@ main (int argc, char *argv[])
         case 'o':
           outfile = optarg;
           break;
-        case 'a':
+        case 'a': // as
           dwg_version = dwg_version_as (optarg);
           if (dwg_version == R_INVALID)
             {
@@ -260,11 +260,11 @@ main (int argc, char *argv[])
       infile = argv[i];
       if (!fmt)
         {
-#ifndef DISABLE_DXF
-          if (strstr (infile, ".json") || strstr (infile, ".JSON"))
-            fmt = (char *)"json";
-          else if (strstr (infile, ".dwg") || strstr (infile, ".DWG"))
+          if (strstr (infile, ".dwg") || strstr (infile, ".DWG"))
             fmt = (char *)"dwg";
+#ifndef DISABLE_DXF
+          else if (strstr (infile, ".json") || strstr (infile, ".JSON"))
+            fmt = (char *)"json";
           else if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
             fmt = (char *)"dxfb";
           else if (strstr (infile, ".dxf") || strstr (infile, ".DXF"))
@@ -278,6 +278,12 @@ main (int argc, char *argv[])
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
+  if (version)
+    {
+      if (dwg_version >= R_2007)
+        dwg.header.is_tu = 1; // needed to avoid utf8 - TV - TU roundtrips
+      dwg.header.version = dat.version = dwg_version;
+    }
 
   if (infile)
     {
@@ -298,22 +304,22 @@ main (int argc, char *argv[])
   else
     dat.fh = stdin;
 
-#ifndef DISABLE_DXF
-  if ((fmt && !strcasecmp (fmt, "json"))
-      || (infile && !strcasecmp (infile, ".json")))
-    {
-      if (opts > 1)
-        fprintf (stderr, "Reading JSON file %s\n",
-                 infile ? infile : "from stdin");
-      error = dwg_read_json (&dat, &dwg);
-    }
-  else if ((fmt && !strcasecmp (fmt, "dwg"))
+  if ((fmt && !strcasecmp (fmt, "dwg"))
            || (infile && !strcasecmp (infile, ".dwg")))
     {
       if (opts > 1)
         fprintf (stderr, "Reading DWG file %s\n",
                  infile ? infile : "from stdin");
       error = dwg_read_file (infile ? infile : "-", &dwg);
+    }
+#ifndef DISABLE_DXF
+  else if ((fmt && !strcasecmp (fmt, "json"))
+      || (infile && !strcasecmp (infile, ".json")))
+    {
+      if (opts > 1)
+        fprintf (stderr, "Reading JSON file %s\n",
+                 infile ? infile : "from stdin");
+      error = dwg_read_json (&dat, &dwg);
     }
   else if ((fmt && !strcasecmp (fmt, "dxfb"))
            || (infile && !strcasecmp (infile, ".dxfb")))
@@ -348,16 +354,15 @@ main (int argc, char *argv[])
 
   bit_chain_free (&dat);
   if (infile && dat.fh)
-    fclose (dat.fh);
+    {
+      fclose (dat.fh);
+      dat.fh = NULL;
+    }
   if (error >= DWG_ERR_CRITICAL)
     goto free;
 
-  if (dwg.header.from_version == R_INVALID)
-    dwg.header.from_version = dwg.header.version;
-  else // with DXF we can write everything
-    dwg.header.version = dwg.header.from_version;
-  if (version)
-    dat.version = dwg.header.version = dwg_version;
+  if (!dwg.header.version && !version)
+    dat.version = dwg.header.version = dwg.header.from_version;
   if (minimal)
     dwg.opts |= DWG_OPTS_MINIMAL;
   dwg.opts |= opts;
@@ -369,8 +374,16 @@ main (int argc, char *argv[])
     }
 
   if (opts > 1)
-    fprintf (stderr, "Writing %s%sDXF file %s\n", minimal ? "minimal " : "",
-             binary ? "binary " : "", outfile);
+    {
+      fprintf (stderr, "Writing %s%sDXF file %s", minimal ? "minimal " : "",
+               binary ? "binary " : "", outfile);
+      if (version)
+        fprintf (stderr, " (from %s to %s)\n",
+                 dwg_version_type (dwg.header.from_version),
+                 dwg_version_type (dwg.header.version));
+      else
+        fprintf (stderr, " (%s)\n", dwg_version_type (dwg.header.version));
+    }
 
   {
     struct stat attrib;
