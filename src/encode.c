@@ -1667,7 +1667,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   encode_patch_RLsize (dat, pvzadr);
   bit_write_CRC (dat, pvzadr, 0xC0C1);
 
-  // XXX trying to fix CRC 2-byte overflow. Must find actual reason
+  // XXX trying to fix CRC 2-byte overflow. Must find actual reason.
   // dat->byte -= 2;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_END));
   assert ((long)dat->byte > (long)dwg->header.section[0].address);
@@ -1684,6 +1684,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_ERROR ("Invalid dwg->num_classes %d", dwg->num_classes)
       dwg->num_classes = 0;
+      error |= DWG_ERR_VALUEOUTOFBOUNDS | DWG_ERR_CLASSESNOTFOUND;
     }
   dwg->header.section[SECTION_CLASSES_R13].number = 1;
   dwg->header.section[SECTION_CLASSES_R13].address = dat->byte;
@@ -1697,9 +1698,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       klass = &dwg->dwg_class[j];
       bit_write_BS (dat, klass->number);
       bit_write_BS (dat, klass->proxyflag);
-      bit_write_TV (dat, klass->appname);
-      bit_write_TV (dat, klass->cppname);
-      bit_write_TV (dat, klass->dxfname);
+      bit_write_T (dat, klass->appname);
+      bit_write_T (dat, klass->cppname);
+      SINCE (R_2007) // only when we have it. like not for 2004 => 2007 conversions
+        {
+          if (klass->dxfname_u)
+            bit_write_TU (dat, klass->dxfname_u);
+          else
+            bit_write_T (dat, klass->dxfname);
+        }
+      else // we always have this one
+        bit_write_TV (dat, klass->dxfname);
       bit_write_B (dat, klass->is_zombie);
       bit_write_BS (dat, klass->item_class_id);
       LOG_TRACE ("Class %d 0x%x %s\n"
