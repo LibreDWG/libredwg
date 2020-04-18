@@ -1232,7 +1232,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
               }
             eed[i].data->code = code;
             eed[i].data->u.eed_0_r2007.length = len;
-            eed[i].data->u.eed_0.codepage = obj->parent->header.codepage; /* UTF-8 */
+            //eed[i].data->u.eed_0.codepage = obj->parent->header.codepage; /* UTF-8 */
             if (len && len < 32767)
               {
                 BITCODE_TU tu = bit_utf8_to_TU (pair->value.s);

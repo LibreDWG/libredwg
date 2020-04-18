@@ -347,18 +347,6 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       JSON_TOKENS_CHECK_OVERFLOW_NULL
       return NULL;
     }
-  /*
-  if (dat->version >= R_2007)
-    {
-      unsigned char old = dat->chain[t->end];
-      dat->chain[t->end] = '\0';
-      key = (BITCODE_T)bit_utf8_to_TU ((char*)&dat->chain[t->start]);
-      dat->chain[t->end] = old;
-      tokens->index++;
-      JSON_TOKENS_CHECK_OVERFLOW(key)
-      return key;
-    }
-  */
   // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
   if (memchr (&dat->chain[t->start], '\\', len))
     {
@@ -1127,17 +1115,27 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "dxfname"))
             {
               klass->dxfname = json_string (dat, tokens);
-              LOG_TRACE ("dxfname: \"%s\"\n", klass->dxfname)
+              if (dwg->header.version >= R_2007)
+                klass->dxfname_u = bit_utf8_to_TU (klass->dxfname);
+              LOG_TRACE ("dxfname: \"%s\"\n", klass->dxfname);
             }
           else if (strEQc (key, "cppname"))
             {
-              klass->cppname = json_string (dat, tokens);
-              LOG_TRACE ("cppname: \"%s\"\n", klass->cppname)
+              LOG_TRACE ("cppname: \"%.*s\"\n", t->end - t->start,
+                         &dat->chain[t->start])
+              if (dwg->header.version >= R_2007)
+                klass->cppname = (char*)json_wstring (dat, tokens);
+              else
+                klass->cppname = json_string (dat, tokens);
             }
           else if (strEQc (key, "appname"))
             {
-              klass->appname = json_string (dat, tokens);
-              LOG_TRACE ("appname \"%s\"\n", klass->appname)
+              LOG_TRACE ("appname \"%.*s\"\n",  t->end - t->start,
+                         &dat->chain[t->start])
+              if (dwg->header.version >= R_2007)
+                klass->appname = (char*)json_wstring (dat, tokens);
+              else
+                klass->appname = json_string (dat, tokens);
             }
           else if (strEQc (key, "proxyflag"))
             {
@@ -1227,11 +1225,13 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       t = &tokens->tokens[tokens->index];
       if (t->type == JSMN_OBJECT)
         {
+          const int osize = t->size;
           tokens->index++; // hash of size, handle, code, value
-          for (int j = 0; j < t->size; j++)
+          for (int j = 0; j < osize; j++)
             {
               JSON_TOKENS_CHECK_OVERFLOW_VOID
               json_fixed_key (key, dat, tokens);
+              t = &tokens->tokens[tokens->index];
               if (strEQc (key, "size"))
                 {
                   size = json_long (dat, tokens);
@@ -1283,24 +1283,41 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                     case 0:
                       {
-                        //FIXME: wstring case, needed for dxfwrite
-                        char *s = json_string (dat, tokens);
-                        int len = strlen (s);
-                        if (eed_need_size (dat, obj->eed, i, len + 1 + 1 + 2, &have))
-                          data = obj->eed[i].data;
-                        data->u.eed_0.length = len;
-                        data->u.eed_0.codepage = dwg->header.codepage;
-                        memcpy (&data->u.eed_0.string, s, len + 1);
-                        LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
-                        have++; // ignore the ending NUL
-                        // so far only if PRE(R_2007), so the size gets smaller
-                        if (does_cross_unicode_datversion (dat))
+                        // in work: wstring case, needed for dxfwrite
+                        SINCE (R_2007)
                           {
-                            int oldsize = (len * 2) + 2;
-                            size = len + 3;
-                            obj->eed[isize].size -= (oldsize - size);
+                            BITCODE_TU s = json_wstring (dat, tokens);
+                            int len = bit_wcs2len (s);
+                            if (eed_need_size (dat, obj->eed, i, (len * 2) + 1 + 2, &have))
+                              data = obj->eed[i].data;
+                            data->u.eed_0_r2007.length = len;
+                            memcpy (&data->u.eed_0_r2007.string, s, (len + 1) * 2);
+                            have += 2; // ignore the ending NUL
+                            LOG_TRACE ("eed[%u].data.value \"%.*s\"\n", i,
+                                       t->end - t->start,
+                                       &dat->chain[t->start]);
+                            free (s);
                           }
-                        free (s);
+                        else
+                          {
+                            char *s = json_string (dat, tokens);
+                            int len = strlen (s);
+                            if (eed_need_size (dat, obj->eed, i, len + 1 + 1 + 2, &have))
+                              data = obj->eed[i].data;
+                            data->u.eed_0.length = len;
+                            data->u.eed_0.codepage = dwg->header.codepage;
+                            memcpy (&data->u.eed_0.string, s, len + 1);
+                            LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
+                            have++; // ignore the ending NUL
+                            free (s);
+                            // with PRE (R_2007), the size gets smaller
+                            if (does_cross_unicode_datversion (dat))
+                              {
+                                int oldsize = (len * 2) + 2;
+                                size = len + 3;
+                                obj->eed[isize].size -= (oldsize - size);
+                              }
+                          }
                       }
                       break;
                     case 2:
@@ -1427,6 +1444,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 LATER_VERSIONS
                 {
                   rbuf->value.str.u.wdata = bit_utf8_to_TU (s);
+                  free (s);
                   LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
                   size += (len * 2) + 2;
                 }
@@ -2803,7 +2821,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       JSON_TOKENS_CHECK_OVERFLOW_ERR;
                       t = &tokens->tokens[tokens->index];
-                      o->texts[k] = json_string (dat, tokens);
+                      SINCE (R_2007)
+                        o->texts[k] = (BITCODE_T)json_wstring (dat, tokens);
+                      else
+                        o->texts[k] = json_string (dat, tokens);
                       LOG_TRACE ("texts[%d]: %.*s\t => ", k, t->end - t->start, &dat->chain[t->start]);
                       JSON_TOKENS_CHECK_OVERFLOW_ERR;
                       o->itemhandles[k] = json_HANDLE (dat, dwg, tokens, "itemhandles", obj, k);
