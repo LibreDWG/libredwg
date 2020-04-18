@@ -160,11 +160,22 @@ BITCODE_RC dxf_find_lweight (const int lw);
       ADD_OBJECT (token);                                                     \
     }
 
-#define STRADD(field, string)                                                 \
+#define STRADD_TV(field, string)                                              \
   if (string)                                                                 \
     {                                                                         \
       field = malloc (strlen (string) + 1);                                   \
       strcpy (field, string);                                                 \
+    }
+#define STRADD_T(field, string)                                               \
+  if (string)                                                                 \
+    {                                                                         \
+      if (dat->version >= R_2007)                                             \
+        field = (char*)bit_utf8_to_TU (string);                               \
+      else                                                                    \
+        {                                                                     \
+          field = malloc (strlen (string) + 1);                               \
+          strcpy (field, string);                                             \
+        }                                                                     \
     }
 
 #define UPGRADE_ENTITY(FROM, TO)                                              \

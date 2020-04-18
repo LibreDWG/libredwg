@@ -1068,7 +1068,9 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       LOG_ERROR ("Group 1 for CLASS %s already read", klass->dxfname);
                       break;
                     }
-                  STRADD (klass->dxfname, n);
+                  STRADD_TV (klass->dxfname, n);
+                  if (dat->version >= R_2007)
+                    klass->dxfname_u = bit_utf8_to_TU ((char*)n);
                   LOG_TRACE ("CLASS[%d].dxfname = %s [TV 1]\n", i, n);
                 }
               break;
@@ -1080,7 +1082,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
               if (pair->value.s)
                 {
-                  STRADD (klass->cppname, pair->value.s);
+                  STRADD_T (klass->cppname, pair->value.s);
                 }
               LOG_TRACE ("CLASS[%d].cppname = %s [TV 2]\n", i, pair->value.s);
               break;
@@ -1092,7 +1094,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
               if (pair->value.s)
                 {
-                  STRADD (klass->appname, pair->value.s);
+                  STRADD_T (klass->appname, pair->value.s);
                 }
               LOG_TRACE ("CLASS[%d].appname = %s [TV 3]\n", i, pair->value.s);
               break;
