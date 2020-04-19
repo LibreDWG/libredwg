@@ -224,8 +224,7 @@ dxf_read_rd (Bit_Chain *dat)
     }
 }
 
-// TODO: TV only, no unicode. We encode only r2000 so far.
-// check dwg->header.is_tu if we need to write to TU
+// Unicode strings are created in the field
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {

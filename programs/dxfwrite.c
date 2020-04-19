@@ -278,12 +278,8 @@ main (int argc, char *argv[])
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
-  if (version)
-    {
-      if (dwg_version >= R_2007)
-        dwg.header.is_tu = 1; // needed to avoid utf8 - TV - TU roundtrips
-      dwg.header.version = dat.version = dwg_version;
-    }
+  if (version) // hint the importer
+    dwg.header.version = dat.version = dwg_version;
 
   if (infile)
     {
