@@ -219,6 +219,7 @@ Some projects that use DWG (and specifically LibreDWG) are:
 @table @asis
 @item FreeCAD
 @url{https://freecadweb.org/}
+
 @item GRASS GIS
 @url{http://grass.osgeo.org/}
 @end table
@@ -602,7 +603,7 @@ Return 0 or -1 if successful, otherwise DWG_ERR_OUTOFMEM. -1 is the array was re
 @end deftypefn
 
 Then for each object or entity type there is a
-@deftypefn {Function} int dwg_add_OBJECT (Dwg_Object *@var{obj})
+@deftypefn {Function} int dwg_setup_OBJECT (Dwg_Object *@var{obj})
 Initializes an object for the given OBJECT or ENTITY type, with all fields being zero'ed.
 This does not initialize the @var{obj} size, type, address, handlestream_size, bitsize fields.
 @end deftypefn
@@ -668,10 +669,7 @@ readable 1:1 mapping of the DWG structures, and carries much more
 information than the DXF format. The idea is to dump a DWG to JSON and
 filter/query or postprocess it with more powerful JSON query tools
 such as @b{jq} (@url{https://stedolan.github.io/jq/}), and optionally
-import it back in. JSON is much better structured than DXF.
-
-Writing a JSON to stdout via a pipe is not yet recommended, as then
-ending commas are still there, which is strictly not valid JSON.
+import it back in. @xref{Programs, dwgfilter, Programs: dwgfilter}. JSON is much better structured than DXF.
 
 The current first level objects are all the section names, like
 ``HEADER'', ``CLASSES'', ``OBJECTS''. For more see the specs.
@@ -753,9 +751,10 @@ LibreDWG installs some binary programs to read or write DWG files.
 
 @item @file{dwgread}
 @cindex dwgread
+@anchor{dwgread}
 
 This reads a DWG file, and optionally converts its content to some
-output formats: JSON, GeoJSON, DXF, DXFB (i.e. Binary DXF).
+output formats: JSON, GeoJSON, DXF, DXFB (i.e. Binary DXF), SVG.
 
 @code{dwgread [OPTION]... DWGFILE}
 
@@ -765,11 +764,11 @@ Options:
               verbosity
 
        -O fmt,  --format fmt
-              fmt: JSON, DXF, DXFB, GeoJSON
+              fmt: JSON, DXF, DXFB, GeoJSON.
 
               More planned formats: YAML, XML/OGR, GPX, SVG, PS
 
-       -o outfile
+       -o outfile, --file outfile
               also defines the output fmt. Default: stdout
 
        --help display this help and exit
@@ -777,24 +776,27 @@ Options:
        --version
               output version information and exit
 
-Currently the options need to be specified in this exact same order.
-
 @item @file{dwgwrite}
 @cindex dwgwrite
+@anchor{dwgwrite}
 
 Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
-optionally via @code{--as-rNNNN} as another version. Experimental.
+optionally via @code{--as=rNNNN} as another version.
 For now can only create r13-r2000 DWG files.
 
 @item @file{dxfwrite}
 @cindex dxfwrite
+@anchor{dxfwrite}
 
 Create a DXF from a given input file (@code{DWG}, @pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
-optionally via @code{--as-rNNNN} as another version. Highly experimental.
+optionally via @code{--as=rNNNN} as another version. Highly experimental.
+Supports the same options as @code{dwg2dxf}.
 
 @item @file{dwg2dxf}
 @cindex dwg2dxf
-Converts DWG files to DXF, optionally via @code{--as-rNNNN} as another
+@anchor{dwg2dxf}
+
+Converts DWG files to DXF, optionally via @code{--as=rNNNN} as another
 version, an earlier or later version, or via @code{-m} or
 @code{--minimal} as a minimal DXF version, skipping most headers vars,
 classes, tables and objects.
@@ -806,7 +808,9 @@ the option @code{--overwrite} or @code{-y} is given.
 
 @item @file{dxf2dwg}
 @cindex dxf2dwg
-Converts DXF (or Binary DXF) files to DWG, optionally via @code{--as-rVER} as another
+@anchor{dxf2dwg}
+
+Converts DXF (or Binary DXF) files to DWG, optionally via @code{--as=rVER} as another
 version, an earlier or later version.
 
 The DWG files are created in the current directory and not overwritten, unless
@@ -818,12 +822,14 @@ writing as r2000.
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
+@anchor{dwgrewrite}
 
-Read and write the DWG, optionally via @code{--as-rNNNN} as another
+Read and write the DWG, optionally via @code{--as=rNNNN} as another
 version, an earlier or later version. The default is writing as r2000.
 
 @item @file{dwglayers}
 @cindex dwglayers
+@anchor{dwglayers}
 
 Prints all layers in a DWG.
 With @code{-x} or @code{--extnames} prints the extended displayed layer name with spaces,
@@ -834,13 +840,13 @@ With @code{--on} only the visible layers, which are on and not frozen.
 
 You can get the same effect via this json filter:
 @verbatim
-  dwgread -O json -o out.json example.dwg && \
-    cat out.json | jq '.OBJECTS[]' | \
-    grep -A5 '"object": "LAYER"' | grep name
+  dwgfilter '.OBJECTS[]' example.dwg | \
+    grep -A22 '"object": "LAYER"' | grep name
 @end verbatim
 
 @item @file{dwggrep}
 @cindex dwggrep
+@anchor{dwggrep}
 
 Search regex pattern in all text values in a list of DWGs. dwggrep uses PCRE.
 
@@ -853,6 +859,7 @@ With @code{--text} searches only TEXT-like entities: TEXT, MTEXT, ATTRIB, ATTDEF
 
 @item @file{dwgfilter}
 @cindex dwgfilter
+@anchor{dwgfilter}
 
 Search and modify a single DWG file via @code{jq}, using the powerful
 JQ query expression language on a temporary json file. See @code{man jq}.
@@ -861,6 +868,8 @@ With @code{-i} replaces the DWG in-place. This only makes sense with an JQ expre
 
 @item @file{dwg2SVG}
 @cindex dwg2SVG
+@anchor{dwg2SVG}
+
 Convert a DWG to a limited SVG. All paperspace or modelspace enties of type:
 TEXT, LINE, CIRCLE, ARC, POLYLINE_2D, LWPOLYLINE, INSERT, ELLIPSE (unrotated),
 SOLID, 3DFACE, RAY, XLINE.
@@ -874,6 +883,8 @@ Limitations: Many other graphical entities and some properties are still missing
 
 @item @file{dwg2ps}
 @cindex dwg2ps
+@anchor{dwg2ps}
+
 Convert a DWG to a very limited Postscript file. All paperspace and modelspace entities of type LINE,
 POLYLINE_2D, LWPOLYLINE, ARC and CIRCLE.
 
@@ -883,23 +894,28 @@ Note that the graphical representation for PS and SVG output is severely lacking
 
 @end table
 
+Planned is @strong{dwgplot}, via GNU Plotutils @uref{https://www.gnu.org/software/plotutils/}, to replace @code{dwg2SVG} and @code{dwg2ps}. This supports much more bitmap and vector formats.
+
 There are also some more examples in the source distribution:
 
 @table @asis
 
 @item @file{load_dwg}
 @cindex load_dwg
+@anchor{load_dwg}
 loads a DWG and adds some entities.
 
 @item @file{dwg2svg2}
 @cindex dwg2svg2
+@anchor{dwg2svg2}
 converts a DWG to SVG similar to @file{dwg2SVG},
 but via the @file{dwg_api.h} only. The graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded , UCS and paper space transformations per entity are not yet done.
 
 @item @file{unknown}
 @cindex unknown
-lists the not yet reverse-engineered blobs from our example files, and
-is the framework to guess the field layout for these.
+@anchor{unknown}
+lists the not yet reverse-engineered blobs from our examples files, and
+is the framework to guess the field layout for these. It is using picat (@url{http://picat-lang.org/}) to solve some of the field-packing problems.
 
 @end table
 
