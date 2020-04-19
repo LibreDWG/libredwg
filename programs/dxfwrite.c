@@ -348,11 +348,12 @@ main (int argc, char *argv[])
         fprintf (stderr, "Missing input format\n");
       if (infile)
         fclose (dat.fh);
-      bit_chain_free (&dat);
+      free (dat.chain);
       exit (1);
     }
 
-  bit_chain_free (&dat);
+  free (dat.chain);
+  dat.size = 0;
   if (infile && dat.fh)
     {
       fclose (dat.fh);

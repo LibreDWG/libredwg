@@ -269,7 +269,7 @@ enum RES_BUF_VALUE_TYPE
 enum RES_BUF_VALUE_TYPE get_base_value_type (short gc);
 
 EXPORT Dwg_Version_Type dwg_version_as (const char *);
-const char *dwg_version_type (const Dwg_Version_Type version);
+EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT void dwg_errstrings (int error);
 EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void);
 
