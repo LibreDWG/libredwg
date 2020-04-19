@@ -1,5 +1,5 @@
 #!/bin/sh
-# create -v3 logs and json's from dwg's with dwgread -Ojson
+# create -v3 logs and json's from DWG or DXF with dwgread -Ojson
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
 CFLAGS="@CFLAGS@"
@@ -17,6 +17,7 @@ v=-v3
 test -z "$v" && echo $top_builddir
 out=
 ob="$b"
+ext=
 
 for d in "$@"; do
     case $d in
@@ -27,11 +28,14 @@ for d in "$@"; do
             if [ -f "$srcdir/test/test-data/$d" ]
             then
                 d="$srcdir/test/test-data/$d";
-            else
-                if [ -f "$srcdir/test/test-data/$d.dwg" ]
-                then
-                    d="$srcdir/test/test-data/$d.dwg"
-                fi
+            elif [ -f "$srcdir/test/test-data/$d.dwg" ]
+            then
+                d="$srcdir/test/test-data/$d.dwg"
+                ext=dwg
+            elif [ -f "$srcdir/test/test-data/$d.dxf" ]
+            then
+                d="$srcdir/test/test-data/$d.dxf"
+                ext=dxf
             fi
         fi
         xd=$(dirname "$d")
@@ -39,7 +43,18 @@ for d in "$@"; do
         if [ "$dir" = "_test-data" ]; then dir=""; fi
         if [ "$dir" = "_td" ]; then dir=""; fi
         if [ "$dir" = "_." ]; then dir=""; fi
-        b=$(basename "$d" .dwg)
+        if [ -z "$ext" ]; then
+            case $(basename "$d") in
+                *.dwg)  ext=dwg ;;
+                *.DWG)  ext=dwg ;;
+                *.dxf)  ext=dxf ;;
+                *.DXF)  ext=dxf ;;
+                *.json) ext=json ;;
+                *.JSON) ext=json ;;
+                *)      echo "Illegal extension for $d"; exit ;;
+            esac
+        fi
+        b=$(basename "$d" .$ext)
         log="$b$dir.log"
         out="$b$dir.json"
         echo "$timeout @LTEXEC@ programs/dwgread $v -Ojson -o $out $d 2>$log"
