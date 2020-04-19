@@ -461,7 +461,7 @@ E.g. EED[7] size: 6 is 1 + 2 for EED[7] RC + RS, and 1 + 2 for EED[8] RC + RS.
 Each data block consists of a RC code, and a variable value.
 A string may be a an old pre-r2007 ASCII string with a RC length (max 255
 chars), a codepage and the string. Or a r2007+ wide string with a RS
-length (max 32767 chars), a codepage, and a UCS-2 wide string.
+length (max 32767 chars) and a UCS-2 wide string.
 
 decode stores both, the raw data, and the structured data.
 in_dxf just the data.
