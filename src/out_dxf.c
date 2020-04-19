@@ -2185,7 +2185,14 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
       SINCE (R_2004)
         {
           // first_owned_block
-          LOG_ERROR ("BLOCK_HEADER %s block_entity[0] missing", _hdr->name);
+          SINCE (R_2007)
+            {
+              char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
+              LOG_ERROR ("BLOCK_HEADER %s block_entity[0] missing", s);
+              free (s);
+            }
+          else
+            LOG_ERROR ("BLOCK_HEADER %s block_entity[0] missing", _hdr->name);
           return DWG_ERR_INVALIDDWG;
         }
       else
