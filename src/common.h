@@ -229,11 +229,6 @@ extern const char version_codes[DWG_VERSIONS][7];
 extern const char *dwg_bits_name[];
 extern const unsigned char dwg_bits_size[];
 
-/* The old color.index 0-256 */
-typedef struct rgbpalette {
-  unsigned char r,g,b;
-} Dwg_RGB_Palette;
-
 /**
  * References of sentinels
  */
@@ -267,11 +262,6 @@ enum RES_BUF_VALUE_TYPE
 };
 
 enum RES_BUF_VALUE_TYPE get_base_value_type (short gc);
-
-EXPORT Dwg_Version_Type dwg_version_as (const char *);
-EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
-EXPORT void dwg_errstrings (int error);
-EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void);
 
 unsigned char *dwg_sentinel (Dwg_Sentinel sentinel);
 char *strrplc (const char *s, const char *from, const char *to);

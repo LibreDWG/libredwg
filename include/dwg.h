@@ -6982,6 +6982,16 @@ EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
                                           const unsigned long value,
                                           const Dwg_Object *restrict obj);
 
+EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
+EXPORT Dwg_Version_Type dwg_version_as (const char *);
+EXPORT void dwg_errstrings (int error);
+/* The old color.index 0-256 */
+typedef struct rgbpalette {
+  unsigned char r,g,b;
+} Dwg_RGB_Palette;
+
+EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void);
+
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
     objects are allocated in bulk, and all old obj pointers may become invalid.
