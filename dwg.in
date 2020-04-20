@@ -22,6 +22,7 @@ ob="$b"
 for d in "$@"; do
     case $d in
         -y) ;; # the default
+        --as=*) args="$args $d" ;;
         -Ijson) args="$args $d"
                 ext=json
                 ;;
