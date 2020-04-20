@@ -1557,6 +1557,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     Dwg_Section *section;
 
     Dwg_Object *obj = NULL;
+    Bit_Chain *orig_dat = dat;
+    Bit_Chain file_dat = { 0 };
     struct Dwg_R2004_Header *_obj = &dwg->r2004_header;
     const int size = sizeof (struct Dwg_R2004_Header);
     char encrypted_data[size];
@@ -1569,26 +1571,33 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section_info = calloc (dwg->header.section_infohdr.num_desc,
                                          sizeof (Dwg_Section_Info));
 
-    dat->byte = 0x80;
-    for (i = 0; i < (BITCODE_BL)size; i++)
-      {
-        rseed *= 0x343fd;
-        rseed += 0x269ec3;
-        encrypted_data[i] = bit_read_RC (dat) ^ (rseed >> 0x10);
-      }
     LOG_TRACE ("\n#### Write 2004 File Header ####\n");
-    dat->byte = 0x80;
     if (dat->byte + 0x80 >= dat->size - 1)
       {
         dat->size = dat->byte + 0x80;
         bit_chain_alloc (dat);
       }
-    memcpy (&dat->chain[0x80], encrypted_data, size);
-    LOG_INFO ("@0x%lx\n", dat->byte);
+    bit_chain_alloc (&file_dat);
+    file_dat.version = dat->version;
+    dat = &file_dat;
 
+    // first write plain
     // clang-format off
     #include "r2004_file_header.spec"
     // clang-format on
+
+    // then go back and encrypt it
+    dat = orig_dat;
+    bit_set_position (&file_dat, 0);
+    for (i = 0; i < (BITCODE_BL)size; i++)
+      {
+        rseed *= 0x343fd;
+        rseed += 0x269ec3;
+        dat->chain[0x80 + i] = file_dat.chain[i] ^ (rseed >> 0x10);
+      }
+    bit_chain_free (&file_dat);
+    dat->byte += size;
+    LOG_HANDLE ("@0x%lx\n", dat->byte);
 
     dwg->r2004_header.checksum = 0;
     dwg->r2004_header.checksum = dwg_section_page_checksum (0, dat, size);
@@ -1597,6 +1606,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
      * Section Page Map
      */
     dat->byte = dwg->r2004_header.section_map_address + 0x100;
+    LOG_HANDLE ("@0x%lx\n", dat->byte);
 
     LOG_TRACE ("\n=== Write System Section (Section Page Map) ===\n");
 #ifndef HAVE_COMPRESS_R2004_SECTION
@@ -1611,10 +1621,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     FIELD_RL (checksum, 0);
     LOG_TRACE ("\n")
 
-    LOG_WARN ("TODO write_R2004_section_map(dat, dwg)")
-    LOG_TRACE ("\n")
-
-    return DWG_ERR_NOTYETSUPPORTED;
+    LOG_ERROR ("TODO write_R2004_section_map(dat, dwg)")
+    //return DWG_ERR_NOTYETSUPPORTED;
   }
 
   /*------------------------------------------------------------
