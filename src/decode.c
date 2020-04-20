@@ -3388,19 +3388,18 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-static void
-decrypt_R2004_header (Bit_Chain *restrict dat, BITCODE_RC *restrict decrypted,
-                      unsigned long size, Dwg_Data *restrict dwg)
+/* For decrypt and encrypt: symetric, as it's just a simple XOR with a one-time pad,
+   generated here on the fly. */
+void
+decrypt_R2004_header (BITCODE_RC *restrict dest, const BITCODE_RC *restrict src,
+                      unsigned size)
 {
-  unsigned int rseed = 1;
-  unsigned i;
-
-  /* Decrypt */
-  for (i = 0; i < size; i++)
+  uint32_t rseed = 1;
+  for (unsigned i = 0; i < size; i++)
     {
       rseed *= 0x343fd;
       rseed += 0x269ec3;
-      decrypted[i] = bit_read_RC (dat) ^ (rseed >> 0x10);
+      dest[i] = src[i] ^ (rseed >> 0x10);
     }
 }
 
@@ -3424,11 +3423,9 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     decrypted_header_dat.chain = decrypted_data;
     decrypted_header_dat.byte = decrypted_header_dat.bit = 0;
 
-    file_dat->byte = 0x80;
-    file_dat->bit = 0;
-    LOG_HANDLE ("\nencrypted R2004_Header:\n")
-    LOG_TF (HANDLE, &file_dat->chain[0x80], (int)size)
-    decrypt_R2004_header (file_dat, decrypted_data, size, dwg);
+    LOG_HANDLE ("\nencrypted R2004_Header:\n");
+    LOG_TF (HANDLE, &file_dat->chain[0x80], (int)size);
+    decrypt_R2004_header (decrypted_data, &file_dat->chain[0x80], size);
 
     dat = &decrypted_header_dat;
     dat->bit = dat->byte = 0;

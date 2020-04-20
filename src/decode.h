@@ -54,6 +54,8 @@ int obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                        Bit_Chain *restrict hdl_dat);
 void bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src,
                size_t size);
+void decrypt_R2004_header (BITCODE_RC *restrict dest,
+                           const BITCODE_RC *restrict src, unsigned size);
 
 /* reused with free */
 void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);

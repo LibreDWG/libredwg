@@ -1586,10 +1586,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_HANDLE ("old crc32: 0x%x\n", dwg->r2004_header.crc32);
     dwg->r2004_header.crc32 = 0;
     // recalc the CRC32, without the padding, but the crc32 as 0
-#pragma pack(1)
     dwg->r2004_header.crc32 = bit_calc_CRC32 (0, (unsigned char*)&dwg->r2004_header, 0x6c);
     LOG_HANDLE ("calc crc32: 0x%x\n", dwg->r2004_header.crc32);
-    //crcoffset = offsetof (struct Dwg_R2004_Header, checksum);
 
     // first write plain
     // clang-format off
@@ -1599,12 +1597,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // then go back and encrypt it
     dat = orig_dat;
     bit_set_position (&file_dat, 0);
-    for (i = 0; i < (BITCODE_BL)size; i++)
-      {
-        rseed *= 0x343fd;
-        rseed += 0x269ec3;
-        dat->chain[0x80 + i] = file_dat.chain[i] ^ (rseed >> 0x10);
-      }
+    decrypt_R2004_header (&dat->chain[0x80], file_dat.chain, size);
     bit_chain_free (&file_dat);
     LOG_HANDLE ("encrypted R2004_Header:\n");
     LOG_TF (HANDLE, &dat->chain[0x80], (int)size);

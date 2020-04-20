@@ -6536,6 +6536,8 @@ typedef struct _dwg_AcDs_Segment
 /**
  Main DWG struct
  */
+
+#pragma pack(1)
 typedef struct _dwg_struct
 {
   struct Dwg_Header
@@ -6815,6 +6817,7 @@ typedef struct _dwg_struct
 
   unsigned int layout_type;
 } Dwg_Data;
+#pragma pack()
 
 #define DWG_OPTS_LOGLEVEL 0xf
 #define DWG_OPTS_MINIMAL  0x10
