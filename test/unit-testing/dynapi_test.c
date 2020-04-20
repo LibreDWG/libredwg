@@ -43370,7 +43370,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 43388 "dynapi_test.c"
+#line 43373 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -44074,7 +44074,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 44092 "dynapi_test.c"
+#line 44077 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -45956,6 +45956,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_MLINE_vertex): %d != "
                "dwg_dynapi_fields_size (\"MLINE_vertex\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_R2004_Header);
+  size2 = dwg_dynapi_fields_size ("R2004_Header");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_R2004_Header): %d != "
+               "dwg_dynapi_fields_size (\"R2004_Header\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_SPLINE_control_point);

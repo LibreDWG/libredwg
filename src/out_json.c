@@ -1761,7 +1761,7 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_section_r2004fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  struct Dwg_R2004_Header *_obj = &dwg->r2004_header;
+  Dwg_R2004_Header *_obj = &dwg->r2004_header;
   Dwg_Object *obj = NULL;
   int i;
 

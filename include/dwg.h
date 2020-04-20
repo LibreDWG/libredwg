@@ -6533,11 +6533,46 @@ typedef struct _dwg_AcDs_Segment
   BITCODE_RC padding[9]; // always 8x 0x55
 } Dwg_AcDs_Segment;
 
+#pragma pack(1)
+typedef struct _dwg_R2004_Header /* encrypted */
+{
+  BITCODE_RC file_ID_string[12];
+  BITCODE_RLx header_address;
+  BITCODE_RL header_size;
+  BITCODE_RL x04;
+  BITCODE_RLd root_tree_node_gap;
+  BITCODE_RLd lowermost_left_tree_node_gap;
+  BITCODE_RLd lowermost_right_tree_node_gap;
+  BITCODE_RL unknown_long;
+  BITCODE_RL last_section_id;
+  BITCODE_RLL last_section_address;
+  BITCODE_RLL second_header_address;
+  BITCODE_RL num_gaps;
+  BITCODE_RL num_sections;
+  BITCODE_RL x20;
+  BITCODE_RL x80;
+  BITCODE_RL x40;
+  BITCODE_RL section_map_id;
+  BITCODE_RLL section_map_address;
+  BITCODE_RLd  section_info_id;
+  BITCODE_RL section_array_size;
+  BITCODE_RL gap_array_size;
+  BITCODE_RLx crc32; /* p 2.14.2 32bit CRC 2004+ */
+  BITCODE_RC padding[12];
+  /* System Section: Section Page Map */
+  BITCODE_RL section_type; /* 0x4163043b */
+  BITCODE_RL decomp_data_size;
+  BITCODE_RL comp_data_size;
+  BITCODE_RL compression_type;
+  BITCODE_RLx checksum;
+} Dwg_R2004_Header;
+#pragma pack()
+
+
 /**
  Main DWG struct
  */
 
-#pragma pack(1)
 typedef struct _dwg_struct
 {
   struct Dwg_Header
@@ -6581,38 +6616,7 @@ typedef struct _dwg_struct
   Dwg_Header_Variables header_vars;
   Dwg_Chain thumbnail;
 
-  struct Dwg_R2004_Header /* encrypted */
-    {
-      BITCODE_RC file_ID_string[12];
-      BITCODE_RLx header_address;
-      BITCODE_RL header_size;
-      BITCODE_RL x04;
-      BITCODE_RLd root_tree_node_gap;
-      BITCODE_RLd lowermost_left_tree_node_gap;
-      BITCODE_RLd lowermost_right_tree_node_gap;
-      BITCODE_RL unknown_long;
-      BITCODE_RL last_section_id;
-      BITCODE_RLL last_section_address;
-      BITCODE_RLL second_header_address;
-      BITCODE_RL num_gaps;
-      BITCODE_RL num_sections;
-      BITCODE_RL x20;
-      BITCODE_RL x80;
-      BITCODE_RL x40;
-      BITCODE_RL section_map_id;
-      BITCODE_RLL section_map_address;
-      BITCODE_RLd  section_info_id;
-      BITCODE_RL section_array_size;
-      BITCODE_RL gap_array_size;
-      BITCODE_RLx crc32; /* p 2.14.2 32bit CRC 2004+ */
-      BITCODE_RC padding[12];
-      /* System Section: Section Page Map */
-      BITCODE_RL section_type; /* 0x4163043b */
-      BITCODE_RL decomp_data_size;
-      BITCODE_RL comp_data_size;
-      BITCODE_RL compression_type;
-      BITCODE_RLx checksum;
-  } r2004_header;
+  Dwg_R2004_Header r2004_header; // packed
 
   Dwg_Object *mspace_block;
   Dwg_Object *pspace_block;
@@ -6817,7 +6821,6 @@ typedef struct _dwg_struct
 
   unsigned int layout_type;
 } Dwg_Data;
-#pragma pack()
 
 #define DWG_OPTS_LOGLEVEL 0xf
 #define DWG_OPTS_MINIMAL  0x10

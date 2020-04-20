@@ -9784,6 +9784,72 @@ Dwg_MLINE_line*
 @end vtable
 @end indentedblock
 
+@strong{Dwg_R2004_Header} @anchor{Dwg_R2004_Header}
+@vindex Dwg_R2004_Header
+
+@indentedblock
+@vtable @code
+
+@item file_ID_string[12]
+RC
+@item header_address
+RLx
+@item header_size
+RL
+@item x04
+RL
+@item root_tree_node_gap
+RLd
+@item lowermost_left_tree_node_gap
+RLd
+@item lowermost_right_tree_node_gap
+RLd
+@item unknown_long
+RL
+@item last_section_id
+RL
+@item last_section_address
+RLL
+@item second_header_address
+RLL
+@item num_gaps
+RL
+@item num_sections
+RL
+@item x20
+RL
+@item x80
+RL
+@item x40
+RL
+@item section_map_id
+RL
+@item section_map_address
+RLL
+@item section_info_id
+RLd
+@item section_array_size
+RL
+@item gap_array_size
+RL
+@item crc32
+RLx
+@item padding[12]
+RC
+@item section_type
+RL
+@item decomp_data_size
+RL
+@item comp_data_size
+RL
+@item compression_type
+RL
+@item checksum
+RLx
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_SPLINE_control_point} @anchor{Dwg_SPLINE_control_point}
 @vindex Dwg_SPLINE_control_point
 

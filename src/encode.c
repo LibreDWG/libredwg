@@ -1560,8 +1560,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     Dwg_Object *obj = NULL;
     Bit_Chain *orig_dat = dat;
     Bit_Chain file_dat = { 0 };
-    struct Dwg_R2004_Header *_obj = &dwg->r2004_header;
-    const int size = sizeof (struct Dwg_R2004_Header);
+    Dwg_R2004_Header *_obj = &dwg->r2004_header;
+    const int size = sizeof (Dwg_R2004_Header);
     char encrypted_data[size];
     const unsigned char enc_file_ID_string[]
         = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A', '\xB5', '\xEF' };

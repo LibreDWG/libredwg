@@ -3409,11 +3409,11 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   Dwg_Object *obj = NULL;
-  struct Dwg_R2004_Header *_obj = &dwg->r2004_header;
+  Dwg_R2004_Header *_obj = &dwg->r2004_header;
   Bit_Chain *hdl_dat = file_dat;
 
   {
-    const unsigned long size = sizeof (struct Dwg_R2004_Header);
+    const unsigned long size = sizeof (Dwg_R2004_Header);
     BITCODE_RC decrypted_data[size];
     Bit_Chain decrypted_header_dat = *file_dat;
     Bit_Chain *dat;
