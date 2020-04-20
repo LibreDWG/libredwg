@@ -72,12 +72,9 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf (
-      "             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,"
-      "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
-  printf ("             r2004, r2010, r2013, r2018, r2021\n");
-  printf ("           Planned versions:\n");
-  printf ("             r2007\n");
+  printf ("             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,\n"
+          "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000, r2004, r2010,\n"
+          "             r2013, r2018\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DXF, DXFB, JSON\n");
 #  else
@@ -92,26 +89,20 @@ help (void)
 #else
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
-  printf ("              Valid versions:\n");
-  printf (
-      "                r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, "
-      "r2.4,"
-      "                r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
-          "                r2004, r2010, r2013, r2018, r2021\n");
-          printf ("              Planned versions:\n");
-          printf ("                r2007\n");
+  printf ("           Valid versions:\n");
+  printf ("             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4\n"
+          "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000, r2004, r2010,\n"
+          "             r2013, r2018\n");
 #  ifndef DISABLE_JSON
           printf ("  -I fmt      fmt: DXF, DXFB, JSON\n");
 #  else
           printf ("  -I fmt      fmt: DXF, DXFB\n");
 #  endif
-          printf ("              Planned input formats: GeoJSON, YAML, "
-                  "XML/OGR, GPX\n");
-          printf ("  -o dwgfile\n");
-          printf ("  -y          overwrite existing files\n");
-          printf ("  -h          display this help and exit\n");
-          printf ("  -i          output version information and exit\n"
-                  "\n");
+  printf ("  -o dwgfile\n");
+  printf ("  -y          overwrite existing files\n");
+  printf ("  -h          display this help and exit\n");
+  printf ("  -i          output version information and exit\n"
+          "\n");
 #endif
   printf ("GNU LibreDWG online manual: "
           "<https://www.gnu.org/software/libredwg/>\n");
@@ -164,7 +155,7 @@ main (int argc, char *argv[])
         {
           memset (&out_dat, 0, sizeof (out_dat));
           bit_chain_set_version (&out_dat, &dat);
-          out_dat.version = R_2000;
+          dwg.header.version = out_dat.version = dwg.header.from_version;
           out_dat.codepage = dwg.header.codepage;
           if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
             exit (0);
@@ -410,17 +401,11 @@ main (int argc, char *argv[])
   free (dat.chain);
   if (infile && dat.fh)
     fclose (dat.fh);
-  if (error >= DWG_ERR_CRITICAL)
+  if (error >= DWG_ERR_CRITICAL || dwg.header.from_version == R_INVALID)
     goto free;
 
   if (dwg_version == R_INVALID)
-    {
-      dwg_version = dwg.header.from_version;
-      if (dwg_version >= R_2004)
-        dwg_version = R_2000;
-      else if (dwg_version < R_1_4)
-        dwg_version = R_1_4;
-    }
+    dwg_version = dwg.header.from_version;
   if (dwg.header.from_version == R_INVALID)
     fprintf (stderr, "Unknown DWG header.from_version\n");
   // FIXME: for now only r1.4 - R_2000. later remove this line.
