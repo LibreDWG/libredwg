@@ -3434,7 +3434,12 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     #include "r2004_file_header.spec"
     // clang-format on
 
-    // FIXME: only really needed for r2004 encode later
+    if (memcmp (_obj->file_ID_string, "AcFssFcA", 8))
+      {
+        LOG_ERROR ("r2004_file_header decryption error");
+        return error | DWG_ERR_INVALIDDWG;
+      }
+    // only really needed for r2004 encode later
     crc32 = _obj->crc32;
     _obj->crc32 = 0;
     // without the padding, but the crc32 as 0

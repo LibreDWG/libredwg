@@ -1563,6 +1563,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     struct Dwg_R2004_Header *_obj = &dwg->r2004_header;
     const int size = sizeof (struct Dwg_R2004_Header);
     char encrypted_data[size];
+    const unsigned char enc_file_ID_string[]
+        = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A', '\xB5', '\xEF' };
     unsigned int rseed = 1;
     uint32_t checksum;
 
@@ -1603,6 +1605,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TF (HANDLE, &dat->chain[0x80], (int)size);
     dat->byte += size;
     LOG_HANDLE ("@0x%lx\n", dat->byte);
+
+    if (memcmp (&dat->chain[0x80], enc_file_ID_string, 8))
+      {
+        LOG_ERROR ("r2004_file_header encryption error");
+        return error | DWG_ERR_INVALIDDWG;
+      }
 
     /*-------------------------------------------------------------------------
      * Section Page Map
