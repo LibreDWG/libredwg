@@ -1532,8 +1532,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   VERSION (R_2007)
   {
-    LOG_ERROR (WE_CAN "We don't encode R2007 sections yet")
-    return DWG_ERR_NOTYETSUPPORTED;
+    LOG_ERROR (WE_CAN "We don't encode R2007 sections yet");
+    dat->version = dwg->header.version = R_2010; // rather do 2010
+    //return DWG_ERR_NOTYETSUPPORTED;
   }
 
   /* r2004 file header (compressed + encrypted) */
@@ -1542,7 +1543,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     /* System Section */
     typedef union _system_section
     {
-      unsigned char data[0x14]; // 20byte: 5*4
+      unsigned char data[20]; // 5*4
       struct
       {
         uint32_t section_type; /* 0x4163043b */
@@ -1571,7 +1572,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section_info = calloc (dwg->header.section_infohdr.num_desc,
                                          sizeof (Dwg_Section_Info));
 
-    LOG_TRACE ("\n#### Write 2004 File Header ####\n");
+    LOG_TRACE ("\n#### r2004 File Header ####\n");
     if (dat->byte + 0x80 >= dat->size - 1)
       {
         dat->size = dat->byte + 0x80;
@@ -1580,6 +1581,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_chain_alloc (&file_dat);
     file_dat.version = dat->version;
     dat = &file_dat;
+
+    checksum = dwg->r2004_header.crc32;
+    LOG_HANDLE ("old crc32: 0x%x\n", dwg->r2004_header.crc32);
+    dwg->r2004_header.crc32 = 0;
+    // recalc the CRC32, without the padding, but the crc32 as 0
+#pragma pack(1)
+    dwg->r2004_header.crc32 = bit_calc_CRC32 (0, (unsigned char*)&dwg->r2004_header, 0x6c);
+    LOG_HANDLE ("calc crc32: 0x%x\n", dwg->r2004_header.crc32);
+    //crcoffset = offsetof (struct Dwg_R2004_Header, checksum);
 
     // first write plain
     // clang-format off
@@ -1596,11 +1606,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         dat->chain[0x80 + i] = file_dat.chain[i] ^ (rseed >> 0x10);
       }
     bit_chain_free (&file_dat);
+    LOG_HANDLE ("encrypted R2004_Header:\n");
+    LOG_TF (HANDLE, &dat->chain[0x80], (int)size);
     dat->byte += size;
     LOG_HANDLE ("@0x%lx\n", dat->byte);
-
-    dwg->r2004_header.checksum = 0;
-    dwg->r2004_header.checksum = dwg_section_page_checksum (0, dat, size);
 
     /*-------------------------------------------------------------------------
      * Section Page Map

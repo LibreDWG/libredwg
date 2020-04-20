@@ -46,20 +46,20 @@
   FIELD_RL (last_section_id, 0);      // @0x28 =0x13
   FIELD_RLL (last_section_address, 0);// @0x2c =0x9c80
   FIELD_RLL (second_header_address, 0);// @0x34 =0x984b
-  FIELD_RL (num_gaps, 0);           // @0x3c =0
-  FIELD_RL (num_sections, 0);       // @0x40 =0x11
-  FIELD_RL (x20, 0);        // @0x44 =0x20
-  FIELD_RL (x80, 0);        // @0x48 =0x80
-  FIELD_RL (x40, 0);        // @0x4c =0x40
+  FIELD_RL (num_gaps, 0);             // @0x3c =0
+  FIELD_RL (num_sections, 0);         // @0x40 =0x11
+  FIELD_RL (x20, 0);        	      // @0x44 =0x20
+  FIELD_RL (x80, 0);                  // @0x48 =0x80
+  FIELD_RL (x40, 0);                  // @0x4c =0x40
   FIELD_RL (section_map_id, 0);       // @0x50 =0x13
   FIELD_RLL (section_map_address, 0); // @0x54 (+ 0x100) =0x97a0
-  FIELD_RL (section_info_id, 0);      // @0x5c
+  FIELD_RLd (section_info_id, 0);     // @0x5c
   FIELD_RL (section_array_size, 0);   // @0x60 =0x13
   FIELD_RL (gap_array_size, 0);       // @0x64 =0
   FIELD_RLx (crc32, 0);               // @0x68
-  //end of encrypted 0x6c header
+  //end of encrypted header // @108 0x6c
 
-  // well, the padding is also encrypted, but ODA didn't grok that
-  // encrypted via 0
-  FIELD_TFF (padding, (int)sizeof(FIELD_VALUE (padding)), 0)
+  // well, the padding is also encrypted, but ODA didn't grok that.
+  // 12 byte encrypted via 0
+  FIELD_TFF (padding, (int)sizeof(FIELD_VALUE (padding)), 0) // @120
 

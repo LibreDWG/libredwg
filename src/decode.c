@@ -3426,11 +3426,13 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
 
     file_dat->byte = 0x80;
     file_dat->bit = 0;
+    LOG_HANDLE ("\nencrypted R2004_Header:\n")
+    LOG_TF (HANDLE, &file_dat->chain[0x80], (int)size)
     decrypt_R2004_header (file_dat, decrypted_data, size, dwg);
 
     dat = &decrypted_header_dat;
     dat->bit = dat->byte = 0;
-    LOG_TRACE ("\n#### 2004 File Header ####\n");
+    LOG_TRACE ("\n#### r2004 File Header ####\n");
     // clang-format off
     #include "r2004_file_header.spec"
     // clang-format on
@@ -3442,7 +3444,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     calc_crc32 = bit_calc_CRC32 (0, &decrypted_data[0], 0x6c);
     _obj->crc32 = crc32;
     if (calc_crc32 != crc32)
-      LOG_INFO ("r2004_file_header CRC mismatch 0x%08x != 0x%08x (TODO)\n",
+      LOG_INFO ("r2004_file_header CRC32 mismatch 0x%08x != 0x%08x (TODO)\n",
                 calc_crc32, crc32)
   }
 
