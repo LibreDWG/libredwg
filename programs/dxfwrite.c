@@ -81,7 +81,6 @@ help (void)
 #  else
   printf ("  -I fmt,  --format fmt     DWG, DXF, DXFB\n");
 #  endif
-  printf ("           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dxffile, --file        \n");
   printf ("  -m, --minimal             only $ACADVER, HANDSEED and "
           "ENTITIES\n");
@@ -101,8 +100,6 @@ help (void)
 #  else
   printf ("  -I fmt      fmt: DWG, DXF, DXFB\n");
 #  endif
-  printf (
-      "              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dxffile\n");
   printf ("  -m          minimal, only $ACADVER, HANDSEED and ENTITIES\n");
   printf ("  -b          create a binary DXF\n");
