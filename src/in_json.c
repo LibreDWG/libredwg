@@ -443,10 +443,10 @@ json_float (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
     {
       LOG_ERROR ("Expected JSON PRIMITIVE");
       json_advance_unknown (dat, tokens, t->type, 0);
-      JSON_TOKENS_CHECK_OVERFLOW(NAN)
+      JSON_TOKENS_CHECK_OVERFLOW((double)NAN)
       return (double)NAN;
     }
-  JSON_TOKENS_CHECK_OVERFLOW(NAN)
+  JSON_TOKENS_CHECK_OVERFLOW((double)NAN)
   tokens->index++;
   return strtod ((char *)&dat->chain[t->start], NULL);
 }
