@@ -6547,8 +6547,8 @@ typedef struct _dwg_R2004_Header /* encrypted */
   BITCODE_RL last_section_id;
   BITCODE_RLL last_section_address;
   BITCODE_RLL second_header_address;
-  BITCODE_RL num_gaps;
-  BITCODE_RL num_sections;
+  BITCODE_RL numgaps;
+  BITCODE_RL numsections;
   BITCODE_RL x20;
   BITCODE_RL x80;
   BITCODE_RL x40;

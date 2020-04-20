@@ -29,7 +29,7 @@
       FIELD_VALUE (x40) = 0x40;
       //??
       FIELD_VALUE (last_section_id) = 19;
-      FIELD_VALUE (num_sections) = 17;
+      FIELD_VALUE (numsections) = 17;
       FIELD_VALUE (section_map_id) = 19;
       FIELD_VALUE (section_array_size) = 19;
     }
@@ -46,8 +46,8 @@
   FIELD_RL (last_section_id, 0);      // @0x28 =0x13
   FIELD_RLL (last_section_address, 0);// @0x2c =0x9c80
   FIELD_RLL (second_header_address, 0);// @0x34 =0x984b
-  FIELD_RL (num_gaps, 0);             // @0x3c =0
-  FIELD_RL (num_sections, 0);         // @0x40 =0x11
+  FIELD_RL (numgaps, 0);              // @0x3c =0
+  FIELD_RL (numsections, 0);          // @0x40 =0x11
   FIELD_RL (x20, 0);        	      // @0x44 =0x20
   FIELD_RL (x80, 0);                  // @0x48 =0x80
   FIELD_RL (x40, 0);                  // @0x4c =0x40

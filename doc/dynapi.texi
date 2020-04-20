@@ -9812,9 +9812,9 @@ RL
 RLL
 @item second_header_address
 RLL
-@item num_gaps
+@item numgaps
 RL
-@item num_sections
+@item numsections
 RL
 @item x20
 RL

@@ -1976,13 +1976,13 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 section_address, dwg->r2004_header.last_section_address);
     }
   if (dwg->header.num_sections
-      != dwg->r2004_header.num_gaps + dwg->r2004_header.num_sections)
+      != dwg->r2004_header.numgaps + dwg->r2004_header.numsections)
     {
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
-      LOG_WARN ("Invalid num_sections: %d != gaps: " FORMAT_RL
-                " + sects: " FORMAT_RL,
-                dwg->header.num_sections, dwg->r2004_header.num_gaps,
-                dwg->r2004_header.num_sections);
+      LOG_WARN ("Invalid num_sections: %d != numgaps: " FORMAT_RL
+                " + numsections: " FORMAT_RL,
+                dwg->header.num_sections, dwg->r2004_header.numgaps,
+                dwg->r2004_header.numsections);
     }
   if (!found_section_map_id)
     {
