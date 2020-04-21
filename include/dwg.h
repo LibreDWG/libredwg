@@ -6223,6 +6223,12 @@ typedef struct _dwg_chain
   long unsigned int size;
   long unsigned int byte;
   unsigned char bit;
+  /* NOT:
+  unsigned char opts;
+  FILE *fh;
+  Dwg_Version_Type version;
+  Dwg_Version_Type from_version;
+  */
 } Dwg_Chain;
 
 typedef enum DWG_SECTION_TYPE /* since r2004+ */

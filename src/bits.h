@@ -62,10 +62,10 @@ typedef struct _bit_chain
   long unsigned int size;
   long unsigned int byte;
   unsigned char bit;
+  unsigned char opts; // from dwg->opts, see DWG_OPTS_*
   FILE *fh;
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
-  unsigned char opts; // from dwg->opts, see DWG_OPTS_*
 } Bit_Chain;
 
 /* Functions for raw data manipulations.

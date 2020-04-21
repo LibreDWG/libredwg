@@ -440,21 +440,20 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   BITCODE_RC i, num_pictures, code;
   int found;
   BITCODE_RL header_size, address, osize;
-  Bit_Chain *dat;
+  Bit_Chain dat = { NULL, 0, 0, 0 };
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   *size = 0;
   assert (dwg);
-  dat = (Bit_Chain *)&dwg->thumbnail;
-  if (!dat || !dat->size)
+  // copy the chain data. bit_* needs a full chain with opts and version
+  dat = *(Bit_Chain *)&dwg->thumbnail;
+  if (!dat.size || !dat.chain)
     {
       LOG_INFO ("no THUMBNAIL Image Data\n")
       return NULL;
     }
-  dat->byte = 0;
-  dat->bit = 0;
-  dat->version = dwg->header.version;
-  dat->from_version = dwg->header.from_version;
+  dat.byte = 0;
+  dat.bit = 0;
 
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
@@ -467,57 +466,57 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
     }
 #endif /* USE_TRACING */
 
-  osize = bit_read_RL (dat); /* overall size of all images */
+  osize = bit_read_RL (&dat); /* overall size of all images */
   LOG_TRACE ("overall size: " FORMAT_RL " [RL]\n", osize);
-  if (osize > dat->size)
+  if (osize > dat.size)
     {
-      LOG_ERROR ("Preview overflow > %lu", dat->size);
+      LOG_ERROR ("Preview overflow > %lu", dat.size);
       return NULL;
     }
-  num_pictures = bit_read_RC (dat);
+  num_pictures = bit_read_RC (&dat);
   LOG_INFO ("num_pictures: %d [RC]\n", (int)num_pictures)
 
   found = 0;
   header_size = 0;
   for (i = 0; i < num_pictures; i++)
     {
-      if (dat->byte > dat->size)
+      if (dat.byte > dat.size)
         {
           LOG_ERROR ("Preview overflow");
           break;
         }
-      code = bit_read_RC (dat);
+      code = bit_read_RC (&dat);
       LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, code)
-      address = bit_read_RL (dat);
+      address = bit_read_RL (&dat);
       LOG_TRACE ("\t\tHeader data start: 0x%x [RL]\n", address)
       if (code == 1)
         {
-          header_size += bit_read_RL (dat);
+          header_size += bit_read_RL (&dat);
           LOG_TRACE ("\t\tHeader data size: %i [RL]\n", header_size)
         }
       else if (code == 2 && found == 0)
         {
-          *size = bit_read_RL (dat);
+          *size = bit_read_RL (&dat);
           found = 1;
           LOG_INFO ("\t\tBMP size: %i [RL]\n", *size)
         }
       else if (code == 3)
         {
-          osize = bit_read_RL (dat);
+          osize = bit_read_RL (&dat);
           LOG_INFO ("\t\tWMF size: %i [RL]\n", osize)
         }
       else
         {
-          osize = bit_read_RL (dat);
+          osize = bit_read_RL (&dat);
           LOG_TRACE ("\t\tSize of unknown code %i: %i [RL]\n", code, osize)
         }
     }
-  dat->byte += header_size;
+  dat.byte += header_size;
   if (*size)
-    LOG_TRACE ("BMP offset: %lu\n", dat->byte)
+    LOG_TRACE ("BMP offset: %lu\n", dat.byte)
 
   if (*size > 0)
-    return (dat->chain + dat->byte);
+    return (dat.chain + dat.byte);
   else
     return NULL;
 }
