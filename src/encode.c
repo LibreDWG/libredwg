@@ -1563,9 +1563,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     Dwg_R2004_Header *_obj = &dwg->r2004_header;
     const int size = sizeof (Dwg_R2004_Header);
     char encrypted_data[size];
+    /* "AcFssFcA" encrypted */
     const unsigned char enc_file_ID_string[]
         = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A', '\xB5', '\xEF' };
-    unsigned int rseed = 1;
     uint32_t checksum;
 
     LOG_ERROR (WE_CAN "We don't encode the R2004_section_map yet")
@@ -1584,12 +1584,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     file_dat.version = dat->version;
     dat = &file_dat;
 
-    checksum = dwg->r2004_header.crc32;
-    LOG_HANDLE ("old crc32: 0x%x\n", dwg->r2004_header.crc32);
-    dwg->r2004_header.crc32 = 0;
+    checksum = _obj->crc32;
+    LOG_HANDLE ("old crc32: 0x%x\n", _obj->crc32);
+    _obj->crc32 = 0;
     // recalc the CRC32, without the padding, but the crc32 as 0
-    dwg->r2004_header.crc32 = bit_calc_CRC32 (0, (unsigned char*)&dwg->r2004_header, 0x6c);
-    LOG_HANDLE ("calc crc32: 0x%x\n", dwg->r2004_header.crc32);
+    _obj->crc32 = bit_calc_CRC32 (0, (unsigned char*)&dwg->r2004_header, 0x6c);
+    LOG_HANDLE ("calc crc32: 0x%x\n", _obj->crc32);
 
     // first write plain
     // clang-format off
@@ -1599,11 +1599,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // then go back and encrypt it
     dat = orig_dat;
     bit_set_position (&file_dat, 0);
-    decrypt_R2004_header (&dat->chain[0x80], file_dat.chain, size);
+    decrypt_R2004_header (&dat->chain[0x80], file_dat.chain, sizeof (Dwg_R2004_Header));
     bit_chain_free (&file_dat);
     LOG_HANDLE ("encrypted R2004_Header:\n");
-    LOG_TF (HANDLE, &dat->chain[0x80], (int)size);
-    dat->byte += size;
+    LOG_TF (HANDLE, &dat->chain[0x80], (int)sizeof (Dwg_R2004_Header));
+    dat->byte += sizeof (Dwg_R2004_Header);
     LOG_HANDLE ("@0x%lx\n", dat->byte);
 
     if (memcmp (&dat->chain[0x80], enc_file_ID_string, 8))
@@ -1615,24 +1615,25 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     /*-------------------------------------------------------------------------
      * Section Page Map
      */
-    dat->byte = dwg->r2004_header.section_map_address + 0x100;
+    dat->byte = _obj->section_map_address + 0x100;
     LOG_HANDLE ("@0x%lx\n", dat->byte);
 
     LOG_TRACE ("\n=== Write System Section (Section Page Map) ===\n");
+    /* Trying without compression first */
 #ifndef HAVE_COMPRESS_R2004_SECTION
-    dwg->r2004_header.comp_data_size = dwg->r2004_header.decomp_data_size;
-    dwg->r2004_header.compression_type = 0;
+    _obj->comp_data_size = _obj->decomp_data_size;
+    _obj->compression_type = 0;
 #endif
     FIELD_RL (section_type, 0); // should be 0x4163043b
     FIELD_RL (decomp_data_size, 0);
     FIELD_RL (comp_data_size, 0);
     FIELD_RL (compression_type, 0);
-    dwg_section_page_checksum (dwg->r2004_header.checksum, dat, size);
+    dwg_section_page_checksum (_obj->checksum, dat, sizeof (Dwg_R2004_Header));
     FIELD_RL (checksum, 0);
     LOG_TRACE ("\n")
 
     LOG_ERROR ("TODO write_R2004_section_map(dat, dwg)")
-    //return DWG_ERR_NOTYETSUPPORTED;
+    return DWG_ERR_NOTYETSUPPORTED;
   }
 
   /*------------------------------------------------------------
