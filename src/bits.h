@@ -290,6 +290,12 @@ void bit_write_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
 void bit_chain_init (Bit_Chain *dat, const int size);
 void bit_chain_alloc (Bit_Chain *dat);
 void bit_chain_free (Bit_Chain *dat);
+// after bit_chain_init
+#define bit_chain_set_version(to, from)                                       \
+  (to)->version = (from)->version;                                            \
+  (to)->from_version = (from)->from_version;                                  \
+  (to)->opts = (from)->opts;                                                  \
+  (to)->fh = (from)->fh
 
 void bit_print (Bit_Chain *dat, long unsigned int size);
 

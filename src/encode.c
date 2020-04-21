@@ -1407,9 +1407,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
 #endif
 
-  
   bit_chain_alloc (dat);
   hdl_dat = dat; // splitted later in objects/entities
+  if (!dat->version)
+    {
+      dat->version = dwg->header.version;
+      dat->from_version = dwg->header.from_version;
+      dat->opts = dwg->opts;
+    }
 
   /*------------------------------------------------------------
    * Header
@@ -1662,6 +1667,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       old_dat = dat;
       bit_chain_init (&sec_dat[SECTION_PREVIEW], dwg->thumbnail.size + 64);
       str_dat = hdl_dat = dat = &sec_dat[SECTION_PREVIEW];
+      bit_chain_set_version (dat, old_dat);
     }
   else
     {
@@ -1701,6 +1707,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       sec_id = SECTION_HEADER;
       bit_chain_init (&sec_dat[sec_id], sizeof (struct Dwg_Header) + 64);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
+      bit_chain_set_version (dat, old_dat);
     }
   assert (!dat->bit);
   LOG_INFO ("\n=======> Header Variables:   %4u\n", (unsigned)dat->byte);
@@ -1735,6 +1742,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       sec_id = SECTION_CLASSES;
       bit_chain_init (&sec_dat[sec_id], (sizeof (Dwg_Class) * dwg->num_classes) + 32);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
+      bit_chain_set_version (dat, old_dat);
     }
   else
     sec_id = SECTION_CLASSES_R13;
@@ -1811,6 +1819,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       sec_id = SECTION_OBJECTS;
       bit_chain_alloc (&sec_dat[sec_id]);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
+      bit_chain_set_version (dat, old_dat);
     }
   LOG_INFO ("\n=======> Objects: %4u\n", (unsigned)dat->byte);
   pvzadr = dat->byte;
@@ -1927,6 +1936,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       sec_id = SECTION_HANDLES;
       bit_chain_init (&sec_dat[sec_id], (8 * dwg->num_objects) + 32);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
+      bit_chain_set_version (dat, old_dat);
     }
   else
     {
@@ -2131,6 +2141,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       sec_id = SECTION_TEMPLATE;
       bit_chain_init (&sec_dat[sec_id], 16);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
+      bit_chain_set_version (dat, old_dat);
     }
   else
     sec_id = SECTION_MEASUREMENT_R13;
@@ -2166,6 +2177,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               #include "objfreespace.spec"
             }
             break;
@@ -2174,6 +2186,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_RevHistory *_obj = &dwg->revhistory;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               #include "revhistory.spec"
             }
             break;
@@ -2183,6 +2196,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               #include "appinfohistory.spec"
 #endif
             }
@@ -2192,6 +2206,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_Security *_obj = &dwg->security;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               #include "security.spec"
             }
             break;
@@ -2200,6 +2215,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_FileDepList *_obj = &dwg->filedeplist;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               #include "filedeplist.spec"
             }
             break;
@@ -2208,6 +2224,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_AppInfo *_obj = &dwg->appinfo;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               #include "appinfo.spec"
             }
             break;
@@ -2216,6 +2233,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               #include "summaryinfo.spec"
             }
             break;
@@ -2225,6 +2243,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_AcDs *_obj = &dwg->acds;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              bit_chain_set_version (dat, old_dat);
               {
                 #include "acds.spec"
               }
@@ -2282,7 +2301,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         for (i = 0; i < dwg->header.num_sections; i++)
           {
             Dwg_Section_Info *info = &dwg->header.section_info[i];
-            //info->name = strdup (i);
+            //info->name = strdup (dwg_section_name (i));
           }
 
         size += 8 * ((_obj->numsections + 2) * 24); // no gaps
