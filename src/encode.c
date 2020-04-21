@@ -1253,6 +1253,26 @@ fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dic
 #undef DISABLE_NODSTYLE
 }
 
+/* Compress the decomp buffer into dat of a DWG r2004+ file. Sets comp_data_size. */
+static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
+                                   uint32_t decomp_data_size, uint32_t *comp_data_size)
+{
+  // only uncompressed for now
+  if (dat->byte + decomp_data_size > dat->size)
+    {
+      dat->size = dat->byte + decomp_data_size;
+      bit_chain_alloc (dat);
+    }
+#ifndef HAVE_COMPRESS_R2004_SECTION
+  memcpy (&dat->chain[dat->byte], decomp, decomp_data_size);
+  dat->byte += decomp_data_size;
+  *comp_data_size = decomp_data_size;
+#else
+  #error nyi
+#endif
+  return 0;
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -1628,7 +1648,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("\n=== Write System Section (Section Page Map) ===\n");
     if (!_obj->section_type)
       {
-        _obj->section_type = 0x4163043b;
+        _obj->section_type = 0x41630e3b;
         _obj->decomp_data_size = 208;
         _obj->comp_data_size = 190;
         _obj->compression_type = 2;
@@ -1640,10 +1660,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #endif
     if (_obj->section_type != 0x4163043b)
       {
-        LOG_ERROR ("Invalid R2004_Header.section_type 0x%08x != 0x4163043b", _obj->section_type);
+        LOG_ERROR ("Invalid System section_type 0x%08x != 0x4163043b", _obj->section_type);
         return DWG_ERR_SECTIONNOTFOUND;
       }
-    FIELD_RLx (section_type, 0); // should be 0x4163043b
+    FIELD_RLx (section_type, 0);
     FIELD_RL (decomp_data_size, 0);
     FIELD_RL (comp_data_size, 0);
     FIELD_RL (compression_type, 0);
@@ -1672,6 +1692,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             LOG_TRACE ("0x00:   %d\n", dwg->header.section[i].x00)
           }
      }
+    //TODO: infohdr, compress the following sections into these addresses
+    //      via SINCE (R_2004) dat mapping
 
     //LOG_ERROR ("TODO write_R2004_section_map(dat, dwg)");
     return DWG_ERR_NOTYETSUPPORTED;
