@@ -202,18 +202,18 @@ static bool env_var_checked_p;
     if (_obj->nam)                                                            \
       bit_write_T32 (str_dat, _obj->nam);                                     \
     if (dat->version < R_2007)                                                \
-      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);                 \
+      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf)                  \
     else                                                                      \
-      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
+      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf)                         \
   }
 #define FIELD_TU32(nam, dxf)                                                  \
   {                                                                           \
     if (_obj->nam)                                                            \
       bit_write_TU32 (str_dat, _obj->nam);                                    \
     if (dat->version < R_2007)                                                \
-      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);                \
+      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf)                 \
     else                                                                      \
-      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
+      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf)                         \
   }
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
 
@@ -2217,6 +2217,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
     {
       Dwg_Object *obj = NULL;
+      BITCODE_BL vcount, rcount1, rcount2, rcount3;
       // write remaining sections
       for (sec_id = SECTION_OBJFREESPACE; sec_id < SECTION_UNKNOWN; sec_id++)
         {

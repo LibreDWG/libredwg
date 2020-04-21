@@ -1900,6 +1900,76 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
     bit_write_RS (dat, chain[i]); // probably without byte swapping
 }
 
+// Unicode with RS length
+void bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
+{
+  unsigned int i;
+  unsigned int length;
+
+  if (chain)
+    length = bit_wcs2len (chain) + 1;
+  else
+    length = 0;
+
+  bit_write_RS (dat, length);
+  for (i = 0; i < length; i++)
+    bit_write_RS (dat, chain[i]);
+}
+// ASCII/UCS-2 string with a RL size (not length)
+void bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
+{
+  unsigned int i;
+  unsigned int length;
+
+  if (dat->version >= R_2007)
+    {
+      if (chain)
+        length = bit_wcs2len ((BITCODE_TU)chain) + 1;
+      else
+        length = 0;
+      bit_write_RL (dat, length * 2);
+      for (i = 0; i < length; i++)
+        bit_write_RS (dat, chain[i]);
+    }
+  else
+    {
+      if (chain)
+        length = strlen (chain) + 1;
+      else
+        length = 0;
+      bit_write_RL (dat, length);
+      for (i = 0; i < length; i++)
+        bit_write_RC (dat, chain[i]);
+    }
+}
+// ASCII/UCS-4 or -2 string with a RL size (not length)
+void bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
+{
+  unsigned int i;
+  unsigned int length;
+
+  if (dat->version >= R_2007)
+    {
+      if (chain)
+        length = bit_wcs2len ((BITCODE_TU)chain) + 1;
+      else
+        length = 0;
+      bit_write_RL (dat, length * 4);
+      for (i = 0; i < length; i++)
+        bit_write_RL (dat, chain[i]);
+    }
+  else
+    {
+      if (chain)
+        length = strlen (chain) + 1;
+      else
+        length = 0;
+      bit_write_RL (dat, length);
+      for (i = 0; i < length; i++)
+        bit_write_RC (dat, chain[i]);
+    }
+}
+
 BITCODE_T
 bit_read_T (Bit_Chain *restrict dat)
 {
