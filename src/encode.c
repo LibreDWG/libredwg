@@ -191,6 +191,30 @@ static bool env_var_checked_p;
       bit_write_TU (str_dat, (BITCODE_TU)_obj->nam);                          \
     LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
   }
+#define FIELD_TU16(nam, dxf)                                                  \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      bit_write_TU16 (str_dat, _obj->nam);                                    \
+    LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
+  }
+#define FIELD_T32(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      bit_write_T32 (str_dat, _obj->nam);                                     \
+    if (dat->version < R_2007)                                                \
+      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);                 \
+    else                                                                      \
+      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
+  }
+#define FIELD_TU32(nam, dxf)                                                  \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      bit_write_TU32 (str_dat, _obj->nam);                                    \
+    if (dat->version < R_2007)                                                \
+      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);                \
+    else                                                                      \
+      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
+  }
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
 
 #define _FIELD_DD(nam, _default, dxf)                                         \
@@ -271,6 +295,13 @@ static bool env_var_checked_p;
   {                                                                           \
     bit_write_TIMEBLL (dat, (BITCODE_TIMEBLL)_obj->nam);                      \
     LOG_TRACE (#nam ": " FORMAT_BL "." FORMAT_BL " [TIMEBLL %d]",             \
+               _obj->nam.days, _obj->nam.ms, dxf);                            \
+    LOG_POS                                                                   \
+  }
+#define FIELD_TIMERLL(nam, dxf)                                               \
+  {                                                                           \
+    bit_write_TIMERLL (dat, (BITCODE_TIMERLL)_obj->nam);                      \
+    LOG_TRACE (#nam ": " FORMAT_RL "." FORMAT_RL " [TIMERLL %d]",             \
                _obj->nam.days, _obj->nam.ms, dxf);                            \
     LOG_POS                                                                   \
   }
@@ -1296,11 +1327,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   long unsigned int last_offset;
   BITCODE_BL last_handle;
   Object_Map *omap;
-  Bit_Chain *hdl_dat;
-  const char *section_names[]
+  Bit_Chain *old_dat, *str_dat, *hdl_dat;
+  int sec_id;
+  const char *section_names[] // TODO r2000 only
       = { "AcDb:Header", "AcDb:Classes", "AcDb:Handles",
           "2NDHEADER",   "AcDb:Template",  "AcDb:AuxHeader" };
   Dwg_Version_Type orig_from_version = dat->from_version;
+  Bit_Chain sec_dat[SECTION_UNKNOWN]; // to encode each r2004 section
 
   if (dwg->opts)
     loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -1560,22 +1593,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* r2004 file header (compressed + encrypted) */
   SINCE (R_2004)
   {
-    /* System Section */
-    typedef union _system_section
-    {
-      unsigned char data[20]; // 5*4
-      struct
-      {
-        uint32_t section_type; /* 0x4163043b */
-        uint32_t decomp_data_size;
-        uint32_t comp_data_size;
-        uint32_t compression_type;
-        uint32_t checksum; // see section_page_checksum
-      } fields;
-    } system_section;
-    system_section ss;
-    Dwg_Section *section;
-
     Dwg_Object *obj = NULL;
     Bit_Chain *orig_dat = dat;
     Bit_Chain file_dat = { 0 };
@@ -1632,8 +1649,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         return error | DWG_ERR_INVALIDDWG;
       }
 
+#if 0
     /*-------------------------------------------------------------------------
-     * Section Page Map
+     * Section Page Map. TODO: write only when we have all the section sizes
      */
     section_address = 0x100;
     size = sizeof (ss) * (_obj->numsections * 24);
@@ -1658,9 +1676,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     _obj->comp_data_size = _obj->decomp_data_size;
     _obj->compression_type = 0;
 #endif
-    if (_obj->section_type != 0x4163043b)
+    if (_obj->section_type != 0x41630e3b)
       {
-        LOG_ERROR ("Invalid System section_type 0x%08x != 0x4163043b", _obj->section_type);
+        LOG_ERROR ("Invalid System section_type 0x%08x != 0x41630e3b", _obj->section_type);
         return DWG_ERR_SECTIONNOTFOUND;
       }
     FIELD_RLx (section_type, 0);
@@ -1697,13 +1715,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     //LOG_ERROR ("TODO write_R2004_section_map(dat, dwg)");
     return DWG_ERR_NOTYETSUPPORTED;
+#endif
   }
 
   /*------------------------------------------------------------
    * THUMBNAIL preview pictures
    */
-  if (!dwg->header.thumbnail_address)
-    dwg->header.thumbnail_address = dat->byte;
+  SINCE (R_2004)
+    {
+      old_dat = dat;
+      bit_chain_alloc (&sec_dat[SECTION_PREVIEW]);
+      str_dat = hdl_dat = dat = &sec_dat[SECTION_PREVIEW];
+    }
+  else
+    {
+      if (!dwg->header.thumbnail_address)
+        dwg->header.thumbnail_address = dat->byte;
+    }
   dat->bit = 0;
   LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned)dat->byte);
   // dwg->thumbnail.size = 0; // to disable
@@ -1732,6 +1760,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * Header Variables
    */
+  SINCE (R_2004)
+    {
+      sec_id = SECTION_HEADER;
+      bit_chain_alloc (&sec_dat[sec_id]);
+      str_dat = hdl_dat = dat = &sec_dat[sec_id];
+    }
   assert (!dat->bit);
   LOG_INFO ("\n=======> Header Variables:   %4u\n", (unsigned)dat->byte);
   dwg->header.section[0].number = 0;
@@ -1760,6 +1794,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * Classes
    */
+  SINCE (R_2004)
+    {
+      sec_id = SECTION_CLASSES;
+      bit_chain_alloc (&sec_dat[sec_id]);
+      str_dat = hdl_dat = dat = &sec_dat[sec_id];
+    }
+  else
+    sec_id = SECTION_CLASSES_R13;
   LOG_INFO ("\n=======> Classes: %4u (%d)\n", (unsigned)dat->byte,
             dwg->num_classes);
   if (dwg->num_classes > 5000)
@@ -1768,8 +1810,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->num_classes = 0;
       error |= DWG_ERR_VALUEOUTOFBOUNDS | DWG_ERR_CLASSESNOTFOUND;
     }
-  dwg->header.section[SECTION_CLASSES_R13].number = 1;
-  dwg->header.section[SECTION_CLASSES_R13].address = dat->byte;
+  dwg->header.section[sec_id].number = 1;
+  dwg->header.section[sec_id].address = dat->byte; //FIXME
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
   pvzadr = dat->byte;    // Size position
   bit_write_RL (dat, 0); // Size placeholder
@@ -1828,6 +1870,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Objects
    */
 
+  SINCE (R_2004)
+    {
+      sec_id = SECTION_OBJECTS;
+      bit_chain_alloc (&sec_dat[sec_id]);
+      str_dat = hdl_dat = dat = &sec_dat[sec_id];
+    }
   LOG_INFO ("\n=======> Objects: %4u\n", (unsigned)dat->byte);
   pvzadr = dat->byte;
 
@@ -1938,11 +1986,21 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * split into chunks of max. 2030
    */
   LOG_INFO ("\n=======> Object Map: %4u\n", (unsigned)dat->byte);
-  dwg->header.section[SECTION_HANDLES_R13].number = 2;
-  dwg->header.section[SECTION_HANDLES_R13].address = dat->byte;
+  SINCE (R_2004)
+    {
+      sec_id = SECTION_HANDLES;
+      bit_chain_alloc (&sec_dat[sec_id]);
+      str_dat = hdl_dat = dat = &sec_dat[sec_id];
+    }
+  else
+    {
+      sec_id = SECTION_HANDLES_R13;
+      dwg->header.section[sec_id].number = 2;
+      dwg->header.section[sec_id].address = dat->byte;
+      pvzadr = dat->byte; // Correct value of section size must be written later
+      dat->byte += 2;
+    }
 
-  pvzadr = dat->byte; // Correct value of section size must be written later
-  dat->byte += 2;
   last_offset = 0;
   last_handle = 0;
   for (i = 0; i < dwg->num_objects; i++)
@@ -2005,15 +2063,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /* Calculate and write the size of the object map
    */
-  dwg->header.section[SECTION_HANDLES_R13].size
-      = dat->byte - dwg->header.section[SECTION_HANDLES_R13].address;
+  dwg->header.section[sec_id].size
+      = dat->byte - dwg->header.section[sec_id].address;
   free (omap);
 
   /*------------------------------------------------------------
    * Second header, section 3. R13-R2000 only.
    * But partially also since r2004.
    */
-  if (dwg->header.version >= R_13 && dwg->second_header.num_sections > 3)
+  if (dwg->header.version >= R_13
+      && dwg->header.version < R_2004 // TODO
+      && dwg->second_header.num_sections > 3)
     {
       struct _dwg_second_header *_obj = &dwg->second_header;
       Dwg_Object *obj = NULL;
@@ -2118,7 +2178,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_2NDHEADER_R13].size
           = dat->byte - _obj->address;
     }
-  else if (dwg->header.num_sections > SECTION_2NDHEADER_R13)
+  else if (dwg->header.num_sections > SECTION_2NDHEADER_R13
+           && dwg->header.version < R_2004) // TODO
     {
       dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
       dwg->header.section[SECTION_2NDHEADER_R13].address = 0;
@@ -2126,15 +2187,24 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
 
   /*------------------------------------------------------------
-   * MEASUREMENT Section 4
+   * MEASUREMENT/Template Section 4
    * In a DXF under header_vars
    */
-  if (dwg->header.num_sections > SECTION_MEASUREMENT_R13)
+  SINCE (R_2004)
+    {
+      sec_id = SECTION_TEMPLATE;
+      bit_chain_alloc (&sec_dat[sec_id]);
+      str_dat = hdl_dat = dat = &sec_dat[sec_id];
+    }
+  else
+    sec_id = SECTION_MEASUREMENT_R13;
+
+  if (dwg->header.version >= R_2004 || (int)dwg->header.num_sections > sec_id)
     {
       LOG_INFO ("\n=======> MEASUREMENT: %4u\n", (unsigned)dat->byte);
-      dwg->header.section[SECTION_MEASUREMENT_R13].number = 4;
-      dwg->header.section[SECTION_MEASUREMENT_R13].address = dat->byte;
-      dwg->header.section[SECTION_MEASUREMENT_R13].size = 4;
+      dwg->header.section[sec_id].number = 4;
+      dwg->header.section[sec_id].address = dat->byte;
+      dwg->header.section[sec_id].size = 4;
       // 0 - English, 1- Metric
       bit_write_RL (dat, (BITCODE_RL)dwg->header_vars.MEASUREMENT);
       LOG_TRACE ("HEADER.MEASUREMENT: %d [RL]\n",
@@ -2144,6 +2214,90 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* End of the file
    */
   dat->size = dat->byte;
+  SINCE (R_2004)
+    {
+      Dwg_Object *obj = NULL;
+      // write remaining sections
+      for (sec_id = SECTION_OBJFREESPACE; sec_id < SECTION_UNKNOWN; sec_id++)
+        {
+          switch (sec_id) {
+          case SECTION_OBJECTS:
+            break; // already
+          case SECTION_OBJFREESPACE:
+            {
+              struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "objfreespace.spec"
+            }
+            break;
+          case SECTION_REVHISTORY:
+            {
+              struct Dwg_RevHistory *_obj = &dwg->revhistory;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "revhistory.spec"
+            }
+            break;
+          case SECTION_APPINFOHISTORY:
+            {
+#if 0
+              struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "appinfohistory.spec"
+#endif
+            }
+            break;
+          case SECTION_SECURITY:
+            {
+              struct Dwg_Security *_obj = &dwg->security;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "security.spec"
+            }
+            break;
+          case SECTION_FILEDEPLIST:
+            {
+              struct Dwg_FileDepList *_obj = &dwg->filedeplist;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "filedeplist.spec"
+            }
+            break;
+          case SECTION_APPINFO:
+            {
+              struct Dwg_AppInfo *_obj = &dwg->appinfo;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "appinfo.spec"
+            }
+            break;
+          case SECTION_SUMMARYINFO:
+            {
+              struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "summaryinfo.spec"
+            }
+            break;
+          case SECTION_ACDS:
+            {
+#if 0
+              struct Dwg_AcDs *_obj = &dwg->acds;
+              bit_chain_alloc (&sec_dat[sec_id]);
+              str_dat = hdl_dat = dat = &sec_dat[sec_id];
+              #include "acds.spec"
+#endif
+            }
+            break;
+          default:
+            break;
+          }
+        }
+      // and write system and data section maps.
+      dat = old_dat;
+    }
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
 
   /* Patch section addresses

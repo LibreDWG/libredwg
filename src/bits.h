@@ -231,6 +231,9 @@ BITCODE_T32 bit_read_T32 (Bit_Chain *restrict dat);
 BITCODE_TU32 bit_read_TU32 (Bit_Chain *restrict dat);
 
 void bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict value);
+void bit_write_T32 (Bit_Chain *restrict dat, BITCODE_TU restrict value);
+void bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict value);
+void bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU restrict value);
 
 BITCODE_T bit_read_T (Bit_Chain *restrict dat);
 void bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain);
