@@ -297,10 +297,16 @@ main (int argc, char *argv[])
   if (error >= DWG_ERR_CRITICAL)
     {
       printf ("WRITE ERROR 0x%x\n", error);
-      if (free_fnout)
-        free (filename_out);
-      dwg_free (&dwg);
-      return error;
+#ifndef IS_RELEASE
+      // try to read the halfway written r2004 file.
+      if (!(version && error == DWG_ERR_SECTIONNOTFOUND))
+#endif
+      {
+        if (free_fnout)
+          free (filename_out);
+        dwg_free (&dwg);
+        return error;
+      }
     }
   dwg_free (&dwg);
 
