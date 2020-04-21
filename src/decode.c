@@ -157,8 +157,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   dwg->dirty_refs = 1;
 
-  // memset (&dwg->header, 0, sizeof (dwg->header)); // nope. needed for
-  // version
+  //memset (&dwg->header, 0, sizeof (dwg->header)); // no, needed for version
   memset (&dwg->header_vars, 0, sizeof (dwg->header_vars));
   memset (&dwg->summaryinfo, 0, sizeof (dwg->summaryinfo));
   memset (&dwg->r2004_header, 0, sizeof (dwg->r2004_header));
@@ -1341,8 +1340,7 @@ classes_section:
    * But partially also since r2004.
    */
 
-  if (bit_search_sentinel (dat,
-                           dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN)))
+  if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN)))
     {
       BITCODE_RL i;
       BITCODE_RC sig, sig2;

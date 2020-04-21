@@ -1892,13 +1892,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       obj = &dwg->object[index];
       // change the address to the linearly sorted one
-      assert (dat->byte);
+      PRE (R_2004)
+        assert (dat->byte);
       if (!obj->parent)
         obj->parent = dwg;
       error |= dwg_encode_add_object (obj, dat, dat->byte);
 
 #ifndef NDEBUG
-      // check if this object overwrote at address 0
+      // check if this object overwrote at address 0. but with r2004 it starts fresh
       if (dwg->header.version >= R_1_2 && dwg->header.version < R_2004)
         {
           assert (dat->chain[0] == 'A');
@@ -1989,20 +1990,24 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (ckr_missing)
     {
       sec_size = dat->byte - pvzadr;
-      assert (pvzadr);
+      PRE (R_2004)
+        assert (pvzadr);
       // i.e. encode_patch_RS_LE_size
       dat->chain[pvzadr] = sec_size >> 8;
       dat->chain[pvzadr + 1] = sec_size & 0xFF;
       LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", sec_size, pvzadr);
       bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
     }
-  if (dwg->header.version >= R_1_2)
+#ifndef NDEBUG
+  if (dwg->header.version >= R_1_2 && dwg->header.version < R_2004)
     {
       assert (dat->chain[0] == 'A');
       assert (dat->chain[1] == 'C');
     }
+#endif
   pvzadr = dat->byte;
-  assert (pvzadr);
+  PRE (R_2004)
+    assert (pvzadr);
   bit_write_RS_LE (dat, 2); // last section_size 2
   LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", 2, pvzadr);
   bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
@@ -2015,7 +2020,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   /*------------------------------------------------------------
    * Second header, section 3. R13-R2000 only.
-   * But partially also since r2004.
+   * But partially also since r2004. (TODO: under which name? AuxHeader?)
    */
   if (dwg->header.version >= R_13
       && dwg->header.version < R_2004 // TODO
@@ -2281,8 +2286,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     LOG_WARN ("Unpadded section %d", sec_id);
                     sec_dat[sec_id].byte++;
                   }
-                dwg->header.section[i].number = sec_id + 1;
-                dwg->header.section[i].size = sec_dat[sec_id].byte;
+                dwg->header.section[sec_id].number = sec_id + 1;
+                dwg->header.section[sec_id].size = sec_dat[sec_id].byte;
                 size += sec_dat[sec_id].byte;
               }
           }
@@ -2644,7 +2649,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
 
   oldpos = bit_position (dat);
-  assert (address);
+  PRE (R_2004)
+    assert (address);
   dat->byte = address;
   dat->bit = 0;
 
