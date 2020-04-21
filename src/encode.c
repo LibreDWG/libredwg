@@ -1553,7 +1553,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         uint32_t checksum; // see section_page_checksum
       } fields;
     } system_section;
-
     system_section ss;
     Dwg_Section *section;
 
@@ -1561,13 +1560,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     Bit_Chain *orig_dat = dat;
     Bit_Chain file_dat = { 0 };
     Dwg_R2004_Header *_obj = &dwg->r2004_header;
-    const int size = sizeof (Dwg_R2004_Header);
+    int size = sizeof (Dwg_R2004_Header);
     char encrypted_data[size];
-    /* "AcFssFcA" encrypted */
+    /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
     const unsigned char enc_file_ID_string[]
-        = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A', '\xB5', '\xEF' };
+        = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A', '\xB5', '\xEF', '\x18', '\xDD', '\x0B', '\xF1' };
     uint32_t checksum;
 
+    LOG_INFO("\n")
     LOG_ERROR (WE_CAN "We don't encode the R2004_section_map yet")
 
     if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
@@ -1604,9 +1604,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_HANDLE ("encrypted R2004_Header:\n");
     LOG_TF (HANDLE, &dat->chain[0x80], (int)sizeof (Dwg_R2004_Header));
     dat->byte += sizeof (Dwg_R2004_Header);
-    LOG_HANDLE ("@0x%lx\n", dat->byte);
+    LOG_HANDLE ("@%lu.0\n", dat->byte);
 
-    if (memcmp (&dat->chain[0x80], enc_file_ID_string, 8))
+    if (memcmp (&dat->chain[0x80], enc_file_ID_string, sizeof (enc_file_ID_string)))
       {
         LOG_ERROR ("r2004_file_header encryption error");
         return error | DWG_ERR_INVALIDDWG;
@@ -1615,24 +1615,65 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     /*-------------------------------------------------------------------------
      * Section Page Map
      */
-    dat->byte = _obj->section_map_address + 0x100;
-    LOG_HANDLE ("@0x%lx\n", dat->byte);
+    section_address = 0x100;
+    size = sizeof (ss) * (_obj->numsections * 24);
+    dat->byte = _obj->section_map_address + section_address;
+    if (dat->byte + size >= dat->size)
+      {
+        dat->size = dat->byte + size;
+        bit_chain_alloc (dat);
+      }
+    LOG_HANDLE ("@%lu.0\n", dat->byte);
 
     LOG_TRACE ("\n=== Write System Section (Section Page Map) ===\n");
+    if (!_obj->section_type)
+      {
+        _obj->section_type = 0x4163043b;
+        _obj->decomp_data_size = 208;
+        _obj->comp_data_size = 190;
+        _obj->compression_type = 2;
+      }
     /* Trying without compression first */
 #ifndef HAVE_COMPRESS_R2004_SECTION
     _obj->comp_data_size = _obj->decomp_data_size;
     _obj->compression_type = 0;
 #endif
-    FIELD_RL (section_type, 0); // should be 0x4163043b
+    if (_obj->section_type != 0x4163043b)
+      {
+        LOG_ERROR ("Invalid R2004_Header.section_type 0x%08x != 0x4163043b", _obj->section_type);
+        return DWG_ERR_SECTIONNOTFOUND;
+      }
+    FIELD_RLx (section_type, 0); // should be 0x4163043b
     FIELD_RL (decomp_data_size, 0);
     FIELD_RL (comp_data_size, 0);
     FIELD_RL (compression_type, 0);
-    dwg_section_page_checksum (_obj->checksum, dat, sizeof (Dwg_R2004_Header));
-    FIELD_RL (checksum, 0);
+    dwg_section_page_checksum (0x0a751074, dat, 16);
+    FIELD_RLx (checksum, 0);
     LOG_TRACE ("\n")
 
-    LOG_ERROR ("TODO write_R2004_section_map(dat, dwg)")
+    LOG_TRACE ("\n#### Write 2004 Section Page Map ####\n");
+    for (i = 0; i < dwg->header.num_sections; i++)
+      {
+        bit_write_RL (dat, dwg->header.section[i].number);
+        bit_write_RL (dat, dwg->header.section[i].size);
+        LOG_TRACE ("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
+        LOG_TRACE (" size: %5u,", dwg->header.section[i].size)
+        LOG_TRACE (" address: 0x%04lx\n", // not written!
+                   (unsigned long)dwg->header.section[i].address);
+        if (dwg->header.section[i].number < 0) //gap
+          {
+            bit_write_RL (dat, dwg->header.section[i].parent);
+            bit_write_RL (dat, dwg->header.section[i].left);
+            bit_write_RL (dat, dwg->header.section[i].right);
+            bit_write_RL (dat, dwg->header.section[i].x00);
+            LOG_TRACE ("  Parent: %d, ", dwg->header.section[i].parent)
+            LOG_TRACE ("Left:   %d, ", dwg->header.section[i].left)
+            LOG_TRACE ("Right:  %d, ", dwg->header.section[i].right)
+            LOG_TRACE ("0x00:   %d\n", dwg->header.section[i].x00)
+          }
+     }
+
+    //LOG_ERROR ("TODO write_R2004_section_map(dat, dwg)");
     return DWG_ERR_NOTYETSUPPORTED;
   }
 

@@ -34,7 +34,7 @@
       FIELD_VALUE (section_array_size) = 19;
     }
   }
-  FIELD_TFFx (file_ID_string, 12, 0) //pre-allocated: "AcFssFcA" + some \Uxxxx
+  FIELD_TFF (file_ID_string, 12, 0) //pre-allocated: "AcFssFcAJMB"
   FIELD_RLx (header_address, 0);
   FIELD_RL (header_size, 0);
   FIELD_RL (x04, 0);

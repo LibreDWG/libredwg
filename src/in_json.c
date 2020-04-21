@@ -2992,7 +2992,12 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (strEQc (key, "file_ID_string"))
         {
           unsigned long slen;
+#if 0
           char *s = json_binary (dat, tokens, key, &slen);
+#else
+          char *s = json_string (dat, tokens);
+          slen = strlen (s);
+#endif
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           if (slen == 12)
             memcpy (&_obj->file_ID_string, s, 12);
