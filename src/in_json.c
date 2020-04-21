@@ -2988,18 +2988,25 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_fixed_key (key, dat, tokens);
       t = &tokens->tokens[tokens->index];
 
-      // FIELD_TFF (file_ID_string, 12, 0) //pre-allocated
+      // FIELD_TFFx (file_ID_string, 12, 0) //pre-allocated
       if (strEQc (key, "file_ID_string"))
         {
-          char *s = json_string (dat, tokens);
-          int slen = strlen (s);
+          unsigned long slen;
+          char *s = json_binary (dat, tokens, key, &slen);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
-          memcpy (&_obj->file_ID_string, s, MIN (12, slen));
+          if (slen == 12)
+            memcpy (&_obj->file_ID_string, s, 12);
+          else
+            {
+              LOG_ERROR ("Invalid R2004_Header.file_ID_string fixed")
+              memcpy (&_obj->file_ID_string, "AcFssFcAJMB\0", 12);
+            }
           LOG_TRACE ("file_ID_string: \"%.*s\"\n", 12, _obj->file_ID_string)
           free (s);
         }
       else if (strEQc (key, "padding"))
         {
+          // just zeros encrypted */
           LOG_TRACE ("padding: \"%.*s\" (ignored)\n", t->end - t->start,
                      &dat->chain[t->start])
           tokens->index++;

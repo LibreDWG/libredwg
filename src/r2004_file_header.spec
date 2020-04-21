@@ -34,7 +34,7 @@
       FIELD_VALUE (section_array_size) = 19;
     }
   }
-  FIELD_TFF (file_ID_string, 12, 0) //pre-allocated: "AcFssFcA" + some \Uxxxx
+  FIELD_TFFx (file_ID_string, 12, 0) //pre-allocated: "AcFssFcA" + some \Uxxxx
   FIELD_RLx (header_address, 0);
   FIELD_RL (header_size, 0);
   FIELD_RL (x04, 0);
@@ -61,5 +61,5 @@
 
   // well, the padding is also encrypted, but ODA didn't grok that.
   // 12 byte encrypted via 0
-  FIELD_TFF (padding, (int)sizeof(FIELD_VALUE (padding)), 0) // @120
+  FIELD_TFFx (padding, (int)sizeof(FIELD_VALUE (padding)), 0) // @120
 

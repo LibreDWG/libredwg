@@ -375,7 +375,9 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to encode Dwg_Data\n")
+      LOG_ERROR ("Failed to encode Dwg_Data\n");
+      /* In development we want to look at the corpses */
+#ifdef IS_RELEASE
       if (dat.size > 0)
         {
           free (dat.chain);
@@ -383,6 +385,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
           dat.size = 0;
         }
       return error;
+#endif
     }
 
   // try opening the output file in write mode
