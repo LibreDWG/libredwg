@@ -1651,71 +1651,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
 
 #if 0
-    /*-------------------------------------------------------------------------
-     * Section Page Map. TODO: write only when we have all the section sizes
-     */
-    section_address = 0x100;
-    size = sizeof (ss) * (_obj->numsections * 24);
-    dat->byte = _obj->section_map_address + section_address;
-    if (dat->byte + size >= dat->size)
-      {
-        dat->size = dat->byte + size;
-        bit_chain_alloc (dat);
-      }
-    LOG_HANDLE ("@%lu.0\n", dat->byte);
-
-    LOG_TRACE ("\n=== Write System Section (Section Page Map) ===\n");
-    if (!_obj->section_type)
-      {
-        _obj->section_type = 0x41630e3b;
-        _obj->decomp_data_size = 208;
-        _obj->comp_data_size = 190;
-        _obj->compression_type = 2;
-      }
-    /* Trying without compression first */
-#ifndef HAVE_COMPRESS_R2004_SECTION
-    _obj->comp_data_size = _obj->decomp_data_size;
-    _obj->compression_type = 0;
-#endif
-    if (_obj->section_type != 0x41630e3b)
-      {
-        LOG_ERROR ("Invalid System section_type 0x%08x != 0x41630e3b", _obj->section_type);
-        return DWG_ERR_SECTIONNOTFOUND;
-      }
-    FIELD_RLx (section_type, 0);
-    FIELD_RL (decomp_data_size, 0);
-    FIELD_RL (comp_data_size, 0);
-    FIELD_RL (compression_type, 0);
-    dwg_section_page_checksum (0x0a751074, dat, 16);
-    FIELD_RLx (checksum, 0);
-    LOG_TRACE ("\n")
-
-    LOG_TRACE ("\n#### Write 2004 Section Page Map ####\n");
-    for (i = 0; i < dwg->header.num_sections; i++)
-      {
-        bit_write_RL (dat, dwg->header.section[i].number);
-        bit_write_RL (dat, dwg->header.section[i].size);
-        LOG_TRACE ("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
-        LOG_TRACE (" size: %5u,", dwg->header.section[i].size)
-        LOG_TRACE (" address: 0x%04lx\n", // not written!
-                   (unsigned long)dwg->header.section[i].address);
-        if (dwg->header.section[i].number < 0) //gap
-          {
-            bit_write_RL (dat, dwg->header.section[i].parent);
-            bit_write_RL (dat, dwg->header.section[i].left);
-            bit_write_RL (dat, dwg->header.section[i].right);
-            bit_write_RL (dat, dwg->header.section[i].x00);
-            LOG_TRACE ("  Parent: %d, ", dwg->header.section[i].parent)
-            LOG_TRACE ("Left:   %d, ", dwg->header.section[i].left)
-            LOG_TRACE ("Right:  %d, ", dwg->header.section[i].right)
-            LOG_TRACE ("0x00:   %d\n", dwg->header.section[i].x00)
-          }
-     }
-    //TODO: infohdr, compress the following sections into these addresses
-    //      via SINCE (R_2004) dat mapping
-
-    //LOG_ERROR ("TODO write_R2004_section_map(dat, dwg)");
-    return DWG_ERR_NOTYETSUPPORTED;
 #endif
   }
 
@@ -2219,6 +2154,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       Dwg_Object *obj = NULL;
       BITCODE_BL vcount, rcount1, rcount2, rcount3;
+      size_t size;
       // write remaining sections
       for (sec_id = SECTION_OBJFREESPACE; sec_id < SECTION_UNKNOWN; sec_id++)
         {
@@ -2289,7 +2225,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               struct Dwg_AcDs *_obj = &dwg->acds;
               bit_chain_alloc (&sec_dat[sec_id]);
               str_dat = hdl_dat = dat = &sec_dat[sec_id];
-              #include "acds.spec"
+              {
+                #include "acds.spec"
+              }
 #endif
             }
             break;
@@ -2299,7 +2237,115 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       // and write system and data section maps.
       dat = old_dat;
+
+      /*-------------------------------------------------------------------------
+       * Section Page Map
+       */
+      // no gaps, so header->num_sections == r2004_header->numsections
+      // get together all the section sizes, and set the addresses
+      {
+        Dwg_R2004_Header *_obj = &dwg->r2004_header;
+        _obj->numsections = 0;
+        _obj->numgaps = 0;
+        section_address = 0x100;
+        size = 0;
+        // num_sections
+        if (!dwg->header.section)
+          dwg->header.section = calloc (28, sizeof (Dwg_Section));
+        for (sec_id = 0; sec_id < SECTION_UNKNOWN; sec_id++)
+          {
+            if (sec_dat[sec_id].byte)
+              {
+                _obj->numsections++;
+                if (sec_dat[sec_id].bit)
+                  {
+                    LOG_WARN ("Unpadded section %d", sec_id);
+                    sec_dat[sec_id].byte++;
+                  }
+                dwg->header.section[i].number = sec_id + 1;
+                dwg->header.section[i].size = sec_dat[sec_id].byte;
+                size += sec_dat[sec_id].byte;
+              }
+          }
+        // plus the section_info [27] and section_map [28] as two last sections
+        dwg->header.num_sections = _obj->numsections + 2;
+        _obj->section_info_id = _obj->numsections + 1;
+        _obj->section_map_id = _obj->numsections + 2;
+        _obj->section_array_size = _obj->numsections + 2;
+        _obj->last_section_id = _obj->section_map_id;
+        dwg->header.section_infohdr.num_desc = _obj->numsections;
+
+        if (dwg->header.num_sections > 28)
+          dwg->header.section = realloc (dwg->header.section, dwg->header.num_sections * sizeof (Dwg_Section));
+        if (!dwg->header.section_info)
+          dwg->header.section_info = calloc (dwg->header.section_infohdr.num_desc, sizeof (Dwg_Section_Info));
+        for (i = 0; i < dwg->header.num_sections; i++)
+          {
+            Dwg_Section_Info *info = &dwg->header.section_info[i];
+            //info->name = strdup (i);
+          }
+
+        size += 8 * ((_obj->numsections + 2) * 24); // no gaps
+        dat->byte = _obj->section_map_address + section_address;
+        if (dat->byte + size >= dat->size)
+          {
+            dat->size = dat->byte + size;
+            bit_chain_alloc (dat);
+          }
+        LOG_HANDLE ("@%lu.0\n", dat->byte);
+
+        LOG_TRACE ("\n=== Write System Section (Section Page Map) ===\n");
+        if (!_obj->section_type)
+          {
+            _obj->section_type = 0x41630e3b;
+            _obj->decomp_data_size = 208;
+            _obj->comp_data_size = 190;
+            _obj->compression_type = 2;
+          }
+        /* Trying without compression first */
+#ifndef HAVE_COMPRESS_R2004_SECTION
+        _obj->comp_data_size = _obj->decomp_data_size;
+        _obj->compression_type = 0;
+#endif
+        if (_obj->section_type != 0x41630e3b)
+          {
+            LOG_ERROR ("Invalid System section_type 0x%08x != 0x41630e3b", _obj->section_type);
+            return DWG_ERR_SECTIONNOTFOUND;
+          }
+        FIELD_RLx (section_type, 0);
+        FIELD_RL (decomp_data_size, 0);
+        FIELD_RL (comp_data_size, 0);
+        FIELD_RL (compression_type, 0);
+        dwg_section_page_checksum (0x0a751074, dat, 16);
+        FIELD_RLx (checksum, 0);
+        LOG_TRACE ("\n")
+
+        LOG_TRACE ("\n#### Write 2004 Section Page Map ####\n");
+        for (i = 0; i < dwg->header.num_sections; i++)
+          {
+            bit_write_RL (dat, dwg->header.section[i].number);
+            bit_write_RL (dat, dwg->header.section[i].size);
+            LOG_TRACE ("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
+            LOG_TRACE (" size: %5u,", dwg->header.section[i].size)
+            LOG_TRACE (" address: 0x%04lx\n", // not written!
+                         (unsigned long)dwg->header.section[i].address);
+            if (dwg->header.section[i].number < 0) //gap
+              {
+                bit_write_RL (dat, dwg->header.section[i].parent);
+                bit_write_RL (dat, dwg->header.section[i].left);
+                bit_write_RL (dat, dwg->header.section[i].right);
+                bit_write_RL (dat, dwg->header.section[i].x00);
+                LOG_TRACE ("  Parent: %d, ", dwg->header.section[i].parent)
+                LOG_TRACE ("Left:   %d, ", dwg->header.section[i].left)
+                LOG_TRACE ("Right:  %d, ", dwg->header.section[i].right)
+                LOG_TRACE ("0x00:   %d\n", dwg->header.section[i].x00);
+              }
+        }
+        //TODO: infohdr, compress the sections
+      }
+      //return DWG_ERR_NOTYETSUPPORTED;
     }
+
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
 
   /* Patch section addresses
