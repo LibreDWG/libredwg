@@ -1604,9 +1604,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A', '\xB5', '\xEF', '\x18', '\xDD', '\x0B', '\xF1' };
     uint32_t checksum;
 
-    LOG_INFO("\n")
-    LOG_ERROR (WE_CAN "We don't encode the R2004_section_map yet")
+    LOG_INFO("\n");
+    LOG_ERROR (WE_CAN "We don't encode the R2004_section_map yet");
 
+    memset (&sec_dat, 0, sizeof (Bit_Chain) * SECTION_UNKNOWN);
     if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
       dwg->header.section_info = calloc (dwg->header.section_infohdr.num_desc,
                                          sizeof (Dwg_Section_Info));
@@ -1724,7 +1725,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
     {
       old_dat = dat;
-      bit_chain_alloc (&sec_dat[SECTION_PREVIEW]);
+      bit_chain_init (&sec_dat[SECTION_PREVIEW], dwg->thumbnail.size + 64);
       str_dat = hdl_dat = dat = &sec_dat[SECTION_PREVIEW];
     }
   else
@@ -1763,7 +1764,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
     {
       sec_id = SECTION_HEADER;
-      bit_chain_alloc (&sec_dat[sec_id]);
+      bit_chain_init (&sec_dat[sec_id], sizeof (struct Dwg_Header) + 64);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
     }
   assert (!dat->bit);
@@ -1797,7 +1798,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
     {
       sec_id = SECTION_CLASSES;
-      bit_chain_alloc (&sec_dat[sec_id]);
+      bit_chain_init (&sec_dat[sec_id], (sizeof (Dwg_Class) * dwg->num_classes) + 32);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
     }
   else
@@ -1954,7 +1955,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #ifndef NDEBUG
       // check if this object overwrote at address 0
-      if (dwg->header.version >= R_1_2)
+      if (dwg->header.version >= R_1_2 && dwg->header.version < R_2004)
         {
           assert (dat->chain[0] == 'A');
           assert (dat->chain[1] == 'C');
@@ -1989,7 +1990,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
     {
       sec_id = SECTION_HANDLES;
-      bit_chain_alloc (&sec_dat[sec_id]);
+      bit_chain_init (&sec_dat[sec_id], (8 * dwg->num_objects) + 32);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
     }
   else
@@ -2193,7 +2194,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
     {
       sec_id = SECTION_TEMPLATE;
-      bit_chain_alloc (&sec_dat[sec_id]);
+      bit_chain_init (&sec_dat[sec_id], 16);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
     }
   else
