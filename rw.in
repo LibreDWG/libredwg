@@ -15,12 +15,13 @@ make -s -j4 -C programs dwgrewrite
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
+args=
 ob="$b"
 
 for d in "$@"; do
     case $d in
-        -v*) v="$d"
-             ;;
+        -v*)    v="$d" ;;
+        --as=*) args="$args $d" ;;
         *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]
@@ -40,12 +41,13 @@ for d in "$@"; do
         if [ "$dir" = "_." ]; then dir=""; fi
         b=$(basename "$d" .dwg)
         log="$b$dir.rw.log"
-        echo "$timeout @LTEXEC@ programs/dwgrewrite $v $d 2>$log"
+        echo "$timeout @LTEXEC@ programs/dwgrewrite $args $v $d 2>$log"
         # shellcheck disable=SC2086
-        $timeout @LTEXEC@ programs/dwgrewrite "$v" "$d" 2>"$log"
+        $timeout @LTEXEC@ programs/dwgrewrite $args "$v" "$d" 2>"$log"
         tail "$log"
         ;;
     esac
 done
+args=
 v=
 b=$ob
