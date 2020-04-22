@@ -18,6 +18,7 @@
 #include "config.h"
 #include <string.h>
 #include <stdlib.h>
+#include "common.h"
 #include "classes.h"
 #include "dynapi.h"
 
@@ -318,8 +319,6 @@ static const struct _obj_type_name _dwg_type_name[] =
    { DWG_TYPE_UNKNOWN_ENT, "UNKNOWN_ENT" }, // 0xfffe
    { DWG_TYPE_UNKNOWN_OBJ, "UNKNOWN_OBJ" }, // 0xffff
   };
-
-#define ARRAY_SIZE(arr) (int)(sizeof (arr) / sizeof (arr[0]))
 
 const char *dwg_type_name (const Dwg_Object_Type type)
 {

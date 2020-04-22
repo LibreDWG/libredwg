@@ -1370,7 +1370,7 @@ dwg_section_type (const char* restrict name)
 {
   if (name == NULL)
     {
-      return SECTION_UNKNOWN;
+      return SECTION_EMPTY;
     }
   else if (strEQc (name, "AcDb:Header"))
     {
@@ -1440,7 +1440,7 @@ dwg_section_type (const char* restrict name)
     { // AC1021
       return SECTION_APPINFOHISTORY;
     }
-  return SECTION_UNKNOWN;
+  return SECTION_EMPTY;
 }
 
 EXPORT Dwg_Section_Type
@@ -1452,7 +1452,7 @@ dwg_section_wtype (const DWGCHAR *restrict wname)
   int i = 0;
 
   if (wname == NULL)
-    return SECTION_UNKNOWN;
+    return SECTION_EMPTY;
   wp = (DWGCHAR *)wname;
   while ((c = *wp++))
     {
@@ -1482,6 +1482,8 @@ static const char * const dwg_section_r2004_names[] =
   "AcDb:Signature",
   "AcDb:AcDsPrototype_1b",
   "UNKNOWN",
+  "SYSTEM_MAP",
+  "INFO",
 };
 static const char * const dwg_section_r13_names[] =
 {
@@ -1512,7 +1514,7 @@ dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
 {
   if (dwg->header.version >= R_2004)
     {
-      return (sec_id <= SECTION_UNKNOWN) ? dwg_section_r2004_names[sec_id] : NULL;
+      return (sec_id <= SECTION_EMPTY) ? dwg_section_r2004_names[sec_id] : NULL;
     }
   else if (dwg->header.version > R_11)
     {
@@ -1563,8 +1565,6 @@ dxf_cvt_lweight (const BITCODE_BSd value)
 {
   return lweights[value % 32];
 }
-
-#define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
 
 EXPORT BITCODE_BSd
 dxf_revcvt_lweight (const int lw)

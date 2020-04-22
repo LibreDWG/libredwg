@@ -77,8 +77,6 @@ typedef struct _array_hdls
   struct array_hdl items[]; // Flexible array grows
 } array_hdls;
 
-#define ARRAY_SIZE(arr) (sizeof (arr) / sizeof (arr[0]))
-
 array_hdls *array_push (array_hdls *restrict hdls, const char *restrict field,
                         const char *restrict name, const int code);
 array_hdls *new_array_hdls (int size);
