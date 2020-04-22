@@ -174,6 +174,8 @@
 #define SAFENAME(name) (name) ? (name) : ""
 #define SAFEDXFNAME (obj && obj->dxfname ? obj->dxfname : "")
 #define ARRAY_SIZE(arr) (int)(sizeof (arr) / sizeof ((arr)[0]))
+#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+#define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
 
 /**
  Data types (including compressed forms) used through the project

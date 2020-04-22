@@ -58,9 +58,6 @@ static bool env_var_checked_p;
 #include "logging.h"
 #include "dec_macros.h"
 
-#define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
-#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
-
 /* Other imported functions */
 unsigned int section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id);
 

@@ -28,8 +28,6 @@
 #include "bits.h"
 #include "decode.h"
 
-#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
-
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */

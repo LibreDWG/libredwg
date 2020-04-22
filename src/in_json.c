@@ -64,9 +64,6 @@ static unsigned int cur_ver = 0;
 static char *created_by;
 static Bit_Chain *g_dat;
 
-#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
-#define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
-
 #define json_expect(tokens, typ)                                              \
   if (tokens->tokens[tokens->index].type != JSMN_##typ)                       \
   return DWG_ERR_INVALIDTYPE

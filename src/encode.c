@@ -74,8 +74,6 @@ static bool env_var_checked_p;
 
 #define ANYCODE -1
 
-#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
-
 #define LOG_POS                                                           \
   LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit)\
   LOG_TRACE ("\n")
@@ -1302,7 +1300,7 @@ static int copy_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict dec
   return 0;
 }
 
-/* r2004 compressed sections, TODO */
+/* r2004 compressed sections, LZ77 TODO */
 
 /* R2004 Literal Length
  */
@@ -1336,39 +1334,6 @@ write_literal_length (Bit_Chain *restrict dat, unsigned int length)
 }
 
 #ifdef HAVE_COMPRESS_R2004_SECTION
-
-/* R2004 Long Compression Offset
- */
-static void
-write_long_compression_offset (Bit_Chain *dat, unsigned int offset)
-{
-  unsigned int total = 0;
-  //BITCODE_RC byte = bit_write_RC (dat);
-  /*
-  if (byte == 0)
-    {
-      total = 0xFF;
-      while ((byte = bit_write_RC (dat)) == 0 && dat->size - dat->byte > 1)
-        total += 0xFF;
-    }
-  return total + byte;
-  */
-}
-
-/* R2004 Two Byte Offset
- */
-static unsigned int
-write_two_byte_offset (Bit_Chain *restrict dat, unsigned int offset)
-{
-  BITCODE_RC b1, b2;
-  b1 = offset << 2;
-  b2 = offset >> 6;
-  //offset = (firstByte >> 2) | (secondByte << 6);
-  bit_write_RC (dat, b1);
-  bit_write_RC (dat, b2);
-  //*lit_length = (firstByte & 0x03);
-  return b1 & 0x03;
-}
 
 /* 1 for yes, 0 for no */
 static int
@@ -1435,7 +1400,74 @@ section_encrypted (const Dwg_Data *dwg, const Dwg_Section_Type id)
     }
 }
 
+/* R2004 Long Compression Offset
+ */
+static void
+write_long_compression_offset (Bit_Chain *dat, unsigned int offset)
+{
+  unsigned int total = 0;
+  //BITCODE_RC byte = bit_write_RC (dat);
+  /*
+  if (byte == 0)
+    {
+      total = 0xFF;
+      while ((byte = bit_write_RC (dat)) == 0 && dat->size - dat->byte > 1)
+        total += 0xFF;
+    }
+  return total + byte;
+  */
+}
+
+/* R2004 Two Byte Offset
+ */
+static unsigned int
+write_two_byte_offset (Bit_Chain *restrict dat, unsigned int offset)
+{
+  BITCODE_RC b1, b2;
+  b1 = offset << 2;
+  b2 = offset >> 6;
+  //offset = (firstByte >> 2) | (secondByte << 6);
+  bit_write_RC (dat, b1);
+  bit_write_RC (dat, b2);
+  //*lit_length = (firstByte & 0x03);
+  return b1 & 0x03;
+}
+
 #endif
+
+/* Finds the longest match to the substring starting at i
+   in the lookahead buffer (size ?) from the history window (size ?). */
+static int
+find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size, uint32_t i, uint32_t *lenp)
+{
+  const unsigned lookahead_buffer_size = 32;
+  const unsigned window_size = 64;
+  int offset = 0;
+  uint32_t bufend = MIN (i + lookahead_buffer_size, decomp_data_size + 1);
+  *lenp = 0;
+  // only substring lengths >= 2, anything else compression is longer
+  for (uint32_t j = i + 2; j < bufend; j++)
+    {
+      int start = MAX (0, (int)(i - window_size));
+      BITCODE_RC *s = &decomp[i];
+      uint32_t slen = j - i;
+      for (int k = start; k < (int)i; j++)
+        {
+          int curr_offset = i - k;
+          //unsigned int repetitions = slen / curr_offset;
+          //unsigned int last = slen % curr_offset;
+          BITCODE_RC *match = &decomp[k]; // ...
+          //int matchlen = k + last;
+          if ((memcmp (s, match, slen) == 0)
+              && slen > *lenp)
+            {
+              offset = curr_offset;
+              *lenp = slen;
+            }
+        }
+    }
+  return offset;
+}
 
 /* Compress the decomp buffer into dat of a DWG r2004+ file. Sets comp_data_size.
    Variant of the LZ77 algo. ODA section 4.7
@@ -1444,9 +1476,27 @@ section_encrypted (const Dwg_Data *dwg, const Dwg_Section_Type id)
 static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                                    uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
+  uint32_t i = 0;
   write_literal_length (dat, decomp_data_size);
-  LOG_ERROR ("FIXME compress_R2004_section()")
-  return DWG_ERR_NOTYETSUPPORTED;
+  LOG_ERROR ("FIXME compress_R2004_section(). See LZ77 compressors");
+  while (i < decomp_data_size)
+    {
+      uint32_t len;
+      int offset = find_longest_match (decomp, decomp_data_size, i, &len);
+      if (offset)
+        {
+          // TODO: encode offset + len
+          // ..
+          i += len;
+        }
+      else
+        {
+          // encode literal byte
+          write_literal_length (dat, decomp[i]);
+          i += 1;
+        }
+    }
+  return 0;
 }
 
 /* R2004+ only */
