@@ -1284,6 +1284,74 @@ fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dic
 #undef DISABLE_NODSTYLE
 }
 
+/* r2004 compressed sections, TODO */
+
+#ifdef HAVE_COMPRESS_R2004_SECTION
+
+/* R2004 Literal Length
+ */
+static unsigned char
+write_literal_length (Bit_Chain *restrict dat, unsigned int length)
+{
+  unsigned char opcode = 0x00;
+
+  if (length <= (0x0F + 3)) // single byte, opcode 0
+    {
+      bit_write_RC (dat, length - 3);
+      return 0;
+    }
+  else if (length < 0xf0)
+    {
+      bit_write_RC (dat, length);
+      return length & 0xff;
+    }
+  else
+    {
+      unsigned int total = 0x0f;
+      while (length >= 0xf0)
+        {
+          bit_write_RC (dat, 0);
+          length -= 0xFF;
+          total += 0xFF;
+        }
+      bit_write_RC (dat, length - 3); // ??
+      return 0;
+    }
+}
+
+/* R2004 Long Compression Offset
+ */
+static void
+write_long_compression_offset (Bit_Chain *dat, unsigned int offset)
+{
+  unsigned int total = 0;
+  //BITCODE_RC byte = bit_write_RC (dat);
+  /*
+  if (byte == 0)
+    {
+      total = 0xFF;
+      while ((byte = bit_write_RC (dat)) == 0 && dat->size - dat->byte > 1)
+        total += 0xFF;
+    }
+  return total + byte;
+  */
+}
+
+/* R2004 Two Byte Offset
+ */
+static unsigned int
+write_two_byte_offset (Bit_Chain *restrict dat, unsigned int offset)
+{
+  BITCODE_RC b1, b2;
+  b1 = offset << 2;
+  b2 = offset >> 6;
+  //offset = (firstByte >> 2) | (secondByte << 6);
+  bit_write_RC (dat, b1);
+  bit_write_RC (dat, b2);
+  //*lit_length = (firstByte & 0x03);
+  return b1 & 0x03;
+}
+
 /* Compress the decomp buffer into dat of a DWG r2004+ file. Sets comp_data_size. */
 static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                                    uint32_t decomp_data_size, uint32_t *comp_data_size)
@@ -1294,15 +1362,12 @@ static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict
       dat->size = dat->byte + decomp_data_size;
       bit_chain_alloc (dat);
     }
-#ifndef HAVE_COMPRESS_R2004_SECTION
   memcpy (&dat->chain[dat->byte], decomp, decomp_data_size);
   dat->byte += decomp_data_size;
   *comp_data_size = decomp_data_size;
-#else
-  #error nyi
-#endif
   return 0;
 }
+#endif
 
 /**
  * dwg_encode(): the current generic encoder entry point.
