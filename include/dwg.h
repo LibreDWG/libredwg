@@ -6965,6 +6965,7 @@ EXPORT int dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
 
 EXPORT Dwg_Section_Type dwg_section_type (const char *restrict name);
 EXPORT Dwg_Section_Type dwg_section_wtype (const DWGCHAR *restrict wname);
+EXPORT const char *dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id);
 
 /** Free the whole DWG. all tables, sections, objects, ...
 */
@@ -6998,11 +6999,11 @@ EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT Dwg_Version_Type dwg_version_as (const char *);
 EXPORT void dwg_errstrings (int error);
+
 /* The old color.index 0-256 */
 typedef struct rgbpalette {
   unsigned char r,g,b;
 } Dwg_RGB_Palette;
-
 EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void);
 
 /** Add the empty object to the DWG.

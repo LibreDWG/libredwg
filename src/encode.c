@@ -74,6 +74,8 @@ static bool env_var_checked_p;
 
 #define ANYCODE -1
 
+#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+
 #define LOG_POS                                                           \
   LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit)\
   LOG_TRACE ("\n")
@@ -1367,7 +1369,62 @@ static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict
   *comp_data_size = decomp_data_size;
   return 0;
 }
+
+/* 1 for yes, 0 for no */
+static int
+section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
+{
+  switch (id)
+    {
+    // infohdr: 1
+    case SECTION_HEADER:
+    case SECTION_REVHISTORY:
+    case SECTION_OBJECTS:
+    case SECTION_OBJFREESPACE:
+    case SECTION_TEMPLATE:
+    case SECTION_HANDLES:
+    case SECTION_CLASSES:
+    case SECTION_AUXHEADER:
+      return 1;
+    case SECTION_SUMMARYINFO:
+    case SECTION_PREVIEW:
+    case SECTION_APPINFO:
+    case SECTION_APPINFOHISTORY:
+    case SECTION_FILEDEPLIST:
+    case SECTION_SECURITY:
+    case SECTION_VBAPROJECT:
+    case SECTION_SIGNATURE:
+    case SECTION_ACDS:
+    case SECTION_UNKNOWN:      
+    default:
+      return 0;
+    }
+}
+
 #endif
+
+/* R2004+ only */
+static unsigned int
+_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
+{
+  unsigned max_decomp_size = 0x7400;
+  if (id == SECTION_APPINFOHISTORY)
+    max_decomp_size = 0x580;
+  else if (id == SECTION_APPINFO)
+    max_decomp_size = 0x300;
+  else if (id == SECTION_PREVIEW)
+    {
+      max_decomp_size = 0x7c00; // resp. 0x1800 with r2013+, 0x4a000 with r2007-r2010
+      if (dwg->header.version >= R_2013)
+        max_decomp_size = 0x1800;
+      else if (dwg->header.version >= R_2007 && dwg->header.version <= R_2010)
+        max_decomp_size = 0x4a000;
+    }
+  else if (id == SECTION_SUMMARYINFO)
+    max_decomp_size = 0x80;
+
+  return max_decomp_size;
+}
 
 /**
  * dwg_encode(): the current generic encoder entry point.
@@ -1394,9 +1451,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Object_Map *omap;
   Bit_Chain *old_dat, *str_dat, *hdl_dat;
   int sec_id;
-  const char *section_names[] // TODO r2000 only
-      = { "AcDb:Header", "AcDb:Classes", "AcDb:Handles",
-          "2NDHEADER",   "AcDb:Template",  "AcDb:AuxHeader" };
   Dwg_Version_Type orig_from_version = dat->from_version;
   Bit_Chain sec_dat[SECTION_UNKNOWN]; // to encode each r2004 section
 
@@ -2334,34 +2388,52 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // get together all the section sizes, and set the addresses
       {
         Dwg_R2004_Header *_obj = &dwg->r2004_header;
+        unsigned total_size = 0;
+        int ssize;
+        int si = 0;
         _obj->numsections = 0;
         _obj->numgaps = 0;
         section_address = 0x100;
-        size = 0;
         // num_sections
         if (!dwg->header.section)
           dwg->header.section = calloc (28, sizeof (Dwg_Section));
-        for (sec_id = 0; sec_id < SECTION_UNKNOWN; sec_id++)
+        // first all the data pages, than a number gap of 1, and last the two system page maps,
+        // section_info and section_map
+        // the data_pages can include multiple pages of the same type.
+        for (sec_id = 0; sec_id <= SECTION_UNKNOWN; sec_id++, i++)
           {
             if (sec_dat[sec_id].byte)
               {
-                _obj->numsections++;
+                const unsigned int max_decomp_size
+                    = _max_decomp_size (dwg, (Dwg_Section_Type)sec_id);
                 if (sec_dat[sec_id].bit)
                   {
                     LOG_WARN ("Unpadded section %d", sec_id);
                     sec_dat[sec_id].byte++;
                   }
-                dwg->header.section[sec_id].number = sec_id + 1;
-                dwg->header.section[sec_id].size = sec_dat[sec_id].byte;
-                size += sec_dat[sec_id].byte;
+                ssize = (int)sec_dat[sec_id].byte;
+                do
+                  {
+                    total_size += ssize;
+                    dwg->header.section[si].size = MIN (max_decomp_size, (unsigned)ssize);
+                    // index starting at 1
+                    dwg->header.section[si].number = si + 1;
+                    ssize -= max_decomp_size; // infohdr.max_size, also 0x7c00
+                    si++;
+                  }
+                while (ssize > (int)max_decomp_size); // keep same type
               }
           }
-        // plus the section_info [27] and section_map [28] as two last sections
+        _obj->numsections = i;
+        // plus add the section_info [27] and section_map [28] as two last sections
         dwg->header.num_sections = _obj->numsections + 2;
         _obj->section_info_id = _obj->numsections + 1;
         _obj->section_map_id = _obj->numsections + 2;
         _obj->section_array_size = _obj->numsections + 2;
         _obj->last_section_id = _obj->section_map_id;
+        dwg->header.section[_obj->numsections - 1].number = _obj->section_info_id; // gap 2
+        dwg->header.section[_obj->numsections].number = _obj->section_map_id;
+        //dwg->header.section[sec_id].size = sec_dat[sec_id].byte;
         dwg->header.section_infohdr.num_desc = _obj->numsections;
 
         if (dwg->header.num_sections > 28)
@@ -2374,7 +2446,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             //info->name = strdup (dwg_section_name (i));
           }
 
-        size += 8 * ((_obj->numsections + 2) * 24); // no gaps
+        size = total_size + (8 * ((_obj->numsections + 2) * 24)); // no gaps
         dat->byte = _obj->section_map_address + section_address;
         if (dat->byte + size >= dat->size)
           {
@@ -2430,7 +2502,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 LOG_TRACE ("0x00:   %d\n", dwg->header.section[i].x00);
               }
         }
-        //TODO: infohdr, compress the sections
+        //TODO: infohdr, type, name, compress the sections
       }
       //return DWG_ERR_NOTYETSUPPORTED;
     }
@@ -2447,7 +2519,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_TRACE ("section[%u].number: %4d [RC] %s\n", j,
                  (int)dwg->header.section[j].number,
-                 j < 6 ? section_names[j] : "")
+                 j < 6 ? dwg_section_name(dwg, j) : "")
       LOG_TRACE ("section[%u].offset: %4u [RL]\n", j,
                  (unsigned)dwg->header.section[j].address)
       LOG_TRACE ("section[%u].size:   %4u [RL]\n", j,
@@ -2459,13 +2531,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           if (is_section_r13_critical (j))
             {
               LOG_ERROR ("section[%u] %s address or size overflow", j,
-                         j < 6 ? section_names[j] : "");
+                         j < 6 ? dwg_section_name(dwg, j) : "");
               return DWG_ERR_INVALIDDWG;
             }
           else
             {
               LOG_WARN ("section[%u] %s address or size overflow, skipped",
-                        j, j < 6 ? section_names[j] : "");
+                        j, j < 6 ? dwg_section_name(dwg, j) : "");
               dwg->header.section[j].address = 0;
               dwg->header.section[j].size = 0;
             }

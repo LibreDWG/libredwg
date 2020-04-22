@@ -1462,6 +1462,68 @@ dwg_section_wtype (const DWGCHAR *restrict wname)
   return dwg_section_type (name);
 }
 
+static const char * const dwg_section_r2004_names[] =
+{
+  "AcDb:Header",
+  "AcDb:AuxHeader",
+  "AcDb:Classes",
+  "AcDb:Handles",
+  "AcDb:Template",
+  "AcDb:ObjFreeSpace",
+  "AcDb:AcDbObjects",
+  "AcDb:RevHistory",
+  "AcDb:SummaryInfo",
+  "AcDb:Preview",
+  "AcDb:AppInfo",
+  "AcDb:AppInfoHistory",
+  "AcDb:FileDepList",
+  "AcDb:Security",
+  "AcDb:VBAProject",
+  "AcDb:Signature",
+  "AcDb:AcDsPrototype_1b",
+  "UNKNOWN",
+};
+static const char * const dwg_section_r13_names[] =
+{
+  "Header",
+  "Classes",
+  "Handles",
+  "2ndHeader",
+  "Template",
+  "AuxHeader",
+};
+static const char * const dwg_section_r11_names[] =
+{
+  "HEADER",
+  "BLOCK",
+  "LAYER"
+  "STYLE",
+  "LTYPE",
+  "VIEW",
+  "UCS",
+  "VPORT",
+  "APPID",
+  "DIMSTYLE",
+  "VPORT_ENTITY",
+};
+
+const char *
+dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
+{
+  if (dwg->header.version >= R_2004)
+    {
+      return (sec_id <= SECTION_UNKNOWN) ? dwg_section_r2004_names[sec_id] : NULL;
+    }
+  else if (dwg->header.version > R_11)
+    {
+      return (sec_id <= SECTION_AUXHEADER_R2000) ? dwg_section_r13_names[sec_id] : NULL;
+    }
+  else
+    {
+      return (sec_id <= SECTION_VPORT_ENTITY) ? dwg_section_r11_names[sec_id] : NULL;
+    }
+}
+
 // See acdb.h: 100th of a mm, enum of
 const int lweights[] = { 0,
                          5,
