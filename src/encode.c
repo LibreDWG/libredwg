@@ -1499,29 +1499,6 @@ static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict
   return 0;
 }
 
-/* R2004+ only */
-unsigned int
-section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
-{
-  unsigned max_decomp_size = 0x7400;
-  if (id == SECTION_APPINFOHISTORY)
-    max_decomp_size = 0x580;
-  else if (id == SECTION_APPINFO)
-    max_decomp_size = 0x300;
-  else if (id == SECTION_PREVIEW)
-    {
-      max_decomp_size = 0x7c00; // resp. 0x1800 with r2013+, 0x4a000 with r2007-r2010
-      if (dwg->header.version >= R_2013)
-        max_decomp_size = 0x1800;
-      else if (dwg->header.version >= R_2007 && dwg->header.version <= R_2010)
-        max_decomp_size = 0x4a000;
-    }
-  else if (id == SECTION_SUMMARYINFO)
-    max_decomp_size = 0x80;
-
-  return max_decomp_size;
-}
-
 /**
  * dwg_encode(): the current generic encoder entry point.
  *

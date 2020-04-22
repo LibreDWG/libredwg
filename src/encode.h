@@ -41,7 +41,6 @@ int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
  */
 Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 char *encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data, int *restrict idx);
-unsigned int section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id);
 
 // push to entities and entries handles array
 #define PUSH_HV(_obj, numfield, hvfield, ref)                                 \

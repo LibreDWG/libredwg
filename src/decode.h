@@ -64,6 +64,7 @@ void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);
 void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
 uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
                                     int32_t size);
+unsigned int section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id);
 
 /* reused with out_dxf */
 char *dwg_dim_blockname (Dwg_Data *restrict dwg,
