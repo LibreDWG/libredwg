@@ -1404,8 +1404,8 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
 #endif
 
 /* R2004+ only */
-static unsigned int
-_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
+unsigned int
+section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
 {
   unsigned max_decomp_size = 0x7400;
   if (id == SECTION_APPINFOHISTORY)
@@ -1731,7 +1731,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_INFO("\n");
     LOG_ERROR (WE_CAN "We don't encode the R2004_section_map yet");
 
-    memset (&sec_dat, 0, sizeof (Bit_Chain) * SECTION_UNKNOWN);
+    memset (&sec_dat, 0, sizeof (Bit_Chain) * (SECTION_UNKNOWN + 1));
     if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
       dwg->header.section_info = calloc (dwg->header.section_infohdr.num_desc,
                                          sizeof (Dwg_Section_Info));
@@ -2291,7 +2291,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_BL vcount, rcount1, rcount2, rcount3;
       size_t size;
       // write remaining sections
-      for (sec_id = SECTION_OBJFREESPACE; sec_id < SECTION_UNKNOWN; sec_id++)
+      for (sec_id = SECTION_OBJFREESPACE; sec_id <= SECTION_UNKNOWN; sec_id++)
         {
           switch (sec_id) {
           case SECTION_OBJECTS:
@@ -2405,7 +2405,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             if (sec_dat[sec_id].byte)
               {
                 const unsigned int max_decomp_size
-                    = _max_decomp_size (dwg, (Dwg_Section_Type)sec_id);
+                    = section_max_decomp_size (dwg, (Dwg_Section_Type)sec_id);
                 if (sec_dat[sec_id].bit)
                   {
                     LOG_WARN ("Unpadded section %d", sec_id);

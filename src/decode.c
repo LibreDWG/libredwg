@@ -61,6 +61,9 @@ static bool env_var_checked_p;
 #define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
 #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
 
+/* Other imported functions */
+unsigned int section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id);
+
 /*------------------------------------------------------------------------------
  * Private functions
  */
@@ -2121,6 +2124,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       Dwg_Section_Info *info;
       uint64_t sum_decomp = 0;
       uint64_t prev_address = 0;
+      unsigned max_decomp_size;
 
       if (ptr + 32 + 64 >= decomp_end)
         {
@@ -2157,11 +2161,12 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("read_R2004_section_info out of range");
           return DWG_ERR_INVALIDDWG;
         }
-      // max_decomp_size is the decompressed block size (max 0x7c00)
-      if (info->max_decomp_size > 0x8000)
+      // max_decomp_size is the decompressed block size
+      max_decomp_size = section_max_decomp_size (dwg, info->fixedtype);
+      if (info->max_decomp_size > max_decomp_size)
         {
-          LOG_ERROR ("Skip section %s with max decompression size 0x%x > 0x8000",
-                     info->name, info->max_decomp_size);
+          LOG_ERROR ("Skip section %s with max decompression size 0x%x > 0x%x",
+                     info->name, info->max_decomp_size, max_decomp_size);
           info->max_decomp_size = info->size = 0;
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
         }
