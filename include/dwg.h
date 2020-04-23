@@ -2561,7 +2561,8 @@ typedef struct _dwg_HATCH_ControlPoint
 typedef struct _dwg_HATCH_PathSeg
 {
   struct _dwg_HATCH_Path *parent;
-  BITCODE_RC type_status;
+  BITCODE_RC type_status; // i.e. edge_type: 1-4
+  // could be a union
   /* LINE */
   BITCODE_2RD first_endpoint;
   BITCODE_2RD second_endpoint;

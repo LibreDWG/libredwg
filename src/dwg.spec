@@ -3812,7 +3812,7 @@ DWG_ENTITY (HATCH)
 #define segs paths[rcount1].segs
           REPEAT2 (paths[rcount1].num_segs_or_paths, segs, Dwg_HATCH_PathSeg)
           REPEAT_BLOCK
-              SUB_FIELD_RC (segs[rcount2],type_status, 72);
+              SUB_FIELD_RC (segs[rcount2],type_status, 72); // i.e edge_type
               switch (FIELD_VALUE (segs[rcount2].type_status))
                 {
                     case 1: /* LINE */
