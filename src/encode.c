@@ -1288,7 +1288,7 @@ fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dic
 static int copy_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                                uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
-  if (dat->byte + decomp_data_size > dat->size)
+  if (dat->byte + decomp_data_size >= dat->size)
     {
       dat->size = dat->byte + decomp_data_size;
       bit_chain_alloc (dat);
@@ -2608,9 +2608,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 dwg->header.section_info[info_id].size = ssize;
                 dwg->header.section_info[info_id].max_decomp_size = max_decomp_size;
                 dwg->header.section_info[info_id].encrypted = section_encrypted (dwg, type);
-#ifdef HAVE_COMPRESS_R2004_SECTION
                 dwg->header.section_info[info_id].compressed = 1 + section_compressed (dwg, type);
-#else
+#ifndef HAVE_COMPRESS_R2004_SECTION
                 dwg->header.section_info[info_id].compressed = 1;
 #endif
                 do
@@ -2622,6 +2621,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                             = realloc (dwg->header.section,
                                        (si + 2) * sizeof (Dwg_Section));
                     dwg->header.section[si].size = MIN (max_decomp_size, (unsigned)ssize);
+                    dwg->header.section[si].decomp_data_size = dwg->header.section[si].size;
                     // index starting at 1
                     dwg->header.section[si].number = si + 1;
                     dwg->header.section[si].compression_type = dwg->header.section_info[info_id].compressed;
@@ -2657,7 +2657,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             dat->size = dat->byte + size;
             bit_chain_alloc (dat);
           }
-        LOG_TRACE ("=== Write sections ===\n");
+        LOG_TRACE ("\n=== Write sections in stream order ===\n");
         LOG_HANDLE ("@%lu.0\n", dat->byte);
         for (i = 0; i < ARRAY_SIZE (stream_order); i++)
           {
@@ -2666,34 +2666,43 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             info = find_section_info_type (dwg, type);
             if (info)
               {
-                LOG_TRACE ("Write %s @%lu (%lu)\n", info->name, dat->byte, sec_dat[type].size);
+                LOG_TRACE ("Write %s pages @%lu (%u/%lu)\n", info->name, dat->byte,
+                           info->num_sections, sec_dat[type].size);
                 for (unsigned k = 0; k < info->num_sections; k++)
                   {
                     Dwg_Section *sec = info->sections[k];
                     if (info->encrypted)
                       {
                         BITCODE_RC *decr = calloc (sec->size, 1);
-                        LOG_HANDLE ("Decrypt %s (%d)\n", info->name, sec->size);
-                        decrypt_R2004_header (decr, sec_dat[type].chain, sec->size);
+                        LOG_HANDLE ("Encrypt %s (%u/%d)\n", info->name, k,
+                                    sec->size);
+                        decrypt_R2004_header (decr, sec_dat[type].chain,
+                                              sec->size);
                         free (sec_dat[type].chain);
                         sec_dat[type].chain = decr;
                       }
+                    sec->address = dat->byte;
                     if (info->compressed == 2)
                       {
-                        LOG_HANDLE ("Compress %s (%d)\n", info->name, sec->size);
-                        compress_R2004_section (dat, sec_dat[type].chain, sec->size, &sec->comp_data_size);
+                        LOG_HANDLE ("Compress %s (%u/%d)\n", info->name, k,
+                                    sec->size);
+                        compress_R2004_section (dat, sec_dat[type].chain,
+                                                sec->size,
+                                                &sec->comp_data_size);
                       }
                     else
                       {
-                        LOG_HANDLE ("Copy uncompressed %s (%d)\n", info->name, sec->size);
-                        copy_R2004_section (dat, sec_dat[type].chain, sec->size, &sec->comp_data_size);
+                        LOG_HANDLE ("Copy uncompressed %s (%u/%d)\n",
+                                    info->name, k, sec->size);
+                        copy_R2004_section (dat, sec_dat[type].chain,
+                                            sec->size, &sec->comp_data_size);
                       }
                   }
                 bit_chain_free (&sec_dat[type]);
               }
           }
 
-        LOG_TRACE ("\n=== Write Section Info (Data Section Map) ===\n");
+        LOG_TRACE ("\n=== Write Section Info in map order ===\n");
         {
           Dwg_Section_InfoHdr *_obj = &dwg->header.section_infohdr;
           FIELD_RL (num_desc, 0);
@@ -2707,7 +2716,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             Dwg_Section_Info *_obj = find_section_info_type (dwg, section_map_order[i]);
             if (_obj)
               {
-                LOG_TRACE ("Section_Info %s [%d]\n", dwg_section_name (dwg, _obj->fixedtype), i);
+                LOG_TRACE ("Section_Info %s [%d]\n",
+                           dwg_section_name (dwg, _obj->fixedtype), i);
                 FIELD_RLL (size, 0);
                 FIELD_RL (num_sections, 0);
                 FIELD_RL (max_decomp_size, 0);
@@ -2720,7 +2730,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               }
           }
 
-        LOG_TRACE ("\n=== Write System Section Map (Section Page Map) ===\n");
+        LOG_TRACE ("\n=== Write System Section Map in map order ===\n");
         {
           Dwg_R2004_Header *_obj = &dwg->r2004_header;
           if (!_obj->section_type)

@@ -756,7 +756,7 @@ main (int argc, char const *argv[])
   }
 
   bit_chain_alloc (&bitchain);
-  if (bitchain.size == 82020)
+  if (bitchain.size == 2148)
     pass ();
   else
     fail ("bit_chain_alloc %ld", bitchain.size);

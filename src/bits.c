@@ -2476,9 +2476,9 @@ bit_chain_init (Bit_Chain *dat, const int size)
 
 /*
  * Allocates or adds more memory space for bit_chain
- * adds 10 4kB pages.
+ * adds a 1kB page.
  */
-#define CHAIN_BLOCK 40960
+#define CHAIN_BLOCK 1024
 void
 bit_chain_alloc (Bit_Chain *dat)
 {
