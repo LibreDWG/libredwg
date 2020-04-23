@@ -1464,49 +1464,49 @@ dwg_section_wtype (const DWGCHAR *restrict wname)
 
 static const char * const dwg_section_r2004_names[] =
 {
-  "AcDb:Header",
-  "AcDb:AuxHeader",
-  "AcDb:Classes",
-  "AcDb:Handles",
-  "AcDb:Template",
-  "AcDb:ObjFreeSpace",
-  "AcDb:AcDbObjects",
-  "AcDb:RevHistory",
-  "AcDb:SummaryInfo",
-  "AcDb:Preview",
-  "AcDb:AppInfo",
-  "AcDb:AppInfoHistory",
-  "AcDb:FileDepList",
-  "AcDb:Security",
-  "AcDb:VBAProject",
-  "AcDb:Signature",
-  "AcDb:AcDsPrototype_1b",
-  "UNKNOWN",
-  "SYSTEM_MAP",
-  "INFO",
+  "UNKNOWN",                  // 0
+  "AcDb:Header",              // 1
+  "AcDb:AuxHeader",           // 2
+  "AcDb:Classes",             // 3
+  "AcDb:Handles",             // 4
+  "AcDb:Template",            // 5
+  "AcDb:ObjFreeSpace",        // 6
+  "AcDb:AcDbObjects",         // 7
+  "AcDb:RevHistory",          // 8
+  "AcDb:SummaryInfo",         // 9
+  "AcDb:Preview",             // 10
+  "AcDb:AppInfo",             // 11
+  "AcDb:AppInfoHistory",      // 12
+  "AcDb:FileDepList",         // 13
+  "AcDb:Security",            // 14
+  "AcDb:VBAProject",          // 15
+  "AcDb:Signature",           // 16
+  "AcDb:AcDsPrototype_1b",    // 17
+  "SYSTEM_MAP",               // 18
+  "INFO"                      // 19
 };
 static const char * const dwg_section_r13_names[] =
 {
-  "Header",
-  "Classes",
-  "Handles",
-  "2ndHeader",
-  "Template",
-  "AuxHeader",
+  "Header",                   // 0
+  "Classes",                  // 1
+  "Handles",                  // 2
+  "2ndHeader",                // 3
+  "Template",                 // 4
+  "AuxHeader"                 // 5
 };
 static const char * const dwg_section_r11_names[] =
 {
-  "HEADER",
-  "BLOCK",
-  "LAYER"
-  "STYLE",
-  "LTYPE",
-  "VIEW",
-  "UCS",
-  "VPORT",
-  "APPID",
-  "DIMSTYLE",
-  "VPORT_ENTITY",
+  "HEADER",                   // 0
+  "BLOCK",                    // 1
+  "LAYER"                     // 2
+  "STYLE",                    // 3
+  "LTYPE",                    // 4
+  "VIEW",                     // 5
+  "UCS",                      // 6
+  "VPORT",                    // 7
+  "APPID",                    // 8
+  "DIMSTYLE",                 // 9
+  "VPORT_ENTITY"              // 10
 };
 
 const char *
@@ -1514,7 +1514,7 @@ dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
 {
   if (dwg->header.version >= R_2004)
     {
-      return (sec_id <= SECTION_EMPTY) ? dwg_section_r2004_names[sec_id] : NULL;
+      return (sec_id <= SECTION_INFO) ? dwg_section_r2004_names[sec_id] : NULL;
     }
   else if (dwg->header.version > R_11)
     {

@@ -6234,6 +6234,7 @@ typedef struct _dwg_chain
 
 typedef enum DWG_SECTION_TYPE /* since r2004+ */
 {
+  SECTION_EMPTY = 0,                    /* Unnamed, unknown, the very first */
   SECTION_HEADER = 1,                   /* AcDb:Header */
   SECTION_AUXHEADER = 2,                /* AcDb:AuxHeader */
   SECTION_CLASSES = 3,                  /* AcDb:Classes */
@@ -6251,7 +6252,6 @@ typedef enum DWG_SECTION_TYPE /* since r2004+ */
   SECTION_VBAPROJECT,                   /* AcDb:VBAProject */
   SECTION_SIGNATURE,                    /* AcDb:Signature */
   SECTION_ACDS,                         /* AcDb:AcDsPrototype_1b = 12 (ACIS datastorage) */
-  SECTION_EMPTY,
   SECTION_SYSTEM_MAP,
   SECTION_INFO                          /* also called Data Section, or Section Page Map (ODA) */
 } Dwg_Section_Type;
