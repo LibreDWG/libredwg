@@ -6603,8 +6603,9 @@ typedef struct _dwg_struct
     BITCODE_RL   rl_1c_address;        /* R2004+ mostly 0 */
     BITCODE_RL   summaryinfo_address;  /* R2004+ */
     BITCODE_RL   vbaproj_address;      /* R2004+ */
-    BITCODE_RL   rl_28_80;             /* R2004+ */
-    BITCODE_RL   num_sections;
+    BITCODE_RL   r2004_header_address; /* R2004+ */
+
+    BITCODE_RL   num_sections; // TODO: should not be here
     Dwg_Section* section;
     Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
     Dwg_Section_Info* section_info;

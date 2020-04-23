@@ -977,7 +977,7 @@ dxf_fixup_header (Dwg_Data *dwg)
   // rl_1c_address: 0 [RL 0]
   // summary_info_address: 3200 [RL 0]
   // vba_proj_address: 0 [RL 0]
-  // rl_28_80: 128 [RL 0]
+  // r2004_header_address: 128 [RL 0]
 
   // R_2000:
   // is_maint: 0xf [RC 0]

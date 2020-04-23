@@ -51,7 +51,7 @@
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE (app_dwg_version) = FIELD_VALUE (dwg_version);
       FIELD_VALUE (app_maint_version) = FIELD_VALUE (maint_version);
-      dwg->header.rl_28_80 = 0x80;
+      FIELD_VALUE (r2004_header_address) = 0x80;
     }
     FIELD_RC (unknown_0, 0);
     FIELD_RC (app_dwg_version, 0);
@@ -60,13 +60,13 @@
     FIELD_RL (rl_1c_address, 0); /* mostly 0 */
     FIELD_RL (summaryinfo_address, 0);
     FIELD_RL (vbaproj_address, 0);
-    FIELD_RL (rl_28_80, 0); /* mostly 128/0x80 */
+    FIELD_RL (r2004_header_address, 0); /* mostly 128/0x80 */
     ENCODER {
       for (i = 0; i < 54; i++)
         bit_write_RC (dat, 0);
     }
     else {
-      dat->byte += 54;
+      dat->byte += 54; // empty slack
     }
-    /* now at 0x80 follows the encrypted header data */
+    /* at 0x80 follows the encrypted r2004_header */
   }

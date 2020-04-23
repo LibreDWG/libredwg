@@ -892,7 +892,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (rl_1c_address, 0) /* mostly 0 */
       FIELD_RL (summaryinfo_address, 0)
       FIELD_RL (vbaproj_address, 0)
-      FIELD_RL (rl_28_80, 0) /* mostly 128/0x80 */
+      FIELD_RL (r2004_header_address, 0) /* mostly 128/0x80 */
       // clang-format on
 
       else if (strEQc (key, "HEADER"))
