@@ -2681,7 +2681,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             info = find_section_info_type (dwg, type);
             if (info)
               {
-                LOG_TRACE ("Write %s pages @%lu (%u/%lu)\n", info->name, dat->byte,
+                LOG_TRACE ("Write %s pages @%lu (%u/%lu)\n",
+                           dwg_section_name (dwg, type), dat->byte,
                            info->num_sections, sec_dat[type].size);
                 for (unsigned k = 0; k < info->num_sections; k++)
                   {
@@ -2729,11 +2730,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
         for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
           {
-            Dwg_Section_Info *_obj = find_section_info_type (dwg, section_map_order[i]);
+            Dwg_Section_Info *_obj;
+            type = section_map_order[i];
+            _obj = find_section_info_type (dwg, type);
             if (_obj)
               {
+                assert (type == _obj->fixedtype);
                 LOG_TRACE ("Section_Info %s [%d]\n",
-                           dwg_section_name (dwg, _obj->fixedtype), i);
+                           dwg_section_name (dwg, type), i);
                 FIELD_RLL (size, 0);
                 FIELD_RL (num_sections, 0);
                 FIELD_RL (max_decomp_size, 0);
@@ -2783,9 +2787,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
         for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
           {
-            Dwg_Section_Info *info = find_section_info_type (dwg, section_map_order[i]);
+            Dwg_Section_Info *info;
+            type = section_map_order[i];
+            info = find_section_info_type (dwg, type);
             if (!info)
               break;
+            assert (type == info->fixedtype);
             LOG_TRACE ("Sections %s [%d]\n", dwg_section_name (dwg, info->fixedtype), i);
             for (j = 0; j < info->num_sections; j++)
               {
