@@ -1827,7 +1827,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     if (!dwg->header.section_info)
       {
-        dwg->header.num_sections = SECTION_SYSTEM_MAP + 1;
+        dwg->header.section_infohdr.num_desc = SECTION_SYSTEM_MAP + 1;
         dwg->header.section_info = calloc (SECTION_SYSTEM_MAP + 1, sizeof (Dwg_Section_Info));
       }
 
@@ -2613,31 +2613,43 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #ifndef HAVE_COMPRESS_R2004_SECTION
                 info->compressed = 1;
 #endif
-                do
+                // pre-calc num_sections for both
+                if ((unsigned)ssize <= max_decomp_size)
+                  info->num_sections = 1;
+                else
                   {
-                    int ssi = info->num_sections;
-                    Dwg_Section *sec;
-                    total_size += ssize;
-                    if (si >= (int)(dwg->header.num_sections - 2))
-                        dwg->header.section
-                            = realloc (dwg->header.section,
-                                       (si + 2) * sizeof (Dwg_Section));
-                    sec = &dwg->header.section[si];
-                    sec->number = si + 1; // index starting at 1
-                    sec->size = MIN (max_decomp_size, (unsigned)ssize);
-                    sec->decomp_data_size = sec->size;
-                    sec->type = type;
-                    sec->compression_type = info->compressed;
-                    info->sections = realloc (info->sections,
-                                              (ssi + 1) * sizeof (Dwg_Section));
-                    info->sections[ssi] = sec;
-                    LOG_TRACE ("section_info %s[%d].sections[%d] = %d size=%d\n",
-                               info->name, info_id, ssi, si + 1, (int)sec->size);
-                    info->num_sections++;
-                    ssize -= max_decomp_size;
-                    si++;
+                    info->num_sections = (unsigned)ssize / max_decomp_size;
+                    if ((unsigned)ssize % max_decomp_size)
+                      info->num_sections++;
                   }
-                while (ssize > (int)max_decomp_size); // keep same type
+                info->sections = calloc (info->num_sections, sizeof (Dwg_Section_Info));
+                // enough sections?
+                if (si + info->num_sections >= dwg->header.num_sections)
+                  dwg->header.section
+                    = realloc (dwg->header.section,
+                               (si + info->num_sections) * sizeof (Dwg_Section));
+                {
+                  int ssi = 0;
+                  do
+                    {
+                      Dwg_Section *sec = &dwg->header.section[si];
+                      total_size += ssize;
+                      sec->number = si + 1; // index starting at 1
+                      sec->size = MIN (max_decomp_size, (unsigned)ssize);
+                      sec->decomp_data_size = sec->size;
+                      sec->type = type;
+                      sec->compression_type = info->compressed;
+                      info->sections[ssi] = sec;
+                      LOG_TRACE ("section_info %s[%d].sections[%d]: number=%d "
+                                 "size=%d\n",
+                                 dwg_section_name (dwg, type), info_id, ssi,
+                                 sec->number, (int)sec->size);
+                      ssize -= max_decomp_size;
+                      ssi++; // info->sections index
+                      si++;  // section index
+                    }
+                  while (ssize > (int)max_decomp_size); // keep same type
+                }
                 info_id++;
               }
           }
@@ -2740,14 +2752,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           if (!_obj->section_type)
             {
               _obj->section_type = 0x41630e3b;
-              _obj->decomp_data_size = 208; // FIXME
-              _obj->comp_data_size = 190;
+              _obj->decomp_data_size = 10 + (r2004_header.numsections * 4) +
+                (dwg->r2004_header.numgaps * 8); // 208
               _obj->compression_type = 2;
             }
           /* Trying without compression first */
 #ifndef HAVE_COMPRESS_R2004_SECTION
           _obj->comp_data_size = _obj->decomp_data_size;
-          _obj->compression_type = 0;
+          _obj->compression_type = 1;
+#else
+          // FIXME: write into sec_dat[type] first, compress,
+          // write r2004_header.comp_data_size,
+          compress_R2004_section (tmp_dat, sec_dat[type].chain,
+                                  _obj->size,
+                                  &_obj->comp_data_size);
 #endif
           if (_obj->section_type != 0x41630e3b)
             {
