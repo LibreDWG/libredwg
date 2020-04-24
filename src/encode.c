@@ -1816,7 +1816,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_INFO("\n");
     LOG_ERROR (WE_CAN "Writing R2004 sections not yet finished");
 
-    memset (&sec_dat, 0, sizeof (Bit_Chain) * (SECTION_SYSTEM_MAP + 1));
+    memset (&sec_dat, 0, (SECTION_SYSTEM_MAP + 1) * sizeof (Bit_Chain));
     if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
       dwg->header.section_info = calloc (dwg->header.section_infohdr.num_desc,
                                          sizeof (Dwg_Section_Info));
@@ -2578,6 +2578,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         // first all the data pages, than a number gap of 1, and last the two system page maps,
         // info and system_map
         // the data_pages (system_map sections) can include multiple pages of the same type.
+        LOG_TRACE ("\n=== Section map and info page sizes ===\n");
         for (si = 0, info_id = 0, type = 0; type < SECTION_SYSTEM_MAP; type++, i++)
           {
             if (sec_dat[type].byte)
@@ -2597,8 +2598,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   {
                     dwg->header.section_infohdr.num_desc = info_id + 1;
                     dwg->header.section_info
-                      = realloc (dwg->header.section_info,
-                                 (info_id + 1) * sizeof (Dwg_Section));
+                        = realloc (dwg->header.section_info,
+                                   (info_id + 1) * sizeof (Dwg_Section));
                   }
                 info = &dwg->header.section_info[info_id];
                 info->fixedtype = type;
@@ -2622,12 +2623,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     if ((unsigned)ssize % max_decomp_size)
                       info->num_sections++;
                   }
-                info->sections = calloc (info->num_sections, sizeof (Dwg_Section_Info));
+                info->sections
+                    = calloc (info->num_sections, sizeof (Dwg_Section_Info));
                 // enough sections?
                 if (si + info->num_sections >= dwg->header.num_sections)
-                  dwg->header.section
-                    = realloc (dwg->header.section,
-                               (si + info->num_sections) * sizeof (Dwg_Section));
+                  dwg->header.section = realloc (dwg->header.section,
+                                                 (si + info->num_sections)
+                                                     * sizeof (Dwg_Section));
                 {
                   int ssi = 0;
                   do
@@ -2652,27 +2654,116 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 }
                 info_id++;
               }
+            else
+              LOG_TRACE ("section_info %s is empty, skipped\n",
+                         dwg_section_name (dwg, type));
           }
         dwg->r2004_header.numsections = si;
-        // plus add the section_info [27] and section_map [28] as two last sections
+        // plus add the section_info [27] and section_map [28] as two last
+        // sections
         dwg->header.num_sections = dwg->r2004_header.numsections + 2;
         dwg->r2004_header.section_info_id = dwg->r2004_header.numsections + 1;
         dwg->r2004_header.section_map_id = dwg->r2004_header.numsections + 2;
-        dwg->r2004_header.section_array_size = dwg->r2004_header.numsections + 2;
+        dwg->r2004_header.section_array_size
+            = dwg->r2004_header.numsections + 2;
         dwg->r2004_header.last_section_id = dwg->r2004_header.section_map_id;
-        dwg->header.section[dwg->r2004_header.numsections - 1].number = dwg->r2004_header.section_info_id; // gap 2
-        dwg->header.section[dwg->r2004_header.numsections].number = dwg->r2004_header.section_map_id;
-        //dwg->header.section[type].size = sec_dat[type].byte;
+        dwg->header.section[dwg->r2004_header.numsections - 1].number
+            = dwg->r2004_header.section_info_id; // gap 2
+        dwg->header.section[dwg->r2004_header.numsections].number
+            = dwg->r2004_header.section_map_id;
+        // dwg->header.section[type].size = sec_dat[type].byte;
 
-        // now write the sections in the stream order
-        size = total_size + (8 * ((dwg->r2004_header.numsections + 2) * 24)); // no gaps
+        LOG_TRACE ("\n=== Section Info %d in map order ===\n", dwg->r2004_header.section_info_id);
+        // write into sec_dat[type] first, then compress
+        sec_id = SECTION_INFO;
+        old_dat = dat;
+        sec_dat[sec_id].size = dwg->header.section_infohdr.num_desc * sizeof (Dwg_Section_Info);
+        bit_chain_alloc (&sec_dat[sec_id]);
+        str_dat = hdl_dat = dat = &sec_dat[sec_id];
+        bit_chain_set_version (dat, old_dat);
+
+        {
+          Dwg_Section_InfoHdr *_obj = &dwg->header.section_infohdr;
+          LOG_HANDLE ("InfoHdr @%lu.0\n", dat->byte);
+          FIELD_RL (num_desc, 0);
+          FIELD_RL (compressed, 0);
+          FIELD_RL (max_size, 0);
+          FIELD_RL (encrypted, 0);
+          FIELD_RL (num_desc2, 0);
+        }
+        for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
+          {
+            Dwg_Section_Info *_obj;
+            type = section_map_order[i];
+            _obj = find_section_info_type (dwg, type);
+            if (_obj)
+              {
+                assert (type == _obj->fixedtype);
+                LOG_TRACE ("\nSection_Info %s [%d]\n",
+                           dwg_section_name (dwg, type), i);
+                FIELD_RLL (size, 0);
+                FIELD_RL (num_sections, 0);
+                FIELD_RL (max_decomp_size, 0);
+                FIELD_RL (unknown, 0);
+                FIELD_RL (compressed, 0);
+                FIELD_RL (type, 0);
+                FIELD_RL (encrypted, 0);
+                bit_write_TF (dat, (unsigned char *)_obj->name, 64);
+                LOG_TRACE ("name: %s\n", _obj->name);
+              }
+          }
+
+        LOG_TRACE ("\n=== Section System Map %d in map order ===\n",
+                   dwg->r2004_header.section_map_id);
+        {
+          sec_id = SECTION_SYSTEM_MAP;
+          old_dat = dat;
+          sec_dat[sec_id].size = dwg->header.num_sections * sizeof (Dwg_Section);
+          bit_chain_alloc (&sec_dat[sec_id]);
+          str_dat = hdl_dat = dat = &sec_dat[sec_id];
+          bit_chain_set_version (dat, old_dat);
+
+          for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
+            {
+              Dwg_Section_Info *info;
+              type = section_map_order[i];
+              info = find_section_info_type (dwg, type);
+              if (!info)
+                break;
+              assert (type == info->fixedtype);
+              LOG_TRACE ("Sections %s [%d]\n",
+                         dwg_section_name (dwg, info->fixedtype), i);
+              for (j = 0; j < info->num_sections; j++)
+                {
+                  Dwg_Section *_obj = info->sections[j];
+                  assert (info->fixedtype == _obj->type);
+                  FIELD_RL (number, 0);
+                  FIELD_RL (size, 0);
+                  if (_obj->number < 0) // gap
+                    {
+                      FIELD_RL (parent, 0);
+                      FIELD_RL (left, 0);
+                      FIELD_RL (right, 0);
+                      FIELD_RL (x00, 0);
+                    }
+                }
+            }
+          dwg->r2004_header.decomp_data_size = dat->byte; // system_map_size
+          LOG_TRACE ("-size: %lu\n", dat->byte);
+        }
+
+        dat = old_dat;
+
+        // now write all the sections in the stream order
+        LOG_TRACE ("\n=== Write sections in stream order ===\n");
+        size = total_size
+               + (8 * ((dwg->r2004_header.numsections + 2) * 24)); // no gaps
         dat->byte = dwg->r2004_header.section_map_address + section_address;
         if (dat->byte + size >= dat->size)
           {
             dat->size = dat->byte + size;
             bit_chain_alloc (dat);
           }
-        LOG_TRACE ("\n=== Write sections in stream order ===\n");
         LOG_HANDLE ("@%lu.0\n", dat->byte);
         for (i = 0; i < ARRAY_SIZE (stream_order); i++)
           {
@@ -2719,98 +2810,39 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               }
           }
 
-        LOG_TRACE ("\n=== Write Section Info in map order ===\n");
-        {
-          Dwg_Section_InfoHdr *_obj = &dwg->header.section_infohdr;
-          FIELD_RL (num_desc, 0);
-          FIELD_RL (compressed, 0);
-          FIELD_RL (max_size, 0);
-          FIELD_RL (encrypted, 0);
-          FIELD_RL (num_desc2, 0);
-        }
-        for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
-          {
-            Dwg_Section_Info *_obj;
-            type = section_map_order[i];
-            _obj = find_section_info_type (dwg, type);
-            if (_obj)
-              {
-                assert (type == _obj->fixedtype);
-                LOG_TRACE ("Section_Info %s [%d]\n",
-                           dwg_section_name (dwg, type), i);
-                FIELD_RLL (size, 0);
-                FIELD_RL (num_sections, 0);
-                FIELD_RL (max_decomp_size, 0);
-                FIELD_RL (unknown, 0);
-                FIELD_RL (compressed, 0);
-                FIELD_RL (type, 0);
-                FIELD_RL (encrypted, 0);
-                bit_write_TF (dat, (unsigned char*)_obj->name, 64);
-                LOG_TRACE ("name: %s\n", _obj->name);
-              }
-          }
-
-        LOG_TRACE ("\n=== Write System Section Map in map order ===\n");
         {
           Dwg_R2004_Header *_obj = &dwg->r2004_header;
+          LOG_TRACE ("Section R2004_Header\n");
           if (!_obj->section_type)
             {
               _obj->section_type = 0x41630e3b;
-              _obj->decomp_data_size = 10 + (r2004_header.numsections * 4) +
-                (dwg->r2004_header.numgaps * 8); // 208
+              _obj->decomp_data_size
+                = 10 + (dwg->r2004_header.numsections * 4)
+                + (dwg->r2004_header.numgaps * 8); // 208
               _obj->compression_type = 2;
             }
           /* Trying without compression first */
 #ifndef HAVE_COMPRESS_R2004_SECTION
           _obj->comp_data_size = _obj->decomp_data_size;
           _obj->compression_type = 1;
-#else
-          // FIXME: write into sec_dat[type] first, compress,
-          // write r2004_header.comp_data_size,
-          compress_R2004_section (tmp_dat, sec_dat[type].chain,
-                                  _obj->size,
-                                  &_obj->comp_data_size);
 #endif
           if (_obj->section_type != 0x41630e3b)
             {
-              LOG_ERROR ("Invalid System section_type 0x%08x != 0x41630e3b", _obj->section_type);
+              LOG_ERROR ("Invalid System section_type 0x%08x != 0x41630e3b",
+                         _obj->section_type);
               return DWG_ERR_SECTIONNOTFOUND;
             }
           FIELD_RLx (section_type, 0);
           FIELD_RL (decomp_data_size, 0);
-          FIELD_RL (comp_data_size, 0);
+          FIELD_RL (comp_data_size, 0); // may need to be patched
           FIELD_RL (compression_type, 0);
           _obj->checksum = dwg_section_page_checksum (0x0a751074, dat, 16);
           FIELD_RLx (checksum, 0);
         }
         LOG_TRACE ("\n");
-
-        for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
-          {
-            Dwg_Section_Info *info;
-            type = section_map_order[i];
-            info = find_section_info_type (dwg, type);
-            if (!info)
-              break;
-            assert (type == info->fixedtype);
-            LOG_TRACE ("Sections %s [%d]\n", dwg_section_name (dwg, info->fixedtype), i);
-            for (j = 0; j < info->num_sections; j++)
-              {
-                Dwg_Section *_obj = info->sections[j];
-                assert (info->fixedtype == _obj->type);
-                FIELD_RL (number, 0);
-                FIELD_RL (size, 0);
-                if (_obj->number < 0) //gap
-                  {
-                    FIELD_RL (parent, 0);
-                    FIELD_RL (left, 0);
-                    FIELD_RL (right, 0);
-                    FIELD_RL (x00, 0);
-                  }
-              }
-          }
       }
-    }
+    } // R_2004
+
   assert (!dat->bit);
   dat->size = dat->byte;
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
@@ -2825,9 +2857,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_TRACE ("section[%u].number: %4d [RC] %s\n", j,
                  (int)dwg->header.section[j].number,
-                 j < 6 ? dwg_section_name(dwg, j) : "")
+                 j < 6 ? dwg_section_name (dwg, j) : "");
       LOG_TRACE ("section[%u].offset: %4u [RL]\n", j,
-                 (unsigned)dwg->header.section[j].address)
+                 (unsigned)dwg->header.section[j].address);
       LOG_TRACE ("section[%u].size:   %4u [RL]\n", j,
                  (int)dwg->header.section[j].size);
       if ((unsigned long)dwg->header.section[j].address
@@ -2837,13 +2869,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           if (is_section_r13_critical (j))
             {
               LOG_ERROR ("section[%u] %s address or size overflow", j,
-                         j < 6 ? dwg_section_name(dwg, j) : "");
+                         j < 6 ? dwg_section_name (dwg, j) : "");
               return DWG_ERR_INVALIDDWG;
             }
           else
             {
-              LOG_WARN ("section[%u] %s address or size overflow, skipped",
-                        j, j < 6 ? dwg_section_name(dwg, j) : "");
+              LOG_WARN ("section[%u] %s address or size overflow, skipped", j,
+                        j < 6 ? dwg_section_name (dwg, j) : "");
               dwg->header.section[j].address = 0;
               dwg->header.section[j].size = 0;
             }
@@ -2859,6 +2891,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dat->byte -= 2;
   ckr = bit_read_CRC (dat);
   dat->byte -= 2;
+  //FIXME: r13-2000 only
   switch (dwg->header.num_sections)
     {
     case 3:
@@ -2878,13 +2911,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
   bit_write_RS (dat, ckr);
   LOG_TRACE ("crc: %04X (from 0)\n", ckr);
-
   return 0;
 }
 AFL_GCC_POP
 
-static int
-encode_preR13 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
+static int encode_preR13 (Dwg_Data * restrict dwg,
+                          Bit_Chain * restrict dat)
 {
   return DWG_ERR_NOTYETSUPPORTED;
 }
