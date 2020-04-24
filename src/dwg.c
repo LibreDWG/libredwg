@@ -1370,7 +1370,7 @@ dwg_section_type (const char* restrict name)
 {
   if (name == NULL)
     {
-      return SECTION_EMPTY;
+      return SECTION_UNKNOWN; // but could also be INFO or SYSTEM_MAP
     }
   else if (strEQc (name, "AcDb:Header"))
     {
@@ -1440,7 +1440,7 @@ dwg_section_type (const char* restrict name)
     { // AC1021
       return SECTION_APPINFOHISTORY;
     }
-  return SECTION_EMPTY;
+  return SECTION_UNKNOWN;
 }
 
 EXPORT Dwg_Section_Type
@@ -1452,7 +1452,7 @@ dwg_section_wtype (const DWGCHAR *restrict wname)
   int i = 0;
 
   if (wname == NULL)
-    return SECTION_EMPTY;
+    return SECTION_UNKNOWN; // but could also be INFO or SYSTEM_MAP
   wp = (DWGCHAR *)wname;
   while ((c = *wp++))
     {
@@ -1482,8 +1482,8 @@ static const char * const dwg_section_r2004_names[] =
   "AcDb:VBAProject",          // 15
   "AcDb:Signature",           // 16
   "AcDb:AcDsPrototype_1b",    // 17
-  "SYSTEM_MAP",               // 18
-  "INFO"                      // 19
+  "INFO",                     // 18
+  "SYSTEM_MAP",               // 19
 };
 static const char * const dwg_section_r13_names[] =
 {
@@ -1514,7 +1514,7 @@ dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
 {
   if (dwg->header.version >= R_2004)
     {
-      return (sec_id <= SECTION_INFO) ? dwg_section_r2004_names[sec_id] : NULL;
+      return (sec_id <= SECTION_SYSTEM_MAP) ? dwg_section_r2004_names[sec_id] : NULL;
     }
   else if (dwg->header.version > R_11)
     {
