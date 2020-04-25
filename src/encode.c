@@ -1372,12 +1372,11 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
 /* r2004 compressed sections, LZ77 TODO */
 
 /* R2004 Literal Length
+ * Returns the opcode.
  */
 static unsigned char
 write_literal_length (Bit_Chain *restrict dat, unsigned int length)
 {
-  unsigned char opcode = 0x00;
-
   if (length <= (0x0F + 3)) // single byte, opcode 0
     {
       bit_write_RC (dat, length - 3);
@@ -1409,17 +1408,12 @@ write_literal_length (Bit_Chain *restrict dat, unsigned int length)
 static void
 write_long_compression_offset (Bit_Chain *dat, unsigned int offset)
 {
-  unsigned int total = 0;
-  //BITCODE_RC byte = bit_write_RC (dat);
-  /*
-  if (byte == 0)
+  while (offset > 0xff)
     {
-      total = 0xFF;
-      while ((byte = bit_write_RC (dat)) == 0 && dat->size - dat->byte > 1)
-        total += 0xFF;
+      bit_write_RC (dat, 0);
+      offset -= 0xff;
     }
-  return total + byte;
-  */
+  bit_write_RC (dat, (unsigned char)offset);
 }
 
 /* R2004 Two Byte Offset
@@ -1481,6 +1475,7 @@ static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict
                                    uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
   uint32_t i = 0;
+  unsigned char opcode;
   write_literal_length (dat, decomp_data_size);
   LOG_ERROR ("FIXME compress_R2004_section(). See LZ77 compressors");
   while (i < decomp_data_size)
@@ -1496,7 +1491,7 @@ static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict
       else
         {
           // encode literal byte
-          write_literal_length (dat, decomp[i]);
+          opcode = write_literal_length (dat, decomp[i]);
           i += 1;
         }
     }
