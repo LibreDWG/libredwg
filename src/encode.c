@@ -1836,18 +1836,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* r2004 file header (compressed + encrypted) */
   SINCE (R_2004)
   {
-    Dwg_Object *obj = NULL;
-    Bit_Chain *orig_dat = dat;
-    Bit_Chain file_dat = { 0 };
-    Dwg_R2004_Header *_obj = &dwg->r2004_header;
-    int size = sizeof (Dwg_R2004_Header);
-    char encrypted_data[size];
-    /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
-    const unsigned char enc_file_ID_string[]
-        = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A',
-            '\xB5', '\xEF', '\x18', '\xDD', '\x0B', '\xF1' };
-    uint32_t checksum;
-
     LOG_INFO ("\n");
     LOG_ERROR (WE_CAN "Writing R2004 sections not yet finished");
 
@@ -1865,47 +1853,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         dwg->header.section_infohdr.num_desc = SECTION_SYSTEM_MAP + 1;
         dwg->header.section_info
             = calloc (SECTION_SYSTEM_MAP + 1, sizeof (Dwg_Section_Info));
-      }
-
-    LOG_TRACE ("\n#### r2004 File Header ####\n");
-    if (dat->byte + 0x80 >= dat->size - 1)
-      {
-        dat->size = dat->byte + 0x80;
-        bit_chain_alloc (dat);
-      }
-    bit_chain_alloc (&file_dat);
-    file_dat.version = dat->version;
-    dat = &file_dat;
-
-    checksum = _obj->crc32;
-    LOG_HANDLE ("old crc32: 0x%x\n", _obj->crc32);
-    _obj->crc32 = 0;
-    // recalc the CRC32, without the padding, but the crc32 as 0
-    _obj->crc32
-        = bit_calc_CRC32 (0, (unsigned char *)&dwg->r2004_header, 0x6c);
-    LOG_HANDLE ("calc crc32: 0x%x\n", _obj->crc32);
-
-// first write plain
-// clang-format off
-    #include "r2004_file_header.spec"
-    // clang-format on
-
-    // then go back and encrypt it
-    dat = orig_dat;
-    bit_set_position (&file_dat, 0);
-    decrypt_R2004_header (&dat->chain[0x80], file_dat.chain,
-                          sizeof (Dwg_R2004_Header));
-    bit_chain_free (&file_dat);
-    LOG_HANDLE ("encrypted R2004_Header:\n");
-    LOG_TF (HANDLE, &dat->chain[0x80], (int)sizeof (Dwg_R2004_Header));
-    dat->byte += sizeof (Dwg_R2004_Header);
-    LOG_HANDLE ("@%lu.0\n", dat->byte);
-
-    if (memcmp (&dat->chain[0x80], enc_file_ID_string,
-                sizeof (enc_file_ID_string)))
-      {
-        LOG_ERROR ("r2004_file_header encryption error");
-        return error | DWG_ERR_INVALIDDWG;
       }
   }
 
@@ -2880,8 +2827,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     {
                       dwg->r2004_header.section_map_address = dat->byte - 0x100;
                       dwg->r2004_header.last_section_address = dat->byte + sec->size - 0x100;
+                      dwg->r2004_header.second_header_address = 0; // TODO
                     }
-                  //TODO second_header_address
                   sec->address = dat->byte;
 
                   if (info->encrypted)
@@ -2912,40 +2859,48 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               bit_chain_free (&sec_dat[type]);
             }
         }
-
-      {
-        Dwg_R2004_Header *_obj = &dwg->r2004_header;
-        unsigned long oldpos = dat->byte;
-        LOG_TRACE ("\nSection R2004_Header @0x100\n");
-        dat->byte = 0x100;
-        if (!_obj->section_type)
-          {
-            _obj->section_type = 0x41630e3b;
-            _obj->decomp_data_size = 10 + (dwg->r2004_header.numsections * 4)
-                                     + (dwg->r2004_header.numgaps * 8); // 208
-            _obj->compression_type = 2;
-          }
-          /* Trying without compression first */
-#ifndef HAVE_COMPRESS_R2004_SECTION
-        _obj->comp_data_size = _obj->decomp_data_size;
-        _obj->compression_type = 1;
-#endif
-        if (_obj->section_type != 0x41630e3b)
-          {
-            LOG_ERROR ("Invalid System section_type 0x%08x != 0x41630e3b",
-                       _obj->section_type);
-            return DWG_ERR_SECTIONNOTFOUND;
-          }
-        FIELD_RLx (section_type, 0);
-        FIELD_RL (decomp_data_size, 0);
-        FIELD_RL (comp_data_size, 0); // may need to be patched
-        FIELD_RL (compression_type, 0);
-        _obj->checksum = dwg_section_page_checksum (0x0a751074, dat, 16);
-        FIELD_RLx (checksum, 0);
-
-        dat->byte = oldpos;
-      }
     }
+
+    {
+      Dwg_R2004_Header *_obj = &dwg->r2004_header;
+      Bit_Chain file_dat = { NULL, sizeof (Dwg_R2004_Header), 0 };
+      Bit_Chain *orig_dat = dat;
+      /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
+      const unsigned char enc_file_ID_string[]
+          = { '\x68', '\x40', '\xF8', '\xF7', '\x92', '\x2A',
+              '\xB5', '\xEF', '\x18', '\xDD', '\x0B', '\xF1' };
+      uint32_t checksum;
+
+      file_dat.chain = calloc (1, sizeof (Dwg_R2004_Header));
+      dat = &file_dat;
+      LOG_TRACE ("\nSection R2004_Header @0x100\n");
+
+      checksum = _obj->crc32;
+      LOG_HANDLE ("old crc32: 0x%x\n", _obj->crc32);
+      _obj->crc32 = 0;
+      // recalc the CRC32, without the padding, but the crc32 as 0
+      _obj->crc32
+          = bit_calc_CRC32 (0, (unsigned char *)&dwg->r2004_header, 0x6c);
+      LOG_HANDLE ("calc crc32: 0x%x\n", _obj->crc32);
+
+      // clang-format off
+      #include "r2004_file_header.spec"
+      // clang-format on
+
+      // go back and encrypt it
+      dat = orig_dat;
+      decrypt_R2004_header (&dat->chain[0x80], file_dat.chain,
+                            sizeof (Dwg_R2004_Header));
+      bit_chain_free (&file_dat);
+      LOG_HANDLE ("encrypted R2004_Header:\n");
+      LOG_TF (HANDLE, &dat->chain[0x80], (int)sizeof (Dwg_R2004_Header));
+      if (memcmp (&dat->chain[0x80], enc_file_ID_string,
+                  sizeof (enc_file_ID_string)))
+        {
+          LOG_ERROR ("r2004_file_header encryption error");
+          return error | DWG_ERR_INVALIDDWG;
+        }
+    } // R2004_Header
   } // R_2004
 
   assert (!dat->bit);
@@ -3021,14 +2976,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
 
   return 0;
-}
-AFL_GCC_POP
+  }
+  AFL_GCC_POP
 
-static int encode_preR13 (Dwg_Data * restrict dwg,
-                          Bit_Chain * restrict dat)
-{
-  return DWG_ERR_NOTYETSUPPORTED;
-}
+  static int encode_preR13 (Dwg_Data * restrict dwg, Bit_Chain * restrict dat)
+  {
+    return DWG_ERR_NOTYETSUPPORTED;
+  }
 
 #include "dwg.spec"
 
