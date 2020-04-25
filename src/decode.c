@@ -2379,6 +2379,22 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       // XXX: This Teigha bug is already fixed up before
       if (type == SECTION_TEMPLATE && is_teigha && info->size >= 4 && info->unknown == 1)
         info->num_sections = 1; // bug in Teigha with Template, with num_sections=0
+      /*
+      else if (type == SECTION_UNKNOWN)
+        {
+          Dwg_Section *sec = calloc (1, sizeof (Dwg_Section));
+          info->num_sections = 1; // hidden. enable it
+          info->size = 128;
+          sec->type = SECTION_UNKNOWN;
+          sec->compression_type = info->compressed;
+          sec->address = 128;
+          sec->size = 128;
+          if (info->sections) // [0] is NULL anyway
+            free (info->sections);
+          info->sections = calloc (1, sizeof (Dwg_Section*));
+          info->sections[0] = sec;
+        }
+      */
       else
         return 0;
     }
@@ -3443,7 +3459,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     decrypted_header_dat.chain = decrypted_data;
     decrypted_header_dat.byte = decrypted_header_dat.bit = 0;
 
-    LOG_HANDLE ("\nencrypted R2004_Header (@%u.0-%lu.0, %lu):\n", 0x80, size + 0x80, size);
+    LOG_HANDLE ("encrypted R2004_Header (@%u.0-%lu.0, %lu):\n", 0x80, size + 0x80, size);
     LOG_TF (HANDLE, &file_dat->chain[0x80], (int)size);
     decrypt_R2004_header (decrypted_data, &file_dat->chain[0x80], size);
 
@@ -3468,12 +3484,6 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     if (calc_crc32 != crc32)
       LOG_INFO ("r2004_file_header CRC32 mismatch 0x%08x != 0x%08x (TODO)\n",
                 calc_crc32, crc32)
-
-    // 120, 136. raw
-    LOG_HANDLE ("\nempty R2004 slack (@%lu.0-%u.0, %d):\n", dat->byte, 0x80, 8)
-    LOG_TF (HANDLE, &file_dat->chain[dat->byte], (int)(0x100 - dat->byte))
-    LOG_HANDLE ("\nUnknown R2004 section (@%d.0-%u.0, %d):\n", 0x80, 0x100, 128)
-    LOG_TF (HANDLE, &file_dat->chain[128], 128)
   }
 
   /*-------------------------------------------------------------------------

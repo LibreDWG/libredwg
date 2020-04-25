@@ -1510,6 +1510,33 @@ find_section_info_type (const Dwg_Data *restrict dwg, Dwg_Section_Type type)
   return NULL;
 }
 
+/* header.section pointers changed, rebuild all info->sections */
+static void
+section_info_rebuild (Dwg_Data *dwg, Dwg_Section_Type lasttype)
+{
+  Dwg_Section_Type type;
+  // we only need to rebuild sections up to the given type
+  for (type = 0; type <= lasttype; type++)
+    {
+      Dwg_Section_Info *info = find_section_info_type (dwg, type);
+      if (info)
+        {
+          unsigned ssi = 0;
+          for (unsigned i = 0; i < dwg->header.num_sections; i++)
+            {
+              Dwg_Section *sec = &dwg->header.section[i];
+              if (sec->type == type) // first section
+                {
+                  info->sections[ssi] = sec;
+                  ssi++;
+                }
+              else if (sec->type > type) // sorted by type
+                break;
+            }
+        }
+    }
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -2112,8 +2139,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       obj = &dwg->object[index];
       // change the address to the linearly sorted one
+#ifndef NDEBUG
       PRE (R_2004)
-      assert (dat->byte);
+        assert (dat->byte);
+#endif
       if (!obj->parent)
         obj->parent = dwg;
       error |= dwg_encode_add_object (obj, dat, dat->byte);
@@ -2211,8 +2240,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (ckr_missing)
     {
       sec_size = dat->byte - pvzadr;
+#ifndef NDEBUG
       PRE (R_2004)
-      assert (pvzadr);
+        assert (pvzadr);
+#endif
       // i.e. encode_patch_RS_LE_size
       dat->chain[pvzadr] = sec_size >> 8;
       dat->chain[pvzadr + 1] = sec_size & 0xFF;
@@ -2225,10 +2256,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       assert (dat->chain[0] == 'A');
       assert (dat->chain[1] == 'C');
     }
+  PRE (R_2004)
+    assert (dat->byte);
 #endif
   pvzadr = dat->byte;
-  PRE (R_2004)
-  assert (pvzadr);
   bit_write_RS_LE (dat, 2); // last section_size 2
   LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", 2, pvzadr);
   bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
@@ -2562,7 +2593,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->r2004_header.numsections = 0;
       dwg->r2004_header.numgaps = 0;
 
-      sec_dat[SECTION_UNKNOWN].byte = 160;
+      //sec_dat[SECTION_UNKNOWN].byte = 0;
       sec_dat[SECTION_INFO].byte = 10
                                    + (dwg->header.section_infohdr.num_desc
                                       * sizeof (Dwg_Section_Info));
@@ -2624,10 +2655,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               info->sections
                   = calloc (info->num_sections, sizeof (Dwg_Section*));
               // enough sections?
-              if (si + info->num_sections >= dwg->header.num_sections)
-                dwg->header.section = realloc (dwg->header.section,
-                                               (si + info->num_sections)
-                                                   * sizeof (Dwg_Section));
+              if (si + info->num_sections > dwg->header.num_sections)
+                {
+                  Dwg_Section *oldsecs = dwg->header.section;
+                  dwg->header.num_sections = si + info->num_sections;
+                  dwg->header.section = realloc (dwg->header.section,
+                                                 dwg->header.num_sections
+                                                     * sizeof (Dwg_Section));
+                  if (dwg->header.section != oldsecs)
+                    // need to rebuild all info->sections
+                    section_info_rebuild (dwg, type);
+                }
               {
                 int ssi = 0;
                 do
@@ -2658,8 +2696,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       dwg->r2004_header.numsections = si;
       // section_info [27] and section_map [28] as two last already added.
-      dwg->header.num_sections = dwg->r2004_header.numsections;
-      dwg->header.section = realloc (dwg->header.section, dwg->header.num_sections * sizeof (Dwg_Section));
+      if ((unsigned)si > dwg->header.num_sections) // needed?
+        {
+          Dwg_Section *oldsecs = dwg->header.section;
+          dwg->header.num_sections = si;
+          dwg->header.section = realloc (dwg->header.section, si * sizeof (Dwg_Section));
+          if (dwg->header.section != oldsecs)
+            section_info_rebuild (dwg, SECTION_SYSTEM_MAP);
+        }
       dwg->r2004_header.section_info_id = dwg->r2004_header.numsections + 1; // a gap of 3
       dwg->r2004_header.section_map_id = dwg->r2004_header.numsections + 2;
       dwg->r2004_header.section_array_size = dwg->r2004_header.numsections + 2;
@@ -2804,7 +2848,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               for (unsigned k = 0; k < info->num_sections; k++)
                 {
                   Dwg_Section *sec = info->sections[k];
-                  assert (info->fixedtype == sec->type);
+                  if (!sec)
+                    {
+                      LOG_ERROR ("empty info->sections[%u]", k);
+                      continue;
+                    }
+                  if (!sec_dat[type].chain)
+                    {
+                      LOG_ERROR ("empty %s.chain", dwg_section_name (dwg, type));
+                      continue;
+                    }
+#ifndef NDEBUG
+                  if (info->fixedtype < SECTION_INFO)
+                    assert (info->fixedtype == sec->type);
+#endif
                   if (info->encrypted)
                     {
                       BITCODE_RC *decr = calloc (sec->size, 1);
@@ -3148,8 +3205,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
 
   oldpos = bit_position (dat);
+#ifndef NDEBUG
   PRE (R_2004)
     assert (address);
+#endif
   dat->byte = address;
   dat->bit = 0;
 
@@ -3512,8 +3571,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       BITCODE_BL pos = bit_position (dat);
       BITCODE_RL old_size = obj->size;
+#ifndef NDEBUG
       if (dwg->header.version < R_2004 || obj->index)
         assert (address);
+#endif
       if (dat->byte > obj->address)
         {
           // The size and CRC fields are not included in the obj->size
