@@ -814,7 +814,7 @@ sub out_struct {
     return;
   }
   my @declarations = @{$s->{declarations}};
-  if ($n =~ /^_dwg_(header_variables|object_object|object_entity|summaryinfo)$/) {
+  if ($n =~ /^_dwg_(header_variables|object_object|object_entity)$/) {
     @declarations = sort {
       my $aname = $a->{declarators}->[0]->{declarator};
       my $bname = $b->{declarators}->[0]->{declarator};
@@ -1061,22 +1061,17 @@ for (<DATA>) {
         print $doc "\@strong{Common Entity fields} \@anchor{Common Entity fields}\n";
         print $doc "\@cindex Common Entity fields\n\n";
       } elsif ($1 eq 'summaryinfo') {
-        print $doc "\n\@node SummaryInfo\n\@section SummaryInfo\n\@cindex SummaryInfo\n\n";
-        print $doc "All Section SummaryInfo fields.\n\n";
+        print $doc "\@strong{SummaryInfo fields} \@anchor{SummaryInfo fields}\n";
+        print $doc "\@cindex SummaryInfo fields\n\n";
+        print $doc "\@pxref{SummaryInfo}\n\n";
       } else {
         print $doc "\@strong{$1}\n";
         print $doc "\@vindex $1\n\n";
       }
       out_struct($tmpl, $1);
     } elsif ($tmpl =~ /^struct Dwg_(\w+)/) {
-      warn $tmpl;
-      if ($1 eq 'summaryinfo') {
-        print $doc "\n\@node SummaryInfo\n\@section SummaryInfo\n\@cindex SummaryInfo\n\n";
-        print $doc "All Section SummaryInfo fields.\n\n";
-      } else {
-        print $doc "\@strong{$1}\n";
-        print $doc "\@vindex $1\n\n";
-      }
+      print $doc "\@strong{$1}\n";
+      print $doc "\@vindex $1\n\n";
       out_struct($tmpl, $1);
     }
     print $fh $post,"\n";

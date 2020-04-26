@@ -8304,7 +8304,7 @@ typedef struct _dwg_chain
 
 typedef enum DWG_SECTION_TYPE /* since r2004+ */
 {
-  SECTION_UNKNOWN = 0,                  /* The very first 160 byte */
+  SECTION_UNKNOWN = 0,                  /* The very first 160 byte? */
   SECTION_HEADER = 1,                   /* AcDb:Header */
   SECTION_AUXHEADER = 2,                /* AcDb:AuxHeader */
   SECTION_CLASSES = 3,                  /* AcDb:Classes */

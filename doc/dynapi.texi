@@ -15755,38 +15755,36 @@ H,	DXF 360
 @end vtable
 @end indentedblock
 
+@strong{SummaryInfo fields} @anchor{SummaryInfo fields}
+@cindex SummaryInfo fields
 
-@node SummaryInfo
-@section SummaryInfo
-@cindex SummaryInfo
-
-All Section SummaryInfo fields.
+@pxref{SummaryInfo}
 
 @indentedblock
 @vtable @code
 
+@item TITLE
+TU16,	DXF 1
+@item SUBJECT
+TU16,	DXF 1
 @item AUTHOR
 TU16,	DXF 1
-@item COMMENTS
-TU16,	DXF 1
-@item HYPERLINKBASE
-TU16,	DXF 1
 @item KEYWORDS
+TU16,	DXF 1
+@item COMMENTS
 TU16,	DXF 1
 @item LASTSAVEDBY
 TU16,	DXF 1
 @item REVISIONNUMBER
 TU16,	DXF 1
-@item SUBJECT
+@item HYPERLINKBASE
 TU16,	DXF 1
-@item TDCREATE
-TIMERLL
 @item TDINDWG
+TIMERLL
+@item TDCREATE
 TIMERLL
 @item TDUPDATE
 TIMERLL
-@item TITLE
-TU16,	DXF 1
 @item num_props
 RS
 @item props

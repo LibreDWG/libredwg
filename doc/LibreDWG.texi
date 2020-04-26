@@ -57,6 +57,7 @@ Texts.  A copy of the license is included in the section entitled
 * Usage::               How to use LibreDWG.
 * Types::               Common types, enums, structs.
 * Objects::             All supported objects and entities.
+* Sections::            All supported sections.
 * Structures::          Special structures.
 * Functions::           Call them.
 * Errors::              Error levels.
@@ -436,10 +437,226 @@ native fallback types int/long, which are different across platforms.
 * HEADER::            All Header variables
 * ENTITIES::          All Entities and its special and common fields
 * OBJECTS::           All Objects and its special and common fields
-* SummaryInfo::       All SummaryInfo fields
 @end menu
 
 @include dynapi.texi
+
+@node Sections
+@chapter Sections
+@cindex Sections
+
+@menu
+* HEADER_::           All Header variables
+* OBJECTS_::          All Entities and Objects
+* CLASSES::           The dynamically loaded class types
+* HANDLES::           The sorted handle map (relative handle and size) of all objects
+* R2004_Header::      R2004 Section meta-data to find the INFO and SYSTEM_MAP
+* UNKNOWN::           Unknown Section
+* SummaryInfo::       Some dwg meta-data
+* Preview::           The Thumbnail BMP or WMF data
+* VBAProject::        VBA Section
+* AppInfo::           Which product and version exactly created that DWG
+* AppInfoHistory::    AppInfoHistory Section
+* FileDepList::       Features and File Dependencies. Image files, fonts, xrefs, plotconfigs.
+* AcDS::              The AcDsPrototype_1b DataStorage, used mostly for binary ACIS blobs
+* RevHistory::        Revision History
+* Security::          Password Info
+* ObjFreeSpace::      Some Objects meta-data
+* Template::          Contains one Measurement Header variable.
+* AuxHeader::         In case the original Header gets lost
+* Signature::         Signature Section
+* INFO::              The info of all used sections
+* SYSTEM_MAP::        The map of all used sections and its chunked pages
+@end menu
+
+The r2000 format (used for r13-r2000) knows the following 6 sections:
+
+    HEADER
+    CLASSES
+    HANDLES
+    2NDHEADER
+    MEASUREMENT
+    AUXHEADER (only r2000)
+
+The r2004 and r2007 format (used for r2004-r2018) knows the following sections:
+
+    R2004_Header
+    UNKNOWN
+    SUMMARYINFO
+    PREVIEW
+    VBAPROJECT
+    APPINFO
+    APPINFOHISTORY
+    FILEDEPLIST
+    ACDS
+    REVHISTORY
+    SECURITY
+    OBJECTS
+    OBJFREESPACE
+    TEMPLATE
+    HANDLES
+    CLASSES
+    AUXHEADER
+    HEADER
+    SIGNATURE
+    INFO
+    SYSTEM_MAP
+
+@node HEADER_
+@section HEADER Section
+
+@xref{Objects, HEADER}.
+
+@node OBJECTS_
+@section OBJECTS Section
+
+The OBJECTS Section is usually split up into multiple pages (seperate sections of type AcDbObjects)
+and contains all entities and objects. It is indexed by @ref{HANDLES}.
+
+@xref{Objects, OBJECTS}.
+
+@node CLASSES
+@section CLASSES Section
+
+The @strong{Classes} Section contains the basic info for all dynamically loaded types for entities and objects.
+It's types start with 500, and are variable. An entity which has no class loaded is displayed as proxy.
+
+LibreDWG contains support for many classes, but not all. See @file{src/classes.inc} and @file{src/classes.c}.
+We define a stability for each class, one of stable, unstable, debugging and unhandled.
+
+Objects in @strong{stable} classes are treated as the fixed-type objects with full support. Changes are treated as API breaking.
+
+Objects in @strong{unstable} classes are sometimes written to DXF or JSON, but not to DWG. Changes are not treated as API breaking. Usually such objects are converted to UNKNOWN_OBJ or UNKNOWN_ENT objects, and when written to DWG converted to PLACEHOLDER, DUMMY or POINT objects with EED pointing to the original class and content.
+Only when rewriting from-to the very same version with the full known unknown_bits blob (e.g. dwgrewrite or json) such classes can persist as such.
+
+Objects in @strong{debugging} classes are only handled with the develper @code{configure --enable-debug} flag, otherwise ignored. See unstable above.
+
+Objects in @strong{undhandled} classes are always ignored. There are no fields known, only it's type.
+
+@node HANDLES
+@section HANDLES Section
+
+The Handles section contains a sorted list of all object handles and it's position in the Objects stream.
+All values are stored relatively, as offsets. Handles only increase and can contain holews when an object is deleted, offsets can jump back also.
+
+@node R2004_Header
+@section R2004_Header
+
+The R2004_Header section at fixed position @code{0x100} in the DWG contains some meta-data for r2004 sections to find the two important sections INFO and SYSTEM_MAP.
+
+@node UNKNOWN
+@section UNKNOWN Section
+
+The content of the UNKNOWN section with type 0 is unknown and does not always exist.
+
+@node SummaryInfo
+@section SummaryInfo
+@cindex SummaryInfo
+
+All Section SummaryInfo fields:
+
+@indentedblock
+@vtable @code
+
+@item TITLE
+TU16,	DXF 1
+@item SUBJECT
+TU16,	DXF 1
+@item AUTHOR
+TU16,	DXF 1
+@item KEYWORDS
+TU16,	DXF 1
+@item COMMENTS
+TU16,	DXF 1
+@item LASTSAVEDBY
+TU16,	DXF 1
+@item REVISIONNUMBER
+TU16,	DXF 1
+@item HYPERLINKBASE
+TU16,	DXF 1
+@item TDINDWG
+TIMERLL
+@item TDCREATE
+TIMERLL
+@item TDUPDATE
+TIMERLL
+@item num_props
+RS
+@item props
+Dwg_SummaryInfo_Property*
+@item unknown1
+RL
+@item unknown2
+RL
+
+@end vtable
+@end indentedblock
+
+@xref{Dwg_SummaryInfo_Property}
+
+@node Preview
+@section Preview
+
+The optional Preview section contains the thumbnail stream of BMP or WMF data of the drawing. Note that blocks or proxy objects can also contain it's own preview fields. The program @strong{dwgbmp} can extract the bitmap from this section.
+
+@node VBAProject
+@section VBAProject
+
+@node AppInfo
+@section AppInfo
+
+Which product and version exactly created that DWG.
+
+@node AppInfoHistory
+@section AppInfoHistory
+
+@node FileDepList
+@section FileDepList
+
+Features and File Dependencies. Image files, fonts, xrefs, plotconfigs.
+
+@node AcDS
+@section AcDS
+
+The AcDsPrototype_1b DataStorage, used mostly for binary ACIS blobs, embedded fonts, ...
+
+@node RevHistory
+@section RevHistory
+
+Revision History
+
+@node Security
+@section Security
+
+Password Info
+
+@node ObjFreeSpace
+@section ObjFreeSpace
+
+Some Objects meta-data
+
+@node Template
+@section Template
+
+Contains one Measurement Header variable.
+ 
+@node AuxHeader
+@section AuxHeader
+
+In case the original Header gets lost.
+
+@node Signature
+@section Signature
+
+@node INFO
+@section INFO
+
+The info of all used sections.
+
+@node SYSTEM_MAP
+@section SYSTEM_MAP
+
+The map of all used sections and its chunked pages.
 
 @node Structures
 @chapter Structures
@@ -631,7 +848,11 @@ Sets the fields for the object from the DWG bitstream.
 
 Encoding DWG files, i.e. DWG write support, can be disabled via
 @code{./configure --disable-write}. The default format and only useful
-one is currently r13-r2000. See @file{src/in_dxf.c} for a high-level usage example.
+one is currently r13-r2000. Experimentally work is ongoing for the r2004
+format, which is also used for r2010, r2013, and r2018. Only the pre-r13
+and r2007 versions are not covered yet.
+
+See @file{src/in_dxf.c} for a high-level usage example.
 The default codepage is Latin-1, 30.
 
 The highest level function for encoding a bitstream to a file is @code{dwg_write_file},
@@ -916,10 +1137,15 @@ Options:
        -O fmt,  --format fmt
               fmt: JSON, DXF, DXFB, GeoJSON.
 
-              More planned formats: YAML, XML/OGR, GPX, SVG, PS
+              More planned formats: YAML, XML/OGR, GPX, SVG, PS.
 
        -o outfile, --file outfile
               also defines the output fmt. Default: stdout
+
+       -a rNNNN, --as rNNNN
+              writes the output format as another version.
+              Valid versions are r13, r14, r2000, r2004, r2007, r2010,
+              r2013, r2018.
 
        --help display this help and exit
 
@@ -932,7 +1158,7 @@ Options:
 
 Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
 optionally via @code{--as=rNNNN} as another version.
-For now can only create r13-r2000 DWG files.
+For now can only create r13-r2018, but not r2007 DWG files.
 
 @item @file{dxfwrite}
 @cindex dxfwrite
@@ -967,8 +1193,9 @@ The DWG files are created in the current directory and not overwritten, unless
 the option @code{--overwrite} or @code{-y} is given.
 
 This program is experimental and AutoCAD may fail to import
-it. Only r13-r2000 DWG's can be written yet, currently the default is
-writing as r2000.
+it.
+For now can only create r13-r2018, but not r2007 DWG files.
+Currently the default is writing as r2000.
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
@@ -976,6 +1203,7 @@ writing as r2000.
 
 Read and write the DWG, optionally via @code{--as=rNNNN} as another
 version, an earlier or later version. The default is writing as r2000.
+Pre-r13 and r2007 DWG files cannot be written yet.
 
 @item @file{dwglayers}
 @cindex dwglayers
@@ -1044,6 +1272,9 @@ Note that the graphical representation for PS and SVG output is severely lacking
 
 @end table
 
+@cindex dwgplot
+@anchor{dwgplot}
+
 Planned is @strong{dwgplot}, via GNU Plotutils @uref{https://www.gnu.org/software/plotutils/}, to replace @code{dwg2SVG} and @code{dwg2ps}. This supports much more bitmap and vector formats.
 
 There are also some more examples in the source distribution:
@@ -1065,7 +1296,7 @@ but via the @file{dwg_api.h} only. The graphical representation for PS and SVG o
 @cindex unknown
 @anchor{unknown}
 lists the not yet reverse-engineered blobs from our examples files, and
-is the framework to guess the field layout for these. It is using picat (@url{http://picat-lang.org/}) to solve some of the field-packing problems.
+is the framework to guess the field layout for these. It is optionally using picat (@url{http://picat-lang.org/}) to solve some of the field-packing problems.
 
 @item @file{dwgfuzz}
 @cindex dwgfuzz
