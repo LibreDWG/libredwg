@@ -302,6 +302,9 @@ main (int argc, char *argv[])
       else
         dat.fh = stdout;
 
+      if (dwg.header.from_version == R_INVALID)
+        dwg.header.from_version = dwg.header.version;
+      dat.from_version = dwg.header.from_version;
       if (version)
         dat.version = dwg.header.version = dwg_version;
       else
