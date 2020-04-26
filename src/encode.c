@@ -3961,7 +3961,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004a)
   {
     LOG_INFO ("\n");
-    LOG_ERROR (WE_CAN "Writing R2004 sections not yet finished");
+    LOG_WARN (WE_CAN "Writing R2004 sections not yet finished");
 
     memset (&sec_dat, 0, (SECTION_SYSTEM_MAP + 1) * sizeof (Bit_Chain));
     if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
