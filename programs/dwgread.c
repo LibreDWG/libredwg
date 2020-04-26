@@ -84,13 +84,9 @@ help (void)
 #    else
   printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB\n");
 #    endif
-  printf ("           Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf ("  --as rNNNN                save as other version\n");
   printf ("           Valid versions:\n");
-  printf (
-      "                r12, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("           Planned versions:\n");
-  printf ("             r9, r10, r11\n");
+  printf ("             r9, r10, r11, r12, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile                also defines the output fmt. Default: "
           "stdout\n");
 #  endif
@@ -105,16 +101,11 @@ help (void)
 #    else
   printf ("  -O fmt      fmt: DXF, DXFB\n");
 #    endif
-  printf (
-      "              Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf ("  -o outfile  also defines the output fmt. Default: stdout\n");
 #  endif
   printf ("  -a rNNNN    save as other version\n");
   printf ("              Valid versions:\n");
-  printf (
-      "                r12, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("              Planned versions:\n");
-  printf ("                r9, r10, r11\n");
+  printf ("                r9, r10, r11, r12, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
