@@ -33096,14 +33096,6 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
     lightlist->class_version--;
   }
   {
-    BITCODE_H dictionary;
-    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "dictionary", &dictionary, NULL)
-        && !memcmp (&dictionary, &lightlist->dictionary, sizeof (lightlist->dictionary)))
-        pass ();
-    else
-        fail ("LIGHTLIST.dictionary [H]");
-  }
-  {
     Dwg_LIGHTLIST_light* lights;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_lights", &count, NULL)

@@ -6348,8 +6348,6 @@ B,	DXF 290
 
 @item parent
 struct _dwg_object_object*
-@item dictionary
-H
 @item class_version
 BS,	DXF 90
 @item num_lights
@@ -9635,10 +9633,10 @@ BS,	DXF 271
 
 @item parent
 struct _dwg_object_LIGHTLIST*
-@item light
-H,	DXF 5
 @item name
 T,	DXF 1
+@item light
+H,	DXF 5
 
 @end vtable
 @end indentedblock

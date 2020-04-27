@@ -4148,15 +4148,14 @@ typedef struct _dwg_object_VISUALSTYLE
 typedef struct _dwg_LIGHTLIST_light
 {
   struct _dwg_object_LIGHTLIST *parent;
-  BITCODE_H light;
   BITCODE_T name;
+  BITCODE_H light;
 } Dwg_LIGHTLIST_light;
 
+/* 2010+ */
 typedef struct _dwg_object_LIGHTLIST
 {
   struct _dwg_object_object *parent;
-
-  BITCODE_H dictionary; /* (hard-pointer to ACAD_LIGHT dictionary entry) */
   BITCODE_BS class_version;
   BITCODE_BS num_lights;
   Dwg_LIGHTLIST_light *lights;
@@ -7156,6 +7155,7 @@ EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_GEODATA (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHT (Dwg_Object *obj);
+EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECT_PTR (Dwg_Object *obj);
@@ -7210,7 +7210,6 @@ EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);
 EXPORT int dwg_setup_GEOPOSITIONMARKER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYERFILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
-EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODEL (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODELDEF (Dwg_Object *obj);

@@ -6820,6 +6820,20 @@ DWG_ENTITY (MESH)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+DWG_OBJECT (LIGHTLIST)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbLightList)
+  FIELD_BS (class_version, 90)
+  FIELD_BS (num_lights, 90)
+  REPEAT (num_lights, lights, Dwg_LIGHTLIST_light)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (lights[rcount1],light, 5, 5)
+      SUB_FIELD_T (lights[rcount1],name, 1)
+  END_REPEAT_BLOCK
+  END_REPEAT (lights)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
@@ -8040,24 +8054,6 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
       FIELD_BS (bs74, 74);
       FIELD_BD (rect_height, 46);
     }
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (LIGHTLIST)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbLightList)
-  FIELD_BS (class_version, 90)
-  FIELD_BS (num_lights, 90)
-  /*
-  FIELD_VECTOR_T (lights_names, T, num_lights, 1);
-  HANDLE_VECTOR_N (lights_handles, FIELD_VALUE (num_lights), 5, 5);
-  */
-  REPEAT (num_lights, lights, Dwg_LIGHTLIST_light)
-  REPEAT_BLOCK
-      SUB_FIELD_HANDLE (lights[rcount1],light, 5, 5)
-      SUB_FIELD_T (lights[rcount1],name, 1)
-  END_REPEAT_BLOCK
-  END_REPEAT (lights)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

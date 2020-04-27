@@ -5637,8 +5637,6 @@ static const Dwg_DYNAPI_field _dwg_LEADEROBJECTCONTEXTDATA_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LIGHTLIST_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LIGHTLIST, parent),
     1,1,0, 0 },
-  { "dictionary",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LIGHTLIST, dictionary),
-    1,0,0, 0 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LIGHTLIST, class_version),
     0,0,0, 90 },
   { "num_lights",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LIGHTLIST, num_lights),
@@ -8228,10 +8226,10 @@ static const Dwg_DYNAPI_field _dwg_LEADER_Node_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LIGHTLIST_light_fields[] = {
   { "parent",	"struct _dwg_object_LIGHTLIST*", sizeof (void *),  OFF (struct _dwg_LIGHTLIST_light, parent),
     1,1,0, 0 },
-  { "light",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_LIGHTLIST_light, light),
-    1,0,0, 5 },
   { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_LIGHTLIST_light, name),
     1,1,1, 1 },
+  { "light",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_LIGHTLIST_light, light),
+    1,0,0, 5 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_LTYPE_dash: (sorted by offset) */
