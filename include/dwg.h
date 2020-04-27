@@ -4144,6 +4144,14 @@ typedef struct _dwg_object_VISUALSTYLE
  Object LIGHTLIST (varies)
  R2010+
  */
+
+typedef struct _dwg_LIGHTLIST_light
+{
+  struct _dwg_object_LIGHTLIST *parent;
+  BITCODE_H light;
+  BITCODE_T name;
+} Dwg_LIGHTLIST_light;
+
 typedef struct _dwg_object_LIGHTLIST
 {
   struct _dwg_object_object *parent;
@@ -4151,9 +4159,7 @@ typedef struct _dwg_object_LIGHTLIST
   BITCODE_H dictionary; /* (hard-pointer to ACAD_LIGHT dictionary entry) */
   BITCODE_BS class_version;
   BITCODE_BS num_lights;
-  /* TODO */
-  BITCODE_H*  lights_handles; /* one for each light */
-  BITCODE_T* lights_names;    /* one for each light */
+  Dwg_LIGHTLIST_light *lights;
 } Dwg_Object_LIGHTLIST;
 
 /**

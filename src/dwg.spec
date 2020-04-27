@@ -8045,16 +8045,20 @@ DWG_OBJECT_END
 
 DWG_OBJECT (LIGHTLIST)
   DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbLightList)
   FIELD_BS (class_version, 90)
   FIELD_BS (num_lights, 90)
-  FIELD_VECTOR_T (lights_names, T, num_lights, 1);
-  HANDLE_VECTOR_N (lights_handles, FIELD_VALUE (num_lights), 2, 350);
   /*
-  REPEAT (num_lights)
-    FIELD_HANDLE (lights_handles[rcount1], 2, 350)
-    FIELD_T (lights_names[rcount1], 1)
-  END_REPEAT
+  FIELD_VECTOR_T (lights_names, T, num_lights, 1);
+  HANDLE_VECTOR_N (lights_handles, FIELD_VALUE (num_lights), 5, 5);
   */
+  REPEAT (num_lights, lights, Dwg_LIGHTLIST_light)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (lights[rcount1],light, 5, 5)
+      SUB_FIELD_T (lights[rcount1],name, 1)
+  END_REPEAT_BLOCK
+  END_REPEAT (lights)
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // (varies) TODO

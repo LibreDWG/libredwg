@@ -6354,10 +6354,8 @@ H
 BS,	DXF 90
 @item num_lights
 BS,	DXF 90
-@item lights_handles
-H*,	DXF 350
-@item lights_names
-T*,	DXF 1
+@item lights
+Dwg_LIGHTLIST_light*
 
 @end vtable
 @end indentedblock
@@ -9625,6 +9623,22 @@ BL
 Dwg_LEADER_Break*
 @item attach_dir
 BS,	DXF 271
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_LIGHTLIST_light} @anchor{Dwg_LIGHTLIST_light}
+@vindex Dwg_LIGHTLIST_light
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_LIGHTLIST*
+@item light
+H,	DXF 5
+@item name
+T,	DXF 1
 
 @end vtable
 @end indentedblock

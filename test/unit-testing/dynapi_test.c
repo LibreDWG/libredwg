@@ -33104,24 +33104,14 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
         fail ("LIGHTLIST.dictionary [H]");
   }
   {
-    BITCODE_H* lights_handles;
+    Dwg_LIGHTLIST_light* lights;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_lights_handles", &count, NULL)
-        && dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "lights_handles", &lights_handles, NULL)
-        && lights_handles == lightlist->lights_handles)
+    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_lights", &count, NULL)
+        && dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "lights", &lights, NULL)
+        && lights == lightlist->lights)
       pass ();
     else
-      fail ("LIGHTLIST.lights_handles [H*] * %u num_lights_handles", count);
-  }
-  {
-    BITCODE_T* lights_names;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_lights_names", &count, NULL)
-        && dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "lights_names", &lights_names, NULL)
-        && lights_names == lightlist->lights_names)
-      pass ();
-    else
-      fail ("LIGHTLIST.lights_names [T*] * %u num_lights_names", count);
+      fail ("LIGHTLIST.lights [Dwg_LIGHTLIST_light*] * %u num_lights", count);
   }
   {
     BITCODE_BS num_lights;
@@ -46242,6 +46232,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_LEADER_Node): %d != "
                "dwg_dynapi_fields_size (\"LEADER_Node\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_LIGHTLIST_light);
+  size2 = dwg_dynapi_fields_size ("LIGHTLIST_light");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_LIGHTLIST_light): %d != "
+               "dwg_dynapi_fields_size (\"LIGHTLIST_light\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_LTYPE_dash);
