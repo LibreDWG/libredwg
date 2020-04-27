@@ -4149,11 +4149,11 @@ typedef struct _dwg_object_LIGHTLIST
   struct _dwg_object_object *parent;
 
   BITCODE_H dictionary; /* (hard-pointer to ACAD_LIGHT dictionary entry) */
-  /* TODO */
   BITCODE_BS class_version;
   BITCODE_BS num_lights;
+  /* TODO */
   BITCODE_H*  lights_handles; /* one for each light */
-  BITCODE_TV* lights_names;   /* one for each light */
+  BITCODE_T* lights_names;    /* one for each light */
 } Dwg_Object_LIGHTLIST;
 
 /**

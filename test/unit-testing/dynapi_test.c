@@ -33114,14 +33114,14 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
       fail ("LIGHTLIST.lights_handles [H*] * %u num_lights_handles", count);
   }
   {
-    BITCODE_TV* lights_names;
+    BITCODE_T* lights_names;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "num_lights_names", &count, NULL)
         && dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "lights_names", &lights_names, NULL)
         && lights_names == lightlist->lights_names)
       pass ();
     else
-      fail ("LIGHTLIST.lights_names [TV*] * %u num_lights_names", count);
+      fail ("LIGHTLIST.lights_names [T*] * %u num_lights_names", count);
   }
   {
     BITCODE_BS num_lights;

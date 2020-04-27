@@ -6351,13 +6351,13 @@ struct _dwg_object_object*
 @item dictionary
 H
 @item class_version
-BS
+BS,	DXF 90
 @item num_lights
-BS
+BS,	DXF 90
 @item lights_handles
-H*
+H*,	DXF 350
 @item lights_names
-TV*
+T*,	DXF 1
 
 @end vtable
 @end indentedblock

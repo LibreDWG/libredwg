@@ -5640,13 +5640,13 @@ static const Dwg_DYNAPI_field _dwg_LIGHTLIST_fields[] = {
   { "dictionary",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LIGHTLIST, dictionary),
     1,0,0, 0 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LIGHTLIST, class_version),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "num_lights",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LIGHTLIST, num_lights),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "lights_handles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_LIGHTLIST, lights_handles),
-    1,1,0, 0 },
-  { "lights_names",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_object_LIGHTLIST, lights_names),
-    1,1,0, 0 },
+    1,1,0, 350 },
+  { "lights_names",	"T*", sizeof (BITCODE_T*),  OFF (struct _dwg_object_LIGHTLIST, lights_names),
+    1,1,0, 1 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LONG_TRANSACTION: (sorted by offset) */

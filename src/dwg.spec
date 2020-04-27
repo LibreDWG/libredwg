@@ -6474,23 +6474,6 @@ DWG_ENTITY (LIGHT)
 #endif
   FIELD_B (plot_glyph, 291);
 
-#if 0
-    FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
-    if (FIELD_VALUE (lamp_color_type) == 0) {
-      FIELD_BD (lamp_color_temp, 0);
-    } else {
-      FIELD_BS (lamp_color_preset, 0);
-      if (FIELD_VALUE (lamp_color_preset) == 14) // Custom
-        FIELD_BLx (lamp_color_rgb, 0);
-    }
-    FIELD_B (has_target_grip, 0);
-    FIELD_BS (glyph_display_type, 0);
-    FIELD_T (web_file, 0);
-    FIELD_3BD (web_rotation, 0);
-    FIELD_BS (physical_intensity_method, 0);
-    FIELD_BS (drawable_type, 0);
-#endif
-
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);
   FIELD_3BD (target, 11);
@@ -6502,9 +6485,41 @@ DWG_ENTITY (LIGHT)
   FIELD_BD (falloff_angle, 51);
   FIELD_B (cast_shadows, 293);
   FIELD_BS (shadow_type, 73);
-  FIELD_BS (shadow_map_size, 91);
+  FIELD_BS (shadow_map_size, 91); //not BS
   FIELD_RC (shadow_map_softness, 280);
-
+#if 0
+  if (dwg->header_vars.LIGHTINGUNITS == PHOTOMETRIC)
+  {
+    FIELD_B (has_photometric_data, 1);
+    if (_obj->has_photometric_data)
+      {
+        DXF {
+          VALUE_B (0, 295)
+          if (_obj->web_file)
+            FIELD_T (web_file, 300)
+          else
+            VALUE_B (0, 290) // has_webfile
+       }
+        FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
+        // FIXME
+        if (FIELD_VALUE (lamp_color_type) == 0) {
+          FIELD_BD (lamp_color_temp, 0);
+        } else {
+          FIELD_BS (lamp_color_preset, 0);
+          if (FIELD_VALUE (lamp_color_preset) == 14) // Custom
+            FIELD_BLx (lamp_color_rgb, 0);
+        }
+        FIELD_B (has_target_grip, 0);
+        FIELD_BS (glyph_display_type, 0);
+        FIELD_T (web_file, 0);
+        FIELD_3BD (web_rotation, 0);
+        FIELD_BS (physical_intensity_method, 0);
+        FIELD_BS (drawable_type, 0);
+      }
+  }
+  else
+    _obj->has_photometric_data =  0;
+#endif
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (lights_layer, 5, 0);
 
@@ -8030,6 +8045,16 @@ DWG_OBJECT_END
 
 DWG_OBJECT (LIGHTLIST)
   DECODE_UNKNOWN_BITS
+  FIELD_BS (class_version, 90)
+  FIELD_BS (num_lights, 90)
+  FIELD_VECTOR_T (lights_names, T, num_lights, 1);
+  HANDLE_VECTOR_N (lights_handles, FIELD_VALUE (num_lights), 2, 350);
+  /*
+  REPEAT (num_lights)
+    FIELD_HANDLE (lights_handles[rcount1], 2, 350)
+    FIELD_T (lights_names[rcount1], 1)
+  END_REPEAT
+  */
 DWG_OBJECT_END
 
 // (varies) TODO
@@ -8295,15 +8320,12 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   FIELD_B (fog_enabled, 290);
   FIELD_B (fog_background_enabled, 290);
   FIELD_B (b290_1, 290);
-  //FIELD_CMC (fog_color, 280);
-  //FIELD_BD (fog_distance_near, 40);
-  //FIELD_BD (fog_distance_far, 40);
   FIELD_B (environ_image_enabled, 290);
   FIELD_T (environ_image_filename, 1);
   FIELD_T (description, 1);
   FIELD_BS (bs90, 90);
   SUBCLASS (AcDbRapidRTRenderSettings)
-  FIELD_BS (bs90_0, 90);
+  FIELD_BS (bs90_0, 90); // 6x RL or BL + 2x double
   FIELD_RC (rc70_1, 70);
   FIELD_BS (bs90_1, 90);
   FIELD_BS (bs90_2, 90);
@@ -8311,7 +8333,7 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   FIELD_RC (rc70_3, 70);
   FIELD_BD (fog_density_near, 40);
   FIELD_BD (fog_density_far, 40);
-  FIELD_B (b290_2, 290);
+  FIELD_B (b290_2, 290); // dependent on bs90
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8323,7 +8345,6 @@ DWG_OBJECT (MENTALRAYRENDERSETTINGS)
   FIELD_B (fog_enabled, 290);
   FIELD_B (fog_background_enabled, 290);
   FIELD_B (b290_1, 290);
-  //FIELD_CMC (fog_color, 280);
   FIELD_B (environ_image_enabled, 290);
   FIELD_T (environ_image_filename, 1);
   FIELD_T (description, 1);
