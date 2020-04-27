@@ -439,6 +439,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NAVISWORKSMODEL,
   DWG_TYPE_NAVISWORKSMODELDEF,
   DWG_TYPE_NPOCOLLECTION,
+  DWG_TYPE_NURBSURFACE,
   DWG_TYPE_OBJECT_PTR,
   DWG_TYPE_PERSUBENTMGR,
   DWG_TYPE_PLANESURFACE,
@@ -4589,6 +4590,21 @@ typedef struct _dwg_entity_LOFTEDSURFACE
 } Dwg_Entity_LOFTEDSURFACE;
 
 /**
+ Entity NURBSURFACE (varies)
+ no coverage yet
+*/
+typedef struct _dwg_entity_NURBSURFACE
+{
+  struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
+  BITCODE_BL class_version; /*!< DXF 90 */
+  // ...
+} Dwg_Entity_NURBSURFACE;
+
+/**
  Entity PLANESURFACE (varies)
 */
 typedef struct _dwg_entity_PLANESURFACE
@@ -5928,6 +5944,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
+    Dwg_Entity_NURBSURFACE *NURBSURFACE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
@@ -7202,6 +7219,7 @@ EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
+EXPORT int dwg_setup_NURBSSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_LOFTEDSURFACE (Dwg_Object *obj);

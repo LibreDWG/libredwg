@@ -14586,6 +14586,352 @@ static int test_NAVISWORKSMODEL (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_NURBSURFACE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_NURBSURFACE *restrict nurbsurface = obj->tio.entity->tio.NURBSURFACE;
+  failed = 0;
+  {
+    BITCODE_RC* acis_data;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "acis_data", &acis_data, NULL)
+        && acis_data
+           ? strEQ ((char *)acis_data, (char *)nurbsurface->acis_data)
+           : !nurbsurface->acis_data)
+      pass ();
+    else
+      fail ("NURBSURFACE.acis_data [RC*] '%s' <> '%s'", acis_data, nurbsurface->acis_data);
+  }
+  {
+    BITCODE_B acis_empty;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "acis_empty", &acis_empty, NULL)
+        && acis_empty == nurbsurface->acis_empty)
+      pass ();
+    else
+      fail ("NURBSURFACE.acis_empty [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->acis_empty, acis_empty);
+    acis_empty++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "acis_empty", &acis_empty, 0)
+        && acis_empty == nurbsurface->acis_empty)
+      pass ();
+    else
+      fail ("NURBSURFACE.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->acis_empty, acis_empty);
+    nurbsurface->acis_empty--;
+  }
+  {
+    BITCODE_B acis_empty2;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "acis_empty2", &acis_empty2, NULL)
+        && acis_empty2 == nurbsurface->acis_empty2)
+      pass ();
+    else
+      fail ("NURBSURFACE.acis_empty2 [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->acis_empty2, acis_empty2);
+    acis_empty2++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "acis_empty2", &acis_empty2, 0)
+        && acis_empty2 == nurbsurface->acis_empty2)
+      pass ();
+    else
+      fail ("NURBSURFACE.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->acis_empty2, acis_empty2);
+    nurbsurface->acis_empty2--;
+  }
+  {
+    BITCODE_B acis_empty_bit;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "acis_empty_bit", &acis_empty_bit, NULL)
+        && acis_empty_bit == nurbsurface->acis_empty_bit)
+      pass ();
+    else
+      fail ("NURBSURFACE.acis_empty_bit [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->acis_empty_bit, acis_empty_bit);
+    acis_empty_bit++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "acis_empty_bit", &acis_empty_bit, 0)
+        && acis_empty_bit == nurbsurface->acis_empty_bit)
+      pass ();
+    else
+      fail ("NURBSURFACE.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->acis_empty_bit, acis_empty_bit);
+    nurbsurface->acis_empty_bit--;
+  }
+  {
+    BITCODE_BL* block_size;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "block_size", &block_size, NULL)
+        && !memcmp (&block_size, &nurbsurface->block_size, sizeof (nurbsurface->block_size)))
+        pass ();
+    else
+        fail ("NURBSURFACE.block_size [BL*]");
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "class_version", &class_version, NULL)
+        && class_version == nurbsurface->class_version)
+      pass ();
+    else
+      fail ("NURBSURFACE.class_version [BL] %u != %u", nurbsurface->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "class_version", &class_version, 0)
+        && class_version == nurbsurface->class_version)
+      pass ();
+    else
+      fail ("NURBSURFACE.class_version [BL] set+1 %u != %u", nurbsurface->class_version, class_version);
+    nurbsurface->class_version--;
+  }
+  {
+    char ** encr_sat_data;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &nurbsurface->encr_sat_data, sizeof (nurbsurface->encr_sat_data)))
+      pass ();
+    else
+      fail ("NURBSURFACE.encr_sat_data [char **]");
+  }
+  {
+    struct _dwg_entity_3DSOLID* extra_acis_data;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp (&extra_acis_data, &nurbsurface->extra_acis_data, sizeof (nurbsurface->extra_acis_data)))
+        pass ();
+    else
+        fail ("NURBSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_H history_id;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "history_id", &history_id, NULL)
+        && !memcmp (&history_id, &nurbsurface->history_id, sizeof (nurbsurface->history_id)))
+        pass ();
+    else
+        fail ("NURBSURFACE.history_id [H]");
+  }
+  {
+    BITCODE_B isoline_present;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "isoline_present", &isoline_present, NULL)
+        && isoline_present == nurbsurface->isoline_present)
+      pass ();
+    else
+      fail ("NURBSURFACE.isoline_present [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->isoline_present, isoline_present);
+    isoline_present++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "isoline_present", &isoline_present, 0)
+        && isoline_present == nurbsurface->isoline_present)
+      pass ();
+    else
+      fail ("NURBSURFACE.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->isoline_present, isoline_present);
+    nurbsurface->isoline_present--;
+  }
+  {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "isolines", &isolines, NULL)
+        && isolines == nurbsurface->isolines)
+      pass ();
+    else
+      fail ("NURBSURFACE.isolines [BL] %u != %u", nurbsurface->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "isolines", &isolines, 0)
+        && isolines == nurbsurface->isolines)
+      pass ();
+    else
+      fail ("NURBSURFACE.isolines [BL] set+1 %u != %u", nurbsurface->isolines, isolines);
+    nurbsurface->isolines--;
+  }
+  {
+    BITCODE_BS modeler_format_version;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "modeler_format_version", &modeler_format_version, NULL)
+        && modeler_format_version == nurbsurface->modeler_format_version)
+      pass ();
+    else
+      fail ("NURBSURFACE.modeler_format_version [BS] %hu != %hu", nurbsurface->modeler_format_version, modeler_format_version);
+    modeler_format_version++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "modeler_format_version", &modeler_format_version, 0)
+        && modeler_format_version == nurbsurface->modeler_format_version)
+      pass ();
+    else
+      fail ("NURBSURFACE.modeler_format_version [BS] set+1 %hu != %hu", nurbsurface->modeler_format_version, modeler_format_version);
+    nurbsurface->modeler_format_version--;
+  }
+  {
+    BITCODE_BL num_blocks;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_blocks", &num_blocks, NULL)
+        && num_blocks == nurbsurface->num_blocks)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_blocks [BL] %u != %u", nurbsurface->num_blocks, num_blocks);
+    num_blocks++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "num_blocks", &num_blocks, 0)
+        && num_blocks == nurbsurface->num_blocks)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_blocks [BL] set+1 %u != %u", nurbsurface->num_blocks, num_blocks);
+    nurbsurface->num_blocks--;
+  }
+  {
+    BITCODE_BL num_silhouettes;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_silhouettes", &num_silhouettes, NULL)
+        && num_silhouettes == nurbsurface->num_silhouettes)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_silhouettes [BL] %u != %u", nurbsurface->num_silhouettes, num_silhouettes);
+    num_silhouettes++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "num_silhouettes", &num_silhouettes, 0)
+        && num_silhouettes == nurbsurface->num_silhouettes)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_silhouettes [BL] set+1 %u != %u", nurbsurface->num_silhouettes, num_silhouettes);
+    nurbsurface->num_silhouettes--;
+  }
+  {
+    BITCODE_BL num_wires;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_wires", &num_wires, NULL)
+        && num_wires == nurbsurface->num_wires)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_wires [BL] %u != %u", nurbsurface->num_wires, num_wires);
+    num_wires++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "num_wires", &num_wires, 0)
+        && num_wires == nurbsurface->num_wires)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_wires [BL] set+1 %u != %u", nurbsurface->num_wires, num_wires);
+    nurbsurface->num_wires--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "parent", &parent, NULL)
+        && !memcmp (&parent, &nurbsurface->parent, sizeof (nurbsurface->parent)))
+        pass ();
+    else
+        fail ("NURBSURFACE.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD point;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "point", &point, NULL)
+        && !memcmp (&point, &nurbsurface->point, sizeof (nurbsurface->point)))
+        pass ();
+    else
+        fail ("NURBSURFACE.point [3BD]");
+  }
+  {
+    BITCODE_B point_present;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "point_present", &point_present, NULL)
+        && point_present == nurbsurface->point_present)
+      pass ();
+    else
+      fail ("NURBSURFACE.point_present [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->point_present, point_present);
+    point_present++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "point_present", &point_present, 0)
+        && point_present == nurbsurface->point_present)
+      pass ();
+    else
+      fail ("NURBSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->point_present, point_present);
+    nurbsurface->point_present--;
+  }
+  {
+    Dwg_3DSOLID_silhouette* silhouettes;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_silhouettes", &count, NULL)
+        && dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "silhouettes", &silhouettes, NULL)
+        && silhouettes == nurbsurface->silhouettes)
+      pass ();
+    else
+      fail ("NURBSURFACE.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
+  }
+  {
+    BITCODE_BS u_isolines;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "u_isolines", &u_isolines, NULL)
+        && u_isolines == nurbsurface->u_isolines)
+      pass ();
+    else
+      fail ("NURBSURFACE.u_isolines [BS] %hu != %hu", nurbsurface->u_isolines, u_isolines);
+    u_isolines++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "u_isolines", &u_isolines, 0)
+        && u_isolines == nurbsurface->u_isolines)
+      pass ();
+    else
+      fail ("NURBSURFACE.u_isolines [BS] set+1 %hu != %hu", nurbsurface->u_isolines, u_isolines);
+    nurbsurface->u_isolines--;
+  }
+  {
+    BITCODE_B unknown;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "unknown", &unknown, NULL)
+        && unknown == nurbsurface->unknown)
+      pass ();
+    else
+      fail ("NURBSURFACE.unknown [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->unknown, unknown);
+    unknown++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "unknown", &unknown, 0)
+        && unknown == nurbsurface->unknown)
+      pass ();
+    else
+      fail ("NURBSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->unknown, unknown);
+    nurbsurface->unknown--;
+  }
+  {
+    BITCODE_BL unknown_2007;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "unknown_2007", &unknown_2007, NULL)
+        && unknown_2007 == nurbsurface->unknown_2007)
+      pass ();
+    else
+      fail ("NURBSURFACE.unknown_2007 [BL] %u != %u", nurbsurface->unknown_2007, unknown_2007);
+    unknown_2007++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "unknown_2007", &unknown_2007, 0)
+        && unknown_2007 == nurbsurface->unknown_2007)
+      pass ();
+    else
+      fail ("NURBSURFACE.unknown_2007 [BL] set+1 %u != %u", nurbsurface->unknown_2007, unknown_2007);
+    nurbsurface->unknown_2007--;
+  }
+  {
+    BITCODE_BS v_isolines;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "v_isolines", &v_isolines, NULL)
+        && v_isolines == nurbsurface->v_isolines)
+      pass ();
+    else
+      fail ("NURBSURFACE.v_isolines [BS] %hu != %hu", nurbsurface->v_isolines, v_isolines);
+    v_isolines++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "v_isolines", &v_isolines, 0)
+        && v_isolines == nurbsurface->v_isolines)
+      pass ();
+    else
+      fail ("NURBSURFACE.v_isolines [BS] set+1 %hu != %hu", nurbsurface->v_isolines, v_isolines);
+    nurbsurface->v_isolines--;
+  }
+  {
+    BITCODE_BS version;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "version", &version, NULL)
+        && version == nurbsurface->version)
+      pass ();
+    else
+      fail ("NURBSURFACE.version [BS] %hu != %hu", nurbsurface->version, version);
+    version++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "version", &version, 0)
+        && version == nurbsurface->version)
+      pass ();
+    else
+      fail ("NURBSURFACE.version [BS] set+1 %hu != %hu", nurbsurface->version, version);
+    nurbsurface->version--;
+  }
+  {
+    BITCODE_B wireframe_data_present;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "wireframe_data_present", &wireframe_data_present, NULL)
+        && wireframe_data_present == nurbsurface->wireframe_data_present)
+      pass ();
+    else
+      fail ("NURBSURFACE.wireframe_data_present [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->wireframe_data_present, wireframe_data_present);
+    wireframe_data_present++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "wireframe_data_present", &wireframe_data_present, 0)
+        && wireframe_data_present == nurbsurface->wireframe_data_present)
+      pass ();
+    else
+      fail ("NURBSURFACE.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->wireframe_data_present, wireframe_data_present);
+    nurbsurface->wireframe_data_present--;
+  }
+  {
+    Dwg_3DSOLID_wire* wires;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_wires", &count, NULL)
+        && dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "wires", &wires, NULL)
+        && wires == nurbsurface->wires)
+      pass ();
+    else
+      fail ("NURBSURFACE.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
+  }
+  if (failed && (is_class_unstable ("NURBSURFACE") || is_class_debugging ("NURBSURFACE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "NURBSURFACE", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_OLE2FRAME (const Dwg_Object *obj)
 {
   int error = 0;
@@ -43370,7 +43716,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 43373 "dynapi_test.c"
+#line 43719 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -43444,6 +43790,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MULTILEADER(obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODEL)
     error += test_NAVISWORKSMODEL(obj);
+  else  if (obj->fixedtype == DWG_TYPE_NURBSURFACE)
+    error += test_NURBSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_OLE2FRAME)
     error += test_OLE2FRAME(obj);
   else  if (obj->fixedtype == DWG_TYPE_OLEFRAME)
@@ -43790,6 +44138,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MULTILEADER (obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODEL)
     error += test_NAVISWORKSMODEL (obj);
+  else  if (obj->fixedtype == DWG_TYPE_NURBSURFACE)
+    error += test_NURBSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_OLE2FRAME)
     error += test_OLE2FRAME (obj);
   else  if (obj->fixedtype == DWG_TYPE_OLEFRAME)
@@ -44074,7 +44424,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 44077 "dynapi_test.c"
+#line 44427 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -44362,6 +44712,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_NAVISWORKSMODEL): %d != "
                "dwg_dynapi_fields_size (\"NAVISWORKSMODEL\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_NURBSURFACE);
+  size2 = dwg_dynapi_fields_size ("NURBSURFACE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_NURBSURFACE): %d != "
+               "dwg_dynapi_fields_size (\"NURBSURFACE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_OLE2FRAME);

@@ -146,6 +146,7 @@ testobjects = \
 	multileader \
 	navisworksmodel \
 	navisworksmodeldef \
+	nurbsurface \
 	object_ptr \
 	ole2frame \
 	oleframe \

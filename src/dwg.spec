@@ -7391,6 +7391,29 @@ DWG_ENTITY (SWEPTSURFACE)
 
 DWG_ENTITY_END
 
+// missing coverage
+DWG_ENTITY (NURBSURFACE)
+
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbModelerGeometry)
+  ACTION_3DSOLID;
+  FIELD_BS (modeler_format_version, 70); //def 1
+  //FIELD_BL (bindata_size, 90);
+  //FIELD_TF (bindata, FIELD_VALUE (bindata_size), 1); // in DXF as encrypted ASCII
+
+  SUBCLASS (AcDbSurface)
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  //SUBCLASS (AcDbNurbSurface)
+  //FIELD_BL (class_version, 90);
+  //if (FIELD_VALUE (class_version) > 10)
+  //  return DWG_ERR_VALUEOUTOFBOUNDS;
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+
 DWG_ENTITY (PLANESURFACE)
 
   DECODE_UNKNOWN_BITS

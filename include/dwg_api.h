@@ -506,6 +506,7 @@ typedef struct _dwg_entity_LIGHT                  dwg_ent_light;
 typedef struct _dwg_entity_UNDERLAY               dwg_ent_underlay;
 typedef struct _dwg_entity_WIPEOUT                dwg_ent_wipeout;
 typedef struct _dwg_entity_ARC_DIMENSION          dwg_ent_arc_dimension;
+typedef struct _dwg_entity_NURBSURFACE            dwg_ent_nurbsurface;
 typedef struct _dwg_entity_PLANESURFACE           dwg_ent_planesurface;
 typedef struct _dwg_entity_EXTRUDEDSURFACE        dwg_ent_extrudedsurface;
 typedef struct _dwg_entity_LOFTEDSURFACE          dwg_ent_loftedsurface;
@@ -728,6 +729,7 @@ DWG_GETALL_ENTITY_DECL (EXTRUDEDSURFACE)
 DWG_GETALL_ENTITY_DECL (GEOPOSITIONMARKER)
 DWG_GETALL_ENTITY_DECL (LOFTEDSURFACE)
 DWG_GETALL_ENTITY_DECL (NAVISWORKSMODEL)
+DWG_GETALL_ENTITY_DECL (NURBSURFACE)
 DWG_GETALL_ENTITY_DECL (PLANESURFACE)
 DWG_GETALL_ENTITY_DECL (REVOLVEDSURFACE)
 DWG_GETALL_ENTITY_DECL (SWEPTSURFACE)
@@ -940,6 +942,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (EXTRUDEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (GEOPOSITIONMARKER)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LOFTEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (NAVISWORKSMODEL)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (NURBSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PLANESURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (REVOLVEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SWEPTSURFACE)
@@ -1209,6 +1212,7 @@ dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
 dwg_get_OBJECT_DECL (ent_geopositionmarker, GEOPOSITIONMARKER);
 dwg_get_OBJECT_DECL (ent_loftedsurface, LOFTEDSURFACE);
 dwg_get_OBJECT_DECL (ent_navisworksmodel, NAVISWORKSMODEL);
+dwg_get_OBJECT_DECL (ent_nurbsurface, NURBSURFACE);
 dwg_get_OBJECT_DECL (ent_planesurface, PLANESURFACE);
 dwg_get_OBJECT_DECL (ent_revolvedsurface, REVOLVEDSURFACE);
 dwg_get_OBJECT_DECL (ent_sweptsurface, SWEPTSURFACE);
