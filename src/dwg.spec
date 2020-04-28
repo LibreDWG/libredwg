@@ -1721,16 +1721,17 @@ DWG_ENTITY_END
   FIELD_BL (name.selection_marker, 0);                \
   FIELD_BS (name.color, 0);                           \
   FIELD_BL (name.acis_index, 0);                      \
+  /* TODO: align num_points to 255 */                 \
   FIELD_BL (name.num_points, 0);                      \
   FIELD_3DPOINT_VECTOR (name.points, name.num_points, 0); \
   FIELD_B (name.transform_present, 0);                \
-  if (FIELD_VALUE (name.transform_present))            \
+  if (FIELD_VALUE (name.transform_present))           \
     {                                                 \
       FIELD_3BD (name.axis_x, 0);                     \
       FIELD_3BD (name.axis_y, 0);                     \
       FIELD_3BD (name.axis_z, 0);                     \
       FIELD_3BD (name.translation, 0);                \
-      FIELD_BD (name.scale, 0);                       \
+      FIELD_BT (name.scale, 0);                       \
       FIELD_B (name.has_rotation, 0);                 \
       FIELD_B (name.has_reflection, 0);               \
       FIELD_B (name.has_shear, 0);                    \
@@ -2015,17 +2016,21 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
           REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)                            \
           REPEAT_BLOCK                                                                             \
               SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);                                       \
-              SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);                                  \
+              SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0);   /* ?? */                       \
               SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);                         \
               SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);                                  \
               SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);                               \
-              SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);                                   \
-              REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire) \
-              REPEAT_BLOCK                                                                         \
-                  WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])                          \
-              END_REPEAT_BLOCK                                                                     \
-              SET_PARENT (silhouettes[rcount1].wires, (Dwg_Entity__3DSOLID*)_obj)                  \
-              END_REPEAT (silhouettes[rcount1].wires);                                             \
+              SUB_FIELD_B (silhouettes[rcount1], has_wires, 0);                                    \
+              if (_obj->silhouettes[rcount1].has_wires)                                            \
+                {                                                                                  \
+                  SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);                               \
+                  REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire) \
+                  REPEAT_BLOCK                                                                     \
+                      WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])                      \
+                  END_REPEAT_BLOCK                                                                 \
+                  SET_PARENT (silhouettes[rcount1].wires, (Dwg_Entity__3DSOLID*)_obj)              \
+                  END_REPEAT (silhouettes[rcount1].wires);                                         \
+                }                                                                                  \
           END_REPEAT_BLOCK                                                                         \
           SET_PARENT (silhouettes, (Dwg_Entity__3DSOLID*)_obj)                                     \
           END_REPEAT (silhouettes);                                                                \
@@ -4058,17 +4063,16 @@ DWG_OBJECT (LAYER_INDEX)
   }
   FIELD_BL (num_entries, 0);
   VALUEOUTOFBOUNDS (num_entries, 20000)
-  // TODO: merge entries with H*
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
   REPEAT_BLOCK
-      SUB_FIELD_BL (entries[rcount1], idxlong, 0);
-      SUB_FIELD_T (entries[rcount1], layername, 8);
+      SUB_FIELD_BL (entries[rcount1], numlayers, 0);
+      SUB_FIELD_T (entries[rcount1], name, 8);
+      SUB_FIELD_HANDLE (entries[rcount1], handle, 5, 0);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (entries)
   END_REPEAT (entries)
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (layer_entries, num_entries, 5, 0);
 
 DWG_OBJECT_END
 
@@ -6461,7 +6465,7 @@ DWG_ENTITY (LIGHT)
   FIELD_BL (class_version, 90);
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_T (name, 1);
-  FIELD_BS (type, 70);
+  FIELD_BL (type, 70);
   FIELD_B (status, 290);
 #ifdef IS_DXF
   UNTIL (R_2000) {
@@ -6473,34 +6477,56 @@ DWG_ENTITY (LIGHT)
   FIELD_CMC (color, 63,421);
 #endif
   FIELD_B (plot_glyph, 291);
-
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);
   FIELD_3BD (target, 11);
-  FIELD_BS (attenuation_type, 72);
+  FIELD_BL (attenuation_type, 72);
   FIELD_B (use_attenuation_limits, 292);
   FIELD_BD (attenuation_start_limit, 41);
   FIELD_BD (attenuation_end_limit, 42);
   FIELD_BD (hotspot_angle, 50);
   FIELD_BD (falloff_angle, 51);
   FIELD_B (cast_shadows, 293);
-  FIELD_BS (shadow_type, 73);
+  FIELD_BL (shadow_type, 73);
   FIELD_BS (shadow_map_size, 91); //not BS
   FIELD_RC (shadow_map_softness, 280);
-#if 0
-  if (dwg->header_vars.LIGHTINGUNITS == PHOTOMETRIC)
+
+  // LIGHTINGUNITS is a member of the AcDbVariableDictionary
+  // NOD => DICTIONARY => DICTIONARYVAR
+  DECODER {
+    if (strEQ (dwg_variable_dict (dwg, "LIGHTINGUNITS"), "2")) /* PHOTOMETRIC*/
+      FIELD_VALUE (is_photometric) = 1;
+  }
+  if (FIELD_VALUE (is_photometric))
   {
     FIELD_B (has_photometric_data, 1);
-    if (_obj->has_photometric_data)
+    if (FIELD_VALUE (has_photometric_data))
       {
-        DXF {
-          VALUE_B (0, 295)
-          if (_obj->web_file)
-            FIELD_T (web_file, 300)
-          else
-            VALUE_B (0, 290) // has_webfile
-       }
-        FIELD_BS (lamp_color_type, 0); //0: in kelvin, 1: as preset
+        DXF { VALUE_B (0, 295); }
+        FIELD_B (has_webfile, 290);
+        FIELD_T (web_file, 300);
+        FIELD_BS (lamp_color_type, 70); //0: temp. in kelvin, 1: as preset
+        FIELD_BD (lamp_color_temp, 40);
+        FIELD_BD (lamp_color_temp1, 41);
+        FIELD_BS (lamp_color_preset, 71);
+        FIELD_BD (lamp_color_temp2, 42);
+        FIELD_BS (bl72, 72);
+        FIELD_BD (bd43, 43);
+        FIELD_BD (bd44, 44);
+        FIELD_BD (bd45, 45);
+        FIELD_BS (bl73, 73);
+        FIELD_3BD_1 (web_rotation, 46);
+        FIELD_BS (bl74, 74);
+        FIELD_BS (bl75, 75);
+        FIELD_BS (bl76, 76); //bool
+        FIELD_BD (bd49, 49);
+        FIELD_BD (bl50, 50);
+        FIELD_BD (bd51, 51);
+        FIELD_BD (bd52, 52);
+        FIELD_BD (bd53, 53);
+        FIELD_BD (bd54, 54);
+        FIELD_BS (bl77, 77);
+        /*
         // FIXME
         if (FIELD_VALUE (lamp_color_type) == 0) {
           FIELD_BD (lamp_color_temp, 0);
@@ -6509,17 +6535,13 @@ DWG_ENTITY (LIGHT)
           if (FIELD_VALUE (lamp_color_preset) == 14) // Custom
             FIELD_BLx (lamp_color_rgb, 0);
         }
-        FIELD_B (has_target_grip, 0);
+        //FIELD_B (has_target_grip, 0);
         FIELD_BS (glyph_display_type, 0);
-        FIELD_T (web_file, 0);
-        FIELD_3BD (web_rotation, 0);
         FIELD_BS (physical_intensity_method, 0);
         FIELD_BS (drawable_type, 0);
+        */
       }
   }
-  else
-    _obj->has_photometric_data =  0;
-#endif
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (lights_layer, 5, 0);
 
@@ -6827,7 +6849,7 @@ DWG_OBJECT (LIGHTLIST)
   FIELD_BS (num_lights, 90)
   REPEAT (num_lights, lights, Dwg_LIGHTLIST_light)
   REPEAT_BLOCK
-      SUB_FIELD_HANDLE (lights[rcount1],light, 5, 5)
+      SUB_FIELD_HANDLE (lights[rcount1],handle, 5, 5)
       SUB_FIELD_T (lights[rcount1],name, 1)
   END_REPEAT_BLOCK
   END_REPEAT (lights)
@@ -7088,83 +7110,25 @@ DWG_OBJECT_END
 DWG_OBJECT (SUN)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbSun)
-  FIELD_BL (class_version, 90); //1
+  FIELD_BS (class_version, 90); //1
   VALUEOUTOFBOUNDS (class_version, 10)
-  FIELD_B (is_on, 290); // status, isOn
-  FIELD_B (has_shadow, 291); // shadow on/off
-  FIELD_B (is_dst, 292);  // isDayLightSavingsOn
-  FIELD_BS (unknown, 421); //16777215
-  DEBUG_HERE_OBJ
-  //27 111111111100001000000000 011 [32,58]
-  bit_advance_position (dat, 24);
-  FIELD_BD (intensity, 40); //01
-  FIELD_B (has_shadow, 291); //1
-  FIELD_BL (julian_day, 91); // same as TIMEBLL
-  FIELD_BL (time, 92);    // in seconds past midnight
-  FIELD_B (is_dst, 292);  // isDayLightSavingsOn
-  //
-  DEBUG_HERE_OBJ //128
-  //22 0 010000001011000000010 | 14 0 1011000000010
-  bit_advance_position (dat, 21);
-
-  //FIELD_BD (altitude, 0); //calculated? 10
-  //FIELD_BD (azimuth, 0);  //calculated? 10
-  //FIELD_3BD (direction, 0); //calculated? 101001
-  if (FIELD_VALUE (has_shadow))
-  {
-    FIELD_BS (shadow_type, 70); // 0 raytraced, 1 shadow maps
-    if (FIELD_VALUE (shadow_type)>2) {
-      LOG_ERROR ("Invalid SUN.shadow_type %d", (int)FIELD_VALUE (shadow_type));
-      return DWG_ERR_VALUEOUTOFBOUNDS;
-    }
-    FIELD_BS (shadow_softness, 280); //1 [94-103]
-    FIELD_BS (shadow_mapsize, 71); //256 usually
-  }
-  //there's still 5.4 - 11.3 bits free for some fields
-  //421:16777215
-
-  DEBUG_HERE_OBJ //DEBUG_POS_OBJ
-  rcount1 = bit_position (dat);
-  rcount2 = rcount1 - obj->address * 8; // cur offset
-#if 0
-  FIELD_VALUE (num_bytes) = (obj->bitsize - rcount2) / 8;
-  FIELD_VALUE (num_bits)  = (obj->bitsize - rcount2) % 8;
-  LOG_TRACE ("num_bytes: %d, num_bits: %d\n", FIELD_VALUE (num_bytes), FIELD_VALUE (num_bits));
-  if (obj->bitsize > rcount2) {
-    FIELD_TF (bytes, FIELD_VALUE (num_bytes), 0);
-    FIELD_VECTOR (bits, B, num_bits, 0);
-  }
-#endif
-  bit_set_position (dat, rcount1 + 60);
-
-#if 0
-  //find handle stream
-  for (vcount=bit_position (dat);
-       dat->byte < obj->address+obj->size;
-       bit_set_position (dat,++vcount))
+  if (_obj->class_version > 0)
     {
-      DEBUG_POS_OBJ
-      // @9979.6 5.0.0, @9980.0 4.0.0, @9991.1 3.0.0
-      // search for a valid code=4 handle followed by a valid code=3
-      FIELD_HANDLE (ownerhandle, 4, 0);
-      if (_obj->ownerhandle &&
-          _obj->ownerhandle->handleref.code == 4 &&
-          _obj->ownerhandle->absolute_ref < dwg->num_object_refs)
-        {
-          //reactors also 4. could check num_reactors
-          FIELD_HANDLE (xdicobjhandle, 3, 0);
-          if (_obj->xdicobjhandle &&
-              _obj->xdicobjhandle->handleref.code == 3 &&
-              _obj->xdicobjhandle->absolute_ref < dwg->num_object_refs)
-            {
-              bit_set_position (dat, vcount);
-              break;
-            }
-        }
+      FIELD_B (is_on, 290); // status, isOn
+      FIELD_CMC (color, 63,421);
+      FIELD_BD (intensity, 40); //01
+      FIELD_B (has_shadow, 291); // shadow on/off
+      FIELD_B (is_dst, 292);  // isDayLightSavingsOn
+      FIELD_BS (unknown, 421); //16777215 rgb?
+      //DEBUG_HERE_OBJ
+      //27 111111111100001000000000 011 [32,58]
+      //bit_advance_position (dat, 24);
+      //FIELD_B (has_shadow, 291); //1
+      FIELD_BS (julian_day, 91); // same as TIMEBLL
+      FIELD_BL (time, 92);    // in seconds past midnight
+      FIELD_B (is_dst, 292);  // isDayLightSavingsOn
+      FIELD_RC (shadow_type, 70); // 0 raytraced, 1 shadow maps
     }
-#endif
-
-  FIELD_CMC (color, 63,421);
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
@@ -8312,6 +8276,28 @@ DWG_OBJECT (CSACDOCUMENTOPTIONS)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (RENDERSETTINGS)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbRenderSettings)
+  VERSION (R_2007) { // version 31
+    VALUE_BL (_obj->class_version + 1, 90)
+  }
+  LATER_VERSIONS {
+    FIELD_BL (class_version, 90)
+  }
+  FIELD_T (name, 1);
+  FIELD_B (fog_enabled, 290);
+  FIELD_B (fog_background_enabled, 290);
+  FIELD_B (b290_1, 290);
+  FIELD_B (environ_image_enabled, 290);
+  FIELD_T (environ_image_filename, 1);
+  FIELD_T (description, 1);
+  FIELD_BL (bl90, 90);
+  VERSION (R_2007)
+    FIELD_B (b290_2, 290);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbRenderSettings)
@@ -8394,6 +8380,33 @@ DWG_OBJECT (MENTALRAYRENDERSETTINGS)
   FIELD_BS (bs90_13, 90);
   FIELD_B (b290_12, 290);
   FIELD_BD (bd40_7, 40);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (MOTIONPATH)
+  FIELD_BS (class_version, 90);
+  FIELD_HANDLE (camera_path, 5, 340);
+  FIELD_HANDLE (target_path, 5, 340);
+  FIELD_HANDLE (viewtable, 5, 340);
+  FIELD_BS (frames, 90);
+  FIELD_BS (frame_rate, 90);
+  FIELD_B (corner_decel, 290);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+//not in dxf
+DWG_OBJECT (TVDEVICEPROPERTIES)
+  FIELD_BLx (flags, 0); // bitmask
+  FIELD_BS (max_regen_threads, 0);
+  FIELD_BL (use_lut_palette, 0);
+  FIELD_BLL (alt_hlt, 0);
+  FIELD_BLL (alt_hltcolor, 0);
+  FIELD_BLL (geom_shader_usage, 0);
+  // ver > 3
+  FIELD_BL (blending_mode, 0)
+  //ver 2 or >4:
+  FIELD_BD (antialiasing_level, 0)
+  FIELD_BD (bd2, 0)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

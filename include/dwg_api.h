@@ -577,6 +577,7 @@ typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
 typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockpurgepreventer;
 typedef struct _dwg_object_GEODATA                         dwg_obj_geodata;
+typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
 typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transaction;
 typedef struct _dwg_object_OBJECT_PTR                      dwg_obj_object_ptr;
 typedef struct _dwg_object_PERSUBENTMGR                    dwg_obj_persubentmgr;
@@ -616,9 +617,9 @@ typedef struct _dwg_object_GEOMAPIMAGE                     dwg_obj_geomapimage;
 typedef struct _dwg_object_LAYERFILTER                     dwg_obj_layerfilter;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG               dwg_obj_layoutprintconfig;
 typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA         dwg_obj_leaderobjectcontextdata;
-typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
 typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
 typedef struct _dwg_object_MENTALRAYRENDERSETTINGS         dwg_obj_mentalrayrendersettings;
+typedef struct _dwg_object_MOTIONPATH                      dwg_obj_motionpath;
 typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA        dwg_obj_mleaderobjectcontextdata;
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA dwg_obj_mtextattributeobjectcontextdata;
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA          dwg_obj_mtextobjectcontextdata;
@@ -627,6 +628,8 @@ typedef struct _dwg_object_PLOTSETTINGS                    dwg_obj_plotsettings;
 typedef struct _dwg_object_RAPIDRTRENDERSETTINGS           dwg_obj_rapidrtrendersettings;
 typedef struct _dwg_object_RENDERENVIRONMENT               dwg_obj_renderenvironment;
 typedef struct _dwg_object_RENDERGLOBAL                    dwg_obj_renderglobal;
+typedef struct _dwg_object_RENDERSETTINGS                  dwg_obj_rendersettings;
+typedef struct _dwg_object_TVDEVICEPROPERTIES              dwg_obj_tvdeviceproperties;
 typedef struct _dwg_object_SECTIONVIEWSTYLE                dwg_obj_sectionviewstyle;
 typedef struct _dwg_object_SECTION_SETTINGS                dwg_obj_section_settings;
 typedef struct _dwg_object_SUN                             dwg_obj_sun;
@@ -795,6 +798,7 @@ DWG_GETALL_OBJECT_DECL (DBCOLOR)
 DWG_GETALL_OBJECT_DECL (DIMASSOC)
 DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
 DWG_GETALL_OBJECT_DECL (GEODATA)
+DWG_GETALL_OBJECT_DECL (LIGHTLIST)
 DWG_GETALL_OBJECT_DECL (LONG_TRANSACTION)
 DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
 DWG_GETALL_OBJECT_DECL (PERSUBENTMGR)
@@ -829,7 +833,6 @@ DWG_GETALL_OBJECT_DECL (GEOMAPIMAGE)
 DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
 DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT_DECL (LIGHTLIST)
 DWG_GETALL_OBJECT_DECL (MATERIAL)
 DWG_GETALL_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
@@ -838,6 +841,8 @@ DWG_GETALL_OBJECT_DECL (NAVISWORKSMODELDEF)
 DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
 DWG_GETALL_OBJECT_DECL (RENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
+DWG_GETALL_OBJECT_DECL (RENDERSETTINGS)
+DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES)
 DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS)
 DWG_GETALL_OBJECT_DECL (SUN)
@@ -860,6 +865,7 @@ DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (CSACDOCUMENTOPTIONS)
 DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
+DWG_GETALL_OBJECT_DECL (MOTIONPATH)
 // DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (NPOCOLLECTION)
@@ -998,6 +1004,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (IDBUFFER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGEDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGEDEF_REACTOR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LONG_TRANSACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR)
@@ -1038,7 +1045,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (GEOMAPIMAGE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYERFILTER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUTPRINTCONFIG)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MATERIAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
@@ -1047,6 +1053,8 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (NAVISWORKSMODELDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PLOTSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENVIRONMENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERSETTINGS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTIONVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_SETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SUN)
@@ -1069,6 +1077,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CSACDOCUMENTOPTIONS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (MOTIONPATH)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (NPOCOLLECTION)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUD)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
@@ -1271,6 +1280,7 @@ dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
 dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
 dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);
 dwg_get_OBJECT_DECL (obj_geodata, GEODATA);
+dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
 dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
 dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
@@ -1300,7 +1310,6 @@ dwg_get_OBJECT_DECL (obj_geomapimage, GEOMAPIMAGE)
 dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
 dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
-dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_material, MATERIAL);
 dwg_get_OBJECT_DECL (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_mtextattributeobjectcontextdata, MTEXTATRIBUTEOBJECTCONTEXTDATA);
@@ -1309,6 +1318,8 @@ dwg_get_OBJECT_DECL (obj_navisworksmodeldef, NAVISWORKSMODELDEF);
 dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
 dwg_get_OBJECT_DECL (obj_renderenvironment, RENDERENVIRONMENT);
 dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);
+dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);
+dwg_get_OBJECT_DECL (obj_tvdeviceproperties, TVDEVICEPROPERTIES);
 dwg_get_OBJECT_DECL (obj_section_settings, SECTION_SETTINGS)
 dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_sun, SUN);
@@ -1331,6 +1342,7 @@ dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)
 dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
+dwg_get_OBJECT_DECL (obj_motionpath, MOTIONPATH)
 // dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION)
 // dwg_get_OBJECT_DECL (obj_pointcloud, POINTCLOUD)
 // dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)

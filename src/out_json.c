@@ -543,7 +543,7 @@ static char *_path_field (const char *path);
   VALUE_3RD (_obj->o.nam, dxf)
 
 static void
-field_cmc (Bit_Chain *restrict dat, const char *restrict key,
+field_cmc (Bit_Chain *dat, const char *restrict key,
            const Dwg_Color *restrict _obj)
 {
   if (dat->version >= R_2004)

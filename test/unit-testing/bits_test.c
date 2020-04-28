@@ -672,7 +672,7 @@ main (int argc, char const *argv[])
     color.flag = 1;
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
-    bit_write_CMC (&bitchain, &color);
+    bit_write_CMC (&bitchain, &bitchain, &color);
     if (bitchain.byte == 100 && bitchain.bit == 2)
       pass ();
     else
@@ -687,7 +687,7 @@ main (int argc, char const *argv[])
   bit_advance_position (&bitchain, -size);
   {
     Dwg_Color color_read;
-    bit_read_CMC (&bitchain, &color_read);
+    bit_read_CMC (&bitchain, &bitchain, &color_read);
 
     if (color_read.index == 19)
       pass ();
@@ -705,14 +705,14 @@ main (int argc, char const *argv[])
     color.flag = 1;
     color.name = (char *)"Some name";
     color.book_name = (char *)"book_name";
-    bit_write_CMC (&bitchain, &color);
+    bit_write_CMC (&bitchain, &bitchain, &color);
     if (bitchain.byte == 122 && bitchain.bit == 0)
       pass ();
     else
       fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
 
     bit_set_position (&bitchain, pos);
-    bit_read_CMC (&bitchain, &color);
+    bit_read_CMC (&bitchain, &bitchain, &color);
 
     if (color.index == 19 && color.rgb == 5190965 && color.flag == 1
         && !strcmp (color.name, "Some name"))

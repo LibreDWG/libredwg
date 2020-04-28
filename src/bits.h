@@ -276,8 +276,8 @@ void bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date);
 BITCODE_TIMERLL bit_read_TIMERLL (Bit_Chain *dat);
 void bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date);
 
-void bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
-void bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color);
+void bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color);
+void bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color);
 
 void bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Dwg_Color *restrict color);

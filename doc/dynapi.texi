@@ -2043,7 +2043,7 @@ BL,	DXF 90
 @item name
 T,	DXF 1
 @item type
-BS,	DXF 70
+BL,	DXF 70
 @item status
 B,	DXF 290
 @item color
@@ -2057,7 +2057,7 @@ BD,	DXF 40
 @item target
 3BD,	DXF 11
 @item attenuation_type
-BS,	DXF 72
+BL,	DXF 72
 @item use_attenuation_limits
 B,	DXF 292
 @item attenuation_start_limit
@@ -2071,11 +2071,71 @@ BD,	DXF 51
 @item cast_shadows
 B,	DXF 293
 @item shadow_type
-BS,	DXF 73
+BL,	DXF 73
 @item shadow_map_size
 BS,	DXF 91
 @item shadow_map_softness
 RC,	DXF 280
+@item is_photometric
+B
+@item has_photometric_data
+B,	DXF 1
+@item has_webfile
+B,	DXF 290
+@item web_file
+T,	DXF 300
+@item lamp_color_type
+BS,	DXF 70
+@item lamp_color_temp
+BD,	DXF 40
+@item lamp_color_temp1
+BD,	DXF 41
+@item lamp_color_temp2
+BD,	DXF 42
+@item lamp_color_preset
+BS,	DXF 71
+@item lamp_color_rgb
+BL
+@item web_rotation
+3BD_1,	DXF 46
+@item has_target_grip
+B
+@item glyph_display_type
+BS
+@item physical_intensity_method
+BS
+@item drawable_type
+BS
+@item bl72
+BS,	DXF 72
+@item bd43
+BD,	DXF 43
+@item bd44
+BD,	DXF 44
+@item bd45
+BD,	DXF 45
+@item bl73
+BS,	DXF 73
+@item bl74
+BS,	DXF 74
+@item bl75
+BS,	DXF 75
+@item bl76
+BS,	DXF 76
+@item bd49
+BD,	DXF 49
+@item bl50
+BD,	DXF 50
+@item bd51
+BD,	DXF 51
+@item bd52
+BD,	DXF 52
+@item bd53
+BD,	DXF 53
+@item bd54
+BD,	DXF 54
+@item bl77
+BS,	DXF 77
 @item lights_layer
 H
 
@@ -6176,8 +6236,6 @@ BL,	DXF 40
 BL
 @item entries
 Dwg_LAYER_entry*
-@item layer_entries
-H*
 
 @end vtable
 @end indentedblock
@@ -6910,6 +6968,33 @@ Dwg_MLINESTYLE_line*
 @end vtable
 @end indentedblock
 
+@strong{MOTIONPATH} @anchor{MOTIONPATH}
+@cindex object, MOTIONPATH
+@vindex MOTIONPATH
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 90
+@item camera_path
+H,	DXF 340
+@item target_path
+H,	DXF 340
+@item viewtable
+H,	DXF 340
+@item frames
+BS,	DXF 90
+@item frame_rate
+BS,	DXF 90
+@item corner_decel
+B,	DXF 290
+
+@end vtable
+@end indentedblock
+
 @strong{MTEXTATTRIBUTEOBJECTCONTEXTDATA} @anchor{MTEXTATTRIBUTEOBJECTCONTEXTDATA}
 @cindex object, MTEXTATTRIBUTEOBJECTCONTEXTDATA
 @vindex MTEXTATTRIBUTEOBJECTCONTEXTDATA
@@ -7287,6 +7372,39 @@ BL,	DXF 90
 @item predef_presets_first
 B,	DXF 290
 @item highlevel_info
+B,	DXF 290
+
+@end vtable
+@end indentedblock
+
+@strong{RENDERSETTINGS} @anchor{RENDERSETTINGS}
+@cindex object, RENDERSETTINGS
+@vindex RENDERSETTINGS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item fog_enabled
+B,	DXF 290
+@item fog_background_enabled
+B,	DXF 290
+@item b290_1
+B,	DXF 290
+@item environ_image_enabled
+B,	DXF 290
+@item environ_image_filename
+T,	DXF 1
+@item description
+T,	DXF 1
+@item bl90
+BL,	DXF 90
+@item b290_2
 B,	DXF 290
 
 @end vtable
@@ -7679,9 +7797,9 @@ B,	DXF 291
 @item shadow_type
 BS,	DXF 70
 @item shadow_mapsize
-BS,	DXF 71
+BS
 @item shadow_softness
-BS,	DXF 280
+BS
 @item skyparams
 H
 
@@ -7859,6 +7977,37 @@ BD,	DXF 50
 2RD,	DXF 10
 @item alignment_pt
 2RD,	DXF 11
+
+@end vtable
+@end indentedblock
+
+@strong{TVDEVICEPROPERTIES} @anchor{TVDEVICEPROPERTIES}
+@cindex object, TVDEVICEPROPERTIES
+@vindex TVDEVICEPROPERTIES
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item flags
+BL
+@item max_regen_threads
+BS
+@item use_lut_palette
+BL
+@item alt_hlt
+BLL
+@item alt_hltcolor
+BLL
+@item geom_shader_usage
+BLL
+@item blending_mode
+BL
+@item antialiasing_level
+BD
+@item bd2
+BD
 
 @end vtable
 @end indentedblock
@@ -8500,6 +8649,8 @@ BL
 @item vp_up_dir
 3BD
 @item vp_perspective
+B
+@item has_wires
 B
 @item num_wires
 BL
@@ -9495,10 +9646,12 @@ BD,	DXF 42
 
 @item parent
 struct _dwg_object_LAYER_INDEX*
-@item idxlong
+@item numlayers
 BL
-@item layername
+@item name
 T,	DXF 8
+@item handle
+H
 
 @end vtable
 @end indentedblock
@@ -9635,7 +9788,7 @@ BS,	DXF 271
 struct _dwg_object_LIGHTLIST*
 @item name
 T,	DXF 1
-@item light
+@item handle
 H,	DXF 5
 
 @end vtable
@@ -10507,7 +10660,7 @@ H,	DXF 348
 RC
 @item full_visualstyle
 H,	DXF 348
-@item has_ds_binary_data
+@item has_ds_data
 B
 @item has_edge_visualstyle
 B
@@ -10597,7 +10750,7 @@ struct _dwg_struct*
 Dwg_Eed*
 @item handleref
 Dwg_Handle*
-@item has_ds_binary_data
+@item has_ds_data
 B
 @item num_eed
 BL

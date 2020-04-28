@@ -11969,19 +11969,244 @@ static int test_LIGHT (const Dwg_Object *obj)
     light->attenuation_start_limit--;
   }
   {
-    BITCODE_BS attenuation_type;
+    BITCODE_BL attenuation_type;
     if (dwg_dynapi_entity_value (light, "LIGHT", "attenuation_type", &attenuation_type, NULL)
         && attenuation_type == light->attenuation_type)
       pass ();
     else
-      fail ("LIGHT.attenuation_type [BS] %hu != %hu", light->attenuation_type, attenuation_type);
+      fail ("LIGHT.attenuation_type [BL] %u != %u", light->attenuation_type, attenuation_type);
     attenuation_type++;
     if (dwg_dynapi_entity_set_value (light, "LIGHT", "attenuation_type", &attenuation_type, 0)
         && attenuation_type == light->attenuation_type)
       pass ();
     else
-      fail ("LIGHT.attenuation_type [BS] set+1 %hu != %hu", light->attenuation_type, attenuation_type);
+      fail ("LIGHT.attenuation_type [BL] set+1 %u != %u", light->attenuation_type, attenuation_type);
     light->attenuation_type--;
+  }
+  {
+    BITCODE_BD bd43;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd43", &bd43, NULL)
+        && bd43 == light->bd43)
+      pass ();
+    else
+      fail ("LIGHT.bd43 [BD] %g != %g", light->bd43, bd43);
+    bd43++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd43", &bd43, 0)
+        && bd43 == light->bd43)
+      pass ();
+    else
+      fail ("LIGHT.bd43 [BD] set+1 %g != %g", light->bd43, bd43);
+    light->bd43--;
+  }
+  {
+    BITCODE_BD bd44;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd44", &bd44, NULL)
+        && bd44 == light->bd44)
+      pass ();
+    else
+      fail ("LIGHT.bd44 [BD] %g != %g", light->bd44, bd44);
+    bd44++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd44", &bd44, 0)
+        && bd44 == light->bd44)
+      pass ();
+    else
+      fail ("LIGHT.bd44 [BD] set+1 %g != %g", light->bd44, bd44);
+    light->bd44--;
+  }
+  {
+    BITCODE_BD bd45;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd45", &bd45, NULL)
+        && bd45 == light->bd45)
+      pass ();
+    else
+      fail ("LIGHT.bd45 [BD] %g != %g", light->bd45, bd45);
+    bd45++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd45", &bd45, 0)
+        && bd45 == light->bd45)
+      pass ();
+    else
+      fail ("LIGHT.bd45 [BD] set+1 %g != %g", light->bd45, bd45);
+    light->bd45--;
+  }
+  {
+    BITCODE_BD bd49;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd49", &bd49, NULL)
+        && bd49 == light->bd49)
+      pass ();
+    else
+      fail ("LIGHT.bd49 [BD] %g != %g", light->bd49, bd49);
+    bd49++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd49", &bd49, 0)
+        && bd49 == light->bd49)
+      pass ();
+    else
+      fail ("LIGHT.bd49 [BD] set+1 %g != %g", light->bd49, bd49);
+    light->bd49--;
+  }
+  {
+    BITCODE_BD bd51;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd51", &bd51, NULL)
+        && bd51 == light->bd51)
+      pass ();
+    else
+      fail ("LIGHT.bd51 [BD] %g != %g", light->bd51, bd51);
+    bd51++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd51", &bd51, 0)
+        && bd51 == light->bd51)
+      pass ();
+    else
+      fail ("LIGHT.bd51 [BD] set+1 %g != %g", light->bd51, bd51);
+    light->bd51--;
+  }
+  {
+    BITCODE_BD bd52;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd52", &bd52, NULL)
+        && bd52 == light->bd52)
+      pass ();
+    else
+      fail ("LIGHT.bd52 [BD] %g != %g", light->bd52, bd52);
+    bd52++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd52", &bd52, 0)
+        && bd52 == light->bd52)
+      pass ();
+    else
+      fail ("LIGHT.bd52 [BD] set+1 %g != %g", light->bd52, bd52);
+    light->bd52--;
+  }
+  {
+    BITCODE_BD bd53;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd53", &bd53, NULL)
+        && bd53 == light->bd53)
+      pass ();
+    else
+      fail ("LIGHT.bd53 [BD] %g != %g", light->bd53, bd53);
+    bd53++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd53", &bd53, 0)
+        && bd53 == light->bd53)
+      pass ();
+    else
+      fail ("LIGHT.bd53 [BD] set+1 %g != %g", light->bd53, bd53);
+    light->bd53--;
+  }
+  {
+    BITCODE_BD bd54;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bd54", &bd54, NULL)
+        && bd54 == light->bd54)
+      pass ();
+    else
+      fail ("LIGHT.bd54 [BD] %g != %g", light->bd54, bd54);
+    bd54++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bd54", &bd54, 0)
+        && bd54 == light->bd54)
+      pass ();
+    else
+      fail ("LIGHT.bd54 [BD] set+1 %g != %g", light->bd54, bd54);
+    light->bd54--;
+  }
+  {
+    BITCODE_BD bl50;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bl50", &bl50, NULL)
+        && bl50 == light->bl50)
+      pass ();
+    else
+      fail ("LIGHT.bl50 [BD] %g != %g", light->bl50, bl50);
+    bl50++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bl50", &bl50, 0)
+        && bl50 == light->bl50)
+      pass ();
+    else
+      fail ("LIGHT.bl50 [BD] set+1 %g != %g", light->bl50, bl50);
+    light->bl50--;
+  }
+  {
+    BITCODE_BS bl72;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bl72", &bl72, NULL)
+        && bl72 == light->bl72)
+      pass ();
+    else
+      fail ("LIGHT.bl72 [BS] %hu != %hu", light->bl72, bl72);
+    bl72++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bl72", &bl72, 0)
+        && bl72 == light->bl72)
+      pass ();
+    else
+      fail ("LIGHT.bl72 [BS] set+1 %hu != %hu", light->bl72, bl72);
+    light->bl72--;
+  }
+  {
+    BITCODE_BS bl73;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bl73", &bl73, NULL)
+        && bl73 == light->bl73)
+      pass ();
+    else
+      fail ("LIGHT.bl73 [BS] %hu != %hu", light->bl73, bl73);
+    bl73++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bl73", &bl73, 0)
+        && bl73 == light->bl73)
+      pass ();
+    else
+      fail ("LIGHT.bl73 [BS] set+1 %hu != %hu", light->bl73, bl73);
+    light->bl73--;
+  }
+  {
+    BITCODE_BS bl74;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bl74", &bl74, NULL)
+        && bl74 == light->bl74)
+      pass ();
+    else
+      fail ("LIGHT.bl74 [BS] %hu != %hu", light->bl74, bl74);
+    bl74++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bl74", &bl74, 0)
+        && bl74 == light->bl74)
+      pass ();
+    else
+      fail ("LIGHT.bl74 [BS] set+1 %hu != %hu", light->bl74, bl74);
+    light->bl74--;
+  }
+  {
+    BITCODE_BS bl75;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bl75", &bl75, NULL)
+        && bl75 == light->bl75)
+      pass ();
+    else
+      fail ("LIGHT.bl75 [BS] %hu != %hu", light->bl75, bl75);
+    bl75++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bl75", &bl75, 0)
+        && bl75 == light->bl75)
+      pass ();
+    else
+      fail ("LIGHT.bl75 [BS] set+1 %hu != %hu", light->bl75, bl75);
+    light->bl75--;
+  }
+  {
+    BITCODE_BS bl76;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bl76", &bl76, NULL)
+        && bl76 == light->bl76)
+      pass ();
+    else
+      fail ("LIGHT.bl76 [BS] %hu != %hu", light->bl76, bl76);
+    bl76++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bl76", &bl76, 0)
+        && bl76 == light->bl76)
+      pass ();
+    else
+      fail ("LIGHT.bl76 [BS] set+1 %hu != %hu", light->bl76, bl76);
+    light->bl76--;
+  }
+  {
+    BITCODE_BS bl77;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "bl77", &bl77, NULL)
+        && bl77 == light->bl77)
+      pass ();
+    else
+      fail ("LIGHT.bl77 [BS] %hu != %hu", light->bl77, bl77);
+    bl77++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "bl77", &bl77, 0)
+        && bl77 == light->bl77)
+      pass ();
+    else
+      fail ("LIGHT.bl77 [BS] set+1 %hu != %hu", light->bl77, bl77);
+    light->bl77--;
   }
   {
     BITCODE_B cast_shadows;
@@ -12022,6 +12247,21 @@ static int test_LIGHT (const Dwg_Object *obj)
         fail ("LIGHT.color [CMC]");
   }
   {
+    BITCODE_BS drawable_type;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "drawable_type", &drawable_type, NULL)
+        && drawable_type == light->drawable_type)
+      pass ();
+    else
+      fail ("LIGHT.drawable_type [BS] %hu != %hu", light->drawable_type, drawable_type);
+    drawable_type++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "drawable_type", &drawable_type, 0)
+        && drawable_type == light->drawable_type)
+      pass ();
+    else
+      fail ("LIGHT.drawable_type [BS] set+1 %hu != %hu", light->drawable_type, drawable_type);
+    light->drawable_type--;
+  }
+  {
     BITCODE_BD falloff_angle;
     if (dwg_dynapi_entity_value (light, "LIGHT", "falloff_angle", &falloff_angle, NULL)
         && falloff_angle == light->falloff_angle)
@@ -12035,6 +12275,66 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.falloff_angle [BD] set+1 %g != %g", light->falloff_angle, falloff_angle);
     light->falloff_angle--;
+  }
+  {
+    BITCODE_BS glyph_display_type;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "glyph_display_type", &glyph_display_type, NULL)
+        && glyph_display_type == light->glyph_display_type)
+      pass ();
+    else
+      fail ("LIGHT.glyph_display_type [BS] %hu != %hu", light->glyph_display_type, glyph_display_type);
+    glyph_display_type++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "glyph_display_type", &glyph_display_type, 0)
+        && glyph_display_type == light->glyph_display_type)
+      pass ();
+    else
+      fail ("LIGHT.glyph_display_type [BS] set+1 %hu != %hu", light->glyph_display_type, glyph_display_type);
+    light->glyph_display_type--;
+  }
+  {
+    BITCODE_B has_photometric_data;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "has_photometric_data", &has_photometric_data, NULL)
+        && has_photometric_data == light->has_photometric_data)
+      pass ();
+    else
+      fail ("LIGHT.has_photometric_data [B] " FORMAT_B " != " FORMAT_B "", light->has_photometric_data, has_photometric_data);
+    has_photometric_data++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "has_photometric_data", &has_photometric_data, 0)
+        && has_photometric_data == light->has_photometric_data)
+      pass ();
+    else
+      fail ("LIGHT.has_photometric_data [B] set+1 " FORMAT_B " != " FORMAT_B "", light->has_photometric_data, has_photometric_data);
+    light->has_photometric_data--;
+  }
+  {
+    BITCODE_B has_target_grip;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "has_target_grip", &has_target_grip, NULL)
+        && has_target_grip == light->has_target_grip)
+      pass ();
+    else
+      fail ("LIGHT.has_target_grip [B] " FORMAT_B " != " FORMAT_B "", light->has_target_grip, has_target_grip);
+    has_target_grip++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "has_target_grip", &has_target_grip, 0)
+        && has_target_grip == light->has_target_grip)
+      pass ();
+    else
+      fail ("LIGHT.has_target_grip [B] set+1 " FORMAT_B " != " FORMAT_B "", light->has_target_grip, has_target_grip);
+    light->has_target_grip--;
+  }
+  {
+    BITCODE_B has_webfile;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "has_webfile", &has_webfile, NULL)
+        && has_webfile == light->has_webfile)
+      pass ();
+    else
+      fail ("LIGHT.has_webfile [B] " FORMAT_B " != " FORMAT_B "", light->has_webfile, has_webfile);
+    has_webfile++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "has_webfile", &has_webfile, 0)
+        && has_webfile == light->has_webfile)
+      pass ();
+    else
+      fail ("LIGHT.has_webfile [B] set+1 " FORMAT_B " != " FORMAT_B "", light->has_webfile, has_webfile);
+    light->has_webfile--;
   }
   {
     BITCODE_BD hotspot_angle;
@@ -12067,6 +12367,111 @@ static int test_LIGHT (const Dwg_Object *obj)
     light->intensity--;
   }
   {
+    BITCODE_B is_photometric;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "is_photometric", &is_photometric, NULL)
+        && is_photometric == light->is_photometric)
+      pass ();
+    else
+      fail ("LIGHT.is_photometric [B] " FORMAT_B " != " FORMAT_B "", light->is_photometric, is_photometric);
+    is_photometric++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "is_photometric", &is_photometric, 0)
+        && is_photometric == light->is_photometric)
+      pass ();
+    else
+      fail ("LIGHT.is_photometric [B] set+1 " FORMAT_B " != " FORMAT_B "", light->is_photometric, is_photometric);
+    light->is_photometric--;
+  }
+  {
+    BITCODE_BS lamp_color_preset;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "lamp_color_preset", &lamp_color_preset, NULL)
+        && lamp_color_preset == light->lamp_color_preset)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_preset [BS] %hu != %hu", light->lamp_color_preset, lamp_color_preset);
+    lamp_color_preset++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "lamp_color_preset", &lamp_color_preset, 0)
+        && lamp_color_preset == light->lamp_color_preset)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_preset [BS] set+1 %hu != %hu", light->lamp_color_preset, lamp_color_preset);
+    light->lamp_color_preset--;
+  }
+  {
+    BITCODE_BL lamp_color_rgb;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "lamp_color_rgb", &lamp_color_rgb, NULL)
+        && lamp_color_rgb == light->lamp_color_rgb)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_rgb [BL] %u != %u", light->lamp_color_rgb, lamp_color_rgb);
+    lamp_color_rgb++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "lamp_color_rgb", &lamp_color_rgb, 0)
+        && lamp_color_rgb == light->lamp_color_rgb)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_rgb [BL] set+1 %u != %u", light->lamp_color_rgb, lamp_color_rgb);
+    light->lamp_color_rgb--;
+  }
+  {
+    BITCODE_BD lamp_color_temp;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "lamp_color_temp", &lamp_color_temp, NULL)
+        && lamp_color_temp == light->lamp_color_temp)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_temp [BD] %g != %g", light->lamp_color_temp, lamp_color_temp);
+    lamp_color_temp++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "lamp_color_temp", &lamp_color_temp, 0)
+        && lamp_color_temp == light->lamp_color_temp)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_temp [BD] set+1 %g != %g", light->lamp_color_temp, lamp_color_temp);
+    light->lamp_color_temp--;
+  }
+  {
+    BITCODE_BD lamp_color_temp1;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "lamp_color_temp1", &lamp_color_temp1, NULL)
+        && lamp_color_temp1 == light->lamp_color_temp1)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_temp1 [BD] %g != %g", light->lamp_color_temp1, lamp_color_temp1);
+    lamp_color_temp1++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "lamp_color_temp1", &lamp_color_temp1, 0)
+        && lamp_color_temp1 == light->lamp_color_temp1)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_temp1 [BD] set+1 %g != %g", light->lamp_color_temp1, lamp_color_temp1);
+    light->lamp_color_temp1--;
+  }
+  {
+    BITCODE_BD lamp_color_temp2;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "lamp_color_temp2", &lamp_color_temp2, NULL)
+        && lamp_color_temp2 == light->lamp_color_temp2)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_temp2 [BD] %g != %g", light->lamp_color_temp2, lamp_color_temp2);
+    lamp_color_temp2++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "lamp_color_temp2", &lamp_color_temp2, 0)
+        && lamp_color_temp2 == light->lamp_color_temp2)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_temp2 [BD] set+1 %g != %g", light->lamp_color_temp2, lamp_color_temp2);
+    light->lamp_color_temp2--;
+  }
+  {
+    BITCODE_BS lamp_color_type;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "lamp_color_type", &lamp_color_type, NULL)
+        && lamp_color_type == light->lamp_color_type)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_type [BS] %hu != %hu", light->lamp_color_type, lamp_color_type);
+    lamp_color_type++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "lamp_color_type", &lamp_color_type, 0)
+        && lamp_color_type == light->lamp_color_type)
+      pass ();
+    else
+      fail ("LIGHT.lamp_color_type [BS] set+1 %hu != %hu", light->lamp_color_type, lamp_color_type);
+    light->lamp_color_type--;
+  }
+  {
     BITCODE_H lights_layer;
     if (dwg_dynapi_entity_value (light, "LIGHT", "lights_layer", &lights_layer, NULL)
         && !memcmp (&lights_layer, &light->lights_layer, sizeof (light->lights_layer)))
@@ -12091,6 +12496,21 @@ static int test_LIGHT (const Dwg_Object *obj)
         pass ();
     else
         fail ("LIGHT.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_BS physical_intensity_method;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "physical_intensity_method", &physical_intensity_method, NULL)
+        && physical_intensity_method == light->physical_intensity_method)
+      pass ();
+    else
+      fail ("LIGHT.physical_intensity_method [BS] %hu != %hu", light->physical_intensity_method, physical_intensity_method);
+    physical_intensity_method++;
+    if (dwg_dynapi_entity_set_value (light, "LIGHT", "physical_intensity_method", &physical_intensity_method, 0)
+        && physical_intensity_method == light->physical_intensity_method)
+      pass ();
+    else
+      fail ("LIGHT.physical_intensity_method [BS] set+1 %hu != %hu", light->physical_intensity_method, physical_intensity_method);
+    light->physical_intensity_method--;
   }
   {
     BITCODE_B plot_glyph;
@@ -12146,18 +12566,18 @@ static int test_LIGHT (const Dwg_Object *obj)
     light->shadow_map_softness--;
   }
   {
-    BITCODE_BS shadow_type;
+    BITCODE_BL shadow_type;
     if (dwg_dynapi_entity_value (light, "LIGHT", "shadow_type", &shadow_type, NULL)
         && shadow_type == light->shadow_type)
       pass ();
     else
-      fail ("LIGHT.shadow_type [BS] %hu != %hu", light->shadow_type, shadow_type);
+      fail ("LIGHT.shadow_type [BL] %u != %u", light->shadow_type, shadow_type);
     shadow_type++;
     if (dwg_dynapi_entity_set_value (light, "LIGHT", "shadow_type", &shadow_type, 0)
         && shadow_type == light->shadow_type)
       pass ();
     else
-      fail ("LIGHT.shadow_type [BS] set+1 %hu != %hu", light->shadow_type, shadow_type);
+      fail ("LIGHT.shadow_type [BL] set+1 %u != %u", light->shadow_type, shadow_type);
     light->shadow_type--;
   }
   {
@@ -12184,18 +12604,18 @@ static int test_LIGHT (const Dwg_Object *obj)
         fail ("LIGHT.target [3BD]");
   }
   {
-    BITCODE_BS type;
+    BITCODE_BL type;
     if (dwg_dynapi_entity_value (light, "LIGHT", "type", &type, NULL)
         && type == light->type)
       pass ();
     else
-      fail ("LIGHT.type [BS] %hu != %hu", light->type, type);
+      fail ("LIGHT.type [BL] %u != %u", light->type, type);
     type++;
     if (dwg_dynapi_entity_set_value (light, "LIGHT", "type", &type, 0)
         && type == light->type)
       pass ();
     else
-      fail ("LIGHT.type [BS] set+1 %hu != %hu", light->type, type);
+      fail ("LIGHT.type [BL] set+1 %u != %u", light->type, type);
     light->type--;
   }
   {
@@ -12212,6 +12632,14 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.use_attenuation_limits [B] set+1 " FORMAT_B " != " FORMAT_B "", light->use_attenuation_limits, use_attenuation_limits);
     light->use_attenuation_limits--;
+  }
+  {
+    BITCODE_3BD web_rotation;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "web_rotation", &web_rotation, NULL)
+        && !memcmp (&web_rotation, &light->web_rotation, sizeof (light->web_rotation)))
+        pass ();
+    else
+        fail ("LIGHT.web_rotation [3BD_1]");
   }
   if (failed && (is_class_unstable ("LIGHT") || is_class_debugging ("LIGHT")))
     {
@@ -32251,16 +32679,6 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
       fail ("LAYER_INDEX.entries [Dwg_LAYER_entry*] * %u num_entries", count);
   }
   {
-    BITCODE_H* layer_entries;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "layer_entries", &layer_entries, NULL)
-        && layer_entries == layer_index->layer_entries)
-      pass ();
-    else
-      fail ("LAYER_INDEX.layer_entries [H*] * %u num_entries", count);
-  }
-  {
     BITCODE_BL num_entries;
     if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_entries", &num_entries, NULL)
         && num_entries == layer_index->num_entries)
@@ -36297,6 +36715,111 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_MOTIONPATH (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_MOTIONPATH *restrict motionpath = obj->tio.object->tio.MOTIONPATH;
+  failed = 0;
+  {
+    BITCODE_H camera_path;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "camera_path", &camera_path, NULL)
+        && !memcmp (&camera_path, &motionpath->camera_path, sizeof (motionpath->camera_path)))
+        pass ();
+    else
+        fail ("MOTIONPATH.camera_path [H]");
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "class_version", &class_version, NULL)
+        && class_version == motionpath->class_version)
+      pass ();
+    else
+      fail ("MOTIONPATH.class_version [BS] %hu != %hu", motionpath->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (motionpath, "MOTIONPATH", "class_version", &class_version, 0)
+        && class_version == motionpath->class_version)
+      pass ();
+    else
+      fail ("MOTIONPATH.class_version [BS] set+1 %hu != %hu", motionpath->class_version, class_version);
+    motionpath->class_version--;
+  }
+  {
+    BITCODE_B corner_decel;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "corner_decel", &corner_decel, NULL)
+        && corner_decel == motionpath->corner_decel)
+      pass ();
+    else
+      fail ("MOTIONPATH.corner_decel [B] " FORMAT_B " != " FORMAT_B "", motionpath->corner_decel, corner_decel);
+    corner_decel++;
+    if (dwg_dynapi_entity_set_value (motionpath, "MOTIONPATH", "corner_decel", &corner_decel, 0)
+        && corner_decel == motionpath->corner_decel)
+      pass ();
+    else
+      fail ("MOTIONPATH.corner_decel [B] set+1 " FORMAT_B " != " FORMAT_B "", motionpath->corner_decel, corner_decel);
+    motionpath->corner_decel--;
+  }
+  {
+    BITCODE_BS frame_rate;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "frame_rate", &frame_rate, NULL)
+        && frame_rate == motionpath->frame_rate)
+      pass ();
+    else
+      fail ("MOTIONPATH.frame_rate [BS] %hu != %hu", motionpath->frame_rate, frame_rate);
+    frame_rate++;
+    if (dwg_dynapi_entity_set_value (motionpath, "MOTIONPATH", "frame_rate", &frame_rate, 0)
+        && frame_rate == motionpath->frame_rate)
+      pass ();
+    else
+      fail ("MOTIONPATH.frame_rate [BS] set+1 %hu != %hu", motionpath->frame_rate, frame_rate);
+    motionpath->frame_rate--;
+  }
+  {
+    BITCODE_BS frames;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "frames", &frames, NULL)
+        && frames == motionpath->frames)
+      pass ();
+    else
+      fail ("MOTIONPATH.frames [BS] %hu != %hu", motionpath->frames, frames);
+    frames++;
+    if (dwg_dynapi_entity_set_value (motionpath, "MOTIONPATH", "frames", &frames, 0)
+        && frames == motionpath->frames)
+      pass ();
+    else
+      fail ("MOTIONPATH.frames [BS] set+1 %hu != %hu", motionpath->frames, frames);
+    motionpath->frames--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "parent", &parent, NULL)
+        && !memcmp (&parent, &motionpath->parent, sizeof (motionpath->parent)))
+        pass ();
+    else
+        fail ("MOTIONPATH.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H target_path;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "target_path", &target_path, NULL)
+        && !memcmp (&target_path, &motionpath->target_path, sizeof (motionpath->target_path)))
+        pass ();
+    else
+        fail ("MOTIONPATH.target_path [H]");
+  }
+  {
+    BITCODE_H viewtable;
+    if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "viewtable", &viewtable, NULL)
+        && !memcmp (&viewtable, &motionpath->viewtable, sizeof (motionpath->viewtable)))
+        pass ();
+    else
+        fail ("MOTIONPATH.viewtable [H]");
+  }
+  if (failed && (is_class_unstable ("MOTIONPATH") || is_class_debugging ("MOTIONPATH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MOTIONPATH", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
 {
   int error = 0;
@@ -38085,6 +38608,162 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("RENDERGLOBAL") || is_class_debugging ("RENDERGLOBAL")))
     {
       ok ("%s failed %d tests (TODO unstable)", "RENDERGLOBAL", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_RENDERSETTINGS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_RENDERSETTINGS *restrict rendersettings = obj->tio.object->tio.RENDERSETTINGS;
+  failed = 0;
+  {
+    BITCODE_B b290_1;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "b290_1", &b290_1, NULL)
+        && b290_1 == rendersettings->b290_1)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.b290_1 [B] " FORMAT_B " != " FORMAT_B "", rendersettings->b290_1, b290_1);
+    b290_1++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "b290_1", &b290_1, 0)
+        && b290_1 == rendersettings->b290_1)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.b290_1 [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->b290_1, b290_1);
+    rendersettings->b290_1--;
+  }
+  {
+    BITCODE_B b290_2;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "b290_2", &b290_2, NULL)
+        && b290_2 == rendersettings->b290_2)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.b290_2 [B] " FORMAT_B " != " FORMAT_B "", rendersettings->b290_2, b290_2);
+    b290_2++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "b290_2", &b290_2, 0)
+        && b290_2 == rendersettings->b290_2)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.b290_2 [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->b290_2, b290_2);
+    rendersettings->b290_2--;
+  }
+  {
+    BITCODE_BL bl90;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "bl90", &bl90, NULL)
+        && bl90 == rendersettings->bl90)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.bl90 [BL] %u != %u", rendersettings->bl90, bl90);
+    bl90++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "bl90", &bl90, 0)
+        && bl90 == rendersettings->bl90)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.bl90 [BL] set+1 %u != %u", rendersettings->bl90, bl90);
+    rendersettings->bl90--;
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "class_version", &class_version, NULL)
+        && class_version == rendersettings->class_version)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.class_version [BL] %u != %u", rendersettings->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "class_version", &class_version, 0)
+        && class_version == rendersettings->class_version)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.class_version [BL] set+1 %u != %u", rendersettings->class_version, class_version);
+    rendersettings->class_version--;
+  }
+  {
+    BITCODE_T description;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "description", &description, NULL)
+        && description
+           ? strEQ ((char *)description, (char *)rendersettings->description)
+           : !rendersettings->description)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.description [T] '%s' <> '%s'", description, rendersettings->description);
+  }
+  {
+    BITCODE_B environ_image_enabled;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "environ_image_enabled", &environ_image_enabled, NULL)
+        && environ_image_enabled == rendersettings->environ_image_enabled)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.environ_image_enabled [B] " FORMAT_B " != " FORMAT_B "", rendersettings->environ_image_enabled, environ_image_enabled);
+    environ_image_enabled++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "environ_image_enabled", &environ_image_enabled, 0)
+        && environ_image_enabled == rendersettings->environ_image_enabled)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.environ_image_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->environ_image_enabled, environ_image_enabled);
+    rendersettings->environ_image_enabled--;
+  }
+  {
+    BITCODE_T environ_image_filename;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
+        && environ_image_filename
+           ? strEQ ((char *)environ_image_filename, (char *)rendersettings->environ_image_filename)
+           : !rendersettings->environ_image_filename)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, rendersettings->environ_image_filename);
+  }
+  {
+    BITCODE_B fog_background_enabled;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "fog_background_enabled", &fog_background_enabled, NULL)
+        && fog_background_enabled == rendersettings->fog_background_enabled)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.fog_background_enabled [B] " FORMAT_B " != " FORMAT_B "", rendersettings->fog_background_enabled, fog_background_enabled);
+    fog_background_enabled++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "fog_background_enabled", &fog_background_enabled, 0)
+        && fog_background_enabled == rendersettings->fog_background_enabled)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.fog_background_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->fog_background_enabled, fog_background_enabled);
+    rendersettings->fog_background_enabled--;
+  }
+  {
+    BITCODE_B fog_enabled;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "fog_enabled", &fog_enabled, NULL)
+        && fog_enabled == rendersettings->fog_enabled)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.fog_enabled [B] " FORMAT_B " != " FORMAT_B "", rendersettings->fog_enabled, fog_enabled);
+    fog_enabled++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "fog_enabled", &fog_enabled, 0)
+        && fog_enabled == rendersettings->fog_enabled)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.fog_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->fog_enabled, fog_enabled);
+    rendersettings->fog_enabled--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)rendersettings->name)
+           : !rendersettings->name)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.name [T] '%s' <> '%s'", name, rendersettings->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "parent", &parent, NULL)
+        && !memcmp (&parent, &rendersettings->parent, sizeof (rendersettings->parent)))
+        pass ();
+    else
+        fail ("RENDERSETTINGS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("RENDERSETTINGS") || is_class_debugging ("RENDERSETTINGS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RENDERSETTINGS", failed);
       failed = 0;
     }
   return failed;
@@ -40764,6 +41443,141 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("TEXTOBJECTCONTEXTDATA") || is_class_debugging ("TEXTOBJECTCONTEXTDATA")))
     {
       ok ("%s failed %d tests (TODO unstable)", "TEXTOBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_TVDEVICEPROPERTIES *restrict tvdeviceproperties = obj->tio.object->tio.TVDEVICEPROPERTIES;
+  failed = 0;
+  {
+    BITCODE_BLL alt_hlt;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hlt", &alt_hlt, NULL)
+        && !memcmp (&alt_hlt, &tvdeviceproperties->alt_hlt, sizeof (tvdeviceproperties->alt_hlt)))
+        pass ();
+    else
+        fail ("TVDEVICEPROPERTIES.alt_hlt [BLL]");
+  }
+  {
+    BITCODE_BLL alt_hltcolor;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hltcolor", &alt_hltcolor, NULL)
+        && !memcmp (&alt_hltcolor, &tvdeviceproperties->alt_hltcolor, sizeof (tvdeviceproperties->alt_hltcolor)))
+        pass ();
+    else
+        fail ("TVDEVICEPROPERTIES.alt_hltcolor [BLL]");
+  }
+  {
+    BITCODE_BD antialiasing_level;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "antialiasing_level", &antialiasing_level, NULL)
+        && antialiasing_level == tvdeviceproperties->antialiasing_level)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.antialiasing_level [BD] %g != %g", tvdeviceproperties->antialiasing_level, antialiasing_level);
+    antialiasing_level++;
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "antialiasing_level", &antialiasing_level, 0)
+        && antialiasing_level == tvdeviceproperties->antialiasing_level)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.antialiasing_level [BD] set+1 %g != %g", tvdeviceproperties->antialiasing_level, antialiasing_level);
+    tvdeviceproperties->antialiasing_level--;
+  }
+  {
+    BITCODE_BD bd2;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "bd2", &bd2, NULL)
+        && bd2 == tvdeviceproperties->bd2)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.bd2 [BD] %g != %g", tvdeviceproperties->bd2, bd2);
+    bd2++;
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "bd2", &bd2, 0)
+        && bd2 == tvdeviceproperties->bd2)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.bd2 [BD] set+1 %g != %g", tvdeviceproperties->bd2, bd2);
+    tvdeviceproperties->bd2--;
+  }
+  {
+    BITCODE_BL blending_mode;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "blending_mode", &blending_mode, NULL)
+        && blending_mode == tvdeviceproperties->blending_mode)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.blending_mode [BL] %u != %u", tvdeviceproperties->blending_mode, blending_mode);
+    blending_mode++;
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "blending_mode", &blending_mode, 0)
+        && blending_mode == tvdeviceproperties->blending_mode)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.blending_mode [BL] set+1 %u != %u", tvdeviceproperties->blending_mode, blending_mode);
+    tvdeviceproperties->blending_mode--;
+  }
+  {
+    BITCODE_BL flags;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "flags", &flags, NULL)
+        && flags == tvdeviceproperties->flags)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.flags [BL] %u != %u", tvdeviceproperties->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "flags", &flags, 0)
+        && flags == tvdeviceproperties->flags)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.flags [BL] set+1 %u != %u", tvdeviceproperties->flags, flags);
+    tvdeviceproperties->flags--;
+  }
+  {
+    BITCODE_BLL geom_shader_usage;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "geom_shader_usage", &geom_shader_usage, NULL)
+        && !memcmp (&geom_shader_usage, &tvdeviceproperties->geom_shader_usage, sizeof (tvdeviceproperties->geom_shader_usage)))
+        pass ();
+    else
+        fail ("TVDEVICEPROPERTIES.geom_shader_usage [BLL]");
+  }
+  {
+    BITCODE_BS max_regen_threads;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "max_regen_threads", &max_regen_threads, NULL)
+        && max_regen_threads == tvdeviceproperties->max_regen_threads)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.max_regen_threads [BS] %hu != %hu", tvdeviceproperties->max_regen_threads, max_regen_threads);
+    max_regen_threads++;
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "max_regen_threads", &max_regen_threads, 0)
+        && max_regen_threads == tvdeviceproperties->max_regen_threads)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.max_regen_threads [BS] set+1 %hu != %hu", tvdeviceproperties->max_regen_threads, max_regen_threads);
+    tvdeviceproperties->max_regen_threads--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "parent", &parent, NULL)
+        && !memcmp (&parent, &tvdeviceproperties->parent, sizeof (tvdeviceproperties->parent)))
+        pass ();
+    else
+        fail ("TVDEVICEPROPERTIES.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL use_lut_palette;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "use_lut_palette", &use_lut_palette, NULL)
+        && use_lut_palette == tvdeviceproperties->use_lut_palette)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.use_lut_palette [BL] %u != %u", tvdeviceproperties->use_lut_palette, use_lut_palette);
+    use_lut_palette++;
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "use_lut_palette", &use_lut_palette, 0)
+        && use_lut_palette == tvdeviceproperties->use_lut_palette)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.use_lut_palette [BL] set+1 %u != %u", tvdeviceproperties->use_lut_palette, use_lut_palette);
+    tvdeviceproperties->use_lut_palette--;
+  }
+  if (failed && (is_class_unstable ("TVDEVICEPROPERTIES") || is_class_debugging ("TVDEVICEPROPERTIES")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "TVDEVICEPROPERTIES", failed);
       failed = 0;
     }
   return failed;
@@ -43968,6 +44782,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MLEADERSTYLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
     error += test_MLINESTYLE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_MOTIONPATH)
+    error += test_MOTIONPATH(obj);
   else  if (obj->fixedtype == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
     error += test_MTEXTATTRIBUTEOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
@@ -43992,6 +44808,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_RENDERENVIRONMENT(obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERGLOBAL)
     error += test_RENDERGLOBAL(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERSETTINGS)
+    error += test_RENDERSETTINGS(obj);
   else  if (obj->fixedtype == DWG_TYPE_SCALE)
     error += test_SCALE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
@@ -44022,6 +44840,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TABLESTYLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
     error += test_TEXTOBJECTCONTEXTDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_TVDEVICEPROPERTIES)
+    error += test_TVDEVICEPROPERTIES(obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS)
     error += test_UCS(obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS_CONTROL)
@@ -44316,6 +45136,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MLEADERSTYLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
     error += test_MLINESTYLE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_MOTIONPATH)
+    error += test_MOTIONPATH (obj);
   else  if (obj->fixedtype == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
     error += test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
@@ -44340,6 +45162,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_RENDERENVIRONMENT (obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERGLOBAL)
     error += test_RENDERGLOBAL (obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERSETTINGS)
+    error += test_RENDERSETTINGS (obj);
   else  if (obj->fixedtype == DWG_TYPE_SCALE)
     error += test_SCALE (obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
@@ -44370,6 +45194,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TABLESTYLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
     error += test_TEXTOBJECTCONTEXTDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_TVDEVICEPROPERTIES)
+    error += test_TVDEVICEPROPERTIES (obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS)
     error += test_UCS (obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS_CONTROL)
@@ -45498,6 +46324,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"MLINESTYLE\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_MOTIONPATH);
+  size2 = dwg_dynapi_fields_size ("MOTIONPATH");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_MOTIONPATH): %d != "
+               "dwg_dynapi_fields_size (\"MOTIONPATH\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("MTEXTATTRIBUTEOBJECTCONTEXTDATA");
   if (size1 != size2)
@@ -45592,6 +46426,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_RENDERGLOBAL): %d != "
                "dwg_dynapi_fields_size (\"RENDERGLOBAL\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_RENDERSETTINGS);
+  size2 = dwg_dynapi_fields_size ("RENDERSETTINGS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_RENDERSETTINGS): %d != "
+               "dwg_dynapi_fields_size (\"RENDERSETTINGS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_SCALE);
@@ -45712,6 +46554,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_TEXTOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"TEXTOBJECTCONTEXTDATA\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_TVDEVICEPROPERTIES);
+  size2 = dwg_dynapi_fields_size ("TVDEVICEPROPERTIES");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_TVDEVICEPROPERTIES): %d != "
+               "dwg_dynapi_fields_size (\"TVDEVICEPROPERTIES\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_UCS);

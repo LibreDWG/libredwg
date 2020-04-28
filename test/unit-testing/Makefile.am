@@ -140,6 +140,7 @@ testobjects = \
 	mleaderstyle \
 	mline \
 	mlinestyle \
+	motionpath \
 	mtext \
 	mtextattributeobjectcontextdata \
 	mtextobjectcontextdata \
@@ -167,6 +168,7 @@ testobjects = \
 	region \
 	renderenvironment \
 	renderglobal \
+	rendersettings \
 	revolvedsurface \
 	scale \
 	section_manager \
@@ -193,6 +195,7 @@ testobjects = \
 	textobjectcontextdata \
 	tolerance \
 	trace \
+	tvdeviceproperties \
 	ucs \
 	ucs_control \
 	underlay \

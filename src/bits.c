@@ -2332,7 +2332,7 @@ bit_read_TIMERLL (Bit_Chain *dat)
  *  Ignores the double value.
  */
 void
-bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date)
+bit_write_TIMERLL (Bit_Chain *restrict dat, BITCODE_TIMERLL date)
 {
   bit_write_RL (dat, date.days);
   bit_write_RL (dat, date.ms);
@@ -2341,7 +2341,7 @@ bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date)
 /** Read color
  */
 void
-bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
+bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   memset (color, 0, sizeof (Dwg_Color));
   color->index = bit_read_BS (dat);
@@ -2349,27 +2349,25 @@ bit_read_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
     {
       color->rgb = bit_read_BL (dat);
       color->flag = bit_read_RC (dat);
-      // wide?
-      color->name = (color->flag & 1) ? (char *)bit_read_T (dat) : NULL;
-      color->book_name = (color->flag & 2) ? (char *)bit_read_T (dat) : NULL;
+      color->name = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
+      color->book_name = (color->flag & 2) ? (char *)bit_read_T (str_dat) : NULL;
     }
 }
 
 /** Write color
  */
 void
-bit_write_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color)
+bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   bit_write_BS (dat, color->index);
   if (dat->version >= R_2004)
     {
       bit_write_BL (dat, color->rgb);
       bit_write_RC (dat, color->flag);
-      // wide?
       if (color->flag & 1)
-        bit_write_T (dat, color->name);
+        bit_write_T (str_dat, color->name);
       if (color->flag & 2)
-        bit_write_T (dat, color->book_name);
+        bit_write_T (str_dat, color->book_name);
     }
 }
 

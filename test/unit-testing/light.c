@@ -27,17 +27,33 @@ api_process (dwg_object *obj)
   BITCODE_RC shadow_map_softness;
   BITCODE_H lights_layer;
 #if 0
-  /* yet unknown: */
+  BITCODE_B has_photometric_data;
+  BITCODE_B has_webfile;
+  BITCODE_T webfile;
   BITCODE_BS lamp_color_type;
   BITCODE_BD lamp_color_temp;
   BITCODE_BS lamp_color_preset;
   BITCODE_BL lamp_color_rgb;
-  BITCODE_TV web_file;
   BITCODE_3BD web_rotation;
   BITCODE_B has_target_grip;
   BITCODE_BS glyph_display_type;
   BITCODE_BS physical_intensity_method;
   BITCODE_BS drawable_type;
+  BITCODE_BS bl72;
+  BITCODE_BD bd43;
+  BITCODE_BD bd44;
+  BITCODE_BD bd45;
+  BITCODE_BS bl73;
+  BITCODE_BS bl74;
+  BITCODE_BS bl75;
+  BITCODE_BS bl76;
+  BITCODE_BD bd49;
+  BITCODE_BD bl50;
+  BITCODE_BD bd51;
+  BITCODE_BD bd52;
+  BITCODE_BD bd53;
+  BITCODE_BD bd54;
+  BITCODE_BS bl77;
 #endif
 
   dwg_ent_light *light = dwg_object_to_LIGHT (obj);
@@ -82,5 +98,20 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (light, LIGHT, glyph_display_type, BS, 2);
   CHK_ENTITY_TYPE (light, LIGHT, physical_intensity_method, BS, physical_intensity_method);
   CHK_ENTITY_TYPE (light, LIGHT, drawable_type, BS, drawable_type);
+  CHK_ENTITY_TYPE (light, LIGHT, bl72, BS, bl72);
+  CHK_ENTITY_TYPE (light, LIGHT, bd43, BD, bd43);
+  CHK_ENTITY_TYPE (light, LIGHT, bd44, BD, bd44);
+  CHK_ENTITY_TYPE (light, LIGHT, bd45, BD, bd45);
+  CHK_ENTITY_TYPE (light, LIGHT, bl73, BS, bl73);
+  CHK_ENTITY_TYPE (light, LIGHT, bl74, BS, bl74);
+  CHK_ENTITY_TYPE (light, LIGHT, bl75, BS, bl75);
+  CHK_ENTITY_TYPE (light, LIGHT, bl76, BS, bl76);
+  CHK_ENTITY_TYPE (light, LIGHT, bd49, BD, bd49);
+  CHK_ENTITY_TYPE (light, LIGHT, bl50, BD, bl50);
+  CHK_ENTITY_TYPE (light, LIGHT, bd51, BD, bd51);
+  CHK_ENTITY_TYPE (light, LIGHT, bd52, BD, bd52);
+  CHK_ENTITY_TYPE (light, LIGHT, bd53, BD, bd53);
+  CHK_ENTITY_TYPE (light, LIGHT, bd54, BD, bd54);
+  CHK_ENTITY_TYPE (light, LIGHT, bl77, BS, bl77);
 #endif  
 }

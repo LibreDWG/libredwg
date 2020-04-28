@@ -433,6 +433,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_MESH,
   DWG_TYPE_MLEADEROBJECTCONTEXTDATA,
   DWG_TYPE_MLEADERSTYLE,
+  DWG_TYPE_MOTIONPATH,
   DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,
   DWG_TYPE_MTEXTOBJECTCONTEXTDATA,
   DWG_TYPE_MULTILEADER,
@@ -450,6 +451,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_RASTERVARIABLES,
   DWG_TYPE_RENDERENVIRONMENT,
   DWG_TYPE_RENDERGLOBAL,
+  DWG_TYPE_RENDERSETTINGS,
   DWG_TYPE_REVOLVEDSURFACE,
   DWG_TYPE_RTEXT,
   DWG_TYPE_SCALE,
@@ -468,6 +470,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLEGEOMETRY,
   DWG_TYPE_TABLESTYLE,
   DWG_TYPE_TEXTOBJECTCONTEXTDATA,
+  DWG_TYPE_TVDEVICEPROPERTIES,
   DWG_TYPE_UNDERLAY, /* not separate DGN,DWF,PDF types */
   DWG_TYPE_UNDERLAYDEFINITION, /* not separate DGN,DWF,PDF types */
   DWG_TYPE_VISUALSTYLE,
@@ -1675,6 +1678,7 @@ typedef struct _dwg_3DSOLID_silhouette
   BITCODE_3BD vp_dir_from_target;
   BITCODE_3BD vp_up_dir;
   BITCODE_B vp_perspective;
+  BITCODE_B has_wires;
   BITCODE_BL num_wires;
   Dwg_3DSOLID_wire * wires;
 } Dwg_3DSOLID_silhouette;
@@ -3180,8 +3184,8 @@ typedef struct _dwg_TABLE_BreakRow
 
 typedef struct _dwg_LinkedData
 {
-  BITCODE_TV name;
-  BITCODE_TV description;
+  BITCODE_TV name; // max 16, dxf 1
+  BITCODE_TV description; // max 24, dxf 300
 } Dwg_LinkedData;
 
 typedef struct _dwg_TableCellContent_Attr
@@ -3882,8 +3886,9 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR
 typedef struct _dwg_LAYER_entry
 {
   struct _dwg_object_LAYER_INDEX *parent;
-  BITCODE_BL idxlong;
-  BITCODE_T layername;
+  BITCODE_BL numlayers;
+  BITCODE_T name;
+  BITCODE_H handle;
 } Dwg_LAYER_entry;
 
 typedef struct _dwg_object_LAYER_INDEX
@@ -3893,9 +3898,7 @@ typedef struct _dwg_object_LAYER_INDEX
   BITCODE_BL timestamp1;
   BITCODE_BL timestamp2;
   BITCODE_BL num_entries;
-  // TODO: merge
   Dwg_LAYER_entry* entries;
-  BITCODE_H* layer_entries;
 } Dwg_Object_LAYER_INDEX;
 
 /**
@@ -4149,7 +4152,7 @@ typedef struct _dwg_LIGHTLIST_light
 {
   struct _dwg_object_LIGHTLIST *parent;
   BITCODE_T name;
-  BITCODE_H light;
+  BITCODE_H handle;
 } Dwg_LIGHTLIST_light;
 
 /* 2010+ */
@@ -4374,40 +4377,58 @@ typedef struct _dwg_entity_LIGHT
 
   BITCODE_BL class_version; /*!< DXF 90 */
   BITCODE_T name;       /*!< DXF 1 */
-  BITCODE_BS type;      /*!< DXF 70, distant = 1; point = 2; spot = 3 */
+  BITCODE_BL type;      /*!< DXF 70, distant = 1; point = 2; spot = 3 */
   BITCODE_B status;     /*!< DXF 290, on or off */
   BITCODE_CMC color;    /*!< DXF 63 + 421. r2000: 90 for the rgb value */
   BITCODE_B plot_glyph; /*!< DXF 291 */
   BITCODE_BD intensity; /*!< DXF 40 */
   BITCODE_3BD position; /*!< DXF 10 */
   BITCODE_3BD target;   /*!< DXF 11 */
-  BITCODE_BS attenuation_type;        /*!< DXF 72. None=0, Inverse Linear=1,
-                                                    Inverse Square=2 */
+  BITCODE_BL attenuation_type;        /*!< DXF 72. None=0, Inverse Linear=1,
+                                                   Inverse Square=2 */
   BITCODE_B use_attenuation_limits;   /*!< DXF 292 */
   BITCODE_BD attenuation_start_limit; /*!< DXF 41 */
   BITCODE_BD attenuation_end_limit;   /*!< DXF 42 */
   BITCODE_BD hotspot_angle; 	  /*!< DXF 50 */
   BITCODE_BD falloff_angle; 	  /*!< DXF 51, with type=spot */
   BITCODE_B cast_shadows;   	  /*!< DXF 293 */
-  BITCODE_BS shadow_type;   	  /*!< DXF 73, ray_traced=0, shadow_maps=1 */
+  BITCODE_BL shadow_type;   	  /*!< DXF 73, ray_traced=0, shadow_maps=1 */
   BITCODE_BS shadow_map_size;     /*!< DXF 91 256 */
   BITCODE_RC shadow_map_softness; /*!< DXF 280 0-255 */
-  BITCODE_H lights_layer;
 
-#ifdef DEBUG_CLASSES
-  /* no room for these here */
+  BITCODE_B is_photometric;       /* if LIGHTINGUNITS == "2" */
+  BITCODE_B has_photometric_data;
+  BITCODE_B has_webfile;          /*!< DXF 290 */
+  BITCODE_T web_file;             /*!< DXF 300 IES file */
   BITCODE_BS lamp_color_type;     /*!< /0: in kelvin, 1: as preset */
   BITCODE_BD lamp_color_temp;     /*!< Temperature in Kelvin */
+  BITCODE_BD lamp_color_temp1;
+  BITCODE_BD lamp_color_temp2;
   BITCODE_BS lamp_color_preset;   /*!< 0: D65White, 1: Fluorescent, ... */
   BITCODE_BL lamp_color_rgb;      /*!< if lamp_color_preset is Custom */
-  BITCODE_TV web_file;            /*!< IES file */
-  BITCODE_3BD web_rotation;       /*!< rotation offset in XYZ Euler angles */
+  BITCODE_3BD web_rotation;       /*!< DXF 46? rotation offset in XYZ Euler angles */
   BITCODE_B has_target_grip;      /*!< if the light displays a target grip for orienting
                                        the light */
   BITCODE_BS glyph_display_type;  /*!< 0:auto, 1:on, 2:off */
   BITCODE_BS physical_intensity_method; /*!< ? */
   BITCODE_BS drawable_type;       /*!< ? */
-#endif
+  BITCODE_BS bl72;                /*!< DXF 72 */
+  BITCODE_BD bd43;                /*!< DXF 43 */
+  BITCODE_BD bd44;                /*!< DXF 44 */
+  BITCODE_BD bd45;                /*!< DXF 45 */
+  BITCODE_BS bl73;                /*!< DXF 73 */
+  BITCODE_BS bl74;                /*!< DXF 74 */
+  BITCODE_BS bl75;                /*!< DXF 75 */
+  BITCODE_BS bl76;                /*!< DXF 76 bool really */
+  BITCODE_BD bd49;                /*!< DXF 49 */
+  BITCODE_BD bl50;                /*!< DXF 50 */
+  BITCODE_BD bd51;                /*!< DXF 51 */
+  BITCODE_BD bd52;                /*!< DXF 52 */
+  BITCODE_BD bd53;                /*!< DXF 53 */
+  BITCODE_BD bd54;                /*!< DXF 54 */
+  BITCODE_BS bl77;                /*!< DXF 77 */
+
+  BITCODE_H lights_layer;
 } Dwg_Entity_LIGHT;
 
 /**
@@ -5359,6 +5380,25 @@ typedef struct _dwg_object_RAPIDRTRENDERSETTINGS
 } Dwg_Object_RAPIDRTRENDERSETTINGS;
 
 /**
+ Class RENDERSETTINGS (varies)
+ */
+typedef struct _dwg_object_RENDERSETTINGS
+{
+  struct _dwg_object_object *parent;
+  // AcDbRenderSettings
+  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
+  BITCODE_T name;		/*!< DXF 1 */
+  BITCODE_B fog_enabled;        /*!< DXF 290 */
+  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
+  BITCODE_B b290_1;                  /*!< DXF 290 */
+  BITCODE_B environ_image_enabled;   /*!< DXF 290 */
+  BITCODE_T environ_image_filename;  /*!< DXF 1 */
+  BITCODE_T description;	     /*!< DXF 1 */
+  BITCODE_BL bl90;
+  BITCODE_B b290_2;
+} Dwg_Object_RENDERSETTINGS;
+
+/**
  Class RENDERENVIRONMENT (varies)
  */
 typedef struct _dwg_object_RENDERENVIRONMENT
@@ -5459,6 +5499,44 @@ typedef struct _dwg_object_MENTALRAYRENDERSETTINGS
   BITCODE_BD bd40_7; // 1.0
 
 } Dwg_Object_MENTALRAYRENDERSETTINGS;
+
+/**
+ Class MOTIONPATH (varies)
+ */
+typedef struct _dwg_object_MOTIONPATH
+{
+  struct _dwg_object_object *parent;
+  // AcDbMotionPath
+  BITCODE_BS class_version;     /*!< DXF 90, default: 1 */
+  BITCODE_H camera_path;        /*!< DXF 340 */
+  BITCODE_H target_path;        /*!< DXF 340 */
+  BITCODE_H viewtable;          /*!< DXF 340 */
+  BITCODE_BS frames;            /*!< DXF 90  number of frames? default 30 */
+  BITCODE_BS frame_rate;        /*!< DXF 90  per second, default 30 */
+  BITCODE_B corner_decel;       /*!< DXF 290 */
+} Dwg_Object_MOTIONPATH;
+
+// not in DXF
+typedef struct _dwg_object_TVDEVICEPROPERTIES
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL flags; /* 1: double_buffer, 2: blocks_cache, 4: multithreaded, 8: sw_hlr
+                       16: discard_backfaces, 32: ttf_cache, 64: dyn_subenthlt, 128: force_partial_update
+                       256: clear_screen, 512: use_visual_styles (bit 9) 1024: use_overlay_buffers,
+                       2048: scene_graph, 4096: composite_meta_files, ??: create_gl_context (bit 13)
+                       delay_scenegraphproc (bit 14),
+                    */
+  BITCODE_BS max_regen_threads;
+  BITCODE_BL use_lut_palette;
+  BITCODE_BLL alt_hlt;
+  BITCODE_BLL alt_hltcolor;
+  BITCODE_BLL geom_shader_usage;
+  // ver > 3
+  BITCODE_BL blending_mode;
+  //ver 2 or >4:
+  BITCODE_BD antialiasing_level;
+  BITCODE_BD bd2;
+} Dwg_Object_TVDEVICEPROPERTIES;
 
 /**
  * Class AcDbAnnotScaleObjectContextData (varies)
@@ -5982,7 +6060,7 @@ typedef struct _dwg_object_entity
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
   BITCODE_B isbylayerlt;        /*!< r13-r14 */
   BITCODE_B nolinks;            /*!< r13-r2000 */
-  BITCODE_B has_ds_binary_data; /*!< r2013+ */
+  BITCODE_B has_ds_data;        /*!< r2013+ AcDs datastore */
   BITCODE_CMC color;
   BITCODE_BD ltype_scale;
   BITCODE_BB ltype_flags;       /*!< r2000+ */
@@ -6111,14 +6189,15 @@ typedef struct _dwg_object_object
     Dwg_Object_MLINESTYLE *MLINESTYLE;
     Dwg_Object_NAVISWORKSMODELDEF *NAVISWORKSMODELDEF;
     //Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
-    Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_ALDIMOBJECTCONTEXTDATA *ALDIMOBJECTCONTEXTDATA;
     Dwg_Object_BLKREFOBJECTCONTEXTDATA *BLKREFOBJECTCONTEXTDATA;
     Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
+    Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
     Dwg_Object_MLEADEROBJECTCONTEXTDATA *MLEADEROBJECTCONTEXTDATA;
+    Dwg_Object_MOTIONPATH *MOTIONPATH;
     Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
-    Dwg_Object_TEXTOBJECTCONTEXTDATA *TEXTOBJECTCONTEXTDATA;
+    Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_PERSUBENTMGR *PERSUBENTMGR;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
     Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
@@ -6126,8 +6205,8 @@ typedef struct _dwg_object_object
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_RENDERENVIRONMENT *RENDERENVIRONMENT;
     Dwg_Object_RENDERGLOBAL *RENDERGLOBAL;
-    Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
     //Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
+    Dwg_Object_RENDERSETTINGS *RENDERSETTINGS;
     Dwg_Object_RAPIDRTRENDERSETTINGS *RAPIDRTRENDERSETTINGS;
     //TODO Dwg_Object_RTEXT *RTEXT;
     Dwg_Object_SCALE *SCALE;
@@ -6142,6 +6221,8 @@ typedef struct _dwg_object_object
     Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
+    Dwg_Object_TEXTOBJECTCONTEXTDATA *TEXTOBJECTCONTEXTDATA;
+    Dwg_Object_TVDEVICEPROPERTIES *TVDEVICEPROPERTIES;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
     Dwg_Object_UNDERLAYDEFINITION *UNDERLAYDEFINITION;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
@@ -6160,7 +6241,7 @@ typedef struct _dwg_object_object
   BITCODE_H* reactors;
   BITCODE_H xdicobjhandle;
   BITCODE_B xdic_missing_flag;  /*!< r2004+ */
-  BITCODE_B has_ds_binary_data; /*!< r2013+ */
+  BITCODE_B has_ds_data;        /*!< r2013+  AcDs datastore */
 
   /*unsigned int num_handles;*/
   Dwg_Handle *handleref; //??
@@ -6890,7 +6971,9 @@ EXPORT int dxf_cvt_lweight (const BITCODE_BSd value);
 EXPORT BITCODE_BSd dxf_revcvt_lweight (const int lw);
 
 /* Search for the name in the associated table, and return its handle. Search
- * is case-insensitive */
+ * is case-insensitive.
+ * Both name and table are ascii.
+ */
 EXPORT BITCODE_H dwg_find_tablehandle (Dwg_Data *restrict dwg,
                                        const char *restrict name,
                                        const char *restrict table);
@@ -6898,12 +6981,15 @@ EXPORT BITCODE_H dwg_find_tablehandle (Dwg_Data *restrict dwg,
 /** Not checking the header_vars entry, only searching the objects
  *  Returning a hardowner or hardpointer (DICTIONARY) ref (code 3 or 5)
  *  to it, as stored in header_vars. table must contain the "_CONTROL" suffix.
+ *  table is ascii.
  */
 EXPORT BITCODE_H dwg_find_table_control (Dwg_Data *restrict dwg,
                                          const char *restrict table);
 
 /** Searching for a dictionary ref.
- *  Returning a hardpointer ref (5) to it, as stored in header_vars. */
+ *  Returning a hardpointer ref (5) to it, as stored in header_vars.
+ *  Name is ascii.
+ */
 EXPORT BITCODE_H dwg_find_dictionary (Dwg_Data *restrict dwg,
                                       const char *restrict name);
 /** Searching for a named dictionary entry in the given dict. Search is
@@ -6913,6 +6999,10 @@ EXPORT BITCODE_H dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
 /* Search for a table EXTNAME */
 EXPORT char *dwg_find_table_extname (Dwg_Data *restrict dwg,
                                      Dwg_Object *restrict obj);
+/* Returns the string value of the member of the AcDbVariableDictionary.
+   The name is ascii. E.g. LIGHTINGUNITS => "0" */
+EXPORT char *dwg_variable_dict (Dwg_Data *restrict dwg,
+                                const char *restrict name);
 
 EXPORT double dwg_model_x_min (const Dwg_Data *restrict);
 EXPORT double dwg_model_x_max (const Dwg_Data *restrict);
@@ -7221,7 +7311,9 @@ EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERGLOBAL (Dwg_Object *obj);
 EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
+EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 //EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_NURBSSURFACE (Dwg_Object *obj);

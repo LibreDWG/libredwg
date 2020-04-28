@@ -641,7 +641,7 @@ match_LAYER_INDEX (const char *restrict filename,
   const Dwg_Object_LAYER_INDEX *_obj = obj->tio.object->tio.LAYER_INDEX;
   for (i = 0; i < _obj->num_entries; i++)
     {
-      MATCH_OBJECT (LAYER_INDEX, entries[i].layername, 8);
+      MATCH_OBJECT (LAYER_INDEX, entries[i].name, 8);
     }
   return found;
 }

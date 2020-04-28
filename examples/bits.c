@@ -118,7 +118,7 @@ decode (Bit_Chain *dat, int off, const int size)
     {
       Dwg_Color c;
       int p;
-      bit_read_CMC (dat, &c);
+      bit_read_CMC (dat, dat, &c);
       p = (int)bit_position (dat);
       if (c.index < 257 && p <= size - off)
         {
@@ -179,7 +179,7 @@ main (int argc, char *argv[])
   int hex = 0;
   int i;
   int pos;
-  Bit_Chain dat = { NULL, 0, 0, 0, NULL, 0, 0 };
+  Bit_Chain dat = { NULL, 0, 0, 0, 0, NULL, 0, 0 };
 
   if (argc < 2)
     {

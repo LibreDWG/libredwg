@@ -2036,6 +2036,30 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   return 0;
 }
 
+/* Returns the string value of the member of the AcDbVariableDictionary.
+   NULL if not found.
+   The name is ascii. E.g. LIGHTINGUNITS => "0" */
+EXPORT char *
+dwg_variable_dict (Dwg_Data *restrict dwg, const char *restrict name)
+{
+  static BITCODE_H var_dict = NULL;
+  BITCODE_H var;
+  Dwg_Object *obj;
+  Dwg_Object_DICTIONARYVAR *_obj;
+  if (!var_dict)
+    var_dict = dwg_find_dictionary (dwg, "AcDbVariableDictionary");
+  if (!var_dict)
+    return NULL;
+  var = dwg_find_dicthandle (dwg, var_dict, name);
+  if (!var)
+    return NULL;
+  obj = dwg_ref_object_silent (dwg, var);
+  if (!obj)
+    return NULL;
+  _obj = obj->tio.object->tio.DICTIONARYVAR;
+  return _obj->str;
+}
+
 static bool
 xdata_string_match (Dwg_Data *restrict dwg, Dwg_Resbuf *restrict xdata,
                     int type, char *restrict str)

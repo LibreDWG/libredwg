@@ -295,7 +295,7 @@ bits_CMC (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
             }
         }
     }
-  bit_write_CMC (dat, &color);
+  bit_write_CMC (dat, dat, &color);
   g->type = BITS_CMC;
 }
 
@@ -439,7 +439,7 @@ is_handle (int code)
 static void
 bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 {
-  Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+  Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
   dat.chain = calloc (1, CHAIN_SIZE);
 
   bits_handle (&dat, g, code, objhandle);
@@ -462,7 +462,7 @@ bits_format (struct _unknown_field *g, const int version,
              struct _unknown_dxf *dxf)
 {
   int code = g->code;
-  Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+  Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
   const int is16 = version >= 2007 ? 1 : 0;
 
   dat.chain = calloc (1, CHAIN_SIZE);
@@ -1026,7 +1026,7 @@ main (int argc, char *argv[])
                     }
                   if (g[j].type == BITS_ENC)
                     {
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_CMC (&dat, &g[j]);
@@ -1039,7 +1039,7 @@ main (int argc, char *argv[])
                     }
                   if (g[j].type == BITS_BS && strlen (g[j].value) < 3)
                     {
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_RC (&dat, &g[j]);
@@ -1052,7 +1052,7 @@ main (int argc, char *argv[])
                     }
                   if (g[j].type == BITS_BS)
                     {
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BL (&dat, &g[j]);
@@ -1075,7 +1075,7 @@ main (int argc, char *argv[])
                   if ((g[j].type == BITS_BL || g[j].type == BITS_BLd)
                       && strlen (g[j].value) <= 5)
                     {
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BS (&dat, &g[j]);
@@ -1097,7 +1097,7 @@ main (int argc, char *argv[])
                     }
                   if (g[j].type == BITS_RC)
                     {
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BS (&dat, &g[j]);
@@ -1110,7 +1110,7 @@ main (int argc, char *argv[])
                     }
                   if (g[j].type == BITS_BD)
                     {
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_RD (&dat, &g[j]);
@@ -1127,7 +1127,7 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_RD && strlen (g[j].value) >= 3)
                     {
                       double d;
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_BD (&dat, &g[j]); // g.value -> dat
@@ -1194,7 +1194,7 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_RD && strlen (g[j].value) >= 3)
                     {
                       double d;
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       dat.chain = calloc (1, CHAIN_SIZE);
 
                       bits_RD (&dat, &g[j]); // g.value -> dat
@@ -1264,7 +1264,7 @@ main (int argc, char *argv[])
                   // the length usually includes the final \0
                   if (g[j].type == BITS_TV || g[j].type == BITS_TU)
                     {
-                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, NULL, 0, 0 };
+                      Bit_Chain dat = { NULL, CHAIN_SIZE, 0, 0, 0, NULL, 0, 0 };
                       int len = strlen (g[j].value);
                       dat.chain = calloc (1, CHAIN_SIZE);
 

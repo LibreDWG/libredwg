@@ -313,7 +313,7 @@ static bool env_var_checked_p;
 
 #define FIELD_CMC(color, dxf1, dxf2)                                          \
   {                                                                           \
-    bit_write_CMC (dat, &_obj->color);                                        \
+    bit_write_CMC (dat, str_dat, &_obj->color);                               \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf1);   \
     LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
     if (dat->version >= R_2004)                                               \
@@ -331,7 +331,7 @@ static bool env_var_checked_p;
       }                                                                       \
   }
 
-#define SUB_FIELD_CMC(o, nam, dxf1, dxf2) bit_write_CMC (dat, &_obj->o.nam)
+#define SUB_FIELD_CMC(o, nam, dxf1, dxf2) bit_write_CMC (dat, str_dat, &_obj->o.nam)
 
 #define LOG_TF(level, var, len)                                               \
   if (var)                                                                    \
@@ -4093,7 +4093,7 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
     Dwg_Object_Object *_obj = obj->tio.object;
     FIELD_BL (num_reactors, 0);
     SINCE (R_2004) { FIELD_B (xdic_missing_flag, 0); }
-    SINCE (R_2013) { FIELD_B (has_ds_binary_data, 0); } // AcDs DATA
+    SINCE (R_2013) { FIELD_B (has_ds_data, 0); } // AcDs DATA
   }
   return error;
 }

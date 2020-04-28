@@ -31,7 +31,7 @@ main (int argc, char *argv[])
   int hex = 0;
   int size, bits;
   unsigned long pos;
-  Bit_Chain dat = { NULL, 16, 0, 0, NULL, 0, 0 };
+  Bit_Chain dat = { NULL, 16, 0, 0, 0, NULL, 0, 0 };
 
   if (argc < 2)
     {
@@ -142,7 +142,7 @@ main (int argc, char *argv[])
         printf (FORMAT_H " H? @%lu (%ld)\n", ARGS_H (h), bit_position (&dat),
                 pos);
       bit_set_position (&dat, 0);
-      bit_read_CMC (&dat, &c);
+      bit_read_CMC (&dat, &dat, &c);
       if (c.index < 257)
         printf ("%d 0x%06X 0x%x CMC? @%lu (%ld)\n", c.index, c.rgb, c.flag,
                 bit_position (&dat), pos);

@@ -92,7 +92,7 @@
     }
   SINCE (R_2013)
     {
-      FIELD_B (has_ds_binary_data, 0)
+      FIELD_B (has_ds_data, 0)
     }
 
   // no ENC type as it's only used once, here, and we would need to write
