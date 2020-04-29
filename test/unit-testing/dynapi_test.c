@@ -12472,14 +12472,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     light->lamp_color_type--;
   }
   {
-    BITCODE_H lights_layer;
-    if (dwg_dynapi_entity_value (light, "LIGHT", "lights_layer", &lights_layer, NULL)
-        && !memcmp (&lights_layer, &light->lights_layer, sizeof (light->lights_layer)))
-        pass ();
-    else
-        fail ("LIGHT.lights_layer [H]");
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (light, "LIGHT", "name", &name, NULL)
         && name
@@ -27927,6 +27919,111 @@ static int test_CSACDOCUMENTOPTIONS (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_CURVEPATH (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_CURVEPATH *restrict curvepath = obj->tio.object->tio.CURVEPATH;
+  failed = 0;
+  {
+    BITCODE_H camera_path;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "camera_path", &camera_path, NULL)
+        && !memcmp (&camera_path, &curvepath->camera_path, sizeof (curvepath->camera_path)))
+        pass ();
+    else
+        fail ("CURVEPATH.camera_path [H]");
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "class_version", &class_version, NULL)
+        && class_version == curvepath->class_version)
+      pass ();
+    else
+      fail ("CURVEPATH.class_version [BS] %hu != %hu", curvepath->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (curvepath, "CURVEPATH", "class_version", &class_version, 0)
+        && class_version == curvepath->class_version)
+      pass ();
+    else
+      fail ("CURVEPATH.class_version [BS] set+1 %hu != %hu", curvepath->class_version, class_version);
+    curvepath->class_version--;
+  }
+  {
+    BITCODE_B corner_decel;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "corner_decel", &corner_decel, NULL)
+        && corner_decel == curvepath->corner_decel)
+      pass ();
+    else
+      fail ("CURVEPATH.corner_decel [B] " FORMAT_B " != " FORMAT_B "", curvepath->corner_decel, corner_decel);
+    corner_decel++;
+    if (dwg_dynapi_entity_set_value (curvepath, "CURVEPATH", "corner_decel", &corner_decel, 0)
+        && corner_decel == curvepath->corner_decel)
+      pass ();
+    else
+      fail ("CURVEPATH.corner_decel [B] set+1 " FORMAT_B " != " FORMAT_B "", curvepath->corner_decel, corner_decel);
+    curvepath->corner_decel--;
+  }
+  {
+    BITCODE_BS frame_rate;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "frame_rate", &frame_rate, NULL)
+        && frame_rate == curvepath->frame_rate)
+      pass ();
+    else
+      fail ("CURVEPATH.frame_rate [BS] %hu != %hu", curvepath->frame_rate, frame_rate);
+    frame_rate++;
+    if (dwg_dynapi_entity_set_value (curvepath, "CURVEPATH", "frame_rate", &frame_rate, 0)
+        && frame_rate == curvepath->frame_rate)
+      pass ();
+    else
+      fail ("CURVEPATH.frame_rate [BS] set+1 %hu != %hu", curvepath->frame_rate, frame_rate);
+    curvepath->frame_rate--;
+  }
+  {
+    BITCODE_BS frames;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "frames", &frames, NULL)
+        && frames == curvepath->frames)
+      pass ();
+    else
+      fail ("CURVEPATH.frames [BS] %hu != %hu", curvepath->frames, frames);
+    frames++;
+    if (dwg_dynapi_entity_set_value (curvepath, "CURVEPATH", "frames", &frames, 0)
+        && frames == curvepath->frames)
+      pass ();
+    else
+      fail ("CURVEPATH.frames [BS] set+1 %hu != %hu", curvepath->frames, frames);
+    curvepath->frames--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "parent", &parent, NULL)
+        && !memcmp (&parent, &curvepath->parent, sizeof (curvepath->parent)))
+        pass ();
+    else
+        fail ("CURVEPATH.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H target_path;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "target_path", &target_path, NULL)
+        && !memcmp (&target_path, &curvepath->target_path, sizeof (curvepath->target_path)))
+        pass ();
+    else
+        fail ("CURVEPATH.target_path [H]");
+  }
+  {
+    BITCODE_H viewtable;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "viewtable", &viewtable, NULL)
+        && !memcmp (&viewtable, &curvepath->viewtable, sizeof (curvepath->viewtable)))
+        pass ();
+    else
+        fail ("CURVEPATH.viewtable [H]");
+  }
+  if (failed && (is_class_unstable ("CURVEPATH") || is_class_debugging ("CURVEPATH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "CURVEPATH", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_DATALINK (const Dwg_Object *obj)
 {
   int error = 0;
@@ -40547,6 +40644,21 @@ static int test_SUN (const Dwg_Object *obj)
     sun->julian_day--;
   }
   {
+    BITCODE_BL msecs;
+    if (dwg_dynapi_entity_value (sun, "SUN", "msecs", &msecs, NULL)
+        && msecs == sun->msecs)
+      pass ();
+    else
+      fail ("SUN.msecs [BL] %u != %u", sun->msecs, msecs);
+    msecs++;
+    if (dwg_dynapi_entity_set_value (sun, "SUN", "msecs", &msecs, 0)
+        && msecs == sun->msecs)
+      pass ();
+    else
+      fail ("SUN.msecs [BL] set+1 %u != %u", sun->msecs, msecs);
+    sun->msecs--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (sun, "SUN", "parent", &parent, NULL)
         && !memcmp (&parent, &sun->parent, sizeof (sun->parent)))
@@ -40570,72 +40682,34 @@ static int test_SUN (const Dwg_Object *obj)
     sun->shadow_mapsize--;
   }
   {
-    BITCODE_BS shadow_softness;
+    BITCODE_RC shadow_softness;
     if (dwg_dynapi_entity_value (sun, "SUN", "shadow_softness", &shadow_softness, NULL)
         && shadow_softness == sun->shadow_softness)
       pass ();
     else
-      fail ("SUN.shadow_softness [BS] %hu != %hu", sun->shadow_softness, shadow_softness);
+      fail ("SUN.shadow_softness [RC] %u != %u", sun->shadow_softness, shadow_softness);
     shadow_softness++;
     if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_softness", &shadow_softness, 0)
         && shadow_softness == sun->shadow_softness)
       pass ();
     else
-      fail ("SUN.shadow_softness [BS] set+1 %hu != %hu", sun->shadow_softness, shadow_softness);
+      fail ("SUN.shadow_softness [RC] set+1 %u != %u", sun->shadow_softness, shadow_softness);
     sun->shadow_softness--;
   }
   {
-    BITCODE_BS shadow_type;
+    BITCODE_BL shadow_type;
     if (dwg_dynapi_entity_value (sun, "SUN", "shadow_type", &shadow_type, NULL)
         && shadow_type == sun->shadow_type)
       pass ();
     else
-      fail ("SUN.shadow_type [BS] %hu != %hu", sun->shadow_type, shadow_type);
+      fail ("SUN.shadow_type [BL] %u != %u", sun->shadow_type, shadow_type);
     shadow_type++;
     if (dwg_dynapi_entity_set_value (sun, "SUN", "shadow_type", &shadow_type, 0)
         && shadow_type == sun->shadow_type)
       pass ();
     else
-      fail ("SUN.shadow_type [BS] set+1 %hu != %hu", sun->shadow_type, shadow_type);
+      fail ("SUN.shadow_type [BL] set+1 %u != %u", sun->shadow_type, shadow_type);
     sun->shadow_type--;
-  }
-  {
-    BITCODE_H skyparams;
-    if (dwg_dynapi_entity_value (sun, "SUN", "skyparams", &skyparams, NULL)
-        && !memcmp (&skyparams, &sun->skyparams, sizeof (sun->skyparams)))
-        pass ();
-    else
-        fail ("SUN.skyparams [H]");
-  }
-  {
-    BITCODE_BL time;
-    if (dwg_dynapi_entity_value (sun, "SUN", "time", &time, NULL)
-        && time == sun->time)
-      pass ();
-    else
-      fail ("SUN.time [BL] %u != %u", sun->time, time);
-    time++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "time", &time, 0)
-        && time == sun->time)
-      pass ();
-    else
-      fail ("SUN.time [BL] set+1 %u != %u", sun->time, time);
-    sun->time--;
-  }
-  {
-    BITCODE_BS unknown;
-    if (dwg_dynapi_entity_value (sun, "SUN", "unknown", &unknown, NULL)
-        && unknown == sun->unknown)
-      pass ();
-    else
-      fail ("SUN.unknown [BS] %hu != %hu", sun->unknown, unknown);
-    unknown++;
-    if (dwg_dynapi_entity_set_value (sun, "SUN", "unknown", &unknown, 0)
-        && unknown == sun->unknown)
-      pass ();
-    else
-      fail ("SUN.unknown [BS] set+1 %hu != %hu", sun->unknown, unknown);
-    sun->unknown--;
   }
   if (failed && (is_class_unstable ("SUN") || is_class_debugging ("SUN")))
     {
@@ -43117,18 +43191,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->ext_lighting_model--;
   }
   {
-    BITCODE_BS face_color_mode;
+    BITCODE_BL face_color_mode;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_color_mode", &face_color_mode, NULL)
         && face_color_mode == visualstyle->face_color_mode)
       pass ();
     else
-      fail ("VISUALSTYLE.face_color_mode [BS] %hu != %hu", visualstyle->face_color_mode, face_color_mode);
+      fail ("VISUALSTYLE.face_color_mode [BL] %u != %u", visualstyle->face_color_mode, face_color_mode);
     face_color_mode++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_color_mode", &face_color_mode, 0)
         && face_color_mode == visualstyle->face_color_mode)
       pass ();
     else
-      fail ("VISUALSTYLE.face_color_mode [BS] set+1 %hu != %hu", visualstyle->face_color_mode, face_color_mode);
+      fail ("VISUALSTYLE.face_color_mode [BL] set+1 %u != %u", visualstyle->face_color_mode, face_color_mode);
     visualstyle->face_color_mode--;
   }
   {
@@ -43147,18 +43221,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->face_color_mode_ext--;
   }
   {
-    BITCODE_BS face_lighting_model;
+    BITCODE_BL face_lighting_model;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_lighting_model", &face_lighting_model, NULL)
         && face_lighting_model == visualstyle->face_lighting_model)
       pass ();
     else
-      fail ("VISUALSTYLE.face_lighting_model [BS] %hu != %hu", visualstyle->face_lighting_model, face_lighting_model);
+      fail ("VISUALSTYLE.face_lighting_model [BL] %u != %u", visualstyle->face_lighting_model, face_lighting_model);
     face_lighting_model++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_model", &face_lighting_model, 0)
         && face_lighting_model == visualstyle->face_lighting_model)
       pass ();
     else
-      fail ("VISUALSTYLE.face_lighting_model [BS] set+1 %hu != %hu", visualstyle->face_lighting_model, face_lighting_model);
+      fail ("VISUALSTYLE.face_lighting_model [BL] set+1 %u != %u", visualstyle->face_lighting_model, face_lighting_model);
     visualstyle->face_lighting_model--;
   }
   {
@@ -43177,18 +43251,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->face_lighting_model_ext--;
   }
   {
-    BITCODE_BS face_lighting_quality;
+    BITCODE_BL face_lighting_quality;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_lighting_quality", &face_lighting_quality, NULL)
         && face_lighting_quality == visualstyle->face_lighting_quality)
       pass ();
     else
-      fail ("VISUALSTYLE.face_lighting_quality [BS] %hu != %hu", visualstyle->face_lighting_quality, face_lighting_quality);
+      fail ("VISUALSTYLE.face_lighting_quality [BL] %u != %u", visualstyle->face_lighting_quality, face_lighting_quality);
     face_lighting_quality++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_lighting_quality", &face_lighting_quality, 0)
         && face_lighting_quality == visualstyle->face_lighting_quality)
       pass ();
     else
-      fail ("VISUALSTYLE.face_lighting_quality [BS] set+1 %hu != %hu", visualstyle->face_lighting_quality, face_lighting_quality);
+      fail ("VISUALSTYLE.face_lighting_quality [BL] set+1 %u != %u", visualstyle->face_lighting_quality, face_lighting_quality);
     visualstyle->face_lighting_quality--;
   }
   {
@@ -43373,18 +43447,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         fail ("VISUALSTYLE.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BS style_type;
+    BITCODE_BL style_type;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "style_type", &style_type, NULL)
         && style_type == visualstyle->style_type)
       pass ();
     else
-      fail ("VISUALSTYLE.style_type [BS] %hu != %hu", visualstyle->style_type, style_type);
+      fail ("VISUALSTYLE.style_type [BL] %u != %u", visualstyle->style_type, style_type);
     style_type++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "style_type", &style_type, 0)
         && style_type == visualstyle->style_type)
       pass ();
     else
-      fail ("VISUALSTYLE.style_type [BS] set+1 %hu != %hu", visualstyle->style_type, style_type);
+      fail ("VISUALSTYLE.style_type [BL] set+1 %u != %u", visualstyle->style_type, style_type);
     visualstyle->style_type--;
   }
   {
@@ -44708,6 +44782,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_CELLSTYLEMAP(obj);
   else  if (obj->fixedtype == DWG_TYPE_CSACDOCUMENTOPTIONS)
     error += test_CSACDOCUMENTOPTIONS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_CURVEPATH)
+    error += test_CURVEPATH(obj);
   else  if (obj->fixedtype == DWG_TYPE_DATALINK)
     error += test_DATALINK(obj);
   else  if (obj->fixedtype == DWG_TYPE_DATATABLE)
@@ -45062,6 +45138,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_CELLSTYLEMAP (obj);
   else  if (obj->fixedtype == DWG_TYPE_CSACDOCUMENTOPTIONS)
     error += test_CSACDOCUMENTOPTIONS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_CURVEPATH)
+    error += test_CURVEPATH (obj);
   else  if (obj->fixedtype == DWG_TYPE_DATALINK)
     error += test_DATALINK (obj);
   else  if (obj->fixedtype == DWG_TYPE_DATATABLE)
@@ -46026,6 +46104,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_CSACDOCUMENTOPTIONS): %d != "
                "dwg_dynapi_fields_size (\"CSACDOCUMENTOPTIONS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_CURVEPATH);
+  size2 = dwg_dynapi_fields_size ("CURVEPATH");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_CURVEPATH): %d != "
+               "dwg_dynapi_fields_size (\"CURVEPATH\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_DATALINK);

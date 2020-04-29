@@ -1600,6 +1600,7 @@ bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
   }
 }
 
+#if 0
 /* compare wide string (unix-only). returns 0 if the same or 1 if not */
 // untested, unused
 int
@@ -1615,8 +1616,8 @@ bit_wcs2cmp (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
   if ((uintptr_t)src % SIZEOF_SIZE_T)
     {
       unsigned char *s = (unsigned char *)src;
-      unsigned char *s1 = (s[0] << 8) + s[1];
-      while (*d++ == *s1)
+      uint16_t s1 = (s[0] << 8) + s[1];
+      while (*d++ == s1)
         {
           s += 2;
           s1 = (s[0] << 8) + s[1];
@@ -1632,6 +1633,7 @@ bit_wcs2cmp (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
     return (*d || *s) ? 1 : 0;
   }
 }
+#endif
 
 #endif /* HAVE_NATIVE_WCHAR2 */
 

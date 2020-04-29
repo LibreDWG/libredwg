@@ -401,6 +401,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
   DWG_TYPE_CSACDOCUMENTOPTIONS,
+  DWG_TYPE_CURVEPATH,
   DWG_TYPE_DATALINK,
   DWG_TYPE_DATATABLE,
   DWG_TYPE_DBCOLOR,
@@ -4068,14 +4069,14 @@ typedef struct _dwg_object_VISUALSTYLE
 {
   struct _dwg_object_object *parent;
   BITCODE_T description;          /*!< DXF 2  */
-  BITCODE_BS style_type;          /*!< DXF 70 enum 0-32: (kFlat-kEmptyStyle acgivisualstyle.h) */
+  BITCODE_BL style_type;          /*!< DXF 70 enum 0-32: (kFlat-kEmptyStyle acgivisualstyle.h) */
   BITCODE_BS ext_lighting_model;  /*!< DXF 177, r2010+ ? required on has_xdata */
   BITCODE_B has_ext;              /*!< DXF 291, r2010+ */
-  BITCODE_BS face_lighting_model; /*!< DXF 71 0:Invisible 1:Visible 2:Phong 3:Gooch */
+  BITCODE_BL face_lighting_model; /*!< DXF 71 0:Invisible 1:Visible 2:Phong 3:Gooch */
   BITCODE_BS face_lighting_model_ext;   /*!< DXF 176 r2010+ */
-  BITCODE_BS face_lighting_quality;     /*!< DXF 72 0:No lighting 1:Per face 2:Per vertex */
+  BITCODE_BL face_lighting_quality;     /*!< DXF 72 0:No lighting 1:Per face 2:Per vertex */
   BITCODE_BS face_lighting_quality_ext; /*!< DXF 176 r2010+ */
-  BITCODE_BS face_color_mode;   /*!< DXF 73 0 = No color
+  BITCODE_BL face_color_mode;   /*!< DXF 73 0 = No color
                                   1 = Object color
                                   2 = Background color
                                   3 = Custom color
@@ -4401,6 +4402,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_B has_webfile;          /*!< DXF 290 */
   BITCODE_T web_file;             /*!< DXF 300 IES file */
   BITCODE_BS lamp_color_type;     /*!< /0: in kelvin, 1: as preset */
+  //FIXME 
   BITCODE_BD lamp_color_temp;     /*!< Temperature in Kelvin */
   BITCODE_BD lamp_color_temp1;
   BITCODE_BD lamp_color_temp2;
@@ -4428,7 +4430,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BD bd54;                /*!< DXF 54 */
   BITCODE_BS bl77;                /*!< DXF 77 */
 
-  BITCODE_H lights_layer;
+  //BITCODE_H lights_layer;
 } Dwg_Entity_LIGHT;
 
 /**
@@ -4739,76 +4741,68 @@ typedef struct _dwg_entity_MESH
 } Dwg_Entity_MESH;
 
 /**
- Object SUN (varies) UNKNOWN FIELDS
+ Object SUN (varies)
  wrongly documented by ACAD DXF as entity
- --enable-debug only, unknown fields
  */
 typedef struct _dwg_object_SUN
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL class_version; //90
-  BITCODE_B is_on;   // 290
-  BITCODE_BS unknown; //421
-  BITCODE_CMC color; // 60
-  BITCODE_BD intensity; // 40
-  //BITCODE_3BD direction; //calculated?
-  //BITCODE_BD altitude;   //calculated?
-  //BITCODE_BD azimuth;    //calculated?
-  BITCODE_BL julian_day; //91
-  BITCODE_BL time;       //92
-  BITCODE_B  is_dst;     //292
-  BITCODE_B has_shadow;  //291
-  BITCODE_BS shadow_type;     //70
-  BITCODE_BS shadow_mapsize;  //71
-  BITCODE_BS shadow_softness; //280
-
-  // 11.3 bytes missing, from UNKNOWN_OBJ
-  BITCODE_H skyparams;
+  BITCODE_BL class_version; /*!< DXF 90 */
+  BITCODE_B is_on;          /*!< DXF 290 */
+  BITCODE_CMC color;        /*!< DXF 60, 421 */
+  BITCODE_BD intensity;     /*!< DXF 40 */
+  BITCODE_B  has_shadow;    /*!< DXF 291 */
+  BITCODE_BL julian_day;    /*!< DXF 91 */
+  BITCODE_BL msecs;         /*!< DXF 92 */
+  BITCODE_B  is_dst;        /*!< DXF 292 */
+  BITCODE_BL shadow_type;   /*!< DXF 70 */
+  BITCODE_BS shadow_mapsize;  /*!< DXF 71 */
+  BITCODE_RC shadow_softness; /*!< DXF 280 */
 } Dwg_Object_SUN;
 
 typedef struct _dwg_SUNSTUDY_Dates
 {
   BITCODE_BL julian_day;
-  BITCODE_BL time; //seconds past midnight
+  BITCODE_BL msecs;           //seconds past midnight
 } Dwg_SUNSTUDY_Dates;
 
 /**
- Object SUNSTUDY (varies) UNKNOWN FIELDS
+ Object SUNSTUDY (varies)
  --enable-debug only
  */
 typedef struct _dwg_object_SUNSTUDY
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL class_version;    //90
-  BITCODE_T setup_name;        //1
-  BITCODE_T description;              //2
-  BITCODE_BL output_type;      //70
-  BITCODE_T sheet_set_name;    //3
-  BITCODE_B use_subset;        //290
-  BITCODE_T sheet_subset_name; //3
-  BITCODE_B select_dates_from_calendar; //291
-  BITCODE_BL num_dates;   //91
-  Dwg_SUNSTUDY_Dates* dates; //90+90[]
-  BITCODE_B select_range_of_dates; //292
-  BITCODE_BL start_time;  //93
-  BITCODE_BL end_time;    //94
-  BITCODE_BL interval;    //95
-  BITCODE_BL num_hours;   //73
-  BITCODE_B* hours;       //290
-  BITCODE_BL shade_plot_type;  //74
-  BITCODE_BL numvports;        //75
-  BITCODE_BL numrows;        //76
-  BITCODE_BL numcols;        //77
-  BITCODE_BD spacing;        //40
-  BITCODE_B  lock_viewports; //293
-  BITCODE_B  label_viewports; //294
+  BITCODE_BL class_version;     /*!< DXF 90 */
+  BITCODE_T setup_name;         /*!< DXF 1 */
+  BITCODE_T description;        /*!< DXF 2 */
+  BITCODE_BL output_type;       /*!< DXF 70 */
+  BITCODE_T sheet_set_name;     /*!< DXF 3 */
+  BITCODE_B use_subset;         /*!< DXF 290 */
+  BITCODE_T sheet_subset_name;  /*!< DXF 3 */
+  BITCODE_B select_dates_from_calendar; /*!< DXF 291 */
+  BITCODE_BL num_dates;         /*!< DXF 91 */
+  Dwg_SUNSTUDY_Dates* dates;    /*!< DXF 90[] */
+  BITCODE_B select_range_of_dates; /*!< DXF 292 */
+  BITCODE_BL start_time;        /*!< DXF 93 */
+  BITCODE_BL end_time;          /*!< DXF 94 */
+  BITCODE_BL interval;          /*!< DXF 95 */
+  BITCODE_BL num_hours;         /*!< DXF 73 */
+  BITCODE_B* hours;             /*!< DXF 290 */
+  BITCODE_BL shade_plot_type;   /*!< DXF 74 */
+  BITCODE_BL numvports;         /*!< DXF 75 */
+  BITCODE_BL numrows;           /*!< DXF 76 */
+  BITCODE_BL numcols;           /*!< DXF 77 */
+  BITCODE_BD spacing;           /*!< DXF 40 */
+  BITCODE_B  lock_viewports;    /*!< DXF 293 */
+  BITCODE_B  label_viewports;   /*!< DXF 294 */
 
-  BITCODE_H  page_setup_wizard; //5. 340
-  BITCODE_H  view;         //341
-  BITCODE_H  visualstyle;  //342
-  BITCODE_H  text_style;   //343
+  BITCODE_H  page_setup_wizard; /*!< 5 DXF 340 */
+  BITCODE_H  view;              /*!< DXF 341 */
+  BITCODE_H  visualstyle;       /*!< DXF 342 */
+  BITCODE_H  text_style;        /*!< DXF 343 */
 } Dwg_Object_SUNSTUDY;
 
 /**
@@ -5516,6 +5510,22 @@ typedef struct _dwg_object_MOTIONPATH
   BITCODE_B corner_decel;       /*!< DXF 290 */
 } Dwg_Object_MOTIONPATH;
 
+/**
+ Class ACDBCURVEPATH (varies)
+ */
+typedef struct _dwg_object_CURVEPATH
+{
+  struct _dwg_object_object *parent;
+  // AcDbCurvePath, child of AcDbNamedPath
+  BITCODE_BS class_version;     /*!< DXF 90, default: 1 */
+  BITCODE_H camera_path;        /*!< DXF 340 */
+  BITCODE_H target_path;        /*!< DXF 340 */
+  BITCODE_H viewtable;          /*!< DXF 340 */
+  BITCODE_BS frames;            /*!< DXF 90  number of frames? default 30 */
+  BITCODE_BS frame_rate;        /*!< DXF 90  per second, default 30 */
+  BITCODE_B corner_decel;       /*!< DXF 290 */
+} Dwg_Object_CURVEPATH;
+
 // not in DXF
 typedef struct _dwg_object_TVDEVICEPROPERTIES
 {
@@ -6194,6 +6204,7 @@ typedef struct _dwg_object_object
     Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
     Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
     Dwg_Object_MLEADEROBJECTCONTEXTDATA *MLEADEROBJECTCONTEXTDATA;
+    Dwg_Object_CURVEPATH *CURVEPATH;
     Dwg_Object_MOTIONPATH *MOTIONPATH;
     Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
@@ -7258,6 +7269,7 @@ EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
 EXPORT int dwg_setup_PLOTSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
+EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_UNDERLAY (Dwg_Object *obj);
@@ -7316,19 +7328,20 @@ EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERGLOBAL (Dwg_Object *obj);
 EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
 EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
 //EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
-EXPORT int dwg_setup_NURBSSURFACE (Dwg_Object *obj);
+EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_LOFTEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_SETTINGS (Dwg_Object *obj);
-EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);

@@ -6343,18 +6343,19 @@ DWG_OBJECT (VISUALSTYLE)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbVisualStyle)
   FIELD_T (description, 2);
-  FIELD_BS (style_type, 70);
+  FIELD_BL (style_type, 70);
   SINCE (R_2010) {
+    ENCODER { _obj->ext_lighting_model = 2; }
     FIELD_BS (ext_lighting_model, 177);
     FIELD_B (has_ext, 291)
   }
-  FIELD_BS (face_lighting_model, 71);
+  FIELD_BL (face_lighting_model, 71);
   SINCE (R_2010) { FIELD_BS (face_lighting_model_ext, 176); } // 1
-  FIELD_BS (face_lighting_quality, 72);
+  FIELD_BL (face_lighting_quality, 72);
   SINCE (R_2010) { FIELD_BS (face_lighting_quality_ext, 176); } // 1
-  FIELD_BS (face_color_mode, 73);
-  SINCE (R_2010) { FIELD_BS (face_color_mode_ext, 176); } // 1
+  FIELD_BL (face_color_mode, 73);
   SINCE (R_2010) {
+    FIELD_BS (face_color_mode_ext, 176); // 1
     FIELD_BS (face_modifier, 90);
     FIELD_BS (face_modifier_ext, 0);
   }
@@ -6364,8 +6365,9 @@ DWG_OBJECT (VISUALSTYLE)
   SINCE (R_2010) { FIELD_BS (face_specular_ext, 176); } // 1
   FIELD_CMC (face_mono_color, 63,421);
   SINCE (R_2010) { FIELD_BS (face_mono_color_ext, 176); } // 1
-  UNTIL (R_2007) { FIELD_BS (face_modifier, 90); } // ?
-  FIELD_BS (edge_model, 74);
+  FIELD_BL (face_modifier, 90);
+
+  FIELD_BL (edge_model, 74);
   SINCE (R_2010) { FIELD_BS (edge_model_ext, 176); } // 1
   FIELD_BL (edge_style, 91);
   SINCE (R_2010) { FIELD_BS (edge_style_ext, 176); } // 1
@@ -6373,17 +6375,16 @@ DWG_OBJECT (VISUALSTYLE)
   SINCE (R_2010) { FIELD_BS (edge_intersection_color_ext, 176); } // 1
   FIELD_CMC (edge_obscured_color, 65,423);
   SINCE (R_2010) { FIELD_BS (edge_obscured_color_ext, 176); } // 1
-  FIELD_BS (edge_obscured_line_pattern, 75);
+  FIELD_BL (edge_obscured_line_pattern, 75);
   SINCE (R_2010) { FIELD_BS (edge_obscured_line_pattern_ext, 176); } // 1
   SINCE (R_2010) {
     FIELD_BS (edge_intersection_line_pattern, 175);
     FIELD_BS (edge_intersection_line_pattern_ext, 176);
   }
-//#if defined (DEBUG_CLASSES) || defined (IS_FREE)
   // unstable <r2010:
   FIELD_BD (edge_crease_angle, 42);
   SINCE (R_2010) { FIELD_BS (edge_crease_angle_ext, 176); }
-  FIELD_BS (edge_modifier, 92);
+  FIELD_BL (edge_modifier, 92);
   SINCE (R_2010) { FIELD_BS (edge_modifier_ext, 176); } // 1
   FIELD_CMC (edge_color, 66,424);
   SINCE (R_2010) { FIELD_BS (edge_color_ext, 176); } // 1
@@ -6497,9 +6498,11 @@ DWG_ENTITY (LIGHT)
     static char *value = NULL;
     if (!value)
       value = dwg_variable_dict (dwg, "LIGHTINGUNITS");
+    LOG_TRACE ("vardict.LIGHTINGUNITS: %s\n", value);
     if (value && strEQ (value, "2")) /* PHOTOMETRIC */
       FIELD_VALUE (is_photometric) = 1;
   }
+  LOG_TRACE ("is_photometric: %d\n", FIELD_VALUE (is_photometric));
   if (FIELD_VALUE (is_photometric))
   {
     FIELD_B (has_photometric_data, 1);
@@ -6546,7 +6549,7 @@ DWG_ENTITY (LIGHT)
       }
   }
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (lights_layer, 5, 0);
+  //FIELD_HANDLE (lights_layer, 5, 0);
 
 DWG_ENTITY_END
 
@@ -6859,6 +6862,26 @@ DWG_OBJECT (LIGHTLIST)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
+// DXF docs put that as Entity, wrong!
+DWG_OBJECT (SUN)
+  SUBCLASS (AcDbSun)
+  FIELD_BL (class_version, 90);
+  VALUEOUTOFBOUNDS (class_version, 10)
+  FIELD_B (is_on, 290);       // status, isOn
+  FIELD_CMC (color, 63,421);
+  FIELD_BD (intensity, 40);   //
+  FIELD_B (has_shadow, 291);  // shadow on/off
+  FIELD_BL (julian_day, 91);
+  FIELD_BL (msecs, 92);
+  FIELD_B (is_dst, 292);      // isDayLightSavingsOn
+  FIELD_BL (shadow_type, 70); // 0 raytraced, 1 shadow maps
+  FIELD_BS (shadow_mapsize, 71); // max 3968
+  FIELD_RCd (shadow_softness, 280);
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
@@ -7107,39 +7130,7 @@ DWG_OBJECT (MATERIAL)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// (varies) DEBUGGING, UNKNOWN FIELDS
-// hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
-// DXF docs put that as Entity, wrong!
-DWG_OBJECT (SUN)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbSun)
-  FIELD_BS (class_version, 90); //1
-  VALUEOUTOFBOUNDS (class_version, 10)
-  if (_obj->class_version > 0)
-    {
-      FIELD_B (is_on, 290); // status, isOn
-      FIELD_CMC (color, 63,421);
-      FIELD_BD (intensity, 40); //01
-      FIELD_B (has_shadow, 291); // shadow on/off
-      FIELD_B (is_dst, 292);  // isDayLightSavingsOn
-      FIELD_BS (unknown, 421); //16777215 rgb?
-      //DEBUG_HERE_OBJ
-      //27 111111111100001000000000 011 [32,58]
-      //bit_advance_position (dat, 24);
-      //FIELD_B (has_shadow, 291); //1
-      FIELD_BS (julian_day, 91); // same as TIMEBLL
-      FIELD_BL (time, 92);    // in seconds past midnight
-      FIELD_B (is_dst, 292);  // isDayLightSavingsOn
-      FIELD_RC (shadow_type, 70); // 0 raytraced, 1 shadow maps
-    }
-
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (skyparams, 5, 0); //AcGiSkyParameters class?
-  DEBUG_POS_OBJ //@9992.1
-
-DWG_OBJECT_END
-
-// (varies) DEBUGGING, UNKNOWN FIELDS
+// (varies) DEBUGGING
 DWG_OBJECT (SUNSTUDY)
 
   DECODE_UNKNOWN_BITS
@@ -7161,7 +7152,7 @@ DWG_OBJECT (SUNSTUDY)
   REPEAT (num_dates, dates, Dwg_SUNSTUDY_Dates)
   REPEAT_BLOCK
       SUB_FIELD_BL (dates[rcount1], julian_day, 90);
-      SUB_FIELD_BL (dates[rcount1], time, 90);
+      SUB_FIELD_BL (dates[rcount1], msecs, 90);
   END_REPEAT_BLOCK
   END_REPEAT (dates);
   FIELD_B (select_range_of_dates, 292);
@@ -8394,6 +8385,22 @@ DWG_OBJECT (MOTIONPATH)
   FIELD_BS (frames, 90);
   FIELD_BS (frame_rate, 90);
   FIELD_B (corner_decel, 290);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// dxfname: ACDBCURVEPATH
+DWG_OBJECT (CURVEPATH)
+  SUBCLASS (AcDbNamedPath)
+  SUBCLASS (AcDbCurvePath)
+/*
+  FIELD_BS (class_version, 90);
+  FIELD_HANDLE (camera_path, 5, 340);
+  FIELD_HANDLE (target_path, 5, 340);
+  FIELD_HANDLE (viewtable, 5, 340);
+  FIELD_BS (frames, 90);
+  FIELD_BS (frame_rate, 90);
+  FIELD_B (corner_decel, 290);
+*/
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

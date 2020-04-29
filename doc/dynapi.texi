@@ -2136,8 +2136,6 @@ BD,	DXF 53
 BD,	DXF 54
 @item bl77
 BS,	DXF 77
-@item lights_layer
-H
 
 @end vtable
 @end indentedblock
@@ -5243,6 +5241,33 @@ BS
 @end vtable
 @end indentedblock
 
+@strong{CURVEPATH} @anchor{CURVEPATH}
+@cindex object, CURVEPATH
+@vindex CURVEPATH
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 90
+@item camera_path
+H,	DXF 340
+@item target_path
+H,	DXF 340
+@item viewtable
+H,	DXF 340
+@item frames
+BS,	DXF 90
+@item frame_rate
+BS,	DXF 90
+@item corner_decel
+B,	DXF 290
+
+@end vtable
+@end indentedblock
+
 @strong{DATALINK} @anchor{DATALINK}
 @cindex object, DATALINK
 @vindex DATALINK
@@ -7780,28 +7805,24 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item is_on
 B,	DXF 290
-@item unknown
-BS,	DXF 421
 @item color
 CMC,	DXF 63
 @item intensity
 BD,	DXF 40
+@item has_shadow
+B,	DXF 291
 @item julian_day
 BL,	DXF 91
-@item time
+@item msecs
 BL,	DXF 92
 @item is_dst
 B,	DXF 292
-@item has_shadow
-B,	DXF 291
 @item shadow_type
-BS,	DXF 70
+BL,	DXF 70
 @item shadow_mapsize
-BS
+BS,	DXF 71
 @item shadow_softness
-BS
-@item skyparams
-H
+RC,	DXF 280
 
 @end vtable
 @end indentedblock
@@ -8255,23 +8276,23 @@ struct _dwg_object_object*
 @item description
 T,	DXF 2
 @item style_type
-BS,	DXF 70
+BL,	DXF 70
 @item ext_lighting_model
 BS,	DXF 177
 @item has_ext
 B,	DXF 291
 @item face_lighting_model
-BS,	DXF 71
+BL,	DXF 71
 @item face_lighting_model_ext
 BS
 @item face_lighting_quality
-BS,	DXF 72
+BL,	DXF 72
 @item face_lighting_quality_ext
 BS
 @item face_color_mode
-BS,	DXF 73
+BL,	DXF 73
 @item face_color_mode_ext
-BS
+BS,	DXF 176
 @item face_opacity
 BD,	DXF 40
 @item face_opacity_ext
@@ -10106,7 +10127,7 @@ BD,	DXF 41
 
 @item julian_day
 BL,	DXF 90
-@item time
+@item msecs
 BL,	DXF 90
 
 @end vtable
