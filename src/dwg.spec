@@ -6882,6 +6882,96 @@ DWG_OBJECT (SUN)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+#define AcDbRenderSettings_fields                                             \
+    SUBCLASS (AcDbRenderSettings)                                             \
+    VERSION (R_2013) { /* version 0x1f */                                     \
+      VALUE_BL (_obj->class_version + 1, 90)                                  \
+    } else {                                                                  \
+      FIELD_BL (class_version, 90);                                           \
+    }                                                                         \
+    FIELD_T (name, 1);                                                        \
+    FIELD_B (fog_enabled, 290);                                               \
+    FIELD_B (fog_background_enabled, 290);                                    \
+    FIELD_B (backfaces_enabled, 290);                                         \
+    FIELD_B (environ_image_enabled, 290);                                     \
+    FIELD_T (environ_image_filename, 1);                                      \
+    FIELD_T (description, 1);                                                 \
+    FIELD_BL (display_index, 90);                                             \
+    VERSION (R_2013) {                                                        \
+      FIELD_B (has_predefined, 290);                                          \
+    }
+
+DWG_OBJECT (RENDERSETTINGS)
+  AcDbRenderSettings_fields;
+DWG_OBJECT_END
+
+DWG_OBJECT (MENTALRAYRENDERSETTINGS)
+  AcDbRenderSettings_fields;
+  SUBCLASS (AcDbMentalRayRenderSettings);
+  FIELD_BL (mr_version, 90); /* = 2 */
+  FIELD_BL (sampling1, 90);
+  FIELD_BL (sampling2, 90);
+  FIELD_BS (sampling_mr_filter, 70);
+  FIELD_BD (sampling_filter1, 40);
+  FIELD_BD (sampling_filter2, 40);
+  FIELD_BD (sampling_contrast_color1, 40);
+  FIELD_BD (sampling_contrast_color2, 40);
+  FIELD_BD (sampling_contrast_color3, 40);
+  FIELD_BD (sampling_contrast_color4, 40);
+  FIELD_BS (shadow_mode, 70);
+  FIELD_B  (shadow_maps_enabled, 290);
+  FIELD_B  (ray_tracing_enabled, 290);
+  FIELD_BL (ray_trace_depth1, 90);
+  FIELD_BL (ray_trace_depth2, 90);
+  FIELD_BL (ray_trace_depth3, 90);
+  FIELD_B  (global_illumination_enabled, 290);
+  FIELD_BL (gi_sample_count, 90);
+  FIELD_B  (gi_sample_radius_enabled, 290);
+  FIELD_BD (gi_sample_radius, 40);
+  FIELD_BL (gi_photons_per_light, 90);
+  FIELD_BL (photon_trace_depth1, 90);
+  FIELD_BL (photon_trace_depth2, 90);
+  FIELD_BL (photon_trace_depth3, 90);
+  FIELD_B  (final_gathering_enabled, 290);
+  FIELD_BL (fg_ray_count, 90);
+  FIELD_B  (fg_sample_radius_state1, 290);
+  FIELD_B  (fg_sample_radius_state2, 290);
+  FIELD_B  (fg_sample_radius_state3, 290);
+  FIELD_BD (fg_sample_radius1, 40);
+  FIELD_BD (fg_sample_radius2, 40);
+  FIELD_BD (light_luminance_scale, 40);
+  FIELD_BS (diagnostics_mode, 70);
+  FIELD_BS (diagnostics_grid_mode, 70);
+  FIELD_BD (diagnostics_grid_float, 40);
+  FIELD_BS (diagnostics_photon_mode, 70);
+  FIELD_BS (diagnostics_bsp_mode, 70);
+  FIELD_B  (export_mi_enabled, 290);
+  FIELD_T  (mr_description, 1);
+  FIELD_BL (tile_size, 90);
+  FIELD_BS (tile_order, 70);
+  FIELD_BL (memory_limit, 90);
+  FIELD_B  (diagnostics_samples_mode, 290);
+  FIELD_BD (energy_multiplier, 40);
+  //START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (RAPIDRTRENDERSETTINGS)
+  AcDbRenderSettings_fields;
+  SUBCLASS (AcDbRapidRTRenderSettings)
+  FIELD_BL (rapidrt_version, 90);
+  FIELD_BL (render_target, 70);
+  FIELD_BL (render_level, 90);
+  FIELD_BL (render_time, 90);
+  FIELD_BL (lighting_model, 70);
+  FIELD_BL (filter_type, 70);
+  FIELD_BD (filter_width, 40);
+  FIELD_BD (filter_height, 40);
+  VERSION (R_2013)
+    {}
+  else
+    FIELD_B (has_predefined, 290); // when RENDERSETTINGS does not handle it
+DWG_OBJECT_END
+
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
@@ -8267,113 +8357,6 @@ DWG_OBJECT_END
 DWG_OBJECT (CSACDOCUMENTOPTIONS)
   DECODE_UNKNOWN_BITS
   //size 161
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (RENDERSETTINGS)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbRenderSettings)
-  VERSION (R_2007) { // version 31
-    VALUE_BL (_obj->class_version + 1, 90)
-  }
-  LATER_VERSIONS {
-    FIELD_BL (class_version, 90)
-  }
-  FIELD_T (name, 1);
-  FIELD_B (fog_enabled, 290);
-  FIELD_B (fog_background_enabled, 290);
-  FIELD_B (b290_1, 290);
-  FIELD_B (environ_image_enabled, 290);
-  FIELD_T (environ_image_filename, 1);
-  FIELD_T (description, 1);
-  FIELD_BL (bl90, 90);
-  VERSION (R_2007)
-    FIELD_B (b290_2, 290);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (RAPIDRTRENDERSETTINGS)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbRenderSettings)
-  FIELD_BS (class_version, 90);
-  FIELD_T (name, 1);
-  FIELD_B (fog_enabled, 290);
-  FIELD_B (fog_background_enabled, 290);
-  FIELD_B (b290_1, 290);
-  FIELD_B (environ_image_enabled, 290);
-  FIELD_T (environ_image_filename, 1);
-  FIELD_T (description, 1);
-  FIELD_BS (bs90, 90);
-  SUBCLASS (AcDbRapidRTRenderSettings)
-  FIELD_BS (bs90_0, 90); // 6x RL or BL + 2x double
-  FIELD_RC (rc70_1, 70);
-  FIELD_BS (bs90_1, 90);
-  FIELD_BS (bs90_2, 90);
-  FIELD_RC (rc70_2, 70);
-  FIELD_RC (rc70_3, 70);
-  FIELD_BD (fog_density_near, 40);
-  FIELD_BD (fog_density_far, 40);
-  FIELD_B (b290_2, 290); // dependent on bs90
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (MENTALRAYRENDERSETTINGS)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbRenderSettings)
-  FIELD_BS (class_version, 90);
-  FIELD_T (name, 1);
-  FIELD_B (fog_enabled, 290);
-  FIELD_B (fog_background_enabled, 290);
-  FIELD_B (b290_1, 290);
-  FIELD_B (environ_image_enabled, 290);
-  FIELD_T (environ_image_filename, 1);
-  FIELD_T (description, 1);
-  FIELD_BS (bs90, 90);
-  SUBCLASS (AcDbMentalRayRenderSettings)
-  FIELD_BS (bs90_0, 90);
-  FIELD_RC (rc70_1, 70);
-  FIELD_BS (bs90_1, 90);
-  FIELD_BS (bs90_2, 90);
-  FIELD_BD (fog_density_near, 40);
-  FIELD_BD (fog_density_far, 40);
-  FIELD_BD (samples_distance_near, 40);
-  FIELD_BD (samples_distance_far, 40);
-  FIELD_BD (fog_distance_near, 40);
-  FIELD_BD (fog_distance_far, 40);
-  FIELD_RC (rc70_2, 70);
-  FIELD_B (b290_3, 290);
-  FIELD_B (b290_4, 290);
-  FIELD_BS (bs90_3, 90);
-  FIELD_BS (bs90_4, 90);
-  FIELD_BS (bs90_5, 90);
-  FIELD_B (b290_5, 290);
-  FIELD_BS (bs90_6, 90);
-  FIELD_B (b290_6, 290);
-  FIELD_BD (bd40_2, 40);
-  FIELD_BS (bs90_7, 90);
-  FIELD_BS (bs90_8, 90);
-  FIELD_BS (bs90_9, 90);
-  FIELD_BS (bs90_10, 90);
-  FIELD_B (b290_7, 290);
-  FIELD_BS (bs90_11, 90);
-  FIELD_B (b290_8, 290);
-  FIELD_B (b290_9, 290);
-  FIELD_B (b290_10, 290);
-  FIELD_BD (bd40_3, 40);
-  FIELD_BD (bd40_4, 40);
-  FIELD_BD (bd40_5, 40);
-  FIELD_RC (rc70_3, 70);
-  FIELD_RC (rc70_4, 70);
-  FIELD_BD (bd40_6, 40);
-  FIELD_RC (rc70_5, 70);
-  FIELD_RC (rc70_6, 70);
-  FIELD_B (b290_11, 290);
-  FIELD_T (mrdescription, 1);
-  FIELD_BS (bs90_12, 90);
-  FIELD_RC (rc70_7, 70);
-  FIELD_BS (bs90_13, 90);
-  FIELD_B (b290_12, 290);
-  FIELD_BD (bd40_7, 40);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

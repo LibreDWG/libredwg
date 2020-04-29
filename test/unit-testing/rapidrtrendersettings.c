@@ -6,49 +6,46 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   // AcDbRenderSettings
-  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
-  BITCODE_T name;		/*!< DXF 1 */
-  BITCODE_B fog_enabled;        /*!< DXF 290 */
-  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
-  BITCODE_B b290_1;                  /*!< DXF 290 */
-  BITCODE_B environ_image_enabled;   /*!< DXF 290 */
-  BITCODE_T environ_image_filename;  /*!< DXF 1 */
-  BITCODE_T description;	     /*!< DXF 1 */
-  BITCODE_BS bs90;
+  BITCODE_BL class_version;
+  BITCODE_T name;
+  BITCODE_B fog_enabled;
+  BITCODE_B fog_background_enabled;
+  BITCODE_B backfaces_enabled;
+  BITCODE_B environ_image_enabled;
+  BITCODE_T environ_image_filename;
+  BITCODE_T description;
+  BITCODE_BL display_index;
+  BITCODE_B has_predefined; 	/*!< DXF 290, r2013 only */
   // AcDbRapidRTRenderSettings
-  BITCODE_BS bs90_0;
-  BITCODE_RC rc70_1;
-  BITCODE_BS bs90_1;
-  BITCODE_BS bs90_2;
-  BITCODE_RC rc70_2;
-  BITCODE_RC rc70_3;
-  BITCODE_BD fog_density_near;  /*!< DXF 40 */
-  BITCODE_BD fog_density_far;   /*!< DXF 40 */
-  BITCODE_B b290_2;
+  BITCODE_BL rapidrt_version; 	/*!< DXF 90 */
+  BITCODE_BL render_target;	/*!< DXF 70 */
+  BITCODE_BL render_level;	/*!< DXF 90 */
+  BITCODE_BL render_time;	/*!< DXF 90 */
+  BITCODE_BL lighting_model;	/*!< DXF 70 */
+  BITCODE_BL filter_type;	/*!< DXF 70 */
+  BITCODE_BD filter_width;	/*!< DXF 40 */
+  BITCODE_BD filter_height;	/*!< DXF 40 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_rapidrtrendersettings *_obj = dwg_object_to_RAPIDRTRENDERSETTINGS (obj);
 
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, class_version, BL, class_version);
   CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, name, name);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_enabled, B, fog_enabled);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_background_enabled, B, fog_background_enabled);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, b290_1, B, b290_1);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, backfaces_enabled, B, backfaces_enabled);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, environ_image_enabled, B, environ_image_enabled);
   CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, environ_image_filename, environ_image_filename);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_density_near, BD, fog_density_near);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_density_far, BD, fog_density_far);
   CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, description, description);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, bs90, BS, bs90);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, bs90_0, BS, bs90_0);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, rc70_1, RC, rc70_1);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, bs90_1, BS, bs90_1);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, bs90_2, BS, bs90_2);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, rc70_2, RC, rc70_2);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, rc70_3, RC, rc70_3);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_density_near, BD, fog_density_near);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_density_far, BD, fog_density_far);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, b290_2, B, b290_2);
-#endif
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, display_index, BL, display_index);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, has_predefined, B, has_predefined);
+
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, rapidrt_version, BL, rapidrt_version);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_target, BL, render_target);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_level, BL, render_level);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_time, BL, render_time);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, lighting_model, BL, lighting_model);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_type, BL, filter_type);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_width, BD, filter_width);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_height, BD, filter_height);
 }

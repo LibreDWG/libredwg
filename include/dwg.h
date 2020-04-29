@@ -5345,33 +5345,18 @@ typedef struct _dwg_object_NAVISWORKSMODELDEF
 
 } Dwg_Object_NAVISWORKSMODELDEF;
 
-/**
- Class RAPIDRTRENDERSETTINGS (varies)
- */
-typedef struct _dwg_object_RAPIDRTRENDERSETTINGS
-{
-  struct _dwg_object_object *parent;
-  // AcDbRenderSettings
-  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
-  BITCODE_T name;		/*!< DXF 1 */
-  BITCODE_B fog_enabled;        /*!< DXF 290 */
-  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
-  BITCODE_B b290_1;                  /*!< DXF 290 */
-  BITCODE_B environ_image_enabled;   /*!< DXF 290 */
-  BITCODE_T environ_image_filename;  /*!< DXF 1 */
-  BITCODE_T description;	     /*!< DXF 1 */
-  BITCODE_BS bs90;
-  // AcDbRapidRTRenderSettings
-  BITCODE_BS bs90_0;
-  BITCODE_RC rc70_1;
-  BITCODE_BS bs90_1;
-  BITCODE_BS bs90_2;
-  BITCODE_RC rc70_2;
-  BITCODE_RC rc70_3;
-  BITCODE_BD fog_density_near;  /*!< DXF 40 */
-  BITCODE_BD fog_density_far;   /*!< DXF 40 */
-  BITCODE_B b290_2;
-} Dwg_Object_RAPIDRTRENDERSETTINGS;
+#define RENDERSETTINGS_fields                                                 \
+  /* AcDbRenderSettings */                                                    \
+  BITCODE_BL class_version;         /*!< DXF 90, default: 1 */                \
+  BITCODE_T name;                   /*!< DXF 1 */                             \
+  BITCODE_B fog_enabled;            /*!< DXF 290 */                           \
+  BITCODE_B fog_background_enabled; /*!< DXF 290 */                           \
+  BITCODE_B backfaces_enabled;      /*!< DXF 290 */                           \
+  BITCODE_B environ_image_enabled;  /*!< DXF 290 */                           \
+  BITCODE_T environ_image_filename; /*!< DXF 1 */                             \
+  BITCODE_T description;            /*!< DXF 1 */                             \
+  BITCODE_BL display_index;         /*!< DXF 290 */                           \
+  BITCODE_B has_predefined          /*!< DXF 290, r2013 only */
 
 /**
  Class RENDERSETTINGS (varies)
@@ -5379,18 +5364,81 @@ typedef struct _dwg_object_RAPIDRTRENDERSETTINGS
 typedef struct _dwg_object_RENDERSETTINGS
 {
   struct _dwg_object_object *parent;
-  // AcDbRenderSettings
-  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
-  BITCODE_T name;		/*!< DXF 1 */
-  BITCODE_B fog_enabled;        /*!< DXF 290 */
-  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
-  BITCODE_B b290_1;                  /*!< DXF 290 */
-  BITCODE_B environ_image_enabled;   /*!< DXF 290 */
-  BITCODE_T environ_image_filename;  /*!< DXF 1 */
-  BITCODE_T description;	     /*!< DXF 1 */
-  BITCODE_BL bl90;
-  BITCODE_B b290_2;
+  RENDERSETTINGS_fields;
 } Dwg_Object_RENDERSETTINGS;
+
+/**
+ Class MENTALRAYRENDERSETTINGS (varies)
+ Unstable
+ */
+typedef struct _dwg_object_MENTALRAYRENDERSETTINGS
+{
+  struct _dwg_object_object *parent;
+  RENDERSETTINGS_fields;
+  // AcDbMentalRayRenderSettings
+  BITCODE_BL mr_version;		/*!< DXF 90, always 2 */
+  BITCODE_BL sampling1;			/*!< DXF 90 */
+  BITCODE_BL sampling2;			/*!< DXF 90 */
+  BITCODE_BS sampling_mr_filter;	/*!< DXF 70 */
+  BITCODE_BD sampling_filter1;		/*!< DXF 40 */
+  BITCODE_BD sampling_filter2;		/*!< DXF 40 */
+  BITCODE_BD sampling_contrast_color1;	/*!< DXF 40 */
+  BITCODE_BD sampling_contrast_color2;	/*!< DXF 40 */
+  BITCODE_BD sampling_contrast_color3;	/*!< DXF 40 */
+  BITCODE_BD sampling_contrast_color4;	/*!< DXF 40 */
+  BITCODE_BS shadow_mode;		/*!< DXF 70 */
+  BITCODE_B  shadow_maps_enabled;	/*!< DXF 290 */
+  BITCODE_B  ray_tracing_enabled;	/*!< DXF 290 */
+  BITCODE_BL ray_trace_depth1;		/*!< DXF 90 */
+  BITCODE_BL ray_trace_depth2;		/*!< DXF 90 */
+  BITCODE_BL ray_trace_depth3;		/*!< DXF 90 */
+  BITCODE_B  global_illumination_enabled;/*!< DXF 290 */
+  BITCODE_BL gi_sample_count;		/*!< DXF 90 */
+  BITCODE_B  gi_sample_radius_enabled;	/*!< DXF 290 */
+  BITCODE_BD gi_sample_radius;		/*!< DXF 40 */
+  BITCODE_BL gi_photons_per_light;	/*!< DXF 90 */
+  BITCODE_BL photon_trace_depth1;	/*!< DXF 90 */
+  BITCODE_BL photon_trace_depth2;	/*!< DXF 90 */
+  BITCODE_BL photon_trace_depth3;	/*!< DXF 90 */
+  BITCODE_B  final_gathering_enabled;	/*!< DXF 290 */
+  BITCODE_BL fg_ray_count;		/*!< DXF 90 */
+  BITCODE_B  fg_sample_radius_state1;	/*!< DXF 290 */
+  BITCODE_B  fg_sample_radius_state2;	/*!< DXF 290 */
+  BITCODE_B  fg_sample_radius_state3;	/*!< DXF 290 */
+  BITCODE_BD fg_sample_radius1;		/*!< DXF 40 */
+  BITCODE_BD fg_sample_radius2;		/*!< DXF 40 */
+  BITCODE_BD light_luminance_scale;		/*!< DXF 40 */
+  BITCODE_BS diagnostics_mode;		/*!< DXF 70 */
+  BITCODE_BS diagnostics_grid_mode;	/*!< DXF 70 */
+  BITCODE_BD diagnostics_grid_float;	/*!< DXF 40 */
+  BITCODE_BS diagnostics_photon_mode;	/*!< DXF 70 */
+  BITCODE_BS diagnostics_bsp_mode;	/*!< DXF 70 */
+  BITCODE_B  export_mi_enabled;		/*!< DXF 290 */
+  BITCODE_T  mr_description;		/*!< DXF 1 */
+  BITCODE_BL tile_size;			/*!< DXF 90 */
+  BITCODE_BS tile_order;		/*!< DXF 70 */
+  BITCODE_BL memory_limit;		/*!< DXF 90 */
+  BITCODE_B  diagnostics_samples_mode;	/*!< DXF 290 */
+  BITCODE_BD energy_multiplier;		/*!< DXF 40 */
+} Dwg_Object_MENTALRAYRENDERSETTINGS;
+
+/**
+ Class RAPIDRTRENDERSETTINGS (varies)
+ */
+typedef struct _dwg_object_RAPIDRTRENDERSETTINGS
+{
+  struct _dwg_object_object *parent;
+  RENDERSETTINGS_fields;
+  // AcDbRapidRTRenderSettings
+  BITCODE_BL rapidrt_version; /*!< DXF 90 */
+  BITCODE_BL render_target;	/*!< DXF 70 */
+  BITCODE_BL render_level;	/*!< DXF 90 */
+  BITCODE_BL render_time;	/*!< DXF 90 */
+  BITCODE_BL lighting_model;	/*!< DXF 70 */
+  BITCODE_BL filter_type;	/*!< DXF 70 */
+  BITCODE_BD filter_width;	/*!< DXF 40 */
+  BITCODE_BD filter_height;	/*!< DXF 40 */
+} Dwg_Object_RAPIDRTRENDERSETTINGS;
 
 /**
  Class RENDERENVIRONMENT (varies)
@@ -5428,71 +5476,6 @@ typedef struct _dwg_object_RENDERGLOBAL
   BITCODE_B predef_presets_first; /*!< DXF 290 */
   BITCODE_B highlevel_info;    /*!< DXF 290 */
 } Dwg_Object_RENDERGLOBAL;
-
-/**
- Class MENTALRAYRENDERSETTINGS (varies)
- Debugging
- */
-typedef struct _dwg_object_MENTALRAYRENDERSETTINGS
-{
-  struct _dwg_object_object *parent;
-  // AcDbRenderSettings
-  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
-  BITCODE_T name;		/*!< DXF 1 */
-  BITCODE_B fog_enabled;        /*!< DXF 290 */
-  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
-  BITCODE_B b290_1;                  /*!< DXF 290 */
-  BITCODE_B environ_image_enabled;   /*!< DXF 290 */
-  BITCODE_T environ_image_filename;  /*!< DXF 1 */
-  BITCODE_T description;	     /*!< DXF 1 */
-  BITCODE_BS bs90;
-  // AcDbMentalRayRenderSettings
-  BITCODE_BS bs90_0;
-  BITCODE_BS bs90_1;
-  BITCODE_BS bs90_2;
-  BITCODE_RC rc70_1;
-  BITCODE_BD fog_density_near;  /*!< DXF 40 */
-  BITCODE_BD fog_density_far;   /*!< DXF 40 */
-  BITCODE_BD samples_distance_near; /*!< DXF 40 */
-  BITCODE_BD samples_distance_far;  /*!< DXF 40 */
-  BITCODE_BD fog_distance_near; /*!< DXF 40 */
-  BITCODE_BD fog_distance_far;  /*!< DXF 40 */
-  BITCODE_RC rc70_2;
-  BITCODE_B b290_3;
-  BITCODE_B b290_4;
-  BITCODE_BS bs90_3; // 5
-  BITCODE_BS bs90_4; // 5
-  BITCODE_BS bs90_5; // 5
-  BITCODE_B b290_5;
-  BITCODE_BS bs90_6; // 500
-  BITCODE_B b290_6;
-  BITCODE_BD bd40_2; // 1.0
-  BITCODE_BS bs90_7; // 10000
-  BITCODE_BS bs90_8;  // 5
-  BITCODE_BS bs90_9;  // 5
-  BITCODE_BS bs90_10; // 5
-  BITCODE_B b290_7;   // 0
-  BITCODE_BS bs90_11;  // 200
-  BITCODE_B b290_8;   // 0
-  BITCODE_B b290_9;   // 0
-  BITCODE_B b290_10; // 0
-  BITCODE_BD bd40_3; // 1.0
-  BITCODE_BD bd40_4; // 1.0
-  BITCODE_BD bd40_5; // 1500.0
-  BITCODE_RC rc70_3; // 0
-  BITCODE_RC rc70_4; // 0
-  BITCODE_BD bd40_6; // 10.0
-  BITCODE_RC rc70_5; // 0
-  BITCODE_RC rc70_6; // 0
-  BITCODE_B b290_11; // 0
-  BITCODE_T mrdescription;	     /*!< DXF 1 */
-  BITCODE_BS bs90_12; // 32
-  BITCODE_RC rc70_7; // 0
-  BITCODE_BS bs90_13; // 1048
-  BITCODE_B b290_12; // 0
-  BITCODE_BD bd40_7; // 1.0
-
-} Dwg_Object_MENTALRAYRENDERSETTINGS;
 
 /**
  Class MOTIONPATH (varies)
@@ -7262,11 +7245,14 @@ EXPORT int dwg_setup_GEODATA (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
+EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
 EXPORT int dwg_setup_PLOTSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);
@@ -7327,12 +7313,9 @@ EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERGLOBAL (Dwg_Object *obj);
-EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
 EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
-EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
-EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
 //EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);

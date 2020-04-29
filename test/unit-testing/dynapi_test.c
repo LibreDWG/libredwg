@@ -35201,484 +35201,19 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
   Dwg_Object_MENTALRAYRENDERSETTINGS *restrict mentalrayrendersettings = obj->tio.object->tio.MENTALRAYRENDERSETTINGS;
   failed = 0;
   {
-    BITCODE_B b290_1;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_1", &b290_1, NULL)
-        && b290_1 == mentalrayrendersettings->b290_1)
+    BITCODE_B backfaces_enabled;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "backfaces_enabled", &backfaces_enabled, NULL)
+        && backfaces_enabled == mentalrayrendersettings->backfaces_enabled)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.b290_1 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_1, b290_1);
-    b290_1++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_1", &b290_1, 0)
-        && b290_1 == mentalrayrendersettings->b290_1)
+      fail ("MENTALRAYRENDERSETTINGS.backfaces_enabled [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->backfaces_enabled, backfaces_enabled);
+    backfaces_enabled++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "backfaces_enabled", &backfaces_enabled, 0)
+        && backfaces_enabled == mentalrayrendersettings->backfaces_enabled)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.b290_1 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_1, b290_1);
-    mentalrayrendersettings->b290_1--;
-  }
-  {
-    BITCODE_B b290_10;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_10", &b290_10, NULL)
-        && b290_10 == mentalrayrendersettings->b290_10)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_10 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_10, b290_10);
-    b290_10++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_10", &b290_10, 0)
-        && b290_10 == mentalrayrendersettings->b290_10)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_10 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_10, b290_10);
-    mentalrayrendersettings->b290_10--;
-  }
-  {
-    BITCODE_B b290_11;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_11", &b290_11, NULL)
-        && b290_11 == mentalrayrendersettings->b290_11)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_11 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_11, b290_11);
-    b290_11++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_11", &b290_11, 0)
-        && b290_11 == mentalrayrendersettings->b290_11)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_11 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_11, b290_11);
-    mentalrayrendersettings->b290_11--;
-  }
-  {
-    BITCODE_B b290_12;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_12", &b290_12, NULL)
-        && b290_12 == mentalrayrendersettings->b290_12)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_12 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_12, b290_12);
-    b290_12++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_12", &b290_12, 0)
-        && b290_12 == mentalrayrendersettings->b290_12)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_12 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_12, b290_12);
-    mentalrayrendersettings->b290_12--;
-  }
-  {
-    BITCODE_B b290_3;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_3", &b290_3, NULL)
-        && b290_3 == mentalrayrendersettings->b290_3)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_3 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_3, b290_3);
-    b290_3++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_3", &b290_3, 0)
-        && b290_3 == mentalrayrendersettings->b290_3)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_3 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_3, b290_3);
-    mentalrayrendersettings->b290_3--;
-  }
-  {
-    BITCODE_B b290_4;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_4", &b290_4, NULL)
-        && b290_4 == mentalrayrendersettings->b290_4)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_4 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_4, b290_4);
-    b290_4++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_4", &b290_4, 0)
-        && b290_4 == mentalrayrendersettings->b290_4)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_4 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_4, b290_4);
-    mentalrayrendersettings->b290_4--;
-  }
-  {
-    BITCODE_B b290_5;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_5", &b290_5, NULL)
-        && b290_5 == mentalrayrendersettings->b290_5)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_5 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_5, b290_5);
-    b290_5++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_5", &b290_5, 0)
-        && b290_5 == mentalrayrendersettings->b290_5)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_5 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_5, b290_5);
-    mentalrayrendersettings->b290_5--;
-  }
-  {
-    BITCODE_B b290_6;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_6", &b290_6, NULL)
-        && b290_6 == mentalrayrendersettings->b290_6)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_6 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_6, b290_6);
-    b290_6++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_6", &b290_6, 0)
-        && b290_6 == mentalrayrendersettings->b290_6)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_6 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_6, b290_6);
-    mentalrayrendersettings->b290_6--;
-  }
-  {
-    BITCODE_B b290_7;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_7", &b290_7, NULL)
-        && b290_7 == mentalrayrendersettings->b290_7)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_7 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_7, b290_7);
-    b290_7++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_7", &b290_7, 0)
-        && b290_7 == mentalrayrendersettings->b290_7)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_7 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_7, b290_7);
-    mentalrayrendersettings->b290_7--;
-  }
-  {
-    BITCODE_B b290_8;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_8", &b290_8, NULL)
-        && b290_8 == mentalrayrendersettings->b290_8)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_8 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_8, b290_8);
-    b290_8++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_8", &b290_8, 0)
-        && b290_8 == mentalrayrendersettings->b290_8)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_8 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_8, b290_8);
-    mentalrayrendersettings->b290_8--;
-  }
-  {
-    BITCODE_B b290_9;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_9", &b290_9, NULL)
-        && b290_9 == mentalrayrendersettings->b290_9)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_9 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_9, b290_9);
-    b290_9++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "b290_9", &b290_9, 0)
-        && b290_9 == mentalrayrendersettings->b290_9)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.b290_9 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->b290_9, b290_9);
-    mentalrayrendersettings->b290_9--;
-  }
-  {
-    BITCODE_BD bd40_2;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_2", &bd40_2, NULL)
-        && bd40_2 == mentalrayrendersettings->bd40_2)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_2 [BD] %g != %g", mentalrayrendersettings->bd40_2, bd40_2);
-    bd40_2++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_2", &bd40_2, 0)
-        && bd40_2 == mentalrayrendersettings->bd40_2)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_2 [BD] set+1 %g != %g", mentalrayrendersettings->bd40_2, bd40_2);
-    mentalrayrendersettings->bd40_2--;
-  }
-  {
-    BITCODE_BD bd40_3;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_3", &bd40_3, NULL)
-        && bd40_3 == mentalrayrendersettings->bd40_3)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_3 [BD] %g != %g", mentalrayrendersettings->bd40_3, bd40_3);
-    bd40_3++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_3", &bd40_3, 0)
-        && bd40_3 == mentalrayrendersettings->bd40_3)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_3 [BD] set+1 %g != %g", mentalrayrendersettings->bd40_3, bd40_3);
-    mentalrayrendersettings->bd40_3--;
-  }
-  {
-    BITCODE_BD bd40_4;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_4", &bd40_4, NULL)
-        && bd40_4 == mentalrayrendersettings->bd40_4)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_4 [BD] %g != %g", mentalrayrendersettings->bd40_4, bd40_4);
-    bd40_4++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_4", &bd40_4, 0)
-        && bd40_4 == mentalrayrendersettings->bd40_4)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_4 [BD] set+1 %g != %g", mentalrayrendersettings->bd40_4, bd40_4);
-    mentalrayrendersettings->bd40_4--;
-  }
-  {
-    BITCODE_BD bd40_5;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_5", &bd40_5, NULL)
-        && bd40_5 == mentalrayrendersettings->bd40_5)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_5 [BD] %g != %g", mentalrayrendersettings->bd40_5, bd40_5);
-    bd40_5++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_5", &bd40_5, 0)
-        && bd40_5 == mentalrayrendersettings->bd40_5)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_5 [BD] set+1 %g != %g", mentalrayrendersettings->bd40_5, bd40_5);
-    mentalrayrendersettings->bd40_5--;
-  }
-  {
-    BITCODE_BD bd40_6;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_6", &bd40_6, NULL)
-        && bd40_6 == mentalrayrendersettings->bd40_6)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_6 [BD] %g != %g", mentalrayrendersettings->bd40_6, bd40_6);
-    bd40_6++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_6", &bd40_6, 0)
-        && bd40_6 == mentalrayrendersettings->bd40_6)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_6 [BD] set+1 %g != %g", mentalrayrendersettings->bd40_6, bd40_6);
-    mentalrayrendersettings->bd40_6--;
-  }
-  {
-    BITCODE_BD bd40_7;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_7", &bd40_7, NULL)
-        && bd40_7 == mentalrayrendersettings->bd40_7)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_7 [BD] %g != %g", mentalrayrendersettings->bd40_7, bd40_7);
-    bd40_7++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bd40_7", &bd40_7, 0)
-        && bd40_7 == mentalrayrendersettings->bd40_7)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bd40_7 [BD] set+1 %g != %g", mentalrayrendersettings->bd40_7, bd40_7);
-    mentalrayrendersettings->bd40_7--;
-  }
-  {
-    BITCODE_BS bs90;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90", &bs90, NULL)
-        && bs90 == mentalrayrendersettings->bs90)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90 [BS] %hu != %hu", mentalrayrendersettings->bs90, bs90);
-    bs90++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90", &bs90, 0)
-        && bs90 == mentalrayrendersettings->bs90)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90, bs90);
-    mentalrayrendersettings->bs90--;
-  }
-  {
-    BITCODE_BS bs90_0;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_0", &bs90_0, NULL)
-        && bs90_0 == mentalrayrendersettings->bs90_0)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_0 [BS] %hu != %hu", mentalrayrendersettings->bs90_0, bs90_0);
-    bs90_0++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_0", &bs90_0, 0)
-        && bs90_0 == mentalrayrendersettings->bs90_0)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_0 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_0, bs90_0);
-    mentalrayrendersettings->bs90_0--;
-  }
-  {
-    BITCODE_BS bs90_1;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_1", &bs90_1, NULL)
-        && bs90_1 == mentalrayrendersettings->bs90_1)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_1 [BS] %hu != %hu", mentalrayrendersettings->bs90_1, bs90_1);
-    bs90_1++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_1", &bs90_1, 0)
-        && bs90_1 == mentalrayrendersettings->bs90_1)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_1 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_1, bs90_1);
-    mentalrayrendersettings->bs90_1--;
-  }
-  {
-    BITCODE_BS bs90_10;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_10", &bs90_10, NULL)
-        && bs90_10 == mentalrayrendersettings->bs90_10)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_10 [BS] %hu != %hu", mentalrayrendersettings->bs90_10, bs90_10);
-    bs90_10++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_10", &bs90_10, 0)
-        && bs90_10 == mentalrayrendersettings->bs90_10)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_10 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_10, bs90_10);
-    mentalrayrendersettings->bs90_10--;
-  }
-  {
-    BITCODE_BS bs90_11;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_11", &bs90_11, NULL)
-        && bs90_11 == mentalrayrendersettings->bs90_11)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_11 [BS] %hu != %hu", mentalrayrendersettings->bs90_11, bs90_11);
-    bs90_11++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_11", &bs90_11, 0)
-        && bs90_11 == mentalrayrendersettings->bs90_11)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_11 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_11, bs90_11);
-    mentalrayrendersettings->bs90_11--;
-  }
-  {
-    BITCODE_BS bs90_12;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_12", &bs90_12, NULL)
-        && bs90_12 == mentalrayrendersettings->bs90_12)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_12 [BS] %hu != %hu", mentalrayrendersettings->bs90_12, bs90_12);
-    bs90_12++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_12", &bs90_12, 0)
-        && bs90_12 == mentalrayrendersettings->bs90_12)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_12 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_12, bs90_12);
-    mentalrayrendersettings->bs90_12--;
-  }
-  {
-    BITCODE_BS bs90_13;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_13", &bs90_13, NULL)
-        && bs90_13 == mentalrayrendersettings->bs90_13)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_13 [BS] %hu != %hu", mentalrayrendersettings->bs90_13, bs90_13);
-    bs90_13++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_13", &bs90_13, 0)
-        && bs90_13 == mentalrayrendersettings->bs90_13)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_13 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_13, bs90_13);
-    mentalrayrendersettings->bs90_13--;
-  }
-  {
-    BITCODE_BS bs90_2;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_2", &bs90_2, NULL)
-        && bs90_2 == mentalrayrendersettings->bs90_2)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_2 [BS] %hu != %hu", mentalrayrendersettings->bs90_2, bs90_2);
-    bs90_2++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_2", &bs90_2, 0)
-        && bs90_2 == mentalrayrendersettings->bs90_2)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_2 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_2, bs90_2);
-    mentalrayrendersettings->bs90_2--;
-  }
-  {
-    BITCODE_BS bs90_3;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_3", &bs90_3, NULL)
-        && bs90_3 == mentalrayrendersettings->bs90_3)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_3 [BS] %hu != %hu", mentalrayrendersettings->bs90_3, bs90_3);
-    bs90_3++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_3", &bs90_3, 0)
-        && bs90_3 == mentalrayrendersettings->bs90_3)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_3 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_3, bs90_3);
-    mentalrayrendersettings->bs90_3--;
-  }
-  {
-    BITCODE_BS bs90_4;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_4", &bs90_4, NULL)
-        && bs90_4 == mentalrayrendersettings->bs90_4)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_4 [BS] %hu != %hu", mentalrayrendersettings->bs90_4, bs90_4);
-    bs90_4++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_4", &bs90_4, 0)
-        && bs90_4 == mentalrayrendersettings->bs90_4)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_4 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_4, bs90_4);
-    mentalrayrendersettings->bs90_4--;
-  }
-  {
-    BITCODE_BS bs90_5;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_5", &bs90_5, NULL)
-        && bs90_5 == mentalrayrendersettings->bs90_5)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_5 [BS] %hu != %hu", mentalrayrendersettings->bs90_5, bs90_5);
-    bs90_5++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_5", &bs90_5, 0)
-        && bs90_5 == mentalrayrendersettings->bs90_5)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_5 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_5, bs90_5);
-    mentalrayrendersettings->bs90_5--;
-  }
-  {
-    BITCODE_BS bs90_6;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_6", &bs90_6, NULL)
-        && bs90_6 == mentalrayrendersettings->bs90_6)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_6 [BS] %hu != %hu", mentalrayrendersettings->bs90_6, bs90_6);
-    bs90_6++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_6", &bs90_6, 0)
-        && bs90_6 == mentalrayrendersettings->bs90_6)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_6 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_6, bs90_6);
-    mentalrayrendersettings->bs90_6--;
-  }
-  {
-    BITCODE_BS bs90_7;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_7", &bs90_7, NULL)
-        && bs90_7 == mentalrayrendersettings->bs90_7)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_7 [BS] %hu != %hu", mentalrayrendersettings->bs90_7, bs90_7);
-    bs90_7++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_7", &bs90_7, 0)
-        && bs90_7 == mentalrayrendersettings->bs90_7)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_7 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_7, bs90_7);
-    mentalrayrendersettings->bs90_7--;
-  }
-  {
-    BITCODE_BS bs90_8;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_8", &bs90_8, NULL)
-        && bs90_8 == mentalrayrendersettings->bs90_8)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_8 [BS] %hu != %hu", mentalrayrendersettings->bs90_8, bs90_8);
-    bs90_8++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_8", &bs90_8, 0)
-        && bs90_8 == mentalrayrendersettings->bs90_8)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_8 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_8, bs90_8);
-    mentalrayrendersettings->bs90_8--;
-  }
-  {
-    BITCODE_BS bs90_9;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_9", &bs90_9, NULL)
-        && bs90_9 == mentalrayrendersettings->bs90_9)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_9 [BS] %hu != %hu", mentalrayrendersettings->bs90_9, bs90_9);
-    bs90_9++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "bs90_9", &bs90_9, 0)
-        && bs90_9 == mentalrayrendersettings->bs90_9)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.bs90_9 [BS] set+1 %hu != %hu", mentalrayrendersettings->bs90_9, bs90_9);
-    mentalrayrendersettings->bs90_9--;
+      fail ("MENTALRAYRENDERSETTINGS.backfaces_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->backfaces_enabled, backfaces_enabled);
+    mentalrayrendersettings->backfaces_enabled--;
   }
   {
     BITCODE_BL class_version;
@@ -35696,14 +35231,134 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->class_version--;
   }
   {
-    BITCODE_T description;
+    BITCODE_TV description;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)mentalrayrendersettings->description)
            : !mentalrayrendersettings->description)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.description [T] '%s' <> '%s'", description, mentalrayrendersettings->description);
+      fail ("MENTALRAYRENDERSETTINGS.description [TV] '%s' <> '%s'", description, mentalrayrendersettings->description);
+  }
+  {
+    BITCODE_BS diagnostics_bsp_mode;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_bsp_mode", &diagnostics_bsp_mode, NULL)
+        && diagnostics_bsp_mode == mentalrayrendersettings->diagnostics_bsp_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_bsp_mode [BS] %hu != %hu", mentalrayrendersettings->diagnostics_bsp_mode, diagnostics_bsp_mode);
+    diagnostics_bsp_mode++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_bsp_mode", &diagnostics_bsp_mode, 0)
+        && diagnostics_bsp_mode == mentalrayrendersettings->diagnostics_bsp_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_bsp_mode [BS] set+1 %hu != %hu", mentalrayrendersettings->diagnostics_bsp_mode, diagnostics_bsp_mode);
+    mentalrayrendersettings->diagnostics_bsp_mode--;
+  }
+  {
+    BITCODE_BD diagnostics_grid_float;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_grid_float", &diagnostics_grid_float, NULL)
+        && diagnostics_grid_float == mentalrayrendersettings->diagnostics_grid_float)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_grid_float [BD] %g != %g", mentalrayrendersettings->diagnostics_grid_float, diagnostics_grid_float);
+    diagnostics_grid_float++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_grid_float", &diagnostics_grid_float, 0)
+        && diagnostics_grid_float == mentalrayrendersettings->diagnostics_grid_float)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_grid_float [BD] set+1 %g != %g", mentalrayrendersettings->diagnostics_grid_float, diagnostics_grid_float);
+    mentalrayrendersettings->diagnostics_grid_float--;
+  }
+  {
+    BITCODE_BS diagnostics_grid_mode;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_grid_mode", &diagnostics_grid_mode, NULL)
+        && diagnostics_grid_mode == mentalrayrendersettings->diagnostics_grid_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_grid_mode [BS] %hu != %hu", mentalrayrendersettings->diagnostics_grid_mode, diagnostics_grid_mode);
+    diagnostics_grid_mode++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_grid_mode", &diagnostics_grid_mode, 0)
+        && diagnostics_grid_mode == mentalrayrendersettings->diagnostics_grid_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_grid_mode [BS] set+1 %hu != %hu", mentalrayrendersettings->diagnostics_grid_mode, diagnostics_grid_mode);
+    mentalrayrendersettings->diagnostics_grid_mode--;
+  }
+  {
+    BITCODE_BS diagnostics_mode;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_mode", &diagnostics_mode, NULL)
+        && diagnostics_mode == mentalrayrendersettings->diagnostics_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_mode [BS] %hu != %hu", mentalrayrendersettings->diagnostics_mode, diagnostics_mode);
+    diagnostics_mode++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_mode", &diagnostics_mode, 0)
+        && diagnostics_mode == mentalrayrendersettings->diagnostics_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_mode [BS] set+1 %hu != %hu", mentalrayrendersettings->diagnostics_mode, diagnostics_mode);
+    mentalrayrendersettings->diagnostics_mode--;
+  }
+  {
+    BITCODE_BS diagnostics_photon_mode;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_photon_mode", &diagnostics_photon_mode, NULL)
+        && diagnostics_photon_mode == mentalrayrendersettings->diagnostics_photon_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_photon_mode [BS] %hu != %hu", mentalrayrendersettings->diagnostics_photon_mode, diagnostics_photon_mode);
+    diagnostics_photon_mode++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_photon_mode", &diagnostics_photon_mode, 0)
+        && diagnostics_photon_mode == mentalrayrendersettings->diagnostics_photon_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_photon_mode [BS] set+1 %hu != %hu", mentalrayrendersettings->diagnostics_photon_mode, diagnostics_photon_mode);
+    mentalrayrendersettings->diagnostics_photon_mode--;
+  }
+  {
+    BITCODE_B diagnostics_samples_mode;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_samples_mode", &diagnostics_samples_mode, NULL)
+        && diagnostics_samples_mode == mentalrayrendersettings->diagnostics_samples_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_samples_mode [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->diagnostics_samples_mode, diagnostics_samples_mode);
+    diagnostics_samples_mode++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "diagnostics_samples_mode", &diagnostics_samples_mode, 0)
+        && diagnostics_samples_mode == mentalrayrendersettings->diagnostics_samples_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.diagnostics_samples_mode [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->diagnostics_samples_mode, diagnostics_samples_mode);
+    mentalrayrendersettings->diagnostics_samples_mode--;
+  }
+  {
+    BITCODE_BL display_index;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "display_index", &display_index, NULL)
+        && display_index == mentalrayrendersettings->display_index)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.display_index [BL] %u != %u", mentalrayrendersettings->display_index, display_index);
+    display_index++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "display_index", &display_index, 0)
+        && display_index == mentalrayrendersettings->display_index)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.display_index [BL] set+1 %u != %u", mentalrayrendersettings->display_index, display_index);
+    mentalrayrendersettings->display_index--;
+  }
+  {
+    BITCODE_BD energy_multiplier;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "energy_multiplier", &energy_multiplier, NULL)
+        && energy_multiplier == mentalrayrendersettings->energy_multiplier)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.energy_multiplier [BD] %g != %g", mentalrayrendersettings->energy_multiplier, energy_multiplier);
+    energy_multiplier++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "energy_multiplier", &energy_multiplier, 0)
+        && energy_multiplier == mentalrayrendersettings->energy_multiplier)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.energy_multiplier [BD] set+1 %g != %g", mentalrayrendersettings->energy_multiplier, energy_multiplier);
+    mentalrayrendersettings->energy_multiplier--;
   }
   {
     BITCODE_B environ_image_enabled;
@@ -35721,14 +35376,134 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->environ_image_enabled--;
   }
   {
-    BITCODE_T environ_image_filename;
+    BITCODE_TV environ_image_filename;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
         && environ_image_filename
            ? strEQ ((char *)environ_image_filename, (char *)mentalrayrendersettings->environ_image_filename)
            : !mentalrayrendersettings->environ_image_filename)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, mentalrayrendersettings->environ_image_filename);
+      fail ("MENTALRAYRENDERSETTINGS.environ_image_filename [TV] '%s' <> '%s'", environ_image_filename, mentalrayrendersettings->environ_image_filename);
+  }
+  {
+    BITCODE_B export_mi_enabled;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "export_mi_enabled", &export_mi_enabled, NULL)
+        && export_mi_enabled == mentalrayrendersettings->export_mi_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.export_mi_enabled [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->export_mi_enabled, export_mi_enabled);
+    export_mi_enabled++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "export_mi_enabled", &export_mi_enabled, 0)
+        && export_mi_enabled == mentalrayrendersettings->export_mi_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.export_mi_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->export_mi_enabled, export_mi_enabled);
+    mentalrayrendersettings->export_mi_enabled--;
+  }
+  {
+    BITCODE_BL fg_ray_count;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_ray_count", &fg_ray_count, NULL)
+        && fg_ray_count == mentalrayrendersettings->fg_ray_count)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_ray_count [BL] %u != %u", mentalrayrendersettings->fg_ray_count, fg_ray_count);
+    fg_ray_count++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_ray_count", &fg_ray_count, 0)
+        && fg_ray_count == mentalrayrendersettings->fg_ray_count)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_ray_count [BL] set+1 %u != %u", mentalrayrendersettings->fg_ray_count, fg_ray_count);
+    mentalrayrendersettings->fg_ray_count--;
+  }
+  {
+    BITCODE_BD fg_sample_radius1;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius1", &fg_sample_radius1, NULL)
+        && fg_sample_radius1 == mentalrayrendersettings->fg_sample_radius1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius1 [BD] %g != %g", mentalrayrendersettings->fg_sample_radius1, fg_sample_radius1);
+    fg_sample_radius1++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius1", &fg_sample_radius1, 0)
+        && fg_sample_radius1 == mentalrayrendersettings->fg_sample_radius1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius1 [BD] set+1 %g != %g", mentalrayrendersettings->fg_sample_radius1, fg_sample_radius1);
+    mentalrayrendersettings->fg_sample_radius1--;
+  }
+  {
+    BITCODE_BD fg_sample_radius2;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius2", &fg_sample_radius2, NULL)
+        && fg_sample_radius2 == mentalrayrendersettings->fg_sample_radius2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius2 [BD] %g != %g", mentalrayrendersettings->fg_sample_radius2, fg_sample_radius2);
+    fg_sample_radius2++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius2", &fg_sample_radius2, 0)
+        && fg_sample_radius2 == mentalrayrendersettings->fg_sample_radius2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius2 [BD] set+1 %g != %g", mentalrayrendersettings->fg_sample_radius2, fg_sample_radius2);
+    mentalrayrendersettings->fg_sample_radius2--;
+  }
+  {
+    BITCODE_B fg_sample_radius_state1;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius_state1", &fg_sample_radius_state1, NULL)
+        && fg_sample_radius_state1 == mentalrayrendersettings->fg_sample_radius_state1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius_state1 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->fg_sample_radius_state1, fg_sample_radius_state1);
+    fg_sample_radius_state1++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius_state1", &fg_sample_radius_state1, 0)
+        && fg_sample_radius_state1 == mentalrayrendersettings->fg_sample_radius_state1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius_state1 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->fg_sample_radius_state1, fg_sample_radius_state1);
+    mentalrayrendersettings->fg_sample_radius_state1--;
+  }
+  {
+    BITCODE_B fg_sample_radius_state2;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius_state2", &fg_sample_radius_state2, NULL)
+        && fg_sample_radius_state2 == mentalrayrendersettings->fg_sample_radius_state2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius_state2 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->fg_sample_radius_state2, fg_sample_radius_state2);
+    fg_sample_radius_state2++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius_state2", &fg_sample_radius_state2, 0)
+        && fg_sample_radius_state2 == mentalrayrendersettings->fg_sample_radius_state2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius_state2 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->fg_sample_radius_state2, fg_sample_radius_state2);
+    mentalrayrendersettings->fg_sample_radius_state2--;
+  }
+  {
+    BITCODE_B fg_sample_radius_state3;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius_state3", &fg_sample_radius_state3, NULL)
+        && fg_sample_radius_state3 == mentalrayrendersettings->fg_sample_radius_state3)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius_state3 [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->fg_sample_radius_state3, fg_sample_radius_state3);
+    fg_sample_radius_state3++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fg_sample_radius_state3", &fg_sample_radius_state3, 0)
+        && fg_sample_radius_state3 == mentalrayrendersettings->fg_sample_radius_state3)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.fg_sample_radius_state3 [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->fg_sample_radius_state3, fg_sample_radius_state3);
+    mentalrayrendersettings->fg_sample_radius_state3--;
+  }
+  {
+    BITCODE_B final_gathering_enabled;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "final_gathering_enabled", &final_gathering_enabled, NULL)
+        && final_gathering_enabled == mentalrayrendersettings->final_gathering_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.final_gathering_enabled [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->final_gathering_enabled, final_gathering_enabled);
+    final_gathering_enabled++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "final_gathering_enabled", &final_gathering_enabled, 0)
+        && final_gathering_enabled == mentalrayrendersettings->final_gathering_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.final_gathering_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->final_gathering_enabled, final_gathering_enabled);
+    mentalrayrendersettings->final_gathering_enabled--;
   }
   {
     BITCODE_B fog_background_enabled;
@@ -35746,66 +35521,6 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->fog_background_enabled--;
   }
   {
-    BITCODE_BD fog_density_far;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_density_far", &fog_density_far, NULL)
-        && fog_density_far == mentalrayrendersettings->fog_density_far)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_density_far [BD] %g != %g", mentalrayrendersettings->fog_density_far, fog_density_far);
-    fog_density_far++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_density_far", &fog_density_far, 0)
-        && fog_density_far == mentalrayrendersettings->fog_density_far)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_density_far [BD] set+1 %g != %g", mentalrayrendersettings->fog_density_far, fog_density_far);
-    mentalrayrendersettings->fog_density_far--;
-  }
-  {
-    BITCODE_BD fog_density_near;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_density_near", &fog_density_near, NULL)
-        && fog_density_near == mentalrayrendersettings->fog_density_near)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_density_near [BD] %g != %g", mentalrayrendersettings->fog_density_near, fog_density_near);
-    fog_density_near++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_density_near", &fog_density_near, 0)
-        && fog_density_near == mentalrayrendersettings->fog_density_near)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_density_near [BD] set+1 %g != %g", mentalrayrendersettings->fog_density_near, fog_density_near);
-    mentalrayrendersettings->fog_density_near--;
-  }
-  {
-    BITCODE_BD fog_distance_far;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_distance_far", &fog_distance_far, NULL)
-        && fog_distance_far == mentalrayrendersettings->fog_distance_far)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_distance_far [BD] %g != %g", mentalrayrendersettings->fog_distance_far, fog_distance_far);
-    fog_distance_far++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_distance_far", &fog_distance_far, 0)
-        && fog_distance_far == mentalrayrendersettings->fog_distance_far)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_distance_far [BD] set+1 %g != %g", mentalrayrendersettings->fog_distance_far, fog_distance_far);
-    mentalrayrendersettings->fog_distance_far--;
-  }
-  {
-    BITCODE_BD fog_distance_near;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_distance_near", &fog_distance_near, NULL)
-        && fog_distance_near == mentalrayrendersettings->fog_distance_near)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_distance_near [BD] %g != %g", mentalrayrendersettings->fog_distance_near, fog_distance_near);
-    fog_distance_near++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_distance_near", &fog_distance_near, 0)
-        && fog_distance_near == mentalrayrendersettings->fog_distance_near)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.fog_distance_near [BD] set+1 %g != %g", mentalrayrendersettings->fog_distance_near, fog_distance_near);
-    mentalrayrendersettings->fog_distance_near--;
-  }
-  {
     BITCODE_B fog_enabled;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "fog_enabled", &fog_enabled, NULL)
         && fog_enabled == mentalrayrendersettings->fog_enabled)
@@ -35821,24 +35536,159 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->fog_enabled--;
   }
   {
-    BITCODE_T mrdescription;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "mrdescription", &mrdescription, NULL)
-        && mrdescription
-           ? strEQ ((char *)mrdescription, (char *)mentalrayrendersettings->mrdescription)
-           : !mentalrayrendersettings->mrdescription)
+    BITCODE_BL gi_photons_per_light;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_photons_per_light", &gi_photons_per_light, NULL)
+        && gi_photons_per_light == mentalrayrendersettings->gi_photons_per_light)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.mrdescription [T] '%s' <> '%s'", mrdescription, mentalrayrendersettings->mrdescription);
+      fail ("MENTALRAYRENDERSETTINGS.gi_photons_per_light [BL] %u != %u", mentalrayrendersettings->gi_photons_per_light, gi_photons_per_light);
+    gi_photons_per_light++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_photons_per_light", &gi_photons_per_light, 0)
+        && gi_photons_per_light == mentalrayrendersettings->gi_photons_per_light)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.gi_photons_per_light [BL] set+1 %u != %u", mentalrayrendersettings->gi_photons_per_light, gi_photons_per_light);
+    mentalrayrendersettings->gi_photons_per_light--;
   }
   {
-    BITCODE_T name;
+    BITCODE_BL gi_sample_count;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_sample_count", &gi_sample_count, NULL)
+        && gi_sample_count == mentalrayrendersettings->gi_sample_count)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.gi_sample_count [BL] %u != %u", mentalrayrendersettings->gi_sample_count, gi_sample_count);
+    gi_sample_count++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_sample_count", &gi_sample_count, 0)
+        && gi_sample_count == mentalrayrendersettings->gi_sample_count)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.gi_sample_count [BL] set+1 %u != %u", mentalrayrendersettings->gi_sample_count, gi_sample_count);
+    mentalrayrendersettings->gi_sample_count--;
+  }
+  {
+    BITCODE_BD gi_sample_radius;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_sample_radius", &gi_sample_radius, NULL)
+        && gi_sample_radius == mentalrayrendersettings->gi_sample_radius)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.gi_sample_radius [BD] %g != %g", mentalrayrendersettings->gi_sample_radius, gi_sample_radius);
+    gi_sample_radius++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_sample_radius", &gi_sample_radius, 0)
+        && gi_sample_radius == mentalrayrendersettings->gi_sample_radius)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.gi_sample_radius [BD] set+1 %g != %g", mentalrayrendersettings->gi_sample_radius, gi_sample_radius);
+    mentalrayrendersettings->gi_sample_radius--;
+  }
+  {
+    BITCODE_B gi_sample_radius_enabled;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_sample_radius_enabled", &gi_sample_radius_enabled, NULL)
+        && gi_sample_radius_enabled == mentalrayrendersettings->gi_sample_radius_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.gi_sample_radius_enabled [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->gi_sample_radius_enabled, gi_sample_radius_enabled);
+    gi_sample_radius_enabled++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "gi_sample_radius_enabled", &gi_sample_radius_enabled, 0)
+        && gi_sample_radius_enabled == mentalrayrendersettings->gi_sample_radius_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.gi_sample_radius_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->gi_sample_radius_enabled, gi_sample_radius_enabled);
+    mentalrayrendersettings->gi_sample_radius_enabled--;
+  }
+  {
+    BITCODE_B global_illumination_enabled;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "global_illumination_enabled", &global_illumination_enabled, NULL)
+        && global_illumination_enabled == mentalrayrendersettings->global_illumination_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.global_illumination_enabled [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->global_illumination_enabled, global_illumination_enabled);
+    global_illumination_enabled++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "global_illumination_enabled", &global_illumination_enabled, 0)
+        && global_illumination_enabled == mentalrayrendersettings->global_illumination_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.global_illumination_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->global_illumination_enabled, global_illumination_enabled);
+    mentalrayrendersettings->global_illumination_enabled--;
+  }
+  {
+    BITCODE_B has_predefined;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "has_predefined", &has_predefined, NULL)
+        && has_predefined == mentalrayrendersettings->has_predefined)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.has_predefined [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->has_predefined, has_predefined);
+    has_predefined++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "has_predefined", &has_predefined, 0)
+        && has_predefined == mentalrayrendersettings->has_predefined)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.has_predefined [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->has_predefined, has_predefined);
+    mentalrayrendersettings->has_predefined--;
+  }
+  {
+    BITCODE_BD light_luminance_scale;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "light_luminance_scale", &light_luminance_scale, NULL)
+        && light_luminance_scale == mentalrayrendersettings->light_luminance_scale)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.light_luminance_scale [BD] %g != %g", mentalrayrendersettings->light_luminance_scale, light_luminance_scale);
+    light_luminance_scale++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "light_luminance_scale", &light_luminance_scale, 0)
+        && light_luminance_scale == mentalrayrendersettings->light_luminance_scale)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.light_luminance_scale [BD] set+1 %g != %g", mentalrayrendersettings->light_luminance_scale, light_luminance_scale);
+    mentalrayrendersettings->light_luminance_scale--;
+  }
+  {
+    BITCODE_BL memory_limit;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "memory_limit", &memory_limit, NULL)
+        && memory_limit == mentalrayrendersettings->memory_limit)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.memory_limit [BL] %u != %u", mentalrayrendersettings->memory_limit, memory_limit);
+    memory_limit++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "memory_limit", &memory_limit, 0)
+        && memory_limit == mentalrayrendersettings->memory_limit)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.memory_limit [BL] set+1 %u != %u", mentalrayrendersettings->memory_limit, memory_limit);
+    mentalrayrendersettings->memory_limit--;
+  }
+  {
+    BITCODE_T mr_description;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "mr_description", &mr_description, NULL)
+        && mr_description
+           ? strEQ ((char *)mr_description, (char *)mentalrayrendersettings->mr_description)
+           : !mentalrayrendersettings->mr_description)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.mr_description [T] '%s' <> '%s'", mr_description, mentalrayrendersettings->mr_description);
+  }
+  {
+    BITCODE_BL mr_version;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "mr_version", &mr_version, NULL)
+        && mr_version == mentalrayrendersettings->mr_version)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.mr_version [BL] %u != %u", mentalrayrendersettings->mr_version, mr_version);
+    mr_version++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "mr_version", &mr_version, 0)
+        && mr_version == mentalrayrendersettings->mr_version)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.mr_version [BL] set+1 %u != %u", mentalrayrendersettings->mr_version, mr_version);
+    mentalrayrendersettings->mr_version--;
+  }
+  {
+    BITCODE_TV name;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)mentalrayrendersettings->name)
            : !mentalrayrendersettings->name)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.name [T] '%s' <> '%s'", name, mentalrayrendersettings->name);
+      fail ("MENTALRAYRENDERSETTINGS.name [TV] '%s' <> '%s'", name, mentalrayrendersettings->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -35849,139 +35699,304 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
         fail ("MENTALRAYRENDERSETTINGS.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_RC rc70_1;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_1", &rc70_1, NULL)
-        && rc70_1 == mentalrayrendersettings->rc70_1)
+    BITCODE_BL photon_trace_depth1;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "photon_trace_depth1", &photon_trace_depth1, NULL)
+        && photon_trace_depth1 == mentalrayrendersettings->photon_trace_depth1)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_1 [RC] %u != %u", mentalrayrendersettings->rc70_1, rc70_1);
-    rc70_1++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_1", &rc70_1, 0)
-        && rc70_1 == mentalrayrendersettings->rc70_1)
+      fail ("MENTALRAYRENDERSETTINGS.photon_trace_depth1 [BL] %u != %u", mentalrayrendersettings->photon_trace_depth1, photon_trace_depth1);
+    photon_trace_depth1++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "photon_trace_depth1", &photon_trace_depth1, 0)
+        && photon_trace_depth1 == mentalrayrendersettings->photon_trace_depth1)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_1 [RC] set+1 %u != %u", mentalrayrendersettings->rc70_1, rc70_1);
-    mentalrayrendersettings->rc70_1--;
+      fail ("MENTALRAYRENDERSETTINGS.photon_trace_depth1 [BL] set+1 %u != %u", mentalrayrendersettings->photon_trace_depth1, photon_trace_depth1);
+    mentalrayrendersettings->photon_trace_depth1--;
   }
   {
-    BITCODE_RC rc70_2;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_2", &rc70_2, NULL)
-        && rc70_2 == mentalrayrendersettings->rc70_2)
+    BITCODE_BL photon_trace_depth2;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "photon_trace_depth2", &photon_trace_depth2, NULL)
+        && photon_trace_depth2 == mentalrayrendersettings->photon_trace_depth2)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_2 [RC] %u != %u", mentalrayrendersettings->rc70_2, rc70_2);
-    rc70_2++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_2", &rc70_2, 0)
-        && rc70_2 == mentalrayrendersettings->rc70_2)
+      fail ("MENTALRAYRENDERSETTINGS.photon_trace_depth2 [BL] %u != %u", mentalrayrendersettings->photon_trace_depth2, photon_trace_depth2);
+    photon_trace_depth2++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "photon_trace_depth2", &photon_trace_depth2, 0)
+        && photon_trace_depth2 == mentalrayrendersettings->photon_trace_depth2)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_2 [RC] set+1 %u != %u", mentalrayrendersettings->rc70_2, rc70_2);
-    mentalrayrendersettings->rc70_2--;
+      fail ("MENTALRAYRENDERSETTINGS.photon_trace_depth2 [BL] set+1 %u != %u", mentalrayrendersettings->photon_trace_depth2, photon_trace_depth2);
+    mentalrayrendersettings->photon_trace_depth2--;
   }
   {
-    BITCODE_RC rc70_3;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_3", &rc70_3, NULL)
-        && rc70_3 == mentalrayrendersettings->rc70_3)
+    BITCODE_BL photon_trace_depth3;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "photon_trace_depth3", &photon_trace_depth3, NULL)
+        && photon_trace_depth3 == mentalrayrendersettings->photon_trace_depth3)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_3 [RC] %u != %u", mentalrayrendersettings->rc70_3, rc70_3);
-    rc70_3++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_3", &rc70_3, 0)
-        && rc70_3 == mentalrayrendersettings->rc70_3)
+      fail ("MENTALRAYRENDERSETTINGS.photon_trace_depth3 [BL] %u != %u", mentalrayrendersettings->photon_trace_depth3, photon_trace_depth3);
+    photon_trace_depth3++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "photon_trace_depth3", &photon_trace_depth3, 0)
+        && photon_trace_depth3 == mentalrayrendersettings->photon_trace_depth3)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_3 [RC] set+1 %u != %u", mentalrayrendersettings->rc70_3, rc70_3);
-    mentalrayrendersettings->rc70_3--;
+      fail ("MENTALRAYRENDERSETTINGS.photon_trace_depth3 [BL] set+1 %u != %u", mentalrayrendersettings->photon_trace_depth3, photon_trace_depth3);
+    mentalrayrendersettings->photon_trace_depth3--;
   }
   {
-    BITCODE_RC rc70_4;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_4", &rc70_4, NULL)
-        && rc70_4 == mentalrayrendersettings->rc70_4)
+    BITCODE_BL ray_trace_depth1;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_trace_depth1", &ray_trace_depth1, NULL)
+        && ray_trace_depth1 == mentalrayrendersettings->ray_trace_depth1)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_4 [RC] %u != %u", mentalrayrendersettings->rc70_4, rc70_4);
-    rc70_4++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_4", &rc70_4, 0)
-        && rc70_4 == mentalrayrendersettings->rc70_4)
+      fail ("MENTALRAYRENDERSETTINGS.ray_trace_depth1 [BL] %u != %u", mentalrayrendersettings->ray_trace_depth1, ray_trace_depth1);
+    ray_trace_depth1++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_trace_depth1", &ray_trace_depth1, 0)
+        && ray_trace_depth1 == mentalrayrendersettings->ray_trace_depth1)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_4 [RC] set+1 %u != %u", mentalrayrendersettings->rc70_4, rc70_4);
-    mentalrayrendersettings->rc70_4--;
+      fail ("MENTALRAYRENDERSETTINGS.ray_trace_depth1 [BL] set+1 %u != %u", mentalrayrendersettings->ray_trace_depth1, ray_trace_depth1);
+    mentalrayrendersettings->ray_trace_depth1--;
   }
   {
-    BITCODE_RC rc70_5;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_5", &rc70_5, NULL)
-        && rc70_5 == mentalrayrendersettings->rc70_5)
+    BITCODE_BL ray_trace_depth2;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_trace_depth2", &ray_trace_depth2, NULL)
+        && ray_trace_depth2 == mentalrayrendersettings->ray_trace_depth2)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_5 [RC] %u != %u", mentalrayrendersettings->rc70_5, rc70_5);
-    rc70_5++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_5", &rc70_5, 0)
-        && rc70_5 == mentalrayrendersettings->rc70_5)
+      fail ("MENTALRAYRENDERSETTINGS.ray_trace_depth2 [BL] %u != %u", mentalrayrendersettings->ray_trace_depth2, ray_trace_depth2);
+    ray_trace_depth2++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_trace_depth2", &ray_trace_depth2, 0)
+        && ray_trace_depth2 == mentalrayrendersettings->ray_trace_depth2)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_5 [RC] set+1 %u != %u", mentalrayrendersettings->rc70_5, rc70_5);
-    mentalrayrendersettings->rc70_5--;
+      fail ("MENTALRAYRENDERSETTINGS.ray_trace_depth2 [BL] set+1 %u != %u", mentalrayrendersettings->ray_trace_depth2, ray_trace_depth2);
+    mentalrayrendersettings->ray_trace_depth2--;
   }
   {
-    BITCODE_RC rc70_6;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_6", &rc70_6, NULL)
-        && rc70_6 == mentalrayrendersettings->rc70_6)
+    BITCODE_BL ray_trace_depth3;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_trace_depth3", &ray_trace_depth3, NULL)
+        && ray_trace_depth3 == mentalrayrendersettings->ray_trace_depth3)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_6 [RC] %u != %u", mentalrayrendersettings->rc70_6, rc70_6);
-    rc70_6++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_6", &rc70_6, 0)
-        && rc70_6 == mentalrayrendersettings->rc70_6)
+      fail ("MENTALRAYRENDERSETTINGS.ray_trace_depth3 [BL] %u != %u", mentalrayrendersettings->ray_trace_depth3, ray_trace_depth3);
+    ray_trace_depth3++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_trace_depth3", &ray_trace_depth3, 0)
+        && ray_trace_depth3 == mentalrayrendersettings->ray_trace_depth3)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_6 [RC] set+1 %u != %u", mentalrayrendersettings->rc70_6, rc70_6);
-    mentalrayrendersettings->rc70_6--;
+      fail ("MENTALRAYRENDERSETTINGS.ray_trace_depth3 [BL] set+1 %u != %u", mentalrayrendersettings->ray_trace_depth3, ray_trace_depth3);
+    mentalrayrendersettings->ray_trace_depth3--;
   }
   {
-    BITCODE_RC rc70_7;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_7", &rc70_7, NULL)
-        && rc70_7 == mentalrayrendersettings->rc70_7)
+    BITCODE_B ray_tracing_enabled;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_tracing_enabled", &ray_tracing_enabled, NULL)
+        && ray_tracing_enabled == mentalrayrendersettings->ray_tracing_enabled)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_7 [RC] %u != %u", mentalrayrendersettings->rc70_7, rc70_7);
-    rc70_7++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "rc70_7", &rc70_7, 0)
-        && rc70_7 == mentalrayrendersettings->rc70_7)
+      fail ("MENTALRAYRENDERSETTINGS.ray_tracing_enabled [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->ray_tracing_enabled, ray_tracing_enabled);
+    ray_tracing_enabled++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "ray_tracing_enabled", &ray_tracing_enabled, 0)
+        && ray_tracing_enabled == mentalrayrendersettings->ray_tracing_enabled)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.rc70_7 [RC] set+1 %u != %u", mentalrayrendersettings->rc70_7, rc70_7);
-    mentalrayrendersettings->rc70_7--;
+      fail ("MENTALRAYRENDERSETTINGS.ray_tracing_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->ray_tracing_enabled, ray_tracing_enabled);
+    mentalrayrendersettings->ray_tracing_enabled--;
   }
   {
-    BITCODE_BD samples_distance_far;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "samples_distance_far", &samples_distance_far, NULL)
-        && samples_distance_far == mentalrayrendersettings->samples_distance_far)
+    BITCODE_BL sampling1;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling1", &sampling1, NULL)
+        && sampling1 == mentalrayrendersettings->sampling1)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.samples_distance_far [BD] %g != %g", mentalrayrendersettings->samples_distance_far, samples_distance_far);
-    samples_distance_far++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "samples_distance_far", &samples_distance_far, 0)
-        && samples_distance_far == mentalrayrendersettings->samples_distance_far)
+      fail ("MENTALRAYRENDERSETTINGS.sampling1 [BL] %u != %u", mentalrayrendersettings->sampling1, sampling1);
+    sampling1++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling1", &sampling1, 0)
+        && sampling1 == mentalrayrendersettings->sampling1)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.samples_distance_far [BD] set+1 %g != %g", mentalrayrendersettings->samples_distance_far, samples_distance_far);
-    mentalrayrendersettings->samples_distance_far--;
+      fail ("MENTALRAYRENDERSETTINGS.sampling1 [BL] set+1 %u != %u", mentalrayrendersettings->sampling1, sampling1);
+    mentalrayrendersettings->sampling1--;
   }
   {
-    BITCODE_BD samples_distance_near;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "samples_distance_near", &samples_distance_near, NULL)
-        && samples_distance_near == mentalrayrendersettings->samples_distance_near)
+    BITCODE_BL sampling2;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling2", &sampling2, NULL)
+        && sampling2 == mentalrayrendersettings->sampling2)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.samples_distance_near [BD] %g != %g", mentalrayrendersettings->samples_distance_near, samples_distance_near);
-    samples_distance_near++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "samples_distance_near", &samples_distance_near, 0)
-        && samples_distance_near == mentalrayrendersettings->samples_distance_near)
+      fail ("MENTALRAYRENDERSETTINGS.sampling2 [BL] %u != %u", mentalrayrendersettings->sampling2, sampling2);
+    sampling2++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling2", &sampling2, 0)
+        && sampling2 == mentalrayrendersettings->sampling2)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.samples_distance_near [BD] set+1 %g != %g", mentalrayrendersettings->samples_distance_near, samples_distance_near);
-    mentalrayrendersettings->samples_distance_near--;
+      fail ("MENTALRAYRENDERSETTINGS.sampling2 [BL] set+1 %u != %u", mentalrayrendersettings->sampling2, sampling2);
+    mentalrayrendersettings->sampling2--;
+  }
+  {
+    BITCODE_BD sampling_contrast_color1;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color1", &sampling_contrast_color1, NULL)
+        && sampling_contrast_color1 == mentalrayrendersettings->sampling_contrast_color1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color1 [BD] %g != %g", mentalrayrendersettings->sampling_contrast_color1, sampling_contrast_color1);
+    sampling_contrast_color1++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color1", &sampling_contrast_color1, 0)
+        && sampling_contrast_color1 == mentalrayrendersettings->sampling_contrast_color1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color1 [BD] set+1 %g != %g", mentalrayrendersettings->sampling_contrast_color1, sampling_contrast_color1);
+    mentalrayrendersettings->sampling_contrast_color1--;
+  }
+  {
+    BITCODE_BD sampling_contrast_color2;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color2", &sampling_contrast_color2, NULL)
+        && sampling_contrast_color2 == mentalrayrendersettings->sampling_contrast_color2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color2 [BD] %g != %g", mentalrayrendersettings->sampling_contrast_color2, sampling_contrast_color2);
+    sampling_contrast_color2++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color2", &sampling_contrast_color2, 0)
+        && sampling_contrast_color2 == mentalrayrendersettings->sampling_contrast_color2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color2 [BD] set+1 %g != %g", mentalrayrendersettings->sampling_contrast_color2, sampling_contrast_color2);
+    mentalrayrendersettings->sampling_contrast_color2--;
+  }
+  {
+    BITCODE_BD sampling_contrast_color3;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color3", &sampling_contrast_color3, NULL)
+        && sampling_contrast_color3 == mentalrayrendersettings->sampling_contrast_color3)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color3 [BD] %g != %g", mentalrayrendersettings->sampling_contrast_color3, sampling_contrast_color3);
+    sampling_contrast_color3++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color3", &sampling_contrast_color3, 0)
+        && sampling_contrast_color3 == mentalrayrendersettings->sampling_contrast_color3)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color3 [BD] set+1 %g != %g", mentalrayrendersettings->sampling_contrast_color3, sampling_contrast_color3);
+    mentalrayrendersettings->sampling_contrast_color3--;
+  }
+  {
+    BITCODE_BD sampling_contrast_color4;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color4", &sampling_contrast_color4, NULL)
+        && sampling_contrast_color4 == mentalrayrendersettings->sampling_contrast_color4)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color4 [BD] %g != %g", mentalrayrendersettings->sampling_contrast_color4, sampling_contrast_color4);
+    sampling_contrast_color4++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color4", &sampling_contrast_color4, 0)
+        && sampling_contrast_color4 == mentalrayrendersettings->sampling_contrast_color4)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_contrast_color4 [BD] set+1 %g != %g", mentalrayrendersettings->sampling_contrast_color4, sampling_contrast_color4);
+    mentalrayrendersettings->sampling_contrast_color4--;
+  }
+  {
+    BITCODE_BD sampling_filter1;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_filter1", &sampling_filter1, NULL)
+        && sampling_filter1 == mentalrayrendersettings->sampling_filter1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_filter1 [BD] %g != %g", mentalrayrendersettings->sampling_filter1, sampling_filter1);
+    sampling_filter1++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_filter1", &sampling_filter1, 0)
+        && sampling_filter1 == mentalrayrendersettings->sampling_filter1)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_filter1 [BD] set+1 %g != %g", mentalrayrendersettings->sampling_filter1, sampling_filter1);
+    mentalrayrendersettings->sampling_filter1--;
+  }
+  {
+    BITCODE_BD sampling_filter2;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_filter2", &sampling_filter2, NULL)
+        && sampling_filter2 == mentalrayrendersettings->sampling_filter2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_filter2 [BD] %g != %g", mentalrayrendersettings->sampling_filter2, sampling_filter2);
+    sampling_filter2++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_filter2", &sampling_filter2, 0)
+        && sampling_filter2 == mentalrayrendersettings->sampling_filter2)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_filter2 [BD] set+1 %g != %g", mentalrayrendersettings->sampling_filter2, sampling_filter2);
+    mentalrayrendersettings->sampling_filter2--;
+  }
+  {
+    BITCODE_BS sampling_mr_filter;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_mr_filter", &sampling_mr_filter, NULL)
+        && sampling_mr_filter == mentalrayrendersettings->sampling_mr_filter)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_mr_filter [BS] %hu != %hu", mentalrayrendersettings->sampling_mr_filter, sampling_mr_filter);
+    sampling_mr_filter++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_mr_filter", &sampling_mr_filter, 0)
+        && sampling_mr_filter == mentalrayrendersettings->sampling_mr_filter)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_mr_filter [BS] set+1 %hu != %hu", mentalrayrendersettings->sampling_mr_filter, sampling_mr_filter);
+    mentalrayrendersettings->sampling_mr_filter--;
+  }
+  {
+    BITCODE_B shadow_maps_enabled;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "shadow_maps_enabled", &shadow_maps_enabled, NULL)
+        && shadow_maps_enabled == mentalrayrendersettings->shadow_maps_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.shadow_maps_enabled [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->shadow_maps_enabled, shadow_maps_enabled);
+    shadow_maps_enabled++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "shadow_maps_enabled", &shadow_maps_enabled, 0)
+        && shadow_maps_enabled == mentalrayrendersettings->shadow_maps_enabled)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.shadow_maps_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->shadow_maps_enabled, shadow_maps_enabled);
+    mentalrayrendersettings->shadow_maps_enabled--;
+  }
+  {
+    BITCODE_BS shadow_mode;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "shadow_mode", &shadow_mode, NULL)
+        && shadow_mode == mentalrayrendersettings->shadow_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.shadow_mode [BS] %hu != %hu", mentalrayrendersettings->shadow_mode, shadow_mode);
+    shadow_mode++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "shadow_mode", &shadow_mode, 0)
+        && shadow_mode == mentalrayrendersettings->shadow_mode)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.shadow_mode [BS] set+1 %hu != %hu", mentalrayrendersettings->shadow_mode, shadow_mode);
+    mentalrayrendersettings->shadow_mode--;
+  }
+  {
+    BITCODE_BS tile_order;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "tile_order", &tile_order, NULL)
+        && tile_order == mentalrayrendersettings->tile_order)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.tile_order [BS] %hu != %hu", mentalrayrendersettings->tile_order, tile_order);
+    tile_order++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "tile_order", &tile_order, 0)
+        && tile_order == mentalrayrendersettings->tile_order)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.tile_order [BS] set+1 %hu != %hu", mentalrayrendersettings->tile_order, tile_order);
+    mentalrayrendersettings->tile_order--;
+  }
+  {
+    BITCODE_BL tile_size;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "tile_size", &tile_size, NULL)
+        && tile_size == mentalrayrendersettings->tile_size)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.tile_size [BL] %u != %u", mentalrayrendersettings->tile_size, tile_size);
+    tile_size++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "tile_size", &tile_size, 0)
+        && tile_size == mentalrayrendersettings->tile_size)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.tile_size [BL] set+1 %u != %u", mentalrayrendersettings->tile_size, tile_size);
+    mentalrayrendersettings->tile_size--;
   }
   if (failed && (is_class_unstable ("MENTALRAYRENDERSETTINGS") || is_class_debugging ("MENTALRAYRENDERSETTINGS")))
     {
@@ -38049,94 +38064,19 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
   Dwg_Object_RAPIDRTRENDERSETTINGS *restrict rapidrtrendersettings = obj->tio.object->tio.RAPIDRTRENDERSETTINGS;
   failed = 0;
   {
-    BITCODE_B b290_1;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_1", &b290_1, NULL)
-        && b290_1 == rapidrtrendersettings->b290_1)
+    BITCODE_B backfaces_enabled;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "backfaces_enabled", &backfaces_enabled, NULL)
+        && backfaces_enabled == rapidrtrendersettings->backfaces_enabled)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.b290_1 [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_1, b290_1);
-    b290_1++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_1", &b290_1, 0)
-        && b290_1 == rapidrtrendersettings->b290_1)
+      fail ("RAPIDRTRENDERSETTINGS.backfaces_enabled [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->backfaces_enabled, backfaces_enabled);
+    backfaces_enabled++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "backfaces_enabled", &backfaces_enabled, 0)
+        && backfaces_enabled == rapidrtrendersettings->backfaces_enabled)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.b290_1 [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_1, b290_1);
-    rapidrtrendersettings->b290_1--;
-  }
-  {
-    BITCODE_B b290_2;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_2", &b290_2, NULL)
-        && b290_2 == rapidrtrendersettings->b290_2)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.b290_2 [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_2, b290_2);
-    b290_2++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "b290_2", &b290_2, 0)
-        && b290_2 == rapidrtrendersettings->b290_2)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.b290_2 [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->b290_2, b290_2);
-    rapidrtrendersettings->b290_2--;
-  }
-  {
-    BITCODE_BS bs90;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90", &bs90, NULL)
-        && bs90 == rapidrtrendersettings->bs90)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90 [BS] %hu != %hu", rapidrtrendersettings->bs90, bs90);
-    bs90++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90", &bs90, 0)
-        && bs90 == rapidrtrendersettings->bs90)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90, bs90);
-    rapidrtrendersettings->bs90--;
-  }
-  {
-    BITCODE_BS bs90_0;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_0", &bs90_0, NULL)
-        && bs90_0 == rapidrtrendersettings->bs90_0)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90_0 [BS] %hu != %hu", rapidrtrendersettings->bs90_0, bs90_0);
-    bs90_0++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_0", &bs90_0, 0)
-        && bs90_0 == rapidrtrendersettings->bs90_0)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90_0 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90_0, bs90_0);
-    rapidrtrendersettings->bs90_0--;
-  }
-  {
-    BITCODE_BS bs90_1;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_1", &bs90_1, NULL)
-        && bs90_1 == rapidrtrendersettings->bs90_1)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90_1 [BS] %hu != %hu", rapidrtrendersettings->bs90_1, bs90_1);
-    bs90_1++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_1", &bs90_1, 0)
-        && bs90_1 == rapidrtrendersettings->bs90_1)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90_1 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90_1, bs90_1);
-    rapidrtrendersettings->bs90_1--;
-  }
-  {
-    BITCODE_BS bs90_2;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_2", &bs90_2, NULL)
-        && bs90_2 == rapidrtrendersettings->bs90_2)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90_2 [BS] %hu != %hu", rapidrtrendersettings->bs90_2, bs90_2);
-    bs90_2++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "bs90_2", &bs90_2, 0)
-        && bs90_2 == rapidrtrendersettings->bs90_2)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.bs90_2 [BS] set+1 %hu != %hu", rapidrtrendersettings->bs90_2, bs90_2);
-    rapidrtrendersettings->bs90_2--;
+      fail ("RAPIDRTRENDERSETTINGS.backfaces_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->backfaces_enabled, backfaces_enabled);
+    rapidrtrendersettings->backfaces_enabled--;
   }
   {
     BITCODE_BL class_version;
@@ -38154,14 +38094,29 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
     rapidrtrendersettings->class_version--;
   }
   {
-    BITCODE_T description;
+    BITCODE_TV description;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)rapidrtrendersettings->description)
            : !rapidrtrendersettings->description)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.description [T] '%s' <> '%s'", description, rapidrtrendersettings->description);
+      fail ("RAPIDRTRENDERSETTINGS.description [TV] '%s' <> '%s'", description, rapidrtrendersettings->description);
+  }
+  {
+    BITCODE_BL display_index;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "display_index", &display_index, NULL)
+        && display_index == rapidrtrendersettings->display_index)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.display_index [BL] %u != %u", rapidrtrendersettings->display_index, display_index);
+    display_index++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "display_index", &display_index, 0)
+        && display_index == rapidrtrendersettings->display_index)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.display_index [BL] set+1 %u != %u", rapidrtrendersettings->display_index, display_index);
+    rapidrtrendersettings->display_index--;
   }
   {
     BITCODE_B environ_image_enabled;
@@ -38179,14 +38134,59 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
     rapidrtrendersettings->environ_image_enabled--;
   }
   {
-    BITCODE_T environ_image_filename;
+    BITCODE_TV environ_image_filename;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
         && environ_image_filename
            ? strEQ ((char *)environ_image_filename, (char *)rapidrtrendersettings->environ_image_filename)
            : !rapidrtrendersettings->environ_image_filename)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, rapidrtrendersettings->environ_image_filename);
+      fail ("RAPIDRTRENDERSETTINGS.environ_image_filename [TV] '%s' <> '%s'", environ_image_filename, rapidrtrendersettings->environ_image_filename);
+  }
+  {
+    BITCODE_BD filter_height;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "filter_height", &filter_height, NULL)
+        && filter_height == rapidrtrendersettings->filter_height)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.filter_height [BD] %g != %g", rapidrtrendersettings->filter_height, filter_height);
+    filter_height++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "filter_height", &filter_height, 0)
+        && filter_height == rapidrtrendersettings->filter_height)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.filter_height [BD] set+1 %g != %g", rapidrtrendersettings->filter_height, filter_height);
+    rapidrtrendersettings->filter_height--;
+  }
+  {
+    BITCODE_BL filter_type;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "filter_type", &filter_type, NULL)
+        && filter_type == rapidrtrendersettings->filter_type)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.filter_type [BL] %u != %u", rapidrtrendersettings->filter_type, filter_type);
+    filter_type++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "filter_type", &filter_type, 0)
+        && filter_type == rapidrtrendersettings->filter_type)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.filter_type [BL] set+1 %u != %u", rapidrtrendersettings->filter_type, filter_type);
+    rapidrtrendersettings->filter_type--;
+  }
+  {
+    BITCODE_BD filter_width;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "filter_width", &filter_width, NULL)
+        && filter_width == rapidrtrendersettings->filter_width)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.filter_width [BD] %g != %g", rapidrtrendersettings->filter_width, filter_width);
+    filter_width++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "filter_width", &filter_width, 0)
+        && filter_width == rapidrtrendersettings->filter_width)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.filter_width [BD] set+1 %g != %g", rapidrtrendersettings->filter_width, filter_width);
+    rapidrtrendersettings->filter_width--;
   }
   {
     BITCODE_B fog_background_enabled;
@@ -38204,36 +38204,6 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
     rapidrtrendersettings->fog_background_enabled--;
   }
   {
-    BITCODE_BD fog_density_far;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_far", &fog_density_far, NULL)
-        && fog_density_far == rapidrtrendersettings->fog_density_far)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.fog_density_far [BD] %g != %g", rapidrtrendersettings->fog_density_far, fog_density_far);
-    fog_density_far++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_far", &fog_density_far, 0)
-        && fog_density_far == rapidrtrendersettings->fog_density_far)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.fog_density_far [BD] set+1 %g != %g", rapidrtrendersettings->fog_density_far, fog_density_far);
-    rapidrtrendersettings->fog_density_far--;
-  }
-  {
-    BITCODE_BD fog_density_near;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_near", &fog_density_near, NULL)
-        && fog_density_near == rapidrtrendersettings->fog_density_near)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.fog_density_near [BD] %g != %g", rapidrtrendersettings->fog_density_near, fog_density_near);
-    fog_density_near++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_density_near", &fog_density_near, 0)
-        && fog_density_near == rapidrtrendersettings->fog_density_near)
-      pass ();
-    else
-      fail ("RAPIDRTRENDERSETTINGS.fog_density_near [BD] set+1 %g != %g", rapidrtrendersettings->fog_density_near, fog_density_near);
-    rapidrtrendersettings->fog_density_near--;
-  }
-  {
     BITCODE_B fog_enabled;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "fog_enabled", &fog_enabled, NULL)
         && fog_enabled == rapidrtrendersettings->fog_enabled)
@@ -38249,14 +38219,44 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
     rapidrtrendersettings->fog_enabled--;
   }
   {
-    BITCODE_T name;
+    BITCODE_B has_predefined;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "has_predefined", &has_predefined, NULL)
+        && has_predefined == rapidrtrendersettings->has_predefined)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.has_predefined [B] " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->has_predefined, has_predefined);
+    has_predefined++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "has_predefined", &has_predefined, 0)
+        && has_predefined == rapidrtrendersettings->has_predefined)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.has_predefined [B] set+1 " FORMAT_B " != " FORMAT_B "", rapidrtrendersettings->has_predefined, has_predefined);
+    rapidrtrendersettings->has_predefined--;
+  }
+  {
+    BITCODE_BL lighting_model;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "lighting_model", &lighting_model, NULL)
+        && lighting_model == rapidrtrendersettings->lighting_model)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.lighting_model [BL] %u != %u", rapidrtrendersettings->lighting_model, lighting_model);
+    lighting_model++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "lighting_model", &lighting_model, 0)
+        && lighting_model == rapidrtrendersettings->lighting_model)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.lighting_model [BL] set+1 %u != %u", rapidrtrendersettings->lighting_model, lighting_model);
+    rapidrtrendersettings->lighting_model--;
+  }
+  {
+    BITCODE_TV name;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)rapidrtrendersettings->name)
            : !rapidrtrendersettings->name)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.name [T] '%s' <> '%s'", name, rapidrtrendersettings->name);
+      fail ("RAPIDRTRENDERSETTINGS.name [TV] '%s' <> '%s'", name, rapidrtrendersettings->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -38267,49 +38267,64 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
         fail ("RAPIDRTRENDERSETTINGS.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_RC rc70_1;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_1", &rc70_1, NULL)
-        && rc70_1 == rapidrtrendersettings->rc70_1)
+    BITCODE_BL rapidrt_version;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rapidrt_version", &rapidrt_version, NULL)
+        && rapidrt_version == rapidrtrendersettings->rapidrt_version)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.rc70_1 [RC] %u != %u", rapidrtrendersettings->rc70_1, rc70_1);
-    rc70_1++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_1", &rc70_1, 0)
-        && rc70_1 == rapidrtrendersettings->rc70_1)
+      fail ("RAPIDRTRENDERSETTINGS.rapidrt_version [BL] %u != %u", rapidrtrendersettings->rapidrt_version, rapidrt_version);
+    rapidrt_version++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rapidrt_version", &rapidrt_version, 0)
+        && rapidrt_version == rapidrtrendersettings->rapidrt_version)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.rc70_1 [RC] set+1 %u != %u", rapidrtrendersettings->rc70_1, rc70_1);
-    rapidrtrendersettings->rc70_1--;
+      fail ("RAPIDRTRENDERSETTINGS.rapidrt_version [BL] set+1 %u != %u", rapidrtrendersettings->rapidrt_version, rapidrt_version);
+    rapidrtrendersettings->rapidrt_version--;
   }
   {
-    BITCODE_RC rc70_2;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_2", &rc70_2, NULL)
-        && rc70_2 == rapidrtrendersettings->rc70_2)
+    BITCODE_BL render_level;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "render_level", &render_level, NULL)
+        && render_level == rapidrtrendersettings->render_level)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.rc70_2 [RC] %u != %u", rapidrtrendersettings->rc70_2, rc70_2);
-    rc70_2++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_2", &rc70_2, 0)
-        && rc70_2 == rapidrtrendersettings->rc70_2)
+      fail ("RAPIDRTRENDERSETTINGS.render_level [BL] %u != %u", rapidrtrendersettings->render_level, render_level);
+    render_level++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "render_level", &render_level, 0)
+        && render_level == rapidrtrendersettings->render_level)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.rc70_2 [RC] set+1 %u != %u", rapidrtrendersettings->rc70_2, rc70_2);
-    rapidrtrendersettings->rc70_2--;
+      fail ("RAPIDRTRENDERSETTINGS.render_level [BL] set+1 %u != %u", rapidrtrendersettings->render_level, render_level);
+    rapidrtrendersettings->render_level--;
   }
   {
-    BITCODE_RC rc70_3;
-    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_3", &rc70_3, NULL)
-        && rc70_3 == rapidrtrendersettings->rc70_3)
+    BITCODE_BL render_target;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "render_target", &render_target, NULL)
+        && render_target == rapidrtrendersettings->render_target)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.rc70_3 [RC] %u != %u", rapidrtrendersettings->rc70_3, rc70_3);
-    rc70_3++;
-    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "rc70_3", &rc70_3, 0)
-        && rc70_3 == rapidrtrendersettings->rc70_3)
+      fail ("RAPIDRTRENDERSETTINGS.render_target [BL] %u != %u", rapidrtrendersettings->render_target, render_target);
+    render_target++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "render_target", &render_target, 0)
+        && render_target == rapidrtrendersettings->render_target)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.rc70_3 [RC] set+1 %u != %u", rapidrtrendersettings->rc70_3, rc70_3);
-    rapidrtrendersettings->rc70_3--;
+      fail ("RAPIDRTRENDERSETTINGS.render_target [BL] set+1 %u != %u", rapidrtrendersettings->render_target, render_target);
+    rapidrtrendersettings->render_target--;
+  }
+  {
+    BITCODE_BL render_time;
+    if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "render_time", &render_time, NULL)
+        && render_time == rapidrtrendersettings->render_time)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.render_time [BL] %u != %u", rapidrtrendersettings->render_time, render_time);
+    render_time++;
+    if (dwg_dynapi_entity_set_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "render_time", &render_time, 0)
+        && render_time == rapidrtrendersettings->render_time)
+      pass ();
+    else
+      fail ("RAPIDRTRENDERSETTINGS.render_time [BL] set+1 %u != %u", rapidrtrendersettings->render_time, render_time);
+    rapidrtrendersettings->render_time--;
   }
   if (failed && (is_class_unstable ("RAPIDRTRENDERSETTINGS") || is_class_debugging ("RAPIDRTRENDERSETTINGS")))
     {
@@ -38716,49 +38731,19 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
   Dwg_Object_RENDERSETTINGS *restrict rendersettings = obj->tio.object->tio.RENDERSETTINGS;
   failed = 0;
   {
-    BITCODE_B b290_1;
-    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "b290_1", &b290_1, NULL)
-        && b290_1 == rendersettings->b290_1)
+    BITCODE_B backfaces_enabled;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "backfaces_enabled", &backfaces_enabled, NULL)
+        && backfaces_enabled == rendersettings->backfaces_enabled)
       pass ();
     else
-      fail ("RENDERSETTINGS.b290_1 [B] " FORMAT_B " != " FORMAT_B "", rendersettings->b290_1, b290_1);
-    b290_1++;
-    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "b290_1", &b290_1, 0)
-        && b290_1 == rendersettings->b290_1)
+      fail ("RENDERSETTINGS.backfaces_enabled [B] " FORMAT_B " != " FORMAT_B "", rendersettings->backfaces_enabled, backfaces_enabled);
+    backfaces_enabled++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "backfaces_enabled", &backfaces_enabled, 0)
+        && backfaces_enabled == rendersettings->backfaces_enabled)
       pass ();
     else
-      fail ("RENDERSETTINGS.b290_1 [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->b290_1, b290_1);
-    rendersettings->b290_1--;
-  }
-  {
-    BITCODE_B b290_2;
-    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "b290_2", &b290_2, NULL)
-        && b290_2 == rendersettings->b290_2)
-      pass ();
-    else
-      fail ("RENDERSETTINGS.b290_2 [B] " FORMAT_B " != " FORMAT_B "", rendersettings->b290_2, b290_2);
-    b290_2++;
-    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "b290_2", &b290_2, 0)
-        && b290_2 == rendersettings->b290_2)
-      pass ();
-    else
-      fail ("RENDERSETTINGS.b290_2 [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->b290_2, b290_2);
-    rendersettings->b290_2--;
-  }
-  {
-    BITCODE_BL bl90;
-    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "bl90", &bl90, NULL)
-        && bl90 == rendersettings->bl90)
-      pass ();
-    else
-      fail ("RENDERSETTINGS.bl90 [BL] %u != %u", rendersettings->bl90, bl90);
-    bl90++;
-    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "bl90", &bl90, 0)
-        && bl90 == rendersettings->bl90)
-      pass ();
-    else
-      fail ("RENDERSETTINGS.bl90 [BL] set+1 %u != %u", rendersettings->bl90, bl90);
-    rendersettings->bl90--;
+      fail ("RENDERSETTINGS.backfaces_enabled [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->backfaces_enabled, backfaces_enabled);
+    rendersettings->backfaces_enabled--;
   }
   {
     BITCODE_BL class_version;
@@ -38776,14 +38761,29 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
     rendersettings->class_version--;
   }
   {
-    BITCODE_T description;
+    BITCODE_TV description;
     if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)rendersettings->description)
            : !rendersettings->description)
       pass ();
     else
-      fail ("RENDERSETTINGS.description [T] '%s' <> '%s'", description, rendersettings->description);
+      fail ("RENDERSETTINGS.description [TV] '%s' <> '%s'", description, rendersettings->description);
+  }
+  {
+    BITCODE_BL display_index;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "display_index", &display_index, NULL)
+        && display_index == rendersettings->display_index)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.display_index [BL] %u != %u", rendersettings->display_index, display_index);
+    display_index++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "display_index", &display_index, 0)
+        && display_index == rendersettings->display_index)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.display_index [BL] set+1 %u != %u", rendersettings->display_index, display_index);
+    rendersettings->display_index--;
   }
   {
     BITCODE_B environ_image_enabled;
@@ -38801,14 +38801,14 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
     rendersettings->environ_image_enabled--;
   }
   {
-    BITCODE_T environ_image_filename;
+    BITCODE_TV environ_image_filename;
     if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
         && environ_image_filename
            ? strEQ ((char *)environ_image_filename, (char *)rendersettings->environ_image_filename)
            : !rendersettings->environ_image_filename)
       pass ();
     else
-      fail ("RENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, rendersettings->environ_image_filename);
+      fail ("RENDERSETTINGS.environ_image_filename [TV] '%s' <> '%s'", environ_image_filename, rendersettings->environ_image_filename);
   }
   {
     BITCODE_B fog_background_enabled;
@@ -38841,14 +38841,29 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
     rendersettings->fog_enabled--;
   }
   {
-    BITCODE_T name;
+    BITCODE_B has_predefined;
+    if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "has_predefined", &has_predefined, NULL)
+        && has_predefined == rendersettings->has_predefined)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.has_predefined [B] " FORMAT_B " != " FORMAT_B "", rendersettings->has_predefined, has_predefined);
+    has_predefined++;
+    if (dwg_dynapi_entity_set_value (rendersettings, "RENDERSETTINGS", "has_predefined", &has_predefined, 0)
+        && has_predefined == rendersettings->has_predefined)
+      pass ();
+    else
+      fail ("RENDERSETTINGS.has_predefined [B] set+1 " FORMAT_B " != " FORMAT_B "", rendersettings->has_predefined, has_predefined);
+    rendersettings->has_predefined--;
+  }
+  {
+    BITCODE_TV name;
     if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)rendersettings->name)
            : !rendersettings->name)
       pass ();
     else
-      fail ("RENDERSETTINGS.name [T] '%s' <> '%s'", name, rendersettings->name);
+      fail ("RENDERSETTINGS.name [TV] '%s' <> '%s'", name, rendersettings->name);
   }
   {
     struct _dwg_object_object* parent;

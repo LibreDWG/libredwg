@@ -6731,110 +6731,112 @@ BL,	DXF 94
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL,	DXF 90
+BL
 @item name
-T,	DXF 1
+TV
 @item fog_enabled
-B,	DXF 290
+B
 @item fog_background_enabled
-B,	DXF 290
-@item b290_1
-B,	DXF 290
+B
+@item backfaces_enabled
+B
 @item environ_image_enabled
-B,	DXF 290
+B
 @item environ_image_filename
-T,	DXF 1
+TV
 @item description
+TV
+@item display_index
+BL
+@item has_predefined
+B
+@item mr_version
+BL,	DXF 90
+@item sampling1
+BL,	DXF 90
+@item sampling2
+BL,	DXF 90
+@item sampling_mr_filter
+BS,	DXF 70
+@item sampling_filter1
+BD,	DXF 40
+@item sampling_filter2
+BD,	DXF 40
+@item sampling_contrast_color1
+BD,	DXF 40
+@item sampling_contrast_color2
+BD,	DXF 40
+@item sampling_contrast_color3
+BD,	DXF 40
+@item sampling_contrast_color4
+BD,	DXF 40
+@item shadow_mode
+BS,	DXF 70
+@item shadow_maps_enabled
+B,	DXF 290
+@item ray_tracing_enabled
+B,	DXF 290
+@item ray_trace_depth1
+BL,	DXF 90
+@item ray_trace_depth2
+BL,	DXF 90
+@item ray_trace_depth3
+BL,	DXF 90
+@item global_illumination_enabled
+B,	DXF 290
+@item gi_sample_count
+BL,	DXF 90
+@item gi_sample_radius_enabled
+B,	DXF 290
+@item gi_sample_radius
+BD,	DXF 40
+@item gi_photons_per_light
+BL,	DXF 90
+@item photon_trace_depth1
+BL,	DXF 90
+@item photon_trace_depth2
+BL,	DXF 90
+@item photon_trace_depth3
+BL,	DXF 90
+@item final_gathering_enabled
+B,	DXF 290
+@item fg_ray_count
+BL,	DXF 90
+@item fg_sample_radius_state1
+B,	DXF 290
+@item fg_sample_radius_state2
+B,	DXF 290
+@item fg_sample_radius_state3
+B,	DXF 290
+@item fg_sample_radius1
+BD,	DXF 40
+@item fg_sample_radius2
+BD,	DXF 40
+@item light_luminance_scale
+BD,	DXF 40
+@item diagnostics_mode
+BS,	DXF 70
+@item diagnostics_grid_mode
+BS,	DXF 70
+@item diagnostics_grid_float
+BD,	DXF 40
+@item diagnostics_photon_mode
+BS,	DXF 70
+@item diagnostics_bsp_mode
+BS,	DXF 70
+@item export_mi_enabled
+B,	DXF 290
+@item mr_description
 T,	DXF 1
-@item bs90
-BS,	DXF 90
-@item bs90_0
-BS,	DXF 90
-@item bs90_1
-BS,	DXF 90
-@item bs90_2
-BS,	DXF 90
-@item rc70_1
-RC,	DXF 70
-@item fog_density_near
-BD,	DXF 40
-@item fog_density_far
-BD,	DXF 40
-@item samples_distance_near
-BD,	DXF 40
-@item samples_distance_far
-BD,	DXF 40
-@item fog_distance_near
-BD,	DXF 40
-@item fog_distance_far
-BD,	DXF 40
-@item rc70_2
-RC,	DXF 70
-@item b290_3
+@item tile_size
+BL,	DXF 90
+@item tile_order
+BS,	DXF 70
+@item memory_limit
+BL,	DXF 90
+@item diagnostics_samples_mode
 B,	DXF 290
-@item b290_4
-B,	DXF 290
-@item bs90_3
-BS,	DXF 90
-@item bs90_4
-BS,	DXF 90
-@item bs90_5
-BS,	DXF 90
-@item b290_5
-B,	DXF 290
-@item bs90_6
-BS,	DXF 90
-@item b290_6
-B,	DXF 290
-@item bd40_2
-BD,	DXF 40
-@item bs90_7
-BS,	DXF 90
-@item bs90_8
-BS,	DXF 90
-@item bs90_9
-BS,	DXF 90
-@item bs90_10
-BS,	DXF 90
-@item b290_7
-B,	DXF 290
-@item bs90_11
-BS,	DXF 90
-@item b290_8
-B,	DXF 290
-@item b290_9
-B,	DXF 290
-@item b290_10
-B,	DXF 290
-@item bd40_3
-BD,	DXF 40
-@item bd40_4
-BD,	DXF 40
-@item bd40_5
-BD,	DXF 40
-@item rc70_3
-RC,	DXF 70
-@item rc70_4
-RC,	DXF 70
-@item bd40_6
-BD,	DXF 40
-@item rc70_5
-RC,	DXF 70
-@item rc70_6
-RC,	DXF 70
-@item b290_11
-B,	DXF 290
-@item mrdescription
-T,	DXF 1
-@item bs90_12
-BS,	DXF 90
-@item rc70_7
-RC,	DXF 70
-@item bs90_13
-BS,	DXF 90
-@item b290_12
-B,	DXF 290
-@item bd40_7
+@item energy_multiplier
 BD,	DXF 40
 
 @end vtable
@@ -7278,41 +7280,41 @@ H*,	DXF 340
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL,	DXF 90
+BL
 @item name
-T,	DXF 1
+TV
 @item fog_enabled
-B,	DXF 290
+B
 @item fog_background_enabled
-B,	DXF 290
-@item b290_1
-B,	DXF 290
+B
+@item backfaces_enabled
+B
 @item environ_image_enabled
-B,	DXF 290
+B
 @item environ_image_filename
-T,	DXF 1
+TV
 @item description
-T,	DXF 1
-@item bs90
-BS,	DXF 90
-@item bs90_0
-BS,	DXF 90
-@item rc70_1
-RC,	DXF 70
-@item bs90_1
-BS,	DXF 90
-@item bs90_2
-BS,	DXF 90
-@item rc70_2
-RC,	DXF 70
-@item rc70_3
-RC,	DXF 70
-@item fog_density_near
-BD,	DXF 40
-@item fog_density_far
-BD,	DXF 40
-@item b290_2
+TV
+@item display_index
+BL
+@item has_predefined
 B,	DXF 290
+@item rapidrt_version
+BL,	DXF 90
+@item render_target
+BL,	DXF 70
+@item render_level
+BL,	DXF 90
+@item render_time
+BL,	DXF 90
+@item lighting_model
+BL,	DXF 70
+@item filter_type
+BL,	DXF 70
+@item filter_width
+BD,	DXF 40
+@item filter_height
+BD,	DXF 40
 
 @end vtable
 @end indentedblock
@@ -7412,25 +7414,25 @@ B,	DXF 290
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL,	DXF 90
+BL
 @item name
-T,	DXF 1
+TV
 @item fog_enabled
-B,	DXF 290
+B
 @item fog_background_enabled
-B,	DXF 290
-@item b290_1
-B,	DXF 290
+B
+@item backfaces_enabled
+B
 @item environ_image_enabled
-B,	DXF 290
+B
 @item environ_image_filename
-T,	DXF 1
+TV
 @item description
-T,	DXF 1
-@item bl90
-BL,	DXF 90
-@item b290_2
-B,	DXF 290
+TV
+@item display_index
+BL
+@item has_predefined
+B
 
 @end vtable
 @end indentedblock

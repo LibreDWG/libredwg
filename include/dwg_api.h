@@ -579,8 +579,11 @@ typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockp
 typedef struct _dwg_object_GEODATA                         dwg_obj_geodata;
 typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
 typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transaction;
+typedef struct _dwg_object_MENTALRAYRENDERSETTINGS         dwg_obj_mentalrayrendersettings;
 typedef struct _dwg_object_OBJECT_PTR                      dwg_obj_object_ptr;
 typedef struct _dwg_object_PERSUBENTMGR                    dwg_obj_persubentmgr;
+typedef struct _dwg_object_RAPIDRTRENDERSETTINGS           dwg_obj_rapidrtrendersettings;
+typedef struct _dwg_object_RENDERSETTINGS                  dwg_obj_rendersettings;
 typedef struct _dwg_object_SECTION_MANAGER                 dwg_obj_section_manager;
 typedef struct _dwg_object_TABLEGEOMETRY                   dwg_obj_tablegeometry;
 typedef struct _dwg_object_TABLESTYLE                      dwg_obj_tablestyle;
@@ -619,17 +622,15 @@ typedef struct _dwg_object_LAYERFILTER                     dwg_obj_layerfilter;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG               dwg_obj_layoutprintconfig;
 typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA         dwg_obj_leaderobjectcontextdata;
 typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
-typedef struct _dwg_object_MENTALRAYRENDERSETTINGS         dwg_obj_mentalrayrendersettings;
+typedef struct _dwg_object_CURVEPATH                       dwg_obj_curvepath;
 typedef struct _dwg_object_MOTIONPATH                      dwg_obj_motionpath;
 typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA        dwg_obj_mleaderobjectcontextdata;
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA dwg_obj_mtextattributeobjectcontextdata;
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA          dwg_obj_mtextobjectcontextdata;
 typedef struct _dwg_object_NAVISWORKSMODELDEF              dwg_obj_navisworksmodeldef;
 typedef struct _dwg_object_PLOTSETTINGS                    dwg_obj_plotsettings;
-typedef struct _dwg_object_RAPIDRTRENDERSETTINGS           dwg_obj_rapidrtrendersettings;
 typedef struct _dwg_object_RENDERENVIRONMENT               dwg_obj_renderenvironment;
 typedef struct _dwg_object_RENDERGLOBAL                    dwg_obj_renderglobal;
-typedef struct _dwg_object_RENDERSETTINGS                  dwg_obj_rendersettings;
 typedef struct _dwg_object_TVDEVICEPROPERTIES              dwg_obj_tvdeviceproperties;
 typedef struct _dwg_object_SECTIONVIEWSTYLE                dwg_obj_sectionviewstyle;
 typedef struct _dwg_object_SECTION_SETTINGS                dwg_obj_section_settings;
@@ -800,9 +801,12 @@ DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
 DWG_GETALL_OBJECT_DECL (GEODATA)
 DWG_GETALL_OBJECT_DECL (LIGHTLIST)
 DWG_GETALL_OBJECT_DECL (LONG_TRANSACTION)
+DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
 DWG_GETALL_OBJECT_DECL (PERSUBENTMGR)
 DWG_GETALL_OBJECT_DECL (PROXY_OBJECT)
+DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
+DWG_GETALL_OBJECT_DECL (RENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (SECTION_MANAGER)
 DWG_GETALL_OBJECT_DECL (SUN)
 DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY)
@@ -840,9 +844,10 @@ DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (NAVISWORKSMODELDEF)
 DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
+DWG_GETALL_OBJECT_DECL (CURVEPATH)
+DWG_GETALL_OBJECT_DECL (MOTIONPATH)
 DWG_GETALL_OBJECT_DECL (RENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
-DWG_GETALL_OBJECT_DECL (RENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES)
 DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS)
@@ -864,10 +869,7 @@ DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
 DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (CSACDOCUMENTOPTIONS)
-DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
-DWG_GETALL_OBJECT_DECL (MOTIONPATH)
 // DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
-DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 // DWG_GETALL_OBJECT_DECL (NPOCOLLECTION)
 // DWG_GETALL_OBJECT_DECL (POINTCLOUD)
 // DWG_GETALL_OBJECT_DECL (RTEXT)
@@ -1007,9 +1009,12 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LONG_TRANSACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSUBENTMGR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RASTERVARIABLES)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SCALE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_MANAGER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SORTENTSTABLE)
@@ -1052,9 +1057,10 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (NAVISWORKSMODELDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PLOTSETTINGS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (CURVEPATH)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (MOTIONPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENVIRONMENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTIONVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_SETTINGS)
@@ -1076,12 +1082,9 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CSACDOCUMENTOPTIONS)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (MOTIONPATH)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (NPOCOLLECTION)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUD)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (RTEXT)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (XREFPANELOBJECT)
 #endif
@@ -1282,9 +1285,12 @@ dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
 dwg_get_OBJECT_DECL (obj_geodata, GEODATA);
 dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
+dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
 dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
 dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
 dwg_get_OBJECT_DECL (obj_proxy, PROXY_OBJECT);
+dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
+dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);
 dwg_get_OBJECT_DECL (obj_section_manager, SECTION_MANAGER)
 dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
 dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
@@ -1318,7 +1324,6 @@ dwg_get_OBJECT_DECL (obj_navisworksmodeldef, NAVISWORKSMODELDEF);
 dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
 dwg_get_OBJECT_DECL (obj_renderenvironment, RENDERENVIRONMENT);
 dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);
-dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);
 dwg_get_OBJECT_DECL (obj_tvdeviceproperties, TVDEVICEPROPERTIES);
 dwg_get_OBJECT_DECL (obj_section_settings, SECTION_SETTINGS)
 dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
@@ -1341,12 +1346,11 @@ dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
 dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)
-dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
+dwg_get_OBJECT_DECL (obj_curvepath, CURVEPATH)
 dwg_get_OBJECT_DECL (obj_motionpath, MOTIONPATH)
 // dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION)
 // dwg_get_OBJECT_DECL (obj_pointcloud, POINTCLOUD)
 // dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)
-dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
 // dwg_get_OBJECT_DECL (obj_rtext, RTEXT)
 // dwg_get_OBJECT_DECL (obj_xrefpanelobject, XREFPANELOBJECT)
 #endif

@@ -80,6 +80,7 @@ testobjects = \
 	cellstylemap \
 	circle \
 	csacdocumentoptions \
+	curvepath \
 	datalink \
 	datatable \
 	dbcolor \
