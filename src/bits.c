@@ -1600,6 +1600,39 @@ bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
   }
 }
 
+/* compare wide string (unix-only). returns 0 if the same or 1 if not */
+// untested, unused
+int
+bit_wcs2cmp (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
+{
+  BITCODE_TU d;
+
+  if (!dest)
+    return -1;
+  d = (BITCODE_TU)dest;
+#  ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  // for strict alignment CPU's like sparc only. also for UBSAN.
+  if ((uintptr_t)src % SIZEOF_SIZE_T)
+    {
+      unsigned char *s = (unsigned char *)src;
+      unsigned char *s1 = (s[0] << 8) + s[1];
+      while (*d++ == *s1)
+        {
+          s += 2;
+          s1 = (s[0] << 8) + s[1];
+        }
+      return (*d || *s1) ? 1 : 0;
+    }
+  else
+#  endif
+  {
+    BITCODE_TU s = (BITCODE_TU)src;
+    while ((*d++ == *s++))
+      ;
+    return (*d || *s) ? 1 : 0;
+  }
+}
+
 #endif /* HAVE_NATIVE_WCHAR2 */
 
 /* converts TU to ASCII with embedded \U+XXXX */

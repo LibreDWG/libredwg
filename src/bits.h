@@ -245,10 +245,12 @@ EXPORT char *bit_embed_TU_size (BITCODE_TU restrict wstr, const int len) ATTRIBU
 #ifdef HAVE_NATIVE_WCHAR2
 #define bit_wcs2len(wstr) wcslen(wstr)
 #define bit_wcs2cpy(dest,src) wcscpy(dest,src)
+#define bit_wcs2cmp(dest,src) wcscmp(s1,s2)
 #else
 /* length of UCS-2 string */
 int bit_wcs2len (BITCODE_TU restrict wstr);
 BITCODE_TU bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src);
+int bit_wcs2cmp (BITCODE_TU restrict s1, const BITCODE_TU restrict s2);
 #endif
 
 /* Converts UCS-2 to UTF-8, returning a copy. */

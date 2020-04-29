@@ -1746,8 +1746,53 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
   return NULL;
 }
 
+// find the named dict entry
 EXPORT BITCODE_H
 dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restrict name)
+{
+  BITCODE_BL i;
+  Dwg_Object_DICTIONARY *_obj;
+  Dwg_Object *obj = dwg_resolve_handle (dwg, dict->absolute_ref);
+
+  if (!obj || !obj->tio.object)
+    {
+      LOG_TRACE ("dwg_find_dicthandle: Could not resolve dict " FORMAT_REF "\n",
+                 ARGS_REF(dict));
+      return NULL;
+    }
+  if (obj->type != DWG_TYPE_DICTIONARY)
+    {
+      LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY\n");
+      return NULL;
+    }
+
+  _obj = obj->tio.object->tio.DICTIONARY;
+  if (!_obj->numitems)
+    return NULL;
+  for (i = 0; i < _obj->numitems; i++)
+    {
+      BITCODE_T *texts = _obj->texts;
+      BITCODE_H *hdlv = _obj->itemhandles;
+
+      if (!hdlv || !texts || !texts[i])
+        continue;
+      if (dwg->header.from_version >= R_2007)
+        {
+          if (bit_eq_TU (name, (BITCODE_TU)texts[i]))
+            return hdlv[i];
+        }
+      else
+        {
+          if (strEQ (name, texts[i]))
+            return hdlv[i];
+        }
+    }
+  return NULL;
+}
+
+// find dict entry and match its name
+EXPORT BITCODE_H
+dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restrict name)
 {
   BITCODE_BL i;
   Dwg_Object_DICTIONARY *_obj;
@@ -1991,7 +2036,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       return 0;
     }
   if (obj->type == DWG_TYPE_DICTIONARY)
-    return dwg_find_dicthandle (dwg, ctrl, name);
+    return dwg_find_dicthandle_objname (dwg, ctrl, name);
   if (!dwg_obj_is_control (obj))
     {
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s "
@@ -2054,7 +2099,7 @@ dwg_variable_dict (Dwg_Data *restrict dwg, const char *restrict name)
   if (!var)
     return NULL;
   obj = dwg_ref_object_silent (dwg, var);
-  if (!obj)
+  if (!obj || obj->fixedtype != DWG_TYPE_DICTIONARYVAR)
     return NULL;
   _obj = obj->tio.object->tio.DICTIONARYVAR;
   return _obj->str;

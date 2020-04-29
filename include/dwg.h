@@ -6986,16 +6986,21 @@ EXPORT BITCODE_H dwg_find_tablehandle (Dwg_Data *restrict dwg,
 EXPORT BITCODE_H dwg_find_table_control (Dwg_Data *restrict dwg,
                                          const char *restrict table);
 
-/** Searching for a dictionary ref.
+/** Search for a dictionary ref.
  *  Returning a hardpointer ref (5) to it, as stored in header_vars.
  *  Name is ascii.
  */
 EXPORT BITCODE_H dwg_find_dictionary (Dwg_Data *restrict dwg,
                                       const char *restrict name);
-/** Searching for a named dictionary entry in the given dict. Search is
- * case-insensitive */
+/** Search for a named dictionary entry in the given dict.
+ *  Search is case-sensitive. name is ASCII. */
 EXPORT BITCODE_H dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
                                       const char *restrict name);
+/** Search all dictionary entries in the given dict.
+ *  Check for the matching name of the handle object. (Control lists).
+ *  Search is case-insensitive */
+EXPORT BITCODE_H dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict,
+                                              const char *restrict name);
 /* Search for a table EXTNAME */
 EXPORT char *dwg_find_table_extname (Dwg_Data *restrict dwg,
                                      Dwg_Object *restrict obj);

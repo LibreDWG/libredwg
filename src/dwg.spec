@@ -6491,10 +6491,13 @@ DWG_ENTITY (LIGHT)
   FIELD_BS (shadow_map_size, 91); //not BS
   FIELD_RC (shadow_map_softness, 280);
 
-  // LIGHTINGUNITS is a member of the AcDbVariableDictionary
-  // NOD => DICTIONARY => DICTIONARYVAR
   DECODER {
-    if (strEQ (dwg_variable_dict (dwg, "LIGHTINGUNITS"), "2")) /* PHOTOMETRIC*/
+    // LIGHTINGUNITS is a member of the AcDbVariableDictionary
+    // NOD => DICTIONARY => DICTIONARYVAR
+    static char *value = NULL;
+    if (!value)
+      value = dwg_variable_dict (dwg, "LIGHTINGUNITS");
+    if (value && strEQ (value, "2")) /* PHOTOMETRIC */
       FIELD_VALUE (is_photometric) = 1;
   }
   if (FIELD_VALUE (is_photometric))
