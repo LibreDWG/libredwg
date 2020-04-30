@@ -400,6 +400,12 @@ my @solids = qw(3DSOLID REGSION BODY
 $DXF{$_}->{'version'} = 70 for @solids;
 $DXF{$_}->{'encr_sat_data'} = 1 for @solids;
 $DXF{$_}->{'history_id'} = 350 for @solids;
+my @annotscale = qw (TEXTOBJECTCONTEXTDATA MTEXTOBJECTCONTEXTDATA ALDIMOBJECTCONTEXTDATA
+                     MTEXTATTRIBUTEOBJECTCONTEXTDATA MLEADEROBJECTCONTEXTDATA LEADEROBJECTCONTEXTDATA
+                     BLKREFOBJECTCONTEXTDATA);
+$DXF{$_}->{'class_version'} = 70 for @annotscale;
+$DXF{$_}->{'is_default'} = 290 for @annotscale;
+$DXF{$_}->{'scale'} = 340 for @annotscale;
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;

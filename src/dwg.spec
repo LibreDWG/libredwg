@@ -4675,47 +4675,65 @@ DWG_OBJECT (GEODATA)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbGeoData)
-  FIELD_BL (class_version, 90); //1 for r2009, 2 for r2010 (default), 3 for r2013 (same as r2010)
-  if (FIELD_VALUE (class_version) > 10)
-    return DWG_ERR_VALUEOUTOFBOUNDS;
-  FIELD_HANDLE (host_block, 4, 330);
-  FIELD_BS (coord_type, 70); // 0 unknown, 1 local grid, 2 projected grid,
-                             // 3 geographic (defined by latitude/longitude) (default)
-  if (FIELD_VALUE (class_version) > 1) // or SINCE(R_2010)
+  UNTIL (R_2007) // r2009, class_version 1 really
     {
+      // 1 for r2009, 2 for r2010 (default), 3 for r2013 (same as r2010)
+      ENCODER {
+        _obj->class_version = 1;
+        _obj->one3pt.x = _obj->one3pt.y = _obj->one3pt.z = 1.0;
+      }
+      FIELD_BL (class_version, 90);
+      DXF { FIELD_BS (coord_type, 70); }
+      FIELD_HANDLE (host_block, 4, 330);
+      FIELD_BS (coord_type, 0); // 0 unknown, 1 local grid, 2 projected grid,
+                                // 3 geographic (defined by latitude/longitude) (default)
+      FIELD_3BD_1 (ref_pt, 40); // wrong in ODA docs
+      FIELD_BL (units_value_horiz, 91); // 0-12
+      FIELD_3BD (design_pt, 10);
+      FIELD_3BD (obs_pt, 0);
+      FIELD_3BD (up_dir, 210);
+      // TODO compute if downgrading
+      FIELD_BD (north_dir_angle_deg, 52);
+      FIELD_3BD_1 (one3pt, 43);
+
+      FIELD_T (coord_system_def, 301); // & 303
+      FIELD_T (geo_rss_tag, 302);
+      FIELD_BD (unit_scale_horiz, 46);
+      FIELD_T (coord_system_datum, 303); //obsolete, ""
+      FIELD_T (coord_system_wkt, 304);   //obsolete, ""
+    }
+  else // r2010+
+    {
+      IF_ENCODE_FROM_EARLIER {
+        _obj->class_version = dat->version >= R_2013 ? 3 : 2;
+      }
+      FIELD_BL (class_version, 90); // TODO set by dwgversion 2 or 3
+      FIELD_HANDLE (host_block, 4, 330);
+      FIELD_BS (coord_type, 70); // 0 unknown, 1 local grid, 2 projected grid,
+                                 // 3 geographic (defined by latitude/longitude) (default)
       FIELD_3BD (design_pt, 10);
       FIELD_3BD (ref_pt, 11);
       FIELD_BD (unit_scale_horiz, 40);
       FIELD_BL (units_value_horiz, 91);
-      FIELD_BD (unit_scale_vert, 41);
+      FIELD_BD (unit_scale_vert, 41); //0xffffffff
       FIELD_BL (units_value_vert, 92);
       FIELD_3BD (up_dir, 210);
-      FIELD_2RD (north_dir, 12);
+      // TODO compute if upgrading
+      FIELD_2BD (north_dir, 12); // obsolete: 1,1,1
       FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
                                 // User defined = 2, Grid scale at reference point = 3,
                                 // Prismodial = 4
       FIELD_BD (user_scale_factor, 141);
-      FIELD_B (sea_level_corr, 294);
-      FIELD_BD (sea_level_elev, 142);
-      FIELD_BD (coord_proj_radius, 143);
-      FIELD_T (coord_system_def, 0);
+      DXF {
+        FIELD_B (sea_level_corr, 294);
+        FIELD_BD (sea_level_elev, 142);
+        FIELD_BD (coord_proj_radius, 143);
+      }
+      FIELD_T (coord_system_def, 301); // and 303 if longer
       FIELD_T (geo_rss_tag, 302);
     }
-  else
-    {
-      FIELD_3BD (ref_pt, 11);
-      FIELD_BL (units_value_horiz, 91);
-      FIELD_3BD (design_pt, 10);
-      FIELD_3BD (obs_pt, 0); // 0,0,0
-      FIELD_3BD (up_dir, 210);
-      FIELD_BD (north_dir_angle_deg, 0);
-      FIELD_3BD (north_dir, 12); // obsolete: 1,1,1
-      FIELD_T (coord_system_def, 0);
-      FIELD_T (geo_rss_tag, 302);
-      FIELD_BD (unit_scale_horiz, 40);
-      FIELD_T (coord_system_datum, 0); //obsolete
-      FIELD_T (coord_system_wkt, 0); //obsolete
-    }
+  if (FIELD_VALUE (class_version) > 10)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_T (observation_from_tag, 305);
   FIELD_T (observation_to_tag, 306);
   FIELD_T (observation_coverage_tag, 0);
@@ -4734,30 +4752,27 @@ DWG_OBJECT (GEODATA)
       SUB_FIELD_BL (geomesh_faces[rcount1],face1, 97);
       SUB_FIELD_BL (geomesh_faces[rcount1],face2, 98);
       SUB_FIELD_BL (geomesh_faces[rcount1],face3, 99);
-      //SUB_FIELD_BL (geomesh_faces[rcount1],face4, 0);
   END_REPEAT_BLOCK
   END_REPEAT (geomesh_faces);
 
-  UNTIL (R_2007) // r2009, class_version 1 really
+  UNTIL (R_2007) // r2009, class_version 1
     {
-      FIELD_B (has_civil_data, 0);
-      FIELD_B (obsolete_false, 0);
-      FIELD_RD (refpt0y, 0);
-      FIELD_RD (refpt0x, 0);
-      FIELD_RD (refpt1y, 0);
-      FIELD_RD (refpt1x, 0);
-      FIELD_BL (unknown1, 0);
-      FIELD_BL (unknown2, 0);
-      FIELD_2RD (zero0, 0);
-      FIELD_2RD (zero1, 0);
-      FIELD_B (unknown_b, 0);
+      FIELD_B (has_civil_data, 0); // 1
+      FIELD_B (obsolete_false, 0); // 0
+      FIELD_2BD (refpt0, 0);
+      FIELD_2BD (refpt1, 0);
+      FIELD_BL (unknown1, 0); // 0
+      FIELD_BL (unknown2, 0); // 0
+      FIELD_2BD (zero1, 0);
+      FIELD_2BD (zero2, 0);
+      FIELD_B (unknown_b, 0); // 0
       FIELD_BD (north_dir_angle_deg, 0);
       FIELD_BD (north_dir_angle_rad, 0);
       FIELD_BL (scale_est, 0);
       FIELD_BD (user_scale_factor, 0);
       FIELD_B (sea_level_corr, 0);
       FIELD_BD (sea_level_elev, 0);
-      FIELD_BD (coord_proj_radius, 143);
+      FIELD_BD (coord_proj_radius, 0);
     }
   START_OBJECT_HANDLE_STREAM;
 
@@ -6477,7 +6492,7 @@ DWG_ENTITY (LIGHT)
 #else
   FIELD_CMC (color, 63,421);
 #endif
-  FIELD_B (plot_glyph, 291);
+  FIELD_B (plot_glyph, 291); /* if it's plottable */
   FIELD_BD (intensity, 40);
   FIELD_3BD (position, 10);
   FIELD_3BD (target, 11);
@@ -6489,15 +6504,14 @@ DWG_ENTITY (LIGHT)
   FIELD_BD (falloff_angle, 51);
   FIELD_B (cast_shadows, 293);
   FIELD_BL (shadow_type, 73);
-  FIELD_BS (shadow_map_size, 91); //not BS
-  FIELD_RC (shadow_map_softness, 280);
+  FIELD_BS (shadow_map_size, 91);
+  FIELD_RCd (shadow_map_softness, 280);
 
   DECODER {
     // LIGHTINGUNITS is a member of the AcDbVariableDictionary
     // NOD => DICTIONARY => DICTIONARYVAR
-    static char *value = NULL;
-    if (!value)
-      value = dwg_variable_dict (dwg, "LIGHTINGUNITS");
+    // may not be cached
+    char *value = dwg_variable_dict (dwg, "LIGHTINGUNITS");
     LOG_TRACE ("vardict.LIGHTINGUNITS: %s\n", value);
     if (value && strEQ (value, "2")) /* PHOTOMETRIC */
       FIELD_VALUE (is_photometric) = 1;
@@ -6506,50 +6520,37 @@ DWG_ENTITY (LIGHT)
   if (FIELD_VALUE (is_photometric))
   {
     FIELD_B (has_photometric_data, 1);
+    // IES light model
     if (FIELD_VALUE (has_photometric_data))
       {
         DXF { VALUE_B (0, 295); }
         FIELD_B (has_webfile, 290);
-        FIELD_T (web_file, 300);
-        FIELD_BS (lamp_color_type, 70); //0: temp. in kelvin, 1: as preset
-        FIELD_BD (lamp_color_temp, 40);
-        FIELD_BD (lamp_color_temp1, 41);
-        FIELD_BS (lamp_color_preset, 71);
-        FIELD_BD (lamp_color_temp2, 42);
-        FIELD_BS (bl72, 72);
-        FIELD_BD (bd43, 43);
-        FIELD_BD (bd44, 44);
-        FIELD_BD (bd45, 45);
-        FIELD_BS (bl73, 73);
-        FIELD_3BD_1 (web_rotation, 46);
-        FIELD_BS (bl74, 74);
-        FIELD_BS (bl75, 75);
-        FIELD_BS (bl76, 76); //bool
-        FIELD_BD (bd49, 49);
-        FIELD_BD (bl50, 50);
-        FIELD_BD (bd51, 51);
-        FIELD_BD (bd52, 52);
-        FIELD_BD (bd53, 53);
-        FIELD_BD (bd54, 54);
-        FIELD_BS (bl77, 77);
-        /*
-        // FIXME
-        if (FIELD_VALUE (lamp_color_type) == 0) {
-          FIELD_BD (lamp_color_temp, 0);
-        } else {
-          FIELD_BS (lamp_color_preset, 0);
-          if (FIELD_VALUE (lamp_color_preset) == 14) // Custom
-            FIELD_BLx (lamp_color_rgb, 0);
-        }
-        //FIELD_B (has_target_grip, 0);
-        FIELD_BS (glyph_display_type, 0);
-        FIELD_BS (physical_intensity_method, 0);
-        FIELD_BS (drawable_type, 0);
-        */
+        FIELD_T (webfile, 300);
+        FIELD_BS (physical_intensity_method, 70);
+        FIELD_BD (physical_intensity, 40);
+        FIELD_BD (illuminance_dist, 41);
+        FIELD_BS (lamp_color_type, 71); //0: temp. in kelvin, 1: as preset
+        FIELD_BD (lamp_color_temp, 42);
+        FIELD_BS (lamp_color_preset, 72);
+        FIELD_3BD_1 (web_rotation, 43);
+        // ExtendedLigthShape
+        FIELD_BS (extlight_shape, 73);
+        FIELD_BD (extlight_length, 46);
+        FIELD_BD (extlight_width, 47);
+        FIELD_BD (extlight_radius, 48);
+        FIELD_BS (webfile_type, 74);
+        FIELD_BS (web_symetry, 75);
+        FIELD_BS (has_target_grip, 76); //bool
+        FIELD_BD (web_flux, 49);
+        FIELD_BD (web_angle1, 50);
+        FIELD_BD (web_angle2, 51);
+        FIELD_BD (web_angle3, 52);
+        FIELD_BD (web_angle4, 53);
+        FIELD_BD (web_angle5, 54);
+        FIELD_BS (glyph_display_type, 77);
       }
   }
   COMMON_ENTITY_HANDLE_DATA;
-  //FIELD_HANDLE (lights_layer, 5, 0);
 
 DWG_ENTITY_END
 
@@ -6697,7 +6698,7 @@ DWG_OBJECT (PLOTSETTINGS)
   SUBCLASS (AcDbPlotSettings)
   FIELD_T (page_setup_name, 1);
   FIELD_T (printer_cfg_file, 2);
-  FIELD_T (paper_size, 4);
+  FIELD_T (paper_size, 3);
   FIELD_BS (flags, 0); /*!< plot layout flag:
                          1 = PlotViewportBorders
                          2 = ShowPlotStyles
@@ -7987,14 +7988,21 @@ geoimage_height
 */
 DWG_OBJECT_END
 
+#define AcDbObjectContextData_fields                                    \
+  SUBCLASS (AcDbObjectContextData);                                     \
+  FIELD_BS (class_version, 70);                                         \
+  FIELD_B (is_default, 290);                                            \
+  if (1 /* filerType */) {                                              \
+    FIELD_B (in_dwg, 0);                                                \
+  }
+#define AcDbAnnotScaleObjectContextData_fields                          \
+  AcDbObjectContextData_fields;                                         \
+  SUBCLASS (AcDbAnnotScaleObjectContextData);                           \
+  FIELD_HANDLE (scale, 2, 340)
+
 DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  FIELD_BS (class_version, 70); // 4
-  FIELD_B (has_file, 290);
-  //FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
-  FIELD_HANDLE (scale, 2, 340);
+  AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbDimensionObjectContextData)
   FIELD_T (name, 2);
   FIELD_2RD (def_pt, 10);
@@ -8020,25 +8028,16 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  FIELD_BS (class_version, 70);
-  VALUEOUTOFBOUNDS (class_version, 10)
-  FIELD_B (has_file, 290);
-  FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
-  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbBlkrefObjectContextData)
   // ?? ...
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  FIELD_BS (class_version, 70);
-  VALUEOUTOFBOUNDS (class_version, 10)
-  FIELD_B (has_file, 290);
-  FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbLeaderObjectContextData)
   FIELD_BL (num_points, 70); /* 3 */
   FIELD_3DPOINT_VECTOR (points, num_points, 10);
   FIELD_3DPOINT (x_direction, 11);
@@ -8047,30 +8046,20 @@ DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
   FIELD_3DPOINT (endptproj, 13);
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
 DWG_OBJECT_END
 
 DWG_OBJECT (MLEADEROBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  FIELD_BS (class_version, 70);
-  VALUEOUTOFBOUNDS (class_version, 10)
-  FIELD_B (has_file, 290);
-  FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
-  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbMLeaderObjectContextData)
   // ?? ...
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (TEXTOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  FIELD_BS (class_version, 70); // 4
-  FIELD_B (has_file, 290);
-  //FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
-  FIELD_HANDLE (scale, 2, 340);
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbTextObjectContextData)
   FIELD_BS (flag, 70); // 0
   FIELD_BD (rotation, 50); // 0.0 or 90.0
   FIELD_2RD (insertion_pt, 10);
@@ -8080,25 +8069,16 @@ DWG_OBJECT_END
 
 DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  FIELD_BS (class_version, 70);
-  VALUEOUTOFBOUNDS (class_version, 10)
-  FIELD_B (has_file, 290);
-  FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
-  FIELD_HANDLE (scale, 2, 340); /* to SCALE */
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbMTextAttributeObjectContextData)
   // ?? ...
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  FIELD_BS (class_version, 70); // 4
-  FIELD_B (has_file, 290);
-  //FIELD_B (defaultflag, 0);
-  SUBCLASS (AcDbAnnotScaleObjectContextData)
-  FIELD_HANDLE (scale, 2, 340);
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbMTextObjectContextData)
   FIELD_BS (flag, 70); // 6
   FIELD_3RD (insertion_pt, 11);
   FIELD_3RD (x_axis_dir, 10);

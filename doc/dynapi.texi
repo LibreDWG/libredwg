@@ -2082,59 +2082,51 @@ B
 B,	DXF 1
 @item has_webfile
 B,	DXF 290
-@item web_file
+@item webfile
 T,	DXF 300
-@item lamp_color_type
+@item physical_intensity_method
 BS,	DXF 70
-@item lamp_color_temp
+@item physical_intensity
 BD,	DXF 40
-@item lamp_color_temp1
+@item illuminance_dist
 BD,	DXF 41
-@item lamp_color_temp2
+@item lamp_color_type
+BS,	DXF 71
+@item lamp_color_temp
 BD,	DXF 42
 @item lamp_color_preset
-BS,	DXF 71
+BS,	DXF 72
 @item lamp_color_rgb
 BL
 @item web_rotation
-3BD_1,	DXF 46
-@item has_target_grip
-B
-@item glyph_display_type
-BS
-@item physical_intensity_method
-BS
-@item drawable_type
-BS
-@item bl72
-BS,	DXF 72
-@item bd43
-BD,	DXF 43
-@item bd44
-BD,	DXF 44
-@item bd45
-BD,	DXF 45
-@item bl73
+3BD_1,	DXF 43
+@item extlight_shape
 BS,	DXF 73
-@item bl74
+@item extlight_length
+BD,	DXF 46
+@item extlight_width
+BD,	DXF 47
+@item extlight_radius
+BD,	DXF 48
+@item webfile_type
 BS,	DXF 74
-@item bl75
+@item web_symetry
 BS,	DXF 75
-@item bl76
+@item has_target_grip
 BS,	DXF 76
-@item bd49
+@item web_flux
 BD,	DXF 49
-@item bl50
+@item web_angle1
 BD,	DXF 50
-@item bd51
+@item web_angle2
 BD,	DXF 51
-@item bd52
+@item web_angle3
 BD,	DXF 52
-@item bd53
+@item web_angle4
 BD,	DXF 53
-@item bd54
+@item web_angle5
 BD,	DXF 54
-@item bl77
+@item glyph_display_type
 BS,	DXF 77
 
 @end vtable
@@ -4330,9 +4322,9 @@ B,	DXF 296
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
-@item has_file
+@item is_default
 B,	DXF 290
-@item defaultflag
+@item has_file
 B
 @item scale
 H,	DXF 340
@@ -5091,9 +5083,9 @@ H,	DXF 360
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
-@item has_file
+@item is_default
 B,	DXF 290
-@item defaultflag
+@item has_file
 B
 @item scale
 H,	DXF 340
@@ -5915,9 +5907,11 @@ BS,	DXF 70
 @item design_pt
 3BD,	DXF 10
 @item ref_pt
-3BD,	DXF 11
+3BD_1,	DXF 11
 @item obs_pt
 3BD
+@item one3pt
+3BD_1,	DXF 43
 @item unit_scale_horiz
 BD,	DXF 40
 @item units_value_horiz
@@ -5941,13 +5935,13 @@ BD,	DXF 142
 @item coord_proj_radius
 BD,	DXF 143
 @item coord_system_def
-T
+T,	DXF 301
 @item geo_rss_tag
 T,	DXF 302
 @item coord_system_datum
-T
+T,	DXF 303
 @item coord_system_wkt
-T
+T,	DXF 304
 @item observation_from_tag
 T,	DXF 305
 @item observation_to_tag
@@ -5966,26 +5960,20 @@ Dwg_GEODATA_meshface*
 B
 @item obsolete_false
 B
-@item refpt0y
-RD
-@item refpt0x
-RD
-@item refpt1y
-RD
-@item refpt1x
-RD
+@item refpt0
+2BD
+@item refpt1
+2BD
+@item zero1
+3BD
 @item unknown1
 BL
 @item unknown2
 BL
-@item zero0
-2RD
-@item zero1
-2RD
 @item unknown_b
 B
 @item north_dir_angle_deg
-BD
+BD,	DXF 52
 @item north_dir_angle_rad
 BD
 
@@ -6390,9 +6378,9 @@ BS,	DXF 93
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
-@item has_file
+@item is_default
 B,	DXF 290
-@item defaultflag
+@item has_file
 B
 @item scale
 H,	DXF 340
@@ -6843,9 +6831,9 @@ BD,	DXF 40
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
-@item has_file
+@item is_default
 B,	DXF 290
-@item defaultflag
+@item has_file
 B
 @item scale
 H,	DXF 340
@@ -7023,9 +7011,9 @@ B,	DXF 290
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
-@item has_file
+@item is_default
 B,	DXF 290
-@item defaultflag
+@item has_file
 B
 @item scale
 H,	DXF 340
@@ -7044,9 +7032,9 @@ H,	DXF 340
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
-@item has_file
+@item is_default
 B,	DXF 290
-@item defaultflag
+@item has_file
 B
 @item scale
 H,	DXF 340
@@ -7174,7 +7162,7 @@ T,	DXF 1
 @item printer_cfg_file
 T,	DXF 2
 @item paper_size
-T,	DXF 4
+T,	DXF 3
 @item canonical_media_name
 T,	DXF 4
 @item flags
@@ -8042,9 +8030,9 @@ Dwg_TABLESTYLE_Cell*
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
-@item has_file
+@item is_default
 B,	DXF 290
-@item defaultflag
+@item has_file
 B
 @item scale
 H,	DXF 340

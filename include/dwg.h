@@ -3766,7 +3766,6 @@ typedef struct _dwg_GEODATA_meshface
   BITCODE_BL face1;
   BITCODE_BL face2;
   BITCODE_BL face3;
-  //BITCODE_BL face4;
 } Dwg_GEODATA_meshface;
 
 typedef struct _dwg_object_GEODATA
@@ -3780,6 +3779,7 @@ typedef struct _dwg_object_GEODATA
   BITCODE_3BD design_pt;
   BITCODE_3BD ref_pt;
   BITCODE_3BD obs_pt;
+  BITCODE_3BD one3pt; // always 1.0,1.0,1.0
   BITCODE_BD unit_scale_horiz;
   BITCODE_BL units_value_horiz; // enum 0-20
   BITCODE_BD unit_scale_vert;
@@ -3807,14 +3807,11 @@ typedef struct _dwg_object_GEODATA
 
   BITCODE_B has_civil_data;
   BITCODE_B obsolete_false;
-  BITCODE_RD refpt0y;
-  BITCODE_RD refpt0x;
-  BITCODE_RD refpt1y;
-  BITCODE_RD refpt1x;
+  BITCODE_2BD refpt0;
+  BITCODE_2BD refpt1;
+  BITCODE_3BD zero1, zero2;
   BITCODE_BL unknown1;
   BITCODE_BL unknown2;
-  BITCODE_2RD zero0;
-  BITCODE_2RD zero1;
   BITCODE_B unknown_b;
   BITCODE_BD north_dir_angle_deg;
   BITCODE_BD north_dir_angle_rad;
@@ -4373,7 +4370,7 @@ typedef struct _dwg_object_OBJECT_PTR
 
 /**
  Entity LIGHT (varies)
- UNSTABLE, almost complete
+ UNSTABLE, now complete
  */
 typedef struct _dwg_entity_LIGHT
 {
@@ -4397,43 +4394,37 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_BD falloff_angle; 	  /*!< DXF 51, with type=spot */
   BITCODE_B cast_shadows;   	  /*!< DXF 293 */
   BITCODE_BL shadow_type;   	  /*!< DXF 73, ray_traced=0, shadow_maps=1 */
-  BITCODE_BS shadow_map_size;     /*!< DXF 91 256 */
-  BITCODE_RC shadow_map_softness; /*!< DXF 280 0-255 */
+  BITCODE_BS shadow_map_size;     /*!< DXF 91 in pixel: 64,128,256,...4096 */
+  BITCODE_RC shadow_map_softness; /*!< DXF 280 1-10 (num pixels blend into) */
 
   BITCODE_B is_photometric;       /* if LIGHTINGUNITS == "2" */
   BITCODE_B has_photometric_data;
   BITCODE_B has_webfile;          /*!< DXF 290 */
-  BITCODE_T web_file;             /*!< DXF 300 IES file */
-  BITCODE_BS lamp_color_type;     /*!< /0: in kelvin, 1: as preset */
-  //FIXME 
-  BITCODE_BD lamp_color_temp;     /*!< Temperature in Kelvin */
-  BITCODE_BD lamp_color_temp1;
-  BITCODE_BD lamp_color_temp2;
-  BITCODE_BS lamp_color_preset;   /*!< 0: D65White, 1: Fluorescent, ... */
+  BITCODE_T webfile;              /*!< DXF 300 IES file */
+  BITCODE_BS physical_intensity_method; /*!< DXF 70 */
+  BITCODE_BD physical_intensity;  /*!< DXF 40 */
+  BITCODE_BD illuminance_dist;    /*!< DXF 41 */
+  BITCODE_BS lamp_color_type;     /*!< DXF 71 0: in kelvin, 1: as preset */
+  BITCODE_BD lamp_color_temp;     /*!< DXF 42 Temperature in Kelvin */
+  BITCODE_BS lamp_color_preset;   /*!< DXF 72 */
   BITCODE_BL lamp_color_rgb;      /*!< if lamp_color_preset is Custom */
-  BITCODE_3BD web_rotation;       /*!< DXF 46? rotation offset in XYZ Euler angles */
-  BITCODE_B has_target_grip;      /*!< if the light displays a target grip for orienting
+  BITCODE_3BD web_rotation;       /*!< DXF 43-45 rotation offset in XYZ Euler angles */
+  BITCODE_BS extlight_shape;      /*!< DXF 73: 0 linear, 1 rect, 2 disk, 3 cylinder, 4 sphere */
+  BITCODE_BD extlight_length;     /*!< DXF 46 */
+  BITCODE_BD extlight_width;      /*!< DXF 47 */
+  BITCODE_BD extlight_radius;     /*!< DXF 48 */
+  BITCODE_BS webfile_type;        /*!< DXF 74 */
+  BITCODE_BS web_symetry;         /*!< DXF 75 */
+  BITCODE_BS has_target_grip;     /*!< DXF 76
+                                       if the light displays a target grip for orienting
                                        the light */
-  BITCODE_BS glyph_display_type;  /*!< 0:auto, 1:on, 2:off */
-  BITCODE_BS physical_intensity_method; /*!< ? */
-  BITCODE_BS drawable_type;       /*!< ? */
-  BITCODE_BS bl72;                /*!< DXF 72 */
-  BITCODE_BD bd43;                /*!< DXF 43 */
-  BITCODE_BD bd44;                /*!< DXF 44 */
-  BITCODE_BD bd45;                /*!< DXF 45 */
-  BITCODE_BS bl73;                /*!< DXF 73 */
-  BITCODE_BS bl74;                /*!< DXF 74 */
-  BITCODE_BS bl75;                /*!< DXF 75 */
-  BITCODE_BS bl76;                /*!< DXF 76 bool really */
-  BITCODE_BD bd49;                /*!< DXF 49 */
-  BITCODE_BD bl50;                /*!< DXF 50 */
-  BITCODE_BD bd51;                /*!< DXF 51 */
-  BITCODE_BD bd52;                /*!< DXF 52 */
-  BITCODE_BD bd53;                /*!< DXF 53 */
-  BITCODE_BD bd54;                /*!< DXF 54 */
-  BITCODE_BS bl77;                /*!< DXF 77 */
-
-  //BITCODE_H lights_layer;
+  BITCODE_BD web_flux;        /*!< DXF 49 */
+  BITCODE_BD web_angle1;      /*!< DXF 50 */
+  BITCODE_BD web_angle2;      /*!< DXF 51 */
+  BITCODE_BD web_angle3;      /*!< DXF 52 */
+  BITCODE_BD web_angle4;      /*!< DXF 53 */
+  BITCODE_BD web_angle5;      /*!< DXF 54 */
+  BITCODE_BS glyph_display_type;  /*!< DXF 77 0:auto, 1:on, 2:off */
 } Dwg_Entity_LIGHT;
 
 /**
@@ -5604,20 +5595,21 @@ typedef struct _dwg_object_BACKGROUND
  * R2010+
  * 20.4.89 SubClass AcDbObjectContextData (varies)
  */
-#define AcDbObjectContextData_fields                                          \
+#define OBJECTCONTEXTDATA_fields                                              \
   struct _dwg_object_object *parent;                                          \
   BITCODE_BS class_version; /*!< r2010+ =4 */                                 \
-  BITCODE_B has_file;       /* 290 */                                         \
-  BITCODE_B defaultflag     /* no dxf */
+  BITCODE_B is_default;     /* no dxf */                                      \
+  BITCODE_B has_file        /* 290 */
+#define ANNOTSCALEOBJECTCONTEXTDATA_fields                                    \
+  OBJECTCONTEXTDATA_fields;                                                   \
+  BITCODE_H scale	/*!< DXF 340 */
 
 /**
  * R2010+
  */
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
 {
-  AcDbObjectContextData_fields;
-  // AcDbAnnotScaleObjectContextData
-  BITCODE_H scale;	/*!< DXF 340 */
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
   BITCODE_BS flag;	/*<! DXF 70 */ // 0
   BITCODE_BD rotation;	/*!< DXF 50 */ // 0.0 or 90.0
   BITCODE_2RD insertion_pt; 	/*!< DXF 10-20 */
@@ -5629,9 +5621,7 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
  */
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
 {
-  AcDbObjectContextData_fields;
-  // AcDbAnnotScaleObjectContextData
-  BITCODE_H scale;	/*!< DXF 340 */
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
   BITCODE_BS flag;      	/*<! DXF 70 */
   BITCODE_3BD insertion_pt; 	/*!< DXF 11-31 */
   BITCODE_3BD x_axis_dir; 	/*!< DXF 10-30 */
@@ -5660,9 +5650,7 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
  */
 typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA
 {
-  AcDbObjectContextData_fields;
-  // AcDbAnnotScaleObjectContextData
-  BITCODE_H scale;	/*!< DXF 340 */
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
   // AcDbDimensionObjectContextData
   BITCODE_T name;	/*!< DXF 2 */
   BITCODE_2RD def_pt; 	/*!< DXF 10-20 */
@@ -5684,22 +5672,19 @@ typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA
 
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA
 {
-  AcDbObjectContextData_fields;
-  BITCODE_H scale; /* DXF 340 */
-  // ...??
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
+  // ??
 } Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA
 {
-  AcDbObjectContextData_fields;
-  BITCODE_H scale; /* DXF 340 */
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
   // ...??
 } Dwg_Object_MLEADEROBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA
 {
-  AcDbObjectContextData_fields;
-  BITCODE_H scale; 	/*!< DXF 340 */
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
   BITCODE_BL num_points;	/*< DXF 70 */
   BITCODE_3DPOINT* points;	/*!< DXF 10 */
   BITCODE_B b290;		/*!< DXF 290 */
@@ -5710,8 +5695,7 @@ typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA
 
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA
 {
-  AcDbObjectContextData_fields;
-  BITCODE_H scale; /* DXF 340 */
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
   // ...??
 } Dwg_Object_BLKREFOBJECTCONTEXTDATA;
 
@@ -6778,17 +6762,17 @@ typedef struct _dwg_struct
     Dwg_Section_Info* section_info;
   } header;
 
-  BITCODE_BS num_classes;    /*!< number of classes */
-  Dwg_Class * dwg_class;     /*!< array of classes */
-  BITCODE_BL num_objects;    /*!< number of objects */
-  Dwg_Object * object;       /*!< list of all objects and entities */
+  BITCODE_BS num_classes;        /*!< number of classes */
+  Dwg_Class * dwg_class;         /*!< array of classes */
+  BITCODE_BL num_objects;        /*!< number of objects */
+  Dwg_Object * object;           /*!< list of all objects and entities */
   BITCODE_BL num_entities;       /*!< number of entities in object */
   BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
   Dwg_Object_Ref **object_ref;   /*!< array of most handles */
   struct _inthash *object_map;   /*!< map of all handles */
-  int dirty_refs; /* 1 if we added an entity, and invalidated all the internal
-                     ref->obj's */
-  unsigned int opts; /* See DWG_OPTS_* below */
+  int dirty_refs;                /* 1 if we added an entity, and invalidated all
+                                    the internal ref->obj's */
+  unsigned int opts;             /* See DWG_OPTS_* below */
 
   Dwg_Header_Variables header_vars;
   Dwg_Chain thumbnail;

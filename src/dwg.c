@@ -2091,7 +2091,8 @@ dwg_variable_dict (Dwg_Data *restrict dwg, const char *restrict name)
   BITCODE_H var;
   Dwg_Object *obj;
   Dwg_Object_DICTIONARYVAR *_obj;
-  if (!var_dict)
+
+  if (!var_dict || dwg->dirty_refs)
     var_dict = dwg_find_dictionary (dwg, "AcDbVariableDictionary");
   if (!var_dict)
     return NULL;
