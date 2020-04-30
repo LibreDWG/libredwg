@@ -611,6 +611,7 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER          dwg_obj_assocperssube
 typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY  dwg_obj_assocrevolvedsurfaceactionbody;
 typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY     dwg_obj_assocsweptsurfaceactionbody;
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM          dwg_obj_assocvertexactionparam;
+typedef struct _dwg_object_ATEXT                           dwg_obj_atext;
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA         dwg_obj_blkrefobjectcontextdata;
 typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
 typedef struct _dwg_object_CSACDOCUMENTOPTIONS             dwg_obj_csacdocumentoptions;
@@ -646,7 +647,6 @@ typedef struct _dwg_object_VBA_PROJECT                     dwg_obj_vba_project;
 //typedef struct _dwg_object_ACSH_PYRAMID_CLASS   dwg_obj_acsh_pyramid_class;
 //typedef struct _dwg_object_ACSH_REVOLVE_CLASS   dwg_obj_acsh_revolve_class;
 //typedef struct _dwg_object_ACSH_SPHERE_CLASS    dwg_obj_acsh_sphere_class;
-//typedef struct _dwg_object_ARCALIGNEDTEXT       dwg_obj_arcalignedtext;
 //typedef struct _dwg_object_NPOCOLLECTION        dwg_obj_npocollection;
 //typedef struct _dwg_object_POINTCLOUD           dwg_obj_pointcloud;
 //typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT  dwg_obj_rapidrtrenderenvironment;
@@ -831,6 +831,7 @@ DWG_GETALL_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (ASSOCPERSSUBENTMANAGER)
 DWG_GETALL_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCSWEPTSURFACEACTIONBODY)
+DWG_GETALL_OBJECT_DECL (ATEXT)
 DWG_GETALL_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DATALINK)
@@ -869,7 +870,6 @@ DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
 // DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS)
 // DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS)
 // DWG_GETALL_OBJECT_DECL (ACSH_SPHERE_CLASS)
-// DWG_GETALL_OBJECT_DECL (ARCALIGNEDTEXT)
 DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (CSACDOCUMENTOPTIONS)
@@ -1046,6 +1046,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPERSSUBENTMANAGER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCSWEPTSURFACEACTIONBODY)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ATEXT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CELLSTYLEMAP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
@@ -1084,7 +1085,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SPHERE_CLASS)
-// CAST_DWG_OBJECT_TO_OBJECT_DECL (ARCALIGNEDTEXT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CSACDOCUMENTOPTIONS)
@@ -1313,6 +1313,7 @@ dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
 dwg_get_OBJECT_DECL (obj_assocnetwork, ASSOCNETWORK);
 dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
 dwg_get_OBJECT_DECL (obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER);
+dwg_get_OBJECT_DECL (obj_atext, ATEXT)
 dwg_get_OBJECT_DECL (obj_blkrefobjectcontextdata, BLKREFOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
@@ -1349,7 +1350,6 @@ dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
 // dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS)
 // dwg_get_OBJECT_DECL (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS)
 // dwg_get_OBJECT_DECL (obj_acsh_sphere_class, ACSH_SPHERE_CLASS)
-// dwg_get_OBJECT_DECL (obj_arcalignedtext, ARCALIGNEDTEXT)
 dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)

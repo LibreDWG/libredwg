@@ -69,6 +69,7 @@ testobjects = \
 	assocrevolvedsurfaceactionbody \
 	assocsweptsurfaceactionbody \
 	assocvertexactionparam \
+	atext \
 	attdef \
 	attrib \
 	blkrefobjectcontextdata \

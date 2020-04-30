@@ -7885,6 +7885,7 @@ DWG_OBJECT (NAVISWORKSMODELDEF)
 DWG_OBJECT_END
 
 // officially documented, dbRender.h
+// ACAD_RENDER_ENVIRONMENT
 DWG_OBJECT (RENDERENVIRONMENT)
   DECODE_UNKNOWN_BITS
 
@@ -8397,6 +8398,7 @@ DWG_OBJECT (TVDEVICEPROPERTIES)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// part of ACAD_RENDER_ENTRIES
 DWG_OBJECT (RENDERENTRY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbRenderEntry);
@@ -8418,6 +8420,71 @@ DWG_OBJECT (RENDERENTRY)
   FIELD_BL (light_count, 90);
   FIELD_BL (triangle_count, 90);
   FIELD_BL (display_index, 90);
+DWG_OBJECT_END
+
+// r2000+ expresstools. abbrev. ATEXT
+DWG_OBJECT (ATEXT)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbArcAlignedText);
+  DXF {
+    FIELD_T (text_string, 1);
+    FIELD_T (t2, 2);
+    FIELD_T (t3, 3);
+    FIELD_HANDLE_NAME (textstyle, 7);
+    FIELD_3BD (center, 10);
+    FIELD_BD (radius, 40);
+    FIELD_BD (xscale, 41);
+    FIELD_BD (text_size, 42);
+    FIELD_BD (char_spacing, 43);
+    FIELD_BD (offset_from_arc, 44);
+    FIELD_BD (right_offset, 45);
+    FIELD_BD (left_offset, 46);
+    FIELD_BD (start_angle, 50);
+    FIELD_BD (end_angle, 51);
+    FIELD_BS (is_reverse, 70);
+    FIELD_BS (text_direction, 71);
+    FIELD_BS (alignment, 72);
+    FIELD_BS (text_position, 73);
+    FIELD_BS (font_19, 74);
+    FIELD_BS (bs2, 75);
+    FIELD_BS (is_underlined, 76);
+    FIELD_BS (bs1, 77);
+    FIELD_BS (font, 78);
+    FIELD_BS (is_shx, 79);
+    FIELD_BL (color.index, 90);
+    FIELD_3BD (normal, 210);
+    FIELD_B (wizard_flag, 280);
+    FIELD_HANDLE (arc_handle, 5, 330);
+  } else { // DWG
+    FIELD_D2T (text_size, 42);
+    FIELD_D2T (xscale, 41);
+    FIELD_D2T (char_spacing, 43);
+    FIELD_HANDLE_NAME (textstyle, 7);
+    FIELD_T (t2, 2);
+    FIELD_T (t3, 3);
+    FIELD_T (text_string, 1);
+    FIELD_D2T (offset_from_arc, 44);
+    FIELD_D2T (right_offset, 45);
+    FIELD_D2T (left_offset, 46);
+    FIELD_3BD (center, 10);
+    FIELD_BD (radius, 40);
+    FIELD_BD (start_angle, 50);
+    FIELD_BD (end_angle, 51);
+    FIELD_3BD (normal, );
+    FIELD_BL (color.index, );
+    FIELD_BS (bs1, 77);
+    FIELD_BS (font, 78);
+    FIELD_BS (is_shx, 79);
+    FIELD_BS (font_19, 74);
+    FIELD_BS (bs2, 75);
+    FIELD_BS (is_underlined, 76);
+    FIELD_BS (alignment, 72);
+    FIELD_BS (is_reverse, 70);
+    FIELD_BS (wizard_flag, 280);
+    FIELD_BS (text_position, 73);
+    FIELD_BS (text_direction, 71);
+    FIELD_HANDLE (arc_handle, 5, 330);
+  }
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */
@@ -8475,11 +8542,6 @@ DWG_OBJECT (BACKGROUND)
   default:
     break;
   }
-DWG_OBJECT_END
-
-// r2000+ expresstools. abbrev. ATEXT
-DWG_OBJECT (ARCALIGNEDTEXT)
-  DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 
 // r2000+ expresstools
