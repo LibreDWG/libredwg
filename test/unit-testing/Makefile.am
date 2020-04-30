@@ -169,6 +169,7 @@ testobjects = \
 	ray \
 	region \
 	renderenvironment \
+	renderentry \
 	renderglobal \
 	rendersettings \
 	revolvedsurface \

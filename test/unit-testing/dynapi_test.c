@@ -38397,6 +38397,282 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_RENDERENTRY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_RENDERENTRY *restrict renderentry = obj->tio.object->tio.RENDERENTRY;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "class_version", &class_version, NULL)
+        && class_version == renderentry->class_version)
+      pass ();
+    else
+      fail ("RENDERENTRY.class_version [BL] %u != %u", renderentry->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "class_version", &class_version, 0)
+        && class_version == renderentry->class_version)
+      pass ();
+    else
+      fail ("RENDERENTRY.class_version [BL] set+1 %u != %u", renderentry->class_version, class_version);
+    renderentry->class_version--;
+  }
+  {
+    BITCODE_BL dimension_x;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "dimension_x", &dimension_x, NULL)
+        && dimension_x == renderentry->dimension_x)
+      pass ();
+    else
+      fail ("RENDERENTRY.dimension_x [BL] %u != %u", renderentry->dimension_x, dimension_x);
+    dimension_x++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "dimension_x", &dimension_x, 0)
+        && dimension_x == renderentry->dimension_x)
+      pass ();
+    else
+      fail ("RENDERENTRY.dimension_x [BL] set+1 %u != %u", renderentry->dimension_x, dimension_x);
+    renderentry->dimension_x--;
+  }
+  {
+    BITCODE_BL dimension_y;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "dimension_y", &dimension_y, NULL)
+        && dimension_y == renderentry->dimension_y)
+      pass ();
+    else
+      fail ("RENDERENTRY.dimension_y [BL] %u != %u", renderentry->dimension_y, dimension_y);
+    dimension_y++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "dimension_y", &dimension_y, 0)
+        && dimension_y == renderentry->dimension_y)
+      pass ();
+    else
+      fail ("RENDERENTRY.dimension_y [BL] set+1 %u != %u", renderentry->dimension_y, dimension_y);
+    renderentry->dimension_y--;
+  }
+  {
+    BITCODE_BL display_index;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "display_index", &display_index, NULL)
+        && display_index == renderentry->display_index)
+      pass ();
+    else
+      fail ("RENDERENTRY.display_index [BL] %u != %u", renderentry->display_index, display_index);
+    display_index++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "display_index", &display_index, 0)
+        && display_index == renderentry->display_index)
+      pass ();
+    else
+      fail ("RENDERENTRY.display_index [BL] set+1 %u != %u", renderentry->display_index, display_index);
+    renderentry->display_index--;
+  }
+  {
+    BITCODE_T image_file_name;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "image_file_name", &image_file_name, NULL)
+        && image_file_name
+           ? strEQ ((char *)image_file_name, (char *)renderentry->image_file_name)
+           : !renderentry->image_file_name)
+      pass ();
+    else
+      fail ("RENDERENTRY.image_file_name [T] '%s' <> '%s'", image_file_name, renderentry->image_file_name);
+  }
+  {
+    BITCODE_BL light_count;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "light_count", &light_count, NULL)
+        && light_count == renderentry->light_count)
+      pass ();
+    else
+      fail ("RENDERENTRY.light_count [BL] %u != %u", renderentry->light_count, light_count);
+    light_count++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "light_count", &light_count, 0)
+        && light_count == renderentry->light_count)
+      pass ();
+    else
+      fail ("RENDERENTRY.light_count [BL] set+1 %u != %u", renderentry->light_count, light_count);
+    renderentry->light_count--;
+  }
+  {
+    BITCODE_BL material_count;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "material_count", &material_count, NULL)
+        && material_count == renderentry->material_count)
+      pass ();
+    else
+      fail ("RENDERENTRY.material_count [BL] %u != %u", renderentry->material_count, material_count);
+    material_count++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "material_count", &material_count, 0)
+        && material_count == renderentry->material_count)
+      pass ();
+    else
+      fail ("RENDERENTRY.material_count [BL] set+1 %u != %u", renderentry->material_count, material_count);
+    renderentry->material_count--;
+  }
+  {
+    BITCODE_BL memory_amount;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "memory_amount", &memory_amount, NULL)
+        && memory_amount == renderentry->memory_amount)
+      pass ();
+    else
+      fail ("RENDERENTRY.memory_amount [BL] %u != %u", renderentry->memory_amount, memory_amount);
+    memory_amount++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "memory_amount", &memory_amount, 0)
+        && memory_amount == renderentry->memory_amount)
+      pass ();
+    else
+      fail ("RENDERENTRY.memory_amount [BL] set+1 %u != %u", renderentry->memory_amount, memory_amount);
+    renderentry->memory_amount--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "parent", &parent, NULL)
+        && !memcmp (&parent, &renderentry->parent, sizeof (renderentry->parent)))
+        pass ();
+    else
+        fail ("RENDERENTRY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T preset_name;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "preset_name", &preset_name, NULL)
+        && preset_name
+           ? strEQ ((char *)preset_name, (char *)renderentry->preset_name)
+           : !renderentry->preset_name)
+      pass ();
+    else
+      fail ("RENDERENTRY.preset_name [T] '%s' <> '%s'", preset_name, renderentry->preset_name);
+  }
+  {
+    BITCODE_BD render_time;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "render_time", &render_time, NULL)
+        && render_time == renderentry->render_time)
+      pass ();
+    else
+      fail ("RENDERENTRY.render_time [BD] %g != %g", renderentry->render_time, render_time);
+    render_time++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "render_time", &render_time, 0)
+        && render_time == renderentry->render_time)
+      pass ();
+    else
+      fail ("RENDERENTRY.render_time [BD] set+1 %g != %g", renderentry->render_time, render_time);
+    renderentry->render_time--;
+  }
+  {
+    BITCODE_BS start_day;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "start_day", &start_day, NULL)
+        && start_day == renderentry->start_day)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_day [BS] %hu != %hu", renderentry->start_day, start_day);
+    start_day++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "start_day", &start_day, 0)
+        && start_day == renderentry->start_day)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_day [BS] set+1 %hu != %hu", renderentry->start_day, start_day);
+    renderentry->start_day--;
+  }
+  {
+    BITCODE_BS start_minute;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "start_minute", &start_minute, NULL)
+        && start_minute == renderentry->start_minute)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_minute [BS] %hu != %hu", renderentry->start_minute, start_minute);
+    start_minute++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "start_minute", &start_minute, 0)
+        && start_minute == renderentry->start_minute)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_minute [BS] set+1 %hu != %hu", renderentry->start_minute, start_minute);
+    renderentry->start_minute--;
+  }
+  {
+    BITCODE_BS start_month;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "start_month", &start_month, NULL)
+        && start_month == renderentry->start_month)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_month [BS] %hu != %hu", renderentry->start_month, start_month);
+    start_month++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "start_month", &start_month, 0)
+        && start_month == renderentry->start_month)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_month [BS] set+1 %hu != %hu", renderentry->start_month, start_month);
+    renderentry->start_month--;
+  }
+  {
+    BITCODE_BS start_msec;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "start_msec", &start_msec, NULL)
+        && start_msec == renderentry->start_msec)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_msec [BS] %hu != %hu", renderentry->start_msec, start_msec);
+    start_msec++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "start_msec", &start_msec, 0)
+        && start_msec == renderentry->start_msec)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_msec [BS] set+1 %hu != %hu", renderentry->start_msec, start_msec);
+    renderentry->start_msec--;
+  }
+  {
+    BITCODE_BS start_second;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "start_second", &start_second, NULL)
+        && start_second == renderentry->start_second)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_second [BS] %hu != %hu", renderentry->start_second, start_second);
+    start_second++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "start_second", &start_second, 0)
+        && start_second == renderentry->start_second)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_second [BS] set+1 %hu != %hu", renderentry->start_second, start_second);
+    renderentry->start_second--;
+  }
+  {
+    BITCODE_BS start_year;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "start_year", &start_year, NULL)
+        && start_year == renderentry->start_year)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_year [BS] %hu != %hu", renderentry->start_year, start_year);
+    start_year++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "start_year", &start_year, 0)
+        && start_year == renderentry->start_year)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_year [BS] set+1 %hu != %hu", renderentry->start_year, start_year);
+    renderentry->start_year--;
+  }
+  {
+    BITCODE_BL triangle_count;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "triangle_count", &triangle_count, NULL)
+        && triangle_count == renderentry->triangle_count)
+      pass ();
+    else
+      fail ("RENDERENTRY.triangle_count [BL] %u != %u", renderentry->triangle_count, triangle_count);
+    triangle_count++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "triangle_count", &triangle_count, 0)
+        && triangle_count == renderentry->triangle_count)
+      pass ();
+    else
+      fail ("RENDERENTRY.triangle_count [BL] set+1 %u != %u", renderentry->triangle_count, triangle_count);
+    renderentry->triangle_count--;
+  }
+  {
+    BITCODE_T view_name;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "view_name", &view_name, NULL)
+        && view_name
+           ? strEQ ((char *)view_name, (char *)renderentry->view_name)
+           : !renderentry->view_name)
+      pass ();
+    else
+      fail ("RENDERENTRY.view_name [T] '%s' <> '%s'", view_name, renderentry->view_name);
+  }
+  if (failed && (is_class_unstable ("RENDERENTRY") || is_class_debugging ("RENDERENTRY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RENDERENTRY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -44880,6 +45156,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_RAPIDRTRENDERSETTINGS(obj);
   else  if (obj->fixedtype == DWG_TYPE_RASTERVARIABLES)
     error += test_RASTERVARIABLES(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERENTRY)
+    error += test_RENDERENTRY(obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERENVIRONMENT)
     error += test_RENDERENVIRONMENT(obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERGLOBAL)
@@ -45238,6 +45516,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_RAPIDRTRENDERSETTINGS (obj);
   else  if (obj->fixedtype == DWG_TYPE_RASTERVARIABLES)
     error += test_RASTERVARIABLES (obj);
+  else  if (obj->fixedtype == DWG_TYPE_RENDERENTRY)
+    error += test_RENDERENTRY (obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERENVIRONMENT)
     error += test_RENDERENVIRONMENT (obj);
   else  if (obj->fixedtype == DWG_TYPE_RENDERGLOBAL)
@@ -46506,6 +46786,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_RASTERVARIABLES): %d != "
                "dwg_dynapi_fields_size (\"RASTERVARIABLES\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_RENDERENTRY);
+  size2 = dwg_dynapi_fields_size ("RENDERENTRY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_RENDERENTRY): %d != "
+               "dwg_dynapi_fields_size (\"RENDERENTRY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_RENDERENVIRONMENT);

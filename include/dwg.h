@@ -397,6 +397,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY,
   DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY,
   DWG_TYPE_ASSOCVERTEXACTIONPARAM,
+  DWG_TYPE_BACKGROUND,
   DWG_TYPE_BLKREFOBJECTCONTEXTDATA,
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
@@ -452,6 +453,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_RAPIDRTRENDERSETTINGS,
   DWG_TYPE_RASTERVARIABLES,
   DWG_TYPE_RENDERENVIRONMENT,
+  DWG_TYPE_RENDERENTRY,
   DWG_TYPE_RENDERGLOBAL,
   DWG_TYPE_RENDERSETTINGS,
   DWG_TYPE_REVOLVEDSURFACE,
@@ -5479,6 +5481,32 @@ typedef struct _dwg_object_RENDERGLOBAL
 } Dwg_Object_RENDERGLOBAL;
 
 /**
+ Class RENDERENTRY (varies)
+ */
+typedef struct _dwg_object_RENDERENTRY
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version;	/*!< DXF 90 */
+  BITCODE_T image_file_name;	/*!< DXF 1 */
+  BITCODE_T preset_name;	/*!< DXF 1 */
+  BITCODE_T view_name;		/*!< DXF 1 */
+  BITCODE_BL dimension_x;	/*!< DXF 90 */
+  BITCODE_BL dimension_y;	/*!< DXF 90 */
+  BITCODE_BS start_year;	/*!< DXF 70 */
+  BITCODE_BS start_month;	/*!< DXF 70 */
+  BITCODE_BS start_day;		/*!< DXF 70 */
+  BITCODE_BS start_minute;	/*!< DXF 70 */
+  BITCODE_BS start_second;	/*!< DXF 70 */
+  BITCODE_BS start_msec;	/*!< DXF 70 */
+  BITCODE_BD render_time;	/*!< DXF 40 */
+  BITCODE_BL memory_amount;	/*!< DXF 90 */
+  BITCODE_BL material_count;	/*!< DXF 90 */
+  BITCODE_BL light_count;	/*!< DXF 90 */
+  BITCODE_BL triangle_count;	/*!< DXF 90 */
+  BITCODE_BL display_index;	/*!< DXF 90 */
+} Dwg_Object_RENDERENTRY;
+
+/**
  Class MOTIONPATH (varies)
  */
 typedef struct _dwg_object_MOTIONPATH
@@ -5537,6 +5565,38 @@ typedef struct _dwg_object_TVDEVICEPROPERTIES
   BITCODE_BD antialiasing_level;
   BITCODE_BD bd2;
 } Dwg_Object_TVDEVICEPROPERTIES;
+
+// Unhandled, ACAD_BACKGROUND
+// one of IBLBACKGROUND, SKY..., IMAGE..., SOLID..., GRADIENT..., GROUNDPLANE...
+typedef struct _dwg_object_BACKGROUND
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL type;     		/*!< DXF 90 */
+  // Sky 1:
+  BITCODE_H sunid;		/*!< DXF 340 */
+  // Solid 1:
+  BITCODE_BLx rgb;		/*!< DXF 90 */
+  // Image 1:
+  BITCODE_T image_filename;	/*!< DXF 300 */
+  BITCODE_B fit_to_screen;	/*!< DXF 290 */
+  BITCODE_B maintain_aspect_ratio;	/*!< DXF 291 */
+  BITCODE_B use_tiling;		/*!< DXF 292 */
+  BITCODE_2BD offset;		/*!< DXF 140,141 */
+  BITCODE_2BD scale;		/*!< DXF 142,143 */
+  // IBL 2:
+  BITCODE_B enable;             /*!< DXF 290 */
+  BITCODE_T ibl_image_name;     /*!< DXF 1 */
+  BITCODE_BD rotation;          /*!< DXF 40, normalized, in degrees */
+  BITCODE_B display_image;      /*!< DXF 290 */
+  BITCODE_H secondary_background;/*!< DXF 340 */
+  // GroundPlane 1:
+  BITCODE_BL color_sky_zenith;		/*!< DXF 90 */
+  BITCODE_BL color_sky_horizon;		/*!< DXF 91 */
+  BITCODE_BL color_underground_horizon;	/*!< DXF 92 */
+  BITCODE_BL color_underground_azimuth;	/*!< DXF 93 */
+  BITCODE_BL color_groundplane_near;	/*!< DXF 94 */
+  BITCODE_BL color_groundplane_far;	/*!< DXF 95 */
+} Dwg_Object_BACKGROUND;
 
 /**
  * Class AcDbAnnotScaleObjectContextData (varies)
@@ -6157,6 +6217,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCPLANESURFACEACTIONBODY *ASSOCPLANESURFACEACTIONBODY;
     Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *ASSOCREVOLVEDSURFACEACTIONBODY;
     Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *ASSOCSWEPTSURFACEACTIONBODY;
+    Dwg_Object_BACKGROUND *BACKGROUND;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_DATALINK *DATALINK;
@@ -6206,6 +6267,7 @@ typedef struct _dwg_object_object
     Dwg_Object_PROXY_OBJECT *PROXY_OBJECT;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_RENDERENVIRONMENT *RENDERENVIRONMENT;
+    Dwg_Object_RENDERENTRY *RENDERENTRY;
     Dwg_Object_RENDERGLOBAL *RENDERGLOBAL;
     //Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
     Dwg_Object_RENDERSETTINGS *RENDERSETTINGS;
@@ -7320,11 +7382,13 @@ EXPORT int dwg_setup_SECTIONVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERENVIRONMENT (Dwg_Object *obj);
+EXPORT int dwg_setup_RENDERENTRY (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERGLOBAL (Dwg_Object *obj);
 EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
 EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
+EXPORT int dwg_setup_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
 //EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);

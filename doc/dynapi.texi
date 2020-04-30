@@ -7347,6 +7347,55 @@ BS,	DXF 72
 @end vtable
 @end indentedblock
 
+@strong{RENDERENTRY} @anchor{RENDERENTRY}
+@cindex object, RENDERENTRY
+@vindex RENDERENTRY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item image_file_name
+T,	DXF 1
+@item preset_name
+T,	DXF 1
+@item view_name
+T,	DXF 1
+@item dimension_x
+BL,	DXF 90
+@item dimension_y
+BL,	DXF 90
+@item start_year
+BS,	DXF 70
+@item start_month
+BS,	DXF 70
+@item start_day
+BS,	DXF 70
+@item start_minute
+BS,	DXF 70
+@item start_second
+BS,	DXF 70
+@item start_msec
+BS,	DXF 70
+@item render_time
+BD,	DXF 40
+@item memory_amount
+BL,	DXF 90
+@item material_count
+BL,	DXF 90
+@item light_count
+BL,	DXF 90
+@item triangle_count
+BL,	DXF 90
+@item display_index
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
 @strong{RENDERENVIRONMENT} @anchor{RENDERENVIRONMENT}
 @cindex object, RENDERENVIRONMENT
 @vindex RENDERENVIRONMENT

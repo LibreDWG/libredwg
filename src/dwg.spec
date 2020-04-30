@@ -8403,6 +8403,29 @@ DWG_OBJECT (TVDEVICEPROPERTIES)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (RENDERENTRY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbRenderEntry);
+  FIELD_BL (class_version, 90);
+  FIELD_T (image_file_name, 1);
+  FIELD_T (preset_name, 1);
+  FIELD_T (view_name, 1);
+  FIELD_BL (dimension_x, 90);
+  FIELD_BL (dimension_y, 90);
+  FIELD_BS (start_year, 70);
+  FIELD_BS (start_month, 70);
+  FIELD_BS (start_day, 70);
+  FIELD_BS (start_minute, 70);
+  FIELD_BS (start_second, 70);
+  FIELD_BS (start_msec, 70);
+  FIELD_BD (render_time, 40);
+  FIELD_BL (memory_amount, 90);
+  FIELD_BL (material_count, 90);
+  FIELD_BL (light_count, 90);
+  FIELD_BL (triangle_count, 90);
+  FIELD_BL (display_index, 90);
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES || IS_FREE */
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
@@ -8413,8 +8436,52 @@ DWG_OBJECT_END
   ACDBPOINTCLOUDEX ARRAY
   ATTBLOCKREF ATTDYNBLOCKREF BLOCKREF DYNBLOCKREF XREF
   CENTERMARK CENTERLINE
-  SKYLIGHT_BACKGROUND ACSH_PYRAMID_CLASS
+  ACSH_PYRAMID_CLASS
 */
+
+DWG_OBJECT (BACKGROUND)
+  DECODE_UNKNOWN_BITS
+  //FIXME how subytped?
+  FIELD_BL (type, 90);
+  switch (_obj->type)
+  {
+  case 1:
+    SUBCLASS (AcDbSkyBackground);
+    FIELD_HANDLE (sunid, 5, 340);
+    break;
+  case 1:
+    SUBCLASS (AcDbImageBackground)
+    FIELD_T (image_filename, 300);
+    FIELD_B (fit_to_screen, 290);
+    FIELD_B (maintain_aspect_ratio, 291);
+    FIELD_B (use_tiling, 292);
+    FIELD_2BD_1 (offset, 140);
+    FIELD_2BD_1 (scale, 142);
+    break;
+  case 1:
+    SUBCLASS (AcDbSolidBackground)
+    FIELD_BLx (rgb, 90);
+  case 2:
+    SUBCLASS (AcDbIBLBackground)
+    FIELD_B (enable, 290);
+    FIELD_T (ibl_image_name, 1);
+    FIELD_BD (rotation, 40);
+    FIELD_B (display_image, 290);
+    FIELD_HANDLE (secondary_background, 5, 340);
+    break;
+  case 2:
+    SUBCLASS (AcDbGroundPlaneBackground)
+    FIELD_BL (color_sky_zenith, 90);
+    FIELD_BL (color_sky_horizon, 91);
+    FIELD_BL (color_underground_horizon, 92);
+    FIELD_BL (color_underground_azimuth, 93);
+    FIELD_BL (color_groundplane_near, 94);
+    FIELD_BL (color_groundplane_far, 95);
+    break;
+  default:
+    break;
+  }
+DWG_OBJECT_END
 
 // r2000+ expresstools. abbrev. ATEXT
 DWG_OBJECT (ARCALIGNEDTEXT)
@@ -8476,5 +8543,5 @@ DWG_OBJECT_END
 DWG_OBJECT (RAPIDRTRENDERENVIRONMENT)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
-
+  
 #endif

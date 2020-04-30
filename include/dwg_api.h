@@ -631,6 +631,7 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA          dwg_obj_mtextobjectco
 typedef struct _dwg_object_NAVISWORKSMODELDEF              dwg_obj_navisworksmodeldef;
 typedef struct _dwg_object_PLOTSETTINGS                    dwg_obj_plotsettings;
 typedef struct _dwg_object_RENDERENVIRONMENT               dwg_obj_renderenvironment;
+typedef struct _dwg_object_RENDERENTRY                     dwg_obj_renderentry;
 typedef struct _dwg_object_RENDERGLOBAL                    dwg_obj_renderglobal;
 typedef struct _dwg_object_TVDEVICEPROPERTIES              dwg_obj_tvdeviceproperties;
 typedef struct _dwg_object_SECTIONVIEWSTYLE                dwg_obj_sectionviewstyle;
@@ -849,6 +850,7 @@ DWG_GETALL_OBJECT_DECL (CURVEPATH)
 DWG_GETALL_OBJECT_DECL (MOTIONPATH)
 DWG_GETALL_OBJECT_DECL (POINTPATH)
 DWG_GETALL_OBJECT_DECL (RENDERENVIRONMENT)
+DWG_GETALL_OBJECT_DECL (RENDERENTRY)
 DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
 DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES)
 DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
@@ -1063,6 +1065,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (CURVEPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MOTIONPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENVIRONMENT)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENTRY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTIONVIEWSTYLE)
@@ -1326,6 +1329,7 @@ dwg_get_OBJECT_DECL (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_navisworksmodeldef, NAVISWORKSMODELDEF);
 dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
 dwg_get_OBJECT_DECL (obj_renderenvironment, RENDERENVIRONMENT);
+dwg_get_OBJECT_DECL (obj_renderentry, RENDERENTRY);
 dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);
 dwg_get_OBJECT_DECL (obj_tvdeviceproperties, TVDEVICEPROPERTIES);
 dwg_get_OBJECT_DECL (obj_section_settings, SECTION_SETTINGS)

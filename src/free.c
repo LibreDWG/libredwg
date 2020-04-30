@@ -467,6 +467,7 @@ dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   switch (obj->fixedtype)
     {
     #include "objects.inc"
+
     case DWG_TYPE_FREED: break; // already freed
     case DWG_TYPE_UNUSED:
     case DWG_TYPE_ACDSRECORD:
@@ -475,6 +476,7 @@ dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     case DWG_TYPE_ACSH_PYRAMID_CLASS:
     case DWG_TYPE_ACSH_SPHERE_CLASS:
     case DWG_TYPE_ARCALIGNEDTEXT:
+    case DWG_TYPE_BACKGROUND:
     case DWG_TYPE_NPOCOLLECTION:
     case DWG_TYPE_POINTCLOUD:
     case DWG_TYPE_RAPIDRTRENDERENVIRONMENT:
