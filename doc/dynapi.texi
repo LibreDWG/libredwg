@@ -5252,18 +5252,8 @@ BS
 struct _dwg_object_object*
 @item class_version
 BS,	DXF 90
-@item camera_path
+@item entity
 H,	DXF 340
-@item target_path
-H,	DXF 340
-@item viewtable
-H,	DXF 340
-@item frames
-BS,	DXF 90
-@item frame_rate
-BS,	DXF 90
-@item corner_decel
-B,	DXF 290
 
 @end vtable
 @end indentedblock
@@ -7235,6 +7225,23 @@ BS,	DXF 78
 2BD_1,	DXF 148
 @item shadeplot
 H,	DXF 333
+
+@end vtable
+@end indentedblock
+
+@strong{POINTPATH} @anchor{POINTPATH}
+@cindex object, POINTPATH
+@vindex POINTPATH
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 90
+@item point
+3BD,	DXF 10
 
 @end vtable
 @end indentedblock

@@ -157,6 +157,7 @@ testobjects = \
 	planesurface \
 	plotsettings \
 	point \
+	pointpath \
 	polyline_2d \
 	polyline_3d \
 	polyline_mesh \

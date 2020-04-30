@@ -27926,14 +27926,6 @@ static int test_CURVEPATH (const Dwg_Object *obj)
   Dwg_Object_CURVEPATH *restrict curvepath = obj->tio.object->tio.CURVEPATH;
   failed = 0;
   {
-    BITCODE_H camera_path;
-    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "camera_path", &camera_path, NULL)
-        && !memcmp (&camera_path, &curvepath->camera_path, sizeof (curvepath->camera_path)))
-        pass ();
-    else
-        fail ("CURVEPATH.camera_path [H]");
-  }
-  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "class_version", &class_version, NULL)
         && class_version == curvepath->class_version)
@@ -27949,49 +27941,12 @@ static int test_CURVEPATH (const Dwg_Object *obj)
     curvepath->class_version--;
   }
   {
-    BITCODE_B corner_decel;
-    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "corner_decel", &corner_decel, NULL)
-        && corner_decel == curvepath->corner_decel)
-      pass ();
+    BITCODE_H entity;
+    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "entity", &entity, NULL)
+        && !memcmp (&entity, &curvepath->entity, sizeof (curvepath->entity)))
+        pass ();
     else
-      fail ("CURVEPATH.corner_decel [B] " FORMAT_B " != " FORMAT_B "", curvepath->corner_decel, corner_decel);
-    corner_decel++;
-    if (dwg_dynapi_entity_set_value (curvepath, "CURVEPATH", "corner_decel", &corner_decel, 0)
-        && corner_decel == curvepath->corner_decel)
-      pass ();
-    else
-      fail ("CURVEPATH.corner_decel [B] set+1 " FORMAT_B " != " FORMAT_B "", curvepath->corner_decel, corner_decel);
-    curvepath->corner_decel--;
-  }
-  {
-    BITCODE_BS frame_rate;
-    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "frame_rate", &frame_rate, NULL)
-        && frame_rate == curvepath->frame_rate)
-      pass ();
-    else
-      fail ("CURVEPATH.frame_rate [BS] %hu != %hu", curvepath->frame_rate, frame_rate);
-    frame_rate++;
-    if (dwg_dynapi_entity_set_value (curvepath, "CURVEPATH", "frame_rate", &frame_rate, 0)
-        && frame_rate == curvepath->frame_rate)
-      pass ();
-    else
-      fail ("CURVEPATH.frame_rate [BS] set+1 %hu != %hu", curvepath->frame_rate, frame_rate);
-    curvepath->frame_rate--;
-  }
-  {
-    BITCODE_BS frames;
-    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "frames", &frames, NULL)
-        && frames == curvepath->frames)
-      pass ();
-    else
-      fail ("CURVEPATH.frames [BS] %hu != %hu", curvepath->frames, frames);
-    frames++;
-    if (dwg_dynapi_entity_set_value (curvepath, "CURVEPATH", "frames", &frames, 0)
-        && frames == curvepath->frames)
-      pass ();
-    else
-      fail ("CURVEPATH.frames [BS] set+1 %hu != %hu", curvepath->frames, frames);
-    curvepath->frames--;
+        fail ("CURVEPATH.entity [H]");
   }
   {
     struct _dwg_object_object* parent;
@@ -28000,22 +27955,6 @@ static int test_CURVEPATH (const Dwg_Object *obj)
         pass ();
     else
         fail ("CURVEPATH.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H target_path;
-    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "target_path", &target_path, NULL)
-        && !memcmp (&target_path, &curvepath->target_path, sizeof (curvepath->target_path)))
-        pass ();
-    else
-        fail ("CURVEPATH.target_path [H]");
-  }
-  {
-    BITCODE_H viewtable;
-    if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "viewtable", &viewtable, NULL)
-        && !memcmp (&viewtable, &curvepath->viewtable, sizeof (curvepath->viewtable)))
-        pass ();
-    else
-        fail ("CURVEPATH.viewtable [H]");
   }
   if (failed && (is_class_unstable ("CURVEPATH") || is_class_debugging ("CURVEPATH")))
     {
@@ -37913,6 +37852,50 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_POINTPATH (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_POINTPATH *restrict pointpath = obj->tio.object->tio.POINTPATH;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (pointpath, "POINTPATH", "class_version", &class_version, NULL)
+        && class_version == pointpath->class_version)
+      pass ();
+    else
+      fail ("POINTPATH.class_version [BS] %hu != %hu", pointpath->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointpath, "POINTPATH", "class_version", &class_version, 0)
+        && class_version == pointpath->class_version)
+      pass ();
+    else
+      fail ("POINTPATH.class_version [BS] set+1 %hu != %hu", pointpath->class_version, class_version);
+    pointpath->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (pointpath, "POINTPATH", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointpath->parent, sizeof (pointpath->parent)))
+        pass ();
+    else
+        fail ("POINTPATH.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_3BD point;
+    if (dwg_dynapi_entity_value (pointpath, "POINTPATH", "point", &point, NULL)
+        && !memcmp (&point, &pointpath->point, sizeof (pointpath->point)))
+        pass ();
+    else
+        fail ("POINTPATH.point [3BD]");
+  }
+  if (failed && (is_class_unstable ("POINTPATH") || is_class_debugging ("POINTPATH")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTPATH", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_PROXY_OBJECT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -44889,6 +44872,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLACEHOLDER(obj);
   else  if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     error += test_PLOTSETTINGS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTPATH)
+    error += test_POINTPATH(obj);
   else  if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)
     error += test_PROXY_OBJECT(obj);
   else  if (obj->fixedtype == DWG_TYPE_RAPIDRTRENDERSETTINGS)
@@ -45245,6 +45230,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLACEHOLDER (obj);
   else  if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     error += test_PLOTSETTINGS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTPATH)
+    error += test_POINTPATH (obj);
   else  if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)
     error += test_PROXY_OBJECT (obj);
   else  if (obj->fixedtype == DWG_TYPE_RAPIDRTRENDERSETTINGS)
@@ -46487,6 +46474,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_PLOTSETTINGS): %d != "
                "dwg_dynapi_fields_size (\"PLOTSETTINGS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_POINTPATH);
+  size2 = dwg_dynapi_fields_size ("POINTPATH");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_POINTPATH): %d != "
+               "dwg_dynapi_fields_size (\"POINTPATH\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_PROXY_OBJECT);

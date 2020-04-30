@@ -447,6 +447,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_PLANESURFACE,
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_POINTCLOUD,
+  DWG_TYPE_POINTPATH,
   DWG_TYPE_RAPIDRTRENDERENVIRONMENT,
   DWG_TYPE_RAPIDRTRENDERSETTINGS,
   DWG_TYPE_RASTERVARIABLES,
@@ -5501,13 +5502,19 @@ typedef struct _dwg_object_CURVEPATH
   struct _dwg_object_object *parent;
   // AcDbCurvePath, child of AcDbNamedPath
   BITCODE_BS class_version;     /*!< DXF 90, default: 1 */
-  BITCODE_H camera_path;        /*!< DXF 340 */
-  BITCODE_H target_path;        /*!< DXF 340 */
-  BITCODE_H viewtable;          /*!< DXF 340 */
-  BITCODE_BS frames;            /*!< DXF 90  number of frames? default 30 */
-  BITCODE_BS frame_rate;        /*!< DXF 90  per second, default 30 */
-  BITCODE_B corner_decel;       /*!< DXF 290 */
+  BITCODE_H entity;             /*!< DXF 340 */
 } Dwg_Object_CURVEPATH;
+
+/**
+ Class ACDBPOINTPATH (varies)
+ */
+typedef struct _dwg_object_POINTPATH
+{
+  struct _dwg_object_object *parent;
+  // AcDbPointPath, child of AcDbNamedPath
+  BITCODE_BS class_version;     /*!< DXF 90, default: 1 */
+  BITCODE_3BD point;            /*!< DXF 10 */
+} Dwg_Object_POINTPATH;
 
 // not in DXF
 typedef struct _dwg_object_TVDEVICEPROPERTIES
@@ -6189,6 +6196,7 @@ typedef struct _dwg_object_object
     Dwg_Object_MLEADEROBJECTCONTEXTDATA *MLEADEROBJECTCONTEXTDATA;
     Dwg_Object_CURVEPATH *CURVEPATH;
     Dwg_Object_MOTIONPATH *MOTIONPATH;
+    Dwg_Object_POINTPATH *POINTPATH;
     Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
     Dwg_Object_OBJECT_PTR *OBJECT_PTR;
@@ -7315,6 +7323,7 @@ EXPORT int dwg_setup_RENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERGLOBAL (Dwg_Object *obj);
 EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
 EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
+EXPORT int dwg_setup_POINTPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
 //EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);

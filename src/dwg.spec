@@ -8361,7 +8361,7 @@ DWG_OBJECT (CSACDOCUMENTOPTIONS)
 DWG_OBJECT_END
 
 DWG_OBJECT (MOTIONPATH)
-  FIELD_BS (class_version, 90);
+  FIELD_BL (class_version, 90);
   FIELD_HANDLE (camera_path, 5, 340);
   FIELD_HANDLE (target_path, 5, 340);
   FIELD_HANDLE (viewtable, 5, 340);
@@ -8373,18 +8373,18 @@ DWG_OBJECT_END
 
 // dxfname: ACDBCURVEPATH
 DWG_OBJECT (CURVEPATH)
-  SUBCLASS (AcDbNamedPath)
+  //SUBCLASS (AcDbNamedPath)
   SUBCLASS (AcDbCurvePath)
-/*
-  FIELD_BS (class_version, 90);
-  FIELD_HANDLE (camera_path, 5, 340);
-  FIELD_HANDLE (target_path, 5, 340);
-  FIELD_HANDLE (viewtable, 5, 340);
-  FIELD_BS (frames, 90);
-  FIELD_BS (frame_rate, 90);
-  FIELD_B (corner_decel, 290);
-*/
+  FIELD_BL (class_version, 90);
+  FIELD_HANDLE (entity, 5, 340);
   START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (POINTPATH)
+  //SUBCLASS (AcDbNamedPath)
+  SUBCLASS (AcDbPointPath)
+  FIELD_BS (class_version, 90);
+  FIELD_3BD (point, 10);
 DWG_OBJECT_END
 
 //not in dxf

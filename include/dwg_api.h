@@ -624,6 +624,7 @@ typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA         dwg_obj_leaderobjectc
 typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
 typedef struct _dwg_object_CURVEPATH                       dwg_obj_curvepath;
 typedef struct _dwg_object_MOTIONPATH                      dwg_obj_motionpath;
+typedef struct _dwg_object_POINTPATH                       dwg_obj_pointpath;
 typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA        dwg_obj_mleaderobjectcontextdata;
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA dwg_obj_mtextattributeobjectcontextdata;
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA          dwg_obj_mtextobjectcontextdata;
@@ -846,6 +847,7 @@ DWG_GETALL_OBJECT_DECL (NAVISWORKSMODELDEF)
 DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
 DWG_GETALL_OBJECT_DECL (CURVEPATH)
 DWG_GETALL_OBJECT_DECL (MOTIONPATH)
+DWG_GETALL_OBJECT_DECL (POINTPATH)
 DWG_GETALL_OBJECT_DECL (RENDERENVIRONMENT)
 DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
 DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES)
@@ -1059,6 +1061,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (NAVISWORKSMODELDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PLOTSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CURVEPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MOTIONPATH)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENVIRONMENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES)
@@ -1348,6 +1351,7 @@ dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)
 dwg_get_OBJECT_DECL (obj_curvepath, CURVEPATH)
 dwg_get_OBJECT_DECL (obj_motionpath, MOTIONPATH)
+dwg_get_OBJECT_DECL (obj_pointpath, POINTPATH)
 // dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION)
 // dwg_get_OBJECT_DECL (obj_pointcloud, POINTCLOUD)
 // dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)
