@@ -37497,6 +37497,16 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     plotsettings->bottom_margin--;
   }
   {
+    BITCODE_T canonical_media_name;
+    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "canonical_media_name", &canonical_media_name, NULL)
+        && canonical_media_name
+           ? strEQ ((char *)canonical_media_name, (char *)plotsettings->canonical_media_name)
+           : !plotsettings->canonical_media_name)
+      pass ();
+    else
+      fail ("PLOTSETTINGS.canonical_media_name [T] '%s' <> '%s'", canonical_media_name, plotsettings->canonical_media_name);
+  }
+  {
     BITCODE_BD drawing_units;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "drawing_units", &drawing_units, NULL)
         && drawing_units == plotsettings->drawing_units)
@@ -37510,6 +37520,21 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.drawing_units [BD] set+1 %g != %g", plotsettings->drawing_units, drawing_units);
     plotsettings->drawing_units--;
+  }
+  {
+    BITCODE_BS flags;
+    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "flags", &flags, NULL)
+        && flags == plotsettings->flags)
+      pass ();
+    else
+      fail ("PLOTSETTINGS.flags [BS] %hu != %hu", plotsettings->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "flags", &flags, 0)
+        && flags == plotsettings->flags)
+      pass ();
+    else
+      fail ("PLOTSETTINGS.flags [BS] set+1 %hu != %hu", plotsettings->flags, flags);
+    plotsettings->flags--;
   }
   {
     BITCODE_BD left_margin;
@@ -37606,21 +37631,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         pass ();
     else
         fail ("PLOTSETTINGS.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_BS plot_layout;
-    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "plot_layout", &plot_layout, NULL)
-        && plot_layout == plotsettings->plot_layout)
-      pass ();
-    else
-      fail ("PLOTSETTINGS.plot_layout [BS] %hu != %hu", plotsettings->plot_layout, plot_layout);
-    plot_layout++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "plot_layout", &plot_layout, 0)
-        && plot_layout == plotsettings->plot_layout)
-      pass ();
-    else
-      fail ("PLOTSETTINGS.plot_layout [BS] set+1 %hu != %hu", plotsettings->plot_layout, plot_layout);
-    plotsettings->plot_layout--;
   }
   {
     BITCODE_2BD plot_origin;
@@ -37808,12 +37818,14 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     plotsettings->std_scale_type--;
   }
   {
-    BITCODE_H stylesheet;
+    BITCODE_T stylesheet;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "stylesheet", &stylesheet, NULL)
-        && !memcmp (&stylesheet, &plotsettings->stylesheet, sizeof (plotsettings->stylesheet)))
-        pass ();
+        && stylesheet
+           ? strEQ ((char *)stylesheet, (char *)plotsettings->stylesheet)
+           : !plotsettings->stylesheet)
+      pass ();
     else
-        fail ("PLOTSETTINGS.stylesheet [H]");
+      fail ("PLOTSETTINGS.stylesheet [T] '%s' <> '%s'", stylesheet, plotsettings->stylesheet);
   }
   {
     BITCODE_BD top_margin;
@@ -37829,21 +37841,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.top_margin [BD] set+1 %g != %g", plotsettings->top_margin, top_margin);
     plotsettings->top_margin--;
-  }
-  {
-    BITCODE_B use_std_scale;
-    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "use_std_scale", &use_std_scale, NULL)
-        && use_std_scale == plotsettings->use_std_scale)
-      pass ();
-    else
-      fail ("PLOTSETTINGS.use_std_scale [B] " FORMAT_B " != " FORMAT_B "", plotsettings->use_std_scale, use_std_scale);
-    use_std_scale++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "use_std_scale", &use_std_scale, 0)
-        && use_std_scale == plotsettings->use_std_scale)
-      pass ();
-    else
-      fail ("PLOTSETTINGS.use_std_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", plotsettings->use_std_scale, use_std_scale);
-    plotsettings->use_std_scale--;
   }
   if (failed && (is_class_unstable ("PLOTSETTINGS") || is_class_debugging ("PLOTSETTINGS")))
     {

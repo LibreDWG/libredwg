@@ -68,19 +68,19 @@ const char version_codes[DWG_VERSIONS][7] = {
   "AC1.4",  /* DWG Release 1.4 */
   "AC1.50", /* DWG Release 2.0 */
   "AC2.10", /* DWG Release 2.10 */
-  "AC1002", /* DWG Release 2.5 */
-  "AC1003", /* DWG Release 2.6 */
-  "AC1004", // R_9  DWG Release 9
-  "AC1006", // R_10 DWG Release 10
-  "AC1009", // R_11 DWG Release 11/12 (LT R1/R2)
-  "AC1012", // R_13 and LT95, beware of R13C3
-  "AC1014", // R_14
-  "AC1015", // R_2000 (r15)
-  "AC1018", // R_2004
-  "AC1021", // R_2007
-  "AC1024", // R_2010
-  "AC1027", // R_2013
-  "AC1032", // R_2018
+  "AC1002", // DWG Release 2.5                   9
+  "AC1003", // DWG Release 2.6                   10
+  "AC1004", // R_9  DWG Release 9                0x0b
+  "AC1006", // R_10 DWG Release 10               0x0d
+  "AC1009", // R_11 DWG Release 11/12 (LT R1/R2) 0x10
+  "AC1012", // R_13 and LT95, beware of R13C3    0x13
+  "AC1014", // R_14                              0x15
+  "AC1015", // R_2000 (r15)                      0x17
+  "AC1018", // R_2004                            0x18, 0x19
+  "AC1021", // R_2007                            0x1b
+  "AC1024", // R_2010                            0x1d
+  "AC1027", // R_2013                            0x1f
+  "AC1032", // R_2018                            0x21
   "------"  // R_AFTER
 };
 

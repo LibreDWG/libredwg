@@ -582,6 +582,7 @@ typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transact
 typedef struct _dwg_object_MENTALRAYRENDERSETTINGS         dwg_obj_mentalrayrendersettings;
 typedef struct _dwg_object_OBJECT_PTR                      dwg_obj_object_ptr;
 typedef struct _dwg_object_PERSUBENTMGR                    dwg_obj_persubentmgr;
+typedef struct _dwg_object_PLOTSETTINGS                    dwg_obj_plotsettings;
 typedef struct _dwg_object_RAPIDRTRENDERSETTINGS           dwg_obj_rapidrtrendersettings;
 typedef struct _dwg_object_RENDERSETTINGS                  dwg_obj_rendersettings;
 typedef struct _dwg_object_SECTION_MANAGER                 dwg_obj_section_manager;
@@ -629,7 +630,6 @@ typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA        dwg_obj_mleaderobject
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA dwg_obj_mtextattributeobjectcontextdata;
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA          dwg_obj_mtextobjectcontextdata;
 typedef struct _dwg_object_NAVISWORKSMODELDEF              dwg_obj_navisworksmodeldef;
-typedef struct _dwg_object_PLOTSETTINGS                    dwg_obj_plotsettings;
 typedef struct _dwg_object_RENDERENVIRONMENT               dwg_obj_renderenvironment;
 typedef struct _dwg_object_RENDERENTRY                     dwg_obj_renderentry;
 typedef struct _dwg_object_RENDERGLOBAL                    dwg_obj_renderglobal;
@@ -806,6 +806,7 @@ DWG_GETALL_OBJECT_DECL (LONG_TRANSACTION)
 DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
 DWG_GETALL_OBJECT_DECL (PERSUBENTMGR)
+DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
 DWG_GETALL_OBJECT_DECL (PROXY_OBJECT)
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (RENDERSETTINGS)
@@ -845,7 +846,6 @@ DWG_GETALL_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (NAVISWORKSMODELDEF)
-DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
 DWG_GETALL_OBJECT_DECL (CURVEPATH)
 DWG_GETALL_OBJECT_DECL (MOTIONPATH)
 DWG_GETALL_OBJECT_DECL (POINTPATH)
@@ -1016,6 +1016,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSUBENTMGR)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (PLOTSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RASTERVARIABLES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERSETTINGS)
@@ -1060,7 +1061,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (NAVISWORKSMODELDEF)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (PLOTSETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CURVEPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MOTIONPATH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTPATH)
@@ -1294,6 +1294,7 @@ dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
 dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
 dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
 dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
+dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
 dwg_get_OBJECT_DECL (obj_proxy, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
 dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);
@@ -1327,7 +1328,6 @@ dwg_get_OBJECT_DECL (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_mtextattributeobjectcontextdata, MTEXTATRIBUTEOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_navisworksmodeldef, NAVISWORKSMODELDEF);
-dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
 dwg_get_OBJECT_DECL (obj_renderenvironment, RENDERENVIRONMENT);
 dwg_get_OBJECT_DECL (obj_renderentry, RENDERENTRY);
 dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);

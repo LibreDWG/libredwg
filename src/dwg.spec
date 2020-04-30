@@ -6695,56 +6695,68 @@ DWG_OBJECT (PLOTSETTINGS)
   DECODE_UNKNOWN_BITS
   // See also LAYOUT
   SUBCLASS (AcDbPlotSettings)
-  FIELD_BS (plot_layout, 70); /*!< plot layout flag:
-                                1 = PlotViewportBorders
-                                2 = ShowPlotStyles
-                                4 = PlotCentered
-                                8 = PlotHidden
-                                16 = UseStandardScale
-                                32 = PlotPlotStyles
-                                64 = ScaleLineweights
-                                128 = PrintLineweights
-                                512 = DrawViewportsFirst
-                                1024 = ModelType
-                                2048 = UpdatePaper
-                                4096 = ZoomToPaperOnUpdate
-                                8192 = Initializing
-                                16384 = PrevPlotInit */
   FIELD_T (page_setup_name, 1);
   FIELD_T (printer_cfg_file, 2);
   FIELD_T (paper_size, 4);
-  FIELD_HANDLE (plotview, 0, 6);
-  //DEBUG_HERE_OBJ;
+  FIELD_BS (flags, 0); /*!< plot layout flag:
+                         1 = PlotViewportBorders
+                         2 = ShowPlotStyles
+                         4 = PlotCentered
+                         8 = PlotHidden
+                         16 = UseStandardScale
+                         32 = PlotPlotStyles
+                         64 = ScaleLineweights
+                         128 = PrintLineweights
+                         512 = DrawViewportsFirst
+                         1024 = ModelType
+                         2048 = UpdatePaper
+                         4096 = ZoomToPaperOnUpdate
+                         8192 = Initializing
+                         16384 = PrevPlotInit */
   FIELD_BD (left_margin, 40); // 6.349999904632568
   FIELD_BD (bottom_margin, 41);
   FIELD_BD (right_margin, 42);
   FIELD_BD (top_margin, 43);
   FIELD_BD (paper_width, 44); // in mm
   FIELD_BD (paper_height, 45); // in mm
+  FIELD_T (canonical_media_name, 4);
   FIELD_2BD_1 (plot_origin, 46); // + 47
-  //wrong
-  DEBUG_HERE_OBJ;
+  FIELD_BS (plot_paper_unit, 0); /*!< 0 inches, 1 mm, 2 pixel */
+  FIELD_BS (plot_rotation, 0);   /*!< 0 normal, 1 90, 2 180, 3 270 deg */
+  FIELD_BS (plot_type, 0);       /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
+                                      4 window (see 48-140), 5 layout */
   FIELD_2BD_1 (plot_window_ll, 48); // + 49
   FIELD_2BD_1 (plot_window_ur, 140); // + 141
+#if 0
+  UNTIL (R_2004) {
+    char *name = dwg_handle_name (dwg, "PLOTVIEW", plotview);
+    VALUE_TV (name, 6);
+  } LATER_VERSION
+#endif
+  {
+    FIELD_HANDLE (plotview, 0, 6);
+  }
   FIELD_BD (paper_units, 142);
   FIELD_BD (drawing_units, 143);
-  FIELD_BS (plot_paper_unit, 72); /*!< 0 inches, 1 mm, 2 pixel */
-  FIELD_BS (plot_rotation, 73);   /*!< 0 normal, 1 90, 2 180, 3 270 deg */
-  FIELD_BS (plot_type, 74);       /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
-                                       4 window (see 48-140), 5 layout */
-  FIELD_HANDLE (stylesheet, 0, 7);
-  FIELD_B (use_std_scale, 0);
+  DXF {
+    FIELD_BS (flags, 70);
+    FIELD_BS (plot_paper_unit, 72); /*!< 0 inches, 1 mm, 2 pixel */
+    FIELD_BS (plot_rotation, 73);   /*!< 0 normal, 1 90, 2 180, 3 270 deg */
+    FIELD_BS (plot_type, 74);       /*!< 0 display, 1 extents, 2 limits, 3 view (see DXF 6),
+                                         4 window (see 48-140), 5 layout */
+  }
+  FIELD_T (stylesheet, 7);
   FIELD_BS (std_scale_type, 75); /*!< 0 = scaled to fit,
-                                   1 = 1/128"=1', 2 = 1/64"=1', 3 = 1/32"=1'
-                                   4 = 1/16"=1', 5 = 3/32"=1', 6 = 1/8"=1'
-                                   7 = 3/16"=1', 8 = 1/4"=1', 9 = 3/8"=1'
-                                   10 = 1/2"=1', 11 = 3/4"=1', 12 = 1"=1'
-                                   13 = 3"=1', 14 = 6"=1', 15 = 1'=1'
-                                   16 = 1:1, 17= 1:2, 18 = 1:4 19 = 1:8, 20 = 1:10, 21= 1:16
-                                   22 = 1:20, 23 = 1:30, 24 = 1:40, 25 = 1:50, 26 = 1:100
-                                   27 = 2:1, 28 = 4:1, 29 = 8:1, 30 = 10:1, 31 = 100:1, 32 = 1000:1
-                               */
-  FIELD_BD (std_scale_factor, 147); /*!< value of 75 */
+                                      1 = 1/128"=1', 2 = 1/64"=1', 3 = 1/32"=1'
+                                      4 = 1/16"=1', 5 = 3/32"=1', 6 = 1/8"=1'
+                                      7 = 3/16"=1', 8 = 1/4"=1', 9 = 3/8"=1'
+                                      10 = 1/2"=1', 11 = 3/4"=1', 12 = 1"=1'
+                                      13 = 3"=1', 14 = 6"=1', 15 = 1'=1'
+                                      16 = 1:1, 17= 1:2, 18 = 1:4 19 = 1:8, 20 = 1:10, 21= 1:16
+                                      22 = 1:20, 23 = 1:30, 24 = 1:40, 25 = 1:50, 26 = 1:100
+                                      27 = 2:1, 28 = 4:1, 29 = 8:1, 30 = 10:1, 31 = 100:1, 32 = 1000:1
+                                 */
+  FIELD_BD (std_scale_factor, 147);
   FIELD_2BD_1 (paper_image_origin, 148); // + 149
   SINCE (R_2004)
     {
@@ -6753,8 +6765,10 @@ DWG_OBJECT (PLOTSETTINGS)
       FIELD_BS (shade_plot_reslevel, 77); /*!< 0 draft, 1 preview, 2 nomal,
                                                3 presentation, 4 maximum, 5 custom */
       FIELD_BS (shade_plot_customdpi, 78); /*!< 100-32767 */
-      FIELD_HANDLE (shadeplot, 4, 333); // optional, mostly NULL. 4 with VIEWPORT.
     }
+  SINCE (R_2007) {
+    FIELD_HANDLE (shadeplot, 4, 333); // optional, mostly NULL. 4 with VIEWPORT.
+  }
 DWG_OBJECT_END
 
 // unstable

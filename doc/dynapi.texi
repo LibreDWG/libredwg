@@ -7175,6 +7175,10 @@ T,	DXF 1
 T,	DXF 2
 @item paper_size
 T,	DXF 4
+@item canonical_media_name
+T,	DXF 4
+@item flags
+BS,	DXF 70
 @item plotview
 H,	DXF 6
 @item left_margin
@@ -7199,8 +7203,6 @@ BD,	DXF 45
 BD,	DXF 142
 @item drawing_units
 BD,	DXF 143
-@item plot_layout
-BS,	DXF 70
 @item plot_paper_unit
 BS,	DXF 72
 @item plot_rotation
@@ -7208,9 +7210,7 @@ BS,	DXF 73
 @item plot_type
 BS,	DXF 74
 @item stylesheet
-H,	DXF 7
-@item use_std_scale
-B
+T,	DXF 7
 @item std_scale_type
 BS,	DXF 75
 @item std_scale_factor

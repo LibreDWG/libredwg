@@ -4308,7 +4308,23 @@ typedef struct _dwg_object_PLOTSETTINGS
 
   BITCODE_T page_setup_name;  /*!< DXF 1 */
   BITCODE_T printer_cfg_file; /*!< DXF 2 */
-  BITCODE_T paper_size;       /*!< DXF 4 */
+  BITCODE_T paper_size;       /*!< DXF 3 */
+  BITCODE_T canonical_media_name; /*!< DXF 4 */
+  BITCODE_BS flags;    /*!< DXF 70
+                         1 = PlotViewportBorders
+                         2 = ShowPlotStyles
+                         4 = PlotCentered
+                         8 = PlotHidden
+                         16 = UseStandardScale
+                         32 = PlotPlotStyles
+                         64 = ScaleLineweights
+                         128 = PrintLineweights
+                         512 = DrawViewportsFirst
+                         1024 = ModelType
+                         2048 = UpdatePaper
+                         4096 = ZoomToPaperOnUpdate
+                         8192 = Initializing
+                         16384 = PrevPlotInit */
   BITCODE_H plotview;         /*!< DXF 6 */
   BITCODE_BD left_margin;     /*!< DXF 40, margins in mm */
   BITCODE_BD bottom_margin;   /*!< DXF 42 */
@@ -4319,30 +4335,14 @@ typedef struct _dwg_object_PLOTSETTINGS
   BITCODE_2BD_1 plot_origin;         /*!< DXF 46 */ // + 47
   BITCODE_2BD_1 plot_window_ll;      /*!< DXF 48 */ // + 49
   BITCODE_2BD_1 plot_window_ur;      /*!< DXF 140 */ // + 141
-  BITCODE_BD paper_units;     /*!< DXF 142 */
-  BITCODE_BD drawing_units;   /*!< DXF 143 */
-  BITCODE_BS plot_layout;    /*!< DXF 70
-                                1 = PlotViewportBorders
-                                2 = ShowPlotStyles
-                                4 = PlotCentered
-                                8 = PlotHidden
-                                16 = UseStandardScale
-                                32 = PlotPlotStyles
-                                64 = ScaleLineweights
-                                128 = PrintLineweights
-                                512 = DrawViewportsFirst
-                                1024 = ModelType
-                                2048 = UpdatePaper
-                                4096 = ZoomToPaperOnUpdate
-                                8192 = Initializing
-                                16384 = PrevPlotInit */
+  BITCODE_BD paper_units;      /*!< DXF 142 */
+  BITCODE_BD drawing_units;    /*!< DXF 143 */
   BITCODE_BS plot_paper_unit;  /*!< DXF 72,  0 inches, 1 mm, 2 pixel */
   BITCODE_BS plot_rotation;    /*!< DXF 73,  0 normal, 1 90, 2 180, 3 270 deg */
   BITCODE_BS plot_type;        /*!< DXF 74,  0 display, 1 extents, 2 limits, 3 view (see DXF 6),
                                              4 window (see 48-140), 5 layout */
-  BITCODE_H stylesheet;        /*!< DXF 7 */
-  BITCODE_B use_std_scale;     /*!< DXF 0 */
-  BITCODE_BS std_scale_type; /*!< DXF 75, 0 = scaled to fit,
+  BITCODE_T stylesheet;        /*!< DXF 7 */
+  BITCODE_BS std_scale_type;   /*!< DXF 75, 0 = scaled to fit,
                                    1 = 1/128"=1', 2 = 1/64"=1', 3 = 1/32"=1'
                                    4 = 1/16"=1', 5 = 3/32"=1', 6 = 1/8"=1'
                                    7 = 3/16"=1', 8 = 1/4"=1', 9 = 3/8"=1'
@@ -4357,7 +4357,7 @@ typedef struct _dwg_object_PLOTSETTINGS
                                             4 visualstyle, 5 renderPreset */
   BITCODE_BS shade_plot_reslevel; /*!< DXF 77, 0 draft, 1 preview, 2 nomal,
                                                 3 presentation, 4 maximum, 5 custom */
-  BITCODE_BS  shade_plot_customdpi; /*!< DXF 78, 100-32767 */
+  BITCODE_BS  shade_plot_customdpi;  /*!< DXF 78, 100-32767 */
   BITCODE_2BD_1 paper_image_origin;  /*!< DXF 148 + 149 */
   BITCODE_H   shadeplot;             /*!< DXF 333 optional. As in VIEWPORT */
 } Dwg_Object_PLOTSETTINGS;
