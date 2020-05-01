@@ -174,6 +174,7 @@ testobjects = \
 	renderglobal \
 	rendersettings \
 	revolvedsurface \
+	rtext \
 	scale \
 	section_manager \
 	section_settings \

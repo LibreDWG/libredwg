@@ -90,26 +90,27 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
   "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
   "REVOLVEDSURFACE" "\0\0\0",	/* 50 */
-  "SECTIONOBJECT" "\0\0\0\0\0",	/* 51 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 56 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 62 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 65 */
-  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 66 */
-  "VERTEX_PFACE_FACE" "\0",	/* 67 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "SECTIONOBJECT" "\0\0\0\0\0",	/* 52 */
+  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 57 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 62 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 63 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 66 */
+  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 67 */
+  "VERTEX_PFACE_FACE" "\0",	/* 68 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
@@ -3039,6 +3040,26 @@ static const Dwg_DYNAPI_field _dwg_REVOLVEDSURFACE_fields[] = {
     0,0,0, 291 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_entity_RTEXT: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_RTEXT_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_RTEXT, parent),
+    1,1,0, 0 },
+  { "pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_RTEXT, pt),
+    1,0,0, 10 },
+  { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_RTEXT, extrusion),
+    0,0,0, 210 },
+  { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_RTEXT, rotation),
+    0,0,0, 50 },
+  { "height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_RTEXT, height),
+    0,0,0, 50 },
+  { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_RTEXT, flags),
+    0,0,0, 70 },
+  { "text_value",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_RTEXT, text_value),
+    1,1,1, 1 },
+  { "style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_RTEXT, style),
+    1,0,0, 7 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_entity_SECTIONOBJECT: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_SECTIONOBJECT_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SECTIONOBJECT, parent),
@@ -3587,7 +3608,7 @@ static const Dwg_DYNAPI_field _dwg_TOLERANCE_fields[] = {
     1,0,0, 11 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_TOLERANCE, extrusion),
     0,0,0, 0 },
-  { "text_string",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_TOLERANCE, text_string),
+  { "text_value",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_TOLERANCE, text_value),
     1,1,1, 1 },
   { "dimstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TOLERANCE, dimstyle),
     1,0,0, 3 },
@@ -9477,7 +9498,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "RENDERGLOBAL", DWG_TYPE_RENDERGLOBAL /*(598)*/, _dwg_RENDERGLOBAL_fields, sizeof (struct _dwg_object_RENDERGLOBAL) },	/* 140 */
   { "RENDERSETTINGS", DWG_TYPE_RENDERSETTINGS /*(599)*/, _dwg_RENDERSETTINGS_fields, sizeof (struct _dwg_object_RENDERSETTINGS) },	/* 141 */
   { "REVOLVEDSURFACE", DWG_TYPE_REVOLVEDSURFACE /*(600)*/, _dwg_REVOLVEDSURFACE_fields, sizeof (struct _dwg_entity_REVOLVEDSURFACE) },	/* 142 */
-  { "RTEXT", DWG_TYPE_RTEXT /*(601)*/, NULL, 0 },	/* 143 */
+  { "RTEXT", DWG_TYPE_RTEXT /*(601)*/, _dwg_RTEXT_fields, sizeof (struct _dwg_entity_RTEXT) },	/* 143 */
   { "SCALE", DWG_TYPE_SCALE /*(602)*/, _dwg_SCALE_fields, sizeof (struct _dwg_object_SCALE) },	/* 144 */
   { "SECTIONOBJECT", DWG_TYPE_SECTIONOBJECT /*(603)*/, _dwg_SECTIONOBJECT_fields, sizeof (struct _dwg_entity_SECTIONOBJECT) },	/* 145 */
   { "SECTIONVIEWSTYLE", DWG_TYPE_SECTIONVIEWSTYLE /*(604)*/, _dwg_SECTIONVIEWSTYLE_fields, sizeof (struct _dwg_object_SECTIONVIEWSTYLE) },	/* 146 */

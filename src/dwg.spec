@@ -2416,7 +2416,7 @@ DWG_ENTITY (TOLERANCE)
   FIELD_3DPOINT (x_direction, 11);
   DXF  { FIELD_BE (extrusion, 210); }
   else { FIELD_3DPOINT (extrusion, 210); }
-  FIELD_T (text_string, 1);
+  FIELD_T (text_value, 1);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);
@@ -8487,6 +8487,24 @@ DWG_ENTITY (ATEXT)
     FIELD_BS (text_direction, 71);
     FIELD_HANDLE (arc_handle, 5, 330);
   }
+DWG_ENTITY_END
+
+// r2000+ expresstools. ROTATEDTEXT
+DWG_ENTITY (RTEXT)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbRotatedText);
+  FIELD_3BD (pt, 10);
+  FIELD_BE (extrusion, 210);
+  //DXF  { FIELD_BE (extrusion, 210); }
+  //else { FIELD_3DPOINT (extrusion, 210); }
+  FIELD_BD (rotation, 50);
+  FIELD_BD (height, 50);
+  DXF {
+    FIELD_HANDLE (style, 5, 7);
+  }
+  FIELD_BS (flags, 70);
+  FIELD_T (text_value, 1); // TODO can be split into mult.
+  FIELD_HANDLE (style, 5, 0);
 DWG_ENTITY_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */

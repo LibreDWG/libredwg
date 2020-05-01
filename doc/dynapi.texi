@@ -3177,6 +3177,33 @@ B,	DXF 291
 @end vtable
 @end indentedblock
 
+@strong{RTEXT} @anchor{RTEXT}
+@cindex entity, RTEXT
+@vindex RTEXT
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item pt
+3BD,	DXF 10
+@item extrusion
+BE,	DXF 210
+@item rotation
+BD,	DXF 50
+@item height
+BD,	DXF 50
+@item flags
+BS,	DXF 70
+@item text_value
+T,	DXF 1
+@item style
+H,	DXF 7
+
+@end vtable
+@end indentedblock
+
 @strong{SECTIONOBJECT} @anchor{SECTIONOBJECT}
 @cindex entity, SECTIONOBJECT
 @vindex SECTIONOBJECT
@@ -3786,7 +3813,7 @@ BD
 3BD,	DXF 11
 @item extrusion
 BE
-@item text_string
+@item text_value
 T,	DXF 1
 @item dimstyle
 H,	DXF 3

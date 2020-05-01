@@ -17633,6 +17633,106 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_RTEXT (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_RTEXT *restrict rtext = obj->tio.entity->tio.RTEXT;
+  failed = 0;
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &rtext->extrusion, sizeof (rtext->extrusion)))
+        pass ();
+    else
+        fail ("RTEXT.extrusion [BE]");
+  }
+  {
+    BITCODE_BS flags;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "flags", &flags, NULL)
+        && flags == rtext->flags)
+      pass ();
+    else
+      fail ("RTEXT.flags [BS] %hu != %hu", rtext->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (rtext, "RTEXT", "flags", &flags, 0)
+        && flags == rtext->flags)
+      pass ();
+    else
+      fail ("RTEXT.flags [BS] set+1 %hu != %hu", rtext->flags, flags);
+    rtext->flags--;
+  }
+  {
+    BITCODE_BD height;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "height", &height, NULL)
+        && height == rtext->height)
+      pass ();
+    else
+      fail ("RTEXT.height [BD] %g != %g", rtext->height, height);
+    height++;
+    if (dwg_dynapi_entity_set_value (rtext, "RTEXT", "height", &height, 0)
+        && height == rtext->height)
+      pass ();
+    else
+      fail ("RTEXT.height [BD] set+1 %g != %g", rtext->height, height);
+    rtext->height--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "parent", &parent, NULL)
+        && !memcmp (&parent, &rtext->parent, sizeof (rtext->parent)))
+        pass ();
+    else
+        fail ("RTEXT.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD pt;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "pt", &pt, NULL)
+        && !memcmp (&pt, &rtext->pt, sizeof (rtext->pt)))
+        pass ();
+    else
+        fail ("RTEXT.pt [3BD]");
+  }
+  {
+    BITCODE_BD rotation;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "rotation", &rotation, NULL)
+        && rotation == rtext->rotation)
+      pass ();
+    else
+      fail ("RTEXT.rotation [BD] %g != %g", rtext->rotation, rotation);
+    rotation++;
+    if (dwg_dynapi_entity_set_value (rtext, "RTEXT", "rotation", &rotation, 0)
+        && rotation == rtext->rotation)
+      pass ();
+    else
+      fail ("RTEXT.rotation [BD] set+1 %g != %g", rtext->rotation, rotation);
+    rtext->rotation--;
+  }
+  {
+    BITCODE_H style;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "style", &style, NULL)
+        && !memcmp (&style, &rtext->style, sizeof (rtext->style)))
+        pass ();
+    else
+        fail ("RTEXT.style [H]");
+  }
+  {
+    BITCODE_T text_value;
+    if (dwg_dynapi_entity_value (rtext, "RTEXT", "text_value", &text_value, NULL)
+        && text_value
+           ? strEQ ((char *)text_value, (char *)rtext->text_value)
+           : !rtext->text_value)
+      pass ();
+    else
+      fail ("RTEXT.text_value [T] '%s' <> '%s'", text_value, rtext->text_value);
+  }
+  if (failed && (is_class_unstable ("RTEXT") || is_class_debugging ("RTEXT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "RTEXT", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_SECTIONOBJECT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -20908,14 +21008,14 @@ static int test_TOLERANCE (const Dwg_Object *obj)
         fail ("TOLERANCE.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_T text_string;
-    if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "text_string", &text_string, NULL)
-        && text_string
-           ? strEQ ((char *)text_string, (char *)tolerance->text_string)
-           : !tolerance->text_string)
+    BITCODE_T text_value;
+    if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "text_value", &text_value, NULL)
+        && text_value
+           ? strEQ ((char *)text_value, (char *)tolerance->text_value)
+           : !tolerance->text_value)
       pass ();
     else
-      fail ("TOLERANCE.text_string [T] '%s' <> '%s'", text_string, tolerance->text_string);
+      fail ("TOLERANCE.text_value [T] '%s' <> '%s'", text_value, tolerance->text_value);
   }
   {
     BITCODE_BS unknown_short;
@@ -45259,6 +45359,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_REGION(obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_RTEXT)
+    error += test_RTEXT(obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTIONOBJECT)
     error += test_SECTIONOBJECT(obj);
   else  if (obj->fixedtype == DWG_TYPE_SEQEND)
@@ -45621,6 +45723,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_REGION (obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_RTEXT)
+    error += test_RTEXT (obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTIONOBJECT)
     error += test_SECTIONOBJECT (obj);
   else  if (obj->fixedtype == DWG_TYPE_SEQEND)
@@ -46303,6 +46407,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_REVOLVEDSURFACE): %d != "
                "dwg_dynapi_fields_size (\"REVOLVEDSURFACE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_RTEXT);
+  size2 = dwg_dynapi_fields_size ("RTEXT");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_RTEXT): %d != "
+               "dwg_dynapi_fields_size (\"RTEXT\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_SECTIONOBJECT);

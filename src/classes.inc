@@ -248,6 +248,7 @@
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
   DEBUGGING_CLASS     (ACTION, ARC_DIMENSION)     /* ent */
   DEBUGGING_CLASS     (ACTION, ATEXT)             // ent expresstools
+  DEBUGGING_CLASS     (ACTION, RTEXT)             // ent expresstools
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
                                                      dxfname COORDINATION_MODEL? */
   DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"
@@ -310,7 +311,6 @@
   UNHANDLED_CLASS     (ACTION, NPOCOLLECTION)
   UNHANDLED_CLASS_DXF (ACTION, POINTCLOUD, ACDBPOINTCLOUD)
   UNHANDLED_CLASS     (ACTION, RAPIDRTRENDERENVIRONMENT)  //no coverage
-  UNHANDLED_CLASS     (ACTION, RTEXT) // expresstools
   UNHANDLED_CLASS_DXF (ACTION, XREFPANELOBJECT, EXACXREFPANELOBJECT)
 
 /* Missing DXF names:

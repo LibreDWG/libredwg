@@ -1900,7 +1900,7 @@ typedef struct _dwg_entity_TOLERANCE
   BITCODE_3BD ins_pt;
   BITCODE_3BD x_direction;
   BITCODE_BE extrusion;
-  BITCODE_TV text_string;
+  BITCODE_T text_value;
   BITCODE_H dimstyle;
 } Dwg_Entity_TOLERANCE;
 
@@ -5881,6 +5881,18 @@ typedef struct _dwg_entity_ATEXT
   BITCODE_H arc_handle;		/*!< DXF 330 */
 } Dwg_Entity_ATEXT;
 
+typedef struct _dwg_entity_RTEXT
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_3BD pt;	/*!< DXF 10 */
+  BITCODE_BE extrusion;	/*!< DXF 210 */
+  BITCODE_BD rotation;	/*!< DXF 50 */
+  BITCODE_BD height;	/*!< DXF 50 */
+  BITCODE_BS flags;	/*!< DXF 70 */
+  BITCODE_T text_value;	/*!< DXF 1 */
+  BITCODE_H style;	/*!< DXF 7 */
+} Dwg_Entity_RTEXT;
+
 typedef struct _dwg_object_LAYOUTPRINTCONFIG
 {
   struct _dwg_object_object *parent;
@@ -6121,6 +6133,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_MESH *MESH;
     Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
+    Dwg_Entity_RTEXT *RTEXT;
 
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
@@ -6293,7 +6306,6 @@ typedef struct _dwg_object_object
     //Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
     Dwg_Object_RENDERSETTINGS *RENDERSETTINGS;
     Dwg_Object_RAPIDRTRENDERSETTINGS *RAPIDRTRENDERSETTINGS;
-    //TODO Dwg_Object_RTEXT *RTEXT;
     Dwg_Object_SCALE *SCALE;
     Dwg_Object_SECTION_MANAGER *SECTION_MANAGER;
     Dwg_Object_SECTION_SETTINGS *SECTION_SETTINGS;
@@ -7411,7 +7423,7 @@ EXPORT int dwg_setup_POINTPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
-//EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
+EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
