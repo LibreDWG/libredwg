@@ -94,6 +94,8 @@ static bool env_var_checked_p;
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
+#define VALUE_BS(value, dxf) VALUE (value, BS, dxf)
+#define VALUE_BL(value, dxf) VALUE (value, BL, dxf)
 #define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
 
 #define FIELD(nam, type)                                                      \

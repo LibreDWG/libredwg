@@ -570,6 +570,15 @@ typedef struct _dwg_object_ref
 
 typedef Dwg_Object_Ref* BITCODE_H;
 
+typedef enum DWG_HDL_CODE
+{
+   DWG_HDL_OWNER   = 0,
+   DWG_HDL_SOFTOWN = 2,
+   DWG_HDL_HARDOWN = 3,
+   DWG_HDL_SOFTPTR = 4, // can be relative
+   DWG_HDL_HARDPTR = 5,
+} Dwg_Hdl_Code;
+
 /**
  CMC or ENC colors: color index or rgb value. layers are off when the index
  is negative.
@@ -3885,7 +3894,7 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR
 } Dwg_Object_IMAGEDEF_REACTOR;
 
 /**
- Classes for LAYER_INDEX (varies)
+ Class LAYER_INDEX (varies)
  */
 typedef struct _dwg_LAYER_entry
 {
@@ -3903,7 +3912,7 @@ typedef struct _dwg_object_LAYER_INDEX
 } Dwg_Object_LAYER_INDEX;
 
 /**
- Classes for LWPOLYLINE (77 + varies)
+ Class LWPOLYLINE (77 + varies)
  */
 typedef struct _dwg_entity_LWPOLYLINE
 {
@@ -4882,27 +4891,42 @@ typedef struct _dwg_ACTIONBODY
   BITCODE_BL value; //resbuf
 } Dwg_ACTIONBODY;
 
-#define ASSOCACTION_fields \
-  BITCODE_BL solution_status; /* 90 */ \
-  BITCODE_BL geometry_status; /* 90 */ \
-  BITCODE_H readdep;          /* 330 */ \
-  BITCODE_H writedep;         /* 360 */ \
-  BITCODE_BL constraint_status; /* 90 */ \
-  BITCODE_BL dof;               /* 90 */ \
-  BITCODE_B  is_body_a_proxy    /* 90 */
+
+typedef struct _dwg_ASSOCACTION_Deps
+{
+  struct _dwg_object_ASSOCACTION *parent;
+  BITCODE_B is_soft;
+  BITCODE_H dep;
+} Dwg_ASSOCACTION_Deps;
+
+#define ASSOCACTION_fields                                  \
+  /* until r2010: 1, 2013+: 2 */                            \
+  BITCODE_BS class_version;   /* 90 */                      \
+  /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,  \
+     3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,        \
+     6 RejectedByClient */                                  \
+  BITCODE_BL geometry_status;         /* 90 */              \
+  BITCODE_H owningnetwork;            /* 330 */             \
+  BITCODE_H actionbody;               /* 360 */             \
+  BITCODE_BL action_index;            /* 90 */              \
+  BITCODE_BL max_assoc_dep_index;     /* 90 */              \
+  BITCODE_BL num_deps;                /* 90 */              \
+  Dwg_ASSOCACTION_Deps *deps;         /* 330 or 360 */      \
+  BITCODE_BL num_owned_params;        /* 90 */              \
+  BITCODE_H *owned_params;            /* 360 */             \
+  BITCODE_BL num_owned_value_param_names;        /* 90 */   \
+  BITCODE_H *owned_value_param_names             /* ? */
 
 typedef struct _dwg_object_ASSOCACTION
 {
   struct _dwg_object_object *parent;
   ASSOCACTION_fields;
-
-  BITCODE_BL num_deps;    /* 90 */
   //BITCODE_B is_actionevaluation_in_progress; // 90
-  Dwg_ACTIONBODY body;
-  BITCODE_BL status;
-  BITCODE_H  actionbody;
-  BITCODE_H  callback;
-  BITCODE_H  owningnetwork;
+  //Dwg_ACTIONBODY body;
+  //BITCODE_BL status;
+  //BITCODE_H  actionbody;
+  //BITCODE_H  callback;
+  //BITCODE_H  owningnetwork;
 } Dwg_Object_ASSOCACTION;
 
 typedef struct _dwg_object_ASSOCDEPENDENCY
@@ -4927,7 +4951,7 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL aab_status; // 90
+  BITCODE_BL aab_version; // 90: until 2010: 1, 2013+: 2
   BITCODE_BL pab_status; // 90:0
   BITCODE_BL pab_l2; // 90:0
   BITCODE_BL pab_l3; // 90:1
@@ -5130,7 +5154,7 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 
 #define ASSOCPARAMBASEDACTIONBODY_fields \
   /* AcDbAssocActionBody */ \
-  BITCODE_BL aab_status; /* 90 */ \
+  BITCODE_BL aab_version; /* 90 */ \
   /* AcDbAssocParamBasedActionBody */ \
   BITCODE_BL pab_status; /* 90:0 */ \
   BITCODE_BL pab_l2; /* 90:0*/ \

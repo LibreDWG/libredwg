@@ -4523,20 +4523,30 @@ BL
 
 @item parent
 struct _dwg_object_object*
-@item solution_status
-BL,	DXF 90
+@item class_version
+BS,	DXF 90
 @item geometry_status
 BL,	DXF 90
-@item readdep
+@item owningnetwork
 H,	DXF 330
-@item writedep
+@item actionbody
 H,	DXF 360
-@item constraint_status
+@item action_index
 BL,	DXF 90
-@item dof
+@item max_assoc_dep_index
 BL,	DXF 90
-@item is_body_a_proxy
-B,	DXF 90
+@item num_deps
+BL,	DXF 90
+@item deps
+Dwg_ASSOCACTION_Deps*
+@item num_owned_params
+BL,	DXF 90
+@item owned_params
+H*,	DXF 360
+@item num_owned_value_param_names
+BL
+@item owned_value_param_names
+H*,	DXF 360
 @item l5
 BL,	DXF 90
 @item b1
@@ -4596,32 +4606,30 @@ T,	DXF 1
 
 @item parent
 struct _dwg_object_object*
-@item solution_status
-BL,	DXF 90
+@item class_version
+BS,	DXF 90
 @item geometry_status
 BL,	DXF 90
-@item readdep
+@item owningnetwork
 H,	DXF 330
-@item writedep
+@item actionbody
 H,	DXF 360
-@item constraint_status
+@item action_index
 BL,	DXF 90
-@item dof
+@item max_assoc_dep_index
 BL,	DXF 90
-@item is_body_a_proxy
-B,	DXF 90
 @item num_deps
 BL,	DXF 90
-@item body
-Dwg_ACTIONBODY
-@item status
+@item deps
+Dwg_ASSOCACTION_Deps*
+@item num_owned_params
 BL,	DXF 90
-@item actionbody
-H
-@item callback
-H
-@item owningnetwork
-H
+@item owned_params
+H*,	DXF 360
+@item num_owned_value_param_names
+BL
+@item owned_value_param_names
+H*,	DXF 360
 
 @end vtable
 @end indentedblock
@@ -4635,7 +4643,7 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item aab_status
+@item aab_version
 BL,	DXF 90
 @item pab_status
 BL,	DXF 90
@@ -4711,7 +4719,7 @@ H,	DXF 330
 
 @item parent
 struct _dwg_object_object*
-@item aab_status
+@item aab_version
 BL
 @item pab_status
 BL
@@ -4803,7 +4811,7 @@ B,	DXF 290
 
 @item parent
 struct _dwg_object_object*
-@item aab_status
+@item aab_version
 BL
 @item pab_status
 BL
@@ -4848,20 +4856,30 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item solution_status
-BL,	DXF 90
+@item class_version
+BS,	DXF 90
 @item geometry_status
 BL,	DXF 90
-@item readdep
+@item owningnetwork
 H,	DXF 330
-@item writedep
+@item actionbody
 H,	DXF 360
-@item constraint_status
+@item action_index
 BL,	DXF 90
-@item dof
+@item max_assoc_dep_index
 BL,	DXF 90
-@item is_body_a_proxy
-B,	DXF 90
+@item num_deps
+BL,	DXF 90
+@item deps
+Dwg_ASSOCACTION_Deps*
+@item num_owned_params
+BL,	DXF 90
+@item owned_params
+H*,	DXF 360
+@item num_owned_value_param_names
+BL
+@item owned_value_param_names
+H*,	DXF 360
 @item unknown_assoc
 BL
 @item unknown_n1
@@ -5009,7 +5027,7 @@ B,	DXF 290
 
 @item parent
 struct _dwg_object_object*
-@item aab_status
+@item aab_version
 BL
 @item pab_status
 BL
@@ -5054,7 +5072,7 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item aab_status
+@item aab_version
 BL
 @item pab_status
 BL
@@ -5099,7 +5117,7 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item aab_status
+@item aab_version
 BL
 @item pab_status
 BL
@@ -5145,7 +5163,7 @@ BL,	DXF 90
 @item parent
 struct _dwg_object_object*
 @item class_version
-BS
+BS,	DXF 90
 @item unknown
 RC
 @item unknown1
@@ -5163,7 +5181,7 @@ BS
 @item actions
 H*
 @item writedep
-H,	DXF 360
+H
 
 @end vtable
 @end indentedblock
@@ -6327,10 +6345,6 @@ BL
 
 @item parent
 struct _dwg_object_object*
-@item timestamp1
-BL,	DXF 40
-@item timestamp2
-BL,	DXF 40
 @item num_entries
 BL
 @item entries
@@ -8883,6 +8897,22 @@ BL
 @end vtable
 @end indentedblock
 
+@strong{Dwg_ASSOCACTION_Deps} @anchor{Dwg_ASSOCACTION_Deps}
+@vindex Dwg_ASSOCACTION_Deps
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ASSOCACTION*
+@item is_soft
+B
+@item dep
+H
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_AcDs_Data} @anchor{Dwg_AcDs_Data}
 @vindex Dwg_AcDs_Data
 
@@ -9810,11 +9840,11 @@ BD,	DXF 42
 @item parent
 struct _dwg_object_LAYER_INDEX*
 @item numlayers
-BL
+BL,	DXF 90
 @item name
 T,	DXF 8
 @item handle
-H
+H,	DXF 360
 
 @end vtable
 @end indentedblock

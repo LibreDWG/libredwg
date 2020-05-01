@@ -6257,9 +6257,17 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   FIELD_HANDLE (node, 3, 330);
 DWG_OBJECT_END
 
+#define AcDbAssocActionParam_fields \
+  SUBCLASS (AcDbAssocActionParam)   \
+  FIELD_BL (is_r2013, 90);          \
+  if (_obj->is_r2013) {             \
+    VALUE_BL (0, 90);               \
+  }                                 \
+  FIELD_T (name, 1)
+
 #define AcDbAssocParamBasedActionBody_fields \
   SUBCLASS (AcDbAssocActionBody) \
-  FIELD_BL (aab_status, 90); \
+  FIELD_BL (aab_version, 90); \
   SUBCLASS (AcDbAssocParamBasedActionBody) \
   FIELD_BL (pab_status, 90); \
   FIELD_BL (pab_l2, 90); \
@@ -6772,7 +6780,7 @@ DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocActionBody)
-  FIELD_BL (aab_status, 90); //1 or ownerid
+  FIELD_BL (aab_version, 90);
   SUBCLASS (AcDbAssocParamBasedActionBody)
   FIELD_BL (pab_status, 90);
   FIELD_BL (pab_l2, 90);
@@ -7068,18 +7076,19 @@ DWG_OBJECT (EVALUATION_GRAPH)
 DWG_OBJECT_END
 
 #undef ASSOCACTION_fields
-#define ASSOCACTION_fields   \
-  SUBCLASS (AcDbAssocAction) \
+/* dof: 2 remaining degree of freedom */
+#define ASSOCACTION_fields                                 \
+  SUBCLASS (AcDbAssocAction)                               \
+  /* until r2010: 1, 2013+: 2 */                           \
+  FIELD_BS (class_version, 90);                            \
   /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained, \
      3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,       \
      6 RejectedByClient */                                 \
-  FIELD_BL (solution_status, 90);                          \
   FIELD_BL (geometry_status, 90); /* 0 */                  \
-  FIELD_HANDLE (readdep, 5, 330);                          \
-  FIELD_HANDLE (writedep, 5, 360);                         \
-  FIELD_BL (constraint_status, 90); /* 1 */                             \
-  FIELD_BL (dof, 90);               /* 2 remaining degree of freedom */ \
-  FIELD_B (is_body_a_proxy, 90)     /* 0 */
+  FIELD_HANDLE (owningnetwork, 5, 330);                    \
+  FIELD_HANDLE (actionbody, 5, 360);                       \
+  FIELD_BL (action_index, 90); /* 1 */                     \
+  FIELD_BL (max_assoc_dep_index, 90)
 
 // subclass of AcDbAssocAction DEBUGGING
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
@@ -7524,36 +7533,35 @@ DWG_ENTITY (PLANESURFACE)
 DWG_ENTITY_END
 
 // (varies) DEBUGGING
+// call as dwg_##action_ASSOCACTION_private
 DWG_OBJECT (ASSOCACTION)
   DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields;
-
-  rcount1 = bit_position (dat);
-  DEBUG_HERE_OBJ
-  //17bit 00101000101000101:
-  FIELD_T (body.evaluatorid, 0);
-  FIELD_T (body.expression, 0);
-  FIELD_BL (body.value, 0); //rbuf really
-  //FIELD_B (is_actionevaluation_in_progress, 90);
-  DEBUG_POS_OBJ
-  bit_set_position (dat, rcount1 + 27);
-  FIELD_BL (status, 90); //27-36
-  if (FIELD_VALUE (status) > 0x100) {
-    LOG_ERROR ("Invalid ASSOCACTION.status " FORMAT_BL, FIELD_VALUE (status));
-    _obj->status = 0;
-    return DWG_ERR_VALUEOUTOFBOUNDS;
-  }
-  DEBUG_HERE_OBJ
-  FIELD_HANDLE (actionbody, 5, 0);
-  FIELD_HANDLE (callback, 3, 0);
-  FIELD_HANDLE (owningnetwork, 3, 0);
+  SUBCLASS (AcDbAssocAction)                               
+  /* until r2010: 1, 2013+: 2 */                           
+  FIELD_BS (class_version, 90);                            
+  FIELD_BL (geometry_status, 90); /* 0 */                  
+  FIELD_HANDLE (owningnetwork, 5, 330);                   
+  FIELD_HANDLE (actionbody, 4, 360);                       
+  FIELD_BL (action_index, 90);
+  FIELD_BL (max_assoc_dep_index, 90);
   FIELD_BL (num_deps, 90);
-  VALUEOUTOFBOUNDS (num_deps, 5000)
-  //HANDLE_VECTOR (readdeps, num_deps, 5, 330);
-  //HANDLE_VECTOR (writedeps, num_deps, 0, 360);
-  //FIELD_BL (unknown_assoc, 90);
-
-  START_OBJECT_HANDLE_STREAM;
+  REPEAT (num_deps, deps, Dwg_ASSOCACTION_Deps)
+  REPEAT_BLOCK {
+      int dxf = _obj->deps[rcount1].is_soft ? 360 : 330;
+      int code = _obj->deps[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+      SUB_FIELD_B (deps[rcount1], is_soft, 0);
+      SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);
+  } END_REPEAT_BLOCK
+  END_REPEAT (deps);
+  if (FIELD_VALUE (class_version) > 1)
+  {
+    VALUE_BS (0, 90);
+    FIELD_BL (num_owned_params, 90);
+    HANDLE_VECTOR (owned_params, num_owned_params, DWG_HDL_SOFTPTR, 360);
+    VALUE_BS (0, 90);
+    FIELD_BL (num_owned_value_params, 90); // TODO which hdl_code?
+    HANDLE_VECTOR (owned_value_param_names, num_owned_value_param_names, 5, 360);
+  }
 DWG_OBJECT_END
 
 // DEBUGGING

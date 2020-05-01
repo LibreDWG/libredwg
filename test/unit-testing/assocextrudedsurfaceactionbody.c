@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
 {
   int error;
   // AcDbAssocActionBody
-  BITCODE_BL aab_status;
+  BITCODE_BL aab_version;
   // AcDbAssocParamBasedActionBody
   BITCODE_BL pab_status;
   BITCODE_BL pab_l2;
@@ -32,7 +32,7 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_assocextrudedsurfaceactionbody *_obj = dwg_object_to_ASSOCEXTRUDEDSURFACEACTIONBODY (obj);
 
-  CHK_ENTITY_TYPE (_obj, ASSOCEXTRUDEDSURFACEACTIONBODY, aab_status, BL, aab_status);
+  CHK_ENTITY_TYPE (_obj, ASSOCEXTRUDEDSURFACEACTIONBODY, aab_version, BL, aab_version);
   CHK_ENTITY_TYPE (_obj, ASSOCEXTRUDEDSURFACEACTIONBODY, pab_status, BL, pab_status);
   CHK_ENTITY_TYPE (_obj, ASSOCEXTRUDEDSURFACEACTIONBODY, pab_l2, BL, pab_l2);
   CHK_ENTITY_TYPE (_obj, ASSOCEXTRUDEDSURFACEACTIONBODY, num_deps, BL, num_deps);

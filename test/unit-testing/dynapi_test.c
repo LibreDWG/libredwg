@@ -24220,6 +24220,29 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   Dwg_Object_ASSOC2DCONSTRAINTGROUP *restrict assoc2dconstraintgroup = obj->tio.object->tio.ASSOC2DCONSTRAINTGROUP;
   failed = 0;
   {
+    BITCODE_BL action_index;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "action_index", &action_index, NULL)
+        && action_index == assoc2dconstraintgroup->action_index)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.action_index [BL] %u != %u", assoc2dconstraintgroup->action_index, action_index);
+    action_index++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "action_index", &action_index, 0)
+        && action_index == assoc2dconstraintgroup->action_index)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.action_index [BL] set+1 %u != %u", assoc2dconstraintgroup->action_index, action_index);
+    assoc2dconstraintgroup->action_index--;
+  }
+  {
+    BITCODE_H actionbody;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "actionbody", &actionbody, NULL)
+        && !memcmp (&actionbody, &assoc2dconstraintgroup->actionbody, sizeof (assoc2dconstraintgroup->actionbody)))
+        pass ();
+    else
+        fail ("ASSOC2DCONSTRAINTGROUP.actionbody [H]");
+  }
+  {
     BITCODE_H* actions;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_actions", &count, NULL)
@@ -24329,19 +24352,19 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->cl4--;
   }
   {
-    BITCODE_BL constraint_status;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "constraint_status", &constraint_status, NULL)
-        && constraint_status == assoc2dconstraintgroup->constraint_status)
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "class_version", &class_version, NULL)
+        && class_version == assoc2dconstraintgroup->class_version)
       pass ();
     else
-      fail ("ASSOC2DCONSTRAINTGROUP.constraint_status [BL] %u != %u", assoc2dconstraintgroup->constraint_status, constraint_status);
-    constraint_status++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "constraint_status", &constraint_status, 0)
-        && constraint_status == assoc2dconstraintgroup->constraint_status)
+      fail ("ASSOC2DCONSTRAINTGROUP.class_version [BS] %hu != %hu", assoc2dconstraintgroup->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "class_version", &class_version, 0)
+        && class_version == assoc2dconstraintgroup->class_version)
       pass ();
     else
-      fail ("ASSOC2DCONSTRAINTGROUP.constraint_status [BL] set+1 %u != %u", assoc2dconstraintgroup->constraint_status, constraint_status);
-    assoc2dconstraintgroup->constraint_status--;
+      fail ("ASSOC2DCONSTRAINTGROUP.class_version [BS] set+1 %hu != %hu", assoc2dconstraintgroup->class_version, class_version);
+    assoc2dconstraintgroup->class_version--;
   }
   {
     BITCODE_RC cs1;
@@ -24359,19 +24382,14 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->cs1--;
   }
   {
-    BITCODE_BL dof;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "dof", &dof, NULL)
-        && dof == assoc2dconstraintgroup->dof)
+    Dwg_ASSOCACTION_Deps* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "deps", &deps, NULL)
+        && deps == assoc2dconstraintgroup->deps)
       pass ();
     else
-      fail ("ASSOC2DCONSTRAINTGROUP.dof [BL] %u != %u", assoc2dconstraintgroup->dof, dof);
-    dof++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "dof", &dof, 0)
-        && dof == assoc2dconstraintgroup->dof)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.dof [BL] set+1 %u != %u", assoc2dconstraintgroup->dof, dof);
-    assoc2dconstraintgroup->dof--;
+      fail ("ASSOC2DCONSTRAINTGROUP.deps [Dwg_ASSOCACTION_Deps*] * %u num_deps", count);
   }
   {
     BITCODE_BL geometry_status;
@@ -24411,21 +24429,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.h3 [H]");
-  }
-  {
-    BITCODE_B is_body_a_proxy;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "is_body_a_proxy", &is_body_a_proxy, NULL)
-        && is_body_a_proxy == assoc2dconstraintgroup->is_body_a_proxy)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.is_body_a_proxy [B] " FORMAT_B " != " FORMAT_B "", assoc2dconstraintgroup->is_body_a_proxy, is_body_a_proxy);
-    is_body_a_proxy++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "is_body_a_proxy", &is_body_a_proxy, 0)
-        && is_body_a_proxy == assoc2dconstraintgroup->is_body_a_proxy)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.is_body_a_proxy [B] set+1 " FORMAT_B " != " FORMAT_B "", assoc2dconstraintgroup->is_body_a_proxy, is_body_a_proxy);
-    assoc2dconstraintgroup->is_body_a_proxy--;
   }
   {
     BITCODE_BL l5;
@@ -24473,6 +24476,21 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->l8--;
   }
   {
+    BITCODE_BL max_assoc_dep_index;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "max_assoc_dep_index", &max_assoc_dep_index, NULL)
+        && max_assoc_dep_index == assoc2dconstraintgroup->max_assoc_dep_index)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.max_assoc_dep_index [BL] %u != %u", assoc2dconstraintgroup->max_assoc_dep_index, max_assoc_dep_index);
+    max_assoc_dep_index++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "max_assoc_dep_index", &max_assoc_dep_index, 0)
+        && max_assoc_dep_index == assoc2dconstraintgroup->max_assoc_dep_index)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.max_assoc_dep_index [BL] set+1 %u != %u", assoc2dconstraintgroup->max_assoc_dep_index, max_assoc_dep_index);
+    assoc2dconstraintgroup->max_assoc_dep_index--;
+  }
+  {
     BITCODE_BL num_actions;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_actions", &num_actions, NULL)
         && num_actions == assoc2dconstraintgroup->num_actions)
@@ -24488,35 +24506,85 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->num_actions--;
   }
   {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_deps", &num_deps, NULL)
+        && num_deps == assoc2dconstraintgroup->num_deps)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_deps [BL] %u != %u", assoc2dconstraintgroup->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_deps", &num_deps, 0)
+        && num_deps == assoc2dconstraintgroup->num_deps)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_deps [BL] set+1 %u != %u", assoc2dconstraintgroup->num_deps, num_deps);
+    assoc2dconstraintgroup->num_deps--;
+  }
+  {
+    BITCODE_BL num_owned_params;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_params", &num_owned_params, NULL)
+        && num_owned_params == assoc2dconstraintgroup->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_owned_params [BL] %u != %u", assoc2dconstraintgroup->num_owned_params, num_owned_params);
+    num_owned_params++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_params", &num_owned_params, 0)
+        && num_owned_params == assoc2dconstraintgroup->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_owned_params [BL] set+1 %u != %u", assoc2dconstraintgroup->num_owned_params, num_owned_params);
+    assoc2dconstraintgroup->num_owned_params--;
+  }
+  {
+    BITCODE_BL num_owned_value_param_names;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
+        && num_owned_value_param_names == assoc2dconstraintgroup->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_owned_value_param_names [BL] %u != %u", assoc2dconstraintgroup->num_owned_value_param_names, num_owned_value_param_names);
+    num_owned_value_param_names++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_value_param_names", &num_owned_value_param_names, 0)
+        && num_owned_value_param_names == assoc2dconstraintgroup->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_owned_value_param_names [BL] set+1 %u != %u", assoc2dconstraintgroup->num_owned_value_param_names, num_owned_value_param_names);
+    assoc2dconstraintgroup->num_owned_value_param_names--;
+  }
+  {
+    BITCODE_H* owned_params;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_params", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "owned_params", &owned_params, NULL)
+        && owned_params == assoc2dconstraintgroup->owned_params)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.owned_params [H*] * %u num_owned_params", count);
+  }
+  {
+    BITCODE_H* owned_value_param_names;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_value_param_names", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "owned_value_param_names", &owned_value_param_names, NULL)
+        && owned_value_param_names == assoc2dconstraintgroup->owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
+  }
+  {
+    BITCODE_H owningnetwork;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "owningnetwork", &owningnetwork, NULL)
+        && !memcmp (&owningnetwork, &assoc2dconstraintgroup->owningnetwork, sizeof (assoc2dconstraintgroup->owningnetwork)))
+        pass ();
+    else
+        fail ("ASSOC2DCONSTRAINTGROUP.owningnetwork [H]");
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "parent", &parent, NULL)
         && !memcmp (&parent, &assoc2dconstraintgroup->parent, sizeof (assoc2dconstraintgroup->parent)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H readdep;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "readdep", &readdep, NULL)
-        && !memcmp (&readdep, &assoc2dconstraintgroup->readdep, sizeof (assoc2dconstraintgroup->readdep)))
-        pass ();
-    else
-        fail ("ASSOC2DCONSTRAINTGROUP.readdep [H]");
-  }
-  {
-    BITCODE_BL solution_status;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "solution_status", &solution_status, NULL)
-        && solution_status == assoc2dconstraintgroup->solution_status)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.solution_status [BL] %u != %u", assoc2dconstraintgroup->solution_status, solution_status);
-    solution_status++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "solution_status", &solution_status, 0)
-        && solution_status == assoc2dconstraintgroup->solution_status)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.solution_status [BL] set+1 %u != %u", assoc2dconstraintgroup->solution_status, solution_status);
-    assoc2dconstraintgroup->solution_status--;
   }
   {
     BITCODE_T t1;
@@ -24591,14 +24659,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
         fail ("ASSOC2DCONSTRAINTGROUP.workplane[3] [3BD]");
   }
-  {
-    BITCODE_H writedep;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &assoc2dconstraintgroup->writedep, sizeof (assoc2dconstraintgroup->writedep)))
-        pass ();
-    else
-        fail ("ASSOC2DCONSTRAINTGROUP.writedep [H]");
-  }
   if (failed && (is_class_unstable ("ASSOC2DCONSTRAINTGROUP") || is_class_debugging ("ASSOC2DCONSTRAINTGROUP")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOC2DCONSTRAINTGROUP", failed);
@@ -24613,6 +24673,21 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
   Dwg_Object_ASSOCACTION *restrict assocaction = obj->tio.object->tio.ASSOCACTION;
   failed = 0;
   {
+    BITCODE_BL action_index;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "action_index", &action_index, NULL)
+        && action_index == assocaction->action_index)
+      pass ();
+    else
+      fail ("ASSOCACTION.action_index [BL] %u != %u", assocaction->action_index, action_index);
+    action_index++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "action_index", &action_index, 0)
+        && action_index == assocaction->action_index)
+      pass ();
+    else
+      fail ("ASSOCACTION.action_index [BL] set+1 %u != %u", assocaction->action_index, action_index);
+    assocaction->action_index--;
+  }
+  {
     BITCODE_H actionbody;
     if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "actionbody", &actionbody, NULL)
         && !memcmp (&actionbody, &assocaction->actionbody, sizeof (assocaction->actionbody)))
@@ -24621,50 +24696,29 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
         fail ("ASSOCACTION.actionbody [H]");
   }
   {
-    Dwg_ACTIONBODY body;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "body", &body, NULL)
-        && !memcmp (&body, &assocaction->body, sizeof (assocaction->body)))
-        pass ();
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "class_version", &class_version, NULL)
+        && class_version == assocaction->class_version)
+      pass ();
     else
-        fail ("ASSOCACTION.body [Dwg_ACTIONBODY]");
+      fail ("ASSOCACTION.class_version [BS] %hu != %hu", assocaction->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "class_version", &class_version, 0)
+        && class_version == assocaction->class_version)
+      pass ();
+    else
+      fail ("ASSOCACTION.class_version [BS] set+1 %hu != %hu", assocaction->class_version, class_version);
+    assocaction->class_version--;
   }
   {
-    BITCODE_H callback;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "callback", &callback, NULL)
-        && !memcmp (&callback, &assocaction->callback, sizeof (assocaction->callback)))
-        pass ();
-    else
-        fail ("ASSOCACTION.callback [H]");
-  }
-  {
-    BITCODE_BL constraint_status;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "constraint_status", &constraint_status, NULL)
-        && constraint_status == assocaction->constraint_status)
+    Dwg_ASSOCACTION_Deps* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "deps", &deps, NULL)
+        && deps == assocaction->deps)
       pass ();
     else
-      fail ("ASSOCACTION.constraint_status [BL] %u != %u", assocaction->constraint_status, constraint_status);
-    constraint_status++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "constraint_status", &constraint_status, 0)
-        && constraint_status == assocaction->constraint_status)
-      pass ();
-    else
-      fail ("ASSOCACTION.constraint_status [BL] set+1 %u != %u", assocaction->constraint_status, constraint_status);
-    assocaction->constraint_status--;
-  }
-  {
-    BITCODE_BL dof;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "dof", &dof, NULL)
-        && dof == assocaction->dof)
-      pass ();
-    else
-      fail ("ASSOCACTION.dof [BL] %u != %u", assocaction->dof, dof);
-    dof++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "dof", &dof, 0)
-        && dof == assocaction->dof)
-      pass ();
-    else
-      fail ("ASSOCACTION.dof [BL] set+1 %u != %u", assocaction->dof, dof);
-    assocaction->dof--;
+      fail ("ASSOCACTION.deps [Dwg_ASSOCACTION_Deps*] * %u num_deps", count);
   }
   {
     BITCODE_BL geometry_status;
@@ -24682,19 +24736,19 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     assocaction->geometry_status--;
   }
   {
-    BITCODE_B is_body_a_proxy;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "is_body_a_proxy", &is_body_a_proxy, NULL)
-        && is_body_a_proxy == assocaction->is_body_a_proxy)
+    BITCODE_BL max_assoc_dep_index;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "max_assoc_dep_index", &max_assoc_dep_index, NULL)
+        && max_assoc_dep_index == assocaction->max_assoc_dep_index)
       pass ();
     else
-      fail ("ASSOCACTION.is_body_a_proxy [B] " FORMAT_B " != " FORMAT_B "", assocaction->is_body_a_proxy, is_body_a_proxy);
-    is_body_a_proxy++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "is_body_a_proxy", &is_body_a_proxy, 0)
-        && is_body_a_proxy == assocaction->is_body_a_proxy)
+      fail ("ASSOCACTION.max_assoc_dep_index [BL] %u != %u", assocaction->max_assoc_dep_index, max_assoc_dep_index);
+    max_assoc_dep_index++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "max_assoc_dep_index", &max_assoc_dep_index, 0)
+        && max_assoc_dep_index == assocaction->max_assoc_dep_index)
       pass ();
     else
-      fail ("ASSOCACTION.is_body_a_proxy [B] set+1 " FORMAT_B " != " FORMAT_B "", assocaction->is_body_a_proxy, is_body_a_proxy);
-    assocaction->is_body_a_proxy--;
+      fail ("ASSOCACTION.max_assoc_dep_index [BL] set+1 %u != %u", assocaction->max_assoc_dep_index, max_assoc_dep_index);
+    assocaction->max_assoc_dep_index--;
   }
   {
     BITCODE_BL num_deps;
@@ -24712,6 +24766,56 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     assocaction->num_deps--;
   }
   {
+    BITCODE_BL num_owned_params;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_owned_params", &num_owned_params, NULL)
+        && num_owned_params == assocaction->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOCACTION.num_owned_params [BL] %u != %u", assocaction->num_owned_params, num_owned_params);
+    num_owned_params++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "num_owned_params", &num_owned_params, 0)
+        && num_owned_params == assocaction->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOCACTION.num_owned_params [BL] set+1 %u != %u", assocaction->num_owned_params, num_owned_params);
+    assocaction->num_owned_params--;
+  }
+  {
+    BITCODE_BL num_owned_value_param_names;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
+        && num_owned_value_param_names == assocaction->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCACTION.num_owned_value_param_names [BL] %u != %u", assocaction->num_owned_value_param_names, num_owned_value_param_names);
+    num_owned_value_param_names++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "num_owned_value_param_names", &num_owned_value_param_names, 0)
+        && num_owned_value_param_names == assocaction->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCACTION.num_owned_value_param_names [BL] set+1 %u != %u", assocaction->num_owned_value_param_names, num_owned_value_param_names);
+    assocaction->num_owned_value_param_names--;
+  }
+  {
+    BITCODE_H* owned_params;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_owned_params", &count, NULL)
+        && dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "owned_params", &owned_params, NULL)
+        && owned_params == assocaction->owned_params)
+      pass ();
+    else
+      fail ("ASSOCACTION.owned_params [H*] * %u num_owned_params", count);
+  }
+  {
+    BITCODE_H* owned_value_param_names;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_owned_value_param_names", &count, NULL)
+        && dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "owned_value_param_names", &owned_value_param_names, NULL)
+        && owned_value_param_names == assocaction->owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCACTION.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
+  }
+  {
     BITCODE_H owningnetwork;
     if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "owningnetwork", &owningnetwork, NULL)
         && !memcmp (&owningnetwork, &assocaction->owningnetwork, sizeof (assocaction->owningnetwork)))
@@ -24727,52 +24831,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     else
         fail ("ASSOCACTION.parent [struct _dwg_object_object*]");
   }
-  {
-    BITCODE_H readdep;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "readdep", &readdep, NULL)
-        && !memcmp (&readdep, &assocaction->readdep, sizeof (assocaction->readdep)))
-        pass ();
-    else
-        fail ("ASSOCACTION.readdep [H]");
-  }
-  {
-    BITCODE_BL solution_status;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "solution_status", &solution_status, NULL)
-        && solution_status == assocaction->solution_status)
-      pass ();
-    else
-      fail ("ASSOCACTION.solution_status [BL] %u != %u", assocaction->solution_status, solution_status);
-    solution_status++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "solution_status", &solution_status, 0)
-        && solution_status == assocaction->solution_status)
-      pass ();
-    else
-      fail ("ASSOCACTION.solution_status [BL] set+1 %u != %u", assocaction->solution_status, solution_status);
-    assocaction->solution_status--;
-  }
-  {
-    BITCODE_BL status;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "status", &status, NULL)
-        && status == assocaction->status)
-      pass ();
-    else
-      fail ("ASSOCACTION.status [BL] %u != %u", assocaction->status, status);
-    status++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "status", &status, 0)
-        && status == assocaction->status)
-      pass ();
-    else
-      fail ("ASSOCACTION.status [BL] set+1 %u != %u", assocaction->status, status);
-    assocaction->status--;
-  }
-  {
-    BITCODE_H writedep;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &assocaction->writedep, sizeof (assocaction->writedep)))
-        pass ();
-    else
-        fail ("ASSOCACTION.writedep [H]");
-  }
   if (failed && (is_class_unstable ("ASSOCACTION") || is_class_debugging ("ASSOCACTION")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCACTION", failed);
@@ -24787,19 +24845,19 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *restrict assocaligneddimactionbody = obj->tio.object->tio.ASSOCALIGNEDDIMACTIONBODY;
   failed = 0;
   {
-    BITCODE_BL aab_status;
-    if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_status", &aab_status, NULL)
-        && aab_status == assocaligneddimactionbody->aab_status)
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocaligneddimactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCALIGNEDDIMACTIONBODY.aab_status [BL] %u != %u", assocaligneddimactionbody->aab_status, aab_status);
-    aab_status++;
-    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_status", &aab_status, 0)
-        && aab_status == assocaligneddimactionbody->aab_status)
+      fail ("ASSOCALIGNEDDIMACTIONBODY.aab_version [BL] %u != %u", assocaligneddimactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocaligneddimactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCALIGNEDDIMACTIONBODY.aab_status [BL] set+1 %u != %u", assocaligneddimactionbody->aab_status, aab_status);
-    assocaligneddimactionbody->aab_status--;
+      fail ("ASSOCALIGNEDDIMACTIONBODY.aab_version [BL] set+1 %u != %u", assocaligneddimactionbody->aab_version, aab_version);
+    assocaligneddimactionbody->aab_version--;
   }
   {
     BITCODE_H d_node;
@@ -25148,19 +25206,19 @@ static int test_ASSOCEXTRUDEDSURFACEACTIONBODY (const Dwg_Object *obj)
   Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY *restrict assocextrudedsurfaceactionbody = obj->tio.object->tio.ASSOCEXTRUDEDSURFACEACTIONBODY;
   failed = 0;
   {
-    BITCODE_BL aab_status;
-    if (dwg_dynapi_entity_value (assocextrudedsurfaceactionbody, "ASSOCEXTRUDEDSURFACEACTIONBODY", "aab_status", &aab_status, NULL)
-        && aab_status == assocextrudedsurfaceactionbody->aab_status)
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocextrudedsurfaceactionbody, "ASSOCEXTRUDEDSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocextrudedsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCEXTRUDEDSURFACEACTIONBODY.aab_status [BL] %u != %u", assocextrudedsurfaceactionbody->aab_status, aab_status);
-    aab_status++;
-    if (dwg_dynapi_entity_set_value (assocextrudedsurfaceactionbody, "ASSOCEXTRUDEDSURFACEACTIONBODY", "aab_status", &aab_status, 0)
-        && aab_status == assocextrudedsurfaceactionbody->aab_status)
+      fail ("ASSOCEXTRUDEDSURFACEACTIONBODY.aab_version [BL] %u != %u", assocextrudedsurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocextrudedsurfaceactionbody, "ASSOCEXTRUDEDSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocextrudedsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCEXTRUDEDSURFACEACTIONBODY.aab_status [BL] set+1 %u != %u", assocextrudedsurfaceactionbody->aab_status, aab_status);
-    assocextrudedsurfaceactionbody->aab_status--;
+      fail ("ASSOCEXTRUDEDSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocextrudedsurfaceactionbody->aab_version, aab_version);
+    assocextrudedsurfaceactionbody->aab_version--;
   }
   {
     BITCODE_TV* descriptions;
@@ -25637,19 +25695,19 @@ static int test_ASSOCLOFTEDSURFACEACTIONBODY (const Dwg_Object *obj)
   Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY *restrict assocloftedsurfaceactionbody = obj->tio.object->tio.ASSOCLOFTEDSURFACEACTIONBODY;
   failed = 0;
   {
-    BITCODE_BL aab_status;
-    if (dwg_dynapi_entity_value (assocloftedsurfaceactionbody, "ASSOCLOFTEDSURFACEACTIONBODY", "aab_status", &aab_status, NULL)
-        && aab_status == assocloftedsurfaceactionbody->aab_status)
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocloftedsurfaceactionbody, "ASSOCLOFTEDSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocloftedsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCLOFTEDSURFACEACTIONBODY.aab_status [BL] %u != %u", assocloftedsurfaceactionbody->aab_status, aab_status);
-    aab_status++;
-    if (dwg_dynapi_entity_set_value (assocloftedsurfaceactionbody, "ASSOCLOFTEDSURFACEACTIONBODY", "aab_status", &aab_status, 0)
-        && aab_status == assocloftedsurfaceactionbody->aab_status)
+      fail ("ASSOCLOFTEDSURFACEACTIONBODY.aab_version [BL] %u != %u", assocloftedsurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocloftedsurfaceactionbody, "ASSOCLOFTEDSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocloftedsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCLOFTEDSURFACEACTIONBODY.aab_status [BL] set+1 %u != %u", assocloftedsurfaceactionbody->aab_status, aab_status);
-    assocloftedsurfaceactionbody->aab_status--;
+      fail ("ASSOCLOFTEDSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocloftedsurfaceactionbody->aab_version, aab_version);
+    assocloftedsurfaceactionbody->aab_version--;
   }
   {
     BITCODE_TV* descriptions;
@@ -25883,6 +25941,29 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
   Dwg_Object_ASSOCNETWORK *restrict assocnetwork = obj->tio.object->tio.ASSOCNETWORK;
   failed = 0;
   {
+    BITCODE_BL action_index;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "action_index", &action_index, NULL)
+        && action_index == assocnetwork->action_index)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.action_index [BL] %u != %u", assocnetwork->action_index, action_index);
+    action_index++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "action_index", &action_index, 0)
+        && action_index == assocnetwork->action_index)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.action_index [BL] set+1 %u != %u", assocnetwork->action_index, action_index);
+    assocnetwork->action_index--;
+  }
+  {
+    BITCODE_H actionbody;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "actionbody", &actionbody, NULL)
+        && !memcmp (&actionbody, &assocnetwork->actionbody, sizeof (assocnetwork->actionbody)))
+        pass ();
+    else
+        fail ("ASSOCNETWORK.actionbody [H]");
+  }
+  {
     BITCODE_H* actions;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_actions", &count, NULL)
@@ -25893,34 +25974,29 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
       fail ("ASSOCNETWORK.actions [H*] * %u num_actions", count);
   }
   {
-    BITCODE_BL constraint_status;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "constraint_status", &constraint_status, NULL)
-        && constraint_status == assocnetwork->constraint_status)
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "class_version", &class_version, NULL)
+        && class_version == assocnetwork->class_version)
       pass ();
     else
-      fail ("ASSOCNETWORK.constraint_status [BL] %u != %u", assocnetwork->constraint_status, constraint_status);
-    constraint_status++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "constraint_status", &constraint_status, 0)
-        && constraint_status == assocnetwork->constraint_status)
+      fail ("ASSOCNETWORK.class_version [BS] %hu != %hu", assocnetwork->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "class_version", &class_version, 0)
+        && class_version == assocnetwork->class_version)
       pass ();
     else
-      fail ("ASSOCNETWORK.constraint_status [BL] set+1 %u != %u", assocnetwork->constraint_status, constraint_status);
-    assocnetwork->constraint_status--;
+      fail ("ASSOCNETWORK.class_version [BS] set+1 %hu != %hu", assocnetwork->class_version, class_version);
+    assocnetwork->class_version--;
   }
   {
-    BITCODE_BL dof;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "dof", &dof, NULL)
-        && dof == assocnetwork->dof)
+    Dwg_ASSOCACTION_Deps* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "deps", &deps, NULL)
+        && deps == assocnetwork->deps)
       pass ();
     else
-      fail ("ASSOCNETWORK.dof [BL] %u != %u", assocnetwork->dof, dof);
-    dof++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "dof", &dof, 0)
-        && dof == assocnetwork->dof)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.dof [BL] set+1 %u != %u", assocnetwork->dof, dof);
-    assocnetwork->dof--;
+      fail ("ASSOCNETWORK.deps [Dwg_ASSOCACTION_Deps*] * %u num_deps", count);
   }
   {
     BITCODE_BL geometry_status;
@@ -25938,19 +26014,19 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     assocnetwork->geometry_status--;
   }
   {
-    BITCODE_B is_body_a_proxy;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "is_body_a_proxy", &is_body_a_proxy, NULL)
-        && is_body_a_proxy == assocnetwork->is_body_a_proxy)
+    BITCODE_BL max_assoc_dep_index;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "max_assoc_dep_index", &max_assoc_dep_index, NULL)
+        && max_assoc_dep_index == assocnetwork->max_assoc_dep_index)
       pass ();
     else
-      fail ("ASSOCNETWORK.is_body_a_proxy [B] " FORMAT_B " != " FORMAT_B "", assocnetwork->is_body_a_proxy, is_body_a_proxy);
-    is_body_a_proxy++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "is_body_a_proxy", &is_body_a_proxy, 0)
-        && is_body_a_proxy == assocnetwork->is_body_a_proxy)
+      fail ("ASSOCNETWORK.max_assoc_dep_index [BL] %u != %u", assocnetwork->max_assoc_dep_index, max_assoc_dep_index);
+    max_assoc_dep_index++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "max_assoc_dep_index", &max_assoc_dep_index, 0)
+        && max_assoc_dep_index == assocnetwork->max_assoc_dep_index)
       pass ();
     else
-      fail ("ASSOCNETWORK.is_body_a_proxy [B] set+1 " FORMAT_B " != " FORMAT_B "", assocnetwork->is_body_a_proxy, is_body_a_proxy);
-    assocnetwork->is_body_a_proxy--;
+      fail ("ASSOCNETWORK.max_assoc_dep_index [BL] set+1 %u != %u", assocnetwork->max_assoc_dep_index, max_assoc_dep_index);
+    assocnetwork->max_assoc_dep_index--;
   }
   {
     BITCODE_BL num_actions;
@@ -25968,35 +26044,85 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     assocnetwork->num_actions--;
   }
   {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_deps", &num_deps, NULL)
+        && num_deps == assocnetwork->num_deps)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_deps [BL] %u != %u", assocnetwork->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_deps", &num_deps, 0)
+        && num_deps == assocnetwork->num_deps)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_deps [BL] set+1 %u != %u", assocnetwork->num_deps, num_deps);
+    assocnetwork->num_deps--;
+  }
+  {
+    BITCODE_BL num_owned_params;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_params", &num_owned_params, NULL)
+        && num_owned_params == assocnetwork->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_owned_params [BL] %u != %u", assocnetwork->num_owned_params, num_owned_params);
+    num_owned_params++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_owned_params", &num_owned_params, 0)
+        && num_owned_params == assocnetwork->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_owned_params [BL] set+1 %u != %u", assocnetwork->num_owned_params, num_owned_params);
+    assocnetwork->num_owned_params--;
+  }
+  {
+    BITCODE_BL num_owned_value_param_names;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
+        && num_owned_value_param_names == assocnetwork->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_owned_value_param_names [BL] %u != %u", assocnetwork->num_owned_value_param_names, num_owned_value_param_names);
+    num_owned_value_param_names++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_owned_value_param_names", &num_owned_value_param_names, 0)
+        && num_owned_value_param_names == assocnetwork->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_owned_value_param_names [BL] set+1 %u != %u", assocnetwork->num_owned_value_param_names, num_owned_value_param_names);
+    assocnetwork->num_owned_value_param_names--;
+  }
+  {
+    BITCODE_H* owned_params;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_params", &count, NULL)
+        && dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "owned_params", &owned_params, NULL)
+        && owned_params == assocnetwork->owned_params)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.owned_params [H*] * %u num_owned_params", count);
+  }
+  {
+    BITCODE_H* owned_value_param_names;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_value_param_names", &count, NULL)
+        && dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "owned_value_param_names", &owned_value_param_names, NULL)
+        && owned_value_param_names == assocnetwork->owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
+  }
+  {
+    BITCODE_H owningnetwork;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "owningnetwork", &owningnetwork, NULL)
+        && !memcmp (&owningnetwork, &assocnetwork->owningnetwork, sizeof (assocnetwork->owningnetwork)))
+        pass ();
+    else
+        fail ("ASSOCNETWORK.owningnetwork [H]");
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "parent", &parent, NULL)
         && !memcmp (&parent, &assocnetwork->parent, sizeof (assocnetwork->parent)))
         pass ();
     else
         fail ("ASSOCNETWORK.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_H readdep;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "readdep", &readdep, NULL)
-        && !memcmp (&readdep, &assocnetwork->readdep, sizeof (assocnetwork->readdep)))
-        pass ();
-    else
-        fail ("ASSOCNETWORK.readdep [H]");
-  }
-  {
-    BITCODE_BL solution_status;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "solution_status", &solution_status, NULL)
-        && solution_status == assocnetwork->solution_status)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.solution_status [BL] %u != %u", assocnetwork->solution_status, solution_status);
-    solution_status++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "solution_status", &solution_status, 0)
-        && solution_status == assocnetwork->solution_status)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.solution_status [BL] set+1 %u != %u", assocnetwork->solution_status, solution_status);
-    assocnetwork->solution_status--;
   }
   {
     BITCODE_BL unknown_assoc;
@@ -26042,14 +26168,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.unknown_n2 [BL] set+1 %u != %u", assocnetwork->unknown_n2, unknown_n2);
     assocnetwork->unknown_n2--;
-  }
-  {
-    BITCODE_H writedep;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &assocnetwork->writedep, sizeof (assocnetwork->writedep)))
-        pass ();
-    else
-        fail ("ASSOCNETWORK.writedep [H]");
   }
   if (failed && (is_class_unstable ("ASSOCNETWORK") || is_class_debugging ("ASSOCNETWORK")))
     {
@@ -26825,19 +26943,19 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
   Dwg_Object_ASSOCPLANESURFACEACTIONBODY *restrict assocplanesurfaceactionbody = obj->tio.object->tio.ASSOCPLANESURFACEACTIONBODY;
   failed = 0;
   {
-    BITCODE_BL aab_status;
-    if (dwg_dynapi_entity_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "aab_status", &aab_status, NULL)
-        && aab_status == assocplanesurfaceactionbody->aab_status)
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocplanesurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCPLANESURFACEACTIONBODY.aab_status [BL] %u != %u", assocplanesurfaceactionbody->aab_status, aab_status);
-    aab_status++;
-    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "aab_status", &aab_status, 0)
-        && aab_status == assocplanesurfaceactionbody->aab_status)
+      fail ("ASSOCPLANESURFACEACTIONBODY.aab_version [BL] %u != %u", assocplanesurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocplanesurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCPLANESURFACEACTIONBODY.aab_status [BL] set+1 %u != %u", assocplanesurfaceactionbody->aab_status, aab_status);
-    assocplanesurfaceactionbody->aab_status--;
+      fail ("ASSOCPLANESURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocplanesurfaceactionbody->aab_version, aab_version);
+    assocplanesurfaceactionbody->aab_version--;
   }
   {
     BITCODE_TV* descriptions;
@@ -27071,19 +27189,19 @@ static int test_ASSOCREVOLVEDSURFACEACTIONBODY (const Dwg_Object *obj)
   Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *restrict assocrevolvedsurfaceactionbody = obj->tio.object->tio.ASSOCREVOLVEDSURFACEACTIONBODY;
   failed = 0;
   {
-    BITCODE_BL aab_status;
-    if (dwg_dynapi_entity_value (assocrevolvedsurfaceactionbody, "ASSOCREVOLVEDSURFACEACTIONBODY", "aab_status", &aab_status, NULL)
-        && aab_status == assocrevolvedsurfaceactionbody->aab_status)
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocrevolvedsurfaceactionbody, "ASSOCREVOLVEDSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocrevolvedsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCREVOLVEDSURFACEACTIONBODY.aab_status [BL] %u != %u", assocrevolvedsurfaceactionbody->aab_status, aab_status);
-    aab_status++;
-    if (dwg_dynapi_entity_set_value (assocrevolvedsurfaceactionbody, "ASSOCREVOLVEDSURFACEACTIONBODY", "aab_status", &aab_status, 0)
-        && aab_status == assocrevolvedsurfaceactionbody->aab_status)
+      fail ("ASSOCREVOLVEDSURFACEACTIONBODY.aab_version [BL] %u != %u", assocrevolvedsurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocrevolvedsurfaceactionbody, "ASSOCREVOLVEDSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocrevolvedsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCREVOLVEDSURFACEACTIONBODY.aab_status [BL] set+1 %u != %u", assocrevolvedsurfaceactionbody->aab_status, aab_status);
-    assocrevolvedsurfaceactionbody->aab_status--;
+      fail ("ASSOCREVOLVEDSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocrevolvedsurfaceactionbody->aab_version, aab_version);
+    assocrevolvedsurfaceactionbody->aab_version--;
   }
   {
     BITCODE_TV* descriptions;
@@ -27317,19 +27435,19 @@ static int test_ASSOCSWEPTSURFACEACTIONBODY (const Dwg_Object *obj)
   Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *restrict assocsweptsurfaceactionbody = obj->tio.object->tio.ASSOCSWEPTSURFACEACTIONBODY;
   failed = 0;
   {
-    BITCODE_BL aab_status;
-    if (dwg_dynapi_entity_value (assocsweptsurfaceactionbody, "ASSOCSWEPTSURFACEACTIONBODY", "aab_status", &aab_status, NULL)
-        && aab_status == assocsweptsurfaceactionbody->aab_status)
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocsweptsurfaceactionbody, "ASSOCSWEPTSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocsweptsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCSWEPTSURFACEACTIONBODY.aab_status [BL] %u != %u", assocsweptsurfaceactionbody->aab_status, aab_status);
-    aab_status++;
-    if (dwg_dynapi_entity_set_value (assocsweptsurfaceactionbody, "ASSOCSWEPTSURFACEACTIONBODY", "aab_status", &aab_status, 0)
-        && aab_status == assocsweptsurfaceactionbody->aab_status)
+      fail ("ASSOCSWEPTSURFACEACTIONBODY.aab_version [BL] %u != %u", assocsweptsurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocsweptsurfaceactionbody, "ASSOCSWEPTSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocsweptsurfaceactionbody->aab_version)
       pass ();
     else
-      fail ("ASSOCSWEPTSURFACEACTIONBODY.aab_status [BL] set+1 %u != %u", assocsweptsurfaceactionbody->aab_status, aab_status);
-    assocsweptsurfaceactionbody->aab_status--;
+      fail ("ASSOCSWEPTSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocsweptsurfaceactionbody->aab_version, aab_version);
+    assocsweptsurfaceactionbody->aab_version--;
   }
   {
     BITCODE_TV* descriptions;
@@ -33136,36 +33254,6 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
         pass ();
     else
         fail ("LAYER_INDEX.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_BL timestamp1;
-    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "timestamp1", &timestamp1, NULL)
-        && timestamp1 == layer_index->timestamp1)
-      pass ();
-    else
-      fail ("LAYER_INDEX.timestamp1 [BL] %u != %u", layer_index->timestamp1, timestamp1);
-    timestamp1++;
-    if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "timestamp1", &timestamp1, 0)
-        && timestamp1 == layer_index->timestamp1)
-      pass ();
-    else
-      fail ("LAYER_INDEX.timestamp1 [BL] set+1 %u != %u", layer_index->timestamp1, timestamp1);
-    layer_index->timestamp1--;
-  }
-  {
-    BITCODE_BL timestamp2;
-    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "timestamp2", &timestamp2, NULL)
-        && timestamp2 == layer_index->timestamp2)
-      pass ();
-    else
-      fail ("LAYER_INDEX.timestamp2 [BL] %u != %u", layer_index->timestamp2, timestamp2);
-    timestamp2++;
-    if (dwg_dynapi_entity_set_value (layer_index, "LAYER_INDEX", "timestamp2", &timestamp2, 0)
-        && timestamp2 == layer_index->timestamp2)
-      pass ();
-    else
-      fail ("LAYER_INDEX.timestamp2 [BL] set+1 %u != %u", layer_index->timestamp2, timestamp2);
-    layer_index->timestamp2--;
   }
   if (failed && (is_class_unstable ("LAYER_INDEX") || is_class_debugging ("LAYER_INDEX")))
     {
@@ -47503,6 +47591,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_ACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_ASSOCACTION_Deps);
+  size2 = dwg_dynapi_fields_size ("ASSOCACTION_Deps");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_ASSOCACTION_Deps): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCACTION_Deps\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_AcDs_Data);

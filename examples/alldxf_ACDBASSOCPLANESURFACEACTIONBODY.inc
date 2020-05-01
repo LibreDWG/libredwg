@@ -7,7 +7,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPLANESURFACEACTIONBODY_481[] =
   //{ 5, "50C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "50B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "aab_status", 2, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "aab_version", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocParamBasedActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 90, "0", NULL, 0, BITS_UNKNOWN, "pab_status", 8, {-1,-1,-1,-1,-1} },
     { 90, "0", NULL, 0, BITS_UNKNOWN, "pab_l2", 8, {-1,-1,-1,-1,-1} },

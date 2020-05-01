@@ -923,7 +923,8 @@ match_PLOTSETTINGS (const char *restrict filename,
   //const Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
   MATCH_OBJECT (PLOTSETTINGS, page_setup_name, 1);
   MATCH_OBJECT (PLOTSETTINGS, printer_cfg_file, 2);
-  MATCH_OBJECT (PLOTSETTINGS, paper_size, 4);
+  MATCH_OBJECT (PLOTSETTINGS, paper_size,3);
+  MATCH_OBJECT (PLOTSETTINGS, canonical_media_name, 4);
   return found;
 }
 
@@ -933,8 +934,8 @@ match_ASSOCACTION (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (ASSOCACTION, body.evaluatorid, 0);
-  MATCH_OBJECT (ASSOCACTION, body.expression, 0);
+  //MATCH_OBJECT (ASSOCACTION, body.evaluatorid, 0);
+  //MATCH_OBJECT (ASSOCACTION, body.expression, 0);
   return found;
 }
 static int

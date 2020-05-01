@@ -66,18 +66,26 @@ if (0) {
 }
 
 my @ASSOCACTION_fields =
-  ( 90 => 'solution_status',
+  ( 90 => 'class_version',
     90 => 'geometry_status',
-    330 => 'readdep',
-    360 => 'writedep',
-    90 => 'constraint_status',
-    90 => 'dof',
-    90 => 'is_body_a_proxy'
+    330 => 'owningnetwork',
+    360 => 'actionbody',
+    90 => 'action_index',
+    90 => 'max_assoc_dep_index',
+    90 => 'num_deps',
+    360 => 'dep',
+    # class_version > 1:
+    90 => '', # 0
+    90 => 'num_owned_params',
+    360 => 'owned_params',
+    90 => '', # 0
+    90 => 'num_owned_value_params',
+    360 => 'owned_value_params',
   );
 
 my @AcDbAssocPathBasedSurfaceActionBody =
   (100 => 'AcDbAssocActionBody',
-    90 => 'aab_status',
+    90 => 'aab_version',
     100 => 'AcDbAssocParamBasedActionBody',
     90 => 'pab_status',
     90 => 'pab_l2',
@@ -385,7 +393,7 @@ my $known = {
     90 => 'depbodyid',
     ],
   ACDBASSOCALIGNEDDIMACTIONBODY => [
-    90 => 'aab_status',
+    90 => 'aab_version',
     #100 => 'AcDbAssocParamBasedActionBody',
     90 => 'pab_status',
     90 => 'pab_l2',
