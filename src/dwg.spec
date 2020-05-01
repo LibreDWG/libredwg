@@ -4052,28 +4052,22 @@ DWG_OBJECT_END
 
 //pg.144
 DWG_OBJECT (LAYER_INDEX)
-
   SUBCLASS (AcDbLayerIndex)
-  DXF {
-    VALUE_BL (1.0 * FIELD_VALUE (timestamp1), 40);
-    VALUE_BL (1.0 * FIELD_VALUE (timestamp2), 40);
-  } else {
-    FIELD_BL (timestamp1, 40);
-    FIELD_BL (timestamp2, 40);
-  }
   FIELD_BL (num_entries, 0);
   VALUEOUTOFBOUNDS (num_entries, 20000)
   REPEAT (num_entries, entries, Dwg_LAYER_entry)
   REPEAT_BLOCK
       SUB_FIELD_BL (entries[rcount1], numlayers, 0);
       SUB_FIELD_T (entries[rcount1], name, 8);
-      SUB_FIELD_HANDLE (entries[rcount1], handle, 5, 0);
+      SUB_FIELD_HANDLE (entries[rcount1], handle, 5, 360);
+      DXF {
+        SUB_FIELD_BL (entries[rcount1], numlayers, 90);
+      }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (entries)
   END_REPEAT (entries)
 
   START_OBJECT_HANDLE_STREAM;
-
 DWG_OBJECT_END
 
 //pg.145

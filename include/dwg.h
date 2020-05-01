@@ -3898,9 +3898,6 @@ typedef struct _dwg_LAYER_entry
 typedef struct _dwg_object_LAYER_INDEX
 {
   struct _dwg_object_object *parent;
-
-  BITCODE_BL timestamp1;
-  BITCODE_BL timestamp2;
   BITCODE_BL num_entries;
   Dwg_LAYER_entry* entries;
 } Dwg_Object_LAYER_INDEX;
