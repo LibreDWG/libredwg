@@ -2989,18 +2989,13 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (strEQc (key, "file_ID_string"))
         {
           unsigned long slen;
-#if 0
           char *s = json_binary (dat, tokens, key, &slen);
-#else
-          char *s = json_string (dat, tokens);
-          slen = strlen (s);
-#endif
           JSON_TOKENS_CHECK_OVERFLOW_ERR
-          if (slen == 12)
+          if (slen == 11)
             memcpy (&_obj->file_ID_string, s, 12);
           else
             {
-              LOG_ERROR ("Invalid R2004_Header.file_ID_string fixed")
+              LOG_ERROR ("Invalid R2004_Header.file_ID_string len %lu fixed", slen)
               memcpy (&_obj->file_ID_string, "AcFssFcAJMB\0", 12);
             }
           LOG_TRACE ("file_ID_string: \"%.*s\"\n", 12, _obj->file_ID_string)
