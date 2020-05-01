@@ -626,7 +626,7 @@ match_TOLERANCE (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  MATCH_ENTITY (TOLERANCE, text_string, 1);
+  MATCH_ENTITY (TOLERANCE, text_value, 1);
   return found;
 }
 
@@ -723,7 +723,7 @@ match_TABLE (const char *restrict filename, const Dwg_Object *restrict obj)
     {
       if (_obj->cells[i].type == 1)
         {
-          MATCH_ENTITY (TABLE, cells[i].text_string, 1);
+          MATCH_ENTITY (TABLE, cells[i].text_value, 1);
         }
       else if (_obj->cells[i].type == 2
                && _obj->cells[i].additional_data_flag == 1)

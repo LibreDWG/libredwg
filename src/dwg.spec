@@ -5176,7 +5176,7 @@ DWG_ENTITY (TABLE)
   
         if (FIELD_VALUE (cells[rcount1].type) == 1)
           { /* text cell */
-            SUB_FIELD_T (cells[rcount1],text_string, 1);
+            SUB_FIELD_T (cells[rcount1],text_value, 1);
           }
         if (FIELD_VALUE (cells[rcount1].type) == 2)
           { /* block cell */

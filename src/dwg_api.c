@@ -11079,9 +11079,9 @@ dwg_ent_tolerance_set_text_string (dwg_ent_tolerance *restrict tol,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        tol->text_string = (char *)bit_utf8_to_TU ((char *)string);
+        tol->text_value = (char *)bit_utf8_to_TU ((char *)string);
       else
-        tol->text_string = (char *)string;
+        tol->text_value = (char *)string;
     }
   else
     {
@@ -11100,9 +11100,9 @@ dwg_ent_tolerance_get_text_string (const dwg_ent_tolerance *restrict tol,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)tol->text_string);
+        return bit_convert_TU ((BITCODE_TU)tol->text_value);
       else
-        return tol->text_string;
+        return tol->text_value;
     }
   else
     {

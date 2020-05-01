@@ -10441,8 +10441,8 @@ BL,	DXF 175
 BL,	DXF 176
 @item rotation_value
 BD,	DXF 145
-@item text_string
-TV,	DXF 1
+@item text_value
+T,	DXF 1
 @item block_scale
 BD,	DXF 144
 @item additional_data_flag

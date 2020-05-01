@@ -8866,7 +8866,7 @@ static const Dwg_DYNAPI_field _dwg_TABLE_Cell_fields[] = {
     0,0,0, 176 },
   { "rotation_value",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_TABLE_Cell, rotation_value),
     0,0,0, 145 },
-  { "text_string",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_TABLE_Cell, text_string),
+  { "text_value",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_TABLE_Cell, text_value),
     1,1,1, 1 },
   { "block_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_TABLE_Cell, block_scale),
     0,0,0, 144 },

@@ -3135,7 +3135,7 @@ typedef struct _dwg_TABLE_Cell
   BITCODE_BL merged_width_flag;
   BITCODE_BL merged_height_flag;
   BITCODE_BD rotation_value;
-  BITCODE_TV text_string;
+  BITCODE_T text_value;
   BITCODE_BD block_scale;
   BITCODE_B additional_data_flag;
   BITCODE_BS attr_def_index;
@@ -7214,7 +7214,7 @@ EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
                                           const Dwg_Object *restrict obj);
 
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
-EXPORT Dwg_Version_Type dwg_version_as (const char *);
+EXPORT Dwg_Version_Type dwg_version_as (const char *version);
 EXPORT void dwg_errstrings (int error);
 
 /* The old color.index 0-256 */

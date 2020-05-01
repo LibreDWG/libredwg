@@ -18,21 +18,22 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 WARN_CFLAGS = @WARN_CFLAGS@
-AM_CFLAGS  = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD      = $(top_builddir)/src/libredwg.la -lm
+AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
+LDADD       = $(top_builddir)/src/libredwg.la -lm
 
-check_PROGRAMS = load_dwg dwg2svg2
-EXTRA_PROGRAMS = unknown bd bits
+check_PROGRAMS   = load_dwg dwg2svg2
+EXTRA_PROGRAMS   = unknown bd bits
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 unknown_SOURCES  = unknown.c
 # alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc bd-unknown.inc
-unknown_LDADD  = $(top_builddir)/src/bits.lo $(top_builddir)/src/common.lo
-bd_SOURCE  = bd.c
-bd_LDADD  = $(top_builddir)/src/bits.lo
-bits_SOURCE  = bits.c
-bits_LDADD  = $(top_builddir)/src/bits.lo
+unknown_LDADD    = $(top_builddir)/src/libredwg.la \
+                   $(top_builddir)/src/bits.lo $(top_builddir)/src/common.lo
+bd_SOURCE        = bd.c
+bd_LDADD         = $(top_builddir)/src/bits.lo
+bits_SOURCE      = bits.c
+bits_LDADD       = $(top_builddir)/src/bits.lo
 all: $(check_PROGRAMS)
 
 .PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov

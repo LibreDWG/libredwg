@@ -180,7 +180,7 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, merged_width_flag, BL);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, merged_height_flag, BL);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, rotation_value, BD);
-        CHK_SUBCLASS_UTF8TEXT (cells[i], TABLE_Cell, text_string);
+        CHK_SUBCLASS_UTF8TEXT (cells[i], TABLE_Cell, text_value);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, block_scale, BD);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, additional_data_flag, B);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, attr_def_index, BS);
