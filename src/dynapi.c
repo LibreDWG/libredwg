@@ -43,72 +43,73 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "3DSOLID" "\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
   "ARC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 2 */
   "ARC_DIMENSION" "\0\0\0\0\0",	/* 3 */
-  "ATTDEF" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
-  "ATTRIB" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
-  "BLOCK" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
-  "BODY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
-  "CAMERA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 8 */
-  "CIRCLE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 9 */
-  "DIMENSION_ALIGNED" "\0",	/* 10 */
-  "DIMENSION_ANG2LN" "\0\0",	/* 11 */
-  "DIMENSION_ANG3PT" "\0\0",	/* 12 */
-  "DIMENSION_DIAMETER" "",	/* 13 */
-  "DIMENSION_LINEAR" "\0\0",	/* 14 */
-  "DIMENSION_ORDINATE" "",	/* 15 */
-  "DIMENSION_RADIUS" "\0\0",	/* 16 */
-  "ELLIPSE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 17 */
-  "ENDBLK" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
-  "EXTRUDEDSURFACE" "\0\0\0",	/* 19 */
-  "GEOPOSITIONMARKER" "\0",	/* 20 */
-  "HATCH" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 21 */
-  "HELIX" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
-  "IMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
-  "INSERT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
-  "LEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
-  "LIGHT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
-  "LINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
-  "LOFTEDSURFACE" "\0\0\0\0\0",	/* 28 */
-  "LWPOLYLINE" "\0\0\0\0\0\0\0\0",	/* 29 */
-  "MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "MINSERT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
-  "MLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "MTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "MULTILEADER" "\0\0\0\0\0\0\0",	/* 34 */
-  "NAVISWORKSMODEL" "\0\0\0",	/* 35 */
-  "NURBSURFACE" "\0\0\0\0\0\0\0",	/* 36 */
-  "OLE2FRAME" "\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0",	/* 38 */
-  "PLANESURFACE" "\0\0\0\0\0\0",	/* 39 */
-  "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
-  "POLYLINE_2D" "\0\0\0\0\0\0\0",	/* 41 */
-  "POLYLINE_3D" "\0\0\0\0\0\0\0",	/* 42 */
-  "POLYLINE_MESH" "\0\0\0\0\0",	/* 43 */
-  "POLYLINE_PFACE" "\0\0\0\0",	/* 44 */
-  "PROXY_ENTITY" "\0\0\0\0\0\0",	/* 45 */
-  "PROXY_LWPOLYLINE" "\0\0",	/* 46 */
-  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
-  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
-  "REVOLVEDSURFACE" "\0\0\0",	/* 49 */
-  "SECTIONOBJECT" "\0\0\0\0\0",	/* 50 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 55 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 61 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 62 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 64 */
-  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 65 */
-  "VERTEX_PFACE_FACE" "\0",	/* 66 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "ATEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
+  "ATTDEF" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
+  "ATTRIB" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
+  "BLOCK" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
+  "BODY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 8 */
+  "CAMERA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 9 */
+  "CIRCLE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 10 */
+  "DIMENSION_ALIGNED" "\0",	/* 11 */
+  "DIMENSION_ANG2LN" "\0\0",	/* 12 */
+  "DIMENSION_ANG3PT" "\0\0",	/* 13 */
+  "DIMENSION_DIAMETER" "",	/* 14 */
+  "DIMENSION_LINEAR" "\0\0",	/* 15 */
+  "DIMENSION_ORDINATE" "",	/* 16 */
+  "DIMENSION_RADIUS" "\0\0",	/* 17 */
+  "ELLIPSE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
+  "ENDBLK" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 19 */
+  "EXTRUDEDSURFACE" "\0\0\0",	/* 20 */
+  "GEOPOSITIONMARKER" "\0",	/* 21 */
+  "HATCH" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
+  "HELIX" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
+  "IMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
+  "INSERT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
+  "LEADER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
+  "LIGHT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
+  "LINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
+  "LOFTEDSURFACE" "\0\0\0\0\0",	/* 29 */
+  "LWPOLYLINE" "\0\0\0\0\0\0\0\0",	/* 30 */
+  "MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "MINSERT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
+  "MLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
+  "MTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
+  "MULTILEADER" "\0\0\0\0\0\0\0",	/* 35 */
+  "NAVISWORKSMODEL" "\0\0\0",	/* 36 */
+  "NURBSURFACE" "\0\0\0\0\0\0\0",	/* 37 */
+  "OLE2FRAME" "\0\0\0\0\0\0\0\0\0",	/* 38 */
+  "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0",	/* 39 */
+  "PLANESURFACE" "\0\0\0\0\0\0",	/* 40 */
+  "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
+  "POLYLINE_2D" "\0\0\0\0\0\0\0",	/* 42 */
+  "POLYLINE_3D" "\0\0\0\0\0\0\0",	/* 43 */
+  "POLYLINE_MESH" "\0\0\0\0\0",	/* 44 */
+  "POLYLINE_PFACE" "\0\0\0\0",	/* 45 */
+  "PROXY_ENTITY" "\0\0\0\0\0\0",	/* 46 */
+  "PROXY_LWPOLYLINE" "\0\0",	/* 47 */
+  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "REVOLVEDSURFACE" "\0\0\0",	/* 50 */
+  "SECTIONOBJECT" "\0\0\0\0\0",	/* 51 */
+  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 56 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 59 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 62 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 63 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 65 */
+  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 66 */
+  "VERTEX_PFACE_FACE" "\0",	/* 67 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 68 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
@@ -1094,6 +1095,68 @@ static const Dwg_DYNAPI_field _dwg_ARC_DIMENSION_fields[] = {
     0,0,0, 40 },
   { "flag2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ARC_DIMENSION, flag2),
     0,0,0, 71 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_ATEXT: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ATEXT_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_ATEXT, parent),
+    1,1,0, 0 },
+  { "text_size",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, text_size),
+    0,0,0, 42 },
+  { "xscale",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, xscale),
+    0,0,0, 41 },
+  { "char_spacing",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, char_spacing),
+    0,0,0, 43 },
+  { "style",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATEXT, style),
+    1,1,1, 7 },
+  { "t2",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATEXT, t2),
+    1,1,1, 2 },
+  { "t3",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATEXT, t3),
+    1,1,1, 3 },
+  { "text_value",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATEXT, text_value),
+    1,1,1, 1 },
+  { "offset_from_arc",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, offset_from_arc),
+    0,0,0, 44 },
+  { "right_offset",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, right_offset),
+    0,0,0, 45 },
+  { "left_offset",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, left_offset),
+    0,0,0, 46 },
+  { "center",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_ATEXT, center),
+    1,0,0, 10 },
+  { "radius",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_ATEXT, radius),
+    0,0,0, 40 },
+  { "start_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_ATEXT, start_angle),
+    0,0,0, 50 },
+  { "end_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_ATEXT, end_angle),
+    0,0,0, 51 },
+  { "extrusion",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_ATEXT, extrusion),
+    1,0,0, 210 },
+  { "color_index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_ATEXT, color_index),
+    0,0,0, 0 },
+  { "is_reverse",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, is_reverse),
+    0,0,0, 70 },
+  { "text_direction",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, text_direction),
+    0,0,0, 71 },
+  { "alignment",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, alignment),
+    0,0,0, 72 },
+  { "text_position",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, text_position),
+    0,0,0, 73 },
+  { "font_19",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, font_19),
+    0,0,0, 74 },
+  { "bs2",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, bs2),
+    0,0,0, 75 },
+  { "is_underlined",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, is_underlined),
+    0,0,0, 76 },
+  { "bs1",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, bs1),
+    0,0,0, 77 },
+  { "font",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, font),
+    0,0,0, 78 },
+  { "is_shx",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, is_shx),
+    0,0,0, 79 },
+  { "wizard_flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATEXT, wizard_flag),
+    0,0,0, 280 },
+  { "arc_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_ATEXT, arc_handle),
+    1,0,0, 330 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_ATTDEF: (sorted by offset) */
@@ -5697,9 +5760,9 @@ static const Dwg_DYNAPI_field _dwg_LEADEROBJECTCONTEXTDATA_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LIGHTLIST_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LIGHTLIST, parent),
     1,1,0, 0 },
-  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LIGHTLIST, class_version),
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_LIGHTLIST, class_version),
     0,0,0, 90 },
-  { "num_lights",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LIGHTLIST, num_lights),
+  { "num_lights",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_LIGHTLIST, num_lights),
     0,0,0, 90 },
   { "lights",	"Dwg_LIGHTLIST_light*", sizeof (Dwg_LIGHTLIST_light*),  OFF (struct _dwg_object_LIGHTLIST, lights),
     1,1,0, 0 },
@@ -9289,22 +9352,22 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "APPID", DWG_TYPE_APPID /*(67)*/, _dwg_APPID_fields, sizeof (struct _dwg_object_APPID) },	/* 15 */
   { "APPID_CONTROL", DWG_TYPE_APPID_CONTROL /*(66)*/, _dwg_APPID_CONTROL_fields, sizeof (struct _dwg_object_APPID_CONTROL) },	/* 16 */
   { "ARC", DWG_TYPE_ARC /*(17)*/, _dwg_ARC_fields, sizeof (struct _dwg_entity_ARC) },	/* 17 */
-  { "ARCALIGNEDTEXT", DWG_TYPE_ARCALIGNEDTEXT /*(525)*/, NULL, 0 },	/* 18 */
-  { "ARC_DIMENSION", DWG_TYPE_ARC_DIMENSION /*(526)*/, _dwg_ARC_DIMENSION_fields, sizeof (struct _dwg_entity_ARC_DIMENSION) },	/* 19 */
-  { "ASSOC2DCONSTRAINTGROUP", DWG_TYPE_ASSOC2DCONSTRAINTGROUP /*(527)*/, _dwg_ASSOC2DCONSTRAINTGROUP_fields, sizeof (struct _dwg_object_ASSOC2DCONSTRAINTGROUP) },	/* 20 */
-  { "ASSOCACTION", DWG_TYPE_ASSOCACTION /*(528)*/, _dwg_ASSOCACTION_fields, sizeof (struct _dwg_object_ASSOCACTION) },	/* 21 */
-  { "ASSOCALIGNEDDIMACTIONBODY", DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY /*(529)*/, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY) },	/* 22 */
-  { "ASSOCDEPENDENCY", DWG_TYPE_ASSOCDEPENDENCY /*(530)*/, _dwg_ASSOCDEPENDENCY_fields, sizeof (struct _dwg_object_ASSOCDEPENDENCY) },	/* 23 */
-  { "ASSOCEXTRUDEDSURFACEACTIONBODY", DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY /*(531)*/, _dwg_ASSOCEXTRUDEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY) },	/* 24 */
-  { "ASSOCGEOMDEPENDENCY", DWG_TYPE_ASSOCGEOMDEPENDENCY /*(532)*/, _dwg_ASSOCGEOMDEPENDENCY_fields, sizeof (struct _dwg_object_ASSOCGEOMDEPENDENCY) },	/* 25 */
-  { "ASSOCLOFTEDSURFACEACTIONBODY", DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY /*(533)*/, _dwg_ASSOCLOFTEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY) },	/* 26 */
-  { "ASSOCNETWORK", DWG_TYPE_ASSOCNETWORK /*(534)*/, _dwg_ASSOCNETWORK_fields, sizeof (struct _dwg_object_ASSOCNETWORK) },	/* 27 */
-  { "ASSOCOSNAPPOINTREFACTIONPARAM", DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM /*(535)*/, _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM) },	/* 28 */
-  { "ASSOCPERSSUBENTMANAGER", DWG_TYPE_ASSOCPERSSUBENTMANAGER /*(536)*/, _dwg_ASSOCPERSSUBENTMANAGER_fields, sizeof (struct _dwg_object_ASSOCPERSSUBENTMANAGER) },	/* 29 */
-  { "ASSOCPLANESURFACEACTIONBODY", DWG_TYPE_ASSOCPLANESURFACEACTIONBODY /*(537)*/, _dwg_ASSOCPLANESURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCPLANESURFACEACTIONBODY) },	/* 30 */
-  { "ASSOCREVOLVEDSURFACEACTIONBODY", DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY /*(538)*/, _dwg_ASSOCREVOLVEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY) },	/* 31 */
-  { "ASSOCSWEPTSURFACEACTIONBODY", DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY /*(539)*/, _dwg_ASSOCSWEPTSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY) },	/* 32 */
-  { "ASSOCVERTEXACTIONPARAM", DWG_TYPE_ASSOCVERTEXACTIONPARAM /*(540)*/, _dwg_ASSOCVERTEXACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCVERTEXACTIONPARAM) },	/* 33 */
+  { "ARC_DIMENSION", DWG_TYPE_ARC_DIMENSION /*(525)*/, _dwg_ARC_DIMENSION_fields, sizeof (struct _dwg_entity_ARC_DIMENSION) },	/* 18 */
+  { "ASSOC2DCONSTRAINTGROUP", DWG_TYPE_ASSOC2DCONSTRAINTGROUP /*(526)*/, _dwg_ASSOC2DCONSTRAINTGROUP_fields, sizeof (struct _dwg_object_ASSOC2DCONSTRAINTGROUP) },	/* 19 */
+  { "ASSOCACTION", DWG_TYPE_ASSOCACTION /*(527)*/, _dwg_ASSOCACTION_fields, sizeof (struct _dwg_object_ASSOCACTION) },	/* 20 */
+  { "ASSOCALIGNEDDIMACTIONBODY", DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY /*(528)*/, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY) },	/* 21 */
+  { "ASSOCDEPENDENCY", DWG_TYPE_ASSOCDEPENDENCY /*(529)*/, _dwg_ASSOCDEPENDENCY_fields, sizeof (struct _dwg_object_ASSOCDEPENDENCY) },	/* 22 */
+  { "ASSOCEXTRUDEDSURFACEACTIONBODY", DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY /*(530)*/, _dwg_ASSOCEXTRUDEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY) },	/* 23 */
+  { "ASSOCGEOMDEPENDENCY", DWG_TYPE_ASSOCGEOMDEPENDENCY /*(531)*/, _dwg_ASSOCGEOMDEPENDENCY_fields, sizeof (struct _dwg_object_ASSOCGEOMDEPENDENCY) },	/* 24 */
+  { "ASSOCLOFTEDSURFACEACTIONBODY", DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY /*(532)*/, _dwg_ASSOCLOFTEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY) },	/* 25 */
+  { "ASSOCNETWORK", DWG_TYPE_ASSOCNETWORK /*(533)*/, _dwg_ASSOCNETWORK_fields, sizeof (struct _dwg_object_ASSOCNETWORK) },	/* 26 */
+  { "ASSOCOSNAPPOINTREFACTIONPARAM", DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM /*(534)*/, _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM) },	/* 27 */
+  { "ASSOCPERSSUBENTMANAGER", DWG_TYPE_ASSOCPERSSUBENTMANAGER /*(535)*/, _dwg_ASSOCPERSSUBENTMANAGER_fields, sizeof (struct _dwg_object_ASSOCPERSSUBENTMANAGER) },	/* 28 */
+  { "ASSOCPLANESURFACEACTIONBODY", DWG_TYPE_ASSOCPLANESURFACEACTIONBODY /*(536)*/, _dwg_ASSOCPLANESURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCPLANESURFACEACTIONBODY) },	/* 29 */
+  { "ASSOCREVOLVEDSURFACEACTIONBODY", DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY /*(537)*/, _dwg_ASSOCREVOLVEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY) },	/* 30 */
+  { "ASSOCSWEPTSURFACEACTIONBODY", DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY /*(538)*/, _dwg_ASSOCSWEPTSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY) },	/* 31 */
+  { "ASSOCVERTEXACTIONPARAM", DWG_TYPE_ASSOCVERTEXACTIONPARAM /*(539)*/, _dwg_ASSOCVERTEXACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCVERTEXACTIONPARAM) },	/* 32 */
+  { "ATEXT", DWG_TYPE_ATEXT /*(540)*/, _dwg_ATEXT_fields, sizeof (struct _dwg_entity_ATEXT) },	/* 33 */
   { "ATTDEF", DWG_TYPE_ATTDEF /*(3)*/, _dwg_ATTDEF_fields, sizeof (struct _dwg_entity_ATTDEF) },	/* 34 */
   { "ATTRIB", DWG_TYPE_ATTRIB /*(2)*/, _dwg_ATTRIB_fields, sizeof (struct _dwg_entity_ATTRIB) },	/* 35 */
   { "BACKGROUND", DWG_TYPE_BACKGROUND /*(541)*/, NULL, sizeof (struct _dwg_object_BACKGROUND) },	/* 36 */

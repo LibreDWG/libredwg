@@ -506,6 +506,7 @@ typedef struct _dwg_entity_LIGHT                  dwg_ent_light;
 typedef struct _dwg_entity_UNDERLAY               dwg_ent_underlay;
 typedef struct _dwg_entity_WIPEOUT                dwg_ent_wipeout;
 typedef struct _dwg_entity_ARC_DIMENSION          dwg_ent_arc_dimension;
+typedef struct _dwg_entity_ATEXT                  dwg_ent_atext;
 typedef struct _dwg_entity_NURBSURFACE            dwg_ent_nurbsurface;
 typedef struct _dwg_entity_PLANESURFACE           dwg_ent_planesurface;
 typedef struct _dwg_entity_EXTRUDEDSURFACE        dwg_ent_extrudedsurface;
@@ -611,7 +612,6 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER          dwg_obj_assocperssube
 typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY  dwg_obj_assocrevolvedsurfaceactionbody;
 typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY     dwg_obj_assocsweptsurfaceactionbody;
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM          dwg_obj_assocvertexactionparam;
-typedef struct _dwg_object_ATEXT                           dwg_obj_atext;
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA         dwg_obj_blkrefobjectcontextdata;
 typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
 typedef struct _dwg_object_CSACDOCUMENTOPTIONS             dwg_obj_csacdocumentoptions;
@@ -731,6 +731,7 @@ DWG_GETALL_ENTITY_DECL (UNDERLAY)
 DWG_GETALL_ENTITY_DECL (WIPEOUT)
 // DEBUG_CLASSES
 DWG_GETALL_ENTITY_DECL (ARC_DIMENSION)
+DWG_GETALL_ENTITY_DECL (ATEXT)
 DWG_GETALL_ENTITY_DECL (EXTRUDEDSURFACE)
 DWG_GETALL_ENTITY_DECL (GEOPOSITIONMARKER)
 DWG_GETALL_ENTITY_DECL (LOFTEDSURFACE)
@@ -831,7 +832,6 @@ DWG_GETALL_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (ASSOCPERSSUBENTMANAGER)
 DWG_GETALL_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCSWEPTSURFACEACTIONBODY)
-DWG_GETALL_OBJECT_DECL (ATEXT)
 DWG_GETALL_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DATALINK)
@@ -950,6 +950,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (UNDERLAY)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT)
 // DEBUG_CLASSES
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ATEXT)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (EXTRUDEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (GEOPOSITIONMARKER)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LOFTEDSURFACE)
@@ -1046,7 +1047,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPERSSUBENTMANAGER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCSWEPTSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ATEXT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CELLSTYLEMAP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
@@ -1226,6 +1226,7 @@ dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
 dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 #ifdef DEBUG_CLASSES
 dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
+dwg_get_ENTITY_DECL (ent_atext, ATEXT)
 dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
 dwg_get_OBJECT_DECL (ent_geopositionmarker, GEOPOSITIONMARKER);
 dwg_get_OBJECT_DECL (ent_loftedsurface, LOFTEDSURFACE);
@@ -1313,7 +1314,6 @@ dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
 dwg_get_OBJECT_DECL (obj_assocnetwork, ASSOCNETWORK);
 dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
 dwg_get_OBJECT_DECL (obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER);
-dwg_get_OBJECT_DECL (obj_atext, ATEXT)
 dwg_get_OBJECT_DECL (obj_blkrefobjectcontextdata, BLKREFOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_datalink, DATALINK);

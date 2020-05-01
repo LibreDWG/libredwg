@@ -6866,8 +6866,8 @@ DWG_ENTITY_END
 DWG_OBJECT (LIGHTLIST)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbLightList)
-  FIELD_BS (class_version, 90)
-  FIELD_BS (num_lights, 90)
+  FIELD_BL (class_version, 90);
+  FIELD_BL (num_lights, 90);
   REPEAT (num_lights, lights, Dwg_LIGHTLIST_light)
   REPEAT_BLOCK
       SUB_FIELD_HANDLE (lights[rcount1],handle, 5, 5)
@@ -6986,6 +6986,8 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   else
     FIELD_B (has_predefined, 290); // when RENDERSETTINGS does not handle it
 DWG_OBJECT_END
+
+/*=============================================================================*/
 
 /* In work area:
    The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
@@ -8422,15 +8424,15 @@ DWG_OBJECT (RENDERENTRY)
   FIELD_BL (display_index, 90);
 DWG_OBJECT_END
 
-// r2000+ expresstools. abbrev. ATEXT
-DWG_OBJECT (ATEXT)
+// r2000+ expresstools. ARCALIGNEDTEXT
+DWG_ENTITY (ATEXT)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbArcAlignedText);
   DXF {
-    FIELD_T (text_string, 1);
+    FIELD_T (text_value, 1);
     FIELD_T (t2, 2);
     FIELD_T (t3, 3);
-    FIELD_HANDLE_NAME (textstyle, 7);
+    FIELD_T (style, 7); // as name
     FIELD_3BD (center, 10);
     FIELD_BD (radius, 40);
     FIELD_BD (xscale, 41);
@@ -8452,17 +8454,17 @@ DWG_OBJECT (ATEXT)
     FIELD_BS (font, 78);
     FIELD_BS (is_shx, 79);
     FIELD_BL (color.index, 90);
-    FIELD_3BD (normal, 210);
+    FIELD_3BD (extrusion, 210);
     FIELD_B (wizard_flag, 280);
     FIELD_HANDLE (arc_handle, 5, 330);
   } else { // DWG
     FIELD_D2T (text_size, 42);
     FIELD_D2T (xscale, 41);
     FIELD_D2T (char_spacing, 43);
-    FIELD_HANDLE_NAME (textstyle, 7);
+    FIELD_T (style, 7);
     FIELD_T (t2, 2);
     FIELD_T (t3, 3);
-    FIELD_T (text_string, 1);
+    FIELD_T (text_value, 1);
     FIELD_D2T (offset_from_arc, 44);
     FIELD_D2T (right_offset, 45);
     FIELD_D2T (left_offset, 46);
@@ -8470,8 +8472,8 @@ DWG_OBJECT (ATEXT)
     FIELD_BD (radius, 40);
     FIELD_BD (start_angle, 50);
     FIELD_BD (end_angle, 51);
-    FIELD_3BD (normal, );
-    FIELD_BL (color.index, );
+    FIELD_3BD (extrusion, 210);
+    FIELD_BL (color_index, 0);
     FIELD_BS (bs1, 77);
     FIELD_BS (font, 78);
     FIELD_BS (is_shx, 79);
@@ -8485,9 +8487,10 @@ DWG_OBJECT (ATEXT)
     FIELD_BS (text_direction, 71);
     FIELD_HANDLE (arc_handle, 5, 330);
   }
-DWG_OBJECT_END
+DWG_ENTITY_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */
+/*=============================================================================*/
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
 

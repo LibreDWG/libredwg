@@ -182,6 +182,9 @@ typedef BITCODE_DOUBLE BITCODE_BD;
 #define FORMAT_BD "%f"
 typedef BITCODE_RC BITCODE_4BITS;
 #define FORMAT_4BITS "%1x"
+/* double stored as string. ATEXT */
+typedef BITCODE_TV BITCODE_D2T;
+#define FORMAT_D2T "%s"
 
 /* TODO: implement version dependent string parsing */
 /* encode codepages/utf8 */
@@ -4160,8 +4163,8 @@ typedef struct _dwg_LIGHTLIST_light
 typedef struct _dwg_object_LIGHTLIST
 {
   struct _dwg_object_object *parent;
-  BITCODE_BS class_version;
-  BITCODE_BS num_lights;
+  BITCODE_BL class_version;
+  BITCODE_BL num_lights;
   Dwg_LIGHTLIST_light *lights;
 } Dwg_Object_LIGHTLIST;
 
@@ -5844,6 +5847,39 @@ typedef struct _dwg_object_LAYERFILTER
   BITCODE_T description;
   // ...
 } Dwg_Object_LAYERFILTER;
+
+typedef struct _dwg_entity_ATEXT
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_D2T text_size;	/*!< DXF 42 */
+  BITCODE_D2T xscale;		/*!< DXF 41 */
+  BITCODE_D2T char_spacing;	/*!< DXF 43 */
+  BITCODE_T style;		/*!< DXF 7 */
+  BITCODE_T t2;			/*!< DXF 2 */
+  BITCODE_T t3;			/*!< DXF 3 */
+  BITCODE_T text_value;		/*!< DXF 1 */
+  BITCODE_D2T offset_from_arc;	/*!< DXF 44 */
+  BITCODE_D2T right_offset;	/*!< DXF 45 */
+  BITCODE_D2T left_offset;	/*!< DXF 46 */
+  BITCODE_3BD center;		/*!< DXF 10 */
+  BITCODE_BD radius;		/*!< DXF 40 */
+  BITCODE_BD start_angle;	/*!< DXF 50 */
+  BITCODE_BD end_angle;		/*!< DXF 51 */
+  BITCODE_3BD extrusion;
+  BITCODE_BL color_index;
+  BITCODE_BS is_reverse;	/*!< DXF 70 */
+  BITCODE_BS text_direction;	/*!< DXF 71 */
+  BITCODE_BS alignment;		/*!< DXF 72 */
+  BITCODE_BS text_position;	/*!< DXF 73 */
+  BITCODE_BS font_19;		/*!< DXF 74 */
+  BITCODE_BS bs2;		/*!< DXF 75 */
+  BITCODE_BS is_underlined;	/*!< DXF 76 */
+  BITCODE_BS bs1;		/*!< DXF 77 */
+  BITCODE_BS font;		/*!< DXF 78 */
+  BITCODE_BS is_shx;		/*!< DXF 79 */
+  BITCODE_BS wizard_flag;	/*!< DXF 280 */
+  BITCODE_H arc_handle;		/*!< DXF 330 */
+} Dwg_Entity_ATEXT;
 
 typedef struct _dwg_object_LAYOUTPRINTCONFIG
 {

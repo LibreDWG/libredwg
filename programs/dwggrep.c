@@ -340,7 +340,23 @@ match_TEXT (const char *restrict filename, const Dwg_Object *restrict obj)
   int found = 0;
   MATCH_ENTITY (TEXT, text_value, 1);
   if (!opt_text)
-    MATCH_TABLE (TEXT, style, STYLE, 7);
+    {
+      MATCH_TABLE (TEXT, style, STYLE, 7);
+    }
+  return found;
+}
+
+static int
+match_ATEXT (const char *restrict filename, const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_ENTITY (ATEXT, text_value, 1);
+  if (!opt_text)
+    {
+      // ignore the various sizes stored as text
+      MATCH_ENTITY (ATEXT, style, 7);
+    }
   return found;
 }
 
@@ -353,7 +369,9 @@ match_ATTRIB (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_ENTITY (ATTRIB, text_value, 1);
   MATCH_ENTITY (ATTRIB, tag, 2);
   if (!opt_text)
-    MATCH_TABLE (ATTRIB, style, STYLE, 7);
+    {
+      MATCH_TABLE (ATTRIB, style, STYLE, 7);
+    }
   return found;
 }
 
@@ -854,12 +872,12 @@ static int
 match_LIGHTLIST (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
-  int found = 0, i;
+  int found = 0;
   const Dwg_Object_LIGHTLIST *_obj = obj->tio.object->tio.LIGHTLIST;
 
-  for (i = 0; i < _obj->num_lights; i++)
+  for (BITCODE_BL i = 0; i < _obj->num_lights; i++)
     {
-      // MATCH_OBJECT (LIGHTLIST, lights[i].name, 1);
+      MATCH_OBJECT (LIGHTLIST, lights[i].name, 1);
     }
   return found;
 }
@@ -1157,6 +1175,7 @@ match_BLOCK_HEADER (const char *restrict filename,
 #endif
       ELSEMATCH (ATTDEF)
       ELSEMATCH (MTEXT)
+      ELSEMATCH (ATEXT)
       else if (obj->type == DWG_TYPE_INSERT)
         {
 #ifndef WITH_SUBENTS

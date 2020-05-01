@@ -273,6 +273,10 @@
 #ifndef FIELD_BINARY
 #  define FIELD_BINARY(name, len, dxf) FIELD_TF (name, len, dxf)
 #endif
+// double to text
+#ifndef FIELD_D2T
+#  define FIELD_D2T(name, dxf) FIELD_TV (name, dxf)
+#endif
 #ifndef LOG_TRACE_TF
 #  define LOG_TRACE_TF(var, len)
 #  define LOG_INSANE_TF(var, len)
