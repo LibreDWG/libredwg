@@ -6400,6 +6400,12 @@ DWG_OBJECT (VISUALSTYLE)
   }
   // unstable <r2010:
   FIELD_BD (edge_crease_angle, 42);
+  if (_obj->edge_crease_angle < -12.0 || _obj->edge_crease_angle > 12.0)
+    {
+      LOG_ERROR ("Invalid edge_crease_angle, skipping");
+      _obj->edge_crease_angle = 0.0;
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   SINCE (R_2010) { FIELD_BS (edge_crease_angle_ext, 176); }
   FIELD_BL (edge_modifier, 92);
   SINCE (R_2010) { FIELD_BS (edge_modifier_ext, 176); } // 1
