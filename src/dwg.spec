@@ -8494,9 +8494,11 @@ DWG_ENTITY (RTEXT)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbRotatedText);
   FIELD_3BD (pt, 10);
+#ifdef IS_DXF
   FIELD_BE (extrusion, 210);
-  //DXF  { FIELD_BE (extrusion, 210); }
-  //else { FIELD_3DPOINT (extrusion, 210); }
+#else
+  FIELD_3DPOINT (extrusion, 210);
+#endif
   FIELD_BD (rotation, 50);
   FIELD_BD (height, 50);
   DXF {
