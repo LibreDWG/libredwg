@@ -6355,8 +6355,8 @@ DWG_OBJECT_END
 
 /*
 TvVisualStyle:
-FIELD_T (name, 0);
-FIELD_B (is_default, 0);
+  FIELD_T (name, 0);
+  FIELD_B (is_default, 0);
  */
 
 // r2007+ UNSTABLE
@@ -7150,7 +7150,8 @@ DWG_OBJECT (MATERIAL)
   SUBCLASS (AcDbMaterial)
   FIELD_T (name, 1);
   FIELD_T (description, 2);
-#ifdef IS_DXF
+
+#if 0 && defined(IS_DXF) //dummy
   FIELD_BS (normalmap_projection, 73);
   FIELD_BS (specularmap_projection, 78);
   FIELD_BS (reflectionmap_projection, 172);
@@ -7160,100 +7161,65 @@ DWG_OBJECT (MATERIAL)
   return 0;
 #endif
 
-  FIELD_BS (ambient_color_flag, 70); // 0 Use current color, 1 Override
-  FIELD_BD (ambient_color_factor, 40); // 0.0 - 1.0
-  FIELD_CMC (ambient_color, 90,0);
+  // each color writes RC flag, BD factor, BL rgb if flag=1
+#define MAT_COLOR(color, dxf1, dxf2, dxf3)                                    \
+    FIELD_RC (color##_flag, dxf1);     /* 0 Use current color, 1 Override */  \
+    FIELD_BD (color##_factor, dxf2);   /* 0.0 - 1.0 */                        \
+    if (_obj->color##_flag == 1)                                              \
+      {                                                                       \
+        FIELD_BL (color.rgb, dxf3);                                           \
+      }
+  
+  MAT_COLOR (ambient_color, 70, 40, 90);
+  MAT_COLOR (diffuse_color, 71, 41, 91);
 
-  DEBUG_HERE_OBJ; // TODO from here on the order of the fields is unknown
-  FIELD_BS (diffuse_color_flag, 71); // 0 Use current color, 1 Override
-  FIELD_BD (diffuse_color_factor, 41); // 0.0 - 1.0
-  FIELD_CMC (diffuse_color, 91,0);
-  FIELD_BS (diffusemap_source, 72);  // 0 scene, 1 file (def), 2 procedural
-  FIELD_T  (diffusemap_filename, 3); // if NULL no diffuse map
-  FIELD_BD (diffusemap_blendfactor, 42); // 1.0
-  FIELD_BS (diffusemap_projection, 73); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
-  FIELD_BS (diffusemap_tiling, 74);     // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (diffusemap_autotransform, 75); // 1 no, 2: scale to curr ent,
-                                           // 4: w/ current block transform
-  DEBUG_HERE_OBJ;
-  FIELD_VECTOR_N (diffusemap_transmatrix, BD, 16, 43);
+#  define MAT_MAP(map, dxf1, dxf2, dxf3, dxf4, dxf5, dxf6, dxf7)              \
+    FIELD_BD (map##_blendfactor, dxf1);                                       \
+    FIELD_BS (map##_source, dxf2); /* 0 scene, 1 file (def), 2 procedural */  \
+    FIELD_T (map##_filename, dxf3); /* if NULL no map */                      \
+    /* 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */              \
+    FIELD_BS (map##_projection, dxf4);                                        \
+    /* 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror */                  \
+    FIELD_BS (map##_tiling, dxf5);                                            \
+    /* 1 no, 2: scale to curr ent, 4: w/ current block transform */           \
+    FIELD_BS (map##_autotransform, dxf6);                                     \
+    FIELD_VECTOR_N (map##_transmatrix, BD, 16, dxf7)
 
+  MAT_MAP (diffusemap, 42, 72, 3, 73, 74, 75, 43);
+  MAT_COLOR (specular_color, 76, 45, 92);
+  MAT_MAP (specularmap, 46, 77, 4, 78, 79, 170, 47);
   FIELD_BD (specular_gloss_factor, 44); //def: 0.5
-  FIELD_BS (specular_color_flag, 76); // 0 Use current color, 1 Override
-  FIELD_BD (specular_color_factor, 45); // 0.0 - 1.0
-  FIELD_CMC (specular_color, 92,0);
-
-  FIELD_BS (specularmap_source, 77); // 0 current, 1 image file (default)
-  FIELD_T  (specularmap_filename, 4); // if NULL no specular map
-  FIELD_BD (specularmap_blendfactor, 46); // 1.0
-  FIELD_BS (specularmap_projection, 78);  // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
-  FIELD_BS (specularmap_tiling, 79); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (specularmap_autotransform, 170); // 1 no, 2: scale to curr ent,
-                                        // 4: w/ current block transform
-  FIELD_VECTOR_N (specularmap_transmatrix, BD, 16, 47);
-
-  FIELD_BS (reflectionmap_source, 171); // 0 current, 1 image file (default)
-  FIELD_T  (reflectionmap_filename, 6); // if NULL no diffuse map
-  FIELD_BD (reflectionmap_blendfactor, 48); // 1.0
-  FIELD_BS (reflectionmap_projection, 172); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
-  FIELD_BS (reflectionmap_tiling, 173); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (reflectionmap_autotransform, 174); // 1 no, 2: scale to curr ent,
-                                        // 4: w/ current block transform
-  DEBUG_HERE_OBJ;
-  FIELD_VECTOR_N (reflectionmap_transmatrix, BD, 16, 49);
-
+  MAT_MAP (reflectionmap, 48, 171, 6, 172, 173, 174, 49);
   FIELD_BD (opacity_percent, 140); //def: 1.0
-  FIELD_BS (opacitymap_source, 175); // 0 current, 1 image file (default)
-  FIELD_T  (opacitymap_filename, 7); // if NULL no specular map
-  FIELD_BD (opacitymap_blendfactor, 141); // 1.0
-  FIELD_BS (opacitymap_projection, 176); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
-  FIELD_BS (opacitymap_tiling, 177); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (opacitymap_autotransform, 178); // 1 no, 2: scale to curr ent,
-                                        // 4: w/ current block transform
-  DEBUG_HERE_OBJ;
-  FIELD_VECTOR_N (opacitymap_transmatrix, BD, 16, 142);
-
-  FIELD_BS (bumpmap_source, 179); // 0 current, 1 image file (default)
-  FIELD_T  (bumpmap_filename, 8); // if NULL no specular map
-  FIELD_BD (bumpmap_blendfactor, 143); // 1.0
-  FIELD_BS (bumpmap_projection, 270); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
-  FIELD_BS (bumpmap_tiling, 271); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (bumpmap_autotransform, 272); // 1 no, 2: scale to curr ent,
-                                        // 4: w/ current block transform
-  DEBUG_HERE_OBJ;
-  FIELD_VECTOR_N (bumpmap_transmatrix, BD, 16, 144);
-
+  MAT_MAP (opacitymap, 141, 175, 7, 176, 177, 178, 142);
+  MAT_MAP (bumpmap, 143, 179, 8, 270, 271, 272, 144);
   FIELD_BD (refraction_index, 145); //def: 1.0
-  FIELD_BS (refractionmap_source, 273); // 0 current, 1 image file (default)
-  FIELD_T  (refractionmap_filename, 9); // if NULL no specular map
-  FIELD_BD (refractionmap_blendfactor, 146); // 1.0
-  FIELD_BS (refractionmap_projection, 274); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
-  FIELD_BS (refractionmap_tiling, 275); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (refractionmap_autotransform, 276); // 1 no, 2: scale to curr ent,
-                                        // 4: w/ current block transform
-  FIELD_VECTOR_N (refractionmap_transmatrix, BD, 16, 147);
-  FIELD_BD (color_bleed_scale, 460);
-  FIELD_BD (indirect_dump_scale, 461);
+  MAT_MAP (refractionmap, 146, 273, 9, 274, 275, 276, 147);
+
+  SINCE (R_2007) {
+    // all: DXF not if 0
+    FIELD_BD (translucence, 148);
+    FIELD_BD (self_illumination, 149);
+    FIELD_BD (reflectivity, 468);
+    FIELD_BL (illumination_model, 93);
+    FIELD_BL (channel_flags, 94);
+    FIELD_BL (mode, 282);
+  }
+
+  // advanced
+  FIELD_BD (indirect_bump_scale, 461);
   FIELD_BD (reflectance_scale, 462);
   FIELD_BD (transmittance_scale, 463);
   FIELD_B (two_sided_material, 290);
-  DEBUG_HERE_OBJ;
   FIELD_BD (luminance, 464);
   FIELD_BS (luminance_mode, 270);
   FIELD_BS (normalmap_method, 271);
   FIELD_BD (normalmap_strength, 465); //def: 1.0
-  FIELD_BS (normalmap_source, 72); // 0 current, 1 image file (default)
-  FIELD_T  (normalmap_filename, 3); // if NULL no specular map
-  FIELD_BD (normalmap_blendfactor, 42); // 1.0
-  FIELD_BS (normalmap_projection, 73); // 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere
-  FIELD_BS (normalmap_tiling, 74); // 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror
-  FIELD_BS (normalmap_autotransform, 75); // 0 inherit, 1 no, 2 object (scale to curr ent),
-                                          // 4 model (w/ current block transform)
-  DEBUG_HERE_OBJ;
-  FIELD_VECTOR_N (normalmap_transmatrix, BD, 16, 43);
-  FIELD_B (materials_anonymous, 293);
-  FIELD_BS (global_illumination_mode, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
-  FIELD_BS (final_gather_mode, 273);  // 0 none, 1 cast, 2 receive, 3 cast&receive
+  MAT_MAP (normalmap, 42, 72, 3, 73, 74, 75, 43);
+
+  FIELD_B (is_anonymous, 293);
+  FIELD_BS (global_illumination, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
+  FIELD_BS (final_gather, 273);        // 0 none, 1 cast, 2 receive, 3 cast&receive
   FIELD_T (genprocname, 300);
   FIELD_B (genprocvalbool, 291);
   FIELD_BS (genprocvalint, 271);
@@ -7263,13 +7229,7 @@ DWG_OBJECT (MATERIAL)
   FIELD_CMC (genprocvalcolorindex, 62,420);
   FIELD_BL (genprocvalcolorrgb, 420); //int32
   FIELD_T (genprocvalcolorname, 430);
-  FIELD_BS (map_utile, 270);
-  FIELD_BD (translucence, 148);
-  FIELD_BL (self_illumination, 90);
-  FIELD_BD (reflectivity, 468);
-  FIELD_BL (illumination_model, 93);
-  DEBUG_HERE_OBJ;
-  FIELD_BL (channel_flags, 94);
+  FIELD_BD (color_bleed_scale, 460);
   //78
   //172
   //176
@@ -7597,7 +7557,7 @@ DWG_OBJECT (ASSOCACTION)
     FIELD_BL (num_owned_params, 90);
     HANDLE_VECTOR (owned_params, num_owned_params, DWG_HDL_SOFTPTR, 360);
     VALUE_BS (0, 90);
-    FIELD_BL (num_owned_value_params, 90); // TODO which hdl_code?
+    FIELD_BL (num_owned_value_param_names, 90); // TODO which hdl_code?
     HANDLE_VECTOR (owned_value_param_names, num_owned_value_param_names, 5, 360);
   }
 DWG_OBJECT_END
@@ -8475,12 +8435,12 @@ DWG_ENTITY (ATEXT)
     FIELD_T (style, 7); // as name
     FIELD_3BD (center, 10);
     FIELD_BD (radius, 40);
-    FIELD_BD (xscale, 41);
-    FIELD_BD (text_size, 42);
-    FIELD_BD (char_spacing, 43);
-    FIELD_BD (offset_from_arc, 44);
-    FIELD_BD (right_offset, 45);
-    FIELD_BD (left_offset, 46);
+    FIELD_D2T (xscale, 41);
+    FIELD_D2T (text_size, 42);
+    FIELD_D2T (char_spacing, 43);
+    FIELD_D2T (offset_from_arc, 44);
+    FIELD_D2T (right_offset, 45);
+    FIELD_D2T (left_offset, 46);
     FIELD_BD (start_angle, 50);
     FIELD_BD (end_angle, 51);
     FIELD_BS (is_reverse, 70);
@@ -8513,7 +8473,7 @@ DWG_ENTITY (ATEXT)
     FIELD_BD (start_angle, 50);
     FIELD_BD (end_angle, 51);
     FIELD_3BD (extrusion, 210);
-    FIELD_BL (color_index, 0);
+    FIELD_BL (color.index, 90);
     FIELD_BS (bs1, 77);
     FIELD_BS (font, 78);
     FIELD_BS (is_shx, 79);

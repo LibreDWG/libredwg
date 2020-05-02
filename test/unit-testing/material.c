@@ -1,3 +1,4 @@
+// unstable
 #define DWG_TYPE DWG_TYPE_MATERIAL
 #include "common.c"
 
@@ -62,7 +63,7 @@ api_process (dwg_object *obj)
   BITCODE_BS refractionmap_autotransform;
   BITCODE_BD* refractionmap_transmatrix;
   BITCODE_BD color_bleed_scale;
-  BITCODE_BD indirect_dump_scale;
+  BITCODE_BD indirect_bump_scale;
   BITCODE_BD reflectance_scale;
   BITCODE_BD transmittance_scale;
   BITCODE_B two_sided_material;
@@ -77,9 +78,9 @@ api_process (dwg_object *obj)
   BITCODE_BS normalmap_tiling;
   BITCODE_BS normalmap_autotransform;
   BITCODE_BD* normalmap_transmatrix;
-  BITCODE_B materials_anonymous;
-  BITCODE_BS global_illumination_mode;
-  BITCODE_BS final_gather_mode;
+  BITCODE_B is_anonymous;
+  BITCODE_BS global_illumination;
+  BITCODE_BS final_gather;
   BITCODE_T genprocname;
   BITCODE_B genprocvalbool;
   BITCODE_BS genprocvalint;
@@ -206,7 +207,7 @@ api_process (dwg_object *obj)
             refractionmap_transmatrix[i]);
       }
   CHK_ENTITY_TYPE (_obj, MATERIAL, color_bleed_scale, BD, color_bleed_scale);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, indirect_dump_scale, BD, indirect_dump_scale);
+  CHK_ENTITY_TYPE (_obj, MATERIAL, indirect_bump_scale, BD, indirect_bump_scale);
   CHK_ENTITY_TYPE (_obj, MATERIAL, reflectance_scale, BD, reflectance_scale);
   CHK_ENTITY_TYPE (_obj, MATERIAL, transmittance_scale, BD, transmittance_scale);
   CHK_ENTITY_TYPE (_obj, MATERIAL, two_sided_material, B, two_sided_material);
@@ -229,9 +230,9 @@ api_process (dwg_object *obj)
         ok ("MATERIAL.normalmap_transmatrix[%d]: %f", i,
             normalmap_transmatrix[i]);
       }
-  CHK_ENTITY_TYPE (_obj, MATERIAL, materials_anonymous, B, materials_anonymous);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, global_illumination_mode, BS, global_illumination_mode);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, final_gather_mode, BS, final_gather_mode);
+  CHK_ENTITY_TYPE (_obj, MATERIAL, is_anonymous, B, is_anonymous);
+  CHK_ENTITY_TYPE (_obj, MATERIAL, global_illumination_mode, BS, global_illumination);
+  CHK_ENTITY_TYPE (_obj, MATERIAL, final_gather_mode, BS, final_gather);
   CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, genprocname, genprocname);
   CHK_ENTITY_TYPE (_obj, MATERIAL, genprocvalbool, B, genprocvalbool);
   CHK_ENTITY_TYPE (_obj, MATERIAL, genprocvalint, BS, genprocvalint);

@@ -4263,12 +4263,20 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_BD* refractionmap_transmatrix; /*!< DXF 147: 16x BD */
 
   BITCODE_BD color_bleed_scale;    /*!< DXF 460 */
-  BITCODE_BD indirect_dump_scale;  /*!< DXF 461 */
+  BITCODE_BD indirect_bump_scale;  /*!< DXF 461 */
   BITCODE_BD reflectance_scale;    /*!< DXF 462 */
   BITCODE_BD transmittance_scale;  /*!< DXF 463 */
   BITCODE_B two_sided_material;    /*!< DXF 290 */
   BITCODE_BD luminance;            /*!< DXF 464 */
-  BITCODE_BS luminance_mode;       /*!< DXF 270 */
+  BITCODE_BS luminance_mode;    /*!< DXF 270 */
+  BITCODE_BD translucence;      /*!< DXF 148 */
+  BITCODE_BD self_illumination; /*!< DXF 149 */
+  BITCODE_BD reflectivity;      /*!< DXF 468 */
+  BITCODE_BL illumination_model;/*!< DXF 93 */
+  BITCODE_BL channel_flags;     /*!< DXF 94 */
+  BITCODE_BL mode;              /*!< DXF 282 */
+
+  
   BITCODE_BS normalmap_method;     /*!< DXF 271 */
   BITCODE_BD normalmap_strength;   /*!< DXF 465 def: 1.0 */
   BITCODE_BS normalmap_source;     /*!< DXF 72 0 current, 1 image file (default) */
@@ -4279,9 +4287,9 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_BS normalmap_autotransform; /*!< DXF 75 1 no, 2: scale to curr ent,
                                                   4: w/ current block transform */
   BITCODE_BD* normalmap_transmatrix; /*!< DXF 43: 16x BD */
-  BITCODE_B materials_anonymous;     /*!< DXF 293 */
-  BITCODE_BS global_illumination_mode;/*!< DXF 272 */
-  BITCODE_BS final_gather_mode; /*!< DXF 273 */
+  BITCODE_B is_anonymous;     /*!< DXF 293 */
+  BITCODE_BS global_illumination;    /*!< DXF 272 */
+  BITCODE_BS final_gather;      /*!< DXF 273 */
   BITCODE_T genprocname;        /*!< DXF 300 */
   BITCODE_B genprocvalbool;     /*!< DXF 291 */
   BITCODE_BS genprocvalint;     /*!< DXF 271 */
@@ -4291,12 +4299,6 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_CMC genprocvalcolorindex;/*!< DXF 62 */
   BITCODE_BS genprocvalcolorrgb;/*!< DXF 420 */
   BITCODE_T genprocvalcolorname;/*!< DXF 430 */
-  BITCODE_BS map_utile;         /*!< DXF 270 */
-  BITCODE_BD translucence;      /*!< DXF 148 */
-  BITCODE_BL self_illumination; /*!< DXF 90 */
-  BITCODE_BD reflectivity;      /*!< DXF 468 */
-  BITCODE_BL illumination_model;/*!< DXF 93 */
-  BITCODE_BL channel_flags;     /*!< DXF 94 */
   //? BD backface_cull
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature
@@ -5622,7 +5624,7 @@ typedef struct _dwg_object_BACKGROUND
   struct _dwg_object_object *parent;                                          \
   BITCODE_BS class_version; /*!< r2010+ =4 */                                 \
   BITCODE_B is_default;     /* no dxf */                                      \
-  BITCODE_B has_file        /* 290 */
+  BITCODE_B in_dwg          /* 290, always 1 */
 #define ANNOTSCALEOBJECTCONTEXTDATA_fields                                    \
   OBJECTCONTEXTDATA_fields;                                                   \
   BITCODE_H scale	/*!< DXF 340 */
@@ -5884,8 +5886,8 @@ typedef struct _dwg_entity_ATEXT
   BITCODE_BD radius;		/*!< DXF 40 */
   BITCODE_BD start_angle;	/*!< DXF 50 */
   BITCODE_BD end_angle;		/*!< DXF 51 */
-  BITCODE_3BD extrusion;
-  BITCODE_BL color_index;
+  BITCODE_3BD extrusion;        /*!< DXF 210 */
+  BITCODE_CMC color;            /*!< DXF 90 */
   BITCODE_BS is_reverse;	/*!< DXF 70 */
   BITCODE_BS text_direction;	/*!< DXF 71 */
   BITCODE_BS alignment;		/*!< DXF 72 */

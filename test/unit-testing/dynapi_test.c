@@ -6326,19 +6326,12 @@ static int test_ATEXT (const Dwg_Object *obj)
     atext->char_spacing--;
   }
   {
-    BITCODE_BL color_index;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "color_index", &color_index, NULL)
-        && color_index == atext->color_index)
-      pass ();
+    BITCODE_CMC color;
+    if (dwg_dynapi_entity_value (atext, "ATEXT", "color", &color, NULL)
+        && !memcmp (&color, &atext->color, sizeof (atext->color)))
+        pass ();
     else
-      fail ("ATEXT.color_index [BL] %u != %u", atext->color_index, color_index);
-    color_index++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "color_index", &color_index, 0)
-        && color_index == atext->color_index)
-      pass ();
-    else
-      fail ("ATEXT.color_index [BL] set+1 %u != %u", atext->color_index, color_index);
-    atext->color_index--;
+        fail ("ATEXT.color [CMC]");
   }
   {
     BITCODE_BD end_angle;
@@ -23961,19 +23954,19 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
     aldimobjectcontextdata->flag--;
   }
   {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == aldimobjectcontextdata->has_file)
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == aldimobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("ALDIMOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == aldimobjectcontextdata->has_file)
+      fail ("ALDIMOBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == aldimobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("ALDIMOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->has_file, has_file);
-    aldimobjectcontextdata->has_file--;
+      fail ("ALDIMOBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->in_dwg, in_dwg);
+    aldimobjectcontextdata->in_dwg--;
   }
   {
     BITCODE_B is_default;
@@ -27850,19 +27843,19 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
     blkrefobjectcontextdata->class_version--;
   }
   {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == blkrefobjectcontextdata->has_file)
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == blkrefobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("BLKREFOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == blkrefobjectcontextdata->has_file)
+      fail ("BLKREFOBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == blkrefobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("BLKREFOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->has_file, has_file);
-    blkrefobjectcontextdata->has_file--;
+      fail ("BLKREFOBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->in_dwg, in_dwg);
+    blkrefobjectcontextdata->in_dwg--;
   }
   {
     BITCODE_B is_default;
@@ -33923,19 +33916,19 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("LEADEROBJECTCONTEXTDATA.endptproj [3DPOINT]");
   }
   {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == leaderobjectcontextdata->has_file)
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == leaderobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("LEADEROBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == leaderobjectcontextdata->has_file)
+      fail ("LEADEROBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == leaderobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("LEADEROBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->has_file, has_file);
-    leaderobjectcontextdata->has_file--;
+      fail ("LEADEROBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->in_dwg, in_dwg);
+    leaderobjectcontextdata->in_dwg--;
   }
   {
     BITCODE_3DPOINT inspt_offset;
@@ -34696,19 +34689,19 @@ static int test_MATERIAL (const Dwg_Object *obj)
         fail ("MATERIAL.diffusemap_transmatrix [BD*]");
   }
   {
-    BITCODE_BS final_gather_mode;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "final_gather_mode", &final_gather_mode, NULL)
-        && final_gather_mode == material->final_gather_mode)
+    BITCODE_BS final_gather;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "final_gather", &final_gather, NULL)
+        && final_gather == material->final_gather)
       pass ();
     else
-      fail ("MATERIAL.final_gather_mode [BS] %hu != %hu", material->final_gather_mode, final_gather_mode);
-    final_gather_mode++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "final_gather_mode", &final_gather_mode, 0)
-        && final_gather_mode == material->final_gather_mode)
+      fail ("MATERIAL.final_gather [BS] %hu != %hu", material->final_gather, final_gather);
+    final_gather++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "final_gather", &final_gather, 0)
+        && final_gather == material->final_gather)
       pass ();
     else
-      fail ("MATERIAL.final_gather_mode [BS] set+1 %hu != %hu", material->final_gather_mode, final_gather_mode);
-    material->final_gather_mode--;
+      fail ("MATERIAL.final_gather [BS] set+1 %hu != %hu", material->final_gather, final_gather);
+    material->final_gather--;
   }
   {
     BITCODE_T genprocname;
@@ -34824,19 +34817,19 @@ static int test_MATERIAL (const Dwg_Object *obj)
       fail ("MATERIAL.genprocvaltext [T] '%s' <> '%s'", genprocvaltext, material->genprocvaltext);
   }
   {
-    BITCODE_BS global_illumination_mode;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "global_illumination_mode", &global_illumination_mode, NULL)
-        && global_illumination_mode == material->global_illumination_mode)
+    BITCODE_BS global_illumination;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "global_illumination", &global_illumination, NULL)
+        && global_illumination == material->global_illumination)
       pass ();
     else
-      fail ("MATERIAL.global_illumination_mode [BS] %hu != %hu", material->global_illumination_mode, global_illumination_mode);
-    global_illumination_mode++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "global_illumination_mode", &global_illumination_mode, 0)
-        && global_illumination_mode == material->global_illumination_mode)
+      fail ("MATERIAL.global_illumination [BS] %hu != %hu", material->global_illumination, global_illumination);
+    global_illumination++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "global_illumination", &global_illumination, 0)
+        && global_illumination == material->global_illumination)
       pass ();
     else
-      fail ("MATERIAL.global_illumination_mode [BS] set+1 %hu != %hu", material->global_illumination_mode, global_illumination_mode);
-    material->global_illumination_mode--;
+      fail ("MATERIAL.global_illumination [BS] set+1 %hu != %hu", material->global_illumination, global_illumination);
+    material->global_illumination--;
   }
   {
     BITCODE_BL illumination_model;
@@ -34854,19 +34847,34 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->illumination_model--;
   }
   {
-    BITCODE_BD indirect_dump_scale;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "indirect_dump_scale", &indirect_dump_scale, NULL)
-        && indirect_dump_scale == material->indirect_dump_scale)
+    BITCODE_BD indirect_bump_scale;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "indirect_bump_scale", &indirect_bump_scale, NULL)
+        && indirect_bump_scale == material->indirect_bump_scale)
       pass ();
     else
-      fail ("MATERIAL.indirect_dump_scale [BD] %g != %g", material->indirect_dump_scale, indirect_dump_scale);
-    indirect_dump_scale++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "indirect_dump_scale", &indirect_dump_scale, 0)
-        && indirect_dump_scale == material->indirect_dump_scale)
+      fail ("MATERIAL.indirect_bump_scale [BD] %g != %g", material->indirect_bump_scale, indirect_bump_scale);
+    indirect_bump_scale++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "indirect_bump_scale", &indirect_bump_scale, 0)
+        && indirect_bump_scale == material->indirect_bump_scale)
       pass ();
     else
-      fail ("MATERIAL.indirect_dump_scale [BD] set+1 %g != %g", material->indirect_dump_scale, indirect_dump_scale);
-    material->indirect_dump_scale--;
+      fail ("MATERIAL.indirect_bump_scale [BD] set+1 %g != %g", material->indirect_bump_scale, indirect_bump_scale);
+    material->indirect_bump_scale--;
+  }
+  {
+    BITCODE_B is_anonymous;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "is_anonymous", &is_anonymous, NULL)
+        && is_anonymous == material->is_anonymous)
+      pass ();
+    else
+      fail ("MATERIAL.is_anonymous [B] " FORMAT_B " != " FORMAT_B "", material->is_anonymous, is_anonymous);
+    is_anonymous++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "is_anonymous", &is_anonymous, 0)
+        && is_anonymous == material->is_anonymous)
+      pass ();
+    else
+      fail ("MATERIAL.is_anonymous [B] set+1 " FORMAT_B " != " FORMAT_B "", material->is_anonymous, is_anonymous);
+    material->is_anonymous--;
   }
   {
     BITCODE_BD luminance;
@@ -34899,34 +34907,19 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->luminance_mode--;
   }
   {
-    BITCODE_BS map_utile;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "map_utile", &map_utile, NULL)
-        && map_utile == material->map_utile)
+    BITCODE_BL mode;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "mode", &mode, NULL)
+        && mode == material->mode)
       pass ();
     else
-      fail ("MATERIAL.map_utile [BS] %hu != %hu", material->map_utile, map_utile);
-    map_utile++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "map_utile", &map_utile, 0)
-        && map_utile == material->map_utile)
+      fail ("MATERIAL.mode [BL] %u != %u", material->mode, mode);
+    mode++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "mode", &mode, 0)
+        && mode == material->mode)
       pass ();
     else
-      fail ("MATERIAL.map_utile [BS] set+1 %hu != %hu", material->map_utile, map_utile);
-    material->map_utile--;
-  }
-  {
-    BITCODE_B materials_anonymous;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "materials_anonymous", &materials_anonymous, NULL)
-        && materials_anonymous == material->materials_anonymous)
-      pass ();
-    else
-      fail ("MATERIAL.materials_anonymous [B] " FORMAT_B " != " FORMAT_B "", material->materials_anonymous, materials_anonymous);
-    materials_anonymous++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "materials_anonymous", &materials_anonymous, 0)
-        && materials_anonymous == material->materials_anonymous)
-      pass ();
-    else
-      fail ("MATERIAL.materials_anonymous [B] set+1 " FORMAT_B " != " FORMAT_B "", material->materials_anonymous, materials_anonymous);
-    material->materials_anonymous--;
+      fail ("MATERIAL.mode [BL] set+1 %u != %u", material->mode, mode);
+    material->mode--;
   }
   {
     BITCODE_T name;
@@ -35409,18 +35402,18 @@ static int test_MATERIAL (const Dwg_Object *obj)
         fail ("MATERIAL.refractionmap_transmatrix [BD*]");
   }
   {
-    BITCODE_BL self_illumination;
+    BITCODE_BD self_illumination;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "self_illumination", &self_illumination, NULL)
         && self_illumination == material->self_illumination)
       pass ();
     else
-      fail ("MATERIAL.self_illumination [BL] %u != %u", material->self_illumination, self_illumination);
+      fail ("MATERIAL.self_illumination [BD] %g != %g", material->self_illumination, self_illumination);
     self_illumination++;
     if (dwg_dynapi_entity_set_value (material, "MATERIAL", "self_illumination", &self_illumination, 0)
         && self_illumination == material->self_illumination)
       pass ();
     else
-      fail ("MATERIAL.self_illumination [BL] set+1 %u != %u", material->self_illumination, self_illumination);
+      fail ("MATERIAL.self_illumination [BD] set+1 %g != %g", material->self_illumination, self_illumination);
     material->self_illumination--;
   }
   {
@@ -36454,19 +36447,19 @@ static int test_MLEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
     mleaderobjectcontextdata->class_version--;
   }
   {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == mleaderobjectcontextdata->has_file)
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == mleaderobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("MLEADEROBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == mleaderobjectcontextdata->has_file)
+      fail ("MLEADEROBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == mleaderobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("MLEADEROBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->has_file, has_file);
-    mleaderobjectcontextdata->has_file--;
+      fail ("MLEADEROBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->in_dwg, in_dwg);
+    mleaderobjectcontextdata->in_dwg--;
   }
   {
     BITCODE_B is_default;
@@ -37381,19 +37374,19 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextattributeobjectcontextdata->class_version--;
   }
   {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == mtextattributeobjectcontextdata->has_file)
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == mtextattributeobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == mtextattributeobjectcontextdata->has_file)
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == mtextattributeobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->has_file, has_file);
-    mtextattributeobjectcontextdata->has_file--;
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->in_dwg, in_dwg);
+    mtextattributeobjectcontextdata->in_dwg--;
   }
   {
     BITCODE_B is_default;
@@ -37575,19 +37568,19 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextobjectcontextdata->flag--;
   }
   {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == mtextobjectcontextdata->has_file)
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == mtextobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == mtextobjectcontextdata->has_file)
+      fail ("MTEXTOBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == mtextobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->has_file, has_file);
-    mtextobjectcontextdata->has_file--;
+      fail ("MTEXTOBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->in_dwg, in_dwg);
+    mtextobjectcontextdata->in_dwg--;
   }
   {
     BITCODE_3BD insertion_pt;
@@ -42205,19 +42198,19 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     textobjectcontextdata->flag--;
   }
   {
-    BITCODE_B has_file;
-    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "has_file", &has_file, NULL)
-        && has_file == textobjectcontextdata->has_file)
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == textobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("TEXTOBJECTCONTEXTDATA.has_file [B] " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->has_file, has_file);
-    has_file++;
-    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "has_file", &has_file, 0)
-        && has_file == textobjectcontextdata->has_file)
+      fail ("TEXTOBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == textobjectcontextdata->in_dwg)
       pass ();
     else
-      fail ("TEXTOBJECTCONTEXTDATA.has_file [B] set+1 " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->has_file, has_file);
-    textobjectcontextdata->has_file--;
+      fail ("TEXTOBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->in_dwg, in_dwg);
+    textobjectcontextdata->in_dwg--;
   }
   {
     BITCODE_2RD insertion_pt;

@@ -951,8 +951,8 @@ BD,	DXF 50
 BD,	DXF 51
 @item extrusion
 3BD,	DXF 210
-@item color_index
-BL
+@item color
+CMC
 @item is_reverse
 BS,	DXF 70
 @item text_direction
@@ -4420,7 +4420,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item has_file
+@item in_dwg
 B
 @item scale
 H,	DXF 340
@@ -4544,7 +4544,7 @@ BL,	DXF 90
 @item owned_params
 H*,	DXF 360
 @item num_owned_value_param_names
-BL
+BL,	DXF 90
 @item owned_value_param_names
 H*,	DXF 360
 @item l5
@@ -4627,7 +4627,7 @@ BL,	DXF 90
 @item owned_params
 H*,	DXF 360
 @item num_owned_value_param_names
-BL
+BL,	DXF 90
 @item owned_value_param_names
 H*,	DXF 360
 
@@ -4877,7 +4877,7 @@ BL,	DXF 90
 @item owned_params
 H*,	DXF 360
 @item num_owned_value_param_names
-BL
+BL,	DXF 90
 @item owned_value_param_names
 H*,	DXF 360
 @item unknown_assoc
@@ -5199,7 +5199,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item has_file
+@item in_dwg
 B
 @item scale
 H,	DXF 340
@@ -6490,7 +6490,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item has_file
+@item in_dwg
 B
 @item scale
 H,	DXF 340
@@ -6630,116 +6630,116 @@ T,	DXF 1
 @item description
 T,	DXF 2
 @item ambient_color_flag
-BS,	DXF 70
+BS
 @item ambient_color_factor
-BD,	DXF 40
+BD
 @item ambient_color
-CMC,	DXF 90
+CMC
 @item diffuse_color_flag
-BS,	DXF 71
+BS
 @item diffuse_color_factor
-BD,	DXF 41
+BD
 @item diffuse_color
-CMC,	DXF 91
+CMC
 @item diffusemap_source
-BS,	DXF 72
+BS
 @item diffusemap_filename
-T,	DXF 3
+T
 @item diffusemap_blendfactor
-BD,	DXF 42
+BD
 @item diffusemap_projection
-BS,	DXF 73
+BS
 @item diffusemap_tiling
-BS,	DXF 74
+BS
 @item diffusemap_autotransform
-BS,	DXF 75
+BS
 @item diffusemap_transmatrix
-BD*,	DXF 43
+BD*
 @item specular_gloss_factor
 BD,	DXF 44
 @item specular_color_flag
-BS,	DXF 76
+BS
 @item specular_color_factor
-BD,	DXF 45
+BD
 @item specular_color
-CMC,	DXF 92
+CMC
 @item specularmap_source
-BS,	DXF 77
+BS
 @item specularmap_filename
-T,	DXF 4
+T
 @item specularmap_blendfactor
-BD,	DXF 46
+BD
 @item specularmap_projection
 BS,	DXF 78
 @item specularmap_tiling
-BS,	DXF 79
+BS
 @item specularmap_autotransform
-BS,	DXF 170
+BS
 @item specularmap_transmatrix
-BD*,	DXF 47
+BD*
 @item reflectionmap_source
-BS,	DXF 171
+BS
 @item reflectionmap_filename
-T,	DXF 6
+T
 @item reflectionmap_blendfactor
-BD,	DXF 48
+BD
 @item reflectionmap_projection
 BS,	DXF 172
 @item reflectionmap_tiling
-BS,	DXF 173
+BS
 @item reflectionmap_autotransform
-BS,	DXF 174
+BS
 @item reflectionmap_transmatrix
-BD*,	DXF 49
+BD*
 @item opacity_percent
 BD,	DXF 140
 @item opacitymap_source
-BS,	DXF 175
+BS
 @item opacitymap_filename
-T,	DXF 7
+T
 @item opacitymap_blendfactor
-BD,	DXF 141
+BD
 @item opacitymap_projection
 BS,	DXF 176
 @item opacitymap_tiling
-BS,	DXF 177
+BS
 @item opacitymap_autotransform
-BS,	DXF 178
+BS
 @item opacitymap_transmatrix
-BD*,	DXF 142
+BD*
 @item bumpmap_source
-BS,	DXF 179
+BS
 @item bumpmap_filename
-T,	DXF 8
+T
 @item bumpmap_blendfactor
-BD,	DXF 143
+BD
 @item bumpmap_projection
 BS,	DXF 270
 @item bumpmap_tiling
-BS,	DXF 271
+BS
 @item bumpmap_autotransform
-BS,	DXF 272
+BS
 @item bumpmap_transmatrix
-BD*,	DXF 144
+BD*
 @item refraction_index
 BD,	DXF 145
 @item refractionmap_source
-BS,	DXF 273
+BS
 @item refractionmap_filename
-T,	DXF 9
+T
 @item refractionmap_blendfactor
-BD,	DXF 146
+BD
 @item refractionmap_projection
 BS,	DXF 274
 @item refractionmap_tiling
-BS,	DXF 275
+BS
 @item refractionmap_autotransform
-BS,	DXF 276
+BS
 @item refractionmap_transmatrix
-BD*,	DXF 147
+BD*
 @item color_bleed_scale
 BD,	DXF 460
-@item indirect_dump_scale
+@item indirect_bump_scale
 BD,	DXF 461
 @item reflectance_scale
 BD,	DXF 462
@@ -6751,29 +6751,41 @@ B,	DXF 290
 BD,	DXF 464
 @item luminance_mode
 BS,	DXF 270
+@item translucence
+BD,	DXF 148
+@item self_illumination
+BD,	DXF 149
+@item reflectivity
+BD,	DXF 468
+@item illumination_model
+BL,	DXF 93
+@item channel_flags
+BL,	DXF 94
+@item mode
+BL,	DXF 282
 @item normalmap_method
 BS,	DXF 271
 @item normalmap_strength
 BD,	DXF 465
 @item normalmap_source
-BS,	DXF 72
+BS
 @item normalmap_filename
-T,	DXF 3
+T
 @item normalmap_blendfactor
-BD,	DXF 42
+BD
 @item normalmap_projection
 BS,	DXF 73
 @item normalmap_tiling
-BS,	DXF 74
+BS
 @item normalmap_autotransform
-BS,	DXF 75
+BS
 @item normalmap_transmatrix
-BD*,	DXF 43
-@item materials_anonymous
+BD*
+@item is_anonymous
 B,	DXF 293
-@item global_illumination_mode
+@item global_illumination
 BS,	DXF 272
-@item final_gather_mode
+@item final_gather
 BS,	DXF 273
 @item genprocname
 T,	DXF 300
@@ -6793,18 +6805,6 @@ CMC,	DXF 62
 BS,	DXF 420
 @item genprocvalcolorname
 T,	DXF 430
-@item map_utile
-BS,	DXF 270
-@item translucence
-BD,	DXF 148
-@item self_illumination
-BL,	DXF 90
-@item reflectivity
-BD,	DXF 468
-@item illumination_model
-BL,	DXF 93
-@item channel_flags
-BL,	DXF 94
 
 @end vtable
 @end indentedblock
@@ -6943,7 +6943,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item has_file
+@item in_dwg
 B
 @item scale
 H,	DXF 340
@@ -7123,7 +7123,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item has_file
+@item in_dwg
 B
 @item scale
 H,	DXF 340
@@ -7144,7 +7144,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item has_file
+@item in_dwg
 B
 @item scale
 H,	DXF 340
@@ -8142,7 +8142,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item has_file
+@item in_dwg
 B
 @item scale
 H,	DXF 340
