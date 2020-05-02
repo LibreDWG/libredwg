@@ -689,12 +689,7 @@ DWG_ENTITY (VERTEX_2D)
   }
   SINCE (R_13)
   {
-    DXF {
-      if (FIELD_VALUE (flag) != 0)
-        FIELD_RC (flag, 70);
-    } else {
-      FIELD_RC (flag, 70);
-    }
+    FIELD_RC0 (flag, 70);
     FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
@@ -703,16 +698,13 @@ DWG_ENTITY (VERTEX_2D)
      the spec. --Juca */
     DXF_OR_PRINT {
       if (FIELD_VALUE (flag) != 0) {
-        if (FIELD_VALUE (start_width) != 0.0)
-          FIELD_BD (start_width, 40);
-        if (FIELD_VALUE (end_width) != 0.0)
-          FIELD_BD (end_width, 41);
+        FIELD_BD0 (start_width, 40);
+        FIELD_BD0 (end_width, 41);
       }
     }
     DECODER
     {
       FIELD_BD (start_width, 40);
-
       if (FIELD_VALUE (start_width) < 0)
         {
           FIELD_VALUE (start_width) = -FIELD_VALUE (start_width);
@@ -741,8 +733,8 @@ DWG_ENTITY (VERTEX_2D)
     }
 
     DXF {
-      if (FIELD_VALUE (flag) != 0 && FIELD_VALUE (bulge) != 0.0)
-        FIELD_BD (bulge, 42);
+      if (FIELD_VALUE (flag) != 0)
+        FIELD_BD0 (bulge, 42);
     } else {
       FIELD_BD (bulge, 42);
     }
@@ -854,15 +846,8 @@ DWG_ENTITY (POLYLINE_2D)
     else {
       FIELD_VALUE (has_vertex) = 1;
     }
-    DXF {
-      if (FIELD_VALUE (flag) != 0)
-        FIELD_BS (flag, 70);
-      if (FIELD_VALUE (curve_type) != 0)
-        FIELD_BS (curve_type, 75);
-    } else {
-      FIELD_BS (flag, 70);
-      FIELD_BS (curve_type, 75);
-    }
+    FIELD_BS0 (flag, 70);
+    FIELD_BS0 (curve_type, 75);
     DECODER_OR_ENCODER {
       FIELD_BD (start_width, 40);
       FIELD_BD (end_width, 41);
@@ -872,8 +857,7 @@ DWG_ENTITY (POLYLINE_2D)
     DXF {
       BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
       pt.z = FIELD_VALUE (elevation);
-      if (FIELD_VALUE (thickness != 0.0))
-        FIELD_BT (thickness, 39);
+      FIELD_BT0 (thickness, 39);
       KEY (elevation); VALUE_3BD (pt, 10);
       FIELD_BD (start_width, 40);
       FIELD_BD (end_width, 41);
@@ -7246,13 +7230,13 @@ DWG_OBJECT (MATERIAL)
   MAT_MAP (refractionmap, 146, 273, 9, 274, 275, 276, 147);
 
   SINCE (R_2007) {
-    // all: DXF not if 0
-    FIELD_BD (translucence, 148);
-    FIELD_BD (self_illumination, 149);
-    FIELD_BD (reflectivity, 468);
-    FIELD_BL (illumination_model, 93);
-    FIELD_BL (channel_flags, 94);
-    FIELD_BL (mode, 282);
+    // no DXF if 0
+    FIELD_BD0 (translucence, 148);
+    FIELD_BD0 (self_illumination, 149);
+    FIELD_BD0 (reflectivity, 468);
+    FIELD_BL0 (illumination_model, 93);
+    FIELD_BL0 (channel_flags, 94);
+    FIELD_BL0 (mode, 282);
   }
 
 #if 0

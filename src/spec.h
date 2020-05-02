@@ -276,6 +276,15 @@
 #ifndef FIELD_BINARY
 #  define FIELD_BINARY(name, len, dxf) FIELD_TF (name, len, dxf)
 #endif
+// on DXF skip if 0
+#ifndef FIELD_BD0
+#  define FIELD_BD0(name, dxf) FIELD_BD (name, dxf)
+#  define FIELD_BL0(name, dxf) FIELD_BL (name, dxf)
+#  define FIELD_BS0(name, dxf) FIELD_BS (name, dxf)
+#  define FIELD_RC0(name, dxf) FIELD_RC (name, dxf)
+#  define FIELD_BT0(name, dxf) FIELD_BT (name, dxf)
+#endif
+
 // double to text
 #ifndef FIELD_D2T
 #  define FIELD_D2T(name, dxf) FIELD_TV (name, dxf)
