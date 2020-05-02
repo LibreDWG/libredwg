@@ -7011,6 +7011,153 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
     FIELD_B (has_predefined, 290); // when RENDERSETTINGS does not handle it
 DWG_OBJECT_END
 
+/* MATERIAL classes */
+
+// each color writes RC flag, BD factor, BL rgb if flag=1
+#define MAT_COLOR(color, dxf1, dxf2, dxf3)                                    \
+  {                                                                           \
+    FIELD_RC (color.flag, dxf1);     /* 0 Use current color, 1 Override */    \
+    FIELD_BD (color.factor, dxf2);   /* 0.0 - 1.0 */                          \
+    if (_obj->color.flag == 1)                                                \
+      {                                                                       \
+        FIELD_BL (color.rgb, dxf3);                                           \
+      }                                                                       \
+  }
+  
+/* if source == 2 */
+#define MAT_TEXTURE(map, value)                                               \
+  {                                                                           \
+    FIELD_BS (map.texturemode, 277);                                          \
+    if (FIELD_VALUE (map.texturemode) == 0)                                   \
+      {                                                                       \
+        /* woodtexture */                                                     \
+        MAT_COLOR (map.color1, 278, 460, 95);                                 \
+        MAT_COLOR (map.color2, 279, 461, 96);                                 \
+      }                                                                       \
+    else if (FIELD_VALUE (map.texturemode) == 1)                              \
+      {                                                                       \
+        /* marbletexture */                                                   \
+        MAT_COLOR (map.color1, 280, 465, 97);                                 \
+        MAT_COLOR (map.color2, 281, 466, 98);                                 \
+      }                                                                       \
+    else if (FIELD_VALUE (map.texturemode) == 2)                              \
+      {                                                                       \
+        /* generic texture variant */                                         \
+        FIELD_BS (genproctype, 0);                                            \
+        switch (_obj->genproctype) {                                          \
+        case 1:                                                               \
+          FIELD_B (genprocvalbool, 291); break;                               \
+        case 2:                                                               \
+          FIELD_BS (genprocvalint, 271); break;                               \
+        case 3:                                                               \
+          FIELD_BD (genprocvalreal, 469); break;                              \
+        case 4:                                                               \
+          FIELD_CMC (genprocvalcolor, 62,420); break;                         \
+        case 5:                                                               \
+          FIELD_T (genprocvaltext, 301); break;                               \
+        case 6:                                                               \
+          FIELD_BS (num_gentextures, 0);                                      \
+          /* struct of { genprocname, recursive MAT_TEXTURE } */              \
+        default:                                                              \
+          break;                                                              \
+         }                                                                    \
+      }                                                                       \
+  }
+
+#define MAT_MAPPER(map, dxf4, dxf5, dxf6, dxf7)                               \
+  {                                                                           \
+    /* 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */              \
+    FIELD_RC (map.projection, dxf4);                                          \
+    /* 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror */                  \
+    FIELD_RC (map.tiling, dxf5);                                              \
+    /* 1 no, 2: scale to curr ent, 4: w/ current block transform */           \
+    FIELD_RC (map.autotransform, dxf6);                                       \
+    FIELD_VECTOR_N (map.transmatrix, BD, 16, dxf7);                           \
+  }
+
+#define MAT_MAP(map, dxf1, dxf2, dxf3, dxf4, dxf5, dxf6, dxf7)                \
+    FIELD_BD (map.blendfactor, dxf1);                                         \
+    MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7);                                 \
+    FIELD_RC (map.source, dxf2); /* 0 scene, 1 file (def), 2 procedural */    \
+    if (FIELD_VALUE (map.source) == 1)                                        \
+      {                                                                       \
+        FIELD_T (map.filename, dxf3); /* if NULL no map */                    \
+      }                                                                       \
+    else if (FIELD_VALUE (map.source) == 2)                                   \
+      MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7)
+
+// (varies)
+DWG_OBJECT (MATERIAL)
+  //DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbMaterial)
+  FIELD_T (name, 1);
+  FIELD_T (description, 2);
+  MAT_COLOR (ambient_color, 70, 40, 90);
+  MAT_COLOR (diffuse_color, 71, 41, 91);
+
+  MAT_MAP (diffusemap, 42, 72, 3, 73, 74, 75, 43);
+  DXF {
+    SINCE (R_2007)
+      MAT_TEXTURE (diffusemap, 0)
+    //DXF { VALUE_B (1, 292); } /* genproctableend  */
+    //DXF { VALUE_BS (value, 277); } /* ?? */
+  }
+  MAT_COLOR (specular_color, 76, 45, 92);
+  DXF { FIELD_BD (specular_gloss_factor, 44); }
+  MAT_MAP (specularmap, 46, 77, 4, 78, 79, 170, 47);
+  FIELD_BD (specular_gloss_factor, 0); // def: 0.5
+  MAT_MAP (reflectionmap, 48, 171, 6, 172, 173, 174, 49);
+  FIELD_BD (opacity_percent, 140);      // def: 1.0
+  MAT_MAP (opacitymap, 141, 175, 7, 176, 177, 178, 142);
+  MAT_MAP (bumpmap, 143, 179, 8, 270, 271, 272, 144);
+  FIELD_BD (refraction_index, 145);     // def: 1.0
+  MAT_MAP (refractionmap, 146, 273, 9, 274, 275, 276, 147);
+
+  SINCE (R_2007) {
+    // no DXF if 0
+    FIELD_BD0 (translucence, 148);
+    FIELD_BD0 (self_illumination, 149);
+    FIELD_BD0 (reflectivity, 468);
+    FIELD_BL0 (illumination_model, 93);
+    FIELD_BL0 (channel_flags, 94);
+    FIELD_BL0 (mode, 282);
+  }
+
+#if 0
+  // missing:
+  FIELD_BD (indirect_bump_scale, 461);
+  FIELD_BD (reflectance_scale, 462);
+  FIELD_BD (transmittance_scale, 463);
+  FIELD_B (two_sided_material, 290);
+  FIELD_BD (luminance, 464);
+  FIELD_BS (luminance_mode, 270);
+  FIELD_BS (normalmap_method, 271);
+  FIELD_BD (normalmap_strength, 465); //def: 1.0
+  MAT_MAP (normalmap, 42, 72, 3, 73, 74, 75, 43);
+  FIELD_B (is_anonymous, 293);
+  FIELD_BS (global_illumination, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
+  FIELD_BS (final_gather, 273);        // 0 none, 1 cast, 2 receive, 3 cast&receive
+  FIELD_BD (color_bleed_scale, 460);
+
+  // saveas: ADVMATERIAL into xdic
+  //FIELD_T (genprocname, 300);
+  //FIELD_B (genprocvalbool, 291);
+  //FIELD_BS (genprocvalint, 271);
+  //FIELD_BD (genprocvalreal, 469);
+  //FIELD_T (genprocvaltext, 301);
+  //FIELD_B (genproctableend, 292); // always 1
+  //FIELD_CMC (genprocvalcolorindex, 62,420);
+  //FIELD_BL (genprocvalcolorrgb, 420); //int32
+  //FIELD_T (genprocvalcolorname, 430);
+  //78
+  //172
+  //176
+  //270
+  //274
+#endif
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -7126,152 +7273,6 @@ DWG_OBJECT (ASSOCNETWORK)
 
   START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (actions, num_actions, 5, 330);
-DWG_OBJECT_END
-
-/* MATERIAL classes */
-
-// each color writes RC flag, BD factor, BL rgb if flag=1
-#define MAT_COLOR(color, dxf1, dxf2, dxf3)                                    \
-  {                                                                           \
-    FIELD_RC (color.flag, dxf1);     /* 0 Use current color, 1 Override */    \
-    FIELD_BD (color.factor, dxf2);   /* 0.0 - 1.0 */                          \
-    if (_obj->color.flag == 1)                                                \
-      {                                                                       \
-        FIELD_BL (color.rgb, dxf3);                                           \
-      }                                                                       \
-  }
-  
-/* if source == 2 */
-#define MAT_TEXTURE(map, value)                                               \
-  {                                                                           \
-    FIELD_BS (map.texturemode, 277);                                          \
-    if (FIELD_VALUE (map.texturemode) == 0)                                   \
-      {                                                                       \
-        /* woodtexture */                                                     \
-        MAT_COLOR (map.color1, 278, 460, 95);                                 \
-        MAT_COLOR (map.color2, 279, 461, 96);                                 \
-      }                                                                       \
-    else if (FIELD_VALUE (map.texturemode) == 1)                              \
-      {                                                                       \
-        /* marbletexture */                                                   \
-        MAT_COLOR (map.color1, 280, 465, 97);                                 \
-        MAT_COLOR (map.color2, 281, 466, 98);                                 \
-      }                                                                       \
-    else if (FIELD_VALUE (map.texturemode) == 2)                              \
-      {                                                                       \
-        /* generic texture variant */                                         \
-        FIELD_BS (genproctype, 0);                                            \
-        switch (_obj->genproctype) {                                          \
-        case 1:                                                               \
-          FIELD_B (genprocvalbool, 291); break;                               \
-        case 2:                                                               \
-          FIELD_BS (genprocvalint, 271); break;                               \
-        case 3:                                                               \
-          FIELD_BD (genprocvalreal, 469); break;                              \
-        case 4:                                                               \
-          FIELD_CMC (genprocvalcolor, 62,420); break;                         \
-        case 5:                                                               \
-          FIELD_T (genprocvaltext, 301); break;                               \
-        case 6:                                                               \
-          FIELD_BS (num_gentextures, 0);                                      \
-          /* struct of { genprocname, recursive MAT_TEXTURE } */              \
-        default:                                                              \
-          break;                                                              \
-         }                                                                    \
-      }                                                                       \
-  }
-
-#define MAT_MAPPER(map, dxf4, dxf5, dxf6, dxf7)                               \
-  {                                                                           \
-    /* 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */              \
-    FIELD_RC (map.projection, dxf4);                                          \
-    /* 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror */                  \
-    FIELD_RC (map.tiling, dxf5);                                              \
-    /* 1 no, 2: scale to curr ent, 4: w/ current block transform */           \
-    FIELD_RC (map.autotransform, dxf6);                                       \
-    FIELD_VECTOR_N (map.transmatrix, BD, 16, dxf7);                           \
-  }
-
-#define MAT_MAP(map, dxf1, dxf2, dxf3, dxf4, dxf5, dxf6, dxf7)                \
-    FIELD_BD (map.blendfactor, dxf1);                                         \
-    MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7);                                 \
-    FIELD_RC (map.source, dxf2); /* 0 scene, 1 file (def), 2 procedural */    \
-    if (FIELD_VALUE (map.source) == 1)                                        \
-      {                                                                       \
-        FIELD_T (map.filename, dxf3); /* if NULL no map */                    \
-      }                                                                       \
-    else if (FIELD_VALUE (map.source) == 2)                                   \
-      MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7)
-
-// (varies) working on DEBUGGING
-DWG_OBJECT (MATERIAL)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbMaterial)
-  FIELD_T (name, 1);
-  FIELD_T (description, 2);
-  MAT_COLOR (ambient_color, 70, 40, 90);
-  MAT_COLOR (diffuse_color, 71, 41, 91);
-
-  MAT_MAP (diffusemap, 42, 72, 3, 73, 74, 75, 43);
-  DXF {
-    SINCE (R_2007)
-      MAT_TEXTURE (diffusemap, 0)
-    //DXF { VALUE_B (1, 292); } /* genproctableend  */
-    //DXF { VALUE_BS (value, 277); } /* ?? */
-  }
-  MAT_COLOR (specular_color, 76, 45, 92);
-  MAT_MAP (specularmap, 46, 77, 4, 78, 79, 170, 47);
-  FIELD_BD (specular_gloss_factor, 44); // def: 0.5
-  MAT_MAP (reflectionmap, 48, 171, 6, 172, 173, 174, 49);
-  FIELD_BD (opacity_percent, 140);      // def: 1.0
-  MAT_MAP (opacitymap, 141, 175, 7, 176, 177, 178, 142);
-  MAT_MAP (bumpmap, 143, 179, 8, 270, 271, 272, 144);
-  FIELD_BD (refraction_index, 145);     // def: 1.0
-  MAT_MAP (refractionmap, 146, 273, 9, 274, 275, 276, 147);
-
-  SINCE (R_2007) {
-    // no DXF if 0
-    FIELD_BD0 (translucence, 148);
-    FIELD_BD0 (self_illumination, 149);
-    FIELD_BD0 (reflectivity, 468);
-    FIELD_BL0 (illumination_model, 93);
-    FIELD_BL0 (channel_flags, 94);
-    FIELD_BL0 (mode, 282);
-  }
-
-#if 0
-  // missing:
-  FIELD_BD (indirect_bump_scale, 461);
-  FIELD_BD (reflectance_scale, 462);
-  FIELD_BD (transmittance_scale, 463);
-  FIELD_B (two_sided_material, 290);
-  FIELD_BD (luminance, 464);
-  FIELD_BS (luminance_mode, 270);
-  FIELD_BS (normalmap_method, 271);
-  FIELD_BD (normalmap_strength, 465); //def: 1.0
-  MAT_MAP (normalmap, 42, 72, 3, 73, 74, 75, 43);
-  FIELD_B (is_anonymous, 293);
-  FIELD_BS (global_illumination, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
-  FIELD_BS (final_gather, 273);        // 0 none, 1 cast, 2 receive, 3 cast&receive
-  FIELD_BD (color_bleed_scale, 460);
-
-  // saveas: ADVMATERIAL into xdic
-  //FIELD_T (genprocname, 300);
-  //FIELD_B (genprocvalbool, 291);
-  //FIELD_BS (genprocvalint, 271);
-  //FIELD_BD (genprocvalreal, 469);
-  //FIELD_T (genprocvaltext, 301);
-  //FIELD_B (genproctableend, 292); // always 1
-  //FIELD_CMC (genprocvalcolorindex, 62,420);
-  //FIELD_BL (genprocvalcolorrgb, 420); //int32
-  //FIELD_T (genprocvalcolorname, 430);
-  //78
-  //172
-  //176
-  //270
-  //274
-#endif
-  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // (varies) DEBUGGING

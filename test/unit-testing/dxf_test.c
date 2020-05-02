@@ -99,7 +99,7 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
     goto VT_POINT3D;
   if (vtype == VT_INT8 && fp->size == 1 && strEQc (fp->type, "B"))
     goto VT_BOOL;
-  if (vtype == VT_BOOL && fp->size == 1 && strEQc (fp->type, "RC"))
+  if ((vtype == VT_BOOL || vtype == VT_INT16) && fp->size == 1 && strEQc (fp->type, "RC"))
     goto VT_INT8;
   if (vtype == VT_INT8 && fp->size == 2)
     goto VT_INT16;
@@ -509,12 +509,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         goto VT_POINT3D;
       if (vtype == VT_INT8 && fp->size == 1 && strEQc (fp->type, "B"))
         goto VT_BOOL;
-      if (vtype == VT_BOOL && fp->size == 1 && strEQc (fp->type, "RC"))
+      if (vtype == VT_INT16 && fp->size == 1 && strEQc (fp->type, "RC"))
         goto VT_INT8;
       if (vtype == VT_INT8 && fp->size == 2)
         goto VT_INT16;
       if (vtype == VT_INT16 && fp->size == 4)
         goto VT_INT32;
+      if (vtype == VT_INT16 && fp->size == 1)
+        goto VT_INT8;
       if (vtype == VT_INT32 && fp->size == 8)
         goto VT_INT64;
       switch (vtype)

@@ -907,7 +907,7 @@ match_MATERIAL (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_OBJECT (MATERIAL, opacitymap.filename, 7);
   MATCH_OBJECT (MATERIAL, bumpmap.filename, 8);
   MATCH_OBJECT (MATERIAL, refractionmap.filename, 9);
-  MATCH_OBJECT (MATERIAL, normalmap.filename, 3);
+  //MATCH_OBJECT (MATERIAL, normalmap.filename, 3);
   //MATCH_OBJECT (MATERIAL, genprocname, 300);
   //MATCH_OBJECT (MATERIAL, genprocvaltext, 301);
   //MATCH_OBJECT (MATERIAL, genprocvalcolorname, 430);

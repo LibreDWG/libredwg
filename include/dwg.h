@@ -4172,10 +4172,11 @@ typedef struct _dwg_object_LIGHTLIST
   Dwg_LIGHTLIST_light *lights;
 } Dwg_Object_LIGHTLIST;
 
+
 typedef struct _dwg_MATERIAL_color
 {
   struct _dwg_object_object *parent;
-  BITCODE_BS flag;    /*!< 0 Use current color, 1 Override */
+  BITCODE_RC flag;    /*!< 0 Use current color, 1 Override */
   BITCODE_BD factor;  /*!< 0.0 - 1.0 */
   BITCODE_BL rgb;
 } Dwg_MATERIAL_color;
@@ -4184,7 +4185,7 @@ typedef struct _dwg_MATERIAL_mapper
 {
   struct _dwg_object_object *parent;
   BITCODE_BD blendfactor;   /*!< DXF 42  def: 1.0 */
-  BITCODE_BS source;        /*!< DXF 72  0 current, 1 image file (def), 2 2nd map? */
+  BITCODE_RC source;        /*!< DXF 72  0 current, 1 image file (def), 2 2nd map? */
   BITCODE_T filename;       /*!< DXF 3   if NULL no diffuse map */
   BITCODE_RC projection;    /*!< DXF 73  1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
   BITCODE_RC tiling;        /*!< DXF 74  1 = Tile (def), 2 = Crop, 3 = Clamp */
@@ -4199,8 +4200,6 @@ typedef struct _dwg_MATERIAL_mapper
 
 /**
  Object MATERIAL (varies)
- R2007+ yet unused
-
  Acad Naming: e.g. Materials/assetlibrary_base.fbm/shaders/AdskShaders.mi
                   Materials/assetlibrary_base.fbm/Mats/SolidGlass/Generic.xml
  */
@@ -4208,33 +4207,33 @@ typedef struct _dwg_object_MATERIAL
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_T name; /*!< DXF 1 */
-  BITCODE_T description; /*!< DXF 2 optional */
+  BITCODE_T name; 			/*!< DXF 1 */
+  BITCODE_T description; 		/*!< DXF 2 optional */
 
-  Dwg_MATERIAL_color ambient_color;    /*!< 70, 40, 90 */
-  Dwg_MATERIAL_color diffuse_color;    /*!< 71, 41, 91 */
-  Dwg_MATERIAL_mapper diffusemap;      /*!< 42, 72, 3, 73, 74, 75, 43 */
+  Dwg_MATERIAL_color ambient_color;    /*!< DXF 70, 40, 90 */
+  Dwg_MATERIAL_color diffuse_color;    /*!< DXF 71, 41, 91 */
+  Dwg_MATERIAL_mapper diffusemap;      /*!< DXF 42, 72, 3, 73, 74, 75, 43 */
 
-  BITCODE_BD specular_gloss_factor;          /*!< DXF 44 def: 0.5 */
-  Dwg_MATERIAL_color specular_color;  /*!< 76, 45, 92 */
-  Dwg_MATERIAL_mapper specularmap;    /*!< 46, 77, 4, 78, 79, 170, 47 */
+  BITCODE_BD specular_gloss_factor;    /*!< DXF 44 def: 0.5 */
+  Dwg_MATERIAL_color specular_color;   /*!< DXF 76, 45, 92 */
+  Dwg_MATERIAL_mapper specularmap;     /*!< DXF 46, 77, 4, 78, 79, 170, 47 */
 
   //?? BD reflection_depth
   //reflection_glossy_samples
-  Dwg_MATERIAL_mapper reflectionmap;  /*!< 48, 171, 6, 172, 173, 174, 49 */
+  Dwg_MATERIAL_mapper reflectionmap;   /*!< DXF 48, 171, 6, 172, 173, 174, 49 */
 
-  BITCODE_BD opacity_percent;                /*!< DXF 140 def: 1.0 */
-  Dwg_MATERIAL_mapper opacitymap;     /*!< 141, 175, 7, 176, 177, 178, 142 */
+  BITCODE_BD opacity_percent;          /*!< DXF 140 def: 1.0 */
+  Dwg_MATERIAL_mapper opacitymap;      /*!< DXF 141, 175, 7, 176, 177, 178, 142 */
 
   //BITCODE_B bump_enable
   //?BD bump_amount
-  Dwg_MATERIAL_mapper bumpmap;        /*!< 143, 179, 8, 270, 271, 272, 144 */
+  Dwg_MATERIAL_mapper bumpmap;         /*!< DXF 143, 179, 8, 270, 271, 272, 144 */
 
-  BITCODE_BD refraction_index;               /*!< DXF 145 def: 1.0 */
+  BITCODE_BD refraction_index;         /*!< DXF 145 def: 1.0 */
   //?? BD refraction_depth
   //?? BD refraction_translucency_weight
   //?? refraction_glossy_samples
-  Dwg_MATERIAL_mapper refractionmap;  /*!< 146, 273, 9, 274, 275, 276, 147 */
+  Dwg_MATERIAL_mapper refractionmap;   /*!< DXF 146, 273, 9, 274, 275, 276, 147 */
 
   BITCODE_BD color_bleed_scale;    /*!< DXF 460 */
   BITCODE_BD indirect_bump_scale;  /*!< DXF 461 */
@@ -4250,28 +4249,24 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_BL channel_flags;        /*!< DXF 94 */
   BITCODE_BL mode;                 /*!< DXF 282 */
 
-  
-  BITCODE_BS normalmap_method;     /*!< DXF 271 */
-  BITCODE_BD normalmap_strength;   /*!< DXF 465 def: 1.0 */
-  Dwg_MATERIAL_mapper normalmap;  /*!< 42, 72, 3, 73, 74, 75, 43 */
-  BITCODE_B is_anonymous;            /*!< DXF 293 */
-  BITCODE_BS global_illumination;    /*!< DXF 272 */
-  BITCODE_BS final_gather;           /*!< DXF 273 */
-
-  BITCODE_T genprocname;        /*!< DXF 300 */
+  BITCODE_T genprocname;           /*!< DXF 300 */
   BITCODE_BS genproctype;
-  BITCODE_B genprocvalbool;     /*!< DXF 291 */
-  BITCODE_BS genprocvalint;     /*!< DXF 271 */
-  BITCODE_BD genprocvalreal;    /*!< DXF 469 */
-  BITCODE_T genprocvaltext;     /*!< DXF 301 */
-  BITCODE_CMC genprocvalcolor;  /*!< DXF 62 */
-  BITCODE_B genproctableend;    /*!< DXF 292 */
+  BITCODE_B genprocvalbool;        /*!< DXF 291 */
+  BITCODE_BS genprocvalint;        /*!< DXF 271 */
+  BITCODE_BD genprocvalreal;       /*!< DXF 469 */
+  BITCODE_T genprocvaltext;        /*!< DXF 301 */
+  BITCODE_CMC genprocvalcolor;     /*!< DXF 62 */
+  BITCODE_B genproctableend;       /*!< DXF 292 */
   BITCODE_BS num_gentextures;
   void* gentextures;
-  BITCODE_CMC gencolorfrom;
-  BITCODE_CMC gencolorto;
-  BITCODE_BD gencolor_from;
-  BITCODE_BD gencolor_to;
+#if 0
+  BITCODE_BS normalmap_method;     /*!< DXF 271 */
+  BITCODE_BD normalmap_strength;   /*!< DXF 465 def: 1.0 */
+  Dwg_MATERIAL_mapper normalmap;   /*!< DXF 42, 72, 3, 73, 74, 75, 43 */
+  BITCODE_B is_anonymous;          /*!< DXF 293 */
+  BITCODE_BS global_illumination;  /*!< DXF 272 */
+  BITCODE_BS final_gather;         /*!< DXF 273 */
+#endif
   //? BD backface_cull
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature
@@ -7342,6 +7337,7 @@ EXPORT int dwg_setup_GEODATA (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
+EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_MULTILEADER (Dwg_Object *obj);
@@ -7400,7 +7396,6 @@ EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);
 EXPORT int dwg_setup_GEOPOSITIONMARKER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYERFILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
-EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODEL (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODELDEF (Dwg_Object *obj);
 EXPORT int dwg_setup_NPOCOLLECTION (Dwg_Object *obj);

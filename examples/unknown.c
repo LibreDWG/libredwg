@@ -45,7 +45,7 @@
 //              size_t little_len);
 
 
-#define CHAIN_SIZE 32
+#define CHAIN_SIZE 128
 int cur_hdl; // to avoid dupl. search
 
 #include "unknown.h"

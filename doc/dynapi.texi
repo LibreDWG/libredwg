@@ -6679,18 +6679,6 @@ BL,	DXF 93
 BL,	DXF 94
 @item mode
 BL,	DXF 282
-@item normalmap_method
-BS,	DXF 271
-@item normalmap_strength
-BD,	DXF 465
-@item normalmap
-Dwg_MATERIAL_mapper
-@item is_anonymous
-B,	DXF 293
-@item global_illumination
-BS,	DXF 272
-@item final_gather
-BS,	DXF 273
 @item genprocname
 T
 @item genproctype
@@ -6711,14 +6699,6 @@ B
 BS
 @item gentextures
 void*
-@item gencolorfrom
-CMC
-@item gencolorto
-CMC
-@item gencolor_from
-BD
-@item gencolor_to
-BD
 
 @end vtable
 @end indentedblock
@@ -9984,7 +9964,7 @@ H*
 @item parent
 struct _dwg_object_object*
 @item flag
-BS
+RC
 @item factor
 BD
 @item rgb
@@ -10004,7 +9984,7 @@ struct _dwg_object_object*
 @item blendfactor
 BD
 @item source
-BS
+RC
 @item filename
 T
 @item projection
