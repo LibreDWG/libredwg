@@ -6629,114 +6629,30 @@ struct _dwg_object_object*
 T,	DXF 1
 @item description
 T,	DXF 2
-@item ambient_color_flag
-BS
-@item ambient_color_factor
-BD
 @item ambient_color
-CMC
-@item diffuse_color_flag
-BS
-@item diffuse_color_factor
-BD
+Dwg_MATERIAL_color
 @item diffuse_color
-CMC
-@item diffusemap_source
-BS
-@item diffusemap_filename
-T
-@item diffusemap_blendfactor
-BD
-@item diffusemap_projection
-RC
-@item diffusemap_tiling
-RC
-@item diffusemap_autotransform
-RC
-@item diffusemap_transmatrix
-BD*
+Dwg_MATERIAL_color
+@item diffusemap
+Dwg_MATERIAL_mapper
 @item specular_gloss_factor
 BD,	DXF 44
-@item specular_color_flag
-BS
-@item specular_color_factor
-BD
 @item specular_color
-CMC
-@item specularmap_source
-BS
-@item specularmap_filename
-T
-@item specularmap_blendfactor
-BD
-@item specularmap_projection
-BS,	DXF 78
-@item specularmap_tiling
-BS
-@item specularmap_autotransform
-BS
-@item specularmap_transmatrix
-BD*
-@item reflectionmap_source
-BS
-@item reflectionmap_filename
-T
-@item reflectionmap_blendfactor
-BD
-@item reflectionmap_projection
-BS,	DXF 172
-@item reflectionmap_tiling
-BS
-@item reflectionmap_autotransform
-BS
-@item reflectionmap_transmatrix
-BD*
+Dwg_MATERIAL_color
+@item specularmap
+Dwg_MATERIAL_mapper
+@item reflectionmap
+Dwg_MATERIAL_mapper
 @item opacity_percent
 BD,	DXF 140
-@item opacitymap_source
-BS
-@item opacitymap_filename
-T
-@item opacitymap_blendfactor
-BD
-@item opacitymap_projection
-BS,	DXF 176
-@item opacitymap_tiling
-BS
-@item opacitymap_autotransform
-BS
-@item opacitymap_transmatrix
-BD*
-@item bumpmap_source
-BS
-@item bumpmap_filename
-T
-@item bumpmap_blendfactor
-BD
-@item bumpmap_projection
-BS,	DXF 270
-@item bumpmap_tiling
-BS
-@item bumpmap_autotransform
-BS
-@item bumpmap_transmatrix
-BD*
+@item opacitymap
+Dwg_MATERIAL_mapper
+@item bumpmap
+Dwg_MATERIAL_mapper
 @item refraction_index
 BD,	DXF 145
-@item refractionmap_source
-BS
-@item refractionmap_filename
-T
-@item refractionmap_blendfactor
-BD
-@item refractionmap_projection
-BS,	DXF 274
-@item refractionmap_tiling
-BS
-@item refractionmap_autotransform
-BS
-@item refractionmap_transmatrix
-BD*
+@item refractionmap
+Dwg_MATERIAL_mapper
 @item color_bleed_scale
 BD,	DXF 460
 @item indirect_bump_scale
@@ -6767,42 +6683,28 @@ BL,	DXF 282
 BS,	DXF 271
 @item normalmap_strength
 BD,	DXF 465
-@item normalmap_source
-BS
-@item normalmap_filename
-T
-@item normalmap_blendfactor
-BD
-@item normalmap_projection
-BS,	DXF 73
-@item normalmap_tiling
-BS
-@item normalmap_autotransform
-BS
-@item normalmap_transmatrix
-BD*
+@item normalmap
+Dwg_MATERIAL_mapper
 @item is_anonymous
 B,	DXF 293
 @item global_illumination
 BS,	DXF 272
 @item final_gather
 BS,	DXF 273
-@item texturemode
-BS
 @item genprocname
 T
 @item genproctype
 BS
 @item genprocvalbool
-B,	DXF 291
+B
 @item genprocvalint
-BS,	DXF 271
+BS
 @item genprocvalreal
-BD,	DXF 469
+BD
 @item genprocvaltext
-T,	DXF 301
+T
 @item genprocvalcolor
-CMC,	DXF 62
+CMC
 @item genproctableend
 B
 @item num_gentextures
@@ -10069,6 +9971,56 @@ Dwg_TableRow*
 BL
 @item field_refs
 H*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_MATERIAL_color} @anchor{Dwg_MATERIAL_color}
+@vindex Dwg_MATERIAL_color
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item flag
+BS
+@item factor
+BD
+@item rgb
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_MATERIAL_mapper} @anchor{Dwg_MATERIAL_mapper}
+@vindex Dwg_MATERIAL_mapper
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item blendfactor
+BD
+@item source
+BS
+@item filename
+T
+@item projection
+RC
+@item tiling
+RC
+@item autotransform
+RC
+@item transmatrix
+BD*
+@item texturemode
+BS
+@item color1
+Dwg_MATERIAL_color
+@item color2
+Dwg_MATERIAL_color
 
 @end vtable
 @end indentedblock

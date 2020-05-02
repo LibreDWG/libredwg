@@ -34387,135 +34387,20 @@ static int test_MATERIAL (const Dwg_Object *obj)
   Dwg_Object_MATERIAL *restrict material = obj->tio.object->tio.MATERIAL;
   failed = 0;
   {
-    BITCODE_CMC ambient_color;
+    Dwg_MATERIAL_color ambient_color;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "ambient_color", &ambient_color, NULL)
         && !memcmp (&ambient_color, &material->ambient_color, sizeof (material->ambient_color)))
         pass ();
     else
-        fail ("MATERIAL.ambient_color [CMC]");
+        fail ("MATERIAL.ambient_color [Dwg_MATERIAL_color]");
   }
   {
-    BITCODE_BD ambient_color_factor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "ambient_color_factor", &ambient_color_factor, NULL)
-        && ambient_color_factor == material->ambient_color_factor)
-      pass ();
-    else
-      fail ("MATERIAL.ambient_color_factor [BD] %g != %g", material->ambient_color_factor, ambient_color_factor);
-    ambient_color_factor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "ambient_color_factor", &ambient_color_factor, 0)
-        && ambient_color_factor == material->ambient_color_factor)
-      pass ();
-    else
-      fail ("MATERIAL.ambient_color_factor [BD] set+1 %g != %g", material->ambient_color_factor, ambient_color_factor);
-    material->ambient_color_factor--;
-  }
-  {
-    BITCODE_BS ambient_color_flag;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "ambient_color_flag", &ambient_color_flag, NULL)
-        && ambient_color_flag == material->ambient_color_flag)
-      pass ();
-    else
-      fail ("MATERIAL.ambient_color_flag [BS] %hu != %hu", material->ambient_color_flag, ambient_color_flag);
-    ambient_color_flag++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "ambient_color_flag", &ambient_color_flag, 0)
-        && ambient_color_flag == material->ambient_color_flag)
-      pass ();
-    else
-      fail ("MATERIAL.ambient_color_flag [BS] set+1 %hu != %hu", material->ambient_color_flag, ambient_color_flag);
-    material->ambient_color_flag--;
-  }
-  {
-    BITCODE_BS bumpmap_autotransform;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_autotransform", &bumpmap_autotransform, NULL)
-        && bumpmap_autotransform == material->bumpmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_autotransform [BS] %hu != %hu", material->bumpmap_autotransform, bumpmap_autotransform);
-    bumpmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_autotransform", &bumpmap_autotransform, 0)
-        && bumpmap_autotransform == material->bumpmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_autotransform [BS] set+1 %hu != %hu", material->bumpmap_autotransform, bumpmap_autotransform);
-    material->bumpmap_autotransform--;
-  }
-  {
-    BITCODE_BD bumpmap_blendfactor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_blendfactor", &bumpmap_blendfactor, NULL)
-        && bumpmap_blendfactor == material->bumpmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_blendfactor [BD] %g != %g", material->bumpmap_blendfactor, bumpmap_blendfactor);
-    bumpmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_blendfactor", &bumpmap_blendfactor, 0)
-        && bumpmap_blendfactor == material->bumpmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_blendfactor [BD] set+1 %g != %g", material->bumpmap_blendfactor, bumpmap_blendfactor);
-    material->bumpmap_blendfactor--;
-  }
-  {
-    BITCODE_T bumpmap_filename;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_filename", &bumpmap_filename, NULL)
-        && bumpmap_filename
-           ? strEQ ((char *)bumpmap_filename, (char *)material->bumpmap_filename)
-           : !material->bumpmap_filename)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_filename [T] '%s' <> '%s'", bumpmap_filename, material->bumpmap_filename);
-  }
-  {
-    BITCODE_BS bumpmap_projection;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_projection", &bumpmap_projection, NULL)
-        && bumpmap_projection == material->bumpmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_projection [BS] %hu != %hu", material->bumpmap_projection, bumpmap_projection);
-    bumpmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_projection", &bumpmap_projection, 0)
-        && bumpmap_projection == material->bumpmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_projection [BS] set+1 %hu != %hu", material->bumpmap_projection, bumpmap_projection);
-    material->bumpmap_projection--;
-  }
-  {
-    BITCODE_BS bumpmap_source;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_source", &bumpmap_source, NULL)
-        && bumpmap_source == material->bumpmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_source [BS] %hu != %hu", material->bumpmap_source, bumpmap_source);
-    bumpmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_source", &bumpmap_source, 0)
-        && bumpmap_source == material->bumpmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_source [BS] set+1 %hu != %hu", material->bumpmap_source, bumpmap_source);
-    material->bumpmap_source--;
-  }
-  {
-    BITCODE_BS bumpmap_tiling;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_tiling", &bumpmap_tiling, NULL)
-        && bumpmap_tiling == material->bumpmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_tiling [BS] %hu != %hu", material->bumpmap_tiling, bumpmap_tiling);
-    bumpmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "bumpmap_tiling", &bumpmap_tiling, 0)
-        && bumpmap_tiling == material->bumpmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.bumpmap_tiling [BS] set+1 %hu != %hu", material->bumpmap_tiling, bumpmap_tiling);
-    material->bumpmap_tiling--;
-  }
-  {
-    BITCODE_BD* bumpmap_transmatrix;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap_transmatrix", &bumpmap_transmatrix, NULL)
-        && !memcmp (&bumpmap_transmatrix, &material->bumpmap_transmatrix, sizeof (material->bumpmap_transmatrix)))
+    Dwg_MATERIAL_mapper bumpmap;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap", &bumpmap, NULL)
+        && !memcmp (&bumpmap, &material->bumpmap, sizeof (material->bumpmap)))
         pass ();
     else
-        fail ("MATERIAL.bumpmap_transmatrix [BD*]");
+        fail ("MATERIAL.bumpmap [Dwg_MATERIAL_mapper]");
   }
   {
     BITCODE_BL channel_flags;
@@ -34558,135 +34443,20 @@ static int test_MATERIAL (const Dwg_Object *obj)
       fail ("MATERIAL.description [T] '%s' <> '%s'", description, material->description);
   }
   {
-    BITCODE_CMC diffuse_color;
+    Dwg_MATERIAL_color diffuse_color;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "diffuse_color", &diffuse_color, NULL)
         && !memcmp (&diffuse_color, &material->diffuse_color, sizeof (material->diffuse_color)))
         pass ();
     else
-        fail ("MATERIAL.diffuse_color [CMC]");
+        fail ("MATERIAL.diffuse_color [Dwg_MATERIAL_color]");
   }
   {
-    BITCODE_BD diffuse_color_factor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffuse_color_factor", &diffuse_color_factor, NULL)
-        && diffuse_color_factor == material->diffuse_color_factor)
-      pass ();
-    else
-      fail ("MATERIAL.diffuse_color_factor [BD] %g != %g", material->diffuse_color_factor, diffuse_color_factor);
-    diffuse_color_factor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffuse_color_factor", &diffuse_color_factor, 0)
-        && diffuse_color_factor == material->diffuse_color_factor)
-      pass ();
-    else
-      fail ("MATERIAL.diffuse_color_factor [BD] set+1 %g != %g", material->diffuse_color_factor, diffuse_color_factor);
-    material->diffuse_color_factor--;
-  }
-  {
-    BITCODE_BS diffuse_color_flag;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffuse_color_flag", &diffuse_color_flag, NULL)
-        && diffuse_color_flag == material->diffuse_color_flag)
-      pass ();
-    else
-      fail ("MATERIAL.diffuse_color_flag [BS] %hu != %hu", material->diffuse_color_flag, diffuse_color_flag);
-    diffuse_color_flag++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffuse_color_flag", &diffuse_color_flag, 0)
-        && diffuse_color_flag == material->diffuse_color_flag)
-      pass ();
-    else
-      fail ("MATERIAL.diffuse_color_flag [BS] set+1 %hu != %hu", material->diffuse_color_flag, diffuse_color_flag);
-    material->diffuse_color_flag--;
-  }
-  {
-    BITCODE_RC diffusemap_autotransform;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_autotransform", &diffusemap_autotransform, NULL)
-        && diffusemap_autotransform == material->diffusemap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_autotransform [RC] %u != %u", material->diffusemap_autotransform, diffusemap_autotransform);
-    diffusemap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_autotransform", &diffusemap_autotransform, 0)
-        && diffusemap_autotransform == material->diffusemap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_autotransform [RC] set+1 %u != %u", material->diffusemap_autotransform, diffusemap_autotransform);
-    material->diffusemap_autotransform--;
-  }
-  {
-    BITCODE_BD diffusemap_blendfactor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_blendfactor", &diffusemap_blendfactor, NULL)
-        && diffusemap_blendfactor == material->diffusemap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_blendfactor [BD] %g != %g", material->diffusemap_blendfactor, diffusemap_blendfactor);
-    diffusemap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_blendfactor", &diffusemap_blendfactor, 0)
-        && diffusemap_blendfactor == material->diffusemap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_blendfactor [BD] set+1 %g != %g", material->diffusemap_blendfactor, diffusemap_blendfactor);
-    material->diffusemap_blendfactor--;
-  }
-  {
-    BITCODE_T diffusemap_filename;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_filename", &diffusemap_filename, NULL)
-        && diffusemap_filename
-           ? strEQ ((char *)diffusemap_filename, (char *)material->diffusemap_filename)
-           : !material->diffusemap_filename)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_filename [T] '%s' <> '%s'", diffusemap_filename, material->diffusemap_filename);
-  }
-  {
-    BITCODE_RC diffusemap_projection;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_projection", &diffusemap_projection, NULL)
-        && diffusemap_projection == material->diffusemap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_projection [RC] %u != %u", material->diffusemap_projection, diffusemap_projection);
-    diffusemap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_projection", &diffusemap_projection, 0)
-        && diffusemap_projection == material->diffusemap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_projection [RC] set+1 %u != %u", material->diffusemap_projection, diffusemap_projection);
-    material->diffusemap_projection--;
-  }
-  {
-    BITCODE_BS diffusemap_source;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_source", &diffusemap_source, NULL)
-        && diffusemap_source == material->diffusemap_source)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_source [BS] %hu != %hu", material->diffusemap_source, diffusemap_source);
-    diffusemap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_source", &diffusemap_source, 0)
-        && diffusemap_source == material->diffusemap_source)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_source [BS] set+1 %hu != %hu", material->diffusemap_source, diffusemap_source);
-    material->diffusemap_source--;
-  }
-  {
-    BITCODE_RC diffusemap_tiling;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_tiling", &diffusemap_tiling, NULL)
-        && diffusemap_tiling == material->diffusemap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_tiling [RC] %u != %u", material->diffusemap_tiling, diffusemap_tiling);
-    diffusemap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_tiling", &diffusemap_tiling, 0)
-        && diffusemap_tiling == material->diffusemap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.diffusemap_tiling [RC] set+1 %u != %u", material->diffusemap_tiling, diffusemap_tiling);
-    material->diffusemap_tiling--;
-  }
-  {
-    BITCODE_BD* diffusemap_transmatrix;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_transmatrix", &diffusemap_transmatrix, NULL)
-        && !memcmp (&diffusemap_transmatrix, &material->diffusemap_transmatrix, sizeof (material->diffusemap_transmatrix)))
+    Dwg_MATERIAL_mapper diffusemap;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap", &diffusemap, NULL)
+        && !memcmp (&diffusemap, &material->diffusemap, sizeof (material->diffusemap)))
         pass ();
     else
-        fail ("MATERIAL.diffusemap_transmatrix [BD*]");
+        fail ("MATERIAL.diffusemap [Dwg_MATERIAL_mapper]");
   }
   {
     BITCODE_BS final_gather;
@@ -34978,44 +34748,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
       fail ("MATERIAL.name [T] '%s' <> '%s'", name, material->name);
   }
   {
-    BITCODE_BS normalmap_autotransform;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_autotransform", &normalmap_autotransform, NULL)
-        && normalmap_autotransform == material->normalmap_autotransform)
-      pass ();
+    Dwg_MATERIAL_mapper normalmap;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap", &normalmap, NULL)
+        && !memcmp (&normalmap, &material->normalmap, sizeof (material->normalmap)))
+        pass ();
     else
-      fail ("MATERIAL.normalmap_autotransform [BS] %hu != %hu", material->normalmap_autotransform, normalmap_autotransform);
-    normalmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_autotransform", &normalmap_autotransform, 0)
-        && normalmap_autotransform == material->normalmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_autotransform [BS] set+1 %hu != %hu", material->normalmap_autotransform, normalmap_autotransform);
-    material->normalmap_autotransform--;
-  }
-  {
-    BITCODE_BD normalmap_blendfactor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_blendfactor", &normalmap_blendfactor, NULL)
-        && normalmap_blendfactor == material->normalmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_blendfactor [BD] %g != %g", material->normalmap_blendfactor, normalmap_blendfactor);
-    normalmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_blendfactor", &normalmap_blendfactor, 0)
-        && normalmap_blendfactor == material->normalmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_blendfactor [BD] set+1 %g != %g", material->normalmap_blendfactor, normalmap_blendfactor);
-    material->normalmap_blendfactor--;
-  }
-  {
-    BITCODE_T normalmap_filename;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_filename", &normalmap_filename, NULL)
-        && normalmap_filename
-           ? strEQ ((char *)normalmap_filename, (char *)material->normalmap_filename)
-           : !material->normalmap_filename)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_filename [T] '%s' <> '%s'", normalmap_filename, material->normalmap_filename);
+        fail ("MATERIAL.normalmap [Dwg_MATERIAL_mapper]");
   }
   {
     BITCODE_BS normalmap_method;
@@ -35033,36 +34771,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->normalmap_method--;
   }
   {
-    BITCODE_BS normalmap_projection;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_projection", &normalmap_projection, NULL)
-        && normalmap_projection == material->normalmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_projection [BS] %hu != %hu", material->normalmap_projection, normalmap_projection);
-    normalmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_projection", &normalmap_projection, 0)
-        && normalmap_projection == material->normalmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_projection [BS] set+1 %hu != %hu", material->normalmap_projection, normalmap_projection);
-    material->normalmap_projection--;
-  }
-  {
-    BITCODE_BS normalmap_source;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_source", &normalmap_source, NULL)
-        && normalmap_source == material->normalmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_source [BS] %hu != %hu", material->normalmap_source, normalmap_source);
-    normalmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_source", &normalmap_source, 0)
-        && normalmap_source == material->normalmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_source [BS] set+1 %hu != %hu", material->normalmap_source, normalmap_source);
-    material->normalmap_source--;
-  }
-  {
     BITCODE_BD normalmap_strength;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_strength", &normalmap_strength, NULL)
         && normalmap_strength == material->normalmap_strength)
@@ -35076,29 +34784,6 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.normalmap_strength [BD] set+1 %g != %g", material->normalmap_strength, normalmap_strength);
     material->normalmap_strength--;
-  }
-  {
-    BITCODE_BS normalmap_tiling;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_tiling", &normalmap_tiling, NULL)
-        && normalmap_tiling == material->normalmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_tiling [BS] %hu != %hu", material->normalmap_tiling, normalmap_tiling);
-    normalmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "normalmap_tiling", &normalmap_tiling, 0)
-        && normalmap_tiling == material->normalmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.normalmap_tiling [BS] set+1 %hu != %hu", material->normalmap_tiling, normalmap_tiling);
-    material->normalmap_tiling--;
-  }
-  {
-    BITCODE_BD* normalmap_transmatrix;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "normalmap_transmatrix", &normalmap_transmatrix, NULL)
-        && !memcmp (&normalmap_transmatrix, &material->normalmap_transmatrix, sizeof (material->normalmap_transmatrix)))
-        pass ();
-    else
-        fail ("MATERIAL.normalmap_transmatrix [BD*]");
   }
   {
     BITCODE_BS num_gentextures;
@@ -35131,97 +34816,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->opacity_percent--;
   }
   {
-    BITCODE_BS opacitymap_autotransform;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_autotransform", &opacitymap_autotransform, NULL)
-        && opacitymap_autotransform == material->opacitymap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_autotransform [BS] %hu != %hu", material->opacitymap_autotransform, opacitymap_autotransform);
-    opacitymap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_autotransform", &opacitymap_autotransform, 0)
-        && opacitymap_autotransform == material->opacitymap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_autotransform [BS] set+1 %hu != %hu", material->opacitymap_autotransform, opacitymap_autotransform);
-    material->opacitymap_autotransform--;
-  }
-  {
-    BITCODE_BD opacitymap_blendfactor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_blendfactor", &opacitymap_blendfactor, NULL)
-        && opacitymap_blendfactor == material->opacitymap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_blendfactor [BD] %g != %g", material->opacitymap_blendfactor, opacitymap_blendfactor);
-    opacitymap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_blendfactor", &opacitymap_blendfactor, 0)
-        && opacitymap_blendfactor == material->opacitymap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_blendfactor [BD] set+1 %g != %g", material->opacitymap_blendfactor, opacitymap_blendfactor);
-    material->opacitymap_blendfactor--;
-  }
-  {
-    BITCODE_T opacitymap_filename;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_filename", &opacitymap_filename, NULL)
-        && opacitymap_filename
-           ? strEQ ((char *)opacitymap_filename, (char *)material->opacitymap_filename)
-           : !material->opacitymap_filename)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_filename [T] '%s' <> '%s'", opacitymap_filename, material->opacitymap_filename);
-  }
-  {
-    BITCODE_BS opacitymap_projection;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_projection", &opacitymap_projection, NULL)
-        && opacitymap_projection == material->opacitymap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_projection [BS] %hu != %hu", material->opacitymap_projection, opacitymap_projection);
-    opacitymap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_projection", &opacitymap_projection, 0)
-        && opacitymap_projection == material->opacitymap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_projection [BS] set+1 %hu != %hu", material->opacitymap_projection, opacitymap_projection);
-    material->opacitymap_projection--;
-  }
-  {
-    BITCODE_BS opacitymap_source;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_source", &opacitymap_source, NULL)
-        && opacitymap_source == material->opacitymap_source)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_source [BS] %hu != %hu", material->opacitymap_source, opacitymap_source);
-    opacitymap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_source", &opacitymap_source, 0)
-        && opacitymap_source == material->opacitymap_source)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_source [BS] set+1 %hu != %hu", material->opacitymap_source, opacitymap_source);
-    material->opacitymap_source--;
-  }
-  {
-    BITCODE_BS opacitymap_tiling;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_tiling", &opacitymap_tiling, NULL)
-        && opacitymap_tiling == material->opacitymap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_tiling [BS] %hu != %hu", material->opacitymap_tiling, opacitymap_tiling);
-    opacitymap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "opacitymap_tiling", &opacitymap_tiling, 0)
-        && opacitymap_tiling == material->opacitymap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.opacitymap_tiling [BS] set+1 %hu != %hu", material->opacitymap_tiling, opacitymap_tiling);
-    material->opacitymap_tiling--;
-  }
-  {
-    BITCODE_BD* opacitymap_transmatrix;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap_transmatrix", &opacitymap_transmatrix, NULL)
-        && !memcmp (&opacitymap_transmatrix, &material->opacitymap_transmatrix, sizeof (material->opacitymap_transmatrix)))
+    Dwg_MATERIAL_mapper opacitymap;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap", &opacitymap, NULL)
+        && !memcmp (&opacitymap, &material->opacitymap, sizeof (material->opacitymap)))
         pass ();
     else
-        fail ("MATERIAL.opacitymap_transmatrix [BD*]");
+        fail ("MATERIAL.opacitymap [Dwg_MATERIAL_mapper]");
   }
   {
     struct _dwg_object_object* parent;
@@ -35247,97 +34847,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->reflectance_scale--;
   }
   {
-    BITCODE_BS reflectionmap_autotransform;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_autotransform", &reflectionmap_autotransform, NULL)
-        && reflectionmap_autotransform == material->reflectionmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_autotransform [BS] %hu != %hu", material->reflectionmap_autotransform, reflectionmap_autotransform);
-    reflectionmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_autotransform", &reflectionmap_autotransform, 0)
-        && reflectionmap_autotransform == material->reflectionmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_autotransform [BS] set+1 %hu != %hu", material->reflectionmap_autotransform, reflectionmap_autotransform);
-    material->reflectionmap_autotransform--;
-  }
-  {
-    BITCODE_BD reflectionmap_blendfactor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_blendfactor", &reflectionmap_blendfactor, NULL)
-        && reflectionmap_blendfactor == material->reflectionmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_blendfactor [BD] %g != %g", material->reflectionmap_blendfactor, reflectionmap_blendfactor);
-    reflectionmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_blendfactor", &reflectionmap_blendfactor, 0)
-        && reflectionmap_blendfactor == material->reflectionmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_blendfactor [BD] set+1 %g != %g", material->reflectionmap_blendfactor, reflectionmap_blendfactor);
-    material->reflectionmap_blendfactor--;
-  }
-  {
-    BITCODE_T reflectionmap_filename;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_filename", &reflectionmap_filename, NULL)
-        && reflectionmap_filename
-           ? strEQ ((char *)reflectionmap_filename, (char *)material->reflectionmap_filename)
-           : !material->reflectionmap_filename)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_filename [T] '%s' <> '%s'", reflectionmap_filename, material->reflectionmap_filename);
-  }
-  {
-    BITCODE_BS reflectionmap_projection;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_projection", &reflectionmap_projection, NULL)
-        && reflectionmap_projection == material->reflectionmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_projection [BS] %hu != %hu", material->reflectionmap_projection, reflectionmap_projection);
-    reflectionmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_projection", &reflectionmap_projection, 0)
-        && reflectionmap_projection == material->reflectionmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_projection [BS] set+1 %hu != %hu", material->reflectionmap_projection, reflectionmap_projection);
-    material->reflectionmap_projection--;
-  }
-  {
-    BITCODE_BS reflectionmap_source;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_source", &reflectionmap_source, NULL)
-        && reflectionmap_source == material->reflectionmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_source [BS] %hu != %hu", material->reflectionmap_source, reflectionmap_source);
-    reflectionmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_source", &reflectionmap_source, 0)
-        && reflectionmap_source == material->reflectionmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_source [BS] set+1 %hu != %hu", material->reflectionmap_source, reflectionmap_source);
-    material->reflectionmap_source--;
-  }
-  {
-    BITCODE_BS reflectionmap_tiling;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_tiling", &reflectionmap_tiling, NULL)
-        && reflectionmap_tiling == material->reflectionmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_tiling [BS] %hu != %hu", material->reflectionmap_tiling, reflectionmap_tiling);
-    reflectionmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "reflectionmap_tiling", &reflectionmap_tiling, 0)
-        && reflectionmap_tiling == material->reflectionmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.reflectionmap_tiling [BS] set+1 %hu != %hu", material->reflectionmap_tiling, reflectionmap_tiling);
-    material->reflectionmap_tiling--;
-  }
-  {
-    BITCODE_BD* reflectionmap_transmatrix;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap_transmatrix", &reflectionmap_transmatrix, NULL)
-        && !memcmp (&reflectionmap_transmatrix, &material->reflectionmap_transmatrix, sizeof (material->reflectionmap_transmatrix)))
+    Dwg_MATERIAL_mapper reflectionmap;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap", &reflectionmap, NULL)
+        && !memcmp (&reflectionmap, &material->reflectionmap, sizeof (material->reflectionmap)))
         pass ();
     else
-        fail ("MATERIAL.reflectionmap_transmatrix [BD*]");
+        fail ("MATERIAL.reflectionmap [Dwg_MATERIAL_mapper]");
   }
   {
     BITCODE_BD reflectivity;
@@ -35370,97 +34885,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->refraction_index--;
   }
   {
-    BITCODE_BS refractionmap_autotransform;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_autotransform", &refractionmap_autotransform, NULL)
-        && refractionmap_autotransform == material->refractionmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_autotransform [BS] %hu != %hu", material->refractionmap_autotransform, refractionmap_autotransform);
-    refractionmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_autotransform", &refractionmap_autotransform, 0)
-        && refractionmap_autotransform == material->refractionmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_autotransform [BS] set+1 %hu != %hu", material->refractionmap_autotransform, refractionmap_autotransform);
-    material->refractionmap_autotransform--;
-  }
-  {
-    BITCODE_BD refractionmap_blendfactor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_blendfactor", &refractionmap_blendfactor, NULL)
-        && refractionmap_blendfactor == material->refractionmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_blendfactor [BD] %g != %g", material->refractionmap_blendfactor, refractionmap_blendfactor);
-    refractionmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_blendfactor", &refractionmap_blendfactor, 0)
-        && refractionmap_blendfactor == material->refractionmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_blendfactor [BD] set+1 %g != %g", material->refractionmap_blendfactor, refractionmap_blendfactor);
-    material->refractionmap_blendfactor--;
-  }
-  {
-    BITCODE_T refractionmap_filename;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_filename", &refractionmap_filename, NULL)
-        && refractionmap_filename
-           ? strEQ ((char *)refractionmap_filename, (char *)material->refractionmap_filename)
-           : !material->refractionmap_filename)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_filename [T] '%s' <> '%s'", refractionmap_filename, material->refractionmap_filename);
-  }
-  {
-    BITCODE_BS refractionmap_projection;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_projection", &refractionmap_projection, NULL)
-        && refractionmap_projection == material->refractionmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_projection [BS] %hu != %hu", material->refractionmap_projection, refractionmap_projection);
-    refractionmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_projection", &refractionmap_projection, 0)
-        && refractionmap_projection == material->refractionmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_projection [BS] set+1 %hu != %hu", material->refractionmap_projection, refractionmap_projection);
-    material->refractionmap_projection--;
-  }
-  {
-    BITCODE_BS refractionmap_source;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_source", &refractionmap_source, NULL)
-        && refractionmap_source == material->refractionmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_source [BS] %hu != %hu", material->refractionmap_source, refractionmap_source);
-    refractionmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_source", &refractionmap_source, 0)
-        && refractionmap_source == material->refractionmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_source [BS] set+1 %hu != %hu", material->refractionmap_source, refractionmap_source);
-    material->refractionmap_source--;
-  }
-  {
-    BITCODE_BS refractionmap_tiling;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_tiling", &refractionmap_tiling, NULL)
-        && refractionmap_tiling == material->refractionmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_tiling [BS] %hu != %hu", material->refractionmap_tiling, refractionmap_tiling);
-    refractionmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "refractionmap_tiling", &refractionmap_tiling, 0)
-        && refractionmap_tiling == material->refractionmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.refractionmap_tiling [BS] set+1 %hu != %hu", material->refractionmap_tiling, refractionmap_tiling);
-    material->refractionmap_tiling--;
-  }
-  {
-    BITCODE_BD* refractionmap_transmatrix;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap_transmatrix", &refractionmap_transmatrix, NULL)
-        && !memcmp (&refractionmap_transmatrix, &material->refractionmap_transmatrix, sizeof (material->refractionmap_transmatrix)))
+    Dwg_MATERIAL_mapper refractionmap;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap", &refractionmap, NULL)
+        && !memcmp (&refractionmap, &material->refractionmap, sizeof (material->refractionmap)))
         pass ();
     else
-        fail ("MATERIAL.refractionmap_transmatrix [BD*]");
+        fail ("MATERIAL.refractionmap [Dwg_MATERIAL_mapper]");
   }
   {
     BITCODE_BD self_illumination;
@@ -35478,42 +34908,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->self_illumination--;
   }
   {
-    BITCODE_CMC specular_color;
+    Dwg_MATERIAL_color specular_color;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "specular_color", &specular_color, NULL)
         && !memcmp (&specular_color, &material->specular_color, sizeof (material->specular_color)))
         pass ();
     else
-        fail ("MATERIAL.specular_color [CMC]");
-  }
-  {
-    BITCODE_BD specular_color_factor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specular_color_factor", &specular_color_factor, NULL)
-        && specular_color_factor == material->specular_color_factor)
-      pass ();
-    else
-      fail ("MATERIAL.specular_color_factor [BD] %g != %g", material->specular_color_factor, specular_color_factor);
-    specular_color_factor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_color_factor", &specular_color_factor, 0)
-        && specular_color_factor == material->specular_color_factor)
-      pass ();
-    else
-      fail ("MATERIAL.specular_color_factor [BD] set+1 %g != %g", material->specular_color_factor, specular_color_factor);
-    material->specular_color_factor--;
-  }
-  {
-    BITCODE_BS specular_color_flag;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specular_color_flag", &specular_color_flag, NULL)
-        && specular_color_flag == material->specular_color_flag)
-      pass ();
-    else
-      fail ("MATERIAL.specular_color_flag [BS] %hu != %hu", material->specular_color_flag, specular_color_flag);
-    specular_color_flag++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specular_color_flag", &specular_color_flag, 0)
-        && specular_color_flag == material->specular_color_flag)
-      pass ();
-    else
-      fail ("MATERIAL.specular_color_flag [BS] set+1 %hu != %hu", material->specular_color_flag, specular_color_flag);
-    material->specular_color_flag--;
+        fail ("MATERIAL.specular_color [Dwg_MATERIAL_color]");
   }
   {
     BITCODE_BD specular_gloss_factor;
@@ -35531,112 +34931,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->specular_gloss_factor--;
   }
   {
-    BITCODE_BS specularmap_autotransform;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_autotransform", &specularmap_autotransform, NULL)
-        && specularmap_autotransform == material->specularmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_autotransform [BS] %hu != %hu", material->specularmap_autotransform, specularmap_autotransform);
-    specularmap_autotransform++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_autotransform", &specularmap_autotransform, 0)
-        && specularmap_autotransform == material->specularmap_autotransform)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_autotransform [BS] set+1 %hu != %hu", material->specularmap_autotransform, specularmap_autotransform);
-    material->specularmap_autotransform--;
-  }
-  {
-    BITCODE_BD specularmap_blendfactor;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_blendfactor", &specularmap_blendfactor, NULL)
-        && specularmap_blendfactor == material->specularmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_blendfactor [BD] %g != %g", material->specularmap_blendfactor, specularmap_blendfactor);
-    specularmap_blendfactor++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_blendfactor", &specularmap_blendfactor, 0)
-        && specularmap_blendfactor == material->specularmap_blendfactor)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_blendfactor [BD] set+1 %g != %g", material->specularmap_blendfactor, specularmap_blendfactor);
-    material->specularmap_blendfactor--;
-  }
-  {
-    BITCODE_T specularmap_filename;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_filename", &specularmap_filename, NULL)
-        && specularmap_filename
-           ? strEQ ((char *)specularmap_filename, (char *)material->specularmap_filename)
-           : !material->specularmap_filename)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_filename [T] '%s' <> '%s'", specularmap_filename, material->specularmap_filename);
-  }
-  {
-    BITCODE_BS specularmap_projection;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_projection", &specularmap_projection, NULL)
-        && specularmap_projection == material->specularmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_projection [BS] %hu != %hu", material->specularmap_projection, specularmap_projection);
-    specularmap_projection++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_projection", &specularmap_projection, 0)
-        && specularmap_projection == material->specularmap_projection)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_projection [BS] set+1 %hu != %hu", material->specularmap_projection, specularmap_projection);
-    material->specularmap_projection--;
-  }
-  {
-    BITCODE_BS specularmap_source;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_source", &specularmap_source, NULL)
-        && specularmap_source == material->specularmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_source [BS] %hu != %hu", material->specularmap_source, specularmap_source);
-    specularmap_source++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_source", &specularmap_source, 0)
-        && specularmap_source == material->specularmap_source)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_source [BS] set+1 %hu != %hu", material->specularmap_source, specularmap_source);
-    material->specularmap_source--;
-  }
-  {
-    BITCODE_BS specularmap_tiling;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_tiling", &specularmap_tiling, NULL)
-        && specularmap_tiling == material->specularmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_tiling [BS] %hu != %hu", material->specularmap_tiling, specularmap_tiling);
-    specularmap_tiling++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "specularmap_tiling", &specularmap_tiling, 0)
-        && specularmap_tiling == material->specularmap_tiling)
-      pass ();
-    else
-      fail ("MATERIAL.specularmap_tiling [BS] set+1 %hu != %hu", material->specularmap_tiling, specularmap_tiling);
-    material->specularmap_tiling--;
-  }
-  {
-    BITCODE_BD* specularmap_transmatrix;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap_transmatrix", &specularmap_transmatrix, NULL)
-        && !memcmp (&specularmap_transmatrix, &material->specularmap_transmatrix, sizeof (material->specularmap_transmatrix)))
+    Dwg_MATERIAL_mapper specularmap;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap", &specularmap, NULL)
+        && !memcmp (&specularmap, &material->specularmap, sizeof (material->specularmap)))
         pass ();
     else
-        fail ("MATERIAL.specularmap_transmatrix [BD*]");
-  }
-  {
-    BITCODE_BS texturemode;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "texturemode", &texturemode, NULL)
-        && texturemode == material->texturemode)
-      pass ();
-    else
-      fail ("MATERIAL.texturemode [BS] %hu != %hu", material->texturemode, texturemode);
-    texturemode++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "texturemode", &texturemode, 0)
-        && texturemode == material->texturemode)
-      pass ();
-    else
-      fail ("MATERIAL.texturemode [BS] set+1 %hu != %hu", material->texturemode, texturemode);
-    material->texturemode--;
+        fail ("MATERIAL.specularmap [Dwg_MATERIAL_mapper]");
   }
   {
     BITCODE_BD translucence;
@@ -48046,6 +47346,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_LinkedTableData): %d != "
                "dwg_dynapi_fields_size (\"LinkedTableData\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_MATERIAL_color);
+  size2 = dwg_dynapi_fields_size ("MATERIAL_color");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_MATERIAL_color): %d != "
+               "dwg_dynapi_fields_size (\"MATERIAL_color\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_MATERIAL_mapper);
+  size2 = dwg_dynapi_fields_size ("MATERIAL_mapper");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_MATERIAL_mapper): %d != "
+               "dwg_dynapi_fields_size (\"MATERIAL_mapper\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_MESH_edge);

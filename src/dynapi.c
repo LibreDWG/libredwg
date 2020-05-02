@@ -5869,114 +5869,30 @@ static const Dwg_DYNAPI_field _dwg_MATERIAL_fields[] = {
     1,1,1, 1 },
   { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, description),
     1,1,1, 2 },
-  { "ambient_color_flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, ambient_color_flag),
+  { "ambient_color",	"Dwg_MATERIAL_color", sizeof (Dwg_MATERIAL_color),  OFF (struct _dwg_object_MATERIAL, ambient_color),
     0,0,0, 0 },
-  { "ambient_color_factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, ambient_color_factor),
+  { "diffuse_color",	"Dwg_MATERIAL_color", sizeof (Dwg_MATERIAL_color),  OFF (struct _dwg_object_MATERIAL, diffuse_color),
     0,0,0, 0 },
-  { "ambient_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_MATERIAL, ambient_color),
-    1,0,0, 0 },
-  { "diffuse_color_flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, diffuse_color_flag),
+  { "diffusemap",	"Dwg_MATERIAL_mapper", sizeof (Dwg_MATERIAL_mapper),  OFF (struct _dwg_object_MATERIAL, diffusemap),
     0,0,0, 0 },
-  { "diffuse_color_factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, diffuse_color_factor),
-    0,0,0, 0 },
-  { "diffuse_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_MATERIAL, diffuse_color),
-    1,0,0, 0 },
-  { "diffusemap_source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, diffusemap_source),
-    0,0,0, 0 },
-  { "diffusemap_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, diffusemap_filename),
-    1,1,1, 0 },
-  { "diffusemap_blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, diffusemap_blendfactor),
-    0,0,0, 0 },
-  { "diffusemap_projection",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MATERIAL, diffusemap_projection),
-    0,0,0, 0 },
-  { "diffusemap_tiling",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MATERIAL, diffusemap_tiling),
-    0,0,0, 0 },
-  { "diffusemap_autotransform",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_MATERIAL, diffusemap_autotransform),
-    0,0,0, 0 },
-  { "diffusemap_transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_MATERIAL, diffusemap_transmatrix),
-    1,1,0, 0 },
   { "specular_gloss_factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, specular_gloss_factor),
     0,0,0, 44 },
-  { "specular_color_flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, specular_color_flag),
+  { "specular_color",	"Dwg_MATERIAL_color", sizeof (Dwg_MATERIAL_color),  OFF (struct _dwg_object_MATERIAL, specular_color),
     0,0,0, 0 },
-  { "specular_color_factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, specular_color_factor),
+  { "specularmap",	"Dwg_MATERIAL_mapper", sizeof (Dwg_MATERIAL_mapper),  OFF (struct _dwg_object_MATERIAL, specularmap),
     0,0,0, 0 },
-  { "specular_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_MATERIAL, specular_color),
-    1,0,0, 0 },
-  { "specularmap_source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, specularmap_source),
+  { "reflectionmap",	"Dwg_MATERIAL_mapper", sizeof (Dwg_MATERIAL_mapper),  OFF (struct _dwg_object_MATERIAL, reflectionmap),
     0,0,0, 0 },
-  { "specularmap_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, specularmap_filename),
-    1,1,1, 0 },
-  { "specularmap_blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, specularmap_blendfactor),
-    0,0,0, 0 },
-  { "specularmap_projection",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, specularmap_projection),
-    0,0,0, 78 },
-  { "specularmap_tiling",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, specularmap_tiling),
-    0,0,0, 0 },
-  { "specularmap_autotransform",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, specularmap_autotransform),
-    0,0,0, 0 },
-  { "specularmap_transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_MATERIAL, specularmap_transmatrix),
-    1,1,0, 0 },
-  { "reflectionmap_source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, reflectionmap_source),
-    0,0,0, 0 },
-  { "reflectionmap_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, reflectionmap_filename),
-    1,1,1, 0 },
-  { "reflectionmap_blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, reflectionmap_blendfactor),
-    0,0,0, 0 },
-  { "reflectionmap_projection",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, reflectionmap_projection),
-    0,0,0, 172 },
-  { "reflectionmap_tiling",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, reflectionmap_tiling),
-    0,0,0, 0 },
-  { "reflectionmap_autotransform",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, reflectionmap_autotransform),
-    0,0,0, 0 },
-  { "reflectionmap_transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_MATERIAL, reflectionmap_transmatrix),
-    1,1,0, 0 },
   { "opacity_percent",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, opacity_percent),
     0,0,0, 140 },
-  { "opacitymap_source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, opacitymap_source),
+  { "opacitymap",	"Dwg_MATERIAL_mapper", sizeof (Dwg_MATERIAL_mapper),  OFF (struct _dwg_object_MATERIAL, opacitymap),
     0,0,0, 0 },
-  { "opacitymap_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, opacitymap_filename),
-    1,1,1, 0 },
-  { "opacitymap_blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, opacitymap_blendfactor),
+  { "bumpmap",	"Dwg_MATERIAL_mapper", sizeof (Dwg_MATERIAL_mapper),  OFF (struct _dwg_object_MATERIAL, bumpmap),
     0,0,0, 0 },
-  { "opacitymap_projection",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, opacitymap_projection),
-    0,0,0, 176 },
-  { "opacitymap_tiling",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, opacitymap_tiling),
-    0,0,0, 0 },
-  { "opacitymap_autotransform",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, opacitymap_autotransform),
-    0,0,0, 0 },
-  { "opacitymap_transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_MATERIAL, opacitymap_transmatrix),
-    1,1,0, 0 },
-  { "bumpmap_source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, bumpmap_source),
-    0,0,0, 0 },
-  { "bumpmap_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, bumpmap_filename),
-    1,1,1, 0 },
-  { "bumpmap_blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, bumpmap_blendfactor),
-    0,0,0, 0 },
-  { "bumpmap_projection",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, bumpmap_projection),
-    0,0,0, 270 },
-  { "bumpmap_tiling",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, bumpmap_tiling),
-    0,0,0, 0 },
-  { "bumpmap_autotransform",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, bumpmap_autotransform),
-    0,0,0, 0 },
-  { "bumpmap_transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_MATERIAL, bumpmap_transmatrix),
-    1,1,0, 0 },
   { "refraction_index",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, refraction_index),
     0,0,0, 145 },
-  { "refractionmap_source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, refractionmap_source),
+  { "refractionmap",	"Dwg_MATERIAL_mapper", sizeof (Dwg_MATERIAL_mapper),  OFF (struct _dwg_object_MATERIAL, refractionmap),
     0,0,0, 0 },
-  { "refractionmap_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, refractionmap_filename),
-    1,1,1, 0 },
-  { "refractionmap_blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, refractionmap_blendfactor),
-    0,0,0, 0 },
-  { "refractionmap_projection",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, refractionmap_projection),
-    0,0,0, 274 },
-  { "refractionmap_tiling",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, refractionmap_tiling),
-    0,0,0, 0 },
-  { "refractionmap_autotransform",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, refractionmap_autotransform),
-    0,0,0, 0 },
-  { "refractionmap_transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_MATERIAL, refractionmap_transmatrix),
-    1,1,0, 0 },
   { "color_bleed_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, color_bleed_scale),
     0,0,0, 460 },
   { "indirect_bump_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, indirect_bump_scale),
@@ -6007,42 +5923,28 @@ static const Dwg_DYNAPI_field _dwg_MATERIAL_fields[] = {
     0,0,0, 271 },
   { "normalmap_strength",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, normalmap_strength),
     0,0,0, 465 },
-  { "normalmap_source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, normalmap_source),
+  { "normalmap",	"Dwg_MATERIAL_mapper", sizeof (Dwg_MATERIAL_mapper),  OFF (struct _dwg_object_MATERIAL, normalmap),
     0,0,0, 0 },
-  { "normalmap_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, normalmap_filename),
-    1,1,1, 0 },
-  { "normalmap_blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, normalmap_blendfactor),
-    0,0,0, 0 },
-  { "normalmap_projection",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, normalmap_projection),
-    0,0,0, 73 },
-  { "normalmap_tiling",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, normalmap_tiling),
-    0,0,0, 0 },
-  { "normalmap_autotransform",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, normalmap_autotransform),
-    0,0,0, 0 },
-  { "normalmap_transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_MATERIAL, normalmap_transmatrix),
-    1,1,0, 0 },
   { "is_anonymous",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MATERIAL, is_anonymous),
     0,0,0, 293 },
   { "global_illumination",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, global_illumination),
     0,0,0, 272 },
   { "final_gather",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, final_gather),
     0,0,0, 273 },
-  { "texturemode",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, texturemode),
-    0,0,0, 0 },
   { "genprocname",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, genprocname),
     1,1,1, 0 },
   { "genproctype",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, genproctype),
     0,0,0, 0 },
   { "genprocvalbool",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MATERIAL, genprocvalbool),
-    0,0,0, 291 },
+    0,0,0, 0 },
   { "genprocvalint",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, genprocvalint),
-    0,0,0, 271 },
+    0,0,0, 0 },
   { "genprocvalreal",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MATERIAL, genprocvalreal),
-    0,0,0, 469 },
+    0,0,0, 0 },
   { "genprocvaltext",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MATERIAL, genprocvaltext),
-    1,1,1, 301 },
+    1,1,1, 0 },
   { "genprocvalcolor",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_MATERIAL, genprocvalcolor),
-    1,0,0, 62 },
+    1,0,0, 0 },
   { "genproctableend",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MATERIAL, genproctableend),
     0,0,0, 0 },
   { "num_gentextures",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MATERIAL, num_gentextures),
@@ -8586,6 +8488,44 @@ static const Dwg_DYNAPI_field _dwg_LinkedTableData_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_MATERIAL_color: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_MATERIAL_color_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_MATERIAL_color, parent),
+    1,1,0, 0 },
+  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_MATERIAL_color, flag),
+    0,0,0, 0 },
+  { "factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_MATERIAL_color, factor),
+    0,0,0, 0 },
+  { "rgb",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_MATERIAL_color, rgb),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_MATERIAL_mapper: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_MATERIAL_mapper_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_MATERIAL_mapper, parent),
+    1,1,0, 0 },
+  { "blendfactor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_MATERIAL_mapper, blendfactor),
+    0,0,0, 0 },
+  { "source",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_MATERIAL_mapper, source),
+    0,0,0, 0 },
+  { "filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_MATERIAL_mapper, filename),
+    1,1,1, 0 },
+  { "projection",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_MATERIAL_mapper, projection),
+    0,0,0, 0 },
+  { "tiling",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_MATERIAL_mapper, tiling),
+    0,0,0, 0 },
+  { "autotransform",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_MATERIAL_mapper, autotransform),
+    0,0,0, 0 },
+  { "transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_MATERIAL_mapper, transmatrix),
+    1,1,0, 0 },
+  { "texturemode",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_MATERIAL_mapper, texturemode),
+    0,0,0, 0 },
+  { "color1",	"Dwg_MATERIAL_color", sizeof (Dwg_MATERIAL_color),  OFF (struct _dwg_MATERIAL_mapper, color1),
+    0,0,0, 0 },
+  { "color2",	"Dwg_MATERIAL_color", sizeof (Dwg_MATERIAL_color),  OFF (struct _dwg_MATERIAL_mapper, color2),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_MESH_edge: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_MESH_edge_fields[] = {
   { "parent",	"struct _dwg_entity_MESH*", sizeof (void *),  OFF (struct _dwg_MESH_edge, parent),
@@ -9642,30 +9582,32 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 53 */
   { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 54 */
   { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 55 */
-  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 56 */
-  { "MLEADER_AnnotContext", 0, "AcDbObjectContextData", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 57 */
-  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 58 */
-  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 59 */
-  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 60 */
-  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 61 */
-  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 62 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 63 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 64 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 65 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 66 */
-  { "TABLESTYLE_Cell", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_Cell_fields, sizeof (Dwg_TABLESTYLE_Cell) },	/* 67 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 68 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 69 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 70 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 71 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 72 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 73 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 74 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 75 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 76 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 77 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 78 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 79 */
+  { "MATERIAL_color", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_color_fields, sizeof (Dwg_MATERIAL_color) },	/* 56 */
+  { "MATERIAL_mapper", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_mapper_fields, sizeof (Dwg_MATERIAL_mapper) },	/* 57 */
+  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 58 */
+  { "MLEADER_AnnotContext", 0, "AcDbObjectContextData", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 59 */
+  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 60 */
+  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 61 */
+  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 62 */
+  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 63 */
+  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 64 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 65 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 66 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 67 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 68 */
+  { "TABLESTYLE_Cell", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_Cell_fields, sizeof (Dwg_TABLESTYLE_Cell) },	/* 69 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 70 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 71 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 72 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 73 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 74 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 75 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 76 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 77 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 78 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 79 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 80 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 81 */
 
 };
 
