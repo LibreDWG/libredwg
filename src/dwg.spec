@@ -7163,27 +7163,77 @@ DWG_OBJECT (MATERIAL)
 
   // each color writes RC flag, BD factor, BL rgb if flag=1
 #define MAT_COLOR(color, dxf1, dxf2, dxf3)                                    \
+  {                                                                           \
     FIELD_RC (color##_flag, dxf1);     /* 0 Use current color, 1 Override */  \
     FIELD_BD (color##_factor, dxf2);   /* 0.0 - 1.0 */                        \
     if (_obj->color##_flag == 1)                                              \
       {                                                                       \
         FIELD_BL (color.rgb, dxf3);                                           \
-      }
+      }                                                                       \
+  }
   
   MAT_COLOR (ambient_color, 70, 40, 90);
   MAT_COLOR (diffuse_color, 71, 41, 91);
 
+#  define MAT_MAPPER(map, dxf4, dxf5, dxf6, dxf7)                             \
+  {                                                                           \
+    /* 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */              \
+    FIELD_RC (map##_projection, dxf4);                                        \
+    /* 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror */                  \
+    FIELD_RC (map##_tiling, dxf5);                                            \
+    /* 1 no, 2: scale to curr ent, 4: w/ current block transform */           \
+    FIELD_RC (map##_autotransform, dxf6);                                     \
+    FIELD_VECTOR_N (map##_transmatrix, BD, 16, dxf7);                         \
+  }
+
+#  define MAT_TEXTURE(map, dxf1, dxf2, dxf3, dxf4, dxf5, dxf6, dxf7)          \
+  {                                                                           \
+    FIELD_BS (texturemode, dxf?);                                             \
+    if (FIELD_VALUE (texturemode) == 0)                                       \
+      {                                                                       \
+        /* generic procedural texture */                                      \
+        FIELD_BS (genproctype, dxf?);                                         \
+        switch (_obj->genproctype) {                                          \
+        case 1:                                                               \
+          FIELD_B (genprocvalbool, 291); break;                               \
+        case 2:                                                               \
+          FIELD_BS (genprocvalint, 271); break;                               \
+        case 3:                                                               \
+          FIELD_BD (genprocvalreal, 469); break;                              \
+        case 4:                                                               \
+          FIELD_CMC (genprocvalcolor, 62,420); break;                         \
+        case 5:                                                               \
+          FIELD_T (genprocvaltext, 301); break;                               \
+        case 5:                                                               \
+          FIELD_BS (num_gentextures, 0);                                      \
+          /* struct of { genprocname, recursive MAT_TEXTURE } */              \
+          break;                                                              \
+        }                                                                     \
+      }                                                                       \
+    else if (FIELD_VALUE (texturemode) == 1)                                  \
+      {                                                                       \
+        /* colorgradient? texture */                                          \
+        MAT_COLOR (gencolorfrom, 70, 40, 90);                                 \
+        MAT_COLOR (gencolorto, 70, 40, 90);                                   \
+        FIELD_BD (gencolor_from, 0);                                          \
+        FIELD_BD (gencolor_to, 0);                                            \
+      }                                                                       \
+    else if (FIELD_VALUE (texturemode) == 2)                                  \
+      {                                                                       \
+        /* generic texture */                                                 \
+      }                                                                       \
+  }
+    
 #  define MAT_MAP(map, dxf1, dxf2, dxf3, dxf4, dxf5, dxf6, dxf7)              \
     FIELD_BD (map##_blendfactor, dxf1);                                       \
-    FIELD_BS (map##_source, dxf2); /* 0 scene, 1 file (def), 2 procedural */  \
-    FIELD_T (map##_filename, dxf3); /* if NULL no map */                      \
-    /* 0 Inherit, 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */              \
-    FIELD_BS (map##_projection, dxf4);                                        \
-    /* 0 Inherit, 1 Tile (def), 2 Crop, 3 Clamp, 4 Mirror */                  \
-    FIELD_BS (map##_tiling, dxf5);                                            \
-    /* 1 no, 2: scale to curr ent, 4: w/ current block transform */           \
-    FIELD_BS (map##_autotransform, dxf6);                                     \
-    FIELD_VECTOR_N (map##_transmatrix, BD, 16, dxf7)
+    MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7);                                 \
+    FIELD_RC (map##_source, dxf2); /* 0 scene, 1 file (def), 2 procedural */  \
+    if (FIELD_VALUE (map##_source) == 1)                                      \
+      {                                                                       \
+        FIELD_T (map##_filename, dxf3); /* if NULL no map */                  \
+      }                                                                       \
+    else if (FIELD_VALUE (map##_source) == 2)                                 \
+      MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7);                               \
 
   MAT_MAP (diffusemap, 42, 72, 3, 73, 74, 75, 43);
   MAT_COLOR (specular_color, 76, 45, 92);
@@ -7220,15 +7270,15 @@ DWG_OBJECT (MATERIAL)
   FIELD_B (is_anonymous, 293);
   FIELD_BS (global_illumination, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
   FIELD_BS (final_gather, 273);        // 0 none, 1 cast, 2 receive, 3 cast&receive
-  FIELD_T (genprocname, 300);
-  FIELD_B (genprocvalbool, 291);
-  FIELD_BS (genprocvalint, 271);
-  FIELD_BD (genprocvalreal, 469);
-  FIELD_T (genprocvaltext, 301);
-  FIELD_B (genproctableend, 292);
-  FIELD_CMC (genprocvalcolorindex, 62,420);
-  FIELD_BL (genprocvalcolorrgb, 420); //int32
-  FIELD_T (genprocvalcolorname, 430);
+  //FIELD_T (genprocname, 300);
+  //FIELD_B (genprocvalbool, 291);
+  //FIELD_BS (genprocvalint, 271);
+  //FIELD_BD (genprocvalreal, 469);
+  //FIELD_T (genprocvaltext, 301);
+  //FIELD_B (genproctableend, 292);
+  //FIELD_CMC (genprocvalcolorindex, 62,420);
+  //FIELD_BL (genprocvalcolorrgb, 420); //int32
+  //FIELD_T (genprocvalcolorname, 430);
   FIELD_BD (color_bleed_scale, 460);
   //78
   //172

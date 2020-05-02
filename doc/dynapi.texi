@@ -6648,11 +6648,11 @@ T
 @item diffusemap_blendfactor
 BD
 @item diffusemap_projection
-BS
+RC
 @item diffusemap_tiling
-BS
+RC
 @item diffusemap_autotransform
-BS
+RC
 @item diffusemap_transmatrix
 BD*
 @item specular_gloss_factor
@@ -6787,8 +6787,12 @@ B,	DXF 293
 BS,	DXF 272
 @item final_gather
 BS,	DXF 273
+@item texturemode
+BS
 @item genprocname
-T,	DXF 300
+T
+@item genproctype
+BS
 @item genprocvalbool
 B,	DXF 291
 @item genprocvalint
@@ -6797,14 +6801,22 @@ BS,	DXF 271
 BD,	DXF 469
 @item genprocvaltext
 T,	DXF 301
-@item genproctableend
-B,	DXF 292
-@item genprocvalcolorindex
+@item genprocvalcolor
 CMC,	DXF 62
-@item genprocvalcolorrgb
-BS,	DXF 420
-@item genprocvalcolorname
-T,	DXF 430
+@item genproctableend
+B
+@item num_gentextures
+BS
+@item gentextures
+void*
+@item gencolorfrom
+CMC
+@item gencolorto
+CMC
+@item gencolor_from
+BD
+@item gencolor_to
+BD
 
 @end vtable
 @end indentedblock

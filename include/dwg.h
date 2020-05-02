@@ -4197,9 +4197,9 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_BS diffusemap_source;     /*!< DXF 72 0 current, 1 image file (def) */
   BITCODE_T diffusemap_filename;   /*!< DXF 3 if NULL no diffuse map */
   BITCODE_BD diffusemap_blendfactor;/*!< DXF 42 def: 1.0 */
-  BITCODE_BS diffusemap_projection; /*!< DXF 73 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
-  BITCODE_BS diffusemap_tiling;     /*!< DXF 74 */ // 1 = Tile (def), 2 = Crop, 3 = Clamp
-  BITCODE_BS diffusemap_autotransform; /*!< DXF 75 */ // 1 no, 2: scale to curr ent,
+  BITCODE_RC diffusemap_projection; /*!< DXF 73 1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
+  BITCODE_RC diffusemap_tiling;     /*!< DXF 74 */ // 1 = Tile (def), 2 = Crop, 3 = Clamp
+  BITCODE_RC diffusemap_autotransform; /*!< DXF 75 */ // 1 no, 2: scale to curr ent,
                                                       // 4: w/ current block transform
   BITCODE_BD* diffusemap_transmatrix;  /*!< DXF 43: 16x BD */
 
@@ -4287,18 +4287,25 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_BS normalmap_autotransform; /*!< DXF 75 1 no, 2: scale to curr ent,
                                                   4: w/ current block transform */
   BITCODE_BD* normalmap_transmatrix; /*!< DXF 43: 16x BD */
-  BITCODE_B is_anonymous;     /*!< DXF 293 */
+  BITCODE_B is_anonymous;            /*!< DXF 293 */
   BITCODE_BS global_illumination;    /*!< DXF 272 */
-  BITCODE_BS final_gather;      /*!< DXF 273 */
+  BITCODE_BS final_gather;           /*!< DXF 273 */
+
+  BITCODE_BS texturemode;
   BITCODE_T genprocname;        /*!< DXF 300 */
+  BITCODE_BS genproctype;
   BITCODE_B genprocvalbool;     /*!< DXF 291 */
   BITCODE_BS genprocvalint;     /*!< DXF 271 */
   BITCODE_BD genprocvalreal;    /*!< DXF 469 */
   BITCODE_T genprocvaltext;     /*!< DXF 301 */
+  BITCODE_CMC genprocvalcolor;  /*!< DXF 62 */
   BITCODE_B genproctableend;    /*!< DXF 292 */
-  BITCODE_CMC genprocvalcolorindex;/*!< DXF 62 */
-  BITCODE_BS genprocvalcolorrgb;/*!< DXF 420 */
-  BITCODE_T genprocvalcolorname;/*!< DXF 430 */
+  BITCODE_BS num_gentextures;
+  void* gentextures;
+  BITCODE_CMC gencolorfrom;
+  BITCODE_CMC gencolorto;
+  BITCODE_BD gencolor_from;
+  BITCODE_BD gencolor_to;
   //? BD backface_cull
   //? BD self_illum_luminance
   //? BD self_illum_color_temperature

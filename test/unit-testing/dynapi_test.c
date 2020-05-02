@@ -34596,18 +34596,18 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->diffuse_color_flag--;
   }
   {
-    BITCODE_BS diffusemap_autotransform;
+    BITCODE_RC diffusemap_autotransform;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_autotransform", &diffusemap_autotransform, NULL)
         && diffusemap_autotransform == material->diffusemap_autotransform)
       pass ();
     else
-      fail ("MATERIAL.diffusemap_autotransform [BS] %hu != %hu", material->diffusemap_autotransform, diffusemap_autotransform);
+      fail ("MATERIAL.diffusemap_autotransform [RC] %u != %u", material->diffusemap_autotransform, diffusemap_autotransform);
     diffusemap_autotransform++;
     if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_autotransform", &diffusemap_autotransform, 0)
         && diffusemap_autotransform == material->diffusemap_autotransform)
       pass ();
     else
-      fail ("MATERIAL.diffusemap_autotransform [BS] set+1 %hu != %hu", material->diffusemap_autotransform, diffusemap_autotransform);
+      fail ("MATERIAL.diffusemap_autotransform [RC] set+1 %u != %u", material->diffusemap_autotransform, diffusemap_autotransform);
     material->diffusemap_autotransform--;
   }
   {
@@ -34636,18 +34636,18 @@ static int test_MATERIAL (const Dwg_Object *obj)
       fail ("MATERIAL.diffusemap_filename [T] '%s' <> '%s'", diffusemap_filename, material->diffusemap_filename);
   }
   {
-    BITCODE_BS diffusemap_projection;
+    BITCODE_RC diffusemap_projection;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_projection", &diffusemap_projection, NULL)
         && diffusemap_projection == material->diffusemap_projection)
       pass ();
     else
-      fail ("MATERIAL.diffusemap_projection [BS] %hu != %hu", material->diffusemap_projection, diffusemap_projection);
+      fail ("MATERIAL.diffusemap_projection [RC] %u != %u", material->diffusemap_projection, diffusemap_projection);
     diffusemap_projection++;
     if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_projection", &diffusemap_projection, 0)
         && diffusemap_projection == material->diffusemap_projection)
       pass ();
     else
-      fail ("MATERIAL.diffusemap_projection [BS] set+1 %hu != %hu", material->diffusemap_projection, diffusemap_projection);
+      fail ("MATERIAL.diffusemap_projection [RC] set+1 %u != %u", material->diffusemap_projection, diffusemap_projection);
     material->diffusemap_projection--;
   }
   {
@@ -34666,18 +34666,18 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->diffusemap_source--;
   }
   {
-    BITCODE_BS diffusemap_tiling;
+    BITCODE_RC diffusemap_tiling;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap_tiling", &diffusemap_tiling, NULL)
         && diffusemap_tiling == material->diffusemap_tiling)
       pass ();
     else
-      fail ("MATERIAL.diffusemap_tiling [BS] %hu != %hu", material->diffusemap_tiling, diffusemap_tiling);
+      fail ("MATERIAL.diffusemap_tiling [RC] %u != %u", material->diffusemap_tiling, diffusemap_tiling);
     diffusemap_tiling++;
     if (dwg_dynapi_entity_set_value (material, "MATERIAL", "diffusemap_tiling", &diffusemap_tiling, 0)
         && diffusemap_tiling == material->diffusemap_tiling)
       pass ();
     else
-      fail ("MATERIAL.diffusemap_tiling [BS] set+1 %hu != %hu", material->diffusemap_tiling, diffusemap_tiling);
+      fail ("MATERIAL.diffusemap_tiling [RC] set+1 %u != %u", material->diffusemap_tiling, diffusemap_tiling);
     material->diffusemap_tiling--;
   }
   {
@@ -34702,6 +34702,52 @@ static int test_MATERIAL (const Dwg_Object *obj)
     else
       fail ("MATERIAL.final_gather [BS] set+1 %hu != %hu", material->final_gather, final_gather);
     material->final_gather--;
+  }
+  {
+    BITCODE_BD gencolor_from;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "gencolor_from", &gencolor_from, NULL)
+        && gencolor_from == material->gencolor_from)
+      pass ();
+    else
+      fail ("MATERIAL.gencolor_from [BD] %g != %g", material->gencolor_from, gencolor_from);
+    gencolor_from++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "gencolor_from", &gencolor_from, 0)
+        && gencolor_from == material->gencolor_from)
+      pass ();
+    else
+      fail ("MATERIAL.gencolor_from [BD] set+1 %g != %g", material->gencolor_from, gencolor_from);
+    material->gencolor_from--;
+  }
+  {
+    BITCODE_BD gencolor_to;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "gencolor_to", &gencolor_to, NULL)
+        && gencolor_to == material->gencolor_to)
+      pass ();
+    else
+      fail ("MATERIAL.gencolor_to [BD] %g != %g", material->gencolor_to, gencolor_to);
+    gencolor_to++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "gencolor_to", &gencolor_to, 0)
+        && gencolor_to == material->gencolor_to)
+      pass ();
+    else
+      fail ("MATERIAL.gencolor_to [BD] set+1 %g != %g", material->gencolor_to, gencolor_to);
+    material->gencolor_to--;
+  }
+  {
+    BITCODE_CMC gencolorfrom;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "gencolorfrom", &gencolorfrom, NULL)
+        && !memcmp (&gencolorfrom, &material->gencolorfrom, sizeof (material->gencolorfrom)))
+        pass ();
+    else
+        fail ("MATERIAL.gencolorfrom [CMC]");
+  }
+  {
+    BITCODE_CMC gencolorto;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "gencolorto", &gencolorto, NULL)
+        && !memcmp (&gencolorto, &material->gencolorto, sizeof (material->gencolorto)))
+        pass ();
+    else
+        fail ("MATERIAL.gencolorto [CMC]");
   }
   {
     BITCODE_T genprocname;
@@ -34729,6 +34775,21 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->genproctableend--;
   }
   {
+    BITCODE_BS genproctype;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "genproctype", &genproctype, NULL)
+        && genproctype == material->genproctype)
+      pass ();
+    else
+      fail ("MATERIAL.genproctype [BS] %hu != %hu", material->genproctype, genproctype);
+    genproctype++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genproctype", &genproctype, 0)
+        && genproctype == material->genproctype)
+      pass ();
+    else
+      fail ("MATERIAL.genproctype [BS] set+1 %hu != %hu", material->genproctype, genproctype);
+    material->genproctype--;
+  }
+  {
     BITCODE_B genprocvalbool;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvalbool", &genprocvalbool, NULL)
         && genprocvalbool == material->genprocvalbool)
@@ -34744,37 +34805,12 @@ static int test_MATERIAL (const Dwg_Object *obj)
     material->genprocvalbool--;
   }
   {
-    BITCODE_CMC genprocvalcolorindex;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvalcolorindex", &genprocvalcolorindex, NULL)
-        && !memcmp (&genprocvalcolorindex, &material->genprocvalcolorindex, sizeof (material->genprocvalcolorindex)))
+    BITCODE_CMC genprocvalcolor;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvalcolor", &genprocvalcolor, NULL)
+        && !memcmp (&genprocvalcolor, &material->genprocvalcolor, sizeof (material->genprocvalcolor)))
         pass ();
     else
-        fail ("MATERIAL.genprocvalcolorindex [CMC]");
-  }
-  {
-    BITCODE_T genprocvalcolorname;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvalcolorname", &genprocvalcolorname, NULL)
-        && genprocvalcolorname
-           ? strEQ ((char *)genprocvalcolorname, (char *)material->genprocvalcolorname)
-           : !material->genprocvalcolorname)
-      pass ();
-    else
-      fail ("MATERIAL.genprocvalcolorname [T] '%s' <> '%s'", genprocvalcolorname, material->genprocvalcolorname);
-  }
-  {
-    BITCODE_BS genprocvalcolorrgb;
-    if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvalcolorrgb", &genprocvalcolorrgb, NULL)
-        && genprocvalcolorrgb == material->genprocvalcolorrgb)
-      pass ();
-    else
-      fail ("MATERIAL.genprocvalcolorrgb [BS] %hu != %hu", material->genprocvalcolorrgb, genprocvalcolorrgb);
-    genprocvalcolorrgb++;
-    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "genprocvalcolorrgb", &genprocvalcolorrgb, 0)
-        && genprocvalcolorrgb == material->genprocvalcolorrgb)
-      pass ();
-    else
-      fail ("MATERIAL.genprocvalcolorrgb [BS] set+1 %hu != %hu", material->genprocvalcolorrgb, genprocvalcolorrgb);
-    material->genprocvalcolorrgb--;
+        fail ("MATERIAL.genprocvalcolor [CMC]");
   }
   {
     BITCODE_BS genprocvalint;
@@ -34815,6 +34851,16 @@ static int test_MATERIAL (const Dwg_Object *obj)
       pass ();
     else
       fail ("MATERIAL.genprocvaltext [T] '%s' <> '%s'", genprocvaltext, material->genprocvaltext);
+  }
+  {
+    void* gentextures;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "num_gentextures", &count, NULL)
+        && dwg_dynapi_entity_value (material, "MATERIAL", "gentextures", &gentextures, NULL)
+        && gentextures == material->gentextures)
+      pass ();
+    else
+      fail ("MATERIAL.gentextures [void*] * %u num_gentextures", count);
   }
   {
     BITCODE_BS global_illumination;
@@ -35053,6 +35099,21 @@ static int test_MATERIAL (const Dwg_Object *obj)
         pass ();
     else
         fail ("MATERIAL.normalmap_transmatrix [BD*]");
+  }
+  {
+    BITCODE_BS num_gentextures;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "num_gentextures", &num_gentextures, NULL)
+        && num_gentextures == material->num_gentextures)
+      pass ();
+    else
+      fail ("MATERIAL.num_gentextures [BS] %hu != %hu", material->num_gentextures, num_gentextures);
+    num_gentextures++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "num_gentextures", &num_gentextures, 0)
+        && num_gentextures == material->num_gentextures)
+      pass ();
+    else
+      fail ("MATERIAL.num_gentextures [BS] set+1 %hu != %hu", material->num_gentextures, num_gentextures);
+    material->num_gentextures--;
   }
   {
     BITCODE_BD opacity_percent;
@@ -35561,6 +35622,21 @@ static int test_MATERIAL (const Dwg_Object *obj)
         pass ();
     else
         fail ("MATERIAL.specularmap_transmatrix [BD*]");
+  }
+  {
+    BITCODE_BS texturemode;
+    if (dwg_dynapi_entity_value (material, "MATERIAL", "texturemode", &texturemode, NULL)
+        && texturemode == material->texturemode)
+      pass ();
+    else
+      fail ("MATERIAL.texturemode [BS] %hu != %hu", material->texturemode, texturemode);
+    texturemode++;
+    if (dwg_dynapi_entity_set_value (material, "MATERIAL", "texturemode", &texturemode, 0)
+        && texturemode == material->texturemode)
+      pass ();
+    else
+      fail ("MATERIAL.texturemode [BS] set+1 %hu != %hu", material->texturemode, texturemode);
+    material->texturemode--;
   }
   {
     BITCODE_BD translucence;
