@@ -5860,7 +5860,7 @@ typedef struct _dwg_entity_ATEXT
   BITCODE_BD start_angle;	/*!< DXF 50 */
   BITCODE_BD end_angle;		/*!< DXF 51 */
   BITCODE_3BD extrusion;        /*!< DXF 210 */
-  BITCODE_CMC color;            /*!< DXF 90 */
+  BITCODE_BL color;             /*!< DXF 90 */
   BITCODE_BS is_reverse;	/*!< DXF 70 */
   BITCODE_BS text_direction;	/*!< DXF 71 */
   BITCODE_BS alignment;		/*!< DXF 72 */

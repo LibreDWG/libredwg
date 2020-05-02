@@ -6326,12 +6326,19 @@ static int test_ATEXT (const Dwg_Object *obj)
     atext->char_spacing--;
   }
   {
-    BITCODE_CMC color;
+    BITCODE_BL color;
     if (dwg_dynapi_entity_value (atext, "ATEXT", "color", &color, NULL)
-        && !memcmp (&color, &atext->color, sizeof (atext->color)))
-        pass ();
+        && color == atext->color)
+      pass ();
     else
-        fail ("ATEXT.color [CMC]");
+      fail ("ATEXT.color [BL] %u != %u", atext->color, color);
+    color++;
+    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "color", &color, 0)
+        && color == atext->color)
+      pass ();
+    else
+      fail ("ATEXT.color [BL] set+1 %u != %u", atext->color, color);
+    atext->color--;
   }
   {
     BITCODE_BD end_angle;

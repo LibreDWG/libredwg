@@ -30,7 +30,7 @@ api_process (dwg_object *obj)
   BITCODE_BD start_angle;	/*!< DXF 50 */
   BITCODE_BD end_angle;		/*!< DXF 51 */
   BITCODE_3BD extrusion;
-  BITCODE_BL color_index;
+  BITCODE_BL color;
   BITCODE_BS is_reverse;	/*!< DXF 70 */
   BITCODE_BS text_direction;	/*!< DXF 71 */
   BITCODE_BS alignment;		/*!< DXF 72 */
@@ -66,7 +66,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (atext, ATEXT, end_angle, BD, end_angle);
   CHK_ENTITY_MAX (atext, ATEXT, end_angle, BD, 6.284);
   
-  CHK_ENTITY_TYPE (atext, ATEXT, color_index, BL, color_index);
+  CHK_ENTITY_TYPE (atext, ATEXT, color, BL, color);
   CHK_ENTITY_TYPE (atext, ATEXT, is_reverse, BS, is_reverse);
   CHK_ENTITY_TYPE (atext, ATEXT, text_direction, BS, text_direction);
   CHK_ENTITY_TYPE (atext, ATEXT, alignment, BS, alignment);

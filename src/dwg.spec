@@ -8489,7 +8489,7 @@ DWG_ENTITY (ATEXT)
     FIELD_BS (bs1, 77);
     FIELD_BS (font, 78);
     FIELD_BS (is_shx, 79);
-    FIELD_BL (color.index, 90);
+    FIELD_BL (color, 90);
     FIELD_3BD (extrusion, 210);
     FIELD_B (wizard_flag, 280);
     FIELD_HANDLE (arc_handle, 5, 330);
@@ -8509,7 +8509,7 @@ DWG_ENTITY (ATEXT)
     FIELD_BD (start_angle, 50);
     FIELD_BD (end_angle, 51);
     FIELD_3BD (extrusion, 210);
-    FIELD_BL (color.index, 90);
+    FIELD_BL (color, 90);
     FIELD_BS (bs1, 77);
     FIELD_BS (font, 78);
     FIELD_BS (is_shx, 79);

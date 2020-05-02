@@ -952,7 +952,7 @@ BD,	DXF 51
 @item extrusion
 3BD,	DXF 210
 @item color
-CMC
+BL,	DXF 90
 @item is_reverse
 BS,	DXF 70
 @item text_direction
