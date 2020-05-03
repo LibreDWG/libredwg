@@ -41718,6 +41718,22 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       fail ("TABLESTYLE.cells [Dwg_TABLESTYLE_Cell*] * %u num_cells", count);
   }
   {
+    Dwg_TABLESTYLE_Cell cellstyle;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cellstyle", &cellstyle, NULL)
+        && !memcmp (&cellstyle, &tablestyle->cellstyle, sizeof (tablestyle->cellstyle)))
+        pass ();
+    else
+        fail ("TABLESTYLE.cellstyle [Dwg_TABLESTYLE_Cell]");
+  }
+  {
+    BITCODE_H cellstyle_handle;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cellstyle_handle", &cellstyle_handle, NULL)
+        && !memcmp (&cellstyle_handle, &tablestyle->cellstyle_handle, sizeof (tablestyle->cellstyle_handle)))
+        pass ();
+    else
+        fail ("TABLESTYLE.cellstyle_handle [H]");
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "class_version", &class_version, NULL)
         && class_version == tablestyle->class_version)
@@ -41864,6 +41880,51 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.title_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", tablestyle->title_suppressed, title_suppressed);
     tablestyle->title_suppressed--;
+  }
+  {
+    BITCODE_BL unknown_bl1;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "unknown_bl1", &unknown_bl1, NULL)
+        && unknown_bl1 == tablestyle->unknown_bl1)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_bl1 [BL] %u != %u", tablestyle->unknown_bl1, unknown_bl1);
+    unknown_bl1++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "unknown_bl1", &unknown_bl1, 0)
+        && unknown_bl1 == tablestyle->unknown_bl1)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_bl1 [BL] set+1 %u != %u", tablestyle->unknown_bl1, unknown_bl1);
+    tablestyle->unknown_bl1--;
+  }
+  {
+    BITCODE_BL unknown_bl2;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "unknown_bl2", &unknown_bl2, NULL)
+        && unknown_bl2 == tablestyle->unknown_bl2)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_bl2 [BL] %u != %u", tablestyle->unknown_bl2, unknown_bl2);
+    unknown_bl2++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "unknown_bl2", &unknown_bl2, 0)
+        && unknown_bl2 == tablestyle->unknown_bl2)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_bl2 [BL] set+1 %u != %u", tablestyle->unknown_bl2, unknown_bl2);
+    tablestyle->unknown_bl2--;
+  }
+  {
+    BITCODE_RC unknown_rc;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "unknown_rc", &unknown_rc, NULL)
+        && unknown_rc == tablestyle->unknown_rc)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_rc [RC] %u != %u", tablestyle->unknown_rc, unknown_rc);
+    unknown_rc++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "unknown_rc", &unknown_rc, 0)
+        && unknown_rc == tablestyle->unknown_rc)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_rc [RC] set+1 %u != %u", tablestyle->unknown_rc, unknown_rc);
+    tablestyle->unknown_rc--;
   }
   {
     BITCODE_BD vert_cell_margin;
@@ -45044,7 +45105,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 45260 "dynapi_test.c"
+#line 44628 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -45796,7 +45857,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 46000 "dynapi_test.c"
+#line 45368 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

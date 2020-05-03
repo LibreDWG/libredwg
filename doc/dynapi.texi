@@ -8108,6 +8108,16 @@ BD,	DXF 41
 B,	DXF 280
 @item header_suppressed
 B,	DXF 281
+@item unknown_rc
+RC,	DXF 70
+@item unknown_bl1
+BL
+@item unknown_bl2
+BL
+@item cellstyle_handle
+H
+@item cellstyle
+Dwg_TABLESTYLE_Cell
 @item num_rowstyles
 BL
 @item rowstyles
@@ -9348,6 +9358,8 @@ struct _dwg_CellStyle*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_CELLSTYLEMAP*
 @item style
 Dwg_CellStyle
 @item id
@@ -9356,8 +9368,6 @@ BL,	DXF 90
 BL,	DXF 91
 @item name
 T,	DXF 300
-@item parent
-struct _dwg_object_CELLSTYLEMAP*
 
 @end vtable
 @end indentedblock
@@ -10444,6 +10454,8 @@ T
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_TABLEGEOMETRY*
 @item geom_data_flag
 BL,	DXF 93
 @item width_w_gap
@@ -10456,8 +10468,6 @@ H,	DXF 330
 BL,	DXF 94
 @item geometry
 Dwg_CellContentGeometry*
-@item parent
-struct _dwg_object_TABLEGEOMETRY*
 
 @end vtable
 @end indentedblock
@@ -10468,16 +10478,16 @@ struct _dwg_object_TABLEGEOMETRY*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_TABLESTYLE*
 @item cell
 Dwg_TABLE_Cell
 @item id
-BL
+BL,	DXF 90
 @item type
-BL
+BL,	DXF 91
 @item name
-T
-@item parent
-struct _dwg_object_TABLESTYLE*
+T,	DXF 300
 
 @end vtable
 @end indentedblock
@@ -10488,14 +10498,14 @@ struct _dwg_object_TABLESTYLE*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_TABLESTYLE_rowstyles*
 @item linewt
 BSd
 @item visible
 B
 @item color
 CMC
-@item parent
-struct _dwg_TABLESTYLE_rowstyles*
 
 @end vtable
 @end indentedblock
@@ -10506,6 +10516,8 @@ struct _dwg_TABLESTYLE_rowstyles*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_TABLESTYLE*
 @item text_style
 H,	DXF 7
 @item text_height
@@ -10528,8 +10540,6 @@ BL,	DXF 90
 BL,	DXF 91
 @item format_string
 TU,	DXF 1
-@item parent
-struct _dwg_object_TABLESTYLE*
 
 @end vtable
 @end indentedblock

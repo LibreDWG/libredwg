@@ -295,6 +295,7 @@ sub dxf_in {
       } elsif ($n eq 'MLEADER_AnnotContext' && $f eq 'flags') {
         $n = 'MULTILEADER'; # pop back
       }
+      embedded_struct ('cellstyle', 'TABLESTYLE_Cell');
       embedded_struct ('body', 'ACTIONBODY');
       embedded_struct ('ldata', 'LinkedData');
       embedded_struct ('tdata', 'LinkedTableData');
@@ -1069,7 +1070,7 @@ EOF
       }
     }
   }
-  if (m{/\* \@\@for if_test_OBJECT\@\@ \*/}) {
+  if (m{/\* \@\@for if_test_OBJECT\@\@ \*/}) { # The impl, inside test_object
     for my $name (@entity_names, @object_names) {
       my $xname = $name =~ /^3/ ? "_$name" : $name; # 3DFACE, 3DSOLID
       #next if $name eq 'DIMENSION_';
@@ -1081,7 +1082,7 @@ EOF
 EOF
     }
   }
-
+  # The first, as decl
   if (m{/\* \@\@for test_OBJECT\@\@ \*/}) {
     for my $name (@entity_names, @object_names) {
       #next if $name eq 'DIMENSION_';
@@ -1104,8 +1105,8 @@ EOF
   for my $var (sort keys %{$ENT{$name}}) {
     my $type = $ENT{$name}->{$var};
     # if 0 ignored in .spec
-    next if $type eq 'T' and $name eq 'LIGHT' and $var eq 'web_file';
-    next if $type eq 'TF' and $name eq 'SUN' and $var eq 'bytes';
+    # next if $type eq 'T' and $name eq 'LIGHT' and $var eq 'web_file';
+    # next if $type eq 'TF' and $name eq 'SUN' and $var eq 'bytes';
     my $fmt = exists $FMT{$type} ? $FMT{$type} : undef;
     if (!$fmt) {
       if ($type =~ /[ \*]/ or $type eq 'H') {

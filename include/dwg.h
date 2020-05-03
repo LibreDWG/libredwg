@@ -3565,25 +3565,25 @@ typedef struct _dwg_entity_TABLE
 
 typedef struct _dwg_TABLESTYLE_Cell
 {
+  struct _dwg_object_TABLESTYLE *parent;
   Dwg_TABLE_Cell cell;
   BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
                       ref TABLESTYLE. custom IDs > 100 */
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_T name;
-
-  struct _dwg_object_TABLESTYLE *parent;
 } Dwg_TABLESTYLE_Cell;
 
 typedef struct _dwg_TABLESTYLE_border
 {
+  struct _dwg_TABLESTYLE_rowstyles *parent;
   BITCODE_BSd linewt;
   BITCODE_B visible;
-  BITCODE_CMC color; // or BL?
-  struct _dwg_TABLESTYLE_rowstyles *parent;
+  BITCODE_CMC color;
 } Dwg_TABLESTYLE_border;
 
 typedef struct _dwg_TABLESTYLE_rowstyles
 {
+  struct _dwg_object_TABLESTYLE *parent;
   BITCODE_H text_style;
   BITCODE_BD text_height;
   BITCODE_BS text_alignment;
@@ -3598,8 +3598,6 @@ typedef struct _dwg_TABLESTYLE_rowstyles
   BITCODE_BL data_type;  // r2007+
   BITCODE_BL unit_type;
   BITCODE_TU format_string;
-
-  struct _dwg_object_TABLESTYLE *parent;
 } Dwg_TABLESTYLE_rowstyles;
 
 typedef struct _dwg_object_TABLESTYLE
@@ -3607,13 +3605,18 @@ typedef struct _dwg_object_TABLESTYLE
   struct _dwg_object_object *parent;
 
   BITCODE_BS class_version;
-  BITCODE_TV name;
+  BITCODE_T name;
   BITCODE_BS flags;
   BITCODE_BS flow_direction;
   BITCODE_BD horiz_cell_margin;
   BITCODE_BD vert_cell_margin;
   BITCODE_B title_suppressed;
   BITCODE_B header_suppressed;
+  BITCODE_RC unknown_rc;
+  BITCODE_BL unknown_bl1;
+  BITCODE_BL unknown_bl2;
+  BITCODE_H cellstyle_handle;    //r2007+
+  Dwg_TABLESTYLE_Cell cellstyle; //r2007+. Note: embedded struct
 
   // 0: data, 1: title, 2: header
   BITCODE_BL num_rowstyles; // always 3
@@ -3630,19 +3633,17 @@ typedef struct _dwg_object_TABLESTYLE
 
 typedef struct _dwg_CELLSTYLEMAP_Cell
 {
+  struct _dwg_object_CELLSTYLEMAP *parent;
   Dwg_CellStyle style;
   BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
                       ref TABLESTYLE. custom IDs > 100 */
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_T name;
-
-  struct _dwg_object_CELLSTYLEMAP *parent;
 } Dwg_CELLSTYLEMAP_Cell;
 
 typedef struct _dwg_object_CELLSTYLEMAP
 {
   struct _dwg_object_object *parent;
-
   BITCODE_BL num_cells;
   Dwg_CELLSTYLEMAP_Cell* cells;
 } Dwg_Object_CELLSTYLEMAP;
@@ -3653,14 +3654,13 @@ typedef struct _dwg_object_CELLSTYLEMAP
 
 typedef struct _dwg_TABLEGEOMETRY_Cell
 {
+  struct _dwg_object_TABLEGEOMETRY *parent;
   BITCODE_BL geom_data_flag;
   BITCODE_BD width_w_gap;
   BITCODE_BD height_w_gap;
   BITCODE_H tablegeometry;
   BITCODE_BL num_geometry;
   Dwg_CellContentGeometry *geometry;
-
-  struct _dwg_object_TABLEGEOMETRY *parent;
 } Dwg_TABLEGEOMETRY_Cell;
 
 typedef struct _dwg_object_TABLEGEOMETRY

@@ -7071,7 +7071,7 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_fields[] = {
     1,1,0, 0 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_TABLESTYLE, class_version),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_TABLESTYLE, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_TABLESTYLE, name),
     1,1,1, 3 },
   { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_TABLESTYLE, flags),
     0,0,0, 71 },
@@ -7085,6 +7085,16 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_fields[] = {
     0,0,0, 280 },
   { "header_suppressed",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_TABLESTYLE, header_suppressed),
     0,0,0, 281 },
+  { "unknown_rc",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_TABLESTYLE, unknown_rc),
+    0,0,0, 70 },
+  { "unknown_bl1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, unknown_bl1),
+    0,0,0, 0 },
+  { "unknown_bl2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, unknown_bl2),
+    0,0,0, 0 },
+  { "cellstyle_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_TABLESTYLE, cellstyle_handle),
+    1,0,0, 0 },
+  { "cellstyle",	"Dwg_TABLESTYLE_Cell", sizeof (Dwg_TABLESTYLE_Cell),  OFF (struct _dwg_object_TABLESTYLE, cellstyle),
+    0,0,0, 0 },
   { "num_rowstyles",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, num_rowstyles),
     0,0,0, 0 },
   { "rowstyles",	"Dwg_TABLESTYLE_rowstyles*", sizeof (Dwg_TABLESTYLE_rowstyles*),  OFF (struct _dwg_object_TABLESTYLE, rowstyles),
@@ -8014,6 +8024,8 @@ static const Dwg_DYNAPI_field _dwg_BorderStyle_fields[] = {
 };
 /* from typedef struct _dwg_CELLSTYLEMAP_Cell: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_CELLSTYLEMAP_Cell_fields[] = {
+  { "parent",	"struct _dwg_object_CELLSTYLEMAP*", sizeof (void *),  OFF (struct _dwg_CELLSTYLEMAP_Cell, parent),
+    1,1,0, 0 },
   { "style",	"Dwg_CellStyle", sizeof (Dwg_CellStyle),  OFF (struct _dwg_CELLSTYLEMAP_Cell, style),
     0,0,0, 0 },
   { "id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_CELLSTYLEMAP_Cell, id),
@@ -8022,8 +8034,6 @@ static const Dwg_DYNAPI_field _dwg_CELLSTYLEMAP_Cell_fields[] = {
     0,0,0, 91 },
   { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_CELLSTYLEMAP_Cell, name),
     1,1,1, 300 },
-  { "parent",	"struct _dwg_object_CELLSTYLEMAP*", sizeof (void *),  OFF (struct _dwg_CELLSTYLEMAP_Cell, parent),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_CellContentGeometry: (sorted by offset) */
@@ -8840,6 +8850,8 @@ static const Dwg_DYNAPI_field _dwg_SummaryInfo_Property_fields[] = {
 };
 /* from typedef struct _dwg_TABLEGEOMETRY_Cell: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_TABLEGEOMETRY_Cell_fields[] = {
+  { "parent",	"struct _dwg_object_TABLEGEOMETRY*", sizeof (void *),  OFF (struct _dwg_TABLEGEOMETRY_Cell, parent),
+    1,1,0, 0 },
   { "geom_data_flag",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLEGEOMETRY_Cell, geom_data_flag),
     0,0,0, 93 },
   { "width_w_gap",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_TABLEGEOMETRY_Cell, width_w_gap),
@@ -8852,38 +8864,38 @@ static const Dwg_DYNAPI_field _dwg_TABLEGEOMETRY_Cell_fields[] = {
     0,0,0, 94 },
   { "geometry",	"Dwg_CellContentGeometry*", sizeof (Dwg_CellContentGeometry*),  OFF (struct _dwg_TABLEGEOMETRY_Cell, geometry),
     1,1,0, 0 },
-  { "parent",	"struct _dwg_object_TABLEGEOMETRY*", sizeof (void *),  OFF (struct _dwg_TABLEGEOMETRY_Cell, parent),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLESTYLE_Cell: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_TABLESTYLE_Cell_fields[] = {
+  { "parent",	"struct _dwg_object_TABLESTYLE*", sizeof (void *),  OFF (struct _dwg_TABLESTYLE_Cell, parent),
+    1,1,0, 0 },
   { "cell",	"Dwg_TABLE_Cell", sizeof (Dwg_TABLE_Cell),  OFF (struct _dwg_TABLESTYLE_Cell, cell),
     0,0,0, 0 },
   { "id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLESTYLE_Cell, id),
-    0,0,0, 0 },
+    0,0,0, 90 },
   { "type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLESTYLE_Cell, type),
-    0,0,0, 0 },
+    0,0,0, 91 },
   { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_TABLESTYLE_Cell, name),
-    1,1,1, 0 },
-  { "parent",	"struct _dwg_object_TABLESTYLE*", sizeof (void *),  OFF (struct _dwg_TABLESTYLE_Cell, parent),
-    1,1,0, 0 },
+    1,1,1, 300 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLESTYLE_border: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_TABLESTYLE_border_fields[] = {
+  { "parent",	"struct _dwg_TABLESTYLE_rowstyles*", sizeof (void *),  OFF (struct _dwg_TABLESTYLE_border, parent),
+    1,1,0, 0 },
   { "linewt",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_TABLESTYLE_border, linewt),
     0,0,0, 0 },
   { "visible",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_TABLESTYLE_border, visible),
     0,0,0, 0 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_TABLESTYLE_border, color),
     1,0,0, 0 },
-  { "parent",	"struct _dwg_TABLESTYLE_rowstyles*", sizeof (void *),  OFF (struct _dwg_TABLESTYLE_border, parent),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLESTYLE_rowstyles: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_TABLESTYLE_rowstyles_fields[] = {
+  { "parent",	"struct _dwg_object_TABLESTYLE*", sizeof (void *),  OFF (struct _dwg_TABLESTYLE_rowstyles, parent),
+    1,1,0, 0 },
   { "text_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_TABLESTYLE_rowstyles, text_style),
     1,0,0, 7 },
   { "text_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_TABLESTYLE_rowstyles, text_height),
@@ -8906,8 +8918,6 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_rowstyles_fields[] = {
     0,0,0, 91 },
   { "format_string",	"TU", sizeof (BITCODE_TU),  OFF (struct _dwg_TABLESTYLE_rowstyles, format_string),
     1,1,1, 1 },
-  { "parent",	"struct _dwg_object_TABLESTYLE*", sizeof (void *),  OFF (struct _dwg_TABLESTYLE_rowstyles, parent),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLE_BreakHeight: (sorted by offset) */

@@ -5564,52 +5564,58 @@ DWG_OBJECT_END
 // Added with r2005
 // TABLESTYLE only contains the Table (R24), _Title, _Header and _Data cell style.
 DWG_OBJECT (TABLESTYLE)
-  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbTableStyle)
-  PRE (R_2010) {
+  UNTIL (R_2007) {
     FIELD_T (name, 3);
-    FIELD_BS (flow_direction, 70);
-    FIELD_BS (flags, 71);
-    FIELD_BD (horiz_cell_margin, 40);
-    FIELD_BD (vert_cell_margin, 41);
-    FIELD_B (title_suppressed, 280);
-    FIELD_B (header_suppressed, 281);
-
-    FIELD_VALUE (num_rowstyles) = 3;
-    // 0: data, 1: title, 2: header
-    REPEAT_CN (3, rowstyles, Dwg_TABLESTYLE_rowstyles)
-    REPEAT_BLOCK
-        #define rowstyle rowstyles[rcount1]
-        // TODO in DXF by name
-        SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
-        SUB_FIELD_BD (rowstyle,text_height, 140);
-        SUB_FIELD_BS (rowstyle,text_alignment, 170);
-        SUB_FIELD_CMC (rowstyle,text_color, 62); //FIXME
-        SUB_FIELD_CMC (rowstyle,fill_color, 63);
-        SUB_FIELD_B (rowstyle,has_bgcolor, 283);
-
-        _obj->rowstyle.num_borders = 6;
-        // top, horizontal inside, bottom, left, vertical inside, right
-        _REPEAT_CN (6, rowstyle.borders, Dwg_TABLESTYLE_border, 2)
-        REPEAT_BLOCK
-            #define border rowstyle.borders[rcount2]
-            SUB_FIELD_BSd (border,linewt, 274+rcount2);
-            SUB_FIELD_B (border,visible, 284+rcount2);
-            SUB_FIELD_CMC (border,color, 64+rcount2);
-        END_REPEAT_BLOCK
-        END_REPEAT (rowstyle.borders)
-
-        SINCE (R_2007) {
-          SUB_FIELD_BL (rowstyle,data_type, 90);
-          SUB_FIELD_BL (rowstyle,unit_type, 91);
-          SUB_FIELD_TU (rowstyle,format_string, 1);
-        }
-    END_REPEAT_BLOCK
-    END_REPEAT (rowstyles)
   }
   LATER_VERSIONS {
-    LOG_ERROR ("TABLESTYLE r2010+ not yet implemented") // TABLE/CELLSTYLEMAP
+    FIELD_RC (unknown_rc, 70);
+    FIELD_T (name, 3);
+    FIELD_BL (unknown_bl1, 0);
+    FIELD_BL (unknown_bl2, 0);
+    FIELD_HANDLE (cellstyle_handle, DWG_HDL_HARDOWN, 0);
+    FIELD_BL (cellstyle.id, 90);
+    FIELD_BL (cellstyle.type, 91);
+    FIELD_T (cellstyle.name, 300);
   }
+  FIELD_BS (flow_direction, 70);
+  FIELD_BS (flags, 71);
+  FIELD_BD (horiz_cell_margin, 40);
+  FIELD_BD (vert_cell_margin, 41);
+  FIELD_B (title_suppressed, 280);
+  FIELD_B (header_suppressed, 281);
+
+  FIELD_VALUE (num_rowstyles) = 3;
+  // 0: data, 1: title, 2: header
+  REPEAT_CN (3, rowstyles, Dwg_TABLESTYLE_rowstyles)
+  REPEAT_BLOCK
+      #define rowstyle rowstyles[rcount1]
+      // TODO in DXF by name
+      SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
+      SUB_FIELD_BD (rowstyle,text_height, 140);
+      SUB_FIELD_BS (rowstyle,text_alignment, 170);
+      SUB_FIELD_CMC (rowstyle,text_color, 62); //FIXME
+      SUB_FIELD_CMC (rowstyle,fill_color, 63);
+      SUB_FIELD_B (rowstyle,has_bgcolor, 283);
+
+      _obj->rowstyle.num_borders = 6;
+      // top, horizontal inside, bottom, left, vertical inside, right
+      _REPEAT_CN (6, rowstyle.borders, Dwg_TABLESTYLE_border, 2)
+      REPEAT_BLOCK
+          #define border rowstyle.borders[rcount2]
+          SUB_FIELD_BSd (border,linewt, 274+rcount2);
+          SUB_FIELD_B (border,visible, 284+rcount2);
+          SUB_FIELD_CMC (border,color, 64+rcount2);
+      END_REPEAT_BLOCK
+      END_REPEAT (rowstyle.borders)
+
+      SINCE (R_2007) {
+        SUB_FIELD_BL (rowstyle,data_type, 90);
+        SUB_FIELD_BL (rowstyle,unit_type, 91);
+        SUB_FIELD_TU (rowstyle,format_string, 1);
+      }
+  END_REPEAT_BLOCK
+  END_REPEAT (rowstyles)
   START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END
