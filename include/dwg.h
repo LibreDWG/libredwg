@@ -4877,7 +4877,7 @@ typedef struct _dwg_entity_TABLE
  Class TABLESTYLE (varies)
  */
 
-typedef struct _dwg_TABLESTYLE_CellStyle
+typedef struct _dwg_TABLESTYLE_cellstyle
 {
   struct _dwg_object_TABLESTYLE *parent;
   BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
@@ -4885,11 +4885,12 @@ typedef struct _dwg_TABLESTYLE_CellStyle
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_T  name;
   struct _dwg_CellStyle cellstyle;
-} Dwg_TABLESTYLE_CellStyle;
+} Dwg_TABLESTYLE_cellstyle;
 
 // very similar to GridLine, or GridFormat. but no overrides, type, ltype, ...
 typedef struct _dwg_TABLESTYLE_border
 {
+  struct _dwg_TABLESTYLE_rowstyle *parent;
   BITCODE_BSd linewt;
   BITCODE_B visible;
   BITCODE_CMC color;
@@ -4898,7 +4899,7 @@ typedef struct _dwg_TABLESTYLE_border
   // BITCODE_BD double_line_spacing;
 } Dwg_TABLESTYLE_border; // child of TABLE/TABLESTYLE/...
 
-typedef struct _dwg_TABLESTYLE_rowstyles
+typedef struct _dwg_TABLESTYLE_rowstyle
 {
   struct _dwg_object_TABLESTYLE *parent;
   BITCODE_H text_style;
@@ -4908,20 +4909,25 @@ typedef struct _dwg_TABLESTYLE_rowstyles
   BITCODE_CMC fill_color;
   BITCODE_B has_bgcolor;
 
-  // 6: top, horizontal inside, bottom, left, vertical inside, right
-  BITCODE_BL num_borders; // always 6
-  Dwg_TABLESTYLE_border *borders;
+  // top, horizontal inside, bottom, left, vertical inside, right
+  // Also called Grid
+  Dwg_TABLESTYLE_border top_border;
+  Dwg_TABLESTYLE_border hor_border;
+  Dwg_TABLESTYLE_border bot_border;
+  Dwg_TABLESTYLE_border left_border;
+  Dwg_TABLESTYLE_border vert_border;
+  Dwg_TABLESTYLE_border right_border;
 
-  BITCODE_BL data_type;  // r2007+
+  BITCODE_BL data_type;  // r2010+
   BITCODE_BL unit_type;
   BITCODE_TU format_string;
-} Dwg_TABLESTYLE_rowstyles;
+} Dwg_TABLESTYLE_rowstyle;
 
 typedef struct _dwg_object_TABLESTYLE
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BS class_version;
+  //BITCODE_BS class_version;
   BITCODE_T name;
   BITCODE_BS flags;
   BITCODE_BS flow_direction;
@@ -4932,15 +4938,16 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_RC unknown_rc;         //r2007+ signed
   BITCODE_BL unknown_bl1;
   BITCODE_BL unknown_bl2;
-  BITCODE_H cellstyle;           //r2007+. was called template
-  Dwg_TABLESTYLE_CellStyle sty;  //r2007+. Note: embedded struct
+  BITCODE_H cellstyle_handle;   //r2007+. was called template
+  Dwg_TABLESTYLE_cellstyle sty; // Note: embedded structs
   BITCODE_BL numoverrides;      // ??
   BITCODE_BL unknown_bl3;
-  Dwg_TABLESTYLE_CellStyle ovr;  // ??
+  Dwg_TABLESTYLE_cellstyle ovr;  // overrides
 
   // 0: data, 1: title, 2: header
-  BITCODE_BL num_rowstyles; // always 3
-  Dwg_TABLESTYLE_rowstyles *rowstyles;
+  Dwg_TABLESTYLE_rowstyle data_rowstyle;
+  Dwg_TABLESTYLE_rowstyle title_rowstyle;
+  Dwg_TABLESTYLE_rowstyle header_rowstyle;
 } Dwg_Object_TABLESTYLE;
 
 /**
@@ -4951,7 +4958,7 @@ typedef struct _dwg_object_CELLSTYLEMAP
 {
   struct _dwg_object_object *parent;
   BITCODE_BL num_cells;
-  Dwg_TABLESTYLE_CellStyle *cells;
+  Dwg_TABLESTYLE_cellstyle *cells;
 } Dwg_Object_CELLSTYLEMAP;
 
 /* 20.4.103 TABLEGEOMETRY
