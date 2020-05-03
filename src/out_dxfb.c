@@ -371,6 +371,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   VALUE_TV (#token, 2)
 #define ENDTAB() VALUE_TV ("ENDTAB", 0)
 #define RECORD(token) VALUE_TV (#token, 0)
+#define RECORDs(record) VALUE_TV (_XSTR (record), 0)
 #define SUBCLASS(text)                                                        \
   if (dat->version >= R_13b1)                                                 \
     {                                                                         \

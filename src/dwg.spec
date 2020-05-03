@@ -7326,99 +7326,6 @@ DWG_ENTITY_END
 
 #endif /* DEBUG_CLASSES */
 
-// See TABLE and p20.4.101
-// Added with r2005. unstable for r2010+
-// TABLESTYLE only contains the Table (R24), _Title, _Header and _Data cell style.
-DWG_OBJECT (TABLESTYLE)
-  HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbTableStyle)
-  UNTIL (R_2007) {
-    FIELD_T (name, 3);
-    FIELD_BS (flow_direction, 70);
-    FIELD_BS (flags, 71);
-    FIELD_BD (horiz_cell_margin, 40);
-    FIELD_BD (vert_cell_margin, 41);
-    FIELD_B (is_title_suppressed, 280);
-    FIELD_B (is_header_suppressed, 281);
-#ifdef IS_ENCODER
-    if (dwg->header.from_version > R_2007)
-      downconvert_TABLESTYLE (obj);
-#endif
-  }
-  LATER_VERSIONS { // r2010+
-#ifdef IS_ENCODER
-    //if (dwg->header.from_version <= R_2007)
-    //  upconvert_TABLESTYLE (obj);
-#endif
-    FIELD_RCd (unknown_rc, 70);
-    FIELD_T (name, 3);
-    FIELD_BL (unknown_bl1, 0);
-    FIELD_BL (unknown_bl2, 0);
-    FIELD_HANDLE (cellstyle, DWG_HDL_HARDOWN, 0);
-    CellStyle_fields (sty.cellstyle);
-    DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
-    FIELD_BL0 (sty.id, 90);
-    FIELD_BL0 (sty.type, 91);
-    FIELD_T0 (sty.name, 300);
-    DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
-
-    DECODER {
-      FIELD_VALUE (flow_direction) =
-        _obj->sty.cellstyle.property_override_flags & 0x10000;
-    }
-    FIELD_BL (numoverrides, 0);
-    // FIXME style overrides for 0-6
-    if (FIELD_VALUE (numoverrides))
-      {
-        FIELD_BL (unknown_bl3, 0);
-        CellStyle_fields (ovr.cellstyle);
-        DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
-        FIELD_BL0 (ovr.id, 90);
-        FIELD_BL0 (ovr.type, 91);
-        FIELD_T0 (ovr.name, 300);
-        DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
-        LOG_WARN ("TODO TABLESTYLE r2010+ missing fields")
-      }
-  }
-
-  UNTIL (R_2007) {
-    FIELD_VALUE (num_rowstyles) = 3;
-    // 0: data, 1: title, 2: header
-    #define rowstyle rowstyles[rcount1]
-    REPEAT_CN (3, rowstyles, Dwg_TABLESTYLE_rowstyles)
-    REPEAT_BLOCK
-        // TODO in DXF by name
-        SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
-        SUB_FIELD_BD (rowstyle,text_height, 140);
-        SUB_FIELD_BS (rowstyle,text_alignment, 170);
-        SUB_FIELD_CMTC (rowstyle,text_color, 62);
-        SUB_FIELD_CMTC (rowstyle,fill_color, 63);
-        SUB_FIELD_B (rowstyle,has_bgcolor, 283);
-
-        _obj->rowstyle.num_borders = 6;
-        // grid: top, horizontal inside, bottom, left, vertical inside, right
-        _REPEAT_CN (6, rowstyle.borders, Dwg_TABLESTYLE_border, 2)
-        REPEAT_BLOCK
-            #define border rowstyle.borders[rcount2]
-            SUB_FIELD_BSd (border,linewt, 274+rcount2);
-            SUB_FIELD_B (border,visible, 284+rcount2);
-            SUB_FIELD_CMTC (border,color, 64+rcount2);
-        END_REPEAT_BLOCK
-        END_REPEAT (rowstyle.borders)
-
-        //SINCE (R_2007a) {
-        //  SUB_FIELD_BL (rowstyle,data_type, 90);
-        //  SUB_FIELD_BL (rowstyle,unit_type, 91);
-        //  SUB_FIELD_TU (rowstyle,format_string, 1);
-        //}
-        #undef border
-    END_REPEAT_BLOCK
-    END_REPEAT (rowstyles)
-    #undef rowstyle
-  }
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 // pg.246 20.4.102 and TABLE
 // added with r2008, backcompat with r2007
 // The cellstyle map can contain custom cell styles, whereas the TABLESTYLE
@@ -7426,7 +7333,7 @@ DWG_OBJECT_END
 DWG_OBJECT (CELLSTYLEMAP)
   SUBCLASS (AcDbCellStyleMap)
   FIELD_BL (num_cells, 90);
-  REPEAT (num_cells, cells, Dwg_TABLESTYLE_CellStyle)
+  REPEAT (num_cells, cells, Dwg_TABLESTYLE_cellstyle)
   REPEAT_BLOCK
       DXF { VALUE_TFF ("CELLSTYLE", 300); }
       CellStyle_fields (cells[rcount1].cellstyle);
@@ -7479,6 +7386,92 @@ DWG_OBJECT (TABLEGEOMETRY)
       #undef cell
   END_REPEAT_BLOCK
   END_REPEAT (cells);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+/* top, horizontal inside, bottom, left, vertical inside, right */
+#define TABLESTYLE_rowstyle_border(nam, bord, rcount2)                  \
+  JSON { RECORDs (bord); }                                              \
+  SUB_FIELD_BSd (nam##_rowstyle.bord,linewt, 274+rcount2);              \
+  SUB_FIELD_B (nam##_rowstyle.bord,visible, 284+rcount2);               \
+  SUB_FIELD_CMC (nam##_rowstyle.bord,color, 64+rcount2);                \
+  DECODER { _obj->nam##_rowstyle.bord.parent = &_obj->nam##_rowstyle; } \
+  JSON { ENDRECORD (); }
+
+/* data, title, header */
+#define TABLESTYLE_rowstyle(nam)                                        \
+  JSON { RECORDs (nam##_rowstyle); }                                    \
+  SUB_FIELD_HANDLE (nam##_rowstyle,text_style, 5, 7); /* DXF by name */ \
+  SUB_FIELD_BD (nam##_rowstyle,text_height, 140);                       \
+  SUB_FIELD_BS (nam##_rowstyle,text_alignment, 170);                    \
+  SUB_FIELD_CMC (nam##_rowstyle,text_color, 62);                        \
+  SUB_FIELD_CMC (nam##_rowstyle,fill_color, 63);                        \
+  SUB_FIELD_B (nam##_rowstyle,has_bgcolor, 283);                        \
+  TABLESTYLE_rowstyle_border (nam, top_border, 0);                      \
+  TABLESTYLE_rowstyle_border (nam, hor_border, 1);                      \
+  TABLESTYLE_rowstyle_border (nam, bot_border, 2);                      \
+  TABLESTYLE_rowstyle_border (nam, left_border, 3);                     \
+  TABLESTYLE_rowstyle_border (nam, vert_border, 4);                     \
+  TABLESTYLE_rowstyle_border (nam, right_border, 5);                    \
+  SINCE (R_2007a) {                                                     \
+    SUB_FIELD_BL (nam##_rowstyle,data_type, 90);                        \
+    SUB_FIELD_BL (nam##_rowstyle,unit_type, 91);                        \
+    SUB_FIELD_TU (nam##_rowstyle,format_string, 1);                     \
+  }                                                                     \
+  DECODER { _obj->nam##_rowstyle.parent = _obj; }                       \
+  JSON { ENDRECORD (); }
+
+// See TABLE and p20.4.101
+// Added with r2005
+// TABLESTYLE only contains the Table (R24), _Title, _Header and _Data cell style.
+DWG_OBJECT (TABLESTYLE)
+  SUBCLASS (AcDbTableStyle)
+  UNTIL (R_2007) {
+    FIELD_T (name, 3);
+    FIELD_BS (flow_direction, 70);
+    FIELD_BS (flags, 71);
+    FIELD_BD (horiz_cell_margin, 40);
+    FIELD_BD (vert_cell_margin, 41);
+    FIELD_B (is_title_suppressed, 280);
+    FIELD_B (is_header_suppressed, 281);
+#ifdef IS_ENCODER
+    if (dwg->header.from_version > R_2007)
+      downconvert_TABLESTYLE (obj);
+#endif
+  }
+  LATER_VERSIONS { // r2010+
+    FIELD_RC (unknown_rc, 70);
+    FIELD_T (name, 3);
+    FIELD_BL (unknown_bl1, 0);
+    FIELD_BL (unknown_bl2, 0);
+    FIELD_HANDLE (cellstyle_handle, DWG_HDL_HARDOWN, 0);
+    CellStyle_fields (sty.cellstyle);
+    DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
+    FIELD_BL0 (sty.id, 90);
+    FIELD_BL0 (sty.type, 91);
+    FIELD_T0 (sty.name, 300);
+    DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
+
+    DECODER { FIELD_VALUE (flow_direction) = _obj->sty.cellstyle.property_override_flags & 0x10000; }
+    FIELD_BL (numoverrides, 0);
+    // FIXME style overrides for 0-6
+    if (FIELD_VALUE (numoverrides))
+      {
+        FIELD_BL (unknown_bl3, 0);
+        CellStyle_fields (ovr.cellstyle);
+        DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
+        FIELD_BL0 (ovr.id, 90);
+        FIELD_BL0 (ovr.type, 91);
+        FIELD_T0 (ovr.name, 300);
+        DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
+        LOG_WARN ("TODO TABLESTYLE r2010+ missing fields")
+      }
+  }
+
+  TABLESTYLE_rowstyle (data);
+  TABLESTYLE_rowstyle (title);
+  TABLESTYLE_rowstyle (header);
+
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
