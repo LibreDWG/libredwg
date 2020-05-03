@@ -19,7 +19,11 @@ api_process (dwg_object *obj)
   BITCODE_RCd unknown_rc;
   BITCODE_BL unknown_bl1;
   BITCODE_BL unknown_bl2;
-  BITCODE_H cellstyle;
+  BITCODE_H cellstyle_handle;
+  Dwg_TABLE_Cell cell;
+  Dwg_TABLESTYLE_cellstyle cellstyle; // embedded structs
+  Dwg_TABLESTYLE_rowstyle rowstyle;
+  Dwg_TABLESTYLE_border border;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_tablestyle *tblstyle = dwg_object_to_TABLESTYLE (obj);
@@ -47,113 +51,91 @@ api_process (dwg_object *obj)
       BITCODE_T name;
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl1, BL);
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl2, BL);
-      CHK_ENTITY_H (tblstyle, TABLESTYLE, cellstyle);
-
-      if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "sty", &sty, NULL))
-        fail ("TABLESTYLE.sty");
-      CHK_SUBCLASS_TYPE (sty, TABLESTYLE_CellStyle, id, BL);
-      CHK_SUBCLASS_TYPE (sty, TABLESTYLE_CellStyle, type, BL);
-      CHK_SUBCLASS_MAX (sty, TABLESTYLE_CellStyle, type, BL, 2);
-      // CHK_SUBCLASS_UTF8TEXT (sty, TABLESTYLE_CellStyle, name);
-
-      CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, type, BL);
-      CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, data_flags, BS);
-      if (sty.cellstyle.data_flags)
-        {
-          CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, property_override_flags,
-                             BL);
-          CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, merge_flags, BL);
-          CHK_SUBCLASS_CMC (sty.cellstyle, CellStyle, bg_color);
-          CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, content_layout, BL);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             property_override_flags, BL);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             property_override_flags, BL);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             property_flags, BL);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             value_data_type, BL);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             value_unit_type, BL);
-          CHK_SUBCLASS_UTF8TEXT (sty.cellstyle.content_format, ContentFormat,
-                                 value_format_string);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             rotation, BD);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             block_scale, BD);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             cell_alignment, BL);
-          CHK_SUBCLASS_CMC (sty.cellstyle.content_format, ContentFormat,
-                            content_color);
-          CHK_SUBCLASS_H (sty.cellstyle.content_format, ContentFormat,
-                          text_style);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.content_format, ContentFormat,
-                             text_height, BD);
-          CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, margin_override_flags,
-                             BS);
-          if (sty.cellstyle.margin_override_flags)
-            {
-              CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, vert_margin, BD);
-              CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, horiz_margin, BD);
-              CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, bottom_margin, BD);
-              CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, right_margin, BD);
-              CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle,
-                                 margin_horiz_spacing, BD);
-              CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, margin_vert_spacing,
-                                 BD);
-            }
-        }
-      CHK_SUBCLASS_TYPE (sty.cellstyle, CellStyle, num_borders, BL);
-      for (j = 0; j < sty.cellstyle.num_borders; j++)
-        {
-          CHK_SUBCLASS_TYPE (sty.cellstyle.borders[j], GridFormat, index_mask,
-                             BL);
-          if (!sty.cellstyle.borders[j].index_mask)
-            continue;
-          CHK_SUBCLASS_TYPE (sty.cellstyle.borders[j], GridFormat,
-                             border_overrides, BL);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.borders[j], GridFormat, border_type,
-                             BL);
-          CHK_SUBCLASS_CMC (sty.cellstyle.borders[j], GridFormat, color);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.borders[j], GridFormat, linewt,
-                             BLd);
-          CHK_SUBCLASS_H (sty.cellstyle.borders[j], GridFormat, ltype);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.borders[j], GridFormat, visible, B);
-          CHK_SUBCLASS_TYPE (sty.cellstyle.borders[j], GridFormat,
-                             double_line_spacing, BD);
-        }
+      CHK_ENTITY_H (tblstyle, TABLESTYLE, cellstyle_handle);
+      if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "cellstyle",
+                                    &cellstyle, NULL))
+        fail ("TABLESTYLE.cellstyle");
+      CHK_SUBCLASS_TYPE (cellstyle, TABLESTYLE_cellstyle, id, BL);
+      CHK_SUBCLASS_TYPE (cellstyle, TABLESTYLE_cellstyle, type, BL);
+      CHK_SUBCLASS_UTF8TEXT (cellstyle, TABLESTYLE_cellstyle, name);
+      if (!dwg_dynapi_entity_value (&cellstyle, "TABLESTYLE_cellstyle", "cell",
+                                    &cell, NULL))
+        fail ("TABLESTYLE.cellstyle.cell");
     }
 
-  for (i = 0; i < num_rowstyles; i++)
+    /* FIXME: border is no subclass. There's no proper parent id to get to the
+     * obj */
+#define CHK_BORDER(row, name)                                                 \
+  if (!dwg_dynapi_subclass_value (&rowstyle, "TABLESTYLE_rowstyle", #name,    \
+                                  &border, NULL))                             \
+    fail ("TABLESTYLE." #row "_rowstyle." #name "_border");                   \
+  CHK_SUBCLASS_TYPE (border, TABLESTYLE_border, linewt, BSd);                 \
+  CHK_SUBCLASS_TYPE (border, TABLESTYLE_border, visible, B);                  \
+  CHK_SUBCLASS_CMC (border, TABLESTYLE_border, color)
+
+  if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "data_rowstyle",
+                                &rowstyle, NULL))
+    fail ("TABLESTYLE.data_rowstyle");
+  CHK_SUBCLASS_H (rowstyle, TABLESTYLE_rowstyle, text_style);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, text_height, BD);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, text_alignment, BS);
+  CHK_SUBCLASS_CMC (rowstyle, TABLESTYLE_rowstyle, text_color);
+  CHK_SUBCLASS_CMC (rowstyle, TABLESTYLE_rowstyle, fill_color);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, has_bgcolor, B);
+  CHK_BORDER (data, top);
+  CHK_BORDER (data, hor);
+  CHK_BORDER (data, bot);
+  CHK_BORDER (data, left);
+  CHK_BORDER (data, vert);
+  CHK_BORDER (data, right);
+  if (dwg_version >= R_2007)
     {
-      CHK_SUBCLASS_H (rowstyles[i], TABLESTYLE_rowstyles, text_style);
-      CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, text_height, BD);
-      CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, text_alignment,
-                         BS);
-      CHK_SUBCLASS_CMC (rowstyles[i], TABLESTYLE_rowstyles, text_color);
-      CHK_SUBCLASS_CMC (rowstyles[i], TABLESTYLE_rowstyles, fill_color);
-      CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, has_bgcolor, B);
-      if (rowstyles[i].num_borders != 6)
-        fail ("TABLESTYLE.rowstyles[%d].num_borders %d != 6", i,
-              rowstyles[i].num_borders);
-      if (rowstyles[i].borders)
-        for (j = 0; j < 6; j++)
-          {
-            CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border,
-                               linewt, BSd);
-            CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border,
-                               visible, B);
-            CHK_SUBCLASS_CMC (rowstyles[i].borders[j], TABLESTYLE_border,
-                              color);
-          }
-      if (dwg_version >= R_2007)
-        {
-          CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, data_type,
-                             BL);
-          CHK_SUBCLASS_TYPE (rowstyles[i], TABLESTYLE_rowstyles, unit_type,
-                             BL);
-          CHK_SUBCLASS_UTF8TEXT (rowstyles[i], TABLESTYLE_rowstyles,
-                                 format_string);
-        }
+      CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, data_type, BL);
+      CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, unit_type, BL);
+      CHK_SUBCLASS_UTF8TEXT (rowstyle, TABLESTYLE_rowstyle, format_string);
+    }
+
+  if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "title_rowstyle",
+                                &rowstyle, NULL))
+    fail ("TABLESTYLE.title_rowstyle");
+  CHK_SUBCLASS_H (rowstyle, TABLESTYLE_rowstyle, text_style);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, text_height, BD);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, text_alignment, BS);
+  CHK_SUBCLASS_CMC (rowstyle, TABLESTYLE_rowstyle, text_color);
+  CHK_SUBCLASS_CMC (rowstyle, TABLESTYLE_rowstyle, fill_color);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, has_bgcolor, B);
+  CHK_BORDER (title, top);
+  CHK_BORDER (title, hor);
+  CHK_BORDER (title, bot);
+  CHK_BORDER (title, left);
+  CHK_BORDER (title, vert);
+  CHK_BORDER (title, right);
+  if (dwg_version >= R_2007)
+    {
+      CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, data_type, BL);
+      CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, unit_type, BL);
+      CHK_SUBCLASS_UTF8TEXT (rowstyle, TABLESTYLE_rowstyle, format_string);
+    }
+
+  if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "header_rowstyle",
+                                &rowstyle, NULL))
+    fail ("TABLESTYLE.header_rowstyle");
+  CHK_SUBCLASS_H (rowstyle, TABLESTYLE_rowstyle, text_style);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, text_height, BD);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, text_alignment, BS);
+  CHK_SUBCLASS_CMC (rowstyle, TABLESTYLE_rowstyle, text_color);
+  CHK_SUBCLASS_CMC (rowstyle, TABLESTYLE_rowstyle, fill_color);
+  CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, has_bgcolor, B);
+  CHK_BORDER (header, top);
+  CHK_BORDER (header, hor);
+  CHK_BORDER (header, bot);
+  CHK_BORDER (header, left);
+  CHK_BORDER (header, vert);
+  CHK_BORDER (header, right);
+  if (dwg_version >= R_2007)
+    {
+      CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, data_type, BL);
+      CHK_SUBCLASS_TYPE (rowstyle, TABLESTYLE_rowstyle, unit_type, BL);
+      CHK_SUBCLASS_UTF8TEXT (rowstyle, TABLESTYLE_rowstyle, format_string);
     }
 }
