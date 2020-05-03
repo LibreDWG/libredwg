@@ -125,6 +125,9 @@ static char *_path_field (const char *path);
 #define RECORD(nam)                                                           \
   KEY (nam);                                                                  \
   HASH
+#define RECORDs(x)                                                            \
+  KEYs (_XSTR (x));                                                           \
+  HASH
 #define ENDRECORD() ENDHASH
 // a named list
 #define SECTION(nam)                                                          \
