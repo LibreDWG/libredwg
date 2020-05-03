@@ -371,6 +371,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   VALUE_TV (#token, 2)
 #define ENDTAB() VALUE_TV ("ENDTAB", 0)
 #define RECORD(token) VALUE_TV (#token, 0)
+#define RECORDs(record) VALUE_TV (_XSTR (record), 0)
 #define SUBCLASS(text)                                                        \
   if (dat->version >= R_13b1)                                                 \
     {                                                                         \
@@ -1362,16 +1363,17 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     VALUE_TV ("*", 2)                                                         \
   if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
     { /* Mask off plotflag and linewt. */                                     \
-      BITCODE_RC _flag = _obj->flag & ~0x3e0; /* Don't keep bit 16 when not      \
+      BITCODE_RC _flag = _obj->flag & ~0x3e0; /* Don't keep bit 16 when not                               \
                                                  xrefdep like "XREF|name" */               \
       if (_flag & 0x10 && !dxf_has_xrefdep_vertbar (dat, _obj->name))         \
         _flag &= ~0x10;                                                       \
       VALUE_RC (_flag, 70);                                                   \
     }                                                                         \
   else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
-    ; /* skip 70 for AcDbBlockTableRecord       \
-                                                                           here. \
-                                          done in AcDbBlockBegin */     \
+    ; /* skip 70 for AcDbBlockTableRecord                                        \
+                                                                                                    here. \
+                                                                   done in                                \
+                                  AcDbBlockBegin */     \
   else                                                                        \
     { /* mask off 64, the loaded bit 6 */                                     \
       VALUE_RS (_obj->flag & ~64, 70);                                        \
