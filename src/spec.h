@@ -521,6 +521,16 @@
 #  define DXF_OR_PRINT if (1)
 #  undef DECODER_OR_ENCODER
 #  define DECODER_OR_ENCODER if (1)
+#else
+#  ifndef RECORD
+#    define RECORD(x)
+#  endif
+#  ifndef RECORDs
+#    define RECORDs(x)
+#  endif
+#  ifndef ENDRECORD
+#    define ENDRECORD()
+#  endif
 #endif
 
 #if defined(IS_FREE)
