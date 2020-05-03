@@ -368,7 +368,16 @@ sub dxf_in {
         $n = 'MLEADER_AnnotContext';
       }
       embedded_struct ('plotsettings', 'PLOTSETTINGS');
-      embedded_struct ('cellstyle', 'TABLESTYLE_Cell');
+      embedded_struct ('cellstyle', 'TABLESTYLE_cellstyle');
+      embedded_struct ('data_rowstyle', 'TABLESTYLE_rowstyle');
+      embedded_struct ('title_rowstyle', 'TABLESTYLE_rowstyle');
+      embedded_struct ('header_rowstyle', 'TABLESTYLE_rowstyle');
+      embedded_struct ('top_border', 'TABLESTYLE_border');
+      embedded_struct ('hor_border', 'TABLESTYLE_border');
+      embedded_struct ('bot_border', 'TABLESTYLE_border');
+      embedded_struct ('left_border', 'TABLESTYLE_border');
+      embedded_struct ('vert_border', 'TABLESTYLE_border');
+      embedded_struct ('right_border', 'TABLESTYLE_border');
       embedded_struct ('body', 'ACTIONBODY');
       embedded_struct ('ldata', 'LinkedData');
       embedded_struct ('tdata', 'LinkedTableData');
@@ -546,6 +555,18 @@ my @annotscale = qw (TEXTOBJECTCONTEXTDATA MTEXTOBJECTCONTEXTDATA ALDIMOBJECTCON
 $DXF{$_}->{'class_version'} = 70 for @annotscale;
 $DXF{$_}->{'is_default'} = 290 for @annotscale;
 $DXF{$_}->{'scale'} = 340 for @annotscale;
+$DXF{TABLESTYLE_rowstyle} =
+  {
+   text_style => 7,
+   text_height => 140,
+   text_alignment => 170,
+   text_color => 62,
+   fill_color => 63,
+   has_bgcolor => 283,
+   data_type => 90,
+   unit_type => 91,
+   format_string => 1,
+  };
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;
