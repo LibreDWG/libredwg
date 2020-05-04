@@ -432,12 +432,12 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 
 /* THUMBNAIL IMAGE DATA (R13C3+).
    Supports multiple preview pictures.
-   Currently 2 types: BMP and WMF.
+   Currently 3 types: BMP, WMF and PNG. but returns only the size of the BMP.
  */
 EXPORT unsigned char *
 dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 {
-  BITCODE_RC i, num_pictures, code;
+  BITCODE_RC i, num_pictures, type;
   int found;
   BITCODE_RL header_size, address, osize;
   Bit_Chain dat = { NULL, 0, 0, 0 };
@@ -485,30 +485,35 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
           LOG_ERROR ("Preview overflow");
           break;
         }
-      code = bit_read_RC (&dat);
-      LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, code)
+      type = bit_read_RC (&dat);
+      LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, type)
       address = bit_read_RL (&dat);
       LOG_TRACE ("\t\tHeader data start: 0x%x [RL]\n", address)
-      if (code == 1)
+      if (type == 1)
         {
           header_size += bit_read_RL (&dat);
           LOG_TRACE ("\t\tHeader data size: %i [RL]\n", header_size)
         }
-      else if (code == 2 && found == 0)
+      else if (type == 2 && found == 0)
         {
           *size = bit_read_RL (&dat);
           found = 1;
           LOG_INFO ("\t\tBMP size: %i [RL]\n", *size)
         }
-      else if (code == 3)
+      else if (type == 3)
         {
           osize = bit_read_RL (&dat);
           LOG_INFO ("\t\tWMF size: %i [RL]\n", osize)
         }
+      else if (type == 4) // type 4?
+        {
+          osize = bit_read_RL (&dat);
+          LOG_INFO ("\t\tPNG size: %i [RL]\n", osize)
+        }
       else
         {
           osize = bit_read_RL (&dat);
-          LOG_TRACE ("\t\tSize of unknown code %i: %i [RL]\n", code, osize)
+          LOG_TRACE ("\t\tSize of unknown type %i: %i [RL]\n", type, osize)
         }
     }
   dat.byte += header_size;
