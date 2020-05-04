@@ -84,7 +84,7 @@
     }
   SINCE (R_2004) //ODA bug
     {
-      FIELD_B (xdic_missing_flag, 0);
+      FIELD_B (is_xdic_missing, 0);
     }
   PRE (R_2004) //ODA bug
     {

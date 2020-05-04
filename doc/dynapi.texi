@@ -10805,6 +10805,8 @@ B
 B
 @item invisible
 BS,	DXF 60
+@item is_xdic_missing
+B
 @item isbylayerlt
 B
 @item kind_r11
@@ -10865,8 +10867,6 @@ H
 RC,	DXF 284
 @item thickness_r11
 RD
-@item xdic_missing_flag
-B
 @item xdicobjhandle
 H,	DXF 360
 
@@ -10887,6 +10887,8 @@ Dwg_Eed*
 Dwg_Handle*
 @item has_ds_data
 B
+@item is_xdic_missing
+B
 @item num_eed
 BL
 @item num_reactors
@@ -10897,8 +10899,6 @@ BL
 H,	DXF 330
 @item reactors
 H*,	DXF 330
-@item xdic_missing_flag
-B
 @item xdicobjhandle
 H,	DXF 360
 

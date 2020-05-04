@@ -734,7 +734,7 @@ api_common_entity (dwg_object *obj)
   BITCODE_H handle;
   BITCODE_BL num_reactors, num_eed;
   BITCODE_H *reactors;
-  BITCODE_B xdic_missing_flag, has_ds_data, preview_exists;
+  BITCODE_B is_xdic_missing, has_ds_data, preview_exists;
   BITCODE_RC linewt;
   BITCODE_RL preview_size_rl;
   BITCODE_BLL preview_size;
@@ -797,8 +797,8 @@ api_common_entity (dwg_object *obj)
     }
   CHK_COMMON_TYPE (ent, invisible, BS, invisible);
 
-  CHK_COMMON_TYPE (ent, xdic_missing_flag, B, xdic_missing_flag);
-  if (!xdic_missing_flag)
+  CHK_COMMON_TYPE (ent, is_xdic_missing, B, is_xdic_missing);
+  if (!is_xdic_missing)
     CHK_COMMON_H (ent, xdicobjhandle, handle);
   CHK_COMMON_TYPE (ent, num_reactors, BL, num_reactors);
   CHK_COMMON_HV (ent, reactors, reactors, num_reactors);
@@ -1211,15 +1211,15 @@ api_common_object (dwg_object *obj)
   BITCODE_H handle;
   BITCODE_BL num_reactors, num_eed;
   BITCODE_H *reactors;
-  BITCODE_B xdic_missing_flag, has_ds_data;
+  BITCODE_B is_xdic_missing, has_ds_data;
   Dwg_Data *dwg = obj->parent;
   Dwg_Version_Type version = obj->parent->header.version;
   Dwg_Object_Object *obj_obj = obj->tio.object;
   Dwg_Object_LAYER *_obj = obj->tio.object->tio.LAYER;
 
   CHK_COMMON_H (_obj, ownerhandle, handle);
-  CHK_COMMON_TYPE (_obj, xdic_missing_flag, B, xdic_missing_flag);
-  if (!xdic_missing_flag)
+  CHK_COMMON_TYPE (_obj, is_xdic_missing, B, is_xdic_missing);
+  if (!is_xdic_missing)
     CHK_COMMON_H (_obj, xdicobjhandle, handle);
   CHK_COMMON_TYPE (_obj, num_reactors, BL, num_reactors);
   CHK_COMMON_HV (_obj, reactors, reactors, num_reactors);

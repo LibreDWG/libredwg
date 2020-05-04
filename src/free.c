@@ -249,7 +249,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define XDICOBJHANDLE(code)                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.object->xdic_missing_flag)                                  \
+    if (!obj->tio.object->is_xdic_missing)                                  \
       {                                                                       \
         VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,    \
                       0);                                                     \
@@ -262,7 +262,7 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define ENT_XDICOBJHANDLE(code)                                               \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!ent->xdic_missing_flag)                                              \
+    if (!ent->is_xdic_missing)                                              \
       {                                                                       \
         VALUE_HANDLE (ent->xdicobjhandle, xdicobjhandle, code, 0);            \
       }                                                                       \

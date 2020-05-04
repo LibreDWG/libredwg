@@ -4387,9 +4387,9 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   xrefref = 1;
   if (dwg_dynapi_entity_field (obj->name, "xrefref"))
     dwg_dynapi_entity_set_value (_obj, obj->name, "xrefref", &xrefref, 1);
-  // default xdic_missing_flag
+  // default is_xdic_missing
   if (dwg->header.version >= R_2004)
-    obj->tio.object->xdic_missing_flag = 1;
+    obj->tio.object->is_xdic_missing = 1;
 
   pair = dxf_read_pair (dat);
   // read common table until next 0 table or endtab
@@ -4457,7 +4457,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 360: // {ACAD_XDICTIONARY TODO
           obj->tio.object->xdicobjhandle
               = dwg_add_handleref (dwg, 3, pair->value.u, obj);
-          obj->tio.object->xdic_missing_flag = 0;
+          obj->tio.object->is_xdic_missing = 0;
           LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [H 360]\n", ctrlname,
                      ARGS_REF (obj->tio.object->xdicobjhandle));
           break;
@@ -4520,7 +4520,7 @@ do_return:
   // default NULL handle
   if (!obj->tio.object->xdicobjhandle)
     {
-      obj->tio.object->xdic_missing_flag = 1;
+      obj->tio.object->is_xdic_missing = 1;
       if (dwg->header.version >= R_13 && dwg->header.version < R_2004)
         obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
     }
@@ -5629,16 +5629,16 @@ in_postprocess_handles (Dwg_Object *restrict obj)
   int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
 
   // common_entity_handle_data:
-  // set xdic_missing_flag and xdicobjhandle if <2004
+  // set is_xdic_missing and xdicobjhandle if <2004
   if (is_entity ? !obj->tio.entity->xdicobjhandle
                 : !obj->tio.object->xdicobjhandle)
     {
       if (dwg->header.version >= R_2004)
         {
           if (is_entity)
-            obj->tio.entity->xdic_missing_flag = 1;
+            obj->tio.entity->is_xdic_missing = 1;
           else
-            obj->tio.object->xdic_missing_flag = 1;
+            obj->tio.object->is_xdic_missing = 1;
         }
       else if (dwg->header.version >= R_13 && !is_entity)
         obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
@@ -5752,7 +5752,7 @@ new_object (char *restrict name, char *restrict dxfname,
     {
       NEW_ENTITY (dwg, obj);
 
-      obj->tio.entity->xdic_missing_flag = 1;
+      obj->tio.entity->is_xdic_missing = 1;
       obj->tio.entity->color.index = 256; // ByLayer
       obj->tio.entity->ltype_scale = 1.0;
       obj->tio.entity->linewt = 0x1d;
@@ -5796,7 +5796,7 @@ new_object (char *restrict name, char *restrict dxfname,
     {
       NEW_OBJECT (dwg, obj);
 
-      obj->tio.object->xdic_missing_flag = 1;
+      obj->tio.object->is_xdic_missing = 1;
       if (!ctrl_id) // no table
         {
           // clang-format off
@@ -6339,12 +6339,12 @@ new_object (char *restrict name, char *restrict dxfname,
               if (is_entity)
                 {
                   obj->tio.entity->xdicobjhandle = xdic;
-                  obj->tio.entity->xdic_missing_flag = 0;
+                  obj->tio.entity->is_xdic_missing = 0;
                 }
               else
                 {
                   obj->tio.object->xdicobjhandle = xdic;
-                  obj->tio.object->xdic_missing_flag = 0;
+                  obj->tio.object->is_xdic_missing = 0;
                 }
               LOG_TRACE ("%s.xdicobjhandle = " FORMAT_REF " [H 360]\n", name,
                          ARGS_REF (xdic));
@@ -8595,7 +8595,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         _obj->name = strdup ((char*)"*Model_Space");
       _obj->xrefref = 1;
-      obj->tio.object->xdic_missing_flag = 1;
+      obj->tio.object->is_xdic_missing = 1;
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
     }

@@ -425,7 +425,7 @@ static bool env_var_checked_p;
   RESET_VER                                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.object->xdic_missing_flag)                                  \
+    if (!obj->tio.object->is_xdic_missing)                                  \
       {                                                                       \
         VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,    \
                       360);                                                   \
@@ -445,7 +445,7 @@ static bool env_var_checked_p;
   RESET_VER                                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.entity->xdic_missing_flag)                                  \
+    if (!obj->tio.entity->is_xdic_missing)                                  \
       {                                                                       \
         VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, code,    \
                       360);                                                   \
@@ -4094,7 +4094,7 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
   SINCE (R_13) {
     Dwg_Object_Object *_obj = obj->tio.object;
     FIELD_BL (num_reactors, 0);
-    SINCE (R_2004) { FIELD_B (xdic_missing_flag, 0); }
+    SINCE (R_2004) { FIELD_B (is_xdic_missing, 0); }
     SINCE (R_2013) { FIELD_B (has_ds_data, 0); } // AcDs DATA
   }
   return error;

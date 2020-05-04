@@ -1154,12 +1154,12 @@
 #define XDICOBJHANDLE(code)                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.object->xdic_missing_flag)                                  \
+    if (!obj->tio.object->is_xdic_missing)                                  \
       {                                                                       \
         VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,    \
                       360);                                                   \
         if (!obj->tio.object->xdicobjhandle)                                  \
-          obj->tio.object->xdic_missing_flag = 1;                             \
+          obj->tio.object->is_xdic_missing = 1;                             \
       }                                                                       \
   }                                                                           \
   else                                                                        \
@@ -1174,7 +1174,7 @@
 #define ENT_XDICOBJHANDLE(code)                                               \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!_ent->xdic_missing_flag)                                             \
+    if (!_ent->is_xdic_missing)                                             \
       {                                                                       \
         VALUE_HANDLE (_ent->xdicobjhandle, xdicobjhandle, code, 360);         \
       }                                                                       \

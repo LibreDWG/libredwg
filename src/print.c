@@ -304,7 +304,7 @@ static unsigned int cur_ver = 0;
 #define XDICOBJHANDLE(code)                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.object->xdic_missing_flag)                                  \
+    if (!obj->tio.object->is_xdic_missing)                                  \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);  \
   }                                                                           \
   PRIOR_VERSIONS                                                              \

@@ -5438,7 +5438,7 @@ EXPORT BITCODE_BL dwg_ent_get_num_reactors (const dwg_obj_ent *restrict ent,
     __nonnull ((2));
 
 EXPORT BITCODE_B
-dwg_ent_get_xdic_missing_flag (const dwg_obj_ent *restrict ent,
+dwg_ent_get_is_xdic_missing (const dwg_obj_ent *restrict ent,
                                int *restrict error) // r2004+
     __nonnull ((2));
 
@@ -5585,7 +5585,7 @@ EXPORT BITCODE_H dwg_obj_get_xdicobjhandle (const dwg_obj_obj *restrict obj,
                                             int *restrict error)
     __nonnull ((2));
 /* r2004+ */
-EXPORT BITCODE_B dwg_obj_get_xdic_missing_flag (
+EXPORT BITCODE_B dwg_obj_get_is_xdic_missing (
     const dwg_obj_obj *restrict obj, int *restrict error) __nonnull ((2));
 /* r2013+ */
 EXPORT BITCODE_B dwg_obj_get_has_ds_binary_data (
