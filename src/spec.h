@@ -436,38 +436,11 @@
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
     PRE (R_13)                                                                \
     {                                                                         \
-      FIELD_RC (flag, 70);                                                    \
-      FIELD_TFv (name, 32, 2);                                                \
-      FIELD_RS (used, 0);                                                     \
-    }                                                                         \
-    LATER_VERSIONS                                                            \
-    {                                                                         \
-      FIELD_T (name, 2);                                                      \
-      FIELD_B (xrefref, 0); /* 70 bit 7 */                                    \
-      PRE (R_2007)                                                            \
-      {                                                                       \
-        FIELD_BS (xrefindex_plus1, 0);                                        \
-        FIELD_B (xrefdep, 0);                                                 \
+      if (obj->fixedtype == DWG_TYPE_LAYER) {                                 \
+        FIELD_CAST (flag, RC, RS, 70)                                         \
+      } else {                                                                \
+        FIELD_RC (flag, 70)                                                   \
       }                                                                       \
-      LATER_VERSIONS                                                          \
-      {                                                                       \
-        FIELD_B (xrefdep, 0);                                                 \
-        if (FIELD_VALUE (xrefdep))                                            \
-          {                                                                   \
-            FIELD_BS (xrefindex_plus1, 0);                                    \
-          }                                                                   \
-      }                                                                       \
-      FIELD_VALUE (flag) = FIELD_VALUE (flag) | FIELD_VALUE (xrefdep) << 4    \
-                           | FIELD_VALUE (xrefref) << 6;                      \
-    }                                                                         \
-    RESET_VER
-
-// Same as above. just Dwg_Object_LAYER::flags is short, not RC
-#  define LAYER_TABLE_FLAGS(acdbname)                                         \
-    assert (obj->fixedtype == DWG_TYPE_LAYER);                                \
-    PRE (R_13)                                                                \
-    {                                                                         \
-      FIELD_CAST (flag, RC, RS, 70);                                          \
       FIELD_TFv (name, 32, 2);                                                \
       FIELD_RS (used, 0);                                                     \
     }                                                                         \
