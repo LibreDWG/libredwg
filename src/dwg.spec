@@ -2468,6 +2468,7 @@ DWG_ENTITY_END
 DWG_OBJECT (BLOCK_CONTROL)
 
   DXF {
+    // plus MSPACE and PSPACE
     VALUE_RL (FIELD_VALUE (num_entries) +
               (dwg->header_vars.BLOCK_RECORD_PSPACE ? 2 : 1), 70);
   } else {
@@ -2597,7 +2598,8 @@ DWG_OBJECT_END
 DWG_OBJECT (LAYER_CONTROL)
 
   DXF {
-    VALUE_RL (FIELD_VALUE (num_entries)-1, 70);
+    // minus 0
+    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
   } else {
     FIELD_BL (num_entries, 70);
   }
@@ -2683,7 +2685,8 @@ DWG_OBJECT_END
 DWG_OBJECT (STYLE_CONTROL)
 
   DXF {
-    VALUE_RL (FIELD_VALUE (num_entries)-1, 70);
+    // minus Standard
+    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
   } else {
     FIELD_BL (num_entries, 70);
   }
@@ -2770,6 +2773,7 @@ DWG_OBJECT_END
 /*(56)*/
 DWG_OBJECT (LTYPE_CONTROL)
 
+  // DXF minus ByLayer/ByBlock/Continuous ?
   FIELD_BS (num_entries, 70);
 
   CONTROL_HANDLE_STREAM;
@@ -2882,7 +2886,8 @@ DWG_OBJECT_END
 DWG_OBJECT (VIEW_CONTROL)
 
   DXF {
-    VALUE_RL (FIELD_VALUE (num_entries)-1, 70);
+    // minus ?
+    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
   } else {
     FIELD_BL (num_entries, 70);
   }
@@ -2965,8 +2970,8 @@ DWG_OBJECT (VIEW)
   SINCE (R_2007) {
     FIELD_B (camera_plottable, 73);
   }
+  START_OBJECT_HANDLE_STREAM;
   SINCE (R_13) {
-    START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (null_handle, 5, 0);
   }
   SINCE (R_2007) {
@@ -3040,7 +3045,8 @@ DWG_OBJECT_END
 DWG_OBJECT (VPORT_CONTROL)
 
   DXF {
-    VALUE_RL (FIELD_VALUE (num_entries)-1, 70);
+    // minus Standard
+    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
   } else {
     FIELD_BS (num_entries, 70);
   }
