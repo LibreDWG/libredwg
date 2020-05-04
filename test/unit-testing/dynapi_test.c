@@ -41795,27 +41795,27 @@ static int test_UCS (const Dwg_Object *obj)
         fail ("UCS.named_ucs [H]");
   }
   {
+    BITCODE_BL num_orthopts;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "num_orthopts", &num_orthopts, NULL)
+        && num_orthopts == ucs->num_orthopts)
+      pass ();
+    else
+      fail ("UCS.num_orthopts [BL] %u != %u", ucs->num_orthopts, num_orthopts);
+    num_orthopts++;
+    if (dwg_dynapi_entity_set_value (ucs, "UCS", "num_orthopts", &num_orthopts, 0)
+        && num_orthopts == ucs->num_orthopts)
+      pass ();
+    else
+      fail ("UCS.num_orthopts [BL] set+1 %u != %u", ucs->num_orthopts, num_orthopts);
+    ucs->num_orthopts--;
+  }
+  {
     BITCODE_3BD origin;
     if (dwg_dynapi_entity_value (ucs, "UCS", "origin", &origin, NULL)
         && !memcmp (&origin, &ucs->origin, sizeof (ucs->origin)))
         pass ();
     else
         fail ("UCS.origin [3BD]");
-  }
-  {
-    BITCODE_BS orthographic_type;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "orthographic_type", &orthographic_type, NULL)
-        && orthographic_type == ucs->orthographic_type)
-      pass ();
-    else
-      fail ("UCS.orthographic_type [BS] %hu != %hu", ucs->orthographic_type, orthographic_type);
-    orthographic_type++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "orthographic_type", &orthographic_type, 0)
-        && orthographic_type == ucs->orthographic_type)
-      pass ();
-    else
-      fail ("UCS.orthographic_type [BS] set+1 %hu != %hu", ucs->orthographic_type, orthographic_type);
-    ucs->orthographic_type--;
   }
   {
     BITCODE_BS orthographic_view_type;
@@ -41831,6 +41831,16 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.orthographic_view_type [BS] set+1 %hu != %hu", ucs->orthographic_view_type, orthographic_view_type);
     ucs->orthographic_view_type--;
+  }
+  {
+    Dwg_UCS_orthopts* orthopts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "num_orthopts", &count, NULL)
+        && dwg_dynapi_entity_value (ucs, "UCS", "orthopts", &orthopts, NULL)
+        && orthopts == ucs->orthopts)
+      pass ();
+    else
+      fail ("UCS.orthopts [Dwg_UCS_orthopts*] * %u num_orthopts", count);
   }
   {
     struct _dwg_object_object* parent;
@@ -47449,6 +47459,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_TableRow): %d != "
                "dwg_dynapi_fields_size (\"TableRow\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_UCS_orthopts);
+  size2 = dwg_dynapi_fields_size ("UCS_orthopts");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_UCS_orthopts): %d != "
+               "dwg_dynapi_fields_size (\"UCS_orthopts\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (union _dwg_MLEADER_Content);

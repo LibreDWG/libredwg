@@ -7092,13 +7092,15 @@ static const Dwg_DYNAPI_field _dwg_UCS_fields[] = {
   { "elevation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_UCS, elevation),
     0,0,0, 146 },
   { "orthographic_view_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_UCS, orthographic_view_type),
-    0,0,0, 71 },
-  { "orthographic_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_UCS, orthographic_type),
-    0,0,0, 71 },
+    0,0,0, 79 },
   { "base_ucs",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_UCS, base_ucs),
     1,0,0, 346 },
   { "named_ucs",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_UCS, named_ucs),
-    1,0,0, 345 },
+    1,0,0, 0 },
+  { "num_orthopts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_UCS, num_orthopts),
+    0,0,0, 0 },
+  { "orthopts",	"Dwg_UCS_orthopts*", sizeof (Dwg_UCS_orthopts*),  OFF (struct _dwg_object_UCS, orthopts),
+    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_UCS_CONTROL: (sorted by offset) */
@@ -9046,6 +9048,16 @@ static const Dwg_DYNAPI_field _dwg_TableRow_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_UCS_orthopts: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_UCS_orthopts_fields[] = {
+  { "parent",	"struct _dwg_object_UCS*", sizeof (void *),  OFF (struct _dwg_UCS_orthopts, parent),
+    1,1,0, 0 },
+  { "type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_UCS_orthopts, type),
+    0,0,0, 71 },
+  { "pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_UCS_orthopts, pt),
+    1,0,0, 13 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef union _dwg_MLEADER_Content: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_MLEADER_Content_fields[] = {
   { "txt.default_text",	"TV", sizeof (BITCODE_TV),  OFF (union _dwg_MLEADER_Content, txt.default_text),
@@ -9592,6 +9604,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 79 */
   { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 80 */
   { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 81 */
+  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 82 */
 
 };
 

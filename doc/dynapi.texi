@@ -8123,13 +8123,15 @@ H
 @item elevation
 BD,	DXF 146
 @item orthographic_view_type
-BS,	DXF 71
-@item orthographic_type
-BS,	DXF 71
+BS,	DXF 79
 @item base_ucs
 H,	DXF 346
 @item named_ucs
-H,	DXF 345
+H
+@item num_orthopts
+BL
+@item orthopts
+Dwg_UCS_orthopts*
 
 @end vtable
 @end indentedblock
@@ -10679,6 +10681,22 @@ BL
 BL
 @item parent
 struct _dwg_LinkedTableData*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_UCS_orthopts} @anchor{Dwg_UCS_orthopts}
+@vindex Dwg_UCS_orthopts
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_UCS*
+@item type
+BS,	DXF 71
+@item pt
+3BD,	DXF 13
 
 @end vtable
 @end indentedblock

@@ -18,8 +18,10 @@ api_process (dwg_object *obj)
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_BS orthographic_type;
-  BITCODE_H base_ucs;  /*! DXF 346 */
-  BITCODE_H named_ucs; /*! DXF 345 */
+  BITCODE_H base_ucs;
+  BITCODE_H named_ucs;
+  BITCODE_BS num_orthopts, i;
+  Dwg_UCS_orthopts *orthopts;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_ucs *_obj = dwg_object_to_UCS (obj);
@@ -37,7 +39,15 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, UCS, y_direction, y_direction);
   CHK_ENTITY_TYPE (_obj, UCS, elevation, BD, elevation);
   CHK_ENTITY_TYPE (_obj, UCS, orthographic_view_type, BS, orthographic_view_type);
-  CHK_ENTITY_TYPE (_obj, UCS, orthographic_type, BS, orthographic_type);
   CHK_ENTITY_H (_obj, UCS, base_ucs, base_ucs);
   CHK_ENTITY_H (_obj, UCS, named_ucs, named_ucs);
+  CHK_ENTITY_TYPE (_obj, UCS, num_orthopts, BS, num_orthopts);
+  if (!dwg_dynapi_entity_value (_obj, "UCS", "orthopts", &orthopts, NULL))
+    fail ("UCS.orthopts");
+  else
+    for (i = 0; i < num_orthopts; i++)
+      {
+        CHK_SUBCLASS_TYPE (orthopts[i], UCS_orthopts, type, BS);
+        CHK_SUBCLASS_3RD (orthopts[i], UCS_orthopts, pt);
+      }
 }

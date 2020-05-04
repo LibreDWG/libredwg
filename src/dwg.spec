@@ -2999,24 +2999,23 @@ DWG_OBJECT (UCS)
     FIELD_3BD (x_direction, 11);
     FIELD_3BD (y_direction, 12);
   }
-
   SINCE (R_2000)
   {
-    FIELD_BD (elevation, 146);
-    FIELD_BS (orthographic_view_type, 71);
-    FIELD_BS (orthographic_type, 71); // on pairs with 13?
-  }
+    FIELD_BD (elevation, 146); // DXF optional since ver 22
+    FIELD_HANDLE (base_ucs, DWG_HDL_HARDPTR, 346);
+    FIELD_HANDLE (named_ucs, DWG_HDL_HARDPTR, 0);
+    FIELD_BS (orthographic_view_type, 79);
 
-  IF_FREE_OR_SINCE (R_13)
-  {
-    START_OBJECT_HANDLE_STREAM;
+    FIELD_BS (num_orthopts, 0);
+    REPEAT (num_orthopts, orthopts, Dwg_UCS_orthopts)
+    REPEAT_BLOCK
+      SUB_FIELD_BS (orthopts[rcount1],type, 71);
+      SUB_FIELD_3BD (orthopts[rcount1],pt, 13);
+    END_REPEAT_BLOCK
+    SET_PARENT_OBJ (orthopts)
+    END_REPEAT (orthopts);
   }
-  IF_FREE_OR_SINCE (R_2000)
-  {
-    FIELD_HANDLE (base_ucs, ANYCODE, 346);
-    FIELD_HANDLE (named_ucs, 5, 345);
-  }
-
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 /* (0x40/64) */

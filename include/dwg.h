@@ -2181,6 +2181,13 @@ typedef struct _dwg_object_UCS_CONTROL
 /**
  UCS (63) object, table entry
  */
+typedef struct _dwg_UCS_orthopts
+{
+  struct _dwg_object_UCS *parent;
+  BITCODE_BS  type; // 71
+  BITCODE_3BD pt;   // 13
+} Dwg_UCS_orthopts;
+
 typedef struct _dwg_object_UCS
 {
   COMMON_TABLE_FIELDS();
@@ -2189,9 +2196,10 @@ typedef struct _dwg_object_UCS
   BITCODE_3BD y_direction;
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
-  BITCODE_BS orthographic_type;
-  BITCODE_H base_ucs;  /*! DXF 346 */
-  BITCODE_H named_ucs; /*! DXF 345 */
+  BITCODE_H base_ucs;
+  BITCODE_H named_ucs;
+  BITCODE_BL num_orthopts; // missing in ODA docs
+  Dwg_UCS_orthopts *orthopts;
 } Dwg_Object_UCS;
 
 /**
