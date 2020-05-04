@@ -503,8 +503,8 @@ match_STYLE (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_OBJECT (STYLE, name, 2);
   if (!opt_tables)
     {
-      MATCH_OBJECT (STYLE, font_name, 3);
-      MATCH_OBJECT (STYLE, bigfont_name, 4);
+      MATCH_OBJECT (STYLE, font_file, 3);
+      MATCH_OBJECT (STYLE, bigfont_file, 4);
     }
   return found;
 }

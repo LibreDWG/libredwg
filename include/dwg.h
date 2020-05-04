@@ -2061,16 +2061,27 @@ typedef struct _dwg_object_STYLE_CONTROL
  */
 typedef struct _dwg_object_STYLE
 {
+  /* flag 70:
+     1:  is_vertical
+     2:  is_upsidedown
+     4:  is_shape
+     64: pre_loaded
+    128: is_backward
+ */
   COMMON_TABLE_FIELDS();
-  BITCODE_B vertical;
-  BITCODE_B shape_file;
-  BITCODE_BD fixed_height;
+  BITCODE_B is_vertical;
+  BITCODE_B is_shape;
+  BITCODE_BD text_size;
   BITCODE_BD width_factor;
   BITCODE_BD oblique_ang;
   BITCODE_RC generation;
   BITCODE_BD last_height;
-  BITCODE_TV font_name;
-  BITCODE_TV bigfont_name;
+  BITCODE_T font_file;
+  BITCODE_T bigfont_file;
+  /* italic: 0x1000000, bold 0x2000000:
+     charset (bits 8-15), pitch&family (bits 0-7) */
+  BITCODE_BL ttf_flags;
+  BITCODE_T ttf_typeface;
   BITCODE_H extref;
 } Dwg_Object_STYLE;
 

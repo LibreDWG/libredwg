@@ -40252,14 +40252,14 @@ static int test_STYLE (const Dwg_Object *obj)
   Dwg_Object_STYLE *restrict style = obj->tio.object->tio.STYLE;
   failed = 0;
   {
-    BITCODE_T bigfont_name;
-    if (dwg_dynapi_entity_value (style, "STYLE", "bigfont_name", &bigfont_name, NULL)
-        && bigfont_name
-           ? strEQ ((char *)bigfont_name, (char *)style->bigfont_name)
-           : !style->bigfont_name)
+    BITCODE_T bigfont_file;
+    if (dwg_dynapi_entity_value (style, "STYLE", "bigfont_file", &bigfont_file, NULL)
+        && bigfont_file
+           ? strEQ ((char *)bigfont_file, (char *)style->bigfont_file)
+           : !style->bigfont_file)
       pass ();
     else
-      fail ("STYLE.bigfont_name [T] '%s' <> '%s'", bigfont_name, style->bigfont_name);
+      fail ("STYLE.bigfont_file [T] '%s' <> '%s'", bigfont_file, style->bigfont_file);
   }
   {
     BITCODE_H extref;
@@ -40268,21 +40268,6 @@ static int test_STYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("STYLE.extref [H]");
-  }
-  {
-    BITCODE_BD fixed_height;
-    if (dwg_dynapi_entity_value (style, "STYLE", "fixed_height", &fixed_height, NULL)
-        && fixed_height == style->fixed_height)
-      pass ();
-    else
-      fail ("STYLE.fixed_height [BD] %g != %g", style->fixed_height, fixed_height);
-    fixed_height++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "fixed_height", &fixed_height, 0)
-        && fixed_height == style->fixed_height)
-      pass ();
-    else
-      fail ("STYLE.fixed_height [BD] set+1 %g != %g", style->fixed_height, fixed_height);
-    style->fixed_height--;
   }
   {
     BITCODE_RC flag;
@@ -40300,14 +40285,14 @@ static int test_STYLE (const Dwg_Object *obj)
     style->flag--;
   }
   {
-    BITCODE_T font_name;
-    if (dwg_dynapi_entity_value (style, "STYLE", "font_name", &font_name, NULL)
-        && font_name
-           ? strEQ ((char *)font_name, (char *)style->font_name)
-           : !style->font_name)
+    BITCODE_T font_file;
+    if (dwg_dynapi_entity_value (style, "STYLE", "font_file", &font_file, NULL)
+        && font_file
+           ? strEQ ((char *)font_file, (char *)style->font_file)
+           : !style->font_file)
       pass ();
     else
-      fail ("STYLE.font_name [T] '%s' <> '%s'", font_name, style->font_name);
+      fail ("STYLE.font_file [T] '%s' <> '%s'", font_file, style->font_file);
   }
   {
     BITCODE_RC generation;
@@ -40323,6 +40308,36 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.generation [RC] set+1 %u != %u", style->generation, generation);
     style->generation--;
+  }
+  {
+    BITCODE_B is_shape;
+    if (dwg_dynapi_entity_value (style, "STYLE", "is_shape", &is_shape, NULL)
+        && is_shape == style->is_shape)
+      pass ();
+    else
+      fail ("STYLE.is_shape [B] " FORMAT_B " != " FORMAT_B "", style->is_shape, is_shape);
+    is_shape++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "is_shape", &is_shape, 0)
+        && is_shape == style->is_shape)
+      pass ();
+    else
+      fail ("STYLE.is_shape [B] set+1 " FORMAT_B " != " FORMAT_B "", style->is_shape, is_shape);
+    style->is_shape--;
+  }
+  {
+    BITCODE_B is_vertical;
+    if (dwg_dynapi_entity_value (style, "STYLE", "is_vertical", &is_vertical, NULL)
+        && is_vertical == style->is_vertical)
+      pass ();
+    else
+      fail ("STYLE.is_vertical [B] " FORMAT_B " != " FORMAT_B "", style->is_vertical, is_vertical);
+    is_vertical++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "is_vertical", &is_vertical, 0)
+        && is_vertical == style->is_vertical)
+      pass ();
+    else
+      fail ("STYLE.is_vertical [B] set+1 " FORMAT_B " != " FORMAT_B "", style->is_vertical, is_vertical);
+    style->is_vertical--;
   }
   {
     BITCODE_BD last_height;
@@ -40373,19 +40388,44 @@ static int test_STYLE (const Dwg_Object *obj)
         fail ("STYLE.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_B shape_file;
-    if (dwg_dynapi_entity_value (style, "STYLE", "shape_file", &shape_file, NULL)
-        && shape_file == style->shape_file)
+    BITCODE_BD text_size;
+    if (dwg_dynapi_entity_value (style, "STYLE", "text_size", &text_size, NULL)
+        && text_size == style->text_size)
       pass ();
     else
-      fail ("STYLE.shape_file [B] " FORMAT_B " != " FORMAT_B "", style->shape_file, shape_file);
-    shape_file++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "shape_file", &shape_file, 0)
-        && shape_file == style->shape_file)
+      fail ("STYLE.text_size [BD] %g != %g", style->text_size, text_size);
+    text_size++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "text_size", &text_size, 0)
+        && text_size == style->text_size)
       pass ();
     else
-      fail ("STYLE.shape_file [B] set+1 " FORMAT_B " != " FORMAT_B "", style->shape_file, shape_file);
-    style->shape_file--;
+      fail ("STYLE.text_size [BD] set+1 %g != %g", style->text_size, text_size);
+    style->text_size--;
+  }
+  {
+    BITCODE_BL ttf_flags;
+    if (dwg_dynapi_entity_value (style, "STYLE", "ttf_flags", &ttf_flags, NULL)
+        && ttf_flags == style->ttf_flags)
+      pass ();
+    else
+      fail ("STYLE.ttf_flags [BL] %u != %u", style->ttf_flags, ttf_flags);
+    ttf_flags++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "ttf_flags", &ttf_flags, 0)
+        && ttf_flags == style->ttf_flags)
+      pass ();
+    else
+      fail ("STYLE.ttf_flags [BL] set+1 %u != %u", style->ttf_flags, ttf_flags);
+    style->ttf_flags--;
+  }
+  {
+    BITCODE_T ttf_typeface;
+    if (dwg_dynapi_entity_value (style, "STYLE", "ttf_typeface", &ttf_typeface, NULL)
+        && ttf_typeface
+           ? strEQ ((char *)ttf_typeface, (char *)style->ttf_typeface)
+           : !style->ttf_typeface)
+      pass ();
+    else
+      fail ("STYLE.ttf_typeface [T] '%s' <> '%s'", ttf_typeface, style->ttf_typeface);
   }
   {
     BITCODE_RS used;
@@ -40401,21 +40441,6 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.used [RS] set+1 %hu != %hu", style->used, used);
     style->used--;
-  }
-  {
-    BITCODE_B vertical;
-    if (dwg_dynapi_entity_value (style, "STYLE", "vertical", &vertical, NULL)
-        && vertical == style->vertical)
-      pass ();
-    else
-      fail ("STYLE.vertical [B] " FORMAT_B " != " FORMAT_B "", style->vertical, vertical);
-    vertical++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "vertical", &vertical, 0)
-        && vertical == style->vertical)
-      pass ();
-    else
-      fail ("STYLE.vertical [B] set+1 " FORMAT_B " != " FORMAT_B "", style->vertical, vertical);
-    style->vertical--;
   }
   {
     BITCODE_BD width_factor;

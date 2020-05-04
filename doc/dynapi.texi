@@ -7795,11 +7795,11 @@ B
 BS
 @item xrefdep
 B
-@item vertical
+@item is_vertical
 B
-@item shape_file
+@item is_shape
 B
-@item fixed_height
+@item text_size
 BD,	DXF 40
 @item width_factor
 BD,	DXF 41
@@ -7809,10 +7809,14 @@ BD,	DXF 50
 RC,	DXF 71
 @item last_height
 BD,	DXF 42
-@item font_name
+@item font_file
 T,	DXF 3
-@item bigfont_name
+@item bigfont_file
 T,	DXF 4
+@item ttf_flags
+BL
+@item ttf_typeface
+T
 @item extref
 H
 

@@ -2701,46 +2701,51 @@ DWG_OBJECT (STYLE)
 
   SINCE (R_13)
   {
-    FIELD_B (shape_file, 0);   //wrong oda doc
-    FIELD_B (vertical, 0);     //
-    FIELD_VALUE (flag) |= (FIELD_VALUE (vertical) ? 4 : 0) +
-                         (FIELD_VALUE (shape_file) ? 1 : 0);
+    FIELD_B (is_shape, 0);        //wrong oda doc
+    FIELD_B (is_vertical, 0);     //
+    FIELD_VALUE (flag) |= (FIELD_VALUE (is_vertical) ? 4 : 0) +
+                          (FIELD_VALUE (is_shape) ? 1 : 0);
   }
   PRE (R_13)
   {
-    FIELD_RD (fixed_height, 40);
+    FIELD_RD (text_size, 40);
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_ang, 50);
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
-    FIELD_TFv (font_name, 128, 3);
+    FIELD_TFv (font_file, 128, 3);
+    //FIELD_TFv (bigfont_file, 128, 4); ??
 
-    FIELD_VALUE (shape_file) = FIELD_VALUE (flag) & 4;
-    FIELD_VALUE (vertical)   = FIELD_VALUE (flag) & 1;
+    FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
+    FIELD_VALUE (is_vertical) = FIELD_VALUE (flag) & 1;
   }
   LATER_VERSIONS
   {
-    FIELD_BD (fixed_height, 40);
+    FIELD_BD (text_size, 40);
     FIELD_BD (width_factor, 41);
     FIELD_BD (oblique_ang, 50);
     FIELD_RC (generation, 71);
     FIELD_BD (last_height, 42);
-    FIELD_T (font_name, 3);
-    FIELD_T (bigfont_name, 4);
+    FIELD_T (font_file, 3);
+    FIELD_T (bigfont_file, 4);
+
+    FIELD_BL (ttf_flags, 0);
+    FIELD_T (ttf_typeface, 0);
+
     //1001 1000 1071 mandatory r2007+ if .ttf
     //long truetype font’s pitch and family, charset, and italic and bold flags
     DXF {
       char _buf[256];
       char *s;
-      if (_obj->font_name)
+      if (_obj->font_file)
         {
           SINCE (R_2007) {
-            s = bit_convert_TU ((BITCODE_TU)_obj->font_name);
+            s = bit_convert_TU ((BITCODE_TU)_obj->font_file);
             strncpy (_buf, s, 255);
             free (s);
           }
           else {
-            strncpy (_buf, _obj->font_name, 255);
+            strncpy (_buf, _obj->font_file, 255);
           }
           _buf[255] = '\0';
           if ((s = strstr (_buf, ".ttf")) ||
@@ -2749,7 +2754,7 @@ DWG_OBJECT (STYLE)
               *s = 0;
               VALUE_TFF ("ACAD", 1001);
               VALUE_TFF (_buf, 1000);
-              VALUE_RL (34, 1071);
+              VALUE_RL (34, 1071); // typeface?
             }
         }
     }

@@ -404,13 +404,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
-          FIELD_RD (fixed_height, 40); // ok
+          FIELD_RD (text_size, 40); // ok
           FIELD_RD (width_factor, 41);
           FIELD_RD (oblique_ang, 50);
           FIELD_RC (generation, 71);
           FIELD_RD (last_height, 42);
-          FIELD_TFv (font_name, 64, 3);    // 8ed
-          FIELD_TFv (bigfont_name, 64, 4); // 92d
+          FIELD_TFv (font_file, 64, 3);    // 8ed
+          FIELD_TFv (bigfont_file, 64, 4); // 92d
           CHK_ENDPOS;
         }
       break;

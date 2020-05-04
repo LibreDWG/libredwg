@@ -236,21 +236,21 @@ output_TEXT (Dwg_Object *obj)
   else
     escaped = htmlescape (text->text_value, (int)dwg->header.codepage);
 
-  if (style && o->fixedtype == DWG_TYPE_STYLE && style->font_name
-      && *style->font_name
+  if (style && o->fixedtype == DWG_TYPE_STYLE && style->font_file
+      && *style->font_file
 #ifdef HAVE_STRCASESTR
-      && strcasestr (style->font_name, ".ttf")
+      && strcasestr (style->font_file, ".ttf")
 #else
-      && (strstr (style->font_name, ".ttf")
-          || strstr (style->font_name, ".TTF"))
+      && (strstr (style->font_file, ".ttf")
+          || strstr (style->font_file, ".TTF"))
 #endif
   )
     {
 #ifdef HAVE_STRCASESTR
-      if (strcasestr (style->font_name, "Arial"))
+      if (strcasestr (style->font_file, "Arial"))
 #else
-      if ((strstr (style->font_name, "arial"))
-          || strstr (style->font_name, "Arial"))
+      if ((strstr (style->font_file, "arial"))
+          || strstr (style->font_file, "Arial"))
 #endif
         {
           fontfamily = "Arial";
