@@ -447,21 +447,20 @@
     LATER_VERSIONS                                                            \
     {                                                                         \
       FIELD_T (name, 2);                                                      \
-      FIELD_B (is_xref_ref, 0);       /* always 1, 70 bit 6 */                \
-      PRE (R_2007)                                                            \
+      UNTIL (R_2004)                                                          \
       {                                                                       \
-        FIELD_BS (is_xref_resolved, 0);                                       \
-        FIELD_B (is_xref_dep, 0);     /* 70 bit 4 */                          \
+        FIELD_B (is_xref_ref, 0);       /* always 1, 70 bit 6 */              \
+        FIELD_BS (is_xref_resolved, 0); /* 0 or 256 */                        \
+        FIELD_B (is_xref_dep, 0);       /* 70 bit 4 */                        \
       }                                                                       \
       LATER_VERSIONS                                                          \
       {                                                                       \
-        FIELD_B (is_xref_dep, 0);                                             \
-        if (FIELD_VALUE (is_xref_dep))                                        \
-          {                                                                   \
-            FIELD_BS (is_xref_resolved, 0);                                   \
-          }                                                                   \
+        FIELD_VALUE (is_xref_ref) = 1;                                        \
+        FIELD_BS (is_xref_resolved, 0); /* 0 or 256 */                        \
+        if (FIELD_VALUE (is_xref_resolved) == 256)                            \
+          FIELD_VALUE (is_xref_dep) = 1;                                      \
       }                                                                       \
-      FIELD_HANDLE (xref, 5, 0);                                              \
+      FIELD_HANDLE (xref, 5, 0); /* NULLHDL without is_xref_dep */            \
       FIELD_VALUE (flag) |= FIELD_VALUE (is_xref_dep) << 4                    \
                           | FIELD_VALUE (is_xref_ref) << 6;                   \
     }                                                                         \
