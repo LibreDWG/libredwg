@@ -24030,19 +24030,64 @@ static int test_APPID (const Dwg_Object *obj)
   Dwg_Object_APPID *restrict appid = obj->tio.object->tio.APPID;
   failed = 0;
   {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (appid, "APPID", "flag", &flag, NULL)
         && flag == appid->flag)
       pass ();
     else
-      fail ("APPID.flag [RC] %u != %u", appid->flag, flag);
+      fail ("APPID.flag [RS] %hu != %hu", appid->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (appid, "APPID", "flag", &flag, 0)
         && flag == appid->flag)
       pass ();
     else
-      fail ("APPID.flag [RC] set+1 %u != %u", appid->flag, flag);
+      fail ("APPID.flag [RS] set+1 %hu != %hu", appid->flag, flag);
     appid->flag--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (appid, "APPID", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == appid->is_xref_dep)
+      pass ();
+    else
+      fail ("APPID.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", appid->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (appid, "APPID", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == appid->is_xref_dep)
+      pass ();
+    else
+      fail ("APPID.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", appid->is_xref_dep, is_xref_dep);
+    appid->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (appid, "APPID", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == appid->is_xref_ref)
+      pass ();
+    else
+      fail ("APPID.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", appid->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (appid, "APPID", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == appid->is_xref_ref)
+      pass ();
+    else
+      fail ("APPID.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", appid->is_xref_ref, is_xref_ref);
+    appid->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (appid, "APPID", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == appid->is_xref_resolved)
+      pass ();
+    else
+      fail ("APPID.is_xref_resolved [BS] %hu != %hu", appid->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (appid, "APPID", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == appid->is_xref_resolved)
+      pass ();
+    else
+      fail ("APPID.is_xref_resolved [BS] set+1 %hu != %hu", appid->is_xref_resolved, is_xref_resolved);
+    appid->is_xref_resolved--;
   }
   {
     BITCODE_TV name;
@@ -24053,14 +24098,6 @@ static int test_APPID (const Dwg_Object *obj)
       pass ();
     else
       fail ("APPID.name [TV] '%s' <> '%s'", name, appid->name);
-  }
-  {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value (appid, "APPID", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &appid->null_handle, sizeof (appid->null_handle)))
-        pass ();
-    else
-        fail ("APPID.null_handle [H]");
   }
   {
     struct _dwg_object_object* parent;
@@ -24101,49 +24138,12 @@ static int test_APPID (const Dwg_Object *obj)
     appid->used--;
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (appid, "APPID", "xrefdep", &xrefdep, NULL)
-        && xrefdep == appid->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (appid, "APPID", "xref", &xref, NULL)
+        && !memcmp (&xref, &appid->xref, sizeof (appid->xref)))
+        pass ();
     else
-      fail ("APPID.xrefdep [B] " FORMAT_B " != " FORMAT_B "", appid->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefdep", &xrefdep, 0)
-        && xrefdep == appid->xrefdep)
-      pass ();
-    else
-      fail ("APPID.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", appid->xrefdep, xrefdep);
-    appid->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (appid, "APPID", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == appid->xrefindex_plus1)
-      pass ();
-    else
-      fail ("APPID.xrefindex_plus1 [BS] %hu != %hu", appid->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == appid->xrefindex_plus1)
-      pass ();
-    else
-      fail ("APPID.xrefindex_plus1 [BS] set+1 %hu != %hu", appid->xrefindex_plus1, xrefindex_plus1);
-    appid->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (appid, "APPID", "xrefref", &xrefref, NULL)
-        && xrefref == appid->xrefref)
-      pass ();
-    else
-      fail ("APPID.xrefref [B] " FORMAT_B " != " FORMAT_B "", appid->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (appid, "APPID", "xrefref", &xrefref, 0)
-        && xrefref == appid->xrefref)
-      pass ();
-    else
-      fail ("APPID.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", appid->xrefref, xrefref);
-    appid->xrefref--;
+        fail ("APPID.xref [H]");
   }
   if (failed && (is_class_unstable ("APPID") || is_class_debugging ("APPID")))
     {
@@ -28113,18 +28113,18 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         fail ("BLOCK_HEADER.first_entity [H]");
   }
   {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "flag", &flag, NULL)
         && flag == block_header->flag)
       pass ();
     else
-      fail ("BLOCK_HEADER.flag [RC] %u != %u", block_header->flag, flag);
+      fail ("BLOCK_HEADER.flag [RS] %hu != %hu", block_header->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag", &flag, 0)
         && flag == block_header->flag)
       pass ();
     else
-      fail ("BLOCK_HEADER.flag [RC] set+1 %u != %u", block_header->flag, flag);
+      fail ("BLOCK_HEADER.flag [RS] set+1 %hu != %hu", block_header->flag, flag);
     block_header->flag--;
   }
   {
@@ -28198,6 +28198,51 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
       fail ("BLOCK_HEADER.inserts [H*] * %u num_inserts", count);
   }
   {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == block_header->is_xref_dep)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", block_header->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == block_header->is_xref_dep)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->is_xref_dep, is_xref_dep);
+    block_header->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == block_header->is_xref_ref)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", block_header->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == block_header->is_xref_ref)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->is_xref_ref, is_xref_ref);
+    block_header->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == block_header->is_xref_resolved)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.is_xref_resolved [BS] %hu != %hu", block_header->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == block_header->is_xref_resolved)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.is_xref_resolved [BS] set+1 %hu != %hu", block_header->is_xref_resolved, is_xref_resolved);
+    block_header->is_xref_resolved--;
+  }
+  {
     BITCODE_H last_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "last_entity", &last_entity, NULL)
         && !memcmp (&last_entity, &block_header->last_entity, sizeof (block_header->last_entity)))
@@ -28237,14 +28282,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCK_HEADER.name [TV] '%s' <> '%s'", name, block_header->name);
-  }
-  {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &block_header->null_handle, sizeof (block_header->null_handle)))
-        pass ();
-    else
-        fail ("BLOCK_HEADER.null_handle [H]");
   }
   {
     BITCODE_RL num_inserts;
@@ -28323,6 +28360,14 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     block_header->used--;
   }
   {
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xref", &xref, NULL)
+        && !memcmp (&xref, &block_header->xref, sizeof (block_header->xref)))
+        pass ();
+    else
+        fail ("BLOCK_HEADER.xref [H]");
+  }
+  {
     BITCODE_T xref_pname;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xref_pname", &xref_pname, NULL)
         && xref_pname
@@ -28331,36 +28376,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCK_HEADER.xref_pname [T] '%s' <> '%s'", xref_pname, block_header->xref_pname);
-  }
-  {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xrefdep", &xrefdep, NULL)
-        && xrefdep == block_header->xrefdep)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.xrefdep [B] " FORMAT_B " != " FORMAT_B "", block_header->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefdep", &xrefdep, 0)
-        && xrefdep == block_header->xrefdep)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xrefdep, xrefdep);
-    block_header->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == block_header->xrefindex_plus1)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.xrefindex_plus1 [BS] %hu != %hu", block_header->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == block_header->xrefindex_plus1)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.xrefindex_plus1 [BS] set+1 %hu != %hu", block_header->xrefindex_plus1, xrefindex_plus1);
-    block_header->xrefindex_plus1--;
   }
   {
     BITCODE_B xrefoverlaid;
@@ -28376,21 +28391,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     else
       fail ("BLOCK_HEADER.xrefoverlaid [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xrefoverlaid, xrefoverlaid);
     block_header->xrefoverlaid--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xrefref", &xrefref, NULL)
-        && xrefref == block_header->xrefref)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.xrefref [B] " FORMAT_B " != " FORMAT_B "", block_header->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xrefref", &xrefref, 0)
-        && xrefref == block_header->xrefref)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xrefref, xrefref);
-    block_header->xrefref--;
   }
   if (failed && (is_class_unstable ("BLOCK_HEADER") || is_class_debugging ("BLOCK_HEADER")))
     {
@@ -30931,26 +30931,18 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     dimstyle->DIMZIN--;
   }
   {
-    BITCODE_H extref;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "extref", &extref, NULL)
-        && !memcmp (&extref, &dimstyle->extref, sizeof (dimstyle->extref)))
-        pass ();
-    else
-        fail ("DIMSTYLE.extref [H]");
-  }
-  {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "flag", &flag, NULL)
         && flag == dimstyle->flag)
       pass ();
     else
-      fail ("DIMSTYLE.flag [RC] %u != %u", dimstyle->flag, flag);
+      fail ("DIMSTYLE.flag [RS] %hu != %hu", dimstyle->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "flag", &flag, 0)
         && flag == dimstyle->flag)
       pass ();
     else
-      fail ("DIMSTYLE.flag [RC] set+1 %u != %u", dimstyle->flag, flag);
+      fail ("DIMSTYLE.flag [RS] set+1 %hu != %hu", dimstyle->flag, flag);
     dimstyle->flag--;
   }
   {
@@ -30967,6 +30959,51 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     else
       fail ("DIMSTYLE.flag0 [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->flag0, flag0);
     dimstyle->flag0--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == dimstyle->is_xref_dep)
+      pass ();
+    else
+      fail ("DIMSTYLE.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", dimstyle->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == dimstyle->is_xref_dep)
+      pass ();
+    else
+      fail ("DIMSTYLE.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->is_xref_dep, is_xref_dep);
+    dimstyle->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == dimstyle->is_xref_ref)
+      pass ();
+    else
+      fail ("DIMSTYLE.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", dimstyle->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == dimstyle->is_xref_ref)
+      pass ();
+    else
+      fail ("DIMSTYLE.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->is_xref_ref, is_xref_ref);
+    dimstyle->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == dimstyle->is_xref_resolved)
+      pass ();
+    else
+      fail ("DIMSTYLE.is_xref_resolved [BS] %hu != %hu", dimstyle->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == dimstyle->is_xref_resolved)
+      pass ();
+    else
+      fail ("DIMSTYLE.is_xref_resolved [BS] set+1 %hu != %hu", dimstyle->is_xref_resolved, is_xref_resolved);
+    dimstyle->is_xref_resolved--;
   }
   {
     BITCODE_TV name;
@@ -31002,49 +31039,12 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     dimstyle->used--;
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "xrefdep", &xrefdep, NULL)
-        && xrefdep == dimstyle->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "xref", &xref, NULL)
+        && !memcmp (&xref, &dimstyle->xref, sizeof (dimstyle->xref)))
+        pass ();
     else
-      fail ("DIMSTYLE.xrefdep [B] " FORMAT_B " != " FORMAT_B "", dimstyle->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefdep", &xrefdep, 0)
-        && xrefdep == dimstyle->xrefdep)
-      pass ();
-    else
-      fail ("DIMSTYLE.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->xrefdep, xrefdep);
-    dimstyle->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == dimstyle->xrefindex_plus1)
-      pass ();
-    else
-      fail ("DIMSTYLE.xrefindex_plus1 [BS] %hu != %hu", dimstyle->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == dimstyle->xrefindex_plus1)
-      pass ();
-    else
-      fail ("DIMSTYLE.xrefindex_plus1 [BS] set+1 %hu != %hu", dimstyle->xrefindex_plus1, xrefindex_plus1);
-    dimstyle->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "xrefref", &xrefref, NULL)
-        && xrefref == dimstyle->xrefref)
-      pass ();
-    else
-      fail ("DIMSTYLE.xrefref [B] " FORMAT_B " != " FORMAT_B "", dimstyle->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "xrefref", &xrefref, 0)
-        && xrefref == dimstyle->xrefref)
-      pass ();
-    else
-      fail ("DIMSTYLE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", dimstyle->xrefref, xrefref);
-    dimstyle->xrefref--;
+        fail ("DIMSTYLE.xref [H]");
   }
   if (failed && (is_class_unstable ("DIMSTYLE") || is_class_debugging ("DIMSTYLE")))
     {
@@ -32863,18 +32863,18 @@ static int test_LAYER (const Dwg_Object *obj)
     layer->color_rs--;
   }
   {
-    BITCODE_BS flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (layer, "LAYER", "flag", &flag, NULL)
         && flag == layer->flag)
       pass ();
     else
-      fail ("LAYER.flag [BS] %hu != %hu", layer->flag, flag);
+      fail ("LAYER.flag [RS] %hu != %hu", layer->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (layer, "LAYER", "flag", &flag, 0)
         && flag == layer->flag)
       pass ();
     else
-      fail ("LAYER.flag [BS] set+1 %hu != %hu", layer->flag, flag);
+      fail ("LAYER.flag [RS] set+1 %hu != %hu", layer->flag, flag);
     layer->flag--;
   }
   {
@@ -32906,6 +32906,51 @@ static int test_LAYER (const Dwg_Object *obj)
     else
       fail ("LAYER.frozen_in_new [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->frozen_in_new, frozen_in_new);
     layer->frozen_in_new--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == layer->is_xref_dep)
+      pass ();
+    else
+      fail ("LAYER.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", layer->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == layer->is_xref_dep)
+      pass ();
+    else
+      fail ("LAYER.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->is_xref_dep, is_xref_dep);
+    layer->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == layer->is_xref_ref)
+      pass ();
+    else
+      fail ("LAYER.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", layer->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == layer->is_xref_ref)
+      pass ();
+    else
+      fail ("LAYER.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->is_xref_ref, is_xref_ref);
+    layer->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == layer->is_xref_resolved)
+      pass ();
+    else
+      fail ("LAYER.is_xref_resolved [BS] %hu != %hu", layer->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == layer->is_xref_resolved)
+      pass ();
+    else
+      fail ("LAYER.is_xref_resolved [BS] set+1 %hu != %hu", layer->is_xref_resolved, is_xref_resolved);
+    layer->is_xref_resolved--;
   }
   {
     BITCODE_RC linewt;
@@ -33046,51 +33091,6 @@ static int test_LAYER (const Dwg_Object *obj)
         pass ();
     else
         fail ("LAYER.xref [H]");
-  }
-  {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "xrefdep", &xrefdep, NULL)
-        && xrefdep == layer->xrefdep)
-      pass ();
-    else
-      fail ("LAYER.xrefdep [B] " FORMAT_B " != " FORMAT_B "", layer->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefdep", &xrefdep, 0)
-        && xrefdep == layer->xrefdep)
-      pass ();
-    else
-      fail ("LAYER.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->xrefdep, xrefdep);
-    layer->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == layer->xrefindex_plus1)
-      pass ();
-    else
-      fail ("LAYER.xrefindex_plus1 [BS] %hu != %hu", layer->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == layer->xrefindex_plus1)
-      pass ();
-    else
-      fail ("LAYER.xrefindex_plus1 [BS] set+1 %hu != %hu", layer->xrefindex_plus1, xrefindex_plus1);
-    layer->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "xrefref", &xrefref, NULL)
-        && xrefref == layer->xrefref)
-      pass ();
-    else
-      fail ("LAYER.xrefref [B] " FORMAT_B " != " FORMAT_B "", layer->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "xrefref", &xrefref, 0)
-        && xrefref == layer->xrefref)
-      pass ();
-    else
-      fail ("LAYER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->xrefref, xrefref);
-    layer->xrefref--;
   }
   if (failed && (is_class_unstable ("LAYER") || is_class_debugging ("LAYER")))
     {
@@ -34150,26 +34150,18 @@ static int test_LTYPE (const Dwg_Object *obj)
       fail ("LTYPE.description [T] '%s' <> '%s'", description, ltype->description);
   }
   {
-    BITCODE_H extref;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "extref", &extref, NULL)
-        && !memcmp (&extref, &ltype->extref, sizeof (ltype->extref)))
-        pass ();
-    else
-        fail ("LTYPE.extref [H]");
-  }
-  {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "flag", &flag, NULL)
         && flag == ltype->flag)
       pass ();
     else
-      fail ("LTYPE.flag [RC] %u != %u", ltype->flag, flag);
+      fail ("LTYPE.flag [RS] %hu != %hu", ltype->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "flag", &flag, 0)
         && flag == ltype->flag)
       pass ();
     else
-      fail ("LTYPE.flag [RC] set+1 %u != %u", ltype->flag, flag);
+      fail ("LTYPE.flag [RS] set+1 %hu != %hu", ltype->flag, flag);
     ltype->flag--;
   }
   {
@@ -34186,6 +34178,51 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.has_strings_area [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->has_strings_area, has_strings_area);
     ltype->has_strings_area--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == ltype->is_xref_dep)
+      pass ();
+    else
+      fail ("LTYPE.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", ltype->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == ltype->is_xref_dep)
+      pass ();
+    else
+      fail ("LTYPE.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->is_xref_dep, is_xref_dep);
+    ltype->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == ltype->is_xref_ref)
+      pass ();
+    else
+      fail ("LTYPE.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", ltype->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == ltype->is_xref_ref)
+      pass ();
+    else
+      fail ("LTYPE.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->is_xref_ref, is_xref_ref);
+    ltype->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == ltype->is_xref_resolved)
+      pass ();
+    else
+      fail ("LTYPE.is_xref_resolved [BS] %hu != %hu", ltype->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == ltype->is_xref_resolved)
+      pass ();
+    else
+      fail ("LTYPE.is_xref_resolved [BS] set+1 %hu != %hu", ltype->is_xref_resolved, is_xref_resolved);
+    ltype->is_xref_resolved--;
   }
   {
     BITCODE_TV name;
@@ -34259,49 +34296,12 @@ static int test_LTYPE (const Dwg_Object *obj)
     ltype->used--;
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "xrefdep", &xrefdep, NULL)
-        && xrefdep == ltype->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "xref", &xref, NULL)
+        && !memcmp (&xref, &ltype->xref, sizeof (ltype->xref)))
+        pass ();
     else
-      fail ("LTYPE.xrefdep [B] " FORMAT_B " != " FORMAT_B "", ltype->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefdep", &xrefdep, 0)
-        && xrefdep == ltype->xrefdep)
-      pass ();
-    else
-      fail ("LTYPE.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->xrefdep, xrefdep);
-    ltype->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == ltype->xrefindex_plus1)
-      pass ();
-    else
-      fail ("LTYPE.xrefindex_plus1 [BS] %hu != %hu", ltype->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == ltype->xrefindex_plus1)
-      pass ();
-    else
-      fail ("LTYPE.xrefindex_plus1 [BS] set+1 %hu != %hu", ltype->xrefindex_plus1, xrefindex_plus1);
-    ltype->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "xrefref", &xrefref, NULL)
-        && xrefref == ltype->xrefref)
-      pass ();
-    else
-      fail ("LTYPE.xrefref [B] " FORMAT_B " != " FORMAT_B "", ltype->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "xrefref", &xrefref, 0)
-        && xrefref == ltype->xrefref)
-      pass ();
-    else
-      fail ("LTYPE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", ltype->xrefref, xrefref);
-    ltype->xrefref--;
+        fail ("LTYPE.xref [H]");
   }
   if (failed && (is_class_unstable ("LTYPE") || is_class_debugging ("LTYPE")))
     {
@@ -40262,26 +40262,18 @@ static int test_STYLE (const Dwg_Object *obj)
       fail ("STYLE.bigfont_file [T] '%s' <> '%s'", bigfont_file, style->bigfont_file);
   }
   {
-    BITCODE_H extref;
-    if (dwg_dynapi_entity_value (style, "STYLE", "extref", &extref, NULL)
-        && !memcmp (&extref, &style->extref, sizeof (style->extref)))
-        pass ();
-    else
-        fail ("STYLE.extref [H]");
-  }
-  {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (style, "STYLE", "flag", &flag, NULL)
         && flag == style->flag)
       pass ();
     else
-      fail ("STYLE.flag [RC] %u != %u", style->flag, flag);
+      fail ("STYLE.flag [RS] %hu != %hu", style->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (style, "STYLE", "flag", &flag, 0)
         && flag == style->flag)
       pass ();
     else
-      fail ("STYLE.flag [RC] set+1 %u != %u", style->flag, flag);
+      fail ("STYLE.flag [RS] set+1 %hu != %hu", style->flag, flag);
     style->flag--;
   }
   {
@@ -40338,6 +40330,51 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.is_vertical [B] set+1 " FORMAT_B " != " FORMAT_B "", style->is_vertical, is_vertical);
     style->is_vertical--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (style, "STYLE", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == style->is_xref_dep)
+      pass ();
+    else
+      fail ("STYLE.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", style->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == style->is_xref_dep)
+      pass ();
+    else
+      fail ("STYLE.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", style->is_xref_dep, is_xref_dep);
+    style->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (style, "STYLE", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == style->is_xref_ref)
+      pass ();
+    else
+      fail ("STYLE.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", style->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == style->is_xref_ref)
+      pass ();
+    else
+      fail ("STYLE.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", style->is_xref_ref, is_xref_ref);
+    style->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (style, "STYLE", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == style->is_xref_resolved)
+      pass ();
+    else
+      fail ("STYLE.is_xref_resolved [BS] %hu != %hu", style->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == style->is_xref_resolved)
+      pass ();
+    else
+      fail ("STYLE.is_xref_resolved [BS] set+1 %hu != %hu", style->is_xref_resolved, is_xref_resolved);
+    style->is_xref_resolved--;
   }
   {
     BITCODE_BD last_height;
@@ -40458,49 +40495,12 @@ static int test_STYLE (const Dwg_Object *obj)
     style->width_factor--;
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (style, "STYLE", "xrefdep", &xrefdep, NULL)
-        && xrefdep == style->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (style, "STYLE", "xref", &xref, NULL)
+        && !memcmp (&xref, &style->xref, sizeof (style->xref)))
+        pass ();
     else
-      fail ("STYLE.xrefdep [B] " FORMAT_B " != " FORMAT_B "", style->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefdep", &xrefdep, 0)
-        && xrefdep == style->xrefdep)
-      pass ();
-    else
-      fail ("STYLE.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", style->xrefdep, xrefdep);
-    style->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (style, "STYLE", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == style->xrefindex_plus1)
-      pass ();
-    else
-      fail ("STYLE.xrefindex_plus1 [BS] %hu != %hu", style->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == style->xrefindex_plus1)
-      pass ();
-    else
-      fail ("STYLE.xrefindex_plus1 [BS] set+1 %hu != %hu", style->xrefindex_plus1, xrefindex_plus1);
-    style->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (style, "STYLE", "xrefref", &xrefref, NULL)
-        && xrefref == style->xrefref)
-      pass ();
-    else
-      fail ("STYLE.xrefref [B] " FORMAT_B " != " FORMAT_B "", style->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "xrefref", &xrefref, 0)
-        && xrefref == style->xrefref)
-      pass ();
-    else
-      fail ("STYLE.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", style->xrefref, xrefref);
-    style->xrefref--;
+        fail ("STYLE.xref [H]");
   }
   if (failed && (is_class_unstable ("STYLE") || is_class_debugging ("STYLE")))
     {
@@ -41717,19 +41717,64 @@ static int test_UCS (const Dwg_Object *obj)
     ucs->elevation--;
   }
   {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (ucs, "UCS", "flag", &flag, NULL)
         && flag == ucs->flag)
       pass ();
     else
-      fail ("UCS.flag [RC] %u != %u", ucs->flag, flag);
+      fail ("UCS.flag [RS] %hu != %hu", ucs->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (ucs, "UCS", "flag", &flag, 0)
         && flag == ucs->flag)
       pass ();
     else
-      fail ("UCS.flag [RC] set+1 %u != %u", ucs->flag, flag);
+      fail ("UCS.flag [RS] set+1 %hu != %hu", ucs->flag, flag);
     ucs->flag--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == ucs->is_xref_dep)
+      pass ();
+    else
+      fail ("UCS.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", ucs->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (ucs, "UCS", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == ucs->is_xref_dep)
+      pass ();
+    else
+      fail ("UCS.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", ucs->is_xref_dep, is_xref_dep);
+    ucs->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == ucs->is_xref_ref)
+      pass ();
+    else
+      fail ("UCS.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", ucs->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (ucs, "UCS", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == ucs->is_xref_ref)
+      pass ();
+    else
+      fail ("UCS.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", ucs->is_xref_ref, is_xref_ref);
+    ucs->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == ucs->is_xref_resolved)
+      pass ();
+    else
+      fail ("UCS.is_xref_resolved [BS] %hu != %hu", ucs->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (ucs, "UCS", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == ucs->is_xref_resolved)
+      pass ();
+    else
+      fail ("UCS.is_xref_resolved [BS] set+1 %hu != %hu", ucs->is_xref_resolved, is_xref_resolved);
+    ucs->is_xref_resolved--;
   }
   {
     BITCODE_TV name;
@@ -41748,14 +41793,6 @@ static int test_UCS (const Dwg_Object *obj)
         pass ();
     else
         fail ("UCS.named_ucs [H]");
-  }
-  {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &ucs->null_handle, sizeof (ucs->null_handle)))
-        pass ();
-    else
-        fail ("UCS.null_handle [H]");
   }
   {
     BITCODE_3BD origin;
@@ -41827,49 +41864,12 @@ static int test_UCS (const Dwg_Object *obj)
         fail ("UCS.x_direction [3BD]");
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "xrefdep", &xrefdep, NULL)
-        && xrefdep == ucs->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "xref", &xref, NULL)
+        && !memcmp (&xref, &ucs->xref, sizeof (ucs->xref)))
+        pass ();
     else
-      fail ("UCS.xrefdep [B] " FORMAT_B " != " FORMAT_B "", ucs->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefdep", &xrefdep, 0)
-        && xrefdep == ucs->xrefdep)
-      pass ();
-    else
-      fail ("UCS.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", ucs->xrefdep, xrefdep);
-    ucs->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == ucs->xrefindex_plus1)
-      pass ();
-    else
-      fail ("UCS.xrefindex_plus1 [BS] %hu != %hu", ucs->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == ucs->xrefindex_plus1)
-      pass ();
-    else
-      fail ("UCS.xrefindex_plus1 [BS] set+1 %hu != %hu", ucs->xrefindex_plus1, xrefindex_plus1);
-    ucs->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "xrefref", &xrefref, NULL)
-        && xrefref == ucs->xrefref)
-      pass ();
-    else
-      fail ("UCS.xrefref [B] " FORMAT_B " != " FORMAT_B "", ucs->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "xrefref", &xrefref, 0)
-        && xrefref == ucs->xrefref)
-      pass ();
-    else
-      fail ("UCS.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", ucs->xrefref, xrefref);
-    ucs->xrefref--;
+        fail ("UCS.xref [H]");
   }
   {
     BITCODE_3BD y_direction;
@@ -42198,18 +42198,18 @@ static int test_VIEW (const Dwg_Object *obj)
     view->elevation--;
   }
   {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (view, "VIEW", "flag", &flag, NULL)
         && flag == view->flag)
       pass ();
     else
-      fail ("VIEW.flag [RC] %u != %u", view->flag, flag);
+      fail ("VIEW.flag [RS] %hu != %hu", view->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (view, "VIEW", "flag", &flag, 0)
         && flag == view->flag)
       pass ();
     else
-      fail ("VIEW.flag [RC] set+1 %u != %u", view->flag, flag);
+      fail ("VIEW.flag [RS] set+1 %hu != %hu", view->flag, flag);
     view->flag--;
   }
   {
@@ -42241,6 +42241,51 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.height [BD] set+1 %g != %g", view->height, height);
     view->height--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (view, "VIEW", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == view->is_xref_dep)
+      pass ();
+    else
+      fail ("VIEW.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", view->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == view->is_xref_dep)
+      pass ();
+    else
+      fail ("VIEW.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", view->is_xref_dep, is_xref_dep);
+    view->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (view, "VIEW", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == view->is_xref_ref)
+      pass ();
+    else
+      fail ("VIEW.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", view->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == view->is_xref_ref)
+      pass ();
+    else
+      fail ("VIEW.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", view->is_xref_ref, is_xref_ref);
+    view->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (view, "VIEW", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == view->is_xref_resolved)
+      pass ();
+    else
+      fail ("VIEW.is_xref_resolved [BS] %hu != %hu", view->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == view->is_xref_resolved)
+      pass ();
+    else
+      fail ("VIEW.is_xref_resolved [BS] set+1 %hu != %hu", view->is_xref_resolved, is_xref_resolved);
+    view->is_xref_resolved--;
   }
   {
     BITCODE_BD lens_length;
@@ -42282,14 +42327,6 @@ static int test_VIEW (const Dwg_Object *obj)
         pass ();
     else
         fail ("VIEW.named_ucs [H]");
-  }
-  {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value (view, "VIEW", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &view->null_handle, sizeof (view->null_handle)))
-        pass ();
-    else
-        fail ("VIEW.null_handle [H]");
   }
   {
     BITCODE_3BD origin;
@@ -42445,49 +42482,12 @@ static int test_VIEW (const Dwg_Object *obj)
         fail ("VIEW.x_direction [3BD]");
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (view, "VIEW", "xrefdep", &xrefdep, NULL)
-        && xrefdep == view->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (view, "VIEW", "xref", &xref, NULL)
+        && !memcmp (&xref, &view->xref, sizeof (view->xref)))
+        pass ();
     else
-      fail ("VIEW.xrefdep [B] " FORMAT_B " != " FORMAT_B "", view->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefdep", &xrefdep, 0)
-        && xrefdep == view->xrefdep)
-      pass ();
-    else
-      fail ("VIEW.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", view->xrefdep, xrefdep);
-    view->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (view, "VIEW", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == view->xrefindex_plus1)
-      pass ();
-    else
-      fail ("VIEW.xrefindex_plus1 [BS] %hu != %hu", view->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == view->xrefindex_plus1)
-      pass ();
-    else
-      fail ("VIEW.xrefindex_plus1 [BS] set+1 %hu != %hu", view->xrefindex_plus1, xrefindex_plus1);
-    view->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (view, "VIEW", "xrefref", &xrefref, NULL)
-        && xrefref == view->xrefref)
-      pass ();
-    else
-      fail ("VIEW.xrefref [B] " FORMAT_B " != " FORMAT_B "", view->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "xrefref", &xrefref, 0)
-        && xrefref == view->xrefref)
-      pass ();
-    else
-      fail ("VIEW.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", view->xrefref, xrefref);
-    view->xrefref--;
+        fail ("VIEW.xref [H]");
   }
   {
     BITCODE_3BD y_direction;
@@ -43816,18 +43816,18 @@ static int test_VPORT (const Dwg_Object *obj)
     vport->default_lightning_type--;
   }
   {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (vport, "VPORT", "flag", &flag, NULL)
         && flag == vport->flag)
       pass ();
     else
-      fail ("VPORT.flag [RC] %u != %u", vport->flag, flag);
+      fail ("VPORT.flag [RS] %hu != %hu", vport->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (vport, "VPORT", "flag", &flag, 0)
         && flag == vport->flag)
       pass ();
     else
-      fail ("VPORT.flag [RC] set+1 %u != %u", vport->flag, flag);
+      fail ("VPORT.flag [RS] set+1 %hu != %hu", vport->flag, flag);
     vport->flag--;
   }
   {
@@ -43876,6 +43876,51 @@ static int test_VPORT (const Dwg_Object *obj)
     vport->grid_major--;
   }
   {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == vport->is_xref_dep)
+      pass ();
+    else
+      fail ("VPORT.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", vport->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == vport->is_xref_dep)
+      pass ();
+    else
+      fail ("VPORT.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->is_xref_dep, is_xref_dep);
+    vport->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == vport->is_xref_ref)
+      pass ();
+    else
+      fail ("VPORT.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", vport->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == vport->is_xref_ref)
+      pass ();
+    else
+      fail ("VPORT.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->is_xref_ref, is_xref_ref);
+    vport->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == vport->is_xref_resolved)
+      pass ();
+    else
+      fail ("VPORT.is_xref_resolved [BS] %hu != %hu", vport->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == vport->is_xref_resolved)
+      pass ();
+    else
+      fail ("VPORT.is_xref_resolved [BS] set+1 %hu != %hu", vport->is_xref_resolved, is_xref_resolved);
+    vport->is_xref_resolved--;
+  }
+  {
     BITCODE_BD lens_length;
     if (dwg_dynapi_entity_value (vport, "VPORT", "lens_length", &lens_length, NULL)
         && lens_length == vport->lens_length)
@@ -43915,14 +43960,6 @@ static int test_VPORT (const Dwg_Object *obj)
         pass ();
     else
         fail ("VPORT.named_ucs [H]");
-  }
-  {
-    BITCODE_H null_handle;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "null_handle", &null_handle, NULL)
-        && !memcmp (&null_handle, &vport->null_handle, sizeof (vport->null_handle)))
-        pass ();
-    else
-        fail ("VPORT.null_handle [H]");
   }
   {
     struct _dwg_object_object* parent;
@@ -44109,49 +44146,12 @@ static int test_VPORT (const Dwg_Object *obj)
         fail ("VPORT.visualstyle [H]");
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "xrefdep", &xrefdep, NULL)
-        && xrefdep == vport->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "xref", &xref, NULL)
+        && !memcmp (&xref, &vport->xref, sizeof (vport->xref)))
+        pass ();
     else
-      fail ("VPORT.xrefdep [B] " FORMAT_B " != " FORMAT_B "", vport->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefdep", &xrefdep, 0)
-        && xrefdep == vport->xrefdep)
-      pass ();
-    else
-      fail ("VPORT.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->xrefdep, xrefdep);
-    vport->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == vport->xrefindex_plus1)
-      pass ();
-    else
-      fail ("VPORT.xrefindex_plus1 [BS] %hu != %hu", vport->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == vport->xrefindex_plus1)
-      pass ();
-    else
-      fail ("VPORT.xrefindex_plus1 [BS] set+1 %hu != %hu", vport->xrefindex_plus1, xrefindex_plus1);
-    vport->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "xrefref", &xrefref, NULL)
-        && xrefref == vport->xrefref)
-      pass ();
-    else
-      fail ("VPORT.xrefref [B] " FORMAT_B " != " FORMAT_B "", vport->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "xrefref", &xrefref, 0)
-        && xrefref == vport->xrefref)
-      pass ();
-    else
-      fail ("VPORT.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->xrefref, xrefref);
-    vport->xrefref--;
+        fail ("VPORT.xref [H]");
   }
   if (failed && (is_class_unstable ("VPORT") || is_class_debugging ("VPORT")))
     {
@@ -44289,26 +44289,18 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   Dwg_Object_VPORT_ENTITY_HEADER *restrict vport_entity_header = obj->tio.object->tio.VPORT_ENTITY_HEADER;
   failed = 0;
   {
-    BITCODE_H extref;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "extref", &extref, NULL)
-        && !memcmp (&extref, &vport_entity_header->extref, sizeof (vport_entity_header->extref)))
-        pass ();
-    else
-        fail ("VPORT_ENTITY_HEADER.extref [H]");
-  }
-  {
-    BITCODE_RC flag;
+    BITCODE_RS flag;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, NULL)
         && flag == vport_entity_header->flag)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag [RC] %u != %u", vport_entity_header->flag, flag);
+      fail ("VPORT_ENTITY_HEADER.flag [RS] %hu != %hu", vport_entity_header->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, 0)
         && flag == vport_entity_header->flag)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag [RC] set+1 %u != %u", vport_entity_header->flag, flag);
+      fail ("VPORT_ENTITY_HEADER.flag [RS] set+1 %hu != %hu", vport_entity_header->flag, flag);
     vport_entity_header->flag--;
   }
   {
@@ -44325,6 +44317,51 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     else
       fail ("VPORT_ENTITY_HEADER.flag1 [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->flag1, flag1);
     vport_entity_header->flag1--;
+  }
+  {
+    BITCODE_B is_xref_dep;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == vport_entity_header->is_xref_dep)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_dep, is_xref_dep);
+    is_xref_dep++;
+    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == vport_entity_header->is_xref_dep)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_dep, is_xref_dep);
+    vport_entity_header->is_xref_dep--;
+  }
+  {
+    BITCODE_B is_xref_ref;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == vport_entity_header->is_xref_ref)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_ref, is_xref_ref);
+    is_xref_ref++;
+    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == vport_entity_header->is_xref_ref)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_ref, is_xref_ref);
+    vport_entity_header->is_xref_ref--;
+  }
+  {
+    BITCODE_BS is_xref_resolved;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == vport_entity_header->is_xref_resolved)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.is_xref_resolved [BS] %hu != %hu", vport_entity_header->is_xref_resolved, is_xref_resolved);
+    is_xref_resolved++;
+    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == vport_entity_header->is_xref_resolved)
+      pass ();
+    else
+      fail ("VPORT_ENTITY_HEADER.is_xref_resolved [BS] set+1 %hu != %hu", vport_entity_header->is_xref_resolved, is_xref_resolved);
+    vport_entity_header->is_xref_resolved--;
   }
   {
     BITCODE_TV name;
@@ -44385,49 +44422,12 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
       fail ("VPORT_ENTITY_HEADER.viewports [H*] * %u num_viewports", count);
   }
   {
-    BITCODE_B xrefdep;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefdep", &xrefdep, NULL)
-        && xrefdep == vport_entity_header->xrefdep)
-      pass ();
+    BITCODE_H xref;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xref", &xref, NULL)
+        && !memcmp (&xref, &vport_entity_header->xref, sizeof (vport_entity_header->xref)))
+        pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.xrefdep [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->xrefdep, xrefdep);
-    xrefdep++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefdep", &xrefdep, 0)
-        && xrefdep == vport_entity_header->xrefdep)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_HEADER.xrefdep [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->xrefdep, xrefdep);
-    vport_entity_header->xrefdep--;
-  }
-  {
-    BITCODE_BS xrefindex_plus1;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefindex_plus1", &xrefindex_plus1, NULL)
-        && xrefindex_plus1 == vport_entity_header->xrefindex_plus1)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_HEADER.xrefindex_plus1 [BS] %hu != %hu", vport_entity_header->xrefindex_plus1, xrefindex_plus1);
-    xrefindex_plus1++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefindex_plus1", &xrefindex_plus1, 0)
-        && xrefindex_plus1 == vport_entity_header->xrefindex_plus1)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_HEADER.xrefindex_plus1 [BS] set+1 %hu != %hu", vport_entity_header->xrefindex_plus1, xrefindex_plus1);
-    vport_entity_header->xrefindex_plus1--;
-  }
-  {
-    BITCODE_B xrefref;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefref", &xrefref, NULL)
-        && xrefref == vport_entity_header->xrefref)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_HEADER.xrefref [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->xrefref, xrefref);
-    xrefref++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xrefref", &xrefref, 0)
-        && xrefref == vport_entity_header->xrefref)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_HEADER.xrefref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->xrefref, xrefref);
-    vport_entity_header->xrefref--;
+        fail ("VPORT_ENTITY_HEADER.xref [H]");
   }
   if (failed && (is_class_unstable ("VPORT_ENTITY_HEADER") || is_class_debugging ("VPORT_ENTITY_HEADER")))
     {

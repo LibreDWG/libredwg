@@ -4472,21 +4472,21 @@ APPID is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item unknown
 RC,	DXF 71
-@item null_handle
-H
 
 @end vtable
 @end indentedblock
@@ -5248,17 +5248,19 @@ BLOCK_HEADER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item __iterator
 BL
 @item flag2
@@ -5295,8 +5297,6 @@ BS,	DXF 70
 B,	DXF 280
 @item block_scaling
 RC,	DXF 281
-@item null_handle
-H
 @item block_entity
 H
 @item first_entity
@@ -5648,17 +5648,19 @@ DIMSTYLE is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC,	DXF 70
+RS,	DXF 70
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item DIMTOL
 B,	DXF 71
 @item DIMLIM
@@ -5821,8 +5823,6 @@ BSd,	DXF 371
 BSd,	DXF 372
 @item flag0
 B
-@item extref
-H
 @item DIMTXSTY
 H,	DXF 340
 @item DIMLDRBLK
@@ -6253,17 +6253,19 @@ LAYER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-BS
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item frozen
 B
 @item on
@@ -6282,8 +6284,6 @@ CMC,	DXF 62
 short,	DXF 62
 @item ltype_rs
 RS,	DXF 7
-@item xref
-H
 @item plotstyle
 H,	DXF 390
 @item material
@@ -6556,17 +6556,19 @@ LTYPE is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item description
 T,	DXF 3
 @item pattern_len
@@ -6583,8 +6585,6 @@ RD*
 B
 @item strings_area
 TF
-@item extref
-H
 
 @end vtable
 @end indentedblock
@@ -7784,17 +7784,19 @@ STYLE is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item is_vertical
 B
 @item is_shape
@@ -7817,8 +7819,6 @@ T,	DXF 4
 BL
 @item ttf_typeface
 T
-@item extref
-H
 
 @end vtable
 @end indentedblock
@@ -8101,17 +8101,19 @@ UCS is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item origin
 3BD,	DXF 10
 @item x_direction
@@ -8124,8 +8126,6 @@ BD,	DXF 146
 BS,	DXF 71
 @item orthographic_type
 BS,	DXF 71
-@item null_handle
-H
 @item base_ucs
 H,	DXF 346
 @item named_ucs
@@ -8218,17 +8218,19 @@ VIEW is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item height
 BD,	DXF 40
 @item width
@@ -8277,8 +8279,6 @@ BD,	DXF 146
 BS,	DXF 79
 @item camera_plottable
 B,	DXF 73
-@item null_handle
-H
 @item background
 H,	DXF 332
 @item visualstyle
@@ -8471,17 +8471,19 @@ VPORT is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item VIEWSIZE
 BD,	DXF 40
 @item viewwidth
@@ -8562,8 +8564,6 @@ BS,	DXF 79
 BS,	DXF 60
 @item grid_major
 BS,	DXF 61
-@item null_handle
-H
 @item background
 H,	DXF 332
 @item visualstyle
@@ -8638,21 +8638,21 @@ VPORT_ENTITY_HEADER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RS
 @item name
 TV
 @item used
 RS
-@item xrefref
+@item is_xref_ref
 B
-@item xrefindex_plus1
+@item is_xref_resolved
 BS
-@item xrefdep
+@item is_xref_dep
 B
+@item xref
+H
 @item flag1
 B,	DXF 70
-@item extref
-H
 @item num_viewports
 BL
 @item viewports

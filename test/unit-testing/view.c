@@ -8,9 +8,11 @@ api_process (dwg_object *obj)
   BITCODE_RS flag;
   BITCODE_T name;
   BITCODE_RS used;
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
+  BITCODE_B is_xref_ref;
+  BITCODE_BS is_xref_resolved;
+  BITCODE_B is_xref_dep;
+  BITCODE_H xref;
+
   BITCODE_BD height;
   BITCODE_BD width;
   BITCODE_2RD center;
@@ -35,7 +37,6 @@ api_process (dwg_object *obj)
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_B camera_plottable;
-  BITCODE_H null_handle;
   BITCODE_H background;
   BITCODE_H visualstyle;
   BITCODE_H sun;
@@ -49,9 +50,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VIEW, flag, RC, flag);
   CHK_ENTITY_UTF8TEXT (_obj, VIEW, name, name);
   CHK_ENTITY_TYPE (_obj, VIEW, used, RS, used);
-  CHK_ENTITY_TYPE (_obj, VIEW, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (_obj, VIEW, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (_obj, VIEW, xrefdep, B, xrefdep);
+  CHK_ENTITY_TYPE (_obj, VIEW, is_xref_ref, B, is_xref_ref);
+  CHK_ENTITY_TYPE (_obj, VIEW, is_xref_resolved, BS, is_xref_resolved);
+  CHK_ENTITY_TYPE (_obj, VIEW, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_H (_obj, VIEW, xref, xref);
 
   CHK_ENTITY_TYPE (_obj, VIEW, height, BD, height);
   CHK_ENTITY_TYPE (_obj, VIEW, width, BD, width);
@@ -77,7 +79,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VIEW, elevation, BD, elevation);
   CHK_ENTITY_TYPE (_obj, VIEW, orthographic_view_type, BS, orthographic_view_type);
   CHK_ENTITY_TYPE (_obj, VIEW, camera_plottable, B, camera_plottable);
-  CHK_ENTITY_H (_obj, VIEW, null_handle, null_handle);
   CHK_ENTITY_H (_obj, VIEW, background, background);
   CHK_ENTITY_H (_obj, VIEW, visualstyle, visualstyle);
   CHK_ENTITY_H (_obj, VIEW, sun, sun);

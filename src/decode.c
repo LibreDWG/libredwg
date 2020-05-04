@@ -4369,7 +4369,6 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
     // restrict the hdl_dat stream
     error |= obj_handle_stream (dat, obj, hdl_dat);
-
     // and set the string stream (restricted to size)
     if (obj->type >= 500 || obj_has_strings (obj->type))
       error |= obj_string_stream (dat, obj, str_dat);

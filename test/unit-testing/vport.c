@@ -8,9 +8,10 @@ api_process (dwg_object *obj)
   BITCODE_RS flag;
   BITCODE_T name;
   BITCODE_RS used;
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
+  BITCODE_B is_xref_ref;
+  BITCODE_BS is_xref_resolved;
+  BITCODE_B is_xref_dep;
+  BITCODE_H xref;
   BITCODE_BD VIEWSIZE;  // really the view height
   BITCODE_BD viewwidth; // in DWG r13+, needed to calc. aspect_ratio
   BITCODE_BD aspect_ratio; // DXF 41 = viewwidth / VIEWSIZE
@@ -51,7 +52,6 @@ api_process (dwg_object *obj)
   BITCODE_BS ucs_orthografic_type;
   BITCODE_BS grid_flags;
   BITCODE_BS grid_major;
-  BITCODE_H null_handle;
   BITCODE_H background;
   BITCODE_H visualstyle;
   BITCODE_H sun;
@@ -64,9 +64,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT, flag, RC, flag);
   CHK_ENTITY_UTF8TEXT (_obj, VPORT, name, name);
   CHK_ENTITY_TYPE (_obj, VPORT, used, RS, used);
-  CHK_ENTITY_TYPE (_obj, VPORT, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (_obj, VPORT, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (_obj, VPORT, xrefdep, B, xrefdep);
+  CHK_ENTITY_TYPE (_obj, VPORT, is_xref_ref, B, is_xref_ref);
+  CHK_ENTITY_TYPE (_obj, VPORT, is_xref_resolved, BS, is_xref_resolved);
+  CHK_ENTITY_TYPE (_obj, VPORT, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_H (_obj, VPORT, xref, xref);
 
   CHK_ENTITY_TYPE (_obj, VPORT, VIEWSIZE, BD, VIEWSIZE);  // really the view height
   CHK_ENTITY_TYPE (_obj, VPORT, viewwidth, BD, viewwidth); // in DWG r13+, needed to calc. aspect_ratio
@@ -108,7 +109,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT, ucs_orthografic_type, BS, ucs_orthografic_type);
   CHK_ENTITY_TYPE (_obj, VPORT, grid_flags, BS, grid_flags);
   CHK_ENTITY_TYPE (_obj, VPORT, grid_major, BS, grid_major);
-  CHK_ENTITY_H (_obj, VPORT, null_handle, null_handle);
   CHK_ENTITY_H (_obj, VPORT, background, background);
   CHK_ENTITY_H (_obj, VPORT, visualstyle, visualstyle);
   CHK_ENTITY_H (_obj, VPORT, sun, sun);

@@ -8,9 +8,10 @@ api_process (dwg_object *obj)
   BITCODE_RS flag;
   BITCODE_T name;
   BITCODE_RS used;
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
+  BITCODE_B is_xref_ref;
+  BITCODE_BS is_xref_resolved;
+  BITCODE_B is_xref_dep;
+  BITCODE_H xref;
 
   BITCODE_BL __iterator;
   BITCODE_RC flag2; /* preR13 */
@@ -30,7 +31,6 @@ api_process (dwg_object *obj)
   BITCODE_BS insert_units;
   BITCODE_B explodable;
   BITCODE_RC block_scaling;
-  BITCODE_H null_handle;
   BITCODE_H block_entity;
   BITCODE_H first_entity;
   BITCODE_H last_entity;
@@ -45,9 +45,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag, RC, flag);
   CHK_ENTITY_UTF8TEXT_W_OBJ (block_header, BLOCK_HEADER, name, name);
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, used, RS, used);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefdep, B, xrefdep);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_ref, B, is_xref_ref);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_resolved, BS, is_xref_resolved);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_H (block_header, BLOCK_HEADER, xref, xref);
 
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag2, RC, flag2); /* preR13 */
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag3, RS, flag3); /* preR13 */
@@ -67,7 +68,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, explodable, B, explodable);
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, block_scaling, RC, block_scaling);
   CHK_ENTITY_UTF8TEXT (block_header, BLOCK_HEADER, description, description);
-  CHK_ENTITY_H (block_header, BLOCK_HEADER, null_handle, null_handle);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, block_entity, block_entity);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, first_entity, first_entity);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, last_entity, last_entity);

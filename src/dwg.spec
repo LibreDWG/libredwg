@@ -2519,12 +2519,10 @@ DWG_OBJECT (BLOCK_HEADER)
     FIELD_B (loaded_bit, 0); // bit 32
   }
   SINCE (R_13) {
-    FIELD_VALUE (flag) = FIELD_VALUE (anonymous) |
-                        FIELD_VALUE (hasattrs) << 1 |
-                        FIELD_VALUE (blkisxref) << 2 |
-                        FIELD_VALUE (xrefoverlaid) << 3 |
-                        FIELD_VALUE (xrefdep) << 4 |
-                        FIELD_VALUE (xrefref) << 6;
+    FIELD_VALUE (flag) |= FIELD_VALUE (anonymous) |
+                          FIELD_VALUE (hasattrs) << 1 |
+                          FIELD_VALUE (blkisxref) << 2 |
+                          FIELD_VALUE (xrefoverlaid) << 3;
   }
   SINCE (R_2004) { // but not in 2007
     FIELD_BL (num_owned, 0);
@@ -2563,7 +2561,6 @@ DWG_OBJECT (BLOCK_HEADER)
 
   SINCE (R_13) {
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (null_handle, 5, 0);
     FIELD_HANDLE (block_entity, 3, 0);
   }
 
@@ -2659,12 +2656,10 @@ DWG_OBJECT (LAYER)
   VERSIONS (R_13, R_14)
   {
     DECODER { FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0; }
-    FIELD_VALUE (flag) = FIELD_VALUE (frozen) |
+    FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
       (FIELD_VALUE (frozen_in_new) << 1) |
       (FIELD_VALUE (locked) << 2) |
-      (FIELD_VALUE (color.index) < 0 ? 32 : 0) |
-      (FIELD_VALUE (xrefdep) << 4) |
-      (FIELD_VALUE (xrefref) << 6);
+      (FIELD_VALUE (color.index) < 0 ? 32 : 0);
   }
 
   START_OBJECT_HANDLE_STREAM;
@@ -2676,8 +2671,6 @@ DWG_OBJECT (LAYER)
   }
   FIELD_HANDLE (ltype, 5, 6);
   //TODO handle: DXF 370, 348
-  //FIELD_HANDLE (null_handle, 5); // doc error?
-
 DWG_OBJECT_END
 
 /* STYLE table (52) */
@@ -2760,7 +2753,6 @@ DWG_OBJECT (STYLE)
     }
 
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (extref, 5, 0);
   }
 
 DWG_OBJECT_END
@@ -2795,7 +2787,6 @@ DWG_OBJECT (LTYPE)
     FIELD_BD (pattern_len, 0); // total length
   }
   FIELD_RC (alignment, 72);
-  FIELD_HANDLE (extref, 5, 0);
   FIELD_RCu (num_dashes, 73);
   DXF { FIELD_BD (pattern_len, 40); }
   REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
@@ -2943,11 +2934,7 @@ DWG_OBJECT (VIEW)
   }
   SINCE (R_13) {
     FIELD_B (pspace_flag, 0);
-    FIELD_VALUE (flag) =
-      FIELD_VALUE (pspace_flag) |
-      FIELD_VALUE (xrefdep) << 4 |
-      (FIELD_VALUE (xrefindex_plus1)>0 ? 32 : 0) |
-      FIELD_VALUE (xrefref) << 6;
+    FIELD_VALUE (flag) |= FIELD_VALUE (pspace_flag);
   }
   SINCE (R_2000)
     {
@@ -2967,9 +2954,6 @@ DWG_OBJECT (VIEW)
     FIELD_B (camera_plottable, 73);
   }
   START_OBJECT_HANDLE_STREAM;
-  SINCE (R_13) {
-    FIELD_HANDLE (null_handle, 5, 0);
-  }
   SINCE (R_2007) {
     FIELD_HANDLE (background, 4, 332);
     FIELD_HANDLE (visualstyle, 5, 348);
@@ -3026,7 +3010,6 @@ DWG_OBJECT (UCS)
   IF_FREE_OR_SINCE (R_13)
   {
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (null_handle, 5, 0);
   }
   IF_FREE_OR_SINCE (R_2000)
   {
@@ -3239,7 +3222,6 @@ DWG_OBJECT (VPORT)
     }
 
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (null_handle, 5, 0);
   }
 
   IF_FREE_OR_SINCE (R_2007)
@@ -3272,7 +3254,6 @@ DWG_OBJECT_END
 DWG_OBJECT (APPID)
 
   COMMON_TABLE_FLAGS (RegApp)
-
   SINCE (R_13) {
     DXF {
       if (FIELD_VALUE (unknown))
@@ -3281,10 +3262,7 @@ DWG_OBJECT (APPID)
       FIELD_RC (unknown, 71);
     }
   }
-
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (null_handle, 5, 0);
-
 DWG_OBJECT_END
 
 /*(68)*/
@@ -3307,9 +3285,7 @@ DWG_OBJECT_END
 DWG_OBJECT (DIMSTYLE)
 
   DXF {
-    FIELD_VALUE (flag) = FIELD_VALUE (flag0) |
-                         FIELD_VALUE (xrefdep) << 4 |
-                         FIELD_VALUE (xrefref) << 6;
+    FIELD_VALUE (flag) = FIELD_VALUE (flag0);
   }
   COMMON_TABLE_FLAGS (DimStyle)
   PRE (R_13)
@@ -3536,12 +3512,9 @@ DWG_OBJECT (DIMSTYLE)
   SINCE (R_13)
   {
     FIELD_B (flag0, 0); // Bit 0 of 70
-    FIELD_VALUE (flag) = FIELD_VALUE (flag0) |
-                         FIELD_VALUE (xrefdep) << 4 |
-                         FIELD_VALUE (xrefref) << 6;
+    FIELD_VALUE (flag) |= FIELD_VALUE (flag0);
 
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (extref, 5, 0);
     FIELD_HANDLE (DIMTXSTY, 5, 340); /* Text style (DIMTXSTY) */
   }
   IF_FREE_OR_SINCE (R_2000)
@@ -3580,13 +3553,9 @@ DWG_OBJECT (VPORT_ENTITY_HEADER)
     } else {
       FIELD_B (flag1, 70); // bit 1 of 70
     }
-    FIELD_VALUE (flag) =
-      (FIELD_VALUE (flag1) << 1) |
-      (FIELD_VALUE (xrefdep) << 4) |
-      (FIELD_VALUE (xrefref) << 6);
+    FIELD_VALUE (flag) |= FIELD_VALUE (flag1) << 1;
 
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (extref, 5, 0);
     DECODER
     {
       int _i = -1;

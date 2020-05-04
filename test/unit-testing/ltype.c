@@ -8,9 +8,10 @@ api_process (dwg_object *obj)
   BITCODE_RS flag;
   BITCODE_T name;
   BITCODE_RS used;
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
+  BITCODE_B is_xref_ref;
+  BITCODE_BS is_xref_resolved;
+  BITCODE_B is_xref_dep;
+  BITCODE_H xref;
 
   BITCODE_TV description;
   BITCODE_BD pattern_len;
@@ -20,7 +21,6 @@ api_process (dwg_object *obj)
   BITCODE_RD* dashes_r11;
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
-  BITCODE_H extref;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_ltype *ltype = dwg_object_to_LTYPE (obj);
@@ -28,9 +28,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (ltype, LTYPE, flag, RC, flag);
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, name, name);
   CHK_ENTITY_TYPE (ltype, LTYPE, used, RS, used);
-  CHK_ENTITY_TYPE (ltype, LTYPE, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (ltype, LTYPE, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (ltype, LTYPE, xrefdep, B, xrefdep);
+  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_ref, B, is_xref_ref);
+  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_resolved, BS, is_xref_resolved);
+  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_H (ltype, LTYPE, xref, xref);
 
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, description, description);
   CHK_ENTITY_TYPE (ltype, LTYPE, pattern_len, BD, pattern_len);
@@ -56,5 +57,4 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B, has_strings_area);
   CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF, strings_area);
-  CHK_ENTITY_H (ltype, LTYPE, extref, extref);
 }

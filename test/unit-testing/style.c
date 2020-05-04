@@ -8,11 +8,13 @@ api_process (dwg_object *obj)
   BITCODE_RS flag;
   BITCODE_T name;
   BITCODE_RS used;
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-  BITCODE_B is_vertical;
+  BITCODE_B is_xref_ref;
+  BITCODE_BS is_xref_resolved;
+  BITCODE_B is_xref_dep;
+  BITCODE_H xref;
+
   BITCODE_B is_shape;
+  BITCODE_B is_vertical;
   BITCODE_BD text_size;
   BITCODE_BD width_factor;
   BITCODE_BD oblique_ang;
@@ -22,7 +24,6 @@ api_process (dwg_object *obj)
   BITCODE_TV bigfont_file;
   BITCODE_BL ttf_flags;
   BITCODE_T ttf_typeface;
-  BITCODE_H extref;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_style *_obj = dwg_object_to_STYLE (obj);
@@ -30,9 +31,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, STYLE, flag, RC, flag);
   CHK_ENTITY_UTF8TEXT (_obj, STYLE, name, name);
   CHK_ENTITY_TYPE (_obj, STYLE, used, RS, used);
-  CHK_ENTITY_TYPE (_obj, STYLE, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (_obj, STYLE, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (_obj, STYLE, xrefdep, B, xrefdep);
+  CHK_ENTITY_TYPE (_obj, STYLE, is_xref_ref, B, is_xref_ref);
+  CHK_ENTITY_TYPE (_obj, STYLE, is_xref_resolved, BS, is_xref_resolved);
+  CHK_ENTITY_TYPE (_obj, STYLE, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_H (_obj, STYLE, xref, xref);
+
   CHK_ENTITY_TYPE (_obj, STYLE, is_vertical, B, is_vertical);
   CHK_ENTITY_TYPE (_obj, STYLE, is_shape, B, is_shape);
   CHK_ENTITY_TYPE (_obj, STYLE, text_size, BD, text_size);
@@ -44,6 +47,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, STYLE, bigfont_file, bigfont_file);
   CHK_ENTITY_TYPE (_obj, STYLE, ttf_flags, BL, ttf_flags);
   CHK_ENTITY_UTF8TEXT (_obj, STYLE, ttf_typeface, ttf_typeface);
-
-  CHK_ENTITY_H (_obj, STYLE, extref, extref);  
 }

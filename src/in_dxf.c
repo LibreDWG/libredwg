@@ -4324,7 +4324,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   char *fieldname;
   char ctrlname[80];
   char *dxfname;
-  BITCODE_B xrefref;
+  BITCODE_B is_xref_ref; // referencable
 
   NEW_OBJECT (dwg, obj);
 
@@ -4384,9 +4384,9 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       return pair;
     }
   dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, 1);
-  xrefref = 1;
-  if (dwg_dynapi_entity_field (obj->name, "xrefref"))
-    dwg_dynapi_entity_set_value (_obj, obj->name, "xrefref", &xrefref, 1);
+  is_xref_ref = 1;
+  if (dwg_dynapi_entity_field (obj->name, "is_xref_ref"))
+    dwg_dynapi_entity_set_value (_obj, obj->name, "is_xref_ref", &is_xref_ref, 1);
   // default is_xdic_missing
   if (dwg->header.version >= R_2004)
     obj->tio.object->is_xdic_missing = 1;
@@ -5874,10 +5874,10 @@ new_object (char *restrict name, char *restrict dxfname,
   ctrl = &dwg->object[ctrl_id];
 
   {
-    BITCODE_B xrefref = 1;
+    BITCODE_B is_xref_ref = 1;
     // set defaults not in dxf:
-    if (dwg_dynapi_entity_field (obj->name, "xrefref"))
-      dwg_dynapi_entity_set_value (_obj, obj->name, "xrefref", &xrefref, 0);
+    if (dwg_dynapi_entity_field (obj->name, "is_xref_ref"))
+      dwg_dynapi_entity_set_value (_obj, obj->name, "is_xref_ref", &is_xref_ref, 0);
     if (dwg_dynapi_entity_field (obj->name, "scale_flag"))
       {
         scale_flag = 3;
@@ -5983,7 +5983,7 @@ new_object (char *restrict name, char *restrict dxfname,
         goto next_pair;
 #endif
       switch (pair->code)
-        { // common flags: name, xrefref, xrefdep, ...
+        { // common flags: name, xref
         case 0:
           if (strEQc (name, "SEQEND"))
             dxf_postprocess_SEQEND (obj);
@@ -8594,7 +8594,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->name = (char*)bit_utf8_to_TU ((char*)"*Model_Space");
       else
         _obj->name = strdup ((char*)"*Model_Space");
-      _obj->xrefref = 1;
+      _obj->is_xref_ref = 1;
       obj->tio.object->is_xdic_missing = 1;
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);

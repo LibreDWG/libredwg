@@ -1016,8 +1016,8 @@ add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
     _obj->name = (BITCODE_T)bit_utf8_to_TU ((char*)"LibreDWG");
   else
     _obj->name = strdup ("LibreDWG");
-  _obj->xrefref = 1;
-  _obj->null_handle = dwg_add_handleref (dwg, 5, 0, NULL);
+  _obj->is_xref_ref = 1;
+  _obj->xref = dwg_add_handleref (dwg, 5, 0, NULL);
 
   // add to APPID_CONTROL
   obj = dwg_ref_object (dwg, appctl);

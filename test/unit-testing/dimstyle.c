@@ -9,9 +9,10 @@ api_process (dwg_object *obj)
   BITCODE_B flag0;
   BITCODE_T name;
   BITCODE_RS used;
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
+  BITCODE_B is_xref_ref;
+  BITCODE_BS is_xref_resolved;
+  BITCODE_B is_xref_dep;
+  BITCODE_H xref;
 
   BITCODE_B DIMTOL;
   BITCODE_B DIMLIM;
@@ -94,7 +95,6 @@ api_process (dwg_object *obj)
   BITCODE_T  DIMMZS;    /*!< r2010+ */
   BITCODE_BSd DIMLWD;
   BITCODE_BSd DIMLWE;
-  BITCODE_H extref;
   BITCODE_H DIMTXSTY;
   BITCODE_H DIMLDRBLK;
   BITCODE_H DIMBLK;
@@ -111,9 +111,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, flag0, B, flag0);
   CHK_ENTITY_UTF8TEXT (_obj, DIMSTYLE, name, name);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, used, RS, used);
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, xrefref, B, xrefref);
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, xrefindex_plus1, BS, xrefindex_plus1);
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, xrefdep, B, xrefdep);
+  CHK_ENTITY_TYPE (_obj, DIMSTYLE, is_xref_ref, B, is_xref_ref);
+  CHK_ENTITY_TYPE (_obj, DIMSTYLE, is_xref_resolved, BS, is_xref_resolved);
+  CHK_ENTITY_TYPE (_obj, DIMSTYLE, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_H (_obj, DIMSTYLE, xref, xref);
 
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMTOL, B, DIMTOL);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMLIM, B, DIMLIM);
@@ -195,7 +196,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, DIMSTYLE, DIMMZS, DIMMZS);    /*!< r2010+ */
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMLWD, BSd, DIMLWD);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMLWE, BSd, DIMLWE);
-  CHK_ENTITY_H (_obj, DIMSTYLE, extref, extref);
   CHK_ENTITY_H (_obj, DIMSTYLE, DIMTXSTY, DIMTXSTY);
   CHK_ENTITY_H (_obj, DIMSTYLE, DIMLDRBLK, DIMLDRBLK);
   CHK_ENTITY_H (_obj, DIMSTYLE, DIMBLK, DIMBLK);

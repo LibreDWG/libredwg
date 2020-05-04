@@ -1950,21 +1950,25 @@ typedef struct _dwg_entity_MLINE
   BITCODE_H mlinestyle;
 } Dwg_Entity_MLINE;
 
-#define COMMON_TABLE_CONTROL_FIELDS \
+#define COMMON_TABLE_CONTROL_FIELDS  \
   struct _dwg_object_object *parent; \
-  BITCODE_BS num_entries; \
-  BITCODE_H* entries; \
+  BITCODE_BS num_entries;            \
+  BITCODE_H* entries;                \
   BITCODE_BL objid
 
-// not for LAYER!
-#define COMMON_TABLE_FIELDS() \
-  struct _dwg_object_object *parent; \
-  BITCODE_RC flag; \
-  BITCODE_TV name; \
-  BITCODE_RS used; \
-  BITCODE_B xrefref; \
-  BITCODE_BS xrefindex_plus1; \
-  BITCODE_B xrefdep
+// table entries may be imported from xref's
+#define COMMON_TABLE_FIELDS()             \
+  struct _dwg_object_object *parent;      \
+  BITCODE_RS flag;                        \
+  BITCODE_T  name;                        \
+  BITCODE_RS used;                        \
+  /* may be referenced by xref: */        \
+  BITCODE_B  is_xref_ref;                 \
+  /* is a xref reference: */              \
+  BITCODE_BS is_xref_resolved; /* 0 or 256 */ \
+  /* is dependent on xref: */             \
+  BITCODE_B  is_xref_dep;                 \
+  BITCODE_H  xref
 
 /**
  BLOCK_CONTROL (48) object, table header
@@ -2000,7 +2004,6 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_BS insert_units;
   BITCODE_B explodable;
   BITCODE_RC block_scaling;
-  BITCODE_H null_handle;
   BITCODE_H block_entity;
   BITCODE_H first_entity;
   BITCODE_H last_entity;
@@ -2023,25 +2026,16 @@ typedef struct _dwg_object_LAYER_CONTROL
  */
 typedef struct _dwg_object_LAYER
 {
-  struct _dwg_object_object *parent;
-  BITCODE_BS flag;
-  BITCODE_TV name;
-  BITCODE_RS used; /* preR13 */
-  BITCODE_B xrefref;
-  BITCODE_BS xrefindex_plus1;
-  BITCODE_B xrefdep;
-
+  COMMON_TABLE_FIELDS();
   BITCODE_B frozen;
   BITCODE_B on;
   BITCODE_B frozen_in_new;
   BITCODE_B locked;
   BITCODE_B plotflag;
   BITCODE_RC linewt;
-  //BITCODE_BS flag_s;
   BITCODE_CMC color;
   short      color_rs;    /* preR13, needs to be signed */
   BITCODE_RS ltype_rs;    /* preR13 */
-  BITCODE_H xref;
   BITCODE_H plotstyle;
   BITCODE_H material;
   BITCODE_H ltype;
@@ -2082,7 +2076,6 @@ typedef struct _dwg_object_STYLE
      charset (bits 8-15), pitch&family (bits 0-7) */
   BITCODE_BL ttf_flags;
   BITCODE_T ttf_typeface;
-  BITCODE_H extref;
 } Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */
@@ -2127,7 +2120,6 @@ typedef struct _dwg_object_LTYPE
   BITCODE_RD* dashes_r11;
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
-  BITCODE_H extref;
 } Dwg_Object_LTYPE;
 
 /* 58 and 59 are UNKNOWN OBJECTS */
@@ -2170,7 +2162,6 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_B camera_plottable;
-  BITCODE_H null_handle;
   BITCODE_H background;
   BITCODE_H visualstyle;
   BITCODE_H sun;
@@ -2199,7 +2190,6 @@ typedef struct _dwg_object_UCS
   BITCODE_BD elevation;
   BITCODE_BS orthographic_view_type;
   BITCODE_BS orthographic_type;
-  BITCODE_H null_handle;
   BITCODE_H base_ucs;  /*! DXF 346 */
   BITCODE_H named_ucs; /*! DXF 345 */
 } Dwg_Object_UCS;
@@ -2258,7 +2248,6 @@ typedef struct _dwg_object_VPORT
   BITCODE_BS ucs_orthografic_type;
   BITCODE_BS grid_flags;
   BITCODE_BS grid_major;
-  BITCODE_H null_handle;
   BITCODE_H background;
   BITCODE_H visualstyle;
   BITCODE_H sun;
@@ -2283,7 +2272,6 @@ typedef struct _dwg_object_APPID
 {
   COMMON_TABLE_FIELDS();
   BITCODE_RC unknown;
-  BITCODE_H null_handle;
 } Dwg_Object_APPID;
 
 /**
@@ -2386,7 +2374,6 @@ typedef struct _dwg_object_DIMSTYLE
   BITCODE_BSd DIMLWE;
   BITCODE_B flag0;
 
-  BITCODE_H extref;
   BITCODE_H DIMTXSTY;
 
   BITCODE_H DIMLDRBLK;
@@ -2417,7 +2404,6 @@ typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
   COMMON_TABLE_FIELDS();
   BITCODE_B flag1;
-  BITCODE_H extref;
   BITCODE_BL num_viewports; // calculated
   BITCODE_H *viewports;
 } Dwg_Object_VPORT_ENTITY_HEADER;

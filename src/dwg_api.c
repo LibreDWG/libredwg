@@ -6906,7 +6906,7 @@ dwg_obj_appid_get_flag (const dwg_obj_appid *restrict appid,
   if (appid)
     {
       *error = 0;
-      return appid->flag & 1 || appid->xrefref >> 6 || appid->xrefdep >> 4;
+      return appid->flag & 1 || appid->is_xref_ref >> 4 || appid->is_xref_dep >> 6;
     }
   else
     {
@@ -6917,7 +6917,7 @@ dwg_obj_appid_get_flag (const dwg_obj_appid *restrict appid,
 }
 
 /** Sets the _dwg_entity_APPID::flag, DXF 70.
-    and the other related fields xrefdep and xrefref.
+    and the other related xref flags.
 \code Usage: dwg_obj_appid_set_flag(appid, flag, &error);
 \endcode
 \param[out] appid  dwg_obj_appid*
@@ -6933,8 +6933,8 @@ dwg_obj_appid_set_flag (dwg_obj_appid *restrict appid, const BITCODE_RC flag,
     {
       *error = 0;
       appid->flag = flag;
-      appid->xrefdep = flag & 16;
-      appid->xrefref = flag & 64;
+      appid->is_xref_ref = flag & 16;
+      appid->is_xref_dep = flag & 64;
     }
   else
     {
