@@ -2185,6 +2185,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       // seperate subclass type loop
                       const Dwg_DYNAPI_field *f1;
                       char key1[80];
+                      char *rest;
                       JSON_TOKENS_CHECK_OVERFLOW_ERR
                       json_fixed_key (key1, dat, tokens);
                       LOG_INSANE ("-search %s.%s\n", subclass, key1);
@@ -2205,9 +2206,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                                   subclass, "lt", sfields))
                             ++tokens->index;
                         }
-                      else if (strchr (key1, '.')) // embedded struct
+                      else if ((rest = strchr (key1, '.'))) // embedded struct
                         {
-                          char *rest = strchr (key1, '.');
                           *rest = '\0';
                           rest++;
                           f1 = dwg_dynapi_subclass_field (subclass, key1);
