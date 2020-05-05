@@ -1703,6 +1703,8 @@ json_set_numfield (void *restrict _obj,
           LOG_ERROR ("Unknown %s dynapi size %d", key, f->size);
         }
     }
+  else if (strEQc (key, "transmatrix"))
+    ; // ignore
   else if (strEQc (key, "ref"))
     {
       if (size != 4) // fixed size
