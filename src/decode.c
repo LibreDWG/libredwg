@@ -4283,8 +4283,8 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         str_dat->chain += str_dat->byte;
         str_dat->byte = 0;
         str_dat->bit = 0;
-        str_dat->size = 0;
         bit_advance_position (str_dat, obj->bitsize - 1 - 8);
+        str_dat->size = 0;
       }
   }
 
@@ -4377,8 +4377,8 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         str_dat->chain += str_dat->byte;
         str_dat->byte = 0;
         str_dat->bit = 0;
-        str_dat->size = 0;
         bit_advance_position (str_dat, obj->bitsize - 1 - 8);
+        str_dat->size = 0;
       }
   }
 
