@@ -3562,8 +3562,7 @@ typedef struct _dwg_TABLESTYLE_border
 {
   BITCODE_BSd linewt;
   BITCODE_B visible;
-  BITCODE_CMC color;
-
+  BITCODE_CMC color; // or BL?
   struct _dwg_TABLESTYLE_rowstyles *parent;
 } Dwg_TABLESTYLE_border;
 

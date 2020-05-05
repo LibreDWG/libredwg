@@ -21,6 +21,7 @@
 #include "config.h"
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "common.h"
 #include "dynapi.h"
 #define DWG_LOGLEVEL loglevel
@@ -10145,6 +10146,12 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
         }
       else
         memcpy (old, value, sizeof (char*));
+    }
+  // CMC <2004 is color.index only
+  else if (strEQc (f->type, "CMC") && dwg_version < R_2004)
+    {
+      assert (OFF (struct _dwg_color, index) == 0);
+      memcpy (old, value, 2);
     }
   else
     memcpy (old, value, f->size);
