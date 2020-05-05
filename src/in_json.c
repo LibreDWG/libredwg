@@ -1765,7 +1765,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               t->end - t->start, &dat->chain[t->start]);
   for (f = &fields[0]; f->name; f++) // linear search, not binary for now
     {
-      // LOG_INSANE ("-%s.%s [%s]\n", name, f->name, f->type);
+      LOG_INSANE ("-%s.%s [%s]\n", name, f->name, f->type);
       // common and entity dynapi, check types
       JSON_TOKENS_CHECK_OVERFLOW_ERR
       if (strEQ (f->name, key)) // found
@@ -2236,6 +2236,76 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               if (dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1))
                 LOG_TRACE ("subclass %s.%s done\n", name, key);
+              free (subclass);
+            }
+          // subclass structs (embedded):
+          else if (t->type == JSMN_OBJECT && memBEGINc (f->type, "Dwg_"))
+            {
+              int num_keys = t->size; // div by 2 really
+              //int size_struct;
+              const Dwg_DYNAPI_field *sfields;
+              char *subclass = dwg_dynapi_subclass_name (f->type);
+              if (!subclass)
+                {
+                  LOG_ERROR ("Unknown subclass type %s", f->type);
+                  goto unknown_ent;
+                }
+              //size_struct = dwg_dynapi_fields_size (subclass);
+              sfields = dwg_dynapi_subclass_fields (subclass);
+              if (!sfields)
+                {
+                  LOG_ERROR ("Unknown subclass name %s", subclass);
+                  free (subclass);
+                  goto unknown_ent;
+                }
+              LOG_TRACE ("embedded struct %s %s [%d keys]\n",
+                         subclass, key, num_keys / 2);
+              tokens->index++;
+              // a single struct
+              if (!num_keys)
+                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+              for (int k = 0; k < num_keys; k++)
+                {
+                  const Dwg_DYNAPI_field *f1;
+                  char key1[80];
+                  char *rest;
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
+                  json_fixed_key (key1, dat, tokens);
+                  LOG_INSANE ("-search %s.%s\n", subclass, key1);
+                  f1 = dwg_dynapi_subclass_field (subclass, key1);
+                  if (f1)
+                    {
+                      // subclass offset for _obj
+                      void *off = &((char *)_obj)[f->offset + f1->offset];
+                      if (!_set_struct_field (dat, obj, tokens, off, subclass, key1, sfields))
+                        ++tokens->index;
+                    }
+                  else if ((rest = strchr (key1, '.'))) // embedded struct
+                    {
+                      *rest = '\0';
+                      rest++;
+                      f1 = dwg_dynapi_subclass_field (subclass, key1);
+                      if (f1 && *rest)
+                        {
+                          void *off = &((char *)_obj)[f->offset + f1->offset];
+                          char *subclass1 = dwg_dynapi_subclass_name (f1->type);
+                          const Dwg_DYNAPI_field *sfields1
+                            = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
+                            : NULL;
+                          if (!sfields1
+                              || !_set_struct_field (dat, obj, tokens, off,
+                                                     subclass1, rest, sfields1))
+                            ++tokens->index;
+                          free (subclass1);
+                        }
+                    }
+                  if (!f1 || !f1->name) // not found
+                    {
+                      LOG_ERROR ("Unknown subclass field %s.%s", subclass,
+                                 key1);
+                      ++tokens->index;
+                    }
+                }
               free (subclass);
             }
           else
@@ -2852,6 +2922,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         }
                       free (subclass);
                     }
+                  else
+                    LOG_ERROR ("%s.%s not found", name, key)
                 }
               LOG_ERROR ("Unknown %s.%s %.*s ignored\n", name, key,
                          t->end - t->start, &dat->chain[t->start]);
