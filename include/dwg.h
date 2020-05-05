@@ -2063,8 +2063,8 @@ typedef struct _dwg_object_STYLE
     128: is_backward
  */
   COMMON_TABLE_FIELDS();
-  BITCODE_B is_vertical;
   BITCODE_B is_shape;
+  BITCODE_B is_vertical;
   BITCODE_BD text_size;
   BITCODE_BD width_factor;
   BITCODE_BD oblique_ang;

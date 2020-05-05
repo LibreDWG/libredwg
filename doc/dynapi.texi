@@ -7797,9 +7797,9 @@ BS
 B
 @item xref
 H
-@item is_vertical
-B
 @item is_shape
+B
+@item is_vertical
 B
 @item text_size
 BD,	DXF 40
@@ -9210,7 +9210,7 @@ RL
 @vtable @code
 
 @item edge_flags
-BL,	DXF 95
+BL
 @item border_property_overrides_flag
 BL,	DXF 90
 @item border_type
@@ -9224,7 +9224,7 @@ H,	DXF 340
 @item invisible
 B,	DXF 93
 @item double_line_spacing
-BD,	DXF 93
+BD,	DXF 40
 @item parent
 struct _dwg_CellStyle*
 

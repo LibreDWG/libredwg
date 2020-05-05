@@ -35,9 +35,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCPLANESURFACEACTIONBODY, pab_status, BL, pab_status);
   CHK_ENTITY_TYPE (_obj, ASSOCPLANESURFACEACTIONBODY, pab_l2, BL, pab_l2);
   CHK_ENTITY_TYPE (_obj, ASSOCSWEPTSURFACEACTIONBODY, num_deps, BL, num_deps);
+  CHK_ENTITY_HV (_obj, ASSOCSWEPTSURFACEACTIONBODY, readdeps, readdeps, num_deps);
   CHK_ENTITY_TYPE (_obj, ASSOCSWEPTSURFACEACTIONBODY, pab_l4, BL, pab_l4);
   CHK_ENTITY_TYPE (_obj, ASSOCSWEPTSURFACEACTIONBODY, pab_l5, BL, pab_l5);
-  CHK_ENTITY_HV (_obj, ASSOCSWEPTSURFACEACTIONBODY, readdeps, readdeps, num_deps);
   CHK_ENTITY_HV (_obj, ASSOCSWEPTSURFACEACTIONBODY, writedeps, writedeps, num_deps); 
   CHK_ENTITY_TYPE (_obj, ASSOCPLANESURFACEACTIONBODY, sab_status, BL, sab_status);
   CHK_ENTITY_TYPE (_obj, ASSOCPLANESURFACEACTIONBODY, sab_b1, B, sab_b1);

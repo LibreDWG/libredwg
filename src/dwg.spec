@@ -4795,49 +4795,64 @@ DWG_OBJECT_END
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 // 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
-#define ContentFormat_fields(fmt) \
-      FIELD_BL (fmt.property_override_flags, 90); \
-      FIELD_BL (fmt.property_flags, 91); \
-      FIELD_BL (fmt.value_data_type, 92); \
-      FIELD_BL (fmt.value_unit_type, 93); \
-      FIELD_T (fmt.value_format_string, 300); \
-      FIELD_BD (fmt.rotation, 40); \
-      FIELD_BD (fmt.block_scale, 140); \
-      FIELD_BL (fmt.cell_alignment, 94); \
-      FIELD_CMC (fmt.content_color, 62,420);   \
-      FIELD_HANDLE (fmt.text_style, 3, 92); \
-      FIELD_BD (fmt.text_height, 92)
+#define ContentFormat_fields(fmt)                 \
+  DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }         \
+  FIELD_BL (fmt.property_override_flags, 90);     \
+  FIELD_BL (fmt.property_flags, 91);              \
+  FIELD_BL (fmt.value_data_type, 92);             \
+  FIELD_BL (fmt.value_unit_type, 93);             \
+  FIELD_T (fmt.value_format_string, 300);         \
+  FIELD_BD (fmt.rotation, 40);                    \
+  FIELD_BD (fmt.block_scale, 140);                \
+  FIELD_BL (fmt.cell_alignment, 94);              \
+  FIELD_CMC (fmt.content_color, 62,420);          \
+  FIELD_HANDLE (fmt.text_style, 3, 92);           \
+  FIELD_BD (fmt.text_height, 92);                 \
+  DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
 
 // Cell style 20.4.101.4 for TABLE, TABLECONTENT and CELLSTYLEMAP
-#define CellStyle_fields(sty) \
-      FIELD_BL (sty.type, 90); \
-      FIELD_BS (sty.data_flags, 170); \
-      FIELD_BL (sty.property_override_flags, 91); \
-      FIELD_BL (sty.merge_flags, 92); \
-      FIELD_CMC (sty.background_color, 62,420);    \
-      FIELD_BL (sty.content_layout, 93); \
-      ContentFormat_fields (sty.content_format); \
-      FIELD_BS (sty.margin_override_flags, 171); \
-      FIELD_BD (sty.vert_margin, 40); \
-      FIELD_BD (sty.horiz_margin, 40); \
-      FIELD_BD (sty.bottom_margin, 40); \
-      FIELD_BD (sty.right_margin, 40); \
-      FIELD_BD (sty.margin_horiz_spacing, 40); \
-      FIELD_BD (sty.margin_vert_spacing, 40); \
-      FIELD_BL (sty.num_borders, 94); /* 0-6 */ \
-      VALUEOUTOFBOUNDS (sty.num_borders, 10000) \
-      REPEAT2 (sty.num_borders, sty.border, Dwg_BorderStyle) \
-      REPEAT_BLOCK \
-          SUB_FIELD_BL (sty.border[rcount2],edge_flags, 95);                \
-          SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90); \
-          SUB_FIELD_BL (sty.border[rcount2],border_type, 91);               \
-          SUB_FIELD_CMC (sty.border[rcount2],color, 62,420);                \
-          SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                   \
-          SUB_FIELD_HANDLE (sty.border[rcount2],line_type, 3, 340);         \
-          SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                 \
-          SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 93);       \
-      END_REPEAT_BLOCK \
-      END_REPEAT (sty.border)
+#define CellStyle_fields(sty)                                           \
+  DXF { VALUE_TFF ("TABLEFORMAT_BEGIN", 1) }                             \
+  FIELD_BL (sty.type, 90);                                              \
+  FIELD_BS (sty.data_flags, 170);                                       \
+  if (FIELD_VALUE (sty.data_flags))                                     \
+    {                                                                   \
+      FIELD_BL (sty.property_override_flags, 91);                       \
+      FIELD_BL (sty.merge_flags, 92);                                   \
+      FIELD_CMC (sty.background_color, 62,420);                         \
+      FIELD_BL (sty.content_layout, 93);                                \
+      ContentFormat_fields (sty.content_format);                        \
+      FIELD_BS (sty.margin_override_flags, 171);                        \
+      if (FIELD_VALUE (sty.margin_override_flags))                      \
+        {                                                               \
+          DXF { VALUE_TFF ("MARGIN", 301) }                              \
+          DXF { VALUE_TFF ("CELLMARGIN_BEGIN", 1) }                      \
+          FIELD_BD (sty.vert_margin, 40);                               \
+          FIELD_BD (sty.horiz_margin, 40);                              \
+          FIELD_BD (sty.bottom_margin, 40);                             \
+          FIELD_BD (sty.right_margin, 40);                              \
+          FIELD_BD (sty.margin_horiz_spacing, 40);                      \
+          FIELD_BD (sty.margin_vert_spacing, 40);                       \
+          DXF { VALUE_TFF ("CELLMARGIN_END", 309) }                      \
+        }                                                               \
+      FIELD_BL (sty.num_borders, 94); /* 0-6 */                         \
+      VALUEOUTOFBOUNDS (sty.num_borders, 7);                            \
+      REPEAT2 (sty.num_borders, sty.border, Dwg_BorderStyle)            \
+        REPEAT_BLOCK                                                    \
+          DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                              \
+          SUB_FIELD_BL (sty.border[rcount2],edge_flags, 0); /* was 95 */        \
+          SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90);\
+          SUB_FIELD_BL (sty.border[rcount2],border_type, 91);                   \
+          SUB_FIELD_CMC (sty.border[rcount2],color, 62,420);                    \
+          SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                       \
+          SUB_FIELD_HANDLE (sty.border[rcount2],line_type, 3, 340);             \
+          SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                     \
+          SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 40);           \
+          DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }                              \
+      END_REPEAT_BLOCK                                                          \
+      END_REPEAT (sty.border);                                                  \
+    }                                                                           \
+  DXF { VALUE_TFF ("TABLEFORMAT_END", 309) }
 
 // clang-format off
 #define row tdata.rows[rcount1]
@@ -7689,7 +7704,7 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   FIELD_BL (l8, 90); //9
 
   FIELD_T (t1, 1);
-  //DXF { FIELD_TV ("AcConstrainedCircle", 1); }
+  //DXF { FIELD_TFF ("AcConstrainedCircle", 1); }
   FIELD_HANDLE (h2, 0, 330);
   FIELD_BL (cl1, 90); //1
   FIELD_RC (cs1, 70); //1
@@ -7705,7 +7720,7 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   FIELD_BD (w3, 40);
 
   FIELD_T (t2, 1);
-  //DXF { FIELD_TV ("AcConstrainedImplicitPoint", 1); }
+  //DXF { FIELD_TFF ("AcConstrainedImplicitPoint", 1); }
   // ...
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
