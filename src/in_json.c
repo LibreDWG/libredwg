@@ -331,7 +331,9 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   char *key;
-  int len = t->end - t->start;
+  int len;
+  JSON_TOKENS_CHECK_OVERFLOW_NULL;
+  len = t->end - t->start;
   if (t->type != JSMN_STRING)
     {
       LOG_ERROR ("Expected JSON STRING");
@@ -368,7 +370,6 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       key[len] = '\0';
     }
   tokens->index++;
-  JSON_TOKENS_CHECK_OVERFLOW_NULL;
   return key;
 }
 
