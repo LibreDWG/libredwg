@@ -227,22 +227,17 @@ static Bit_Chain *g_dat;
       }                                                                       \
   }
 
-#define JSON_TOKENS_CHECK_OVERFLOW(retval)                                    \
+#define JSON_TOKENS_CHECK_OVERFLOW(ret)                                       \
   if (tokens->index >= (unsigned int)tokens->num_tokens)                      \
     {                                                                         \
       LOG_ERROR ("Unexpected end of JSON at %u of %ld tokens", tokens->index, \
                  tokens->num_tokens);                                         \
-      return retval;                                                          \
+      ret;                                                                    \
     }
-#define JSON_TOKENS_CHECK_OVERFLOW_VOID                                       \
-  if (tokens->index >= (unsigned int)tokens->num_tokens)                      \
-    {                                                                         \
-      LOG_ERROR ("Unexpected end of JSON at %u of %ld tokens", tokens->index, \
-                 tokens->num_tokens);                                         \
-      return;                                                                 \
-    }
-#define JSON_TOKENS_CHECK_OVERFLOW_ERR  JSON_TOKENS_CHECK_OVERFLOW (DWG_ERR_INVALIDDWG)
-#define JSON_TOKENS_CHECK_OVERFLOW_NULL JSON_TOKENS_CHECK_OVERFLOW (NULL)
+#define JSON_TOKENS_CHECK_OVERFLOW_LABEL(label) JSON_TOKENS_CHECK_OVERFLOW (goto label)
+#define JSON_TOKENS_CHECK_OVERFLOW_ERR  JSON_TOKENS_CHECK_OVERFLOW (return DWG_ERR_INVALIDDWG)
+#define JSON_TOKENS_CHECK_OVERFLOW_NULL JSON_TOKENS_CHECK_OVERFLOW (return NULL)
+#define JSON_TOKENS_CHECK_OVERFLOW_VOID JSON_TOKENS_CHECK_OVERFLOW (return)
 
 // advance until next known first-level type
 // on OBJECT to end of OBJECT
@@ -373,7 +368,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       key[len] = '\0';
     }
   tokens->index++;
-  JSON_TOKENS_CHECK_OVERFLOW(key)
+  JSON_TOKENS_CHECK_OVERFLOW_NULL;
   return key;
 }
 
@@ -440,10 +435,10 @@ json_float (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
     {
       LOG_ERROR ("Expected JSON PRIMITIVE");
       json_advance_unknown (dat, tokens, t->type, 0);
-      JSON_TOKENS_CHECK_OVERFLOW((double)NAN)
+      JSON_TOKENS_CHECK_OVERFLOW(return (double)NAN)
       return (double)NAN;
     }
-  JSON_TOKENS_CHECK_OVERFLOW((double)NAN)
+  JSON_TOKENS_CHECK_OVERFLOW(return (double)NAN)
   tokens->index++;
   return strtod ((char *)&dat->chain[t->start], NULL);
 }
@@ -457,10 +452,10 @@ json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
     {
       LOG_ERROR ("Expected JSON PRIMITIVE");
       json_advance_unknown (dat, tokens, t->type, 0);
-      JSON_TOKENS_CHECK_OVERFLOW(0)
+      JSON_TOKENS_CHECK_OVERFLOW(return 0)
       return 0;
     }
-  JSON_TOKENS_CHECK_OVERFLOW(0)
+  JSON_TOKENS_CHECK_OVERFLOW(return 0)
   tokens->index++;
   return strtol ((char *)&dat->chain[t->start], NULL, 10);
 }
@@ -2389,7 +2384,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "OBJECTS";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  int size;
+  int i, size;
   if (t->type != JSMN_ARRAY || dwg->num_objects)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
@@ -2420,7 +2415,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return DWG_ERR_OUTOFMEM;
     }
   dwg->num_objects += size;
-  for (int i = 0; i < size; i++)
+  for (i = 0; i < size; i++)
     {
       char name[80];
       int keys;
@@ -2430,7 +2425,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       const Dwg_DYNAPI_field *fields = NULL, *cfields;
       const Dwg_DYNAPI_field *f;
 
-      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
       if (i > 0)
         {
           Dwg_Object *oldobj = &dwg->object[i - 1];
@@ -2477,8 +2472,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               t_typename[t->type], tokens->index, tokens->num_tokens, section,
               __FUNCTION__, __LINE__);
           json_advance_unknown (dat, tokens, t->type, 0);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
-          return DWG_ERR_INVALIDTYPE;
+          JSON_TOKENS_CHECK_OVERFLOW(goto typeerr)
         }
       keys = t->size;
       LOG_HANDLE ("\n-keys: %d\n", keys);
@@ -2488,9 +2482,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         {
           char key[80];
           LOG_INSANE ("[%d] ", j);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
           json_fixed_key (key, dat, tokens);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
           t = &tokens->tokens[tokens->index];
           if (strEQc (key, "object") && t->type == JSMN_STRING
               && i < (int)dwg->num_objects && !dwg->object[i].type)
@@ -2511,7 +2505,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
-                      JSON_TOKENS_CHECK_OVERFLOW_ERR
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
                     }
                   tokens->index--;
                   break;
@@ -2530,7 +2524,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
-                      JSON_TOKENS_CHECK_OVERFLOW_ERR
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
                     }
                   tokens->index--;
                   break;
@@ -2549,7 +2543,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               // TODO alias
               obj->dxfname = strdup (name);
               tokens->index++;
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
             }
           else if (strEQc (key, "entity") && t->type == JSMN_STRING
                    && i < (int)dwg->num_objects && !dwg->object[i].type)
@@ -2570,7 +2564,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
-                      JSON_TOKENS_CHECK_OVERFLOW_ERR
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
                     }
                   tokens->index--;
                   break;
@@ -2589,7 +2583,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
-                      JSON_TOKENS_CHECK_OVERFLOW_ERR
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
                     }
                   tokens->index--;
                   break;
@@ -2608,13 +2602,13 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               // if different, the alias is done via extra dxfname key (below)
               obj->dxfname = strdup (name);
               tokens->index++;
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
             }
           else if (!obj || !fields)
             {
               LOG_ERROR ("Required object or entity key missing");
               json_advance_unknown (dat, tokens, t->type, 0);
-              return DWG_ERR_INVALIDDWG;
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
             }
           else if (strEQc (key, "dxfname"))
             {
@@ -2635,7 +2629,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "type") && !obj->type)
             {
               obj->type = json_long (dat, tokens);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
               // clang-format off
               // ADD_ENTITY by name
               // check all objects
@@ -2684,11 +2678,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    && t->type == JSMN_PRIMITIVE)
             {
               obj->size = json_long (dat, tokens);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
               if (!obj->handle.value)
                 {
-                  LOG_ERROR ("Required %s.handle missing", name)
-                  return DWG_ERR_INVALIDDWG;
+                  LOG_ERROR ("Required %s.handle missing", name);
+                  goto harderr;
                 }
               LOG_TRACE ("size: %d\n", obj->size)
             }
@@ -2696,12 +2690,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               obj->bitsize = json_long (dat, tokens);
               LOG_TRACE ("bitsize: %d\n", obj->bitsize)
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
             }
           else if (strEQc (key, "handle") && !obj->handle.value)
             {
               BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, key, obj, -1);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
               if (hdl)
                 {
                   obj->handle.code = hdl->handleref.code;
@@ -2719,13 +2713,13 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               LOG_TRACE ("_subclass: %.*s\n", t->end - t->start, &dat->chain[t->start]);
               tokens->index++;
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
             }
           else if (strEQc (key, "num_unknown_bits")
                    && memBEGINc (obj->name, "UNKNOWN_"))
             {
               obj->num_unknown_bits = json_long (dat, tokens);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
               LOG_TRACE ("num_unknown_bits: %d\n", (int)obj->num_unknown_bits);
             }
           else if (strEQc (key, "unknown_bits")
@@ -2756,7 +2750,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    && t->type == JSMN_ARRAY)
             {
               json_eed (dat, dwg, tokens, obj->tio.object);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
             }
           else
             // search_field:
@@ -2818,14 +2812,14 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   tokens->index++;
                   for (int k = 0; k < (int)o->numitems; k++)
                     {
-                      JSON_TOKENS_CHECK_OVERFLOW_ERR;
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr);
                       t = &tokens->tokens[tokens->index];
                       SINCE (R_2007)
                         o->texts[k] = (BITCODE_T)json_wstring (dat, tokens);
                       else
                         o->texts[k] = json_string (dat, tokens);
                       LOG_TRACE ("texts[%d]: %.*s\t => ", k, t->end - t->start, &dat->chain[t->start]);
-                      JSON_TOKENS_CHECK_OVERFLOW_ERR;
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr);
                       o->itemhandles[k] = json_HANDLE (dat, dwg, tokens, "itemhandles", obj, k);
                     }
                   if (!o->numitems)
@@ -2862,13 +2856,23 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_ERROR ("Unknown %s.%s %.*s ignored\n", name, key,
                          t->end - t->start, &dat->chain[t->start]);
               json_advance_unknown (dat, tokens, t->type, 0);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
             }
         }
     }
   LOG_TRACE ("End of %s\n", section)
   tokens->index--;
   return 0;
+ harderr:
+  dwg->num_objects = i;
+  LOG_TRACE ("End of %s\n", section)
+  tokens->index--;
+  return DWG_ERR_INVALIDDWG;  
+ typeerr:
+  dwg->num_objects = i;
+  LOG_TRACE ("End of %s\n", section)
+  tokens->index--;
+  return DWG_ERR_INVALIDTYPE;
 }
 
 static int
