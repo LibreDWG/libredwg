@@ -28,6 +28,7 @@ api_process (dwg_object *obj)
   Dwg_DATALINK_customdata *customdata; // 330 + 304
   BITCODE_H hardowner;	/*<! DXF 360  */
 
+  Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
   dwg_obj_datalink *_obj = dwg_object_to_DATALINK (obj);
 
@@ -51,7 +52,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DATALINK, bl93, BL, bl93);
   CHK_ENTITY_UTF8TEXT (_obj, DATALINK, update_status, update_status);
   CHK_ENTITY_TYPE (_obj, DATALINK, num_customdata, BL, num_customdata);
-  Dwg_DATALINK_customdata *customdata; // 330 + 304
   if (!dwg_dynapi_entity_value (_obj, "DATALINK", "customdata", &customdata, NULL))
     fail ("DATALINK.customdata");
   if (num_customdata)

@@ -7,13 +7,18 @@ api_process (dwg_object *obj)
 {
   int error;
   // ASSOCACTION
-  BITCODE_BL solution_status;
+  BITCODE_BS class_version;
   BITCODE_BL geometry_status;
-  BITCODE_H readdep;
-  BITCODE_H writedep;
-  BITCODE_BL constraint_status;
-  BITCODE_BL dof;
-  BITCODE_B  is_body_a_proxy;
+  BITCODE_H owningnetwork;
+  BITCODE_H actionbody;
+  BITCODE_BL action_index;
+  BITCODE_BL max_assoc_dep_index;
+  BITCODE_BL num_deps;
+  Dwg_ASSOCACTION_Deps *deps;
+  BITCODE_BL num_owned_params;
+  BITCODE_H *owned_params;
+  BITCODE_BL num_owned_value_param_names;
+  BITCODE_H *owned_value_param_names;
 
   BITCODE_BL unknown_assoc;
   BITCODE_BL unknown_n1;
@@ -25,17 +30,21 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_assocnetwork *_obj = dwg_object_to_ASSOCNETWORK (obj);
 
-  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, solution_status, BL, solution_status);
-  CHK_ENTITY_MAX (_obj, ASSOCNETWORK, solution_status, BL, 6);
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, class_version, BS, class_version);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, geometry_status, BL, geometry_status);
   CHK_ENTITY_MAX (_obj, ASSOCNETWORK, geometry_status, BL, 10);
-  CHK_ENTITY_H (_obj, ASSOCNETWORK, readdep, readdep);
-  CHK_ENTITY_H (_obj, ASSOCNETWORK, writedep, writedep);
-  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, constraint_status, BL, constraint_status);
-  CHK_ENTITY_MAX (_obj, ASSOCNETWORK, constraint_status, BL, 10);
-  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, dof, BL, dof);
-  CHK_ENTITY_MAX (_obj, ASSOCNETWORK, dof, BL, 6);
-  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, is_body_a_proxy, B, is_body_a_proxy);
+  CHK_ENTITY_H (_obj, ASSOCNETWORK, owningnetwork, owningnetwork);
+  CHK_ENTITY_H (_obj, ASSOCNETWORK, actionbody, actionbody);
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, action_index, BL, action_index);
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, max_assoc_dep_index, BL, max_assoc_dep_index);
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_deps, BL, num_deps);
+  //Dwg_ASSOCACTION_Deps *deps;
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_params, BL, num_owned_params);
+  CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_params, owned_params, num_owned_params);
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_value_param_names,
+                   BL, num_owned_value_param_names);
+  CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_value_param_names,
+                 owned_value_param_names, num_owned_value_param_names);
 
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, unknown_assoc, BL, unknown_assoc);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, unknown_n1, BL, unknown_n1);

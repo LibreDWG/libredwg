@@ -5,7 +5,7 @@
 void
 api_process (dwg_object *obj)
 {
-  int error;
+  int error, isnew;
   BITCODE_B is_initialized;
   BITCODE_B b2;
   BITCODE_T name;
