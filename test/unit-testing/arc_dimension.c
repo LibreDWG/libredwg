@@ -1,11 +1,11 @@
-// DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ARC_DIMENSION
 #include "common.c"
 
 void
 api_process (dwg_object *obj)
 {
-  int error, is_new;
+  int error, isnew;
   double elevation, act_measurement, horiz_dir, lspace_factor, text_rotation,
       ins_rotation, leader_len;
   BITCODE_T user_text;
@@ -67,12 +67,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (dim, DIMENSION_RADIUS, block, block);
 
   /* arc_dimension */
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, arc_pt, pt10);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline1_pt, pt13);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline2_pt, pt14);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, center_pt, pt15);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader1_pt, pt16);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader2_pt, pt17);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, arc_pt, arc_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline1_pt, xline1_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline2_pt, xline2_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, center_pt, center_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader1_pt, leader1_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader2_pt, leader2_pt);
   CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_start_param, BD, arc_start_param);
   CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_end_param, BD, arc_end_param);
   CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, is_partial, B, is_partial);

@@ -7343,6 +7343,7 @@ EXPORT int dwg_setup_WIPEOUTVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 
 /* UNSTABLE: */
+EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
@@ -7387,7 +7388,6 @@ EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_ALDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_BLKREFOBJECTCONTEXTDATA (Dwg_Object *obj);
