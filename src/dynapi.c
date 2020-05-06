@@ -4924,20 +4924,8 @@ static const Dwg_DYNAPI_field _dwg_DATATABLE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DBCOLOR_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_DBCOLOR, parent),
     1,1,0, 0 },
-  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_DBCOLOR, class_version),
-    0,0,0, 90 },
-  { "unknown1",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_object_DBCOLOR, unknown1),
-    0,0,0, 0 },
-  { "rgb",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_DBCOLOR, rgb),
-    0,0,0, 420 },
-  { "unknown2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DBCOLOR, unknown2),
-    0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DBCOLOR, name),
-    1,1,1, 0 },
-  { "catalog",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DBCOLOR, catalog),
-    1,1,1, 0 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_DBCOLOR, color),
-    1,0,0, 0 },
+    1,0,0, 62 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DETAILVIEWSTYLE: (sorted by offset) */

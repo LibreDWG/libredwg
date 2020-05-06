@@ -6921,6 +6921,8 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
+#if 0
+          //FIXME a normal CMC color
           else if (obj->fixedtype == DWG_TYPE_DBCOLOR)
             {
               Dwg_Object_DBCOLOR *o = obj->tio.object->tio.DBCOLOR;
@@ -6934,24 +6936,23 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (pair->code == 430)
                 {
                   char *x;
-                  //FIXME TU
-                  o->catalog = strdup (pair->value.s);
-                  x = strchr (o->catalog, '$');
+                  o->color.book_name = strdup (pair->value.s);
+                  x = strchr (o->color.book_name, '$');
                   if (!x)
                     goto search_field;
-                  o->name = strdup (x + 1);
+                  o->color.name = strdup (x + 1);
                   x[0] = '\0';
-                  LOG_TRACE ("DBCOLOR.catalog = %s [CMC %d]\n", o->catalog,
+                  LOG_TRACE ("DBCOLOR.catalog = %s [CMC %d]\n", o->color.book_name,
                              pair->code);
-                  LOG_TRACE ("DBCOLOR.name = %s [CMC %d]\n", o->name,
+                  LOG_TRACE ("DBCOLOR.name = %s [CMC %d]\n", o->color.name,
                              pair->code);
                   if (dwg->header.version >= R_2007)
                     {
-                      char *tmp = o->catalog;
-                      o->catalog = (BITCODE_T)bit_utf8_to_TU (o->catalog);
+                      char *tmp = o->color.book_name;
+                      o->color.book_name = (BITCODE_T)bit_utf8_to_TU (o->color.book_name);
                       free (tmp);
-                      tmp = o->name;
-                      o->name = (BITCODE_T)bit_utf8_to_TU (o->name);
+                      tmp = o->color.name;
+                      o->color.name = (BITCODE_T)bit_utf8_to_TU (o->color.name);
                       free (tmp);
                     }
                   goto next_pair;
@@ -6959,6 +6960,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
+#endif
           else if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
             {
               Dwg_Object_MLEADERSTYLE *o = obj->tio.object->tio.MLEADERSTYLE;

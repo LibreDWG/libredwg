@@ -28893,31 +28893,6 @@ static int test_DBCOLOR (const Dwg_Object *obj)
   Dwg_Object_DBCOLOR *restrict dbcolor = obj->tio.object->tio.DBCOLOR;
   failed = 0;
   {
-    BITCODE_T catalog;
-    if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "catalog", &catalog, NULL)
-        && catalog
-           ? strEQ ((char *)catalog, (char *)dbcolor->catalog)
-           : !dbcolor->catalog)
-      pass ();
-    else
-      fail ("DBCOLOR.catalog [T] '%s' <> '%s'", catalog, dbcolor->catalog);
-  }
-  {
-    BITCODE_BL class_version;
-    if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "class_version", &class_version, NULL)
-        && class_version == dbcolor->class_version)
-      pass ();
-    else
-      fail ("DBCOLOR.class_version [BL] %u != %u", dbcolor->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "class_version", &class_version, 0)
-        && class_version == dbcolor->class_version)
-      pass ();
-    else
-      fail ("DBCOLOR.class_version [BL] set+1 %u != %u", dbcolor->class_version, class_version);
-    dbcolor->class_version--;
-  }
-  {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "color", &color, NULL)
         && !memcmp (&color, &dbcolor->color, sizeof (dbcolor->color)))
@@ -28926,67 +28901,12 @@ static int test_DBCOLOR (const Dwg_Object *obj)
         fail ("DBCOLOR.color [CMC]");
   }
   {
-    BITCODE_T name;
-    if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "name", &name, NULL)
-        && name
-           ? strEQ ((char *)name, (char *)dbcolor->name)
-           : !dbcolor->name)
-      pass ();
-    else
-      fail ("DBCOLOR.name [T] '%s' <> '%s'", name, dbcolor->name);
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "parent", &parent, NULL)
         && !memcmp (&parent, &dbcolor->parent, sizeof (dbcolor->parent)))
         pass ();
     else
         fail ("DBCOLOR.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_RL rgb;
-    if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "rgb", &rgb, NULL)
-        && rgb == dbcolor->rgb)
-      pass ();
-    else
-      fail ("DBCOLOR.rgb [RL] %u != %u", dbcolor->rgb, rgb);
-    rgb++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "rgb", &rgb, 0)
-        && rgb == dbcolor->rgb)
-      pass ();
-    else
-      fail ("DBCOLOR.rgb [RL] set+1 %u != %u", dbcolor->rgb, rgb);
-    dbcolor->rgb--;
-  }
-  {
-    BITCODE_BB unknown1;
-    if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "unknown1", &unknown1, NULL)
-        && unknown1 == dbcolor->unknown1)
-      pass ();
-    else
-      fail ("DBCOLOR.unknown1 [BB] " FORMAT_BB " != " FORMAT_BB "", dbcolor->unknown1, unknown1);
-    unknown1++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "unknown1", &unknown1, 0)
-        && unknown1 == dbcolor->unknown1)
-      pass ();
-    else
-      fail ("DBCOLOR.unknown1 [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", dbcolor->unknown1, unknown1);
-    dbcolor->unknown1--;
-  }
-  {
-    BITCODE_RC unknown2;
-    if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "unknown2", &unknown2, NULL)
-        && unknown2 == dbcolor->unknown2)
-      pass ();
-    else
-      fail ("DBCOLOR.unknown2 [RC] %u != %u", dbcolor->unknown2, unknown2);
-    unknown2++;
-    if (dwg_dynapi_entity_set_value (dbcolor, "DBCOLOR", "unknown2", &unknown2, 0)
-        && unknown2 == dbcolor->unknown2)
-      pass ();
-    else
-      fail ("DBCOLOR.unknown2 [RC] set+1 %u != %u", dbcolor->unknown2, unknown2);
-    dbcolor->unknown2--;
   }
   if (failed && (is_class_unstable ("DBCOLOR") || is_class_debugging ("DBCOLOR")))
     {

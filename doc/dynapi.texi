@@ -5449,20 +5449,8 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
-@item class_version
-BL,	DXF 90
-@item unknown1
-BB
-@item rgb
-RL,	DXF 420
-@item unknown2
-RC
-@item name
-T
-@item catalog
-T
 @item color
-CMC
+CMC,	DXF 62
 
 @end vtable
 @end indentedblock

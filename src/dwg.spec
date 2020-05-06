@@ -6567,7 +6567,6 @@ DWG_ENTITY_END
 // (varies)
 // ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
 DWG_OBJECT (DYNAMICBLOCKPURGEPREVENTER)
-
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDynamicBlockPurgePreventer)
   FIELD_BS (flag, 70); //1 class_version would be 90
@@ -6575,40 +6574,10 @@ DWG_OBJECT (DYNAMICBLOCKPURGEPREVENTER)
   FIELD_HANDLE (block, 5, 0)
 DWG_OBJECT_END
 
-// UNSTABLE. missing color index 62: 21
+// UNSTABLE
 DWG_OBJECT (DBCOLOR)
-
-  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbColor)
-  FIELD_BL (class_version, 90); //0
-  VALUEOUTOFBOUNDS (class_version, 10)
-#if 0
-  FIELD_BB (unknown1, 0); //2
-  FIELD_RLx (rgb, 420);   //32
-  FIELD_RC (unknown2, 0); //8
-#elsif 0
-  FIELD_BSx (rgb, 420);   //18
-  FIELD_RS  (unknown1, 0);//16
-  FIELD_RC  (unknown2, 0);//8
-#else
-  DXF { FIELD_VALUE (rgb) = FIELD_VALUE (rgb) & 0xffffff; }
-  FIELD_BLx (rgb, 420);   //34
-  DECODER {
-    FIELD_VALUE (unknown1) = FIELD_VALUE (rgb) & 0xff000000; //0xc2
-  }
-  FIELD_RC (unknown2, 0); //8
-#endif
-  DXF {
-    char *s = malloc (strlen (_obj->name) + strlen (_obj->catalog) + 2);
-    strcpy (s, _obj->catalog);
-    strcat (s, "$");
-    strcat (s, _obj->name);
-    VALUE_TV (s, 430);
-    free (s);
-  }
-  FIELD_T (name, 0);    //2nd part of 430: DIC \d+
-  FIELD_T (catalog, 0); //1st part of 430: DIC COLOR GUIDE (R)
-
+  FIELD_CMC (color, 62);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

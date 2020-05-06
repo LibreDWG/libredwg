@@ -888,8 +888,8 @@ match_DBCOLOR (const char *restrict filename, const Dwg_Object *restrict obj)
   char *text;
   int found = 0;
   //const Dwg_Object_DBCOLOR *_obj = obj->tio.object->tio.DBCOLOR;
-  MATCH_OBJECT (DBCOLOR, name, 430);
-  MATCH_OBJECT (DBCOLOR, catalog, 430);
+  MATCH_OBJECT (DBCOLOR, color.name, 430);
+  MATCH_OBJECT (DBCOLOR, color.book_name, 430);
   return found;
 }
 
