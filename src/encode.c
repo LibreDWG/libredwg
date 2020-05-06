@@ -999,6 +999,11 @@ add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
 #if 1
   if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
     appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
+  if (!appctl)
+    {
+      LOG_ERROR ("APPID_CONTROL not found")
+      return 0x12;
+    }
   ref = dwg->object[dwg->num_objects - 1].handle.value + 1;
   // add APPID
   dwg_add_object (dwg);
@@ -1021,6 +1026,11 @@ add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
 
   // add to APPID_CONTROL
   obj = dwg_ref_object (dwg, appctl);
+  if (!obj)
+    {
+      LOG_ERROR ("APPID_CONTROL not found")
+      return 0x12;
+    }
   o = obj->tio.object->tio.APPID_CONTROL;
   PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, ref, NULL));
   return ref;
@@ -1617,25 +1627,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           BITCODE_BS placeholder_type = 0;
           LOG_TRACE ("Found unsupported objects, add APPID LibreDWG\n");
           new_appid = add_LibreDWG_APPID (dwg, 0);
-          fixup = 0;
-          // if not found leaves placeholder_type at 0 to use DUMMY
-          dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type);
-          for (i = 0; i < dwg->num_objects; i++)
+          if (new_appid)
             {
-              Dwg_Object *obj = &dwg->object[i];
-              if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
-                  || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+              fixup = 0;
+              // if not found leaves placeholder_type at 0 to use DUMMY
+              dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type);
+              for (i = 0; i < dwg->num_objects; i++)
                 {
-                  fixup++;
-                  // replace entities with points, objects with placeholders
-                  encode_unknown_as_dummy (obj, placeholder_type);
+                  Dwg_Object *obj = &dwg->object[i];
+                  if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+                      || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+                    {
+                      fixup++;
+                      // replace entities with points, objects with
+                      // placeholders
+                      encode_unknown_as_dummy (obj, placeholder_type);
+                    }
+                  // what to do with links to MATERIAL/...
+                  if (obj->handle.value == 0xC
+                      && obj->fixedtype == DWG_TYPE_DICTIONARY)
+                    fixup_NOD (dwg, obj); // named object dict
                 }
-              // what to do with links to MATERIAL/...
-              if (obj->handle.value == 0xC
-                  && obj->fixedtype == DWG_TYPE_DICTIONARY)
-                fixup_NOD (dwg, obj); // named object dict
+              LOG_TRACE ("Fixed %d unsupported objects\n\n", fixup);
             }
-          LOG_TRACE ("Fixed %d unsupported objects\n\n", fixup);
         }
     }
 #endif
