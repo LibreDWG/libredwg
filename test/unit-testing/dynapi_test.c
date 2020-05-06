@@ -7910,12 +7910,12 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     dimension_ang2ln->act_measurement--;
   }
   {
-    BITCODE_3BD arc_def_pt;
+    BITCODE_2BD arc_def_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "arc_def_pt", &arc_def_pt, NULL)
         && !memcmp (&arc_def_pt, &dimension_ang2ln->arc_def_pt, sizeof (dimension_ang2ln->arc_def_pt)))
         pass ();
     else
-        fail ("DIMENSION_ANG2LN.arc_def_pt [3BD]");
+        fail ("DIMENSION_ANG2LN.arc_def_pt [2BD]");
   }
   {
     BITCODE_BS attachment;
@@ -27971,6 +27971,102 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_BLOCKVISIBILITYPARAMETER (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BLOCKVISIBILITYPARAMETER *restrict blockvisibilityparameter = obj->tio.object->tio.BLOCKVISIBILITYPARAMETER;
+  failed = 0;
+  {
+    BITCODE_B b2;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "b2", &b2, NULL)
+        && b2 == blockvisibilityparameter->b2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.b2 [B] " FORMAT_B " != " FORMAT_B "", blockvisibilityparameter->b2, b2);
+    b2++;
+    if (dwg_dynapi_entity_set_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "b2", &b2, 0)
+        && b2 == blockvisibilityparameter->b2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.b2 [B] set+1 " FORMAT_B " != " FORMAT_B "", blockvisibilityparameter->b2, b2);
+    blockvisibilityparameter->b2--;
+  }
+  {
+    BITCODE_T desc;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "desc", &desc, NULL)
+        && desc
+           ? strEQ ((char *)desc, (char *)blockvisibilityparameter->desc)
+           : !blockvisibilityparameter->desc)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.desc [T] '%s' <> '%s'", desc, blockvisibilityparameter->desc);
+  }
+  {
+    BITCODE_B is_initialized;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "is_initialized", &is_initialized, NULL)
+        && is_initialized == blockvisibilityparameter->is_initialized)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.is_initialized [B] " FORMAT_B " != " FORMAT_B "", blockvisibilityparameter->is_initialized, is_initialized);
+    is_initialized++;
+    if (dwg_dynapi_entity_set_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "is_initialized", &is_initialized, 0)
+        && is_initialized == blockvisibilityparameter->is_initialized)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.is_initialized [B] set+1 " FORMAT_B " != " FORMAT_B "", blockvisibilityparameter->is_initialized, is_initialized);
+    blockvisibilityparameter->is_initialized--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockvisibilityparameter->name)
+           : !blockvisibilityparameter->name)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.name [T] '%s' <> '%s'", name, blockvisibilityparameter->name);
+  }
+  {
+    BITCODE_BL num_states;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "num_states", &num_states, NULL)
+        && num_states == blockvisibilityparameter->num_states)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.num_states [BL] %u != %u", blockvisibilityparameter->num_states, num_states);
+    num_states++;
+    if (dwg_dynapi_entity_set_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "num_states", &num_states, 0)
+        && num_states == blockvisibilityparameter->num_states)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.num_states [BL] set+1 %u != %u", blockvisibilityparameter->num_states, num_states);
+    blockvisibilityparameter->num_states--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "parent", &parent, NULL)
+        && !memcmp (&parent, &blockvisibilityparameter->parent, sizeof (blockvisibilityparameter->parent)))
+        pass ();
+    else
+        fail ("BLOCKVISIBILITYPARAMETER.parent [struct _dwg_object_object*]");
+  }
+  {
+    Dwg_BLOCKVISIBILITYPARAMETER_state* states;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "num_states", &count, NULL)
+        && dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "states", &states, NULL)
+        && states == blockvisibilityparameter->states)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.states [Dwg_BLOCKVISIBILITYPARAMETER_state*] * %u num_states", count);
+  }
+  if (failed && (is_class_unstable ("BLOCKVISIBILITYPARAMETER") || is_class_debugging ("BLOCKVISIBILITYPARAMETER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLOCKVISIBILITYPARAMETER", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_BLOCK_CONTROL (const Dwg_Object *obj)
 {
   int error = 0;
@@ -44760,6 +44856,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCVERTEXACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
+    error += test_BLOCKVISIBILITYPARAMETER(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
     error += test_BLOCK_CONTROL(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
@@ -45124,6 +45222,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCVERTEXACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
+    error += test_BLOCKVISIBILITYPARAMETER (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
     error += test_BLOCK_CONTROL (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
@@ -46088,6 +46188,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"BLKREFOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_BLOCKVISIBILITYPARAMETER);
+  size2 = dwg_dynapi_fields_size ("BLOCKVISIBILITYPARAMETER");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKVISIBILITYPARAMETER): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKVISIBILITYPARAMETER\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_BLOCK_CONTROL);
   size2 = dwg_dynapi_fields_size ("BLOCK_CONTROL");
   if (size1 != size2)
@@ -46990,6 +47098,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_AcDs_SegmentIndex): %d != "
                "dwg_dynapi_fields_size (\"AcDs_SegmentIndex\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BLOCKVISIBILITYPARAMETER_state);
+  size2 = dwg_dynapi_fields_size ("BLOCKVISIBILITYPARAMETER_state");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BLOCKVISIBILITYPARAMETER_state): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKVISIBILITYPARAMETER_state\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_BorderStyle);

@@ -1089,10 +1089,10 @@ DWG_ENTITY_END
     } else { \
       FIELD_T (user_text, 1); \
     } \
-    FIELD_BD (text_rotation, 53); \
-    FIELD_BD (horiz_dir, 51); \
+    FIELD_BD0 (text_rotation, 53); \
+    FIELD_BD0 (horiz_dir, 51); \
     FIELD_3BD_1 (ins_scale, 0); \
-    FIELD_BD (ins_rotation, 54); \
+    FIELD_BD0 (ins_rotation, 54); \
     SINCE (R_2000) \
       { \
         FIELD_BS (attachment, 71); \
@@ -1149,8 +1149,8 @@ DWG_ENTITY (DIMENSION_LINEAR)
   FIELD_3BD (_13_pt, 13);
   FIELD_3BD (_14_pt, 14);
   FIELD_3BD (def_pt, 10);
-  FIELD_BD (ext_line_rotation, 52);
-  FIELD_BD (dim_rotation, 50);
+  FIELD_BD0 (ext_line_rotation, 52);
+  FIELD_BD0 (dim_rotation, 50);
   SUBCLASS (AcDbRotatedDimension)
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1206,8 +1206,7 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb2LineAngularDimension)
-  FIELD_2BD (arc_def_pt, 0);
-  DECODER { _obj->arc_def_pt.z = _obj->def_pt.z; }
+  FIELD_2RD (arc_def_pt, 0);
   FIELD_3BD (xline1start_pt, 13);
   FIELD_3BD (xline1end_pt, 14);
   FIELD_3BD (xline2start_pt, 15);
@@ -8511,6 +8510,25 @@ DWG_ENTITY (RTEXT)
   FIELD_HANDLE (style, 5, 0);
 DWG_ENTITY_END
 
+// related to dynblock, aka ACAD_ENHANCEDBLOCK
+DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockVisibilityParameter)
+  FIELD_B (is_initialized, 0);
+  FIELD_T (name, 0);
+  FIELD_T (desc, 0);
+  FIELD_B (b2, 0);
+  FIELD_BL (num_states, 0);
+  REPEAT (num_states, states, Dwg_BLOCKVISIBILITYPARAMETER_state)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (states[rcount1],block, DWG_HDL_HARDOWN, 330);
+      SUB_FIELD_BL (states[rcount1], bl1, 0);
+      SUB_FIELD_BL (states[rcount1], bl2, 0);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (states);
+  END_REPEAT (states)
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
 
@@ -8569,12 +8587,6 @@ DWG_OBJECT (BACKGROUND)
   }
 DWG_OBJECT_END
 
-// r2000+ expresstools
-DWG_ENTITY (RTEXT)
-  DECODE_UNKNOWN_BITS
-  COMMON_ENTITY_HANDLE_DATA;
-DWG_ENTITY_END
-
 // EXACXREFPANELOBJECT
 DWG_OBJECT (XREFPANELOBJECT)
   DECODE_UNKNOWN_BITS
@@ -8624,5 +8636,20 @@ DWG_OBJECT_END
 DWG_OBJECT (RAPIDRTRENDERENVIRONMENT)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
-  
+
+DWG_OBJECT (VISIBILITYPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockVisibilityParameterEntity)
+DWG_OBJECT_END
+
+DWG_OBJECT (VISIBILITYGRIPENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockVisibilityGripEntity)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockGripExpr)
+DWG_OBJECT_END
+
 #endif

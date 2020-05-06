@@ -2504,7 +2504,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               LOG_ERROR ("Required %s.handle missing, skipped", oldobj->name)
               dwg_free_object (obj);
-              obj = oldobj; i--; size--;
+              obj = oldobj; i--;
             }
           else if (!oldobj->type)
             {
@@ -2516,7 +2516,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               LOG_ERROR ("Required %s.fixedtype missing, skipped", oldobj->name);
               dwg_free_object (obj);
-              obj = oldobj; i--; size--;
+              obj = oldobj; i--;
             }
           if (oldobj->fixedtype == DWG_TYPE_SEQEND)
             {
@@ -2938,12 +2938,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
  harderr:
   dwg->num_objects = i;
-  LOG_TRACE ("End of %s\n", section)
+  LOG_TRACE ("End of %s (hard error)\n", section)
   tokens->index--;
   return DWG_ERR_INVALIDDWG;  
  typeerr:
   dwg->num_objects = i;
-  LOG_TRACE ("End of %s\n", section)
+  LOG_TRACE ("End of %s (type error)\n", section)
   tokens->index--;
   return DWG_ERR_INVALIDTYPE;
 }

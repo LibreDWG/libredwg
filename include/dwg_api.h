@@ -615,6 +615,7 @@ typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY  dwg_obj_assocrevolved
 typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY     dwg_obj_assocsweptsurfaceactionbody;
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM          dwg_obj_assocvertexactionparam;
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA         dwg_obj_blkrefobjectcontextdata;
+typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER        dwg_obj_blockvisibilityparameter;
 typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
 typedef struct _dwg_object_CSACDOCUMENTOPTIONS             dwg_obj_csacdocumentoptions;
 typedef struct _dwg_object_DATALINK                        dwg_obj_datalink;
@@ -650,9 +651,11 @@ typedef struct _dwg_object_VBA_PROJECT                     dwg_obj_vba_project;
 //typedef struct _dwg_object_ACSH_SPHERE_CLASS    dwg_obj_acsh_sphere_class;
 //typedef struct _dwg_object_NPOCOLLECTION        dwg_obj_npocollection;
 //typedef struct _dwg_object_POINTCLOUD           dwg_obj_pointcloud;
-//typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT  dwg_obj_rapidrtrenderenvironment;
-//typedef struct _dwg_object_RTEXT                dwg_obj_rtext;
-//typedef struct _dwg_object_XREFPANELOBJECT      dwg_obj_xrefpanelobject;
+//typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT    dwg_obj_rapidrtrenderenvironment;
+//typedef struct _dwg_object_XREFPANELOBJECT             dwg_obj_xrefpanelobject;
+//typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT  dwg_obj_blockgriplocationcomponent;
+//typedef struct _dwg_object_VISIBILITYGRIPENTITY        dwg_obj_visibilitygripentity;
+//typedef struct _dwg_object_VISIBILITYPARAMETERENTITY   dwg_obj_visibilityparameterentity;
 
 typedef struct _dwg_object                        dwg_object;
 typedef struct _dwg_object_ref                    dwg_object_ref;
@@ -836,6 +839,7 @@ DWG_GETALL_OBJECT_DECL (ASSOCPERSSUBENTMANAGER)
 DWG_GETALL_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCSWEPTSURFACEACTIONBODY)
 DWG_GETALL_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA)
+DWG_GETALL_OBJECT_DECL (BLOCKVISIBILITYPARAMETER)
 DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DATALINK)
 DWG_GETALL_OBJECT_DECL (DATATABLE)
@@ -1051,6 +1055,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPERSSUBENTMANAGER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCSWEPTSURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKVISIBILITYPARAMETER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CELLSTYLEMAP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
@@ -1318,6 +1323,7 @@ dwg_get_OBJECT_DECL (obj_assocnetwork, ASSOCNETWORK);
 dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
 dwg_get_OBJECT_DECL (obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER);
 dwg_get_OBJECT_DECL (obj_blkrefobjectcontextdata, BLKREFOBJECTCONTEXTDATA);
+dwg_get_OBJECT_DECL (obj_blockvisibilityparameter, BLOCKVISIBILITYPARAMETER);
 dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
 dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);

@@ -1295,7 +1295,7 @@ H,	DXF 3
 @item block
 H
 @item arc_def_pt
-3BD
+2BD
 @item xline1start_pt
 3BD,	DXF 13
 @item xline1end_pt
@@ -5215,6 +5215,31 @@ BD,	DXF 50
 3BD,	DXF 10
 @item scale_factor
 3BD_1,	DXF 42
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKVISIBILITYPARAMETER} @anchor{BLOCKVISIBILITYPARAMETER}
+@cindex object, BLOCKVISIBILITYPARAMETER
+@vindex BLOCKVISIBILITYPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_initialized
+B
+@item b2
+B
+@item name
+T
+@item desc
+T
+@item num_states
+BL
+@item states
+Dwg_BLOCKVISIBILITYPARAMETER_state*
 
 @end vtable
 @end indentedblock
@@ -9197,6 +9222,24 @@ RC
 RLL
 @item size
 RL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BLOCKVISIBILITYPARAMETER_state} @anchor{Dwg_BLOCKVISIBILITYPARAMETER_state}
+@vindex Dwg_BLOCKVISIBILITYPARAMETER_state
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_BLOCKVISIBILITYPARAMETER*
+@item block
+H
+@item bl1
+BL
+@item bl2
+BL
 
 @end vtable
 @end indentedblock

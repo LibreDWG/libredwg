@@ -73,6 +73,7 @@ testobjects = \
 	attdef \
 	attrib \
 	blkrefobjectcontextdata \
+	blockvisibilityparameter \
 	block \
 	block_control \
 	block_header \
