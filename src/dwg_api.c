@@ -8874,7 +8874,7 @@ dwg_ent_dim_ang2ln_get_def_pt (const dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Sets dim ang2ln 13 point
+/** Sets dim ang2ln 13 xline1start point
  */
 void
 dwg_ent_dim_ang2ln_set_13_pt (dwg_ent_dim_ang2ln *restrict ang,
@@ -8888,9 +8888,9 @@ dwg_ent_dim_ang2ln_set_13_pt (dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      ang->_13_pt.x = point->x;
-      ang->_13_pt.y = point->y;
-      ang->_13_pt.z = point->z;
+      ang->xline1start_pt.x = point->x;
+      ang->xline1start_pt.y = point->y;
+      ang->xline1start_pt.z = point->z;
     }
   else
     {
@@ -8899,7 +8899,7 @@ dwg_ent_dim_ang2ln_set_13_pt (dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Returns dim ang2ln 13 point
+/** Returns dim ang2ln 13 xline1start point
  */
 void
 dwg_ent_dim_ang2ln_get_13_pt (const dwg_ent_dim_ang2ln *restrict ang,
@@ -8913,9 +8913,9 @@ dwg_ent_dim_ang2ln_get_13_pt (const dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      point->x = ang->_13_pt.x;
-      point->y = ang->_13_pt.y;
-      point->z = ang->_13_pt.z;
+      point->x = ang->xline1start_pt.x;
+      point->y = ang->xline1start_pt.y;
+      point->z = ang->xline1start_pt.z;
     }
   else
     {
@@ -8924,7 +8924,7 @@ dwg_ent_dim_ang2ln_get_13_pt (const dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Sets dim ang2ln 14 point
+/** Sets dim ang2ln 14 xline1end point
  */
 void
 dwg_ent_dim_ang2ln_set_14_pt (dwg_ent_dim_ang2ln *restrict ang,
@@ -8938,9 +8938,9 @@ dwg_ent_dim_ang2ln_set_14_pt (dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      ang->_14_pt.x = point->x;
-      ang->_14_pt.y = point->y;
-      ang->_14_pt.z = point->z;
+      ang->xline1end_pt.x = point->x;
+      ang->xline1end_pt.y = point->y;
+      ang->xline1end_pt.z = point->z;
     }
   else
     {
@@ -8949,7 +8949,7 @@ dwg_ent_dim_ang2ln_set_14_pt (dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Returns dim ang2ln 14 point
+/** Returns dim ang2ln 14 xline1end point
  */
 void
 dwg_ent_dim_ang2ln_get_14_pt (const dwg_ent_dim_ang2ln *restrict ang,
@@ -8963,9 +8963,9 @@ dwg_ent_dim_ang2ln_get_14_pt (const dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      point->x = ang->_14_pt.x;
-      point->y = ang->_14_pt.y;
-      point->z = ang->_14_pt.z;
+      point->x = ang->xline1end_pt.x;
+      point->y = ang->xline1end_pt.y;
+      point->z = ang->xline1end_pt.z;
     }
   else
     {
@@ -8974,7 +8974,7 @@ dwg_ent_dim_ang2ln_get_14_pt (const dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Sets dim ang2ln first_arc 15 point
+/** Sets dim ang2ln xline2start 15 point
  */
 void
 dwg_ent_dim_ang2ln_set_first_arc_pt (dwg_ent_dim_ang2ln *restrict ang,
@@ -8988,9 +8988,9 @@ dwg_ent_dim_ang2ln_set_first_arc_pt (dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      ang->first_arc_pt.x = point->x;
-      ang->first_arc_pt.y = point->y;
-      ang->first_arc_pt.z = point->z;
+      ang->xline2start_pt.x = point->x;
+      ang->xline2start_pt.y = point->y;
+      ang->xline2start_pt.z = point->z;
     }
   else
     {
@@ -8999,7 +8999,7 @@ dwg_ent_dim_ang2ln_set_first_arc_pt (dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Returns dim ang2ln first_arc 15 point
+/** Returns dim ang2ln xline2start 15 point
  */
 void
 dwg_ent_dim_ang2ln_get_first_arc_pt (const dwg_ent_dim_ang2ln *restrict ang,
@@ -9013,9 +9013,9 @@ dwg_ent_dim_ang2ln_get_first_arc_pt (const dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      point->x = ang->first_arc_pt.x;
-      point->y = ang->first_arc_pt.y;
-      point->z = ang->first_arc_pt.z;
+      point->x = ang->xline2start_pt.x;
+      point->y = ang->xline2start_pt.y;
+      point->z = ang->xline2start_pt.z;
     }
   else
     {
@@ -9024,11 +9024,11 @@ dwg_ent_dim_ang2ln_get_first_arc_pt (const dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Sets dim ang2ln 16 point
+/** Sets dim ang2ln xline2end 16 point
  */
 void
 dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
-                              const dwg_point_2d *restrict point,
+                              const dwg_point_3d *restrict point,
                               int *restrict error)
 {
   if (ang
@@ -9038,8 +9038,9 @@ dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      ang->_16_pt.x = point->x;
-      ang->_16_pt.y = point->y;
+      ang->xline2end_pt.x = point->x;
+      ang->xline2end_pt.y = point->y;
+      ang->xline2end_pt.z = point->z;
     }
   else
     {
@@ -9052,7 +9053,7 @@ dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
  */
 void
 dwg_ent_dim_ang2ln_get_16_pt (const dwg_ent_dim_ang2ln *restrict ang,
-                              dwg_point_2d *restrict point,
+                              dwg_point_3d *restrict point,
                               int *restrict error)
 {
   if (ang
@@ -9062,8 +9063,9 @@ dwg_ent_dim_ang2ln_get_16_pt (const dwg_ent_dim_ang2ln *restrict ang,
   )
     {
       *error = 0;
-      point->x = ang->_16_pt.x;
-      point->y = ang->_16_pt.y;
+      point->x = ang->xline2end_pt.x;
+      point->y = ang->xline2end_pt.y;
+      point->z = ang->xline2end_pt.z;
     }
   else
     {

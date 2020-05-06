@@ -1206,13 +1206,12 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb2LineAngularDimension)
-  FIELD_2RD (_16_pt, 16);
-  FIELD_3BD (_13_pt, 13);
-  FIELD_3BD (_14_pt, 14);
-  FIELD_3BD (first_arc_pt, 15);
-  DECODER_OR_ENCODER {
-    FIELD_3BD (def_pt, 10);
-  }
+  FIELD_2BD (arc_def_pt, 0);
+  DECODER { _obj->arc_def_pt.z = _obj->def_pt.z; }
+  FIELD_3BD (xline1start_pt, 13);
+  FIELD_3BD (xline1end_pt, 14);
+  FIELD_3BD (xline2start_pt, 15);
+  FIELD_3BD (xline2end_pt, 16);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);

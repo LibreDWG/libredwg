@@ -2906,12 +2906,12 @@ EXPORT void dwg_ent_dim_ang2ln_get_first_arc_pt (
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
-                                          const dwg_point_2d *restrict point,
+                                          const dwg_point_3d *restrict point,
                                           int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
 EXPORT void dwg_ent_dim_ang2ln_get_16_pt (
-    const dwg_ent_dim_ang2ln *restrict ang, dwg_point_2d *restrict point,
+    const dwg_ent_dim_ang2ln *restrict ang, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
 /********************************************************************

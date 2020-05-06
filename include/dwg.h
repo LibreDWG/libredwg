@@ -1409,10 +1409,11 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
 typedef struct _dwg_entity_DIMENSION_ANG2LN
 {
   DIMENSION_COMMON;
-  BITCODE_2RD _16_pt;
-  BITCODE_3BD _13_pt;
-  BITCODE_3BD _14_pt;
-  BITCODE_3BD first_arc_pt;
+  BITCODE_3BD arc_def_pt; // is from the elevation
+  BITCODE_3BD xline1start_pt;
+  BITCODE_3BD xline1end_pt;
+  BITCODE_3BD xline2start_pt;
+  BITCODE_3BD xline2end_pt;
 } Dwg_Entity_DIMENSION_ANG2LN;
 
 /**

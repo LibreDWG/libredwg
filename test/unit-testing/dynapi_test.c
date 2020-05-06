@@ -7895,30 +7895,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   Dwg_Entity_DIMENSION_ANG2LN *restrict dimension_ang2ln = obj->tio.entity->tio.DIMENSION_ANG2LN;
   failed = 0;
   {
-    BITCODE_3BD _13_pt;
-    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "_13_pt", &_13_pt, NULL)
-        && !memcmp (&_13_pt, &dimension_ang2ln->_13_pt, sizeof (dimension_ang2ln->_13_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG2LN._13_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _14_pt;
-    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "_14_pt", &_14_pt, NULL)
-        && !memcmp (&_14_pt, &dimension_ang2ln->_14_pt, sizeof (dimension_ang2ln->_14_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG2LN._14_pt [3BD]");
-  }
-  {
-    BITCODE_2RD _16_pt;
-    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "_16_pt", &_16_pt, NULL)
-        && !memcmp (&_16_pt, &dimension_ang2ln->_16_pt, sizeof (dimension_ang2ln->_16_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG2LN._16_pt [2RD]");
-  }
-  {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "act_measurement", &act_measurement, NULL)
         && act_measurement == dimension_ang2ln->act_measurement)
@@ -7932,6 +7908,14 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ANG2LN.act_measurement [BD] set+1 %g != %g", dimension_ang2ln->act_measurement, act_measurement);
     dimension_ang2ln->act_measurement--;
+  }
+  {
+    BITCODE_3BD arc_def_pt;
+    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "arc_def_pt", &arc_def_pt, NULL)
+        && !memcmp (&arc_def_pt, &dimension_ang2ln->arc_def_pt, sizeof (dimension_ang2ln->arc_def_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG2LN.arc_def_pt [3BD]");
   }
   {
     BITCODE_BS attachment;
@@ -8027,14 +8011,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         pass ();
     else
         fail ("DIMENSION_ANG2LN.extrusion [BE]");
-  }
-  {
-    BITCODE_3BD first_arc_pt;
-    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "first_arc_pt", &first_arc_pt, NULL)
-        && !memcmp (&first_arc_pt, &dimension_ang2ln->first_arc_pt, sizeof (dimension_ang2ln->first_arc_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG2LN.first_arc_pt [3BD]");
   }
   {
     BITCODE_RC flag;
@@ -8219,6 +8195,38 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
       pass ();
     else
       fail ("DIMENSION_ANG2LN.user_text [TV] '%s' <> '%s'", user_text, dimension_ang2ln->user_text);
+  }
+  {
+    BITCODE_3BD xline1end_pt;
+    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline1end_pt", &xline1end_pt, NULL)
+        && !memcmp (&xline1end_pt, &dimension_ang2ln->xline1end_pt, sizeof (dimension_ang2ln->xline1end_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG2LN.xline1end_pt [3BD]");
+  }
+  {
+    BITCODE_3BD xline1start_pt;
+    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline1start_pt", &xline1start_pt, NULL)
+        && !memcmp (&xline1start_pt, &dimension_ang2ln->xline1start_pt, sizeof (dimension_ang2ln->xline1start_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG2LN.xline1start_pt [3BD]");
+  }
+  {
+    BITCODE_3BD xline2end_pt;
+    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline2end_pt", &xline2end_pt, NULL)
+        && !memcmp (&xline2end_pt, &dimension_ang2ln->xline2end_pt, sizeof (dimension_ang2ln->xline2end_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG2LN.xline2end_pt [3BD]");
+  }
+  {
+    BITCODE_3BD xline2start_pt;
+    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline2start_pt", &xline2start_pt, NULL)
+        && !memcmp (&xline2start_pt, &dimension_ang2ln->xline2start_pt, sizeof (dimension_ang2ln->xline2start_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG2LN.xline2start_pt [3BD]");
   }
   if (failed && (is_class_unstable ("DIMENSION_ANG2LN") || is_class_debugging ("DIMENSION_ANG2LN")))
     {

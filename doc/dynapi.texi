@@ -1294,14 +1294,16 @@ B,	DXF 75
 H,	DXF 3
 @item block
 H
-@item _16_pt
-2RD,	DXF 16
-@item _13_pt
+@item arc_def_pt
+3BD
+@item xline1start_pt
 3BD,	DXF 13
-@item _14_pt
+@item xline1end_pt
 3BD,	DXF 14
-@item first_arc_pt
+@item xline2start_pt
 3BD,	DXF 15
+@item xline2end_pt
+3BD,	DXF 16
 
 @end vtable
 @end indentedblock
