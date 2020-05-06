@@ -4803,32 +4803,37 @@ typedef struct _dwg_object_DATATABLE
 /**
  Object DATALINK (varies)
  */
+typedef struct _dwg_DATALINK_customdata
+{
+  struct _dwg_object_DATALINK *parent;
+  BITCODE_H target; // 330
+  BITCODE_T text;   // 304
+} Dwg_DATALINK_customdata;
+
 typedef struct _dwg_object_DATALINK
 {
   struct _dwg_object_object *parent;
   BITCODE_BS class_version; /*<! DXF 70 1 */
-  BITCODE_T appname;	/*<! DXF 1  */
+  BITCODE_T data_adapter;/*<! DXF 1  */
   BITCODE_T description;/*<! DXF 300  */
-  BITCODE_T link;	/*<! DXF 301  */
-  BITCODE_T cell;	/*<! DXF 302  */
-  BITCODE_BS bs90;	/*<! DXF 90  2 */
-  BITCODE_BS bs91;	/*<! DXF 91  1179649 */
-  BITCODE_BS bs92;	/*<! DXF 92  1 */
+  BITCODE_T tooltip;	/*<! DXF 301  */
+  BITCODE_T connection_string;	/*<! DXF 302  */
+  BITCODE_BL option;	/*<! DXF 90  2 */
+  BITCODE_BL update_option;/*<! DXF 91  1179649 */
+  BITCODE_BL bl92;	/*<! DXF 92  1 */
   BITCODE_BS year;	/*<! DXF 170  */
   BITCODE_BS month;	/*<! DXF 171  */
   BITCODE_BS day;	/*<! DXF 172  */
   BITCODE_BS hour;	/*<! DXF 173  */
   BITCODE_BS minute;	/*<! DXF 174  */
   BITCODE_BS seconds;	/*<! DXF 175  */
-  BITCODE_BS bs176;	/*<! DXF 176  0 */
-  BITCODE_BS bs171;	/*<! DXF 177  1 */
-  BITCODE_BS bs93;	/*<! DXF 93   0 */
-  BITCODE_T t304;	/*<! DXF 304  */
-  BITCODE_BS num_deps;	/*<! DXF 94   2 */
-  BITCODE_H *deps;	/*<! DXF 330  */
-  BITCODE_H writedep;	/*<! DXF 360  */
-  BITCODE_T t305;	/*<! DXF 305 CUSTOMDATA */
-  //...
+  BITCODE_BS msec;	/*<! DXF 176  */
+  BITCODE_BS path_option; /*<! DXF 177  1 */
+  BITCODE_BL bl93;	  /*<! DXF 93   0 */
+  BITCODE_T update_status;/*<! DXF 304  */
+  BITCODE_BL num_customdata; // 94
+  Dwg_DATALINK_customdata *customdata; // 330 + 304
+  BITCODE_H hardowner;	/*<! DXF 360  */
 } Dwg_Object_DATALINK;
 
 /**

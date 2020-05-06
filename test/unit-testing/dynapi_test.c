@@ -28593,114 +28593,34 @@ static int test_DATALINK (const Dwg_Object *obj)
   Dwg_Object_DATALINK *restrict datalink = obj->tio.object->tio.DATALINK;
   failed = 0;
   {
-    BITCODE_T appname;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "appname", &appname, NULL)
-        && appname
-           ? strEQ ((char *)appname, (char *)datalink->appname)
-           : !datalink->appname)
+    BITCODE_BL bl92;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bl92", &bl92, NULL)
+        && bl92 == datalink->bl92)
       pass ();
     else
-      fail ("DATALINK.appname [T] '%s' <> '%s'", appname, datalink->appname);
+      fail ("DATALINK.bl92 [BL] %u != %u", datalink->bl92, bl92);
+    bl92++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bl92", &bl92, 0)
+        && bl92 == datalink->bl92)
+      pass ();
+    else
+      fail ("DATALINK.bl92 [BL] set+1 %u != %u", datalink->bl92, bl92);
+    datalink->bl92--;
   }
   {
-    BITCODE_BS bs171;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bs171", &bs171, NULL)
-        && bs171 == datalink->bs171)
+    BITCODE_BL bl93;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bl93", &bl93, NULL)
+        && bl93 == datalink->bl93)
       pass ();
     else
-      fail ("DATALINK.bs171 [BS] %hu != %hu", datalink->bs171, bs171);
-    bs171++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bs171", &bs171, 0)
-        && bs171 == datalink->bs171)
+      fail ("DATALINK.bl93 [BL] %u != %u", datalink->bl93, bl93);
+    bl93++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bl93", &bl93, 0)
+        && bl93 == datalink->bl93)
       pass ();
     else
-      fail ("DATALINK.bs171 [BS] set+1 %hu != %hu", datalink->bs171, bs171);
-    datalink->bs171--;
-  }
-  {
-    BITCODE_BS bs176;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bs176", &bs176, NULL)
-        && bs176 == datalink->bs176)
-      pass ();
-    else
-      fail ("DATALINK.bs176 [BS] %hu != %hu", datalink->bs176, bs176);
-    bs176++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bs176", &bs176, 0)
-        && bs176 == datalink->bs176)
-      pass ();
-    else
-      fail ("DATALINK.bs176 [BS] set+1 %hu != %hu", datalink->bs176, bs176);
-    datalink->bs176--;
-  }
-  {
-    BITCODE_BS bs90;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bs90", &bs90, NULL)
-        && bs90 == datalink->bs90)
-      pass ();
-    else
-      fail ("DATALINK.bs90 [BS] %hu != %hu", datalink->bs90, bs90);
-    bs90++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bs90", &bs90, 0)
-        && bs90 == datalink->bs90)
-      pass ();
-    else
-      fail ("DATALINK.bs90 [BS] set+1 %hu != %hu", datalink->bs90, bs90);
-    datalink->bs90--;
-  }
-  {
-    BITCODE_BS bs91;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bs91", &bs91, NULL)
-        && bs91 == datalink->bs91)
-      pass ();
-    else
-      fail ("DATALINK.bs91 [BS] %hu != %hu", datalink->bs91, bs91);
-    bs91++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bs91", &bs91, 0)
-        && bs91 == datalink->bs91)
-      pass ();
-    else
-      fail ("DATALINK.bs91 [BS] set+1 %hu != %hu", datalink->bs91, bs91);
-    datalink->bs91--;
-  }
-  {
-    BITCODE_BS bs92;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bs92", &bs92, NULL)
-        && bs92 == datalink->bs92)
-      pass ();
-    else
-      fail ("DATALINK.bs92 [BS] %hu != %hu", datalink->bs92, bs92);
-    bs92++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bs92", &bs92, 0)
-        && bs92 == datalink->bs92)
-      pass ();
-    else
-      fail ("DATALINK.bs92 [BS] set+1 %hu != %hu", datalink->bs92, bs92);
-    datalink->bs92--;
-  }
-  {
-    BITCODE_BS bs93;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bs93", &bs93, NULL)
-        && bs93 == datalink->bs93)
-      pass ();
-    else
-      fail ("DATALINK.bs93 [BS] %hu != %hu", datalink->bs93, bs93);
-    bs93++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bs93", &bs93, 0)
-        && bs93 == datalink->bs93)
-      pass ();
-    else
-      fail ("DATALINK.bs93 [BS] set+1 %hu != %hu", datalink->bs93, bs93);
-    datalink->bs93--;
-  }
-  {
-    BITCODE_T cell;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "cell", &cell, NULL)
-        && cell
-           ? strEQ ((char *)cell, (char *)datalink->cell)
-           : !datalink->cell)
-      pass ();
-    else
-      fail ("DATALINK.cell [T] '%s' <> '%s'", cell, datalink->cell);
+      fail ("DATALINK.bl93 [BL] set+1 %u != %u", datalink->bl93, bl93);
+    datalink->bl93--;
   }
   {
     BITCODE_BS class_version;
@@ -28718,6 +28638,36 @@ static int test_DATALINK (const Dwg_Object *obj)
     datalink->class_version--;
   }
   {
+    BITCODE_T connection_string;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "connection_string", &connection_string, NULL)
+        && connection_string
+           ? strEQ ((char *)connection_string, (char *)datalink->connection_string)
+           : !datalink->connection_string)
+      pass ();
+    else
+      fail ("DATALINK.connection_string [T] '%s' <> '%s'", connection_string, datalink->connection_string);
+  }
+  {
+    Dwg_DATALINK_customdata* customdata;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "num_customdata", &count, NULL)
+        && dwg_dynapi_entity_value (datalink, "DATALINK", "customdata", &customdata, NULL)
+        && customdata == datalink->customdata)
+      pass ();
+    else
+      fail ("DATALINK.customdata [Dwg_DATALINK_customdata*] * %u num_customdata", count);
+  }
+  {
+    BITCODE_T data_adapter;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "data_adapter", &data_adapter, NULL)
+        && data_adapter
+           ? strEQ ((char *)data_adapter, (char *)datalink->data_adapter)
+           : !datalink->data_adapter)
+      pass ();
+    else
+      fail ("DATALINK.data_adapter [T] '%s' <> '%s'", data_adapter, datalink->data_adapter);
+  }
+  {
     BITCODE_BS day;
     if (dwg_dynapi_entity_value (datalink, "DATALINK", "day", &day, NULL)
         && day == datalink->day)
@@ -28733,16 +28683,6 @@ static int test_DATALINK (const Dwg_Object *obj)
     datalink->day--;
   }
   {
-    BITCODE_H* deps;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "num_deps", &count, NULL)
-        && dwg_dynapi_entity_value (datalink, "DATALINK", "deps", &deps, NULL)
-        && deps == datalink->deps)
-      pass ();
-    else
-      fail ("DATALINK.deps [H*] * %u num_deps", count);
-  }
-  {
     BITCODE_T description;
     if (dwg_dynapi_entity_value (datalink, "DATALINK", "description", &description, NULL)
         && description
@@ -28751,6 +28691,14 @@ static int test_DATALINK (const Dwg_Object *obj)
       pass ();
     else
       fail ("DATALINK.description [T] '%s' <> '%s'", description, datalink->description);
+  }
+  {
+    BITCODE_H hardowner;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "hardowner", &hardowner, NULL)
+        && !memcmp (&hardowner, &datalink->hardowner, sizeof (datalink->hardowner)))
+        pass ();
+    else
+        fail ("DATALINK.hardowner [H]");
   }
   {
     BITCODE_BS hour;
@@ -28766,16 +28714,6 @@ static int test_DATALINK (const Dwg_Object *obj)
     else
       fail ("DATALINK.hour [BS] set+1 %hu != %hu", datalink->hour, hour);
     datalink->hour--;
-  }
-  {
-    BITCODE_T link;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "link", &link, NULL)
-        && link
-           ? strEQ ((char *)link, (char *)datalink->link)
-           : !datalink->link)
-      pass ();
-    else
-      fail ("DATALINK.link [T] '%s' <> '%s'", link, datalink->link);
   }
   {
     BITCODE_BS minute;
@@ -28808,19 +28746,49 @@ static int test_DATALINK (const Dwg_Object *obj)
     datalink->month--;
   }
   {
-    BITCODE_BS num_deps;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "num_deps", &num_deps, NULL)
-        && num_deps == datalink->num_deps)
+    BITCODE_BS msec;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "msec", &msec, NULL)
+        && msec == datalink->msec)
       pass ();
     else
-      fail ("DATALINK.num_deps [BS] %hu != %hu", datalink->num_deps, num_deps);
-    num_deps++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "num_deps", &num_deps, 0)
-        && num_deps == datalink->num_deps)
+      fail ("DATALINK.msec [BS] %hu != %hu", datalink->msec, msec);
+    msec++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "msec", &msec, 0)
+        && msec == datalink->msec)
       pass ();
     else
-      fail ("DATALINK.num_deps [BS] set+1 %hu != %hu", datalink->num_deps, num_deps);
-    datalink->num_deps--;
+      fail ("DATALINK.msec [BS] set+1 %hu != %hu", datalink->msec, msec);
+    datalink->msec--;
+  }
+  {
+    BITCODE_BL num_customdata;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "num_customdata", &num_customdata, NULL)
+        && num_customdata == datalink->num_customdata)
+      pass ();
+    else
+      fail ("DATALINK.num_customdata [BL] %u != %u", datalink->num_customdata, num_customdata);
+    num_customdata++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "num_customdata", &num_customdata, 0)
+        && num_customdata == datalink->num_customdata)
+      pass ();
+    else
+      fail ("DATALINK.num_customdata [BL] set+1 %u != %u", datalink->num_customdata, num_customdata);
+    datalink->num_customdata--;
+  }
+  {
+    BITCODE_BL option;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "option", &option, NULL)
+        && option == datalink->option)
+      pass ();
+    else
+      fail ("DATALINK.option [BL] %u != %u", datalink->option, option);
+    option++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "option", &option, 0)
+        && option == datalink->option)
+      pass ();
+    else
+      fail ("DATALINK.option [BL] set+1 %u != %u", datalink->option, option);
+    datalink->option--;
   }
   {
     struct _dwg_object_object* parent;
@@ -28829,6 +28797,21 @@ static int test_DATALINK (const Dwg_Object *obj)
         pass ();
     else
         fail ("DATALINK.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BS path_option;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "path_option", &path_option, NULL)
+        && path_option == datalink->path_option)
+      pass ();
+    else
+      fail ("DATALINK.path_option [BS] %hu != %hu", datalink->path_option, path_option);
+    path_option++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "path_option", &path_option, 0)
+        && path_option == datalink->path_option)
+      pass ();
+    else
+      fail ("DATALINK.path_option [BS] set+1 %hu != %hu", datalink->path_option, path_option);
+    datalink->path_option--;
   }
   {
     BITCODE_BS seconds;
@@ -28846,32 +28829,39 @@ static int test_DATALINK (const Dwg_Object *obj)
     datalink->seconds--;
   }
   {
-    BITCODE_T t304;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "t304", &t304, NULL)
-        && t304
-           ? strEQ ((char *)t304, (char *)datalink->t304)
-           : !datalink->t304)
+    BITCODE_T tooltip;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "tooltip", &tooltip, NULL)
+        && tooltip
+           ? strEQ ((char *)tooltip, (char *)datalink->tooltip)
+           : !datalink->tooltip)
       pass ();
     else
-      fail ("DATALINK.t304 [T] '%s' <> '%s'", t304, datalink->t304);
+      fail ("DATALINK.tooltip [T] '%s' <> '%s'", tooltip, datalink->tooltip);
   }
   {
-    BITCODE_T t305;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "t305", &t305, NULL)
-        && t305
-           ? strEQ ((char *)t305, (char *)datalink->t305)
-           : !datalink->t305)
+    BITCODE_BL update_option;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "update_option", &update_option, NULL)
+        && update_option == datalink->update_option)
       pass ();
     else
-      fail ("DATALINK.t305 [T] '%s' <> '%s'", t305, datalink->t305);
+      fail ("DATALINK.update_option [BL] %u != %u", datalink->update_option, update_option);
+    update_option++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "update_option", &update_option, 0)
+        && update_option == datalink->update_option)
+      pass ();
+    else
+      fail ("DATALINK.update_option [BL] set+1 %u != %u", datalink->update_option, update_option);
+    datalink->update_option--;
   }
   {
-    BITCODE_H writedep;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &datalink->writedep, sizeof (datalink->writedep)))
-        pass ();
+    BITCODE_T update_status;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "update_status", &update_status, NULL)
+        && update_status
+           ? strEQ ((char *)update_status, (char *)datalink->update_status)
+           : !datalink->update_status)
+      pass ();
     else
-        fail ("DATALINK.writedep [H]");
+      fail ("DATALINK.update_status [T] '%s' <> '%s'", update_status, datalink->update_status);
   }
   {
     BITCODE_BS year;
@@ -47032,6 +47022,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_ContentFormat): %d != "
                "dwg_dynapi_fields_size (\"ContentFormat\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_DATALINK_customdata);
+  size2 = dwg_dynapi_fields_size ("DATALINK_customdata");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_DATALINK_customdata): %d != "
+               "dwg_dynapi_fields_size (\"DATALINK_customdata\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_DIMASSOC_Ref);

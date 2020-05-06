@@ -8107,29 +8107,38 @@ DWG_OBJECT_END
 DWG_OBJECT (DATALINK)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDataLink)
-  FIELD_BS (class_version, 0); // 10
-  FIELD_T (appname, 1);
+  //FIELD_BS (class_version, 0); // 10
+  FIELD_T (data_adapter, 1);
   FIELD_T (description, 300);
-  FIELD_T (link, 301);
-  FIELD_T (cell, 302);
-  //FIELD_BS (bs90, 90); // 2
-  FIELD_BS (bs91, 91); // 1179649
-  FIELD_BS (bs92, 92); // 1
+  FIELD_T (tooltip, 301);
+  FIELD_T (connection_string, 302);
+  FIELD_BL (option, 90); // 2
+  FIELD_BL (update_option, 91); // 1179649
+  FIELD_BL (bl92, 92); // 1
   FIELD_BS (year, 170);
   FIELD_BS (month, 171);
   FIELD_BS (day, 172);
   FIELD_BS (hour, 173);
   FIELD_BS (minute, 174);
   FIELD_BS (seconds, 175);
-  FIELD_BS (bs176, 176); // 0
-  FIELD_BS (bs171, 177); // 1
-  FIELD_BS (bs93, 93); // 0
-  FIELD_T (t304, 304);
-  FIELD_BS (num_deps, 94); // 2
-  HANDLE_VECTOR (deps, num_deps, 0, 330);
-  FIELD_HANDLE (writedep, 0, 360);
-  FIELD_T (t305, 305); // CUSTOMDATA
+  FIELD_BS (msec, 176);
+  FIELD_BS (path_option, 177); // 1
+  FIELD_BL (bl93, 93); // 0
+  FIELD_T (update_status, 304);
+  FIELD_BL (num_customdata, 94); // 2
+  DXF { VALUE_TFF ("CUSTOMDATA", 305); }
   DEBUG_HERE_OBJ
+  DXF { VALUE_TFF ("DATAMAP_BEGIN", 1); }
+  REPEAT (num_customdata, customdata, Dwg_DATALINK_customdata)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (customdata[rcount1],target, DWG_HDL_HARDOWN, 330);
+      // ACEXCEL_UPDATEOPTIONS, ACEXCEL_CONNECTION_STRING, ACEXCEL_SOURCEDATA
+      SUB_FIELD_T (customdata[rcount1],text, 304);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (customdata);
+  END_REPEAT (customdata)
+  DXF { VALUE_TFF ("DATAMAP_END", 309); }
+  FIELD_HANDLE (hardowner, DWG_HDL_HARDOWN, 360);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

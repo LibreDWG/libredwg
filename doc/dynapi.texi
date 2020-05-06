@@ -5385,20 +5385,20 @@ H,	DXF 340
 struct _dwg_object_object*
 @item class_version
 BS
-@item appname
+@item data_adapter
 T,	DXF 1
 @item description
 T,	DXF 300
-@item link
+@item tooltip
 T,	DXF 301
-@item cell
+@item connection_string
 T,	DXF 302
-@item bs90
-BS
-@item bs91
-BS,	DXF 91
-@item bs92
-BS,	DXF 92
+@item option
+BL,	DXF 90
+@item update_option
+BL,	DXF 91
+@item bl92
+BL,	DXF 92
 @item year
 BS,	DXF 170
 @item month
@@ -5411,22 +5411,20 @@ BS,	DXF 173
 BS,	DXF 174
 @item seconds
 BS,	DXF 175
-@item bs176
+@item msec
 BS,	DXF 176
-@item bs171
+@item path_option
 BS,	DXF 177
-@item bs93
-BS,	DXF 93
-@item t304
+@item bl93
+BL,	DXF 93
+@item update_status
 T,	DXF 304
-@item num_deps
-BS,	DXF 94
-@item deps
-H*,	DXF 330
-@item writedep
+@item num_customdata
+BL,	DXF 94
+@item customdata
+Dwg_DATALINK_customdata*
+@item hardowner
 H,	DXF 360
-@item t305
-T,	DXF 305
 
 @end vtable
 @end indentedblock
@@ -9351,6 +9349,22 @@ CMC,	DXF 62
 H
 @item text_height
 BD,	DXF 92
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_DATALINK_customdata} @anchor{Dwg_DATALINK_customdata}
+@vindex Dwg_DATALINK_customdata
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_DATALINK*
+@item target
+H
+@item text
+T,	DXF 304
 
 @end vtable
 @end indentedblock
