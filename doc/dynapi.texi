@@ -5203,6 +5203,12 @@ B,	DXF 290
 B
 @item scale
 H,	DXF 340
+@item rotation
+BD,	DXF 50
+@item insertion_pt
+3BD,	DXF 10
+@item scale_factor
+3BD_1,	DXF 42
 
 @end vtable
 @end indentedblock

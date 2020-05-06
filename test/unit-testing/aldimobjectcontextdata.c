@@ -7,9 +7,10 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BITCODE_BS class_version; /*!< r2010+ =4 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
+  BITCODE_B is_default;
+  BITCODE_B in_dwg;
   BITCODE_H scale;
+
   BITCODE_T name;
   BITCODE_2RD def_pt;
   BITCODE_B b293;
@@ -31,9 +32,9 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_aldimobjectcontextdata *_obj = dwg_object_to_ALDIMOBJECTCONTEXTDATA (obj);
 
-  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, class_version, BL, class_version);
-  //CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, has_file, B, has_file);
-  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, defaultflag, B, defaultflag);
+  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, is_default, B, is_default);
+  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, in_dwg, B, in_dwg);
   CHK_ENTITY_H (_obj, ALDIMOBJECTCONTEXTDATA, scale, scale);
   CHK_ENTITY_UTF8TEXT (_obj, ALDIMOBJECTCONTEXTDATA, name, name);
   CHK_ENTITY_2RD (_obj, ALDIMOBJECTCONTEXTDATA, def_pt, def_pt);

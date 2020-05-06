@@ -4482,8 +4482,8 @@ DWG_OBJECT (OBJECTCONTEXTDATA)
     if (FIELD_VALUE (class_version) > 10)
       return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  FIELD_B (has_file, 290);
-  FIELD_B (defaultflag, 0);
+  FIELD_B (is_default, 0);
+  FIELD_B (in_dwg, 290);
 
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8055,8 +8055,11 @@ DWG_OBJECT_END
 DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbBlkrefObjectContextData)
-  // ?? ...
+  SUBCLASS (AcDbBlkrefObjectContextData);
+  FIELD_BD (rotation, 50)
+  FIELD_3BD (insertion_pt, 10);
+  FIELD_3BD_1 (scale_factor, 42);
+
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

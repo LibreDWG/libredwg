@@ -27865,6 +27865,14 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
     blkrefobjectcontextdata->in_dwg--;
   }
   {
+    BITCODE_3BD insertion_pt;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
+        && !memcmp (&insertion_pt, &blkrefobjectcontextdata->insertion_pt, sizeof (blkrefobjectcontextdata->insertion_pt)))
+        pass ();
+    else
+        fail ("BLKREFOBJECTCONTEXTDATA.insertion_pt [3BD]");
+  }
+  {
     BITCODE_B is_default;
     if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "is_default", &is_default, NULL)
         && is_default == blkrefobjectcontextdata->is_default)
@@ -27888,12 +27896,35 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("BLKREFOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
   }
   {
+    BITCODE_BD rotation;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "rotation", &rotation, NULL)
+        && rotation == blkrefobjectcontextdata->rotation)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.rotation [BD] %g != %g", blkrefobjectcontextdata->rotation, rotation);
+    rotation++;
+    if (dwg_dynapi_entity_set_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "rotation", &rotation, 0)
+        && rotation == blkrefobjectcontextdata->rotation)
+      pass ();
+    else
+      fail ("BLKREFOBJECTCONTEXTDATA.rotation [BD] set+1 %g != %g", blkrefobjectcontextdata->rotation, rotation);
+    blkrefobjectcontextdata->rotation--;
+  }
+  {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "scale", &scale, NULL)
         && !memcmp (&scale, &blkrefobjectcontextdata->scale, sizeof (blkrefobjectcontextdata->scale)))
         pass ();
     else
         fail ("BLKREFOBJECTCONTEXTDATA.scale [H]");
+  }
+  {
+    BITCODE_3BD scale_factor;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "scale_factor", &scale_factor, NULL)
+        && !memcmp (&scale_factor, &blkrefobjectcontextdata->scale_factor, sizeof (blkrefobjectcontextdata->scale_factor)))
+        pass ();
+    else
+        fail ("BLKREFOBJECTCONTEXTDATA.scale_factor [3BD_1]");
   }
   if (failed && (is_class_unstable ("BLKREFOBJECTCONTEXTDATA") || is_class_debugging ("BLKREFOBJECTCONTEXTDATA")))
     {

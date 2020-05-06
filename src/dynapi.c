@@ -4742,6 +4742,12 @@ static const Dwg_DYNAPI_field _dwg_BLKREFOBJECTCONTEXTDATA_fields[] = {
     0,0,0, 0 },
   { "scale",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLKREFOBJECTCONTEXTDATA, scale),
     1,0,0, 340 },
+  { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLKREFOBJECTCONTEXTDATA, rotation),
+    0,0,0, 50 },
+  { "insertion_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLKREFOBJECTCONTEXTDATA, insertion_pt),
+    1,0,0, 10 },
+  { "scale_factor",	"3BD_1", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLKREFOBJECTCONTEXTDATA, scale_factor),
+    1,0,0, 42 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BLOCK_CONTROL: (sorted by offset) */

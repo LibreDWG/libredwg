@@ -7,8 +7,8 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BS class_version; /*!< r2010+ =3 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
+  BITCODE_B is_default;
+  BITCODE_B in_dwg;
   BITCODE_H scale;
   BITCODE_BL i, num_points;
   BITCODE_3DPOINT* points;	/*!< DXF 10 */
@@ -21,9 +21,9 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_leaderobjectcontextdata *_obj = dwg_object_to_LEADEROBJECTCONTEXTDATA (obj);
 
-  CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, class_version, BL, class_version);
-  CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, has_file, B, has_file);
-  CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, defaultflag, B, defaultflag);
+  CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, is_default, B, is_default);
+  CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, in_dwg, B, in_dwg);
   CHK_ENTITY_H (_obj, LEADEROBJECTCONTEXTDATA, scale, scale);
 
   CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, num_points, BL, num_points);

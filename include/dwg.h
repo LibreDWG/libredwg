@@ -5701,7 +5701,9 @@ typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
-  // ...??
+  BITCODE_BD rotation;           /* 50 */
+  BITCODE_3BD insertion_pt;      /* 10 */
+  BITCODE_3BD scale_factor;      /* 42-44 */
 } Dwg_Object_BLKREFOBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_DETAILVIEWSTYLE

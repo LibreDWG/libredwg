@@ -6,9 +6,9 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BS class_version; /*!< r2010+ =4 */
-  BITCODE_B has_file;
-  BITCODE_B defaultflag;
+  BITCODE_BS class_version; /*!< r2010+ =3 */
+  BITCODE_B is_default;
+  BITCODE_B in_dwg;
   BITCODE_H scale;
   BITCODE_3BD insertion_pt;
   BITCODE_3BD x_axis_dir;
@@ -28,9 +28,9 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_mtextobjectcontextdata *_obj = dwg_object_to_MTEXTOBJECTCONTEXTDATA (obj);
 
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, class_version, BL, class_version);
-  //CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, has_file, B, has_file);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, defaultflag, B, defaultflag);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, is_default, B, is_default);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, in_dwg, B, in_dwg);
   CHK_ENTITY_H (_obj, MTEXTOBJECTCONTEXTDATA, scale, scale);
   CHK_ENTITY_3RD (_obj, MTEXTOBJECTCONTEXTDATA, insertion_pt, insertion_pt);
   CHK_ENTITY_3RD (_obj, MTEXTOBJECTCONTEXTDATA, x_axis_dir, x_axis_dir);
