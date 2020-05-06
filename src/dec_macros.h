@@ -689,16 +689,16 @@
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
   }
-#define FIELD_CMC(color, dxf1, dxf2)                                          \
+#define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
     bit_read_CMC (dat, str_dat, &_obj->color);                                \
-    LOG_TRACE (#color ".index: %d [CMC.BS %d]", _obj->color.index, dxf1);     \
+    LOG_TRACE (#color ".index: %d [CMC.BS %d]", _obj->color.index, dxf);      \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
     LOG_TRACE ("\n");                                                         \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
-                   (unsigned)_obj->color.rgb, dxf2);                          \
+                   (unsigned)_obj->color.rgb, dxf + 420 - 62);                \
         LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->color.flag);                               \
         if (_obj->color.flag & 1)                                             \
@@ -712,17 +712,17 @@
           }                                                                   \
       }                                                                       \
   }
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
+#define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
     bit_read_CMC (dat, str_dat, &_obj->o.color);                              \
     LOG_TRACE (#o "." #color ".index: %d [CMC.BS %d]", _obj->o.color.index,   \
-               dxf1);                                                         \
+               dxf);                                                          \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
     LOG_TRACE ("\n");                                                         \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         LOG_TRACE (#o "." #color ".rgb: 0x%06x [CMC.BL %d]\n",                \
-                   (unsigned)_obj->o.color.rgb, dxf2);                        \
+                   (unsigned)_obj->o.color.rgb, dxf + 420 - 62);              \
         LOG_TRACE (#o "." #color ".flag: 0x%x [CMC.RC]\n",                    \
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
@@ -737,30 +737,30 @@
           }                                                                   \
       }                                                                       \
   }
-#define FIELD_ENC(color, dxf1, dxf2)                                          \
+#define FIELD_ENC(color, dxf)                                                 \
   {                                                                           \
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->color);                       \
-    LOG_TRACE (#color ".index: %d [ENC.BS %d]\n", _obj->color.index, dxf1);   \
+    LOG_TRACE (#color ".index: %d [ENC.BS %d]\n", _obj->color.index, dxf);    \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         if (_obj->color.flag)                                                 \
           LOG_TRACE (#color ".flag: 0x%x\n", (unsigned)_obj->color.flag);     \
         if (_obj->color.flag & 0x20)                                          \
           LOG_TRACE (#color ".alpha: %d [ENC.BL %d]\n",                       \
-                     (int)_obj->color.alpha, dxf2 + 20);                      \
+                     (int)_obj->color.alpha, dxf + 440 - 62);                 \
         if (_obj->color.flag & 0x80)                                          \
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
-                     (unsigned)_obj->color.rgb, dxf2);                        \
+                     (unsigned)_obj->color.rgb, dxf + 420 - 62);              \
         if (_obj->color.flag & 0x40 && _obj->color.handle)                    \
           LOG_TRACE (#color ".handle: %X [ENC.H %d]\n",                       \
-                     _obj->color.handle->handleref.value, dxf2 + 10);         \
+                     _obj->color.handle->handleref.value, dxf + 430 - 62);    \
       }                                                                       \
   }
-#define SUB_FIELD_ENC(o, color, dxf1, dxf2)                                   \
+#define SUB_FIELD_ENC(o, color, dxf)                                          \
   {                                                                           \
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->o.color);                     \
     LOG_TRACE (#o "." #color ".index: %d [ENC.BS %d]\n", _obj->o.color.index, \
-               dxf1);                                                         \
+               dxf);                                                          \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         if (_obj->o.color.flag)                                               \
@@ -768,13 +768,13 @@
                      (unsigned)_obj->o.color.flag);                           \
         if (_obj->o.color.flag & 0x20)                                        \
           LOG_TRACE (#o "." #color ".alpha: %d [ENC.BL %d]\n",                \
-                     (unsigned)_obj->o.color.alpha, dxf2 + 20);               \
+                     (unsigned)_obj->o.color.alpha, dxf + 440 - 62);          \
         if (_obj->o.color.flag & 0x80)                                        \
           LOG_TRACE (#o "." #color ".rgb: 0x%06x [ENC.BL %d]\n",              \
-                     (unsigned)_obj->o.color.rgb, dxf2);                      \
+                     (unsigned)_obj->o.color.rgb, dxf + 420 - 62);            \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
           LOG_TRACE (#o "." #color ".handle: %lX [ENC.H %d]\n",               \
-                     _obj->o.color.handle->handleref.value, dxf2 + 10);       \
+                     _obj->o.color.handle->handleref.value, dxf + 430 - 62);  \
       }                                                                       \
   }
 

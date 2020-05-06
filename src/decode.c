@@ -1036,7 +1036,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("         Length: " FORMAT_RL " [RL]\n", dwg->header_vars.size)
   dat->bit = 0;
 
-  dwg_decode_header_variables (dat, dat, dat, dwg);
+  error |= dwg_decode_header_variables (dat, dat, dat, dwg);
 
   // LOG_HANDLE ("@ 0x%lx.%lu\n", bit_position (dat)/8, bit_position (dat)%8);
   // check slack
@@ -2705,8 +2705,8 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("size: " FORMAT_RL " [RL]\n", dwg->header_vars.size);
       PRE (R_2007)
       {
-        error
-            |= dwg_decode_header_variables (&sec_dat, &sec_dat, &sec_dat, dwg);
+        error |= dwg_decode_header_variables (&sec_dat, &sec_dat, &sec_dat,
+                                              dwg);
       }
       else
       {
@@ -2726,8 +2726,8 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         endbits += dwg->header_vars.bitsize;
         bit_set_position (&hdl_dat, endbits);
         section_string_stream (&sec_dat, dwg->header_vars.bitsize, &str_dat);
-        error
-            |= dwg_decode_header_variables (&sec_dat, &hdl_dat, &str_dat, dwg);
+        error |= dwg_decode_header_variables (&sec_dat, &hdl_dat, &str_dat,
+                                              dwg);
       }
     }
   free (sec_dat.chain);
@@ -4693,6 +4693,8 @@ dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   #include "header_variables.spec"
   // clang-format on
 
+  if (!dwg->header_vars.BLOCK_RECORD_MSPACE)
+    return error | DWG_ERR_INVALIDDWG;
   return error;
 }
 AFL_GCC_POP

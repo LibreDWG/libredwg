@@ -1568,7 +1568,7 @@ DWG_ENTITY (VIEWPORT)
       FIELD_RC (default_lighting_type, 282);
       FIELD_BD (brightness, 141);
       FIELD_BD (contrast, 142);
-      FIELD_CMC (ambient_color, 63,421);
+      FIELD_CMC (ambient_color, 63);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -2288,7 +2288,7 @@ DWG_ENTITY (MTEXT)
       if (FIELD_VALUE (bg_fill_flag) & (dat->version <= R_2018 ? 1 : 0x10))
         {
           FIELD_BL (bg_fill_scale, 45); // def: 1.5
-          FIELD_CMC (bg_fill_color, 63,421);
+          FIELD_CMC (bg_fill_color, 63);
           FIELD_BL (bg_fill_trans, 441);
         }
     }
@@ -2652,7 +2652,7 @@ DWG_OBJECT (LAYER)
       }
     }
   }
-  FIELD_CMC (color, 62,420);
+  FIELD_CMC (color, 62);
   VERSIONS (R_13, R_14)
   {
     DECODER { FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0; }
@@ -2930,7 +2930,7 @@ DWG_OBJECT (VIEW)
     FIELD_RC (default_lightning_type, 282);
     FIELD_BD (brightness, 141);
     FIELD_BD (contrast, 142);
-    FIELD_CMC (ambient_color, 63,421);
+    FIELD_CMC (ambient_color, 63);
   }
   SINCE (R_13) {
     FIELD_B (pspace_flag, 0);
@@ -3105,7 +3105,7 @@ DWG_OBJECT (VPORT)
     FIELD_BD (brightness, 141);
     FIELD_BD (contrast, 142);
     //TODO: 63, 421, 423 only when non-black
-    FIELD_CMC (ambient_color, 63,421); // +421, 431
+    FIELD_CMC (ambient_color, 63); // +421, 431
   }
   //TODO 1001 1070
   REACTORS (4);
@@ -3185,7 +3185,7 @@ DWG_OBJECT (VPORT)
       FIELD_RC (default_lightning_type, 282);
       FIELD_BD (brightness, 141);
       FIELD_BD (contrast, 142);
-      FIELD_CMC (ambient_color, 63,421); // +421, 431
+      FIELD_CMC (ambient_color, 63); // +421, 431
     }
 
     FIELD_2RD (lower_left, 10);
@@ -3397,9 +3397,9 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_TV (DIMBLK_T, 5);
       FIELD_TV (DIMBLK1_T, 6);
       FIELD_TV (DIMBLK2_T, 7);
-      FIELD_CMC (DIMCLRD, 176,0);
-      FIELD_CMC (DIMCLRE, 177,0);
-      FIELD_CMC (DIMCLRT, 178,0);
+      FIELD_CMC (DIMCLRD, 176);
+      FIELD_CMC (DIMCLRE, 177);
+      FIELD_CMC (DIMCLRT, 178);
     }
   else FREE {
       FIELD_TV (DIMBLK_T, 5);
@@ -3426,7 +3426,7 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_BD (DIMFXL, 49);
       FIELD_BD (DIMJOGANG, 50);
       FIELD_BS (DIMTFILL, 69);
-      FIELD_CMC (DIMTFILLCLR, 70,0);
+      FIELD_CMC (DIMTFILLCLR, 70);
     }
 
   SINCE (R_2000)
@@ -3464,9 +3464,9 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_B (DIMSAH, 173);
       FIELD_B (DIMTIX, 174);
       FIELD_B (DIMSOXD, 175);
-      FIELD_CMC (DIMCLRD, 176,0);
-      FIELD_CMC (DIMCLRE, 177,0);
-      FIELD_CMC (DIMCLRT, 178,0);
+      FIELD_CMC (DIMCLRD, 176);
+      FIELD_CMC (DIMCLRE, 177);
+      FIELD_CMC (DIMCLRT, 178);
       FIELD_BS (DIMADEC, 179);
       FIELD_BS (DIMDEC, 271);
       FIELD_BS (DIMTDEC, 272);
@@ -3621,7 +3621,7 @@ DWG_OBJECT (MLINESTYLE)
                              512 = End inner arcs cap,
                              1024 = End round (outer arcs) cap */
   DXF { FIELD_T (description, 3); }
-  FIELD_CMC (fill_color, 62,420); /*!< default 256 */
+  FIELD_CMC (fill_color, 62); /*!< default 256 */
 #ifdef IS_DXF
   // 0 - 90
   FIELD_VALUE (start_angle) = rad2deg (FIELD_VALUE (start_angle));
@@ -3638,7 +3638,7 @@ DWG_OBJECT (MLINESTYLE)
   REPEAT (num_lines, lines, Dwg_MLINESTYLE_line)
   REPEAT_BLOCK
       SUB_FIELD_BD (lines[rcount1], offset, 49);
-      SUB_FIELD_CMC (lines[rcount1], color, 62,420); /*!< default: 0 */
+      SUB_FIELD_CMC (lines[rcount1], color, 62); /*!< default: 0 */
       PRE (R_2018)
       {
 #if defined (IS_DXF) && !defined (IS_ENCODER)
@@ -3711,7 +3711,7 @@ int DWG_FUNC_N (ACTION,_HATCH_gradientfill)(
   REPEAT (num_colors, colors, Dwg_HATCH_Color)
   REPEAT_BLOCK
       SUB_FIELD_BD (colors[rcount1], shift_value, 463);
-      SUB_FIELD_CMC (colors[rcount1], color, 63,421);
+      SUB_FIELD_CMC (colors[rcount1], color, 63);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (colors)
   END_REPEAT (colors);
@@ -4796,7 +4796,7 @@ DWG_OBJECT_END
 
 // 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
 #define ContentFormat_fields(fmt)                 \
-  DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }         \
+  DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }        \
   FIELD_BL (fmt.property_override_flags, 90);     \
   FIELD_BL (fmt.property_flags, 91);              \
   FIELD_BL (fmt.value_data_type, 92);             \
@@ -4805,7 +4805,7 @@ DWG_OBJECT_END
   FIELD_BD (fmt.rotation, 40);                    \
   FIELD_BD (fmt.block_scale, 140);                \
   FIELD_BL (fmt.cell_alignment, 94);              \
-  FIELD_CMC (fmt.content_color, 62,420);          \
+  FIELD_CMC (fmt.content_color, 62);              \
   FIELD_HANDLE (fmt.text_style, 3, 92);           \
   FIELD_BD (fmt.text_height, 92);                 \
   DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
@@ -4819,36 +4819,36 @@ DWG_OBJECT_END
     {                                                                   \
       FIELD_BL (sty.property_override_flags, 91);                       \
       FIELD_BL (sty.merge_flags, 92);                                   \
-      FIELD_CMC (sty.background_color, 62,420);                         \
+      FIELD_CMC (sty.background_color, 62);                             \
       FIELD_BL (sty.content_layout, 93);                                \
       ContentFormat_fields (sty.content_format);                        \
       FIELD_BS (sty.margin_override_flags, 171);                        \
       if (FIELD_VALUE (sty.margin_override_flags))                      \
         {                                                               \
-          DXF { VALUE_TFF ("MARGIN", 301) }                              \
-          DXF { VALUE_TFF ("CELLMARGIN_BEGIN", 1) }                      \
+          DXF { VALUE_TFF ("MARGIN", 301) }                             \
+          DXF { VALUE_TFF ("CELLMARGIN_BEGIN", 1) }                     \
           FIELD_BD (sty.vert_margin, 40);                               \
           FIELD_BD (sty.horiz_margin, 40);                              \
           FIELD_BD (sty.bottom_margin, 40);                             \
           FIELD_BD (sty.right_margin, 40);                              \
           FIELD_BD (sty.margin_horiz_spacing, 40);                      \
           FIELD_BD (sty.margin_vert_spacing, 40);                       \
-          DXF { VALUE_TFF ("CELLMARGIN_END", 309) }                      \
+          DXF { VALUE_TFF ("CELLMARGIN_END", 309) }                     \
         }                                                               \
       FIELD_BL (sty.num_borders, 94); /* 0-6 */                         \
       VALUEOUTOFBOUNDS (sty.num_borders, 7);                            \
       REPEAT2 (sty.num_borders, sty.border, Dwg_BorderStyle)            \
         REPEAT_BLOCK                                                    \
-          DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                              \
+          DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                             \
           SUB_FIELD_BL (sty.border[rcount2],edge_flags, 0); /* was 95 */        \
           SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90);\
           SUB_FIELD_BL (sty.border[rcount2],border_type, 91);                   \
-          SUB_FIELD_CMC (sty.border[rcount2],color, 62,420);                    \
+          SUB_FIELD_CMC (sty.border[rcount2],color, 62);                        \
           SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                       \
           SUB_FIELD_HANDLE (sty.border[rcount2],line_type, 3, 340);             \
           SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                     \
           SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 40);           \
-          DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }                              \
+          DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }                             \
       END_REPEAT_BLOCK                                                          \
       END_REPEAT (sty.border);                                                  \
     }                                                                           \
@@ -5171,34 +5171,34 @@ DWG_ENTITY (TABLE)
                 if (cell_flag & 0x02)
                   SUB_FIELD_B (cells[rcount1],background_fill_none, 283);
                 if (cell_flag & 0x04)
-                  SUB_FIELD_CMC (cells[rcount1],background_color, 63,421);
+                  SUB_FIELD_CMC (cells[rcount1],background_color, 63);
                 if (cell_flag & 0x08)
-                  SUB_FIELD_CMC (cells[rcount1],content_color, 64,422);
+                  SUB_FIELD_CMC (cells[rcount1],content_color, 64);
                 if (cell_flag & 0x10) {
                   SUB_FIELD_HANDLE (cells[rcount1],text_style, 5, 7);
                 }
                 if (cell_flag & 0x20)
                   SUB_FIELD_BD (cells[rcount1],text_height, 140);
                 if (cell_flag & 0x00040)
-                  SUB_FIELD_CMC (cells[rcount1],top_grid_color, 69,0);
+                  SUB_FIELD_CMC (cells[rcount1],top_grid_color, 69);
                 if (cell_flag & 0x00400)
                   SUB_FIELD_BS (cells[rcount1],top_grid_linewt, 279);
                 if (cell_flag & 0x04000)
                   SUB_FIELD_BS (cells[rcount1],top_visibility, 289);
                 if (cell_flag & 0x00080)
-                  SUB_FIELD_CMC (cells[rcount1],right_grid_color, 65,423);
+                  SUB_FIELD_CMC (cells[rcount1],right_grid_color, 65);
                 if (cell_flag & 0x00800)
                   SUB_FIELD_BS (cells[rcount1],right_grid_linewt, 275);
                 if (cell_flag & 0x08000)
                   SUB_FIELD_BS (cells[rcount1],right_visibility, 285);
                 if (cell_flag & 0x00100)
-                  SUB_FIELD_CMC (cells[rcount1],bottom_grid_color, 66,0);
+                  SUB_FIELD_CMC (cells[rcount1],bottom_grid_color, 66);
                 if (cell_flag & 0x01000)
                   SUB_FIELD_BS (cells[rcount1],bottom_grid_linewt, 276);
                 if (cell_flag & 0x10000)
                   SUB_FIELD_BS (cells[rcount1],bottom_visibility, 286);
                 if (cell_flag & 0x00200)
-                  SUB_FIELD_CMC (cells[rcount1],left_grid_color, 68,0);
+                  SUB_FIELD_CMC (cells[rcount1],left_grid_color, 68);
                 if (cell_flag & 0x02000)
                   SUB_FIELD_BS (cells[rcount1],left_grid_linewt, 278);
                 if (cell_flag & 0x20000)
@@ -5240,11 +5240,11 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0010)
           FIELD_BD (vert_cell_margin, 41);
         if (table_flag & 0x0020)
-          FIELD_CMC (title_row_color, 64,422);
+          FIELD_CMC (title_row_color, 64);
         if (table_flag & 0x0040)
-          FIELD_CMC (header_row_color, 64,422);
+          FIELD_CMC (header_row_color, 64);
         if (table_flag & 0x0080)
-          FIELD_CMC (data_row_color, 64,422);
+          FIELD_CMC (data_row_color, 64);
         if (table_flag & 0x0100)
           FIELD_B (title_row_fill_none, 283);
         if (table_flag & 0x0200)
@@ -5252,11 +5252,11 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0400)
           FIELD_B (data_row_fill_none, 283);
         if (table_flag & 0x0800)
-          FIELD_CMC (title_row_fill_color, 63,421);
+          FIELD_CMC (title_row_fill_color, 63);
         if (table_flag & 0x1000)
-          FIELD_CMC (header_row_fill_color, 63,421);
+          FIELD_CMC (header_row_fill_color, 63);
         if (table_flag & 0x2000)
-          FIELD_CMC (data_row_fill_color, 63,421);
+          FIELD_CMC (data_row_fill_color, 63);
         if (table_flag & 0x4000)
           FIELD_BS (title_row_alignment, 170);
         if (table_flag & 0x8000)
@@ -5284,41 +5284,41 @@ DWG_ENTITY (TABLE)
         FIELD_BL (border_color_overrides_flag, 94);
         border_color = FIELD_VALUE (border_color_overrides_flag);
         if (border_color & 0x0001)
-          FIELD_CMC (title_horiz_top_color, 64,422);
+          FIELD_CMC (title_horiz_top_color, 64);
         if (border_color & 0x0002)
-          FIELD_CMC (title_horiz_ins_color, 65,423);
+          FIELD_CMC (title_horiz_ins_color, 65);
         if (border_color & 0x0004)
-          FIELD_CMC (title_horiz_bottom_color, 66,424);
+          FIELD_CMC (title_horiz_bottom_color, 66);
         if (border_color & 0x0008)
-          FIELD_CMC (title_vert_left_color, 63,421);
+          FIELD_CMC (title_vert_left_color, 63);
         if (border_color & 0x0010)
-          FIELD_CMC (title_vert_ins_color, 68,426);
+          FIELD_CMC (title_vert_ins_color, 68);
         if (border_color & 0x0020)
-          FIELD_CMC (title_vert_right_color, 69,427);
+          FIELD_CMC (title_vert_right_color, 69);
         if (border_color & 0x0040)
-          FIELD_CMC (header_horiz_top_color, 64,422);
+          FIELD_CMC (header_horiz_top_color, 64);
         if (border_color & 0x0080)
-          FIELD_CMC (header_horiz_ins_color, 65,423);
+          FIELD_CMC (header_horiz_ins_color, 65);
         if (border_color & 0x0100)
-          FIELD_CMC (header_horiz_bottom_color, 66,424);
+          FIELD_CMC (header_horiz_bottom_color, 66);
         if (border_color & 0x0200)
-          FIELD_CMC (header_vert_left_color, 63,421);
+          FIELD_CMC (header_vert_left_color, 63);
         if (border_color & 0x0400)
-          FIELD_CMC (header_vert_ins_color, 68,426);
+          FIELD_CMC (header_vert_ins_color, 68);
         if (border_color & 0x0800)
-          FIELD_CMC (header_vert_right_color, 69,427);
+          FIELD_CMC (header_vert_right_color, 69);
         if (border_color & 0x1000)
-          FIELD_CMC (data_horiz_top_color, 64,422);
+          FIELD_CMC (data_horiz_top_color, 64);
         if (border_color & 0x2000)
-          FIELD_CMC (data_horiz_ins_color, 65,423);
+          FIELD_CMC (data_horiz_ins_color, 65);
         if (border_color & 0x4000)
-          FIELD_CMC (data_horiz_bottom_color, 66,424);
+          FIELD_CMC (data_horiz_bottom_color, 66);
         if (border_color & 0x8000)
-          FIELD_CMC (data_vert_left_color, 63,421);
+          FIELD_CMC (data_vert_left_color, 63);
         if (border_color & 0x10000)
-          FIELD_CMC (data_vert_ins_color, 68,426);
+          FIELD_CMC (data_vert_ins_color, 68);
         if (border_color & 0x20000)
-          FIELD_CMC (data_vert_right_color, 69,427);
+          FIELD_CMC (data_vert_right_color, 69);
       }
   
     FIELD_B (has_border_lineweight_overrides, 0);
@@ -5584,8 +5584,8 @@ DWG_OBJECT (TABLESTYLE)
         SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
         SUB_FIELD_BD (rowstyle,text_height, 140);
         SUB_FIELD_BS (rowstyle,text_alignment, 170);
-        SUB_FIELD_CMC (rowstyle,text_color, 62,0); //FIXME
-        SUB_FIELD_CMC (rowstyle,fill_color, 63,0);
+        SUB_FIELD_CMC (rowstyle,text_color, 62); //FIXME
+        SUB_FIELD_CMC (rowstyle,fill_color, 63);
         SUB_FIELD_B (rowstyle,has_bgcolor, 283);
 
         _obj->rowstyle.num_borders = 6;
@@ -5595,7 +5595,7 @@ DWG_OBJECT (TABLESTYLE)
             #define border rowstyle.borders[rcount2]
             SUB_FIELD_BSd (border,linewt, 274+rcount2);
             SUB_FIELD_B (border,visible, 284+rcount2);
-            SUB_FIELD_CMC (border,color, 64+rcount2, 0);
+            SUB_FIELD_CMC (border,color, 64+rcount2);
         END_REPEAT_BLOCK
         END_REPEAT (rowstyle.borders)
 
@@ -5800,7 +5800,7 @@ DWG_ENTITY (MULTILEADER)
           SINCE (R_2010)
             {
               SUB_FIELD_BS (lline, type, 170);
-              SUB_FIELD_CMC (lline, color, 92,0);
+              SUB_FIELD_CMC (lline, color, 92);
               SUB_FIELD_HANDLE (lline, ltype, 5, 340);
               SUB_FIELD_BLd (lline, linewt, 171);
               SUB_FIELD_BD (lline, arrow_size, 40);
@@ -5842,10 +5842,10 @@ DWG_ENTITY (MULTILEADER)
       FIELD_BD (ctx.content.txt.height, 44);
       FIELD_BD (ctx.content.txt.line_spacing_factor, 45);
       FIELD_BS (ctx.content.txt.line_spacing_style, 170);
-      FIELD_CMC (ctx.content.txt.color, 90,0);
+      FIELD_CMC (ctx.content.txt.color, 90);
       FIELD_BS (ctx.content.txt.alignment, 171);
       FIELD_BS (ctx.content.txt.flow, 172);
-      FIELD_CMC (ctx.content.txt.bg_color, 91,0);
+      FIELD_CMC (ctx.content.txt.bg_color, 91);
       FIELD_BD (ctx.content.txt.bg_scale, 141); // r2000!!
       FIELD_BL (ctx.content.txt.bg_transparency, 92);
       FIELD_B (ctx.content.txt.is_bg_fill, 291);
@@ -5871,7 +5871,7 @@ DWG_ENTITY (MULTILEADER)
           FIELD_3BD (ctx.content.blk.location, 15);
           FIELD_3BD (ctx.content.blk.scale, 16);
           FIELD_BD (ctx.content.blk.rotation, 46);
-          FIELD_CMC (ctx.content.blk.color, 93,0);
+          FIELD_CMC (ctx.content.blk.color, 93);
           FIELD_VECTOR_N (ctx.content.blk.transform, BD, 16, 47);
         }
     }
@@ -5891,7 +5891,7 @@ DWG_ENTITY (MULTILEADER)
 
   FIELD_BL (flags, 90); // override flags
   FIELD_BS (type, 170);
-  FIELD_CMC (color, 91,0);
+  FIELD_CMC (color, 91);
   FIELD_BLd (linewt, 171);
   FIELD_B (has_landing, 290);
   FIELD_B (has_dogleg, 291);
@@ -5909,9 +5909,9 @@ DWG_ENTITY (MULTILEADER)
   FIELD_BS (text_right, 95);
   FIELD_BS (text_angletype, 174);
   FIELD_BS (attach_type, 175); // unknown at ODA
-  FIELD_CMC (text_color, 92,0);
+  FIELD_CMC (text_color, 92);
   FIELD_B (has_text_frame, 292);
-  FIELD_CMC (block_color, 93,0);
+  FIELD_CMC (block_color, 93);
   FIELD_3BD (block_scale, 10);
   FIELD_BD (block_rotation, 43);
   FIELD_BS (style_attachment, 176);
@@ -5984,7 +5984,7 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_BD (first_seg_angle, 40);
   FIELD_BD (second_seg_angle, 41);
   FIELD_BS (type, 173);
-  FIELD_CMC (line_color, 91,0);
+  FIELD_CMC (line_color, 91);
   FIELD_BLd (linewt, 92);
   FIELD_B (has_landing, 290);
   FIELD_BD (landing_gap, 42);
@@ -5997,7 +5997,7 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_BS (attach_right, 178);
   FIELD_BS (text_angle_type, 175);
   FIELD_BS (text_align_type, 176);
-  FIELD_CMC (text_color, 93,0);
+  FIELD_CMC (text_color, 93);
   FIELD_BD (text_height, 45);
   FIELD_B (text_frame, 292);
   //is_new_format: if the object has extended data for APPID “ACAD_MLEADERVER”.
@@ -6009,7 +6009,7 @@ DWG_OBJECT (MLEADERSTYLE)
     }
   }
   FIELD_BD (align_space, 46);
-  FIELD_CMC (block_color, 94,0);
+  FIELD_CMC (block_color, 94);
   JSON {
     FIELD_3BD (block_scale, 0)
   } else {
@@ -6371,13 +6371,13 @@ DWG_OBJECT (VISUALSTYLE)
     FIELD_BD (face_opacity, 40);
     FIELD_BD (face_specular, 41);
     DXF { VALUE_BL (5, 62); } // color
-    FIELD_CMC (face_mono_color, 63,421);
+    FIELD_CMC (face_mono_color, 63);
     FIELD_BL (face_modifier, 0);
 
     FIELD_BL (edge_model, 74);
     FIELD_BL (edge_style, 91);
-    FIELD_CMC (edge_intersection_color, 64,422);
-    FIELD_CMC (edge_obscured_color, 65,423);
+    FIELD_CMC (edge_intersection_color, 64);
+    FIELD_CMC (edge_obscured_color, 65);
     FIELD_BL (edge_obscured_line_pattern, 75);
     DXF { FIELD_BS (edge_intersection_line_pattern, 175); }
     FIELD_BD (edge_crease_angle, 42);
@@ -6389,12 +6389,12 @@ DWG_OBJECT (VISUALSTYLE)
     }
 
     FIELD_BL (edge_modifier, 92);
-    FIELD_CMC (edge_color, 66,424);
+    FIELD_CMC (edge_color, 66);
     FIELD_BD (edge_opacity, 43);
     FIELD_BS (edge_width, 76); // 1
     FIELD_BS (edge_overhang, 77); // 6
     FIELD_BL (edge_jitter, 78); // 2 documented as BS
-    FIELD_CMC (edge_silhouette_color, 67,425);
+    FIELD_CMC (edge_silhouette_color, 67);
     FIELD_BS (edge_silhouette_width, 79); // 3 or 5
     FIELD_RC (edge_halo_gap, 170); // 0
     FIELD_BS (numedge_isolines, 171);
@@ -6425,16 +6425,16 @@ DWG_OBJECT (VISUALSTYLE)
       FIELD_BS (face_opacity_int, 176);
     FIELD_BD (face_specular, 41);
       FIELD_BS (face_specular_int, 176);
-    FIELD_CMC (face_mono_color, 63,421);
+    FIELD_CMC (face_mono_color, 63);
       FIELD_BS (face_mono_color_int, 176);
 
     FIELD_BL (edge_model, 74);
       FIELD_BS (edge_model_int, 176);
     FIELD_BL (edge_style, 91);
       FIELD_BS (edge_style_int, 176);
-    FIELD_CMC (edge_intersection_color, 64,422);
+    FIELD_CMC (edge_intersection_color, 64);
       FIELD_BS (edge_intersection_color_int, 176);
-    FIELD_CMC (edge_obscured_color, 65,423);
+    FIELD_CMC (edge_obscured_color, 65);
       FIELD_BS (edge_obscured_color_int, 176);
     FIELD_BL (edge_obscured_line_pattern, 75);
       FIELD_BS (edge_obscured_line_pattern_int, 176);
@@ -6444,7 +6444,7 @@ DWG_OBJECT (VISUALSTYLE)
       FIELD_BS (edge_crease_angle_int, 176);
     FIELD_BL (edge_modifier, 92);
       FIELD_BS (edge_modifier_int, 176);
-    FIELD_CMC (edge_color, 66,424);
+    FIELD_CMC (edge_color, 66);
       FIELD_BS (edge_color_int, 176);
     FIELD_BD (edge_opacity, 43);
       FIELD_BS (edge_opacity_int, 176);
@@ -6454,7 +6454,7 @@ DWG_OBJECT (VISUALSTYLE)
       FIELD_BS (edge_overhang_int, 176);
     FIELD_BL (edge_jitter, 78); // 2 documented as BS
       FIELD_BS (edge_jitter_int, 176);
-    FIELD_CMC (edge_silhouette_color, 67,425);
+    FIELD_CMC (edge_silhouette_color, 67);
       FIELD_BS (edge_silhouette_color_int, 176);
     FIELD_BS (edge_silhouette_width, 79); // 3 or 5
       FIELD_BS (edge_silhouette_width_int, 176);
@@ -6497,10 +6497,10 @@ DWG_ENTITY (LIGHT)
   UNTIL (R_2000) {
     FIELD_BL (color.rgb, 90);
   } else {
-    FIELD_CMC (color, 63,421);
+    FIELD_CMC (color, 63);
   }
 #else
-  FIELD_CMC (color, 63,421);
+  FIELD_CMC (color, 63);
 #endif
   FIELD_B (plot_glyph, 291); /* if it's plottable */
   FIELD_BD (intensity, 40);
@@ -6827,7 +6827,7 @@ DWG_ENTITY (SECTIONOBJECT)
   FIELD_BD (top_height, 40);
   FIELD_BD (bottom_height, 41);
   FIELD_BL (indicator_alpha, 70);
-  FIELD_CMC (indicator_color, 62,420); //dxf doc bug: 63, 411
+  FIELD_CMC (indicator_color, 62); //dxf doc bug: 63, 411
   FIELD_BL (num_verts, 92);
   FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
   FIELD_BL (num_blverts, 93);
@@ -6894,7 +6894,7 @@ DWG_OBJECT (SUN)
   FIELD_BL (class_version, 90);
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_B (is_on, 290);       // status, isOn
-  FIELD_CMC (color, 63,421);
+  FIELD_CMC (color, 63);
   FIELD_BD (intensity, 40);   //
   FIELD_B (has_shadow, 291);  // shadow on/off
   FIELD_BL (julian_day, 91);
@@ -7038,7 +7038,7 @@ DWG_OBJECT_END
         case 3:                                                               \
           FIELD_BD (genprocvalreal, 469); break;                              \
         case 4:                                                               \
-          FIELD_CMC (genprocvalcolor, 62,420); break;                         \
+          FIELD_CMC (genprocvalcolor, 62); break;                         \
         case 5:                                                               \
           FIELD_T (genprocvaltext, 301); break;                               \
         case 6:                                                               \
@@ -7132,7 +7132,7 @@ DWG_OBJECT (MATERIAL)
   //FIELD_BD (genprocvalreal, 469);
   //FIELD_T (genprocvaltext, 301);
   //FIELD_B (genproctableend, 292); // always 1
-  //FIELD_CMC (genprocvalcolorindex, 62,420);
+  //FIELD_CMC (genprocvalcolorindex, 62);
   //FIELD_BL (genprocvalcolorrgb, 420); //int32
   //FIELD_T (genprocvalcolorname, 430);
   //78
@@ -7738,7 +7738,7 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   FIELD_BL (shhn_bl90, 90); //33
   FIELD_BL (shhn_bl91, 91); //29
   FIELD_VECTOR_N1 (shhn_pts, BD, 16, 40); //40-55
-  FIELD_CMC (color, 62,421); //256
+  FIELD_CMC (color, 62); //256
   FIELD_B  (shhn_b92, 92);     //1
   FIELD_BL (shhn_bl347, 347);   //269
 
@@ -7793,7 +7793,7 @@ DWG_OBJECT (ACSH_BOX_CLASS)
   FIELD_BL (shhn_bl90, 90); //33
   FIELD_BL (shhn_bl91, 91); //29
   FIELD_VECTOR_N1 (shhn_pts, BD, 16, 40); //40-55
-  FIELD_CMC (color, 62,421); //256
+  FIELD_CMC (color, 62); //256
   FIELD_B  (shhn_b92, 92);     //0
   FIELD_BL (shhn_bl347, 347);   //11
 
@@ -7819,7 +7819,7 @@ DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   FIELD_BL (shhn_bl90, 90); //33
   FIELD_BL (shhn_bl91, 91); //29
   FIELD_VECTOR_N1 (shhn_pts, BD, 16, 40); //40-55
-  FIELD_CMC (color, 62,421); //256
+  FIELD_CMC (color, 62); //256
   FIELD_B  (shhn_b92, 92);     //0
   FIELD_BL (shhn_bl347, 347);   //11
 
@@ -7871,7 +7871,7 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   FIELD_BL (shhn_bl90, 90); //33
   FIELD_BL (shhn_bl91, 91); //29
   FIELD_VECTOR_N1 (shhn_pts, BD, 16, 40); //40-55
-  FIELD_CMC (color, 62,421); //256
+  FIELD_CMC (color, 62); //256
   FIELD_B  (shhn_b92, 92);     //0
   FIELD_BL (shhn_bl347, 347);   //11
   //??
@@ -7919,7 +7919,7 @@ DWG_OBJECT (RENDERENVIRONMENT)
   FIELD_BL (class_version, 90);     /*!< default 1 */
   FIELD_B (fog_enabled, 290);
   FIELD_B (fog_background_enabled, 290);
-  FIELD_CMC (fog_color, 0,280);
+  FIELD_CMC (fog_color, 280);
   FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
   FIELD_BD (fog_density_far, 40);
   FIELD_BD (fog_distance_near, 40); /* default 100.0 (at the far clipping plane) */
@@ -8180,11 +8180,11 @@ DWG_OBJECT (DETAILVIEWSTYLE)
   // pi: 90 (r2007+: 280) 71 62 62 62 62 62 40 40 ?? 40 90 ?? 40 300 90 40 71 90 90 ?? 90 ??
   FIELD_BS (connection_line_weight, 71);
   DEBUG_HERE_OBJ
-  FIELD_CMC (connection_line_color, 62,420);
-  FIELD_CMC (identifier_color, 62,420);
-  FIELD_CMC (arrow_symbol_color, 62,420);
-  FIELD_CMC (boundary_line_color, 62,420);
-  FIELD_CMC (viewlabel_text_color, 62,420);
+  FIELD_CMC (connection_line_color, 62);
+  FIELD_CMC (identifier_color, 62);
+  FIELD_CMC (arrow_symbol_color, 62);
+  FIELD_CMC (boundary_line_color, 62);
+  FIELD_CMC (viewlabel_text_color, 62);
 
   FIELD_BD (identifier_height, 40);
   FIELD_BD (identifier_offset, 42);
@@ -8203,7 +8203,7 @@ DWG_OBJECT (DETAILVIEWSTYLE)
   FIELD_BS (viewlabel_pattern, 0);
   FIELD_B (show_viewlabel, 280);
   FIELD_BD (borderline_weight, 71);
-  FIELD_CMC (borderline_color, 62,420);
+  FIELD_CMC (borderline_color, 62);
   FIELD_HANDLE (borderline_type, 5, 340);
 
   START_OBJECT_HANDLE_STREAM;
@@ -8222,25 +8222,25 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   DEBUG_HERE_OBJ
   // DXF: 100 70 3 290 3 90 100 70 71 90 71 340 62 40 340 340 62 40 300 40 90 40 90 71 340 90 62 340 90 62 40 40 40 71 340 62 40 90 40 90 300(field) 71 62 62 300 40 90 290 290 90 6 40 40 40 40 40
   //pi: 70 3 290
-  FIELD_CMC (identifier_color, 62,420);
+  FIELD_CMC (identifier_color, 62);
   DEBUG_HERE_OBJ
   FIELD_BD (identifier_height, 40); // 5.0
-  FIELD_CMC (plane_line_color, 62,420);
+  FIELD_CMC (plane_line_color, 62);
   FIELD_BD (identifier_offset, 42); // 5.0
   FIELD_T (viewlabel_text, 300); // I, O, Q, S, X, Z
   // 40 90 62 40 40 62 40 62 40 300 71
   FIELD_BD (arrow_symbol_size, 40);
   FIELD_BS (viewlabel_pattern, 90);
-  FIELD_CMC (arrow_symbol_color, 62,420);
+  FIELD_CMC (arrow_symbol_color, 62);
   FIELD_BL (hatch_pattern, 90);
-  FIELD_CMC (bend_line_color, 62,420);
+  FIELD_CMC (bend_line_color, 62);
   FIELD_BD (identifier_position, 40);
   FIELD_BD (viewlabel_text_height, 40);
-  FIELD_CMC (viewlabel_text_color, 62,420);
+  FIELD_CMC (viewlabel_text_color, 62);
   FIELD_BD (bend_line_length, 40);
   DEBUG_HERE_OBJ
-  FIELD_CMC (hatch_color, 62,420);
-  FIELD_CMC (hatch_bg_color, 62,420);
+  FIELD_CMC (hatch_color, 62);
+  FIELD_CMC (hatch_bg_color, 62);
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
   FIELD_HANDLE (arrow_start_symbol, 5, 340);
   FIELD_HANDLE (arrow_end_symbol, 5, 340);
@@ -8280,7 +8280,7 @@ DWG_OBJECT (SECTION_SETTINGS)
     FIELD_BL (num_sources, 0);
     FIELD_T (destfile, 0);
     FIELD_B (visibility, 0);
-    FIELD_CMC (color, 0,0);
+    FIELD_CMC (color, 0);
     FIELD_BD (ltype_scale, 0);
     FIELD_RC (linewt, 0);
     FIELD_BS (face_transparency, 0);

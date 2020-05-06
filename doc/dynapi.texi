@@ -7404,7 +7404,7 @@ B,	DXF 290
 @item fog_background_enabled
 B,	DXF 290
 @item fog_color
-CMC
+CMC,	DXF 280
 @item fog_density_near
 BD,	DXF 40
 @item fog_density_far
@@ -9216,7 +9216,7 @@ BL,	DXF 90
 @item border_type
 BL,	DXF 91
 @item color
-CMC
+CMC,	DXF 62
 @item linewt
 BLd,	DXF 92
 @item line_type
@@ -9294,7 +9294,7 @@ BL,	DXF 91
 @item merge_flags
 BL,	DXF 92
 @item background_color
-CMC
+CMC,	DXF 62
 @item content_layout
 BL,	DXF 93
 @item content_format
@@ -9348,7 +9348,7 @@ BD,	DXF 140
 @item cell_alignment
 BL,	DXF 94
 @item content_color
-CMC
+CMC,	DXF 62
 @item text_style
 H
 @item text_height
@@ -9586,7 +9586,7 @@ struct _dwg_entity_HATCH*
 @item shift_value
 BD,	DXF 463
 @item color
-CMC
+CMC,	DXF 63
 
 @end vtable
 @end indentedblock
@@ -9816,7 +9816,7 @@ BL,	DXF 91
 @item type
 BS,	DXF 170
 @item color
-CMC
+CMC,	DXF 92
 @item ltype
 H,	DXF 340
 @item linewt
@@ -10098,7 +10098,7 @@ struct _dwg_object_MLINESTYLE*
 @item offset
 BD,	DXF 49
 @item color
-CMC
+CMC,	DXF 62
 @item lt.index
 BSd
 @item lt.ltype
@@ -10338,9 +10338,9 @@ BD,	DXF 140
 @item text_alignment
 BS,	DXF 170
 @item text_color
-CMC
+CMC,	DXF 62
 @item fill_color
-CMC
+CMC,	DXF 63
 @item has_bgcolor
 B,	DXF 283
 @item num_borders
@@ -10436,33 +10436,33 @@ RS,	DXF 170
 @item background_fill_none
 B,	DXF 283
 @item background_color
-CMC
+CMC,	DXF 63
 @item content_color
-CMC
+CMC,	DXF 64
 @item text_style
 H,	DXF 7
 @item text_height
 BD,	DXF 140
 @item top_grid_color
-CMC
+CMC,	DXF 69
 @item top_grid_linewt
 BS,	DXF 279
 @item top_visibility
 BS,	DXF 289
 @item right_grid_color
-CMC
+CMC,	DXF 65
 @item right_grid_linewt
 BS,	DXF 275
 @item right_visibility
 BS,	DXF 285
 @item bottom_grid_color
-CMC
+CMC,	DXF 66
 @item bottom_grid_linewt
 BS,	DXF 276
 @item bottom_visibility
 BS,	DXF 286
 @item left_grid_color
-CMC
+CMC,	DXF 68
 @item left_grid_linewt
 BS,	DXF 278
 @item left_visibility

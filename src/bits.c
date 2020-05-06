@@ -2380,12 +2380,16 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   memset (color, 0, sizeof (Dwg_Color));
   color->index = bit_read_BS (dat);
-  if (dat->from_version >= R_2004)
+  if (dat->from_version >= R_2004) // truecolor
     {
       color->rgb = bit_read_BL (dat);
+      color->method = color->rgb >> 0x18;
       color->flag = bit_read_RC (dat);
-      color->name = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
-      color->book_name = (color->flag & 2) ? (char *)bit_read_T (str_dat) : NULL;
+      if (color->method == 0xc2)
+        {
+          color->name      = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
+          color->book_name = (color->flag & 2) ? (char *)bit_read_T (str_dat) : NULL;
+        }
     }
 }
 
@@ -2394,16 +2398,24 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 void
 bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
-  bit_write_BS (dat, color->index);
-  if (dat->version >= R_2004)
+  if (dat->version >= R_2004) // truecolor
     {
+      bit_write_BS (dat, 0);
       bit_write_BL (dat, color->rgb);
-      bit_write_RC (dat, color->flag);
-      if (color->flag & 1)
-        bit_write_T (str_dat, color->name);
-      if (color->flag & 2)
-        bit_write_T (str_dat, color->book_name);
+      color->method = color->rgb >> 0x18;
+      if (color->method == 0xc2) // for entity
+        {
+          bit_write_RC (dat, color->flag);
+          if (color->flag & 1)
+            bit_write_T (str_dat, color->name);
+          if (color->flag & 2)
+            bit_write_T (str_dat, color->book_name);
+        }
+      else
+        bit_write_RC (dat, 0); // ignore the flag
     }
+  else
+    bit_write_BS (dat, color->index);
 }
 
 /** Read entity color (2004+) (truecolor rgb and alpha support)

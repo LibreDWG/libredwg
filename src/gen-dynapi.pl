@@ -312,14 +312,19 @@ sub dxf_in {
       my $type = $1;
       $f = $2;
       $DXF{$n}->{$f} = $3 if $3;
-    } elsif (/^\s+FIELD_(?:CMC|ENC)\s*\((\w+),\s*(\d+),\s*(\d+)\)/) {
+    } elsif (/^\s+FIELD_(?:CMC|ENC)\s*\((\w+),\s*(\d+)\)/) {
       $f = $1;
-      $DXF{$n}->{$f} = $2 if $2;
-      if ($3) {
-        $DXF{$n}->{"$f.index"} = $2;
-        $DXF{$n}->{"$f.rbg"} = $3;
-        $DXF{$n}->{"$f.book"} = $3 + 10;
-        $DXF{$n}->{"$f.alpha"} = $3 + 20;
+      if ($2) {
+        $DXF{$n}->{$f} = $2;
+        if ($2 < 90) {
+          $DXF{$n}->{"$f.index"} = $2;
+          $DXF{$n}->{"$f.rbg"} = $2 + 420 - 62;
+          $DXF{$n}->{"$f.name"} = $2 + 430 - 62;
+          $DXF{$n}->{"$f.book_name"} = $2 + 430 - 62;
+          $DXF{$n}->{"$f.alpha"} = $2 + 440 - 62;
+        } else {
+          $DXF{$n}->{"$f.rbg"} = $2;
+        }
       }
     } elsif (/^\s+FIELD_(.+?)\s*\((\w+),.*,\s*(\d+)\)/) {
       my $type = $1;

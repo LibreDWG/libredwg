@@ -150,13 +150,13 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     if (dat->version < R_14)                                                  \
       {                                                                       \
-        unsigned char icode = (unsigned char)code;                            \
-        fwrite (&icode, sizeof (unsigned char), 1, dat->fh);                  \
+        uint8_t icode = (uint8_t)code;                                        \
+        fwrite (&icode, 1, 1, dat->fh);                                       \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        short icode = code;                                                   \
-        fwrite (&icode, sizeof (short), 1, dat->fh);                          \
+        uint16_t icode = (uint16_t)code;                                      \
+        fwrite (&icode, 2, 1, dat->fh);                                       \
       }                                                                       \
   }
 #define FIELD_TV(nam, dxf)                                                    \
@@ -414,28 +414,42 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     FIELD_RD (nam.z, dxf + 2);                                                \
   }
 #define FIELD_3DPOINT(nam, dxf) FIELD_3RD (nam, dxf)
-#define FIELD_CMC(color, dxf1, dxf2)                                          \
+#define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
-    if (dxf1 > 0 && (dat->version < R_2004 || _obj->color.index == 256))      \
+    if (dat->version < R_2004)                                                \
       {                                                                       \
-        VALUE_RS ((_obj->color.index & 255), dxf1);                           \
+        VALUE_RS ((_obj->color.index & 255), dxf);                            \
       }                                                                       \
-    if (dat->version >= R_2004 && dxf2 > 0 && _obj->color.index != 256)       \
+    else                                                                      \
       {                                                                       \
-        VALUE_RS (_obj->color.rgb >> 24, dxf1);                               \
-        VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf2);                        \
+        if (dxf >= 90)                                                        \
+          {                                                                   \
+            VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf);                     \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            VALUE_RS ((_obj->color.index & 255), dxf);                        \
+            VALUE_RL (_obj->color.rgb & 0x00ffffff, (unsigned)(dxf + 420 - 62)); \
+          }                                                                   \
       }                                                                       \
   }
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
+#define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
-    if (dxf1 > 0 && (dat->version < R_2004 || _obj->o.color.index == 256))    \
+    if (dat->version < R_2004)                                                \
       {                                                                       \
-        VALUE_RS ((_obj->o.color.index & 255), dxf1);                         \
+        VALUE_RS ((_obj->o.color.index & 255), dxf);                          \
       }                                                                       \
-    if (dat->version >= R_2004 && dxf2 > 0 && _obj->o.color.index != 256)     \
+    else                                                                      \
       {                                                                       \
-        VALUE_RS (_obj->o.color.rgb >> 24, dxf1);                             \
-        VALUE_RL (_obj->o.color.rgb & 0x00ffffff, dxf2);                      \
+        if (dxf >= 90)                                                        \
+          {                                                                   \
+            VALUE_RL (_obj->o.color.rgb & 0x00ffffff, dxf);                   \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            VALUE_RS ((_obj->o.color.index & 255), dxf);                      \
+            VALUE_RL (_obj->o.color.rgb & 0x00ffffff, (unsigned)(dxf + 420 - 62)); \
+          }                                                                   \
       }                                                                       \
   }
 #define HEADER_CMC(nam, dxf)                                                  \

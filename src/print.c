@@ -149,13 +149,13 @@ static unsigned int cur_ver = 0;
 #define FIELD_3BD(name, dxf) FIELD_3PT_TRACE (name, BD, dxf)
 #define FIELD_3BD_1(name, dxf) FIELD_3PT_TRACE (name, BD, dxf)
 #define FIELD_3DPOINT(name, dxf) FIELD_3BD (name, dxf)
-#define FIELD_CMC(color, dxf1, dxf2)                                          \
+#define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
-    LOG_TRACE (#color ".index [CMC.BS %d]\n", _obj->color.index)              \
+    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf)     \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
-                   (unsigned)_obj->color.rgb, dxf2);                          \
+                   (unsigned)_obj->color.rgb, dxf + 420 - 62);                \
         LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->color.flag);                               \
         if (_obj->color.flag & 1)                                             \
@@ -165,13 +165,13 @@ static unsigned int cur_ver = 0;
                      _obj->color.book_name);                                  \
       }                                                                       \
   }
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
+#define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
-    LOG_TRACE (#color ".index [CMC.BS %d]\n", _obj->o.color.index)            \
+    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf)   \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
-                   (unsigned)_obj->o.color.rgb, dxf2);                        \
+                   (unsigned)_obj->o.color.rgb, dxf + 420 - 62);              \
         LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
@@ -190,13 +190,13 @@ static unsigned int cur_ver = 0;
           LOG_TRACE (#color ".flag: 0x%x\n", (unsigned)_obj->color.flag);     \
         if (_obj->color.flag & 0x20)                                          \
           LOG_TRACE (#color ".alpha: 0%d [ENC.BL %d]\n",                      \
-                     (int)_obj->color.alpha, dxf2 + 20);                      \
+                     (int)_obj->color.alpha, dxf + 440 - 62);                 \
         if (_obj->color.flag & 0x40)                                          \
           LOG_TRACE (#color ".handle: " FORMAT_REF " [ENC.H %d]\n",           \
-                     ARGS_REF (_obj->color.handle), dxf2 + 10);               \
+                     ARGS_REF (_obj->color.handle), dxf + 430 - 62);          \
         if (_obj->color.flag & 0x80)                                          \
           LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
-                     (unsigned)_obj->color.rgb, dxf2);                        \
+                     (unsigned)_obj->color.rgb, dxf + 420 - 62);              \
       }                                                                       \
   }
 

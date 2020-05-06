@@ -176,12 +176,12 @@ static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
 // indxf does not assign names yet
-#define FIELD_CMC(color, dxf1, dxf2)                                          \
+#define FIELD_CMC(color, dxf)                                                 \
   if (!(dat->opts & DWG_OPTS_IN)) {                                           \
     FIELD_T (color.name, 0);                                                  \
     FIELD_T (color.book_name, 0);                                             \
   }
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
+#define SUB_FIELD_CMC(o, color, dxf)                                          \
   if (!(dat->opts & DWG_OPTS_IN)) {                                           \
     VALUE_TV (_obj->o.color.name, 0);                                         \
     VALUE_TV (_obj->o.color.book_name, 0);                                    \

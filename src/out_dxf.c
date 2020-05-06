@@ -59,6 +59,7 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
+static void dxf_CMC (Bit_Chain *restrict dat, BITCODE_CMC *restrict color, const int dxf);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -514,47 +515,10 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     FIELD_BD (nam.z, dxf + 2);                                                \
   }
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
-// TODO r2004+: lookup the rgb index for 62
-// skip index 256 bylayer
-// if the dxf code is 90-99 rather emit the rgb only
-#define FIELD_CMC(color, dxf1, dxf2)                                          \
-  {                                                                           \
-    if (dxf1 >= 90 && !(_obj->color.index & 255))                             \
-      {                                                                       \
-        VALUE_RL (_obj->color.rgb | 0xffffffff00000000, dxf1)                 \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        if (dxf1 > 0 && _obj->color.index != 256)                             \
-          {                                                                   \
-            VALUE_RS ((_obj->color.index & 255), dxf1);                       \
-          }                                                                   \
-        if (dat->version >= R_2004 && dxf2 > 0 && _obj->color.index != 256)   \
-          {                                                                   \
-            /*VALUE_RS (_obj->color.rgb >> 24, dxf1);*/                       \
-            VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf2);                    \
-          }                                                                   \
-      }                                                                       \
-  }
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
-  {                                                                           \
-    if (dxf1 >= 90 && !(_obj->o.color.index & 255))                           \
-      {                                                                       \
-        VALUE_RL (_obj->o.color.rgb | 0xffffffff00000000, dxf1)               \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        if (dxf1 > 0 && _obj->o.color.index != 256)                           \
-          {                                                                   \
-            VALUE_RS ((_obj->o.color.index & 255), dxf1);                     \
-          }                                                                   \
-        if (dat->version >= R_2004 && dxf2 > 0 && _obj->o.color.index != 256) \
-          {                                                                   \
-            VALUE_RS (_obj->o.color.rgb >> 24, dxf1);                         \
-            VALUE_RL (_obj->o.color.rgb & 0x00ffffff, dxf2);                  \
-          }                                                                   \
-      }                                                                       \
-  }
+
+#define FIELD_CMC(color, dxf) dxf_CMC (dat, &_obj->color, dxf)
+#define SUB_FIELD_CMC(o, color, dxf) dxf_CMC (dat, &_obj->o.color, dxf)
+
 #define HEADER_TIMEBLL(nam, dxf)                                              \
   HEADER_9 (nam);                                                             \
   FIELD_TIMEBLL (nam, dxf)
@@ -845,6 +809,58 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 
 #undef DXF_3DSOLID
 #define DXF_3DSOLID dxf_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
+
+// skip index 256 bylayer
+// if the dxf code is 90-99 rather emit the rgb only
+static void dxf_CMC (Bit_Chain *restrict dat, BITCODE_CMC *restrict color, const int dxf)
+{
+  if (dat->version >= R_2004)
+    {
+      if (dxf >= 90)
+        {
+          VALUE_RL (color->rgb & 0x00ffffff, dxf);
+          return;
+        }
+      VALUE_RS (color->index, dxf);
+      VALUE_RL (color->rgb & 0x00ffffff, dxf + 420 - 62);
+      if (color->flag & 2 && color->book_name)
+        {
+          char name[80];
+          if (dat->from_version >= R_2007)
+            {
+              char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
+              strcpy (name, u8);
+              free (u8);
+              u8 = bit_convert_TU ((BITCODE_TU)color->name);
+              if (u8)
+                {
+                  strcat (name, "$");
+                  strcpy (name, u8);
+                  free (u8);
+                }
+            }
+          else
+            {
+              strcpy (name, color->book_name);
+              strcat (name, "$");
+              strcpy (name, color->name);
+            }
+          VALUE_TV (name, dxf + 430 - 62);
+        }
+      else if (color->flag & 1 && color->name)
+        {
+          VALUE_T (color->name, dxf + 430 - 62);
+        }
+      else if (color->flag)
+        {
+          VALUE_TFF ("UNNAMED", dxf + 430 - 62);
+        }
+    }
+  else
+    {
+      VALUE_RS (color->index, dxf);
+    }
+}
 
 static char *
 cquote (char *restrict dest, const char *restrict src, const int len)

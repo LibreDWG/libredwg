@@ -590,9 +590,17 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   BITCODE_BS flag;    /* 1: name follows, 2: book name follows, ... */
   BITCODE_BS raw;     /* flag << 8 + index */
   BITCODE_BL rgb;     /* DXF 420 */
-  BITCODE_H  handle;
+  unsigned method;    /* first byte of rgb:
+                         0xc0 for ByLayer (also c3 and rgb of 0x100)
+                         0xc1 for ByBlock (also c3 and rgb of 0)
+                         0xc2 for entities (default), with names with an additional name flag RC,
+                         0xc3 for truecolor,
+                         0xc5 for foreground color
+                         0xc8 for none (also c3 and rgb of 0x101)
+                       */
   BITCODE_T  name;       /* DXF 430 */
   BITCODE_T  book_name;  /* DXF 430 */
+  BITCODE_H  handle;
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
   BITCODE_RC alpha;      /* DXF 440. 0-255 */
 } Dwg_Color;

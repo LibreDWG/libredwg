@@ -575,8 +575,8 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     }
 }
 
-#define FIELD_CMC(color, dxf1, dxf2) field_cmc (dat, #color, &_obj->color)
-#define SUB_FIELD_CMC(o, color, dxf1, dxf2)                                   \
+#define FIELD_CMC(color, dxf) field_cmc (dat, #color, &_obj->color)
+#define SUB_FIELD_CMC(o, color, dxf)                                          \
   field_cmc (dat, #color, &_obj->o.color)
 
 #define FIELD_TIMEBLL(nam, dxf)                                               \

@@ -151,7 +151,7 @@
         {
           FIELD_TV (color.name, 430);
         }
-      else if ((flags & 0x42) == 0x42)
+      if ((flags & 0x42) == 0x42)
         {
           FIELD_TV (color.book_name, 430);
         }
@@ -163,7 +163,7 @@
 #endif
     }
   OTHER_VERSIONS
-    FIELD_CMC (color, 62,420);
+    FIELD_CMC (color, 62);
 
   DXF {
     if (FIELD_VALUE (ltype_scale) != 1.0)
