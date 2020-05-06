@@ -1330,14 +1330,14 @@ typedef struct _dwg_entity_LINE
 #define DIMENSION_COMMON \
     struct _dwg_object_entity *parent; \
     BITCODE_RC class_version; /* R2010+ */ \
-    BITCODE_TV blockname; \
+    BITCODE_T blockname; \
     BITCODE_BE extrusion; \
     BITCODE_3BD def_pt; \
     BITCODE_2RD text_midpt; \
     BITCODE_BD elevation; \
     BITCODE_RC flag; /* calculated, DXF only 70 */ \
     BITCODE_RC flag1; /* as in the DWG */ \
-    BITCODE_TV user_text; \
+    BITCODE_T user_text; \
     BITCODE_BD text_rotation; \
     BITCODE_BD horiz_dir; \
     BITCODE_3BD ins_scale; \
@@ -1441,14 +1441,16 @@ typedef struct _dwg_entity_DIMENSION_DIAMETER
 typedef struct _dwg_entity_ARC_DIMENSION
 {
   DIMENSION_COMMON;
-  BITCODE_3BD _13_pt;
-  BITCODE_3BD _14_pt;
-  BITCODE_3BD _15_pt;
-  BITCODE_3BD unknown_pt;
-  BITCODE_3BD _16_pt;
-  BITCODE_3BD _17_pt;
-  BITCODE_BD leader_len;    /*!< DXF 40 */
-  BITCODE_RC flag2;
+  BITCODE_3BD arc_pt;		/* DXF 10 */
+  BITCODE_3BD xline1_pt;	/* DXF 13 */
+  BITCODE_3BD xline2_pt;	/* DXF 14 */
+  BITCODE_3BD center_pt;	/* DXF 15 */
+  BITCODE_B is_partial;		/* DXF 70 */
+  BITCODE_BD arc_start_param;	/* DXF 41 */
+  BITCODE_BD arc_end_param;	/* DXF 42 */
+  BITCODE_B has_leader;		/* DXF 71 */
+  BITCODE_3BD leader1_pt;	/* DXF 16 */
+  BITCODE_3BD leader2_pt;	/* DXF 17 */
 } Dwg_Entity_ARC_DIMENSION;
 
 /**

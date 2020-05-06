@@ -5866,46 +5866,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   Dwg_Entity_ARC_DIMENSION *restrict arc_dimension = obj->tio.entity->tio.ARC_DIMENSION;
   failed = 0;
   {
-    BITCODE_3BD _13_pt;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "_13_pt", &_13_pt, NULL)
-        && !memcmp (&_13_pt, &arc_dimension->_13_pt, sizeof (arc_dimension->_13_pt)))
-        pass ();
-    else
-        fail ("ARC_DIMENSION._13_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _14_pt;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "_14_pt", &_14_pt, NULL)
-        && !memcmp (&_14_pt, &arc_dimension->_14_pt, sizeof (arc_dimension->_14_pt)))
-        pass ();
-    else
-        fail ("ARC_DIMENSION._14_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _15_pt;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "_15_pt", &_15_pt, NULL)
-        && !memcmp (&_15_pt, &arc_dimension->_15_pt, sizeof (arc_dimension->_15_pt)))
-        pass ();
-    else
-        fail ("ARC_DIMENSION._15_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _16_pt;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "_16_pt", &_16_pt, NULL)
-        && !memcmp (&_16_pt, &arc_dimension->_16_pt, sizeof (arc_dimension->_16_pt)))
-        pass ();
-    else
-        fail ("ARC_DIMENSION._16_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _17_pt;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "_17_pt", &_17_pt, NULL)
-        && !memcmp (&_17_pt, &arc_dimension->_17_pt, sizeof (arc_dimension->_17_pt)))
-        pass ();
-    else
-        fail ("ARC_DIMENSION._17_pt [3BD]");
-  }
-  {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "act_measurement", &act_measurement, NULL)
         && act_measurement == arc_dimension->act_measurement)
@@ -5919,6 +5879,44 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.act_measurement [BD] set+1 %g != %g", arc_dimension->act_measurement, act_measurement);
     arc_dimension->act_measurement--;
+  }
+  {
+    BITCODE_BD arc_end_param;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "arc_end_param", &arc_end_param, NULL)
+        && arc_end_param == arc_dimension->arc_end_param)
+      pass ();
+    else
+      fail ("ARC_DIMENSION.arc_end_param [BD] %g != %g", arc_dimension->arc_end_param, arc_end_param);
+    arc_end_param++;
+    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "arc_end_param", &arc_end_param, 0)
+        && arc_end_param == arc_dimension->arc_end_param)
+      pass ();
+    else
+      fail ("ARC_DIMENSION.arc_end_param [BD] set+1 %g != %g", arc_dimension->arc_end_param, arc_end_param);
+    arc_dimension->arc_end_param--;
+  }
+  {
+    BITCODE_3BD arc_pt;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "arc_pt", &arc_pt, NULL)
+        && !memcmp (&arc_pt, &arc_dimension->arc_pt, sizeof (arc_dimension->arc_pt)))
+        pass ();
+    else
+        fail ("ARC_DIMENSION.arc_pt [3BD]");
+  }
+  {
+    BITCODE_BD arc_start_param;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "arc_start_param", &arc_start_param, NULL)
+        && arc_start_param == arc_dimension->arc_start_param)
+      pass ();
+    else
+      fail ("ARC_DIMENSION.arc_start_param [BD] %g != %g", arc_dimension->arc_start_param, arc_start_param);
+    arc_start_param++;
+    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "arc_start_param", &arc_start_param, 0)
+        && arc_start_param == arc_dimension->arc_start_param)
+      pass ();
+    else
+      fail ("ARC_DIMENSION.arc_start_param [BD] set+1 %g != %g", arc_dimension->arc_start_param, arc_start_param);
+    arc_dimension->arc_start_param--;
   }
   {
     BITCODE_BS attachment;
@@ -5952,6 +5950,14 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
       pass ();
     else
       fail ("ARC_DIMENSION.blockname [TV] '%s' <> '%s'", blockname, arc_dimension->blockname);
+  }
+  {
+    BITCODE_3BD center_pt;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "center_pt", &center_pt, NULL)
+        && !memcmp (&center_pt, &arc_dimension->center_pt, sizeof (arc_dimension->center_pt)))
+        pass ();
+    else
+        fail ("ARC_DIMENSION.center_pt [3BD]");
   }
   {
     BITCODE_RC class_version;
@@ -6046,21 +6052,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     arc_dimension->flag1--;
   }
   {
-    BITCODE_RC flag2;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "flag2", &flag2, NULL)
-        && flag2 == arc_dimension->flag2)
-      pass ();
-    else
-      fail ("ARC_DIMENSION.flag2 [RC] %u != %u", arc_dimension->flag2, flag2);
-    flag2++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "flag2", &flag2, 0)
-        && flag2 == arc_dimension->flag2)
-      pass ();
-    else
-      fail ("ARC_DIMENSION.flag2 [RC] set+1 %u != %u", arc_dimension->flag2, flag2);
-    arc_dimension->flag2--;
-  }
-  {
     BITCODE_B flip_arrow1;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "flip_arrow1", &flip_arrow1, NULL)
         && flip_arrow1 == arc_dimension->flip_arrow1)
@@ -6089,6 +6080,21 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     else
       fail ("ARC_DIMENSION.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", arc_dimension->flip_arrow2, flip_arrow2);
     arc_dimension->flip_arrow2--;
+  }
+  {
+    BITCODE_B has_leader;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "has_leader", &has_leader, NULL)
+        && has_leader == arc_dimension->has_leader)
+      pass ();
+    else
+      fail ("ARC_DIMENSION.has_leader [B] " FORMAT_B " != " FORMAT_B "", arc_dimension->has_leader, has_leader);
+    has_leader++;
+    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "has_leader", &has_leader, 0)
+        && has_leader == arc_dimension->has_leader)
+      pass ();
+    else
+      fail ("ARC_DIMENSION.has_leader [B] set+1 " FORMAT_B " != " FORMAT_B "", arc_dimension->has_leader, has_leader);
+    arc_dimension->has_leader--;
   }
   {
     BITCODE_BD horiz_dir;
@@ -6129,19 +6135,35 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         fail ("ARC_DIMENSION.ins_scale [3BD]");
   }
   {
-    BITCODE_BD leader_len;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "leader_len", &leader_len, NULL)
-        && leader_len == arc_dimension->leader_len)
+    BITCODE_B is_partial;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "is_partial", &is_partial, NULL)
+        && is_partial == arc_dimension->is_partial)
       pass ();
     else
-      fail ("ARC_DIMENSION.leader_len [BD] %g != %g", arc_dimension->leader_len, leader_len);
-    leader_len++;
-    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "leader_len", &leader_len, 0)
-        && leader_len == arc_dimension->leader_len)
+      fail ("ARC_DIMENSION.is_partial [B] " FORMAT_B " != " FORMAT_B "", arc_dimension->is_partial, is_partial);
+    is_partial++;
+    if (dwg_dynapi_entity_set_value (arc_dimension, "ARC_DIMENSION", "is_partial", &is_partial, 0)
+        && is_partial == arc_dimension->is_partial)
       pass ();
     else
-      fail ("ARC_DIMENSION.leader_len [BD] set+1 %g != %g", arc_dimension->leader_len, leader_len);
-    arc_dimension->leader_len--;
+      fail ("ARC_DIMENSION.is_partial [B] set+1 " FORMAT_B " != " FORMAT_B "", arc_dimension->is_partial, is_partial);
+    arc_dimension->is_partial--;
+  }
+  {
+    BITCODE_3BD leader1_pt;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "leader1_pt", &leader1_pt, NULL)
+        && !memcmp (&leader1_pt, &arc_dimension->leader1_pt, sizeof (arc_dimension->leader1_pt)))
+        pass ();
+    else
+        fail ("ARC_DIMENSION.leader1_pt [3BD]");
+  }
+  {
+    BITCODE_3BD leader2_pt;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "leader2_pt", &leader2_pt, NULL)
+        && !memcmp (&leader2_pt, &arc_dimension->leader2_pt, sizeof (arc_dimension->leader2_pt)))
+        pass ();
+    else
+        fail ("ARC_DIMENSION.leader2_pt [3BD]");
   }
   {
     BITCODE_BD lspace_factor;
@@ -6220,14 +6242,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     arc_dimension->unknown--;
   }
   {
-    BITCODE_3BD unknown_pt;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "unknown_pt", &unknown_pt, NULL)
-        && !memcmp (&unknown_pt, &arc_dimension->unknown_pt, sizeof (arc_dimension->unknown_pt)))
-        pass ();
-    else
-        fail ("ARC_DIMENSION.unknown_pt [3BD]");
-  }
-  {
     BITCODE_TV user_text;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "user_text", &user_text, NULL)
         && user_text
@@ -6236,6 +6250,22 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
       pass ();
     else
       fail ("ARC_DIMENSION.user_text [TV] '%s' <> '%s'", user_text, arc_dimension->user_text);
+  }
+  {
+    BITCODE_3BD xline1_pt;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "xline1_pt", &xline1_pt, NULL)
+        && !memcmp (&xline1_pt, &arc_dimension->xline1_pt, sizeof (arc_dimension->xline1_pt)))
+        pass ();
+    else
+        fail ("ARC_DIMENSION.xline1_pt [3BD]");
+  }
+  {
+    BITCODE_3BD xline2_pt;
+    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "xline2_pt", &xline2_pt, NULL)
+        && !memcmp (&xline2_pt, &arc_dimension->xline2_pt, sizeof (arc_dimension->xline2_pt)))
+        pass ();
+    else
+        fail ("ARC_DIMENSION.xline2_pt [3BD]");
   }
   if (failed && (is_class_unstable ("ARC_DIMENSION") || is_class_debugging ("ARC_DIMENSION")))
     {

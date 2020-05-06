@@ -7922,24 +7922,22 @@ DWG_OBJECT_END
 
 DWG_ENTITY (ARC_DIMENSION)
   DECODE_UNKNOWN_BITS
-
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbArcDimension)
-  FIELD_3BD (def_pt, 10);
-  FIELD_3BD (_13_pt, 13);
-  FIELD_3BD (_14_pt, 14);
-  FIELD_3BD (_15_pt, 15);
-  FIELD_3BD (unknown_pt, 0); // clone_ins_pt?
-  FIELD_3BD (_16_pt, 16);
-  FIELD_3BD (_17_pt, 17);
-  //FIELD_B (unknown_b, 0);
-  DEBUG_HERE_OBJ
-  FIELD_BD (leader_len, 40);
-  FIELD_BD (ins_scale.x, 41);
-  FIELD_RC (flag2, 71);
-
+  FIELD_3BD (arc_pt, 10);
+  FIELD_3BD (xline1_pt, 13);
+  FIELD_3BD (xline2_pt, 14);
+  FIELD_3BD (center_pt, 15);
+  FIELD_B (is_partial, 70);
+  FIELD_BD (arc_start_param, 41);
+  FIELD_BD (arc_end_param, 42);
+  FIELD_B (has_leader, 71);
+  FIELD_3BD (leader1_pt, 16);
+  FIELD_3BD (leader2_pt, 17);
   COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (dimstyle, 5, 0);
+  FIELD_HANDLE (block, 5, 0);
 DWG_ENTITY_END
 
 // LiveMap raster image underlay r2015+

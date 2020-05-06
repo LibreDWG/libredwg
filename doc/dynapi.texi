@@ -892,22 +892,26 @@ B,	DXF 75
 H,	DXF 3
 @item block
 H
-@item _13_pt
+@item arc_pt
+3BD,	DXF 10
+@item xline1_pt
 3BD,	DXF 13
-@item _14_pt
+@item xline2_pt
 3BD,	DXF 14
-@item _15_pt
+@item center_pt
 3BD,	DXF 15
-@item unknown_pt
-3BD
-@item _16_pt
+@item is_partial
+B,	DXF 70
+@item arc_start_param
+BD,	DXF 41
+@item arc_end_param
+BD,	DXF 42
+@item has_leader
+B,	DXF 71
+@item leader1_pt
 3BD,	DXF 16
-@item _17_pt
+@item leader2_pt
 3BD,	DXF 17
-@item leader_len
-BD,	DXF 40
-@item flag2
-RC,	DXF 71
 
 @end vtable
 @end indentedblock

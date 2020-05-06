@@ -1,23 +1,31 @@
+// DEBUGGING
 #define DWG_TYPE DWG_TYPE_ARC_DIMENSION
 #include "common.c"
 
 void
 api_process (dwg_object *obj)
 {
-  int error;
+  int error, is_new;
   double elevation, act_measurement, horiz_dir, lspace_factor, text_rotation,
-      ins_rotation;
+      ins_rotation, leader_len;
+  BITCODE_T user_text;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC class_version, flag, flag1;
   BITCODE_BS lspace_style, attachment;
-  char *user_text;
-  dwg_point_2d text_midpt, pt12, pt2d;
-  dwg_point_3d pt10, pt13, pt14, pt15, pt16, pt17, unknown_pt, ext, ins_scale, pt3d;
-  BITCODE_BD leader_len;
-  BITCODE_RC flag2;
-
+  dwg_point_2d text_midpt, pt12;
+  dwg_point_3d def_pt, first_arc_pt, extrusion, ins_scale;
   BITCODE_H dimstyle, block;
-  int isnew;
+  
+  BITCODE_3BD arc_pt;
+  BITCODE_3BD xline1_pt;
+  BITCODE_3BD xline2_pt;
+  BITCODE_3BD center_pt;
+  BITCODE_B is_partial;
+  BITCODE_BD arc_start_param;
+  BITCODE_BD arc_end_param;
+  BITCODE_B has_leader;
+  BITCODE_3BD leader1_pt;
+  BITCODE_3BD leader2_pt;
 
 #ifdef DEBUG_CLASSES
   dwg_ent_arc_dimension *arc_dimension = dwg_object_to_ARC_DIMENSION (obj);
@@ -26,8 +34,9 @@ api_process (dwg_object *obj)
 
   if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
     return;
+
 #ifdef DEBUG_CLASSES
-  /* common */
+    /* DIMENSION_COMMON */
   CHK_ENTITY_TYPE (dim, ARC_DIMENSION, class_version, RC, class_version);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, lspace_style, BS,
                          lspace_style);
@@ -37,10 +46,10 @@ api_process (dwg_object *obj)
                          act_measurement);
   CHK_ENTITY_TYPE (dim, ARC_DIMENSION, attachment, BS, attachment);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, elevation, BD, elevation);
-  CHK_ENTITY_3RD (dim, ARC_DIMENSION, extrusion, ext);
+  CHK_ENTITY_3RD (dim, ARC_DIMENSION, extrusion, extrusion);
   CHK_ENTITY_2RD_W_OLD (dim, ARC_DIMENSION, clone_ins_pt, pt12);
   CHK_ENTITY_2RD_W_OLD (dim, ARC_DIMENSION, text_midpt, text_midpt);
-  //CHK_ENTITY_UTF8TEXT (dim, ARC_DIMENSION, user_text, user_text); // fails randomly
+  CHK_ENTITY_UTF8TEXT (dim, ARC_DIMENSION, user_text, user_text); // fails randomly
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, text_rotation, BD,
                          text_rotation);
   CHK_ENTITY_3RD_W_OLD (dim, ARC_DIMENSION, ins_scale, ins_scale);
@@ -54,19 +63,19 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow2, B, flip_arrow2);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flag1, RC, flag1);
   CHK_ENTITY_TYPE (dim, ARC_DIMENSION, flag, RC, flag);
+  CHK_ENTITY_H (dim, DIMENSION_RADIUS, dimstyle, dimstyle);
+  CHK_ENTITY_H (dim, DIMENSION_RADIUS, block, block);
 
   /* arc_dimension */
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, def_pt, pt10);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, _13_pt, pt13);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, _14_pt, pt14);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, _15_pt, pt15);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, _16_pt, pt16);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, _17_pt, pt17);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, unknown_pt, unknown_pt);
-  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, leader_len, BD, leader_len);
-  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, flag2, RC, flag2);
-
-  CHK_ENTITY_H (arc_dimension, ARC_DIMENSION, dimstyle, dimstyle);
-  CHK_ENTITY_H (arc_dimension, ARC_DIMENSION, block, block);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, arc_pt, pt10);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline1_pt, pt13);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline2_pt, pt14);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, center_pt, pt15);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader1_pt, pt16);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader2_pt, pt17);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_start_param, BD, arc_start_param);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_end_param, BD, arc_end_param);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, is_partial, B, is_partial);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, has_leader, B, has_leader);
 #endif
 }
