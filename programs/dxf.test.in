@@ -167,7 +167,8 @@ check_roundtrip() {
         @LTEXEC@ ./dwg2dxf -y -v2 -o "$dxf" "$dwg" 2>"$log1" >/dev/null
         @LTEXEC@ ./dxf2dwg -y -v0 -o "$tgt" "$dxf" 2>/dev/null >/dev/null
         @LTEXEC@ ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
-        expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (MULTILEADER|UNKNOWN_ENT)')"
+        # we dont write unstable entities yet.
+        expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (MULTILEADER|ARC_DIMENSION|HELIX|SECTIONOBJECT|UNKNOWN_ENT)')"
         got="$(grep -E -c '^Add entity' "$log2")"
         rm "./$dxf" "./$tgt" 2>/dev/null
         if [ "$got" -eq "$expect" ]
