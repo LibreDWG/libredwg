@@ -44,6 +44,7 @@ static unsigned int loglevel;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static char buf[255];
+static BITCODE_BL rcount1, rcount2;
 // static int is_sorted = 0;
 
 // imported
@@ -697,7 +698,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
   static int dwg_dxf_##token (Bit_Chain *restrict dat,                        \
                               const Dwg_Object *restrict obj)                 \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
     Dwg_Data *dwg = obj->parent;                                              \
     Bit_Chain *str_dat = dat;                                                 \
@@ -750,7 +751,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
   static int dwg_dxf_##token (Bit_Chain *restrict dat,                        \
                               const Dwg_Object *restrict obj)                 \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
     Bit_Chain *hdl_dat = dat, *str_dat = dat;                                 \
     Dwg_Data *dwg = obj->parent;                                              \

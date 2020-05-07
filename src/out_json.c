@@ -36,6 +36,8 @@
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
+static BITCODE_BL rcount1, rcount2;
+
 /* see also examples/unknown.c */
 #ifdef HAVE_NATIVE_WCHAR2
 static wchar_t *wcquote (wchar_t *restrict dest, const wchar_t *restrict src);
@@ -844,7 +846,7 @@ _prefix (Bit_Chain *dat)
   static int dwg_json_##token (Bit_Chain *restrict dat,                       \
                                Dwg_Object *restrict obj)                      \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                    \
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
@@ -880,7 +882,7 @@ _prefix (Bit_Chain *dat)
   static int dwg_json_##token (Bit_Chain *restrict dat,                       \
                                Dwg_Object *restrict obj)                      \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                    \
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
@@ -1285,7 +1287,7 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               Dwg_Entity_3DSOLID *restrict _obj)
 {
   Dwg_Data *dwg = obj->parent;
-  BITCODE_BL vcount, rcount1, rcount2;
+  BITCODE_BL vcount;
   BITCODE_BL i;
   int error = 0;
 
@@ -1780,7 +1782,6 @@ json_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (SummaryInfo); // single hash
   // clang-format off
@@ -1796,7 +1797,6 @@ json_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_VBAProject *_obj = &dwg->vbaproject;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (VBAProject); // single hash
   HASH;
@@ -1813,7 +1813,6 @@ json_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_AppInfo *_obj = &dwg->appinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (AppInfo); // single hash
   // clang-format off
@@ -1829,7 +1828,6 @@ json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (AppInfoHistory); // single hash
   FIRSTPREFIX fprintf (dat->fh, "\"size\": %d", _obj->size);
@@ -1847,7 +1845,7 @@ json_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL vcount, rcount1;
+  BITCODE_RL vcount;
 
   RECORD (FileDepList); // single hash
   // clang-format off
@@ -1863,7 +1861,6 @@ json_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_Security *_obj = &dwg->security;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (Security); // single hash
   // clang-format off
@@ -1896,7 +1893,6 @@ json_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (ObjFreeSpace); // single hash
   // clang-format off
@@ -1912,7 +1908,7 @@ json_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1, rcount2, rcount3 = 0, rcount4, vcount;
+  BITCODE_RL rcount3 = 0, rcount4, vcount;
 
   RECORD (AcDs); // single hash
   {
@@ -1930,7 +1926,6 @@ json_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_Template *_obj = &dwg->template;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (Template); // single hash. i.e MEASUREMENT metric/imperial
   // clang-format off
@@ -1946,7 +1941,7 @@ json_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
   int error = 0, i;
-  BITCODE_RL vcount, rcount1;
+  BITCODE_RL vcount;
 
   RECORD (AuxHeader); // single hash
   // clang-format off
@@ -1963,7 +1958,6 @@ json_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct Dwg_Signature *_obj = &dwg->signature;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (Signature); // single hash
   // clang-format off
@@ -1979,7 +1973,6 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   struct _dwg_second_header *_obj = &dwg->second_header;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1;
 
   RECORD (SecondHeader); // single hash
   HASH;

@@ -55,6 +55,7 @@ int dwg_dynapi_entity_size (const char *restrict name);
 static unsigned int loglevel;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
+static BITCODE_BL rcount1 = 0, rcount2 = 0;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -789,7 +790,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #define DWG_ENTITY(token)                                                     \
   static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)  \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Object_Entity *_ent = obj->tio.entity;                                \
     Dwg_Entity_##token *_obj = _ent->tio.token;                               \
     int error;                                                                \
@@ -825,7 +826,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #define DWG_OBJECT(token)                                                     \
   static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)  \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                    \
     int error;                                                                \
     Bit_Chain _hdl_dat = { 0 };                                               \
     Bit_Chain *hdl_dat = &_hdl_dat; /* a new copy */                          \
@@ -2381,7 +2382,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     Dwg_Section_Type type;
     Dwg_Object *obj = NULL;
-    BITCODE_BL vcount, rcount1, rcount2, rcount3;
+    BITCODE_BL vcount, rcount3;
     size_t size;
     unsigned total_size = 0;
 

@@ -35014,14 +35014,14 @@ static int test_MATERIAL (const Dwg_Object *obj)
       fail ("MATERIAL.genprocvaltext [T] '%s' <> '%s'", genprocvaltext, material->genprocvaltext);
   }
   {
-    void* gentextures;
+    Dwg_MATERIAL_gentexture* gentextures;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "num_gentextures", &count, NULL)
         && dwg_dynapi_entity_value (material, "MATERIAL", "gentextures", &gentextures, NULL)
         && gentextures == material->gentextures)
       pass ();
     else
-      fail ("MATERIAL.gentextures [void*] * %u num_gentextures", count);
+      fail ("MATERIAL.gentextures [Dwg_MATERIAL_gentexture*] * %u num_gentextures", count);
   }
   {
     BITCODE_BL illumination_model;
@@ -47764,6 +47764,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_MATERIAL_color): %d != "
                "dwg_dynapi_fields_size (\"MATERIAL_color\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_MATERIAL_gentexture);
+  size2 = dwg_dynapi_fields_size ("MATERIAL_gentexture");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_MATERIAL_gentexture): %d != "
+               "dwg_dynapi_fields_size (\"MATERIAL_gentexture\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_MATERIAL_mapper);

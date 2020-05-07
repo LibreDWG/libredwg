@@ -45,6 +45,7 @@ static int env_var_checked_p;
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 static Bit_Chain pdat = { NULL, 0, 0, 0, 0, 0 };
+static BITCODE_BL rcount1, rcount2;
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -309,7 +310,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
   static int dwg_free_##token##_private (Bit_Chain *restrict dat,             \
                                          Dwg_Object *restrict obj)            \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
     Bit_Chain *hdl_dat = dat;                                                 \
@@ -349,7 +350,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
   static int dwg_free_##token##_private (Bit_Chain *restrict dat,             \
                                          Dwg_Object *restrict obj)            \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Object_##token *_obj;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
@@ -851,7 +852,6 @@ dwg_free_summaryinfo (Dwg_Data *dwg)
   struct Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-  BITCODE_RL rcount1, rcount2;
 
   // clang-format off
   #include "summaryinfo.spec"
@@ -865,7 +865,6 @@ dwg_free_appinfo (Dwg_Data *dwg)
   struct Dwg_AppInfo *_obj = &dwg->appinfo;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-  BITCODE_RL rcount1, rcount2;
 
   // clang-format off
   #include "appinfo.spec"
@@ -878,7 +877,7 @@ dwg_free_filedeplist (Dwg_Data *dwg)
   struct Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-  BITCODE_RL vcount, rcount1;
+  BITCODE_RL vcount;
 
   // clang-format off
   #include "filedeplist.spec"
@@ -891,7 +890,6 @@ dwg_free_security (Dwg_Data *dwg)
   struct Dwg_Security *_obj = &dwg->security;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-  BITCODE_RL rcount1, rcount2;
 
   // clang-format off
   #include "security.spec"
@@ -905,7 +903,7 @@ dwg_free_acds (Dwg_Data *dwg)
   struct Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
-  BITCODE_RL rcount1, rcount2, rcount3 = 0, rcount4, vcount;
+  BITCODE_RL rcount3 = 0, rcount4, vcount;
 
   // clang-format off
   #include "acds.spec"

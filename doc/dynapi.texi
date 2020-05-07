@@ -6793,7 +6793,7 @@ B
 @item num_gentextures
 BS
 @item gentextures
-void*
+Dwg_MATERIAL_gentexture*
 
 @end vtable
 @end indentedblock
@@ -10104,6 +10104,22 @@ RC
 BD
 @item rgb
 BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_MATERIAL_gentexture} @anchor{Dwg_MATERIAL_gentexture}
+@vindex Dwg_MATERIAL_gentexture
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_MATERIAL*
+@item genprocname
+T
+@item self
+struct _dwg_object_MATERIAL*
 
 @end vtable
 @end indentedblock

@@ -41,7 +41,9 @@
 #include "free.h"
 #include "dynapi.h"
 
-/* The logging level for the read (decode) path.  */
+/* The logging level for the read (decode) path. 
+ * Yes, this library is not thread-safe.
+ */
 static unsigned int loglevel;
 /* the current version per spec block */
 static int cur_ver = 0;

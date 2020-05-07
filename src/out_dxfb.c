@@ -32,9 +32,10 @@ static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
-/* the current version per spec block */
+/* the current version per spec block. */
 static unsigned int cur_ver = 0;
 static char buf[4096];
+static BITCODE_BL rcount1, rcount2;
 
 // private
 static int dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
@@ -602,7 +603,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
   static int dwg_dxfb_##token (Bit_Chain *restrict dat,                       \
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                    \
     int error = 0;                                                            \
     Dwg_Data *dwg = obj->parent;                                              \
     Bit_Chain *str_dat = dat;                                                 \
@@ -662,7 +663,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
   static int dwg_dxfb_##token (Bit_Chain *restrict dat,                       \
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \

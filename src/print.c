@@ -33,6 +33,7 @@
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
+static BITCODE_BL rcount1, rcount2;
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -335,7 +336,7 @@ static unsigned int cur_ver = 0;
   static int dwg_print_##token (Bit_Chain *restrict dat,                      \
                                 Dwg_Object *restrict obj)                     \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
     Bit_Chain *hdl_dat = dat;                                                 \
@@ -355,7 +356,7 @@ static unsigned int cur_ver = 0;
   static int dwg_print_##token (Bit_Chain *restrict dat,                      \
                                 Dwg_Object *restrict obj)                     \
   {                                                                           \
-    BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Object_##token *_obj;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \

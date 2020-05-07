@@ -3686,9 +3686,6 @@ int DWG_FUNC_N (ACTION,_HATCH_gradientfill)(
                         Dwg_Entity_HATCH *restrict _obj)
 {
   BITCODE_BL vcount, rcount3, rcount4;
-#ifndef IS_DECODER
-  BITCODE_BL rcount1, rcount2;
-#endif
   int error = 0;
   //Dwg_Data* dwg = obj->parent;
 
@@ -6976,7 +6973,10 @@ DWG_OBJECT_END
         FIELD_BL (color.rgb, dxf3);                                           \
       }                                                                       \
   }
-  
+
+// We need to declare it first, because it's recursive. Only here
+DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
+
 /* if source == 2 */
 #define MAT_TEXTURE(map, value)                                               \
   {                                                                           \
@@ -7005,12 +7005,22 @@ DWG_OBJECT_END
         case 3:                                                               \
           FIELD_BD (genprocvalreal, 469); break;                              \
         case 4:                                                               \
-          FIELD_CMC (genprocvalcolor, 62); break;                         \
+          FIELD_CMC (genprocvalcolor, 62); break;                             \
         case 5:                                                               \
           FIELD_T (genprocvaltext, 301); break;                               \
         case 6:                                                               \
           FIELD_BS (num_gentextures, 0);                                      \
-          /* struct of { genprocname, recursive MAT_TEXTURE } */              \
+          REPEAT (num_gentextures, gentextures, Dwg_MATERIAL_gentexture)      \
+          REPEAT_BLOCK                                                        \
+            _obj->gentextures[rcount1].self = _obj;                           \
+            SUB_FIELD_T (gentextures[rcount1], genprocname, 300);             \
+            LOG_WARN ("recursive MATERIAL.gentextures")                       \
+            CALL_SUBCLASS (_obj->gentextures[rcount1].self, MATERIAL,         \
+                           Texture_diffusemap);                               \
+          END_REPEAT_BLOCK                                                    \
+          SET_PARENT_OBJ (gentextures);                                       \
+          END_REPEAT (gentextures)                                            \
+          FIELD_B (genproctableend, 292);                                     \
         default:                                                              \
           break;                                                              \
          }                                                                    \
@@ -7039,6 +7049,9 @@ DWG_OBJECT_END
     else if (FIELD_VALUE (map.source) == 2)                                   \
       MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7)
 
+#define Texture_diffusemap_fields MAT_TEXTURE (diffusemap, 0)
+DWG_SUBCLASS (MATERIAL, Texture_diffusemap);
+
 // (varies)
 DWG_OBJECT (MATERIAL)
   //DECODE_UNKNOWN_BITS
@@ -7051,7 +7064,8 @@ DWG_OBJECT (MATERIAL)
   MAT_MAP (diffusemap, 42, 72, 3, 73, 74, 75, 43);
   DXF {
     SINCE (R_2007)
-      MAT_TEXTURE (diffusemap, 0)
+      CALL_SUBCLASS (_obj, MATERIAL, Texture_diffusemap);
+      /* MAT_TEXTURE (diffusemap, 0) */
     //DXF { VALUE_B (1, 292); } /* genproctableend  */
     //DXF { VALUE_BS (value, 277); } /* ?? */
   }
@@ -7093,15 +7107,7 @@ DWG_OBJECT (MATERIAL)
   FIELD_BD (color_bleed_scale, 460);
 
   // saveas: ADVMATERIAL into xdic
-  //FIELD_T (genprocname, 300);
-  //FIELD_B (genprocvalbool, 291);
-  //FIELD_BS (genprocvalint, 271);
-  //FIELD_BD (genprocvalreal, 469);
-  //FIELD_T (genprocvaltext, 301);
   //FIELD_B (genproctableend, 292); // always 1
-  //FIELD_CMC (genprocvalcolorindex, 62);
-  //FIELD_BL (genprocvalcolorrgb, 420); //int32
-  //FIELD_T (genprocvalcolorname, 430);
   //78
   //172
   //176
@@ -8558,7 +8564,7 @@ DWG_SUBCLASS (BLOCKVISIBILITYGRIP, AcDbEvalExpr);
 
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
   DECODE_UNKNOWN_BITS;
-  CALL_SUBCLASS (BLOCKVISIBILITYGRIP, AcDbEvalExpr);
+  CALL_SUBCLASS (_obj, BLOCKVISIBILITYGRIP, AcDbEvalExpr);
   SUBCLASS (AcDbBlockElement)
   FIELD_T (be_t, 0);
   FIELD_BL (be_bl1, 0);
@@ -8579,7 +8585,7 @@ DWG_SUBCLASS (BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
 
 DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   DECODE_UNKNOWN_BITS
-  CALL_SUBCLASS (BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
+  CALL_SUBCLASS (_obj, BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
   AcDbEvalExpr_fields;
   SUBCLASS (AcDbBlockGripExpr)
   FIELD_BL (eval_type, 91); //??

@@ -4210,6 +4210,13 @@ typedef struct _dwg_MATERIAL_mapper
   Dwg_MATERIAL_color color2;
 } Dwg_MATERIAL_mapper;
 
+typedef struct _dwg_MATERIAL_gentexture
+{
+  struct _dwg_object_MATERIAL *parent;
+  BITCODE_T genprocname;
+  struct _dwg_object_MATERIAL *self;
+} Dwg_MATERIAL_gentexture;
+
 /**
  Object MATERIAL (varies)
  Acad Naming: e.g. Materials/assetlibrary_base.fbm/shaders/AdskShaders.mi
@@ -4270,7 +4277,8 @@ typedef struct _dwg_object_MATERIAL
   BITCODE_CMC genprocvalcolor;     /*!< DXF 62 */
   BITCODE_B genproctableend;       /*!< DXF 292 */
   BITCODE_BS num_gentextures;
-  void* gentextures;
+  Dwg_MATERIAL_gentexture* gentextures;
+
 #if 0
   BITCODE_BS normalmap_method;     /*!< DXF 271 */
   BITCODE_BD normalmap_strength;   /*!< DXF 465 def: 1.0 */
