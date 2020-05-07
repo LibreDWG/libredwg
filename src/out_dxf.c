@@ -59,7 +59,7 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
-static void dxf_CMC (Bit_Chain *restrict dat, BITCODE_CMC *restrict color, const int dxf);
+static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, const int dxf);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -812,7 +812,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 
 // skip index 256 bylayer
 // if the dxf code is 90-99 rather emit the rgb only
-static void dxf_CMC (Bit_Chain *restrict dat, BITCODE_CMC *restrict color, const int dxf)
+static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, const int dxf)
 {
   if (dat->version >= R_2004)
     {
@@ -1652,13 +1652,11 @@ static int
 dxf_common_entity_handle_data (Bit_Chain *restrict dat,
                                const Dwg_Object *restrict obj)
 {
-  Dwg_Object_Entity *ent;
-  // Dwg_Data *dwg = obj->parent;
-  Dwg_Object_Entity *_obj;
+  const Dwg_Data *dwg = obj->parent;
+  const Dwg_Object_Entity *ent = obj->tio.entity;
+  const Dwg_Object_Entity *_obj = ent;
   int error = 0;
   BITCODE_BL vcount = 0;
-  ent = obj->tio.entity;
-  _obj = ent;
 
   // clang-format off
   #include "common_entity_handle_data.spec"

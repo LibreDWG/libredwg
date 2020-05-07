@@ -14,9 +14,9 @@
         if (obj->klass && obj->klass->is_zombie)
           {
             dxf = 92;
-            DECODER {
-              ent->preview_is_proxy = 1;
-            }
+#ifdef IS_DECODER
+            ent->preview_is_proxy = 1;
+#endif
           }
 #if defined(IS_JSON) || defined(IS_PRINT)
         FIELD_B (preview_is_proxy, 0);
@@ -79,8 +79,10 @@
   VERSIONS (R_13, R_14) //ODA bug
     {
       FIELD_B (isbylayerlt, 0);
+#ifdef IS_DECODER
       if (FIELD_VALUE (isbylayerlt))
         FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
+#endif
     }
   SINCE (R_2004) //ODA bug
     {
@@ -110,27 +112,27 @@
       } else {
         FIELD_BSx (color.raw, 0);
       }
-      DECODER {
-        ent->color.flag = ent->color.raw >> 8;
-        ent->color.index = ent->color.raw & 0x1ff; // 256 / -1 needed for ByLayer
-        ent->color.rgb = 0L;
-        if (ent->color.index != ent->color.raw)
-          LOG_TRACE (" color.index: %d [ENC 62]\n", ent->color.index);
-        if (ent->color.flag > 1)
-          LOG_TRACE (" color.flag: 0x%x [ENC]\n", ent->color.flag);
-      }
+#ifdef IS_DECODER
+      ent->color.flag = ent->color.raw >> 8;
+      ent->color.index = ent->color.raw & 0x1ff; // 256 / -1 needed for ByLayer
+      ent->color.rgb = 0L;
+      if (ent->color.index != ent->color.raw)
+        LOG_TRACE (" color.index: %d [ENC 62]\n", ent->color.index);
+      if (ent->color.flag > 1)
+        LOG_TRACE (" color.flag: 0x%x [ENC]\n", ent->color.flag);
+#endif
       flags = ent->color.flag;
       if (flags & 0x20)
         {
 #ifndef IS_DXF
           FIELD_BLx (color.alpha, 0);
 #endif
-          DECODER {
-            /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
-            ent->color.alpha_type = ent->color.alpha >> 24;
-            ent->color.alpha = ent->color.alpha & 0xFF;
-            LOG_TRACE (" color.alpha_type: %d [ENV 440]\n", ent->color.alpha_type);
-          }
+#ifdef IS_DECODER
+          /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
+          ent->color.alpha_type = ent->color.alpha >> 24;
+          ent->color.alpha = ent->color.alpha & 0xFF;
+          LOG_TRACE (" color.alpha_type: %d [ENV 440]\n", ent->color.alpha_type);
+#endif
           JSON {
             FIELD_BB (color.alpha_type, 0);
           }

@@ -1418,13 +1418,11 @@ static int
 dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
                                 const Dwg_Object *restrict obj)
 {
-  Dwg_Object_Entity *ent;
-  // Dwg_Data *dwg = obj->parent;
-  Dwg_Object_Entity *_obj;
+  const Dwg_Data *dwg = obj->parent;
+  const Dwg_Object_Entity *ent = obj->tio.entity;
+  const Dwg_Object_Entity *_obj = ent;
   int error = 0;
   BITCODE_BL vcount = 0;
-  ent = obj->tio.entity;
-  _obj = ent;
 
   // clang-format off
   #include "common_entity_handle_data.spec"
