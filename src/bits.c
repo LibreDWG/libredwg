@@ -2292,6 +2292,28 @@ bit_eq_TU (const char *restrict str, BITCODE_TU restrict wstr)
   return result;
 }
 
+/* check if the string (ascii or unicode) is empty */
+int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str)
+{
+  if (dat->from_version < R_2007)
+    return !*str;
+  else
+    {
+      uint16_t c;
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+      if ((uintptr_t)str % SIZEOF_SIZE_T)
+        {
+          unsigned char *b = (unsigned char*)str;
+          c = (b[0] << 8) + b[1];
+          return !c;
+        }
+#endif
+      c = *(BITCODE_TU)str;
+      return !c;
+    }
+}
+
+
 /** Read 1 bitlong according to normal order
  */
 BITCODE_RL
@@ -2385,11 +2407,8 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
       color->rgb = bit_read_BL (dat);
       color->method = color->rgb >> 0x18;
       color->flag = bit_read_RC (dat);
-      if (color->method == 0xc2)
-        {
-          color->name      = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
-          color->book_name = (color->flag & 2) ? (char *)bit_read_T (str_dat) : NULL;
-        }
+      color->name      = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
+      color->book_name = (color->flag & 2) ? (char *)bit_read_T (str_dat) : NULL;
     }
 }
 
@@ -2405,6 +2424,10 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
       color->method = color->rgb >> 0x18;
       if (color->method == 0xc2) // for entity
         {
+          if (color->name && !bit_empty_T (dat, color->name))
+            color->flag |= 1;
+          if (color->name && !bit_empty_T (dat, color->book_name))
+            color->flag |= 2;
           bit_write_RC (dat, color->flag);
           if (color->flag & 1)
             bit_write_T (str_dat, color->name);
