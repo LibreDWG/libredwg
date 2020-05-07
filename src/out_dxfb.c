@@ -664,6 +664,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
   {                                                                           \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
     int error = 0;                                                            \
+    Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
     Dwg_Object_##token *_obj;                                                 \

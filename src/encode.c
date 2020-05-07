@@ -787,8 +787,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #endif
 
 #define DWG_ENTITY(token)                                                     \
-  static int dwg_encode_##token (Bit_Chain *restrict dat,                     \
-                                 Dwg_Object *restrict obj)                    \
+  static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)  \
   {                                                                           \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
     Dwg_Object_Entity *_ent = obj->tio.entity;                                \
@@ -824,8 +823,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
    all internal obj pointers after a object[] realloc.
 */
 #define DWG_OBJECT(token)                                                     \
-  static int dwg_encode_##token (Bit_Chain *restrict dat,                     \
-                                 Dwg_Object *restrict obj)                    \
+  static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)  \
   {                                                                           \
     BITCODE_BL vcount, rcount1, rcount2, rcount3, rcount4;                    \
     int error;                                                                \

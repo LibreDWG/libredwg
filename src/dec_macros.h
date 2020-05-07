@@ -1479,7 +1479,7 @@
       Dwg_Object *restrict obj);                                              \
                                                                               \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
-                                 Dwg_Object *restrict obj)                    \
+                          Dwg_Object *restrict obj)                           \
   {                                                                           \
     int error = dwg_setup_##token (obj);                                      \
     Bit_Chain hdl_dat = *dat;                                                 \

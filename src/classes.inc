@@ -61,9 +61,6 @@
 # define DEBUGGING_CLASS_CPP(action, name, _cppname) UNHANDLED_CLASS_CPP(action, name, _cppname)
 #endif
 
-//#define _DWG_FUNC_N(action,name) dwg_ ## action ## _ ## name
-//#define DWG_FUNC_N(action,name) _DWG_FUNC_N(action,name)
-
 #define STABLE_CLASS(action, _name) \
   if (klass->dxfname && strEQc (klass->dxfname, #_name)) \
     { \

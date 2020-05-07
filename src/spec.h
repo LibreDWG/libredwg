@@ -36,7 +36,7 @@
 #  define IF_IS_FREE 0
 
 #  ifndef ACTION
-#    error ACTION define missing: decode, encode, dxf, ...
+#    error ACTION define missing: decode, encode, dxf, json, ...
 #  endif
 #  define _DWG_FUNC_N(ACTION, name) dwg_##ACTION##_##name
 #  define DWG_FUNC_N(ACTION, name) _DWG_FUNC_N (ACTION, name)
@@ -552,3 +552,20 @@
     if (_obj->name)                                                           \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #endif
+
+#define DWG_SUBCLASS(parenttype, subtype)                                     \
+  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype)                   \
+    (Dwg_Object_##parenttype *restrict _obj, Bit_Chain *dat,                  \
+     Bit_Chain *hdl_dat,                                                      \
+     Bit_Chain *str_dat, Dwg_Object *restrict obj)                            \
+  {                                                                           \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    int error = 0;                                                            \
+    subtype##_fields;                                                         \
+    return error;                                                             \
+  }
+
+#define CALL_SUBCLASS(parenttype, subtype)                                    \
+  error |= DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (_obj, dat,         \
+               hdl_dat, str_dat, (Dwg_Object *)obj)
