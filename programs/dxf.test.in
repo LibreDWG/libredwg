@@ -26,15 +26,15 @@ check_subentity() {
         @LTEXEC@ ./dwg2dxf -y -v4 -o "$tgt" "$dwg" 2>/dev/null
         grep -A8 ^VERTEX "$dxf" >tmp1
         grep -A8 ^VERTEX "$tgt" >tmp2
-        d="$(diff -b tmp1 tmp2)"
+        d="$(diff -bu1 tmp1 tmp2)"
         test -z "$d" || echo "VERTEX $tgt $d"
         grep -A8 ^SEQEND "$dxf" >tmp1
         grep -A8 ^SEQEND "$tgt" >tmp2
-        d="$(diff -b tmp1 tmp2)"
+        d="$(diff -bu1 tmp1 tmp2)"
         test -z "$d" || echo "SEQEND $tgt $d"
         grep -A8 ^POLYLINE "$dxf" >tmp1
         grep -A8 ^POLYLINE "$tgt" >tmp2
-        d="$(diff -b tmp1 tmp2)"
+        d="$(diff -bu1 tmp1 tmp2)"
         test -z "$d" || echo "POLYLINE $tgt $d"
         rm tmp1 tmp2
 #   else
