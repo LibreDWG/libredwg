@@ -8529,6 +8529,58 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   END_REPEAT (states)
 DWG_OBJECT_END
 
+#define CLASS_HAS(x) 0
+
+// abstract subclass. requires eval_expr
+#define AcDbEvalExpr_fields \
+  FIELD_BL (ee_bl1, 0); \
+  FIELD_BL (ee_bl2, 0); \
+  FIELD_BL (ee_bl3, 0); \
+  if (!CLASS_HAS (eval_expr)) \
+    { \
+      FIELD_BL (ee_bs1, 0); \
+    } \
+  else \
+    { \
+      FIELD_BS (ee_type, 0); \
+      /* switch on ee_eval_type \
+       40: BD \
+       10: 2RD \
+       11: 3BD \
+       1: T \
+       90: BL \
+       91: H \
+       70: BS */ \
+    } \
+  FIELD_BL (ee_bl4, 0)
+
+DWG_OBJECT (BLOCKVISIBILITYGRIP)
+  DECODE_UNKNOWN_BITS;
+  AcDbEvalExpr_fields;
+  SUBCLASS (AcDbBlockElement)
+  FIELD_T (be_t, 0);
+  FIELD_BL (be_bl1, 0);
+  FIELD_BL (be_bl2, 0);
+  FIELD_BL (be_bl3, 0);
+  SUBCLASS (AcDbBlockGrip)
+  FIELD_BL (bg_bl1, 0);
+  FIELD_BL (bg_bl2, 0);
+  FIELD_3BD (bg_pt, 0);
+  FIELD_B (bg_insert_cycling, 0);
+  FIELD_BL (bg_insert_cycling_weight, 0);
+  //FIELD_3BD (bg_location, 0); //?
+  //FIELD_3BD (bg_display_location, 0); // ?
+  SUBCLASS (AcDbBlockVisibilityGrip)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
+  DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
+  SUBCLASS (AcDbBlockGripExpr)
+  FIELD_BL (eval_type, 91); //??
+  FIELD_T (eval_expr, 300);
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
 
@@ -8645,11 +8697,6 @@ DWG_OBJECT_END
 DWG_OBJECT (VISIBILITYGRIPENTITY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbBlockVisibilityGripEntity)
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbBlockGripExpr)
 DWG_OBJECT_END
 
 #endif

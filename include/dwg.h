@@ -404,6 +404,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_BLKREFOBJECTCONTEXTDATA,
   DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT,
   DWG_TYPE_BLOCKVISIBILITYPARAMETER,
+  DWG_TYPE_BLOCKVISIBILITYGRIP,
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
   DWG_TYPE_CSACDOCUMENTOPTIONS,
@@ -5977,6 +5978,9 @@ typedef struct _dwg_object_CSACDOCUMENTOPTIONS
   //?
 } Dwg_Object_CSACDOCUMENTOPTIONS;
 
+
+// dynamic blocks:
+
 typedef struct _dwg_BLOCKVISIBILITYPARAMETER_state
 {
   struct _dwg_object_BLOCKVISIBILITYPARAMETER *parent;
@@ -5996,6 +6000,58 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   Dwg_BLOCKVISIBILITYPARAMETER_state *states;
 } Dwg_Object_BLOCKVISIBILITYPARAMETER;
 
+#define ACDBEVALEXPR_fields \
+  BITCODE_BL ee_bl1; \
+  BITCODE_BL ee_bl2; \
+  BITCODE_BL ee_bl3; \
+  BITCODE_BL ee_bs1; \
+  BITCODE_BS ee_type; \
+  BITCODE_BL ee_bl4
+
+#define ACDBBLOCKELEMENT_fields \
+  BITCODE_T be_t;    \
+  BITCODE_BL be_bl1; \
+  BITCODE_BL be_bl2; \
+  BITCODE_BL be_bl3
+
+typedef struct _dwg_object_BLOCKVISIBILITYGRIP
+{
+  struct _dwg_object_object *parent;
+  //ACDBEVALEXPR_fields;
+  // AcDbEvalExpr
+  BITCODE_BL ee_bl1;
+  BITCODE_BL ee_bl2;
+  BITCODE_BL ee_bl3;
+  BITCODE_BL ee_bs1;
+  BITCODE_BS ee_type;
+  BITCODE_BL ee_bl4;
+  ACDBBLOCKELEMENT_fields;
+  // AcDbBlockGrip
+  BITCODE_BL bg_bl1;
+  BITCODE_BL bg_bl2;
+  BITCODE_3BD bg_pt;
+  BITCODE_B bg_insert_cycling;
+  BITCODE_BL bg_insert_cycling_weight;
+  //BITCODE_3BD bg_location; //?
+  //BITCODE_3BD bg_display_location; // ?
+  // AcDbBlockVisibilityGrip
+} Dwg_Object_BLOCKVISIBILITYGRIP;
+
+typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT
+{
+  struct _dwg_object_object *parent;
+  // ACDBEVALEXPR_fields;
+  // AcDbEvalExpr  
+  BITCODE_BL ee_bl1;
+  BITCODE_BL ee_bl2;
+  BITCODE_BL ee_bl3;
+  BITCODE_BL ee_bs1;
+  BITCODE_BS ee_type;
+  BITCODE_BL ee_bl4;
+  // AcDbBlockGripExpr
+  BITCODE_BL eval_type;
+  BITCODE_T eval_expr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
+} Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT;
 
 /**
  -----------------------------------
@@ -6280,7 +6336,8 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *ASSOCSWEPTSURFACEACTIONBODY;
     Dwg_Object_BACKGROUND *BACKGROUND;
     Dwg_Object_BLOCKVISIBILITYPARAMETER *BLOCKVISIBILITYPARAMETER;
-    //Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *BLOCKGRIPLOCATIONCOMPONENT;
+    Dwg_Object_BLOCKVISIBILITYGRIP *BLOCKVISIBILITYGRIP;
+    Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *BLOCKGRIPLOCATIONCOMPONENT;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
     Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_DATALINK *DATALINK;
@@ -7466,8 +7523,9 @@ EXPORT int dwg_setup_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
 //EXPORT int dwg_setup_XREFPANELOBJECT (Dwg_Object *obj);
+EXPORT int dwg_setup_BLOCKGRIPLOCATIONCOMPONENT (Dwg_Object *obj);
+EXPORT int dwg_setup_BLOCKVISIBILITYGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKVISIBILITYPARAMETER (Dwg_Object *obj);
-//EXPORT int dwg_setup_BLOCKGRIPLOCATIONCOMPONENT (Dwg_Object *obj);
 //EXPORT int dwg_setup_VISIBILITYGRIPENTITY (Dwg_Object *obj);
 //EXPORT int dwg_setup_VISIBILITYPARAMETERENTITY (Dwg_Object *obj);
 

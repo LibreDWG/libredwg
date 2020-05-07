@@ -27971,6 +27971,376 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *restrict blockgriplocationcomponent = obj->tio.object->tio.BLOCKGRIPLOCATIONCOMPONENT;
+  failed = 0;
+  {
+    BITCODE_BL ee_bl1;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl1", &ee_bl1, NULL)
+        && ee_bl1 == blockgriplocationcomponent->ee_bl1)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl1 [BL] %u != %u", blockgriplocationcomponent->ee_bl1, ee_bl1);
+    ee_bl1++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl1", &ee_bl1, 0)
+        && ee_bl1 == blockgriplocationcomponent->ee_bl1)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl1 [BL] set+1 %u != %u", blockgriplocationcomponent->ee_bl1, ee_bl1);
+    blockgriplocationcomponent->ee_bl1--;
+  }
+  {
+    BITCODE_BL ee_bl2;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl2", &ee_bl2, NULL)
+        && ee_bl2 == blockgriplocationcomponent->ee_bl2)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl2 [BL] %u != %u", blockgriplocationcomponent->ee_bl2, ee_bl2);
+    ee_bl2++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl2", &ee_bl2, 0)
+        && ee_bl2 == blockgriplocationcomponent->ee_bl2)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl2 [BL] set+1 %u != %u", blockgriplocationcomponent->ee_bl2, ee_bl2);
+    blockgriplocationcomponent->ee_bl2--;
+  }
+  {
+    BITCODE_BL ee_bl3;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl3", &ee_bl3, NULL)
+        && ee_bl3 == blockgriplocationcomponent->ee_bl3)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl3 [BL] %u != %u", blockgriplocationcomponent->ee_bl3, ee_bl3);
+    ee_bl3++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl3", &ee_bl3, 0)
+        && ee_bl3 == blockgriplocationcomponent->ee_bl3)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl3 [BL] set+1 %u != %u", blockgriplocationcomponent->ee_bl3, ee_bl3);
+    blockgriplocationcomponent->ee_bl3--;
+  }
+  {
+    BITCODE_BL ee_bl4;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl4", &ee_bl4, NULL)
+        && ee_bl4 == blockgriplocationcomponent->ee_bl4)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl4 [BL] %u != %u", blockgriplocationcomponent->ee_bl4, ee_bl4);
+    ee_bl4++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bl4", &ee_bl4, 0)
+        && ee_bl4 == blockgriplocationcomponent->ee_bl4)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bl4 [BL] set+1 %u != %u", blockgriplocationcomponent->ee_bl4, ee_bl4);
+    blockgriplocationcomponent->ee_bl4--;
+  }
+  {
+    BITCODE_BL ee_bs1;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bs1", &ee_bs1, NULL)
+        && ee_bs1 == blockgriplocationcomponent->ee_bs1)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bs1 [BL] %u != %u", blockgriplocationcomponent->ee_bs1, ee_bs1);
+    ee_bs1++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_bs1", &ee_bs1, 0)
+        && ee_bs1 == blockgriplocationcomponent->ee_bs1)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_bs1 [BL] set+1 %u != %u", blockgriplocationcomponent->ee_bs1, ee_bs1);
+    blockgriplocationcomponent->ee_bs1--;
+  }
+  {
+    BITCODE_BS ee_type;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_type", &ee_type, NULL)
+        && ee_type == blockgriplocationcomponent->ee_type)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_type [BS] %hu != %hu", blockgriplocationcomponent->ee_type, ee_type);
+    ee_type++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_type", &ee_type, 0)
+        && ee_type == blockgriplocationcomponent->ee_type)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_type [BS] set+1 %hu != %hu", blockgriplocationcomponent->ee_type, ee_type);
+    blockgriplocationcomponent->ee_type--;
+  }
+  {
+    BITCODE_T eval_expr;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "eval_expr", &eval_expr, NULL)
+        && eval_expr
+           ? strEQ ((char *)eval_expr, (char *)blockgriplocationcomponent->eval_expr)
+           : !blockgriplocationcomponent->eval_expr)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.eval_expr [T] '%s' <> '%s'", eval_expr, blockgriplocationcomponent->eval_expr);
+  }
+  {
+    BITCODE_BL eval_type;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "eval_type", &eval_type, NULL)
+        && eval_type == blockgriplocationcomponent->eval_type)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.eval_type [BL] %u != %u", blockgriplocationcomponent->eval_type, eval_type);
+    eval_type++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "eval_type", &eval_type, 0)
+        && eval_type == blockgriplocationcomponent->eval_type)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.eval_type [BL] set+1 %u != %u", blockgriplocationcomponent->eval_type, eval_type);
+    blockgriplocationcomponent->eval_type--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "parent", &parent, NULL)
+        && !memcmp (&parent, &blockgriplocationcomponent->parent, sizeof (blockgriplocationcomponent->parent)))
+        pass ();
+    else
+        fail ("BLOCKGRIPLOCATIONCOMPONENT.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("BLOCKGRIPLOCATIONCOMPONENT") || is_class_debugging ("BLOCKGRIPLOCATIONCOMPONENT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLOCKGRIPLOCATIONCOMPONENT", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BLOCKVISIBILITYGRIP *restrict blockvisibilitygrip = obj->tio.object->tio.BLOCKVISIBILITYGRIP;
+  failed = 0;
+  {
+    BITCODE_BL be_bl1;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "be_bl1", &be_bl1, NULL)
+        && be_bl1 == blockvisibilitygrip->be_bl1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.be_bl1 [BL] %u != %u", blockvisibilitygrip->be_bl1, be_bl1);
+    be_bl1++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "be_bl1", &be_bl1, 0)
+        && be_bl1 == blockvisibilitygrip->be_bl1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.be_bl1 [BL] set+1 %u != %u", blockvisibilitygrip->be_bl1, be_bl1);
+    blockvisibilitygrip->be_bl1--;
+  }
+  {
+    BITCODE_BL be_bl2;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "be_bl2", &be_bl2, NULL)
+        && be_bl2 == blockvisibilitygrip->be_bl2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.be_bl2 [BL] %u != %u", blockvisibilitygrip->be_bl2, be_bl2);
+    be_bl2++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "be_bl2", &be_bl2, 0)
+        && be_bl2 == blockvisibilitygrip->be_bl2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.be_bl2 [BL] set+1 %u != %u", blockvisibilitygrip->be_bl2, be_bl2);
+    blockvisibilitygrip->be_bl2--;
+  }
+  {
+    BITCODE_BL be_bl3;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "be_bl3", &be_bl3, NULL)
+        && be_bl3 == blockvisibilitygrip->be_bl3)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.be_bl3 [BL] %u != %u", blockvisibilitygrip->be_bl3, be_bl3);
+    be_bl3++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "be_bl3", &be_bl3, 0)
+        && be_bl3 == blockvisibilitygrip->be_bl3)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.be_bl3 [BL] set+1 %u != %u", blockvisibilitygrip->be_bl3, be_bl3);
+    blockvisibilitygrip->be_bl3--;
+  }
+  {
+    BITCODE_T be_t;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "be_t", &be_t, NULL)
+        && be_t
+           ? strEQ ((char *)be_t, (char *)blockvisibilitygrip->be_t)
+           : !blockvisibilitygrip->be_t)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.be_t [T] '%s' <> '%s'", be_t, blockvisibilitygrip->be_t);
+  }
+  {
+    BITCODE_BL bg_bl1;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl1", &bg_bl1, NULL)
+        && bg_bl1 == blockvisibilitygrip->bg_bl1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_bl1 [BL] %u != %u", blockvisibilitygrip->bg_bl1, bg_bl1);
+    bg_bl1++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl1", &bg_bl1, 0)
+        && bg_bl1 == blockvisibilitygrip->bg_bl1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_bl1 [BL] set+1 %u != %u", blockvisibilitygrip->bg_bl1, bg_bl1);
+    blockvisibilitygrip->bg_bl1--;
+  }
+  {
+    BITCODE_BL bg_bl2;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl2", &bg_bl2, NULL)
+        && bg_bl2 == blockvisibilitygrip->bg_bl2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_bl2 [BL] %u != %u", blockvisibilitygrip->bg_bl2, bg_bl2);
+    bg_bl2++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl2", &bg_bl2, 0)
+        && bg_bl2 == blockvisibilitygrip->bg_bl2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_bl2 [BL] set+1 %u != %u", blockvisibilitygrip->bg_bl2, bg_bl2);
+    blockvisibilitygrip->bg_bl2--;
+  }
+  {
+    BITCODE_B bg_insert_cycling;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_insert_cycling", &bg_insert_cycling, NULL)
+        && bg_insert_cycling == blockvisibilitygrip->bg_insert_cycling)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling [B] " FORMAT_B " != " FORMAT_B "", blockvisibilitygrip->bg_insert_cycling, bg_insert_cycling);
+    bg_insert_cycling++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_insert_cycling", &bg_insert_cycling, 0)
+        && bg_insert_cycling == blockvisibilitygrip->bg_insert_cycling)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling [B] set+1 " FORMAT_B " != " FORMAT_B "", blockvisibilitygrip->bg_insert_cycling, bg_insert_cycling);
+    blockvisibilitygrip->bg_insert_cycling--;
+  }
+  {
+    BITCODE_BL bg_insert_cycling_weight;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
+        && bg_insert_cycling_weight == blockvisibilitygrip->bg_insert_cycling_weight)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling_weight [BL] %u != %u", blockvisibilitygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+    bg_insert_cycling_weight++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
+        && bg_insert_cycling_weight == blockvisibilitygrip->bg_insert_cycling_weight)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockvisibilitygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+    blockvisibilitygrip->bg_insert_cycling_weight--;
+  }
+  {
+    BITCODE_3BD bg_pt;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_pt", &bg_pt, NULL)
+        && !memcmp (&bg_pt, &blockvisibilitygrip->bg_pt, sizeof (blockvisibilitygrip->bg_pt)))
+        pass ();
+    else
+        fail ("BLOCKVISIBILITYGRIP.bg_pt [3BD]");
+  }
+  {
+    BITCODE_BL ee_bl1;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl1", &ee_bl1, NULL)
+        && ee_bl1 == blockvisibilitygrip->ee_bl1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl1 [BL] %u != %u", blockvisibilitygrip->ee_bl1, ee_bl1);
+    ee_bl1++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl1", &ee_bl1, 0)
+        && ee_bl1 == blockvisibilitygrip->ee_bl1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl1 [BL] set+1 %u != %u", blockvisibilitygrip->ee_bl1, ee_bl1);
+    blockvisibilitygrip->ee_bl1--;
+  }
+  {
+    BITCODE_BL ee_bl2;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl2", &ee_bl2, NULL)
+        && ee_bl2 == blockvisibilitygrip->ee_bl2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl2 [BL] %u != %u", blockvisibilitygrip->ee_bl2, ee_bl2);
+    ee_bl2++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl2", &ee_bl2, 0)
+        && ee_bl2 == blockvisibilitygrip->ee_bl2)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl2 [BL] set+1 %u != %u", blockvisibilitygrip->ee_bl2, ee_bl2);
+    blockvisibilitygrip->ee_bl2--;
+  }
+  {
+    BITCODE_BL ee_bl3;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl3", &ee_bl3, NULL)
+        && ee_bl3 == blockvisibilitygrip->ee_bl3)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl3 [BL] %u != %u", blockvisibilitygrip->ee_bl3, ee_bl3);
+    ee_bl3++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl3", &ee_bl3, 0)
+        && ee_bl3 == blockvisibilitygrip->ee_bl3)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl3 [BL] set+1 %u != %u", blockvisibilitygrip->ee_bl3, ee_bl3);
+    blockvisibilitygrip->ee_bl3--;
+  }
+  {
+    BITCODE_BL ee_bl4;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl4", &ee_bl4, NULL)
+        && ee_bl4 == blockvisibilitygrip->ee_bl4)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl4 [BL] %u != %u", blockvisibilitygrip->ee_bl4, ee_bl4);
+    ee_bl4++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bl4", &ee_bl4, 0)
+        && ee_bl4 == blockvisibilitygrip->ee_bl4)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bl4 [BL] set+1 %u != %u", blockvisibilitygrip->ee_bl4, ee_bl4);
+    blockvisibilitygrip->ee_bl4--;
+  }
+  {
+    BITCODE_BL ee_bs1;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bs1", &ee_bs1, NULL)
+        && ee_bs1 == blockvisibilitygrip->ee_bs1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bs1 [BL] %u != %u", blockvisibilitygrip->ee_bs1, ee_bs1);
+    ee_bs1++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_bs1", &ee_bs1, 0)
+        && ee_bs1 == blockvisibilitygrip->ee_bs1)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_bs1 [BL] set+1 %u != %u", blockvisibilitygrip->ee_bs1, ee_bs1);
+    blockvisibilitygrip->ee_bs1--;
+  }
+  {
+    BITCODE_BS ee_type;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_type", &ee_type, NULL)
+        && ee_type == blockvisibilitygrip->ee_type)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_type [BS] %hu != %hu", blockvisibilitygrip->ee_type, ee_type);
+    ee_type++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_type", &ee_type, 0)
+        && ee_type == blockvisibilitygrip->ee_type)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_type [BS] set+1 %hu != %hu", blockvisibilitygrip->ee_type, ee_type);
+    blockvisibilitygrip->ee_type--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "parent", &parent, NULL)
+        && !memcmp (&parent, &blockvisibilitygrip->parent, sizeof (blockvisibilitygrip->parent)))
+        pass ();
+    else
+        fail ("BLOCKVISIBILITYGRIP.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("BLOCKVISIBILITYGRIP") || is_class_debugging ("BLOCKVISIBILITYGRIP")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLOCKVISIBILITYGRIP", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_BLOCKVISIBILITYPARAMETER (const Dwg_Object *obj)
 {
   int error = 0;
@@ -44856,6 +45226,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCVERTEXACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
+    error += test_BLOCKGRIPLOCATIONCOMPONENT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYGRIP)
+    error += test_BLOCKVISIBILITYGRIP(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
     error += test_BLOCKVISIBILITYPARAMETER(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
@@ -45222,6 +45596,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCVERTEXACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
+    error += test_BLOCKGRIPLOCATIONCOMPONENT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYGRIP)
+    error += test_BLOCKVISIBILITYGRIP (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
     error += test_BLOCKVISIBILITYPARAMETER (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_CONTROL)
@@ -46186,6 +46564,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_BLKREFOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"BLKREFOBJECTCONTEXTDATA\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT);
+  size2 = dwg_dynapi_fields_size ("BLOCKGRIPLOCATIONCOMPONENT");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKGRIPLOCATIONCOMPONENT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_BLOCKVISIBILITYGRIP);
+  size2 = dwg_dynapi_fields_size ("BLOCKVISIBILITYGRIP");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKVISIBILITYGRIP): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKVISIBILITYGRIP\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_BLOCKVISIBILITYPARAMETER);

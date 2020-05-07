@@ -73,6 +73,8 @@ testobjects = \
 	attdef \
 	attrib \
 	blkrefobjectcontextdata \
+	blockgriplocationcomponent \
+	blockvisibilitygrip \
 	blockvisibilityparameter \
 	block \
 	block_control \

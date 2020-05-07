@@ -5219,6 +5219,78 @@ BD,	DXF 50
 @end vtable
 @end indentedblock
 
+@strong{BLOCKGRIPLOCATIONCOMPONENT} @anchor{BLOCKGRIPLOCATIONCOMPONENT}
+@cindex object, BLOCKGRIPLOCATIONCOMPONENT
+@vindex BLOCKGRIPLOCATIONCOMPONENT
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item ee_bl1
+BL
+@item ee_bl2
+BL
+@item ee_bl3
+BL
+@item ee_bs1
+BL
+@item ee_type
+BS
+@item ee_bl4
+BL
+@item eval_type
+BL,	DXF 91
+@item eval_expr
+T,	DXF 300
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKVISIBILITYGRIP} @anchor{BLOCKVISIBILITYGRIP}
+@cindex object, BLOCKVISIBILITYGRIP
+@vindex BLOCKVISIBILITYGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item ee_bl1
+BL
+@item ee_bl2
+BL
+@item ee_bl3
+BL
+@item ee_bs1
+BL
+@item ee_type
+BS
+@item ee_bl4
+BL
+@item be_t
+T
+@item be_bl1
+BL
+@item be_bl2
+BL
+@item be_bl3
+BL
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+
+@end vtable
+@end indentedblock
+
 @strong{BLOCKVISIBILITYPARAMETER} @anchor{BLOCKVISIBILITYPARAMETER}
 @cindex object, BLOCKVISIBILITYPARAMETER
 @vindex BLOCKVISIBILITYPARAMETER
