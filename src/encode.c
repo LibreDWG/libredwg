@@ -1572,7 +1572,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   long unsigned int last_offset;
   BITCODE_BL last_handle;
   Object_Map *omap;
-  Bit_Chain *old_dat, *str_dat, *hdl_dat;
+  Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   int sec_id;
   Dwg_Version_Type orig_from_version = dat->from_version;
   Bit_Chain sec_dat[SECTION_SYSTEM_MAP + 1]; // to encode each r2004 section
@@ -1870,9 +1870,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /*------------------------------------------------------------
    * THUMBNAIL preview pictures
    */
+  old_dat = dat;
   SINCE (R_2004)
   {
-    old_dat = dat;
     bit_chain_init (&sec_dat[SECTION_PREVIEW], dwg->thumbnail.size + 64);
     str_dat = hdl_dat = dat = &sec_dat[SECTION_PREVIEW];
     bit_chain_set_version (dat, old_dat);
@@ -2739,6 +2739,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         Dwg_Section_InfoHdr *_obj = &dwg->header.section_infohdr;
         Dwg_Section *sec = &dwg->header.section[si - 1];
         Dwg_Section_Info *info = find_section_info_type (dwg, type);
+        if (!info || !info->sections)
+          {
+            LOG_ERROR ("SECTION_SYSTEM_MAP not found");
+            return DWG_ERR_SECTIONNOTFOUND;
+          }
 
         sec_dat[sec_id].size = sec_dat[sec_id].byte;
         bit_chain_alloc (&sec_dat[sec_id]);
