@@ -3362,7 +3362,7 @@ typedef struct _dwg_TableRow
 
 typedef struct _dwg_TableDataColumn
 {
-  BITCODE_TV name;
+  BITCODE_T name;
   BITCODE_BL custom_data;
   //BITCODE_TV data;
   Dwg_CellStyle cellstyle;
@@ -3569,7 +3569,7 @@ typedef struct _dwg_TABLESTYLE_Cell
   BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
                       ref TABLESTYLE. custom IDs > 100 */
   BITCODE_BL type; /* 1=data, 2=label */
-  BITCODE_TV name;
+  BITCODE_T name;
 
   struct _dwg_object_TABLESTYLE *parent;
 } Dwg_TABLESTYLE_Cell;
@@ -3634,7 +3634,7 @@ typedef struct _dwg_CELLSTYLEMAP_Cell
   BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
                       ref TABLESTYLE. custom IDs > 100 */
   BITCODE_BL type; /* 1=data, 2=label */
-  BITCODE_TV name;
+  BITCODE_T name;
 
   struct _dwg_object_CELLSTYLEMAP *parent;
 } Dwg_CELLSTYLEMAP_Cell;
@@ -4796,14 +4796,32 @@ typedef struct _dwg_object_SUNSTUDY
   BITCODE_H  text_style;        /*!< DXF 343 */
 } Dwg_Object_SUNSTUDY;
 
+typedef struct _dwg_DATATABLE_row
+{
+  struct _dwg_object_DATATABLE *parent;
+  Dwg_TABLE_value value;
+} Dwg_DATATABLE_row;
+
+typedef struct _dwg_DATATABLE_column
+{
+  struct _dwg_object_DATATABLE *parent;
+  BITCODE_BL type;          /* DXF 92 */
+  BITCODE_T  text;          /* DXF 2 */
+  Dwg_DATATABLE_row *rows;
+} Dwg_DATATABLE_column;
+
 /**
- Object DATATABLE (varies) UNKNOWN FIELDS
+ Object DATATABLE (varies)
  --enable-debug only
  */
 typedef struct _dwg_object_DATATABLE
 {
   struct _dwg_object_object *parent;
-  //...
+  BITCODE_BS flags;	/* DXF 70 */
+  BITCODE_BL num_cols;	/* DXF 90 */
+  BITCODE_BL num_rows;	/* DXF 91 */
+  BITCODE_T table_name;	/* DXF 1 */
+  Dwg_DATATABLE_column *cols;
 } Dwg_Object_DATATABLE;
 
 /**

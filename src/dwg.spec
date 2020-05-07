@@ -8103,15 +8103,42 @@ DWG_OBJECT_END
 // (varies) TODO
 DWG_OBJECT (DATATABLE)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbDataTable)
+  UNTIL (R_2000) {
+    SUBCLASS (ACDBDATABLE)
+  } LATER_VERSIONS {
+    SUBCLASS (AcDbDataTable)
+  }
   DEBUG_HERE_OBJ
+  FIELD_BS (flags, 70);
+  FIELD_BL (num_cols, 90);
+  FIELD_BL (num_rows, 91);
+  FIELD_T (table_name, 1);
+  REPEAT (num_cols, cols, Dwg_DATATABLE_column)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (cols[rcount1],type, 92);
+      SUB_FIELD_T (cols[rcount1],text, 2);
+
+      REPEAT2 (num_rows, cols[rcount1].rows, Dwg_DATATABLE_row) //CellType?
+      REPEAT_BLOCK
+          // almost like Dwg_TABLE_value
+          //switch case 1:
+          SUB_FIELD_BL (cols[rcount1].rows[rcount2],value.data_long, 93);
+          //switch case 2:
+          SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
+          //switch case 3:
+          SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
+      END_REPEAT_BLOCK
+      SET_PARENT_OBJ (cols[rcount1].rows);
+      END_REPEAT (cols[rcount1].rows)
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (cols);
+  END_REPEAT (cols)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (DATALINK)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDataLink)
-  //FIELD_BS (class_version, 0); // 10
   FIELD_T (data_adapter, 1);
   FIELD_T (description, 300);
   FIELD_T (tooltip, 301);

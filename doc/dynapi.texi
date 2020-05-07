@@ -5537,6 +5537,16 @@ H,	DXF 360
 
 @item parent
 struct _dwg_object_object*
+@item flags
+BS,	DXF 70
+@item num_cols
+BL,	DXF 90
+@item num_rows
+BL,	DXF 91
+@item table_name
+T,	DXF 1
+@item cols
+Dwg_DATATABLE_column*
 
 @end vtable
 @end indentedblock
@@ -9357,7 +9367,7 @@ BL,	DXF 90
 @item type
 BL,	DXF 91
 @item name
-TV,	DXF 300
+T,	DXF 300
 @item parent
 struct _dwg_object_CELLSTYLEMAP*
 
@@ -9482,6 +9492,38 @@ struct _dwg_object_DATALINK*
 H
 @item text
 T,	DXF 304
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_DATATABLE_column} @anchor{Dwg_DATATABLE_column}
+@vindex Dwg_DATATABLE_column
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_DATATABLE*
+@item type
+BL,	DXF 92
+@item text
+T,	DXF 2
+@item rows
+Dwg_DATATABLE_row*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_DATATABLE_row} @anchor{Dwg_DATATABLE_row}
+@vindex Dwg_DATATABLE_row
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_DATATABLE*
+@item value
+Dwg_TABLE_value
 
 @end vtable
 @end indentedblock
@@ -10445,7 +10487,7 @@ BL
 @item type
 BL
 @item name
-TV
+T
 @item parent
 struct _dwg_object_TABLESTYLE*
 
@@ -10787,7 +10829,7 @@ struct _dwg_TableCellContent*
 @vtable @code
 
 @item name
-TV,	DXF 300
+T,	DXF 300
 @item custom_data
 BL,	DXF 91
 @item cellstyle

@@ -29366,12 +29366,77 @@ static int test_DATATABLE (const Dwg_Object *obj)
   Dwg_Object_DATATABLE *restrict datatable = obj->tio.object->tio.DATATABLE;
   failed = 0;
   {
+    Dwg_DATATABLE_column* cols;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (datatable, "DATATABLE", "num_cols", &count, NULL)
+        && dwg_dynapi_entity_value (datatable, "DATATABLE", "cols", &cols, NULL)
+        && cols == datatable->cols)
+      pass ();
+    else
+      fail ("DATATABLE.cols [Dwg_DATATABLE_column*] * %u num_cols", count);
+  }
+  {
+    BITCODE_BS flags;
+    if (dwg_dynapi_entity_value (datatable, "DATATABLE", "flags", &flags, NULL)
+        && flags == datatable->flags)
+      pass ();
+    else
+      fail ("DATATABLE.flags [BS] %hu != %hu", datatable->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (datatable, "DATATABLE", "flags", &flags, 0)
+        && flags == datatable->flags)
+      pass ();
+    else
+      fail ("DATATABLE.flags [BS] set+1 %hu != %hu", datatable->flags, flags);
+    datatable->flags--;
+  }
+  {
+    BITCODE_BL num_cols;
+    if (dwg_dynapi_entity_value (datatable, "DATATABLE", "num_cols", &num_cols, NULL)
+        && num_cols == datatable->num_cols)
+      pass ();
+    else
+      fail ("DATATABLE.num_cols [BL] %u != %u", datatable->num_cols, num_cols);
+    num_cols++;
+    if (dwg_dynapi_entity_set_value (datatable, "DATATABLE", "num_cols", &num_cols, 0)
+        && num_cols == datatable->num_cols)
+      pass ();
+    else
+      fail ("DATATABLE.num_cols [BL] set+1 %u != %u", datatable->num_cols, num_cols);
+    datatable->num_cols--;
+  }
+  {
+    BITCODE_BL num_rows;
+    if (dwg_dynapi_entity_value (datatable, "DATATABLE", "num_rows", &num_rows, NULL)
+        && num_rows == datatable->num_rows)
+      pass ();
+    else
+      fail ("DATATABLE.num_rows [BL] %u != %u", datatable->num_rows, num_rows);
+    num_rows++;
+    if (dwg_dynapi_entity_set_value (datatable, "DATATABLE", "num_rows", &num_rows, 0)
+        && num_rows == datatable->num_rows)
+      pass ();
+    else
+      fail ("DATATABLE.num_rows [BL] set+1 %u != %u", datatable->num_rows, num_rows);
+    datatable->num_rows--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (datatable, "DATATABLE", "parent", &parent, NULL)
         && !memcmp (&parent, &datatable->parent, sizeof (datatable->parent)))
         pass ();
     else
         fail ("DATATABLE.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T table_name;
+    if (dwg_dynapi_entity_value (datatable, "DATATABLE", "table_name", &table_name, NULL)
+        && table_name
+           ? strEQ ((char *)table_name, (char *)datatable->table_name)
+           : !datatable->table_name)
+      pass ();
+    else
+      fail ("DATATABLE.table_name [T] '%s' <> '%s'", table_name, datatable->table_name);
   }
   if (failed && (is_class_unstable ("DATATABLE") || is_class_debugging ("DATATABLE")))
     {
@@ -47548,6 +47613,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_DATALINK_customdata): %d != "
                "dwg_dynapi_fields_size (\"DATALINK_customdata\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_DATATABLE_column);
+  size2 = dwg_dynapi_fields_size ("DATATABLE_column");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_DATATABLE_column): %d != "
+               "dwg_dynapi_fields_size (\"DATATABLE_column\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_DATATABLE_row);
+  size2 = dwg_dynapi_fields_size ("DATATABLE_row");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_DATATABLE_row): %d != "
+               "dwg_dynapi_fields_size (\"DATATABLE_row\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_DIMASSOC_Ref);
