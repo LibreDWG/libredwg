@@ -15,7 +15,7 @@ make -s -C programs dwg2dxf dxfwrite
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
-args=
+args=-y
 out=
 
 for d in "$@"; do
