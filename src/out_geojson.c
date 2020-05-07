@@ -390,12 +390,12 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     }
 
   sprintf (tmp, "%lX", obj->handle.value);
-  // if has name or text
+  // if has notes and opt. an mtext frame_text
   if (obj->type == DWG_TYPE_GEOPOSITIONMARKER)
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj
           = obj->tio.entity->tio.GEOPOSITIONMARKER;
-      PAIR_S (Text, _obj->text)
+      PAIR_S (Text, _obj->notes)
     }
   else if (obj->type == DWG_TYPE_TEXT)
     {

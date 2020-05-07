@@ -1788,29 +1788,23 @@ H
 @item parent
 struct _dwg_object_entity*
 @item type
-BS
+BS,	DXF 90
 @item position
 3BD,	DXF 10
-@item extrusion
-BE,	DXF 210
 @item radius
 BD,	DXF 40
 @item landing_gap
-BD
-@item text
+BD,	DXF 40
+@item notes
 T,	DXF 1
 @item text_alignment
-BS
+RC,	DXF 280
 @item mtext_visible
-B
+B,	DXF 290
 @item enable_frame_text
-B
-@item notes
-T
-@item mtext_handle
-H
-@item text_style
-H,	DXF 7
+B,	DXF 290
+@item mtext
+struct _dwg_object*
 
 @end vtable
 @end indentedblock
@@ -5719,22 +5713,16 @@ H,	DXF 340
 
 @item parent
 struct _dwg_object_object*
+@item dimensionobj
+H,	DXF 330
 @item associativity
 BL,	DXF 90
 @item trans_space_flag
-RC,	DXF 70
+B,	DXF 70
 @item rotated_type
-BS,	DXF 71
+RC,	DXF 71
 @item ref
 Dwg_DIMASSOC_Ref*
-@item intsect_gsmarker
-BL,	DXF 92
-@item dimensionobj
-H,	DXF 330
-@item xrefobj
-H
-@item intsectxrefobj
-H
 
 @end vtable
 @end indentedblock
@@ -9539,7 +9527,7 @@ struct _dwg_object_DIMASSOC*
 @item has_lastpt_ref
 B,	DXF 75
 @item classname
-TV,	DXF 1
+T,	DXF 1
 @item osnap_type
 RC,	DXF 72
 @item main_subent_type

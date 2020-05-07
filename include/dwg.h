@@ -4435,24 +4435,20 @@ typedef struct _dwg_entity_CAMERA
 } Dwg_Entity_CAMERA;
 
 /**
- Entity GEOPOSITIONMARKER (varies) UNKNOWN FIELDS
- yet unsorted, and unused.
+ Entity GEOPOSITIONMARKER (varies)
 */
 typedef struct _dwg_entity_GEOPOSITIONMARKER
 {
   struct _dwg_object_entity *parent;
-  BITCODE_BS type;        /*!< point, lat_lon, mylocation */
+  BITCODE_BS type;        /*!< DXF 90 point, lat_lon, mylocation */
   BITCODE_3BD position;   /*!< DXF 10 */
-  BITCODE_BE extrusion;   /*!< DXF 210 */
   BITCODE_BD radius;      /*!< DXF 40 */
-  BITCODE_BD landing_gap; /*!< DXF 41 */
-  BITCODE_T text;         /*!< DXF 1 */
-  BITCODE_BS text_alignment; /*!< DXF 70  0 left, 1 center, 2 right */
-  BITCODE_B mtext_visible;/*!< DXF ? */
-  BITCODE_B enable_frame_text; /*!< DXF ? */
-  BITCODE_T notes;        /*!< DXF 3 */
-  BITCODE_H mtext_handle; /*!< DXF ? */
-  BITCODE_H text_style;   /*!< DXF 7 */
+  BITCODE_BD landing_gap; /*!< DXF 40 */
+  BITCODE_T notes;         /*!< DXF 1 */
+  BITCODE_RC text_alignment;   /*!< DXF 70  0 left, 1 center, 2 right */
+  BITCODE_B mtext_visible;     /*!< DXF 290 */
+  BITCODE_B enable_frame_text; /*!< DXF 290 */
+  struct _dwg_object *mtext;
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
@@ -4868,7 +4864,7 @@ typedef struct _dwg_DIMASSOC_Ref
 {
   struct _dwg_object_DIMASSOC *parent;
   BITCODE_B  has_lastpt_ref;  /*!< DXF 75 */
-  BITCODE_TV classname;       /*!< DXF 1 */
+  BITCODE_T classname;       /*!< DXF 1 */
   BITCODE_RC osnap_type;      /*!< DXF 72 */
   BITCODE_BS main_subent_type; /*!< DXF 73 */
   BITCODE_BL main_gsmarker;   /*!< DXF 91 */
@@ -4883,15 +4879,12 @@ typedef struct _dwg_DIMASSOC_Ref
 typedef struct _dwg_object_DIMASSOC
 {
   struct _dwg_object_object *parent;
+  BITCODE_H dimensionobj;
   BITCODE_BL associativity;   /*!< DXF 90, bitmask 0-15*/
-  BITCODE_RC trans_space_flag;/*!< DXF 70 boolean */
-  BITCODE_BS rotated_type;    /*!< DXF 71 mostly 0 */
+  BITCODE_B trans_space_flag; /*!< DXF 70 boolean */
+  BITCODE_RC rotated_type;      /*!< DXF 71 */
   Dwg_DIMASSOC_Ref *ref;       /* 1-4x, with possible holes,
                                   depend. on associativity bitmask */
-  BITCODE_BL intsect_gsmarker; /*!< DXF 92 */
-  BITCODE_H dimensionobj;     /*!< DXF 330 */
-  BITCODE_H xrefobj;          /*!< DXF 301 */
-  BITCODE_H intsectxrefobj;   /*!< DXF 302 */
 } Dwg_Object_DIMASSOC;
 
 typedef struct _dwg_ACTIONBODY

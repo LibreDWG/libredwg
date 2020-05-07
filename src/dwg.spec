@@ -6276,9 +6276,8 @@ DWG_OBJECT (DIMASSOC)
   SUBCLASS (AcDbDimAssoc)
   FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_BLx (associativity, 90);
-  FIELD_RC (trans_space_flag, 70);
-  // missing from DWG, always 0
-  DXF { FIELD_BS (rotated_type, 71); }
+  FIELD_B (trans_space_flag, 70);
+  FIELD_RC (rotated_type, 71);
   REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref)
   REPEAT_BLOCK
       // TODO: there could be much more blocks, up to 5.
@@ -6310,12 +6309,8 @@ DWG_OBJECT (DIMASSOC)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ref)
   END_REPEAT (ref)
-  //FIELD_BL (intsect_gsmarker, 92);
 
   START_OBJECT_HANDLE_STREAM;
-  //FIELD_HANDLE (xrefobj, 4, 301); // TODO optional
-  //FIELD_HANDLE (intsectxrefobj, 4, 302); // TODO multiple
-
 DWG_OBJECT_END
 
 /*
@@ -7314,26 +7309,24 @@ DWG_ENTITY (GEOPOSITIONMARKER)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbGeoPositionMarker)
-  FIELD_BS (type, 0); // POINT, LATLONG, MYLOCATION
+  FIELD_BL (type, 90); // 0
   FIELD_3BD (position, 10);
-  //FIELD_3BD (lat_lon_alt, 0); // the same?
-  FIELD_3BD (extrusion, 210);
   FIELD_BD (radius, 40);
-  FIELD_BD (landing_gap, 0);
-  FIELD_T (text, 1);
-  FIELD_BS (text_alignment, 0); // 0 left, 1 center, 2 right
-  FIELD_B (mtext_visible, 0);
-  //FIELD_B (mtext_is_vertical, 0);
-  //FIELD_BD (mtext_actual_width, 0);
-  //FIELD_BD (mtext_actual_height, 0);
-  FIELD_B (enable_frame_text, 0);
-  FIELD_T (notes, 0);
-
+  FIELD_T (notes, 1);
+  FIELD_BD (landing_gap, 40);
+  FIELD_B (mtext_visible, 290);
+  FIELD_RCd (text_alignment, 280); // 0 left, 1 center, 2 right
+  FIELD_B (enable_frame_text, 290);
+  if (FIELD_VALUE (enable_frame_text))
+    {
+      DECODER {
+        dwg_add_object (dwg);
+        _obj->mtext = &dwg->object[dwg->num_objects - 1];
+        dwg_setup_MTEXT (_obj->mtext);
+      }
+      CALL_ENTITY (MTEXT, _obj->mtext);
+    }
   COMMON_ENTITY_HANDLE_DATA;
-  //FIELD_HANDLE (leader_handle, 5, 0); //or drawn automatically?
-  FIELD_HANDLE (mtext_handle, 5, 0);
-  FIELD_HANDLE (text_style, 5, 7);
-
 DWG_ENTITY_END
 
 // r2007+
@@ -8735,6 +8728,18 @@ DWG_OBJECT_END
 DWG_OBJECT (VISIBILITYGRIPENTITY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbBlockVisibilityGripEntity)
+DWG_OBJECT_END
+
+DWG_OBJECT (COMPOUNDOBJECT)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbCompoundObjectId)
+  FIELD_B (has_data, 290);
+  if (FIELD_VALUE (has_data))
+    {
+      //...
+      FIELD_T (name, 1);
+      //...
+    }
 DWG_OBJECT_END
 
 #endif

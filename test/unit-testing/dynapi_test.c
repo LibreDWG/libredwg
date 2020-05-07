@@ -10685,14 +10685,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     geopositionmarker->enable_frame_text--;
   }
   {
-    BITCODE_BE extrusion;
-    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &geopositionmarker->extrusion, sizeof (geopositionmarker->extrusion)))
-        pass ();
-    else
-        fail ("GEOPOSITIONMARKER.extrusion [BE]");
-  }
-  {
     BITCODE_BD landing_gap;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "landing_gap", &landing_gap, NULL)
         && landing_gap == geopositionmarker->landing_gap)
@@ -10708,12 +10700,14 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     geopositionmarker->landing_gap--;
   }
   {
-    BITCODE_H mtext_handle;
-    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "mtext_handle", &mtext_handle, NULL)
-        && !memcmp (&mtext_handle, &geopositionmarker->mtext_handle, sizeof (geopositionmarker->mtext_handle)))
-        pass ();
+    struct _dwg_object* mtext;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "num_mtext", &count, NULL)
+        && dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "mtext", &mtext, NULL)
+        && mtext == geopositionmarker->mtext)
+      pass ();
     else
-        fail ("GEOPOSITIONMARKER.mtext_handle [H]");
+      fail ("GEOPOSITIONMARKER.mtext [struct _dwg_object*] * %u num_mtext", count);
   }
   {
     BITCODE_B mtext_visible;
@@ -10772,37 +10766,19 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     geopositionmarker->radius--;
   }
   {
-    BITCODE_T text;
-    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "text", &text, NULL)
-        && text
-           ? strEQ ((char *)text, (char *)geopositionmarker->text)
-           : !geopositionmarker->text)
-      pass ();
-    else
-      fail ("GEOPOSITIONMARKER.text [T] '%s' <> '%s'", text, geopositionmarker->text);
-  }
-  {
-    BITCODE_BS text_alignment;
+    BITCODE_RC text_alignment;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "text_alignment", &text_alignment, NULL)
         && text_alignment == geopositionmarker->text_alignment)
       pass ();
     else
-      fail ("GEOPOSITIONMARKER.text_alignment [BS] %hu != %hu", geopositionmarker->text_alignment, text_alignment);
+      fail ("GEOPOSITIONMARKER.text_alignment [RC] %u != %u", geopositionmarker->text_alignment, text_alignment);
     text_alignment++;
     if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "text_alignment", &text_alignment, 0)
         && text_alignment == geopositionmarker->text_alignment)
       pass ();
     else
-      fail ("GEOPOSITIONMARKER.text_alignment [BS] set+1 %hu != %hu", geopositionmarker->text_alignment, text_alignment);
+      fail ("GEOPOSITIONMARKER.text_alignment [RC] set+1 %u != %u", geopositionmarker->text_alignment, text_alignment);
     geopositionmarker->text_alignment--;
-  }
-  {
-    BITCODE_H text_style;
-    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "text_style", &text_style, NULL)
-        && !memcmp (&text_style, &geopositionmarker->text_style, sizeof (geopositionmarker->text_style)))
-        pass ();
-    else
-        fail ("GEOPOSITIONMARKER.text_style [H]");
   }
   {
     BITCODE_BS type;
@@ -30152,29 +30128,6 @@ static int test_DIMASSOC (const Dwg_Object *obj)
         fail ("DIMASSOC.dimensionobj [H]");
   }
   {
-    BITCODE_BL intsect_gsmarker;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "intsect_gsmarker", &intsect_gsmarker, NULL)
-        && intsect_gsmarker == dimassoc->intsect_gsmarker)
-      pass ();
-    else
-      fail ("DIMASSOC.intsect_gsmarker [BL] %u != %u", dimassoc->intsect_gsmarker, intsect_gsmarker);
-    intsect_gsmarker++;
-    if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "intsect_gsmarker", &intsect_gsmarker, 0)
-        && intsect_gsmarker == dimassoc->intsect_gsmarker)
-      pass ();
-    else
-      fail ("DIMASSOC.intsect_gsmarker [BL] set+1 %u != %u", dimassoc->intsect_gsmarker, intsect_gsmarker);
-    dimassoc->intsect_gsmarker--;
-  }
-  {
-    BITCODE_H intsectxrefobj;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "intsectxrefobj", &intsectxrefobj, NULL)
-        && !memcmp (&intsectxrefobj, &dimassoc->intsectxrefobj, sizeof (dimassoc->intsectxrefobj)))
-        pass ();
-    else
-        fail ("DIMASSOC.intsectxrefobj [H]");
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "parent", &parent, NULL)
         && !memcmp (&parent, &dimassoc->parent, sizeof (dimassoc->parent)))
@@ -30191,42 +30144,34 @@ static int test_DIMASSOC (const Dwg_Object *obj)
         fail ("DIMASSOC.ref [Dwg_DIMASSOC_Ref*]");
   }
   {
-    BITCODE_BS rotated_type;
+    BITCODE_RC rotated_type;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "rotated_type", &rotated_type, NULL)
         && rotated_type == dimassoc->rotated_type)
       pass ();
     else
-      fail ("DIMASSOC.rotated_type [BS] %hu != %hu", dimassoc->rotated_type, rotated_type);
+      fail ("DIMASSOC.rotated_type [RC] %u != %u", dimassoc->rotated_type, rotated_type);
     rotated_type++;
     if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "rotated_type", &rotated_type, 0)
         && rotated_type == dimassoc->rotated_type)
       pass ();
     else
-      fail ("DIMASSOC.rotated_type [BS] set+1 %hu != %hu", dimassoc->rotated_type, rotated_type);
+      fail ("DIMASSOC.rotated_type [RC] set+1 %u != %u", dimassoc->rotated_type, rotated_type);
     dimassoc->rotated_type--;
   }
   {
-    BITCODE_RC trans_space_flag;
+    BITCODE_B trans_space_flag;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "trans_space_flag", &trans_space_flag, NULL)
         && trans_space_flag == dimassoc->trans_space_flag)
       pass ();
     else
-      fail ("DIMASSOC.trans_space_flag [RC] %u != %u", dimassoc->trans_space_flag, trans_space_flag);
+      fail ("DIMASSOC.trans_space_flag [B] " FORMAT_B " != " FORMAT_B "", dimassoc->trans_space_flag, trans_space_flag);
     trans_space_flag++;
     if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "trans_space_flag", &trans_space_flag, 0)
         && trans_space_flag == dimassoc->trans_space_flag)
       pass ();
     else
-      fail ("DIMASSOC.trans_space_flag [RC] set+1 %u != %u", dimassoc->trans_space_flag, trans_space_flag);
+      fail ("DIMASSOC.trans_space_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", dimassoc->trans_space_flag, trans_space_flag);
     dimassoc->trans_space_flag--;
-  }
-  {
-    BITCODE_H xrefobj;
-    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "xrefobj", &xrefobj, NULL)
-        && !memcmp (&xrefobj, &dimassoc->xrefobj, sizeof (dimassoc->xrefobj)))
-        pass ();
-    else
-        fail ("DIMASSOC.xrefobj [H]");
   }
   if (failed && (is_class_unstable ("DIMASSOC") || is_class_debugging ("DIMASSOC")))
     {

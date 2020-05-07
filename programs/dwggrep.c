@@ -806,8 +806,9 @@ match_GEOPOSITIONMARKER (const char *restrict filename,
   int found = 0;
   //const Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
 
-  MATCH_ENTITY (GEOPOSITIONMARKER, text, 1);
-  MATCH_ENTITY (GEOPOSITIONMARKER, notes, 3);
+  MATCH_ENTITY (GEOPOSITIONMARKER, notes, 1);
+  //if enabled
+  //MATCH_ENTITY (GEOPOSITIONMARKER, mtext->tio.entity->tio.MTEXT->text, 3);
   return found;
 }
 
