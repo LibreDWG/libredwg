@@ -822,7 +822,8 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
           return;
         }
       VALUE_RS (color->index, dxf);
-      VALUE_RL (color->rgb & 0x00ffffff, dxf + 420 - 62);
+      if (color->rgb & 0x00ffffff) // optional
+        VALUE_RL (color->rgb & 0x00ffffff, dxf + 420 - 62);
       if (color->flag & 2 && color->book_name)
         {
           char name[80];

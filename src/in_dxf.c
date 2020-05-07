@@ -6586,6 +6586,7 @@ new_object (char *restrict name, char *restrict dxfname,
         case 425:
         case 426:
         case 427:
+          // note that there is a DIMSTYLE.DIMTFILL with rgb 428. so far I only found index 70, not rgb 428
           if (pair->code >= 420 && pair->code <= 427)
             {
               const char *fname = NULL;
