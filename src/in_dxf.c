@@ -6586,8 +6586,9 @@ new_object (char *restrict name, char *restrict dxfname,
         case 425:
         case 426:
         case 427:
+        case 428:
           // note that there is a DIMSTYLE.DIMTFILL with rgb 428. so far I only found index 70, not rgb 428
-          if (pair->code >= 420 && pair->code <= 427)
+          if (pair->code >= 420 && pair->code <= 428)
             {
               const char *fname = NULL;
               if (pair->code == 420 && strEQc (name, "LAYER"))
@@ -6615,6 +6616,8 @@ new_object (char *restrict name, char *restrict dxfname,
                 fname = "edge_color";
               else if (pair->code == 425 && strEQc (name, "VISUALSTYLE"))
                 fname = "edge_silhouette_color";
+              else if (pair->code == 428 && strEQc (name, "DIMSTYLE"))
+                fname = "DIMTFILL";
               else if (strEQc (name, "TABLE"))
                 {
                   BITCODE_BL table_flag
@@ -6694,8 +6697,9 @@ new_object (char *restrict name, char *restrict dxfname,
                   BITCODE_CMC color;
                   dwg_dynapi_entity_value (_obj, obj->name, fname, &color,
                                            NULL);
-                  color.rgb = pair->value.l;
-                  LOG_TRACE ("%s.%s.rgb = %06X [CMC %d]\n", name, fname,
+                  color.method = 0xc2;
+                  color.rgb = (0xc2 << 0x18) | (pair->value.l & 0x00ffffff);
+                  LOG_TRACE ("%s.%s.rgb = %08X [CMC %d]\n", name, fname,
                              pair->value.u, pair->code);
                   dwg_dynapi_entity_set_value (_obj, obj->name, fname, &color,
                                                is_tu);

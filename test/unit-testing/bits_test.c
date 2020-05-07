@@ -668,10 +668,10 @@ main (int argc, char const *argv[])
     Dwg_Color color;
     bitchain.version = R_2000;
     color.index = 19;
-    color.rgb = 5190965;
-    color.flag = 1;
-    color.name = (char *)"Some name";
-    color.book_name = (char *)"book_name";
+    color.rgb = 0xc2ff00ff;
+    color.flag = 3; // write both. to skip book set it to NULL
+    color.name = (char *)"Some color";
+    color.book_name = (char *)"DIC(3) Catalog";
     bit_write_CMC (&bitchain, &bitchain, &color);
     if (bitchain.byte == 100 && bitchain.bit == 2)
       pass ();
@@ -693,6 +693,8 @@ main (int argc, char const *argv[])
       pass ();
     else
       fail ("bit_read_CMC %d", color_read.index);
+    free (color_read.name);
+    free (color_read.book_name);
   }
 
   bit_advance_position (&bitchain, -size);
@@ -701,26 +703,28 @@ main (int argc, char const *argv[])
     pos = bit_position (&bitchain);
     bitchain.from_version = bitchain.version = R_2004;
     color.index = 19;
-    color.rgb = 5190965;
-    color.flag = 1;
-    color.name = (char *)"Some name";
-    color.book_name = (char *)"book_name";
+    color.rgb = 0xc2ff00ff;
+    color.flag = 3; // write both. to skip book set it to NULL
+    color.name = (char *)"Some color";
+    color.book_name = (char *)"DIC(3) Catalog";
     bit_write_CMC (&bitchain, &bitchain, &color);
-    if (bitchain.byte == 122 && bitchain.bit == 0)
+    if (bitchain.byte == 138 && bitchain.bit == 2)
       pass ();
     else
-      fail ("bit_write_CMC @%ld.%d", bitchain.byte, bitchain.bit);
+      fail ("bit_write_CMC (true) @%ld.%d", bitchain.byte, bitchain.bit);
 
     bit_set_position (&bitchain, pos);
     bit_read_CMC (&bitchain, &bitchain, &color);
 
-    if (color.index == 19 && color.rgb == 5190965 && color.flag == 1
-        && !strcmp (color.name, "Some name"))
+    // index is ignored
+    if (color.index == 0 && color.rgb == 0xc2ff00ff && color.flag == 3
+        && !strcmp (color.name, "Some color"))
       pass ();
     else
-      fail ("bit_read_CMC (%d,%u,%d) %s", color.index, color.rgb, color.flag,
+      fail ("bit_read_CMC (%d,%x,%d) %s", color.index, color.rgb, color.flag,
             color.name);
     free (color.name);
+    free (color.book_name);
   }
 
   bitchain.byte++;
@@ -738,18 +742,18 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel (&bitchain, sentinel);
-    if (bitchain.byte == 139)
+    if (bitchain.byte == 155)
       pass ();
     else
       {
         fail ("bit_search_sentinel %lu", bitchain.byte);
-        bitchain.byte = 139;
+        bitchain.byte = 155;
       }
   }
   {
     unsigned int check
         = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 124L);
-    if (check == 0x7C16)
+    if (check == 0x6EF6)
       pass ();
     else
       fail ("bit_calc_CRC %04X", check);
