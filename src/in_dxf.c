@@ -4082,16 +4082,17 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("%s.ref[%d].osnap_type = %d [RC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
+        //FIXME: 301 xrefpaths[j]
         case 331:
           {
             BITCODE_BS n;
             if (i < 0) break;
-            n = o->ref[i].num_mainobjs;
-            o->ref[i].mainobjs = realloc (o->ref[i].mainobjs, (n + 1) * sizeof (BITCODE_H));
-            o->ref[i].mainobjs[n] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-            LOG_TRACE ("%s.ref[%d].mainobjs[%d] = " FORMAT_REF " [H* %d]\n",
-                       obj->name, i, n, ARGS_REF(o->ref[i].mainobjs[n]), pair->code);
-            o->ref[i].num_mainobjs++;
+            n = o->ref[i].num_xrefs;
+            o->ref[i].xrefs = realloc (o->ref[i].xrefs, (n + 1) * sizeof (BITCODE_H));
+            o->ref[i].xrefs[n] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+            LOG_TRACE ("%s.ref[%d].xrefs[%d] = " FORMAT_REF " [H* %d]\n",
+                       obj->name, i, n, ARGS_REF(o->ref[i].xrefs[n]), pair->code);
+            o->ref[i].num_xrefs++;
           }
           break;
         case 332:

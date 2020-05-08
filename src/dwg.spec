@@ -6301,22 +6301,30 @@ DWG_OBJECT (DIMASSOC)
           continue;
         }
       LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
-      SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
+      // DXF: 1, 72, 10, ??, 75
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
-      SUB_FIELD_BS (ref[rcount1], num_mainobjs, 0); // 1 or 2
-      SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_mainobjs, 100)
-      SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);  // if 0 not in DXF
-      if (FIELD_VALUE (ref[rcount1].main_subent_type))
-        {
-          SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
-          SUB_FIELD_BS (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
-          SUB_HANDLE_VECTOR (ref[rcount1], mainobjs, num_mainobjs, 4, 331);
-          if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-            SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1-3
-          SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
-        }
+     // TODO idpaths
+     /*
+        SUB_FIELD_BL (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
+        if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
+          SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1-3
+     */
+      SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
       SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
+
+      if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
+        {
+          SUB_FIELD_BL (ref[rcount1], num_xrefs, 0); // 1 or 2
+          SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_xrefs, 100)
+          SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
+
+          SUB_FIELD_BL (ref[rcount1], main_subent_type, 73);  // if 0 not in DXF
+          SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
+          SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
+          FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
+        }
+      SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ref)
   END_REPEAT (ref)

@@ -9534,28 +9534,32 @@ Dwg_TABLE_value
 
 @item parent
 struct _dwg_object_DIMASSOC*
-@item has_lastpt_ref
-B,	DXF 75
 @item classname
 T,	DXF 1
 @item osnap_type
 RC,	DXF 72
-@item main_subent_type
-BS,	DXF 73
-@item main_gsmarker
-BL,	DXF 91
-@item intsect_subent_type
-BS,	DXF 74
-@item num_mainobjs
-BS
 @item osnap_dist
 BD,	DXF 40
 @item osnap_pt
 3BD,	DXF 10
-@item mainobjs
+@item num_xrefs
+BS
+@item xrefs
 H*,	DXF 331
+@item main_subent_type
+BS,	DXF 73
+@item main_gsmarker
+BL,	DXF 91
+@item num_xrefpaths
+BS
+@item xrefpaths
+TV*,	DXF 301
+@item has_lastpt_ref
+B,	DXF 75
 @item intsectobj
 H,	DXF 332
+@item intsect_subent_type
+BS,	DXF 74
 
 @end vtable
 @end indentedblock
