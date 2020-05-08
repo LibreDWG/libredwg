@@ -5,7 +5,7 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  double thickness, scale, rotation, width_factor, oblique;
+  double thickness, scale, rotation, width_factor, oblique_angle;
   BITCODE_BS style_id;
   dwg_point_3d ins_pt, ext;
   BITCODE_H style;
@@ -17,8 +17,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, rotation, BD, rotation);
   CHK_ENTITY_MAX (shape, SHAPE, rotation, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, width_factor, BD, width_factor);
-  CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, oblique, BD, oblique);
-  CHK_ENTITY_MAX (shape, SHAPE, oblique, BD, MAX_ANGLE);
+  CHK_ENTITY_TYPE (shape, SHAPE, oblique_angle, BD, oblique_angle);
+  CHK_ENTITY_MAX (shape, SHAPE, oblique_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, thickness, BD, thickness);
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, style_id, BS, style_id);
   CHK_ENTITY_3RD_W_OLD (shape, SHAPE, extrusion, ext);

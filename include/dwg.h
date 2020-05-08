@@ -1034,7 +1034,7 @@ typedef struct _dwg_entity_TEXT
   BITCODE_2DPOINT alignment_pt; /*!< DXF 11. optional, when dataflags & 2, i.e 72/73 != 0 */
   BITCODE_BE extrusion;       /*!< DXF 210. Default 0,0,1 */
   BITCODE_RD thickness;       /*!< DXF 39 */
-  BITCODE_RD oblique_ang;     /*!< DXF 51 */
+  BITCODE_RD oblique_angle;   /*!< DXF 51 */
   BITCODE_RD rotation;        /*!< DXF 50 */
   BITCODE_RD height;          /*!< DXF 40 */
   BITCODE_RD width_factor;    /*!< DXF 41 */
@@ -1060,7 +1060,7 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_2DPOINT alignment_pt;
   BITCODE_BE extrusion;
   BITCODE_RD thickness;
-  BITCODE_RD oblique_ang;
+  BITCODE_RD oblique_angle;
   BITCODE_RD rotation;
   BITCODE_RD height;
   BITCODE_RD width_factor;
@@ -1095,7 +1095,7 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_2DPOINT alignment_pt;
   BITCODE_BE extrusion;
   BITCODE_RD thickness;
-  BITCODE_RD oblique_ang;
+  BITCODE_RD oblique_angle;
   BITCODE_RD rotation;
   BITCODE_RD height;
   BITCODE_RD width_factor;
@@ -1380,9 +1380,9 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
 typedef struct _dwg_entity_DIMENSION_LINEAR
 {
   DIMENSION_COMMON;
-  BITCODE_3BD _13_pt;
-  BITCODE_3BD _14_pt;
-  BITCODE_BD ext_line_rotation;
+  BITCODE_3BD xline1_pt;
+  BITCODE_3BD xline2_pt;
+  BITCODE_BD oblique_angle;
   BITCODE_BD dim_rotation;
 } Dwg_Entity_DIMENSION_LINEAR;
 
@@ -1392,9 +1392,9 @@ typedef struct _dwg_entity_DIMENSION_LINEAR
 typedef struct _dwg_entity_DIMENSION_ALIGNED
 {
   DIMENSION_COMMON;
-  BITCODE_3BD _13_pt;
-  BITCODE_3BD _14_pt;
-  BITCODE_BD ext_line_rotation;
+  BITCODE_3BD xline1_pt;
+  BITCODE_3BD xline2_pt;
+  BITCODE_BD oblique_angle;
 } Dwg_Entity_DIMENSION_ALIGNED;
 
 /**
@@ -1403,8 +1403,8 @@ typedef struct _dwg_entity_DIMENSION_ALIGNED
 typedef struct _dwg_entity_DIMENSION_ANG3PT
 {
   DIMENSION_COMMON;
-  BITCODE_3BD _13_pt;
-  BITCODE_3BD _14_pt;
+  BITCODE_3BD xline1_pt;
+  BITCODE_3BD xline2_pt;
   BITCODE_3BD first_arc_pt;
 } Dwg_Entity_DIMENSION_ANG3PT;
 
@@ -1562,7 +1562,7 @@ typedef struct _dwg_entity_SHAPE
   BITCODE_BD scale;
   BITCODE_BD rotation;
   BITCODE_BD width_factor;
-  BITCODE_BD oblique;
+  BITCODE_BD oblique_angle;
   BITCODE_BD thickness;
   BITCODE_BS style_id;
   BITCODE_BE extrusion;
@@ -2083,7 +2083,7 @@ typedef struct _dwg_object_STYLE
   BITCODE_B is_vertical;
   BITCODE_BD text_size;
   BITCODE_BD width_factor;
-  BITCODE_BD oblique_ang;
+  BITCODE_BD oblique_angle;
   BITCODE_RC generation;
   BITCODE_BD last_height;
   BITCODE_T font_file;

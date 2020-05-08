@@ -6920,19 +6920,19 @@ static int test_ATTDEF (const Dwg_Object *obj)
         fail ("ATTDEF.mtext_handles [H]");
   }
   {
-    BITCODE_RD oblique_ang;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "oblique_ang", &oblique_ang, NULL)
-        && oblique_ang == attdef->oblique_ang)
+    BITCODE_RD oblique_angle;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "oblique_angle", &oblique_angle, NULL)
+        && oblique_angle == attdef->oblique_angle)
       pass ();
     else
-      fail ("ATTDEF.oblique_ang [RD] %g != %g", attdef->oblique_ang, oblique_ang);
-    oblique_ang++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "oblique_ang", &oblique_ang, 0)
-        && oblique_ang == attdef->oblique_ang)
+      fail ("ATTDEF.oblique_angle [RD] %g != %g", attdef->oblique_angle, oblique_angle);
+    oblique_angle++;
+    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "oblique_angle", &oblique_angle, 0)
+        && oblique_angle == attdef->oblique_angle)
       pass ();
     else
-      fail ("ATTDEF.oblique_ang [RD] set+1 %g != %g", attdef->oblique_ang, oblique_ang);
-    attdef->oblique_ang--;
+      fail ("ATTDEF.oblique_angle [RD] set+1 %g != %g", attdef->oblique_angle, oblique_angle);
+    attdef->oblique_angle--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -7279,19 +7279,19 @@ static int test_ATTRIB (const Dwg_Object *obj)
         fail ("ATTRIB.mtext_handles [H]");
   }
   {
-    BITCODE_RD oblique_ang;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "oblique_ang", &oblique_ang, NULL)
-        && oblique_ang == attrib->oblique_ang)
+    BITCODE_RD oblique_angle;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "oblique_angle", &oblique_angle, NULL)
+        && oblique_angle == attrib->oblique_angle)
       pass ();
     else
-      fail ("ATTRIB.oblique_ang [RD] %g != %g", attrib->oblique_ang, oblique_ang);
-    oblique_ang++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "oblique_ang", &oblique_ang, 0)
-        && oblique_ang == attrib->oblique_ang)
+      fail ("ATTRIB.oblique_angle [RD] %g != %g", attrib->oblique_angle, oblique_angle);
+    oblique_angle++;
+    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "oblique_angle", &oblique_angle, 0)
+        && oblique_angle == attrib->oblique_angle)
       pass ();
     else
-      fail ("ATTRIB.oblique_ang [RD] set+1 %g != %g", attrib->oblique_ang, oblique_ang);
-    attrib->oblique_ang--;
+      fail ("ATTRIB.oblique_angle [RD] set+1 %g != %g", attrib->oblique_angle, oblique_angle);
+    attrib->oblique_angle--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -7557,22 +7557,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   Dwg_Entity_DIMENSION_ALIGNED *restrict dimension_aligned = obj->tio.entity->tio.DIMENSION_ALIGNED;
   failed = 0;
   {
-    BITCODE_3BD _13_pt;
-    if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "_13_pt", &_13_pt, NULL)
-        && !memcmp (&_13_pt, &dimension_aligned->_13_pt, sizeof (dimension_aligned->_13_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ALIGNED._13_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _14_pt;
-    if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "_14_pt", &_14_pt, NULL)
-        && !memcmp (&_14_pt, &dimension_aligned->_14_pt, sizeof (dimension_aligned->_14_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ALIGNED._14_pt [3BD]");
-  }
-  {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "act_measurement", &act_measurement, NULL)
         && act_measurement == dimension_aligned->act_measurement)
@@ -7673,21 +7657,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     else
       fail ("DIMENSION_ALIGNED.elevation [BD] set+1 %g != %g", dimension_aligned->elevation, elevation);
     dimension_aligned->elevation--;
-  }
-  {
-    BITCODE_BD ext_line_rotation;
-    if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "ext_line_rotation", &ext_line_rotation, NULL)
-        && ext_line_rotation == dimension_aligned->ext_line_rotation)
-      pass ();
-    else
-      fail ("DIMENSION_ALIGNED.ext_line_rotation [BD] %g != %g", dimension_aligned->ext_line_rotation, ext_line_rotation);
-    ext_line_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "ext_line_rotation", &ext_line_rotation, 0)
-        && ext_line_rotation == dimension_aligned->ext_line_rotation)
-      pass ();
-    else
-      fail ("DIMENSION_ALIGNED.ext_line_rotation [BD] set+1 %g != %g", dimension_aligned->ext_line_rotation, ext_line_rotation);
-    dimension_aligned->ext_line_rotation--;
   }
   {
     BITCODE_BE extrusion;
@@ -7826,6 +7795,21 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     dimension_aligned->lspace_style--;
   }
   {
+    BITCODE_BD oblique_angle;
+    if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "oblique_angle", &oblique_angle, NULL)
+        && oblique_angle == dimension_aligned->oblique_angle)
+      pass ();
+    else
+      fail ("DIMENSION_ALIGNED.oblique_angle [BD] %g != %g", dimension_aligned->oblique_angle, oblique_angle);
+    oblique_angle++;
+    if (dwg_dynapi_entity_set_value (dimension_aligned, "DIMENSION_ALIGNED", "oblique_angle", &oblique_angle, 0)
+        && oblique_angle == dimension_aligned->oblique_angle)
+      pass ();
+    else
+      fail ("DIMENSION_ALIGNED.oblique_angle [BD] set+1 %g != %g", dimension_aligned->oblique_angle, oblique_angle);
+    dimension_aligned->oblique_angle--;
+  }
+  {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "parent", &parent, NULL)
         && !memcmp (&parent, &dimension_aligned->parent, sizeof (dimension_aligned->parent)))
@@ -7880,6 +7864,22 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
       pass ();
     else
       fail ("DIMENSION_ALIGNED.user_text [TV] '%s' <> '%s'", user_text, dimension_aligned->user_text);
+  }
+  {
+    BITCODE_3BD xline1_pt;
+    if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "xline1_pt", &xline1_pt, NULL)
+        && !memcmp (&xline1_pt, &dimension_aligned->xline1_pt, sizeof (dimension_aligned->xline1_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ALIGNED.xline1_pt [3BD]");
+  }
+  {
+    BITCODE_3BD xline2_pt;
+    if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "xline2_pt", &xline2_pt, NULL)
+        && !memcmp (&xline2_pt, &dimension_aligned->xline2_pt, sizeof (dimension_aligned->xline2_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ALIGNED.xline2_pt [3BD]");
   }
   if (failed && (is_class_unstable ("DIMENSION_ALIGNED") || is_class_debugging ("DIMENSION_ALIGNED")))
     {
@@ -8242,22 +8242,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   Dwg_Entity_DIMENSION_ANG3PT *restrict dimension_ang3pt = obj->tio.entity->tio.DIMENSION_ANG3PT;
   failed = 0;
   {
-    BITCODE_3BD _13_pt;
-    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "_13_pt", &_13_pt, NULL)
-        && !memcmp (&_13_pt, &dimension_ang3pt->_13_pt, sizeof (dimension_ang3pt->_13_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG3PT._13_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _14_pt;
-    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "_14_pt", &_14_pt, NULL)
-        && !memcmp (&_14_pt, &dimension_ang3pt->_14_pt, sizeof (dimension_ang3pt->_14_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG3PT._14_pt [3BD]");
-  }
-  {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "act_measurement", &act_measurement, NULL)
         && act_measurement == dimension_ang3pt->act_measurement)
@@ -8558,6 +8542,22 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
       pass ();
     else
       fail ("DIMENSION_ANG3PT.user_text [TV] '%s' <> '%s'", user_text, dimension_ang3pt->user_text);
+  }
+  {
+    BITCODE_3BD xline1_pt;
+    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "xline1_pt", &xline1_pt, NULL)
+        && !memcmp (&xline1_pt, &dimension_ang3pt->xline1_pt, sizeof (dimension_ang3pt->xline1_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG3PT.xline1_pt [3BD]");
+  }
+  {
+    BITCODE_3BD xline2_pt;
+    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "xline2_pt", &xline2_pt, NULL)
+        && !memcmp (&xline2_pt, &dimension_ang3pt->xline2_pt, sizeof (dimension_ang3pt->xline2_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG3PT.xline2_pt [3BD]");
   }
   if (failed && (is_class_unstable ("DIMENSION_ANG3PT") || is_class_debugging ("DIMENSION_ANG3PT")))
     {
@@ -8903,22 +8903,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   Dwg_Entity_DIMENSION_LINEAR *restrict dimension_linear = obj->tio.entity->tio.DIMENSION_LINEAR;
   failed = 0;
   {
-    BITCODE_3BD _13_pt;
-    if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "_13_pt", &_13_pt, NULL)
-        && !memcmp (&_13_pt, &dimension_linear->_13_pt, sizeof (dimension_linear->_13_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_LINEAR._13_pt [3BD]");
-  }
-  {
-    BITCODE_3BD _14_pt;
-    if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "_14_pt", &_14_pt, NULL)
-        && !memcmp (&_14_pt, &dimension_linear->_14_pt, sizeof (dimension_linear->_14_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_LINEAR._14_pt [3BD]");
-  }
-  {
     BITCODE_BD act_measurement;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "act_measurement", &act_measurement, NULL)
         && act_measurement == dimension_linear->act_measurement)
@@ -9034,21 +9018,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     else
       fail ("DIMENSION_LINEAR.elevation [BD] set+1 %g != %g", dimension_linear->elevation, elevation);
     dimension_linear->elevation--;
-  }
-  {
-    BITCODE_BD ext_line_rotation;
-    if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "ext_line_rotation", &ext_line_rotation, NULL)
-        && ext_line_rotation == dimension_linear->ext_line_rotation)
-      pass ();
-    else
-      fail ("DIMENSION_LINEAR.ext_line_rotation [BD] %g != %g", dimension_linear->ext_line_rotation, ext_line_rotation);
-    ext_line_rotation++;
-    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "ext_line_rotation", &ext_line_rotation, 0)
-        && ext_line_rotation == dimension_linear->ext_line_rotation)
-      pass ();
-    else
-      fail ("DIMENSION_LINEAR.ext_line_rotation [BD] set+1 %g != %g", dimension_linear->ext_line_rotation, ext_line_rotation);
-    dimension_linear->ext_line_rotation--;
   }
   {
     BITCODE_BE extrusion;
@@ -9187,6 +9156,21 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     dimension_linear->lspace_style--;
   }
   {
+    BITCODE_BD oblique_angle;
+    if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "oblique_angle", &oblique_angle, NULL)
+        && oblique_angle == dimension_linear->oblique_angle)
+      pass ();
+    else
+      fail ("DIMENSION_LINEAR.oblique_angle [BD] %g != %g", dimension_linear->oblique_angle, oblique_angle);
+    oblique_angle++;
+    if (dwg_dynapi_entity_set_value (dimension_linear, "DIMENSION_LINEAR", "oblique_angle", &oblique_angle, 0)
+        && oblique_angle == dimension_linear->oblique_angle)
+      pass ();
+    else
+      fail ("DIMENSION_LINEAR.oblique_angle [BD] set+1 %g != %g", dimension_linear->oblique_angle, oblique_angle);
+    dimension_linear->oblique_angle--;
+  }
+  {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "parent", &parent, NULL)
         && !memcmp (&parent, &dimension_linear->parent, sizeof (dimension_linear->parent)))
@@ -9241,6 +9225,22 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
       pass ();
     else
       fail ("DIMENSION_LINEAR.user_text [TV] '%s' <> '%s'", user_text, dimension_linear->user_text);
+  }
+  {
+    BITCODE_3BD xline1_pt;
+    if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "xline1_pt", &xline1_pt, NULL)
+        && !memcmp (&xline1_pt, &dimension_linear->xline1_pt, sizeof (dimension_linear->xline1_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_LINEAR.xline1_pt [3BD]");
+  }
+  {
+    BITCODE_3BD xline2_pt;
+    if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "xline2_pt", &xline2_pt, NULL)
+        && !memcmp (&xline2_pt, &dimension_linear->xline2_pt, sizeof (dimension_linear->xline2_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_LINEAR.xline2_pt [3BD]");
   }
   if (failed && (is_class_unstable ("DIMENSION_LINEAR") || is_class_debugging ("DIMENSION_LINEAR")))
     {
@@ -17971,19 +17971,19 @@ static int test_SHAPE (const Dwg_Object *obj)
         fail ("SHAPE.ins_pt [3BD]");
   }
   {
-    BITCODE_BD oblique;
-    if (dwg_dynapi_entity_value (shape, "SHAPE", "oblique", &oblique, NULL)
-        && oblique == shape->oblique)
+    BITCODE_BD oblique_angle;
+    if (dwg_dynapi_entity_value (shape, "SHAPE", "oblique_angle", &oblique_angle, NULL)
+        && oblique_angle == shape->oblique_angle)
       pass ();
     else
-      fail ("SHAPE.oblique [BD] %g != %g", shape->oblique, oblique);
-    oblique++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "oblique", &oblique, 0)
-        && oblique == shape->oblique)
+      fail ("SHAPE.oblique_angle [BD] %g != %g", shape->oblique_angle, oblique_angle);
+    oblique_angle++;
+    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "oblique_angle", &oblique_angle, 0)
+        && oblique_angle == shape->oblique_angle)
       pass ();
     else
-      fail ("SHAPE.oblique [BD] set+1 %g != %g", shape->oblique, oblique);
-    shape->oblique--;
+      fail ("SHAPE.oblique_angle [BD] set+1 %g != %g", shape->oblique_angle, oblique_angle);
+    shape->oblique_angle--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -20846,19 +20846,19 @@ static int test_TEXT (const Dwg_Object *obj)
         fail ("TEXT.insertion_pt [2DPOINT]");
   }
   {
-    BITCODE_RD oblique_ang;
-    if (dwg_dynapi_entity_value (text, "TEXT", "oblique_ang", &oblique_ang, NULL)
-        && oblique_ang == text->oblique_ang)
+    BITCODE_RD oblique_angle;
+    if (dwg_dynapi_entity_value (text, "TEXT", "oblique_angle", &oblique_angle, NULL)
+        && oblique_angle == text->oblique_angle)
       pass ();
     else
-      fail ("TEXT.oblique_ang [RD] %g != %g", text->oblique_ang, oblique_ang);
-    oblique_ang++;
-    if (dwg_dynapi_entity_set_value (text, "TEXT", "oblique_ang", &oblique_ang, 0)
-        && oblique_ang == text->oblique_ang)
+      fail ("TEXT.oblique_angle [RD] %g != %g", text->oblique_angle, oblique_angle);
+    oblique_angle++;
+    if (dwg_dynapi_entity_set_value (text, "TEXT", "oblique_angle", &oblique_angle, 0)
+        && oblique_angle == text->oblique_angle)
       pass ();
     else
-      fail ("TEXT.oblique_ang [RD] set+1 %g != %g", text->oblique_ang, oblique_ang);
-    text->oblique_ang--;
+      fail ("TEXT.oblique_angle [RD] set+1 %g != %g", text->oblique_angle, oblique_angle);
+    text->oblique_angle--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -40857,19 +40857,19 @@ static int test_STYLE (const Dwg_Object *obj)
       fail ("STYLE.name [TV] '%s' <> '%s'", name, style->name);
   }
   {
-    BITCODE_BD oblique_ang;
-    if (dwg_dynapi_entity_value (style, "STYLE", "oblique_ang", &oblique_ang, NULL)
-        && oblique_ang == style->oblique_ang)
+    BITCODE_BD oblique_angle;
+    if (dwg_dynapi_entity_value (style, "STYLE", "oblique_angle", &oblique_angle, NULL)
+        && oblique_angle == style->oblique_angle)
       pass ();
     else
-      fail ("STYLE.oblique_ang [BD] %g != %g", style->oblique_ang, oblique_ang);
-    oblique_ang++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "oblique_ang", &oblique_ang, 0)
-        && oblique_ang == style->oblique_ang)
+      fail ("STYLE.oblique_angle [BD] %g != %g", style->oblique_angle, oblique_angle);
+    oblique_angle++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "oblique_angle", &oblique_angle, 0)
+        && oblique_angle == style->oblique_angle)
       pass ();
     else
-      fail ("STYLE.oblique_ang [BD] set+1 %g != %g", style->oblique_ang, oblique_ang);
-    style->oblique_ang--;
+      fail ("STYLE.oblique_angle [BD] set+1 %g != %g", style->oblique_angle, oblique_angle);
+    style->oblique_angle--;
   }
   {
     struct _dwg_object_object* parent;

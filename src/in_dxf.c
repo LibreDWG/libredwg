@@ -5565,14 +5565,14 @@ postprocess_TEXTlike (Dwg_Object *obj)
 {
   BITCODE_RC dataflags;
   BITCODE_2RD alignment_pt;
-  BITCODE_RD oblique_ang, rotation, width_factor;
+  BITCODE_RD oblique_angle, rotation, width_factor;
   BITCODE_BS generation, horiz_alignment, vert_alignment;
   BITCODE_H style;
   Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
 
   dwg_dynapi_entity_value (_obj, obj->name, "dataflags", &dataflags, NULL);
   dwg_dynapi_entity_value (_obj, obj->name, "alignment_pt", &alignment_pt, NULL);
-  dwg_dynapi_entity_value (_obj, obj->name, "oblique_ang", &oblique_ang, NULL);
+  dwg_dynapi_entity_value (_obj, obj->name, "oblique_angle", &oblique_angle, NULL);
   dwg_dynapi_entity_value (_obj, obj->name, "rotation", &rotation, NULL);
   dwg_dynapi_entity_value (_obj, obj->name, "width_factor", &width_factor, NULL);
   dwg_dynapi_entity_value (_obj, obj->name, "generation", &generation, NULL);
@@ -5582,7 +5582,7 @@ postprocess_TEXTlike (Dwg_Object *obj)
 
   if (alignment_pt.x == 0.0 && alignment_pt.y == 0.0)
     dataflags |= 2;
-  if (oblique_ang == 0.0)
+  if (oblique_angle == 0.0)
     dataflags |= 4;
   if (rotation == 0.0)
     dataflags |= 8;

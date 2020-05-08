@@ -1004,7 +1004,7 @@ BD,	DXF 30
 BE,	DXF 210
 @item thickness
 RD,	DXF 39
-@item oblique_ang
+@item oblique_angle
 RD,	DXF 51
 @item rotation
 RD,	DXF 50
@@ -1073,7 +1073,7 @@ BD,	DXF 30
 BE,	DXF 210
 @item thickness
 RD,	DXF 39
-@item oblique_ang
+@item oblique_angle
 RD,	DXF 51
 @item rotation
 RD,	DXF 50
@@ -1229,12 +1229,12 @@ B,	DXF 75
 H,	DXF 3
 @item block
 H
-@item _13_pt
+@item xline1_pt
 3BD,	DXF 13
-@item _14_pt
+@item xline2_pt
 3BD,	DXF 14
-@item ext_line_rotation
-BD
+@item oblique_angle
+BD,	DXF 52
 
 @end vtable
 @end indentedblock
@@ -1363,9 +1363,9 @@ B,	DXF 75
 H,	DXF 3
 @item block
 H
-@item _13_pt
+@item xline1_pt
 3BD,	DXF 13
-@item _14_pt
+@item xline2_pt
 3BD,	DXF 14
 @item first_arc_pt
 3BD,	DXF 15
@@ -1491,11 +1491,11 @@ B,	DXF 75
 H,	DXF 3
 @item block
 H
-@item _13_pt
+@item xline1_pt
 3BD,	DXF 13
-@item _14_pt
+@item xline2_pt
 3BD,	DXF 14
-@item ext_line_rotation
+@item oblique_angle
 BD,	DXF 52
 @item dim_rotation
 BD,	DXF 50
@@ -3273,7 +3273,7 @@ BD,	DXF 40
 BD,	DXF 50
 @item width_factor
 BD,	DXF 41
-@item oblique
+@item oblique_angle
 BD,	DXF 51
 @item thickness
 BD,	DXF 39
@@ -3770,7 +3770,7 @@ RD,	DXF 30
 BE,	DXF 210
 @item thickness
 RD,	DXF 39
-@item oblique_ang
+@item oblique_angle
 RD,	DXF 51
 @item rotation
 RD,	DXF 50
@@ -7898,7 +7898,7 @@ B
 BD,	DXF 40
 @item width_factor
 BD,	DXF 41
-@item oblique_ang
+@item oblique_angle
 BD,	DXF 50
 @item generation
 RC,	DXF 71

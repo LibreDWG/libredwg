@@ -408,7 +408,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
           FIELD_RD (text_size, 40); // ok
           FIELD_RD (width_factor, 41);
-          FIELD_RD (oblique_ang, 50);
+          FIELD_RD (oblique_angle, 50);
           FIELD_RC (generation, 71);
           FIELD_RD (last_height, 42);
           FIELD_TFv (font_file, 64, 3);    // 8ed

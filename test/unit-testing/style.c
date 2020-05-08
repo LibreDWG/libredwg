@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   BITCODE_B is_vertical;
   BITCODE_BD text_size;
   BITCODE_BD width_factor;
-  BITCODE_BD oblique_ang;
+  BITCODE_BD oblique_angle;
   BITCODE_RC generation;
   BITCODE_BD last_height;
   BITCODE_TV font_file;
@@ -40,7 +40,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, STYLE, is_shape, B, is_shape);
   CHK_ENTITY_TYPE (_obj, STYLE, text_size, BD, text_size);
   CHK_ENTITY_TYPE (_obj, STYLE, width_factor, BD, width_factor);
-  CHK_ENTITY_TYPE (_obj, STYLE, oblique_ang, BD, oblique_ang);
+  CHK_ENTITY_TYPE (_obj, STYLE, oblique_angle, BD, oblique_angle);
   CHK_ENTITY_TYPE (_obj, STYLE, generation, RC, generation);
   CHK_ENTITY_TYPE (_obj, STYLE, last_height, BD, last_height);
   CHK_ENTITY_UTF8TEXT (_obj, STYLE, font_file, font_file);

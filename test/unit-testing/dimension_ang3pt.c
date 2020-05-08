@@ -12,8 +12,8 @@ api_process (dwg_object *obj)
   BITCODE_BS lspace_style, attachment;
   char *user_text;
   int isnew;
-  dwg_point_2d text_midpt, pt12, pt2d;
-  dwg_point_3d pt10, pt13, pt14, first_arc_pt, ext, ins_scale, pt3d;
+  dwg_point_2d text_midpt, clone_ins_pt, pt2d;
+  dwg_point_3d def_pt, xline1_pt, xline2_pt, first_arc_pt, ext, ins_scale, pt3d;
   BITCODE_H dimstyle, block;
 
   dwg_ent_dim_ang3pt *dim_ang3pt = dwg_object_to_DIMENSION_ANG3PT (obj);
@@ -30,7 +30,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, attachment, BS, attachment);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, elevation, BD, elevation);
   CHK_ENTITY_3RD (dim, DIMENSION_ANG3PT, extrusion, ext);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG3PT, clone_ins_pt, pt12);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG3PT, clone_ins_pt, clone_ins_pt);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG3PT, text_midpt, text_midpt);
   CHK_ENTITY_UTF8TEXT (dim, DIMENSION_ANG3PT, user_text, user_text);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, text_rotation, BD,
@@ -48,18 +48,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, flag, RC, flag);
 
   /* ang3pt */
-  CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, def_pt, pt10);
+  CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, def_pt, def_pt);
   CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, first_arc_pt,
                         first_arc_pt);
-  CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, _13_pt, pt13);
+  CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, xline1_pt, xline1_pt);
   dwg_ent_dim_ang3pt_get_13_pt (dim_ang3pt, &pt3d, &error);
-  if (error || memcmp (&pt13, &pt3d, sizeof (pt13)))
+  if (error || memcmp (&xline1_pt, &pt3d, sizeof (xline1_pt)))
     fail ("old API dwg_ent_dim_ang3pt_get_13_pt");
   else
     pass ();
-  CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, _14_pt, pt14);
+  CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, xline2_pt, xline2_pt);
   dwg_ent_dim_ang3pt_get_14_pt (dim_ang3pt, &pt3d, &error);
-  if (error || memcmp (&pt14, &pt3d, sizeof (pt14)))
+  if (error || memcmp (&xline2_pt, &pt3d, sizeof (xline2_pt)))
     fail ("old API dwg_ent_dim_ang3pt_get_14_pt");
   else
     pass ();

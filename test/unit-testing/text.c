@@ -5,7 +5,7 @@ void
 api_process (dwg_object *obj)
 {
   int error = 0;
-  BITCODE_RD elevation, thickness, rotation, height, oblique_ang, width_factor,
+  BITCODE_RD elevation, thickness, rotation, height, oblique_angle, width_factor,
       rdvalue;
   BITCODE_BS generation, vert_align, horiz_align, bsvalue;
   BITCODE_RC dataflags, rcvalue;
@@ -35,8 +35,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (text, TEXT, thickness, RD, thickness);
   CHK_ENTITY_TYPE_W_OLD (text, TEXT, rotation, RD, rotation);
   CHK_ENTITY_MAX (text, TEXT, rotation, RD, 6.284);
-  CHK_ENTITY_TYPE (text, TEXT, oblique_ang, RD, oblique_ang);
-  CHK_ENTITY_MAX (text, TEXT, oblique_ang, RD, 6.284);
+  CHK_ENTITY_TYPE (text, TEXT, oblique_angle, RD, oblique_angle);
+  CHK_ENTITY_MAX (text, TEXT, oblique_angle, RD, 6.284);
   CHK_ENTITY_TYPE (text, TEXT, width_factor, RD, width_factor);
   CHK_ENTITY_TYPE (text, TEXT, generation, BS, generation);
 

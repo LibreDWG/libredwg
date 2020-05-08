@@ -5,7 +5,7 @@ void
 api_process (dwg_object *obj)
 {
   int error = 0;
-  double elevation, thickness, rotation, height, oblique_ang, width_factor,
+  double elevation, thickness, rotation, height, oblique_angle, width_factor,
       rdvalue;
   BITCODE_BS generation, vert_align, horiz_align, field_length,
       annotative_data_size, annotative_short, bsvalue;
@@ -50,8 +50,8 @@ api_process (dwg_object *obj)
   rdvalue = dwg_ent_attdef_get_rotation (attdef, &error);
   if (error || rotation != rdvalue)
     fail ("old API dwg_ent_attdef_get_rotation");
-  CHK_ENTITY_TYPE (attdef, ATTDEF, oblique_ang, RD, oblique_ang);
-  CHK_ENTITY_MAX (attdef, ATTDEF, oblique_ang, RD, 6.284);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, oblique_angle, RD, oblique_angle);
+  CHK_ENTITY_MAX (attdef, ATTDEF, oblique_angle, RD, 6.284);
   CHK_ENTITY_TYPE (attdef, ATTDEF, width_factor, RD, width_factor);
   CHK_ENTITY_TYPE (attdef, ATTDEF, generation, BS, generation);
 

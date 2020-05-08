@@ -8128,7 +8128,7 @@ dwg_ent_dim_linear_get_def_pt (const dwg_ent_dim_linear *restrict dim,
     }
 }
 
-/** Sets the 13 point
+/** Sets the xline1 point
 \code Usage: dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
 \endcode
 \param[in] dim_linear dwg_ent_dim_linear*
@@ -8148,9 +8148,9 @@ dwg_ent_dim_linear_set_13_pt (dwg_ent_dim_linear *restrict dim,
   )
     {
       *error = 0;
-      dim->_13_pt.x = point->x;
-      dim->_13_pt.y = point->y;
-      dim->_13_pt.z = point->z;
+      dim->xline1_pt.x = point->x;
+      dim->xline1_pt.y = point->y;
+      dim->xline1_pt.z = point->z;
     }
   else
     {
@@ -8159,7 +8159,7 @@ dwg_ent_dim_linear_set_13_pt (dwg_ent_dim_linear *restrict dim,
     }
 }
 
-/** Sets the 13 point
+/** Sets the xline1 point
 \code Usage: dwg_ent_dim_linear_set_13_pt(dim, &point, &error);
 \endcode
 \param[in] dim_linear dwg_ent_dim_linear*
@@ -8179,9 +8179,9 @@ dwg_ent_dim_linear_get_13_pt (const dwg_ent_dim_linear *restrict dim,
   )
     {
       *error = 0;
-      point->x = dim->_13_pt.x;
-      point->y = dim->_13_pt.y;
-      point->z = dim->_13_pt.z;
+      point->x = dim->xline1_pt.x;
+      point->y = dim->xline1_pt.y;
+      point->z = dim->xline1_pt.z;
     }
   else
     {
@@ -8190,7 +8190,7 @@ dwg_ent_dim_linear_get_13_pt (const dwg_ent_dim_linear *restrict dim,
     }
 }
 
-/** Sets the 14 point
+/** Sets the xline2 point
 \code Usage: dwg_ent_dim_linear_set_14_pt(dim, &point, &error);
 \endcode
 \param[in] dim   dwg_ent_dim_linear*
@@ -8210,9 +8210,9 @@ dwg_ent_dim_linear_set_14_pt (dwg_ent_dim_linear *restrict dim,
   )
     {
       *error = 0;
-      dim->_14_pt.x = point->x;
-      dim->_14_pt.y = point->y;
-      dim->_14_pt.z = point->z;
+      dim->xline2_pt.x = point->x;
+      dim->xline2_pt.y = point->y;
+      dim->xline2_pt.z = point->z;
     }
   else
     {
@@ -8241,9 +8241,9 @@ dwg_ent_dim_linear_get_14_pt (const dwg_ent_dim_linear *restrict dim,
   )
     {
       *error = 0;
-      point->x = dim->_14_pt.x;
-      point->y = dim->_14_pt.y;
-      point->z = dim->_14_pt.z;
+      point->x = dim->xline2_pt.x;
+      point->y = dim->xline2_pt.y;
+      point->z = dim->xline2_pt.z;
     }
   else
     {
@@ -8252,7 +8252,7 @@ dwg_ent_dim_linear_get_14_pt (const dwg_ent_dim_linear *restrict dim,
     }
 }
 
-/** Returns the ext line rotation
+/** Returns the oblique angle
 \code Usage: double rot = dwg_ent_dim_linear_get_ext_line_rotation(dim,
 &error); \endcode \param[in] dim   dwg_ent_dim_linear* \param[out] error int*,
 is set to 0 for ok, 1 on error \deprecated
@@ -8264,7 +8264,7 @@ dwg_ent_dim_linear_get_ext_line_rotation (
   if (dim)
     {
       *error = 0;
-      return dim->ext_line_rotation;
+      return dim->oblique_angle;
     }
   else
     {
@@ -8274,7 +8274,7 @@ dwg_ent_dim_linear_get_ext_line_rotation (
     }
 }
 
-/** Sets the ext line rotation
+/** Sets the oblique_angle.
 \code Usage: dwg_ent_dim_linear_set_ext_line_rotation(dim, rot, &error);
 \endcode
 \param[out] dim   dwg_ent_dim_linear*
@@ -8284,13 +8284,13 @@ dwg_ent_dim_linear_get_ext_line_rotation (
 */
 void
 dwg_ent_dim_linear_set_ext_line_rotation (dwg_ent_dim_linear *restrict dim,
-                                          const double rotation,
+                                          const double angle,
                                           int *restrict error)
 {
   if (dim)
     {
       *error = 0;
-      dim->ext_line_rotation = rotation;
+      dim->oblique_angle = angle;
     }
   else
     {
@@ -8414,7 +8414,7 @@ dwg_ent_dim_aligned_get_def_pt (const dwg_ent_dim_aligned *restrict dim,
     }
 }
 
-/** Sets the 13 point
+/** Sets the xline1 point
 \code Usage: dwg_ent_dim_aligned_set_13_pt(dim, &point, &error);
 \endcode
 \param[out] dim   dwg_ent_dim_aligned*
@@ -8434,9 +8434,9 @@ dwg_ent_dim_aligned_set_13_pt (dwg_ent_dim_aligned *restrict dim,
   )
     {
       *error = 0;
-      dim->_13_pt.x = point->x;
-      dim->_13_pt.y = point->y;
-      dim->_13_pt.z = point->z;
+      dim->xline1_pt.x = point->x;
+      dim->xline1_pt.y = point->y;
+      dim->xline1_pt.z = point->z;
     }
   else
     {
@@ -8445,7 +8445,7 @@ dwg_ent_dim_aligned_set_13_pt (dwg_ent_dim_aligned *restrict dim,
     }
 }
 
-/** Returns the 13 point
+/** Returns the xline1 point
 \code Usage: dwg_ent_dim_aligned_get_13_pt(dim, &point, &error);
 \endcode
 \param[in]  dim   dwg_ent_dim_aligned*
@@ -8465,9 +8465,9 @@ dwg_ent_dim_aligned_get_13_pt (const dwg_ent_dim_aligned *restrict dim,
   )
     {
       *error = 0;
-      point->x = dim->_13_pt.x;
-      point->y = dim->_13_pt.y;
-      point->z = dim->_13_pt.z;
+      point->x = dim->xline1_pt.x;
+      point->y = dim->xline1_pt.y;
+      point->z = dim->xline1_pt.z;
     }
   else
     {
@@ -8496,9 +8496,9 @@ dwg_ent_dim_aligned_set_14_pt (dwg_ent_dim_aligned *restrict dim,
   )
     {
       *error = 0;
-      dim->_14_pt.x = point->x;
-      dim->_14_pt.y = point->y;
-      dim->_14_pt.z = point->z;
+      dim->xline2_pt.x = point->x;
+      dim->xline2_pt.y = point->y;
+      dim->xline2_pt.z = point->z;
     }
   else
     {
@@ -8523,9 +8523,9 @@ dwg_ent_dim_aligned_get_14_pt (const dwg_ent_dim_aligned *restrict dim,
   if (dim)
     {
       *error = 0;
-      point->x = dim->_14_pt.x;
-      point->y = dim->_14_pt.y;
-      point->z = dim->_14_pt.z;
+      point->x = dim->xline2_pt.x;
+      point->y = dim->xline2_pt.y;
+      point->z = dim->xline2_pt.z;
     }
   else
     {
@@ -8534,7 +8534,7 @@ dwg_ent_dim_aligned_get_14_pt (const dwg_ent_dim_aligned *restrict dim,
     }
 }
 
-/** Returns the ext line rotation
+/** Returns the oblique_angle
 \code Usage: double rot = dwg_ent_dim_aligned_get_ext_line_rotation(dim,
 &error); \endcode \param[in] dim   dwg_ent_dim_aligned* \param[out] error int*,
 is set to 0 for ok, 1 on error \deprecated
@@ -8546,7 +8546,7 @@ dwg_ent_dim_aligned_get_ext_line_rotation (
   if (dim)
     {
       *error = 0;
-      return dim->ext_line_rotation;
+      return dim->oblique_angle;
     }
   else
     {
@@ -8556,7 +8556,7 @@ dwg_ent_dim_aligned_get_ext_line_rotation (
     }
 }
 
-/** Sets the ext line rotation
+/** Sets the oblique_angle
 \code Usage: dwg_ent_dim_aligned_set_ext_line_rotation(dim, rot, &error);
 \endcode
 \param[out] dim   dwg_ent_dim_aligned*
@@ -8572,7 +8572,7 @@ dwg_ent_dim_aligned_set_ext_line_rotation (dwg_ent_dim_aligned *restrict dim,
   if (dim)
     {
       *error = 0;
-      dim->ext_line_rotation = rotation;
+      dim->oblique_angle = rotation;
     }
   else
     {
@@ -8643,7 +8643,7 @@ dwg_ent_dim_ang3pt_get_def_pt (const dwg_ent_dim_ang3pt *restrict ang,
     }
 }
 
-/** Sets the 13 point
+/** Sets the xline1 point
 \code Usage: dwg_ent_dim_ang3pt_set_13_pt(dim, &point, &error);
 \endcode
 \param[out] ang     dwg_ent_dim_ang3pt*
@@ -8663,9 +8663,9 @@ dwg_ent_dim_ang3pt_set_13_pt (dwg_ent_dim_ang3pt *restrict ang,
   )
     {
       *error = 0;
-      ang->_13_pt.x = point->x;
-      ang->_13_pt.y = point->y;
-      ang->_13_pt.z = point->z;
+      ang->xline1_pt.x = point->x;
+      ang->xline1_pt.y = point->y;
+      ang->xline1_pt.z = point->z;
     }
   else
     {
@@ -8674,7 +8674,7 @@ dwg_ent_dim_ang3pt_set_13_pt (dwg_ent_dim_ang3pt *restrict ang,
     }
 }
 
-/** Returns the 13 pt
+/** Returns the xline1 pt
 \code Usage: dwg_ent_dim_ang3pt_get_13_pt(dim, &point, &error);
 \endcode
 \param[in]  ang     dwg_ent_dim_ang3pt*
@@ -8694,9 +8694,9 @@ dwg_ent_dim_ang3pt_get_13_pt (const dwg_ent_dim_ang3pt *restrict ang,
   )
     {
       *error = 0;
-      point->x = ang->_13_pt.x;
-      point->y = ang->_13_pt.y;
-      point->z = ang->_13_pt.z;
+      point->x = ang->xline1_pt.x;
+      point->y = ang->xline1_pt.y;
+      point->z = ang->xline1_pt.z;
     }
   else
     {
@@ -8705,7 +8705,7 @@ dwg_ent_dim_ang3pt_get_13_pt (const dwg_ent_dim_ang3pt *restrict ang,
     }
 }
 
-/** Sets the 14 point
+/** Sets the xline2 point
 \code Usage: dwg_ent_dim_ang3pt_set_14_pt(dim, &point, &error);
 \endcode
 \param[out] ang     dwg_ent_dim_ang3pt*
@@ -8725,9 +8725,9 @@ dwg_ent_dim_ang3pt_set_14_pt (dwg_ent_dim_ang3pt *restrict ang,
   )
     {
       *error = 0;
-      ang->_14_pt.x = point->x;
-      ang->_14_pt.y = point->y;
-      ang->_14_pt.z = point->z;
+      ang->xline2_pt.x = point->x;
+      ang->xline2_pt.y = point->y;
+      ang->xline2_pt.z = point->z;
     }
   else
     {
@@ -8736,7 +8736,7 @@ dwg_ent_dim_ang3pt_set_14_pt (dwg_ent_dim_ang3pt *restrict ang,
     }
 }
 
-/** Returns the 14 pt
+/** Returns the xline2 pt
 \code Usage: dwg_ent_dim_ang3pt_get_14_pt(dim, &point, &error);
 \endcode
 \param[in]  ang     dwg_ent_dim_ang3pt*
@@ -8756,9 +8756,9 @@ dwg_ent_dim_ang3pt_get_14_pt (const dwg_ent_dim_ang3pt *restrict ang,
   )
     {
       *error = 0;
-      point->x = ang->_14_pt.x;
-      point->y = ang->_14_pt.y;
-      point->z = ang->_14_pt.z;
+      point->x = ang->xline2_pt.x;
+      point->y = ang->xline2_pt.y;
+      point->z = ang->xline2_pt.z;
     }
   else
     {
@@ -9058,7 +9058,7 @@ dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Returns dim ang2ln 16 point
+/** Returns dim ang2ln xline2end 16 point
  */
 void
 dwg_ent_dim_ang2ln_get_16_pt (const dwg_ent_dim_ang2ln *restrict ang,
@@ -9539,7 +9539,7 @@ dwg_ent_shape_get_oblique (const dwg_ent_shape *restrict shape,
   if (shape)
     {
       *error = 0;
-      return shape->oblique;
+      return shape->oblique_angle;
     }
   else
     {
@@ -9558,7 +9558,7 @@ dwg_ent_shape_set_oblique (dwg_ent_shape *restrict shape, const double oblique,
   if (shape)
     {
       *error = 0;
-      shape->oblique = oblique;
+      shape->oblique_angle = oblique;
     }
   else
     {

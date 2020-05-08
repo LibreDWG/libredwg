@@ -39,7 +39,7 @@ DWG_ENTITY (TEXT)
     if (R11OPTS (2))
       FIELD_RD (width_factor, 41);
     if (R11OPTS (4))
-      FIELD_RD (oblique_ang, 51);
+      FIELD_RD (oblique_angle, 51);
     if (R11OPTS (8)) {
       DECODER { _ent->ltype_r11 = bit_read_RC (dat); }
       ENCODER { bit_write_RC (dat, _ent->ltype_r11); }
@@ -61,7 +61,7 @@ DWG_ENTITY (TEXT)
       FIELD_2RD (alignment_pt, 11);
       FIELD_3BD (extrusion, 210);
       FIELD_BD (thickness, 39);
-      FIELD_BD (oblique_ang, 51);
+      FIELD_BD (oblique_angle, 51);
       FIELD_BD (rotation, 50);
       FIELD_BD (height, 40);
       FIELD_BD (width_factor, 41);
@@ -92,7 +92,7 @@ DWG_ENTITY (TEXT)
       FIELD_BT (thickness, 39);
 
       if (!(dataflags & 0x04))
-        FIELD_RD (oblique_ang, 51);
+        FIELD_RD (oblique_angle, 51);
       if (!(dataflags & 0x08))
         FIELD_RD (rotation, 50);
 
@@ -145,7 +145,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_2RD (alignment_pt, 11);
       FIELD_3BD (extrusion, 210);
       FIELD_BD (thickness, 39);
-      FIELD_BD (oblique_ang, 51);
+      FIELD_BD (oblique_angle, 51);
       FIELD_BD (rotation, 50);
       FIELD_BD (height, 40);
       FIELD_BD (width_factor, 41);
@@ -176,7 +176,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_BT (thickness, 39);
 
       if (!(dataflags & 0x04))
-        FIELD_RD (oblique_ang, 51);
+        FIELD_RD (oblique_angle, 51);
       if (!(dataflags & 0x08))
         FIELD_RD (rotation, 50);
 
@@ -256,7 +256,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_2RD (alignment_pt, 11);
       FIELD_3BD (extrusion, 210);
       FIELD_BD (thickness, 39);
-      FIELD_BD (oblique_ang, 51);
+      FIELD_BD (oblique_angle, 51);
       FIELD_BD (rotation, 50);
       FIELD_BD (height, 40);
       FIELD_BD (width_factor, 41);
@@ -287,7 +287,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_BT (thickness, 39);
 
       if (!(dataflags & 0x04))
-        FIELD_RD (oblique_ang, 51);
+        FIELD_RD (oblique_angle, 51);
       if (!(dataflags & 0x08))
         FIELD_RD (rotation, 50);
 
@@ -1146,10 +1146,10 @@ DWG_ENTITY (DIMENSION_LINEAR)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
-  FIELD_3BD (_13_pt, 13);
-  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (xline1_pt, 13);
+  FIELD_3BD (xline2_pt, 14);
   FIELD_3BD (def_pt, 10);
-  FIELD_BD0 (ext_line_rotation, 52);
+  FIELD_BD0 (oblique_angle, 52);
   FIELD_BD0 (dim_rotation, 50);
   SUBCLASS (AcDbRotatedDimension)
 
@@ -1166,12 +1166,17 @@ DWG_ENTITY (DIMENSION_ALIGNED)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
-  FIELD_3BD (_13_pt, 13); // TODO: rename
-  FIELD_3BD (_14_pt, 14); // TODO: rename
+  UNTIL (R_9) {
+    FIELD_2RD (xline1_pt, 13);
+    FIELD_2RD (xline2_pt, 14);
+  } LATER_VERSIONS {
+    FIELD_3BD (xline1_pt, 13);
+    FIELD_3BD (xline2_pt, 14);
+  }
   DECODER_OR_ENCODER {
     FIELD_3BD (def_pt, 10);
   }
-  FIELD_BD (ext_line_rotation, 0); /* 52 */
+  FIELD_BD0 (oblique_angle, 52);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);
@@ -1189,8 +1194,8 @@ DWG_ENTITY (DIMENSION_ANG3PT)
   DECODER_OR_ENCODER {
     FIELD_3BD (def_pt, 10);
   }
-  FIELD_3BD (_13_pt, 13);
-  FIELD_3BD (_14_pt, 14);
+  FIELD_3BD (xline1_pt, 13);
+  FIELD_3BD (xline2_pt, 14);
   FIELD_3BD (first_arc_pt, 15);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1464,7 +1469,7 @@ DWG_ENTITY (SHAPE)
     FIELD_BD (scale, 40);  // documented as size
     FIELD_BD (rotation, 50);
     FIELD_BD (width_factor, 41);
-    FIELD_BD (oblique, 51);
+    FIELD_BD (oblique_angle, 51);
     FIELD_BD (thickness, 39);
 #ifdef IS_DXF
     {
@@ -2701,7 +2706,7 @@ DWG_OBJECT (STYLE)
   {
     FIELD_RD (text_size, 40);
     FIELD_RD (width_factor, 41);
-    FIELD_RD (oblique_ang, 50);
+    FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
     FIELD_TFv (font_file, 128, 3);
@@ -2714,7 +2719,7 @@ DWG_OBJECT (STYLE)
   {
     FIELD_BD (text_size, 40);
     FIELD_BD (width_factor, 41);
-    FIELD_BD (oblique_ang, 50);
+    FIELD_BD (oblique_angle, 50);
     FIELD_RC (generation, 71);
     FIELD_BD (last_height, 42);
     FIELD_T (font_file, 3);

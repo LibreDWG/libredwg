@@ -6,7 +6,7 @@ api_process (dwg_object *obj)
 {
   int error;
   double elevation, act_measurement, horiz_dir, lspace_factor, text_rotation,
-      ins_rotation, ext_line_rotation;
+      ins_rotation, oblique_angle;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC class_version, flag, flag1, flag2;
   BITCODE_BS lspace_style, attachment;

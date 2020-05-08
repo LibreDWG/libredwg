@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
 {
   int error = 0, isnew;
   // TEXT:
-  //BITCODE_RD elevation, thickness, rotation, height, oblique_ang, width_factor,
+  //BITCODE_RD elevation, thickness, rotation, height, oblique_angle, width_factor,
   //    rdvalue;
   //BITCODE_BS generation, vert_alignment, horiz_alignment, bsvalue;
   //BITCODE_RC dataflags, rcvalue;
