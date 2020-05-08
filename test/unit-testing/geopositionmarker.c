@@ -38,7 +38,7 @@ api_process (dwg_object *obj)
     {
       Dwg_Entity_MTEXT *_obj = mtext->tio.entity->tio.MTEXT;
       if (mtext->fixedtype != DWG_TYPE_MTEXT)
-        fail ("MTEXT.mtext.fixedtype %d", mtext->fixedtype);
+        fail ("Wrong MTEXT.mtext.fixedtype %d", mtext->fixedtype);
     }
   //CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, text, text);
   //CHK_ENTITY_H (_obj, GEOPOSITIONMARKER, mtext_handle, mtext_handle);

@@ -760,7 +760,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 {                                                \
   Bit_Chain dat = { 0 };                         \
-  int error = 0; \
+  int error = 0;                                 \
   BITCODE_BL num_objs  = dwg->num_objects;       \
   dat.size = sizeof(Dwg_Object_##token) + 40;    \
   LOG_INFO ("Add object " #token " ")            \
@@ -788,16 +788,16 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #endif
 
 #define DWG_ENTITY(token)                                                     \
-  static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)  \
+  static int dwg_encode_##token##_private (                                   \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj);                                              \
+  static int dwg_encode_##token (Bit_Chain *restrict dat,                     \
+                                 Dwg_Object *restrict obj)                    \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
-    Dwg_Object_Entity *_ent = obj->tio.entity;                                \
-    Dwg_Entity_##token *_obj = _ent->tio.token;                               \
     int error;                                                                \
     Bit_Chain _hdl_dat = { 0 };                                               \
     Bit_Chain *hdl_dat = &_hdl_dat; /* a new copy */                          \
     Bit_Chain *str_dat = dat; /* a ref */                                     \
-    Dwg_Data *dwg = obj->parent;                                              \
     LOG_INFO ("Encode entity " #token "\n");                                  \
     bit_chain_init (hdl_dat, 128);                                            \
     error = dwg_encode_entity (obj, dat, hdl_dat, str_dat);                   \
@@ -806,17 +806,28 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
         if (hdl_dat != dat)                                                   \
           bit_chain_free (hdl_dat);                                           \
         return error;                                                         \
-      }
+      }                                                                       \
+    return dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);         \
+  }                                                                           \
+  static int dwg_encode_##token##_private (                                   \
+        Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,               \
+        Dwg_Object *restrict obj)                                             \
+  {                                                                           \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Object_Entity *_ent = obj->tio.entity;                                \
+    Dwg_Entity_##token *_obj = _ent->tio.token;                               \
 
 #define DWG_ENTITY_END                                                        \
-  if (hdl_dat->byte > dat->byte)                                              \
-    {                                                                         \
-      dat->byte = hdl_dat->byte;                                              \
-      dat->bit = hdl_dat->bit;                                                \
-    }                                                                         \
-  if (hdl_dat != dat)                                                         \
-    bit_chain_free (hdl_dat);                                                 \
-  return error;                                                               \
+    if (hdl_dat->byte > dat->byte)                                            \
+      {                                                                       \
+        dat->byte = hdl_dat->byte;                                            \
+        dat->bit = hdl_dat->bit;                                              \
+      }                                                                       \
+    if (hdl_dat != dat)                                                       \
+      bit_chain_free (hdl_dat);                                               \
+    return error;                                                             \
   }
 
 /** Returns -1 if not added, else returns the new objid.
@@ -824,16 +835,16 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
    all internal obj pointers after a object[] realloc.
 */
 #define DWG_OBJECT(token)                                                     \
-  static int dwg_encode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)  \
+  static int dwg_encode_##token##_private (                                   \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj);                                              \
+  static int dwg_encode_##token (Bit_Chain *restrict dat,                     \
+                                 Dwg_Object *restrict obj)                    \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                    \
     int error;                                                                \
     Bit_Chain _hdl_dat = { 0 };                                               \
     Bit_Chain *hdl_dat = &_hdl_dat; /* a new copy */                          \
     Bit_Chain *str_dat = dat;       /* a ref */                               \
-    Dwg_Data *dwg = obj->parent;                                              \
-    Dwg_Object_##token *_obj                                                  \
-        = obj->tio.object ? obj->tio.object->tio.token : NULL;                \
     LOG_INFO ("Encode object " #token "\n");                                  \
     bit_chain_init (hdl_dat, 128);                                            \
     error = dwg_encode_object (obj, dat, hdl_dat, str_dat);                   \
@@ -842,7 +853,17 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
         if (hdl_dat != dat)                                                   \
           bit_chain_free (hdl_dat);                                           \
         return error;                                                         \
-      }
+      }                                                                       \
+    return dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);         \
+  }                                                                           \
+  static int dwg_encode_##token##_private (                                   \
+        Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,               \
+        Dwg_Object *restrict obj)                                             \
+  {                                                                           \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Object_##token *_obj = obj->tio.object->tio.token;
 
 // some objects specs forgot about the common streams, so add it here
 #define DWG_OBJECT_END                                                        \

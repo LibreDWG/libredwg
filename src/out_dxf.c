@@ -695,15 +695,15 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 // The strcmp is being optimized away at compile-time!
 // https://godbolt.org/g/AqkhwL
 #define DWG_ENTITY(token)                                                     \
+  static int dwg_dxf_##token##_private (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj);                                        \
   static int dwg_dxf_##token (Bit_Chain *restrict dat,                        \
                               const Dwg_Object *restrict obj)                 \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
-    Dwg_Data *dwg = obj->parent;                                              \
+    Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
-    Dwg_Entity_##token *ent, *_obj;                                           \
-    Dwg_Object_Entity *_ent;                                                  \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
@@ -732,30 +732,39 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
       record (obj->dxfname);                                                  \
     else                                                                      \
       RECORD (token);                                                         \
-    _ent = obj->tio.entity;                                                   \
-    _obj = ent = _ent->tio.token;                                             \
     LOG_INFO ("Entity " #token ":\n")                                         \
     SINCE (R_11)                                                              \
     {                                                                         \
       LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle));      \
       fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value);              \
     }                                                                         \
-    SINCE (R_13) { error |= dxf_common_entity_handle_data (dat, obj); }
+    SINCE (R_13) { error |= dxf_common_entity_handle_data (dat, obj); }       \
+    error |= dwg_dxf_##token##_private (dat, hdl_dat, str_dat, obj);          \
+    error |= dxf_write_eed (dat, obj->tio.object);                            \
+    return error;                                                             \
+  }                                                                           \
+  static int dwg_dxf_##token##_private (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj) {                                       \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Entity_##token *_obj = obj->tio.entity->tio.token;                    \
+    Dwg_Object_Entity *_ent = obj->tio.entity;
 
 #define DWG_ENTITY_END                                                        \
-  error |= dxf_write_eed (dat, (Dwg_Object_Object*)obj->tio.entity);          \
-  return error;                                                               \
+    return error;                                                             \
   }
 
 #define DWG_OBJECT(token)                                                     \
+  static int dwg_dxf_##token##_private (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj);                                        \
   static int dwg_dxf_##token (Bit_Chain *restrict dat,                        \
                               const Dwg_Object *restrict obj)                 \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
     Bit_Chain *hdl_dat = dat, *str_dat = dat;                                 \
-    Dwg_Data *dwg = obj->parent;                                              \
-    Dwg_Object_##token *_obj;                                                 \
     LOG_INFO ("Object " #token ":\n")                                         \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
@@ -763,7 +772,6 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
                    DWG_TYPE_##token, #token);                                 \
         return DWG_ERR_INVALIDTYPE;                                           \
       }                                                                       \
-    _obj = obj->tio.object->tio.token;                                        \
     if (!dwg_obj_is_control (obj))                                            \
       {                                                                       \
         if (obj->fixedtype == DWG_TYPE_TABLE)                                 \
@@ -777,6 +785,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
                                                                               \
         SINCE (R_13)                                                          \
         {                                                                     \
+          BITCODE_BL vcount;                                                  \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
           fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value);        \
           _XDICOBJHANDLE (3);                                                 \
@@ -799,14 +808,24 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           }                                                                   \
         else                                                                  \
           LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))   \
-      }
+      }                                                                       \
+    error |= dwg_dxf_##token##_private (dat, hdl_dat, str_dat, obj);          \
+    error |= dxf_write_eed (dat, obj->tio.object);                            \
+    return error;                                                             \
+  }                                                                           \
+  static int dwg_dxf_##token##_private (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj) {                                       \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Object_##token *_obj = obj->tio.object->tio.token;
 
 // then 330, SUBCLASS
 
 #define DWG_OBJECT_END                                                        \
-    error |= dxf_write_eed (dat, obj->tio.object);                            \
     return error;                                                             \
-}
+  }
 
 #undef DXF_3DSOLID
 #define DXF_3DSOLID dxf_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);

@@ -842,11 +842,13 @@ _prefix (Bit_Chain *dat)
 }
 
 #define DWG_ENTITY(token)                                                     \
+  static int dwg_json_##token##_private (                                     \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj);                                              \
   GCC30_DIAG_IGNORE (-Wshadow)                                                \
   static int dwg_json_##token (Bit_Chain *restrict dat,                       \
                                Dwg_Object *restrict obj)                      \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                    \
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
@@ -871,22 +873,34 @@ _prefix (Bit_Chain *dat)
     _FIELD (bitsize, BL, 0);                                                  \
     if (_ent->preview_exists)                                                 \
       ENT_FIELD (preview_exists, B, 0);                                       \
-    error |= json_common_entity_data (dat, obj);
+    error |= json_common_entity_data (dat, obj);                              \
+    return error | dwg_json_##token##_private (dat, hdl_dat, str_dat, obj);   \
+  }                                                                           \
+  static int dwg_json_##token##_private (                                     \
+        Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,               \
+        Dwg_Object *restrict obj)                                             \
+  {                                                                           \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Object_Entity *_ent = obj->tio.entity;                                \
+    Dwg_Entity_##token *_obj = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
-  return 0;                                                                   \
+    return error;                                                             \
   }
 
 #define DWG_OBJECT(token)                                                     \
+  static int dwg_json_##token##_private (                                     \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj);                                              \
   GCC30_DIAG_IGNORE (-Wshadow)                                                \
   static int dwg_json_##token (Bit_Chain *restrict dat,                       \
                                Dwg_Object *restrict obj)                      \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                    \
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
-    Dwg_Data *dwg = obj->parent;                                              \
     const char *name = #token;                                                \
     Dwg_Object_##token *_obj;                                                 \
     LOG_INFO ("Object "#token ":\n")                                          \
@@ -904,10 +918,20 @@ _prefix (Bit_Chain *dat)
     _FIELD (size, RL, 0);                                                     \
     _FIELD (bitsize, BL, 0);                                                  \
     error |= json_eed (dat, obj->tio.object);                                 \
-    error |= json_common_object_handle_data (dat, obj);
+    error |= json_common_object_handle_data (dat, obj);                       \
+    return error | dwg_json_##token##_private (dat, hdl_dat, str_dat, obj);   \
+  }                                                                           \
+  static int dwg_json_##token##_private (                                     \
+        Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,               \
+        Dwg_Object *restrict obj)                                             \
+  {                                                                           \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Object_##token *_obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END                                                        \
-  return 0;                                                                   \
+    return 0;                                                                 \
   }
 
 #undef JSON_3DSOLID

@@ -333,8 +333,13 @@ static BITCODE_BL rcount1, rcount2;
   bit_set_position (hdl_dat, obj->hdlpos)
 
 #define DWG_ENTITY(token)                                                     \
+  static int dwg_print_##token##_private (                                    \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj) {                                       \
+    return 0;                                                                 \
+  }                                                                           \
   static int dwg_print_##token (Bit_Chain *restrict dat,                      \
-                                Dwg_Object *restrict obj)                     \
+                                const Dwg_Object *restrict obj)               \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Entity_##token *ent, *_obj;                                           \
@@ -346,6 +351,7 @@ static BITCODE_BL rcount1, rcount2;
     LOG_INFO ("Entity " #token ":\n")                                         \
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
+    dwg_print_##token##_private (dat, hdl_dat, str_dat, obj);                 \
     LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))
 
 #define DWG_ENTITY_END                                                        \
@@ -353,8 +359,13 @@ static BITCODE_BL rcount1, rcount2;
   }
 
 #define DWG_OBJECT(token)                                                     \
+  static int dwg_print_##token##_private (                                    \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj) {                                       \
+    return 0;                                                                 \
+  }                                                                           \
   static int dwg_print_##token (Bit_Chain *restrict dat,                      \
-                                Dwg_Object *restrict obj)                     \
+                                const Dwg_Object *restrict obj)               \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Object_##token *_obj;                                                 \
@@ -363,6 +374,7 @@ static BITCODE_BL rcount1, rcount2;
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
     LOG_INFO ("Object " #token ":\n")                                         \
+    dwg_print_##token##_private (dat, hdl_dat, str_dat, obj);                 \
     _obj = obj->tio.object->tio.token;                                        \
     LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))
 

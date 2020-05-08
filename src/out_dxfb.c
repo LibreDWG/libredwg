@@ -600,15 +600,17 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
 #endif
 
 #define DWG_ENTITY(token)                                                     \
+  static int dwg_dxfb_##token##_private (                                     \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj);                                        \
   static int dwg_dxfb_##token (Bit_Chain *restrict dat,                       \
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                    \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
     Dwg_Data *dwg = obj->parent;                                              \
+    Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
-    Dwg_Entity_##token *ent, *_obj;                                           \
-    Dwg_Object_Entity *_ent;                                                  \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
@@ -638,8 +640,6 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     else                                                                      \
       RECORD (token)                                                          \
     LOG_INFO ("Entity " #token ":\n")                                         \
-    _ent = obj->tio.entity;                                                   \
-    _obj = ent = _ent->tio.token;                                             \
     SINCE (R_11)                                                              \
     {                                                                         \
       uint32_t i = (uint32_t)obj->handle.value;                               \
@@ -652,14 +652,28 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
       VALUE_HANDLE_NAME (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 330,   \
                          BLOCK_HEADER);                                       \
       error |= dxfb_common_entity_handle_data (dat, obj);                     \
-    }
+    }                                                                         \
+    error |= dwg_dxfb_##token##_private (dat, hdl_dat, str_dat, obj);         \
+    error |= dxfb_write_eed (dat, obj->tio.object);                           \
+    return error;                                                             \
+  }                                                                           \
+  static int dwg_dxfb_##token##_private (                                     \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj) {                                       \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Entity_##token *_obj = obj->tio.entity->tio.token;                    \
+    Dwg_Object_Entity *_ent = obj->tio.entity;
 
 #define DWG_ENTITY_END                                                        \
-    error |= dxfb_write_eed (dat, (Dwg_Object_Object*)obj->tio.entity);       \
     return error;                                                             \
   }
 
 #define DWG_OBJECT(token)                                                     \
+  static int dwg_dxfb_##token##_private (                                     \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj);                                        \
   static int dwg_dxfb_##token (Bit_Chain *restrict dat,                       \
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
@@ -667,8 +681,6 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
-    Dwg_Data *dwg = obj->parent;                                              \
-    Dwg_Object_##token *_obj;                                                 \
     LOG_INFO ("Object " #token ":\n")                                         \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
@@ -676,7 +688,6 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                    DWG_TYPE_##token, #token);                                 \
         return DWG_ERR_INVALIDTYPE;                                           \
       }                                                                       \
-    _obj = obj->tio.object->tio.token;                                        \
     if (!dwg_obj_is_control (obj))                                            \
       {                                                                       \
         if (obj->fixedtype == DWG_TYPE_TABLE)                                 \
@@ -701,10 +712,20 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
         }                                                                     \
       }                                                                       \
-    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))         \
+    error |= dwg_dxfb_##token##_private (dat, hdl_dat, str_dat, obj);         \
+    error |= dxfb_write_eed (dat, obj->tio.object);                           \
+    return error;                                                             \
+  }                                                                           \
+  static int dwg_dxfb_##token##_private (                                     \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      const Dwg_Object *restrict obj) {                                       \
+    int error = 0;                                                            \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Object_##token *_obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END                                                        \
-    error |= dxfb_write_eed (dat, obj->tio.object);                           \
     return error;                                                             \
   }
 

@@ -318,10 +318,12 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
     _ent = obj->tio.entity;                                                   \
+    if (!_ent)                                                                \
+      return 0;                                                               \
     _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
-  return error;                                                               \
+    return error;                                                             \
   }
 
 #define DWG_OBJECT(token)                                                     \
@@ -363,7 +365,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname or
  * static */
 #define DWG_OBJECT_END                                                        \
-  return error;                                                               \
+    return error;                                                             \
   }
 
 static void
