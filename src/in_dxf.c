@@ -6947,6 +6947,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (!x)
                     goto search_field;
                   o->color.name = strdup (x + 1);
+                  o->color |= 3;
                   x[0] = '\0';
                   LOG_TRACE ("DBCOLOR.catalog = %s [CMC %d]\n", o->color.book_name,
                              pair->code);
@@ -7718,16 +7719,17 @@ new_object (char *restrict name, char *restrict dxfname,
                   Dwg_Object_LAYER *o = obj->tio.object->tio.LAYER;
                   if (pair->code == 420)
                     {
-                      o->color.rgb = pair->value.l;
-                      o->color.alpha = (pair->value.l & 0xFF000000) >> 24;
-                      if (o->color.alpha)
-                        o->color.alpha_type = 3;
+                      o->color.rgb = 0xc2000000 & (pair->value.l & 0x00ffffff);
+                      o->color.method = 0xc2;
+                      //o->color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                      //if (o->color.alpha)
+                      //  o->color.alpha_type = 3;
                       LOG_TRACE ("%s.color.rgb = %08X [%s %d]\n", name,
                                  pair->value.u, "CMC", pair->code);
                     }
                   else if (pair->code == 440)
                     {
-                      o->color.flag |= 0x20;
+                      o->color.flag |= 0x20; // ???
                       o->color.alpha = (pair->value.l & 0xFF000000) >> 24;
                       o->color.alpha_type = pair->value.u >> 8;
                       if (o->color.alpha && !o->color.alpha_type)
@@ -7737,14 +7739,39 @@ new_object (char *restrict name, char *restrict dxfname,
                     }
                   else if (pair->code == 430)
                     {
-                      o->color.flag |= 0x10;
-                      if (dwg->header.version >= R_2007)
-                        o->color.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+                      char *x;
+                      o->color.book_name = strdup (pair->value.s);
+                      x = strchr (o->color.book_name, '$');
+                      if (!x) // name only
+                        {
+                          o->color.name = o->color.book_name;
+                          o->color.flag = 1;
+                          LOG_TRACE ("%s.color.name = %s [%s %d]\n", name,
+                                     pair->value.s, "CMC", pair->code);
+                          if (dwg->header.version >= R_2007)
+                            {
+                              char *tmp = o->color.name;
+                              o->color.name = (BITCODE_T)bit_utf8_to_TU (o->color.name);
+                              free (tmp);
+                            }
+                        }
                       else
-                        o->color.name = strdup (pair->value.s);
-                      // TODO: book_name or name?
-                      LOG_TRACE ("%s.color.name = %s [%s %d]\n", name,
-                                 pair->value.s, "CMC", pair->code);
+                        { // book with name
+                          o->color.flag = 3;
+                          o->color.name = strdup (x + 1);
+                          x[0] = '\0';
+                          if (dwg->header.version >= R_2007)
+                            {
+                              char *tmp = o->color.book_name;
+                              o->color.book_name = (BITCODE_T)bit_utf8_to_TU (o->color.book_name);
+                              free (tmp);
+                              tmp = o->color.name;
+                              o->color.name = (BITCODE_T)bit_utf8_to_TU (o->color.name);
+                              free (tmp);
+                            }
+                          LOG_TRACE ("%s.color.book+name = %s [%s %d]\n", name,
+                                     pair->value.s, "CMC", pair->code);
+                        }
                     }
                   else if (pair->code == 348)
                     LOG_TRACE ("Unknown DXF code %d for %s\n", pair->code, name);

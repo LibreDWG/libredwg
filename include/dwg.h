@@ -592,8 +592,8 @@ typedef enum DWG_HDL_CODE
 typedef struct _dwg_color /* CmColor: R15 and earlier */
 {
   BITCODE_BSd index;  /* <0: turned off. 0: BYBLOCK, 256: BYLAYER */
-  BITCODE_BS flag;    /* 1: name follows, 2: book name follows, ... */
-  BITCODE_BS raw;     /* flag << 8 + index */
+  BITCODE_BS flag;    /* 1: has name, 2: has book_name. */
+  BITCODE_BS raw;     /* ENC only */
   BITCODE_BL rgb;     /* DXF 420 */
   unsigned method;    /* first byte of rgb:
                          0xc0 for ByLayer (also c3 and rgb of 0x100)
@@ -604,7 +604,7 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
                          0xc8 for none (also c3 and rgb of 0x101)
                        */
   BITCODE_T  name;       /* DXF 430 */
-  BITCODE_T  book_name;  /* DXF 430 */
+  BITCODE_T  book_name;  /* DXF 430, DXF: "book_name$name" */
   BITCODE_H  handle;
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
   BITCODE_RC alpha;      /* DXF 440. 0-255 */

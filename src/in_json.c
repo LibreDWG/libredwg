@@ -617,6 +617,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_VOID
               LOG_TRACE ("%s.name \"%s\" [CMC]\n", name, str);
               color->name = str;
+              color->flag |= 1;
             }
           else if (strEQc (key, "book_name"))
             {
@@ -624,6 +625,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_VOID
               LOG_TRACE ("%s.book_name \"%s\" [CMC]\n", name, str);
               color->book_name = str;
+              color->flag |= 2;
             }
           else
             {
