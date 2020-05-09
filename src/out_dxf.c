@@ -479,12 +479,9 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
             if (u8 && *u8)                                                    \
               {                                                               \
                 GROUP (dxf);                                                  \
-                if (u8)                                                       \
-                  fprintf (dat->fh, "%s\r\n", u8);                            \
-                else                                                          \
-                  fprintf (dat->fh, "\r\n");                                  \
-                free (u8);                                                    \
+                fprintf (dat->fh, "%s\r\n", u8);                              \
               }                                                               \
+            free (u8);                                                        \
           }                                                                   \
         else if (*_obj->nam)                                                  \
           {                                                                   \

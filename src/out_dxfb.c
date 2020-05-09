@@ -191,6 +191,53 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define FIELD_TF(nam, len, dxf) VALUE_TV (_obj->nam, dxf)
 #define FIELD_TFF(nam, len, dxf) VALUE_TV (_obj->nam, dxf)
 
+// skip if 0
+#define FIELD_BD0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0.0)                                                     \
+      FIELD_BD (nam, dxf)                                                     \
+  }
+#define FIELD_BL0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_BL (nam, dxf)                                                     \
+  }
+#define FIELD_BS0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_BS (nam, dxf)                                                     \
+  }
+#define FIELD_RC0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_RC (nam, dxf)                                                     \
+  }
+#define FIELD_BT0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_BT (nam, dxf)                                                     \
+  }
+#define FIELD_T0(nam, dxf)                                                    \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      {                                                                       \
+        if (dat->from_version >= R_2007)                                      \
+          {                                                                   \
+            char *u8 = bit_convert_TU ((BITCODE_TU)_obj->nam);                \
+            if (u8 && *u8)                                                    \
+              {                                                               \
+                FIELD_TU (nam, dxf)                                           \
+              }                                                               \
+            free (u8);                                                        \
+          }                                                                   \
+        else if (*_obj->nam)                                                  \
+          {                                                                   \
+            FIELD_TV (nam, dxf);                                              \
+          }                                                                   \
+      }                                                                       \
+  }
+
+
 #define HEADER_TV(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   VALUE_TV (dwg->header_vars.nam, dxf)
