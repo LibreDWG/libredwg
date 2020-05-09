@@ -334,7 +334,25 @@ static bool env_var_checked_p;
       }                                                                       \
   }
 
-#define SUB_FIELD_CMC(o, nam, dxf)  bit_write_CMC (dat, str_dat, &_obj->o.nam)
+#define SUB_FIELD_CMC(o, color, dxf)                                          \
+  {                                                                           \
+    bit_write_CMC (dat, str_dat, &_obj->o.color);                             \
+    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
+    LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
+    if (dat->version >= R_2004)                                               \
+      {                                                                       \
+        LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
+                   (unsigned)_obj->o.color.rgb, dxf + 420 - 62);              \
+        LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
+                   (unsigned)_obj->o.color.flag);                             \
+        if (_obj->o.color.flag & 1)                                           \
+          LOG_TRACE (#color ".name: %s [CMC.TV]\n", _obj->o.color.name);      \
+        if (_obj->o.color.flag & 2)                                           \
+          LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                       \
+                     _obj->o.color.book_name);                                \
+        LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
+      }                                                                       \
+  }
 
 #define LOG_TF(level, var, len)                                               \
   if (var)                                                                    \
