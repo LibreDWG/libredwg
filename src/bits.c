@@ -2423,6 +2423,8 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
           color->method = 0xc2;
           color->rgb = 0xc2000000 | (color->rgb & 0xffffff);
         }
+      // fixup index by palette lookup
+      color->index = dwg_find_color_index (color->rgb);
     }
 }
 
@@ -2433,7 +2435,7 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   if (dat->version >= R_2004) // truecolor
     {
-      bit_write_BS (dat, 0);
+      bit_write_BS (dat, 0);  // index override
       bit_write_BL (dat, color->rgb);
       color->method = color->rgb >> 0x18;
       if (color->method == 0xc2) // for entity

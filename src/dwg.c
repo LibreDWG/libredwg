@@ -2329,6 +2329,22 @@ EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void)
   return rgb_palette;
 }
 
+EXPORT BITCODE_BS dwg_find_color_index (BITCODE_BL rgb)
+{
+  Dwg_RGB_Palette pal;
+  rgb &= 0x00ffffff;
+  pal.r = rgb & 0xff0000;
+  pal.g = rgb & 0x00ff00;
+  pal.b = rgb & 0x0000ff;
+  // linear search is good enough for 256. the palette is unsorted.
+  for (BITCODE_BS i = 0; i < 256; i++)
+    {
+      if (memcmp (&pal, &rgb_palette[i], 3) == 0)
+        return i;
+    }
+  return 256;
+}
+
 // map [rVER] to our enum number, not the dwg->header.dwgversion
 // Acad 2018 offers SaveAs DWG: 2018,2013,2010,2007,2004,2004,2000,r14
 //                         DXF: 2018,2013,2010,2007,2004,2004,2000,r12

@@ -7334,6 +7334,10 @@ typedef struct rgbpalette {
   unsigned char r,g,b;
 } Dwg_RGB_Palette;
 EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void);
+/* find a matching color index (0-255) for a truecolor rgb value.
+   returns 256 if not found, i.e. the default ByLayer.
+ */
+EXPORT BITCODE_BS dwg_find_color_index (BITCODE_BL rgb);
 
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
