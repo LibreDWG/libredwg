@@ -5567,6 +5567,10 @@ DWG_OBJECT (TABLESTYLE)
   SUBCLASS (AcDbTableStyle)
   UNTIL (R_2007) {
     FIELD_T (name, 3);
+    FREE { // leaks on downconvert
+      FIELD_HANDLE (cellstyle_handle, DWG_HDL_HARDOWN, 0);
+      FIELD_T (cellstyle.name, 300);
+    }
   }
   LATER_VERSIONS {
     FIELD_RC (unknown_rc, 70);
