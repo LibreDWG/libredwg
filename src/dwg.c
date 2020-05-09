@@ -2464,3 +2464,18 @@ dwg_errstrings (int error)
     HANDLER (OUTPUT, "OUTOFMEM ");
   HANDLER (OUTPUT, "\n");
 }
+
+// return name of color.method
+EXPORT const char*
+dwg_color_method_name (unsigned m)
+{
+  switch (m) {
+  case 0xc0: return "ByLayer";
+  case 0xc1: return "ByBlock";
+  case 0xc2: return "entity (default)";
+  case 0xc3: return "Truecolor";
+  case 0xc5: return "Foreground";
+  case 0xc8: return "none";
+  default: return "";
+  }
+}

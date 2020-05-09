@@ -613,6 +613,8 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
 typedef Dwg_Color BITCODE_CMC;
 typedef Dwg_Color BITCODE_ENC;
 
+EXPORT const char* dwg_color_method_name (unsigned method);
+
 /**
  ASCII or Unicode text in xdata \ref Dwg_Resbuf
  */

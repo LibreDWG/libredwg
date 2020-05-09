@@ -6984,7 +6984,7 @@ DWG_OBJECT_END
     FIELD_BD (color.factor, dxf2);   /* 0.0 - 1.0 */                          \
     if (_obj->color.flag == 1)                                                \
       {                                                                       \
-        FIELD_BL (color.rgb, dxf3);                                           \
+        FIELD_BLx (color.rgb, dxf3);                                           \
       }                                                                       \
   }
 
