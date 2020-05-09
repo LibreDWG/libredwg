@@ -569,6 +569,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   char key[80];
   const jsmntok_t *t = &tokens->tokens[tokens->index];
+  memset (color, 0, sizeof (Dwg_Color));
   if (t->type == JSMN_OBJECT)
     {                  // 2004+
       tokens->index++; // hash of index, rgb...
@@ -1001,7 +1002,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       else if (strEQc (f->type, "CMC"))
         {
-          static BITCODE_CMC color = { 0, 0, 0 };
+          BITCODE_CMC color = { 0, 0, 0 };
           json_CMC (dat, dwg, tokens, key, &color);
           dwg_dynapi_header_set_value (dwg, key, &color, 0);
         }
@@ -1923,7 +1924,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           else if (strEQc (f->type, "CMC"))
             {
-              static BITCODE_CMC color = { 0, 0, 0 };
+              BITCODE_CMC color = { 0, 0, 0 };
               json_CMC (dat, dwg, tokens, key, &color);
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               dwg_dynapi_field_set_value (dwg, _obj, f, &color, 1);

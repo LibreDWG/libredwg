@@ -326,9 +326,9 @@ static bool env_var_checked_p;
         LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->color.flag);                               \
         if (_obj->color.flag & 1)                                             \
-          LOG_TRACE (#color ".name: %s [CMC.TV]\n", _obj->color.name);        \
+          LOG_TRACE (#color ".name: %s [CMC.T]\n", _obj->color.name);         \
         if (_obj->color.flag & 2)                                             \
-          LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                       \
+          LOG_TRACE (#color ".bookname: %s [CMC.T]\n",                        \
                      _obj->color.book_name);                                  \
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
@@ -346,9 +346,9 @@ static bool env_var_checked_p;
         LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
-          LOG_TRACE (#color ".name: %s [CMC.TV]\n", _obj->o.color.name);      \
+          LOG_TRACE (#color ".name: %s [CMC.T]\n", _obj->o.color.name);       \
         if (_obj->o.color.flag & 2)                                           \
-          LOG_TRACE (#color ".bookname: %s [CMC.TV]\n",                       \
+          LOG_TRACE (#color ".bookname: %s [CMC.T]\n",                        \
                      _obj->o.color.book_name);                                \
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
