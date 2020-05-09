@@ -2407,8 +2407,22 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
       color->rgb = bit_read_BL (dat);
       color->method = color->rgb >> 0x18;
       color->flag = bit_read_RC (dat);
-      color->name      = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
-      color->book_name = (color->flag & 2) ? (char *)bit_read_T (str_dat) : NULL;
+      if (color->flag < 4)
+        {
+          color->name      = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
+          color->book_name = (color->flag & 2) ? (char *)bit_read_T (str_dat) : NULL;
+        }
+      else
+        {
+          LOG_ERROR ("Invalid CMC flag 0x%x ignored", color->flag);
+          color->flag = 0;
+        }
+      if (color->method < 0xc0 || color->method > 0xc8)
+        {
+          LOG_ERROR ("Invalid CMC method 0x%x ignored", color->method);
+          color->method = 0xc2;
+          color->rgb = 0xc2000000 | (color->rgb & 0xffffff);
+        }
     }
 }
 
