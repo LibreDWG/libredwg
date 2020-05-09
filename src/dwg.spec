@@ -5578,9 +5578,9 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BL (unknown_bl1, 0);
     FIELD_BL (unknown_bl2, 0);
     FIELD_HANDLE (cellstyle_handle, DWG_HDL_HARDOWN, 0);
-    FIELD_BL (cellstyle.id, 90);
-    FIELD_BL (cellstyle.type, 91);
-    FIELD_T (cellstyle.name, 300);
+    FIELD_BL0 (cellstyle.id, 90);
+    FIELD_BL0 (cellstyle.type, 91);
+    FIELD_T0 (cellstyle.name, 300);
   }
   FIELD_BS (flow_direction, 70);
   FIELD_BS (flags, 71);

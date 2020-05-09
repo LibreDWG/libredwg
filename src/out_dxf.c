@@ -469,6 +469,29 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     if (_obj->nam != 0)                                                       \
       FIELD_BT (nam, dxf)                                                     \
   }
+#define FIELD_T0(nam, dxf)                                                    \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      {                                                                       \
+        if (dat->from_version >= R_2007)                                      \
+          {                                                                   \
+            char *u8 = bit_convert_TU ((BITCODE_TU)_obj->nam);                \
+            if (u8 && *u8)                                                    \
+              {                                                               \
+                GROUP (dxf);                                                  \
+                if (u8)                                                       \
+                  fprintf (dat->fh, "%s\r\n", u8);                            \
+                else                                                          \
+                  fprintf (dat->fh, "\r\n");                                  \
+                free (u8);                                                    \
+              }                                                               \
+          }                                                                   \
+        else if (*_obj->nam)                                                  \
+          {                                                                   \
+            FIELD_TV (nam, dxf);                                              \
+          }                                                                   \
+      }                                                                       \
+  }
 
 #define FIELD_DD(nam, _default, dxf) FIELD_BD (nam, dxf)
 #define FIELD_2DD(nam, d1, d2, dxf)                                           \
