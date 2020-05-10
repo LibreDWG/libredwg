@@ -1367,7 +1367,7 @@ H
 3BD,	DXF 13
 @item xline2_pt
 3BD,	DXF 14
-@item first_arc_pt
+@item center_pt
 3BD,	DXF 15
 
 @end vtable

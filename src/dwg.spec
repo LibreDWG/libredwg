@@ -1196,7 +1196,7 @@ DWG_ENTITY (DIMENSION_ANG3PT)
   }
   FIELD_3BD (xline1_pt, 13);
   FIELD_3BD (xline2_pt, 14);
-  FIELD_3BD (first_arc_pt, 15);
+  FIELD_3BD (center_pt, 15);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);

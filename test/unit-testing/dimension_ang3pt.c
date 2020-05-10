@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
   char *user_text;
   int isnew;
   dwg_point_2d text_midpt, clone_ins_pt, pt2d;
-  dwg_point_3d def_pt, xline1_pt, xline2_pt, first_arc_pt, ext, ins_scale, pt3d;
+  dwg_point_3d def_pt, xline1_pt, xline2_pt, center_pt, ext, ins_scale, pt3d;
   BITCODE_H dimstyle, block;
 
   dwg_ent_dim_ang3pt *dim_ang3pt = dwg_object_to_DIMENSION_ANG3PT (obj);
@@ -49,8 +49,12 @@ api_process (dwg_object *obj)
 
   /* ang3pt */
   CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, def_pt, def_pt);
-  CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, first_arc_pt,
-                        first_arc_pt);
+  CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, center_pt, center_pt);
+  dwg_ent_dim_ang3pt_get_first_arc_pt (dim_ang3pt, &pt3d, &error);
+  if (error || memcmp (&center_pt, &pt3d, sizeof (center_pt)))
+    fail ("old API dwg_ent_dim_ang3pt_get_first_arc_pt");
+  else
+    pass ();
   CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, xline1_pt, xline1_pt);
   dwg_ent_dim_ang3pt_get_13_pt (dim_ang3pt, &pt3d, &error);
   if (error || memcmp (&xline1_pt, &pt3d, sizeof (xline1_pt)))

@@ -8290,6 +8290,14 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
       fail ("DIMENSION_ANG3PT.blockname [TV] '%s' <> '%s'", blockname, dimension_ang3pt->blockname);
   }
   {
+    BITCODE_3BD center_pt;
+    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "center_pt", &center_pt, NULL)
+        && !memcmp (&center_pt, &dimension_ang3pt->center_pt, sizeof (dimension_ang3pt->center_pt)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG3PT.center_pt [3BD]");
+  }
+  {
     BITCODE_RC class_version;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "class_version", &class_version, NULL)
         && class_version == dimension_ang3pt->class_version)
@@ -8350,14 +8358,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         pass ();
     else
         fail ("DIMENSION_ANG3PT.extrusion [BE]");
-  }
-  {
-    BITCODE_3BD first_arc_pt;
-    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "first_arc_pt", &first_arc_pt, NULL)
-        && !memcmp (&first_arc_pt, &dimension_ang3pt->first_arc_pt, sizeof (dimension_ang3pt->first_arc_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG3PT.first_arc_pt [3BD]");
   }
   {
     BITCODE_RC flag;

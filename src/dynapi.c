@@ -1492,7 +1492,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ANG3PT_fields[] = {
     1,0,0, 13 },
   { "xline2_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, xline2_pt),
     1,0,0, 14 },
-  { "first_arc_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, first_arc_pt),
+  { "center_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, center_pt),
     1,0,0, 15 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

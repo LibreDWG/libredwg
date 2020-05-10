@@ -8767,7 +8767,7 @@ dwg_ent_dim_ang3pt_get_14_pt (const dwg_ent_dim_ang3pt *restrict ang,
     }
 }
 
-/** Sets the 15 first_arc point
+/** Sets the center_pt 15
 \code Usage: dwg_ent_dim_ang3pt_set_first_arc_pt(dim, &point, &error);
 \endcode
 \param[out] ang dwg_ent_dim_ang3pt*
@@ -8787,9 +8787,9 @@ dwg_ent_dim_ang3pt_set_first_arc_pt (dwg_ent_dim_ang3pt *restrict ang,
   )
     {
       *error = 0;
-      ang->first_arc_pt.x = point->x;
-      ang->first_arc_pt.y = point->y;
-      ang->first_arc_pt.z = point->z;
+      ang->center_pt.x = point->x;
+      ang->center_pt.y = point->y;
+      ang->center_pt.z = point->z;
     }
   else
     {
@@ -8798,11 +8798,11 @@ dwg_ent_dim_ang3pt_set_first_arc_pt (dwg_ent_dim_ang3pt *restrict ang,
     }
 }
 
-/** Returns the text 15 first_arc pt
-\code Usage: dwg_ent_dim_ang3pt_get_text_first_arc_pt(dim, &point, &error);
+/** Returns the center_pt 15
+\code Usage: dwg_ent_dim_ang3pt_get_first_arc_pt(dim, &point, &error);
 \endcode
 \param[in] ang dwg_ent_dim_ang3pt*
-\param[out] dwg_point_2d
+\param[out] dwg_point_3d
 \param[out] error   int*, is set to 0 for ok, 1 on error
 \deprecated
 */
@@ -8818,9 +8818,9 @@ dwg_ent_dim_ang3pt_get_first_arc_pt (const dwg_ent_dim_ang3pt *restrict ang,
   )
     {
       *error = 0;
-      point->x = ang->first_arc_pt.x;
-      point->y = ang->first_arc_pt.y;
-      point->z = ang->first_arc_pt.z;
+      point->x = ang->center_pt.x;
+      point->y = ang->center_pt.y;
+      point->z = ang->center_pt.z;
     }
   else
     {

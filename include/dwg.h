@@ -1407,7 +1407,7 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
   DIMENSION_COMMON;
   BITCODE_3BD xline1_pt;
   BITCODE_3BD xline2_pt;
-  BITCODE_3BD first_arc_pt;
+  BITCODE_3BD center_pt;
 } Dwg_Entity_DIMENSION_ANG3PT;
 
 /**
