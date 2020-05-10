@@ -22,6 +22,8 @@
  * modified by Reini Urban
  */
 
+//#define HAVE_COMPRESS_R2004_SECTION
+
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__
 #  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
@@ -1419,57 +1421,88 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
     }
 }
 
-/* r2004 compressed sections, LZ77 TODO */
+/* r2004 compressed sections, LZ77 WIP */
 
-/* R2004 Literal Length
- * Returns the opcode.
+static void
+write_length (Bit_Chain *dat, uint32_t u1, uint32_t match, uint32_t u2);
+
+/* R2004 Write literal length
  */
 static unsigned char
-write_literal_length (Bit_Chain *restrict dat, unsigned int length)
+write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf, uint32_t len)
 {
-  if (length <= (0x0F + 3)) // single byte, opcode 0
+#if 0
+  if (len <= (0x0F + 3)) // single byte, opcode 0
     {
-      bit_write_RC (dat, length - 3);
+      bit_write_RC (dat, len - 3);
       return 0;
     }
-  else if (length < 0xf0)
+  else if (len < 0xf0)
     {
-      bit_write_RC (dat, length);
+      bit_write_RC (dat, len);
       return length & 0xff;
     }
   else
     {
-      unsigned int total = 0x0f;
-      while (length >= 0xf0)
+      uint32_t total = 0x0f;
+      while (leng >= 0xf0)
         {
           bit_write_RC (dat, 0);
-          length -= 0xFF;
+          len -= 0xFF;
           total += 0xFF;
         }
-      bit_write_RC (dat, length - 3); // ??
+      bit_write_RC (dat, len - 3); // ??
       return 0;
     }
+#else
+  if (len)
+    {
+      if (len > 3) {
+        write_length (dat, 0, len - 1, 0x11);
+      }
+      LOG_INSANE ("LIT %x\n", len)
+      bit_write_TF (dat, buf, len);
+    }
+  return 0;
+#endif
 }
-
-#ifdef HAVE_COMPRESS_R2004_SECTION
 
 /* R2004 Long Compression Offset
  */
 static void
-write_long_compression_offset (Bit_Chain *dat, unsigned int offset)
+write_long_compression_offset (Bit_Chain *dat, uint32_t offset)
 {
   while (offset > 0xff)
     {
       bit_write_RC (dat, 0);
       offset -= 0xff;
     }
+  LOG_INSANE (">O 00 %x", offset)
   bit_write_RC (dat, (unsigned char)offset);
+}
+
+static void
+write_length (Bit_Chain *dat, uint32_t u1, uint32_t match, uint32_t u2)
+{
+  if (u2 < match)
+    {
+      LOG_INSANE (">L %x ", u1 & 0xff)
+      bit_write_RC (dat, u1 & 0xff);
+      write_long_compression_offset (dat, match - u2);
+      LOG_INSANE ("\n")
+    }
+  else
+    {
+      LOG_INSANE (">L %x\n", (u1 | (match - 2)) & 0xff);
+      bit_write_RC (dat, (u1 | (match - 2)) & 0xff);
+    }
 }
 
 /* R2004 Two Byte Offset
  */
+#if 0
 static unsigned int
-write_two_byte_offset (Bit_Chain *restrict dat, unsigned int offset)
+write_two_byte_offset (Bit_Chain *restrict dat, uint32_t offset)
 {
   BITCODE_RC b1, b2;
   b1 = offset << 2;
@@ -1480,16 +1513,49 @@ write_two_byte_offset (Bit_Chain *restrict dat, unsigned int offset)
   //*lit_length = (firstByte & 0x03);
   return b1 & 0x03;
 }
-
 #endif
+
+static void
+write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen, uint32_t offset, uint32_t len)
+{
+  const unsigned lookahead_buffer_size = 0x4000;
+  uint32_t b1, b2;
+
+  LOG_INSANE ("2O %x %x %x: ", oldlen, offset, len)
+  if ((offset < 0xf) && (oldlen < 0x401))
+    {
+      b1 = (offset + 1) * 0x10 | ((oldlen - 1U) & 3) << 2;
+      b2 = (oldlen - 1U) >> 2;
+    }
+  else
+    {
+      if (oldlen <= lookahead_buffer_size)
+        {
+          b2 = oldlen - 1;
+          write_length (dat, 0x20, offset, 0x21);
+        }
+      else
+        {
+          b2 = oldlen - lookahead_buffer_size;
+          write_length (dat, ((b2 >> 0xb) & 8U) | 0x10, offset, 9);
+        }
+      b1 = (b2 & 0xff) << 2;
+      b2 = b2 >> 6;
+    }
+  if (len < 4)
+    b1 = b1 | len;
+  LOG_INSANE ("> %x %x\n", b1, b2)
+  bit_write_RC (dat, b1 & 0xff);
+  bit_write_RC (dat, b2 & 0xff);
+}
 
 /* Finds the longest match to the substring starting at i
    in the lookahead buffer (size ?) from the history window (size ?). */
 static int
 find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size, uint32_t i, uint32_t *lenp)
 {
-  const unsigned lookahead_buffer_size = 32;
-  const unsigned window_size = 64;
+  const unsigned lookahead_buffer_size = 0x4000;
+  const unsigned window_size = 0x8000;
   int offset = 0;
   uint32_t bufend = MIN (i + lookahead_buffer_size, decomp_data_size + 1);
   *lenp = 0;
@@ -1514,37 +1580,59 @@ find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size, uint
             }
         }
     }
+  if (offset)
+    {
+      LOG_INSANE (">M %u (%u)\n", offset, *lenp)
+    }
   return offset;
 }
 
 /* Compress the decomp buffer into dat of a DWG r2004+ file. Sets comp_data_size.
    Variant of the LZ77 algo. ODA section 4.7
-   TODO
 */
 static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                                    uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
   uint32_t i = 0;
-  unsigned char opcode;
-  write_literal_length (dat, decomp_data_size);
-  LOG_ERROR ("FIXME compress_R2004_section(). See LZ77 compressors");
-  while (i < decomp_data_size)
+  uint32_t match = 0, oldlen = 0;
+  uint32_t len = 0;
+  unsigned long pos = bit_position (dat);
+  //write_literal_length (dat, decomp_data_size);
+  LOG_WARN ("compress_R2004_section %d", decomp_data_size);
+  if (decomp_data_size < 0x13)
     {
-      uint32_t len;
+      bit_write_TF (dat, decomp, decomp_data_size);
+      *comp_data_size = bit_position (dat) - pos;
+      LOG_INSANE ("LIT %u\n", *comp_data_size);
+      return 0;
+    }
+  while (i < decomp_data_size - 0x13)
+    {
       int offset = find_longest_match (decomp, decomp_data_size, i, &len);
       if (offset)
         {
-          // TODO: encode offset + len
-          // ..
-          i += len;
+          // encode offset + len
+          if (match)
+            write_two_byte_offset (dat, oldlen, match, len);
+          write_literal_length (dat, &decomp[i], len);
+          i += match;
+          match = offset;
+          oldlen = len;
         }
       else
         {
-          // encode literal byte
-          opcode = write_literal_length (dat, decomp[i]);
-          i += 1;
+          i += 1; // no match found
         }
     }
+  len = decomp_data_size - i;
+  if (match)
+    write_two_byte_offset (dat, oldlen, match, len);
+  write_literal_length (dat, &decomp[i], len);
+  bit_write_RC (dat, 0x11);
+  bit_write_RC (dat, 0);
+  bit_write_RC (dat, 0);
+  *comp_data_size = bit_position (dat) - pos;
+  LOG_INSANE ("> 11 0 => %u\n", *comp_data_size)
   return 0;
 }
 
@@ -2901,6 +2989,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                   sec->size);
                       compress_R2004_section (dat, sec_dat[type].chain,
                                               sec->size, &sec->comp_data_size);
+                      LOG_TRACE ("sec->comp_data_size: " FORMAT_RL "\n", sec->comp_data_size);
                     }
                   else
                     {
