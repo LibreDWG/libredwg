@@ -1423,6 +1423,10 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
 
 /* r2004 compressed sections, LZ77 WIP */
 
+#define MIN_COMPRESSED_SECTION 19
+#define COMPRESSION_BUFFER_SIZE 0x400
+#define COMPRESSION_WINDOW_SIZE 0x800
+
 static void
 write_length (Bit_Chain *dat, uint32_t u1, uint32_t match, uint32_t u2);
 
@@ -1518,7 +1522,7 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t offset)
 static void
 write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen, uint32_t offset, uint32_t len)
 {
-  const unsigned lookahead_buffer_size = 0x4000;
+  const unsigned lookahead_buffer_size = COMPRESSION_BUFFER_SIZE;
   uint32_t b1, b2;
 
   LOG_INSANE ("2O %x %x %x: ", oldlen, offset, len)
@@ -1554,8 +1558,8 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen, uint32_t offset
 static int
 find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size, uint32_t i, uint32_t *lenp)
 {
-  const unsigned lookahead_buffer_size = 0x4000;
-  const unsigned window_size = 0x8000;
+  const unsigned lookahead_buffer_size = COMPRESSION_BUFFER_SIZE;
+  const unsigned window_size = COMPRESSION_WINDOW_SIZE;
   int offset = 0;
   uint32_t bufend = MIN (i + lookahead_buffer_size, decomp_data_size + 1);
   *lenp = 0;
@@ -1597,16 +1601,9 @@ static int compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict
   uint32_t match = 0, oldlen = 0;
   uint32_t len = 0;
   unsigned long pos = bit_position (dat);
-  //write_literal_length (dat, decomp_data_size);
   LOG_WARN ("compress_R2004_section %d", decomp_data_size);
-  if (decomp_data_size < 0x13)
-    {
-      bit_write_TF (dat, decomp, decomp_data_size);
-      *comp_data_size = bit_position (dat) - pos;
-      LOG_INSANE ("LIT %u\n", *comp_data_size);
-      return 0;
-    }
-  while (i < decomp_data_size - 0x13)
+  assert (decomp_data_size > MIN_COMPRESSED_SECTION);
+  while (i < decomp_data_size - MIN_COMPRESSED_SECTION)
     {
       int offset = find_longest_match (decomp, decomp_data_size, i, &len);
       if (offset)
@@ -2826,6 +2823,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             // very unlikely, more than 1 page
             info->sections[0] = sec;
           }
+        if (_obj->compressed == 2 && sec->size <= MIN_COMPRESSED_SECTION)
+          _obj->compressed = 1;
 #ifndef HAVE_COMPRESS_R2004_SECTION
         _obj->compressed = 1;
 #endif
@@ -2885,9 +2884,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         sec->compression_type = info->compressed;
         // very unlikely, more than 1 page
         info->sections[0] = sec;
-#ifndef HAVE_COMPRESS_R2004_SECTION
-        _obj->compressed = 1;
-#endif
       }
       
       address = 0x100;
@@ -2983,6 +2979,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       free (sec_dat[type].chain);
                       sec_dat[type].chain = decr;
                     }
+                  assert (sec->size <= MIN_COMPRESSED_SECTION ? info->compressed == 1 : 1);
                   if (info->compressed == 2)
                     {
                       LOG_HANDLE ("Compress %s (%u/%d)\n", info->name, k,
