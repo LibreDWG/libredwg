@@ -6100,7 +6100,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     }
                   else if (strEQc (subclass, "AcDbAlignedDimension"))
                     {
-                      // FIXME: could be DIMENSION_LINEAR also
+                      // could be DIMENSION_LINEAR also. changed later on those new pairs
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
                       obj->name = (char *)"DIMENSION_ALIGNED";
                       obj->dxfname = strdup (obj->name);
@@ -7795,6 +7795,17 @@ new_object (char *restrict name, char *restrict dxfname,
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n",
                              name, "ext_line_rotation", ang, pair->value.d,
                              "BD", 52);
+                }
+              else if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED && pair->code == 50)
+                {
+                  BITCODE_BD ang = deg2rad (pair->value.d);
+                  free (obj->dxfname);
+                  UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
+                  dwg_dynapi_entity_set_value (_obj, "DIMENSION_LINEAR",
+                                               "dim_rotation", &ang, 1);
+                  LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n",
+                             name, "dim_rotation", ang, pair->value.d,
+                             "BD", 50);
                 }
               else if (is_class_stable (obj->name))
                 {
