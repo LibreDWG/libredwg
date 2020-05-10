@@ -7331,6 +7331,18 @@ new_object (char *restrict name, char *restrict dxfname,
                                      pair->value.d, f->type, pair->code);
                           goto next_pair; // found
                         }
+                      else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
+                        {
+                          static BITCODE_TIMEBLL date = { 0, 0, 0 };
+                          double ms;
+                          date.value = pair->value.d;
+                          date.days = (BITCODE_BL)trunc (pair->value.d);
+                          date.ms = (BITCODE_BL)(86400.0 * (date.value - date.days));
+                          LOG_TRACE ("%s.%s %.09f (%u, %u) [TIMEBLL %d]\n", name,
+                                     f->name, date.value, date.days, date.ms, pair->code);
+                          dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &date, 1);
+                          goto next_pair;
+                        }
                       else if (f->size > 8 && strEQc (f->type, "CMC"))
                         {
                           BITCODE_CMC color;

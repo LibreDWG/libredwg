@@ -985,6 +985,12 @@ api_common_entity (dwg_object *obj)
         fail (#name "." #field ":\t(%f, %f, %f)", value.x, value.y, value.z); \
     }
 
+#define CHK_ENTITY_TIMEBLL(ent, name, field, value)                           \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &value, NULL))            \
+    fail (#name "." #field);                                                  \
+  else                                                                        \
+    ok ("%s.%s " FORMAT_BL "." FORMAT_BL, #name, #field, value.days, value.ms);
+
 #define CHK_ENTITY_MAX(ent, name, field, type, _max)                          \
   if (field > _max)                                                           \
     fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, field)
