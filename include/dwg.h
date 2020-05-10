@@ -4872,7 +4872,7 @@ typedef struct _dwg_DIMASSOC_Ref
   BITCODE_BS num_xrefs;
   BITCODE_H *xrefs;            /*!< DXF 331 the geometry objects, 1 or 2 */ 
   BITCODE_BS main_subent_type; /*!< DXF 73 */
-  BITCODE_BL main_gsmarker;   /*!< DXF 91 */
+  BITCODE_BL main_gsmarker;    /*!< DXF 91 */
   BITCODE_BS num_xrefpaths;
   BITCODE_T *xrefpaths;        /*!< DXF 301 */
   BITCODE_B  has_lastpt_ref;   /*!< DXF 75 */

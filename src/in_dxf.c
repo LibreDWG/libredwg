@@ -1754,7 +1754,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 42)
         {
-          if (!j)
+          if (!_o->num_bulges)
             {
               _o->bulges = xcalloc (num_points, sizeof (BITCODE_BD));
               if (!_o->bulges)
