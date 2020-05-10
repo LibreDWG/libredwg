@@ -6028,6 +6028,31 @@ H*,	DXF 360
 @end vtable
 @end indentedblock
 
+@strong{FCFOBJECTCONTEXTDATA} @anchor{FCFOBJECTCONTEXTDATA}
+@cindex object, FCFOBJECTCONTEXTDATA
+@vindex FCFOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS
+@item is_default
+B
+@item in_dwg
+B
+@item scale
+H
+@item location
+3BD,	DXF 10
+@item horiz_dir
+3BD,	DXF 11
+
+@end vtable
+@end indentedblock
+
 @strong{FIELD} @anchor{FIELD}
 @cindex object, FIELD
 @vindex FIELD
@@ -7001,7 +7026,7 @@ BS,	DXF 176
 CMC,	DXF 93
 @item text_height
 BD,	DXF 45
-@item text_frame
+@item has_text_frame
 B,	DXF 292
 @item is_new_format
 B
@@ -7025,7 +7050,7 @@ B,	DXF 294
 BS,	DXF 177
 @item scale
 BD,	DXF 142
-@item changed
+@item is_changed
 B,	DXF 295
 @item is_annotative
 B,	DXF 296
@@ -7038,7 +7063,7 @@ BS,	DXF 273
 @item attach_bottom
 BS,	DXF 272
 @item text_extended
-B
+B,	DXF 298
 
 @end vtable
 @end indentedblock

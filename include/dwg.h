@@ -2975,7 +2975,7 @@ typedef struct _dwg_object_MLEADERSTYLE
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BS class_version; /*!< r2010+ =2 */
+  BITCODE_BS class_version; /*!< DXF 179, r2010+ =2 */
   BITCODE_BS content_type;
   BITCODE_BS mleader_order;
   BITCODE_BS leader_order;
@@ -3001,7 +3001,7 @@ typedef struct _dwg_object_MLEADERSTYLE
   BITCODE_BS text_align_type;
   BITCODE_CMC text_color;
   BITCODE_BD text_height;
-  BITCODE_B text_frame;
+  BITCODE_B has_text_frame;
   BITCODE_B is_new_format; /* computed */
   BITCODE_B text_always_left;
   BITCODE_BD align_space;
@@ -3013,7 +3013,7 @@ typedef struct _dwg_object_MLEADERSTYLE
   BITCODE_B use_block_rotation;
   BITCODE_BS block_connection;
   BITCODE_BD scale;
-  BITCODE_B changed;
+  BITCODE_B is_changed;
   BITCODE_B is_annotative;
   BITCODE_BD break_size;
 

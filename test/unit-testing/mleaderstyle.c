@@ -31,7 +31,7 @@ api_process (dwg_object *obj)
   BITCODE_BS text_align_type;
   BITCODE_CMC text_color;
   BITCODE_BD text_height;
-  BITCODE_B text_frame;
+  BITCODE_B has_text_frame;
   BITCODE_B is_new_format; /* computed */
   BITCODE_B text_always_left;
   BITCODE_BD align_space;
@@ -43,7 +43,7 @@ api_process (dwg_object *obj)
   BITCODE_B use_block_rotation;
   BITCODE_BS block_connection;
   BITCODE_BD scale;
-  BITCODE_B changed;
+  BITCODE_B is_changed;
   BITCODE_B is_annotative;
   BITCODE_BD break_size;
   BITCODE_BS attach_dir;
@@ -80,7 +80,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, text_align_type, BS, text_align_type);
   CHK_ENTITY_CMC (_obj, MLEADERSTYLE, text_color, text_color);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, text_height, BD, text_height);
-  CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, text_frame, B, text_frame);
+  CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, has_text_frame, B, has_text_frame);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, is_new_format, B, is_new_format); /* computed */
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, text_always_left, B, text_always_left);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, align_space, BD, align_space);
@@ -92,7 +92,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, use_block_rotation, B, use_block_rotation);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, block_connection, BS, block_connection);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, scale, BD, scale);
-  CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, changed, B, changed);
+  CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, is_changed, B, is_changed);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, is_annotative, B, is_annotative);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, break_size, BD, break_size);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, attach_dir, BS, attach_dir);

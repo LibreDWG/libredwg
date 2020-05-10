@@ -5990,30 +5990,34 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_BD (second_seg_angle, 41);
   FIELD_BS (type, 173);
   FIELD_CMC (line_color, 91);
+  FIELD_HANDLE (line_type, 5, 340);
   FIELD_BLd (linewt, 92);
   FIELD_B (has_landing, 290);
   FIELD_BD (landing_gap, 42);
   FIELD_B (has_dogleg, 291);
   FIELD_BD (landing_dist, 43);
   FIELD_T (description, 3);
+  FIELD_HANDLE (arrow_head, 5, 341);
   FIELD_BD (arrow_head_size, 44);
   FIELD_T (text_default, 300);
+  FIELD_HANDLE (text_style, 5, 342);
   FIELD_BS (attach_left, 174);
   FIELD_BS (attach_right, 178);
   FIELD_BS (text_angle_type, 175);
   FIELD_BS (text_align_type, 176);
-  FIELD_CMC (text_color, 93);
+  FIELD_CMC (text_color, 93); // as RGB only
   FIELD_BD (text_height, 45);
-  FIELD_B (text_frame, 292);
+  FIELD_B (has_text_frame, 292);
   //is_new_format: if the object has extended data for APPID “ACAD_MLEADERVER”.
   if (FIELD_VALUE (is_new_format) || dat->version >= R_2010) {
-    FIELD_B (text_always_left, 297);
+    FIELD_B (text_always_left, 297); // in DXF always
     JSON {
       _obj->is_new_format = 1;
       FIELD_B (is_new_format, 0);
     }
   }
   FIELD_BD (align_space, 46);
+  FIELD_HANDLE (block, 5, 343);
   FIELD_CMC (block_color, 94);
   JSON {
     FIELD_3BD (block_scale, 0)
@@ -6027,7 +6031,7 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_B (use_block_rotation, 294);
   FIELD_BS (block_connection, 177);
   FIELD_BD (scale, 142);
-  FIELD_B (changed, 295);
+  FIELD_B (is_changed, 295);
   FIELD_B (is_annotative, 296);
   FIELD_BD (break_size, 143);
 
@@ -6037,14 +6041,9 @@ DWG_OBJECT (MLEADERSTYLE)
       FIELD_BS (attach_top, 273);
       FIELD_BS (attach_bottom, 272);
     }
-  //SINCE (R_2013) DXF 298, value 1
-
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (line_type, 5, 340);
-  FIELD_HANDLE (arrow_head, 5, 341);
-  FIELD_HANDLE (text_style, 5, 342);
-  FIELD_HANDLE (block, 5, 343);
-
+  SINCE (R_2013) {
+    FIELD_B (text_extended, 298);
+  }
 DWG_OBJECT_END
 
 ////////////////////
