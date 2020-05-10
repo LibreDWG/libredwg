@@ -5725,7 +5725,7 @@ static const Dwg_DYNAPI_field _dwg_LAYER_CONTROL_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LAYER_INDEX_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYER_INDEX, parent),
     1,1,0, 0 },
-  { "timestamp",	"TIMEBLL", sizeof (BITCODE_TIMEBLL),  OFF (struct _dwg_object_LAYER_INDEX, timestamp),
+  { "last_updated",	"TIMEBLL", sizeof (BITCODE_TIMEBLL),  OFF (struct _dwg_object_LAYER_INDEX, last_updated),
     1,0,0, 40 },
   { "num_entries",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_LAYER_INDEX, num_entries),
     0,0,0, 0 },

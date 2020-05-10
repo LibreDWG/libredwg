@@ -33688,6 +33688,14 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
       fail ("LAYER_INDEX.entries [Dwg_LAYER_entry*] * %u num_entries", count);
   }
   {
+    BITCODE_TIMEBLL last_updated;
+    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "last_updated", &last_updated, NULL)
+        && !memcmp (&last_updated, &layer_index->last_updated, sizeof (layer_index->last_updated)))
+        pass ();
+    else
+        fail ("LAYER_INDEX.last_updated [TIMEBLL]");
+  }
+  {
     BITCODE_BL num_entries;
     if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "num_entries", &num_entries, NULL)
         && num_entries == layer_index->num_entries)
@@ -33709,14 +33717,6 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
         pass ();
     else
         fail ("LAYER_INDEX.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_TIMEBLL timestamp;
-    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "timestamp", &timestamp, NULL)
-        && !memcmp (&timestamp, &layer_index->timestamp, sizeof (layer_index->timestamp)))
-        pass ();
-    else
-        fail ("LAYER_INDEX.timestamp [TIMEBLL]");
   }
   if (failed && (is_class_unstable ("LAYER_INDEX") || is_class_debugging ("LAYER_INDEX")))
     {

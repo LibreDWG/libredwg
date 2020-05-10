@@ -3921,7 +3921,7 @@ typedef struct _dwg_LAYER_entry
 typedef struct _dwg_object_LAYER_INDEX
 {
   struct _dwg_object_object *parent;
-  BITCODE_TIMEBLL timestamp;
+  BITCODE_TIMEBLL last_updated;
   BITCODE_BL num_entries;
   Dwg_LAYER_entry* entries;
 } Dwg_Object_LAYER_INDEX;

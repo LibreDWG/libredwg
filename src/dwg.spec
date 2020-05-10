@@ -4007,11 +4007,8 @@ DWG_OBJECT_END
 
 //pg.144
 DWG_OBJECT (LAYER_INDEX)
-  UNTIL (R_2004) {
-    SUBCLASS (AcDbIndex)
-    // optional 100 AcDbIndex, 40 timestamp
-    FIELD_TIMEBLL (timestamp, 40);
-  }
+  SUBCLASS (AcDbIndex)
+  FIELD_TIMEBLL (last_updated, 40);
   SUBCLASS (AcDbLayerIndex)
   FIELD_BL (num_entries, 0);
   VALUEOUTOFBOUNDS (num_entries, 20000)
@@ -4025,7 +4022,6 @@ DWG_OBJECT (LAYER_INDEX)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (entries)
   END_REPEAT (entries)
-
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
