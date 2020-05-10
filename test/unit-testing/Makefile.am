@@ -108,6 +108,7 @@ testobjects = \
 	endblk \
 	evaluation_graph \
 	extrudedsurface \
+	fcfobjectcontextdata \
 	field \
 	fieldlist \
 	geodata \
