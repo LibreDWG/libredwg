@@ -2329,7 +2329,7 @@ bit_write_L (Bit_Chain *dat, BITCODE_RL value)
 }
 
 /** Read 2 time BL bitlong (compacted data).
- *  julian day + milliseconds
+ *  julian days + milliseconds since midnight
  *  used for TDCREATE, TDUPDATE, and all other DATE variables.
  *  pre-R13 read 2xRL
  */
@@ -2337,8 +2337,6 @@ BITCODE_TIMEBLL
 bit_read_TIMEBLL (Bit_Chain *dat)
 {
   BITCODE_TIMEBLL date;
-  BITCODE_BD ms;
-
   if (dat->from_version < R_13)
     {
       date.days = bit_read_RL (dat);
@@ -2349,12 +2347,12 @@ bit_read_TIMEBLL (Bit_Chain *dat)
       date.days = bit_read_BL (dat);
       date.ms = bit_read_BL (dat);
     }
-  date.value = date.days + (date.ms / 86400.0); // just for display, not calculations
+  date.value = date.days + (date.ms / 86400000.0); // just for display, not calculations
   return date;
 }
 
 /** Write 2 time BL bitlong (compacted data).
- * Ignores the double value.
+ *  Ignores the double value.
  */
 void
 bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date)
@@ -2375,13 +2373,9 @@ BITCODE_TIMERLL
 bit_read_TIMERLL (Bit_Chain *dat)
 {
   BITCODE_TIMERLL date;
-  BITCODE_BD ms;
   date.days = bit_read_RL (dat);
   date.ms = bit_read_RL (dat);
-  ms = (double)date.ms;
-  while (ms > 1.0)
-    ms /= 10.0;
-  date.value = date.days + ms; // just for display, not calculations
+  date.value = date.days + (date.ms / 86400000.0); // just for display, not calculations
   return date;
 }
 
