@@ -6438,6 +6438,8 @@ BL
 
 @item parent
 struct _dwg_object_object*
+@item timestamp
+TIMEBLL,	DXF 40
 @item num_entries
 BL
 @item entries

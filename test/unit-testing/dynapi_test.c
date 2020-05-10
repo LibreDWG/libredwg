@@ -33710,6 +33710,14 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
     else
         fail ("LAYER_INDEX.parent [struct _dwg_object_object*]");
   }
+  {
+    BITCODE_TIMEBLL timestamp;
+    if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "timestamp", &timestamp, NULL)
+        && !memcmp (&timestamp, &layer_index->timestamp, sizeof (layer_index->timestamp)))
+        pass ();
+    else
+        fail ("LAYER_INDEX.timestamp [TIMEBLL]");
+  }
   if (failed && (is_class_unstable ("LAYER_INDEX") || is_class_debugging ("LAYER_INDEX")))
     {
       ok ("%s failed %d tests (TODO unstable)", "LAYER_INDEX", failed);

@@ -4156,6 +4156,68 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// starting with 90 or 8
+static Dxf_Pair *
+add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                 Dxf_Pair *restrict pair)
+{
+  Dwg_Object_LAYER_INDEX *o = obj->tio.object->tio.LAYER_INDEX;
+  Dwg_Data *dwg = obj->parent;
+  int i = 0;
+  o->entries = xcalloc (1, sizeof (Dwg_LAYER_entry));
+  o->num_entries = 1;
+  if (!o->entries)
+    {
+      return NULL;
+    }
+  if (pair->code == 90 && !pair->value.i)
+    {
+      LOG_TRACE ("skip first %s.entries[%d].numlayers = %d [BL %d]\n",
+                 obj->name, i, pair->value.i, pair->code);
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  while (pair != NULL && pair->code != 0)
+    {
+      switch (pair->code)
+        {
+        case 0:
+          break;
+        case 8:
+          if (dwg->header.version >= R_2007)
+            o->entries[i].name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+          else
+            o->entries[i].name = strdup (pair->value.s);
+          LOG_TRACE ("%s.entries[%d].name = %s [T %d]\n",
+                     obj->name, i, pair->value.s, pair->code);
+          break;
+        case 360:
+          o->entries[i].handle = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.entries[%d].handle = " FORMAT_REF " [H %d]\n", obj->name, i,
+                     ARGS_REF (o->entries[i].handle), pair->code);
+          break;
+        case 90:
+          o->entries[i].numlayers = pair->value.i;
+          LOG_TRACE ("%s.entries[%d].numlayers = %d [BL %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          o->num_entries++;
+          i++;
+          o->entries = realloc (o->entries, o->num_entries * sizeof (Dwg_LAYER_entry));
+          if (!o->entries)
+            return NULL;
+          break;
+        default:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
+                     "LAYER_INDEX");
+          return NULL;
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  o->num_entries--;
+  LOG_TRACE ("%s.num_entries = %d [BL]\n", obj->name, o->num_entries);
+  return pair;
+}
 
 // with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
 static Dxf_Pair *
@@ -6743,6 +6805,16 @@ new_object (char *restrict name, char *restrict dxfname,
                    obj->fixedtype == DWG_TYPE_DIMASSOC)
             {
               pair = add_DIMASSOC (obj, dat, pair);
+              // returns with 0
+              if (pair != NULL && pair->code == 0)
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if ((pair->code == 8 || pair->code == 90) &&
+                   obj->fixedtype == DWG_TYPE_LAYER_INDEX)
+            {
+              pair = add_LAYER_entry (obj, dat, pair);
               // returns with 0
               if (pair != NULL && pair->code == 0)
                 goto start_loop;
