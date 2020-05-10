@@ -7221,7 +7221,7 @@ static const Dwg_DYNAPI_field _dwg_UNKNOWN_OBJ_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VBA_PROJECT_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VBA_PROJECT, parent),
     1,1,0, 0 },
-  { "data_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_VBA_PROJECT, data_size),
+  { "data_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_VBA_PROJECT, data_size),
     0,0,0, 90 },
   { "data",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_VBA_PROJECT, data),
     1,1,0, 310 },

@@ -8302,7 +8302,7 @@ struct _dwg_object_object*
 @item parent
 struct _dwg_object_object*
 @item data_size
-RL,	DXF 90
+BL,	DXF 90
 @item data
 TF,	DXF 310
 

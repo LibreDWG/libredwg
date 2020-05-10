@@ -42529,18 +42529,18 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
         fail ("VBA_PROJECT.data [TF]");
   }
   {
-    BITCODE_RL data_size;
+    BITCODE_BL data_size;
     if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "data_size", &data_size, NULL)
         && data_size == vba_project->data_size)
       pass ();
     else
-      fail ("VBA_PROJECT.data_size [RL] %u != %u", vba_project->data_size, data_size);
+      fail ("VBA_PROJECT.data_size [BL] %u != %u", vba_project->data_size, data_size);
     data_size++;
     if (dwg_dynapi_entity_set_value (vba_project, "VBA_PROJECT", "data_size", &data_size, 0)
         && data_size == vba_project->data_size)
       pass ();
     else
-      fail ("VBA_PROJECT.data_size [RL] set+1 %u != %u", vba_project->data_size, data_size);
+      fail ("VBA_PROJECT.data_size [BL] set+1 %u != %u", vba_project->data_size, data_size);
     vba_project->data_size--;
   }
   {

@@ -5725,24 +5725,19 @@ DWG_OBJECT (SCALE)
 
 DWG_OBJECT_END
 
-#if defined (DEBUG_CLASSES) || defined (IS_FREE)
-
-// just guessing:
 // VBA_PROJECT (81 + varies), a blob
 DWG_OBJECT (VBA_PROJECT)
 
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbVbaProject)
+  SINCE (R_2000) {
+    SUBCLASS (AcDbVbaProject)
 #ifndef IS_JSON
-  FIELD_RL (data_size, 90);
+    FIELD_BL (data_size, 90);
 #endif
-  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
+    FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 
-  START_OBJECT_HANDLE_STREAM;
-
+    START_OBJECT_HANDLE_STREAM;
+  }
 DWG_OBJECT_END
-
-#endif
 
 /* pg. 157, 20.4.48 (varies)
    AcDbMLeader, now implemented.

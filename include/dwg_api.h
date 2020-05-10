@@ -569,6 +569,7 @@ typedef struct _dwg_object_SCALE                  dwg_obj_scale;
 typedef struct _dwg_object_SORTENTSTABLE          dwg_obj_sortentstable;
 typedef struct _dwg_object_SPATIAL_FILTER         dwg_obj_spatial_filter;
 typedef struct _dwg_object_SPATIAL_INDEX          dwg_obj_spatial_index;
+typedef struct _dwg_object_VBA_PROJECT            dwg_obj_vba_project;
 typedef struct _dwg_object_WIPEOUTVARIABLES       dwg_obj_wipeoutvariables;
 typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
 // unstable:
@@ -644,7 +645,6 @@ typedef struct _dwg_object_SECTION_SETTINGS                dwg_obj_section_setti
 typedef struct _dwg_object_SUNSTUDY                        dwg_obj_sunstudy;
 typedef struct _dwg_object_TABLECONTENT                    dwg_obj_tablecontent;
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA           dwg_obj_textobjectcontextdata;
-typedef struct _dwg_object_VBA_PROJECT                     dwg_obj_vba_project;
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
 //typedef struct _dwg_object_ACDSSCHEMA           dwg_obj_acdsschema;
@@ -799,6 +799,7 @@ DWG_GETALL_OBJECT_DECL (SCALE)
 DWG_GETALL_OBJECT_DECL (SORTENTSTABLE)
 DWG_GETALL_OBJECT_DECL (SPATIAL_FILTER)
 DWG_GETALL_OBJECT_DECL (SPATIAL_INDEX)
+DWG_GETALL_OBJECT_DECL (VBA_PROJECT)
 DWG_GETALL_OBJECT_DECL (WIPEOUTVARIABLES)
 DWG_GETALL_OBJECT_DECL (XRECORD)
 // unstable:
@@ -869,7 +870,6 @@ DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS)
 DWG_GETALL_OBJECT_DECL (SUNSTUDY)
 DWG_GETALL_OBJECT_DECL (TABLECONTENT)
 DWG_GETALL_OBJECT_DECL (TEXTOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT_DECL (VBA_PROJECT)
 // unhandled:
 // DWG_GETALL_OBJECT_DECL (ACDSRECORD)
 // DWG_GETALL_OBJECT_DECL (ACDSSCHEMA)
@@ -1004,6 +1004,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (DICTIONARY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PLACEHOLDER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (PROXY_OBJECT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUT)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (XRECORD)
 
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
@@ -1087,7 +1088,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_SETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SUNSTUDY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TEXTOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT)
 /// unhandled:
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSRECORD)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCHEMA)
@@ -1293,6 +1293,7 @@ dwg_get_OBJECT_DECL (obj_scale, SCALE);
 dwg_get_OBJECT_DECL (obj_sortentstable, SORTENTSTABLE);
 dwg_get_OBJECT_DECL (obj_spatial_filter, SPATIAL_FILTER);
 dwg_get_OBJECT_DECL (obj_spatial_index, SPATIAL_INDEX);
+dwg_get_OBJECT_DECL (obj_vba_project, VBA_PROJECT);
 dwg_get_OBJECT_DECL (obj_wipeoutvariables, WIPEOUTVARIABLES);
 dwg_get_OBJECT_DECL (obj_xrecord, XRECORD);
 // unstable:
@@ -1355,7 +1356,6 @@ dwg_get_OBJECT_DECL (obj_sun, SUN);
 dwg_get_OBJECT_DECL (obj_sunstudy, SUNSTUDY);
 dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
 dwg_get_OBJECT_DECL (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA);
-dwg_get_OBJECT_DECL (obj_vba_project, VBA_PROJECT);
 // unhandled:
 // dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD)
 // dwg_get_OBJECT_DECL (obj_acdsschema, ACDSSCHEMA)

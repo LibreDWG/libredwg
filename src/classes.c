@@ -111,7 +111,6 @@ static const Dwg_Object_Type _classes_debugging[] =
    DWG_TYPE_TABLECONTENT,
    DWG_TYPE_TEXTOBJECTCONTEXTDATA,
    DWG_TYPE_TVDEVICEPROPERTIES,
-   DWG_TYPE_VBA_PROJECT
   };
 static const Dwg_Object_Type _classes_unhandled[] =
   {

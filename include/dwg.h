@@ -3031,7 +3031,7 @@ typedef struct _dwg_object_VBA_PROJECT
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_RL data_size;
+  BITCODE_BL data_size;
   BITCODE_TF data;
 } Dwg_Object_VBA_PROJECT;
 
@@ -7450,6 +7450,7 @@ EXPORT int dwg_setup_SCALE (Dwg_Object *obj);
 EXPORT int dwg_setup_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
+EXPORT int dwg_setup_VBA_PROJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_WIPEOUTVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 
@@ -7486,7 +7487,6 @@ EXPORT int dwg_setup_VISUALSTYLE (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
 
 /* DEBUGGING and UNHANDLED: */
-EXPORT int dwg_setup_VBA_PROJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCNETWORK (Dwg_Object *obj);
