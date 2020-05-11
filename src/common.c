@@ -288,3 +288,64 @@ get_base_value_type (short gc)
     }
   return VT_INVALID;
 }
+
+/*
+ 32 types, with 3 categories: Face, Edge, Display, plus 58 props r2013+
+ */
+const char *const _dwg_VISUALSTYLE_types[32] = { "Flat",
+                                                 "FlatWithEdges",
+                                                 "Gouraud",
+                                                 "GouraudWithEdges",
+                                                 "2DWireframe",
+                                                 "3DWireFrame",
+                                                 "Hidden",
+                                                 "Basic",
+                                                 "Realistic",
+                                                 "Conceptual",
+                                                 "Dim",
+                                                 "Brighten",
+                                                 "Thicken",
+                                                 "LinePattern",
+                                                 "Facepattern",
+                                                 "ColorChange",
+                                                 "FaceOnly",
+                                                 "EdgeOnly",
+                                                 "DisplayOnly",
+                                                 "JitterOff",
+                                                 "OverhangOff",
+                                                 "EdgeColorOff",
+                                                 "Shades of Gray",
+                                                 "Sketchy",
+                                                 "X-Ray",
+                                                 "Shaded with edges",
+                                                 "Shaded",
+                                                 "ByViewport",
+                                                 "ByLayer",
+                                                 "ByBlock",
+                                                 "ForEmptyStyle" };
+
+/* types of the 58 rest r2013+ properties.
+ * 1:
+ * 2:
+ * 3:
+ * 4:
+ * 5:
+ */
+const unsigned char _dwg_VISUALSTYLE_proptypes[58] =
+  {
+   /* [0]  */    2,  2,  2,  2,
+   /* [4]  */    3,  3,  4,  2,
+   /* [8]  */    2,  4,  4,  2,
+   /* [12] */    2,  3,  2,  4,
+   /* [16] */    3,  2,  2,  2,
+   /* [20] */    4,  2,  2,  2,
+   /* [24] */    1,  2,  3,  2,
+   /* [28] */    1,  1,  1,  1,
+   /* [32] */    1,  1,  1,  1,
+   /* [36] */    1,  2,  3,  3,
+   /* [40] */    2,  4,  2,  2,
+   /* [44] */    4,  1,  2,  2,
+   /* [48] */    2,  1,  2,  4,
+   /* [52] */    3,  2,  5,  1,
+   /* [56] */    3,  3
+  };

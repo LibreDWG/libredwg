@@ -4090,6 +4090,8 @@ typedef struct _dwg_entity_SECTIONOBJECT
  Unstable
  Class VISUALSTYLE (varies)
  R2007+
+
+ 32 types, with 3 categories: Face, Edge, Display, plus 58 props r2013+
  */
 typedef struct _dwg_object_VISUALSTYLE
 {
@@ -4097,7 +4099,7 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_T description;          /*!< DXF 2  */
   BITCODE_BL style_type;          /*!< DXF 70 enum 0-32: (kFlat-kEmptyStyle acgivisualstyle.h) */
   BITCODE_BS ext_lighting_model;  /*!< DXF 177, r2010+ ? required on has_xdata */
-  BITCODE_B int_only;             /*!< DXF 291, r2010+ has internal_only flags */
+  BITCODE_B internal_only;        /*!< DXF 291, has internal_use_only flags */
   BITCODE_BL face_lighting_model; /*!< DXF 71 0:Invisible 1:Visible 2:Phong 3:Gooch */
   BITCODE_BS face_lighting_model_int;   /*!< DXF 176 r2010+ */
   BITCODE_BL face_lighting_quality;     /*!< DXF 72 0:No lighting 1:Per face 2:Per vertex */
@@ -4114,7 +4116,7 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_BS face_opacity_int;  /*!< DXF 176 r2010+ */
   BITCODE_BD face_specular;     /*!< DXF 41  */
   BITCODE_BS face_specular_int; /*!< DXF 176 r2010+ */
-  BITCODE_BS face_modifier;     /*!< DXF 90 0:No modifiers 1:Opacity 2:Specular */
+  BITCODE_BL face_modifier;     /*!< DXF 90 0:No modifiers 1:Opacity 2:Specular */
   BITCODE_BS face_modifier_int; /*!< DXF 176 r2010+ */
   BITCODE_CMC face_mono_color;  /*!< DXF 63 + 421 */
   BITCODE_BS face_mono_color_int; /*!< DXF 176 r2010+ */
@@ -4126,45 +4128,79 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_BS edge_intersection_color_int; /*!< DXF 176 r2010+ */
   BITCODE_CMC edge_obscured_color;      /*!< DXF 65  */
   BITCODE_BS edge_obscured_color_int;   /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_obscured_line_pattern;      /*!< DXF 75   */
-  BITCODE_BS edge_obscured_line_pattern_int;  /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_intersection_line_pattern;  /*!< DXF 175  */
-  BITCODE_BS edge_intersection_line_pattern_int; /*!< DXF 176 r2010+ */
+  BITCODE_BL edge_obscured_ltype;      /*!< DXF 75   */
+  BITCODE_BS edge_obscured_ltype_int;  /*!< DXF 176 r2010+ */
+  BITCODE_BL edge_intersection_ltype;  /*!< DXF 175  */
+  BITCODE_BS edge_intersection_ltype_int; /*!< DXF 176 r2010+ */
   BITCODE_BD edge_crease_angle;         /*!< DXF 42  */
   BITCODE_BS edge_crease_angle_int;     /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_modifier;             /*!< DXF 92  */
+  BITCODE_BL edge_modifier;             /*!< DXF 92  */
   BITCODE_BS edge_modifier_int;         /*!< DXF 176 r2010+ */
   BITCODE_CMC edge_color;               /*!< DXF 66  */
   BITCODE_BS edge_color_int;            /*!< DXF 176 r2010+ */
   BITCODE_BD edge_opacity;              /*!< DXF 43  */
   BITCODE_BS edge_opacity_int;          /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_width;                /*!< DXF 76  */
+  BITCODE_BL edge_width;                /*!< DXF 76  */
   BITCODE_BS edge_width_int;            /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_overhang;             /*!< DXF 77  */
+  BITCODE_BL edge_overhang;             /*!< DXF 77  */
   BITCODE_BS edge_overhang_int;         /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_jitter;               /*!< DXF 78  */
+  BITCODE_BL edge_jitter;               /*!< DXF 78  */
   BITCODE_BS edge_jitter_int;           /*!< DXF 176 r2010+ */
   BITCODE_CMC edge_silhouette_color;    /*!< DXF 67  */
   BITCODE_BS edge_silhouette_color_int; /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_silhouette_width;     /*!< DXF 79  */
+  BITCODE_BL edge_silhouette_width;     /*!< DXF 79  */
   BITCODE_BS edge_silhouette_width_int; /*!< DXF 176 r2010+ */
-  BITCODE_BS edge_halo_gap;             /*!< DXF 170  */
+  BITCODE_BL edge_halo_gap;             /*!< DXF 170  */
   BITCODE_BS edge_halo_gap_int;         /*!< DXF 176 r2010+ */
-  BITCODE_BS numedge_isolines;          /*!< DXF 171  */
-  BITCODE_BS numedge_isolines_int;      /*!< DXF 176 r2010+ */
-  BITCODE_B  edge_hide_precision_flag;  /*!< DXF 290  */
-  BITCODE_BS edge_hide_precision_flag_int;/*!< DXF 176 r2010+ */
-  BITCODE_BS edge_style_apply_flag;     /*!< DXF 174  */
-  BITCODE_BS edge_style_apply_flag_int; /*!< DXF 174  */
-  BITCODE_BS display_style;             /*!< DXF 93  */
-  BITCODE_BS display_style_int;         /*!< DXF 176 r2010+ */
-  BITCODE_BL display_brightness;        /*!< DXF 44  */
+  BITCODE_BL edge_isolines;             /*!< DXF 171  */
+  BITCODE_BS edge_isolines_int;         /*!< DXF 176 r2010+ */
+  BITCODE_B  edge_do_hide_precision;    /*!< DXF 290  */
+  BITCODE_BS edge_do_hide_precision_int;/*!< DXF 176 r2010+ */
+  BITCODE_BL edge_style_apply;     	/*!< DXF 174  */
+  BITCODE_BS edge_style_apply_int; 	/*!< DXF 176 r2010+  */
+  BITCODE_BL display_settings;          /*!< DXF 93 flags  */
+  BITCODE_BS display_settings_int;      /*!< DXF 176 r2010+ */
+  BITCODE_BL display_brightness_bl;     /*!< DXF 44 <=r2007 */
+  BITCODE_BD display_brightness;        /*!< DXF 44  r2010+ */
   BITCODE_BS display_brightness_int;    /*!< DXF 176 r2010+ */
-  BITCODE_BS display_shadow_type;       /*!< DXF 173  */
+  BITCODE_BL display_shadow_type;       /*!< DXF 173  */
   BITCODE_BS display_shadow_type_int;   /*!< DXF 176 r2010+ */
-  BITCODE_BD unknown_float45;           /*!< DXF 45 ?? 0.0 */
+  BITCODE_BD bd2007_45;                 /*!< DXF 45 r2007-only 0.0 */
 
-  //BITCODE_H dictionary; /* (hard-pointer to DICTIONARY_VISUALSTYLE or reverse?) */
+  BITCODE_BS num_props; 		/*!< r2013+ version3 58x */
+  /* the rest of the props:
+     all bool are 290, all BS/BL are 90, all BD are 40, colors 62, text 1 */
+  BITCODE_B b_prop1c;   BITCODE_BS b_prop1c_int;
+  BITCODE_B b_prop1d;   BITCODE_BS b_prop1d_int;
+  BITCODE_B b_prop1e;   BITCODE_BS b_prop1e_int;
+  BITCODE_B b_prop1f;   BITCODE_BS b_prop1f_int;
+  BITCODE_B b_prop20;   BITCODE_BS b_prop20_int;
+  BITCODE_B b_prop21;   BITCODE_BS b_prop21_int;
+  BITCODE_B b_prop22;   BITCODE_BS b_prop22_int;
+  BITCODE_B b_prop23;   BITCODE_BS b_prop23_int;
+  BITCODE_B b_prop24;   BITCODE_BS b_prop24_int;
+  BITCODE_BL bl_prop25; BITCODE_BS bl_prop25_int;
+  BITCODE_BD bd_prop26; BITCODE_BS bd_prop26_int;
+  BITCODE_BD bd_prop27; BITCODE_BS bd_prop27_int;
+  BITCODE_BL bl_prop28; BITCODE_BS bl_prop28_int;
+  BITCODE_CMC c_prop29; BITCODE_BS c_prop29_int;
+  BITCODE_BL bl_prop2a; BITCODE_BS bl_prop2a_int;
+  BITCODE_BL bl_prop2b; BITCODE_BS bl_prop2b_int;
+  BITCODE_CMC c_prop2c; BITCODE_BS c_prop2c_int;
+  BITCODE_B b_prop2d;   BITCODE_BS b_prop2d_int;
+  BITCODE_BL bl_prop2e; BITCODE_BS bl_prop2e_int;
+  BITCODE_BL bl_prop2f; BITCODE_BS bl_prop2f_int;
+  BITCODE_BL bl_prop30; BITCODE_BS bl_prop30_int;
+  BITCODE_B b_prop31;   BITCODE_BS b_prop31_int;
+  BITCODE_BL bl_prop32; BITCODE_BS bl_prop32_int;
+  BITCODE_CMC c_prop33; BITCODE_BS c_prop33_int;
+  BITCODE_BD bd_prop34; BITCODE_BS bd_prop34_int;
+  BITCODE_BL edge_wiggle;BITCODE_BS edge_wiggle_int;
+  BITCODE_T strokes;    BITCODE_BS strokes_int;
+  BITCODE_B b_prop37;   BITCODE_BS b_prop37_int;
+  BITCODE_BD bd_prop38; BITCODE_BS bd_prop38_int;
+  BITCODE_BD bd_prop39; BITCODE_BS bd_prop39_int;
+
 } Dwg_Object_VISUALSTYLE;
 
 /**

@@ -43196,6 +43196,840 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   Dwg_Object_VISUALSTYLE *restrict visualstyle = obj->tio.object->tio.VISUALSTYLE;
   failed = 0;
   {
+    BITCODE_B b_prop1c;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1c", &b_prop1c, NULL)
+        && b_prop1c == visualstyle->b_prop1c)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1c [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1c, b_prop1c);
+    b_prop1c++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1c", &b_prop1c, 0)
+        && b_prop1c == visualstyle->b_prop1c)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1c [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1c, b_prop1c);
+    visualstyle->b_prop1c--;
+  }
+  {
+    BITCODE_BS b_prop1c_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1c_int", &b_prop1c_int, NULL)
+        && b_prop1c_int == visualstyle->b_prop1c_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1c_int [BS] %hu != %hu", visualstyle->b_prop1c_int, b_prop1c_int);
+    b_prop1c_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1c_int", &b_prop1c_int, 0)
+        && b_prop1c_int == visualstyle->b_prop1c_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1c_int [BS] set+1 %hu != %hu", visualstyle->b_prop1c_int, b_prop1c_int);
+    visualstyle->b_prop1c_int--;
+  }
+  {
+    BITCODE_B b_prop1d;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1d", &b_prop1d, NULL)
+        && b_prop1d == visualstyle->b_prop1d)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1d [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1d, b_prop1d);
+    b_prop1d++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1d", &b_prop1d, 0)
+        && b_prop1d == visualstyle->b_prop1d)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1d [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1d, b_prop1d);
+    visualstyle->b_prop1d--;
+  }
+  {
+    BITCODE_BS b_prop1d_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1d_int", &b_prop1d_int, NULL)
+        && b_prop1d_int == visualstyle->b_prop1d_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1d_int [BS] %hu != %hu", visualstyle->b_prop1d_int, b_prop1d_int);
+    b_prop1d_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1d_int", &b_prop1d_int, 0)
+        && b_prop1d_int == visualstyle->b_prop1d_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1d_int [BS] set+1 %hu != %hu", visualstyle->b_prop1d_int, b_prop1d_int);
+    visualstyle->b_prop1d_int--;
+  }
+  {
+    BITCODE_B b_prop1e;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1e", &b_prop1e, NULL)
+        && b_prop1e == visualstyle->b_prop1e)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1e [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1e, b_prop1e);
+    b_prop1e++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1e", &b_prop1e, 0)
+        && b_prop1e == visualstyle->b_prop1e)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1e [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1e, b_prop1e);
+    visualstyle->b_prop1e--;
+  }
+  {
+    BITCODE_BS b_prop1e_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1e_int", &b_prop1e_int, NULL)
+        && b_prop1e_int == visualstyle->b_prop1e_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1e_int [BS] %hu != %hu", visualstyle->b_prop1e_int, b_prop1e_int);
+    b_prop1e_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1e_int", &b_prop1e_int, 0)
+        && b_prop1e_int == visualstyle->b_prop1e_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1e_int [BS] set+1 %hu != %hu", visualstyle->b_prop1e_int, b_prop1e_int);
+    visualstyle->b_prop1e_int--;
+  }
+  {
+    BITCODE_B b_prop1f;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1f", &b_prop1f, NULL)
+        && b_prop1f == visualstyle->b_prop1f)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1f [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1f, b_prop1f);
+    b_prop1f++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1f", &b_prop1f, 0)
+        && b_prop1f == visualstyle->b_prop1f)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1f [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop1f, b_prop1f);
+    visualstyle->b_prop1f--;
+  }
+  {
+    BITCODE_BS b_prop1f_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop1f_int", &b_prop1f_int, NULL)
+        && b_prop1f_int == visualstyle->b_prop1f_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1f_int [BS] %hu != %hu", visualstyle->b_prop1f_int, b_prop1f_int);
+    b_prop1f_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop1f_int", &b_prop1f_int, 0)
+        && b_prop1f_int == visualstyle->b_prop1f_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop1f_int [BS] set+1 %hu != %hu", visualstyle->b_prop1f_int, b_prop1f_int);
+    visualstyle->b_prop1f_int--;
+  }
+  {
+    BITCODE_B b_prop20;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop20", &b_prop20, NULL)
+        && b_prop20 == visualstyle->b_prop20)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop20 [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop20, b_prop20);
+    b_prop20++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop20", &b_prop20, 0)
+        && b_prop20 == visualstyle->b_prop20)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop20 [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop20, b_prop20);
+    visualstyle->b_prop20--;
+  }
+  {
+    BITCODE_BS b_prop20_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop20_int", &b_prop20_int, NULL)
+        && b_prop20_int == visualstyle->b_prop20_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop20_int [BS] %hu != %hu", visualstyle->b_prop20_int, b_prop20_int);
+    b_prop20_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop20_int", &b_prop20_int, 0)
+        && b_prop20_int == visualstyle->b_prop20_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop20_int [BS] set+1 %hu != %hu", visualstyle->b_prop20_int, b_prop20_int);
+    visualstyle->b_prop20_int--;
+  }
+  {
+    BITCODE_B b_prop21;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop21", &b_prop21, NULL)
+        && b_prop21 == visualstyle->b_prop21)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop21 [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop21, b_prop21);
+    b_prop21++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop21", &b_prop21, 0)
+        && b_prop21 == visualstyle->b_prop21)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop21 [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop21, b_prop21);
+    visualstyle->b_prop21--;
+  }
+  {
+    BITCODE_BS b_prop21_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop21_int", &b_prop21_int, NULL)
+        && b_prop21_int == visualstyle->b_prop21_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop21_int [BS] %hu != %hu", visualstyle->b_prop21_int, b_prop21_int);
+    b_prop21_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop21_int", &b_prop21_int, 0)
+        && b_prop21_int == visualstyle->b_prop21_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop21_int [BS] set+1 %hu != %hu", visualstyle->b_prop21_int, b_prop21_int);
+    visualstyle->b_prop21_int--;
+  }
+  {
+    BITCODE_B b_prop22;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop22", &b_prop22, NULL)
+        && b_prop22 == visualstyle->b_prop22)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop22 [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop22, b_prop22);
+    b_prop22++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop22", &b_prop22, 0)
+        && b_prop22 == visualstyle->b_prop22)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop22 [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop22, b_prop22);
+    visualstyle->b_prop22--;
+  }
+  {
+    BITCODE_BS b_prop22_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop22_int", &b_prop22_int, NULL)
+        && b_prop22_int == visualstyle->b_prop22_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop22_int [BS] %hu != %hu", visualstyle->b_prop22_int, b_prop22_int);
+    b_prop22_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop22_int", &b_prop22_int, 0)
+        && b_prop22_int == visualstyle->b_prop22_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop22_int [BS] set+1 %hu != %hu", visualstyle->b_prop22_int, b_prop22_int);
+    visualstyle->b_prop22_int--;
+  }
+  {
+    BITCODE_B b_prop23;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop23", &b_prop23, NULL)
+        && b_prop23 == visualstyle->b_prop23)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop23 [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop23, b_prop23);
+    b_prop23++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop23", &b_prop23, 0)
+        && b_prop23 == visualstyle->b_prop23)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop23 [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop23, b_prop23);
+    visualstyle->b_prop23--;
+  }
+  {
+    BITCODE_BS b_prop23_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop23_int", &b_prop23_int, NULL)
+        && b_prop23_int == visualstyle->b_prop23_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop23_int [BS] %hu != %hu", visualstyle->b_prop23_int, b_prop23_int);
+    b_prop23_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop23_int", &b_prop23_int, 0)
+        && b_prop23_int == visualstyle->b_prop23_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop23_int [BS] set+1 %hu != %hu", visualstyle->b_prop23_int, b_prop23_int);
+    visualstyle->b_prop23_int--;
+  }
+  {
+    BITCODE_B b_prop24;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop24", &b_prop24, NULL)
+        && b_prop24 == visualstyle->b_prop24)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop24 [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop24, b_prop24);
+    b_prop24++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop24", &b_prop24, 0)
+        && b_prop24 == visualstyle->b_prop24)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop24 [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop24, b_prop24);
+    visualstyle->b_prop24--;
+  }
+  {
+    BITCODE_BS b_prop24_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop24_int", &b_prop24_int, NULL)
+        && b_prop24_int == visualstyle->b_prop24_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop24_int [BS] %hu != %hu", visualstyle->b_prop24_int, b_prop24_int);
+    b_prop24_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop24_int", &b_prop24_int, 0)
+        && b_prop24_int == visualstyle->b_prop24_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop24_int [BS] set+1 %hu != %hu", visualstyle->b_prop24_int, b_prop24_int);
+    visualstyle->b_prop24_int--;
+  }
+  {
+    BITCODE_B b_prop2d;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop2d", &b_prop2d, NULL)
+        && b_prop2d == visualstyle->b_prop2d)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop2d [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop2d, b_prop2d);
+    b_prop2d++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop2d", &b_prop2d, 0)
+        && b_prop2d == visualstyle->b_prop2d)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop2d [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop2d, b_prop2d);
+    visualstyle->b_prop2d--;
+  }
+  {
+    BITCODE_BS b_prop2d_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop2d_int", &b_prop2d_int, NULL)
+        && b_prop2d_int == visualstyle->b_prop2d_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop2d_int [BS] %hu != %hu", visualstyle->b_prop2d_int, b_prop2d_int);
+    b_prop2d_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop2d_int", &b_prop2d_int, 0)
+        && b_prop2d_int == visualstyle->b_prop2d_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop2d_int [BS] set+1 %hu != %hu", visualstyle->b_prop2d_int, b_prop2d_int);
+    visualstyle->b_prop2d_int--;
+  }
+  {
+    BITCODE_B b_prop31;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop31", &b_prop31, NULL)
+        && b_prop31 == visualstyle->b_prop31)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop31 [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop31, b_prop31);
+    b_prop31++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop31", &b_prop31, 0)
+        && b_prop31 == visualstyle->b_prop31)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop31 [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop31, b_prop31);
+    visualstyle->b_prop31--;
+  }
+  {
+    BITCODE_BS b_prop31_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop31_int", &b_prop31_int, NULL)
+        && b_prop31_int == visualstyle->b_prop31_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop31_int [BS] %hu != %hu", visualstyle->b_prop31_int, b_prop31_int);
+    b_prop31_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop31_int", &b_prop31_int, 0)
+        && b_prop31_int == visualstyle->b_prop31_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop31_int [BS] set+1 %hu != %hu", visualstyle->b_prop31_int, b_prop31_int);
+    visualstyle->b_prop31_int--;
+  }
+  {
+    BITCODE_B b_prop37;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop37", &b_prop37, NULL)
+        && b_prop37 == visualstyle->b_prop37)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop37 [B] " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop37, b_prop37);
+    b_prop37++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop37", &b_prop37, 0)
+        && b_prop37 == visualstyle->b_prop37)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop37 [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->b_prop37, b_prop37);
+    visualstyle->b_prop37--;
+  }
+  {
+    BITCODE_BS b_prop37_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "b_prop37_int", &b_prop37_int, NULL)
+        && b_prop37_int == visualstyle->b_prop37_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop37_int [BS] %hu != %hu", visualstyle->b_prop37_int, b_prop37_int);
+    b_prop37_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "b_prop37_int", &b_prop37_int, 0)
+        && b_prop37_int == visualstyle->b_prop37_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.b_prop37_int [BS] set+1 %hu != %hu", visualstyle->b_prop37_int, b_prop37_int);
+    visualstyle->b_prop37_int--;
+  }
+  {
+    BITCODE_BD bd2007_45;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd2007_45", &bd2007_45, NULL)
+        && bd2007_45 == visualstyle->bd2007_45)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd2007_45 [BD] %g != %g", visualstyle->bd2007_45, bd2007_45);
+    bd2007_45++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd2007_45", &bd2007_45, 0)
+        && bd2007_45 == visualstyle->bd2007_45)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd2007_45 [BD] set+1 %g != %g", visualstyle->bd2007_45, bd2007_45);
+    visualstyle->bd2007_45--;
+  }
+  {
+    BITCODE_BD bd_prop26;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop26", &bd_prop26, NULL)
+        && bd_prop26 == visualstyle->bd_prop26)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop26 [BD] %g != %g", visualstyle->bd_prop26, bd_prop26);
+    bd_prop26++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop26", &bd_prop26, 0)
+        && bd_prop26 == visualstyle->bd_prop26)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop26 [BD] set+1 %g != %g", visualstyle->bd_prop26, bd_prop26);
+    visualstyle->bd_prop26--;
+  }
+  {
+    BITCODE_BS bd_prop26_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop26_int", &bd_prop26_int, NULL)
+        && bd_prop26_int == visualstyle->bd_prop26_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop26_int [BS] %hu != %hu", visualstyle->bd_prop26_int, bd_prop26_int);
+    bd_prop26_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop26_int", &bd_prop26_int, 0)
+        && bd_prop26_int == visualstyle->bd_prop26_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop26_int [BS] set+1 %hu != %hu", visualstyle->bd_prop26_int, bd_prop26_int);
+    visualstyle->bd_prop26_int--;
+  }
+  {
+    BITCODE_BD bd_prop27;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop27", &bd_prop27, NULL)
+        && bd_prop27 == visualstyle->bd_prop27)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop27 [BD] %g != %g", visualstyle->bd_prop27, bd_prop27);
+    bd_prop27++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop27", &bd_prop27, 0)
+        && bd_prop27 == visualstyle->bd_prop27)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop27 [BD] set+1 %g != %g", visualstyle->bd_prop27, bd_prop27);
+    visualstyle->bd_prop27--;
+  }
+  {
+    BITCODE_BS bd_prop27_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop27_int", &bd_prop27_int, NULL)
+        && bd_prop27_int == visualstyle->bd_prop27_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop27_int [BS] %hu != %hu", visualstyle->bd_prop27_int, bd_prop27_int);
+    bd_prop27_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop27_int", &bd_prop27_int, 0)
+        && bd_prop27_int == visualstyle->bd_prop27_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop27_int [BS] set+1 %hu != %hu", visualstyle->bd_prop27_int, bd_prop27_int);
+    visualstyle->bd_prop27_int--;
+  }
+  {
+    BITCODE_BD bd_prop34;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop34", &bd_prop34, NULL)
+        && bd_prop34 == visualstyle->bd_prop34)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop34 [BD] %g != %g", visualstyle->bd_prop34, bd_prop34);
+    bd_prop34++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop34", &bd_prop34, 0)
+        && bd_prop34 == visualstyle->bd_prop34)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop34 [BD] set+1 %g != %g", visualstyle->bd_prop34, bd_prop34);
+    visualstyle->bd_prop34--;
+  }
+  {
+    BITCODE_BS bd_prop34_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop34_int", &bd_prop34_int, NULL)
+        && bd_prop34_int == visualstyle->bd_prop34_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop34_int [BS] %hu != %hu", visualstyle->bd_prop34_int, bd_prop34_int);
+    bd_prop34_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop34_int", &bd_prop34_int, 0)
+        && bd_prop34_int == visualstyle->bd_prop34_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop34_int [BS] set+1 %hu != %hu", visualstyle->bd_prop34_int, bd_prop34_int);
+    visualstyle->bd_prop34_int--;
+  }
+  {
+    BITCODE_BD bd_prop38;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop38", &bd_prop38, NULL)
+        && bd_prop38 == visualstyle->bd_prop38)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop38 [BD] %g != %g", visualstyle->bd_prop38, bd_prop38);
+    bd_prop38++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop38", &bd_prop38, 0)
+        && bd_prop38 == visualstyle->bd_prop38)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop38 [BD] set+1 %g != %g", visualstyle->bd_prop38, bd_prop38);
+    visualstyle->bd_prop38--;
+  }
+  {
+    BITCODE_BS bd_prop38_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop38_int", &bd_prop38_int, NULL)
+        && bd_prop38_int == visualstyle->bd_prop38_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop38_int [BS] %hu != %hu", visualstyle->bd_prop38_int, bd_prop38_int);
+    bd_prop38_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop38_int", &bd_prop38_int, 0)
+        && bd_prop38_int == visualstyle->bd_prop38_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop38_int [BS] set+1 %hu != %hu", visualstyle->bd_prop38_int, bd_prop38_int);
+    visualstyle->bd_prop38_int--;
+  }
+  {
+    BITCODE_BD bd_prop39;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop39", &bd_prop39, NULL)
+        && bd_prop39 == visualstyle->bd_prop39)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop39 [BD] %g != %g", visualstyle->bd_prop39, bd_prop39);
+    bd_prop39++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop39", &bd_prop39, 0)
+        && bd_prop39 == visualstyle->bd_prop39)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop39 [BD] set+1 %g != %g", visualstyle->bd_prop39, bd_prop39);
+    visualstyle->bd_prop39--;
+  }
+  {
+    BITCODE_BS bd_prop39_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bd_prop39_int", &bd_prop39_int, NULL)
+        && bd_prop39_int == visualstyle->bd_prop39_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop39_int [BS] %hu != %hu", visualstyle->bd_prop39_int, bd_prop39_int);
+    bd_prop39_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bd_prop39_int", &bd_prop39_int, 0)
+        && bd_prop39_int == visualstyle->bd_prop39_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bd_prop39_int [BS] set+1 %hu != %hu", visualstyle->bd_prop39_int, bd_prop39_int);
+    visualstyle->bd_prop39_int--;
+  }
+  {
+    BITCODE_BL bl_prop25;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop25", &bl_prop25, NULL)
+        && bl_prop25 == visualstyle->bl_prop25)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop25 [BL] %u != %u", visualstyle->bl_prop25, bl_prop25);
+    bl_prop25++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop25", &bl_prop25, 0)
+        && bl_prop25 == visualstyle->bl_prop25)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop25 [BL] set+1 %u != %u", visualstyle->bl_prop25, bl_prop25);
+    visualstyle->bl_prop25--;
+  }
+  {
+    BITCODE_BS bl_prop25_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop25_int", &bl_prop25_int, NULL)
+        && bl_prop25_int == visualstyle->bl_prop25_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop25_int [BS] %hu != %hu", visualstyle->bl_prop25_int, bl_prop25_int);
+    bl_prop25_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop25_int", &bl_prop25_int, 0)
+        && bl_prop25_int == visualstyle->bl_prop25_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop25_int [BS] set+1 %hu != %hu", visualstyle->bl_prop25_int, bl_prop25_int);
+    visualstyle->bl_prop25_int--;
+  }
+  {
+    BITCODE_BL bl_prop28;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop28", &bl_prop28, NULL)
+        && bl_prop28 == visualstyle->bl_prop28)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop28 [BL] %u != %u", visualstyle->bl_prop28, bl_prop28);
+    bl_prop28++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop28", &bl_prop28, 0)
+        && bl_prop28 == visualstyle->bl_prop28)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop28 [BL] set+1 %u != %u", visualstyle->bl_prop28, bl_prop28);
+    visualstyle->bl_prop28--;
+  }
+  {
+    BITCODE_BS bl_prop28_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop28_int", &bl_prop28_int, NULL)
+        && bl_prop28_int == visualstyle->bl_prop28_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop28_int [BS] %hu != %hu", visualstyle->bl_prop28_int, bl_prop28_int);
+    bl_prop28_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop28_int", &bl_prop28_int, 0)
+        && bl_prop28_int == visualstyle->bl_prop28_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop28_int [BS] set+1 %hu != %hu", visualstyle->bl_prop28_int, bl_prop28_int);
+    visualstyle->bl_prop28_int--;
+  }
+  {
+    BITCODE_BL bl_prop2a;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2a", &bl_prop2a, NULL)
+        && bl_prop2a == visualstyle->bl_prop2a)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2a [BL] %u != %u", visualstyle->bl_prop2a, bl_prop2a);
+    bl_prop2a++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2a", &bl_prop2a, 0)
+        && bl_prop2a == visualstyle->bl_prop2a)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2a [BL] set+1 %u != %u", visualstyle->bl_prop2a, bl_prop2a);
+    visualstyle->bl_prop2a--;
+  }
+  {
+    BITCODE_BS bl_prop2a_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2a_int", &bl_prop2a_int, NULL)
+        && bl_prop2a_int == visualstyle->bl_prop2a_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2a_int [BS] %hu != %hu", visualstyle->bl_prop2a_int, bl_prop2a_int);
+    bl_prop2a_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2a_int", &bl_prop2a_int, 0)
+        && bl_prop2a_int == visualstyle->bl_prop2a_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2a_int [BS] set+1 %hu != %hu", visualstyle->bl_prop2a_int, bl_prop2a_int);
+    visualstyle->bl_prop2a_int--;
+  }
+  {
+    BITCODE_BL bl_prop2b;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2b", &bl_prop2b, NULL)
+        && bl_prop2b == visualstyle->bl_prop2b)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2b [BL] %u != %u", visualstyle->bl_prop2b, bl_prop2b);
+    bl_prop2b++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2b", &bl_prop2b, 0)
+        && bl_prop2b == visualstyle->bl_prop2b)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2b [BL] set+1 %u != %u", visualstyle->bl_prop2b, bl_prop2b);
+    visualstyle->bl_prop2b--;
+  }
+  {
+    BITCODE_BS bl_prop2b_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2b_int", &bl_prop2b_int, NULL)
+        && bl_prop2b_int == visualstyle->bl_prop2b_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2b_int [BS] %hu != %hu", visualstyle->bl_prop2b_int, bl_prop2b_int);
+    bl_prop2b_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2b_int", &bl_prop2b_int, 0)
+        && bl_prop2b_int == visualstyle->bl_prop2b_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2b_int [BS] set+1 %hu != %hu", visualstyle->bl_prop2b_int, bl_prop2b_int);
+    visualstyle->bl_prop2b_int--;
+  }
+  {
+    BITCODE_BL bl_prop2e;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2e", &bl_prop2e, NULL)
+        && bl_prop2e == visualstyle->bl_prop2e)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2e [BL] %u != %u", visualstyle->bl_prop2e, bl_prop2e);
+    bl_prop2e++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2e", &bl_prop2e, 0)
+        && bl_prop2e == visualstyle->bl_prop2e)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2e [BL] set+1 %u != %u", visualstyle->bl_prop2e, bl_prop2e);
+    visualstyle->bl_prop2e--;
+  }
+  {
+    BITCODE_BS bl_prop2e_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2e_int", &bl_prop2e_int, NULL)
+        && bl_prop2e_int == visualstyle->bl_prop2e_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2e_int [BS] %hu != %hu", visualstyle->bl_prop2e_int, bl_prop2e_int);
+    bl_prop2e_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2e_int", &bl_prop2e_int, 0)
+        && bl_prop2e_int == visualstyle->bl_prop2e_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2e_int [BS] set+1 %hu != %hu", visualstyle->bl_prop2e_int, bl_prop2e_int);
+    visualstyle->bl_prop2e_int--;
+  }
+  {
+    BITCODE_BL bl_prop2f;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2f", &bl_prop2f, NULL)
+        && bl_prop2f == visualstyle->bl_prop2f)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2f [BL] %u != %u", visualstyle->bl_prop2f, bl_prop2f);
+    bl_prop2f++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2f", &bl_prop2f, 0)
+        && bl_prop2f == visualstyle->bl_prop2f)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2f [BL] set+1 %u != %u", visualstyle->bl_prop2f, bl_prop2f);
+    visualstyle->bl_prop2f--;
+  }
+  {
+    BITCODE_BS bl_prop2f_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop2f_int", &bl_prop2f_int, NULL)
+        && bl_prop2f_int == visualstyle->bl_prop2f_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2f_int [BS] %hu != %hu", visualstyle->bl_prop2f_int, bl_prop2f_int);
+    bl_prop2f_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop2f_int", &bl_prop2f_int, 0)
+        && bl_prop2f_int == visualstyle->bl_prop2f_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop2f_int [BS] set+1 %hu != %hu", visualstyle->bl_prop2f_int, bl_prop2f_int);
+    visualstyle->bl_prop2f_int--;
+  }
+  {
+    BITCODE_BL bl_prop30;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop30", &bl_prop30, NULL)
+        && bl_prop30 == visualstyle->bl_prop30)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop30 [BL] %u != %u", visualstyle->bl_prop30, bl_prop30);
+    bl_prop30++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop30", &bl_prop30, 0)
+        && bl_prop30 == visualstyle->bl_prop30)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop30 [BL] set+1 %u != %u", visualstyle->bl_prop30, bl_prop30);
+    visualstyle->bl_prop30--;
+  }
+  {
+    BITCODE_BS bl_prop30_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop30_int", &bl_prop30_int, NULL)
+        && bl_prop30_int == visualstyle->bl_prop30_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop30_int [BS] %hu != %hu", visualstyle->bl_prop30_int, bl_prop30_int);
+    bl_prop30_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop30_int", &bl_prop30_int, 0)
+        && bl_prop30_int == visualstyle->bl_prop30_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop30_int [BS] set+1 %hu != %hu", visualstyle->bl_prop30_int, bl_prop30_int);
+    visualstyle->bl_prop30_int--;
+  }
+  {
+    BITCODE_BL bl_prop32;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop32", &bl_prop32, NULL)
+        && bl_prop32 == visualstyle->bl_prop32)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop32 [BL] %u != %u", visualstyle->bl_prop32, bl_prop32);
+    bl_prop32++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop32", &bl_prop32, 0)
+        && bl_prop32 == visualstyle->bl_prop32)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop32 [BL] set+1 %u != %u", visualstyle->bl_prop32, bl_prop32);
+    visualstyle->bl_prop32--;
+  }
+  {
+    BITCODE_BS bl_prop32_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "bl_prop32_int", &bl_prop32_int, NULL)
+        && bl_prop32_int == visualstyle->bl_prop32_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop32_int [BS] %hu != %hu", visualstyle->bl_prop32_int, bl_prop32_int);
+    bl_prop32_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "bl_prop32_int", &bl_prop32_int, 0)
+        && bl_prop32_int == visualstyle->bl_prop32_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.bl_prop32_int [BS] set+1 %hu != %hu", visualstyle->bl_prop32_int, bl_prop32_int);
+    visualstyle->bl_prop32_int--;
+  }
+  {
+    BITCODE_CMC c_prop29;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop29", &c_prop29, NULL)
+        && !memcmp (&c_prop29, &visualstyle->c_prop29, sizeof (visualstyle->c_prop29)))
+        pass ();
+    else
+        fail ("VISUALSTYLE.c_prop29 [CMC]");
+  }
+  {
+    BITCODE_BS c_prop29_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop29_int", &c_prop29_int, NULL)
+        && c_prop29_int == visualstyle->c_prop29_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.c_prop29_int [BS] %hu != %hu", visualstyle->c_prop29_int, c_prop29_int);
+    c_prop29_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "c_prop29_int", &c_prop29_int, 0)
+        && c_prop29_int == visualstyle->c_prop29_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.c_prop29_int [BS] set+1 %hu != %hu", visualstyle->c_prop29_int, c_prop29_int);
+    visualstyle->c_prop29_int--;
+  }
+  {
+    BITCODE_CMC c_prop2c;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop2c", &c_prop2c, NULL)
+        && !memcmp (&c_prop2c, &visualstyle->c_prop2c, sizeof (visualstyle->c_prop2c)))
+        pass ();
+    else
+        fail ("VISUALSTYLE.c_prop2c [CMC]");
+  }
+  {
+    BITCODE_BS c_prop2c_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop2c_int", &c_prop2c_int, NULL)
+        && c_prop2c_int == visualstyle->c_prop2c_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.c_prop2c_int [BS] %hu != %hu", visualstyle->c_prop2c_int, c_prop2c_int);
+    c_prop2c_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "c_prop2c_int", &c_prop2c_int, 0)
+        && c_prop2c_int == visualstyle->c_prop2c_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.c_prop2c_int [BS] set+1 %hu != %hu", visualstyle->c_prop2c_int, c_prop2c_int);
+    visualstyle->c_prop2c_int--;
+  }
+  {
+    BITCODE_CMC c_prop33;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop33", &c_prop33, NULL)
+        && !memcmp (&c_prop33, &visualstyle->c_prop33, sizeof (visualstyle->c_prop33)))
+        pass ();
+    else
+        fail ("VISUALSTYLE.c_prop33 [CMC]");
+  }
+  {
+    BITCODE_BS c_prop33_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop33_int", &c_prop33_int, NULL)
+        && c_prop33_int == visualstyle->c_prop33_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.c_prop33_int [BS] %hu != %hu", visualstyle->c_prop33_int, c_prop33_int);
+    c_prop33_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "c_prop33_int", &c_prop33_int, 0)
+        && c_prop33_int == visualstyle->c_prop33_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.c_prop33_int [BS] set+1 %hu != %hu", visualstyle->c_prop33_int, c_prop33_int);
+    visualstyle->c_prop33_int--;
+  }
+  {
     BITCODE_T description;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "description", &description, NULL)
         && description
@@ -43206,19 +44040,34 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
       fail ("VISUALSTYLE.description [T] '%s' <> '%s'", description, visualstyle->description);
   }
   {
-    BITCODE_BL display_brightness;
+    BITCODE_BD display_brightness;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_brightness", &display_brightness, NULL)
         && display_brightness == visualstyle->display_brightness)
       pass ();
     else
-      fail ("VISUALSTYLE.display_brightness [BL] %u != %u", visualstyle->display_brightness, display_brightness);
+      fail ("VISUALSTYLE.display_brightness [BD] %g != %g", visualstyle->display_brightness, display_brightness);
     display_brightness++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_brightness", &display_brightness, 0)
         && display_brightness == visualstyle->display_brightness)
       pass ();
     else
-      fail ("VISUALSTYLE.display_brightness [BL] set+1 %u != %u", visualstyle->display_brightness, display_brightness);
+      fail ("VISUALSTYLE.display_brightness [BD] set+1 %g != %g", visualstyle->display_brightness, display_brightness);
     visualstyle->display_brightness--;
+  }
+  {
+    BITCODE_BL display_brightness_bl;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_brightness_bl", &display_brightness_bl, NULL)
+        && display_brightness_bl == visualstyle->display_brightness_bl)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_brightness_bl [BL] %u != %u", visualstyle->display_brightness_bl, display_brightness_bl);
+    display_brightness_bl++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_brightness_bl", &display_brightness_bl, 0)
+        && display_brightness_bl == visualstyle->display_brightness_bl)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_brightness_bl [BL] set+1 %u != %u", visualstyle->display_brightness_bl, display_brightness_bl);
+    visualstyle->display_brightness_bl--;
   }
   {
     BITCODE_BS display_brightness_int;
@@ -43236,18 +44085,48 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->display_brightness_int--;
   }
   {
-    BITCODE_BS display_shadow_type;
+    BITCODE_BL display_settings;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_settings", &display_settings, NULL)
+        && display_settings == visualstyle->display_settings)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_settings [BL] %u != %u", visualstyle->display_settings, display_settings);
+    display_settings++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_settings", &display_settings, 0)
+        && display_settings == visualstyle->display_settings)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_settings [BL] set+1 %u != %u", visualstyle->display_settings, display_settings);
+    visualstyle->display_settings--;
+  }
+  {
+    BITCODE_BS display_settings_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_settings_int", &display_settings_int, NULL)
+        && display_settings_int == visualstyle->display_settings_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_settings_int [BS] %hu != %hu", visualstyle->display_settings_int, display_settings_int);
+    display_settings_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_settings_int", &display_settings_int, 0)
+        && display_settings_int == visualstyle->display_settings_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.display_settings_int [BS] set+1 %hu != %hu", visualstyle->display_settings_int, display_settings_int);
+    visualstyle->display_settings_int--;
+  }
+  {
+    BITCODE_BL display_shadow_type;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_shadow_type", &display_shadow_type, NULL)
         && display_shadow_type == visualstyle->display_shadow_type)
       pass ();
     else
-      fail ("VISUALSTYLE.display_shadow_type [BS] %hu != %hu", visualstyle->display_shadow_type, display_shadow_type);
+      fail ("VISUALSTYLE.display_shadow_type [BL] %u != %u", visualstyle->display_shadow_type, display_shadow_type);
     display_shadow_type++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_shadow_type", &display_shadow_type, 0)
         && display_shadow_type == visualstyle->display_shadow_type)
       pass ();
     else
-      fail ("VISUALSTYLE.display_shadow_type [BS] set+1 %hu != %hu", visualstyle->display_shadow_type, display_shadow_type);
+      fail ("VISUALSTYLE.display_shadow_type [BL] set+1 %u != %u", visualstyle->display_shadow_type, display_shadow_type);
     visualstyle->display_shadow_type--;
   }
   {
@@ -43264,36 +44143,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.display_shadow_type_int [BS] set+1 %hu != %hu", visualstyle->display_shadow_type_int, display_shadow_type_int);
     visualstyle->display_shadow_type_int--;
-  }
-  {
-    BITCODE_BS display_style;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_style", &display_style, NULL)
-        && display_style == visualstyle->display_style)
-      pass ();
-    else
-      fail ("VISUALSTYLE.display_style [BS] %hu != %hu", visualstyle->display_style, display_style);
-    display_style++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_style", &display_style, 0)
-        && display_style == visualstyle->display_style)
-      pass ();
-    else
-      fail ("VISUALSTYLE.display_style [BS] set+1 %hu != %hu", visualstyle->display_style, display_style);
-    visualstyle->display_style--;
-  }
-  {
-    BITCODE_BS display_style_int;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_style_int", &display_style_int, NULL)
-        && display_style_int == visualstyle->display_style_int)
-      pass ();
-    else
-      fail ("VISUALSTYLE.display_style_int [BS] %hu != %hu", visualstyle->display_style_int, display_style_int);
-    display_style_int++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_style_int", &display_style_int, 0)
-        && display_style_int == visualstyle->display_style_int)
-      pass ();
-    else
-      fail ("VISUALSTYLE.display_style_int [BS] set+1 %hu != %hu", visualstyle->display_style_int, display_style_int);
-    visualstyle->display_style_int--;
   }
   {
     BITCODE_CMC edge_color;
@@ -43349,18 +44198,48 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_crease_angle_int--;
   }
   {
-    BITCODE_BS edge_halo_gap;
+    BITCODE_B edge_do_hide_precision;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_do_hide_precision", &edge_do_hide_precision, NULL)
+        && edge_do_hide_precision == visualstyle->edge_do_hide_precision)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_do_hide_precision [B] " FORMAT_B " != " FORMAT_B "", visualstyle->edge_do_hide_precision, edge_do_hide_precision);
+    edge_do_hide_precision++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_do_hide_precision", &edge_do_hide_precision, 0)
+        && edge_do_hide_precision == visualstyle->edge_do_hide_precision)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_do_hide_precision [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->edge_do_hide_precision, edge_do_hide_precision);
+    visualstyle->edge_do_hide_precision--;
+  }
+  {
+    BITCODE_BS edge_do_hide_precision_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_do_hide_precision_int", &edge_do_hide_precision_int, NULL)
+        && edge_do_hide_precision_int == visualstyle->edge_do_hide_precision_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_do_hide_precision_int [BS] %hu != %hu", visualstyle->edge_do_hide_precision_int, edge_do_hide_precision_int);
+    edge_do_hide_precision_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_do_hide_precision_int", &edge_do_hide_precision_int, 0)
+        && edge_do_hide_precision_int == visualstyle->edge_do_hide_precision_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_do_hide_precision_int [BS] set+1 %hu != %hu", visualstyle->edge_do_hide_precision_int, edge_do_hide_precision_int);
+    visualstyle->edge_do_hide_precision_int--;
+  }
+  {
+    BITCODE_BL edge_halo_gap;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_halo_gap", &edge_halo_gap, NULL)
         && edge_halo_gap == visualstyle->edge_halo_gap)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_halo_gap [BS] %hu != %hu", visualstyle->edge_halo_gap, edge_halo_gap);
+      fail ("VISUALSTYLE.edge_halo_gap [BL] %u != %u", visualstyle->edge_halo_gap, edge_halo_gap);
     edge_halo_gap++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_halo_gap", &edge_halo_gap, 0)
         && edge_halo_gap == visualstyle->edge_halo_gap)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_halo_gap [BS] set+1 %hu != %hu", visualstyle->edge_halo_gap, edge_halo_gap);
+      fail ("VISUALSTYLE.edge_halo_gap [BL] set+1 %u != %u", visualstyle->edge_halo_gap, edge_halo_gap);
     visualstyle->edge_halo_gap--;
   }
   {
@@ -43377,36 +44256,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_halo_gap_int [BS] set+1 %hu != %hu", visualstyle->edge_halo_gap_int, edge_halo_gap_int);
     visualstyle->edge_halo_gap_int--;
-  }
-  {
-    BITCODE_B edge_hide_precision_flag;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag", &edge_hide_precision_flag, NULL)
-        && edge_hide_precision_flag == visualstyle->edge_hide_precision_flag)
-      pass ();
-    else
-      fail ("VISUALSTYLE.edge_hide_precision_flag [B] " FORMAT_B " != " FORMAT_B "", visualstyle->edge_hide_precision_flag, edge_hide_precision_flag);
-    edge_hide_precision_flag++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag", &edge_hide_precision_flag, 0)
-        && edge_hide_precision_flag == visualstyle->edge_hide_precision_flag)
-      pass ();
-    else
-      fail ("VISUALSTYLE.edge_hide_precision_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->edge_hide_precision_flag, edge_hide_precision_flag);
-    visualstyle->edge_hide_precision_flag--;
-  }
-  {
-    BITCODE_BS edge_hide_precision_flag_int;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag_int", &edge_hide_precision_flag_int, NULL)
-        && edge_hide_precision_flag_int == visualstyle->edge_hide_precision_flag_int)
-      pass ();
-    else
-      fail ("VISUALSTYLE.edge_hide_precision_flag_int [BS] %hu != %hu", visualstyle->edge_hide_precision_flag_int, edge_hide_precision_flag_int);
-    edge_hide_precision_flag_int++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_hide_precision_flag_int", &edge_hide_precision_flag_int, 0)
-        && edge_hide_precision_flag_int == visualstyle->edge_hide_precision_flag_int)
-      pass ();
-    else
-      fail ("VISUALSTYLE.edge_hide_precision_flag_int [BS] set+1 %hu != %hu", visualstyle->edge_hide_precision_flag_int, edge_hide_precision_flag_int);
-    visualstyle->edge_hide_precision_flag_int--;
   }
   {
     BITCODE_CMC edge_intersection_color;
@@ -43432,48 +44281,78 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_intersection_color_int--;
   }
   {
-    BITCODE_BS edge_intersection_line_pattern;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern", &edge_intersection_line_pattern, NULL)
-        && edge_intersection_line_pattern == visualstyle->edge_intersection_line_pattern)
+    BITCODE_BL edge_intersection_ltype;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_intersection_ltype", &edge_intersection_ltype, NULL)
+        && edge_intersection_ltype == visualstyle->edge_intersection_ltype)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_intersection_line_pattern [BS] %hu != %hu", visualstyle->edge_intersection_line_pattern, edge_intersection_line_pattern);
-    edge_intersection_line_pattern++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern", &edge_intersection_line_pattern, 0)
-        && edge_intersection_line_pattern == visualstyle->edge_intersection_line_pattern)
+      fail ("VISUALSTYLE.edge_intersection_ltype [BL] %u != %u", visualstyle->edge_intersection_ltype, edge_intersection_ltype);
+    edge_intersection_ltype++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_ltype", &edge_intersection_ltype, 0)
+        && edge_intersection_ltype == visualstyle->edge_intersection_ltype)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_intersection_line_pattern [BS] set+1 %hu != %hu", visualstyle->edge_intersection_line_pattern, edge_intersection_line_pattern);
-    visualstyle->edge_intersection_line_pattern--;
+      fail ("VISUALSTYLE.edge_intersection_ltype [BL] set+1 %u != %u", visualstyle->edge_intersection_ltype, edge_intersection_ltype);
+    visualstyle->edge_intersection_ltype--;
   }
   {
-    BITCODE_BS edge_intersection_line_pattern_int;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern_int", &edge_intersection_line_pattern_int, NULL)
-        && edge_intersection_line_pattern_int == visualstyle->edge_intersection_line_pattern_int)
+    BITCODE_BS edge_intersection_ltype_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_intersection_ltype_int", &edge_intersection_ltype_int, NULL)
+        && edge_intersection_ltype_int == visualstyle->edge_intersection_ltype_int)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_intersection_line_pattern_int [BS] %hu != %hu", visualstyle->edge_intersection_line_pattern_int, edge_intersection_line_pattern_int);
-    edge_intersection_line_pattern_int++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_line_pattern_int", &edge_intersection_line_pattern_int, 0)
-        && edge_intersection_line_pattern_int == visualstyle->edge_intersection_line_pattern_int)
+      fail ("VISUALSTYLE.edge_intersection_ltype_int [BS] %hu != %hu", visualstyle->edge_intersection_ltype_int, edge_intersection_ltype_int);
+    edge_intersection_ltype_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_intersection_ltype_int", &edge_intersection_ltype_int, 0)
+        && edge_intersection_ltype_int == visualstyle->edge_intersection_ltype_int)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_intersection_line_pattern_int [BS] set+1 %hu != %hu", visualstyle->edge_intersection_line_pattern_int, edge_intersection_line_pattern_int);
-    visualstyle->edge_intersection_line_pattern_int--;
+      fail ("VISUALSTYLE.edge_intersection_ltype_int [BS] set+1 %hu != %hu", visualstyle->edge_intersection_ltype_int, edge_intersection_ltype_int);
+    visualstyle->edge_intersection_ltype_int--;
   }
   {
-    BITCODE_BS edge_jitter;
+    BITCODE_BL edge_isolines;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_isolines", &edge_isolines, NULL)
+        && edge_isolines == visualstyle->edge_isolines)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_isolines [BL] %u != %u", visualstyle->edge_isolines, edge_isolines);
+    edge_isolines++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_isolines", &edge_isolines, 0)
+        && edge_isolines == visualstyle->edge_isolines)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_isolines [BL] set+1 %u != %u", visualstyle->edge_isolines, edge_isolines);
+    visualstyle->edge_isolines--;
+  }
+  {
+    BITCODE_BS edge_isolines_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_isolines_int", &edge_isolines_int, NULL)
+        && edge_isolines_int == visualstyle->edge_isolines_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_isolines_int [BS] %hu != %hu", visualstyle->edge_isolines_int, edge_isolines_int);
+    edge_isolines_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_isolines_int", &edge_isolines_int, 0)
+        && edge_isolines_int == visualstyle->edge_isolines_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_isolines_int [BS] set+1 %hu != %hu", visualstyle->edge_isolines_int, edge_isolines_int);
+    visualstyle->edge_isolines_int--;
+  }
+  {
+    BITCODE_BL edge_jitter;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_jitter", &edge_jitter, NULL)
         && edge_jitter == visualstyle->edge_jitter)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_jitter [BS] %hu != %hu", visualstyle->edge_jitter, edge_jitter);
+      fail ("VISUALSTYLE.edge_jitter [BL] %u != %u", visualstyle->edge_jitter, edge_jitter);
     edge_jitter++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_jitter", &edge_jitter, 0)
         && edge_jitter == visualstyle->edge_jitter)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_jitter [BS] set+1 %hu != %hu", visualstyle->edge_jitter, edge_jitter);
+      fail ("VISUALSTYLE.edge_jitter [BL] set+1 %u != %u", visualstyle->edge_jitter, edge_jitter);
     visualstyle->edge_jitter--;
   }
   {
@@ -43522,18 +44401,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_model_int--;
   }
   {
-    BITCODE_BS edge_modifier;
+    BITCODE_BL edge_modifier;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_modifier", &edge_modifier, NULL)
         && edge_modifier == visualstyle->edge_modifier)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_modifier [BS] %hu != %hu", visualstyle->edge_modifier, edge_modifier);
+      fail ("VISUALSTYLE.edge_modifier [BL] %u != %u", visualstyle->edge_modifier, edge_modifier);
     edge_modifier++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_modifier", &edge_modifier, 0)
         && edge_modifier == visualstyle->edge_modifier)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_modifier [BS] set+1 %hu != %hu", visualstyle->edge_modifier, edge_modifier);
+      fail ("VISUALSTYLE.edge_modifier [BL] set+1 %u != %u", visualstyle->edge_modifier, edge_modifier);
     visualstyle->edge_modifier--;
   }
   {
@@ -43575,34 +44454,34 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_obscured_color_int--;
   }
   {
-    BITCODE_BS edge_obscured_line_pattern;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern", &edge_obscured_line_pattern, NULL)
-        && edge_obscured_line_pattern == visualstyle->edge_obscured_line_pattern)
+    BITCODE_BL edge_obscured_ltype;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_ltype", &edge_obscured_ltype, NULL)
+        && edge_obscured_ltype == visualstyle->edge_obscured_ltype)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_obscured_line_pattern [BS] %hu != %hu", visualstyle->edge_obscured_line_pattern, edge_obscured_line_pattern);
-    edge_obscured_line_pattern++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern", &edge_obscured_line_pattern, 0)
-        && edge_obscured_line_pattern == visualstyle->edge_obscured_line_pattern)
+      fail ("VISUALSTYLE.edge_obscured_ltype [BL] %u != %u", visualstyle->edge_obscured_ltype, edge_obscured_ltype);
+    edge_obscured_ltype++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_ltype", &edge_obscured_ltype, 0)
+        && edge_obscured_ltype == visualstyle->edge_obscured_ltype)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_obscured_line_pattern [BS] set+1 %hu != %hu", visualstyle->edge_obscured_line_pattern, edge_obscured_line_pattern);
-    visualstyle->edge_obscured_line_pattern--;
+      fail ("VISUALSTYLE.edge_obscured_ltype [BL] set+1 %u != %u", visualstyle->edge_obscured_ltype, edge_obscured_ltype);
+    visualstyle->edge_obscured_ltype--;
   }
   {
-    BITCODE_BS edge_obscured_line_pattern_int;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern_int", &edge_obscured_line_pattern_int, NULL)
-        && edge_obscured_line_pattern_int == visualstyle->edge_obscured_line_pattern_int)
+    BITCODE_BS edge_obscured_ltype_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_ltype_int", &edge_obscured_ltype_int, NULL)
+        && edge_obscured_ltype_int == visualstyle->edge_obscured_ltype_int)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_obscured_line_pattern_int [BS] %hu != %hu", visualstyle->edge_obscured_line_pattern_int, edge_obscured_line_pattern_int);
-    edge_obscured_line_pattern_int++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_line_pattern_int", &edge_obscured_line_pattern_int, 0)
-        && edge_obscured_line_pattern_int == visualstyle->edge_obscured_line_pattern_int)
+      fail ("VISUALSTYLE.edge_obscured_ltype_int [BS] %hu != %hu", visualstyle->edge_obscured_ltype_int, edge_obscured_ltype_int);
+    edge_obscured_ltype_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_obscured_ltype_int", &edge_obscured_ltype_int, 0)
+        && edge_obscured_ltype_int == visualstyle->edge_obscured_ltype_int)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_obscured_line_pattern_int [BS] set+1 %hu != %hu", visualstyle->edge_obscured_line_pattern_int, edge_obscured_line_pattern_int);
-    visualstyle->edge_obscured_line_pattern_int--;
+      fail ("VISUALSTYLE.edge_obscured_ltype_int [BS] set+1 %hu != %hu", visualstyle->edge_obscured_ltype_int, edge_obscured_ltype_int);
+    visualstyle->edge_obscured_ltype_int--;
   }
   {
     BITCODE_BD edge_opacity;
@@ -43635,18 +44514,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_opacity_int--;
   }
   {
-    BITCODE_BS edge_overhang;
+    BITCODE_BL edge_overhang;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_overhang", &edge_overhang, NULL)
         && edge_overhang == visualstyle->edge_overhang)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_overhang [BS] %hu != %hu", visualstyle->edge_overhang, edge_overhang);
+      fail ("VISUALSTYLE.edge_overhang [BL] %u != %u", visualstyle->edge_overhang, edge_overhang);
     edge_overhang++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_overhang", &edge_overhang, 0)
         && edge_overhang == visualstyle->edge_overhang)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_overhang [BS] set+1 %hu != %hu", visualstyle->edge_overhang, edge_overhang);
+      fail ("VISUALSTYLE.edge_overhang [BL] set+1 %u != %u", visualstyle->edge_overhang, edge_overhang);
     visualstyle->edge_overhang--;
   }
   {
@@ -43688,18 +44567,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_silhouette_color_int--;
   }
   {
-    BITCODE_BS edge_silhouette_width;
+    BITCODE_BL edge_silhouette_width;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_silhouette_width", &edge_silhouette_width, NULL)
         && edge_silhouette_width == visualstyle->edge_silhouette_width)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_silhouette_width [BS] %hu != %hu", visualstyle->edge_silhouette_width, edge_silhouette_width);
+      fail ("VISUALSTYLE.edge_silhouette_width [BL] %u != %u", visualstyle->edge_silhouette_width, edge_silhouette_width);
     edge_silhouette_width++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_silhouette_width", &edge_silhouette_width, 0)
         && edge_silhouette_width == visualstyle->edge_silhouette_width)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_silhouette_width [BS] set+1 %hu != %hu", visualstyle->edge_silhouette_width, edge_silhouette_width);
+      fail ("VISUALSTYLE.edge_silhouette_width [BL] set+1 %u != %u", visualstyle->edge_silhouette_width, edge_silhouette_width);
     visualstyle->edge_silhouette_width--;
   }
   {
@@ -43733,34 +44612,34 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_style--;
   }
   {
-    BITCODE_BS edge_style_apply_flag;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag", &edge_style_apply_flag, NULL)
-        && edge_style_apply_flag == visualstyle->edge_style_apply_flag)
+    BITCODE_BL edge_style_apply;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_style_apply", &edge_style_apply, NULL)
+        && edge_style_apply == visualstyle->edge_style_apply)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_style_apply_flag [BS] %hu != %hu", visualstyle->edge_style_apply_flag, edge_style_apply_flag);
-    edge_style_apply_flag++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag", &edge_style_apply_flag, 0)
-        && edge_style_apply_flag == visualstyle->edge_style_apply_flag)
+      fail ("VISUALSTYLE.edge_style_apply [BL] %u != %u", visualstyle->edge_style_apply, edge_style_apply);
+    edge_style_apply++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_apply", &edge_style_apply, 0)
+        && edge_style_apply == visualstyle->edge_style_apply)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_style_apply_flag [BS] set+1 %hu != %hu", visualstyle->edge_style_apply_flag, edge_style_apply_flag);
-    visualstyle->edge_style_apply_flag--;
+      fail ("VISUALSTYLE.edge_style_apply [BL] set+1 %u != %u", visualstyle->edge_style_apply, edge_style_apply);
+    visualstyle->edge_style_apply--;
   }
   {
-    BITCODE_BS edge_style_apply_flag_int;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag_int", &edge_style_apply_flag_int, NULL)
-        && edge_style_apply_flag_int == visualstyle->edge_style_apply_flag_int)
+    BITCODE_BS edge_style_apply_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_style_apply_int", &edge_style_apply_int, NULL)
+        && edge_style_apply_int == visualstyle->edge_style_apply_int)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_style_apply_flag_int [BS] %hu != %hu", visualstyle->edge_style_apply_flag_int, edge_style_apply_flag_int);
-    edge_style_apply_flag_int++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_apply_flag_int", &edge_style_apply_flag_int, 0)
-        && edge_style_apply_flag_int == visualstyle->edge_style_apply_flag_int)
+      fail ("VISUALSTYLE.edge_style_apply_int [BS] %hu != %hu", visualstyle->edge_style_apply_int, edge_style_apply_int);
+    edge_style_apply_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_style_apply_int", &edge_style_apply_int, 0)
+        && edge_style_apply_int == visualstyle->edge_style_apply_int)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_style_apply_flag_int [BS] set+1 %hu != %hu", visualstyle->edge_style_apply_flag_int, edge_style_apply_flag_int);
-    visualstyle->edge_style_apply_flag_int--;
+      fail ("VISUALSTYLE.edge_style_apply_int [BS] set+1 %hu != %hu", visualstyle->edge_style_apply_int, edge_style_apply_int);
+    visualstyle->edge_style_apply_int--;
   }
   {
     BITCODE_BS edge_style_int;
@@ -43778,18 +44657,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->edge_style_int--;
   }
   {
-    BITCODE_BS edge_width;
+    BITCODE_BL edge_width;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_width", &edge_width, NULL)
         && edge_width == visualstyle->edge_width)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_width [BS] %hu != %hu", visualstyle->edge_width, edge_width);
+      fail ("VISUALSTYLE.edge_width [BL] %u != %u", visualstyle->edge_width, edge_width);
     edge_width++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_width", &edge_width, 0)
         && edge_width == visualstyle->edge_width)
       pass ();
     else
-      fail ("VISUALSTYLE.edge_width [BS] set+1 %hu != %hu", visualstyle->edge_width, edge_width);
+      fail ("VISUALSTYLE.edge_width [BL] set+1 %u != %u", visualstyle->edge_width, edge_width);
     visualstyle->edge_width--;
   }
   {
@@ -43806,6 +44685,36 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.edge_width_int [BS] set+1 %hu != %hu", visualstyle->edge_width_int, edge_width_int);
     visualstyle->edge_width_int--;
+  }
+  {
+    BITCODE_BL edge_wiggle;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_wiggle", &edge_wiggle, NULL)
+        && edge_wiggle == visualstyle->edge_wiggle)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_wiggle [BL] %u != %u", visualstyle->edge_wiggle, edge_wiggle);
+    edge_wiggle++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_wiggle", &edge_wiggle, 0)
+        && edge_wiggle == visualstyle->edge_wiggle)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_wiggle [BL] set+1 %u != %u", visualstyle->edge_wiggle, edge_wiggle);
+    visualstyle->edge_wiggle--;
+  }
+  {
+    BITCODE_BS edge_wiggle_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_wiggle_int", &edge_wiggle_int, NULL)
+        && edge_wiggle_int == visualstyle->edge_wiggle_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_wiggle_int [BS] %hu != %hu", visualstyle->edge_wiggle_int, edge_wiggle_int);
+    edge_wiggle_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "edge_wiggle_int", &edge_wiggle_int, 0)
+        && edge_wiggle_int == visualstyle->edge_wiggle_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.edge_wiggle_int [BS] set+1 %hu != %hu", visualstyle->edge_wiggle_int, edge_wiggle_int);
+    visualstyle->edge_wiggle_int--;
   }
   {
     BITCODE_BS ext_lighting_model;
@@ -43913,18 +44822,18 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->face_lighting_quality_int--;
   }
   {
-    BITCODE_BS face_modifier;
+    BITCODE_BL face_modifier;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_modifier", &face_modifier, NULL)
         && face_modifier == visualstyle->face_modifier)
       pass ();
     else
-      fail ("VISUALSTYLE.face_modifier [BS] %hu != %hu", visualstyle->face_modifier, face_modifier);
+      fail ("VISUALSTYLE.face_modifier [BL] %u != %u", visualstyle->face_modifier, face_modifier);
     face_modifier++;
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "face_modifier", &face_modifier, 0)
         && face_modifier == visualstyle->face_modifier)
       pass ();
     else
-      fail ("VISUALSTYLE.face_modifier [BS] set+1 %hu != %hu", visualstyle->face_modifier, face_modifier);
+      fail ("VISUALSTYLE.face_modifier [BL] set+1 %u != %u", visualstyle->face_modifier, face_modifier);
     visualstyle->face_modifier--;
   }
   {
@@ -44026,49 +44935,34 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->face_specular_int--;
   }
   {
-    BITCODE_B int_only;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "int_only", &int_only, NULL)
-        && int_only == visualstyle->int_only)
+    BITCODE_B internal_only;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "internal_only", &internal_only, NULL)
+        && internal_only == visualstyle->internal_only)
       pass ();
     else
-      fail ("VISUALSTYLE.int_only [B] " FORMAT_B " != " FORMAT_B "", visualstyle->int_only, int_only);
-    int_only++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "int_only", &int_only, 0)
-        && int_only == visualstyle->int_only)
+      fail ("VISUALSTYLE.internal_only [B] " FORMAT_B " != " FORMAT_B "", visualstyle->internal_only, internal_only);
+    internal_only++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "internal_only", &internal_only, 0)
+        && internal_only == visualstyle->internal_only)
       pass ();
     else
-      fail ("VISUALSTYLE.int_only [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->int_only, int_only);
-    visualstyle->int_only--;
+      fail ("VISUALSTYLE.internal_only [B] set+1 " FORMAT_B " != " FORMAT_B "", visualstyle->internal_only, internal_only);
+    visualstyle->internal_only--;
   }
   {
-    BITCODE_BS numedge_isolines;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "numedge_isolines", &numedge_isolines, NULL)
-        && numedge_isolines == visualstyle->numedge_isolines)
+    BITCODE_BS num_props;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "num_props", &num_props, NULL)
+        && num_props == visualstyle->num_props)
       pass ();
     else
-      fail ("VISUALSTYLE.numedge_isolines [BS] %hu != %hu", visualstyle->numedge_isolines, numedge_isolines);
-    numedge_isolines++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "numedge_isolines", &numedge_isolines, 0)
-        && numedge_isolines == visualstyle->numedge_isolines)
+      fail ("VISUALSTYLE.num_props [BS] %hu != %hu", visualstyle->num_props, num_props);
+    num_props++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "num_props", &num_props, 0)
+        && num_props == visualstyle->num_props)
       pass ();
     else
-      fail ("VISUALSTYLE.numedge_isolines [BS] set+1 %hu != %hu", visualstyle->numedge_isolines, numedge_isolines);
-    visualstyle->numedge_isolines--;
-  }
-  {
-    BITCODE_BS numedge_isolines_int;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "numedge_isolines_int", &numedge_isolines_int, NULL)
-        && numedge_isolines_int == visualstyle->numedge_isolines_int)
-      pass ();
-    else
-      fail ("VISUALSTYLE.numedge_isolines_int [BS] %hu != %hu", visualstyle->numedge_isolines_int, numedge_isolines_int);
-    numedge_isolines_int++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "numedge_isolines_int", &numedge_isolines_int, 0)
-        && numedge_isolines_int == visualstyle->numedge_isolines_int)
-      pass ();
-    else
-      fail ("VISUALSTYLE.numedge_isolines_int [BS] set+1 %hu != %hu", visualstyle->numedge_isolines_int, numedge_isolines_int);
-    visualstyle->numedge_isolines_int--;
+      fail ("VISUALSTYLE.num_props [BS] set+1 %hu != %hu", visualstyle->num_props, num_props);
+    visualstyle->num_props--;
   }
   {
     struct _dwg_object_object* parent;
@@ -44077,6 +44971,31 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("VISUALSTYLE.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T strokes;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "strokes", &strokes, NULL)
+        && strokes
+           ? strEQ ((char *)strokes, (char *)visualstyle->strokes)
+           : !visualstyle->strokes)
+      pass ();
+    else
+      fail ("VISUALSTYLE.strokes [T] '%s' <> '%s'", strokes, visualstyle->strokes);
+  }
+  {
+    BITCODE_BS strokes_int;
+    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "strokes_int", &strokes_int, NULL)
+        && strokes_int == visualstyle->strokes_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.strokes_int [BS] %hu != %hu", visualstyle->strokes_int, strokes_int);
+    strokes_int++;
+    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "strokes_int", &strokes_int, 0)
+        && strokes_int == visualstyle->strokes_int)
+      pass ();
+    else
+      fail ("VISUALSTYLE.strokes_int [BS] set+1 %hu != %hu", visualstyle->strokes_int, strokes_int);
+    visualstyle->strokes_int--;
   }
   {
     BITCODE_BL style_type;
@@ -44092,21 +45011,6 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     else
       fail ("VISUALSTYLE.style_type [BL] set+1 %u != %u", visualstyle->style_type, style_type);
     visualstyle->style_type--;
-  }
-  {
-    BITCODE_BD unknown_float45;
-    if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "unknown_float45", &unknown_float45, NULL)
-        && unknown_float45 == visualstyle->unknown_float45)
-      pass ();
-    else
-      fail ("VISUALSTYLE.unknown_float45 [BD] %g != %g", visualstyle->unknown_float45, unknown_float45);
-    unknown_float45++;
-    if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "unknown_float45", &unknown_float45, 0)
-        && unknown_float45 == visualstyle->unknown_float45)
-      pass ();
-    else
-      fail ("VISUALSTYLE.unknown_float45 [BD] set+1 %g != %g", visualstyle->unknown_float45, unknown_float45);
-    visualstyle->unknown_float45--;
   }
   if (failed && (is_class_unstable ("VISUALSTYLE") || is_class_debugging ("VISUALSTYLE")))
     {

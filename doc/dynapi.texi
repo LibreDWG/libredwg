@@ -8465,126 +8465,250 @@ T,	DXF 2
 BL,	DXF 70
 @item ext_lighting_model
 BS,	DXF 177
-@item int_only
+@item internal_only
 B,	DXF 291
 @item face_lighting_model
 BL,	DXF 71
 @item face_lighting_model_int
-BS,	DXF 176
+BS
 @item face_lighting_quality
 BL,	DXF 72
 @item face_lighting_quality_int
-BS,	DXF 176
+BS
 @item face_color_mode
 BL,	DXF 73
 @item face_color_mode_int
-BS,	DXF 176
+BS
 @item face_opacity
 BD,	DXF 40
 @item face_opacity_int
-BS,	DXF 176
+BS
 @item face_specular
 BD,	DXF 41
 @item face_specular_int
-BS,	DXF 176
+BS
 @item face_modifier
-BS,	DXF 90
+BL,	DXF 90
 @item face_modifier_int
 BS
 @item face_mono_color
 CMC,	DXF 63
 @item face_mono_color_int
-BS,	DXF 176
+BS
 @item edge_model
 BS,	DXF 74
 @item edge_model_int
-BS,	DXF 176
+BS
 @item edge_style
 BL,	DXF 91
 @item edge_style_int
-BS,	DXF 176
+BS
 @item edge_intersection_color
 CMC,	DXF 64
 @item edge_intersection_color_int
-BS,	DXF 176
+BS
 @item edge_obscured_color
 CMC,	DXF 65
 @item edge_obscured_color_int
-BS,	DXF 176
-@item edge_obscured_line_pattern
-BS,	DXF 75
-@item edge_obscured_line_pattern_int
-BS,	DXF 176
-@item edge_intersection_line_pattern
-BS,	DXF 175
-@item edge_intersection_line_pattern_int
-BS,	DXF 176
+BS
+@item edge_obscured_ltype
+BL,	DXF 75
+@item edge_obscured_ltype_int
+BS
+@item edge_intersection_ltype
+BL,	DXF 175
+@item edge_intersection_ltype_int
+BS
 @item edge_crease_angle
 BD,	DXF 42
 @item edge_crease_angle_int
-BS,	DXF 176
+BS
 @item edge_modifier
-BS,	DXF 92
+BL,	DXF 92
 @item edge_modifier_int
-BS,	DXF 176
+BS
 @item edge_color
 CMC,	DXF 66
 @item edge_color_int
-BS,	DXF 176
+BS
 @item edge_opacity
 BD,	DXF 43
 @item edge_opacity_int
-BS,	DXF 176
+BS
 @item edge_width
-BS,	DXF 76
+BL,	DXF 76
 @item edge_width_int
-BS,	DXF 176
+BS
 @item edge_overhang
-BS,	DXF 77
+BL,	DXF 77
 @item edge_overhang_int
-BS,	DXF 176
+BS
 @item edge_jitter
-BS,	DXF 78
+BL,	DXF 78
 @item edge_jitter_int
-BS,	DXF 176
+BS
 @item edge_silhouette_color
 CMC,	DXF 67
 @item edge_silhouette_color_int
-BS,	DXF 176
-@item edge_silhouette_width
-BS,	DXF 79
-@item edge_silhouette_width_int
-BS,	DXF 176
-@item edge_halo_gap
-BS,	DXF 170
-@item edge_halo_gap_int
-BS,	DXF 176
-@item numedge_isolines
-BS,	DXF 171
-@item numedge_isolines_int
-BS,	DXF 176
-@item edge_hide_precision_flag
-B,	DXF 290
-@item edge_hide_precision_flag_int
-BS,	DXF 176
-@item edge_style_apply_flag
-BS,	DXF 174
-@item edge_style_apply_flag_int
 BS
-@item display_style
-BS,	DXF 93
-@item display_style_int
-BS,	DXF 176
-@item display_brightness
+@item edge_silhouette_width
+BL,	DXF 79
+@item edge_silhouette_width_int
+BS
+@item edge_halo_gap
+BL,	DXF 170
+@item edge_halo_gap_int
+BS
+@item edge_isolines
+BL,	DXF 171
+@item edge_isolines_int
+BS
+@item edge_do_hide_precision
+B,	DXF 290
+@item edge_do_hide_precision_int
+BS
+@item edge_style_apply
+BL,	DXF 174
+@item edge_style_apply_int
+BS
+@item display_settings
+BL,	DXF 93
+@item display_settings_int
+BS
+@item display_brightness_bl
 BL,	DXF 44
+@item display_brightness
+BD,	DXF 44
 @item display_brightness_int
-BS,	DXF 176
+BS
 @item display_shadow_type
-BS,	DXF 173
+BL,	DXF 173
 @item display_shadow_type_int
-BS,	DXF 176
-@item unknown_float45
+BS
+@item bd2007_45
 BD,	DXF 45
+@item num_props
+BS,	DXF 70
+@item b_prop1c
+B,	DXF 290
+@item b_prop1c_int
+BS
+@item b_prop1d
+B,	DXF 290
+@item b_prop1d_int
+BS
+@item b_prop1e
+B,	DXF 290
+@item b_prop1e_int
+BS
+@item b_prop1f
+B,	DXF 90
+@item b_prop1f_int
+BS
+@item b_prop20
+B,	DXF 290
+@item b_prop20_int
+BS
+@item b_prop21
+B,	DXF 90
+@item b_prop21_int
+BS
+@item b_prop22
+B,	DXF 290
+@item b_prop22_int
+BS
+@item b_prop23
+B,	DXF 290
+@item b_prop23_int
+BS
+@item b_prop24
+B,	DXF 290
+@item b_prop24_int
+BS
+@item bl_prop25
+BL,	DXF 90
+@item bl_prop25_int
+BS
+@item bd_prop26
+BD,	DXF 40
+@item bd_prop26_int
+BS
+@item bd_prop27
+BD,	DXF 40
+@item bd_prop27_int
+BS
+@item bl_prop28
+BL,	DXF 90
+@item bl_prop28_int
+BS
+@item c_prop29
+CMC,	DXF 62
+@item c_prop29_int
+BS
+@item bl_prop2a
+BL,	DXF 90
+@item bl_prop2a_int
+BS
+@item bl_prop2b
+BL,	DXF 90
+@item bl_prop2b_int
+BS
+@item c_prop2c
+CMC,	DXF 62
+@item c_prop2c_int
+BS
+@item b_prop2d
+B
+@item b_prop2d_int
+BS
+@item bl_prop2e
+BL,	DXF 290
+@item bl_prop2e_int
+BS
+@item bl_prop2f
+BL,	DXF 90
+@item bl_prop2f_int
+BS
+@item bl_prop30
+BL,	DXF 90
+@item bl_prop30_int
+BS
+@item b_prop31
+B,	DXF 290
+@item b_prop31_int
+BS
+@item bl_prop32
+BL,	DXF 90
+@item bl_prop32_int
+BS
+@item c_prop33
+CMC,	DXF 62
+@item c_prop33_int
+BS
+@item bd_prop34
+BD,	DXF 40
+@item bd_prop34_int
+BS
+@item edge_wiggle
+BL,	DXF 90
+@item edge_wiggle_int
+BS
+@item strokes
+T,	DXF 1
+@item strokes_int
+BS
+@item b_prop37
+B,	DXF 290
+@item b_prop37_int
+BS
+@item bd_prop38
+BD,	DXF 40
+@item bd_prop38_int
+BS
+@item bd_prop39
+BD,	DXF 40
+@item bd_prop39_int
+BS
 
 @end vtable
 @end indentedblock
