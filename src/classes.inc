@@ -232,7 +232,7 @@
   UNSTABLE_CLASS     (ACTION, SECTION_MANAGER)
   UNSTABLE_CLASS     (ACTION, SUN)
   UNSTABLE_CLASS     (ACTION, TABLESTYLE)        // pre-r2010 only
-  UNSTABLE_CLASS     (ACTION, VISUALSTYLE)
+  STABLE_CLASS     (ACTION, VISUALSTYLE)
 
   // coverage exists, but broken and being worked on. needs -DDEBUG_CLASSES. See also
   // examples/unknown with all the unknown blobs of these.

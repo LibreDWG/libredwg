@@ -309,6 +309,9 @@ sub dxf_in {
       $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
       $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
+      if ($n eq 'VISUALSTYLE') {
+        $DXF{$n}->{$f."_int"} = 176;
+      }
     } elsif (@old && /^\s+SUB_FIELD_HANDLE\s*\($v,\s*(\w+),\s*\d+,\s*(\d+)\)/) {
       my $type = $1;
       $f = $1;

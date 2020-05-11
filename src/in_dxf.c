@@ -7129,6 +7129,7 @@ new_object (char *restrict name, char *restrict dxfname,
               const Dwg_DYNAPI_field *f;
               const Dwg_DYNAPI_field *fields
                   = dwg_dynapi_entity_fields (obj->name);
+              const Dwg_DYNAPI_field *cur_vstyle = NULL;
               if (!pair)
                 break;
               if (!fields)
@@ -7219,8 +7220,37 @@ new_object (char *restrict name, char *restrict dxfname,
                           goto next_pair;
                         }
                     }
+                  else if (obj->fixedtype == DWG_TYPE_VISUALSTYLE &&
+                           dat->version >= R_2010 &&
+                           pair->code == 176 && cur_vstyle)
+                    {
+                      // which 176 of the many? the one after the previous field
+                      char fieldname[40];
+                      strcpy (fieldname, cur_vstyle->name);
+                      strcat (fieldname, "_int");
+                      f = cur_vstyle + 1;
+                      if (strEQc (fieldname, "display_brightness_bl_int"))
+                        {
+                          strcpy (fieldname, "display_brightness_int");
+                          f++;
+                        }
+                      if (strEQ (fieldname, f->name))
+                        {
+                          LOG_HANDLE ("found %s.%s:\n", name, fieldname);
+                          goto matching_pair;
+                        }
+                      else
+                        LOG_WARN ("%s.%s [BS 176] not found in dynapi", name, fieldname);
+                    }
                   else if (f->dxf == pair->code) // matching DXF code
                     {
+                    matching_pair:
+                      if (obj->fixedtype == DWG_TYPE_VISUALSTYLE &&
+                          dat->version >= R_2010 &&
+                          pair->code != 176)
+                        {
+                          cur_vstyle = f;
+                        }
                       // exceptions, where there's another field 92:
                       if ((pair->code == 92) && is_entity
                           && obj->fixedtype > DWG_TYPE_LAYOUT
