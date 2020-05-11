@@ -437,11 +437,14 @@
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
     PRE (R_13)                                                                \
     {                                                                         \
-      if (obj->fixedtype == DWG_TYPE_LAYER) {                                 \
-        FIELD_RS (flag, 70)                                                   \
-      } else {                                                                \
-        FIELD_CAST (flag, RC, RS, 70)                                         \
-      }                                                                       \
+      if (strcmp (#acdbname, "Layer") == 0)                                   \
+        {                                                                     \
+        FIELD_CAST (flag, RC, RS, 70);                                        \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          FIELD_RC (flag, 70);                                                \
+        }                                                                     \
       FIELD_TFv (name, 32, 2);                                                \
       FIELD_RS (used, 0);                                                     \
     }                                                                         \

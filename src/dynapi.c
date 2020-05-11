@@ -1205,7 +1205,7 @@ static const Dwg_DYNAPI_field _dwg_ATTDEF_fields[] = {
     0,0,0, 280 },
   { "type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ATTDEF, type),
     0,0,0, 70 },
-  { "tag",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, tag),
+  { "tag",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATTDEF, tag),
     1,1,1, 2 },
   { "field_length",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATTDEF, field_length),
     0,0,0, 0 },
@@ -1227,7 +1227,7 @@ static const Dwg_DYNAPI_field _dwg_ATTDEF_fields[] = {
     0,0,0, 0 },
   { "attdef_class_version",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ATTDEF, attdef_class_version),
     0,0,0, 280 },
-  { "prompt",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTDEF, prompt),
+  { "prompt",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATTDEF, prompt),
     1,1,1, 3 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -1267,7 +1267,7 @@ static const Dwg_DYNAPI_field _dwg_ATTRIB_fields[] = {
     0,0,0, 280 },
   { "type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ATTRIB, type),
     0,0,0, 70 },
-  { "tag",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ATTRIB, tag),
+  { "tag",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATTRIB, tag),
     1,1,1, 2 },
   { "field_length",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATTRIB, field_length),
     0,0,0, 73 },
@@ -1293,7 +1293,7 @@ static const Dwg_DYNAPI_field _dwg_ATTRIB_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCK_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_BLOCK, parent),
     1,1,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_BLOCK, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_BLOCK, name),
     1,1,1, 2 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -4130,7 +4130,7 @@ static const Dwg_DYNAPI_field _dwg_ALDIMOBJECTCONTEXTDATA_fields[] = {
 static const Dwg_DYNAPI_field _dwg_APPID_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_APPID, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_APPID, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_APPID, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_APPID, name),
     1,1,1, 0 },
@@ -4850,7 +4850,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_CONTROL_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_BLOCK_HEADER, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_HEADER, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_BLOCK_HEADER, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, name),
     1,1,1, 0 },
@@ -5152,9 +5152,9 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DIMSTYLE_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_DIMSTYLE, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_DIMSTYLE, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DIMSTYLE, flag),
     0,0,0, 70 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_DIMSTYLE, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_DIMSTYLE, name),
     1,1,1, 0 },
   { "used",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_DIMSTYLE, used),
     0,0,0, 0 },
@@ -5676,9 +5676,9 @@ static const Dwg_DYNAPI_field _dwg_IMAGEDEF_REACTOR_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYER, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_LAYER, flag),
+  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYER, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYER, name),
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYER, name),
     1,1,1, 0 },
   { "used",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_LAYER, used),
     0,0,0, 0 },
@@ -5910,7 +5910,7 @@ static const Dwg_DYNAPI_field _dwg_LONG_TRANSACTION_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LTYPE, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_LTYPE, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LTYPE, name),
     1,1,1, 0 },
@@ -6920,7 +6920,7 @@ static const Dwg_DYNAPI_field _dwg_SPATIAL_INDEX_fields[] = {
 static const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_STYLE, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_STYLE, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_STYLE, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_STYLE, name),
     1,1,1, 0 },
@@ -7176,7 +7176,7 @@ static const Dwg_DYNAPI_field _dwg_TVDEVICEPROPERTIES_fields[] = {
 static const Dwg_DYNAPI_field _dwg_UCS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_UCS, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_UCS, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_UCS, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_UCS, name),
     1,1,1, 0 },
@@ -7252,7 +7252,7 @@ static const Dwg_DYNAPI_field _dwg_VBA_PROJECT_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VIEW, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VIEW, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VIEW, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VIEW, name),
     1,1,1, 0 },
@@ -7600,7 +7600,7 @@ static const Dwg_DYNAPI_field _dwg_VISUALSTYLE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VPORT_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VPORT, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VPORT, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VPORT, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VPORT, name),
     1,1,1, 0 },
@@ -7734,7 +7734,7 @@ static const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_CONTROL_fields[] = {
 static const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_HEADER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, parent),
     1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, flag),
     0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, name),
     1,1,1, 0 },

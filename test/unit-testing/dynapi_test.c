@@ -7418,14 +7418,14 @@ static int test_BLOCK (const Dwg_Object *obj)
   Dwg_Entity_BLOCK *restrict block = obj->tio.entity->tio.BLOCK;
   failed = 0;
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (block, "BLOCK", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)block->name)
            : !block->name)
       pass ();
     else
-      fail ("BLOCK.name [TV] '%s' <> '%s'", name, block->name);
+      fail ("BLOCK.name [T] '%s' <> '%s'", name, block->name);
   }
   {
     struct _dwg_object_entity* parent;
@@ -24044,18 +24044,18 @@ static int test_APPID (const Dwg_Object *obj)
   Dwg_Object_APPID *restrict appid = obj->tio.object->tio.APPID;
   failed = 0;
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (appid, "APPID", "flag", &flag, NULL)
         && flag == appid->flag)
       pass ();
     else
-      fail ("APPID.flag [RS] %hu != %hu", appid->flag, flag);
+      fail ("APPID.flag [RC] %u != %u", appid->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (appid, "APPID", "flag", &flag, 0)
         && flag == appid->flag)
       pass ();
     else
-      fail ("APPID.flag [RS] set+1 %hu != %hu", appid->flag, flag);
+      fail ("APPID.flag [RC] set+1 %u != %u", appid->flag, flag);
     appid->flag--;
   }
   {
@@ -28624,18 +28624,18 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         fail ("BLOCK_HEADER.first_entity [H]");
   }
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "flag", &flag, NULL)
         && flag == block_header->flag)
       pass ();
     else
-      fail ("BLOCK_HEADER.flag [RS] %hu != %hu", block_header->flag, flag);
+      fail ("BLOCK_HEADER.flag [RC] %u != %u", block_header->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag", &flag, 0)
         && flag == block_header->flag)
       pass ();
     else
-      fail ("BLOCK_HEADER.flag [RS] set+1 %hu != %hu", block_header->flag, flag);
+      fail ("BLOCK_HEADER.flag [RC] set+1 %u != %u", block_header->flag, flag);
     block_header->flag--;
   }
   {
@@ -31386,18 +31386,18 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     dimstyle->DIMZIN--;
   }
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "flag", &flag, NULL)
         && flag == dimstyle->flag)
       pass ();
     else
-      fail ("DIMSTYLE.flag [RS] %hu != %hu", dimstyle->flag, flag);
+      fail ("DIMSTYLE.flag [RC] %u != %u", dimstyle->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "flag", &flag, 0)
         && flag == dimstyle->flag)
       pass ();
     else
-      fail ("DIMSTYLE.flag [RS] set+1 %hu != %hu", dimstyle->flag, flag);
+      fail ("DIMSTYLE.flag [RC] set+1 %u != %u", dimstyle->flag, flag);
     dimstyle->flag--;
   }
   {
@@ -31461,14 +31461,14 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     dimstyle->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)dimstyle->name)
            : !dimstyle->name)
       pass ();
     else
-      fail ("DIMSTYLE.name [TV] '%s' <> '%s'", name, dimstyle->name);
+      fail ("DIMSTYLE.name [T] '%s' <> '%s'", name, dimstyle->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -33408,18 +33408,18 @@ static int test_LAYER (const Dwg_Object *obj)
     layer->color_rs--;
   }
   {
-    BITCODE_RS flag;
+    BITCODE_BS flag;
     if (dwg_dynapi_entity_value (layer, "LAYER", "flag", &flag, NULL)
         && flag == layer->flag)
       pass ();
     else
-      fail ("LAYER.flag [RS] %hu != %hu", layer->flag, flag);
+      fail ("LAYER.flag [BS] %hu != %hu", layer->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (layer, "LAYER", "flag", &flag, 0)
         && flag == layer->flag)
       pass ();
     else
-      fail ("LAYER.flag [RS] set+1 %hu != %hu", layer->flag, flag);
+      fail ("LAYER.flag [BS] set+1 %hu != %hu", layer->flag, flag);
     layer->flag--;
   }
   {
@@ -33559,14 +33559,14 @@ static int test_LAYER (const Dwg_Object *obj)
         fail ("LAYER.material [H]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (layer, "LAYER", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)layer->name)
            : !layer->name)
       pass ();
     else
-      fail ("LAYER.name [TV] '%s' <> '%s'", name, layer->name);
+      fail ("LAYER.name [T] '%s' <> '%s'", name, layer->name);
   }
   {
     BITCODE_B on;
@@ -34703,18 +34703,18 @@ static int test_LTYPE (const Dwg_Object *obj)
       fail ("LTYPE.description [T] '%s' <> '%s'", description, ltype->description);
   }
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "flag", &flag, NULL)
         && flag == ltype->flag)
       pass ();
     else
-      fail ("LTYPE.flag [RS] %hu != %hu", ltype->flag, flag);
+      fail ("LTYPE.flag [RC] %u != %u", ltype->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "flag", &flag, 0)
         && flag == ltype->flag)
       pass ();
     else
-      fail ("LTYPE.flag [RS] set+1 %hu != %hu", ltype->flag, flag);
+      fail ("LTYPE.flag [RC] set+1 %u != %u", ltype->flag, flag);
     ltype->flag--;
   }
   {
@@ -40815,18 +40815,18 @@ static int test_STYLE (const Dwg_Object *obj)
       fail ("STYLE.bigfont_file [T] '%s' <> '%s'", bigfont_file, style->bigfont_file);
   }
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (style, "STYLE", "flag", &flag, NULL)
         && flag == style->flag)
       pass ();
     else
-      fail ("STYLE.flag [RS] %hu != %hu", style->flag, flag);
+      fail ("STYLE.flag [RC] %u != %u", style->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (style, "STYLE", "flag", &flag, 0)
         && flag == style->flag)
       pass ();
     else
-      fail ("STYLE.flag [RS] set+1 %hu != %hu", style->flag, flag);
+      fail ("STYLE.flag [RC] set+1 %u != %u", style->flag, flag);
     style->flag--;
   }
   {
@@ -42331,18 +42331,18 @@ static int test_UCS (const Dwg_Object *obj)
     ucs->elevation--;
   }
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (ucs, "UCS", "flag", &flag, NULL)
         && flag == ucs->flag)
       pass ();
     else
-      fail ("UCS.flag [RS] %hu != %hu", ucs->flag, flag);
+      fail ("UCS.flag [RC] %u != %u", ucs->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (ucs, "UCS", "flag", &flag, 0)
         && flag == ucs->flag)
       pass ();
     else
-      fail ("UCS.flag [RS] set+1 %hu != %hu", ucs->flag, flag);
+      fail ("UCS.flag [RC] set+1 %u != %u", ucs->flag, flag);
     ucs->flag--;
   }
   {
@@ -42822,18 +42822,18 @@ static int test_VIEW (const Dwg_Object *obj)
     view->elevation--;
   }
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (view, "VIEW", "flag", &flag, NULL)
         && flag == view->flag)
       pass ();
     else
-      fail ("VIEW.flag [RS] %hu != %hu", view->flag, flag);
+      fail ("VIEW.flag [RC] %u != %u", view->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (view, "VIEW", "flag", &flag, 0)
         && flag == view->flag)
       pass ();
     else
-      fail ("VIEW.flag [RS] set+1 %hu != %hu", view->flag, flag);
+      fail ("VIEW.flag [RC] set+1 %u != %u", view->flag, flag);
     view->flag--;
   }
   {
@@ -45344,18 +45344,18 @@ static int test_VPORT (const Dwg_Object *obj)
     vport->default_lightning_type--;
   }
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vport, "VPORT", "flag", &flag, NULL)
         && flag == vport->flag)
       pass ();
     else
-      fail ("VPORT.flag [RS] %hu != %hu", vport->flag, flag);
+      fail ("VPORT.flag [RC] %u != %u", vport->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (vport, "VPORT", "flag", &flag, 0)
         && flag == vport->flag)
       pass ();
     else
-      fail ("VPORT.flag [RS] set+1 %hu != %hu", vport->flag, flag);
+      fail ("VPORT.flag [RC] set+1 %u != %u", vport->flag, flag);
     vport->flag--;
   }
   {
@@ -45817,18 +45817,18 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   Dwg_Object_VPORT_ENTITY_HEADER *restrict vport_entity_header = obj->tio.object->tio.VPORT_ENTITY_HEADER;
   failed = 0;
   {
-    BITCODE_RS flag;
+    BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, NULL)
         && flag == vport_entity_header->flag)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag [RS] %hu != %hu", vport_entity_header->flag, flag);
+      fail ("VPORT_ENTITY_HEADER.flag [RC] %u != %u", vport_entity_header->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, 0)
         && flag == vport_entity_header->flag)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag [RS] set+1 %hu != %hu", vport_entity_header->flag, flag);
+      fail ("VPORT_ENTITY_HEADER.flag [RC] set+1 %u != %u", vport_entity_header->flag, flag);
     vport_entity_header->flag--;
   }
   {

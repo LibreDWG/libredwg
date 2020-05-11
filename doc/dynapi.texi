@@ -1129,7 +1129,7 @@ BS
 @item parent
 struct _dwg_object_entity*
 @item name
-TV,	DXF 2
+T,	DXF 2
 
 @end vtable
 @end indentedblock
@@ -4472,7 +4472,7 @@ APPID is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used
@@ -5351,7 +5351,7 @@ BLOCK_HEADER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used
@@ -5741,9 +5741,9 @@ DIMSTYLE is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS,	DXF 70
+RC,	DXF 70
 @item name
-TV
+T
 @item used
 RS
 @item is_xref_ref
@@ -6371,9 +6371,9 @@ LAYER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+BS
 @item name
-TV
+T
 @item used
 RS
 @item is_xref_ref
@@ -6676,7 +6676,7 @@ LTYPE is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used
@@ -7904,7 +7904,7 @@ STYLE is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used
@@ -8231,7 +8231,7 @@ UCS is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used
@@ -8350,7 +8350,7 @@ VIEW is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used
@@ -8727,7 +8727,7 @@ VPORT is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used
@@ -8894,7 +8894,7 @@ VPORT_ENTITY_HEADER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RS
+RC
 @item name
 TV
 @item used

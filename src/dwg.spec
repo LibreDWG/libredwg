@@ -2488,7 +2488,7 @@ DWG_OBJECT_END
 /* (49/1) */
 DWG_OBJECT (BLOCK_HEADER)
 
-  //DXF: the name must be from the block_entity
+  //DXF: the name must be from the block_entity!
   COMMON_TABLE_FLAGS (Block)
   DXF {
     // not allowed to be skipped, can be 0
@@ -2695,6 +2695,7 @@ DWG_OBJECT_END
 DWG_OBJECT (STYLE)
 
   COMMON_TABLE_FLAGS (TextStyle)
+
   SINCE (R_13)
   {
     FIELD_B (is_shape, 0);        //wrong oda doc
@@ -2782,6 +2783,7 @@ DWG_OBJECT_END
 DWG_OBJECT (LTYPE)
 
   COMMON_TABLE_FLAGS (Linetype)
+
   PRE (R_13) {
     FIELD_TFv (description, 48, 3);
   }
@@ -2892,6 +2894,7 @@ DWG_OBJECT_END
 DWG_OBJECT (VIEW)
 
   COMMON_TABLE_FLAGS (View)
+
   PRE (R_13)
   {
     FIELD_RD (height, 40);
@@ -2990,6 +2993,7 @@ DWG_OBJECT_END
 DWG_OBJECT (UCS)
 
   COMMON_TABLE_FLAGS (Ucs)
+
   PRE (R_13)
   {
     FIELD_3RD (origin, 10);
@@ -3040,7 +3044,8 @@ DWG_OBJECT_END
 DWG_OBJECT (VPORT)
 
   COMMON_TABLE_FLAGS (Viewport)
-  DXF { // has a different order of fields
+
+ DXF { // has a different order of fields
 
   FIELD_2RD (lower_left, 10);
   FIELD_2RD (upper_right, 11);
@@ -3290,6 +3295,7 @@ DWG_OBJECT (DIMSTYLE)
     FIELD_VALUE (flag) = FIELD_VALUE (flag0);
   }
   COMMON_TABLE_FLAGS (DimStyle)
+
   PRE (R_13)
     {
       FIELD_RC (DIMTOL, 71);

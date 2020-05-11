@@ -162,6 +162,9 @@ while (<$in>) {
 #$h{Dwg_Bitcode_2BD} = '2BD';
 #$h{Dwg_Bitcode_3RD} = '3RD';
 #$h{Dwg_Bitcode_2RD} = '2RD';
+$ENT{LAYER}->{flag} = 'BS';
+$ENT{LAYER}->{name} = 'T';
+$ENT{DIMSTYLE}->{name} = 'T';
 #$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
 my @old;

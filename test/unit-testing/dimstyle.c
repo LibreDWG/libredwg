@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_RC flag;
   BITCODE_B flag0;
-  BITCODE_T name;
+  BITCODE_TV name;
   BITCODE_RS used;
   BITCODE_B is_xref_ref;
   BITCODE_BS is_xref_resolved;
