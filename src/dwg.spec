@@ -6342,11 +6342,9 @@ TvVisualStyle:
   FIELD_B (is_default, 0);
  */
 
-// r2007+ UNSTABLE
+// r2007+ STABLE
 // dbvisualstyle.h
 DWG_OBJECT (VISUALSTYLE)
-
-  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbVisualStyle)
 
   UNTIL (R_2007) {

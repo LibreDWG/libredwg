@@ -45,7 +45,6 @@ static const Dwg_Object_Type _classes_unstable[] =
    DWG_TYPE_SECTION_MANAGER,
    DWG_TYPE_SUN,
    DWG_TYPE_TABLESTYLE,
-   DWG_TYPE_VISUALSTYLE
   };
 static const Dwg_Object_Type _classes_debugging[] =
   {

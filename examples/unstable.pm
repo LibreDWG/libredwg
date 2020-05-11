@@ -33,7 +33,6 @@ no strict;
   SECTION_MANAGER
   SUN
   TABLESTYLE
-  VISUALSTYLE
 );
 
 @debugging = qw(
