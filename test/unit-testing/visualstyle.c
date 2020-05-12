@@ -1,4 +1,3 @@
-// TODO unstable
 #define DWG_TYPE DWG_TYPE_VISUALSTYLE
 #include "common.c"
 
@@ -22,20 +21,20 @@ api_process (dwg_object *obj)
   BITCODE_CMC edge_intersection_color;
   BITCODE_CMC edge_obscured_color;
   BITCODE_BL edge_obscured_ltype;
-  BITCODE_BS edge_intersection_ltype;
+  BITCODE_BL edge_intersection_ltype;
   BITCODE_BD edge_crease_angle;
   BITCODE_BL edge_modifier;
   BITCODE_CMC edge_color;
   BITCODE_BD edge_opacity;
-  BITCODE_BS edge_width;
-  BITCODE_BS edge_overhang;
-  BITCODE_BS edge_jitter;
+  BITCODE_BL edge_width;
+  BITCODE_BL edge_overhang;
+  BITCODE_BL edge_jitter;
   BITCODE_CMC edge_silhouette_color;
   BITCODE_BL edge_silhouette_width;
   BITCODE_BL edge_halo_gap;
   BITCODE_BL edge_isolines;
   BITCODE_B edge_do_hide_precision;
-  BITCODE_BS edge_style_apply;
+  BITCODE_BL edge_style_apply;
   BITCODE_BL display_settings;
   BITCODE_BL display_brightness_bl;     /*!< DXF 44 <=r2007 */
   BITCODE_BD display_brightness;        /*!< DXF 44  r2010+ */
@@ -86,7 +85,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_lighting_quality, BL, face_lighting_quality);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_lighting_quality, BL, 2);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_color_mode, BL, face_color_mode);
-  CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_color_mode, BS, 6);
+  CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_color_mode, BL, 6);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_opacity, BD, face_opacity);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_specular, BD, face_specular);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_modifier, BL, face_modifier);
@@ -99,30 +98,40 @@ api_process (dwg_object *obj)
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_intersection_color, edge_intersection_color);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_obscured_color, edge_obscured_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_obscured_ltype, BL, edge_obscured_ltype);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_ltype, BS, edge_intersection_ltype);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_crease_angle, BD, edge_crease_angle);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, edge_crease_angle, BD, 360.0);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_modifier, BL, edge_modifier);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_color, edge_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_opacity, BD, edge_opacity);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BS, edge_width);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_overhang, BS, edge_overhang);
+  PRE (R_2010) {
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BS, edge_width);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_overhang, BS, edge_overhang);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_silhouette_width, BS, edge_silhouette_width);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_halo_gap, RC, edge_halo_gap);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_isolines, BS, edge_isolines);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style_apply, BS, edge_style_apply);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_ltype, BS, edge_intersection_ltype);
+  } LATER_VERSIONS {
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BL, edge_width);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_overhang, BL, edge_overhang);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_silhouette_width, BL, edge_silhouette_width);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_halo_gap, BL, edge_halo_gap);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_isolines, BL, edge_isolines);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style_apply, BL, edge_style_apply);
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_ltype, BL, edge_intersection_ltype);
+  }
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_jitter, BL, edge_jitter);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_silhouette_color, edge_silhouette_color);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_silhouette_width, BS, edge_silhouette_width);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_halo_gap, RC, edge_halo_gap);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_isolines, BS, edge_isolines);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_do_hide_precision, B, edge_do_hide_precision);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style_apply, BS, edge_style_apply);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_settings, BL, display_settings);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness_bl, BL, display_brightness_bl);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness, BD, display_brightness);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_shadow_type, BL, display_shadow_type);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, internal_only, B, internal_only);
-  if (dwg_version == R_2007) {
+  VERSION (R_2007) {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd2007_45, BD, bd2007_45);
   }
-  if (dwg_version >= R_2013) {
+  SINCE (R_2013) {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, num_props, BS, num_props);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop1c, B, b_prop1c);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop1d, B, b_prop1d);

@@ -27,6 +27,19 @@ int g_countmax = MAX_COUNTER;
 // in radians. angles are not normalized. max observed: 10.307697 in ELLIPSE.end_angle
 #define MAX_ANGLE 12.57
 
+// needs Dwg_Version_Type dwg_version = obj->parent->header.version;
+#undef PRE
+#undef VERSION
+#undef VERSIONS
+#undef UNTIL
+#undef SINCE
+#define VERSION(version) if (dwg_version == version)
+#define VERSIONS(v1, v2)   if (dwg_version >= v1 && dwg_version <= v2)
+#define PRE(version)   if (dwg_version < version)
+#define UNTIL(version) if (dwg_version <= version)
+#define SINCE(version) if (dwg_version >= version)
+#define LATER_VERSIONS else
+
 /// test a DWG file
 int test_code (const char *filename, int cov);
 
