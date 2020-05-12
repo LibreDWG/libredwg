@@ -5746,25 +5746,23 @@ DWG_OBJECT (VBA_PROJECT)
 DWG_OBJECT_END
 
 /* pg. 157, 20.4.48 (varies)
-   AcDbMLeader, now implemented.
+   AcDbMLeader
  */
 DWG_ENTITY (MULTILEADER)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbMLeader)
-  DXF_OR_PRINT { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
-
-  SINCE (R_2010)
-    {
-      FIELD_BS (class_version, 270); // default 2. 1 <= r2004
-      VALUEOUTOFBOUNDS (class_version, 10)
-    }
+  SINCE (R_2010) {
+    FIELD_BS (class_version, 270); // default 2. 1 <= r2004
+    VALUEOUTOFBOUNDS (class_version, 10)
+  }
 #if 0
   FIELD_BS (ctx.class_version, 70); // default 3
   FIELD_B (ctx.has_xdic_file, 0);
   FIELD_B (ctx.is_default, 290);
 #endif
 
+  DXF_OR_PRINT { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
   FIELD_BL (ctx.num_leaders, 0);
   VALUEOUTOFBOUNDS (ctx.num_leaders, 5000) // MAX_LEADER_NUMBER
   DXF_OR_PRINT { VALUE_TFF ("LEADER{", 302); }
@@ -5837,8 +5835,8 @@ DWG_ENTITY (MULTILEADER)
   FIELD_BD (ctx.landing_gap, 145);
   FIELD_BS (ctx.text_left, 174);
   FIELD_BS (ctx.text_right, 175);
-  FIELD_BS (ctx.text_alignment, 176);
-  FIELD_BS (ctx.attach_type, 177);
+  FIELD_BS (ctx.text_angletype, 176);
+  FIELD_BS (ctx.text_alignment, 177);
 
   FIELD_B (ctx.has_content_txt, 290);
   if (FIELD_VALUE (ctx.has_content_txt))
@@ -5857,7 +5855,7 @@ DWG_ENTITY (MULTILEADER)
       FIELD_BS (ctx.content.txt.alignment, 171);
       FIELD_BS (ctx.content.txt.flow, 172);
       FIELD_CMC (ctx.content.txt.bg_color, 91);
-      FIELD_BD (ctx.content.txt.bg_scale, 141); // r2000!!
+      FIELD_BD (ctx.content.txt.bg_scale, 141);
       FIELD_BL (ctx.content.txt.bg_transparency, 92);
       FIELD_B (ctx.content.txt.is_bg_fill, 291);
       FIELD_B (ctx.content.txt.is_bg_mask_fill, 292);
@@ -5888,8 +5886,8 @@ DWG_ENTITY (MULTILEADER)
     }
 
   FIELD_3BD (ctx.base, 110);
-  FIELD_3BD (ctx.base_dir, 111);
-  FIELD_3BD (ctx.base_vert, 112);
+  FIELD_3BD (ctx.base_dir, 111);  // dxf only 2d?
+  FIELD_3BD (ctx.base_vert, 112); // dxf only 2d
   FIELD_B (ctx.is_normal_reversed, 297);
 
   SINCE (R_2010)
@@ -5900,13 +5898,15 @@ DWG_ENTITY (MULTILEADER)
   DXF_OR_PRINT { VALUE_TFF ("}", 301); } //end CONTEXT_DATA
   // END MLEADER_AnnotContext
 
-  FIELD_BL (flags, 90); // override flags
+  FIELD_HANDLE (mleaderstyle, 5, 340);
+  FIELD_BLx (flags, 90); // override flags
   FIELD_BS (type, 170);
   FIELD_CMC (color, 91);
+  FIELD_HANDLE (ltype, 5, 341);
   FIELD_BLd (linewt, 171);
   FIELD_B (has_landing, 290);
   FIELD_B (has_dogleg, 291);
-  FIELD_BD (landing_dist, 41); // FIXME unstable
+  FIELD_BD (landing_dist, 41);
   DECODER {
     if (bit_isnan (FIELD_VALUE (landing_dist)))
       {
@@ -5914,14 +5914,17 @@ DWG_ENTITY (MULTILEADER)
         return DWG_ERR_VALUEOUTOFBOUNDS;
       }
   }
-  FIELD_BD (arrow_size, 42);
+  FIELD_HANDLE0 (arrow_handle, 5, 342);
+  FIELD_BD0 (arrow_size, 42);
   FIELD_BS (style_content, 172);
+  FIELD_HANDLE (text_style, 5, 343);
   FIELD_BS (text_left, 173);
   FIELD_BS (text_right, 95);
   FIELD_BS (text_angletype, 174);
-  FIELD_BS (attach_type, 175); // unknown at ODA
+  FIELD_BS (text_alignment, 175); // unknown at ODA
   FIELD_CMC (text_color, 92);
   FIELD_B (has_text_frame, 292);
+  FIELD_HANDLE (block_style, 5, 344);
   FIELD_CMC (block_color, 93);
   FIELD_3BD (block_scale, 10);
   FIELD_BD (block_rotation, 43);
@@ -5934,7 +5937,7 @@ DWG_ENTITY (MULTILEADER)
       VALUEOUTOFBOUNDS (num_arrowheads, 5000)
       REPEAT (num_arrowheads, arrowheads, Dwg_LEADER_ArrowHead)
       REPEAT_BLOCK
-          SUB_FIELD_BL (arrowheads[rcount1],is_default, 94);
+          SUB_FIELD_B (arrowheads[rcount1],is_default, 94);
           SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (arrowheads)
@@ -5967,11 +5970,6 @@ DWG_ENTITY (MULTILEADER)
     FIELD_B (text_extended, 295);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (mleaderstyle, 5, 340);
-  FIELD_HANDLE (ltype, 5, 341);
-  FIELD_HANDLE (arrow_handle, 5, 342);
-  FIELD_HANDLE (text_style, 5, 343);
-  FIELD_HANDLE (block_style, 5, 344);
 
 DWG_ENTITY_END
 

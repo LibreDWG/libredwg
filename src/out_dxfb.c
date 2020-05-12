@@ -144,6 +144,11 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 // if (_obj->nam->obj) ...
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
+#define FIELD_HANDLE0(nam, handle_code, dxf)                                  \
+  if (_obj->nam && _obj->nam->absolute_ref)                                   \
+    {                                                                         \
+      FIELD_HANDLE (nam, handle_code, dxf);                                   \
+    }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
   VALUE_HANDLE (_obj->o.nam, nam, handle_code, dxf)
 

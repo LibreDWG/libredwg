@@ -155,8 +155,13 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       else if (dxf == 8)                                                      \
         SUB_FIELD_HANDLE_NAME (o, nam, dxf, LAYER)                            \
       else if (dat->version >= R_13)                                          \
-        fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                               \
+        fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                              \
                  _obj->o.nam->obj ? _obj->o.nam->absolute_ref : 0);           \
+    }
+#define FIELD_HANDLE0(nam, handle_code, dxf)                                  \
+  if (_obj->nam && _obj->nam->absolute_ref)                                   \
+    {                                                                         \
+      FIELD_HANDLE (nam, handle_code, dxf);                                   \
     }
 #define HEADER_9(nam)                                                         \
   GROUP (9);                                                                  \

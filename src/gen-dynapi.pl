@@ -275,6 +275,9 @@ sub dxf_in {
       }
     } elsif (/^\s+FIELD_HANDLE\s*\((\w+),\s*\d+,\s*(\d+)\)/) {
       $f = $1;
+      if ($n eq 'MLEADER_AnnotContext' && $f eq 'mleaderstyle') {
+        $n = 'MULTILEADER'; # pop back
+      }
       $DXF{$n}->{$f} = $2 if $2;
     } elsif (/^\s+VALUE_HANDLE\s*\(.+,\s*(\w+),\s*\d,\s*(\d+)\)/) {
       $f = $1;
@@ -296,8 +299,6 @@ sub dxf_in {
       if ($f =~ /^ctx\.(\w+)$/) {
         $f = $1;
         $n = 'MLEADER_AnnotContext';
-      } elsif ($n eq 'MLEADER_AnnotContext' && $f eq 'flags') {
-        $n = 'MULTILEADER'; # pop back
       }
       embedded_struct ('cellstyle', 'TABLESTYLE_Cell');
       embedded_struct ('body', 'ACTIONBODY');

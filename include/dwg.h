@@ -2784,7 +2784,7 @@ typedef struct _dwg_ODALeader_Line //// as documented by ODA
 typedef struct _dwg_LEADER_ArrowHead
 {
   struct _dwg_entity_MULTILEADER *parent;
-  BITCODE_BL is_default;
+  BITCODE_B is_default;
   BITCODE_H arrowhead;
 } Dwg_LEADER_ArrowHead;
 
@@ -2900,8 +2900,8 @@ typedef struct _dwg_MLEADER_AnnotContext
   BITCODE_BD landing_gap;
   BITCODE_BS text_left;
   BITCODE_BS text_right;
+  BITCODE_BS text_angletype;
   BITCODE_BS text_alignment;
-  BITCODE_BS attach_type;
 
   BITCODE_B has_content_txt;
   BITCODE_B has_content_blk;
@@ -2924,8 +2924,8 @@ typedef struct _dwg_entity_MULTILEADER
 
   BITCODE_BS class_version; /*!< r2010+ =2 */
   Dwg_MLEADER_AnnotContext ctx;
-  BITCODE_H mleaderstyle;
-  BITCODE_BL flags; /* override */
+  BITCODE_H mleaderstyle; /* DXF  340 */
+  BITCODE_BL flags; 	  /* override. DXF 90 */
   BITCODE_BS type;
   BITCODE_CMC color;
   BITCODE_H ltype;
@@ -2940,10 +2940,10 @@ typedef struct _dwg_entity_MULTILEADER
   BITCODE_BS text_left;
   BITCODE_BS text_right;
   BITCODE_BS text_angletype;
-  BITCODE_BS attach_type;
+  BITCODE_BS text_alignment;
   BITCODE_CMC text_color;
   BITCODE_B has_text_frame;
-  BITCODE_H block_style;
+  BITCODE_H block_style; // internal blocks mostly, _TagSlot, _TagHexagon, _DetailCallout, ...
   BITCODE_CMC block_color;
   BITCODE_3BD block_scale;
   BITCODE_BD block_rotation;

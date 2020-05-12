@@ -14870,21 +14870,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     multileader->attach_top--;
   }
   {
-    BITCODE_BS attach_type;
-    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "attach_type", &attach_type, NULL)
-        && attach_type == multileader->attach_type)
-      pass ();
-    else
-      fail ("MULTILEADER.attach_type [BS] %hu != %hu", multileader->attach_type, attach_type);
-    attach_type++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "attach_type", &attach_type, 0)
-        && attach_type == multileader->attach_type)
-      pass ();
-    else
-      fail ("MULTILEADER.attach_type [BS] set+1 %hu != %hu", multileader->attach_type, attach_type);
-    multileader->attach_type--;
-  }
-  {
     BITCODE_CMC block_color;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "block_color", &block_color, NULL)
         && !memcmp (&block_color, &multileader->block_color, sizeof (multileader->block_color)))
@@ -15211,6 +15196,21 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     else
       fail ("MULTILEADER.style_content [BS] set+1 %hu != %hu", multileader->style_content, style_content);
     multileader->style_content--;
+  }
+  {
+    BITCODE_BS text_alignment;
+    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "text_alignment", &text_alignment, NULL)
+        && text_alignment == multileader->text_alignment)
+      pass ();
+    else
+      fail ("MULTILEADER.text_alignment [BS] %hu != %hu", multileader->text_alignment, text_alignment);
+    text_alignment++;
+    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_alignment", &text_alignment, 0)
+        && text_alignment == multileader->text_alignment)
+      pass ();
+    else
+      fail ("MULTILEADER.text_alignment [BS] set+1 %hu != %hu", multileader->text_alignment, text_alignment);
+    multileader->text_alignment--;
   }
   {
     BITCODE_BS text_angletype;

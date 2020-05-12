@@ -25,7 +25,7 @@ api_process (dwg_object *obj)
   BITCODE_BS text_left;
   BITCODE_BS text_right;
   BITCODE_BS text_angletype;
-  BITCODE_BS attach_type;
+  BITCODE_BS text_alignment;
   BITCODE_CMC text_color;
   BITCODE_B has_text_frame;
   BITCODE_H block_style;
@@ -136,12 +136,10 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, landing_gap, BD);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_left, BS);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_right, BS);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_angletype, BS);
+  CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.text_angletype, BS, 2);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_alignment, BS);
-  if (ctx.text_alignment > 2)
-    fail ("Invalid MLEADER_AnnotContext.text_alignment " FORMAT_BS " > 2", ctx.text_alignment);
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, attach_type, BS);
-  if (ctx.attach_type > 1)
-    fail ("Invalid MLEADER_AnnotContext.attach_type " FORMAT_BS " > 1", ctx.attach_type);
+  CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.text_alignment, BS, 1);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_txt, B);
   if (ctx.has_content_txt)
     {
@@ -218,7 +216,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_left, BS, text_left);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_right, BS, text_right);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_angletype, BS, text_angletype);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_type, BS, attach_type);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_alignment, BS, text_alignment);
   CHK_ENTITY_CMC (mleader, MULTILEADER, text_color, text_color);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_text_frame, B, has_text_frame);
   CHK_ENTITY_H (mleader, MULTILEADER, block_style, block_style);
@@ -242,7 +240,7 @@ api_process (dwg_object *obj)
           else
             for (i = 0; i < num_arrowheads; i++)
               {
-                ok ("MULTILEADER.arrowheads[%d].is_default: " FORMAT_BL, i,
+                ok ("MULTILEADER.arrowheads[%d].is_default: " FORMAT_B, i,
                     arrowheads[i].is_default);
                 ok ("MULTILEADER.arrowheads[%d].arrowhead: " FORMAT_REF, i,
                     ARGS_REF (arrowheads[i].arrowhead));

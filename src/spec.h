@@ -284,6 +284,7 @@
 #  define FIELD_RC0(name, dxf) FIELD_RC (name, dxf)
 #  define FIELD_BT0(name, dxf) FIELD_BT (name, dxf)
 #  define FIELD_T0(name, dxf) FIELD_T (name, dxf)
+#  define FIELD_HANDLE0(name, code, dxf) FIELD_HANDLE (name, code, dxf)
 #endif
 
 // double to text

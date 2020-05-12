@@ -2593,7 +2593,7 @@ BS,	DXF 173
 BS,	DXF 95
 @item text_angletype
 BS,	DXF 174
-@item attach_type
+@item text_alignment
 BS,	DXF 175
 @item text_color
 CMC,	DXF 92
@@ -10076,7 +10076,7 @@ H,	DXF 360
 @item parent
 struct _dwg_entity_MULTILEADER*
 @item is_default
-BL,	DXF 94
+B,	DXF 94
 @item arrowhead
 H,	DXF 345
 
@@ -10401,9 +10401,9 @@ BD,	DXF 145
 BS,	DXF 174
 @item text_right
 BS,	DXF 175
-@item text_alignment
+@item text_angletype
 BS,	DXF 176
-@item attach_type
+@item text_alignment
 BS,	DXF 177
 @item has_content_txt
 B,	DXF 290
