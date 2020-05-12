@@ -1425,8 +1425,6 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ANG2LN_fields[] = {
     1,0,0, 3 },
   { "block",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, block),
     1,0,0, 0 },
-  { "arc_def_pt",	"2BD", sizeof (BITCODE_2BD),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, arc_def_pt),
-    1,0,0, 0 },
   { "xline1start_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, xline1start_pt),
     1,0,0, 13 },
   { "xline1end_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, xline1end_pt),

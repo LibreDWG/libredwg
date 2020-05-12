@@ -7902,14 +7902,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     dimension_ang2ln->act_measurement--;
   }
   {
-    BITCODE_2BD arc_def_pt;
-    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "arc_def_pt", &arc_def_pt, NULL)
-        && !memcmp (&arc_def_pt, &dimension_ang2ln->arc_def_pt, sizeof (dimension_ang2ln->arc_def_pt)))
-        pass ();
-    else
-        fail ("DIMENSION_ANG2LN.arc_def_pt [2BD]");
-  }
-  {
     BITCODE_BS attachment;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "attachment", &attachment, NULL)
         && attachment == dimension_ang2ln->attachment)

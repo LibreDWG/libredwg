@@ -8833,7 +8833,7 @@ dwg_ent_dim_ang3pt_get_first_arc_pt (const dwg_ent_dim_ang3pt *restrict ang,
  *              FUNCTIONS FOR ANG2LN DIMENSION ENTITY                *
  ********************************************************************/
 
-/** Sets dim ang2ln 10 def point
+/** Sets dim ang2ln 10 def point. The z-coord is ignored, it is the eleavtion.
  */
 void
 dwg_ent_dim_ang2ln_set_def_pt (dwg_ent_dim_ang2ln *restrict ang,
@@ -8849,7 +8849,6 @@ dwg_ent_dim_ang2ln_set_def_pt (dwg_ent_dim_ang2ln *restrict ang,
       *error = 0;
       ang->def_pt.x = point->x;
       ang->def_pt.y = point->y;
-      ang->def_pt.z = point->z;
     }
   else
     {
@@ -8858,7 +8857,7 @@ dwg_ent_dim_ang2ln_set_def_pt (dwg_ent_dim_ang2ln *restrict ang,
     }
 }
 
-/** Returns dim ang2ln 10 def point
+/** Returns dim ang2ln 10 def point, The z-coord is the elevation.
  */
 void
 dwg_ent_dim_ang2ln_get_def_pt (const dwg_ent_dim_ang2ln *restrict ang,
@@ -8874,7 +8873,7 @@ dwg_ent_dim_ang2ln_get_def_pt (const dwg_ent_dim_ang2ln *restrict ang,
       *error = 0;
       point->x = ang->def_pt.x;
       point->y = ang->def_pt.y;
-      point->z = ang->def_pt.z;
+      point->z = ang->elevation;
     }
   else
     {

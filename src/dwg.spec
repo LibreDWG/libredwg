@@ -1047,6 +1047,7 @@ DWG_ENTITY_END
  */
 #ifndef COMMON_ENTITY_DIMENSION
 #define COMMON_ENTITY_DIMENSION \
+    SUBCLASS (AcDbDimension) \
     SINCE (R_2010) \
       { \
         FIELD_RC (class_version, 280); /* 0=r2010 */ \
@@ -1115,7 +1116,6 @@ DWG_ENTITY_END
 /*(20)*/
 DWG_ENTITY (DIMENSION_ORDINATE)
 
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbOrdinateDimension)
   DECODER_OR_ENCODER {
@@ -1142,7 +1142,6 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_LINEAR)
 
   // TODO PRE (R_R13)
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
@@ -1162,7 +1161,6 @@ DWG_ENTITY_END
 /*(22)*/
 DWG_ENTITY (DIMENSION_ALIGNED)
 
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
@@ -1187,7 +1185,6 @@ DWG_ENTITY_END
 /*(23)*/
 DWG_ENTITY (DIMENSION_ANG3PT)
 
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb3PointAngularDimension)
@@ -1207,11 +1204,12 @@ DWG_ENTITY_END
 /*(24)*/
 DWG_ENTITY (DIMENSION_ANG2LN)
 
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb2LineAngularDimension)
-  FIELD_2RD (arc_def_pt, 0);
+  DECODER_OR_ENCODER {
+    FIELD_2RD (def_pt, 10);
+  }
   FIELD_3BD (xline1start_pt, 13);
   FIELD_3BD (xline1end_pt, 14);
   FIELD_3BD (xline2start_pt, 15);
@@ -1226,7 +1224,6 @@ DWG_ENTITY_END
 /*(25)*/
 DWG_ENTITY (DIMENSION_RADIUS)
 
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbRadialDimension)
@@ -1245,7 +1242,6 @@ DWG_ENTITY_END
 /*(26)*/
 DWG_ENTITY (DIMENSION_DIAMETER)
 
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbDiametricDimension)
@@ -7132,12 +7128,13 @@ DWG_OBJECT (MATERIAL)
 DWG_OBJECT_END
 
 DWG_ENTITY (ARC_DIMENSION)
+
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
+  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbArcDimension)
   DECODER_OR_ENCODER {
-    FIELD_3BD (def_pt, 0);
+    FIELD_3BD (def_pt, 10);
   }
   FIELD_3BD (xline1_pt, 13);
   FIELD_3BD (xline2_pt, 14);
