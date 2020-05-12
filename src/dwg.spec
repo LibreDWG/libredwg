@@ -5756,12 +5756,6 @@ DWG_ENTITY (MULTILEADER)
     FIELD_BS (class_version, 270); // default 2. 1 <= r2004
     VALUEOUTOFBOUNDS (class_version, 10)
   }
-#if 0
-  FIELD_BS (ctx.class_version, 70); // default 3
-  FIELD_B (ctx.has_xdic_file, 0);
-  FIELD_B (ctx.is_default, 290);
-#endif
-
   DXF_OR_PRINT { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
   FIELD_BL (ctx.num_leaders, 0);
   VALUEOUTOFBOUNDS (ctx.num_leaders, 5000) // MAX_LEADER_NUMBER
@@ -5828,7 +5822,7 @@ DWG_ENTITY (MULTILEADER)
   END_REPEAT (ctx.leaders)
   DXF_OR_PRINT { VALUE_TFF ("}", 303); }
 
-  FIELD_BD (ctx.scale, 40);
+  FIELD_BD (ctx.scale_factor, 40);
   FIELD_3BD (ctx.content_base, 10);
   FIELD_BD (ctx.text_height, 41);
   FIELD_BD (ctx.arrow_size, 140);

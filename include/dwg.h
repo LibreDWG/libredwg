@@ -2762,25 +2762,6 @@ typedef struct _dwg_LEADER_Line // as documented by DXF
                     // 16 = arrow size, 32 = arrow symbol (handle)
 } Dwg_LEADER_Line;
 
-typedef struct _dwg_ODALeader_Line //// as documented by ODA
-{
-  struct _dwg_Leader *parent;
-  BITCODE_BL num_points;
-  BITCODE_3BD * points;
-  BITCODE_BL num_breaks;
-  Dwg_LEADER_Break * breaks;
-  BITCODE_BL segment_index;
-  BITCODE_BL index;
-
-  BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
-  BITCODE_CMC color;
-  BITCODE_H ltype;
-  BITCODE_BLd linewt;
-  BITCODE_BD arrow_size;
-  BITCODE_H arrow_handle;
-  BITCODE_BL flags;
-} Dwg_ODALeader_Line;
-
 typedef struct _dwg_LEADER_ArrowHead
 {
   struct _dwg_entity_MULTILEADER *parent;
@@ -2796,25 +2777,6 @@ typedef struct _dwg_LEADER_BlockLabel
   BITCODE_BS ui_index;
   BITCODE_BD width;
 } Dwg_LEADER_BlockLabel;
-
-/* as documented in ODA, but contradicting DXF docs, and
-   the reverse-engineered format */
-typedef struct _dwg_ODALeader
-{
-  struct _dwg_entity_MULTILEADER *parent;
-  BITCODE_B is_valid;
-  BITCODE_B unknown;
-  BITCODE_3BD connection;
-  BITCODE_3BD direction;
-  BITCODE_BL num_breaks;
-  Dwg_LEADER_Break * breaks;
-  BITCODE_BL num_lines;
-  Dwg_LEADER_Line * lines;
-  BITCODE_BL index;
-  BITCODE_BD landing_distance;
-  /* ... */
-  BITCODE_BS attach_dir;
-} Dwg_ODALeader;
 
 typedef struct _dwg_LEADER_Node
 {
@@ -2881,19 +2843,18 @@ typedef union _dwg_MLEADER_Content
 typedef struct _dwg_MLEADER_AnnotContext
 {
   //AcDbObjectContextData:
-  BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
-  BITCODE_B has_xdic_file;   /*!< r2010+ default true */
-  BITCODE_B is_default;      /*!< r2010+ DXF 290 */
-
+  //BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
+  //BITCODE_B has_xdic_file;   /*!< r2010+ default true */
+  //BITCODE_B is_default;      /*!< r2010+ DXF 290 */
   // AcDbAnnotScaleObjectContextData:
-  BITCODE_H scale_handle;      /*!< DXF 340 hard ptr to AcDbScale */
+  //BITCODE_H scale;           /*!< DXF 340 hard ptr to AcDbScale */
 
   BITCODE_BL num_leaders;
   Dwg_LEADER_Node * leaders;
 
   BITCODE_BS attach_dir;
 
-  BITCODE_BD scale;
+  BITCODE_BD scale_factor;
   BITCODE_3BD content_base;
   BITCODE_BD text_height;
   BITCODE_BD arrow_size;

@@ -8811,21 +8811,13 @@ static const Dwg_DYNAPI_field _dwg_MESH_edge_fields[] = {
 };
 /* from typedef struct _dwg_MLEADER_AnnotContext: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_MLEADER_AnnotContext_fields[] = {
-  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_MLEADER_AnnotContext, class_version),
-    0,0,0, 70 },
-  { "has_xdic_file",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_MLEADER_AnnotContext, has_xdic_file),
-    0,0,0, 0 },
-  { "is_default",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_MLEADER_AnnotContext, is_default),
-    0,0,0, 290 },
-  { "scale_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_MLEADER_AnnotContext, scale_handle),
-    1,0,0, 0 },
   { "num_leaders",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_MLEADER_AnnotContext, num_leaders),
     0,0,0, 0 },
   { "leaders",	"Dwg_LEADER_Node*", sizeof (Dwg_LEADER_Node*),  OFF (struct _dwg_MLEADER_AnnotContext, leaders),
     1,1,0, 0 },
   { "attach_dir",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_MLEADER_AnnotContext, attach_dir),
     0,0,0, 0 },
-  { "scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_MLEADER_AnnotContext, scale),
+  { "scale_factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_MLEADER_AnnotContext, scale_factor),
     0,0,0, 40 },
   { "content_base",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_MLEADER_AnnotContext, content_base),
     1,0,0, 10 },

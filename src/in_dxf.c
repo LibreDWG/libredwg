@@ -3213,7 +3213,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 300:
               break;
             case 40:
-              ctx->scale = pair->value.d;
+              ctx->scale_factor = pair->value.d;
               LOG_TRACE ("%s.ctx.scale = %f [BD %d]\n", obj->name,
                          pair->value.d, pair->code);
               break;
@@ -3255,13 +3255,13 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->value.i, pair->code);
               break;
             case 176:
-              ctx->text_alignment = pair->value.i;
-              LOG_TRACE ("%s.ctx.text_alignment = %d [BS %d]\n", obj->name,
+              ctx->text_angletype = pair->value.i;
+              LOG_TRACE ("%s.ctx.text_angletype = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 177:
-              ctx->attach_type = pair->value.i;
-              LOG_TRACE ("%s.ctx.attach_type = %d [BS %d]\n", obj->name,
+              ctx->text_alignment = pair->value.i;
+              LOG_TRACE ("%s.ctx.text_alignment = %d [BS %d]\n", obj->name,
                          pair->value.i, pair->code);
               break;
             case 290:

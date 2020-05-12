@@ -1221,6 +1221,7 @@ dwg_get_OBJECT_DECL (ent_mtext, MTEXT);
 dwg_get_OBJECT_DECL (ent_leader, LEADER);
 dwg_get_OBJECT_DECL (ent_tolerance, TOLERANCE);
 dwg_get_OBJECT_DECL (ent_mline, MLINE);
+dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
 dwg_get_OBJECT_DECL (ent_ole2frame, OLE2FRAME);
 dwg_get_OBJECT_DECL (ent_lwpline, LWPOLYLINE);
 dwg_get_OBJECT_DECL (ent_proxy, PROXY_ENTITY);
@@ -1235,7 +1236,6 @@ dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
 dwg_get_OBJECT_DECL (ent_camera, CAMERA);
 dwg_get_OBJECT_DECL (ent_helix, HELIX);
 dwg_get_OBJECT_DECL (ent_mesh, MESH);
-dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
 dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 #ifdef DEBUG_CLASSES
 dwg_get_OBJECT_DECL (ent_atext, ATEXT)

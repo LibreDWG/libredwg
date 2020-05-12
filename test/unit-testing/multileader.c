@@ -1,4 +1,3 @@
-// TODO: This entity is still unstable
 #define DWG_TYPE DWG_TYPE_MULTILEADER
 #include "common.c"
 
@@ -129,7 +128,7 @@ api_process (dwg_object *obj)
       else
         if (ctx.leaders)
           fail ("MULTILEADER.ctx.leaders but 0 ctx.num_leaders");
-  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, scale, BD);
+  CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, scale_factor, BD);
   CHK_SUBCLASS_3RD (ctx, MLEADER_AnnotContext, content_base);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_height, BD);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, arrow_size, BD);

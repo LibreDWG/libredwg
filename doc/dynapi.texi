@@ -10373,21 +10373,13 @@ BL,	DXF 90
 @indentedblock
 @vtable @code
 
-@item class_version
-BS,	DXF 70
-@item has_xdic_file
-B
-@item is_default
-B,	DXF 290
-@item scale_handle
-H
 @item num_leaders
 BL
 @item leaders
 Dwg_LEADER_Node*
 @item attach_dir
 BS
-@item scale
+@item scale_factor
 BD,	DXF 40
 @item content_base
 3BD,	DXF 10
