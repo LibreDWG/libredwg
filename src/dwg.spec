@@ -7136,7 +7136,9 @@ DWG_ENTITY (ARC_DIMENSION)
   SUBCLASS (AcDbDimension)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbArcDimension)
-  FIELD_3BD (arc_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 0);
+  }
   FIELD_3BD (xline1_pt, 13);
   FIELD_3BD (xline2_pt, 14);
   FIELD_3BD (center_pt, 15);

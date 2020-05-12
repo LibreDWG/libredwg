@@ -5896,14 +5896,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     arc_dimension->arc_end_param--;
   }
   {
-    BITCODE_3BD arc_pt;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "arc_pt", &arc_pt, NULL)
-        && !memcmp (&arc_pt, &arc_dimension->arc_pt, sizeof (arc_dimension->arc_pt)))
-        pass ();
-    else
-        fail ("ARC_DIMENSION.arc_pt [3BD]");
-  }
-  {
     BITCODE_BD arc_start_param;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "arc_start_param", &arc_start_param, NULL)
         && arc_start_param == arc_dimension->arc_start_param)

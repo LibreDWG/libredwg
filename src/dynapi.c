@@ -1085,8 +1085,6 @@ static const Dwg_DYNAPI_field _dwg_ARC_DIMENSION_fields[] = {
     1,0,0, 3 },
   { "block",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_ARC_DIMENSION, block),
     1,0,0, 0 },
-  { "arc_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_ARC_DIMENSION, arc_pt),
-    1,0,0, 10 },
   { "xline1_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_ARC_DIMENSION, xline1_pt),
     1,0,0, 13 },
   { "xline2_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_ARC_DIMENSION, xline2_pt),

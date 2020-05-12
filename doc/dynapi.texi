@@ -892,8 +892,6 @@ B,	DXF 75
 H,	DXF 3
 @item block
 H
-@item arc_pt
-3BD,	DXF 10
 @item xline1_pt
 3BD,	DXF 13
 @item xline2_pt

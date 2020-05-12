@@ -1450,7 +1450,6 @@ typedef struct _dwg_entity_DIMENSION_DIAMETER
 typedef struct _dwg_entity_ARC_DIMENSION
 {
   DIMENSION_COMMON;
-  BITCODE_3BD arc_pt;		/* DXF 10 */
   BITCODE_3BD xline1_pt;	/* DXF 13 */
   BITCODE_3BD xline2_pt;	/* DXF 14 */
   BITCODE_3BD center_pt;	/* DXF 15 */
