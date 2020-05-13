@@ -806,6 +806,20 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -1716,6 +1730,20 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -2273,6 +2301,20 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -2709,6 +2751,20 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
 @item history_id
 H
 @item acis_empty_bit
@@ -2826,6 +2882,20 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -3145,6 +3215,20 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -3424,6 +3508,20 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
 @item history_id
 H,	DXF 350
 @item acis_empty_bit

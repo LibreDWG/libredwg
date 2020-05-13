@@ -1381,13 +1381,17 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);
                   SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);
                   SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);
-                  SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
-                  REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire)
-                  REPEAT_BLOCK
-                      WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
-                  END_REPEAT_BLOCK
-                  SET_PARENT_OBJ (silhouettes[rcount1].wires)
-                  END_REPEAT (silhouettes[rcount1].wires);
+                  SUB_FIELD_B (silhouettes[rcount1], has_wires, 0);
+                  if (_obj->silhouettes[rcount1].has_wires)
+                    {
+                      SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);
+                      REPEAT2 (silhouettes[rcount1].num_wires, silhouettes[rcount1].wires, Dwg_3DSOLID_wire)
+                      REPEAT_BLOCK
+                          WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])
+                      END_REPEAT_BLOCK
+                      SET_PARENT_OBJ (silhouettes[rcount1].wires)
+                      END_REPEAT (silhouettes[rcount1].wires);
+                    }
               END_REPEAT_BLOCK
               SET_PARENT_OBJ (silhouettes)
               END_REPEAT (silhouettes);
@@ -1395,10 +1399,29 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
 
       FIELD_B (acis_empty_bit, 0);
-      if (FIELD_VALUE (version) > 1)
-        {
-          SINCE (R_2007) { FIELD_BL (unknown_2007, 0); }
+      if (FIELD_VALUE (version) > 1) {
+        SINCE (R_2007) {
+          FIELD_BL (num_materials, 0);
+          REPEAT (num_materials, materials, Dwg_3DSOLID_material)
+          REPEAT_BLOCK
+              SUB_FIELD_BL (materials[rcount1], array_index, 0);
+              SUB_FIELD_BL (materials[rcount1], mat_absref, 0);   /* ?? */
+              SUB_FIELD_HANDLE (materials[rcount1], material_handle, 5, 0);
+          END_REPEAT_BLOCK
+          SET_PARENT (materials, (Dwg_Entity__3DSOLID*)_obj)
+          END_REPEAT (materials);
         }
+      }
+      SINCE (R_2013) {
+        FIELD_B (has_revision_guid, 290);
+        FIELD_BL (revision_major, 0);
+        FIELD_BS (revision_minor1, 0);
+        FIELD_BS (revision_minor2, 0);
+        FIELD_TFFx (revision_bytes, 8, 0);
+        dxf_3dsolid_revisionguid ((Dwg_Entity_3DSOLID*)_obj);
+        FIELD_TV (revision_guid, 0);
+        FIELD_BL (end_marker, 0);
+      }
       COMMON_ENTITY_HANDLE_DATA;
       if (FIELD_VALUE (version) > 1)
         {

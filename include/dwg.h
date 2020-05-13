@@ -1736,7 +1736,7 @@ typedef struct _dwg_3DSOLID_material
   BITCODE_B point_present; \
   BITCODE_3BD point; \
   BITCODE_BL isolines; /* i.e. wires */ \
-  BITCODE_B isoline_present; /* ie. has_wires */  \
+  BITCODE_B isoline_present; /* ie. has_wires */ \
   BITCODE_BL num_wires; \
   Dwg_3DSOLID_wire * wires; \
   BITCODE_BL num_silhouettes; \
@@ -1745,6 +1745,13 @@ typedef struct _dwg_3DSOLID_material
   struct _dwg_entity_3DSOLID* extra_acis_data; \
   BITCODE_BL num_materials; \
   Dwg_3DSOLID_material *materials; \
+  BITCODE_B has_revision_guid; \
+  BITCODE_RC revision_guid[38]; \
+  BITCODE_BL revision_major; \
+  BITCODE_BS revision_minor1; \
+  BITCODE_BS revision_minor2; \
+  BITCODE_RC revision_bytes[9]; \
+  BITCODE_BL end_marker; \
   BITCODE_H history_id; \
   BITCODE_B acis_empty_bit
 

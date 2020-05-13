@@ -2037,6 +2037,22 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
         END_REPEAT (materials);                                                                    \
       }                                                                                            \
     }                                                                                              \
+    SINCE (R_2013) {                                                                               \
+      FIELD_B (has_revision_guid, 290);                                                            \
+      DXF {                                                                                        \
+        FIELD_TFF (revision_guid, 37, 2);                                                          \
+      }                                                                                            \
+      else {                                                                                       \
+        FIELD_BL (revision_major, 0);                                                              \
+        FIELD_BS (revision_minor1, 0);                                                             \
+        FIELD_BS (revision_minor2, 0);                                                             \
+        FIELD_TFFx (revision_bytes, 8, 0);                                                         \
+        DECODER {                                                                                  \
+          dxf_3dsolid_revisionguid ((Dwg_Entity_3DSOLID*)_obj);                                    \
+        }                                                                                          \
+      }                                                                                            \
+      FIELD_BL (end_marker, 0);                                                                    \
+    }                                                                                              \
                                                                                                    \
     COMMON_ENTITY_HANDLE_DATA;                                                                     \
     if (FIELD_VALUE (version) > 1) {                                                               \

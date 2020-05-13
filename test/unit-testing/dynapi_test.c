@@ -5555,12 +5555,42 @@ static int test__3DSOLID (const Dwg_Object *obj)
       fail ("3DSOLID.encr_sat_data [char **]");
   }
   {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "end_marker", &end_marker, NULL)
+        && end_marker == _3dsolid->end_marker)
+      pass ();
+    else
+      fail ("3DSOLID.end_marker [BL] %u != %u", _3dsolid->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "end_marker", &end_marker, 0)
+        && end_marker == _3dsolid->end_marker)
+      pass ();
+    else
+      fail ("3DSOLID.end_marker [BL] set+1 %u != %u", _3dsolid->end_marker, end_marker);
+    _3dsolid->end_marker--;
+  }
+  {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "extra_acis_data", &extra_acis_data, NULL)
         && !memcmp (&extra_acis_data, &_3dsolid->extra_acis_data, sizeof (_3dsolid->extra_acis_data)))
         pass ();
     else
         fail ("3DSOLID.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == _3dsolid->has_revision_guid)
+      pass ();
+    else
+      fail ("3DSOLID.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", _3dsolid->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == _3dsolid->has_revision_guid)
+      pass ();
+    else
+      fail ("3DSOLID.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->has_revision_guid, has_revision_guid);
+    _3dsolid->has_revision_guid--;
   }
   {
     BITCODE_H history_id;
@@ -5700,6 +5730,67 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->point_present, point_present);
     _3dsolid->point_present--;
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &_3dsolid->revision_bytes, sizeof (_3dsolid->revision_bytes)))
+        pass ();
+    else
+        fail ("3DSOLID.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[38];
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_guid[38]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &_3dsolid->revision_guid, sizeof (_3dsolid->revision_guid)))
+        pass ();
+    else
+        fail ("3DSOLID.revision_guid[38] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_major", &revision_major, NULL)
+        && revision_major == _3dsolid->revision_major)
+      pass ();
+    else
+      fail ("3DSOLID.revision_major [BL] %u != %u", _3dsolid->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "revision_major", &revision_major, 0)
+        && revision_major == _3dsolid->revision_major)
+      pass ();
+    else
+      fail ("3DSOLID.revision_major [BL] set+1 %u != %u", _3dsolid->revision_major, revision_major);
+    _3dsolid->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == _3dsolid->revision_minor1)
+      pass ();
+    else
+      fail ("3DSOLID.revision_minor1 [BS] %hu != %hu", _3dsolid->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == _3dsolid->revision_minor1)
+      pass ();
+    else
+      fail ("3DSOLID.revision_minor1 [BS] set+1 %hu != %hu", _3dsolid->revision_minor1, revision_minor1);
+    _3dsolid->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == _3dsolid->revision_minor2)
+      pass ();
+    else
+      fail ("3DSOLID.revision_minor2 [BS] %hu != %hu", _3dsolid->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == _3dsolid->revision_minor2)
+      pass ();
+    else
+      fail ("3DSOLID.revision_minor2 [BS] set+1 %hu != %hu", _3dsolid->revision_minor2, revision_minor2);
+    _3dsolid->revision_minor2--;
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -10243,12 +10334,42 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
       fail ("EXTRUDEDSURFACE.encr_sat_data [char **]");
   }
   {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "end_marker", &end_marker, NULL)
+        && end_marker == extrudedsurface->end_marker)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.end_marker [BL] %u != %u", extrudedsurface->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "end_marker", &end_marker, 0)
+        && end_marker == extrudedsurface->end_marker)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.end_marker [BL] set+1 %u != %u", extrudedsurface->end_marker, end_marker);
+    extrudedsurface->end_marker--;
+  }
+  {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
         && !memcmp (&extra_acis_data, &extrudedsurface->extra_acis_data, sizeof (extrudedsurface->extra_acis_data)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == extrudedsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", extrudedsurface->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == extrudedsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->has_revision_guid, has_revision_guid);
+    extrudedsurface->has_revision_guid--;
   }
   {
     BITCODE_BD height;
@@ -10457,6 +10578,67 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("EXTRUDEDSURFACE.reference_vector_for_controlling_twist [3BD]");
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &extrudedsurface->revision_bytes, sizeof (extrudedsurface->revision_bytes)))
+        pass ();
+    else
+        fail ("EXTRUDEDSURFACE.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[38];
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &extrudedsurface->revision_guid, sizeof (extrudedsurface->revision_guid)))
+        pass ();
+    else
+        fail ("EXTRUDEDSURFACE.revision_guid[38] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_major", &revision_major, NULL)
+        && revision_major == extrudedsurface->revision_major)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.revision_major [BL] %u != %u", extrudedsurface->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_major", &revision_major, 0)
+        && revision_major == extrudedsurface->revision_major)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.revision_major [BL] set+1 %u != %u", extrudedsurface->revision_major, revision_major);
+    extrudedsurface->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == extrudedsurface->revision_minor1)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.revision_minor1 [BS] %hu != %hu", extrudedsurface->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == extrudedsurface->revision_minor1)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.revision_minor1 [BS] set+1 %hu != %hu", extrudedsurface->revision_minor1, revision_minor1);
+    extrudedsurface->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == extrudedsurface->revision_minor2)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.revision_minor2 [BS] %hu != %hu", extrudedsurface->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == extrudedsurface->revision_minor2)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.revision_minor2 [BS] set+1 %hu != %hu", extrudedsurface->revision_minor2, revision_minor2);
+    extrudedsurface->revision_minor2--;
   }
   {
     BITCODE_BD scale_factor;
@@ -13239,6 +13421,21 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     loftedsurface->end_draft_magnitude--;
   }
   {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "end_marker", &end_marker, NULL)
+        && end_marker == loftedsurface->end_marker)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.end_marker [BL] %u != %u", loftedsurface->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "end_marker", &end_marker, 0)
+        && end_marker == loftedsurface->end_marker)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.end_marker [BL] set+1 %u != %u", loftedsurface->end_marker, end_marker);
+    loftedsurface->end_marker--;
+  }
+  {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
         && !memcmp (&extra_acis_data, &loftedsurface->extra_acis_data, sizeof (loftedsurface->extra_acis_data)))
@@ -13255,6 +13452,21 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
       pass ();
     else
       fail ("LOFTEDSURFACE.guide_curves [H*] * %u num_guide_curves", count);
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == loftedsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", loftedsurface->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == loftedsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->has_revision_guid, has_revision_guid);
+    loftedsurface->has_revision_guid--;
   }
   {
     BITCODE_H history_id;
@@ -13485,6 +13697,67 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->point_present, point_present);
     loftedsurface->point_present--;
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &loftedsurface->revision_bytes, sizeof (loftedsurface->revision_bytes)))
+        pass ();
+    else
+        fail ("LOFTEDSURFACE.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[38];
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &loftedsurface->revision_guid, sizeof (loftedsurface->revision_guid)))
+        pass ();
+    else
+        fail ("LOFTEDSURFACE.revision_guid[38] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_major", &revision_major, NULL)
+        && revision_major == loftedsurface->revision_major)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.revision_major [BL] %u != %u", loftedsurface->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "revision_major", &revision_major, 0)
+        && revision_major == loftedsurface->revision_major)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.revision_major [BL] set+1 %u != %u", loftedsurface->revision_major, revision_major);
+    loftedsurface->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == loftedsurface->revision_minor1)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.revision_minor1 [BS] %hu != %hu", loftedsurface->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == loftedsurface->revision_minor1)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.revision_minor1 [BS] set+1 %hu != %hu", loftedsurface->revision_minor1, revision_minor1);
+    loftedsurface->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == loftedsurface->revision_minor2)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.revision_minor2 [BS] %hu != %hu", loftedsurface->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == loftedsurface->revision_minor2)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.revision_minor2 [BS] set+1 %hu != %hu", loftedsurface->revision_minor2, revision_minor2);
+    loftedsurface->revision_minor2--;
   }
   {
     BITCODE_B ruled_surface;
@@ -15471,12 +15744,42 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
       fail ("NURBSURFACE.encr_sat_data [char **]");
   }
   {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "end_marker", &end_marker, NULL)
+        && end_marker == nurbsurface->end_marker)
+      pass ();
+    else
+      fail ("NURBSURFACE.end_marker [BL] %u != %u", nurbsurface->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "end_marker", &end_marker, 0)
+        && end_marker == nurbsurface->end_marker)
+      pass ();
+    else
+      fail ("NURBSURFACE.end_marker [BL] set+1 %u != %u", nurbsurface->end_marker, end_marker);
+    nurbsurface->end_marker--;
+  }
+  {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "extra_acis_data", &extra_acis_data, NULL)
         && !memcmp (&extra_acis_data, &nurbsurface->extra_acis_data, sizeof (nurbsurface->extra_acis_data)))
         pass ();
     else
         fail ("NURBSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == nurbsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("NURBSURFACE.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == nurbsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("NURBSURFACE.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->has_revision_guid, has_revision_guid);
+    nurbsurface->has_revision_guid--;
   }
   {
     BITCODE_H history_id;
@@ -15631,6 +15934,67 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
     else
       fail ("NURBSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->point_present, point_present);
     nurbsurface->point_present--;
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &nurbsurface->revision_bytes, sizeof (nurbsurface->revision_bytes)))
+        pass ();
+    else
+        fail ("NURBSURFACE.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[38];
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_guid[38]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &nurbsurface->revision_guid, sizeof (nurbsurface->revision_guid)))
+        pass ();
+    else
+        fail ("NURBSURFACE.revision_guid[38] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_major", &revision_major, NULL)
+        && revision_major == nurbsurface->revision_major)
+      pass ();
+    else
+      fail ("NURBSURFACE.revision_major [BL] %u != %u", nurbsurface->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "revision_major", &revision_major, 0)
+        && revision_major == nurbsurface->revision_major)
+      pass ();
+    else
+      fail ("NURBSURFACE.revision_major [BL] set+1 %u != %u", nurbsurface->revision_major, revision_major);
+    nurbsurface->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == nurbsurface->revision_minor1)
+      pass ();
+    else
+      fail ("NURBSURFACE.revision_minor1 [BS] %hu != %hu", nurbsurface->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == nurbsurface->revision_minor1)
+      pass ();
+    else
+      fail ("NURBSURFACE.revision_minor1 [BS] set+1 %hu != %hu", nurbsurface->revision_minor1, revision_minor1);
+    nurbsurface->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == nurbsurface->revision_minor2)
+      pass ();
+    else
+      fail ("NURBSURFACE.revision_minor2 [BS] %hu != %hu", nurbsurface->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == nurbsurface->revision_minor2)
+      pass ();
+    else
+      fail ("NURBSURFACE.revision_minor2 [BS] set+1 %hu != %hu", nurbsurface->revision_minor2, revision_minor2);
+    nurbsurface->revision_minor2--;
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -16029,12 +16393,42 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
       fail ("PLANESURFACE.encr_sat_data [char **]");
   }
   {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "end_marker", &end_marker, NULL)
+        && end_marker == planesurface->end_marker)
+      pass ();
+    else
+      fail ("PLANESURFACE.end_marker [BL] %u != %u", planesurface->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "end_marker", &end_marker, 0)
+        && end_marker == planesurface->end_marker)
+      pass ();
+    else
+      fail ("PLANESURFACE.end_marker [BL] set+1 %u != %u", planesurface->end_marker, end_marker);
+    planesurface->end_marker--;
+  }
+  {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "extra_acis_data", &extra_acis_data, NULL)
         && !memcmp (&extra_acis_data, &planesurface->extra_acis_data, sizeof (planesurface->extra_acis_data)))
         pass ();
     else
         fail ("PLANESURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == planesurface->has_revision_guid)
+      pass ();
+    else
+      fail ("PLANESURFACE.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", planesurface->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == planesurface->has_revision_guid)
+      pass ();
+    else
+      fail ("PLANESURFACE.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->has_revision_guid, has_revision_guid);
+    planesurface->has_revision_guid--;
   }
   {
     BITCODE_H history_id;
@@ -16189,6 +16583,67 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->point_present, point_present);
     planesurface->point_present--;
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &planesurface->revision_bytes, sizeof (planesurface->revision_bytes)))
+        pass ();
+    else
+        fail ("PLANESURFACE.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[38];
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_guid[38]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &planesurface->revision_guid, sizeof (planesurface->revision_guid)))
+        pass ();
+    else
+        fail ("PLANESURFACE.revision_guid[38] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_major", &revision_major, NULL)
+        && revision_major == planesurface->revision_major)
+      pass ();
+    else
+      fail ("PLANESURFACE.revision_major [BL] %u != %u", planesurface->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "revision_major", &revision_major, 0)
+        && revision_major == planesurface->revision_major)
+      pass ();
+    else
+      fail ("PLANESURFACE.revision_major [BL] set+1 %u != %u", planesurface->revision_major, revision_major);
+    planesurface->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == planesurface->revision_minor1)
+      pass ();
+    else
+      fail ("PLANESURFACE.revision_minor1 [BS] %hu != %hu", planesurface->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == planesurface->revision_minor1)
+      pass ();
+    else
+      fail ("PLANESURFACE.revision_minor1 [BS] set+1 %hu != %hu", planesurface->revision_minor1, revision_minor1);
+    planesurface->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == planesurface->revision_minor2)
+      pass ();
+    else
+      fail ("PLANESURFACE.revision_minor2 [BS] %hu != %hu", planesurface->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == planesurface->revision_minor2)
+      pass ();
+    else
+      fail ("PLANESURFACE.revision_minor2 [BS] set+1 %hu != %hu", planesurface->revision_minor2, revision_minor2);
+    planesurface->revision_minor2--;
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -17345,12 +17800,42 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
       fail ("REVOLVEDSURFACE.encr_sat_data [char **]");
   }
   {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "end_marker", &end_marker, NULL)
+        && end_marker == revolvedsurface->end_marker)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.end_marker [BL] %u != %u", revolvedsurface->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "end_marker", &end_marker, 0)
+        && end_marker == revolvedsurface->end_marker)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.end_marker [BL] set+1 %u != %u", revolvedsurface->end_marker, end_marker);
+    revolvedsurface->end_marker--;
+  }
+  {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
         && !memcmp (&extra_acis_data, &revolvedsurface->extra_acis_data, sizeof (revolvedsurface->extra_acis_data)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == revolvedsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", revolvedsurface->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == revolvedsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->has_revision_guid, has_revision_guid);
+    revolvedsurface->has_revision_guid--;
   }
   {
     BITCODE_H history_id;
@@ -17520,6 +18005,67 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->point_present, point_present);
     revolvedsurface->point_present--;
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &revolvedsurface->revision_bytes, sizeof (revolvedsurface->revision_bytes)))
+        pass ();
+    else
+        fail ("REVOLVEDSURFACE.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[38];
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &revolvedsurface->revision_guid, sizeof (revolvedsurface->revision_guid)))
+        pass ();
+    else
+        fail ("REVOLVEDSURFACE.revision_guid[38] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_major", &revision_major, NULL)
+        && revision_major == revolvedsurface->revision_major)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.revision_major [BL] %u != %u", revolvedsurface->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "revision_major", &revision_major, 0)
+        && revision_major == revolvedsurface->revision_major)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.revision_major [BL] set+1 %u != %u", revolvedsurface->revision_major, revision_major);
+    revolvedsurface->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == revolvedsurface->revision_minor1)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.revision_minor1 [BS] %hu != %hu", revolvedsurface->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == revolvedsurface->revision_minor1)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.revision_minor1 [BS] set+1 %hu != %hu", revolvedsurface->revision_minor1, revision_minor1);
+    revolvedsurface->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == revolvedsurface->revision_minor2)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.revision_minor2 [BS] %hu != %hu", revolvedsurface->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == revolvedsurface->revision_minor2)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.revision_minor2 [BS] set+1 %hu != %hu", revolvedsurface->revision_minor2, revision_minor2);
+    revolvedsurface->revision_minor2--;
   }
   {
     BITCODE_BD revolve_angle;
@@ -18707,12 +19253,42 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
       fail ("SWEPTSURFACE.encr_sat_data [char **]");
   }
   {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "end_marker", &end_marker, NULL)
+        && end_marker == sweptsurface->end_marker)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.end_marker [BL] %u != %u", sweptsurface->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "end_marker", &end_marker, 0)
+        && end_marker == sweptsurface->end_marker)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.end_marker [BL] set+1 %u != %u", sweptsurface->end_marker, end_marker);
+    sweptsurface->end_marker--;
+  }
+  {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "extra_acis_data", &extra_acis_data, NULL)
         && !memcmp (&extra_acis_data, &sweptsurface->extra_acis_data, sizeof (sweptsurface->extra_acis_data)))
         pass ();
     else
         fail ("SWEPTSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == sweptsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", sweptsurface->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == sweptsurface->has_revision_guid)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->has_revision_guid, has_revision_guid);
+    sweptsurface->has_revision_guid--;
   }
   {
     BITCODE_H history_id;
@@ -18944,6 +19520,67 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("SWEPTSURFACE.reference_vector_for_controlling_twist [3BD]");
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &sweptsurface->revision_bytes, sizeof (sweptsurface->revision_bytes)))
+        pass ();
+    else
+        fail ("SWEPTSURFACE.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[38];
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_guid[38]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &sweptsurface->revision_guid, sizeof (sweptsurface->revision_guid)))
+        pass ();
+    else
+        fail ("SWEPTSURFACE.revision_guid[38] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_major", &revision_major, NULL)
+        && revision_major == sweptsurface->revision_major)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.revision_major [BL] %u != %u", sweptsurface->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "revision_major", &revision_major, 0)
+        && revision_major == sweptsurface->revision_major)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.revision_major [BL] set+1 %u != %u", sweptsurface->revision_major, revision_major);
+    sweptsurface->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == sweptsurface->revision_minor1)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.revision_minor1 [BS] %hu != %hu", sweptsurface->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == sweptsurface->revision_minor1)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.revision_minor1 [BS] set+1 %hu != %hu", sweptsurface->revision_minor1, revision_minor1);
+    sweptsurface->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == sweptsurface->revision_minor2)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.revision_minor2 [BS] %hu != %hu", sweptsurface->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == sweptsurface->revision_minor2)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.revision_minor2 [BS] set+1 %hu != %hu", sweptsurface->revision_minor2, revision_minor2);
+    sweptsurface->revision_minor2--;
   }
   {
     BITCODE_BD scale_factor;

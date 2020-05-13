@@ -6136,4 +6136,14 @@ dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
   return name ? name : "";
 }
 
+// for DXF
+void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj)
+{
+  sprintf ((char*)_obj->revision_guid, "{%08lX-%04X-%04X-%02X%02X%02X%02X%02X%02X%02X%02X}",
+           (unsigned long)_obj->revision_major, (unsigned)_obj->revision_minor1, (unsigned)_obj->revision_minor2,
+           _obj->revision_bytes[0], _obj->revision_bytes[1], _obj->revision_bytes[2],
+           _obj->revision_bytes[3], _obj->revision_bytes[4], _obj->revision_bytes[5],
+           _obj->revision_bytes[6], _obj->revision_bytes[7]);
+}
+
 #undef IS_DECODER

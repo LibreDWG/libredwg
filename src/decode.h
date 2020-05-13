@@ -74,6 +74,7 @@ int dwg_validate_INSERT (Dwg_Object *restrict obj);
 int dwg_validate_POLYLINE (Dwg_Object *restrict obj);
 /* reused with many */
 int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
+void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj);
 
 /* from decode_r2007.c */
 int obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
