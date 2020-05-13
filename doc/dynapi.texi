@@ -802,8 +802,10 @@ Dwg_3DSOLID_silhouette*
 B
 @item extra_acis_data
 struct _dwg_entity_3DSOLID*
-@item unknown_2007
+@item num_materials
 BL
+@item materials
+Dwg_3DSOLID_material*
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -1710,8 +1712,10 @@ Dwg_3DSOLID_silhouette*
 B
 @item extra_acis_data
 struct _dwg_entity_3DSOLID*
-@item unknown_2007
+@item num_materials
 BL
+@item materials
+Dwg_3DSOLID_material*
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -2265,8 +2269,10 @@ Dwg_3DSOLID_silhouette*
 B
 @item extra_acis_data
 struct _dwg_entity_3DSOLID*
-@item unknown_2007
+@item num_materials
 BL
+@item materials
+Dwg_3DSOLID_material*
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -2699,8 +2705,10 @@ Dwg_3DSOLID_silhouette*
 B
 @item extra_acis_data
 struct _dwg_entity_3DSOLID*
-@item unknown_2007
+@item num_materials
 BL
+@item materials
+Dwg_3DSOLID_material*
 @item history_id
 H
 @item acis_empty_bit
@@ -2814,8 +2822,10 @@ Dwg_3DSOLID_silhouette*
 B
 @item extra_acis_data
 struct _dwg_entity_3DSOLID*
-@item unknown_2007
+@item num_materials
 BL
+@item materials
+Dwg_3DSOLID_material*
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -3131,8 +3141,10 @@ Dwg_3DSOLID_silhouette*
 B
 @item extra_acis_data
 struct _dwg_entity_3DSOLID*
-@item unknown_2007
+@item num_materials
 BL
+@item materials
+Dwg_3DSOLID_material*
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -3408,8 +3420,10 @@ Dwg_3DSOLID_silhouette*
 B
 @item extra_acis_data
 struct _dwg_entity_3DSOLID*
-@item unknown_2007
+@item num_materials
 BL
+@item materials
+Dwg_3DSOLID_material*
 @item history_id
 H,	DXF 350
 @item acis_empty_bit
@@ -8949,6 +8963,24 @@ Dwg_Resbuf*
 BL
 @item objid_handles
 H*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_3DSOLID_material} @anchor{Dwg_3DSOLID_material}
+@vindex Dwg_3DSOLID_material
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_entity_3DSOLID*
+@item array_index
+BL
+@item mat_absref
+BL
+@item material_handle
+H
 
 @end vtable
 @end indentedblock

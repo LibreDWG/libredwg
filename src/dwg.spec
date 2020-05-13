@@ -2026,7 +2026,15 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
       }                                                                                            \
     if (FIELD_VALUE (version) > 1) {                                                               \
       SINCE (R_2007) {                                                                             \
-        FIELD_BL (unknown_2007, 0);                                                                \
+        FIELD_BL (num_materials, 0);                                                               \
+        REPEAT (num_materials, materials, Dwg_3DSOLID_material)                                    \
+        REPEAT_BLOCK                                                                               \
+            SUB_FIELD_BL (materials[rcount1], array_index, 0);                                     \
+            SUB_FIELD_BL (materials[rcount1], mat_absref, 0);   /* ?? */                           \
+            SUB_FIELD_HANDLE (materials[rcount1], material_handle, 5, 0);                          \
+        END_REPEAT_BLOCK                                                                           \
+        SET_PARENT (materials, (Dwg_Entity__3DSOLID*)_obj)                                         \
+        END_REPEAT (materials);                                                                    \
       }                                                                                            \
     }                                                                                              \
                                                                                                    \

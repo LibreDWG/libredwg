@@ -5601,6 +5601,16 @@ static int test__3DSOLID (const Dwg_Object *obj)
     _3dsolid->isolines--;
   }
   {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "materials", &materials, NULL)
+        && materials == _3dsolid->materials)
+      pass ();
+    else
+      fail ("3DSOLID.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
     BITCODE_BL num_blocks;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "num_blocks", &num_blocks, NULL)
         && num_blocks == _3dsolid->num_blocks)
@@ -5614,6 +5624,21 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.num_blocks [BL] set+1 %u != %u", _3dsolid->num_blocks, num_blocks);
     _3dsolid->num_blocks--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "num_materials", &num_materials, NULL)
+        && num_materials == _3dsolid->num_materials)
+      pass ();
+    else
+      fail ("3DSOLID.num_materials [BL] %u != %u", _3dsolid->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "num_materials", &num_materials, 0)
+        && num_materials == _3dsolid->num_materials)
+      pass ();
+    else
+      fail ("3DSOLID.num_materials [BL] set+1 %u != %u", _3dsolid->num_materials, num_materials);
+    _3dsolid->num_materials--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -5700,21 +5725,6 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->unknown, unknown);
     _3dsolid->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == _3dsolid->unknown_2007)
-      pass ();
-    else
-      fail ("3DSOLID.unknown_2007 [BL] %u != %u", _3dsolid->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == _3dsolid->unknown_2007)
-      pass ();
-    else
-      fail ("3DSOLID.unknown_2007 [BL] set+1 %u != %u", _3dsolid->unknown_2007, unknown_2007);
-    _3dsolid->unknown_2007--;
   }
   {
     BITCODE_BS version;
@@ -10294,6 +10304,16 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     extrudedsurface->isolines--;
   }
   {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "materials", &materials, NULL)
+        && materials == extrudedsurface->materials)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == extrudedsurface->modeler_format_version)
@@ -10322,6 +10342,21 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.num_blocks [BL] set+1 %u != %u", extrudedsurface->num_blocks, num_blocks);
     extrudedsurface->num_blocks--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "num_materials", &num_materials, NULL)
+        && num_materials == extrudedsurface->num_materials)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.num_materials [BL] %u != %u", extrudedsurface->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "num_materials", &num_materials, 0)
+        && num_materials == extrudedsurface->num_materials)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.num_materials [BL] set+1 %u != %u", extrudedsurface->num_materials, num_materials);
+    extrudedsurface->num_materials--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -10569,21 +10604,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->unknown, unknown);
     extrudedsurface->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == extrudedsurface->unknown_2007)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.unknown_2007 [BL] %u != %u", extrudedsurface->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == extrudedsurface->unknown_2007)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.unknown_2007 [BL] set+1 %u != %u", extrudedsurface->unknown_2007, unknown_2007);
-    extrudedsurface->unknown_2007--;
   }
   {
     BITCODE_BS v_isolines;
@@ -13283,6 +13303,16 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         fail ("LOFTEDSURFACE.loft_entity_transmatrix [BD*]");
   }
   {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "materials", &materials, NULL)
+        && materials == loftedsurface->materials)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == loftedsurface->modeler_format_version)
@@ -13356,6 +13386,21 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.num_guide_curves [BS] set+1 %hu != %hu", loftedsurface->num_guide_curves, num_guide_curves);
     loftedsurface->num_guide_curves--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "num_materials", &num_materials, NULL)
+        && num_materials == loftedsurface->num_materials)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.num_materials [BL] %u != %u", loftedsurface->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "num_materials", &num_materials, 0)
+        && num_materials == loftedsurface->num_materials)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.num_materials [BL] set+1 %u != %u", loftedsurface->num_materials, num_materials);
+    loftedsurface->num_materials--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -13555,21 +13600,6 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->unknown, unknown);
     loftedsurface->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == loftedsurface->unknown_2007)
-      pass ();
-    else
-      fail ("LOFTEDSURFACE.unknown_2007 [BL] %u != %u", loftedsurface->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == loftedsurface->unknown_2007)
-      pass ();
-    else
-      fail ("LOFTEDSURFACE.unknown_2007 [BL] set+1 %u != %u", loftedsurface->unknown_2007, unknown_2007);
-    loftedsurface->unknown_2007--;
   }
   {
     BITCODE_BS v_isolines;
@@ -15487,6 +15517,16 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
     nurbsurface->isolines--;
   }
   {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "materials", &materials, NULL)
+        && materials == nurbsurface->materials)
+      pass ();
+    else
+      fail ("NURBSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == nurbsurface->modeler_format_version)
@@ -15515,6 +15555,21 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
     else
       fail ("NURBSURFACE.num_blocks [BL] set+1 %u != %u", nurbsurface->num_blocks, num_blocks);
     nurbsurface->num_blocks--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_materials", &num_materials, NULL)
+        && num_materials == nurbsurface->num_materials)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_materials [BL] %u != %u", nurbsurface->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "num_materials", &num_materials, 0)
+        && num_materials == nurbsurface->num_materials)
+      pass ();
+    else
+      fail ("NURBSURFACE.num_materials [BL] set+1 %u != %u", nurbsurface->num_materials, num_materials);
+    nurbsurface->num_materials--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -15616,21 +15671,6 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
     else
       fail ("NURBSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->unknown, unknown);
     nurbsurface->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == nurbsurface->unknown_2007)
-      pass ();
-    else
-      fail ("NURBSURFACE.unknown_2007 [BL] %u != %u", nurbsurface->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == nurbsurface->unknown_2007)
-      pass ();
-    else
-      fail ("NURBSURFACE.unknown_2007 [BL] set+1 %u != %u", nurbsurface->unknown_2007, unknown_2007);
-    nurbsurface->unknown_2007--;
   }
   {
     BITCODE_BS v_isolines;
@@ -16035,6 +16075,16 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     planesurface->isolines--;
   }
   {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "materials", &materials, NULL)
+        && materials == planesurface->materials)
+      pass ();
+    else
+      fail ("PLANESURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == planesurface->modeler_format_version)
@@ -16063,6 +16113,21 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.num_blocks [BL] set+1 %u != %u", planesurface->num_blocks, num_blocks);
     planesurface->num_blocks--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "num_materials", &num_materials, NULL)
+        && num_materials == planesurface->num_materials)
+      pass ();
+    else
+      fail ("PLANESURFACE.num_materials [BL] %u != %u", planesurface->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "num_materials", &num_materials, 0)
+        && num_materials == planesurface->num_materials)
+      pass ();
+    else
+      fail ("PLANESURFACE.num_materials [BL] set+1 %u != %u", planesurface->num_materials, num_materials);
+    planesurface->num_materials--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -16164,21 +16229,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->unknown, unknown);
     planesurface->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == planesurface->unknown_2007)
-      pass ();
-    else
-      fail ("PLANESURFACE.unknown_2007 [BL] %u != %u", planesurface->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == planesurface->unknown_2007)
-      pass ();
-    else
-      fail ("PLANESURFACE.unknown_2007 [BL] set+1 %u != %u", planesurface->unknown_2007, unknown_2007);
-    planesurface->unknown_2007--;
   }
   {
     BITCODE_BS v_isolines;
@@ -17356,6 +17406,16 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     revolvedsurface->isolines--;
   }
   {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "materials", &materials, NULL)
+        && materials == revolvedsurface->materials)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == revolvedsurface->modeler_format_version)
@@ -17384,6 +17444,21 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.num_blocks [BL] set+1 %u != %u", revolvedsurface->num_blocks, num_blocks);
     revolvedsurface->num_blocks--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "num_materials", &num_materials, NULL)
+        && num_materials == revolvedsurface->num_materials)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.num_materials [BL] %u != %u", revolvedsurface->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "num_materials", &num_materials, 0)
+        && num_materials == revolvedsurface->num_materials)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.num_materials [BL] set+1 %u != %u", revolvedsurface->num_materials, num_materials);
+    revolvedsurface->num_materials--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -17553,21 +17628,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     else
       fail ("REVOLVEDSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->unknown, unknown);
     revolvedsurface->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == revolvedsurface->unknown_2007)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.unknown_2007 [BL] %u != %u", revolvedsurface->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == revolvedsurface->unknown_2007)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.unknown_2007 [BL] set+1 %u != %u", revolvedsurface->unknown_2007, unknown_2007);
-    revolvedsurface->unknown_2007--;
   }
   {
     BITCODE_BS v_isolines;
@@ -18693,6 +18753,16 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     sweptsurface->isolines--;
   }
   {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "materials", &materials, NULL)
+        && materials == sweptsurface->materials)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
     BITCODE_BS modeler_format_version;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "modeler_format_version", &modeler_format_version, NULL)
         && modeler_format_version == sweptsurface->modeler_format_version)
@@ -18721,6 +18791,21 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.num_blocks [BL] set+1 %u != %u", sweptsurface->num_blocks, num_blocks);
     sweptsurface->num_blocks--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "num_materials", &num_materials, NULL)
+        && num_materials == sweptsurface->num_materials)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.num_materials [BL] %u != %u", sweptsurface->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "num_materials", &num_materials, 0)
+        && num_materials == sweptsurface->num_materials)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.num_materials [BL] set+1 %u != %u", sweptsurface->num_materials, num_materials);
+    sweptsurface->num_materials--;
   }
   {
     BITCODE_BL num_silhouettes;
@@ -19028,21 +19113,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->unknown, unknown);
     sweptsurface->unknown--;
-  }
-  {
-    BITCODE_BL unknown_2007;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "unknown_2007", &unknown_2007, NULL)
-        && unknown_2007 == sweptsurface->unknown_2007)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.unknown_2007 [BL] %u != %u", sweptsurface->unknown_2007, unknown_2007);
-    unknown_2007++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "unknown_2007", &unknown_2007, 0)
-        && unknown_2007 == sweptsurface->unknown_2007)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.unknown_2007 [BL] set+1 %u != %u", sweptsurface->unknown_2007, unknown_2007);
-    sweptsurface->unknown_2007--;
   }
   {
     BITCODE_BS v_isolines;
@@ -48361,6 +48431,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_XRECORD): %d != "
                "dwg_dynapi_fields_size (\"XRECORD\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_3DSOLID_material);
+  size2 = dwg_dynapi_fields_size ("3DSOLID_material");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_3DSOLID_material): %d != "
+               "dwg_dynapi_fields_size (\"3DSOLID_material\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_3DSOLID_silhouette);

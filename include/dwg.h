@@ -1716,6 +1716,14 @@ typedef struct _dwg_3DSOLID_silhouette
   Dwg_3DSOLID_wire * wires;
 } Dwg_3DSOLID_silhouette;
 
+typedef struct _dwg_3DSOLID_material
+{
+  struct _dwg_entity_3DSOLID *parent;
+  BITCODE_BL array_index;
+  BITCODE_BL mat_absref;
+  BITCODE_H  material_handle; /* code 5 */
+} Dwg_3DSOLID_material;
+
 #define _3DSOLID_FIELDS \
   BITCODE_B acis_empty; \
   BITCODE_B unknown; \
@@ -1727,15 +1735,16 @@ typedef struct _dwg_3DSOLID_silhouette
   BITCODE_B wireframe_data_present; \
   BITCODE_B point_present; \
   BITCODE_3BD point; \
-  BITCODE_BL isolines; \
-  BITCODE_B isoline_present; \
+  BITCODE_BL isolines; /* i.e. wires */ \
+  BITCODE_B isoline_present; /* ie. has_wires */  \
   BITCODE_BL num_wires; \
   Dwg_3DSOLID_wire * wires; \
   BITCODE_BL num_silhouettes; \
   Dwg_3DSOLID_silhouette * silhouettes; \
   BITCODE_B acis_empty2; \
   struct _dwg_entity_3DSOLID* extra_acis_data; \
-  BITCODE_BL unknown_2007; \
+  BITCODE_BL num_materials; \
+  Dwg_3DSOLID_material *materials; \
   BITCODE_H history_id; \
   BITCODE_B acis_empty_bit
 
