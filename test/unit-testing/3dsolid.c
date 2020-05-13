@@ -4,17 +4,10 @@
 void
 api_process (dwg_object *obj)
 {
-  int error;
+  int error, isnew;
   BITCODE_BL i;
-  BITCODE_BS version;
-  BITCODE_BL num_blocks, isolines, num_wires, num_silhouettes, unknown_2007;
-  unsigned char *acis_data;
-  BITCODE_B wireframe_data_present, point_present, isoline_present;
-  BITCODE_B acis_empty, acis2_empty;
-  dwg_point_3d point, pt3d;
-  dwg_3dsolid_wire *wire;
-  dwg_3dsolid_silhouette *sil;
-  BITCODE_H history_id;
+  _3DSOLID_FIELDS;
+  dwg_point_3d pt3d;
 
   dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -64,30 +57,64 @@ api_process (dwg_object *obj)
       || error)
     fail ("old API dwg_ent_3dsolid_get_num_sil");
 
-  wire = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
+  wires = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
-        ok ("3DSOLID.wire[%d]:" FORMAT_BL, i, wire[i].selection_marker);
-      free (wire);
+        {
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, type, RC);
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, selection_marker, BL);
+          PRE (R_2004) {
+            CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BS);
+          } else {
+            CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BL);
+          }
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, acis_index, BL);
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, num_points, BL);
+          CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_x);
+          CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_y);
+          CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_z);
+          CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, translation);
+          CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, scale);
+        }
+      free (wires);
     }
   else
     fail ("wires");
 
-  sil = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
+  silhouettes = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
   if (!error)
     {
       for (i = 0; i < num_silhouettes; i++)
-        ok ("3DSOLID.silhouettes[%d]:" FORMAT_BL, i, sil[i].vp_id);
-      free (sil);
+        ok ("3DSOLID.silhouettes[%d]:" FORMAT_BL, i, silhouettes[i].vp_id);
+      free (silhouettes);
     }
   else
     fail ("silhouettes");
 
-  if (dwg_version >= R_2007
-      && _3dsolid->history_id) // if it did not fail before
-    {
-      CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, unknown_2007, BL);
-      CHK_ENTITY_H (_3dsolid, 3DSOLID, history_id);
-    }
+  SINCE (R_2007) {
+    CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_materials, BL);
+    if (!dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "materials", &materials, NULL))
+      fail ("3DSOLID.materials");
+    else
+      for (i = 0; i < num_materials; i++)
+        {
+          CHK_SUBCLASS_TYPE (_3dsolid->materials[i], 3DSOLID_material, array_index, BL);
+          CHK_SUBCLASS_TYPE (_3dsolid->materials[i], 3DSOLID_material, mat_absref, BL);
+          CHK_SUBCLASS_H (_3dsolid->materials[i], 3DSOLID_material, material_handle);
+        }
+    CHK_ENTITY_H (_3dsolid, 3DSOLID, history_id);
+  }
+  SINCE (R_2013) {
+    CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, has_revision_guid, B);
+    if (has_revision_guid)
+      {
+        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_guid, TF);
+        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_major, BL);
+        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_minor1, BS);
+        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_minor2, BS);
+        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_bytes, TF);
+      }
+    CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, end_marker, BL);
+  }
 }

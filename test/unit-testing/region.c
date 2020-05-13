@@ -6,15 +6,7 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BL i;
-  BITCODE_BS version;
-  BITCODE_BL num_blocks, isolines, num_wires, num_silhouettes, unknown_2007;
-  unsigned char *acis_data;
-  BITCODE_B wireframe_data_present, point_present, isoline_present;
-  BITCODE_B acis_empty, acis2_empty;
-  dwg_point_3d point, pt3d;
-  dwg_3dsolid_wire *wire;
-  dwg_3dsolid_silhouette *sil;
-  BITCODE_H history_id;
+  _3DSOLID_FIELDS;
 
   dwg_ent_region *region = dwg_object_to_REGION (obj);
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -39,29 +31,28 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (region, REGION, num_wires, BL);
   CHK_ENTITY_TYPE_W_OLD (region, REGION, num_silhouettes, BL);
 
-  wire = dwg_ent_region_get_wires (region, &error);
+  wires = dwg_ent_region_get_wires (region, &error);
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
-        printf ("wire of region :" FORMAT_BL "\n", wire[i].selection_marker);
-      free (wire);
+        printf ("wire of region :" FORMAT_BL "\n", wires[i].selection_marker);
+      free (wires);
     }
   else
     printf ("error in reading num wires");
 
-  sil = dwg_ent_region_get_silhouettes (region, &error);
+  silhouettes = dwg_ent_region_get_silhouettes (region, &error);
   if (!error)
     {
       for (i = 0; i < num_silhouettes; i++)
-        printf ("silhouettes of region :" FORMAT_BL "\n", sil[i].vp_id);
-      free (sil);
+        printf ("silhouettes of region :" FORMAT_BL "\n", silhouettes[i].vp_id);
+      free (silhouettes);
     }
   else
     printf ("error in reading silhouettes");
 
   if (dwg_version >= R_2007 && region->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (region, REGION, unknown_2007, BL);
       CHK_ENTITY_H (region, REGION, history_id);
     }
 }

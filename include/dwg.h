@@ -1697,7 +1697,7 @@ typedef struct _dwg_3DSOLID_wire
   BITCODE_3BD axis_y;
   BITCODE_3BD axis_z;
   BITCODE_3BD translation;
-  BITCODE_BD scale;
+  BITCODE_3BD scale;
   BITCODE_B has_rotation;
   BITCODE_B has_reflection;
   BITCODE_B has_shear;

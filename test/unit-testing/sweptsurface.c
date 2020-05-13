@@ -6,28 +6,7 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  //_3DSOLID_FIELDS;
-  BITCODE_B acis_empty;
-  BITCODE_B unknown;
-  BITCODE_BS version;
-  BITCODE_BL i, num_blocks;
-  BITCODE_BL* block_size;
-  char** encr_sat_data;
-  BITCODE_RC* acis_data;
-  BITCODE_B wireframe_data_present;
-  BITCODE_B point_present;
-  BITCODE_3BD point;
-  BITCODE_BL isolines;
-  BITCODE_B isoline_present;
-  BITCODE_BL num_wires;
-  Dwg_3DSOLID_wire * wires;
-  BITCODE_BL num_silhouettes;
-  Dwg_3DSOLID_silhouette * silhouettes;
-  BITCODE_B acis_empty2;
-  struct _dwg_entity_3DSOLID* extra_acis_data;
-  BITCODE_BL unknown_2007;
-  BITCODE_H history_id;
-  BITCODE_B acis_empty_bit;
+  _3DSOLID_FIELDS;
 
   BITCODE_BS modeler_format_version;
   BITCODE_BS u_isolines;
@@ -90,7 +69,6 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, unknown_2007, BL);
       CHK_ENTITY_H (_obj, SWEPTSURFACE, history_id);
     }
 

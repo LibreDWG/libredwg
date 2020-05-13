@@ -9142,7 +9142,7 @@ B
 @item translation
 3BD
 @item scale
-BD
+3BD
 @item has_rotation
 B
 @item has_reflection
