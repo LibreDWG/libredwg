@@ -1207,9 +1207,8 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb2LineAngularDimension)
-  DECODER_OR_ENCODER {
-    FIELD_2RD (def_pt, 10);
-  }
+  JSON { FIELD_3BD (def_pt, 10); }
+  else { FIELD_2RD (def_pt, 10); }
   FIELD_3BD (xline1start_pt, 13);
   FIELD_3BD (xline1end_pt, 14);
   FIELD_3BD (xline2start_pt, 15);
@@ -8014,7 +8013,11 @@ DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbDimensionObjectContextData)
   FIELD_T (name, 2);
-  FIELD_2RD (def_pt, 10);
+#if defined (IS_JSON) || defined (IS_DXF)
+    FIELD_3BD (def_pt, 10);
+#else
+    FIELD_2RD (def_pt, 10);
+#endif
   //HOLE([140,159],11000000000000000000) len = 20
    FIELD_B (b293, 293); // 0
    FIELD_B (b294, 294); // 1

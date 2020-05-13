@@ -19,6 +19,7 @@
 #  define DECODER if (0)
 #  define ENCODER if (0)
 #  define PRINT if (0)
+/* DECODER_ENCODER_OR_JSON really, or just NOT_DXF */
 #  define DECODER_OR_ENCODER if (0)
 #  define DXF_OR_PRINT if (0)
 #  define DXF if (0)
