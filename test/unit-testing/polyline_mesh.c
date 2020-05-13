@@ -13,18 +13,12 @@ api_process (dwg_object *obj)
   dwg_ent_polyline_mesh *polyline_mesh = dwg_object_to_POLYLINE_MESH (obj);
 
   CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, flag, BS);
-  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, curve_type, BS,
-                         curve_type);
-  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, num_owned, BL,
-                         num_owned);
-  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, m_density, BS,
-                         m_density);
-  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, n_density, BS,
-                         n_density);
-  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, num_m_verts, BS,
-                         num_m_verts);
-  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, num_n_verts, BS,
-                         num_n_verts);
+  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, curve_type, BS);
+  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, num_owned, BL);
+  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, m_density, BS);
+  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, n_density, BS);
+  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, num_m_verts, BS);
+  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, num_n_verts, BS);
 
   if (version >= R_13 && version <= R_2000)
     {
@@ -33,7 +27,7 @@ api_process (dwg_object *obj)
     }
   if (version >= R_2004)
     {
-      CHK_ENTITY_HV (polyline_mesh, POLYLINE_MESH, vertex, vertex, num_owned);
+      CHK_ENTITY_HV (polyline_mesh, POLYLINE_MESH, vertex, num_owned);
     }
   CHK_ENTITY_H (polyline_mesh, POLYLINE_MESH, seqend);
 }

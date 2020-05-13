@@ -25,23 +25,18 @@ api_process (dwg_object *obj)
 
   /* common */
   CHK_ENTITY_TYPE (dim, DIMENSION_ANG2LN, class_version, RC);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, lspace_style, BS,
-                         lspace_style);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, lspace_factor, BD,
-                         lspace_factor);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, act_measurement, BD,
-                         act_measurement);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, lspace_style, BS);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, lspace_factor, BD);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, act_measurement, BD);
   CHK_ENTITY_TYPE (dim, DIMENSION_ANG2LN, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, elevation, BD);
   CHK_ENTITY_3RD (dim, DIMENSION_ANG2LN, extrusion);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG2LN, clone_ins_pt);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG2LN, text_midpt);
   CHK_ENTITY_UTF8TEXT (dim, DIMENSION_ANG2LN, user_text);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, text_rotation, BD,
-                         text_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, text_rotation, BD);
   CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_ANG2LN, ins_scale);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, ins_rotation, BD,
-                         ins_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, ins_rotation, BD);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, horiz_dir, BD);
   CHK_ENTITY_MAX (dim, DIMENSION_ANG2LN, text_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_MAX (dim, DIMENSION_ANG2LN, ins_rotation, BD, MAX_ANGLE);

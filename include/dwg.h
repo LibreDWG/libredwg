@@ -3386,7 +3386,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BL unknown_bl;
   BITCODE_B unknown_b;
   BITCODE_BL unknown_bl1;
-  BITCODE_3BD insertion_point; /*!< DXF 10 */
+  BITCODE_3BD insertion_pt; /*!< DXF 10 */
   BITCODE_3BD scale;        /*!< DXF 41 */
   BITCODE_BB data_flags;
   BITCODE_BD rotation;      /*!< DXF 50 */

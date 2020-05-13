@@ -5,7 +5,7 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  dwg_point_3d origin, ext, x_direction, inspt_offset, endptproj;
+  dwg_point_3d origin, extrusion, x_direction, inspt_offset, endptproj;
   dwg_point_3d *points;
   BITCODE_B unknown_bit_1;
   BITCODE_BS path_type;
@@ -30,7 +30,7 @@ api_process (dwg_object *obj)
   dwg_ent_leader *leader = dwg_object_to_LEADER (obj);
 
   CHK_ENTITY_3RD_W_OLD (leader, LEADER, origin);
-  CHK_ENTITY_3RD_W_OLD (leader, LEADER, extrusion, ext);
+  CHK_ENTITY_3RD_W_OLD (leader, LEADER, extrusion);
   CHK_ENTITY_3RD_W_OLD (leader, LEADER, x_direction);
   CHK_ENTITY_3RD_W_OLD (leader, LEADER, inspt_offset);
   CHK_ENTITY_3RD (leader, LEADER, endptproj);

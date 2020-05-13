@@ -677,8 +677,8 @@ add_table (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("type", "IAcadTable");
   newXMLcProp ("desc", "IAcadTable: IAcadTable Interface");
 
-  buf = spointprepare (table->insertion_point.x, table->insertion_point.y,
-                       table->insertion_point.z);
+  buf = spointprepare (table->insertion_pt.x, table->insertion_pt.y,
+                       table->insertion_pt.z);
   newXMLProp ("InsertionPoint", buf);
 
   dtostring = doubletochar (table->num_rows);

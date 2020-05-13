@@ -58,7 +58,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_deps, BL);
   //Dwg_ASSOCACTION_Deps *deps;
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_owned_params, BL);
-  CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, owned_params, owned_params, num_owned_params);
+  CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, owned_params, num_owned_params);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_owned_value_param_names,
                    BL, num_owned_value_param_names);
   CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, owned_value_param_names,
@@ -69,7 +69,7 @@ api_process (dwg_object *obj)
   //CHK_ENTITY_3RD (_obj, ASSOC2DCONSTRAINTGROUP, workplane[3], workplane[3]); //3x10 workplane
   CHK_ENTITY_H (_obj, ASSOC2DCONSTRAINTGROUP, h1);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_actions, BL);
-  CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, actions, actions, num_actions);
+  CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, actions, num_actions);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, l7, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, l8, BL);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOC2DCONSTRAINTGROUP, t1);

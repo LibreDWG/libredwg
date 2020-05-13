@@ -672,7 +672,7 @@ print_api (dwg_object *obj)
     else                                                                      \
       fail (#field);                                                          \
   }
-#define CHK_COMMON_TYPE2(ent, field, type, value)                              \
+#define CHK_COMMON_TYPE2(ent, field, type, value)                             \
   {                                                                           \
     if (dwg_dynapi_common_value (ent, #field, &value, NULL))                  \
       {                                                                       \
@@ -687,14 +687,14 @@ print_api (dwg_object *obj)
 
 #define CHK_COMMON_H(ent, field)                                              \
   {                                                                           \
-    if (!dwg_dynapi_common_value (ent, #field, &field, NULL))                   \
+    if (!dwg_dynapi_common_value (ent, #field, &field, NULL))                 \
       fail (#field);                                                          \
-    else if (!field)                                                            \
+    else if (!field)                                                          \
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
-        char *_hdlname = dwg_dynapi_handle_name (dwg, field);                   \
-        if (field == (BITCODE_H)ent->parent->field)                             \
+        char *_hdlname = dwg_dynapi_handle_name (dwg, field);                 \
+        if (field == (BITCODE_H)ent->parent->field)                           \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
@@ -837,7 +837,7 @@ api_common_entity (dwg_object *obj)
   if (!is_xdic_missing)
     CHK_COMMON_H (ent, xdicobjhandle);
   CHK_COMMON_TYPE (ent, num_reactors, BL);
-  CHK_COMMON_HV (ent, reactors, reactors, num_reactors);
+  CHK_COMMON_HV (ent, reactors, num_reactors);
   CHK_COMMON_TYPE (ent, has_ds_data, B);
   CHK_COMMON_TYPE (ent, num_eed, BL);
 }
@@ -860,7 +860,7 @@ api_common_entity (dwg_object *obj)
     }
 
 #define CHK_ENTITY_UTF8TEXT(ent, name, field)                                 \
-  _CHK_ENTITY_UTF8TEXT (ent, name, field);                             \
+  _CHK_ENTITY_UTF8TEXT (ent, name, field);                                    \
   if (isnew)                                                                  \
     free (field)
 
@@ -1003,7 +1003,7 @@ api_common_entity (dwg_object *obj)
         fail (#name "." #field ":\t(%f, %f)", field.x, field.y);              \
     }
 
-#define CHK_ENTITY_3RD(ent, name, field, field)                               \
+#define CHK_ENTITY_3RD(ent, name, field)                                      \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
     fail (#name "." #field);                                                  \
   else                                                                        \
@@ -1035,9 +1035,9 @@ api_common_entity (dwg_object *obj)
 #define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME (ent, field)
 #define _DWGAPI_OBJ_NAME(name, field) dwg_obj_##name##_get_##field
 #define DWGAPI_OBJ_NAME(ent, field) _DWGAPI_OBJ_NAME (ent, field)
-#define DWGAPI_ENTOBJ_NAME(ent, field)                                  \
+#define DWGAPI_ENTOBJ_NAME(ent, field)                                        \
   (ent->parent->dwg->object[ent->parent->objid].supertype == DWG_SUPERTYPE_OBJECT  \
-    ? _DWGAPI_OBJ_NAME (ent, field)                                     \
+    ? _DWGAPI_OBJ_NAME (ent, field)                                           \
     : _DWGAPI_ENT_NAME (ent, field))
 
 #define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field)                           \
@@ -1055,8 +1055,8 @@ api_common_entity (dwg_object *obj)
     if (isnew)                                                                \
       free (field);                                                           \
   }
-#define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field)                    \
-  _CHK_ENTITY_UTF8TEXT (ent, name, field);                             \
+#define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field)                           \
+  _CHK_ENTITY_UTF8TEXT (ent, name, field);                                    \
   {                                                                           \
     Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;         \
     if (ent->field)                                                           \
@@ -1073,10 +1073,10 @@ api_common_entity (dwg_object *obj)
       free (field);                                                           \
   }
 
-#define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)                  \
+#define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)                         \
   {                                                                           \
     BITCODE_##type old;                                                       \
-    CHK_ENTITY_TYPE (ent, name, field, type);                          \
+    CHK_ENTITY_TYPE (ent, name, field, type);                                 \
     old = DWGAPI_ENT_NAME (ent, field) (ent, &error);                         \
     if (error || old != field)                                                \
       fail ("old API dwg_ent_" #ent "_get_" #field ": " FORMAT_##type         \
@@ -1264,7 +1264,7 @@ api_common_object (dwg_object *obj)
   if (!is_xdic_missing)
     CHK_COMMON_H (_obj, xdicobjhandle);
   CHK_COMMON_TYPE (_obj, num_reactors, BL);
-  CHK_COMMON_HV (_obj, reactors, reactors, num_reactors);
+  CHK_COMMON_HV (_obj, reactors, num_reactors);
   CHK_COMMON_H (_obj, handleref); //?
   CHK_COMMON_TYPE (_obj, has_ds_data, B);
   CHK_COMMON_TYPE (_obj, num_eed, BL);

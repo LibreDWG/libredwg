@@ -4,15 +4,13 @@
 void
 api_process (dwg_object *obj)
 {
-  int error = 0;
-  BITCODE_RD elevation, thickness, rotation, height, oblique_angle, width_factor,
-      rdvalue;
-  BITCODE_BS generation, vert_align, horiz_align, bsvalue;
-  BITCODE_RC dataflags, rcvalue;
+  int error = 0, isnew;
+  BITCODE_RD elevation, thickness, rotation, height, oblique_angle, width_factor;
+  BITCODE_BS generation, vert_alignment, horiz_alignment;
+  BITCODE_RC dataflags;
   char *text_value;
-  int isnew;
-  dwg_point_3d ext;
-  dwg_point_2d pt2d, ins_pt, alignment_pt;
+  dwg_point_3d extrusion;
+  dwg_point_2d insertion_pt, alignment_pt;
   BITCODE_H style;
 
   Dwg_Version_Type version = obj->parent->header.version;
@@ -23,12 +21,9 @@ api_process (dwg_object *obj)
       && (strcmp (dwg_ent_text_get_text (text, &error), text_value) || error))
     fail ("old API dwg_ent_text_get_text");
 
-  CHK_ENTITY_2RD (text, TEXT, insertion_pt, ins_pt);
-  dwg_ent_text_get_insertion_point (text, &pt2d, &error);
-  if (error || memcmp (&ins_pt, &pt2d, sizeof (ins_pt)))
-    fail ("old API dwg_ent_text_get_insertion_point");
+  CHK_ENTITY_2RD_W_OLD (text, TEXT, insertion_pt);
   CHK_ENTITY_2RD (text, TEXT, alignment_pt);
-  CHK_ENTITY_3RD_W_OLD (text, TEXT, extrusion, ext);
+  CHK_ENTITY_3RD_W_OLD (text, TEXT, extrusion);
   CHK_ENTITY_TYPE (text, TEXT, elevation, BD);
   CHK_ENTITY_TYPE (text, TEXT, dataflags, RC);
   CHK_ENTITY_TYPE_W_OLD (text, TEXT, height, RD);
@@ -40,7 +35,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (text, TEXT, width_factor, RD);
   CHK_ENTITY_TYPE (text, TEXT, generation, BS);
 
-  CHK_ENTITY_TYPE_W_OLD (text, TEXT, vert_alignment, BS, vert_align);
-  CHK_ENTITY_TYPE_W_OLD (text, TEXT, horiz_alignment, BS, horiz_align);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, vert_alignment, BS);
+  CHK_ENTITY_TYPE_W_OLD (text, TEXT, horiz_alignment, BS);
   CHK_ENTITY_H (text, TEXT, style);
 }

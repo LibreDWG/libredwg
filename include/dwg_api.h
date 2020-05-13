@@ -1703,11 +1703,11 @@ EXPORT char *dwg_ent_text_get_text (const dwg_ent_text *restrict text,
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 // Get/Set insertion points of text
-EXPORT void dwg_ent_text_get_insertion_point (
+EXPORT void dwg_ent_text_get_insertion_pt (
     const dwg_ent_text *restrict text, dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_text_set_insertion_point (
+EXPORT void dwg_ent_text_set_insertion_pt (
     dwg_ent_text *restrict text, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
@@ -1785,11 +1785,11 @@ EXPORT char *dwg_ent_attrib_get_text (const dwg_ent_attrib *restrict attrib,
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 // Get/Set insertion points of attrib
-EXPORT void dwg_ent_attrib_get_insertion_point (
+EXPORT void dwg_ent_attrib_get_insertion_pt (
     const dwg_ent_attrib *restrict attrib, dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_attrib_set_insertion_point (
+EXPORT void dwg_ent_attrib_set_insertion_pt (
     dwg_ent_attrib *restrict attrib, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
@@ -1869,11 +1869,11 @@ dwg_ent_attdef_get_default_value (const dwg_ent_attdef *restrict attdef,
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 // Get/Set insertion points of attdef
-EXPORT void dwg_ent_attdef_get_insertion_point (
+EXPORT void dwg_ent_attdef_get_insertion_pt (
     const dwg_ent_attdef *restrict attdef, dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_attdef_set_insertion_point (
+EXPORT void dwg_ent_attdef_set_insertion_pt (
     dwg_ent_attdef *restrict attdef, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
@@ -4474,13 +4474,13 @@ EXPORT void dwg_ent_3dsolid_set_point (dwg_ent_3dsolid *restrict _3dsolid,
                                        int *restrict error)
     __nonnull ((2, 3)) /*_deprecated_dynapi_setter*/;
 
-EXPORT BITCODE_BL dwg_ent_3dsolid_get_num_isolines (
+EXPORT BITCODE_BL dwg_ent_3dsolid_get_isolines (
     const dwg_ent_3dsolid *restrict _3dsolid, int *restrict error)
     __nonnull ((2)) /*_deprecated_dynapi_getter*/;
 
 EXPORT void
-dwg_ent_3dsolid_set_num_isolines (dwg_ent_3dsolid *restrict _3dsolid,
-                                  const BITCODE_BL num, int *restrict error)
+dwg_ent_3dsolid_set_isolines (dwg_ent_3dsolid *restrict _3dsolid,
+                              const BITCODE_BL num, int *restrict error)
     __nonnull ((3)) /*_deprecated_dynapi_setter*/;
 
 EXPORT char
@@ -4576,11 +4576,11 @@ EXPORT void dwg_ent_region_set_point (dwg_ent_region *restrict region,
                                       int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT BITCODE_BL dwg_ent_region_get_num_isolines (
+EXPORT BITCODE_BL dwg_ent_region_get_isolines (
     const dwg_ent_region *restrict region, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_region_set_num_isolines (dwg_ent_region *restrict region,
+EXPORT void dwg_ent_region_set_isolines (dwg_ent_region *restrict region,
                                              const BITCODE_BL num,
                                              int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
@@ -4679,13 +4679,13 @@ EXPORT void dwg_ent_body_set_point (dwg_ent_body *restrict body,
                                     int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT BITCODE_BL dwg_ent_body_get_num_isolines (
+EXPORT BITCODE_BL dwg_ent_body_get_isolines (
     const dwg_ent_body *restrict body, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_body_set_num_isolines (dwg_ent_body *restrict body,
-                                           const BITCODE_BL num,
-                                           int *restrict error)
+EXPORT void dwg_ent_body_set_isolines (dwg_ent_body *restrict body,
+                                       const BITCODE_BL num,
+                                       int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
 EXPORT char
@@ -4729,10 +4729,10 @@ EXPORT void dwg_ent_body_set_acis_empty2 (dwg_ent_body *restrict body,
 *                    FUNCTIONS FOR TABLE ENTITY                     *
 ********************************************************************/
 
-EXPORT void dwg_ent_table_set_insertion_point (
+EXPORT void dwg_ent_table_set_insertion_pt (
     dwg_ent_table *restrict table, const dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
-EXPORT void dwg_ent_table_get_insertion_point (
+EXPORT void dwg_ent_table_get_insertion_pt (
     const dwg_ent_table *restrict table, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 

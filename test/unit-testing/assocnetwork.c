@@ -40,7 +40,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_deps, BL);
   //Dwg_ASSOCACTION_Deps *deps;
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_params, BL);
-  CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_params, owned_params, num_owned_params);
+  CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_params, num_owned_params);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_value_param_names,
                    BL, num_owned_value_param_names);
   CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_value_param_names,

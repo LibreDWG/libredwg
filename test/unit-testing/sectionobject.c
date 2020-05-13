@@ -33,8 +33,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SECTIONOBJECT, indicator_alpha, RC);
   CHK_ENTITY_CMC (_obj, SECTIONOBJECT, indicator_color);
   CHK_ENTITY_TYPE (_obj, SECTIONOBJECT, num_verts, BL);
-  CHK_ENTITY_3DPOINTS (_obj, SECTIONOBJECT, verts, verts, num_verts);
+  CHK_ENTITY_3DPOINTS (_obj, SECTIONOBJECT, verts, num_verts);
   CHK_ENTITY_TYPE (_obj, SECTIONOBJECT, num_blverts, BL);
-  CHK_ENTITY_3DPOINTS (_obj, SECTIONOBJECT, blverts, blverts, num_blverts);
+  CHK_ENTITY_3DPOINTS (_obj, SECTIONOBJECT, blverts, num_blverts);
   CHK_ENTITY_H (_obj, SECTIONOBJECT, setting);
 }

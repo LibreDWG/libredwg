@@ -11,10 +11,9 @@ api_process (dwg_object *obj)
   BITCODE_B trans_space_flag;
   BITCODE_RC rotated_type;
   Dwg_DIMASSOC_Ref *ref;
-  BITCODE_BS j, num_xrefs;
+  BITCODE_BS j;
   BITCODE_H *xrefs;
   //BITCODE_BL intsect_gsmarker;
-  //BITCODE_H xrefobj;
   //BITCODE_H intsectxrefobj;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -24,10 +23,10 @@ api_process (dwg_object *obj)
     return;
 
   CHK_ENTITY_H (dimassoc, DIMASSOC, dimensionobj);
-  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, associativity, BLx, associativity);
+  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, associativity, BLx);
   CHK_ENTITY_MAX (dimassoc, DIMASSOC, associativity, BL, 15);
   CHK_ENTITY_TYPE (dimassoc, DIMASSOC, trans_space_flag, B);
-  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, rotated_type, RCd, rotated_type);
+  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, rotated_type, RCd);
   if (!dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "ref", &ref, NULL))
     fail ("DIMASSOC.ref");
   for (int i = 0; i < 4; i++)
@@ -86,6 +85,5 @@ api_process (dwg_object *obj)
     }
 
   //CHK_ENTITY_TYPE (dimassoc, DIMASSOC, intsect_gsmarker, BL);
-  //CHK_ENTITY_H (dimassoc, DIMASSOC, xrefobj);
   //CHK_ENTITY_H (dimassoc, DIMASSOC, intsectxrefobj);
 }

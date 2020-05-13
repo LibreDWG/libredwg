@@ -80,7 +80,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, contrast, BD);
   CHK_ENTITY_CMC (viewport, VIEWPORT, ambient_color);
   CHK_ENTITY_H (viewport, VIEWPORT, vport_entity_header);
-  CHK_ENTITY_HV (viewport, VIEWPORT, frozen_layers, frozen_layers, num_frozen_layers);
+  CHK_ENTITY_HV (viewport, VIEWPORT, frozen_layers, num_frozen_layers);
   CHK_ENTITY_H (viewport, VIEWPORT, clip_boundary);
   CHK_ENTITY_H (viewport, VIEWPORT, named_ucs);
   CHK_ENTITY_H (viewport, VIEWPORT, base_ucs);

@@ -39,7 +39,7 @@ api_process (dwg_object *obj)
     }
   if (version >= R_2004)
     {
-      CHK_ENTITY_HV (polyline_3d, POLYLINE_3D, vertex, vertex, num_owned);
+      CHK_ENTITY_HV (polyline_3d, POLYLINE_3D, vertex, num_owned);
     }
   CHK_ENTITY_H (polyline_3d, POLYLINE_3D, seqend);
 }

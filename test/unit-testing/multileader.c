@@ -204,7 +204,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (mleader, MULTILEADER, type, BS);
   CHK_ENTITY_CMC (mleader, MULTILEADER, color);
   CHK_ENTITY_H (mleader, MULTILEADER, ltype);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, linewt, BLd, linewt);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, linewt, BLd);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_landing, B);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_dogleg, B);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, landing_dist, BD);

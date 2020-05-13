@@ -4,39 +4,36 @@
 void
 api_process (dwg_object *obj)
 {
-  int error;
-  double rect_height, rect_width, text_height, extents_ht, extents_wid,
+  int error, isnew;
+  double rect_height, rect_width, text_height, extents_height, extents_width,
       linespace_factor;
   BITCODE_BS attachment, drawing_dir, linespace_style, class_version;
   BITCODE_B unknown_bit, annotative, default_flag;
   BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans, column_type;
   BITCODE_CMC bg_fill_color;
   char *text;
-  int isnew;
-  dwg_point_3d ins_pt, ext, x_axis_dir, pt3d;
+  dwg_point_3d insertion_pt, extrusion, x_axis_dir;
   BITCODE_H appid, style;
 
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT (obj);
   Dwg_Version_Type version = obj->parent->header.version;
 
   CHK_ENTITY_UTF8TEXT_W_OLD (mtext, MTEXT, text);
-  CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt, ins_pt);
-  CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion, ext);
+  CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt);
+  CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, x_axis_dir);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, rect_width, BD);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, rect_height, BD);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, text_height, BD);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, drawing_dir, BS);
-  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_height, BD, extents_ht);
-  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_width, BD, extents_wid);
+  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_height, BD);
+  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_width, BD);
   CHK_ENTITY_H (mtext, MTEXT, style);
   if (version >= R_2000)
     {
-      CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_style, BS,
-                             linespace_style);
-      CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_factor, BD,
-                             linespace_factor);
+      CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_style, BS);
+      CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_factor, BD);
       CHK_ENTITY_TYPE (mtext, MTEXT, unknown_bit, B);
     }
   if (version >= R_2004)

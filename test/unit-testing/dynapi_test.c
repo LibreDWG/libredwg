@@ -20106,12 +20106,12 @@ static int test_TABLE (const Dwg_Object *obj)
         fail ("TABLE.horiz_direction [3BD]");
   }
   {
-    BITCODE_3BD insertion_point;
-    if (dwg_dynapi_entity_value (table, "TABLE", "insertion_point", &insertion_point, NULL)
-        && !memcmp (&insertion_point, &table->insertion_point, sizeof (table->insertion_point)))
+    BITCODE_3BD insertion_pt;
+    if (dwg_dynapi_entity_value (table, "TABLE", "insertion_pt", &insertion_pt, NULL)
+        && !memcmp (&insertion_pt, &table->insertion_pt, sizeof (table->insertion_pt)))
         pass ();
     else
-        fail ("TABLE.insertion_point [3BD]");
+        fail ("TABLE.insertion_pt [3BD]");
   }
   {
     BITCODE_H last_attrib;

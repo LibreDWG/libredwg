@@ -26,7 +26,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, start_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, end_angle, BD);
   CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, end_angle, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, num_lines, RCd, num_lines);
+  CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, num_lines, RCd);
   
   if (!dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "lines", &lines, NULL))
     fail ("MLINESTYLE.lines");

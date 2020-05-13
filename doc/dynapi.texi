@@ -3501,8 +3501,8 @@ BL
 B
 @item unknown_bl1
 BL
-@item insertion_point
-3BD,	DXF 10
+@item insertion_pt
+3BD
 @item scale
 3BD_1,	DXF 41
 @item data_flags

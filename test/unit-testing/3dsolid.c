@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL i;
   BITCODE_BS version;
-  BITCODE_BL num_blocks, isolines, num_wires, num_sil, unknown_2007;
+  BITCODE_BL num_blocks, isolines, num_wires, num_silhouettes, unknown_2007;
   unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
@@ -33,8 +33,7 @@ api_process (dwg_object *obj)
       || error)
     fail ("old API dwg_ent_3dsolid_get_acis_data");
 
-  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, wireframe_data_present, B,
-                   wireframe_data_present);
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, wireframe_data_present, B);
   if (dwg_ent_3dsolid_get_wireframe_data_present (_3dsolid, &error)
           != wireframe_data_present
       || error)
@@ -54,14 +53,14 @@ api_process (dwg_object *obj)
       || error)
     fail ("old API dwg_ent_3dsolid_get_isoline_present");
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, isolines, BL);
-  if (dwg_ent_3dsolid_get_num_isolines (_3dsolid, &error) != isolines
+  if (dwg_ent_3dsolid_get_isolines (_3dsolid, &error) != isolines
       || error)
-    fail ("old API dwg_ent_3dsolid_get_num_isolines");
+    fail ("old API dwg_ent_3dsolid_get_isolines");
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_wires, BL);
   if (dwg_ent_3dsolid_get_num_wires (_3dsolid, &error) != num_wires || error)
     fail ("old API dwg_ent_3dsolid_get_num_wires");
-  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_silhouettes, BL, num_sil);
-  if (dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error) != num_sil
+  CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_silhouettes, BL);
+  if (dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error) != num_silhouettes
       || error)
     fail ("old API dwg_ent_3dsolid_get_num_sil");
 
@@ -78,7 +77,7 @@ api_process (dwg_object *obj)
   sil = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
   if (!error)
     {
-      for (i = 0; i < num_sil; i++)
+      for (i = 0; i < num_silhouettes; i++)
         ok ("3DSOLID.silhouettes[%d]:" FORMAT_BL, i, sil[i].vp_id);
       free (sil);
     }

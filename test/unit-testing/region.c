@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL i;
   BITCODE_BS version;
-  BITCODE_BL num_blocks, isolines, num_wires, num_sil, unknown_2007;
+  BITCODE_BL num_blocks, isolines, num_wires, num_silhouettes, unknown_2007;
   unsigned char *acis_data;
   BITCODE_B wireframe_data_present, point_present, isoline_present;
   BITCODE_B acis_empty, acis2_empty;
@@ -19,12 +19,8 @@ api_process (dwg_object *obj)
   dwg_ent_region *region = dwg_object_to_REGION (obj);
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 
-  CHK_ENTITY_TYPE (region, REGION, acis_empty, B);
-  if (dwg_ent_region_get_acis_empty (region, &error) != acis_empty || error)
-    fail ("old API dwg_ent_region_get_acis_empty");
-  CHK_ENTITY_TYPE (region, REGION, version, BS);
-  if (dwg_ent_region_get_version (region, &error) != version || error)
-    fail ("old API dwg_ent_region_get_version");
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, acis_empty, B);
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, version, BS);
   CHK_ENTITY_TYPE (region, REGION, num_blocks, BL);
   CHK_ENTITY_TYPE (region, REGION, acis_data, TV);
   if ((acis_data
@@ -35,50 +31,13 @@ api_process (dwg_object *obj)
       fail ("old API dwg_ent_region_get_acis_data");
     }
 
-  CHK_ENTITY_TYPE (region, REGION, wireframe_data_present, B,
-                   wireframe_data_present);
-  if (dwg_ent_region_get_wireframe_data_present (region, &error)
-          != wireframe_data_present
-      || error)
-    {
-      fail ("old API dwg_ent_region_get_wireframe_data_present");
-    }
-  CHK_ENTITY_TYPE (region, REGION, point_present, B);
-  if (dwg_ent_region_get_point_present (region, &error) != point_present
-      || error)
-    {
-      fail ("old API dwg_ent_region_get_point_present");
-    }
-
-  CHK_ENTITY_3RD (region, REGION, point);
-  dwg_ent_region_get_point (region, &pt3d, &error);
-  if (error || memcmp (&point, &pt3d, sizeof (point)))
-    {
-      fail ("old API dwg_ent_region_get_point");
-    }
-
-  CHK_ENTITY_TYPE (region, REGION, isoline_present, B);
-  if (dwg_ent_region_get_isoline_present (region, &error) != isoline_present
-      || error)
-    {
-      fail ("old API dwg_ent_region_get_isoline_present");
-    }
-  CHK_ENTITY_TYPE (region, REGION, isolines, BL);
-  if (dwg_ent_region_get_num_isolines (region, &error) != isolines
-      || error)
-    {
-      fail ("old API dwg_ent_region_get_num_isolines");
-    }
-  CHK_ENTITY_TYPE (region, REGION, num_wires, BL);
-  if (dwg_ent_region_get_num_wires (region, &error) != num_wires || error)
-    {
-      fail ("old API dwg_ent_region_get_num_wires");
-    }
-  CHK_ENTITY_TYPE (region, REGION, num_silhouettes, BL, num_sil);
-  if (dwg_ent_region_get_num_silhouettes (region, &error) != num_sil || error)
-    {
-      fail ("old API dwg_ent_region_get_num_sil");
-    }
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, wireframe_data_present, B);
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, point_present, B);
+  CHK_ENTITY_3RD_W_OLD (region, REGION, point);
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, isoline_present, B);
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, isolines, BL);
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, num_wires, BL);
+  CHK_ENTITY_TYPE_W_OLD (region, REGION, num_silhouettes, BL);
 
   wire = dwg_ent_region_get_wires (region, &error);
   if (!error)
@@ -93,7 +52,7 @@ api_process (dwg_object *obj)
   sil = dwg_ent_region_get_silhouettes (region, &error);
   if (!error)
     {
-      for (i = 0; i < num_sil; i++)
+      for (i = 0; i < num_silhouettes; i++)
         printf ("silhouettes of region :" FORMAT_BL "\n", sil[i].vp_id);
       free (sil);
     }

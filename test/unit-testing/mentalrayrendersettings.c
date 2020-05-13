@@ -90,14 +90,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling_contrast_color3, BD);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling_contrast_color4, BD);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, shadow_mode, BS);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, shadow_maps_enabled, B , shadow_maps_enabled);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, ray_tracing_enabled, B , ray_tracing_enabled);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, shadow_maps_enabled, B);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, ray_tracing_enabled, B);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, ray_trace_depth1, BL);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, ray_trace_depth2, BL);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, ray_trace_depth3, BL);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, global_illumination_enabled, B , global_illumination_enabled);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, global_illumination_enabled, B);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, gi_sample_count, BL);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, gi_sample_radius_enabled, B , gi_sample_radius_enabled);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, gi_sample_radius_enabled, B);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, gi_sample_radius, BD);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, gi_photons_per_light, BL);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, photon_trace_depth1, BL);
@@ -116,11 +116,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, diagnostics_grid_float, BD);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, diagnostics_photon_mode, BS);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, diagnostics_bsp_mode, BS);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, export_mi_enabled, B , export_mi_enabled);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, export_mi_enabled, B);
   CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, mr_description);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, tile_size, BL);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, tile_order, BS);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, memory_limit, BL);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, diagnostics_samples_mode, B , diagnostics_samples_mode);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, diagnostics_samples_mode, B);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, energy_multiplier, BD);
 }

@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
   char *user_text;
   int isnew;
   dwg_point_2d text_midpt, clone_ins_pt;
-  dwg_point_3d def_pt, xline1_pt, xline2_pt, ext, ins_scale, pt3d;
+  dwg_point_3d def_pt, xline1_pt, xline2_pt, extrusion, ins_scale, pt3d;
   BITCODE_H dimstyle, block;
 
   dwg_ent_dim_linear *dim_linear = dwg_object_to_DIMENSION_LINEAR (obj);
@@ -21,24 +21,19 @@ api_process (dwg_object *obj)
 
   /* common */
   CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, class_version, RC);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, lspace_style, BS,
-                         lspace_style);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, lspace_factor, BD,
-                         lspace_factor);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, act_measurement, BD,
-                         act_measurement);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, lspace_style, BS);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, lspace_factor, BD);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, act_measurement, BD);
   CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, elevation, BD);
-  CHK_ENTITY_3RD (dim, DIMENSION_LINEAR, extrusion, ext);
+  CHK_ENTITY_3RD (dim, DIMENSION_LINEAR, extrusion);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, clone_ins_pt);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, text_midpt);
   CHK_ENTITY_UTF8TEXT (dim, DIMENSION_LINEAR, user_text);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, text_rotation, BD,
-                         text_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, text_rotation, BD);
   CHK_ENTITY_MAX (dim, DIMENSION_LINEAR, text_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_LINEAR, ins_scale);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, ins_rotation, BD,
-                         ins_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, ins_rotation, BD);
   CHK_ENTITY_MAX (dim, DIMENSION_LINEAR, ins_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, horiz_dir, BD);
   CHK_ENTITY_MAX (dim, DIMENSION_LINEAR, horiz_dir, BD, MAX_ANGLE);
@@ -61,10 +56,8 @@ api_process (dwg_object *obj)
     fail ("DIMENSION_LINEAR.xline2_pt");
   else
     pass ();
-  CHK_ENTITY_TYPE (dim_linear, DIMENSION_LINEAR, oblique_angle, BD,
-                   oblique_angle);
-  CHK_ENTITY_TYPE_W_OLD (dim_linear, DIMENSION_LINEAR, dim_rotation, BD,
-                         dim_rotation);
+  CHK_ENTITY_TYPE (dim_linear, DIMENSION_LINEAR, oblique_angle, BD);
+  CHK_ENTITY_TYPE_W_OLD (dim_linear, DIMENSION_LINEAR, dim_rotation, BD);
 
   CHK_ENTITY_H (dim_linear, DIMENSION_LINEAR, dimstyle);
   CHK_ENTITY_H (dim_linear, DIMENSION_LINEAR, block);

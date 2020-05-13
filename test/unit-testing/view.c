@@ -64,7 +64,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VIEW, lens_length, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, front_clip, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, back_clip, BD);
-  CHK_ENTITY_TYPE (_obj, VIEW, VIEWMODE, 4BITS, VIEWMODE);
+  CHK_ENTITY_TYPE (_obj, VIEW, VIEWMODE, 4BITS);
   CHK_ENTITY_TYPE (_obj, VIEW, render_mode, RC);
   CHK_ENTITY_TYPE (_obj, VIEW, use_default_lights, B);
   CHK_ENTITY_TYPE (_obj, VIEW, default_lightning_type, RC);

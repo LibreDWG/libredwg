@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BS lspace_style, attachment;
   char *user_text;
   dwg_point_2d text_midpt, clone_ins_pt, pt2d;
-  dwg_point_3d def_pt, xline1_pt, xline2_pt, ext, ins_scale, pt3d;
+  dwg_point_3d def_pt, xline1_pt, xline2_pt, extrusion, ins_scale, pt3d;
   BITCODE_H dimstyle, block;
   int isnew;
 
@@ -21,23 +21,18 @@ api_process (dwg_object *obj)
 
   /* common */
   CHK_ENTITY_TYPE (dim, DIMENSION_ALIGNED, class_version, RC);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, lspace_style, BS,
-                         lspace_style);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, lspace_factor, BD,
-                         lspace_factor);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, act_measurement, BD,
-                         act_measurement);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, lspace_style, BS);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, lspace_factor, BD);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, act_measurement, BD);
   CHK_ENTITY_TYPE (dim, DIMENSION_ALIGNED, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, elevation, BD);
-  CHK_ENTITY_3RD (dim, DIMENSION_ALIGNED, extrusion, ext);
+  CHK_ENTITY_3RD (dim, DIMENSION_ALIGNED, extrusion);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ALIGNED, clone_ins_pt);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ALIGNED, text_midpt);
   CHK_ENTITY_UTF8TEXT (dim, DIMENSION_ALIGNED, user_text);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, text_rotation, BD,
-                         text_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, text_rotation, BD);
   CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_ALIGNED, ins_scale);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, ins_rotation, BD,
-                         ins_rotation);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, ins_rotation, BD);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, horiz_dir, BD);
   CHK_ENTITY_MAX (dim, DIMENSION_ALIGNED, text_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_MAX (dim, DIMENSION_ALIGNED, ins_rotation, BD, MAX_ANGLE);
@@ -63,8 +58,7 @@ api_process (dwg_object *obj)
   else
     pass ();
 
-  CHK_ENTITY_TYPE (dim_aligned, DIMENSION_ALIGNED, oblique_angle, BD,
-                   oblique_angle);
+  CHK_ENTITY_TYPE (dim_aligned, DIMENSION_ALIGNED, oblique_angle, BD);
 
   CHK_ENTITY_H (dim_aligned, DIMENSION_ALIGNED, dimstyle);
   CHK_ENTITY_H (dim_aligned, DIMENSION_ALIGNED, block);

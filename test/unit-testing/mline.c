@@ -6,21 +6,21 @@ api_process (dwg_object *obj)
 {
   int error;
   double scale;
-  BITCODE_RC just;
+  BITCODE_RC justification;
   BITCODE_RC num_lines;
   BITCODE_BS i, num_verts, flags;
-  dwg_point_3d base_point, ext; // 3d_points
+  dwg_point_3d base_point, extrusion;
   dwg_mline_vertex *verts, *v1;
   BITCODE_H mlinestyle;
 
   dwg_ent_mline *mline = dwg_object_to_MLINE (obj);
 
   CHK_ENTITY_TYPE_W_OLD (mline, MLINE, scale, BD);
-  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, justification, RC, just);
+  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, justification, RC);
   CHK_ENTITY_3RD_W_OLD (mline, MLINE, base_point);
-  CHK_ENTITY_3RD_W_OLD (mline, MLINE, extrusion, ext);
+  CHK_ENTITY_3RD_W_OLD (mline, MLINE, extrusion);
   CHK_ENTITY_TYPE_W_OLD (mline, MLINE, flags, BS);
-  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, num_lines, RCd, num_lines);
+  CHK_ENTITY_TYPE_W_OLD (mline, MLINE, num_lines, RCd);
   CHK_ENTITY_TYPE_W_OLD (mline, MLINE, num_verts, BS);
 
   if (!dwg_dynapi_entity_value (mline, "MLINE", "verts", &v1, NULL))

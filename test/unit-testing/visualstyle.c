@@ -107,7 +107,7 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_overhang, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_silhouette_width, BS);
-    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_halo_gap, RC);
+    //CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_halo_gap, RC); // need to cast
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_isolines, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style_apply, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_ltype, BS);

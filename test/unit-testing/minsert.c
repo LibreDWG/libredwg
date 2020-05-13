@@ -5,7 +5,7 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  dwg_point_3d ins_pt, ext, scale;
+  dwg_point_3d ins_pt, extrusion, scale;
   double rotation;
   BITCODE_BB scale_flag;
   BITCODE_B has_attribs;
@@ -22,7 +22,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (minsert, MINSERT, scale_flag, BB);
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, rotation, BD);
   CHK_ENTITY_MAX (minsert, MINSERT, rotation, BD, MAX_ANGLE);
-  CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, extrusion, ext);
+  CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, extrusion);
   CHK_ENTITY_TYPE (minsert, MINSERT, has_attribs, B);
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_owned, BL);
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_cols, BS);
@@ -40,8 +40,7 @@ api_process (dwg_object *obj)
         }
       if (version >= R_2004)
         {
-          CHK_ENTITY_HV (minsert, MINSERT, attrib_handles, attrib_handles,
-                         num_owned);
+          CHK_ENTITY_HV (minsert, MINSERT, attrib_handles, num_owned);
         }
       CHK_ENTITY_H (minsert, MINSERT, seqend);
     }

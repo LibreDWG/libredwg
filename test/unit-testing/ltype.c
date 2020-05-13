@@ -36,7 +36,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, description);
   CHK_ENTITY_TYPE (ltype, LTYPE, pattern_len, BD);
   CHK_ENTITY_TYPE (ltype, LTYPE, alignment, RC);
-  CHK_ENTITY_TYPE (ltype, LTYPE, num_dashes, RCd, num_dashes);
+  CHK_ENTITY_TYPE (ltype, LTYPE, num_dashes, RCd);
   if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes", &dashes, NULL))
     fail ("LTYPE.dashes");
   else

@@ -6,7 +6,7 @@ api_process (dwg_object *obj)
 {
   int error;
   double height, dimgap;
-  dwg_point_3d ins_pt, x_dir, ext, pt3d;
+  dwg_point_3d ins_pt, x_direction, extrusion;
   char *text_value;
   int isnew;
   BITCODE_BS unknown_short;
@@ -18,17 +18,12 @@ api_process (dwg_object *obj)
   if (tolerance->text_value)
     {
       CHK_ENTITY_UTF8TEXT (tolerance, TOLERANCE, text_value);
-      /*if (version < R_2007 &&
-        (strcmp (dwg_ent_tolerance_get_text_value (tolerance, &error),
-        text_value)
-        || error))
-        fail ("old API dwg_ent_tolerance_get_text_value");*/
     }
   else
     ok ("empty TOLERANCE.text_value");
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, ins_pt);
-  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, extrusion, ext);
-  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, x_direction, x_dir);
+  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, extrusion);
+  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, x_direction);
   if (version <= R_14)
     {
       CHK_ENTITY_TYPE (tolerance, TOLERANCE, unknown_short, BS);

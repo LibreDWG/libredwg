@@ -6,7 +6,7 @@ api_process (dwg_object *obj)
 {
   int error;
   double thickness;
-  dwg_point_3d pt3d, ext, start, end;
+  dwg_point_3d pt3d, extrusion, start, end;
   BITCODE_B z_is_zero;
 
   dwg_ent_line *line = dwg_object_to_LINE (obj);

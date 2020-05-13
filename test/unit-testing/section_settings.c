@@ -37,7 +37,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (_obj, SECTION_SETTINGS, type, BS, 8);
   CHK_ENTITY_TYPE (_obj, SECTION_SETTINGS, num_sources, BL);
   CHK_ENTITY_MAX (_obj, SECTION_SETTINGS, num_sources, BL, 2000);
-  CHK_ENTITY_HV (_obj, SECTION_SETTINGS, sources, sources, num_sources);
+  CHK_ENTITY_HV (_obj, SECTION_SETTINGS, sources, num_sources);
   // ...
 #endif
 }

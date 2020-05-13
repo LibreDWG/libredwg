@@ -31,5 +31,5 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, flag1, B);
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, num_viewports, BL);
-  CHK_ENTITY_HV (_obj, VPORT_ENTITY_HEADER, viewports, viewports, num_viewports);
+  CHK_ENTITY_HV (_obj, VPORT_ENTITY_HEADER, viewports, num_viewports);
 }

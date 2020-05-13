@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   BITCODE_BL unknown_bl;
   BITCODE_B unknown_b;
   BITCODE_BL unknown_bl1;
-  BITCODE_3BD insertion_point;
+  BITCODE_3BD insertion_pt;
   BITCODE_3BD scale;
   BITCODE_BB data_flags;
   BITCODE_BD rotation;
@@ -153,7 +153,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (table, TABLE, unknown_bl, BL);
   CHK_ENTITY_TYPE (table, TABLE, unknown_b, B);
   CHK_ENTITY_TYPE (table, TABLE, unknown_bl1, BL);
-  CHK_ENTITY_3RD (table, TABLE, insertion_point);
+  CHK_ENTITY_3RD (table, TABLE, insertion_pt);
   CHK_ENTITY_3RD (table, TABLE, scale);
   CHK_ENTITY_TYPE (table, TABLE, data_flags, BB);
   CHK_ENTITY_TYPE (table, TABLE, rotation, BD);

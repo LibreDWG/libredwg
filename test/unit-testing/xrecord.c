@@ -38,8 +38,6 @@ api_process (dwg_object *obj)
   else
     fail ("xrecord->xdata[0]");
 #endif
-  CHK_ENTITY_TYPE_W_OBJ (xrecord, XRECORD, num_objid_handles, BL,
-                         num_objid_handles);
-  CHK_ENTITY_HV (xrecord, XRECORD, objid_handles, objid_handles,
-                 num_objid_handles);
+  CHK_ENTITY_TYPE_W_OBJ (xrecord, XRECORD, num_objid_handles, BL);
+  CHK_ENTITY_HV (xrecord, XRECORD, objid_handles, num_objid_handles);
 }

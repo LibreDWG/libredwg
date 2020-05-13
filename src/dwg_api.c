@@ -2610,7 +2610,7 @@ dwg_ent_text_get_text (const dwg_ent_text *restrict ent, int *restrict error)
 }
 
 /** Returns the _dwg_entity_TEXT::insertion_pt, DXF 10.
-\code Usage: dwg_ent_text_get_insertion_point(text, &point, &error);
+\code Usage: dwg_ent_text_get_insertion_pt(text, &point, &error);
 \endcode
 \param[in] text     dwg_ent_text*
 \param[out] point   dwg_2d_point*
@@ -2618,7 +2618,7 @@ dwg_ent_text_get_text (const dwg_ent_text *restrict ent, int *restrict error)
 \deprecated
 */
 void
-dwg_ent_text_get_insertion_point (const dwg_ent_text *restrict text,
+dwg_ent_text_get_insertion_pt (const dwg_ent_text *restrict text,
                                   dwg_point_2d *restrict point,
                                   int *restrict error)
 {
@@ -2640,7 +2640,7 @@ dwg_ent_text_get_insertion_point (const dwg_ent_text *restrict text,
 }
 
 /** Sets the _dwg_entity_TEXT::insertion_pt, DXF 10.
-\code Usage: dwg_ent_text_set_insertion_point(text, &point, &error)
+\code Usage: dwg_ent_text_set_insertion_pt(text, &point, &error)
 \endcode
 \param[in,out] text    dwg_ent_text*
 \param[in]     point   dwg_2d_point*
@@ -2648,7 +2648,7 @@ dwg_ent_text_get_insertion_point (const dwg_ent_text *restrict text,
 \deprecated
 */
 void
-dwg_ent_text_set_insertion_point (dwg_ent_text *restrict text,
+dwg_ent_text_set_insertion_pt (dwg_ent_text *restrict text,
                                   const dwg_point_2d *restrict point,
                                   int *restrict error)
 {
@@ -3033,7 +3033,7 @@ dwg_ent_attrib_get_text (const dwg_ent_attrib *restrict ent,
 }
 
 /** Returns the _dwg_entity_ATTRIB::insertion_pt, DXF 10.
-\code Usage: dwg_ent_attrib_get_insertion_point(attrib, &point, &error);
+\code Usage: dwg_ent_attrib_get_insertion_pt(attrib, &point, &error);
 \endcode
 \param[in] attrib   dwg_ent_attrib*
 \param[out] point   dwg_point_3d
@@ -3041,7 +3041,7 @@ dwg_ent_attrib_get_text (const dwg_ent_attrib *restrict ent,
 \deprecated
 */
 void
-dwg_ent_attrib_get_insertion_point (const dwg_ent_attrib *restrict attrib,
+dwg_ent_attrib_get_insertion_pt (const dwg_ent_attrib *restrict attrib,
                                     dwg_point_2d *restrict point,
                                     int *restrict error)
 {
@@ -3063,7 +3063,7 @@ dwg_ent_attrib_get_insertion_point (const dwg_ent_attrib *restrict attrib,
 }
 
 /** Sets the _dwg_entity_ATTRIB::insertion_pt, DXF 10
-\code Usage: dwg_ent_attrib_set_insertion_point(attrib, &point, &error)
+\code Usage: dwg_ent_attrib_set_insertion_pt(attrib, &point, &error)
 \endcode
 \param[in] attrib   dwg_ent_attrib*
 \param[in] point    dwg_point_3d
@@ -3071,7 +3071,7 @@ dwg_ent_attrib_get_insertion_point (const dwg_ent_attrib *restrict attrib,
 \deprecated
 */
 void
-dwg_ent_attrib_set_insertion_point (dwg_ent_attrib *restrict attrib,
+dwg_ent_attrib_set_insertion_pt (dwg_ent_attrib *restrict attrib,
                                     const dwg_point_2d *restrict point,
                                     int *restrict error)
 {
@@ -3451,7 +3451,7 @@ dwg_ent_attdef_get_default_value (const dwg_ent_attdef *restrict ent,
 }
 
 /** Returns the _dwg_entity_ATTDEF::insertion_pt, DXF 10
-\code Usage: dwg_ent_attdef_get_insertion_point(attdef, &point, &error);
+\code Usage: dwg_ent_attdef_get_insertion_pt(attdef, &point, &error);
 \endcode
 \param[in]  attdef  dwg_ent_attdef*
 \param[out] point   dwg_point_2d*
@@ -3459,7 +3459,7 @@ dwg_ent_attdef_get_default_value (const dwg_ent_attdef *restrict ent,
 \deprecated
 */
 void
-dwg_ent_attdef_get_insertion_point (const dwg_ent_attdef *restrict attdef,
+dwg_ent_attdef_get_insertion_pt (const dwg_ent_attdef *restrict attdef,
                                     dwg_point_2d *restrict point,
                                     int *restrict error)
 {
@@ -3481,7 +3481,7 @@ dwg_ent_attdef_get_insertion_point (const dwg_ent_attdef *restrict attdef,
 }
 
 /** Sets the _dwg_entity_ATTDEF::insertion_pt, DXF 10
-\code Usage: dwg_ent_attdef_set_insertion_point(attdef, &point, &error)
+\code Usage: dwg_ent_attdef_set_insertion_pt(attdef, &point, &error)
 \endcode
 \param[in] attdef   dwg_ent_attdef*
 \param[in] point    dwg_point_2d*
@@ -3489,7 +3489,7 @@ dwg_ent_attdef_get_insertion_point (const dwg_ent_attdef *restrict attdef,
 \deprecated
 */
 void
-dwg_ent_attdef_set_insertion_point (dwg_ent_attdef *restrict attdef,
+dwg_ent_attdef_set_insertion_pt (dwg_ent_attdef *restrict attdef,
                                     const dwg_point_2d *restrict point,
                                     int *restrict error)
 {
@@ -16318,11 +16318,11 @@ dwg_ent_3dsolid_set_point (dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/** Returns the _dwg_entity_3DSOLID::isolines
+/** Returns the number of _dwg_entity_3DSOLID::isolines
  */
 BITCODE_BL
-dwg_ent_3dsolid_get_num_isolines (const dwg_ent_3dsolid *restrict _3dsolid,
-                                  int *restrict error)
+dwg_ent_3dsolid_get_isolines (const dwg_ent_3dsolid *restrict _3dsolid,
+                              int *restrict error)
 {
   if (_3dsolid)
     {
@@ -16337,12 +16337,12 @@ dwg_ent_3dsolid_get_num_isolines (const dwg_ent_3dsolid *restrict _3dsolid,
     }
 }
 
-/** Sets the _dwg_entity_3DSOLID::num_isolines
+/** Sets the number of _dwg_entity_3DSOLID::isolines
     (apparently safe to set)
  */
 void
-dwg_ent_3dsolid_set_num_isolines (dwg_ent_3dsolid *restrict _3dsolid,
-                                  const BITCODE_BL num, int *restrict error)
+dwg_ent_3dsolid_set_isolines (dwg_ent_3dsolid *restrict _3dsolid,
+                              const BITCODE_BL num, int *restrict error)
 {
   if (_3dsolid)
     {
@@ -16638,23 +16638,23 @@ dwg_ent_region_set_point (dwg_ent_region *restrict region,
   dwg_ent_3dsolid_set_point ((dwg_ent_3dsolid *)region, point, error);
 }
 
-/** Returns the Dwg_Entity_REGION::num_isolines
+/** Returns the Dwg_Entity_REGION::isolines
  */
 BITCODE_BL
-dwg_ent_region_get_num_isolines (const dwg_ent_region *restrict region,
-                                 int *restrict error)
+dwg_ent_region_get_isolines (const dwg_ent_region *restrict region,
+                             int *restrict error)
 {
-  return dwg_ent_3dsolid_get_num_isolines ((const dwg_ent_3dsolid *)region,
-                                           error);
+  return dwg_ent_3dsolid_get_isolines ((const dwg_ent_3dsolid *)region,
+                                       error);
 }
 
-/** Sets the Dwg_Entity_REGION::num_isolines (??)
+/** Sets the Dwg_Entity_REGION::isolines (??)
  */
 void
-dwg_ent_region_set_num_isolines (dwg_ent_region *restrict region,
+dwg_ent_region_set_isolines (dwg_ent_region *restrict region,
                                  const BITCODE_BL num, int *restrict error)
 {
-  dwg_ent_3dsolid_set_num_isolines ((dwg_ent_3dsolid *)region, num, error);
+  dwg_ent_3dsolid_set_isolines ((dwg_ent_3dsolid *)region, num, error);
 }
 
 /** Returns the Dwg_Entity_REGION::isoline_present bit
@@ -16854,23 +16854,23 @@ dwg_ent_body_set_point (dwg_ent_body *restrict body,
   dwg_ent_3dsolid_set_point ((dwg_ent_3dsolid *)body, point, error);
 }
 
-/** Returns the Dwg_Entity_BODY::num_isolines
+/** Returns the Dwg_Entity_BODY::isolines
  */
 BITCODE_BL
-dwg_ent_body_get_num_isolines (const dwg_ent_body *restrict body,
+dwg_ent_body_get_isolines (const dwg_ent_body *restrict body,
                                int *restrict error)
 {
-  return dwg_ent_3dsolid_get_num_isolines ((const dwg_ent_3dsolid *)body,
+  return dwg_ent_3dsolid_get_isolines ((const dwg_ent_3dsolid *)body,
                                            error);
 }
 
-/** Sets the Dwg_Entity_BODY::num_isolines (??)
+/** Sets the Dwg_Entity_BODY::isolines (??)
  */
 void
-dwg_ent_body_set_num_isolines (dwg_ent_body *restrict body,
+dwg_ent_body_set_isolines (dwg_ent_body *restrict body,
                                const BITCODE_BL num, int *restrict error)
 {
-  dwg_ent_3dsolid_set_num_isolines ((dwg_ent_3dsolid *)body, num, error);
+  dwg_ent_3dsolid_set_isolines ((dwg_ent_3dsolid *)body, num, error);
 }
 
 /** Returns the Dwg_Entity_BODY::isoline_present bit
@@ -16960,14 +16960,14 @@ dwg_ent_body_set_acis_empty2 (dwg_ent_body *restrict body,
  *                    FUNCTIONS FOR TABLE ENTITY                     *
  ********************************************************************/
 
-/** Sets _dwg_entity_TABLE::insertion_point, DXF 10.
+/** Sets _dwg_entity_TABLE::insertion_pt, DXF 10.
 \param[in,out] table      dwg_ent_table*
 \param[in]     point      dwg_point_3d *
 \param[out]    error      set to 0 for ok, 1 on error
 \deprecated
 */
 void
-dwg_ent_table_set_insertion_point (dwg_ent_table *restrict table,
+dwg_ent_table_set_insertion_pt (dwg_ent_table *restrict table,
                                    const dwg_point_3d *restrict point,
                                    int *restrict error)
 {
@@ -16978,9 +16978,9 @@ dwg_ent_table_set_insertion_point (dwg_ent_table *restrict table,
   )
     {
       *error = 0;
-      table->insertion_point.x = point->x;
-      table->insertion_point.y = point->y;
-      table->insertion_point.z = point->z;
+      table->insertion_pt.x = point->x;
+      table->insertion_pt.y = point->y;
+      table->insertion_pt.z = point->z;
     }
   else
     {
@@ -16996,7 +16996,7 @@ dwg_ent_table_set_insertion_point (dwg_ent_table *restrict table,
 \deprecated
 */
 void
-dwg_ent_table_get_insertion_point (const dwg_ent_table *restrict table,
+dwg_ent_table_get_insertion_pt (const dwg_ent_table *restrict table,
                                    dwg_point_3d *restrict point,
                                    int *restrict error)
 {
@@ -17007,9 +17007,9 @@ dwg_ent_table_get_insertion_point (const dwg_ent_table *restrict table,
   )
     {
       *error = 0;
-      point->x = table->insertion_point.x;
-      point->y = table->insertion_point.y;
-      point->z = table->insertion_point.z;
+      point->x = table->insertion_pt.x;
+      point->y = table->insertion_pt.y;
+      point->z = table->insertion_pt.z;
     }
   else
     {
