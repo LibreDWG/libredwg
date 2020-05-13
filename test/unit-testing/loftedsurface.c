@@ -56,16 +56,16 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_ent_loftedsurface *_obj = dwg_object_to_LOFTEDSURFACE (obj);
 
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, acis_empty, B, acis_empty);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, version, BS, version);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, acis_data, TF, acis_data);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, wireframe_data_present, B, wireframe_data_present);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, point_present, B, point_present);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, acis_empty, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, version, BS);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, acis_data, TF);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, wireframe_data_present, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, point_present, B);
   CHK_ENTITY_3RD (_obj, LOFTEDSURFACE, point, point);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, isoline_present, B, isoline_present);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, isolines, BL, isolines);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_wires, BL, num_wires);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_silhouettes, BL, num_silhouettes);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, isoline_present, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, isolines, BL);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_wires, BL);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_silhouettes, BL);
   if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "wires", &wires, NULL))
     fail ("LOFTEDSURFACE.wires");
   else
@@ -82,13 +82,13 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, unknown_2007, BL, unknown_2007);
+      CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, unknown_2007, BL);
       CHK_ENTITY_H (_obj, LOFTEDSURFACE, history_id, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, modeler_format_version, BS, modeler_format_version);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, u_isolines, BS, u_isolines);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, v_isolines, BS, v_isolines);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, modeler_format_version, BS);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, u_isolines, BS);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, v_isolines, BS);
 
   if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE",
                                 "loft_entity_transmatrix",
@@ -100,21 +100,21 @@ api_process (dwg_object *obj)
         ok ("LOFTEDSURFACE.loft_entity_transmatrix[%d]: %f", i,
             loft_entity_transmatrix[i]);
       }
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, plane_normal_lofting_type, BL, plane_normal_lofting_type);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, start_draft_angle, BD, start_draft_angle);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, end_draft_angle, BD, end_draft_angle);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, start_draft_magnitude, BD, start_draft_magnitude);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, end_draft_magnitude, BD, end_draft_magnitude);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, arc_length_parameterization, B, arc_length_parameterization);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, no_twist, B, no_twist);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, align_direction, B, align_direction);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, simple_surfaces, B, simple_surfaces);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, closed_surfaces, B, closed_surfaces);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, solid, B, solid);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, ruled_surface, B, ruled_surface);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, virtual_guide, B, virtual_guide);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_cross_sections, BS, num_cross_sections);
-  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_guide_curves, BS, num_guide_curves);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, plane_normal_lofting_type, BL);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, start_draft_angle, BD);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, end_draft_angle, BD);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, start_draft_magnitude, BD);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, end_draft_magnitude, BD);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, arc_length_parameterization, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, no_twist, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, align_direction, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, simple_surfaces, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, closed_surfaces, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, solid, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, ruled_surface, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, virtual_guide, B);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_cross_sections, BS);
+  CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_guide_curves, BS);
   CHK_ENTITY_H (_obj, LOFTEDSURFACE, path_curve, path_curve);
   if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "cross_sections", &cross_sections, NULL))
     fail ("LOFTEDSURFACE.cross_sections");

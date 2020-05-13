@@ -12,8 +12,8 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_lightlist *_obj = dwg_object_to_LIGHTLIST (obj);
 
-  CHK_ENTITY_TYPE (_obj, LIGHTLIST, class_version, BS, class_version);
-  CHK_ENTITY_TYPE (_obj, LIGHTLIST, num_lights, BS, num_lights);
+  CHK_ENTITY_TYPE (_obj, LIGHTLIST, class_version, BS);
+  CHK_ENTITY_TYPE (_obj, LIGHTLIST, num_lights, BS);
   if (!dwg_dynapi_entity_value (_obj, "LIGHTLIST", "lights", &lights, NULL))
     fail ("LIGHTLIST.lights");
   for (i = 0; i < num_lights; i++)

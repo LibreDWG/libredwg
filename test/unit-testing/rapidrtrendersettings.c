@@ -29,23 +29,23 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_rapidrtrendersettings *_obj = dwg_object_to_RAPIDRTRENDERSETTINGS (obj);
 
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, class_version, BL, class_version);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, class_version, BL);
   CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, name, name);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_enabled, B, fog_enabled);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_background_enabled, B, fog_background_enabled);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, backfaces_enabled, B, backfaces_enabled);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, environ_image_enabled, B, environ_image_enabled);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_enabled, B);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_background_enabled, B);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, backfaces_enabled, B);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, environ_image_enabled, B);
   CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, environ_image_filename, environ_image_filename);
   CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, description, description);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, display_index, BL, display_index);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, has_predefined, B, has_predefined);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, display_index, BL);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, has_predefined, B);
 
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, rapidrt_version, BL, rapidrt_version);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_target, BL, render_target);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_level, BL, render_level);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_time, BL, render_time);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, lighting_model, BL, lighting_model);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_type, BL, filter_type);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_width, BD, filter_width);
-  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_height, BD, filter_height);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, rapidrt_version, BL);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_target, BL);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_level, BL);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_time, BL);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, lighting_model, BL);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_type, BL);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_width, BD);
+  CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_height, BD);
 }

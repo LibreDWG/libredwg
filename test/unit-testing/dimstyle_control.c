@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_dimstyle_control *ctrl = dwg_object_to_DIMSTYLE_CONTROL (obj);
 
-  CHK_ENTITY_TYPE (ctrl, DIMSTYLE_CONTROL, num_entries, BS, num_entries);
+  CHK_ENTITY_TYPE (ctrl, DIMSTYLE_CONTROL, num_entries, BS);
   entries = dwg_object_tablectrl_get_entries (obj, &error);
   if (!dwg_dynapi_entity_value (ctrl, "DIMSTYLE_CONTROL", "entries", &hdls, NULL))
     fail ("DIMSTYLE_CONTROL.entries");
@@ -24,7 +24,7 @@ api_process (dwg_object *obj)
       else
         fail ("DIMSTYLE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
     }
-  CHK_ENTITY_TYPE (ctrl, DIMSTYLE_CONTROL, num_morehandles, RC, num_morehandles);  
+  CHK_ENTITY_TYPE (ctrl, DIMSTYLE_CONTROL, num_morehandles, RC);  
   if (!dwg_dynapi_entity_value (ctrl, "DIMSTYLE_CONTROL", "morehandles", &morehandles, NULL))
     fail ("DIMSTYLE_CONTROL.morehandles");
   for (i = 0; i < num_morehandles; i++)

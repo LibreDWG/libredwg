@@ -24,16 +24,16 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_assocaction *_obj = dwg_object_to_ASSOCACTION (obj);
 
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, class_version, BS, class_version);
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, geometry_status, BL, geometry_status);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, class_version, BS);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, geometry_status, BL);
   CHK_ENTITY_MAX (_obj, ASSOCACTION, geometry_status, BL, 10);
   CHK_ENTITY_H (_obj, ASSOCACTION, owningnetwork, owningnetwork);
   CHK_ENTITY_H (_obj, ASSOCACTION, actionbody, actionbody);
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, action_index, BL, action_index);
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, max_assoc_dep_index, BL, max_assoc_dep_index);
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_deps, BL, num_deps);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, action_index, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, max_assoc_dep_index, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_deps, BL);
   //Dwg_ASSOCACTION_Deps *deps;
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_params, BL, num_owned_params);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCACTION, owned_params, owned_params, num_owned_params);
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_value_param_names,
                    BL, num_owned_value_param_names);
@@ -43,7 +43,7 @@ api_process (dwg_object *obj)
   //CHK_SUBCLASS_UTF8TEXT (_obj->body, ACTIONBODY, evaluatorid);
   //CHK_SUBCLASS_UTF8TEXT (_obj->body, ACTIONBODY, expression);
   //CHK_SUBCLASS_TYPE (_obj->body, ACTIONBODY, value, BL);
-  //CHK_ENTITY_TYPE (_obj, ASSOCACTION, status, BL, status);
+  //CHK_ENTITY_TYPE (_obj, ASSOCACTION, status, BL);
   //CHK_ENTITY_H (_obj, ASSOCACTION, actionbody, actionbody);
   //CHK_ENTITY_H (_obj, ASSOCACTION, callback, callback);
   //CHK_ENTITY_H (_obj, ASSOCACTION, owningnetwork, owningnetwork);

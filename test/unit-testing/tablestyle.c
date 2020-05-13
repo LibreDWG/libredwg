@@ -28,17 +28,17 @@ api_process (dwg_object *obj)
       printf ("skip: TABLESTYLE r2010+ not yet implemented");
       return;
     }
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, class_version, BL, class_version);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, class_version, BL);
   CHK_ENTITY_UTF8TEXT (tblstyle, TABLESTYLE, name, name);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, flow_direction, BS, flow_direction);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, horiz_cell_margin, BD, horiz_cell_margin);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, vert_cell_margin, BD, vert_cell_margin);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, title_suppressed, B, title_suppressed);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, header_suppressed, B, header_suppressed);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, num_rowstyles, BL, num_rowstyles);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, flow_direction, BS);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, horiz_cell_margin, BD);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, vert_cell_margin, BD);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, title_suppressed, B);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, header_suppressed, B);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, num_rowstyles, BL);
   if (num_rowstyles != 3)
     fail ("TABLESTYLE.num_rowstyles %d != 3", num_rowstyles);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, num_cells, BL, num_cells);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, num_cells, BL);
   if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "rowstyles", &rowstyles, NULL))
     fail ("TABLESTYLE.rowstyles");
   if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "cells", &cells, NULL))

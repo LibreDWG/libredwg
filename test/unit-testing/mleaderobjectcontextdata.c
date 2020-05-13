@@ -15,9 +15,9 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_mleaderobjectcontextdata *_obj = dwg_object_to_MLEADEROBJECTCONTEXTDATA (obj);
 
-  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, class_version, BS, class_version);
-  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, is_default, B, is_default);
-  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, in_dwg, B, in_dwg);
+  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, class_version, BS);
+  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, is_default, B);
+  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, in_dwg, B);
   CHK_ENTITY_H (_obj, MLEADEROBJECTCONTEXTDATA, scale, scale);
 #endif
 }

@@ -19,12 +19,12 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_textobjectcontextdata *_obj = dwg_object_to_TEXTOBJECTCONTEXTDATA (obj);
 
-  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, class_version, BS, class_version);
-  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, is_default, B, is_default);
-  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, in_dwg, B, in_dwg);
+  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, class_version, BS);
+  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, is_default, B);
+  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, in_dwg, B);
   CHK_ENTITY_H (_obj, TEXTOBJECTCONTEXTDATA, scale, scale);
-  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, flag, BS, flag);
-  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, rotation, BD, rotation);
+  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, flag, BS);
+  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, rotation, BD);
   CHK_ENTITY_2RD (_obj, TEXTOBJECTCONTEXTDATA, insertion_pt, insertion_pt);
   CHK_ENTITY_2RD (_obj, TEXTOBJECTCONTEXTDATA, alignment_pt, alignment_pt);
 #endif

@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
 
   dwg_ent_lwpline *lwpline = dwg_object_to_LWPOLYLINE (obj);
 
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, flag, BS, flag);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, flag, BS);
   if (dwg_ent_lwpline_get_flag (lwpline, &error) != flag || error)
     fail ("old API dwg_ent_lwpline_get_flag");
   CHK_ENTITY_3RD (lwpline, LWPOLYLINE, extrusion, extrusion);
@@ -26,23 +26,23 @@ api_process (dwg_object *obj)
   if (error || memcmp (&extrusion, &pt3d, sizeof (extrusion)))
     fail ("old API dwg_ent_lwpline_get_extrusion");
 
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, const_width, BD, const_width);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, const_width, BD);
   if (dwg_ent_lwpline_get_const_width (lwpline, &error) != const_width
       || error)
     fail ("old API dwg_ent_lwpline_get_const_width");
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, thickness, BD, thickness);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, thickness, BD);
   if (dwg_ent_lwpline_get_thickness (lwpline, &error) != thickness || error)
     fail ("old API dwg_ent_lwpline_get_thickness");
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, elevation, BD, elevation);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, elevation, BD);
   if (dwg_ent_lwpline_get_elevation (lwpline, &error) != elevation || error)
     fail ("old API dwg_ent_lwpline_get_elevation");
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_widths, BL, num_widths);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_widths, BL);
   if (dwg_ent_lwpline_get_numwidths (lwpline, &error) != num_widths || error)
     fail ("old API dwg_ent_lwpline_get_numwidths");
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_bulges, BL, num_bulges);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_bulges, BL);
   if (dwg_ent_lwpline_get_numbulges (lwpline, &error) != num_bulges || error)
     fail ("old API dwg_ent_lwpline_get_numbulges");
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_points, BL, num_points);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_points, BL);
   if (dwg_ent_lwpline_get_numpoints (lwpline, &error) != num_points || error)
     fail ("old API dwg_ent_lwpline_get_numpoints");
 
@@ -83,5 +83,5 @@ api_process (dwg_object *obj)
   else
     fail ("widths");
 
-  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_vertexids, BL, num_vertexids);
+  CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, num_vertexids, BL);
 }

@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
 
 #ifdef DEBUG_CLASSES
   CHK_ENTITY_H (_obj, NAVISWORKSMODEL, defhandle, defhandle);
-  CHK_ENTITY_TYPE (_obj, NAVISWORKSMODEL, unitfactor, BD, unitfactor);
+  CHK_ENTITY_TYPE (_obj, NAVISWORKSMODEL, unitfactor, BD);
   if (!dwg_dynapi_entity_value (_obj, "NAVISWORKSMODEL", "transmatrix", &transmatrix, NULL))
     fail ("NAVISWORKSMODEL.transmatrix");
   for (i = 0; i < 16; i++)

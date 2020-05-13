@@ -29,7 +29,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_UTF8TEXT (_obj, FIELD, id, id);
   CHK_ENTITY_UTF8TEXT (_obj, FIELD, code, code);
-  CHK_ENTITY_TYPE (_obj, FIELD, num_childs, BL, num_childs);
+  CHK_ENTITY_TYPE (_obj, FIELD, num_childs, BL);
   if (!dwg_dynapi_entity_value (_obj, "FIELD", "childs", &childs, NULL))
     fail ("FIELD.childs");
   hdls = _obj->childs;
@@ -40,7 +40,7 @@ api_process (dwg_object *obj)
       else
         fail ("FIELD.childs[%d]: " FORMAT_REF, i, ARGS_REF (childs[i]));
     }
-  CHK_ENTITY_TYPE (_obj, FIELD, num_objects, BL, num_objects);
+  CHK_ENTITY_TYPE (_obj, FIELD, num_objects, BL);
   if (!dwg_dynapi_entity_value (_obj, "FIELD", "objects", &objects, NULL))
     fail ("FIELD.objects");
   hdls = _obj->objects;
@@ -52,16 +52,16 @@ api_process (dwg_object *obj)
         fail ("FIELD.objects[%d]: " FORMAT_REF, i, ARGS_REF (objects[i]));
     }
   CHK_ENTITY_UTF8TEXT (_obj, FIELD, format, format);
-  CHK_ENTITY_TYPE (_obj, FIELD, evaluation_option, BL, evaluation_option);
-  CHK_ENTITY_TYPE (_obj, FIELD, filing_option, BL, filing_option);
-  CHK_ENTITY_TYPE (_obj, FIELD, field_state, BL, field_state);
-  CHK_ENTITY_TYPE (_obj, FIELD, evaluation_status, BL, evaluation_status);
-  CHK_ENTITY_TYPE (_obj, FIELD, evaluation_error_code, BL, evaluation_error_code);
+  CHK_ENTITY_TYPE (_obj, FIELD, evaluation_option, BL);
+  CHK_ENTITY_TYPE (_obj, FIELD, filing_option, BL);
+  CHK_ENTITY_TYPE (_obj, FIELD, field_state, BL);
+  CHK_ENTITY_TYPE (_obj, FIELD, evaluation_status, BL);
+  CHK_ENTITY_TYPE (_obj, FIELD, evaluation_error_code, BL);
   CHK_ENTITY_UTF8TEXT (_obj, FIELD, evaluation_error_msg, evaluation_error_msg);
   //Dwg_TABLE_value value;
   CHK_ENTITY_UTF8TEXT (_obj, FIELD, value_string, value_string);
-  CHK_ENTITY_TYPE (_obj, FIELD, value_string_length, BL, value_string_length);
-  CHK_ENTITY_TYPE (_obj, FIELD, num_childval, BL, num_childval);
+  CHK_ENTITY_TYPE (_obj, FIELD, value_string_length, BL);
+  CHK_ENTITY_TYPE (_obj, FIELD, num_childval, BL);
   if (!dwg_dynapi_entity_value (_obj, "FIELD", "childval", &childval, NULL))
     fail ("FIELD.childval");
   for (i = 0; i < num_childval; i++)

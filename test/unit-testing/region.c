@@ -19,14 +19,14 @@ api_process (dwg_object *obj)
   dwg_ent_region *region = dwg_object_to_REGION (obj);
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 
-  CHK_ENTITY_TYPE (region, REGION, acis_empty, B, acis_empty);
+  CHK_ENTITY_TYPE (region, REGION, acis_empty, B);
   if (dwg_ent_region_get_acis_empty (region, &error) != acis_empty || error)
     fail ("old API dwg_ent_region_get_acis_empty");
-  CHK_ENTITY_TYPE (region, REGION, version, BS, version);
+  CHK_ENTITY_TYPE (region, REGION, version, BS);
   if (dwg_ent_region_get_version (region, &error) != version || error)
     fail ("old API dwg_ent_region_get_version");
-  CHK_ENTITY_TYPE (region, REGION, num_blocks, BL, num_blocks);
-  CHK_ENTITY_TYPE (region, REGION, acis_data, TV, acis_data);
+  CHK_ENTITY_TYPE (region, REGION, num_blocks, BL);
+  CHK_ENTITY_TYPE (region, REGION, acis_data, TV);
   if ((acis_data
        && strcmp ((char *)dwg_ent_region_get_acis_data (region, &error),
                   (char *)acis_data))
@@ -43,7 +43,7 @@ api_process (dwg_object *obj)
     {
       fail ("old API dwg_ent_region_get_wireframe_data_present");
     }
-  CHK_ENTITY_TYPE (region, REGION, point_present, B, point_present);
+  CHK_ENTITY_TYPE (region, REGION, point_present, B);
   if (dwg_ent_region_get_point_present (region, &error) != point_present
       || error)
     {
@@ -57,19 +57,19 @@ api_process (dwg_object *obj)
       fail ("old API dwg_ent_region_get_point");
     }
 
-  CHK_ENTITY_TYPE (region, REGION, isoline_present, B, isoline_present);
+  CHK_ENTITY_TYPE (region, REGION, isoline_present, B);
   if (dwg_ent_region_get_isoline_present (region, &error) != isoline_present
       || error)
     {
       fail ("old API dwg_ent_region_get_isoline_present");
     }
-  CHK_ENTITY_TYPE (region, REGION, isolines, BL, isolines);
+  CHK_ENTITY_TYPE (region, REGION, isolines, BL);
   if (dwg_ent_region_get_num_isolines (region, &error) != isolines
       || error)
     {
       fail ("old API dwg_ent_region_get_num_isolines");
     }
-  CHK_ENTITY_TYPE (region, REGION, num_wires, BL, num_wires);
+  CHK_ENTITY_TYPE (region, REGION, num_wires, BL);
   if (dwg_ent_region_get_num_wires (region, &error) != num_wires || error)
     {
       fail ("old API dwg_ent_region_get_num_wires");
@@ -102,7 +102,7 @@ api_process (dwg_object *obj)
 
   if (dwg_version >= R_2007 && region->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (region, REGION, unknown_2007, BL, unknown_2007);
+      CHK_ENTITY_TYPE (region, REGION, unknown_2007, BL);
       CHK_ENTITY_H (region, REGION, history_id, history_id);
     }
 }

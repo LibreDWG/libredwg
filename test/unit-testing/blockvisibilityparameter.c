@@ -17,11 +17,11 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_blockvisibilityparameter *_obj = dwg_object_to_BLOCKVISIBILITYPARAMETER (obj);
 
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, is_initialized, B, is_initialized);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, b2, B, b2);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, is_initialized, B);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, b2, B);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYPARAMETER, name, name);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYPARAMETER, desc, desc);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, num_states, BL, num_states);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, num_states, BL);
   // ..
 #endif
 }

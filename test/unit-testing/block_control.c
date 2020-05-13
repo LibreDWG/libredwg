@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_block_control *block_control = dwg_object_to_BLOCK_CONTROL (obj);
 
-  CHK_ENTITY_TYPE_W_OBJ (block_control, BLOCK_CONTROL, num_entries, BS, num_entries);
+  CHK_ENTITY_TYPE_W_OBJ (block_control, BLOCK_CONTROL, num_entries, BS);
   entries = dwg_object_tablectrl_get_entries (obj, &error);
   if (!dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "entries", &hdls, NULL))
     fail ("BLOCK_CONTROL.entries");
@@ -24,7 +24,7 @@ api_process (dwg_object *obj)
       else
         fail ("BLOCK_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
     }
-  CHK_ENTITY_TYPE (block_control, BLOCK_CONTROL, objid, BL, objid);
+  CHK_ENTITY_TYPE (block_control, BLOCK_CONTROL, objid, BL);
   CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space, model_space);
   CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space, model_space);
 }

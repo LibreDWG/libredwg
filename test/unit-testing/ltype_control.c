@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_ltype_control *ctrl = dwg_object_to_LTYPE_CONTROL (obj);
 
-  CHK_ENTITY_TYPE (ctrl, LTYPE_CONTROL, num_entries, BS, num_entries);
+  CHK_ENTITY_TYPE (ctrl, LTYPE_CONTROL, num_entries, BS);
   entries = dwg_object_tablectrl_get_entries (obj, &error);
   if (!dwg_dynapi_entity_value (ctrl, "LTYPE_CONTROL", "entries", &hdls, NULL))
     fail ("LTYPE_CONTROL.entries");
@@ -35,7 +35,7 @@ api_process (dwg_object *obj)
               fail ("LTYPE_CONTROL.entries[%d]: NULL", i);
           }
       }
-  CHK_ENTITY_TYPE (ctrl, LTYPE_CONTROL, objid, BL, objid);  
+  CHK_ENTITY_TYPE (ctrl, LTYPE_CONTROL, objid, BL);  
   CHK_ENTITY_H (ctrl, LTYPE_CONTROL, bylayer, bylayer);
   CHK_ENTITY_H (ctrl, LTYPE_CONTROL, byblock, byblock);
 }

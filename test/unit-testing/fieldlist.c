@@ -11,8 +11,8 @@ api_process (dwg_object *obj)
 
   dwg_obj_fieldlist *_obj = dwg_object_to_FIELDLIST (obj);
 
-  CHK_ENTITY_TYPE (_obj, FIELDLIST, unknown, B, unknown);
-  CHK_ENTITY_TYPE (_obj, FIELDLIST, num_fields, BL, num_fields);
+  CHK_ENTITY_TYPE (_obj, FIELDLIST, unknown, B);
+  CHK_ENTITY_TYPE (_obj, FIELDLIST, num_fields, BL);
   if (!dwg_dynapi_entity_value (_obj, "FIELDLIST", "fields", &fields, NULL))
     fail ("FIELDLIST.fields");
   hdls = _obj->fields;

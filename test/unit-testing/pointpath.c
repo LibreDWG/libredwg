@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_pointpath *_obj = dwg_object_to_POINTPATH (obj);
 
-  CHK_ENTITY_TYPE (_obj, POINTPATH, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, POINTPATH, class_version, BS);
   CHK_ENTITY_MAX (_obj, POINTPATH, class_version, BS, 3);
   CHK_ENTITY_3RD (_obj, POINTPATH, point, point);
 #endif

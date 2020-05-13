@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   dwg_ent_circle *circle = dwg_object_to_CIRCLE (obj);
 
   CHK_ENTITY_3RD_W_OLD (circle, CIRCLE, center, center);
-  CHK_ENTITY_TYPE_W_OLD (circle, CIRCLE, radius, BD, radius);
-  CHK_ENTITY_TYPE_W_OLD (circle, CIRCLE, thickness, BD, thickness);
+  CHK_ENTITY_TYPE_W_OLD (circle, CIRCLE, radius, BD);
+  CHK_ENTITY_TYPE_W_OLD (circle, CIRCLE, thickness, BD);
   CHK_ENTITY_3RD_W_OLD (circle, CIRCLE, extrusion, ext);
 }

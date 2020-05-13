@@ -66,16 +66,16 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_ent_extrudedsurface *_obj = dwg_object_to_EXTRUDEDSURFACE (obj);
 
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_empty, B, acis_empty);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, version, BS, version);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_data, TF, acis_data);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, wireframe_data_present, B, wireframe_data_present);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, point_present, B, point_present);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_empty, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, version, BS);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_data, TF);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, wireframe_data_present, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, point_present, B);
   CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, point, point);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, isoline_present, B, isoline_present);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, isolines, BL, isolines);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, num_wires, BL, num_wires);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, num_silhouettes, BL, num_silhouettes);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, isoline_present, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, isolines, BL);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, num_wires, BL);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, num_silhouettes, BL);
   if (!dwg_dynapi_entity_value (_obj, "EXTRUDEDSURFACE", "wires", &wires, NULL))
     fail ("EXTRUDEDSURFACE.wires");
   else
@@ -92,17 +92,17 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, unknown_2007, BL, unknown_2007);
+      CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, unknown_2007, BL);
       CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, history_id, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, modeler_format_version, BS, modeler_format_version);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata_size, BL, bindata_size);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata, TF, bindata); // 310|1
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, u_isolines, BS, u_isolines);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, v_isolines, BS, v_isolines);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, class_version, BL, class_version);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, height, BD, height);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, modeler_format_version, BS);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata_size, BL);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata, TF); // 310|1
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, u_isolines, BS);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, v_isolines, BS);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, class_version, BL);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, height, BD);
   CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, sweep_vector, sweep_vector);
   if (!dwg_dynapi_entity_value (_obj, "EXTRUDEDSURFACE", "sweep_transmatrix", &sweep_transmatrix, NULL))
     fail ("EXTRUDEDSURFACE.sweep_transmatrix");
@@ -111,12 +111,12 @@ api_process (dwg_object *obj)
       {
         ok ("EXTRUDEDSURFACE.sweep_transmatrix[%d]: %f", i, sweep_transmatrix[i]);
       }
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, draft_angle, BD, draft_angle);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, draft_start_distance, BD, draft_start_distance);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, draft_end_distance, BD, draft_end_distance);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, twist_angle, BD, twist_angle);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, scale_factor, BD, scale_factor);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, align_angle, BD, align_angle);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, draft_angle, BD);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, draft_start_distance, BD);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, draft_end_distance, BD);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, twist_angle, BD);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, scale_factor, BD);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, align_angle, BD);
   if (!dwg_dynapi_entity_value (_obj, "EXTRUDEDSURFACE",
                                 "sweep_entity_transmatrix",
                                 &sweep_entity_transmatrix, NULL))
@@ -137,11 +137,11 @@ api_process (dwg_object *obj)
         ok ("EXTRUDEDSURFACE.path_entity_transmatrix[%d]: %f", i,
             path_entity_transmatrix[i]);
       }
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, solid, B, solid);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, sweep_alignment_flags, BS, sweep_alignment_flags);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, align_start, B, align_start);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bank, B, bank);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, base_point_set, B, base_point_set);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, solid, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, sweep_alignment_flags, BS);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, align_start, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bank, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, base_point_set, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, sweep_entity_transform_computed, B,
                    sweep_entity_transform_computed);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, path_entity_transform_computed, B,

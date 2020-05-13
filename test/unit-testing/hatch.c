@@ -38,40 +38,40 @@ api_process (dwg_object *obj)
 
   dwg_ent_hatch *hatch = dwg_object_to_HATCH (obj);
 
-  CHK_ENTITY_TYPE (hatch, HATCH, is_gradient_fill, BL, is_gradient_fill);
+  CHK_ENTITY_TYPE (hatch, HATCH, is_gradient_fill, BL);
   if (is_gradient_fill)
     {
-      CHK_ENTITY_TYPE (hatch, HATCH, reserved, BL, reserved);
-      CHK_ENTITY_TYPE (hatch, HATCH, gradient_angle, BD, gradient_angle);
+      CHK_ENTITY_TYPE (hatch, HATCH, reserved, BL);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_angle, BD);
       CHK_ENTITY_MAX (hatch, HATCH, gradient_angle, BD, MAX_ANGLE);
-      CHK_ENTITY_TYPE (hatch, HATCH, gradient_shift, BD, gradient_shift);
-      CHK_ENTITY_TYPE (hatch, HATCH, single_color_gradient, BL, single_color_gradient);
-      CHK_ENTITY_TYPE (hatch, HATCH, gradient_tint, BD, gradient_tint);
-      CHK_ENTITY_TYPE (hatch, HATCH, gradient_name, TV, gradient_name);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_shift, BD);
+      CHK_ENTITY_TYPE (hatch, HATCH, single_color_gradient, BL);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_tint, BD);
+      CHK_ENTITY_TYPE (hatch, HATCH, gradient_name, TV);
     }
-  CHK_ENTITY_TYPE (hatch, HATCH, num_colors, BL, num_colors);
-  CHK_ENTITY_TYPE (hatch, HATCH, elevation, BD, elevation);
+  CHK_ENTITY_TYPE (hatch, HATCH, num_colors, BL);
+  CHK_ENTITY_TYPE (hatch, HATCH, elevation, BD);
   CHK_ENTITY_3RD (hatch, HATCH, extrusion, extrusion);
-  CHK_ENTITY_TYPE (hatch, HATCH, name, TV, name);
-  CHK_ENTITY_TYPE (hatch, HATCH, solid_fill, B, solid_fill);
-  CHK_ENTITY_TYPE (hatch, HATCH, associative, B, associative);
-  CHK_ENTITY_TYPE (hatch, HATCH, num_paths, BL, num_paths);
-  CHK_ENTITY_TYPE (hatch, HATCH, style, BS, style);
+  CHK_ENTITY_TYPE (hatch, HATCH, name, TV);
+  CHK_ENTITY_TYPE (hatch, HATCH, solid_fill, B);
+  CHK_ENTITY_TYPE (hatch, HATCH, associative, B);
+  CHK_ENTITY_TYPE (hatch, HATCH, num_paths, BL);
+  CHK_ENTITY_TYPE (hatch, HATCH, style, BS);
   if (hatch->style > 2)
     fail ("Invalid HATCH.style " FORMAT_BS " > 2", hatch->style);
-  CHK_ENTITY_TYPE (hatch, HATCH, pattern_type, BS, pattern_type);
+  CHK_ENTITY_TYPE (hatch, HATCH, pattern_type, BS);
   if (hatch->pattern_type > 2)
     fail ("Invalid HATCH.pattern_type " FORMAT_BS " > 2", hatch->pattern_type);
-  CHK_ENTITY_TYPE (hatch, HATCH, angle, BD, angle);
-  CHK_ENTITY_TYPE (hatch, HATCH, scale_spacing, BD, scale_spacing);
-  CHK_ENTITY_TYPE (hatch, HATCH, double_flag, B, double_flag);
-  CHK_ENTITY_TYPE (hatch, HATCH, num_deflines, BS, num_deflines);
-  CHK_ENTITY_TYPE (hatch, HATCH, has_derived, B, has_derived);
-  CHK_ENTITY_TYPE (hatch, HATCH, pixel_size, BD, pixel_size);
+  CHK_ENTITY_TYPE (hatch, HATCH, angle, BD);
+  CHK_ENTITY_TYPE (hatch, HATCH, scale_spacing, BD);
+  CHK_ENTITY_TYPE (hatch, HATCH, double_flag, B);
+  CHK_ENTITY_TYPE (hatch, HATCH, num_deflines, BS);
+  CHK_ENTITY_TYPE (hatch, HATCH, has_derived, B);
+  CHK_ENTITY_TYPE (hatch, HATCH, pixel_size, BD);
   if (hatch->pixel_size != 0.0 && !hatch->has_derived)
     fail ("Invalid HATCH.pixel_size %f without HATCH.has_derived", hatch->pixel_size);
-  CHK_ENTITY_TYPE (hatch, HATCH, num_seeds, BL, num_seeds);
-  CHK_ENTITY_TYPE (hatch, HATCH, num_boundary_handles, BL, num_boundary_handles);
+  CHK_ENTITY_TYPE (hatch, HATCH, num_seeds, BL);
+  CHK_ENTITY_TYPE (hatch, HATCH, num_boundary_handles, BL);
 
   if (!dwg_dynapi_entity_value (hatch, "HATCH", "colors", &colors, NULL))
     fail ("HATCH.colors");

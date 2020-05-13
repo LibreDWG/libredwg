@@ -22,11 +22,11 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_acsh_history_class *_obj = dwg_object_to_ACSH_HISTORY_CLASS (obj);
 
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, class_version, BL, class_version); // 90
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, ee_bl98, BL, ee_bl98); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, ee_bl99, BL, ee_bl99); //29
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl90, BL, shhn_bl90); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl91, BL, shhn_bl91); //29
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, class_version, BL); // 90
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, ee_bl98, BL); //33
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, ee_bl99, BL); //29
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl90, BL); //33
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl91, BL); //29
   //FIXME
 #if 0
   // last 16x nums 40-55
@@ -37,8 +37,8 @@ api_process (dwg_object *obj)
       ok ("ACSH_HISTORY_CLASS.shhn_pts[%d]: %f", i, shhn_pts[i]);
     }
   CHK_ENTITY_CMC (_obj, ACSH_HISTORY_CLASS, color, color);
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_b92, B, shhn_b92);
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl347, BL, shhn_bl347);
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_b92, B);
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl347, BL);
   // AcDbShPrimitive
 #endif
 #endif

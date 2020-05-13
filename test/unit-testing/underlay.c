@@ -20,10 +20,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (underlay, UNDERLAY, extrusion, ext);
   CHK_ENTITY_3RD (underlay, UNDERLAY, insertion_pt, insertion_pt);
   CHK_ENTITY_3RD (underlay, UNDERLAY, scale, scale);
-  CHK_ENTITY_TYPE (underlay, UNDERLAY, flag, RC, flag);
-  CHK_ENTITY_TYPE (underlay, UNDERLAY, contrast, RC, contrast);
-  CHK_ENTITY_TYPE (underlay, UNDERLAY, fade, RC, fade);
-  CHK_ENTITY_TYPE (underlay, UNDERLAY, num_clip_verts, BL, num_clip_verts);
+  CHK_ENTITY_TYPE (underlay, UNDERLAY, flag, RC);
+  CHK_ENTITY_TYPE (underlay, UNDERLAY, contrast, RC);
+  CHK_ENTITY_TYPE (underlay, UNDERLAY, fade, RC);
+  CHK_ENTITY_TYPE (underlay, UNDERLAY, num_clip_verts, BL);
 
   if (!dwg_dynapi_entity_value (underlay, "UNDERLAY", "clip_verts", &clip_verts, NULL))
     fail ("UNDERLAY.clip_verts");

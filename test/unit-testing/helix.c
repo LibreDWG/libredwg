@@ -41,25 +41,25 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_helix *helix = dwg_object_to_HELIX (obj);
 
-  CHK_ENTITY_TYPE (helix, HELIX, flag, BS, flag);
-  CHK_ENTITY_TYPE (helix, HELIX, scenario, BS, scenario);
+  CHK_ENTITY_TYPE (helix, HELIX, flag, BS);
+  CHK_ENTITY_TYPE (helix, HELIX, scenario, BS);
   if (scenario == 0 || scenario > 2)
     fail ("Illegal SPLINE.scenario %d", (int)scenario);
-  CHK_ENTITY_TYPE (helix, HELIX, degree, BS, degree);
-  CHK_ENTITY_TYPE (helix, HELIX, splineflags1, BL, splineflags1);
-  CHK_ENTITY_TYPE (helix, HELIX, knotparam, BL, knotparam);
-  CHK_ENTITY_TYPE (helix, HELIX, fit_tol, BD, fit_tol);
+  CHK_ENTITY_TYPE (helix, HELIX, degree, BS);
+  CHK_ENTITY_TYPE (helix, HELIX, splineflags1, BL);
+  CHK_ENTITY_TYPE (helix, HELIX, knotparam, BL);
+  CHK_ENTITY_TYPE (helix, HELIX, fit_tol, BD);
   CHK_ENTITY_3RD (helix, HELIX, beg_tan_vec, beg_tan_vec);
   CHK_ENTITY_3RD (helix, HELIX, end_tan_vec, end_tan_vec);
-  CHK_ENTITY_TYPE (helix, HELIX, rational, B, rational);
-  CHK_ENTITY_TYPE (helix, HELIX, closed_b, B, closed_b);
-  CHK_ENTITY_TYPE (helix, HELIX, periodic, B, periodic);
-  CHK_ENTITY_TYPE (helix, HELIX, weighted, B, weighted);
-  CHK_ENTITY_TYPE (helix, HELIX, knot_tol, BD, knot_tol);
-  CHK_ENTITY_TYPE (helix, HELIX, ctrl_tol, BD, ctrl_tol);
-  CHK_ENTITY_TYPE (helix, HELIX, num_fit_pts, BS, num_fit_pts);
-  CHK_ENTITY_TYPE (helix, HELIX, num_knots, BL, num_knots);
-  CHK_ENTITY_TYPE (helix, HELIX, num_ctrl_pts, BL, num_ctrl_pts);
+  CHK_ENTITY_TYPE (helix, HELIX, rational, B);
+  CHK_ENTITY_TYPE (helix, HELIX, closed_b, B);
+  CHK_ENTITY_TYPE (helix, HELIX, periodic, B);
+  CHK_ENTITY_TYPE (helix, HELIX, weighted, B);
+  CHK_ENTITY_TYPE (helix, HELIX, knot_tol, BD);
+  CHK_ENTITY_TYPE (helix, HELIX, ctrl_tol, BD);
+  CHK_ENTITY_TYPE (helix, HELIX, num_fit_pts, BS);
+  CHK_ENTITY_TYPE (helix, HELIX, num_knots, BL);
+  CHK_ENTITY_TYPE (helix, HELIX, num_ctrl_pts, BL);
 
   if (!dwg_dynapi_entity_value (helix, "HELIX", "fit_pts", &fit_pts, NULL))
     fail ("HELIX.fit_pts");
@@ -113,15 +113,15 @@ api_process (dwg_object *obj)
         }
     }
 
-  CHK_ENTITY_TYPE (helix, HELIX, major_version, BS, major_version);
-  CHK_ENTITY_TYPE (helix, HELIX, maint_version, BS, maint_version);
+  CHK_ENTITY_TYPE (helix, HELIX, major_version, BS);
+  CHK_ENTITY_TYPE (helix, HELIX, maint_version, BS);
   CHK_ENTITY_3RD (helix, HELIX, axis_base_pt, axis_base_pt);
   CHK_ENTITY_3RD (helix, HELIX, start_pt, start_pt);
   CHK_ENTITY_3RD (helix, HELIX, axis_vector, axis_vector);
-  CHK_ENTITY_TYPE (helix, HELIX, radius, BD, radius);
-  CHK_ENTITY_TYPE (helix, HELIX, num_turns, BD, num_turns);
-  CHK_ENTITY_TYPE (helix, HELIX, turn_height, BD, turn_height);
-  CHK_ENTITY_TYPE (helix, HELIX, handedness, B, handedness);
-  CHK_ENTITY_TYPE (helix, HELIX, constraint_type, BS, constraint_type);
+  CHK_ENTITY_TYPE (helix, HELIX, radius, BD);
+  CHK_ENTITY_TYPE (helix, HELIX, num_turns, BD);
+  CHK_ENTITY_TYPE (helix, HELIX, turn_height, BD);
+  CHK_ENTITY_TYPE (helix, HELIX, handedness, B);
+  CHK_ENTITY_TYPE (helix, HELIX, constraint_type, BS);
   CHK_ENTITY_MAX (helix, HELIX, constraint_type, BS, 2);
 }

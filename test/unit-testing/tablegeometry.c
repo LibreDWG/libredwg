@@ -14,9 +14,9 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_tablegeometry *_obj = dwg_object_to_TABLEGEOMETRY (obj);
 
-  CHK_ENTITY_TYPE (_obj, TABLEGEOMETRY, num_rows, BL, num_rows);
-  CHK_ENTITY_TYPE (_obj, TABLEGEOMETRY, num_cols, BL, num_cols);
-  CHK_ENTITY_TYPE (_obj, TABLEGEOMETRY, num_cells, BL, num_cells);
+  CHK_ENTITY_TYPE (_obj, TABLEGEOMETRY, num_rows, BL);
+  CHK_ENTITY_TYPE (_obj, TABLEGEOMETRY, num_cols, BL);
+  CHK_ENTITY_TYPE (_obj, TABLEGEOMETRY, num_cells, BL);
   if (!dwg_dynapi_entity_value (_obj, "TABLEGEOMETRY", "cells", &cells, NULL))
     fail ("TABLEGEOMETRY.cells");
   else

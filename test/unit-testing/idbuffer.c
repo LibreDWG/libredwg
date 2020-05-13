@@ -11,8 +11,8 @@ api_process (dwg_object *obj)
 
   dwg_obj_idbuffer *_obj = dwg_object_to_IDBUFFER (obj);
 
-  CHK_ENTITY_TYPE (_obj, IDBUFFER, unknown, RC, unknown);
-  CHK_ENTITY_TYPE (_obj, IDBUFFER, num_obj_ids, BL, num_obj_ids);
+  CHK_ENTITY_TYPE (_obj, IDBUFFER, unknown, RC);
+  CHK_ENTITY_TYPE (_obj, IDBUFFER, num_obj_ids, BL);
   if (!dwg_dynapi_entity_value (_obj, "IDBUFFER", "obj_ids", &obj_ids, NULL))
     fail ("IDBUFFER.obj_ids");
   hdls = _obj->obj_ids;

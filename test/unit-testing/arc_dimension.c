@@ -37,15 +37,15 @@ api_process (dwg_object *obj)
 
 #ifdef DEBUG_CLASSES
     /* DIMENSION_COMMON */
-  CHK_ENTITY_TYPE (dim, ARC_DIMENSION, class_version, RC, class_version);
+  CHK_ENTITY_TYPE (dim, ARC_DIMENSION, class_version, RC);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, lspace_style, BS,
                          lspace_style);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, lspace_factor, BD,
                          lspace_factor);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, act_measurement, BD,
                          act_measurement);
-  CHK_ENTITY_TYPE (dim, ARC_DIMENSION, attachment, BS, attachment);
-  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, elevation, BD, elevation);
+  CHK_ENTITY_TYPE (dim, ARC_DIMENSION, attachment, BS);
+  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, elevation, BD);
   CHK_ENTITY_3RD (dim, ARC_DIMENSION, extrusion, extrusion);
   CHK_ENTITY_2RD_W_OLD (dim, ARC_DIMENSION, clone_ins_pt, pt12);
   CHK_ENTITY_2RD_W_OLD (dim, ARC_DIMENSION, text_midpt, text_midpt);
@@ -55,14 +55,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (dim, ARC_DIMENSION, ins_scale, ins_scale);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, ins_rotation, BD,
                          ins_rotation);
-  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, horiz_dir, BD, horiz_dir);
+  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, horiz_dir, BD);
   CHK_ENTITY_MAX (dim, ARC_DIMENSION, text_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_MAX (dim, ARC_DIMENSION, ins_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_MAX (dim, ARC_DIMENSION, horiz_dir, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow1, B, flip_arrow1);
-  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow2, B, flip_arrow2);
-  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flag1, RC, flag1);
-  CHK_ENTITY_TYPE (dim, ARC_DIMENSION, flag, RC, flag);
+  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow1, B);
+  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow2, B);
+  CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flag1, RC);
+  CHK_ENTITY_TYPE (dim, ARC_DIMENSION, flag, RC);
   CHK_ENTITY_H (dim, DIMENSION_RADIUS, dimstyle, dimstyle);
   CHK_ENTITY_H (dim, DIMENSION_RADIUS, block, block);
 
@@ -73,9 +73,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, center_pt, center_pt);
   CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader1_pt, leader1_pt);
   CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader2_pt, leader2_pt);
-  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_start_param, BD, arc_start_param);
-  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_end_param, BD, arc_end_param);
-  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, is_partial, B, is_partial);
-  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, has_leader, B, has_leader);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_start_param, BD);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_end_param, BD);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, is_partial, B);
+  CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, has_leader, B);
 #endif
 }

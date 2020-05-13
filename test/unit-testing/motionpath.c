@@ -18,13 +18,13 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_motionpath *_obj = dwg_object_to_MOTIONPATH (obj);
 
-  CHK_ENTITY_TYPE (_obj, MOTIONPATH, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, MOTIONPATH, class_version, BS);
   CHK_ENTITY_MAX (_obj, MOTIONPATH, class_version, BS, 3);
   CHK_ENTITY_H (_obj, MOTIONPATH, camera_path, camera_path);
   CHK_ENTITY_H (_obj, MOTIONPATH, target_path, target_path);
   CHK_ENTITY_H (_obj, MOTIONPATH, viewtable, viewtable);
-  CHK_ENTITY_TYPE (_obj, MOTIONPATH, frames, BS, frames);
-  CHK_ENTITY_TYPE (_obj, MOTIONPATH, frame_rate, BS, frame_rate);
-  CHK_ENTITY_TYPE (_obj, MOTIONPATH, corner_decel, BS, corner_decel);
+  CHK_ENTITY_TYPE (_obj, MOTIONPATH, frames, BS);
+  CHK_ENTITY_TYPE (_obj, MOTIONPATH, frame_rate, BS);
+  CHK_ENTITY_TYPE (_obj, MOTIONPATH, corner_decel, BS);
 #endif
 }

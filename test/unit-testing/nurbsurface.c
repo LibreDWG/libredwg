@@ -38,16 +38,16 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_ent_nurbsurface *_obj = dwg_object_to_NURBSURFACE (obj);
 
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, acis_empty, B, acis_empty);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, version, BS, version);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, acis_data, TF, acis_data);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, wireframe_data_present, B, wireframe_data_present);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, point_present, B, point_present);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, acis_empty, B);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, version, BS);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, acis_data, TF);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, wireframe_data_present, B);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, point_present, B);
   CHK_ENTITY_3RD (_obj, NURBSURFACE, point, point);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, isoline_present, B, isoline_present);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, isolines, BL, isolines);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, num_wires, BL, num_wires);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, num_silhouettes, BL, num_silhouettes);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, isoline_present, B);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, isolines, BL);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, num_wires, BL);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, num_silhouettes, BL);
   if (!dwg_dynapi_entity_value (_obj, "NURBSURFACE", "wires", &wires, NULL))
     fail ("NURBSURFACE.wires");
   else
@@ -64,13 +64,13 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (_obj, NURBSURFACE, unknown_2007, BL, unknown_2007);
+      CHK_ENTITY_TYPE (_obj, NURBSURFACE, unknown_2007, BL);
       CHK_ENTITY_H (_obj, NURBSURFACE, history_id, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, modeler_format_version, BS, modeler_format_version);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, u_isolines, BS, u_isolines);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, v_isolines, BS, v_isolines);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, class_version, BL, class_version);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, modeler_format_version, BS);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, u_isolines, BS);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, v_isolines, BS);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, class_version, BL);
 #endif
 }

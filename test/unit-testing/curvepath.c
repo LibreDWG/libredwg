@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_curvepath *_obj = dwg_object_to_CURVEPATH (obj);
 
-  CHK_ENTITY_TYPE (_obj, CURVEPATH, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, CURVEPATH, class_version, BS);
   CHK_ENTITY_MAX (_obj, CURVEPATH, class_version, BS, 3);
   CHK_ENTITY_H (_obj, CURVEPATH, entity, entity);
 #endif

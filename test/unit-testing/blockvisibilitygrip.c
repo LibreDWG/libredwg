@@ -26,20 +26,20 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_blockvisibilitygrip *_obj = dwg_object_to_BLOCKVISIBILITYGRIP (obj);
 
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl1, BL, ee_bl1);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl2, BL, ee_bl2);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl3, BL, ee_bl3);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bs1, BL, ee_bs1);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_type, BS, ee_type);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl4, BL, ee_bl4);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl1, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl2, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl3, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bs1, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_type, BS);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl4, BL);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYGRIP, be_t, be_t);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl1, BL, be_bl1);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl2, BL, be_bl2);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl3, BL, be_bl3);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_bl1, BL, bg_bl1);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_bl2, BL, bg_bl2);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl1, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl2, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl3, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_bl1, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_bl2, BL);
   CHK_ENTITY_3RD (_obj, BLOCKVISIBILITYGRIP, bg_pt, bg_pt);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling, B, bg_insert_cycling);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling_weight, BL, bg_insert_cycling_weight);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling, B);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling_weight, BL);
 #endif
 }

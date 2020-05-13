@@ -35,25 +35,25 @@ api_process (dwg_object *obj)
   dwg_ent_attdef_get_extrusion (attdef, &pt3d, &error);
   if (error || memcmp (&ext, &pt3d, sizeof (ext)))
     fail ("old API dwg_ent_attdef_get_extrusion");
-  CHK_ENTITY_TYPE (attdef, ATTDEF, elevation, BD, elevation);
-  CHK_ENTITY_TYPE (attdef, ATTDEF, dataflags, RC, dataflags);
-  CHK_ENTITY_TYPE (attdef, ATTDEF, height, RD, height);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, elevation, BD);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, dataflags, RC);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, height, RD);
   rdvalue = dwg_ent_attdef_get_height (attdef, &error);
   if (error || height != rdvalue)
     fail ("old API dwg_ent_attdef_get_height");
-  CHK_ENTITY_TYPE (attdef, ATTDEF, thickness, RD, thickness);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, thickness, RD);
   rdvalue = dwg_ent_attdef_get_thickness (attdef, &error);
   if (error || thickness != rdvalue)
     fail ("old API dwg_ent_attdef_get_thickness");
-  CHK_ENTITY_TYPE (attdef, ATTDEF, rotation, RD, rotation);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, rotation, RD);
   CHK_ENTITY_MAX (attdef, ATTDEF, rotation, RD, 6.284);
   rdvalue = dwg_ent_attdef_get_rotation (attdef, &error);
   if (error || rotation != rdvalue)
     fail ("old API dwg_ent_attdef_get_rotation");
-  CHK_ENTITY_TYPE (attdef, ATTDEF, oblique_angle, RD, oblique_angle);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, oblique_angle, RD);
   CHK_ENTITY_MAX (attdef, ATTDEF, oblique_angle, RD, 6.284);
-  CHK_ENTITY_TYPE (attdef, ATTDEF, width_factor, RD, width_factor);
-  CHK_ENTITY_TYPE (attdef, ATTDEF, generation, BS, generation);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, width_factor, RD);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, generation, BS);
 
   CHK_ENTITY_TYPE (attdef, ATTDEF, vert_alignment, BS, vert_align);
   bsvalue = dwg_ent_attdef_get_vert_alignment (attdef, &error);
@@ -63,12 +63,12 @@ api_process (dwg_object *obj)
   bsvalue = dwg_ent_attdef_get_horiz_alignment (attdef, &error);
   if (error || horiz_align != bsvalue)
     fail ("old API dwg_ent_attdef_horiz_alignment");
-  CHK_ENTITY_TYPE (attdef, ATTDEF, field_length, BS, field_length);
-  CHK_ENTITY_TYPE (attdef, ATTDEF, flags, RC, flags);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, field_length, BS);
+  CHK_ENTITY_TYPE (attdef, ATTDEF, flags, RC);
   CHK_ENTITY_H (attdef, ATTDEF, style, style);
   if (version >= R_2010)
     {
-      CHK_ENTITY_TYPE (attdef, ATTDEF, class_version, RC, class_version);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, class_version, RC);
       CHK_ENTITY_TYPE (attdef, ATTDEF, attdef_class_version, RC,
                        attdef_class_version);
     }
@@ -79,9 +79,9 @@ api_process (dwg_object *obj)
 
       CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS,
                        annotative_data_size);
-      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_short, BS, annotative_short);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_short, BS);
 
-      CHK_ENTITY_TYPE (attdef, ATTDEF, type, RC, type);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, type, RC);
     }
   if (version >= R_2007)
     {

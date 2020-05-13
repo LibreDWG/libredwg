@@ -16,5 +16,5 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_dictionarywdflt *_obj = dwg_object_to_DICTIONARYWDFLT (obj);
 
-  CHK_ENTITY_TYPE (_obj, DICTIONARYWDFLT, numitems, BL, numitems);
+  CHK_ENTITY_TYPE (_obj, DICTIONARYWDFLT, numitems, BL);
 }

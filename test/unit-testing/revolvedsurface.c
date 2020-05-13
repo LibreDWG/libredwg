@@ -51,16 +51,16 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_ent_revolvedsurface *_obj = dwg_object_to_REVOLVEDSURFACE (obj);
 
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_empty, B, acis_empty);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, version, BS, version);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_data, TF, acis_data);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, wireframe_data_present, B, wireframe_data_present);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, point_present, B, point_present);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_empty, B);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, version, BS);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_data, TF);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, wireframe_data_present, B);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, point_present, B);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, point, point);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, isoline_present, B, isoline_present);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, isolines, BL, isolines);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, num_wires, BL, num_wires);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, num_silhouettes, BL, num_silhouettes);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, isoline_present, B);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, isolines, BL);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, num_wires, BL);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, num_silhouettes, BL);
   if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE", "wires", &wires, NULL))
     fail ("REVOLVEDSURFACE.wires");
   else
@@ -77,20 +77,20 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, unknown_2007, BL, unknown_2007);
+      CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, unknown_2007, BL);
       CHK_ENTITY_H (_obj, REVOLVEDSURFACE, history_id, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, modeler_format_version, BS, modeler_format_version);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, u_isolines, BS, u_isolines);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, v_isolines, BS, v_isolines);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, class_version, BL, class_version);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, modeler_format_version, BS);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, u_isolines, BS);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, v_isolines, BS);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, class_version, BL);
   
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, id, BL, id);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, id, BL);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_point, axis_point);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_vector, axis_vector);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, revolve_angle, BD, revolve_angle);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, start_angle, BD, start_angle);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, revolve_angle, BD);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, start_angle, BD);
   if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE",
                                 "revolved_entity_transmatrix",
                                 &revolved_entity_transmatrix, NULL))
@@ -101,11 +101,11 @@ api_process (dwg_object *obj)
         ok ("REVOLVEDSURFACE.revolved_entity_transmatrix[%d]: %f", i,
             revolved_entity_transmatrix[i]);
       }
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, draft_angle, BD, draft_angle);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, draft_start_distance, BD, draft_start_distance);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, draft_end_distance, BD, draft_end_distance);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, twist_angle, BD, twist_angle);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, solid, B, solid);
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, close_to_axis, B, close_to_axis);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, draft_angle, BD);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, draft_start_distance, BD);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, draft_end_distance, BD);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, twist_angle, BD);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, solid, B);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, close_to_axis, B);
 #endif
 }

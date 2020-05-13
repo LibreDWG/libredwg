@@ -11,6 +11,6 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_acmescope *_obj = dwg_object_to_ACMESCOPE (obj);
 
-  CHK_ENTITY_TYPE (_obj, ACMESCOPE, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, ACMESCOPE, class_version, BS);
 #endif
 }

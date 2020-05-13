@@ -12,8 +12,8 @@ api_process (dwg_object *obj)
 
   dwg_ent_oleframe *oleframe = dwg_object_to_OLEFRAME (obj);
 
-  CHK_ENTITY_TYPE (oleframe, OLEFRAME, flag, BS, flag);
-  CHK_ENTITY_TYPE (oleframe, OLEFRAME, mode, BS, mode);
-  CHK_ENTITY_TYPE (oleframe, OLEFRAME, data_size, BL, data_size);
-  CHK_ENTITY_TYPE (oleframe, OLEFRAME, data, TF, data);
+  CHK_ENTITY_TYPE (oleframe, OLEFRAME, flag, BS);
+  CHK_ENTITY_TYPE (oleframe, OLEFRAME, mode, BS);
+  CHK_ENTITY_TYPE (oleframe, OLEFRAME, data_size, BL);
+  CHK_ENTITY_TYPE (oleframe, OLEFRAME, data, TF);
 }

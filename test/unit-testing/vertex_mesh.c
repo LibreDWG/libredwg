@@ -10,6 +10,6 @@ api_process (dwg_object *obj)
 
   dwg_ent_vertex_mesh *vertex_mesh = dwg_object_to_VERTEX_MESH (obj);
 
-  CHK_ENTITY_TYPE (vertex_mesh, VERTEX_MESH, flag, RC, flag);
+  CHK_ENTITY_TYPE (vertex_mesh, VERTEX_MESH, flag, RC);
   CHK_ENTITY_3RD (vertex_mesh, VERTEX_MESH, point, point);
 }

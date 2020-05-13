@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   // dwg_ent_polyline_pface_get_numpoints
   CHK_ENTITY_TYPE_W_OLD (polyline_pface, POLYLINE_PFACE, numfaces, BS,
                          num_faces);
-  CHK_ENTITY_TYPE (polyline_pface, POLYLINE_PFACE, num_owned, BL, num_owned);
+  CHK_ENTITY_TYPE (polyline_pface, POLYLINE_PFACE, num_owned, BL);
   // dwg_ent_polyline_pface_get_points NI
 
   if (num_verts + num_faces == num_owned)

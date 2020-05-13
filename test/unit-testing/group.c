@@ -15,9 +15,9 @@ api_process (dwg_object *obj)
   dwg_obj_group *_obj = dwg_object_to_GROUP (obj);
 
   CHK_ENTITY_UTF8TEXT (_obj, GROUP, name, name);
-  CHK_ENTITY_TYPE (_obj, GROUP, unnamed, BS, unnamed);
-  CHK_ENTITY_TYPE (_obj, GROUP, selectable, BS, selectable);
-  CHK_ENTITY_TYPE (_obj, GROUP, num_groups, BL, num_groups);
+  CHK_ENTITY_TYPE (_obj, GROUP, unnamed, BS);
+  CHK_ENTITY_TYPE (_obj, GROUP, selectable, BS);
+  CHK_ENTITY_TYPE (_obj, GROUP, num_groups, BL);
   if (!dwg_dynapi_entity_value (_obj, "GROUP", "groups", &groups, NULL))
     fail ("GROUP.groups");
   hdls = _obj->groups;

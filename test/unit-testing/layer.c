@@ -29,22 +29,22 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_layer *layer = dwg_object_to_LAYER (obj);
 
-  CHK_ENTITY_TYPE (layer, LAYER, flag, BS, flag);
+  CHK_ENTITY_TYPE (layer, LAYER, flag, BS);
   CHK_ENTITY_UTF8TEXT_W_OBJ (layer, LAYER, name, name);
-  CHK_ENTITY_TYPE (layer, LAYER, used, RS, used);
-  CHK_ENTITY_TYPE (layer, LAYER, is_xref_ref, B, is_xref_ref);
-  CHK_ENTITY_TYPE (layer, LAYER, is_xref_resolved, BS, is_xref_resolved);
-  CHK_ENTITY_TYPE (layer, LAYER, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_TYPE (layer, LAYER, used, RS);
+  CHK_ENTITY_TYPE (layer, LAYER, is_xref_ref, B);
+  CHK_ENTITY_TYPE (layer, LAYER, is_xref_resolved, BS);
+  CHK_ENTITY_TYPE (layer, LAYER, is_xref_dep, B);
   CHK_ENTITY_H (layer, LAYER, xref, xref);
 
-  CHK_ENTITY_TYPE (layer, LAYER, frozen, B, frozen);
-  CHK_ENTITY_TYPE (layer, LAYER, on, B, on);
-  CHK_ENTITY_TYPE (layer, LAYER, frozen_in_new, B, frozen_in_new);
-  CHK_ENTITY_TYPE (layer, LAYER, locked, B, locked);
-  CHK_ENTITY_TYPE (layer, LAYER, plotflag, B, plotflag);
-  CHK_ENTITY_TYPE (layer, LAYER, linewt, RC, linewt);
+  CHK_ENTITY_TYPE (layer, LAYER, frozen, B);
+  CHK_ENTITY_TYPE (layer, LAYER, on, B);
+  CHK_ENTITY_TYPE (layer, LAYER, frozen_in_new, B);
+  CHK_ENTITY_TYPE (layer, LAYER, locked, B);
+  CHK_ENTITY_TYPE (layer, LAYER, plotflag, B);
+  CHK_ENTITY_TYPE (layer, LAYER, linewt, RC);
   CHK_ENTITY_CMC (layer, LAYER, color, color);
-  CHK_ENTITY_TYPE (layer, LAYER, ltype_rs, RS, ltype_rs);
+  CHK_ENTITY_TYPE (layer, LAYER, ltype_rs, RS);
   CHK_ENTITY_H (layer, LAYER, plotstyle, plotstyle);
   CHK_ENTITY_H (layer, LAYER, material, material);
   CHK_ENTITY_H (layer, LAYER, ltype, ltype);

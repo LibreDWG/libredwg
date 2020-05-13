@@ -28,25 +28,25 @@ api_process (dwg_object *obj)
 
   dwg_ent_spline *spline = dwg_object_to_SPLINE (obj);
 
-  CHK_ENTITY_TYPE (spline, SPLINE, flag, RS, flag);
-  CHK_ENTITY_TYPE (spline, SPLINE, splineflags1, BL, splineflags1);
-  CHK_ENTITY_TYPE (spline, SPLINE, knotparam, BL, knotparam);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, scenario, BS, scenario);
+  CHK_ENTITY_TYPE (spline, SPLINE, flag, RS);
+  CHK_ENTITY_TYPE (spline, SPLINE, splineflags1, BL);
+  CHK_ENTITY_TYPE (spline, SPLINE, knotparam, BL);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, scenario, BS);
   if (scenario == 0 || scenario > 2)
     fail ("Illegal SPLINE.scenario %d", (int)scenario);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, degree, BS, degree);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, fit_tol, BD, fit_tol);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, degree, BS);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, fit_tol, BD);
   CHK_ENTITY_3RD  (spline, SPLINE, beg_tan_vec, beg_tan_vec);
   CHK_ENTITY_3RD  (spline, SPLINE, end_tan_vec, end_tan_vec);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, closed_b, B, closed_b);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, periodic, B, periodic);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, rational, B, rational);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, weighted, B, weighted);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, knot_tol, BD, knot_tol);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, ctrl_tol, BD, ctrl_tol);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, num_fit_pts, BS, num_fit_pts);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, num_knots, BL, num_knots);
-  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, num_ctrl_pts, BL, num_ctrl_pts);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, closed_b, B);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, periodic, B);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, rational, B);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, weighted, B);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, knot_tol, BD);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, ctrl_tol, BD);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, num_fit_pts, BS);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, num_knots, BL);
+  CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, num_ctrl_pts, BL);
 
   if (!dwg_dynapi_entity_value (spline, "SPLINE", "fit_pts", &fit_pts, NULL))
     fail ("SPLINE.fit_pts");

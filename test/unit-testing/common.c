@@ -831,15 +831,15 @@ api_common_entity (dwg_object *obj)
       if (_ent->has_edge_visualstyle)
         CHK_COMMON_H (ent, edge_visualstyle);
     }
-  CHK_COMMON_TYPE (ent, invisible, BS, invisible);
+  CHK_COMMON_TYPE (ent, invisible, BS);
 
-  CHK_COMMON_TYPE (ent, is_xdic_missing, B, is_xdic_missing);
+  CHK_COMMON_TYPE (ent, is_xdic_missing, B);
   if (!is_xdic_missing)
     CHK_COMMON_H (ent, xdicobjhandle);
-  CHK_COMMON_TYPE (ent, num_reactors, BL, num_reactors);
+  CHK_COMMON_TYPE (ent, num_reactors, BL);
   CHK_COMMON_HV (ent, reactors, reactors, num_reactors);
-  CHK_COMMON_TYPE (ent, has_ds_data, B, has_ds_data);
-  CHK_COMMON_TYPE (ent, num_eed, BL, num_eed);
+  CHK_COMMON_TYPE (ent, has_ds_data, B);
+  CHK_COMMON_TYPE (ent, num_eed, BL);
 }
 
 #define _CHK_ENTITY_UTF8TEXT(ent, name, field)                                \

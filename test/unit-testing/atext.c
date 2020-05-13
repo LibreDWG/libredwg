@@ -60,25 +60,25 @@ api_process (dwg_object *obj)
   
   CHK_ENTITY_2RD (atext, ATEXT, center, center);
   CHK_ENTITY_3RD (atext, ATEXT, extrusion, extrusion);
-  CHK_ENTITY_TYPE (atext, ATEXT, radius, BD, radius);
-  CHK_ENTITY_TYPE (atext, ATEXT, start_angle, BD, start_angle);
+  CHK_ENTITY_TYPE (atext, ATEXT, radius, BD);
+  CHK_ENTITY_TYPE (atext, ATEXT, start_angle, BD);
   CHK_ENTITY_MAX (atext, ATEXT, start_angle, BD, 6.284);
-  CHK_ENTITY_TYPE (atext, ATEXT, end_angle, BD, end_angle);
+  CHK_ENTITY_TYPE (atext, ATEXT, end_angle, BD);
   CHK_ENTITY_MAX (atext, ATEXT, end_angle, BD, 6.284);
   
-  CHK_ENTITY_TYPE (atext, ATEXT, color, BL, color);
-  CHK_ENTITY_TYPE (atext, ATEXT, is_reverse, BS, is_reverse);
-  CHK_ENTITY_TYPE (atext, ATEXT, text_direction, BS, text_direction);
-  CHK_ENTITY_TYPE (atext, ATEXT, alignment, BS, alignment);
-  CHK_ENTITY_TYPE (atext, ATEXT, text_position, BS, text_position);
-  CHK_ENTITY_TYPE (atext, ATEXT, font_19, BS, font_19);
-  CHK_ENTITY_TYPE (atext, ATEXT, bs2, BS, bs2);
-  CHK_ENTITY_TYPE (atext, ATEXT, is_underlined, BS, is_underlined);
-  CHK_ENTITY_TYPE (atext, ATEXT, bs1, BS, bs1);
-  CHK_ENTITY_TYPE (atext, ATEXT, font, BS, font);
-  CHK_ENTITY_TYPE (atext, ATEXT, is_shx, BS, is_shx);
-  CHK_ENTITY_TYPE (atext, ATEXT, wizard_flag, BS, wizard_flag);
+  CHK_ENTITY_TYPE (atext, ATEXT, color, BL);
+  CHK_ENTITY_TYPE (atext, ATEXT, is_reverse, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, text_direction, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, alignment, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, text_position, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, font_19, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, bs2, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, is_underlined, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, bs1, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, font, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, is_shx, BS);
+  CHK_ENTITY_TYPE (atext, ATEXT, wizard_flag, BS);
   
-  CHK_ENTITY_TYPE (atext, ATEXT, alignment, BS, alignment);
+  CHK_ENTITY_TYPE (atext, ATEXT, alignment, BS);
   CHK_ENTITY_UTF8TEXT (atext, ATEXT, style, style);
 }

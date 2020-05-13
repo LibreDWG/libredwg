@@ -19,13 +19,13 @@ api_process (dwg_object *obj)
   dwg_ent_body *body = dwg_object_to_BODY (obj);
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 
-  CHK_ENTITY_TYPE (body, BODY, acis_empty, B, acis_empty);
+  CHK_ENTITY_TYPE (body, BODY, acis_empty, B);
   if (dwg_ent_body_get_acis_empty (body, &error) != acis_empty || error)
     fail ("old API dwg_ent_body_get_acis_empty");
-  CHK_ENTITY_TYPE (body, BODY, version, BS, version);
+  CHK_ENTITY_TYPE (body, BODY, version, BS);
   if (dwg_ent_body_get_version (body, &error) != version || error)
     fail ("old API dwg_ent_body_get_version");
-  CHK_ENTITY_TYPE (body, BODY, acis_data, TV, acis_data);
+  CHK_ENTITY_TYPE (body, BODY, acis_data, TV);
   if (strcmp ((char *)dwg_ent_body_get_acis_data (body, &error),
               (char *)acis_data)
       || error)
@@ -36,7 +36,7 @@ api_process (dwg_object *obj)
           != wireframe_data_present
       || error)
     fail ("old API dwg_ent_body_get_wireframe_data_present");
-  CHK_ENTITY_TYPE (body, BODY, point_present, B, point_present);
+  CHK_ENTITY_TYPE (body, BODY, point_present, B);
   if (dwg_ent_body_get_point_present (body, &error) != point_present || error)
     fail ("old API dwg_ent_body_get_point_present");
   CHK_ENTITY_3RD (body, BODY, point, point);
@@ -44,14 +44,14 @@ api_process (dwg_object *obj)
   if (error || memcmp (&point, &pt3d, sizeof (point)))
     fail ("old API dwg_ent_body_get_point");
 
-  CHK_ENTITY_TYPE (body, BODY, isoline_present, B, isoline_present);
+  CHK_ENTITY_TYPE (body, BODY, isoline_present, B);
   if (dwg_ent_body_get_isoline_present (body, &error) != isoline_present
       || error)
     fail ("old API dwg_ent_body_get_isoline_present");
-  CHK_ENTITY_TYPE (body, BODY, isolines, BL, isolines);
+  CHK_ENTITY_TYPE (body, BODY, isolines, BL);
   if (dwg_ent_body_get_num_isolines (body, &error) != isolines || error)
     fail ("old API dwg_ent_body_get_num_isolines");
-  CHK_ENTITY_TYPE (body, BODY, num_wires, BL, num_wires);
+  CHK_ENTITY_TYPE (body, BODY, num_wires, BL);
   if (dwg_ent_body_get_num_wires (body, &error) != num_wires || error)
     fail ("old API dwg_ent_body_get_num_wires");
   CHK_ENTITY_TYPE (body, BODY, num_silhouettes, BL, num_sil);
@@ -78,7 +78,7 @@ api_process (dwg_object *obj)
 
   if (dwg_version >= R_2007 && body->history_id) // if it did not fail before
     {
-      CHK_ENTITY_TYPE (body, BODY, unknown_2007, BL, unknown_2007);
+      CHK_ENTITY_TYPE (body, BODY, unknown_2007, BL);
       CHK_ENTITY_H (body, BODY, history_id, history_id);
     }
 }

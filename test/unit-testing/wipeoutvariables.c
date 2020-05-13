@@ -9,5 +9,5 @@ api_process (dwg_object *obj)
 
   dwg_obj_wipeoutvariables *_obj = dwg_object_to_WIPEOUTVARIABLES (obj);
 
-  CHK_ENTITY_TYPE (_obj, WIPEOUTVARIABLES, display_frame, BS, display_frame);
+  CHK_ENTITY_TYPE (_obj, WIPEOUTVARIABLES, display_frame, BS);
 }

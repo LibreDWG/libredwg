@@ -25,17 +25,17 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_ltype *ltype = dwg_object_to_LTYPE (obj);
 
-  CHK_ENTITY_TYPE (ltype, LTYPE, flag, RC, flag);
+  CHK_ENTITY_TYPE (ltype, LTYPE, flag, RC);
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, name, name);
-  CHK_ENTITY_TYPE (ltype, LTYPE, used, RS, used);
-  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_ref, B, is_xref_ref);
-  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_resolved, BS, is_xref_resolved);
-  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_TYPE (ltype, LTYPE, used, RS);
+  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_ref, B);
+  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_resolved, BS);
+  CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_dep, B);
   CHK_ENTITY_H (ltype, LTYPE, xref, xref);
 
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, description, description);
-  CHK_ENTITY_TYPE (ltype, LTYPE, pattern_len, BD, pattern_len);
-  CHK_ENTITY_TYPE (ltype, LTYPE, alignment, RC, alignment);
+  CHK_ENTITY_TYPE (ltype, LTYPE, pattern_len, BD);
+  CHK_ENTITY_TYPE (ltype, LTYPE, alignment, RC);
   CHK_ENTITY_TYPE (ltype, LTYPE, num_dashes, RCd, num_dashes);
   if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes", &dashes, NULL))
     fail ("LTYPE.dashes");
@@ -55,6 +55,6 @@ api_process (dwg_object *obj)
           //  ok ("dashes_r11[%u]: %f", i, dashes_r11[i]);
         }
     }
-  CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B, has_strings_area);
-  CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF, strings_area);
+  CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B);
+  CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF);
 }

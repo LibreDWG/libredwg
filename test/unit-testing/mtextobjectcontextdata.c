@@ -28,22 +28,22 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_mtextobjectcontextdata *_obj = dwg_object_to_MTEXTOBJECTCONTEXTDATA (obj);
 
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, class_version, BS, class_version);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, is_default, B, is_default);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, in_dwg, B, in_dwg);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, class_version, BS);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, is_default, B);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, in_dwg, B);
   CHK_ENTITY_H (_obj, MTEXTOBJECTCONTEXTDATA, scale, scale);
   CHK_ENTITY_3RD (_obj, MTEXTOBJECTCONTEXTDATA, insertion_pt, insertion_pt);
   CHK_ENTITY_3RD (_obj, MTEXTOBJECTCONTEXTDATA, x_axis_dir, x_axis_dir);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, text_height, BD, text_height);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, rect_width, BD, rect_width);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_height, BD, extents_height);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_width, BD, extents_width);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, attachment, BS, attachment);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, drawing_dir, BS, drawing_dir);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, linespace_style, BS, linespace_style);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, linespace_factor, BD, linespace_factor);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, bd45, BD, bd45);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, bs74, BS, bs74);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, bd46, BD, bd46);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, text_height, BD);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, rect_width, BD);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_height, BD);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_width, BD);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, attachment, BS);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, drawing_dir, BS);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, linespace_style, BS);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, linespace_factor, BD);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, bd45, BD);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, bs74, BS);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, bd46, BD);
 #endif
 }

@@ -19,16 +19,16 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, ins_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, scale, scale);
-  CHK_ENTITY_TYPE (minsert, MINSERT, scale_flag, BB, scale_flag);
-  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, rotation, BD, rotation);
+  CHK_ENTITY_TYPE (minsert, MINSERT, scale_flag, BB);
+  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, rotation, BD);
   CHK_ENTITY_MAX (minsert, MINSERT, rotation, BD, MAX_ANGLE);
   CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, extrusion, ext);
-  CHK_ENTITY_TYPE (minsert, MINSERT, has_attribs, B, has_attribs);
-  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_owned, BL, num_owned);
-  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_cols, BS, num_cols);
-  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_rows, BS, num_rows);
-  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, col_spacing, BD, col_spacing);
-  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, row_spacing, BD, row_spacing);
+  CHK_ENTITY_TYPE (minsert, MINSERT, has_attribs, B);
+  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_owned, BL);
+  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_cols, BS);
+  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, num_rows, BS);
+  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, col_spacing, BD);
+  CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, row_spacing, BD);
 
   CHK_ENTITY_H (minsert, MINSERT, block_header, block_header);
   if (minsert->has_attribs)

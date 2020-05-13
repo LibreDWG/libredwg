@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
 
   dwg_ent_polyline_mesh *polyline_mesh = dwg_object_to_POLYLINE_MESH (obj);
 
-  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, flag, BS, flag);
+  CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, flag, BS);
   CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, curve_type, BS,
                          curve_type);
   CHK_ENTITY_TYPE_W_OLD (polyline_mesh, POLYLINE_MESH, num_owned, BL,

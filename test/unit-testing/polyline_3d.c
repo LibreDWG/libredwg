@@ -13,9 +13,9 @@ api_process (dwg_object *obj)
 
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
-  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, flag, RC, flag);
-  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, curve_type, RC, curve_type);
-  CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, num_owned, BL, num_owned);
+  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, flag, RC);
+  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, curve_type, RC);
+  CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, num_owned, BL);
   numpoints = dwg_object_polyline_3d_get_numpoints (obj, &error);
   if (error)
     fail ("polyline_3d_get_numpoints");

@@ -23,11 +23,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt, ins_pt);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, x_axis_dir, x_axis_dir);
-  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, rect_width, BD, rect_width);
-  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, rect_height, BD, rect_height);
-  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, text_height, BD, text_height);
-  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, attachment, BS, attachment);
-  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, drawing_dir, BS, drawing_dir);
+  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, rect_width, BD);
+  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, rect_height, BD);
+  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, text_height, BD);
+  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, attachment, BS);
+  CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, drawing_dir, BS);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_height, BD, extents_ht);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_width, BD, extents_wid);
   CHK_ENTITY_H (mtext, MTEXT, style, style);
@@ -37,21 +37,21 @@ api_process (dwg_object *obj)
                              linespace_style);
       CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_factor, BD,
                              linespace_factor);
-      CHK_ENTITY_TYPE (mtext, MTEXT, unknown_bit, B, unknown_bit);
+      CHK_ENTITY_TYPE (mtext, MTEXT, unknown_bit, B);
     }
   if (version >= R_2004)
     {
-      CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_flag, BL, bg_fill_flag);
-      CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_scale, BL, bg_fill_scale);
+      CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_flag, BL);
+      CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_scale, BL);
       CHK_ENTITY_CMC (mtext, MTEXT, bg_fill_color, bg_fill_color);
-      CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_trans, BL, bg_fill_trans);
+      CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_trans, BL);
     }
   if (version >= R_2018)
     {
-      CHK_ENTITY_TYPE (mtext, MTEXT, annotative, B, annotative);
-      CHK_ENTITY_TYPE (mtext, MTEXT, class_version, BS, class_version);
-      CHK_ENTITY_TYPE (mtext, MTEXT, default_flag, B, default_flag);
+      CHK_ENTITY_TYPE (mtext, MTEXT, annotative, B);
+      CHK_ENTITY_TYPE (mtext, MTEXT, class_version, BS);
+      CHK_ENTITY_TYPE (mtext, MTEXT, default_flag, B);
       CHK_ENTITY_H (mtext, MTEXT, appid, appid);
-      CHK_ENTITY_TYPE (mtext, MTEXT, column_type, BL, column_type);
+      CHK_ENTITY_TYPE (mtext, MTEXT, column_type, BL);
     }
 }

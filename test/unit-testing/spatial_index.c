@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_spatial_index *_obj = dwg_object_to_SPATIAL_INDEX (obj);
 
-  CHK_ENTITY_TYPE (_obj, SPATIAL_INDEX, timestamp1, BL, timestamp1);
-  CHK_ENTITY_TYPE (_obj, SPATIAL_INDEX, timestamp2, BL, timestamp2);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_INDEX, timestamp1, BL);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_INDEX, timestamp2, BL);
   CHK_ENTITY_UTF8TEXT (_obj, SPATIAL_INDEX, unknown, unknown);
 }

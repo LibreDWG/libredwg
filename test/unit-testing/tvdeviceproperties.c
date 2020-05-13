@@ -20,14 +20,14 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_tvdeviceproperties *_obj = dwg_object_to_TVDEVICEPROPERTIES (obj);
 
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, flags, BL, flags);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, max_regen_threads, BS, max_regen_threads);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, use_lut_palette, BL, use_lut_palette);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, alt_hlt, BLL, alt_hlt);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, alt_hltcolor, BLL, alt_hltcolor);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, geom_shader_usage, BLL, geom_shader_usage);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, blending_mode, BL, blending_mode);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, antialiasing_level, BD, antialiasing_level);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, bd2, BD, bd2);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, flags, BL);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, max_regen_threads, BS);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, use_lut_palette, BL);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, alt_hlt, BLL);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, alt_hltcolor, BLL);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, geom_shader_usage, BLL);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, blending_mode, BL);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, antialiasing_level, BD);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, bd2, BD);
 #endif
 }

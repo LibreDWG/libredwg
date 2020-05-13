@@ -10,12 +10,12 @@ api_process (dwg_object *obj)
 
   dwg_ent_ellipse *ellipse = dwg_object_to_ELLIPSE (obj);
 
-  CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, axis_ratio, RD, axis_ratio);
+  CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, axis_ratio, RD);
   CHK_ENTITY_3RD_W_OLD (ellipse, ELLIPSE, sm_axis, sm);
   CHK_ENTITY_3RD_W_OLD (ellipse, ELLIPSE, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (ellipse, ELLIPSE, center, center);
-  CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, start_angle, BD, start_angle);
+  CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, start_angle, BD);
   CHK_ENTITY_MAX (ellipse, ELLIPSE, start_angle, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, end_angle, BD, end_angle);
+  CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, end_angle, BD);
   CHK_ENTITY_MAX (ellipse, ELLIPSE, end_angle, BD, MAX_ANGLE);
 }

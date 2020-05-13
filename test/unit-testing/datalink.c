@@ -32,26 +32,26 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_datalink *_obj = dwg_object_to_DATALINK (obj);
 
-  CHK_ENTITY_TYPE (_obj, DATALINK, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (_obj, DATALINK, class_version, BS);
   CHK_ENTITY_UTF8TEXT (_obj, DATALINK, data_adapter, data_adapter);
   CHK_ENTITY_UTF8TEXT (_obj, DATALINK, description, description);
   CHK_ENTITY_UTF8TEXT (_obj, DATALINK, tooltip, tooltip);
   CHK_ENTITY_UTF8TEXT (_obj, DATALINK, connection_string, connection_string);
 
-  CHK_ENTITY_TYPE (_obj, DATALINK, option, BL, option);
-  CHK_ENTITY_TYPE (_obj, DATALINK, update_option, BL, update_option);
-  CHK_ENTITY_TYPE (_obj, DATALINK, bl92, BL, bl92);
-  CHK_ENTITY_TYPE (_obj, DATALINK, year, BS, year);
-  CHK_ENTITY_TYPE (_obj, DATALINK, month, BS, month);
-  CHK_ENTITY_TYPE (_obj, DATALINK, day, BS, day);
-  CHK_ENTITY_TYPE (_obj, DATALINK, hour, BS, hour);
-  CHK_ENTITY_TYPE (_obj, DATALINK, minute, BS, minute);
-  CHK_ENTITY_TYPE (_obj, DATALINK, seconds, BS, seconds);
-  CHK_ENTITY_TYPE (_obj, DATALINK, msec, BS, msec);
-  CHK_ENTITY_TYPE (_obj, DATALINK, path_option, BS, path_option);
-  CHK_ENTITY_TYPE (_obj, DATALINK, bl93, BL, bl93);
+  CHK_ENTITY_TYPE (_obj, DATALINK, option, BL);
+  CHK_ENTITY_TYPE (_obj, DATALINK, update_option, BL);
+  CHK_ENTITY_TYPE (_obj, DATALINK, bl92, BL);
+  CHK_ENTITY_TYPE (_obj, DATALINK, year, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, month, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, day, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, hour, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, minute, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, seconds, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, msec, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, path_option, BS);
+  CHK_ENTITY_TYPE (_obj, DATALINK, bl93, BL);
   CHK_ENTITY_UTF8TEXT (_obj, DATALINK, update_status, update_status);
-  CHK_ENTITY_TYPE (_obj, DATALINK, num_customdata, BL, num_customdata);
+  CHK_ENTITY_TYPE (_obj, DATALINK, num_customdata, BL);
   if (!dwg_dynapi_entity_value (_obj, "DATALINK", "customdata", &customdata, NULL))
     fail ("DATALINK.customdata");
   if (num_customdata)

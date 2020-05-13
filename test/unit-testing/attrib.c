@@ -32,25 +32,25 @@ api_process (dwg_object *obj)
   dwg_ent_attrib_get_extrusion (attrib, &pt3d, &error);
   if (error || memcmp (&ext, &pt3d, sizeof (ext)))
     fail ("old API dwg_ent_attrib_get_extrusion");
-  CHK_ENTITY_TYPE (attrib, ATTRIB, elevation, BD, elevation);
-  CHK_ENTITY_TYPE (attrib, ATTRIB, dataflags, RC, dataflags);
-  CHK_ENTITY_TYPE (attrib, ATTRIB, height, RD, height);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, elevation, BD);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, dataflags, RC);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, height, RD);
   rdvalue = dwg_ent_attrib_get_height (attrib, &error);
   if (error || height != rdvalue)
     fail ("old API dwg_ent_attrib_get_height");
-  CHK_ENTITY_TYPE (attrib, ATTRIB, thickness, RD, thickness);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, thickness, RD);
   rdvalue = dwg_ent_attrib_get_thickness (attrib, &error);
   if (error || thickness != rdvalue)
     fail ("old API dwg_ent_attrib_get_thickness");
-  CHK_ENTITY_TYPE (attrib, ATTRIB, rotation, RD, rotation);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, rotation, RD);
   CHK_ENTITY_MAX (attrib, ATTRIB, rotation, RD, 6.284);
   rdvalue = dwg_ent_attrib_get_rotation (attrib, &error);
   if (error || rotation != rdvalue)
     fail ("old API dwg_ent_attrib_get_rotation");
-  CHK_ENTITY_TYPE (attrib, ATTRIB, oblique_angle, RD, oblique_angle);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, oblique_angle, RD);
   CHK_ENTITY_MAX (attrib, ATTRIB, oblique_angle, RD, 6.284);
-  CHK_ENTITY_TYPE (attrib, ATTRIB, width_factor, RD, width_factor);
-  CHK_ENTITY_TYPE (attrib, ATTRIB, generation, BS, generation);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, width_factor, RD);
+  CHK_ENTITY_TYPE (attrib, ATTRIB, generation, BS);
 
   CHK_ENTITY_TYPE (attrib, ATTRIB, vert_alignment, BS, vert_align);
   bsvalue = dwg_ent_attrib_get_vert_alignment (attrib, &error);

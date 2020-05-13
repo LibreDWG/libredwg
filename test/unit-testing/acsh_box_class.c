@@ -29,11 +29,11 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_acsh_box_class *_obj = dwg_object_to_ACSH_BOX_CLASS (obj);
 
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, class_version, BL, class_version); // 90
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, ee_bl98, BL, ee_bl98); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, ee_bl99, BL, ee_bl99); //29
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl90, BL, shhn_bl90); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl91, BL, shhn_bl91); //29
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, class_version, BL); // 90
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, ee_bl98, BL); //33
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, ee_bl99, BL); //29
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl90, BL); //33
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl91, BL); //29
   // last 16x nums 40-55
   if (!dwg_dynapi_entity_value (_obj, "ACSH_BOX_CLASS", "shhn_pts", &shhn_pts, NULL))
     fail ("ACSH_BOX_CLASS.shhn_pts");
@@ -42,12 +42,12 @@ api_process (dwg_object *obj)
       ok ("ACSH_BOX_CLASS.shhn_pts[%d]: %f", i, shhn_pts[i]);
     }
   CHK_ENTITY_CMC (_obj, ACSH_BOX_CLASS, color, color);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_b92, B, shhn_b92);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl347, BL, shhn_bl347);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bl90, BL, shb_bl90);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bl91, BL, shb_bl91);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd40, BD, shb_bd40);       /*!< DXF 40 1300.0 (length?) */
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd41, BD, shb_bd41);       /*!< DXF 41 20.0 (width?) */
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd42, BD, shb_bd42);       /*!< DXF 42 420.0 (height?) */
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_b92, B);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl347, BL);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bl90, BL);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bl91, BL);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd40, BD);       /*!< DXF 40 1300.0 (length?) */
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd41, BD);       /*!< DXF 41 20.0 (width?) */
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd42, BD);       /*!< DXF 42 420.0 (height?) */
 #endif
 }

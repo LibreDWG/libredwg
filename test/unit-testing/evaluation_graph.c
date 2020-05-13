@@ -22,12 +22,12 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_evaluation_graph *_obj = dwg_object_to_EVALUATION_GRAPH (obj);
 
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, has_graph, BL, has_graph);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, unknown1, BL, unknown1);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, unknown2, BL, unknown2);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, nodeid, BL, nodeid);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, edge_flags, BL, edge_flags);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, num_evalexpr, BL, num_evalexpr);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, has_graph, BL);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, unknown1, BL);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, unknown2, BL);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, nodeid, BL);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, edge_flags, BL);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, num_evalexpr, BL);
   CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge1, BLd, node_edge1);
   CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge2, BLd, node_edge2);
   CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge3, BLd, node_edge3);

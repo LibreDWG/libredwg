@@ -13,9 +13,9 @@ api_process (dwg_object *obj)
 
   dwg_ent_3dface *_3dface = dwg_object_to__3DFACE (obj);
 
-  CHK_ENTITY_TYPE (_3dface, 3DFACE, has_no_flags, B, has_no_flags);
-  CHK_ENTITY_TYPE (_3dface, 3DFACE, z_is_zero, B, z_is_zero);
-  CHK_ENTITY_TYPE (_3dface, 3DFACE, invis_flags, BS, invis_flags);
+  CHK_ENTITY_TYPE (_3dface, 3DFACE, has_no_flags, B);
+  CHK_ENTITY_TYPE (_3dface, 3DFACE, z_is_zero, B);
+  CHK_ENTITY_TYPE (_3dface, 3DFACE, invis_flags, BS);
   if ( dwg_ent_3dface_get_invis_flags (_3dface, &error) != invis_flags || error)
     fail ("old API dwg_ent_3dface_get_invis_flags");
 

@@ -23,13 +23,13 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_ent_geopositionmarker *_obj = dwg_object_to_GEOPOSITIONMARKER (obj);
 
-  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, type, BS, type);
+  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, type, BS);
   CHK_ENTITY_3RD (_obj, GEOPOSITIONMARKER, position, position);
-  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, radius, BD, radius);
-  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, landing_gap, BD, landing_gap);
-  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, text_alignment, RC, text_alignment);
-  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, mtext_visible, B, mtext_visible);
-  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, enable_frame_text, B, enable_frame_text);
+  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, radius, BD);
+  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, landing_gap, BD);
+  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, text_alignment, RC);
+  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, mtext_visible, B);
+  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, enable_frame_text, B);
   CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, notes, notes);
 
   if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext, NULL))

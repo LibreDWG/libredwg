@@ -17,19 +17,19 @@ api_process (dwg_object *obj)
   BITCODE_H *objids;
 
   dwg_obj_proxy *_obj = dwg_object_to_PROXY_OBJECT (obj);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, class_id, BL, class_id);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, class_id, BL);
   if (class_id != 499)
     fail ("PROXY_OBJECT.class_id %d not 499", (int)class_id);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, version, BL, version);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, maint_version, BL, maint_version);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, from_dxf, B, from_dxf);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, data_numbits, BL, data_numbits);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, data_size, BL, data_size);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, version, BL);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, maint_version, BL);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, from_dxf, B);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, data_numbits, BL);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, data_size, BL);
   if (data_size * 8 < data_numbits || data_size > obj->size)
     fail ("Invalid PROXY_ENTITY.data_size %u * 8 < %u data_numbits",
           (unsigned)data_size, (unsigned)data_numbits);
   //BITCODE_RC *data;
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, num_objids, BL, num_objids);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, num_objids, BL);
   if (!dwg_dynapi_entity_value (_obj, "PROXY_OBJECT", "objids", &objids, NULL))
     fail ("PROXY_OBJECT.objids");
   for (i = 0; i < num_objids; i++)

@@ -26,22 +26,22 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_ucs *_obj = dwg_object_to_UCS (obj);
 
-  CHK_ENTITY_TYPE (_obj, UCS, flag, RC, flag);
+  CHK_ENTITY_TYPE (_obj, UCS, flag, RC);
   CHK_ENTITY_UTF8TEXT (_obj, UCS, name, name);
-  CHK_ENTITY_TYPE (_obj, UCS, used, RS, used);
-  CHK_ENTITY_TYPE (_obj, UCS, is_xref_ref, B, is_xref_ref);
-  CHK_ENTITY_TYPE (_obj, UCS, is_xref_resolved, BS, is_xref_resolved);
-  CHK_ENTITY_TYPE (_obj, UCS, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_TYPE (_obj, UCS, used, RS);
+  CHK_ENTITY_TYPE (_obj, UCS, is_xref_ref, B);
+  CHK_ENTITY_TYPE (_obj, UCS, is_xref_resolved, BS);
+  CHK_ENTITY_TYPE (_obj, UCS, is_xref_dep, B);
   CHK_ENTITY_H (_obj, UCS, xref, xref);
 
   CHK_ENTITY_3RD (_obj, UCS, origin, origin);
   CHK_ENTITY_3RD (_obj, UCS, x_direction, x_direction);
   CHK_ENTITY_3RD (_obj, UCS, y_direction, y_direction);
-  CHK_ENTITY_TYPE (_obj, UCS, elevation, BD, elevation);
-  CHK_ENTITY_TYPE (_obj, UCS, orthographic_view_type, BS, orthographic_view_type);
+  CHK_ENTITY_TYPE (_obj, UCS, elevation, BD);
+  CHK_ENTITY_TYPE (_obj, UCS, orthographic_view_type, BS);
   CHK_ENTITY_H (_obj, UCS, base_ucs, base_ucs);
   CHK_ENTITY_H (_obj, UCS, named_ucs, named_ucs);
-  CHK_ENTITY_TYPE (_obj, UCS, num_orthopts, BS, num_orthopts);
+  CHK_ENTITY_TYPE (_obj, UCS, num_orthopts, BS);
   if (!dwg_dynapi_entity_value (_obj, "UCS", "orthopts", &orthopts, NULL))
     fail ("UCS.orthopts");
   else

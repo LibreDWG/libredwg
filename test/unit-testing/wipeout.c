@@ -26,14 +26,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (wipeout, WIPEOUT, pt0, pt0);
   CHK_ENTITY_3RD (wipeout, WIPEOUT, uvec, uvec);
   CHK_ENTITY_3RD (wipeout, WIPEOUT, vvec, vvec);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, display_props, BS, display_props);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, clipping, B, clipping);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, brightness, RC, brightness);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, contrast, RC, contrast);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, fade, RC, fade);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, clip_mode, B, clip_mode);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, clip_boundary_type, BS, clip_boundary_type);
-  CHK_ENTITY_TYPE (wipeout, WIPEOUT, num_clip_verts, BL, num_clip_verts);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, display_props, BS);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, clipping, B);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, brightness, RC);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, contrast, RC);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, fade, RC);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, clip_mode, B);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, clip_boundary_type, BS);
+  CHK_ENTITY_TYPE (wipeout, WIPEOUT, num_clip_verts, BL);
 
   if (!dwg_dynapi_entity_value (wipeout, "WIPEOUT", "clip_verts", &clip_verts, NULL))
     fail ("WIPEOUT.clip_verts");

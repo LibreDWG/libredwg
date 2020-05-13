@@ -26,7 +26,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (dimassoc, DIMASSOC, dimensionobj, dimensionobj);
   CHK_ENTITY_TYPE (dimassoc, DIMASSOC, associativity, BLx, associativity);
   CHK_ENTITY_MAX (dimassoc, DIMASSOC, associativity, BL, 15);
-  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, trans_space_flag, B, trans_space_flag);
+  CHK_ENTITY_TYPE (dimassoc, DIMASSOC, trans_space_flag, B);
   CHK_ENTITY_TYPE (dimassoc, DIMASSOC, rotated_type, RCd, rotated_type);
   if (!dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "ref", &ref, NULL))
     fail ("DIMASSOC.ref");
@@ -85,7 +85,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, has_lastpt_ref, B);
     }
 
-  //CHK_ENTITY_TYPE (dimassoc, DIMASSOC, intsect_gsmarker, BL, intsect_gsmarker);
+  //CHK_ENTITY_TYPE (dimassoc, DIMASSOC, intsect_gsmarker, BL);
   //CHK_ENTITY_H (dimassoc, DIMASSOC, xrefobj, xrefobj);
   //CHK_ENTITY_H (dimassoc, DIMASSOC, intsectxrefobj, intsectxrefobj);
 }

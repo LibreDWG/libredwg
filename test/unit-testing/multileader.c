@@ -51,7 +51,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_mleader *mleader = dwg_object_to_MULTILEADER (obj);
 
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, class_version, BS, class_version);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, class_version, BS);
   if (!dwg_dynapi_entity_value (mleader, "MULTILEADER", "ctx", &ctx, NULL))
     fail ("MULTILEADER.ctx");
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, num_leaders, BL);
@@ -200,36 +200,36 @@ api_process (dwg_object *obj)
       fail ("!ctx.has_content_blk && !ctx.has_content_txt");
 
   CHK_ENTITY_H (mleader, MULTILEADER, mleaderstyle, mleaderstyle);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, flags, BL, flags);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, type, BS, type);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, flags, BL);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, type, BS);
   CHK_ENTITY_CMC (mleader, MULTILEADER, color, color);
   CHK_ENTITY_H (mleader, MULTILEADER, ltype, ltype);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, linewt, BLd, linewt);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, has_landing, B, has_landing);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, has_dogleg, B, has_dogleg);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, landing_dist, BD, landing_dist);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, has_landing, B);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, has_dogleg, B);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, landing_dist, BD);
   CHK_ENTITY_H (mleader, MULTILEADER, arrow_handle, arrow_handle);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, arrow_size, BD, arrow_size);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, style_content, BS, style_content);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, arrow_size, BD);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, style_content, BS);
   CHK_ENTITY_H (mleader, MULTILEADER, text_style, text_style);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_left, BS, text_left);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_right, BS, text_right);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_angletype, BS, text_angletype);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_alignment, BS, text_alignment);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_left, BS);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_right, BS);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_angletype, BS);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, text_alignment, BS);
   CHK_ENTITY_CMC (mleader, MULTILEADER, text_color, text_color);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, has_text_frame, B, has_text_frame);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, has_text_frame, B);
   CHK_ENTITY_H (mleader, MULTILEADER, block_style, block_style);
   CHK_ENTITY_CMC (mleader, MULTILEADER, block_color, block_color);
   CHK_ENTITY_3RD (mleader, MULTILEADER, block_scale, block_scale);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, block_rotation, BD, block_rotation);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, block_rotation, BD);
   CHK_ENTITY_MAX (mleader, MULTILEADER, block_rotation, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, style_attachment, BS, style_attachment);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, is_annotative, B, is_annotative);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, style_attachment, BS);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, is_annotative, B);
 
   if (dwg_version >= R_2000 && dwg_version <= R_2007)
     {
       // TODO no coverage
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, num_arrowheads, BL, num_arrowheads);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, num_arrowheads, BL);
       if (!dwg_dynapi_entity_value (mleader, "MULTILEADER", "arrowheads", &arrowheads, NULL))
         fail ("MULTILEADER.arrowheads");
       if (num_arrowheads)
@@ -250,7 +250,7 @@ api_process (dwg_object *obj)
           fail ("MULTILEADER.arrowheads but 0 num_arrowheads");
 
       // TODO no coverage
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, num_blocklabels, BL, num_blocklabels);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, num_blocklabels, BL);
       if (!dwg_dynapi_entity_value (mleader, "MULTILEADER", "blocklabels", &blocklabels, NULL))
         fail ("MULTILEADER.blocklabels");
       if (num_blocklabels)
@@ -274,21 +274,21 @@ api_process (dwg_object *obj)
         if (blocklabels)
           fail ("MULTILEADER.blocklabels but 0 num_blocklabels");
 
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, neg_textdir, B, neg_textdir);
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, ipe_alignment, BS, ipe_alignment);
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, justification, BS, justification);
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, scale_factor, BD, scale_factor);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, neg_textdir, B);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, ipe_alignment, BS);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, justification, BS);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, scale_factor, BD);
     }
   if (dwg_version >= R_2010)
     {
       attach_dir = mleader->attach_dir;
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_dir, BS, attach_dir);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_dir, BS);
       CHK_ENTITY_MAX (mleader, MULTILEADER, attach_dir, BS, 1);
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_top, BS, attach_top);
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_bottom, BS, attach_bottom);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_top, BS);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_bottom, BS);
     }
   if (dwg_version >= R_2013)
     {
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, text_extended, B, text_extended);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, text_extended, B);
     }
 }

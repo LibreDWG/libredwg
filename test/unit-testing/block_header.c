@@ -42,31 +42,31 @@ api_process (dwg_object *obj)
   //Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_block_header *block_header = dwg_object_to_BLOCK_HEADER (obj);
 
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag, RC, flag);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag, RC);
   CHK_ENTITY_UTF8TEXT_W_OBJ (block_header, BLOCK_HEADER, name, name);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, used, RS, used);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_ref, B, is_xref_ref);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_resolved, BS, is_xref_resolved);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_dep, B, is_xref_dep);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, used, RS);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_ref, B);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_resolved, BS);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, is_xref_dep, B);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, xref, xref);
 
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag2, RC, flag2); /* preR13 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag3, RS, flag3); /* preR13 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, anonymous, B, anonymous);    /* flag 70 bit 1 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, hasattrs, B, hasattrs);     /* flag 70 bit 2 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, blkisxref, B, blkisxref);    /* flag 70 bit 3 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefoverlaid, B, xrefoverlaid); /* flag 70 bit 4 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, loaded_bit, B, loaded_bit);   /* flag 70 bit 6 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, num_owned, BL, num_owned);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag2, RC); /* preR13 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag3, RS); /* preR13 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, anonymous, B);    /* flag 70 bit 1 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, hasattrs, B);     /* flag 70 bit 2 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, blkisxref, B);    /* flag 70 bit 3 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefoverlaid, B); /* flag 70 bit 4 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, loaded_bit, B);   /* flag 70 bit 6 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, num_owned, BL);
   CHK_ENTITY_3RD (block_header, BLOCK_HEADER, base_pt, base_pt);
   CHK_ENTITY_UTF8TEXT (block_header, BLOCK_HEADER, xref_pname, xref_pname);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, num_inserts, RL, num_inserts);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, description, TV, description);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, preview_size, BL, preview_size);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, preview, TF, preview);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, insert_units, BS, insert_units);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, explodable, B, explodable);
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, block_scaling, RC, block_scaling);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, num_inserts, RL);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, description, TV);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, preview_size, BL);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, preview, TF);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, insert_units, BS);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, explodable, B);
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, block_scaling, RC);
   CHK_ENTITY_UTF8TEXT (block_header, BLOCK_HEADER, description, description);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, block_entity, block_entity);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, first_entity, first_entity);

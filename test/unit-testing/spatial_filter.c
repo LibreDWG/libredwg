@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_spatial_filter *_obj = dwg_object_to_SPATIAL_FILTER (obj);
 
-  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, num_points, BS, num_points);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, num_points, BS);
   if (!dwg_dynapi_entity_value (_obj, "SPATIAL_FILTER", "points", &points, NULL))
     fail ("SPATIAL_FILTER.points");
   for (i = 0; i < num_points; i++)
@@ -28,11 +28,11 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_3RD (_obj, SPATIAL_FILTER, extrusion, extrusion);
   CHK_ENTITY_3RD (_obj, SPATIAL_FILTER, clip_bound_origin, clip_bound_origin);
-  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, display_boundary, BS, display_boundary);
-  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_on, BS, front_clip_on);
-  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_dist, BD, front_clip_dist);
-  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, back_clip_on, BS, back_clip_on);
-  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, back_clip_dist, BD, back_clip_dist);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, display_boundary, BS);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_on, BS);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_dist, BD);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, back_clip_on, BS);
+  CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, back_clip_dist, BD);
   if (!dwg_dynapi_entity_value (_obj, "SPATIAL_FILTER",
                                 "inverse_block_transform",
                                 &inverse_block_transform, NULL))

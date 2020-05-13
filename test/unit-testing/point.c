@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   else
     pass ();
 
-  CHK_ENTITY_TYPE_W_OLD (point, POINT, thickness, BD, thickness);
+  CHK_ENTITY_TYPE_W_OLD (point, POINT, thickness, BD);
   CHK_ENTITY_3RD_W_OLD (point, POINT, extrusion, ext);
-  CHK_ENTITY_TYPE (point, POINT, x_ang, BD, x_ang);
+  CHK_ENTITY_TYPE (point, POINT, x_ang, BD);
 }

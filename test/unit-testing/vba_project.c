@@ -9,6 +9,6 @@ api_process (dwg_object *obj)
   BITCODE_TF data;
   dwg_obj_vba_project *_obj = dwg_object_to_VBA_PROJECT (obj);
 
-  CHK_ENTITY_TYPE (_obj, VBA_PROJECT, data_size, BL, data_size);
-  CHK_ENTITY_TYPE (_obj, VBA_PROJECT, data, TF, data);
+  CHK_ENTITY_TYPE (_obj, VBA_PROJECT, data_size, BL);
+  CHK_ENTITY_TYPE (_obj, VBA_PROJECT, data, TF);
 }

@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_cellstylemap *_obj = dwg_object_to_CELLSTYLEMAP (obj);
 
-  CHK_ENTITY_TYPE (_obj, CELLSTYLEMAP, num_cells, BL, num_cells);
+  CHK_ENTITY_TYPE (_obj, CELLSTYLEMAP, num_cells, BL);
   if (!dwg_dynapi_entity_value (_obj, "CELLSTYLEMAP", "cells", &cells, NULL))
     fail ("CELLSTYLEMAP.cells");
   else

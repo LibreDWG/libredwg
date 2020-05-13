@@ -11,8 +11,8 @@ api_process (dwg_object *obj)
 
   dwg_ent_solid *solid = dwg_object_to_SOLID (obj);
 
-  CHK_ENTITY_TYPE_W_OLD (solid, SOLID, thickness, BD, thickness);
-  CHK_ENTITY_TYPE_W_OLD (solid, SOLID, elevation, BD, elevation);
+  CHK_ENTITY_TYPE_W_OLD (solid, SOLID, thickness, BD);
+  CHK_ENTITY_TYPE_W_OLD (solid, SOLID, elevation, BD);
   CHK_ENTITY_2RD_W_OLD (solid, SOLID, corner1, c1);
   CHK_ENTITY_2RD_W_OLD (solid, SOLID, corner2, c2);
   CHK_ENTITY_2RD_W_OLD (solid, SOLID, corner3, c3);

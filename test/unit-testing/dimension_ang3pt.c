@@ -20,15 +20,15 @@ api_process (dwg_object *obj)
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 
   /* common */
-  CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, class_version, RC, class_version);
+  CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, class_version, RC);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, lspace_style, BS,
                          lspace_style);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, lspace_factor, BD,
                          lspace_factor);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, act_measurement, BD,
                          act_measurement);
-  CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, attachment, BS, attachment);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, elevation, BD, elevation);
+  CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, attachment, BS);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, elevation, BD);
   CHK_ENTITY_3RD (dim, DIMENSION_ANG3PT, extrusion, ext);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG3PT, clone_ins_pt, clone_ins_pt);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG3PT, text_midpt, text_midpt);
@@ -38,14 +38,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_ANG3PT, ins_scale, ins_scale);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, ins_rotation, BD,
                          ins_rotation);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, horiz_dir, BD, horiz_dir);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, horiz_dir, BD);
   CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, text_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, ins_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_MAX (dim, DIMENSION_ANG3PT, horiz_dir, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flip_arrow1, B, flip_arrow1);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flip_arrow2, B, flip_arrow2);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flag1, RC, flag1);
-  CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, flag, RC, flag);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flip_arrow1, B);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flip_arrow2, B);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG3PT, flag1, RC);
+  CHK_ENTITY_TYPE (dim, DIMENSION_ANG3PT, flag, RC);
 
   /* ang3pt */
   CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, def_pt, def_pt);

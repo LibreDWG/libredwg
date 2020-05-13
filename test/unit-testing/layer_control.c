@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_layer_control *ctrl = dwg_object_to_LAYER_CONTROL (obj);
 
-  CHK_ENTITY_TYPE (ctrl, LAYER_CONTROL, num_entries, BS, num_entries);
+  CHK_ENTITY_TYPE (ctrl, LAYER_CONTROL, num_entries, BS);
   entries = dwg_object_tablectrl_get_entries (obj, &error);
   if (!dwg_dynapi_entity_value (ctrl, "LAYER_CONTROL", "entries", &hdls, NULL))
     fail ("LAYER_CONTROL.entries");
@@ -22,5 +22,5 @@ api_process (dwg_object *obj)
       else
         fail ("LAYER_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
     }
-  CHK_ENTITY_TYPE (ctrl, LAYER_CONTROL, objid, BL, objid);  
+  CHK_ENTITY_TYPE (ctrl, LAYER_CONTROL, objid, BL);  
 }

@@ -13,10 +13,10 @@ api_process (dwg_object *obj)
 
   dwg_ent_ole2frame *ole2frame = dwg_object_to_OLE2FRAME (obj);
 
-  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, type, BS, type);
-  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, mode, BS, mode);
-  CHK_ENTITY_TYPE (ole2frame, OLE2FRAME, lock_aspect, RC, lock_aspect);
+  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, type, BS);
+  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, mode, BS);
+  CHK_ENTITY_TYPE (ole2frame, OLE2FRAME, lock_aspect, RC);
 
-  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data_size, BL, data_size);
-  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data, TF, data);
+  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data_size, BL);
+  CHK_ENTITY_TYPE_W_OLD (ole2frame, OLE2FRAME, data, TF);
 }

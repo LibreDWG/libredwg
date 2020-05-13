@@ -20,15 +20,15 @@ api_process (dwg_object *obj)
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 
   /* common */
-  CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, class_version, RC, class_version);
+  CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, class_version, RC);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, lspace_style, BS,
                          lspace_style);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, lspace_factor, BD,
                          lspace_factor);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, act_measurement, BD,
                          act_measurement);
-  CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, attachment, BS, attachment);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, elevation, BD, elevation);
+  CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, attachment, BS);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, elevation, BD);
   CHK_ENTITY_3RD (dim, DIMENSION_LINEAR, extrusion, ext);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, clone_ins_pt, clone_ins_pt);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, text_midpt, text_midpt);
@@ -40,12 +40,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_MAX (dim, DIMENSION_LINEAR, ins_rotation, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, horiz_dir, BD, horiz_dir);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, horiz_dir, BD);
   CHK_ENTITY_MAX (dim, DIMENSION_LINEAR, horiz_dir, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, flip_arrow1, B, flip_arrow1);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, flip_arrow2, B, flip_arrow2);
-  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, flag1, RC, flag1);
-  CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, flag, RC, flag);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, flip_arrow1, B);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, flip_arrow2, B);
+  CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, flag1, RC);
+  CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, flag, RC);
 
   /* linear */
   CHK_ENTITY_3RD_W_OLD (dim_linear, DIMENSION_LINEAR, def_pt, def_pt);

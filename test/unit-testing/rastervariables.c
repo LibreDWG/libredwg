@@ -12,8 +12,8 @@ api_process (dwg_object *obj)
 
   dwg_obj_rastervariables *_obj = dwg_object_to_RASTERVARIABLES (obj);
 
-  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, class_version, BL, class_version);
-  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, display_frame, BS, display_frame);
-  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, display_quality, BS, display_quality);
-  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, units, BS, units);
+  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, class_version, BL);
+  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, display_frame, BS);
+  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, display_quality, BS);
+  CHK_ENTITY_TYPE (_obj, RASTERVARIABLES, units, BS);
 }

@@ -33,9 +33,9 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_section_settings *_obj = dwg_object_to_SECTION_SETTINGS (obj);
 
-  CHK_ENTITY_TYPE (_obj, SECTION_SETTINGS, type, BS, type);
+  CHK_ENTITY_TYPE (_obj, SECTION_SETTINGS, type, BS);
   CHK_ENTITY_MAX (_obj, SECTION_SETTINGS, type, BS, 8);
-  CHK_ENTITY_TYPE (_obj, SECTION_SETTINGS, num_sources, BL, num_sources);
+  CHK_ENTITY_TYPE (_obj, SECTION_SETTINGS, num_sources, BL);
   CHK_ENTITY_MAX (_obj, SECTION_SETTINGS, num_sources, BL, 2000);
   CHK_ENTITY_HV (_obj, SECTION_SETTINGS, sources, sources, num_sources);
   // ...

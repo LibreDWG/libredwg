@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_style_control *ctrl = dwg_object_to_STYLE_CONTROL (obj);
 
-  CHK_ENTITY_TYPE (ctrl, STYLE_CONTROL, num_entries, BS, num_entries);
+  CHK_ENTITY_TYPE (ctrl, STYLE_CONTROL, num_entries, BS);
   entries = dwg_object_tablectrl_get_entries (obj, &error);
   if (!dwg_dynapi_entity_value (ctrl, "STYLE_CONTROL", "entries", &hdls, NULL))
     fail ("STYLE_CONTROL.entries");

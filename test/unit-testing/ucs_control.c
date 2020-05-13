@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_ucs_control *ctrl = dwg_object_to_UCS_CONTROL (obj);
 
-  CHK_ENTITY_TYPE (ctrl, UCS_CONTROL, num_entries, BS, num_entries);
+  CHK_ENTITY_TYPE (ctrl, UCS_CONTROL, num_entries, BS);
   entries = dwg_object_tablectrl_get_entries (obj, &error);
   if (!dwg_dynapi_entity_value (ctrl, "UCS_CONTROL", "entries", &hdls, NULL))
     fail ("UCS_CONTROL.entries");

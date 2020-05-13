@@ -20,9 +20,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (rtext, RTEXT, text_value, text_value);  
   CHK_ENTITY_3RD (rtext, RTEXT, pt, pt);
   CHK_ENTITY_3RD (rtext, RTEXT, extrusion, extrusion);  
-  CHK_ENTITY_TYPE (rtext, RTEXT, rotation, BD, rotation);
+  CHK_ENTITY_TYPE (rtext, RTEXT, rotation, BD);
   CHK_ENTITY_MAX  (rtext, RTEXT, rotation, BD, MAX_ANGLE);
-  CHK_ENTITY_TYPE (rtext, RTEXT, height, BD, height);  
-  CHK_ENTITY_TYPE (rtext, RTEXT, flags, BS, flags);
+  CHK_ENTITY_TYPE (rtext, RTEXT, height, BD);  
+  CHK_ENTITY_TYPE (rtext, RTEXT, flags, BS);
   CHK_ENTITY_H (rtext, RTEXT, style, style);
 }

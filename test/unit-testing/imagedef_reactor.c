@@ -10,5 +10,5 @@ api_process (dwg_object *obj)
   //Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_imagedef_reactor *_obj = dwg_object_to_IMAGEDEF_REACTOR (obj);
 
-  CHK_ENTITY_TYPE (_obj, IMAGEDEF_REACTOR, class_version, BL, class_version);
+  CHK_ENTITY_TYPE (_obj, IMAGEDEF_REACTOR, class_version, BL);
 }

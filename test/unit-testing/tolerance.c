@@ -31,9 +31,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, x_direction, x_dir);
   if (version <= R_14)
     {
-      CHK_ENTITY_TYPE (tolerance, TOLERANCE, unknown_short, BS, unknown_short);
-      CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, height, BD, height);
-      CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, dimgap, BD, dimgap);
+      CHK_ENTITY_TYPE (tolerance, TOLERANCE, unknown_short, BS);
+      CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, height, BD);
+      CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, dimgap, BD);
     }
   CHK_ENTITY_H (tolerance, TOLERANCE, dimstyle, dimstyle);
 }
