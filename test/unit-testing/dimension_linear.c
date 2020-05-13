@@ -30,13 +30,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, elevation, BD);
   CHK_ENTITY_3RD (dim, DIMENSION_LINEAR, extrusion, ext);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, clone_ins_pt, clone_ins_pt);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, text_midpt, text_midpt);
-  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_LINEAR, user_text, user_text);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, clone_ins_pt);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_LINEAR, text_midpt);
+  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_LINEAR, user_text);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, text_rotation, BD,
                          text_rotation);
   CHK_ENTITY_MAX (dim, DIMENSION_LINEAR, text_rotation, BD, MAX_ANGLE);
-  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_LINEAR, ins_scale, ins_scale);
+  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_LINEAR, ins_scale);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_LINEAR, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_MAX (dim, DIMENSION_LINEAR, ins_rotation, BD, MAX_ANGLE);
@@ -48,14 +48,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim, DIMENSION_LINEAR, flag, RC);
 
   /* linear */
-  CHK_ENTITY_3RD_W_OLD (dim_linear, DIMENSION_LINEAR, def_pt, def_pt);
-  CHK_ENTITY_3RD (dim_linear, DIMENSION_LINEAR, xline1_pt, xline1_pt);
+  CHK_ENTITY_3RD_W_OLD (dim_linear, DIMENSION_LINEAR, def_pt);
+  CHK_ENTITY_3RD (dim_linear, DIMENSION_LINEAR, xline1_pt);
   dwg_ent_dim_linear_get_13_pt (dim_linear, &pt3d, &error);
   if (error || memcmp (&xline1_pt, &pt3d, sizeof (xline1_pt)))
     fail ("DIMENSION_LINEAR.xline1_pt");
   else
     pass ();
-  CHK_ENTITY_3RD (dim_linear, DIMENSION_LINEAR, xline2_pt, xline2_pt);
+  CHK_ENTITY_3RD (dim_linear, DIMENSION_LINEAR, xline2_pt);
   dwg_ent_dim_linear_get_14_pt (dim_linear, &pt3d, &error);
   if (error || memcmp (&xline2_pt, &pt3d, sizeof (xline2_pt)))
     fail ("DIMENSION_LINEAR.xline2_pt");
@@ -66,6 +66,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim_linear, DIMENSION_LINEAR, dim_rotation, BD,
                          dim_rotation);
 
-  CHK_ENTITY_H (dim_linear, DIMENSION_LINEAR, dimstyle, dimstyle);
-  CHK_ENTITY_H (dim_linear, DIMENSION_LINEAR, block, block);
+  CHK_ENTITY_H (dim_linear, DIMENSION_LINEAR, dimstyle);
+  CHK_ENTITY_H (dim_linear, DIMENSION_LINEAR, block);
 }

@@ -46,13 +46,13 @@ api_process (dwg_object *obj)
                          act_measurement);
   CHK_ENTITY_TYPE (dim, ARC_DIMENSION, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, elevation, BD);
-  CHK_ENTITY_3RD (dim, ARC_DIMENSION, extrusion, extrusion);
+  CHK_ENTITY_3RD (dim, ARC_DIMENSION, extrusion);
   CHK_ENTITY_2RD_W_OLD (dim, ARC_DIMENSION, clone_ins_pt, pt12);
-  CHK_ENTITY_2RD_W_OLD (dim, ARC_DIMENSION, text_midpt, text_midpt);
-  CHK_ENTITY_UTF8TEXT (dim, ARC_DIMENSION, user_text, user_text); // fails randomly
+  CHK_ENTITY_2RD_W_OLD (dim, ARC_DIMENSION, text_midpt);
+  CHK_ENTITY_UTF8TEXT (dim, ARC_DIMENSION, user_text); // fails randomly
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, text_rotation, BD,
                          text_rotation);
-  CHK_ENTITY_3RD_W_OLD (dim, ARC_DIMENSION, ins_scale, ins_scale);
+  CHK_ENTITY_3RD_W_OLD (dim, ARC_DIMENSION, ins_scale);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, horiz_dir, BD);
@@ -63,16 +63,16 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flip_arrow2, B);
   CHK_ENTITY_TYPE_W_OLD (dim, ARC_DIMENSION, flag1, RC);
   CHK_ENTITY_TYPE (dim, ARC_DIMENSION, flag, RC);
-  CHK_ENTITY_H (dim, DIMENSION_RADIUS, dimstyle, dimstyle);
-  CHK_ENTITY_H (dim, DIMENSION_RADIUS, block, block);
+  CHK_ENTITY_H (dim, DIMENSION_RADIUS, dimstyle);
+  CHK_ENTITY_H (dim, DIMENSION_RADIUS, block);
 
   /* arc_dimension */
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, arc_pt, arc_pt);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline1_pt, xline1_pt);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline2_pt, xline2_pt);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, center_pt, center_pt);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader1_pt, leader1_pt);
-  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader2_pt, leader2_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, arc_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline1_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, xline2_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, center_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader1_pt);
+  CHK_ENTITY_3RD (arc_dimension, ARC_DIMENSION, leader2_pt);
   CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_start_param, BD);
   CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, arc_end_param, BD);
   CHK_ENTITY_TYPE (arc_dimension, ARC_DIMENSION, is_partial, B);

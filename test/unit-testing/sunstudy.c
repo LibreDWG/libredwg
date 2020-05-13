@@ -38,12 +38,12 @@ api_process (dwg_object *obj)
   dwg_obj_sunstudy *_obj = dwg_object_to_SUNSTUDY (obj);
 
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, class_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, setup_name, setup_name);
-  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, description, description);
+  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, setup_name);
+  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, description);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, output_type, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, sheet_set_name, sheet_set_name);
+  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, sheet_set_name);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, use_subset, B);
-  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, sheet_subset_name, sheet_subset_name);
+  CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, sheet_subset_name);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, select_dates_from_calendar, B);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, num_dates, BL);
   //Dwg_SUNSTUDY_Dates* dates;
@@ -60,9 +60,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, spacing, BD);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, lock_viewports, B);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, label_viewports, B);
-  CHK_ENTITY_H (_obj, SUNSTUDY, page_setup_wizard, page_setup_wizard);
-  CHK_ENTITY_H (_obj, SUNSTUDY, view, view);
-  CHK_ENTITY_H (_obj, SUNSTUDY, visualstyle, visualstyle);
-  CHK_ENTITY_H (_obj, SUNSTUDY, text_style, text_style);
+  CHK_ENTITY_H (_obj, SUNSTUDY, page_setup_wizard);
+  CHK_ENTITY_H (_obj, SUNSTUDY, view);
+  CHK_ENTITY_H (_obj, SUNSTUDY, visualstyle);
+  CHK_ENTITY_H (_obj, SUNSTUDY, text_style);
 #endif
 }

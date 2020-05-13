@@ -11,5 +11,5 @@ api_process (dwg_object *obj)
   dwg_ent_vertex_3d *vertex_3d = dwg_object_to_VERTEX_3D (obj);
 
   CHK_ENTITY_TYPE (vertex_3d, VERTEX_3D, flag, RC);
-  CHK_ENTITY_3RD (vertex_3d, VERTEX_3D, point, point);
+  CHK_ENTITY_3RD (vertex_3d, VERTEX_3D, point);
 }

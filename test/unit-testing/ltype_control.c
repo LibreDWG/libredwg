@@ -36,6 +36,6 @@ api_process (dwg_object *obj)
           }
       }
   CHK_ENTITY_TYPE (ctrl, LTYPE_CONTROL, objid, BL);  
-  CHK_ENTITY_H (ctrl, LTYPE_CONTROL, bylayer, bylayer);
-  CHK_ENTITY_H (ctrl, LTYPE_CONTROL, byblock, byblock);
+  CHK_ENTITY_H (ctrl, LTYPE_CONTROL, bylayer);
+  CHK_ENTITY_H (ctrl, LTYPE_CONTROL, byblock);
 }

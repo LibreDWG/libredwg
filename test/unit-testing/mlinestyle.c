@@ -17,11 +17,11 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_mlinestyle *mlinestyle = dwg_object_to_MLINESTYLE (obj);
 
-  CHK_ENTITY_UTF8TEXT_W_OBJ (mlinestyle, MLINESTYLE, name, name);
-  CHK_ENTITY_UTF8TEXT (mlinestyle, MLINESTYLE, description, description); // old API called desc
+  CHK_ENTITY_UTF8TEXT_W_OBJ (mlinestyle, MLINESTYLE, name);
+  CHK_ENTITY_UTF8TEXT (mlinestyle, MLINESTYLE, description); // old API called desc
   CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, flag, BS);
   CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, flag, BS, 2047);
-  CHK_ENTITY_CMC (mlinestyle, MLINESTYLE, fill_color, fill_color);
+  CHK_ENTITY_CMC (mlinestyle, MLINESTYLE, fill_color);
   CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, start_angle, BD);
   CHK_ENTITY_MAX (mlinestyle, MLINESTYLE, start_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OBJ (mlinestyle, MLINESTYLE, end_angle, BD);

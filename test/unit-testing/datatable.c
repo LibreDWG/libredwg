@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DATATABLE, flags, BS);
   CHK_ENTITY_TYPE (_obj, DATATABLE, num_cols, BL);
   CHK_ENTITY_TYPE (_obj, DATATABLE, num_rows, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, DATATABLE, table_name, table_name);
+  CHK_ENTITY_UTF8TEXT (_obj, DATATABLE, table_name);
   if (!dwg_dynapi_entity_value (_obj, "DATATABLE", "cols", &cols, NULL))
     fail ("DATATABLE.cells");
   else

@@ -26,8 +26,8 @@ api_process (dwg_object *obj)
     {
       ok ("SPATIAL_FILTER.points[%d]: (%f, %f)", i, points[i].x, points[i].y);
     }
-  CHK_ENTITY_3RD (_obj, SPATIAL_FILTER, extrusion, extrusion);
-  CHK_ENTITY_3RD (_obj, SPATIAL_FILTER, clip_bound_origin, clip_bound_origin);
+  CHK_ENTITY_3RD (_obj, SPATIAL_FILTER, extrusion);
+  CHK_ENTITY_3RD (_obj, SPATIAL_FILTER, clip_bound_origin);
   CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, display_boundary, BS);
   CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_on, BS);
   CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_dist, BD);

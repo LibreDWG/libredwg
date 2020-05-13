@@ -18,6 +18,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, is_default, B);
   CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, in_dwg, B);
-  CHK_ENTITY_H (_obj, MLEADEROBJECTCONTEXTDATA, scale, scale);
+  CHK_ENTITY_H (_obj, MLEADEROBJECTCONTEXTDATA, scale);
 #endif
 }

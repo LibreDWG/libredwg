@@ -51,7 +51,7 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_TYPE (hatch, HATCH, num_colors, BL);
   CHK_ENTITY_TYPE (hatch, HATCH, elevation, BD);
-  CHK_ENTITY_3RD (hatch, HATCH, extrusion, extrusion);
+  CHK_ENTITY_3RD (hatch, HATCH, extrusion);
   CHK_ENTITY_TYPE (hatch, HATCH, name, TV);
   CHK_ENTITY_TYPE (hatch, HATCH, solid_fill, B);
   CHK_ENTITY_TYPE (hatch, HATCH, associative, B);

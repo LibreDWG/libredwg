@@ -61,7 +61,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, acis_data, TF);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, wireframe_data_present, B);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, point_present, B);
-  CHK_ENTITY_3RD (_obj, LOFTEDSURFACE, point, point);
+  CHK_ENTITY_3RD (_obj, LOFTEDSURFACE, point);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, isoline_present, B);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, isolines, BL);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_wires, BL);
@@ -83,7 +83,7 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, unknown_2007, BL);
-      CHK_ENTITY_H (_obj, LOFTEDSURFACE, history_id, history_id);
+      CHK_ENTITY_H (_obj, LOFTEDSURFACE, history_id);
     }
 
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, modeler_format_version, BS);
@@ -115,7 +115,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, virtual_guide, B);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_cross_sections, BS);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_guide_curves, BS);
-  CHK_ENTITY_H (_obj, LOFTEDSURFACE, path_curve, path_curve);
+  CHK_ENTITY_H (_obj, LOFTEDSURFACE, path_curve);
   if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "cross_sections", &cross_sections, NULL))
     fail ("LOFTEDSURFACE.cross_sections");
   for (i = 0; i < num_cross_sections; i++)

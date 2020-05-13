@@ -71,7 +71,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_data, TF);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, wireframe_data_present, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, point_present, B);
-  CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, point, point);
+  CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, point);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, isoline_present, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, isolines, BL);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, num_wires, BL);
@@ -93,7 +93,7 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, unknown_2007, BL);
-      CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, history_id, history_id);
+      CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, history_id);
     }
 
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, modeler_format_version, BS);
@@ -103,7 +103,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, v_isolines, BS);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, class_version, BL);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, height, BD);
-  CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, sweep_vector, sweep_vector);
+  CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, sweep_vector);
   if (!dwg_dynapi_entity_value (_obj, "EXTRUDEDSURFACE", "sweep_transmatrix", &sweep_transmatrix, NULL))
     fail ("EXTRUDEDSURFACE.sweep_transmatrix");
   else
@@ -149,7 +149,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE,
                   reference_vector_for_controlling_twist,
                   reference_vector_for_controlling_twist);
-  CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, sweep_entity, sweep_entity);
-  CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, path_entity, path_entity);
+  CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, sweep_entity);
+  CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, path_entity);
 #endif
 }

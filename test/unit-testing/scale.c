@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   dwg_obj_scale *_obj = dwg_object_to_SCALE (obj);
 
   CHK_ENTITY_TYPE (_obj, SCALE, flag, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, SCALE, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, SCALE, name);
   CHK_ENTITY_TYPE (_obj, SCALE, paper_units, BD);
   CHK_ENTITY_TYPE (_obj, SCALE, drawing_units, BD);
   CHK_ENTITY_TYPE (_obj, SCALE, has_unit_scale, B);

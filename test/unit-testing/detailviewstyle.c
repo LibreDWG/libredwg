@@ -43,28 +43,28 @@ api_process (dwg_object *obj)
   dwg_obj_detailviewstyle *_obj = dwg_object_to_DETAILVIEWSTYLE (obj);
 
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, class_version, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, name, name);
-  //CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, description, description);
+  CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, name);
+  //CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, description);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, is_modified_for_recompute, B);
-  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, identifier_style, identifier_style);
-  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, identifier_color, identifier_color);
+  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, identifier_style);
+  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, identifier_color);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, identifier_height, BD);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, identifier_offset, BD);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, identifier_placement, BS);
-  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, arrow_symbol, arrow_symbol);
-  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, arrow_symbol_color, arrow_symbol_color);
+  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, arrow_symbol);
+  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, arrow_symbol_color);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, arrow_symbol_size, BD);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, show_arrowheads, B);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, boundary_line_weight, BS);
-  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, boundary_line_color, boundary_line_color);
-  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, boundary_line_type, boundary_line_type);
-  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, connection_line_type, connection_line_type);
+  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, boundary_line_color);
+  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, boundary_line_type);
+  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, connection_line_type);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, connection_line_weight, BS);
-  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, connection_line_color, connection_line_color);
-  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, viewlabel_text_style, viewlabel_text_style);
-  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, viewlabel_text_color, viewlabel_text_color);
+  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, connection_line_color);
+  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, viewlabel_text_style);
+  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, viewlabel_text_color);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, viewlabel_text_height, BD);
-  CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, viewlabel_field, viewlabel_field);
+  CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, viewlabel_field);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, viewlabel_offset, BD);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, viewlabel_attachment, BS);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, viewlabel_alignment, BS);
@@ -72,7 +72,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, show_viewlabel, B);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, model_edge, B);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, borderline_weight, BD);
-  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, borderline_color, borderline_color);
-  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, borderline_type, borderline_type);
+  CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, borderline_color);
+  CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, borderline_type);
 #endif
 }

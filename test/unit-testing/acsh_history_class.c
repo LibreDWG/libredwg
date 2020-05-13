@@ -36,7 +36,7 @@ api_process (dwg_object *obj)
     {
       ok ("ACSH_HISTORY_CLASS.shhn_pts[%d]: %f", i, shhn_pts[i]);
     }
-  CHK_ENTITY_CMC (_obj, ACSH_HISTORY_CLASS, color, color);
+  CHK_ENTITY_CMC (_obj, ACSH_HISTORY_CLASS, color);
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_b92, B);
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, shhn_bl347, BL);
   // AcDbShPrimitive

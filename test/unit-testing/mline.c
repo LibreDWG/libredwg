@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE_W_OLD (mline, MLINE, scale, BD);
   CHK_ENTITY_TYPE_W_OLD (mline, MLINE, justification, RC, just);
-  CHK_ENTITY_3RD_W_OLD (mline, MLINE, base_point, base_point);
+  CHK_ENTITY_3RD_W_OLD (mline, MLINE, base_point);
   CHK_ENTITY_3RD_W_OLD (mline, MLINE, extrusion, ext);
   CHK_ENTITY_TYPE_W_OLD (mline, MLINE, flags, BS);
   CHK_ENTITY_TYPE_W_OLD (mline, MLINE, num_lines, RCd, num_lines);
@@ -62,5 +62,5 @@ api_process (dwg_object *obj)
     }
   free (verts);
 
-  CHK_ENTITY_H (mline, MLINE, mlinestyle, mlinestyle);
+  CHK_ENTITY_H (mline, MLINE, mlinestyle);
 }

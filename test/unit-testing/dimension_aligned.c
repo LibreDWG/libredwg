@@ -30,12 +30,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim, DIMENSION_ALIGNED, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, elevation, BD);
   CHK_ENTITY_3RD (dim, DIMENSION_ALIGNED, extrusion, ext);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ALIGNED, clone_ins_pt, clone_ins_pt);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ALIGNED, text_midpt, text_midpt);
-  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_ALIGNED, user_text, user_text);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ALIGNED, clone_ins_pt);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ALIGNED, text_midpt);
+  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_ALIGNED, user_text);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, text_rotation, BD,
                          text_rotation);
-  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_ALIGNED, ins_scale, ins_scale);
+  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_ALIGNED, ins_scale);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ALIGNED, horiz_dir, BD);
@@ -48,15 +48,15 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim, DIMENSION_ALIGNED, flag, RC);
 
   /* aligned */
-  CHK_ENTITY_3RD_W_OLD (dim_aligned, DIMENSION_ALIGNED, def_pt, def_pt);
-  CHK_ENTITY_3RD (dim_aligned, DIMENSION_ALIGNED, xline1_pt, xline1_pt);
+  CHK_ENTITY_3RD_W_OLD (dim_aligned, DIMENSION_ALIGNED, def_pt);
+  CHK_ENTITY_3RD (dim_aligned, DIMENSION_ALIGNED, xline1_pt);
   dwg_ent_dim_aligned_get_13_pt (dim_aligned, &pt3d, &error);
   if (error || memcmp (&xline1_pt, &pt3d, sizeof (xline1_pt)))
     fail ("old API dwg_ent_dim_aligned_get_13_pt");
   else
     pass ();
 
-  CHK_ENTITY_3RD (dim_aligned, DIMENSION_ALIGNED, xline2_pt, xline2_pt);
+  CHK_ENTITY_3RD (dim_aligned, DIMENSION_ALIGNED, xline2_pt);
   dwg_ent_dim_aligned_get_14_pt (dim_aligned, &pt3d, &error);
   if (error || memcmp (&xline2_pt, &pt3d, sizeof (xline2_pt)))
     fail ("old API dwg_ent_dim_aligned_get_14_pt");
@@ -66,6 +66,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim_aligned, DIMENSION_ALIGNED, oblique_angle, BD,
                    oblique_angle);
 
-  CHK_ENTITY_H (dim_aligned, DIMENSION_ALIGNED, dimstyle, dimstyle);
-  CHK_ENTITY_H (dim_aligned, DIMENSION_ALIGNED, block, block);
+  CHK_ENTITY_H (dim_aligned, DIMENSION_ALIGNED, dimstyle);
+  CHK_ENTITY_H (dim_aligned, DIMENSION_ALIGNED, block);
 }

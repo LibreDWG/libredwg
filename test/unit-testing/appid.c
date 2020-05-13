@@ -18,12 +18,12 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (appid, APPID, flag, RC);
   // the api variant returns a mask: appid->flag & 1 || appid->is_xref_ref >> 6 || appid->is_xref_dep >> 4
-  CHK_ENTITY_UTF8TEXT_W_OBJ (appid, APPID, name, name);
+  CHK_ENTITY_UTF8TEXT_W_OBJ (appid, APPID, name);
   CHK_ENTITY_TYPE (appid, APPID, used, RS);
   CHK_ENTITY_TYPE (appid, APPID, is_xref_ref, B);
   CHK_ENTITY_TYPE (appid, APPID, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (appid, APPID, is_xref_dep, B);
-  CHK_ENTITY_H (appid, APPID, xref, xref);
+  CHK_ENTITY_H (appid, APPID, xref);
 
   CHK_ENTITY_TYPE (appid, APPID, unknown, RC);
 }

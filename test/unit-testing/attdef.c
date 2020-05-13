@@ -30,7 +30,7 @@ api_process (dwg_object *obj)
   dwg_ent_attdef_get_insertion_point (attdef, &pt2d, &error);
   if (error || memcmp (&ins_pt, &pt2d, sizeof (ins_pt)))
     fail ("old API dwg_ent_attdef_get_insertion_point");
-  CHK_ENTITY_2RD (attdef, ATTDEF, alignment_pt, alignment_pt);
+  CHK_ENTITY_2RD (attdef, ATTDEF, alignment_pt);
   CHK_ENTITY_3RD (attdef, ATTDEF, extrusion, ext);
   dwg_ent_attdef_get_extrusion (attdef, &pt3d, &error);
   if (error || memcmp (&ext, &pt3d, sizeof (ext)))
@@ -65,7 +65,7 @@ api_process (dwg_object *obj)
     fail ("old API dwg_ent_attdef_horiz_alignment");
   CHK_ENTITY_TYPE (attdef, ATTDEF, field_length, BS);
   CHK_ENTITY_TYPE (attdef, ATTDEF, flags, RC);
-  CHK_ENTITY_H (attdef, ATTDEF, style, style);
+  CHK_ENTITY_H (attdef, ATTDEF, style);
   if (version >= R_2010)
     {
       CHK_ENTITY_TYPE (attdef, ATTDEF, class_version, RC);
@@ -74,8 +74,8 @@ api_process (dwg_object *obj)
     }
   if (version >= R_2018)
     {
-      CHK_ENTITY_H (attdef, ATTDEF, mtext_handles, mtext_handles);
-      CHK_ENTITY_H (attdef, ATTDEF, annotative_app, annotative_app);
+      CHK_ENTITY_H (attdef, ATTDEF, mtext_handles);
+      CHK_ENTITY_H (attdef, ATTDEF, annotative_app);
 
       CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS,
                        annotative_data_size);

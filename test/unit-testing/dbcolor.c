@@ -11,5 +11,5 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_dbcolor *dbcolor = dwg_object_to_DBCOLOR (obj);
 
-  CHK_ENTITY_CMC (dbcolor, DBCOLOR, color, color);
+  CHK_ENTITY_CMC (dbcolor, DBCOLOR, color);
 }

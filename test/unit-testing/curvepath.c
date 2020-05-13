@@ -15,6 +15,6 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, CURVEPATH, class_version, BS);
   CHK_ENTITY_MAX (_obj, CURVEPATH, class_version, BS, 3);
-  CHK_ENTITY_H (_obj, CURVEPATH, entity, entity);
+  CHK_ENTITY_H (_obj, CURVEPATH, entity);
 #endif
 }

@@ -41,7 +41,7 @@ api_process (dwg_object *obj)
     {
       ok ("ACSH_BOX_CLASS.shhn_pts[%d]: %f", i, shhn_pts[i]);
     }
-  CHK_ENTITY_CMC (_obj, ACSH_BOX_CLASS, color, color);
+  CHK_ENTITY_CMC (_obj, ACSH_BOX_CLASS, color);
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_b92, B);
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl347, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bl90, BL);

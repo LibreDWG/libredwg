@@ -76,7 +76,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_visualstyle *vsty = dwg_object_to_VISUALSTYLE (obj);
  
-  CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, description, description);
+  CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, description);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, style_type, BL);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, style_type, BL, 32);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, ext_lighting_model, BS);
@@ -90,18 +90,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_specular, BD);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_modifier, BL);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_modifier, BL, 2);
-  //CHK_ENTITY_CMC (vsty, VISUALSTYLE, color, color);
-  CHK_ENTITY_CMC (vsty, VISUALSTYLE, face_mono_color, face_mono_color);
+  //CHK_ENTITY_CMC (vsty, VISUALSTYLE, color);
+  CHK_ENTITY_CMC (vsty, VISUALSTYLE, face_mono_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_model, BL);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, edge_model, BL, 2);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style, BL);
-  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_intersection_color, edge_intersection_color);
-  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_obscured_color, edge_obscured_color);
+  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_intersection_color);
+  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_obscured_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_obscured_ltype, BL);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_crease_angle, BD);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, edge_crease_angle, BD, 360.0);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_modifier, BL);
-  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_color, edge_color);
+  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_opacity, BD);
   PRE (R_2010) {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BS);
@@ -121,7 +121,7 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_ltype, BL);
   }
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_jitter, BL);
-  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_silhouette_color, edge_silhouette_color);
+  CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_silhouette_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_do_hide_precision, B);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_settings, BL);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness_bl, BL);
@@ -146,20 +146,20 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd_prop26, BD);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd_prop27, BD);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bl_prop28, BL);
-    CHK_ENTITY_CMC (vsty, VISUALSTYLE, c_prop29, c_prop29);
+    CHK_ENTITY_CMC (vsty, VISUALSTYLE, c_prop29);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bl_prop2a, BL);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bl_prop2b, BL);
-    CHK_ENTITY_CMC (vsty, VISUALSTYLE, c_prop2c, c_prop2c);
+    CHK_ENTITY_CMC (vsty, VISUALSTYLE, c_prop2c);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop2d, B);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bl_prop2e, BL);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bl_prop2f, BL);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bl_prop30, BL);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop31, B);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bl_prop32, BL);
-    CHK_ENTITY_CMC (vsty, VISUALSTYLE, c_prop33, c_prop33);
+    CHK_ENTITY_CMC (vsty, VISUALSTYLE, c_prop33);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd_prop34, BD);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_wiggle, BL);
-    CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, strokes, strokes);
+    CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, strokes);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop37, B);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd_prop38, BD);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd_prop39, BD);

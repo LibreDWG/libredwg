@@ -29,6 +29,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl4, BL);
 
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, eval_type, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYGRIP, eval_expr, eval_expr);
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYGRIP, eval_expr);
 #endif
 }

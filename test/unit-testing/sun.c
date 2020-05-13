@@ -23,7 +23,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, SUN, class_version, BL);
   CHK_ENTITY_TYPE (_obj, SUN, is_on, B);
-  CHK_ENTITY_CMC (_obj, SUN, color, color);
+  CHK_ENTITY_CMC (_obj, SUN, color);
   CHK_ENTITY_TYPE (_obj, SUN, intensity, BD);
   CHK_ENTITY_TYPE (_obj, SUN, julian_day, BL);
   CHK_ENTITY_TYPE (_obj, SUN, msecs, BL);

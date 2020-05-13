@@ -62,20 +62,20 @@ api_process (dwg_object *obj)
     {
       ok ("ACSH_EXTRUSION_CLASS.shhn_pts[%d]: %f", i, shhn_pts[i]);
     }
-  CHK_ENTITY_CMC (_obj, ACSH_EXTRUSION_CLASS, color, color);
+  CHK_ENTITY_CMC (_obj, ACSH_EXTRUSION_CLASS, color);
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shhn_b92, B);
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shhn_bl347, BL);
-  CHK_ENTITY_3RD (_obj, ACSH_EXTRUSION_CLASS, basept, basept);         /*!< DXF 10 */
+  CHK_ENTITY_3RD (_obj, ACSH_EXTRUSION_CLASS, basept);         /*!< DXF 10 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_bl92, BL);       /*!< DXF 92 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_text_size, BL);  /*!< DXF 90 */
   if (!dwg_dynapi_entity_value (_obj, "ACSH_EXTRUSION_CLASS", "shsw_text", &shsw_text, NULL))
     fail ("ACSH_EXTRUSION_CLASS.shsw_text");
-  //CHK_ENTITY_UTF8TEXT (_obj, ACSH_EXTRUSION_CLASS, shsw_text, shsw_text);       /*!< DXF 310 */
+  //CHK_ENTITY_UTF8TEXT (_obj, ACSH_EXTRUSION_CLASS, shsw_text);       /*!< DXF 310 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_bl93, BL);       /*!< DXF 93 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_text2_size, BL); /*!< DXF 90 */
   if (!dwg_dynapi_entity_value (_obj, "ACSH_EXTRUSION_CLASS", "shsw_text2", &shsw_text2, NULL))
     fail ("ACSH_EXTRUSION_CLASS.shsw_text");
-  //CHK_ENTITY_UTF8TEXT (_obj, ACSH_EXTRUSION_CLASS, shsw_text2, shsw_text2);      /*!< DXF 310 */
+  //CHK_ENTITY_UTF8TEXT (_obj, ACSH_EXTRUSION_CLASS, shsw_text2);      /*!< DXF 310 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, draft_angle, BD);       /*!< DXF 42 0.0 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, start_draft_dist, BD);  /*!< DXF 43 0.0 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, end_draft_dist, BD);    /*!< DXF 44 0.0 */
@@ -108,6 +108,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_b294, B);  /*!< DXF 294  1 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_b295, B);  /*!< DXF 295  1 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_b296, B);  /*!< DXF 296  1 */
-  CHK_ENTITY_3RD (_obj, ACSH_EXTRUSION_CLASS, pt2, pt2);      /*!< DXF 11 0,0,0 */
+  CHK_ENTITY_3RD (_obj, ACSH_EXTRUSION_CLASS, pt2);      /*!< DXF 11 0,0,0 */
 #endif
 }

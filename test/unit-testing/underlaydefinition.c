@@ -10,6 +10,6 @@ api_process (dwg_object *obj)
 
   dwg_obj_underlaydefinition *underlaydef = dwg_object_to_UNDERLAYDEFINITION (obj);
 
-  CHK_ENTITY_UTF8TEXT (underlaydef, UNDERLAYDEFINITION, filename, filename);
-  CHK_ENTITY_UTF8TEXT (underlaydef, UNDERLAYDEFINITION, name, name);
+  CHK_ENTITY_UTF8TEXT (underlaydef, UNDERLAYDEFINITION, filename);
+  CHK_ENTITY_UTF8TEXT (underlaydef, UNDERLAYDEFINITION, name);
 }

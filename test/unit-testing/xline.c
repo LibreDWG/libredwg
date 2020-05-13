@@ -8,6 +8,6 @@ api_process (dwg_object *obj)
   dwg_point_3d point, vector;
   dwg_ent_xline *xline = dwg_object_to_XLINE (obj); // i.e. RAY
 
-  CHK_ENTITY_3RD_W_OLD (xline, XLINE, point, point);
-  CHK_ENTITY_3RD_W_OLD (xline, XLINE, vector, vector);
+  CHK_ENTITY_3RD_W_OLD (xline, XLINE, point);
+  CHK_ENTITY_3RD_W_OLD (xline, XLINE, vector);
 }

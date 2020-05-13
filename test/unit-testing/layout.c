@@ -59,12 +59,12 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_layout *layout = dwg_object_to_LAYOUT (obj);
 
-  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, page_setup_name, page_setup_name);
-  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, printer_or_config, printer_or_config);
-  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, paper_size, paper_size);
-  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, plot_view_name, plot_view_name);
-  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, current_style_sheet, current_style_sheet);
-  CHK_ENTITY_H (layout, LAYOUT, plotview, plotview);
+  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, page_setup_name);
+  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, printer_or_config);
+  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, paper_size);
+  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, plot_view_name);
+  CHK_ENTITY_UTF8TEXT (layout, LAYOUT, current_style_sheet);
+  CHK_ENTITY_H (layout, LAYOUT, plotview);
 
   CHK_ENTITY_TYPE (layout, LAYOUT, plot_layout_flags, BS);
   CHK_ENTITY_TYPE (layout, LAYOUT, left_margin, BD);
@@ -73,18 +73,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (layout, LAYOUT, top_margin, BD);
   CHK_ENTITY_TYPE (layout, LAYOUT, paper_width, BD);
   CHK_ENTITY_TYPE (layout, LAYOUT, paper_height, BD);
-  CHK_ENTITY_2RD (layout, LAYOUT, plot_origin, plot_origin);
+  CHK_ENTITY_2RD (layout, LAYOUT, plot_origin);
   CHK_ENTITY_TYPE (layout, LAYOUT, plot_paper_unit, BS);
   CHK_ENTITY_MAX (layout, LAYOUT, plot_paper_unit, BS, 2);
   CHK_ENTITY_TYPE (layout, LAYOUT, plot_rotation, BS);
   CHK_ENTITY_TYPE (layout, LAYOUT, plot_type, BS);
-  CHK_ENTITY_2RD (layout, LAYOUT, plot_window_ll, plot_window_ll);
-  CHK_ENTITY_2RD (layout, LAYOUT, plot_window_ur, plot_window_ur);
+  CHK_ENTITY_2RD (layout, LAYOUT, plot_window_ll);
+  CHK_ENTITY_2RD (layout, LAYOUT, plot_window_ur);
   CHK_ENTITY_TYPE (layout, LAYOUT, paper_units, BD);
   CHK_ENTITY_TYPE (layout, LAYOUT, drawing_units, BD);
   CHK_ENTITY_TYPE (layout, LAYOUT, scale_type, BS);
   CHK_ENTITY_TYPE (layout, LAYOUT, scale_factor, BD);
-  CHK_ENTITY_2RD (layout, LAYOUT, paper_image_origin, paper_image_origin);
+  CHK_ENTITY_2RD (layout, LAYOUT, paper_image_origin);
   CHK_ENTITY_TYPE (layout, LAYOUT, shade_plot_mode, BS);
   CHK_ENTITY_MAX (layout, LAYOUT, shade_plot_mode, BS, 5);
   CHK_ENTITY_TYPE (layout, LAYOUT, shade_plot_reslevel, BS);
@@ -94,21 +94,21 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (layout, LAYOUT, layout_name, TV);
   CHK_ENTITY_TYPE (layout, LAYOUT, tab_order, BS);
   CHK_ENTITY_TYPE (layout, LAYOUT, flag, BS);
-  CHK_ENTITY_3RD (layout, LAYOUT, ucs_origin, ucs_origin);
-  CHK_ENTITY_2RD (layout, LAYOUT, minimum_limits, minimum_limits);
-  CHK_ENTITY_2RD (layout, LAYOUT, maximum_limits, maximum_limits);
-  CHK_ENTITY_3RD (layout, LAYOUT, ins_point,  ins_point);
-  CHK_ENTITY_3RD (layout, LAYOUT, ucs_x_axis, ucs_x_axis);
-  CHK_ENTITY_3RD (layout, LAYOUT, ucs_y_axis, ucs_y_axis);
+  CHK_ENTITY_3RD (layout, LAYOUT, ucs_origin);
+  CHK_ENTITY_2RD (layout, LAYOUT, minimum_limits);
+  CHK_ENTITY_2RD (layout, LAYOUT, maximum_limits);
+  CHK_ENTITY_3RD (layout, LAYOUT, ins_point);
+  CHK_ENTITY_3RD (layout, LAYOUT, ucs_x_axis);
+  CHK_ENTITY_3RD (layout, LAYOUT, ucs_y_axis);
   CHK_ENTITY_TYPE (layout, LAYOUT, elevation, BD);
   CHK_ENTITY_TYPE (layout, LAYOUT, orthoview_type, BS);
   CHK_ENTITY_MAX (layout, LAYOUT, orthoview_type, BS, 6);
-  CHK_ENTITY_3RD (layout, LAYOUT, extent_min, extent_min);
-  CHK_ENTITY_3RD (layout, LAYOUT, extent_max, extent_max);
+  CHK_ENTITY_3RD (layout, LAYOUT, extent_min);
+  CHK_ENTITY_3RD (layout, LAYOUT, extent_max);
 
-  CHK_ENTITY_H (layout, LAYOUT, visualstyle, visualstyle);
-  CHK_ENTITY_H (layout, LAYOUT, block_header, block_header);
-  CHK_ENTITY_H (layout, LAYOUT, active_viewport, active_viewport);
-  CHK_ENTITY_H (layout, LAYOUT, base_ucs, base_ucs);
-  CHK_ENTITY_H (layout, LAYOUT, named_ucs, named_ucs); 
+  CHK_ENTITY_H (layout, LAYOUT, visualstyle);
+  CHK_ENTITY_H (layout, LAYOUT, block_header);
+  CHK_ENTITY_H (layout, LAYOUT, active_viewport);
+  CHK_ENTITY_H (layout, LAYOUT, base_ucs);
+  CHK_ENTITY_H (layout, LAYOUT, named_ucs);
 }

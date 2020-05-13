@@ -33,13 +33,13 @@ api_process (dwg_object *obj)
                          act_measurement);
   CHK_ENTITY_TYPE (dim, DIMENSION_ANG2LN, attachment, BS);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, elevation, BD);
-  CHK_ENTITY_3RD (dim, DIMENSION_ANG2LN, extrusion, extrusion);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG2LN, clone_ins_pt, clone_ins_pt);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG2LN, text_midpt, text_midpt);
-  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_ANG2LN, user_text, user_text);
+  CHK_ENTITY_3RD (dim, DIMENSION_ANG2LN, extrusion);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG2LN, clone_ins_pt);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_ANG2LN, text_midpt);
+  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_ANG2LN, user_text);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, text_rotation, BD,
                          text_rotation);
-  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_ANG2LN, ins_scale, ins_scale);
+  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_ANG2LN, ins_scale);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, horiz_dir, BD);
@@ -51,22 +51,22 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_ANG2LN, flag1, RC);
   CHK_ENTITY_TYPE (dim, DIMENSION_ANG2LN, flag, RC);
   // Note: def_pt.z should be the elevation here, but is not.
-  CHK_ENTITY_2RD (dim_ang2ln, DIMENSION_ANG2LN, def_pt, def_pt);
+  CHK_ENTITY_2RD (dim_ang2ln, DIMENSION_ANG2LN, def_pt);
 
   /* ang2ln */
-  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline1start_pt, xline1start_pt);
+  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline1start_pt);
   dwg_ent_dim_ang2ln_get_13_pt (dim_ang2ln, &pt3d, &error);
   if (error || memcmp (&xline1start_pt, &pt3d, sizeof (xline1start_pt)))
     fail ("old API dwg_ent_dim_ang2ln_get_13_pt");
   else
     pass ();
-  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline1end_pt, xline1end_pt);
+  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline1end_pt);
   dwg_ent_dim_ang2ln_get_14_pt (dim_ang2ln, &pt3d, &error);
   if (error || memcmp (&xline1end_pt, &pt3d, sizeof (xline1end_pt)))
     fail ("old API dwg_ent_dim_ang2ln_get_14_pt");
   else
     pass ();
-  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline2start_pt, xline2start_pt);
+  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline2start_pt);
   /*
   dwg_ent_dim_ang2ln_get_15_pt (dim_ang2ln, &pt3d, &error);
   if (error || memcmp (&xline2start_pt, &pt3d, sizeof (xline2start_pt)))
@@ -74,13 +74,13 @@ api_process (dwg_object *obj)
   else
     pass ();
   */
-  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline2end_pt, xline2end_pt);
+  CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline2end_pt);
   dwg_ent_dim_ang2ln_get_16_pt (dim_ang2ln, &pt3d, &error);
   if (error || memcmp (&xline2end_pt, &pt3d, sizeof (xline2end_pt)))
     fail ("old API dwg_ent_dim_ang2ln_get_16_pt");
   else
     pass ();
 
-  CHK_ENTITY_H (dim_ang2ln, DIMENSION_ANG2LN, dimstyle, dimstyle);
-  CHK_ENTITY_H (dim_ang2ln, DIMENSION_ANG2LN, block, block);
+  CHK_ENTITY_H (dim_ang2ln, DIMENSION_ANG2LN, dimstyle);
+  CHK_ENTITY_H (dim_ang2ln, DIMENSION_ANG2LN, block);
 }

@@ -31,12 +31,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_RADIUS, elevation, BD);
   CHK_ENTITY_3RD (dim, DIMENSION_RADIUS, extrusion, ext);
   CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_RADIUS, clone_ins_pt, pt12);
-  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_RADIUS, text_midpt, text_midpt);
-  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_RADIUS, user_text, user_text);
+  CHK_ENTITY_2RD_W_OLD (dim, DIMENSION_RADIUS, text_midpt);
+  CHK_ENTITY_UTF8TEXT (dim, DIMENSION_RADIUS, user_text);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_RADIUS, text_rotation, BD,
                          text_rotation);
   CHK_ENTITY_MAX (dim, DIMENSION_RADIUS, text_rotation, BD, MAX_ANGLE);
-  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_RADIUS, ins_scale, ins_scale);
+  CHK_ENTITY_3RD_W_OLD (dim, DIMENSION_RADIUS, ins_scale);
   CHK_ENTITY_TYPE_W_OLD (dim, DIMENSION_RADIUS, ins_rotation, BD,
                          ins_rotation);
   CHK_ENTITY_MAX (dim, DIMENSION_RADIUS, ins_rotation, BD, MAX_ANGLE);
@@ -56,6 +56,6 @@ api_process (dwg_object *obj)
   else
     pass ();
 
-  CHK_ENTITY_H (dim_radius, DIMENSION_RADIUS, dimstyle, dimstyle);
-  CHK_ENTITY_H (dim_radius, DIMENSION_RADIUS, block, block);
+  CHK_ENTITY_H (dim_radius, DIMENSION_RADIUS, dimstyle);
+  CHK_ENTITY_H (dim_radius, DIMENSION_RADIUS, block);
 }

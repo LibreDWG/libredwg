@@ -26,14 +26,14 @@ api_process (dwg_object *obj)
   dwg_obj_ltype *ltype = dwg_object_to_LTYPE (obj);
 
   CHK_ENTITY_TYPE (ltype, LTYPE, flag, RC);
-  CHK_ENTITY_UTF8TEXT (ltype, LTYPE, name, name);
+  CHK_ENTITY_UTF8TEXT (ltype, LTYPE, name);
   CHK_ENTITY_TYPE (ltype, LTYPE, used, RS);
   CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_ref, B);
   CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_dep, B);
-  CHK_ENTITY_H (ltype, LTYPE, xref, xref);
+  CHK_ENTITY_H (ltype, LTYPE, xref);
 
-  CHK_ENTITY_UTF8TEXT (ltype, LTYPE, description, description);
+  CHK_ENTITY_UTF8TEXT (ltype, LTYPE, description);
   CHK_ENTITY_TYPE (ltype, LTYPE, pattern_len, BD);
   CHK_ENTITY_TYPE (ltype, LTYPE, alignment, RC);
   CHK_ENTITY_TYPE (ltype, LTYPE, num_dashes, RCd, num_dashes);

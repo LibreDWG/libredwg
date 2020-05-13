@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
 
   dwg_ent_shape *shape = dwg_object_to_SHAPE (obj);
 
-  CHK_ENTITY_3RD_W_OLD (shape, SHAPE, ins_pt, ins_pt);
+  CHK_ENTITY_3RD_W_OLD (shape, SHAPE, ins_pt);
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, scale, BD);
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, rotation, BD);
   CHK_ENTITY_MAX (shape, SHAPE, rotation, BD, MAX_ANGLE);
@@ -22,5 +22,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, thickness, BD);
   CHK_ENTITY_TYPE_W_OLD (shape, SHAPE, style_id, BS);
   CHK_ENTITY_3RD_W_OLD (shape, SHAPE, extrusion, ext);
-  CHK_ENTITY_H (shape, SHAPE, style, style);
+  CHK_ENTITY_H (shape, SHAPE, style);
 }

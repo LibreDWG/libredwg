@@ -49,8 +49,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (helix, HELIX, splineflags1, BL);
   CHK_ENTITY_TYPE (helix, HELIX, knotparam, BL);
   CHK_ENTITY_TYPE (helix, HELIX, fit_tol, BD);
-  CHK_ENTITY_3RD (helix, HELIX, beg_tan_vec, beg_tan_vec);
-  CHK_ENTITY_3RD (helix, HELIX, end_tan_vec, end_tan_vec);
+  CHK_ENTITY_3RD (helix, HELIX, beg_tan_vec);
+  CHK_ENTITY_3RD (helix, HELIX, end_tan_vec);
   CHK_ENTITY_TYPE (helix, HELIX, rational, B);
   CHK_ENTITY_TYPE (helix, HELIX, closed_b, B);
   CHK_ENTITY_TYPE (helix, HELIX, periodic, B);
@@ -115,9 +115,9 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (helix, HELIX, major_version, BS);
   CHK_ENTITY_TYPE (helix, HELIX, maint_version, BS);
-  CHK_ENTITY_3RD (helix, HELIX, axis_base_pt, axis_base_pt);
-  CHK_ENTITY_3RD (helix, HELIX, start_pt, start_pt);
-  CHK_ENTITY_3RD (helix, HELIX, axis_vector, axis_vector);
+  CHK_ENTITY_3RD (helix, HELIX, axis_base_pt);
+  CHK_ENTITY_3RD (helix, HELIX, start_pt);
+  CHK_ENTITY_3RD (helix, HELIX, axis_vector);
   CHK_ENTITY_TYPE (helix, HELIX, radius, BD);
   CHK_ENTITY_TYPE (helix, HELIX, num_turns, BD);
   CHK_ENTITY_TYPE (helix, HELIX, turn_height, BD);

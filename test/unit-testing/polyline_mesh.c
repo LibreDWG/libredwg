@@ -28,12 +28,12 @@ api_process (dwg_object *obj)
 
   if (version >= R_13 && version <= R_2000)
     {
-      CHK_ENTITY_H (polyline_mesh, POLYLINE_MESH, first_vertex, first_vertex);
-      CHK_ENTITY_H (polyline_mesh, POLYLINE_MESH, last_vertex, last_vertex);
+      CHK_ENTITY_H (polyline_mesh, POLYLINE_MESH, first_vertex);
+      CHK_ENTITY_H (polyline_mesh, POLYLINE_MESH, last_vertex);
     }
   if (version >= R_2004)
     {
       CHK_ENTITY_HV (polyline_mesh, POLYLINE_MESH, vertex, vertex, num_owned);
     }
-  CHK_ENTITY_H (polyline_mesh, POLYLINE_MESH, seqend, seqend);
+  CHK_ENTITY_H (polyline_mesh, POLYLINE_MESH, seqend);
 }

@@ -30,12 +30,12 @@ api_process (dwg_object *obj)
   dwg_obj_layer *layer = dwg_object_to_LAYER (obj);
 
   CHK_ENTITY_TYPE (layer, LAYER, flag, BS);
-  CHK_ENTITY_UTF8TEXT_W_OBJ (layer, LAYER, name, name);
+  CHK_ENTITY_UTF8TEXT_W_OBJ (layer, LAYER, name);
   CHK_ENTITY_TYPE (layer, LAYER, used, RS);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_ref, B);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_dep, B);
-  CHK_ENTITY_H (layer, LAYER, xref, xref);
+  CHK_ENTITY_H (layer, LAYER, xref);
 
   CHK_ENTITY_TYPE (layer, LAYER, frozen, B);
   CHK_ENTITY_TYPE (layer, LAYER, on, B);
@@ -43,9 +43,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (layer, LAYER, locked, B);
   CHK_ENTITY_TYPE (layer, LAYER, plotflag, B);
   CHK_ENTITY_TYPE (layer, LAYER, linewt, RC);
-  CHK_ENTITY_CMC (layer, LAYER, color, color);
+  CHK_ENTITY_CMC (layer, LAYER, color);
   CHK_ENTITY_TYPE (layer, LAYER, ltype_rs, RS);
-  CHK_ENTITY_H (layer, LAYER, plotstyle, plotstyle);
-  CHK_ENTITY_H (layer, LAYER, material, material);
-  CHK_ENTITY_H (layer, LAYER, ltype, ltype);
+  CHK_ENTITY_H (layer, LAYER, plotstyle);
+  CHK_ENTITY_H (layer, LAYER, material);
+  CHK_ENTITY_H (layer, LAYER, ltype);
 }

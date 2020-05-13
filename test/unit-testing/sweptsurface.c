@@ -69,7 +69,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, acis_data, TF);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, wireframe_data_present, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, point_present, B);
-  CHK_ENTITY_3RD (_obj, SWEPTSURFACE, point, point);
+  CHK_ENTITY_3RD (_obj, SWEPTSURFACE, point);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, isoline_present, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, isolines, BL);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, num_wires, BL);
@@ -91,7 +91,7 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, unknown_2007, BL);
-      CHK_ENTITY_H (_obj, SWEPTSURFACE, history_id, history_id);
+      CHK_ENTITY_H (_obj, SWEPTSURFACE, history_id);
     }
 
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, modeler_format_version, BS);
@@ -158,6 +158,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, base_point_set, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_entity_transform_computed, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, path_entity_transform_computed, B);
-  CHK_ENTITY_3RD (_obj, SWEPTSURFACE, reference_vector_for_controlling_twist, reference_vector_for_controlling_twist);
+  CHK_ENTITY_3RD (_obj, SWEPTSURFACE, reference_vector_for_controlling_twist);
 #endif
 }

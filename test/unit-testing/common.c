@@ -860,7 +860,7 @@ api_common_entity (dwg_object *obj)
     }
 
 #define CHK_ENTITY_UTF8TEXT(ent, name, field)                                 \
-  _CHK_ENTITY_UTF8TEXT (ent, name, field, field);                             \
+  _CHK_ENTITY_UTF8TEXT (ent, name, field);                             \
   if (isnew)                                                                  \
     free (field)
 

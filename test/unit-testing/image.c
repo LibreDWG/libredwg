@@ -23,9 +23,9 @@ api_process (dwg_object *obj)
 
   dwg_ent_image *image = dwg_object_to_IMAGE (obj);
 
-  CHK_ENTITY_3RD_W_OLD (image, IMAGE, pt0, pt0);
-  CHK_ENTITY_3RD (image, IMAGE, uvec, uvec); // still old api name u_vector
-  CHK_ENTITY_3RD (image, IMAGE, vvec, vvec);
+  CHK_ENTITY_3RD_W_OLD (image, IMAGE, pt0);
+  CHK_ENTITY_3RD (image, IMAGE, uvec); // still old api name u_vector
+  CHK_ENTITY_3RD (image, IMAGE, vvec);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, display_props, BS);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, clipping, B);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, brightness, RC);
@@ -52,6 +52,6 @@ api_process (dwg_object *obj)
     }
   free (cpts);
 
-  CHK_ENTITY_H (image, IMAGE, imagedef, imagedef);
-  CHK_ENTITY_H (image, IMAGE, imagedefreactor, imagedefreactor);
+  CHK_ENTITY_H (image, IMAGE, imagedef);
+  CHK_ENTITY_H (image, IMAGE, imagedefreactor);
 }

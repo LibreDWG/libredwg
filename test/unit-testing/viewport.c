@@ -46,9 +46,9 @@ api_process (dwg_object *obj)
 
   dwg_ent_viewport *viewport = dwg_object_to_VIEWPORT (obj);
 
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, center, center);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, view_target, view_target);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, view_direction, view_direction);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, center);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, view_target);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, view_direction);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, width, BD);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, height, BD);
   CHK_ENTITY_TYPE (viewport, VIEWPORT, on_off, RS);
@@ -64,13 +64,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, grid_major, BS);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, num_frozen_layers, BL);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, status_flag, BL);
-  CHK_ENTITY_UTF8TEXT_W_OLD (viewport, VIEWPORT, style_sheet, style_sheet);
+  CHK_ENTITY_UTF8TEXT_W_OLD (viewport, VIEWPORT, style_sheet);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, render_mode, RC);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_at_origin, B);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_per_viewport, B);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_origin, ucs_origin);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_x_axis, ucs_x_axis);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_y_axis, ucs_y_axis);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_origin);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_x_axis);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_y_axis);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_elevation, BD);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_ortho_view_type, BS);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, shadeplot_mode, BS);
@@ -78,14 +78,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, default_lighting_type, RC);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, brightness, BD);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, contrast, BD);
-  CHK_ENTITY_CMC (viewport, VIEWPORT, ambient_color, ambient_color);
-  CHK_ENTITY_H (viewport, VIEWPORT, vport_entity_header, vport_entity_header);
+  CHK_ENTITY_CMC (viewport, VIEWPORT, ambient_color);
+  CHK_ENTITY_H (viewport, VIEWPORT, vport_entity_header);
   CHK_ENTITY_HV (viewport, VIEWPORT, frozen_layers, frozen_layers, num_frozen_layers);
-  CHK_ENTITY_H (viewport, VIEWPORT, clip_boundary, clip_boundary);
-  CHK_ENTITY_H (viewport, VIEWPORT, named_ucs, named_ucs);
-  CHK_ENTITY_H (viewport, VIEWPORT, base_ucs, base_ucs);
-  CHK_ENTITY_H (viewport, VIEWPORT, background, background);
-  CHK_ENTITY_H (viewport, VIEWPORT, visualstyle, visualstyle);
-  CHK_ENTITY_H (viewport, VIEWPORT, shadeplot, shadeplot);
-  CHK_ENTITY_H (viewport, VIEWPORT, sun, sun);
+  CHK_ENTITY_H (viewport, VIEWPORT, clip_boundary);
+  CHK_ENTITY_H (viewport, VIEWPORT, named_ucs);
+  CHK_ENTITY_H (viewport, VIEWPORT, base_ucs);
+  CHK_ENTITY_H (viewport, VIEWPORT, background);
+  CHK_ENTITY_H (viewport, VIEWPORT, visualstyle);
+  CHK_ENTITY_H (viewport, VIEWPORT, shadeplot);
+  CHK_ENTITY_H (viewport, VIEWPORT, sun);
 }

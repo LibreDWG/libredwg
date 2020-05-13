@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, axis_ratio, RD);
   CHK_ENTITY_3RD_W_OLD (ellipse, ELLIPSE, sm_axis, sm);
   CHK_ENTITY_3RD_W_OLD (ellipse, ELLIPSE, extrusion, ext);
-  CHK_ENTITY_3RD_W_OLD (ellipse, ELLIPSE, center, center);
+  CHK_ENTITY_3RD_W_OLD (ellipse, ELLIPSE, center);
   CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, start_angle, BD);
   CHK_ENTITY_MAX (ellipse, ELLIPSE, start_angle, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE_W_OLD (ellipse, ELLIPSE, end_angle, BD);

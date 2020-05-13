@@ -29,11 +29,11 @@ api_process (dwg_object *obj)
 
   dwg_ent_leader *leader = dwg_object_to_LEADER (obj);
 
-  CHK_ENTITY_3RD_W_OLD (leader, LEADER, origin, origin);
+  CHK_ENTITY_3RD_W_OLD (leader, LEADER, origin);
   CHK_ENTITY_3RD_W_OLD (leader, LEADER, extrusion, ext);
-  CHK_ENTITY_3RD_W_OLD (leader, LEADER, x_direction, x_direction);
-  CHK_ENTITY_3RD_W_OLD (leader, LEADER, inspt_offset, inspt_offset);
-  CHK_ENTITY_3RD (leader, LEADER, endptproj, endptproj);
+  CHK_ENTITY_3RD_W_OLD (leader, LEADER, x_direction);
+  CHK_ENTITY_3RD_W_OLD (leader, LEADER, inspt_offset);
+  CHK_ENTITY_3RD (leader, LEADER, endptproj);
 
   CHK_ENTITY_TYPE (leader, LEADER, unknown_bit_1, B);
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, path_type, BS);
@@ -58,6 +58,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (leader, LEADER, hookline_on, B);
   CHK_ENTITY_TYPE (leader, LEADER, unknown_bit_5, B);
 
-  CHK_ENTITY_H (leader, LEADER, associated_annotation, associated_annotation);
-  CHK_ENTITY_H (leader, LEADER, dimstyle, dimstyle);
+  CHK_ENTITY_H (leader, LEADER, associated_annotation);
+  CHK_ENTITY_H (leader, LEADER, dimstyle);
 }

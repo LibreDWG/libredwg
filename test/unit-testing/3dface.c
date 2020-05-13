@@ -19,22 +19,22 @@ api_process (dwg_object *obj)
   if ( dwg_ent_3dface_get_invis_flags (_3dface, &error) != invis_flags || error)
     fail ("old API dwg_ent_3dface_get_invis_flags");
 
-  CHK_ENTITY_3RD (_3dface, 3DFACE, corner1, corner1);
+  CHK_ENTITY_3RD (_3dface, 3DFACE, corner1);
   dwg_ent_3dface_get_corner1 (_3dface, &_pt3d, &error);
   if (error || memcmp (&corner1, &_pt3d, sizeof (corner1)))
     fail ("old API dwg_ent_3dface_get_corner1");
 
-  CHK_ENTITY_3RD (_3dface, 3DFACE, corner2, corner2);
+  CHK_ENTITY_3RD (_3dface, 3DFACE, corner2);
   dwg_ent_3dface_get_corner2 (_3dface, &_pt3d, &error);
   if (error || memcmp (&corner2, &_pt3d, sizeof (corner2)))
     fail ("old API dwg_ent_3dface_get_corner2");
 
-  CHK_ENTITY_3RD (_3dface, 3DFACE, corner3, corner3);
+  CHK_ENTITY_3RD (_3dface, 3DFACE, corner3);
   dwg_ent_3dface_get_corner3 (_3dface, &_pt3d, &error);
   if (error || memcmp (&corner3, &_pt3d, sizeof (corner3)))
     fail ("old API dwg_ent_3dface_get_corner3");
 
-  CHK_ENTITY_3RD (_3dface, 3DFACE, corner4, corner4);
+  CHK_ENTITY_3RD (_3dface, 3DFACE, corner4);
   dwg_ent_3dface_get_corner4 (_3dface, &_pt3d, &error);
   if (error || memcmp (&corner4, &_pt3d, sizeof (corner4)))
     fail ("old API dwg_ent_3dface_get_corner4");

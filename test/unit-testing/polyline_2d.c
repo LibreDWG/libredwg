@@ -47,8 +47,8 @@ api_process (dwg_object *obj)
     }
   if (version >= R_13 && version <= R_2000)
     {
-      CHK_ENTITY_H (polyline_2d, POLYLINE_2D, first_vertex, first_vertex);
-      CHK_ENTITY_H (polyline_2d, POLYLINE_2D, last_vertex, last_vertex);
+      CHK_ENTITY_H (polyline_2d, POLYLINE_2D, first_vertex);
+      CHK_ENTITY_H (polyline_2d, POLYLINE_2D, last_vertex);
     }
-  CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend, seqend);
+  CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend);
 }

@@ -23,7 +23,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, RENDERGLOBAL, procedure, BL);
   CHK_ENTITY_TYPE (_obj, RENDERGLOBAL, destination, BL);
   CHK_ENTITY_TYPE (_obj, RENDERGLOBAL, save_enabled, B);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERGLOBAL, save_filename, save_filename);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERGLOBAL, save_filename);
   CHK_ENTITY_TYPE (_obj, RENDERGLOBAL, image_width, BL);
   CHK_ENTITY_TYPE (_obj, RENDERGLOBAL, image_height, BL);
   CHK_ENTITY_TYPE (_obj, RENDERGLOBAL, predef_presets_first, B);

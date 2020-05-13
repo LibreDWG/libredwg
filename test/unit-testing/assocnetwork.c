@@ -33,8 +33,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, geometry_status, BL);
   CHK_ENTITY_MAX (_obj, ASSOCNETWORK, geometry_status, BL, 10);
-  CHK_ENTITY_H (_obj, ASSOCNETWORK, owningnetwork, owningnetwork);
-  CHK_ENTITY_H (_obj, ASSOCNETWORK, actionbody, actionbody);
+  CHK_ENTITY_H (_obj, ASSOCNETWORK, owningnetwork);
+  CHK_ENTITY_H (_obj, ASSOCNETWORK, actionbody);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_deps, BL);

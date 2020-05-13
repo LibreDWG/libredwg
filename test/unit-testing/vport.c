@@ -62,19 +62,19 @@ api_process (dwg_object *obj)
   dwg_obj_vport *_obj = dwg_object_to_VPORT (obj);
 
   CHK_ENTITY_TYPE (_obj, VPORT, flag, RC);
-  CHK_ENTITY_UTF8TEXT (_obj, VPORT, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, VPORT, name);
   CHK_ENTITY_TYPE (_obj, VPORT, used, RS);
   CHK_ENTITY_TYPE (_obj, VPORT, is_xref_ref, B);
   CHK_ENTITY_TYPE (_obj, VPORT, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (_obj, VPORT, is_xref_dep, B);
-  CHK_ENTITY_H (_obj, VPORT, xref, xref);
+  CHK_ENTITY_H (_obj, VPORT, xref);
 
   CHK_ENTITY_TYPE (_obj, VPORT, VIEWSIZE, BD);  // really the view height
   CHK_ENTITY_TYPE (_obj, VPORT, viewwidth, BD); // in DWG r13+, needed to calc. aspect_ratio
   CHK_ENTITY_TYPE (_obj, VPORT, aspect_ratio, BD); // DXF 41 = viewwidth / VIEWSIZE
-  CHK_ENTITY_2RD (_obj, VPORT, VIEWCTR, VIEWCTR);
-  CHK_ENTITY_3RD (_obj, VPORT, view_target, view_target);
-  CHK_ENTITY_3RD (_obj, VPORT, VIEWDIR, VIEWDIR);
+  CHK_ENTITY_2RD (_obj, VPORT, VIEWCTR);
+  CHK_ENTITY_3RD (_obj, VPORT, view_target);
+  CHK_ENTITY_3RD (_obj, VPORT, VIEWDIR);
   CHK_ENTITY_TYPE (_obj, VPORT, view_twist, BD);
   CHK_ENTITY_TYPE (_obj, VPORT, lens_length, BD);
   CHK_ENTITY_TYPE (_obj, VPORT, front_clip, BD);
@@ -85,33 +85,33 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT, default_lightning_type, RC);
   CHK_ENTITY_TYPE (_obj, VPORT, brightness, BD);
   CHK_ENTITY_TYPE (_obj, VPORT, contrast, BD);
-  CHK_ENTITY_CMC (_obj, VPORT, ambient_color, ambient_color);
-  CHK_ENTITY_2RD (_obj, VPORT, lower_left, lower_left);
-  CHK_ENTITY_2RD (_obj, VPORT, upper_right, upper_right);
+  CHK_ENTITY_CMC (_obj, VPORT, ambient_color);
+  CHK_ENTITY_2RD (_obj, VPORT, lower_left);
+  CHK_ENTITY_2RD (_obj, VPORT, upper_right);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSFOLLOW, B);
   CHK_ENTITY_TYPE (_obj, VPORT, circle_zoom, BS); /* circle sides: nr of tesselations */
   CHK_ENTITY_TYPE (_obj, VPORT, FASTZOOM, B);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSICON, RC);
   CHK_ENTITY_TYPE (_obj, VPORT, GRIDMODE, B);
-  CHK_ENTITY_2RD (_obj, VPORT, GRIDUNIT, GRIDUNIT);
+  CHK_ENTITY_2RD (_obj, VPORT, GRIDUNIT);
   CHK_ENTITY_TYPE (_obj, VPORT, SNAPMODE, B);
   CHK_ENTITY_TYPE (_obj, VPORT, SNAPSTYLE, B);
   CHK_ENTITY_TYPE (_obj, VPORT, SNAPISOPAIR, BS);
   CHK_ENTITY_TYPE (_obj, VPORT, SNAPANG, BD);
-  CHK_ENTITY_2RD (_obj, VPORT, SNAPBASE, SNAPBASE);
-  CHK_ENTITY_2RD (_obj, VPORT, SNAPUNIT, SNAPUNIT);
+  CHK_ENTITY_2RD (_obj, VPORT, SNAPBASE);
+  CHK_ENTITY_2RD (_obj, VPORT, SNAPUNIT);
   CHK_ENTITY_TYPE (_obj, VPORT, unknown, B);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSVP, B);
-  CHK_ENTITY_3RD (_obj, VPORT, ucs_origin, ucs_origin);
-  CHK_ENTITY_3RD (_obj, VPORT, ucs_x_axis, ucs_x_axis);
-  CHK_ENTITY_3RD (_obj, VPORT, ucs_y_axis, ucs_y_axis);
+  CHK_ENTITY_3RD (_obj, VPORT, ucs_origin);
+  CHK_ENTITY_3RD (_obj, VPORT, ucs_x_axis);
+  CHK_ENTITY_3RD (_obj, VPORT, ucs_y_axis);
   CHK_ENTITY_TYPE (_obj, VPORT, ucs_elevation, BD);
   CHK_ENTITY_TYPE (_obj, VPORT, ucs_orthografic_type, BS);
   CHK_ENTITY_TYPE (_obj, VPORT, grid_flags, BS);
   CHK_ENTITY_TYPE (_obj, VPORT, grid_major, BS);
-  CHK_ENTITY_H (_obj, VPORT, background, background);
-  CHK_ENTITY_H (_obj, VPORT, visualstyle, visualstyle);
-  CHK_ENTITY_H (_obj, VPORT, sun, sun);
-  CHK_ENTITY_H (_obj, VPORT, named_ucs, named_ucs);
-  CHK_ENTITY_H (_obj, VPORT, base_ucs, base_ucs);
+  CHK_ENTITY_H (_obj, VPORT, background);
+  CHK_ENTITY_H (_obj, VPORT, visualstyle);
+  CHK_ENTITY_H (_obj, VPORT, sun);
+  CHK_ENTITY_H (_obj, VPORT, named_ucs);
+  CHK_ENTITY_H (_obj, VPORT, base_ucs);
 }

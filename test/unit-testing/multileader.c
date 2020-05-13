@@ -199,28 +199,28 @@ api_process (dwg_object *obj)
     if (!ctx.has_content_txt)
       fail ("!ctx.has_content_blk && !ctx.has_content_txt");
 
-  CHK_ENTITY_H (mleader, MULTILEADER, mleaderstyle, mleaderstyle);
+  CHK_ENTITY_H (mleader, MULTILEADER, mleaderstyle);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, flags, BL);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, type, BS);
-  CHK_ENTITY_CMC (mleader, MULTILEADER, color, color);
-  CHK_ENTITY_H (mleader, MULTILEADER, ltype, ltype);
+  CHK_ENTITY_CMC (mleader, MULTILEADER, color);
+  CHK_ENTITY_H (mleader, MULTILEADER, ltype);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, linewt, BLd, linewt);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_landing, B);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_dogleg, B);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, landing_dist, BD);
-  CHK_ENTITY_H (mleader, MULTILEADER, arrow_handle, arrow_handle);
+  CHK_ENTITY_H (mleader, MULTILEADER, arrow_handle);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, arrow_size, BD);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, style_content, BS);
-  CHK_ENTITY_H (mleader, MULTILEADER, text_style, text_style);
+  CHK_ENTITY_H (mleader, MULTILEADER, text_style);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_left, BS);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_right, BS);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_angletype, BS);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, text_alignment, BS);
-  CHK_ENTITY_CMC (mleader, MULTILEADER, text_color, text_color);
+  CHK_ENTITY_CMC (mleader, MULTILEADER, text_color);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_text_frame, B);
-  CHK_ENTITY_H (mleader, MULTILEADER, block_style, block_style);
-  CHK_ENTITY_CMC (mleader, MULTILEADER, block_color, block_color);
-  CHK_ENTITY_3RD (mleader, MULTILEADER, block_scale, block_scale);
+  CHK_ENTITY_H (mleader, MULTILEADER, block_style);
+  CHK_ENTITY_CMC (mleader, MULTILEADER, block_color);
+  CHK_ENTITY_3RD (mleader, MULTILEADER, block_scale);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, block_rotation, BD);
   CHK_ENTITY_MAX (mleader, MULTILEADER, block_rotation, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, style_attachment, BS);

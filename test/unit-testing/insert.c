@@ -15,8 +15,8 @@ api_process (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_insert *insert = dwg_object_to_INSERT (obj);
 
-  CHK_ENTITY_3RD_W_OLD (insert, INSERT, ins_pt, ins_pt);
-  CHK_ENTITY_3RD_W_OLD (insert, INSERT, scale, scale);
+  CHK_ENTITY_3RD_W_OLD (insert, INSERT, ins_pt);
+  CHK_ENTITY_3RD_W_OLD (insert, INSERT, scale);
   CHK_ENTITY_TYPE_W_OLD (insert, INSERT, rotation, BD);
   CHK_ENTITY_MAX (insert, INSERT, rotation, BD, MAX_ANGLE);
   CHK_ENTITY_3RD_W_OLD (insert, INSERT, extrusion, ext);
@@ -27,19 +27,19 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE_W_OLD (insert, INSERT, num_owned, BL);
     }
 
-  CHK_ENTITY_H (insert, INSERT, block_header, block_header);
+  CHK_ENTITY_H (insert, INSERT, block_header);
   if (insert->has_attribs)
     {
       if (version <= R_2000)
         {
-          CHK_ENTITY_H (insert, INSERT, first_attrib, first_attrib);
-          CHK_ENTITY_H (insert, INSERT, last_attrib, last_attrib);
+          CHK_ENTITY_H (insert, INSERT, first_attrib);
+          CHK_ENTITY_H (insert, INSERT, last_attrib);
         }
       if (version >= R_2004)
         {
           CHK_ENTITY_HV (insert, INSERT, attrib_handles, attrib_handles,
                          num_owned);
         }
-      CHK_ENTITY_H (insert, INSERT, seqend, seqend);
+      CHK_ENTITY_H (insert, INSERT, seqend);
     }
 }

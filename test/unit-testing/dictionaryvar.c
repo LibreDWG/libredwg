@@ -12,5 +12,5 @@ api_process (dwg_object *obj)
   dwg_obj_dictionaryvar *_obj = dwg_object_to_DICTIONARYVAR (obj);
 
   CHK_ENTITY_TYPE (_obj, DICTIONARYVAR, intval, RC);
-  CHK_ENTITY_UTF8TEXT (_obj, DICTIONARYVAR, str, str);
+  CHK_ENTITY_UTF8TEXT (_obj, DICTIONARYVAR, str);
 }

@@ -27,8 +27,8 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_field *_obj = dwg_object_to_FIELD (obj);
 
-  CHK_ENTITY_UTF8TEXT (_obj, FIELD, id, id);
-  CHK_ENTITY_UTF8TEXT (_obj, FIELD, code, code);
+  CHK_ENTITY_UTF8TEXT (_obj, FIELD, id);
+  CHK_ENTITY_UTF8TEXT (_obj, FIELD, code);
   CHK_ENTITY_TYPE (_obj, FIELD, num_childs, BL);
   if (!dwg_dynapi_entity_value (_obj, "FIELD", "childs", &childs, NULL))
     fail ("FIELD.childs");
@@ -51,15 +51,15 @@ api_process (dwg_object *obj)
       else
         fail ("FIELD.objects[%d]: " FORMAT_REF, i, ARGS_REF (objects[i]));
     }
-  CHK_ENTITY_UTF8TEXT (_obj, FIELD, format, format);
+  CHK_ENTITY_UTF8TEXT (_obj, FIELD, format);
   CHK_ENTITY_TYPE (_obj, FIELD, evaluation_option, BL);
   CHK_ENTITY_TYPE (_obj, FIELD, filing_option, BL);
   CHK_ENTITY_TYPE (_obj, FIELD, field_state, BL);
   CHK_ENTITY_TYPE (_obj, FIELD, evaluation_status, BL);
   CHK_ENTITY_TYPE (_obj, FIELD, evaluation_error_code, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, FIELD, evaluation_error_msg, evaluation_error_msg);
+  CHK_ENTITY_UTF8TEXT (_obj, FIELD, evaluation_error_msg);
   //Dwg_TABLE_value value;
-  CHK_ENTITY_UTF8TEXT (_obj, FIELD, value_string, value_string);
+  CHK_ENTITY_UTF8TEXT (_obj, FIELD, value_string);
   CHK_ENTITY_TYPE (_obj, FIELD, value_string_length, BL);
   CHK_ENTITY_TYPE (_obj, FIELD, num_childval, BL);
   if (!dwg_dynapi_entity_value (_obj, "FIELD", "childval", &childval, NULL))

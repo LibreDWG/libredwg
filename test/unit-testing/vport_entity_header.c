@@ -22,12 +22,12 @@ api_process (dwg_object *obj)
   dwg_obj_vport_entity_header *_obj = dwg_object_to_VPORT_ENTITY_HEADER (obj);
 
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, flag, RC);
-  CHK_ENTITY_UTF8TEXT (_obj, VPORT_ENTITY_HEADER, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, VPORT_ENTITY_HEADER, name);
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, used, RS);
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, is_xref_ref, B);
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, is_xref_dep, B);
-  CHK_ENTITY_H (_obj, VPORT_ENTITY_HEADER, xref, xref);
+  CHK_ENTITY_H (_obj, VPORT_ENTITY_HEADER, xref);
 
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, flag1, B);
   CHK_ENTITY_TYPE (_obj, VPORT_ENTITY_HEADER, num_viewports, BL);

@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_group *_obj = dwg_object_to_GROUP (obj);
 
-  CHK_ENTITY_UTF8TEXT (_obj, GROUP, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, GROUP, name);
   CHK_ENTITY_TYPE (_obj, GROUP, unnamed, BS);
   CHK_ENTITY_TYPE (_obj, GROUP, selectable, BS);
   CHK_ENTITY_TYPE (_obj, GROUP, num_groups, BL);

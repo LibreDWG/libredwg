@@ -33,8 +33,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCDEPENDENCY, order, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCDEPENDENCY, unknown_b5, B);
   CHK_ENTITY_TYPE (_obj, ASSOCDEPENDENCY, depbodyid, BL);
-  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, owner, owner);
-  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, readdep, readdep);
-  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, writedep, writedep);
-  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, node, node);
+  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, owner);
+  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, readdep);
+  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, writedep);
+  CHK_ENTITY_H (_obj, ASSOCDEPENDENCY, node);
 }

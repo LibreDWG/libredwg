@@ -20,13 +20,13 @@ api_process (dwg_object *obj)
   dwg_obj_rendersettings *_obj = dwg_object_to_RENDERSETTINGS (obj);
 
   CHK_ENTITY_TYPE (_obj, RENDERSETTINGS, class_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERSETTINGS, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERSETTINGS, name);
   CHK_ENTITY_TYPE (_obj, RENDERSETTINGS, fog_enabled, B);
   CHK_ENTITY_TYPE (_obj, RENDERSETTINGS, fog_background_enabled, B);
   CHK_ENTITY_TYPE (_obj, RENDERSETTINGS, backfaces_enabled, B);
   CHK_ENTITY_TYPE (_obj, RENDERSETTINGS, environ_image_enabled, B);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERSETTINGS, environ_image_filename, environ_image_filename);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERSETTINGS, description, description);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERSETTINGS, environ_image_filename);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERSETTINGS, description);
   CHK_ENTITY_TYPE (_obj, RENDERSETTINGS, display_index, BL);
   CHK_ENTITY_TYPE (_obj, RENDERSETTINGS, has_predefined, B);
 }

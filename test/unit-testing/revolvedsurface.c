@@ -56,7 +56,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_data, TF);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, wireframe_data_present, B);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, point_present, B);
-  CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, point, point);
+  CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, point);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, isoline_present, B);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, isolines, BL);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, num_wires, BL);
@@ -78,7 +78,7 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, unknown_2007, BL);
-      CHK_ENTITY_H (_obj, REVOLVEDSURFACE, history_id, history_id);
+      CHK_ENTITY_H (_obj, REVOLVEDSURFACE, history_id);
     }
 
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, modeler_format_version, BS);
@@ -87,8 +87,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, class_version, BL);
   
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, id, BL);
-  CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_point, axis_point);
-  CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_vector, axis_vector);
+  CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_point);
+  CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_vector);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, revolve_angle, BD);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, start_angle, BD);
   if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE",

@@ -29,12 +29,12 @@ api_process (dwg_object *obj)
   dwg_obj_style *_obj = dwg_object_to_STYLE (obj);
 
   CHK_ENTITY_TYPE (_obj, STYLE, flag, RC);
-  CHK_ENTITY_UTF8TEXT (_obj, STYLE, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, STYLE, name);
   CHK_ENTITY_TYPE (_obj, STYLE, used, RS);
   CHK_ENTITY_TYPE (_obj, STYLE, is_xref_ref, B);
   CHK_ENTITY_TYPE (_obj, STYLE, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (_obj, STYLE, is_xref_dep, B);
-  CHK_ENTITY_H (_obj, STYLE, xref, xref);
+  CHK_ENTITY_H (_obj, STYLE, xref);
 
   CHK_ENTITY_TYPE (_obj, STYLE, is_vertical, B);
   CHK_ENTITY_TYPE (_obj, STYLE, is_shape, B);
@@ -43,8 +43,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, STYLE, oblique_angle, BD);
   CHK_ENTITY_TYPE (_obj, STYLE, generation, RC);
   CHK_ENTITY_TYPE (_obj, STYLE, last_height, BD);
-  CHK_ENTITY_UTF8TEXT (_obj, STYLE, font_file, font_file);
-  CHK_ENTITY_UTF8TEXT (_obj, STYLE, bigfont_file, bigfont_file);
+  CHK_ENTITY_UTF8TEXT (_obj, STYLE, font_file);
+  CHK_ENTITY_UTF8TEXT (_obj, STYLE, bigfont_file);
   CHK_ENTITY_TYPE (_obj, STYLE, ttf_flags, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, STYLE, ttf_typeface, ttf_typeface);
+  CHK_ENTITY_UTF8TEXT (_obj, STYLE, ttf_typeface);
 }

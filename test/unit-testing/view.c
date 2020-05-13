@@ -48,18 +48,18 @@ api_process (dwg_object *obj)
   dwg_obj_view *_obj = dwg_object_to_VIEW (obj);
 
   CHK_ENTITY_TYPE (_obj, VIEW, flag, RC);
-  CHK_ENTITY_UTF8TEXT (_obj, VIEW, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, VIEW, name);
   CHK_ENTITY_TYPE (_obj, VIEW, used, RS);
   CHK_ENTITY_TYPE (_obj, VIEW, is_xref_ref, B);
   CHK_ENTITY_TYPE (_obj, VIEW, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (_obj, VIEW, is_xref_dep, B);
-  CHK_ENTITY_H (_obj, VIEW, xref, xref);
+  CHK_ENTITY_H (_obj, VIEW, xref);
 
   CHK_ENTITY_TYPE (_obj, VIEW, height, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, width, BD);
-  CHK_ENTITY_2RD (_obj, VIEW, center, center);
-  CHK_ENTITY_3RD (_obj, VIEW, target, target);
-  CHK_ENTITY_3RD (_obj, VIEW, direction, direction);
+  CHK_ENTITY_2RD (_obj, VIEW, center);
+  CHK_ENTITY_3RD (_obj, VIEW, target);
+  CHK_ENTITY_3RD (_obj, VIEW, direction);
   CHK_ENTITY_TYPE (_obj, VIEW, twist_angle, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, lens_length, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, front_clip, BD);
@@ -70,19 +70,19 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VIEW, default_lightning_type, RC);
   CHK_ENTITY_TYPE (_obj, VIEW, brightness, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, contrast, BD);
-  CHK_ENTITY_CMC (_obj, VIEW, ambient_color, ambient_color);
+  CHK_ENTITY_CMC (_obj, VIEW, ambient_color);
   CHK_ENTITY_TYPE (_obj, VIEW, pspace_flag, B);
   CHK_ENTITY_TYPE (_obj, VIEW, associated_ucs, B);
-  CHK_ENTITY_3RD (_obj, VIEW, origin, origin);
-  CHK_ENTITY_3RD (_obj, VIEW, x_direction, x_direction);
-  CHK_ENTITY_3RD (_obj, VIEW, y_direction, y_direction);
+  CHK_ENTITY_3RD (_obj, VIEW, origin);
+  CHK_ENTITY_3RD (_obj, VIEW, x_direction);
+  CHK_ENTITY_3RD (_obj, VIEW, y_direction);
   CHK_ENTITY_TYPE (_obj, VIEW, elevation, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, orthographic_view_type, BS);
   CHK_ENTITY_TYPE (_obj, VIEW, camera_plottable, B);
-  CHK_ENTITY_H (_obj, VIEW, background, background);
-  CHK_ENTITY_H (_obj, VIEW, visualstyle, visualstyle);
-  CHK_ENTITY_H (_obj, VIEW, sun, sun);
-  CHK_ENTITY_H (_obj, VIEW, base_ucs, base_ucs);
-  CHK_ENTITY_H (_obj, VIEW, named_ucs, named_ucs);
-  CHK_ENTITY_H (_obj, VIEW, livesection, livesection);
+  CHK_ENTITY_H (_obj, VIEW, background);
+  CHK_ENTITY_H (_obj, VIEW, visualstyle);
+  CHK_ENTITY_H (_obj, VIEW, sun);
+  CHK_ENTITY_H (_obj, VIEW, base_ucs);
+  CHK_ENTITY_H (_obj, VIEW, named_ucs);
+  CHK_ENTITY_H (_obj, VIEW, livesection);
 }

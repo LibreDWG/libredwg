@@ -8,6 +8,6 @@ api_process (dwg_object *obj)
   dwg_point_3d point, vector;
   dwg_ent_ray *ray = dwg_object_to_RAY (obj);
 
-  CHK_ENTITY_3RD_W_OLD (ray, RAY, point, point);
-  CHK_ENTITY_3RD_W_OLD (ray, RAY, vector, vector);
+  CHK_ENTITY_3RD_W_OLD (ray, RAY, point);
+  CHK_ENTITY_3RD_W_OLD (ray, RAY, vector);
 }

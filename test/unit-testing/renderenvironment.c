@@ -23,12 +23,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, class_version, BL);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_enabled, B);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_background_enabled, B);
-  CHK_ENTITY_CMC (_obj, RENDERENVIRONMENT, fog_color, fog_color);
+  CHK_ENTITY_CMC (_obj, RENDERENVIRONMENT, fog_color);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_density_near, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_density_far, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_distance_near, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_distance_far, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, environ_image_enabled, B);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERENVIRONMENT, environ_image_filename, environ_image_filename);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERENVIRONMENT, environ_image_filename);
 #endif
 }

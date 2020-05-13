@@ -56,15 +56,15 @@ api_process (dwg_object *obj)
   dwg_ent_light *light = dwg_object_to_LIGHT (obj);
 
   CHK_ENTITY_TYPE (light, LIGHT, class_version, BL);
-  CHK_ENTITY_UTF8TEXT (light, LIGHT, name, name);
+  CHK_ENTITY_UTF8TEXT (light, LIGHT, name);
   CHK_ENTITY_TYPE (light, LIGHT, type, BL);
   CHK_ENTITY_MAX (light, LIGHT, type, BL, 3);
   CHK_ENTITY_TYPE (light, LIGHT, status, B);
-  CHK_ENTITY_CMC (light, LIGHT, color, color);
+  CHK_ENTITY_CMC (light, LIGHT, color);
   CHK_ENTITY_TYPE (light, LIGHT, plot_glyph, B);
   CHK_ENTITY_TYPE (light, LIGHT, intensity, BD); // max 100.0?
-  CHK_ENTITY_3RD (light, LIGHT, position, position);
-  CHK_ENTITY_3RD (light, LIGHT, target, target);
+  CHK_ENTITY_3RD (light, LIGHT, position);
+  CHK_ENTITY_3RD (light, LIGHT, target);
   CHK_ENTITY_TYPE (light, LIGHT, attenuation_type, BL);
   CHK_ENTITY_MAX  (light, LIGHT, attenuation_type, BL, 2);
   CHK_ENTITY_TYPE (light, LIGHT, use_attenuation_limits, B);
@@ -87,7 +87,7 @@ api_process (dwg_object *obj)
   if (is_photometric && has_photometric_data)
     {
       CHK_ENTITY_TYPE (light, LIGHT, has_webfile, B);
-      CHK_ENTITY_UTF8TEXT (light, LIGHT, webfile, webfile);
+      CHK_ENTITY_UTF8TEXT (light, LIGHT, webfile);
       CHK_ENTITY_TYPE (light, LIGHT, physical_intensity_method, BS);
       CHK_ENTITY_TYPE (light, LIGHT, physical_intensity, BD);
       CHK_ENTITY_TYPE (light, LIGHT, illuminance_dist, BD);
@@ -96,7 +96,7 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (light, LIGHT, lamp_color_temp, BD);
       CHK_ENTITY_TYPE (light, LIGHT, lamp_color_preset, BS);
       //CHK_ENTITY_TYPE (light, LIGHT, lamp_color_rgb, BL);
-      CHK_ENTITY_3RD (light, LIGHT, web_rotation, web_rotation);
+      CHK_ENTITY_3RD (light, LIGHT, web_rotation);
       CHK_ENTITY_TYPE (light, LIGHT, extlight_shape, BS);
       CHK_ENTITY_MAX  (light, LIGHT, extlight_shape, BS, 4);
       CHK_ENTITY_TYPE (light, LIGHT, extlight_length, BD);

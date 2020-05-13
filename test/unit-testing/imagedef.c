@@ -17,9 +17,9 @@ api_process (dwg_object *obj)
   dwg_obj_imagedef *_obj = dwg_object_to_IMAGEDEF (obj);
 
   CHK_ENTITY_TYPE (_obj, IMAGEDEF, class_version, BL);
-  CHK_ENTITY_2RD (_obj, IMAGEDEF, image_size, image_size);
-  CHK_ENTITY_UTF8TEXT (_obj, IMAGEDEF, file_path, file_path);
+  CHK_ENTITY_2RD (_obj, IMAGEDEF, image_size);
+  CHK_ENTITY_UTF8TEXT (_obj, IMAGEDEF, file_path);
   CHK_ENTITY_TYPE (_obj, IMAGEDEF, is_loaded, B);
   CHK_ENTITY_TYPE (_obj, IMAGEDEF, resunits, RC);
-  CHK_ENTITY_2RD (_obj, IMAGEDEF, pixel_size, pixel_size);
+  CHK_ENTITY_2RD (_obj, IMAGEDEF, pixel_size);
 }

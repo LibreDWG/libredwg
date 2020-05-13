@@ -43,7 +43,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, acis_data, TF);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, wireframe_data_present, B);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, point_present, B);
-  CHK_ENTITY_3RD (_obj, PLANESURFACE, point, point);
+  CHK_ENTITY_3RD (_obj, PLANESURFACE, point);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, isoline_present, B);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, isolines, BL);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, num_wires, BL);
@@ -65,7 +65,7 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_obj, PLANESURFACE, unknown_2007, BL);
-      CHK_ENTITY_H (_obj, PLANESURFACE, history_id, history_id);
+      CHK_ENTITY_H (_obj, PLANESURFACE, history_id);
     }
 
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, modeler_format_version, BS);

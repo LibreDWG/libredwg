@@ -18,8 +18,8 @@ api_process (dwg_object *obj)
   dwg_ent_underlay *underlay = dwg_object_to_UNDERLAY (obj);
 
   CHK_ENTITY_3RD (underlay, UNDERLAY, extrusion, ext);
-  CHK_ENTITY_3RD (underlay, UNDERLAY, insertion_pt, insertion_pt);
-  CHK_ENTITY_3RD (underlay, UNDERLAY, scale, scale);
+  CHK_ENTITY_3RD (underlay, UNDERLAY, insertion_pt);
+  CHK_ENTITY_3RD (underlay, UNDERLAY, scale);
   CHK_ENTITY_TYPE (underlay, UNDERLAY, flag, RC);
   CHK_ENTITY_TYPE (underlay, UNDERLAY, contrast, RC);
   CHK_ENTITY_TYPE (underlay, UNDERLAY, fade, RC);
@@ -34,6 +34,6 @@ api_process (dwg_object *obj)
           ok ("UNDERLAY.clip_verts[%d]: (%f, %f)", i, clip_verts[i].x, clip_verts[i].y);
         }
     }
-  CHK_ENTITY_H (underlay, UNDERLAY, underlay_layer, underlay_layer);
-  CHK_ENTITY_H (underlay, UNDERLAY, definition_id, definition_id);
+  CHK_ENTITY_H (underlay, UNDERLAY, underlay_layer);
+  CHK_ENTITY_H (underlay, UNDERLAY, definition_id);
 }

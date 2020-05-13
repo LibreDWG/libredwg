@@ -36,8 +36,8 @@ api_process (dwg_object *obj)
     fail ("Illegal SPLINE.scenario %d", (int)scenario);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, degree, BS);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, fit_tol, BD);
-  CHK_ENTITY_3RD  (spline, SPLINE, beg_tan_vec, beg_tan_vec);
-  CHK_ENTITY_3RD  (spline, SPLINE, end_tan_vec, end_tan_vec);
+  CHK_ENTITY_3RD  (spline, SPLINE, beg_tan_vec);
+  CHK_ENTITY_3RD  (spline, SPLINE, end_tan_vec);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, closed_b, B);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, periodic, B);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, rational, B);

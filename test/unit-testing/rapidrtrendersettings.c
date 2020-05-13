@@ -30,13 +30,13 @@ api_process (dwg_object *obj)
   dwg_obj_rapidrtrendersettings *_obj = dwg_object_to_RAPIDRTRENDERSETTINGS (obj);
 
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, class_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, name);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_enabled, B);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, fog_background_enabled, B);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, backfaces_enabled, B);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, environ_image_enabled, B);
-  CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, environ_image_filename, environ_image_filename);
-  CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, description, description);
+  CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, environ_image_filename);
+  CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, description);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, display_index, BL);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, has_predefined, B);
 

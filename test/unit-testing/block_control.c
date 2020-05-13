@@ -25,6 +25,6 @@ api_process (dwg_object *obj)
         fail ("BLOCK_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
     }
   CHK_ENTITY_TYPE (block_control, BLOCK_CONTROL, objid, BL);
-  CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space, model_space);
-  CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space, model_space);
+  CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space);
+  CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space);
 }

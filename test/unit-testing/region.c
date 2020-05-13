@@ -50,7 +50,7 @@ api_process (dwg_object *obj)
       fail ("old API dwg_ent_region_get_point_present");
     }
 
-  CHK_ENTITY_3RD (region, REGION, point, point);
+  CHK_ENTITY_3RD (region, REGION, point);
   dwg_ent_region_get_point (region, &pt3d, &error);
   if (error || memcmp (&point, &pt3d, sizeof (point)))
     {
@@ -103,6 +103,6 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2007 && region->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (region, REGION, unknown_2007, BL);
-      CHK_ENTITY_H (region, REGION, history_id, history_id);
+      CHK_ENTITY_H (region, REGION, history_id);
     }
 }

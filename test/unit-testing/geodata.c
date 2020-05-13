@@ -45,16 +45,16 @@ api_process (dwg_object *obj)
   dwg_obj_geodata *geodata = dwg_object_to_GEODATA (obj);
 
   CHK_ENTITY_TYPE (geodata, GEODATA, class_version, BL);
-  CHK_ENTITY_H (geodata, GEODATA, host_block, host_block);
+  CHK_ENTITY_H (geodata, GEODATA, host_block);
   CHK_ENTITY_TYPE (geodata, GEODATA, coord_type, BS);
   /* 0 unknown, 1 local grid, 2 projected grid,
      3 geographic defined by latitude/longitude) */
-  CHK_ENTITY_3RD (geodata, GEODATA, design_pt, design_pt);
-  CHK_ENTITY_3RD (geodata, GEODATA, ref_pt, ref_pt);
-  CHK_ENTITY_3RD (geodata, GEODATA, obs_pt, obs_pt);
+  CHK_ENTITY_3RD (geodata, GEODATA, design_pt);
+  CHK_ENTITY_3RD (geodata, GEODATA, ref_pt);
+  CHK_ENTITY_3RD (geodata, GEODATA, obs_pt);
   CHK_ENTITY_TYPE (geodata, GEODATA, unit_scale_horiz, BD);
-  CHK_ENTITY_3RD (geodata, GEODATA, up_dir, up_dir);
-  CHK_ENTITY_3RD (geodata, GEODATA, north_dir, north_dir);
+  CHK_ENTITY_3RD (geodata, GEODATA, up_dir);
+  CHK_ENTITY_3RD (geodata, GEODATA, north_dir);
   CHK_ENTITY_TYPE (geodata, GEODATA, scale_est, BL);
   /* None = 1, User specified scale factor = 2,
      Grid scale at reference point = 3, Prismodial = 4 */
@@ -64,8 +64,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (geodata, GEODATA, sea_level_corr, B);
   CHK_ENTITY_TYPE (geodata, GEODATA, sea_level_elev, BD);
   CHK_ENTITY_TYPE (geodata, GEODATA, coord_proj_radius, BD);
-  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_def, coord_system_def);
-  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, geo_rss_tag, geo_rss_tag);
+  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_def);
+  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, geo_rss_tag);
 
   if (class_version >= 2)
     {
@@ -75,8 +75,8 @@ api_process (dwg_object *obj)
   else
     {
       CHK_ENTITY_TYPE (geodata, GEODATA, units_value_horiz, BL);
-      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_datum, coord_system_datum); /* obsolete */
-      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt, coord_system_wkt); /* obsolete */
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_datum); /* obsolete */
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt); /* obsolete */
       CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B);
       CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B);
       CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_deg, BD);
@@ -85,9 +85,9 @@ api_process (dwg_object *obj)
       CHK_ENTITY_MAX (geodata, GEODATA, north_dir_angle_rad, BD, MAX_ANGLE);
     }
 
-  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_from_tag, observation_from_tag);
-  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_to_tag, observation_to_tag);
-  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_coverage_tag, observation_coverage_tag);
+  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_from_tag);
+  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_to_tag);
+  CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_coverage_tag);
   CHK_ENTITY_TYPE (geodata, GEODATA, num_geomesh_pts, BL);
   if (!dwg_dynapi_entity_value (geodata, "GEODATA", "geomesh_pts", &geomesh_pts, NULL))
     fail ("GEODATA.geomesh_pts");

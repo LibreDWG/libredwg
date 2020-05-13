@@ -38,18 +38,18 @@ api_process (dwg_object *obj)
   dwg_obj_geomapimage *_obj = dwg_object_to_GEOMAPIMAGE (obj);
 
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, class_version, BL);
-  CHK_ENTITY_3RD (_obj, GEOMAPIMAGE, pt0, pt0);
-  CHK_ENTITY_2RD (_obj, GEOMAPIMAGE, size, size);
+  CHK_ENTITY_3RD (_obj, GEOMAPIMAGE, pt0);
+  CHK_ENTITY_2RD (_obj, GEOMAPIMAGE, size);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, display_props, BS);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, clipping, B);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, brightness, RC);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, contrast, RC);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, fade, RC);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, rotation, BD);
-  //CHK_ENTITY_3RD (_obj, GEOMAPIMAGE, origin, origin);
+  //CHK_ENTITY_3RD (_obj, GEOMAPIMAGE, origin);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, image_width, BD);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, image_height, BD);
-  CHK_ENTITY_UTF8TEXT (_obj, GEOMAPIMAGE, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, GEOMAPIMAGE, name);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, image_file, BD);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, image_visibility, BD);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, transparency, BS);

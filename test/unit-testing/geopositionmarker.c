@@ -24,13 +24,13 @@ api_process (dwg_object *obj)
   dwg_ent_geopositionmarker *_obj = dwg_object_to_GEOPOSITIONMARKER (obj);
 
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, type, BS);
-  CHK_ENTITY_3RD (_obj, GEOPOSITIONMARKER, position, position);
+  CHK_ENTITY_3RD (_obj, GEOPOSITIONMARKER, position);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, radius, BD);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, landing_gap, BD);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, text_alignment, RC);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, mtext_visible, B);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, enable_frame_text, B);
-  CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, notes, notes);
+  CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, notes);
 
   if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext, NULL))
     fail ("GEOPOSITIONMARKER.mtext");
@@ -40,8 +40,8 @@ api_process (dwg_object *obj)
       if (mtext->fixedtype != DWG_TYPE_MTEXT)
         fail ("Wrong MTEXT.mtext.fixedtype %d", mtext->fixedtype);
     }
-  //CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, text, text);
-  //CHK_ENTITY_H (_obj, GEOPOSITIONMARKER, mtext_handle, mtext_handle);
-  //CHK_ENTITY_H (_obj, GEOPOSITIONMARKER, text_style, text_style);
+  //CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, text);
+  //CHK_ENTITY_H (_obj, GEOPOSITIONMARKER, mtext_handle);
+  //CHK_ENTITY_H (_obj, GEOPOSITIONMARKER, text_style);
 #endif
 }

@@ -22,9 +22,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, is_default, B);
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, in_dwg, B);
-  CHK_ENTITY_H (_obj, BLKREFOBJECTCONTEXTDATA, scale, scale);
+  CHK_ENTITY_H (_obj, BLKREFOBJECTCONTEXTDATA, scale);
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, rotation, BD);
-  CHK_ENTITY_3RD (_obj, BLKREFOBJECTCONTEXTDATA, insertion_pt, insertion_pt);
-  CHK_ENTITY_3RD (_obj, BLKREFOBJECTCONTEXTDATA, scale_factor, scale_factor);
+  CHK_ENTITY_3RD (_obj, BLKREFOBJECTCONTEXTDATA, insertion_pt);
+  CHK_ENTITY_3RD (_obj, BLKREFOBJECTCONTEXTDATA, scale_factor);
 #endif
 }

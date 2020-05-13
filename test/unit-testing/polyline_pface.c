@@ -30,12 +30,12 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, first_vertex,
                     first_vertex);
-      CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, last_vertex, last_vertex);
+      CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, last_vertex);
     }
   if (version >= R_2004)
     {
       CHK_ENTITY_HV (polyline_pface, POLYLINE_PFACE, vertex, vertex,
                      num_owned);
     }
-  CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, seqend, seqend);
+  CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, seqend);
 }

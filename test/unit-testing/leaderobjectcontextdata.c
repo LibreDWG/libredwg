@@ -24,7 +24,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, is_default, B);
   CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, in_dwg, B);
-  CHK_ENTITY_H (_obj, LEADEROBJECTCONTEXTDATA, scale, scale);
+  CHK_ENTITY_H (_obj, LEADEROBJECTCONTEXTDATA, scale);
 
   CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, num_points, BL);
   if (!dwg_dynapi_entity_value (_obj, "LEADEROBJECTCONTEXTDATA", "points", &points, NULL))
@@ -33,9 +33,9 @@ api_process (dwg_object *obj)
     for (i = 0; i < _obj->num_points; i++)
       ok ("LEADEROBJECTCONTEXTDATA.points[%d]: (%f, %f, %f)", i, points[i].x,
             points[i].y, points[i].z);
-  CHK_ENTITY_3RD (_obj, LEADEROBJECTCONTEXTDATA, x_direction, x_direction);
-  CHK_ENTITY_3RD (_obj, LEADEROBJECTCONTEXTDATA, inspt_offset, inspt_offset);
-  CHK_ENTITY_3RD (_obj, LEADEROBJECTCONTEXTDATA, endptproj, endptproj);
+  CHK_ENTITY_3RD (_obj, LEADEROBJECTCONTEXTDATA, x_direction);
+  CHK_ENTITY_3RD (_obj, LEADEROBJECTCONTEXTDATA, inspt_offset);
+  CHK_ENTITY_3RD (_obj, LEADEROBJECTCONTEXTDATA, endptproj);
   CHK_ENTITY_TYPE (_obj, LEADEROBJECTCONTEXTDATA, b290, B);
 #endif
 }

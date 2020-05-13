@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_attrib *attrib = dwg_object_to_ATTRIB (obj);
 
-  CHK_ENTITY_UTF8TEXT (attrib, ATTRIB, text_value, text_value);
+  CHK_ENTITY_UTF8TEXT (attrib, ATTRIB, text_value);
   if (version < R_2007
       && (strcmp (dwg_ent_attrib_get_text (attrib, &error), text_value)
           || error))
@@ -27,7 +27,7 @@ api_process (dwg_object *obj)
   dwg_ent_attrib_get_insertion_point (attrib, &pt2d, &error);
   if (error || memcmp (&ins_pt, &pt2d, sizeof (ins_pt)))
     fail ("old API dwg_ent_attrib_get_insertion_point");
-  CHK_ENTITY_2RD (attrib, ATTRIB, alignment_pt, alignment_pt);
+  CHK_ENTITY_2RD (attrib, ATTRIB, alignment_pt);
   CHK_ENTITY_3RD (attrib, ATTRIB, extrusion, ext);
   dwg_ent_attrib_get_extrusion (attrib, &pt3d, &error);
   if (error || memcmp (&ext, &pt3d, sizeof (ext)))
@@ -60,5 +60,5 @@ api_process (dwg_object *obj)
   bsvalue = dwg_ent_attrib_get_horiz_alignment (attrib, &error);
   if (error || horiz_align != bsvalue)
     fail ("old API dwg_ent_attrib_horiz_alignment");
-  CHK_ENTITY_H (attrib, ATTRIB, style, style);
+  CHK_ENTITY_H (attrib, ATTRIB, style);
 }

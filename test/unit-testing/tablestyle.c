@@ -29,7 +29,7 @@ api_process (dwg_object *obj)
       return;
     }
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, class_version, BL);
-  CHK_ENTITY_UTF8TEXT (tblstyle, TABLESTYLE, name, name);
+  CHK_ENTITY_UTF8TEXT (tblstyle, TABLESTYLE, name);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, flow_direction, BS);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, horiz_cell_margin, BD);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, vert_cell_margin, BD);

@@ -30,9 +30,9 @@ api_process (dwg_object *obj)
   dwg_obj_renderentry *_obj = dwg_object_to_RENDERENTRY (obj);
 
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, class_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERENTRY, image_file_name, image_file_name);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERENTRY, preset_name, preset_name);
-  CHK_ENTITY_UTF8TEXT (_obj, RENDERENTRY, view_name, view_name);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERENTRY, image_file_name);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERENTRY, preset_name);
+  CHK_ENTITY_UTF8TEXT (_obj, RENDERENTRY, view_name);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, dimension_x, BL);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, dimension_y, BL);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_year, BS);

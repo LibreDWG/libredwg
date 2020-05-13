@@ -23,9 +23,9 @@ api_process (dwg_object *obj)
 
   dwg_ent_wipeout *wipeout = dwg_object_to_WIPEOUT (obj);
 
-  CHK_ENTITY_3RD (wipeout, WIPEOUT, pt0, pt0);
-  CHK_ENTITY_3RD (wipeout, WIPEOUT, uvec, uvec);
-  CHK_ENTITY_3RD (wipeout, WIPEOUT, vvec, vvec);
+  CHK_ENTITY_3RD (wipeout, WIPEOUT, pt0);
+  CHK_ENTITY_3RD (wipeout, WIPEOUT, uvec);
+  CHK_ENTITY_3RD (wipeout, WIPEOUT, vvec);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, display_props, BS);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, clipping, B);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, brightness, RC);
@@ -44,6 +44,6 @@ api_process (dwg_object *obj)
           ok ("WIPEOUT.clip_verts[%d]: (%f, %f)", i, clip_verts[i].x, clip_verts[i].y);
         }
     }
-  CHK_ENTITY_H (wipeout, WIPEOUT, imagedef, imagedef);
-  CHK_ENTITY_H (wipeout, WIPEOUT, imagedefreactor, imagedefreactor);
+  CHK_ENTITY_H (wipeout, WIPEOUT, imagedef);
+  CHK_ENTITY_H (wipeout, WIPEOUT, imagedefreactor);
 }

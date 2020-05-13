@@ -15,6 +15,6 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, POINTPATH, class_version, BS);
   CHK_ENTITY_MAX (_obj, POINTPATH, class_version, BS, 3);
-  CHK_ENTITY_3RD (_obj, POINTPATH, point, point);
+  CHK_ENTITY_3RD (_obj, POINTPATH, point);
 #endif
 }

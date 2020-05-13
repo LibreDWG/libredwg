@@ -67,13 +67,13 @@ api_process (dwg_object *obj)
 
   // AcDbRenderSettings
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, class_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, name, name);
+  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, name);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, fog_enabled, B);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, fog_background_enabled, B);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, backfaces_enabled, B);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, environ_image_enabled, B);
-  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, environ_image_filename, environ_image_filename);
-  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, description, description);
+  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, environ_image_filename);
+  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, description);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, display_index, BL);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, has_predefined, B);
 
@@ -117,7 +117,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, diagnostics_photon_mode, BS);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, diagnostics_bsp_mode, BS);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, export_mi_enabled, B , export_mi_enabled);
-  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, mr_description, mr_description);
+  CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, mr_description);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, tile_size, BL);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, tile_order, BS);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, memory_limit, BL);

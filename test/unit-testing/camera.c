@@ -9,5 +9,5 @@ api_process (dwg_object *obj)
   BITCODE_H view;
 
   dwg_ent_camera *camera = dwg_object_to_CAMERA (obj);
-  CHK_ENTITY_H (camera, CAMERA, view, view);
+  CHK_ENTITY_H (camera, CAMERA, view);
 }

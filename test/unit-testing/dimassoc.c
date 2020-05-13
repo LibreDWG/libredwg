@@ -23,7 +23,7 @@ api_process (dwg_object *obj)
   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
     return;
 
-  CHK_ENTITY_H (dimassoc, DIMASSOC, dimensionobj, dimensionobj);
+  CHK_ENTITY_H (dimassoc, DIMASSOC, dimensionobj);
   CHK_ENTITY_TYPE (dimassoc, DIMASSOC, associativity, BLx, associativity);
   CHK_ENTITY_MAX (dimassoc, DIMASSOC, associativity, BL, 15);
   CHK_ENTITY_TYPE (dimassoc, DIMASSOC, trans_space_flag, B);
@@ -86,6 +86,6 @@ api_process (dwg_object *obj)
     }
 
   //CHK_ENTITY_TYPE (dimassoc, DIMASSOC, intsect_gsmarker, BL);
-  //CHK_ENTITY_H (dimassoc, DIMASSOC, xrefobj, xrefobj);
-  //CHK_ENTITY_H (dimassoc, DIMASSOC, intsectxrefobj, intsectxrefobj);
+  //CHK_ENTITY_H (dimassoc, DIMASSOC, xrefobj);
+  //CHK_ENTITY_H (dimassoc, DIMASSOC, intsectxrefobj);
 }

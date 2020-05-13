@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, flag, BS);
   if (dwg_ent_lwpline_get_flag (lwpline, &error) != flag || error)
     fail ("old API dwg_ent_lwpline_get_flag");
-  CHK_ENTITY_3RD (lwpline, LWPOLYLINE, extrusion, extrusion);
+  CHK_ENTITY_3RD (lwpline, LWPOLYLINE, extrusion);
   dwg_ent_lwpline_get_extrusion (lwpline, &pt3d, &error);
   if (error || memcmp (&extrusion, &pt3d, sizeof (extrusion)))
     fail ("old API dwg_ent_lwpline_get_extrusion");

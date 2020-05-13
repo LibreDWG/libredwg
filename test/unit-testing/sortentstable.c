@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
 
   dwg_obj_sortentstable *_obj = dwg_object_to_SORTENTSTABLE (obj);
 
-  CHK_ENTITY_H (_obj, SORTENTSTABLE, dictionary, dictionary);
+  CHK_ENTITY_H (_obj, SORTENTSTABLE, dictionary);
   CHK_ENTITY_TYPE (_obj, SORTENTSTABLE, num_ents, BL);
   if (!dwg_dynapi_entity_value (_obj, "SORTENTSTABLE", "ents", &ents, NULL))
     fail ("SORTENTSTABLE.ents");

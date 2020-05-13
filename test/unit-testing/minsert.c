@@ -17,8 +17,8 @@ api_process (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT (obj);
 
-  CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, ins_pt, ins_pt);
-  CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, scale, scale);
+  CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, ins_pt);
+  CHK_ENTITY_3RD_W_OLD (minsert, MINSERT, scale);
   CHK_ENTITY_TYPE (minsert, MINSERT, scale_flag, BB);
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, rotation, BD);
   CHK_ENTITY_MAX (minsert, MINSERT, rotation, BD, MAX_ANGLE);
@@ -30,19 +30,19 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, col_spacing, BD);
   CHK_ENTITY_TYPE_W_OLD (minsert, MINSERT, row_spacing, BD);
 
-  CHK_ENTITY_H (minsert, MINSERT, block_header, block_header);
+  CHK_ENTITY_H (minsert, MINSERT, block_header);
   if (minsert->has_attribs)
     {
       if (version <= R_2000)
         {
-          CHK_ENTITY_H (minsert, MINSERT, first_attrib, first_attrib);
-          CHK_ENTITY_H (minsert, MINSERT, last_attrib, last_attrib);
+          CHK_ENTITY_H (minsert, MINSERT, first_attrib);
+          CHK_ENTITY_H (minsert, MINSERT, last_attrib);
         }
       if (version >= R_2004)
         {
           CHK_ENTITY_HV (minsert, MINSERT, attrib_handles, attrib_handles,
                          num_owned);
         }
-      CHK_ENTITY_H (minsert, MINSERT, seqend, seqend);
+      CHK_ENTITY_H (minsert, MINSERT, seqend);
     }
 }

@@ -17,12 +17,12 @@ api_process (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_rtext *rtext = dwg_object_to_RTEXT (obj);
 
-  CHK_ENTITY_UTF8TEXT (rtext, RTEXT, text_value, text_value);  
-  CHK_ENTITY_3RD (rtext, RTEXT, pt, pt);
-  CHK_ENTITY_3RD (rtext, RTEXT, extrusion, extrusion);  
+  CHK_ENTITY_UTF8TEXT (rtext, RTEXT, text_value);  
+  CHK_ENTITY_3RD (rtext, RTEXT, pt);
+  CHK_ENTITY_3RD (rtext, RTEXT, extrusion);  
   CHK_ENTITY_TYPE (rtext, RTEXT, rotation, BD);
   CHK_ENTITY_MAX  (rtext, RTEXT, rotation, BD, MAX_ANGLE);
   CHK_ENTITY_TYPE (rtext, RTEXT, height, BD);  
   CHK_ENTITY_TYPE (rtext, RTEXT, flags, BS);
-  CHK_ENTITY_H (rtext, RTEXT, style, style);
+  CHK_ENTITY_H (rtext, RTEXT, style);
 }

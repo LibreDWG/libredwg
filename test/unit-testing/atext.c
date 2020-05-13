@@ -47,19 +47,19 @@ api_process (dwg_object *obj)
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_atext *atext = dwg_object_to_ATEXT (obj);
 
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, text_value, text_value);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, text_size, text_size);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, xscale, xscale);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, char_spacing, char_spacing);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, style, style);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, t2, t2);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, t3, t3);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, offset_from_arc, offset_from_arc);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, right_offset, right_offset);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, left_offset, left_offset);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, text_value);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, text_size);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, xscale);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, char_spacing);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, style);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, t2);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, t3);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, offset_from_arc);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, right_offset);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, left_offset);
   
-  CHK_ENTITY_2RD (atext, ATEXT, center, center);
-  CHK_ENTITY_3RD (atext, ATEXT, extrusion, extrusion);
+  CHK_ENTITY_2RD (atext, ATEXT, center);
+  CHK_ENTITY_3RD (atext, ATEXT, extrusion);
   CHK_ENTITY_TYPE (atext, ATEXT, radius, BD);
   CHK_ENTITY_TYPE (atext, ATEXT, start_angle, BD);
   CHK_ENTITY_MAX (atext, ATEXT, start_angle, BD, 6.284);
@@ -80,5 +80,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (atext, ATEXT, wizard_flag, BS);
   
   CHK_ENTITY_TYPE (atext, ATEXT, alignment, BS);
-  CHK_ENTITY_UTF8TEXT (atext, ATEXT, style, style);
+  CHK_ENTITY_UTF8TEXT (atext, ATEXT, style);
 }

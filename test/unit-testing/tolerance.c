@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
 
   if (tolerance->text_value)
     {
-      CHK_ENTITY_UTF8TEXT (tolerance, TOLERANCE, text_value, text_value);
+      CHK_ENTITY_UTF8TEXT (tolerance, TOLERANCE, text_value);
       /*if (version < R_2007 &&
         (strcmp (dwg_ent_tolerance_get_text_value (tolerance, &error),
         text_value)
@@ -26,7 +26,7 @@ api_process (dwg_object *obj)
     }
   else
     ok ("empty TOLERANCE.text_value");
-  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, ins_pt, ins_pt);
+  CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, ins_pt);
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, extrusion, ext);
   CHK_ENTITY_3RD_W_OLD (tolerance, TOLERANCE, x_direction, x_dir);
   if (version <= R_14)
@@ -35,5 +35,5 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, height, BD);
       CHK_ENTITY_TYPE_W_OLD (tolerance, TOLERANCE, dimgap, BD);
     }
-  CHK_ENTITY_H (tolerance, TOLERANCE, dimstyle, dimstyle);
+  CHK_ENTITY_H (tolerance, TOLERANCE, dimstyle);
 }

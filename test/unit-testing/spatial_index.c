@@ -14,5 +14,5 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, SPATIAL_INDEX, timestamp1, BL);
   CHK_ENTITY_TYPE (_obj, SPATIAL_INDEX, timestamp2, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, SPATIAL_INDEX, unknown, unknown);
+  CHK_ENTITY_UTF8TEXT (_obj, SPATIAL_INDEX, unknown);
 }

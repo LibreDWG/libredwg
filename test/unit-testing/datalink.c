@@ -33,10 +33,10 @@ api_process (dwg_object *obj)
   dwg_obj_datalink *_obj = dwg_object_to_DATALINK (obj);
 
   CHK_ENTITY_TYPE (_obj, DATALINK, class_version, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, data_adapter, data_adapter);
-  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, description, description);
-  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, tooltip, tooltip);
-  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, connection_string, connection_string);
+  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, data_adapter);
+  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, description);
+  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, tooltip);
+  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, connection_string);
 
   CHK_ENTITY_TYPE (_obj, DATALINK, option, BL);
   CHK_ENTITY_TYPE (_obj, DATALINK, update_option, BL);
@@ -50,7 +50,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DATALINK, msec, BS);
   CHK_ENTITY_TYPE (_obj, DATALINK, path_option, BS);
   CHK_ENTITY_TYPE (_obj, DATALINK, bl93, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, update_status, update_status);
+  CHK_ENTITY_UTF8TEXT (_obj, DATALINK, update_status);
   CHK_ENTITY_TYPE (_obj, DATALINK, num_customdata, BL);
   if (!dwg_dynapi_entity_value (_obj, "DATALINK", "customdata", &customdata, NULL))
     fail ("DATALINK.customdata");
@@ -65,7 +65,7 @@ api_process (dwg_object *obj)
             CHK_SUBCLASS_UTF8TEXT (customdata[i], DATALINK_customdata, text);
           }
     }
-  CHK_ENTITY_H (_obj, DATALINK, hardowner, hardowner);
+  CHK_ENTITY_H (_obj, DATALINK, hardowner);
 
 #endif
 }

@@ -44,7 +44,7 @@ api_process (dwg_object *obj)
       || error)
     fail ("old API dwg_ent_3dsolid_get_point_present");
 
-  CHK_ENTITY_3RD (_3dsolid, 3DSOLID, point, point);
+  CHK_ENTITY_3RD (_3dsolid, 3DSOLID, point);
   dwg_ent_3dsolid_get_point (_3dsolid, &pt3d, &error);
   if (error || memcmp (&point, &pt3d, sizeof (point)))
     fail ("old API dwg_ent_3dsolid_get_point");
@@ -89,6 +89,6 @@ api_process (dwg_object *obj)
       && _3dsolid->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, unknown_2007, BL);
-      CHK_ENTITY_H (_3dsolid, 3DSOLID, history_id, history_id);
+      CHK_ENTITY_H (_3dsolid, 3DSOLID, history_id);
     }
 }

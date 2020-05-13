@@ -39,7 +39,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (body, BODY, point_present, B);
   if (dwg_ent_body_get_point_present (body, &error) != point_present || error)
     fail ("old API dwg_ent_body_get_point_present");
-  CHK_ENTITY_3RD (body, BODY, point, point);
+  CHK_ENTITY_3RD (body, BODY, point);
   dwg_ent_body_get_point (body, &pt3d, &error);
   if (error || memcmp (&point, &pt3d, sizeof (point)))
     fail ("old API dwg_ent_body_get_point");
@@ -79,6 +79,6 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2007 && body->history_id) // if it did not fail before
     {
       CHK_ENTITY_TYPE (body, BODY, unknown_2007, BL);
-      CHK_ENTITY_H (body, BODY, history_id, history_id);
+      CHK_ENTITY_H (body, BODY, history_id);
     }
 }
