@@ -9124,7 +9124,7 @@ RC
 @item selection_marker
 BL
 @item color
-BS
+BL
 @item acis_index
 BL
 @item num_points

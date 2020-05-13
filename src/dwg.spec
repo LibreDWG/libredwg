@@ -1696,12 +1696,14 @@ DWG_ENTITY (SPLINE)
 
 DWG_ENTITY_END
 
-//TODO: 37, 38 and 39 are ACIS entities
-
+// 37, 38 and 39 are ACIS entities
 #define WIRESTRUCT_fields(name)                       \
   FIELD_RC (name.type, 0);                            \
   FIELD_BL (name.selection_marker, 0);                \
-  FIELD_BS (name.color, 0);                           \
+  PRE (R_2004) {                                      \
+    FIELD_CAST (name.color, BS, BL, 0);               \
+  } else {                                            \
+    FIELD_BL (name.color, 0); }                       \
   FIELD_BL (name.acis_index, 0);                      \
   /* TODO: align num_points to 255 */                 \
   FIELD_BL (name.num_points, 0);                      \
@@ -1713,7 +1715,7 @@ DWG_ENTITY_END
       FIELD_3BD (name.axis_y, 0);                     \
       FIELD_3BD (name.axis_z, 0);                     \
       FIELD_3BD (name.translation, 0);                \
-      FIELD_BT (name.scale, 0);                       \
+      FIELD_3BD (name.scale, 0);                      \
       FIELD_B (name.has_rotation, 0);                 \
       FIELD_B (name.has_reflection, 0);               \
       FIELD_B (name.has_shear, 0);                    \

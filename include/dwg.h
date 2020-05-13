@@ -1688,7 +1688,7 @@ typedef struct _dwg_3DSOLID_wire
   struct _dwg_entity_3DSOLID *parent;
   BITCODE_RC type;
   BITCODE_BL selection_marker;
-  BITCODE_BS color;
+  BITCODE_BL color;
   BITCODE_BL acis_index;
   BITCODE_BL num_points;
   BITCODE_3BD* points;
