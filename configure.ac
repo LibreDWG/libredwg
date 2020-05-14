@@ -180,7 +180,7 @@ if test x$enable_shared = xyes -a x$ac_compiler_gnu = xyes; then
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fno-common -fvisibility=hidden -fno-semantic-interposition])
 else
-  AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release]
+  AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fno-common -fvisibility=hidden])
 fi
 dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
