@@ -2239,9 +2239,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (j < (int)o->num_paths
                   && k < (int)o->paths[j].num_segs_or_paths)
                 {
-                  o->paths[j].segs[k].type_status = pair->value.i;
+                  o->paths[j].segs[k].curve_type = pair->value.i;
                   LOG_TRACE (
-                      "HATCH.paths[%d].segs[%d].type_status = %d [RC 72]\n", j,
+                      "HATCH.paths[%d].segs[%d].curve_type = %d [RC 72]\n", j,
                       k, pair->value.i);
                 }
             }
@@ -2322,7 +2322,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 1: /* LINE */
               o->paths[j].segs[k].first_endpoint.x = pair->value.d;
@@ -2347,9 +2347,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               //           j, k, l, pair->value.d);
               break;
             default:
-              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d "
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].curve_type %d "
                         "for DXF %d",
-                        j, k, o->paths[j].segs[k].type_status, pair->code);
+                        j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
       else if (pair->code == 11 && !is_plpath && !o->num_seeds)
@@ -2358,7 +2358,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 1: /* LINE */
               o->paths[j].segs[k].second_endpoint.x = pair->value.d;
@@ -2384,9 +2384,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               //           j, k, l, pair->value.d);
               break;
             default:
-              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d "
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].curve_type %d "
                         "for DXF %d",
-                        j, k, o->paths[j].segs[k].type_status, pair->code);
+                        j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
       else if (pair->code == 20 && !is_plpath && !o->num_seeds)
@@ -2395,7 +2395,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 1: /* LINE */
               o->paths[j].segs[k].first_endpoint.y = pair->value.d;
@@ -2421,9 +2421,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->value.d);
               break;
             default:
-              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d "
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].curve_type %d "
                         "for DXF %d",
-                        j, k, o->paths[j].segs[k].type_status, pair->code);
+                        j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
       else if (pair->code == 21 && !is_plpath && !o->num_seeds
@@ -2433,7 +2433,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 1: /* LINE */
               o->paths[j].segs[k].second_endpoint.y = pair->value.d;
@@ -2457,9 +2457,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->value.d);
               break;
             default:
-              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d "
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].curve_type %d "
                         "for DXF %d",
-                        j, k, o->paths[j].segs[k].type_status, pair->code);
+                        j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
       else if (pair->code == 40 && !is_plpath)
@@ -2468,7 +2468,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 2: /* CIRCULAR ARC */
               o->paths[j].segs[k].radius = pair->value.d;
@@ -2502,9 +2502,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             default:
-              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d "
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].curve_type %d "
                         "for DXF %d",
-                        j, k, o->paths[j].segs[k].type_status, pair->code);
+                        j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
       else if (pair->code == 50 && !is_plpath)
@@ -2513,7 +2513,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 2: /* CIRCULAR ARC */
             case 3: /* ELLIPTICAL ARC */
@@ -2522,9 +2522,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          j, k, pair->value.d);
               break;
             default:
-              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d "
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].curve_type %d "
                         "for DXF %d",
-                        j, k, o->paths[j].segs[k].type_status, pair->code);
+                        j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
       else if (pair->code == 51 && !is_plpath)
@@ -2533,7 +2533,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 2: /* CIRCULAR ARC */
             case 3: /* ELLIPTICAL ARC */
@@ -2542,9 +2542,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          j, k, pair->value.d);
               break;
             default:
-              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].type_status %d "
+              LOG_WARN ("Unhandled HATCH.paths[%d].segs[%d].curve_type %d "
                         "for DXF %d",
-                        j, k, o->paths[j].segs[k].type_status, pair->code);
+                        j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
       else if (pair->code == 73 && !is_plpath)
@@ -2553,7 +2553,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (k >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          switch (o->paths[j].segs[k].type_status)
+          switch (o->paths[j].segs[k].curve_type)
             {
             case 2: /* CIRCULAR ARC */
             case 3: /* ELLIPTICAL ARC */
@@ -2605,7 +2605,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j >= 0);
           assert (j < (int)o->num_paths);
           assert (k < (int)o->paths[j].num_segs_or_paths);
-          if (k < 0 || o->paths[j].segs[k].type_status != 4)
+          if (k < 0 || o->paths[j].segs[k].curve_type != 4)
             {
               o->paths[j].num_boundary_handles = pair->value.l;
               o->num_boundary_handles += pair->value.l;

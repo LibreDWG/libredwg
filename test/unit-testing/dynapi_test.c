@@ -11010,21 +11010,6 @@ static int test_HATCH (const Dwg_Object *obj)
     hatch->angle--;
   }
   {
-    BITCODE_B associative;
-    if (dwg_dynapi_entity_value (hatch, "HATCH", "associative", &associative, NULL)
-        && associative == hatch->associative)
-      pass ();
-    else
-      fail ("HATCH.associative [B] " FORMAT_B " != " FORMAT_B "", hatch->associative, associative);
-    associative++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "associative", &associative, 0)
-        && associative == hatch->associative)
-      pass ();
-    else
-      fail ("HATCH.associative [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->associative, associative);
-    hatch->associative--;
-  }
-  {
     BITCODE_H* boundary_handles;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "num_boundary_handles", &count, NULL)
@@ -11163,6 +11148,21 @@ static int test_HATCH (const Dwg_Object *obj)
     hatch->has_derived--;
   }
   {
+    BITCODE_B is_associative;
+    if (dwg_dynapi_entity_value (hatch, "HATCH", "is_associative", &is_associative, NULL)
+        && is_associative == hatch->is_associative)
+      pass ();
+    else
+      fail ("HATCH.is_associative [B] " FORMAT_B " != " FORMAT_B "", hatch->is_associative, is_associative);
+    is_associative++;
+    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "is_associative", &is_associative, 0)
+        && is_associative == hatch->is_associative)
+      pass ();
+    else
+      fail ("HATCH.is_associative [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->is_associative, is_associative);
+    hatch->is_associative--;
+  }
+  {
     BITCODE_BL is_gradient_fill;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "is_gradient_fill", &is_gradient_fill, NULL)
         && is_gradient_fill == hatch->is_gradient_fill)
@@ -11176,6 +11176,21 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.is_gradient_fill [BL] set+1 %u != %u", hatch->is_gradient_fill, is_gradient_fill);
     hatch->is_gradient_fill--;
+  }
+  {
+    BITCODE_B is_solid_fill;
+    if (dwg_dynapi_entity_value (hatch, "HATCH", "is_solid_fill", &is_solid_fill, NULL)
+        && is_solid_fill == hatch->is_solid_fill)
+      pass ();
+    else
+      fail ("HATCH.is_solid_fill [B] " FORMAT_B " != " FORMAT_B "", hatch->is_solid_fill, is_solid_fill);
+    is_solid_fill++;
+    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "is_solid_fill", &is_solid_fill, 0)
+        && is_solid_fill == hatch->is_solid_fill)
+      pass ();
+    else
+      fail ("HATCH.is_solid_fill [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->is_solid_fill, is_solid_fill);
+    hatch->is_solid_fill--;
   }
   {
     BITCODE_T name;
@@ -11364,21 +11379,6 @@ static int test_HATCH (const Dwg_Object *obj)
     else
       fail ("HATCH.single_color_gradient [BL] set+1 %u != %u", hatch->single_color_gradient, single_color_gradient);
     hatch->single_color_gradient--;
-  }
-  {
-    BITCODE_B solid_fill;
-    if (dwg_dynapi_entity_value (hatch, "HATCH", "solid_fill", &solid_fill, NULL)
-        && solid_fill == hatch->solid_fill)
-      pass ();
-    else
-      fail ("HATCH.solid_fill [B] " FORMAT_B " != " FORMAT_B "", hatch->solid_fill, solid_fill);
-    solid_fill++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "solid_fill", &solid_fill, 0)
-        && solid_fill == hatch->solid_fill)
-      pass ();
-    else
-      fail ("HATCH.solid_fill [B] set+1 " FORMAT_B " != " FORMAT_B "", hatch->solid_fill, solid_fill);
-    hatch->solid_fill--;
   }
   {
     BITCODE_BS style;

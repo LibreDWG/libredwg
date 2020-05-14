@@ -1870,9 +1870,9 @@ BD,	DXF 30
 BE,	DXF 210
 @item name
 T,	DXF 2
-@item solid_fill
+@item is_solid_fill
 B,	DXF 70
-@item associative
+@item is_associative
 B,	DXF 71
 @item num_paths
 BL,	DXF 91
@@ -10113,7 +10113,7 @@ BL,	DXF 97
 
 @item parent
 struct _dwg_HATCH_Path*
-@item type_status
+@item curve_type
 RC,	DXF 72
 @item first_endpoint
 2RD,	DXF 10

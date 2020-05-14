@@ -1186,11 +1186,12 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->code = bit_read_RC (dat);
   if (pos == dat->byte)
     return DWG_ERR_INVALIDHANDLE;
-  handle->size = handle->code & 0x0f;
+  handle->size = handle->code & 0xf;
   handle->code = (handle->code & 0xf0) >> 4;
   handle->is_global = 0;
   handle->value = 0;
 
+  // size must not exceed 8
   if (handle->size > sizeof(BITCODE_RC *) || handle->code > 14)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -1229,6 +1230,11 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 }
 
 /** Write handle-references.
+ *  TODO
+ *  seperate SoftPtr:   BB 0 + RLL
+ *           HardPtr:   BB 1 + RLL
+ *           SoftOwner: BB 2 + RLL
+ *           HardOwner: BB 3 + RLL
  */
 void
 bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)

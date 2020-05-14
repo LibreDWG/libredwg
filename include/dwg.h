@@ -2620,7 +2620,7 @@ typedef struct _dwg_HATCH_ControlPoint
 typedef struct _dwg_HATCH_PathSeg
 {
   struct _dwg_HATCH_Path *parent;
-  BITCODE_RC type_status; // i.e. edge_type: 1-4
+  BITCODE_RC curve_type; // i.e. curve_type: 1-4
   // could be a union
   /* LINE */
   BITCODE_2RD first_endpoint;
@@ -2663,7 +2663,8 @@ typedef struct _dwg_HATCH_Path
 {
   struct _dwg_entity_HATCH *parent;
   /* Segment path */
-  BITCODE_BL flag;
+  BITCODE_BL flag; /* 2: is_polyline, 4: is_derived, 8: is_textbox,
+                      0x20: is_open, 0x80: is_textisland, 0x100: is_duplicate, 0x200: is_annotative */
   BITCODE_BL num_segs_or_paths;
   Dwg_HATCH_PathSeg* segs;
 
@@ -2697,14 +2698,14 @@ typedef struct _dwg_entity_HATCH
   BITCODE_BD gradient_tint;
   BITCODE_BL num_colors;
   Dwg_HATCH_Color* colors;
-  BITCODE_TV gradient_name;
+  BITCODE_T gradient_name; /* 1: SPHERICAL, 2: HEMISPHERICAL, 3: CURVED, 4: LINEAR, 5: CYLINDER */
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
   BITCODE_TV name;
-  BITCODE_B solid_fill;
-  BITCODE_B associative;
+  BITCODE_B is_solid_fill;
+  BITCODE_B is_associative;
   BITCODE_BL num_paths;
-  Dwg_HATCH_Path* paths;
+  Dwg_HATCH_Path* paths; // also named loop
   BITCODE_BS style;
   BITCODE_BS pattern_type;
   BITCODE_BD angle;

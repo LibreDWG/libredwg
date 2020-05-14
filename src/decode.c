@@ -1124,7 +1124,7 @@ classes_section:
       klass->appname = bit_read_TV (dat);
       klass->cppname = bit_read_TV (dat);
       klass->dxfname = bit_read_TV (dat);
-      klass->is_zombie = bit_read_B (dat);
+      klass->is_zombie = bit_read_B (dat); // was_a_proxy
       // 1f2 for entities, 1f3 for objects
       klass->item_class_id = bit_read_BS (dat);
       LOG_TRACE ("Class %d 0x%x %s\n"

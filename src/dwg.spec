@@ -3725,7 +3725,7 @@ int DWG_FUNC_N (ACTION,_HATCH_gradientfill)(
   FIELD_BL (reserved, 451);
   FIELD_BD (gradient_angle, 460);
   FIELD_BD (gradient_shift, 461);
-  FIELD_BL (single_color_gradient, 452);
+  FIELD_BL (single_color_gradient, 452); //bool
   FIELD_BD (gradient_tint, 462);
   FIELD_BL (num_colors, 453); //default: 2
   if (FIELD_VALUE (is_gradient_fill) != 0 && FIELD_VALUE (num_colors) > 1000)
@@ -3778,8 +3778,8 @@ DWG_ENTITY (HATCH)
   }
   FIELD_3BD (extrusion, 210);
   FIELD_T (name, 2); //default: SOLID
-  FIELD_B (solid_fill, 70); //default: 1, pattern_fill: 0
-  FIELD_B (associative, 71);
+  FIELD_B (is_solid_fill, 70); //default: 1, pattern_fill: 0
+  FIELD_B (is_associative, 71);
   FIELD_BL (num_paths, 91);
   VALUEOUTOFBOUNDS (num_paths, 10000)
   REPEAT (num_paths, paths, Dwg_HATCH_Path)
@@ -3799,8 +3799,8 @@ DWG_ENTITY (HATCH)
 #define segs paths[rcount1].segs
           REPEAT2 (paths[rcount1].num_segs_or_paths, segs, Dwg_HATCH_PathSeg)
           REPEAT_BLOCK
-              SUB_FIELD_RC (segs[rcount2],type_status, 72); // i.e edge_type
-              switch (FIELD_VALUE (segs[rcount2].type_status))
+              SUB_FIELD_RC (segs[rcount2],curve_type, 72); // 1-4
+              switch (FIELD_VALUE (segs[rcount2].curve_type))
                 {
                     case 1: /* LINE */
                       SUB_FIELD_2RD (segs[rcount2],first_endpoint, 10);
@@ -3867,10 +3867,10 @@ DWG_ENTITY (HATCH)
                         }
                       break;
                     default:
-                      LOG_ERROR ("Invalid HATCH.type_status %d\n",
-                                FIELD_VALUE (segs[rcount2].type_status));
+                      LOG_ERROR ("Invalid HATCH.curve_type %d\n",
+                                FIELD_VALUE (segs[rcount2].curve_type));
                       DEBUG_HERE_OBJ
-                      _obj->segs[rcount2].type_status = 0;
+                      _obj->segs[rcount2].curve_type = 0;
                       JSON_END_REPEAT (segs);
                       JSON_END_REPEAT (paths);
                       return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -3925,7 +3925,7 @@ DWG_ENTITY (HATCH)
 #endif
   FIELD_BS (style, 75); // 0=normal (odd parity); 1=outer; 2=whole
   FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
-  if (!FIELD_VALUE (solid_fill))
+  if (!FIELD_VALUE (is_solid_fill))
     {
       FIELD_BD (angle, 52);
       FIELD_BD (scale_spacing, 41); //default 1.0

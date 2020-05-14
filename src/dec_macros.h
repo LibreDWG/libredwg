@@ -633,6 +633,9 @@
       }                                                                       \
     FIELD_2PT_TRACE (nam, 2RD, dxf);                                          \
   }
+// FIXME: does this even exist? normal 2DPOINT is 2RD
+//   HATCH.deflines.pt0,offset LAYOUT.plot_origin,plot_window_{ll,ur}, LAYOUT.paper_image_origin
+//   GEODATA.northdir, GEODATA.refpt0,1 .zero1, zero2 BACKGROUND.offset,scale
 #define FIELD_2BD(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam.x = bit_read_BD (dat);                                          \
@@ -671,6 +674,7 @@
   }
 //    FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+1);
 //    FIELDG(nam.z, BD, dxf+2); }
+#define FIELD_2DPOINT(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
 #define FIELD_3DVECTOR(nam, dxf) FIELD_3BD_1 (nam, dxf)
 #define FIELD_TIMEBLL(nam, dxf)                                               \
