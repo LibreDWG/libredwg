@@ -1025,6 +1025,9 @@ bit_read_BE (Bit_Chain *restrict dat, double *restrict x, double *restrict y,
       *x = bit_read_BD (dat);
       *y = bit_read_BD (dat);
       *z = bit_read_BD (dat);
+      // normalize
+      if (*x == 0.0 && *y == 0.0)
+        *z = (*z <= 0.0) ? -1.0 : 1.0;
     }
 }
 
@@ -1040,6 +1043,9 @@ bit_write_BE (Bit_Chain *dat, double x, double y, double z)
       bit_write_B (dat, 0);
       bit_write_BD (dat, x);
       bit_write_BD (dat, y);
+      // normalize
+      if (x == 0.0 && y == 0.0)
+        z = (z <= 0.0) ? -1.0 : 1.0;
       bit_write_BD (dat, z);
     }
 }
@@ -1156,13 +1162,18 @@ bit_read_BT (Bit_Chain *dat)
 void
 bit_write_BT (Bit_Chain *dat, double value)
 {
-  if (dat->version >= R_2000 && value == 0.0)
-    bit_write_B (dat, 1);
-  else
+  if (dat->version >= R_2000)
     {
-      bit_write_B (dat, 0);
-      bit_write_BD (dat, value);
+      if (value == 0.0)
+        bit_write_B (dat, 1);
+      else
+        {
+          bit_write_B (dat, 0);
+          bit_write_BD (dat, value);
+        }
     }
+  else
+    bit_write_BD (dat, value);
 }
 
 /** Read handle-references. Returns error code: DWG_ERR_INVALIDHANDLE
