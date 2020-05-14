@@ -3776,7 +3776,9 @@ DWG_ENTITY (HATCH)
   } else {
     FIELD_BD (elevation, 30);
   }
+  ENCODER { normalize_BE (FIELD_VALUE (extrusion)); }
   FIELD_3BD (extrusion, 210);
+  DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
   FIELD_T (name, 2); //default: SOLID
   FIELD_B (is_solid_fill, 70); //default: 1, pattern_fill: 0
   FIELD_B (is_associative, 71);

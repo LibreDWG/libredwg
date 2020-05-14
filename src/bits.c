@@ -1050,6 +1050,13 @@ bit_write_BE (Bit_Chain *dat, double x, double y, double z)
     }
 }
 
+void
+normalize_BE (BITCODE_3BD ext)
+{
+  if (ext.x == 0.0 && ext.y == 0.0)
+    ext.z = (ext.z <= 0.0) ? -1.0 : 1.0;
+}
+
 /** Read bit-double with default.
  */
 BITCODE_DD

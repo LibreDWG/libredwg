@@ -1731,6 +1731,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 230)
         {
           _o->extrusion.z = pair->value.d;
+          if (_o->extrusion.x == 0.0 && _o->extrusion.y == 0.0)
+            _o->extrusion.z = (_o->extrusion.z <= 0.0) ? -1.0 : 1.0;
           if (_o->extrusion.x != 0.0 || _o->extrusion.y != 0.0 || _o->extrusion.z != 1.0)
             _o->flag |= 1;
           LOG_TRACE ("LWPOLYLINE.extrusion = (%f, %f, %f) [BE 210]\n",

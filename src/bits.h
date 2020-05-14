@@ -181,6 +181,7 @@ void bit_read_BE (Bit_Chain *restrict dat, double *restrict x,
                   double *restrict y, double *restrict z);
 
 void bit_write_BE (Bit_Chain *dat, double x, double y, double z);
+void normalize_BE (BITCODE_3BD ext);
 
 BITCODE_DD bit_read_DD (Bit_Chain *dat, double default_value);
 BITCODE_BB bit_write_DD (Bit_Chain *dat, double value, double default_value);
