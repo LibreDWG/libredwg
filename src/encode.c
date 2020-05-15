@@ -1844,6 +1844,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           case R_AFTER:
           case R_1_1:
           case R_1_2:
+          case R_1_3:
           case R_1_4:
           case R_2_0:
           case R_2_1:

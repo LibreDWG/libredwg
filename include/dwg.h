@@ -249,6 +249,7 @@ typedef enum DWG_VERSION_TYPE
   R_INVALID,
   R_1_1,	/* MC0.0  MicroCAD Release 1.1 */
   R_1_2,	/* AC1.2  AutoCAD Release 1.2 */
+  R_1_3,	/* AC1.3  AutoCAD Release 1.3 */
   R_1_4,	/* AC1.40 AutoCAD Release 1.4 */
   R_2_0,	/* AC1.50 AutoCAD Release 2.0 */
   R_2_1,	/* AC2.10 AutoCAD Release 2.10 */
