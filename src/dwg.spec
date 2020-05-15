@@ -5095,7 +5095,7 @@ DWG_ENTITY (TABLE)
     }
   else {
     SUBCLASS (AcDbBlockReference)
-    FIELD_3BD (insertion_point, 10);
+    FIELD_3BD (insertion_pt, 10);
     VERSIONS (R_13, R_14) {
       FIELD_3BD_1 (scale, 41);
     }
@@ -8041,24 +8041,21 @@ DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbDimensionObjectContextData)
   FIELD_T (name, 2);
-#if defined (IS_JSON) || defined (IS_DXF)
-    FIELD_3BD (def_pt, 10);
-#else
-    FIELD_2RD (def_pt, 10);
-#endif
+  FIELD_2RD (def_pt, 10);
+  DXF { VALUE_RD (0.0, 30); }
   //HOLE([140,159],11000000000000000000) len = 20
-   FIELD_B (b293, 293); // 0
-   FIELD_B (b294, 294); // 1
-   FIELD_BD (bd140, 140); // 0.0
-   FIELD_B (b298, 298); // 0
-   FIELD_B (b291, 291); // 0
-   FIELD_BS (flag, 70); // 0
-   FIELD_B (b292, 292); // 0
-   FIELD_BS (bs71, 71); // 0
-   FIELD_B (b280, 280); // 0
-   FIELD_B (b295, 295); // 0
-   FIELD_B (b296, 296); // 0
-   FIELD_B (b297, 297); // 0
+  FIELD_B (b293, 293); // 0
+  FIELD_B (b294, 294); // 1
+  FIELD_BD (bd140, 140); // 0.0
+  FIELD_B (b298, 298); // 0
+  FIELD_B (b291, 291); // 0
+  FIELD_BS (flag, 70); // 0
+  FIELD_B (b292, 292); // 0
+  FIELD_BS (bs71, 71); // 0
+  FIELD_B (b280, 280); // 0
+  FIELD_B (b295, 295); // 0
+  FIELD_B (b296, 296); // 0
+  FIELD_B (b297, 297); // 0
 
   SUBCLASS (AcDbAlignedDimensionObjectContextData)
   FIELD_3BD (_11pt, 11);

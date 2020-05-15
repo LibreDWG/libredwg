@@ -14,7 +14,7 @@ static struct _unknown_field unknown_dxf_MENTALRAYRENDERSETTINGS_1341[] = {
     { 330, "C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbRenderSettings", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 3, {-1,-1,-1,-1,-1} },
-    { 1, "Среднее", NULL, 0, BITS_UNKNOWN, "name", 1, {-1,-1,-1,-1,-1} },
+    { 1, "\321\360\345\344\355\345\345", NULL, 0, BITS_UNKNOWN, "name", 1, {-1,-1,-1,-1,-1} },
     { 290, "1", NULL, 0, BITS_UNKNOWN, "fog_enabled", 5, {-1,-1,-1,-1,-1} },
     { 290, "1", NULL, 0, BITS_UNKNOWN, "fog_background_enabled", 5, {-1,-1,-1,-1,-1} },
     { 290, "1", NULL, 0, BITS_UNKNOWN, "backfaces_enabled", 5, {-1,-1,-1,-1,-1} },

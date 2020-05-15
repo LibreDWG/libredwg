@@ -26,7 +26,7 @@ static struct _unknown_field unknown_dxf_PLANESURFACE_1363[] = {
     { 1, "ACIS BinaryFile", NULL, 0, BITS_UNKNOWN, "bin_sat_data", 1, {-1,-1,-1,-1,-1} },
     { 70, "1", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 1, "mogoo nk m o          ", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 1, "ni ^ *+0;:,4 ^ *+0\\^ [ mo ^ LR mmlqoqnqnflo PLG o  ", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1, "ni ^ *+0;:,4 ^ *+0\\\\^ [ mo ^ LR mmlqoqnqnflo PLG o  ", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 1, "n fqfffffffffffffffjkh:roh nqooooooooooooooooli:rno ", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 1, ">,27:>;:- {rn rn _nm mmlqoqnqnflo |", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 1, "=0;& {rn rn {rn {m {rn {rn |", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

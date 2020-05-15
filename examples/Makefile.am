@@ -31,9 +31,9 @@ unknown_SOURCES  = unknown.c
 unknown_LDADD    = $(top_builddir)/src/libredwg.la \
                    $(top_builddir)/src/bits.lo $(top_builddir)/src/common.lo
 bd_SOURCE        = bd.c
-bd_LDADD         = $(top_builddir)/src/bits.lo
+bd_LDADD         = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
 bits_SOURCE      = bits.c
-bits_LDADD       = $(top_builddir)/src/bits.lo
+bits_LDADD       = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
 all: $(check_PROGRAMS)
 
 .PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov
