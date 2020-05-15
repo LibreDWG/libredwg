@@ -3934,9 +3934,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                         {
                           Dwg_Object_MLEADERSTYLE *this
                               = obj->tio.MLEADERSTYLE;
-                          this->is_new_format = 1;
+                          this->class_version = 2; // real value with code 70 follows
                           LOG_TRACE (
-                              "EED found ACAD_MLEADERVER %lX: new format\n",
+                              "EED found ACAD_MLEADERVER %lX\n",
                               ref.absolute_ref);
                         }
                     }
@@ -3971,6 +3971,13 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               continue;         // continue for next size = bit_read_BS(dat)
             }
 
+          if (_obj->fixedtype == DWG_TYPE_MLEADERSTYLE &&
+              obj->tio.MLEADERSTYLE->class_version == 2 &&
+              obj->eed[idx].data->code == 70)
+            {
+              obj->tio.MLEADERSTYLE->class_version = obj->eed[idx].data->u.eed_70.rs;
+              LOG_TRACE ("ACAD_MLEADERVER class_version: %d\n", obj->eed[idx].data->u.eed_70.rs);
+            }
           if (dat->byte < end - 1)
             {
               idx++;

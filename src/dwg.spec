@@ -5994,14 +5994,17 @@ DWG_ENTITY_END
 DWG_OBJECT (MLEADERSTYLE)
 
   SUBCLASS (AcDbMLeaderStyle)
-  SINCE (R_2010)
-    {
-      IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE (class_version) = 2;
-      }
-      FIELD_BS (class_version, 179);
-      VALUEOUTOFBOUNDS (class_version, 10)
+  SINCE (R_2010) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE (class_version) = 2;
     }
+    // is also set on EED for APPID “ACAD_MLEADERVER”
+    FIELD_BS (class_version, 179);
+    VALUEOUTOFBOUNDS (class_version, 10)
+  }
+  else {
+    JSON { FIELD_BS (class_version, 0); }
+  }
 
   FIELD_BS (content_type, 170);
   FIELD_BS (mleader_order, 171);
@@ -6024,18 +6027,15 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_HANDLE (text_style, 5, 342);
   FIELD_BS (attach_left, 174);
   FIELD_BS (attach_right, 178);
-  FIELD_BS (text_angle_type, 175);
+  if (FIELD_VALUE (class_version) >= 2) {
+    FIELD_BS (text_angle_type, 175);
+  }
   FIELD_BS (text_align_type, 176);
   FIELD_CMC (text_color, 93); // as RGB only
   FIELD_BD (text_height, 45);
   FIELD_B (has_text_frame, 292);
-  //is_new_format: if the object has extended data for APPID “ACAD_MLEADERVER”.
-  if (FIELD_VALUE (is_new_format) || dat->version >= R_2010) {
+  if (FIELD_VALUE (class_version) >= 2) {
     FIELD_B (text_always_left, 297); // in DXF always
-    JSON {
-      _obj->is_new_format = 1;
-      FIELD_B (is_new_format, 0);
-    }
   }
   FIELD_BD (align_space, 46);
   FIELD_HANDLE (block, 5, 343);
