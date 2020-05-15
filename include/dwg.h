@@ -3546,11 +3546,11 @@ typedef struct _dwg_entity_TABLE
 typedef struct _dwg_TABLESTYLE_Cell
 {
   struct _dwg_object_TABLESTYLE *parent;
-  Dwg_TABLE_Cell cell;
   BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
                       ref TABLESTYLE. custom IDs > 100 */
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_T name;
+  struct _dwg_CellStyle cellstyle;
 } Dwg_TABLESTYLE_Cell;
 
 typedef struct _dwg_TABLESTYLE_border
@@ -3595,8 +3595,8 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_RC unknown_rc;
   BITCODE_BL unknown_bl1;
   BITCODE_BL unknown_bl2;
-  BITCODE_H cellstyle_handle;    //r2007+
-  Dwg_TABLESTYLE_Cell cellstyle; //r2007+. Note: embedded struct
+  BITCODE_H template;            //r2007+ a cellstyle
+  Dwg_TABLESTYLE_Cell sty;       //r2007+. Note: embedded struct
 
   // 0: data, 1: title, 2: header
   BITCODE_BL num_rowstyles; // always 3
@@ -3610,22 +3610,11 @@ typedef struct _dwg_object_TABLESTYLE
  Class CELLSTYLEMAP (varies)
  R2008+ TABLESTYLE extension class
  */
-
-typedef struct _dwg_CELLSTYLEMAP_Cell
-{
-  struct _dwg_object_CELLSTYLEMAP *parent;
-  Dwg_CellStyle style;
-  BITCODE_BL id;   /* 1=title, 2=header, 3=data, 4=table.
-                      ref TABLESTYLE. custom IDs > 100 */
-  BITCODE_BL type; /* 1=data, 2=label */
-  BITCODE_T name;
-} Dwg_CELLSTYLEMAP_Cell;
-
 typedef struct _dwg_object_CELLSTYLEMAP
 {
   struct _dwg_object_object *parent;
   BITCODE_BL num_cells;
-  Dwg_CELLSTYLEMAP_Cell* cells;
+  Dwg_TABLESTYLE_Cell *cells;
 } Dwg_Object_CELLSTYLEMAP;
 
 /* 20.4.103 TABLEGEOMETRY

@@ -3614,7 +3614,7 @@ B
 @item unknown_bl1
 BL
 @item insertion_pt
-3BD
+3BD,	DXF 10
 @item scale
 3BD_1,	DXF 41
 @item data_flags
@@ -5538,7 +5538,7 @@ struct _dwg_object_object*
 @item num_cells
 BL,	DXF 90
 @item cells
-Dwg_CELLSTYLEMAP_Cell*
+Dwg_TABLESTYLE_Cell*
 
 @end vtable
 @end indentedblock
@@ -8230,7 +8230,7 @@ struct _dwg_object_object*
 @item class_version
 BS
 @item name
-T,	DXF 3
+T,	DXF 300
 @item flags
 BS,	DXF 71
 @item flow_direction
@@ -8249,9 +8249,9 @@ RC,	DXF 70
 BL
 @item unknown_bl2
 BL
-@item cellstyle_handle
+@item template
 H
-@item cellstyle
+@item sty
 Dwg_TABLESTYLE_Cell
 @item num_rowstyles
 BL
@@ -9629,26 +9629,6 @@ struct _dwg_CellStyle*
 @end vtable
 @end indentedblock
 
-@strong{Dwg_CELLSTYLEMAP_Cell} @anchor{Dwg_CELLSTYLEMAP_Cell}
-@vindex Dwg_CELLSTYLEMAP_Cell
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_CELLSTYLEMAP*
-@item style
-Dwg_CellStyle
-@item id
-BL,	DXF 90
-@item type
-BL,	DXF 91
-@item name
-T,	DXF 300
-
-@end vtable
-@end indentedblock
-
 @strong{Dwg_CellContentGeometry} @anchor{Dwg_CellContentGeometry}
 @vindex Dwg_CellContentGeometry
 
@@ -10753,14 +10733,50 @@ Dwg_CellContentGeometry*
 
 @item parent
 struct _dwg_object_TABLESTYLE*
-@item cell
-Dwg_TABLE_Cell
 @item id
 BL,	DXF 90
 @item type
 BL,	DXF 91
 @item name
 T,	DXF 300
+@item cellstyle.type
+BL
+@item cellstyle.data_flags
+BS
+@item cellstyle.property_override_flags
+BL
+@item cellstyle.merge_flags
+BL
+@item cellstyle.background_color
+CMC
+@item cellstyle.content_layout
+BL
+@item cellstyle.content_format
+Dwg_ContentFormat
+@item cellstyle.margin_override_flags
+BS
+@item cellstyle.vert_margin
+BD
+@item cellstyle.horiz_margin
+BD
+@item cellstyle.bottom_margin
+BD
+@item cellstyle.right_margin
+BD
+@item cellstyle.margin_horiz_spacing
+BD
+@item cellstyle.margin_vert_spacing
+BD
+@item cellstyle.num_borders
+BL
+@item cellstyle.border
+Dwg_BorderStyle*
+@item cellstyle.tablerow_parent
+struct _dwg_TableRow*
+@item cellstyle.tabledatacolumn_parent
+struct _dwg_TableDataColumn*
+@item cellstyle
+struct _dwg_CellStyle
 
 @end vtable
 @end indentedblock
