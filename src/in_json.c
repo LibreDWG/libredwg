@@ -307,10 +307,15 @@ json_fixed_key (char *key, Bit_Chain *restrict dat,
       JSON_TOKENS_CHECK_OVERFLOW_VOID
       return;
     }
-  memcpy (key, &dat->chain[t->start], len);
-  key[len] = '\0';
-  tokens->index++;
-  JSON_TOKENS_CHECK_OVERFLOW_VOID
+  if (len > 0)
+    {
+      memcpy (key, &dat->chain[t->start], len);
+      key[len] = '\0';
+      tokens->index++;
+      JSON_TOKENS_CHECK_OVERFLOW_VOID
+    }
+  else
+    LOG_ERROR ("Empty JSON key");
   return;
 }
 
@@ -2499,6 +2504,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       const Dwg_DYNAPI_field *fields = NULL, *cfields;
       const Dwg_DYNAPI_field *f;
 
+      memset (name, 0, sizeof (name));
       JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
       if (i > 0)
         {
@@ -2555,6 +2561,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       for (int j = 0; j < keys; j++)
         {
           char key[80];
+          memset (key, 0, sizeof (key));
           LOG_INSANE ("[%d] ", j);
           JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
           json_fixed_key (key, dat, tokens);
