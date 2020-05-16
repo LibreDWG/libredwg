@@ -21,6 +21,7 @@
 #include <string.h>
 #include <assert.h>
 #include <math.h>
+#include <errno.h>
 
 #include "common.h"
 #include "bits.h"
@@ -402,11 +403,11 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
 {
   // convert from hex
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  char *str = json_string (dat, tokens);
-  size_t len = strlen (str);
-  unsigned long blen = len / 2;
+  const size_t len = t->end - t->start;
+  const char *str = (char *)&dat->chain[t->start];
+  const unsigned long blen = len / 2;
   char *buf = len ? malloc (blen + 1) : NULL;
-  char *pos = str;
+  char *pos = (char *)str;
   char *old;
 
   *lenp = 0;
@@ -417,18 +418,30 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       JSON_TOKENS_CHECK_OVERFLOW_NULL
       return NULL;
     }
+  if (!buf)
+    {
+      LOG_ERROR ("Out of memory");
+      tokens->index++;
+      return NULL;
+    }
   for (unsigned i = 0; i < blen; i++)
     {
-      sscanf (pos, "%2hhX", &buf[i]);
-      pos += 2;
+      if (sscanf (pos, "%2hhX", &buf[i]) != EOF)
+        pos += 2;
+      else
+        {
+          LOG_ERROR ("json_binary sscanf error %s with key %s at pos %u of %lu",
+                     strerror(errno), key, i, blen);
+          break;
+        }
     }
   if (buf)
     {
       buf[blen] = '\0';
-      LOG_TRACE ("%s: '%.*s'... [BINARY]\n", key, (int)len / 10, str);
+      LOG_TRACE ("%s: '%.*s'... [BINARY %lu]\n", key, (int)len / 10, str, (unsigned long)len);
       *lenp = blen;
     }
-  free (str);
+  tokens->index++;
   return buf;
 }
 
