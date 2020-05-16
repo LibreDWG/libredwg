@@ -4846,7 +4846,7 @@ DWG_OBJECT_END
     {                                                                   \
       FIELD_BL (sty.property_override_flags, 91);                       \
       FIELD_BL (sty.merge_flags, 92);                                   \
-      FIELD_CMC (sty.bg_color, 62);                             \
+      FIELD_CMC (sty.bg_color, 62);                                     \
       FIELD_BL (sty.content_layout, 93);                                \
       ContentFormat_fields (sty.content_format);                        \
       FIELD_BS (sty.margin_override_flags, 171);                        \

@@ -550,7 +550,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 {
   if (dat->version >= R_2004)
     {
-      KEYs (key);
+      KEYs (_path_field(key));
       HASH;
       if (_obj->index)
         {
@@ -559,7 +559,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
       FIRSTPREFIX fprintf (dat->fh, "\"rgb\": \"%06x\"", (unsigned)_obj->rgb);
       if (_obj->flag)
         {
-          FIELD_BS (flag, 62);
+          FIELD_BS (flag, 0);
         }
       if (_obj->flag > 0 && _obj->flag < 8)
         {
