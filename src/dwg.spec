@@ -4864,19 +4864,21 @@ DWG_OBJECT_END
         }                                                               \
       FIELD_BL (sty.num_borders, 94); /* 0-6 */                         \
       VALUEOUTOFBOUNDS (sty.num_borders, 7);                            \
-      REPEAT2 (sty.num_borders, sty.border, Dwg_BorderStyle)            \
+      REPEAT2 (sty.num_borders, sty.border, Dwg_GridFormat )            \
       REPEAT_BLOCK                                                      \
-          DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                             \
-          SUB_FIELD_BL (sty.border[rcount2],edge_flags, 0); /* was 95 */        \
-          /* TODO: if (edge_flags) { */                                         \
-          SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90);\
-          SUB_FIELD_BL (sty.border[rcount2],border_type, 91);                   \
-          SUB_FIELD_CMC (sty.border[rcount2],color, 62);                        \
-          SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                       \
-          SUB_FIELD_HANDLE (sty.border[rcount2],line_type, 3, 340);             \
-          SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                     \
-          SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 40);           \
-          DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }                             \
+        DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                     \
+        SUB_FIELD_BL (sty.border[rcount2],edge_flags, 0); /* was 95 */\
+        if (FIELD_VALUE (sty.border[rcount2].edge_flags))             \
+          {                                                           \
+            SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90);\
+            SUB_FIELD_BL (sty.border[rcount2],border_type, 91);                 \
+            SUB_FIELD_CMC (sty.border[rcount2],color, 62);                      \
+            SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                     \
+            SUB_FIELD_HANDLE (sty.border[rcount2],ltype, 3, 340);               \
+            SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                   \
+            SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 40);         \
+          }                                                                     \
+        DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }                               \
       END_REPEAT_BLOCK                                                          \
       END_REPEAT (sty.border);                                                  \
     }                                                                           \
@@ -4899,7 +4901,7 @@ DWG_OBJECT_END
   FIELD_T (ldata.description, 300);	\
   FIELD_BL (tdata.num_cols, 90);	\
   REPEAT (tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
-  REPEAT_BLOCK				\
+  REPEAT_BLOCK                                                  \
       SUB_FIELD_T (tdata.cols[rcount1],name, 300);		\
       SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);	\
       CellStyle_fields (tdata.cols[rcount1].cellstyle);		\
@@ -5064,7 +5066,7 @@ DWG_OBJECT (CELLSTYLEMAP)
         return DWG_ERR_VALUEOUTOFBOUNDS;
       }
   }
-  REPEAT (num_cells, cells, Dwg_TABLESTYLE_Cell)
+  REPEAT (num_cells, cells, Dwg_TABLESTYLE_CellStyle)
   REPEAT_BLOCK
       CellStyle_fields (cells[rcount1].cellstyle);
       SUB_FIELD_BL (cells[rcount1],id, 90);
@@ -5603,7 +5605,7 @@ DWG_OBJECT (TABLESTYLE)
     }
   }
   LATER_VERSIONS {
-    FIELD_RC (unknown_rc, 70);
+    FIELD_RCd (unknown_rc, 70);
     FIELD_T (name, 3);
     FIELD_BL (unknown_bl1, 0);
     FIELD_BL (unknown_bl2, 0);
@@ -5617,8 +5619,8 @@ DWG_OBJECT (TABLESTYLE)
   FIELD_BS (flags, 71);
   FIELD_BD (horiz_cell_margin, 40);
   FIELD_BD (vert_cell_margin, 41);
-  FIELD_B (title_suppressed, 280);
-  FIELD_B (header_suppressed, 281);
+  FIELD_B (is_title_suppressed, 280);
+  FIELD_B (is_header_suppressed, 281);
 
   FIELD_VALUE (num_rowstyles) = 3;
   // 0: data, 1: title, 2: header
@@ -5634,12 +5636,12 @@ DWG_OBJECT (TABLESTYLE)
       SUB_FIELD_B (rowstyle,has_bgcolor, 283);
 
       _obj->rowstyle.num_borders = 6;
-      // top, horizontal inside, bottom, left, vertical inside, right
+      // grid: top, horizontal inside, bottom, left, vertical inside, right
       _REPEAT_CN (6, rowstyle.borders, Dwg_TABLESTYLE_border, 2)
       REPEAT_BLOCK
           #define border rowstyle.borders[rcount2]
           SUB_FIELD_BSd (border,linewt, 274+rcount2);
-          SUB_FIELD_B (border,visible, 284+rcount2);
+          SUB_FIELD_B (border,invisible, 284+rcount2);
           SUB_FIELD_CMC (border,color, 64+rcount2);
       END_REPEAT_BLOCK
       END_REPEAT (rowstyle.borders)

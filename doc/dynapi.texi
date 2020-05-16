@@ -5538,7 +5538,7 @@ struct _dwg_object_object*
 @item num_cells
 BL,	DXF 90
 @item cells
-Dwg_TABLESTYLE_Cell*
+Dwg_TABLESTYLE_CellStyle*
 
 @end vtable
 @end indentedblock
@@ -8239,9 +8239,9 @@ BS,	DXF 70
 BD,	DXF 40
 @item vert_cell_margin
 BD,	DXF 41
-@item title_suppressed
+@item is_title_suppressed
 B,	DXF 280
-@item header_suppressed
+@item is_header_suppressed
 B,	DXF 281
 @item unknown_rc
 RC,	DXF 70
@@ -8252,15 +8252,11 @@ BL
 @item template
 H
 @item sty
-Dwg_TABLESTYLE_Cell
+Dwg_TABLESTYLE_CellStyle
 @item num_rowstyles
 BL
 @item rowstyles
 Dwg_TABLESTYLE_rowstyles*
-@item num_cells
-BL
-@item cells
-Dwg_TABLESTYLE_Cell*
 
 @end vtable
 @end indentedblock
@@ -9601,34 +9597,6 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{Dwg_BorderStyle} @anchor{Dwg_BorderStyle}
-@vindex Dwg_BorderStyle
-
-@indentedblock
-@vtable @code
-
-@item edge_flags
-BL
-@item border_property_overrides_flag
-BL,	DXF 90
-@item border_type
-BL,	DXF 91
-@item color
-CMC,	DXF 62
-@item linewt
-BLd,	DXF 92
-@item line_type
-H,	DXF 340
-@item invisible
-B,	DXF 93
-@item double_line_spacing
-BD,	DXF 40
-@item parent
-struct _dwg_CellStyle*
-
-@end vtable
-@end indentedblock
-
 @strong{Dwg_CellContentGeometry} @anchor{Dwg_CellContentGeometry}
 @vindex Dwg_CellContentGeometry
 
@@ -9694,7 +9662,7 @@ BD,	DXF 40
 @item num_borders
 BL,	DXF 94
 @item border
-Dwg_BorderStyle*
+Dwg_GridFormat*
 @item tablerow_parent
 struct _dwg_TableRow*
 @item tabledatacolumn_parent
@@ -10001,6 +9969,34 @@ BL
 2RD
 @item dest_pt
 2RD
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_GridFormat} @anchor{Dwg_GridFormat}
+@vindex Dwg_GridFormat
+
+@indentedblock
+@vtable @code
+
+@item edge_flags
+BL
+@item border_property_overrides_flag
+BL
+@item border_type
+BL
+@item color
+CMC
+@item linewt
+BLd
+@item ltype
+H
+@item invisible
+B
+@item double_line_spacing
+BD
+@item parent
+struct _dwg_CellStyle*
 
 @end vtable
 @end indentedblock
@@ -10725,8 +10721,8 @@ Dwg_CellContentGeometry*
 @end vtable
 @end indentedblock
 
-@strong{Dwg_TABLESTYLE_Cell} @anchor{Dwg_TABLESTYLE_Cell}
-@vindex Dwg_TABLESTYLE_Cell
+@strong{Dwg_TABLESTYLE_CellStyle} @anchor{Dwg_TABLESTYLE_CellStyle}
+@vindex Dwg_TABLESTYLE_CellStyle
 
 @indentedblock
 @vtable @code
@@ -10770,7 +10766,7 @@ BD
 @item cellstyle.num_borders
 BL
 @item cellstyle.border
-Dwg_BorderStyle*
+Dwg_GridFormat*
 @item cellstyle.tablerow_parent
 struct _dwg_TableRow*
 @item cellstyle.tabledatacolumn_parent
@@ -10787,14 +10783,16 @@ struct _dwg_CellStyle
 @indentedblock
 @vtable @code
 
-@item parent
-struct _dwg_TABLESTYLE_rowstyles*
 @item linewt
 BSd
-@item visible
+@item invisible
 B
 @item color
 CMC
+@item ltype
+H
+@item double_line_spacing
+BD
 
 @end vtable
 @end indentedblock

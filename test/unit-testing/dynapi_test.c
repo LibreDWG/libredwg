@@ -29608,14 +29608,14 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
   Dwg_Object_CELLSTYLEMAP *restrict cellstylemap = obj->tio.object->tio.CELLSTYLEMAP;
   failed = 0;
   {
-    Dwg_TABLESTYLE_Cell* cells;
+    Dwg_TABLESTYLE_CellStyle* cells;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (cellstylemap, "CELLSTYLEMAP", "num_cells", &count, NULL)
         && dwg_dynapi_entity_value (cellstylemap, "CELLSTYLEMAP", "cells", &cells, NULL)
         && cells == cellstylemap->cells)
       pass ();
     else
-      fail ("CELLSTYLEMAP.cells [Dwg_TABLESTYLE_Cell*] * %u num_cells", count);
+      fail ("CELLSTYLEMAP.cells [Dwg_TABLESTYLE_CellStyle*] * %u num_cells", count);
   }
   {
     BITCODE_BL num_cells;
@@ -42497,16 +42497,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   Dwg_Object_TABLESTYLE *restrict tablestyle = obj->tio.object->tio.TABLESTYLE;
   failed = 0;
   {
-    Dwg_TABLESTYLE_Cell* cells;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_cells", &count, NULL)
-        && dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cells", &cells, NULL)
-        && cells == tablestyle->cells)
-      pass ();
-    else
-      fail ("TABLESTYLE.cells [Dwg_TABLESTYLE_Cell*] * %u num_cells", count);
-  }
-  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "class_version", &class_version, NULL)
         && class_version == tablestyle->class_version)
@@ -42552,21 +42542,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     tablestyle->flow_direction--;
   }
   {
-    BITCODE_B header_suppressed;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "header_suppressed", &header_suppressed, NULL)
-        && header_suppressed == tablestyle->header_suppressed)
-      pass ();
-    else
-      fail ("TABLESTYLE.header_suppressed [B] " FORMAT_B " != " FORMAT_B "", tablestyle->header_suppressed, header_suppressed);
-    header_suppressed++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "header_suppressed", &header_suppressed, 0)
-        && header_suppressed == tablestyle->header_suppressed)
-      pass ();
-    else
-      fail ("TABLESTYLE.header_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", tablestyle->header_suppressed, header_suppressed);
-    tablestyle->header_suppressed--;
-  }
-  {
     BITCODE_BD horiz_cell_margin;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "horiz_cell_margin", &horiz_cell_margin, NULL)
         && horiz_cell_margin == tablestyle->horiz_cell_margin)
@@ -42582,6 +42557,36 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     tablestyle->horiz_cell_margin--;
   }
   {
+    BITCODE_B is_header_suppressed;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "is_header_suppressed", &is_header_suppressed, NULL)
+        && is_header_suppressed == tablestyle->is_header_suppressed)
+      pass ();
+    else
+      fail ("TABLESTYLE.is_header_suppressed [B] " FORMAT_B " != " FORMAT_B "", tablestyle->is_header_suppressed, is_header_suppressed);
+    is_header_suppressed++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "is_header_suppressed", &is_header_suppressed, 0)
+        && is_header_suppressed == tablestyle->is_header_suppressed)
+      pass ();
+    else
+      fail ("TABLESTYLE.is_header_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", tablestyle->is_header_suppressed, is_header_suppressed);
+    tablestyle->is_header_suppressed--;
+  }
+  {
+    BITCODE_B is_title_suppressed;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "is_title_suppressed", &is_title_suppressed, NULL)
+        && is_title_suppressed == tablestyle->is_title_suppressed)
+      pass ();
+    else
+      fail ("TABLESTYLE.is_title_suppressed [B] " FORMAT_B " != " FORMAT_B "", tablestyle->is_title_suppressed, is_title_suppressed);
+    is_title_suppressed++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "is_title_suppressed", &is_title_suppressed, 0)
+        && is_title_suppressed == tablestyle->is_title_suppressed)
+      pass ();
+    else
+      fail ("TABLESTYLE.is_title_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", tablestyle->is_title_suppressed, is_title_suppressed);
+    tablestyle->is_title_suppressed--;
+  }
+  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "name", &name, NULL)
         && name
@@ -42590,21 +42595,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       pass ();
     else
       fail ("TABLESTYLE.name [T] '%s' <> '%s'", name, tablestyle->name);
-  }
-  {
-    BITCODE_BL num_cells;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_cells", &num_cells, NULL)
-        && num_cells == tablestyle->num_cells)
-      pass ();
-    else
-      fail ("TABLESTYLE.num_cells [BL] %u != %u", tablestyle->num_cells, num_cells);
-    num_cells++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "num_cells", &num_cells, 0)
-        && num_cells == tablestyle->num_cells)
-      pass ();
-    else
-      fail ("TABLESTYLE.num_cells [BL] set+1 %u != %u", tablestyle->num_cells, num_cells);
-    tablestyle->num_cells--;
   }
   {
     BITCODE_BL num_rowstyles;
@@ -42640,12 +42630,12 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       fail ("TABLESTYLE.rowstyles [Dwg_TABLESTYLE_rowstyles*] * %u num_rowstyles", count);
   }
   {
-    Dwg_TABLESTYLE_Cell sty;
+    Dwg_TABLESTYLE_CellStyle sty;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "sty", &sty, NULL)
         && !memcmp (&sty, &tablestyle->sty, sizeof (tablestyle->sty)))
         pass ();
     else
-        fail ("TABLESTYLE.sty [Dwg_TABLESTYLE_Cell]");
+        fail ("TABLESTYLE.sty [Dwg_TABLESTYLE_CellStyle]");
   }
   {
     BITCODE_H template;
@@ -42654,21 +42644,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("TABLESTYLE.template [H]");
-  }
-  {
-    BITCODE_B title_suppressed;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "title_suppressed", &title_suppressed, NULL)
-        && title_suppressed == tablestyle->title_suppressed)
-      pass ();
-    else
-      fail ("TABLESTYLE.title_suppressed [B] " FORMAT_B " != " FORMAT_B "", tablestyle->title_suppressed, title_suppressed);
-    title_suppressed++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "title_suppressed", &title_suppressed, 0)
-        && title_suppressed == tablestyle->title_suppressed)
-      pass ();
-    else
-      fail ("TABLESTYLE.title_suppressed [B] set+1 " FORMAT_B " != " FORMAT_B "", tablestyle->title_suppressed, title_suppressed);
-    tablestyle->title_suppressed--;
   }
   {
     BITCODE_BL unknown_bl1;
@@ -49286,14 +49261,6 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"BLOCKVISIBILITYPARAMETER_state\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_BorderStyle);
-  size2 = dwg_dynapi_fields_size ("BorderStyle");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_BorderStyle): %d != "
-               "dwg_dynapi_fields_size (\"BorderStyle\"): %d\n", size1, size2);
-      error++;
-    }
   size1 = sizeof (struct _dwg_CellContentGeometry);
   size2 = dwg_dynapi_fields_size ("CellContentGeometry");
   if (size1 != size2)
@@ -49412,6 +49379,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_GEODATA_meshpt): %d != "
                "dwg_dynapi_fields_size (\"GEODATA_meshpt\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_GridFormat);
+  size2 = dwg_dynapi_fields_size ("GridFormat");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_GridFormat): %d != "
+               "dwg_dynapi_fields_size (\"GridFormat\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_HATCH_Color);
@@ -49654,12 +49629,12 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"TABLEGEOMETRY_Cell\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_TABLESTYLE_Cell);
-  size2 = dwg_dynapi_fields_size ("TABLESTYLE_Cell");
+  size1 = sizeof (struct _dwg_TABLESTYLE_CellStyle);
+  size2 = dwg_dynapi_fields_size ("TABLESTYLE_CellStyle");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_TABLESTYLE_Cell): %d != "
-               "dwg_dynapi_fields_size (\"TABLESTYLE_Cell\"): %d\n", size1, size2);
+      fprintf (stderr, "sizeof(struct _dwg_TABLESTYLE_CellStyle): %d != "
+               "dwg_dynapi_fields_size (\"TABLESTYLE_CellStyle\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_TABLESTYLE_border);

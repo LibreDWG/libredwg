@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BITCODE_BL i, num_cells;
-  Dwg_TABLESTYLEMAP_Cell* cells;
+  Dwg_TABLESTYLE_CellStyle* cells;
 
 #ifdef DEBUG_CLASSES
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -19,9 +19,10 @@ api_process (dwg_object *obj)
   else
     for (i = 0; i < num_cells; i++)
       {
-        CHK_SUBCLASS_TYPE (cells[i], CELLSTYLEMAP_Cell, id, BL);
-        CHK_SUBCLASS_TYPE (cells[i], CELLSTYLEMAP_Cell, type, BL);
-        CHK_SUBCLASS_UTF8TEXT (cells[i], TABLESTYLEMAP_Cell, name);
+        CHK_SUBCLASS_TYPE (cells[i], TABLESTYLE_CellStyle, id, BL);
+        CHK_SUBCLASS_TYPE (cells[i], TABLESTYLE_CellStyle, type, BL);
+        CHK_SUBCLASS_MAX (cells[i], TABLESTYLE_CellStyle, type, BL, 2);
+        CHK_SUBCLASS_UTF8TEXT (cells[i], TABLESTYLE_CellStyle, name);
       }
 #endif
 }
