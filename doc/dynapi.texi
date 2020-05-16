@@ -3601,7 +3601,7 @@ Dwg_LinkedData
 Dwg_LinkedTableData
 @item fdata
 Dwg_FormattedTableData
-@item table_style
+@item tablestyle
 H,	DXF 342
 @item unknown_rc
 RC
@@ -8191,7 +8191,7 @@ Dwg_LinkedData
 Dwg_LinkedTableData
 @item fdata
 Dwg_FormattedTableData
-@item table_style
+@item tablestyle
 H,	DXF 340
 
 @end vtable
@@ -9991,7 +9991,7 @@ CMC
 BLd
 @item ltype
 H
-@item invisible
+@item visible
 B
 @item double_line_spacing
 BD
@@ -10785,14 +10785,10 @@ struct _dwg_CellStyle
 
 @item linewt
 BSd
-@item invisible
+@item visible
 B
 @item color
 CMC
-@item ltype
-H
-@item double_line_spacing
-BD
 
 @end vtable
 @end indentedblock

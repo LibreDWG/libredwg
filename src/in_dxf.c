@@ -3736,7 +3736,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (i >= 0 && i < 3);
           assert (o->num_rowstyles);
           o->rowstyles[i].text_color.index = pair->value.i;
-          //TODO rgb, alpha with 420,430?
+          //TODO rgb with 420
           LOG_TRACE ("%s.rowstyles[%d].text_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;

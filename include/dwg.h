@@ -3295,7 +3295,7 @@ typedef struct _dwg_GridFormat
   BITCODE_CMC color;
   BITCODE_BLd linewt;
   BITCODE_H ltype;
-  BITCODE_B invisible;
+  BITCODE_B visible;
   BITCODE_BD double_line_spacing;
 
   struct _dwg_CellStyle *parent;
@@ -3387,7 +3387,7 @@ typedef struct _dwg_FormattedTableData
   Dwg_LinkedData ldata;                                                       \
   Dwg_LinkedTableData tdata;                                                  \
   Dwg_FormattedTableData fdata;                                               \
-  BITCODE_H table_style
+  BITCODE_H tablestyle
 
 typedef struct _dwg_object_TABLECONTENT
 {
@@ -3554,14 +3554,15 @@ typedef struct _dwg_TABLESTYLE_CellStyle
   struct _dwg_CellStyle cellstyle;
 } Dwg_TABLESTYLE_CellStyle;
 
-// very similar to GridLine, or GridFormat
+// very similar to GridLine, or GridFormat. but no overrides, type, ltype, ...
 typedef struct _dwg_TABLESTYLE_border
 {
   BITCODE_BSd linewt;
-  BITCODE_B invisible;
+  BITCODE_B visible;
   BITCODE_CMC color;
-  BITCODE_H ltype;
-  BITCODE_BD double_line_spacing;
+  //TODO
+  // BITCODE_H ltype;
+  // BITCODE_BD double_line_spacing;
 } Dwg_TABLESTYLE_border; // child of TABLE/TABLESTYLE/...
 
 typedef struct _dwg_TABLESTYLE_rowstyles

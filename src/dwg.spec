@@ -4821,7 +4821,7 @@ DWG_OBJECT (SPATIAL_INDEX)
 
 DWG_OBJECT_END
 
-// 20.4.101.3 Content format for TABLECONTENT and Cell_Style_Field
+// 20.4.101.3 Content format for TABLECONTENT and CellStyle_Field
 #define ContentFormat_fields(fmt)                 \
   DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }        \
   FIELD_BL (fmt.property_override_flags, 90);     \
@@ -4866,16 +4866,16 @@ DWG_OBJECT_END
       VALUEOUTOFBOUNDS (sty.num_borders, 7);                            \
       REPEAT2 (sty.num_borders, sty.border, Dwg_GridFormat )            \
       REPEAT_BLOCK                                                      \
-        DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                     \
-        SUB_FIELD_BL (sty.border[rcount2],edge_flags, 0); /* was 95 */\
-        if (FIELD_VALUE (sty.border[rcount2].edge_flags))             \
-          {                                                           \
+        DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                       \
+        SUB_FIELD_BL (sty.border[rcount2],edge_flags, 0); /* was 95 */  \
+        if (FIELD_VALUE (sty.border[rcount2].edge_flags))               \
+          {                                                             \
             SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90);\
             SUB_FIELD_BL (sty.border[rcount2],border_type, 91);                 \
             SUB_FIELD_CMC (sty.border[rcount2],color, 62);                      \
             SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                     \
             SUB_FIELD_HANDLE (sty.border[rcount2],ltype, 3, 340);               \
-            SUB_FIELD_BL (sty.border[rcount2],invisible, 93);                   \
+            SUB_FIELD_BL (sty.border[rcount2],visible, 93);                     \
             SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 40);         \
           }                                                                     \
         DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }                               \
@@ -5046,7 +5046,7 @@ DWG_OBJECT (TABLECONTENT)
   TABLECONTENT_fields;
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (table_style, 3, 340);
+  FIELD_HANDLE (tablestyle, 3, 340);
 DWG_OBJECT_END
 
 // pg.246 20.4.102 and TABLE
@@ -5464,7 +5464,7 @@ DWG_ENTITY (TABLE)
     if (FIELD_VALUE (has_attribs)) {
       FIELD_HANDLE (seqend, 3, 0);
     }
-    FIELD_HANDLE (table_style, 5, 342);
+    FIELD_HANDLE (tablestyle, 5, 342);
     _REPEAT_CNF (_obj->num_cells, cells, Dwg_TABLE_Cell, 1)
     REPEAT_BLOCK
         if (FIELD_VALUE (cells[rcount1].type) == 1)
@@ -5537,7 +5537,7 @@ DWG_ENTITY (TABLE)
     END_REPEAT (break_rows);
 
     COMMON_ENTITY_HANDLE_DATA;
-    FIELD_HANDLE (table_style, 5, 342);
+    FIELD_HANDLE (tablestyle, 5, 342);
   }
 
 DWG_ENTITY_END
@@ -5599,12 +5599,19 @@ DWG_OBJECT (TABLESTYLE)
   SUBCLASS (AcDbTableStyle)
   UNTIL (R_2007) {
     FIELD_T (name, 3);
-    FREE { // leaks on downconvert
-      FIELD_HANDLE (template, DWG_HDL_HARDOWN, 0);
-      FIELD_T (sty.name, 300);
-    }
+#ifdef IS_FREE // leaks on downconvert
+    FIELD_HANDLE (template, DWG_HDL_HARDOWN, 0);
+    FIELD_T (sty.name, 300);
+    CellStyle_fields (sty.cellstyle);
+#endif
+    FIELD_BS (flow_direction, 70);
+    FIELD_BS (flags, 71);
+    FIELD_BD (horiz_cell_margin, 40);
+    FIELD_BD (vert_cell_margin, 41);
+    FIELD_B (is_title_suppressed, 280);
+    FIELD_B (is_header_suppressed, 281);
   }
-  LATER_VERSIONS {
+  LATER_VERSIONS { // r2010+
     FIELD_RCd (unknown_rc, 70);
     FIELD_T (name, 3);
     FIELD_BL (unknown_bl1, 0);
@@ -5614,14 +5621,21 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BL0 (sty.id, 90);
     FIELD_BL0 (sty.type, 91);
     FIELD_T0 (sty.name, 300);
-  }
-  FIELD_BS (flow_direction, 70);
-  FIELD_BS (flags, 71);
-  FIELD_BD (horiz_cell_margin, 40);
-  FIELD_BD (vert_cell_margin, 41);
-  FIELD_B (is_title_suppressed, 280);
-  FIELD_B (is_header_suppressed, 281);
 
+    DECODER { FIELD_VALUE (flow_direction) = _obj->sty.cellstyle.property_override_flags & 0x10000; }
+    FIELD_BL (num_rowstyles, 0);
+    // FIXME style overrides for 0-6
+    if (FIELD_VALUE (num_rowstyles))
+      {
+        FIELD_BL (unknown_bl1, 0);
+        CellStyle_fields (sty.cellstyle);
+        FIELD_BL0 (sty.id, 90);
+        FIELD_BL0 (sty.type, 91);
+        FIELD_T0 (sty.name, 300);
+      }
+  }
+
+  UNTIL (R_2007) {
   FIELD_VALUE (num_rowstyles) = 3;
   // 0: data, 1: title, 2: header
   REPEAT_CN (3, rowstyles, Dwg_TABLESTYLE_rowstyles)
@@ -5641,7 +5655,7 @@ DWG_OBJECT (TABLESTYLE)
       REPEAT_BLOCK
           #define border rowstyle.borders[rcount2]
           SUB_FIELD_BSd (border,linewt, 274+rcount2);
-          SUB_FIELD_B (border,invisible, 284+rcount2);
+          SUB_FIELD_B (border,visible, 284+rcount2);
           SUB_FIELD_CMC (border,color, 64+rcount2);
       END_REPEAT_BLOCK
       END_REPEAT (rowstyle.borders)
@@ -5653,6 +5667,7 @@ DWG_OBJECT (TABLESTYLE)
       }
   END_REPEAT_BLOCK
   END_REPEAT (rowstyles)
+  }
   START_OBJECT_HANDLE_STREAM;
 
 DWG_OBJECT_END

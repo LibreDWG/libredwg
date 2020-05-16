@@ -20,23 +20,23 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_tablestyle *tblstyle = dwg_object_to_TABLESTYLE (obj);
 
-  if (dwg_version >= R_2010)
-    {
-      printf ("skip: TABLESTYLE r2010+ not yet implemented");
-      return;
-    }
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, class_version, BL);
   CHK_ENTITY_UTF8TEXT (tblstyle, TABLESTYLE, name);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, flow_direction, BS);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, horiz_cell_margin, BD);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, vert_cell_margin, BD);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, title_suppressed, B);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, header_suppressed, B);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, is_title_suppressed, B);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, is_header_suppressed, B);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, num_rowstyles, BL);
   if (num_rowstyles != 3)
     fail ("TABLESTYLE.num_rowstyles %d != 3", num_rowstyles);
   if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "rowstyles", &rowstyles, NULL))
     fail ("TABLESTYLE.rowstyles");
+
+  if (dwg_version >= R_2010)
+    {
+      printf ("skip: TABLESTYLE r2010+ not yet implemented");
+    }
   for (i = 0; i < num_rowstyles; i++)
     {
       CHK_SUBCLASS_H (rowstyles[i], TABLESTYLE_rowstyles, text_style);
@@ -51,10 +51,8 @@ api_process (dwg_object *obj)
         for (int j = 0; j < 6; j++)
           {
             CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border, linewt, BSd);
-            CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border, invisible, B);
+            CHK_SUBCLASS_TYPE (rowstyles[i].borders[j], TABLESTYLE_border, visible, B);
             CHK_SUBCLASS_CMC (rowstyles[i].borders[j], TABLESTYLE_border, color);
-            CHK_SUBCLASS_H (rowstyles[i].borders[j], TABLESTYLE_border, ltype);
-            CHK_SUBCLASS_BD (rowstyles[i].borders[j], TABLESTYLE_border, double_line_spacing);
           }
       if (dwg_version >= R_2007)
         {

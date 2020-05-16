@@ -3415,7 +3415,7 @@ static const Dwg_DYNAPI_field _dwg_TABLE_fields[] = {
     0,0,0, 0 },
   { "fdata",	"Dwg_FormattedTableData", sizeof (Dwg_FormattedTableData),  OFF (struct _dwg_entity_TABLE, fdata),
     0,0,0, 0 },
-  { "table_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, table_style),
+  { "tablestyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, tablestyle),
     1,0,0, 342 },
   { "unknown_rc",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_TABLE, unknown_rc),
     0,0,0, 0 },
@@ -7176,7 +7176,7 @@ static const Dwg_DYNAPI_field _dwg_TABLECONTENT_fields[] = {
     0,0,0, 0 },
   { "fdata",	"Dwg_FormattedTableData", sizeof (Dwg_FormattedTableData),  OFF (struct _dwg_object_TABLECONTENT, fdata),
     0,0,0, 0 },
-  { "table_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_TABLECONTENT, table_style),
+  { "tablestyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_TABLECONTENT, tablestyle),
     1,0,0, 340 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -8561,7 +8561,7 @@ static const Dwg_DYNAPI_field _dwg_GridFormat_fields[] = {
     0,0,0, 0 },
   { "ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_GridFormat, ltype),
     1,0,0, 0 },
-  { "invisible",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_GridFormat, invisible),
+  { "visible",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_GridFormat, visible),
     0,0,0, 0 },
   { "double_line_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_GridFormat, double_line_spacing),
     0,0,0, 0 },
@@ -9163,14 +9163,10 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_CellStyle_fields[] = {
 static const Dwg_DYNAPI_field _dwg_TABLESTYLE_border_fields[] = {
   { "linewt",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_TABLESTYLE_border, linewt),
     0,0,0, 0 },
-  { "invisible",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_TABLESTYLE_border, invisible),
+  { "visible",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_TABLESTYLE_border, visible),
     0,0,0, 0 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_TABLESTYLE_border, color),
     1,0,0, 0 },
-  { "ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_TABLESTYLE_border, ltype),
-    1,0,0, 0 },
-  { "double_line_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_TABLESTYLE_border, double_line_spacing),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLESTYLE_rowstyles: (sorted by offset) */

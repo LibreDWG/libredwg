@@ -20991,12 +20991,12 @@ static int test_TABLE (const Dwg_Object *obj)
     table->table_flag_override--;
   }
   {
-    BITCODE_H table_style;
-    if (dwg_dynapi_entity_value (table, "TABLE", "table_style", &table_style, NULL)
-        && !memcmp (&table_style, &table->table_style, sizeof (table->table_style)))
+    BITCODE_H tablestyle;
+    if (dwg_dynapi_entity_value (table, "TABLE", "tablestyle", &tablestyle, NULL)
+        && !memcmp (&tablestyle, &table->tablestyle, sizeof (table->tablestyle)))
         pass ();
     else
-        fail ("TABLE.table_style [H]");
+        fail ("TABLE.tablestyle [H]");
   }
   {
     Dwg_LinkedTableData tdata;
@@ -42392,12 +42392,12 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
         fail ("TABLECONTENT.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_H table_style;
-    if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "table_style", &table_style, NULL)
-        && !memcmp (&table_style, &tablecontent->table_style, sizeof (tablecontent->table_style)))
+    BITCODE_H tablestyle;
+    if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "tablestyle", &tablestyle, NULL)
+        && !memcmp (&tablestyle, &tablecontent->tablestyle, sizeof (tablecontent->tablestyle)))
         pass ();
     else
-        fail ("TABLECONTENT.table_style [H]");
+        fail ("TABLECONTENT.tablestyle [H]");
   }
   {
     Dwg_LinkedTableData tdata;
