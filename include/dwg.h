@@ -3154,8 +3154,8 @@ typedef struct _dwg_TABLE_Cell
   BITCODE_BL cell_flag_override;
   BITCODE_RC virtual_edge_flag;
   BITCODE_RS cell_alignment;
-  BITCODE_B background_fill_none;
-  BITCODE_CMC background_color;
+  BITCODE_B bg_fill_none;
+  BITCODE_CMC bg_color;
   BITCODE_CMC content_color;
   BITCODE_H text_style;
   BITCODE_BD text_height;
@@ -3311,7 +3311,7 @@ typedef struct _dwg_CellStyle
   BITCODE_BS data_flags;
   BITCODE_BL property_override_flags;
   BITCODE_BL merge_flags;
-  BITCODE_CMC background_color;
+  BITCODE_CMC bg_color;
   BITCODE_BL content_layout;
   Dwg_ContentFormat content_format;
   BITCODE_BS margin_override_flags;
@@ -5479,16 +5479,16 @@ typedef struct _dwg_object_RENDERENVIRONMENT
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL class_version;     /*!< DXF 90, default: 1 */
-  BITCODE_B fog_enabled;        /*!< DXF 290 */
-  BITCODE_B fog_background_enabled;  /*!< DXF 290 */
-  BITCODE_CMC fog_color;        /*!< DXF 280 */
-  BITCODE_BD fog_density_near;  /*!< DXF 40 */
-  BITCODE_BD fog_density_far;   /*!< DXF 40 */
-  BITCODE_BD fog_distance_near;     /*!< DXF 40 */
-  BITCODE_BD fog_distance_far;      /*!< DXF 40 */
-  BITCODE_B environ_image_enabled;  /*!< DXF 290 */
-  BITCODE_T environ_image_filename; /*!< DXF 1 */
+  BITCODE_BL class_version;     	/*!< DXF 90, default: 1 */
+  BITCODE_B fog_enabled;        	/*!< DXF 290 */
+  BITCODE_B fog_background_enabled;  	/*!< DXF 290 */
+  BITCODE_CMC fog_color;        	/*!< DXF 280 */
+  BITCODE_BD fog_density_near;  	/*!< DXF 40 */
+  BITCODE_BD fog_density_far;   	/*!< DXF 40 */
+  BITCODE_BD fog_distance_near;     	/*!< DXF 40 */
+  BITCODE_BD fog_distance_far;      	/*!< DXF 40 */
+  BITCODE_B environ_image_enabled;  	/*!< DXF 290 */
+  BITCODE_T environ_image_filename; 	/*!< DXF 1 */
 } Dwg_Object_RENDERENVIRONMENT;
 
 /**
@@ -7473,6 +7473,7 @@ EXPORT int dwg_setup_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_CAMERA (Dwg_Object *obj);
+EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_GEODATA (Dwg_Object *obj);
@@ -7542,7 +7543,6 @@ EXPORT int dwg_setup_NAVISWORKSMODELDEF (Dwg_Object *obj);
 EXPORT int dwg_setup_NPOCOLLECTION (Dwg_Object *obj);
 //EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTIONVIEWSTYLE (Dwg_Object *obj);
-EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERENTRY (Dwg_Object *obj);

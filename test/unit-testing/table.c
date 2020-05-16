@@ -144,7 +144,7 @@ api_process (dwg_object *obj)
 
   if (dwg_version >= R_2010)
     {
-      printf ("TABLECONTENT r2010+"); // TODO
+      printf ("TABLECONTENT r2010+ nyi\n"); // TODO
       return;
     }
 
@@ -189,8 +189,8 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, cell_flag_override, BL);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, virtual_edge_flag, RC);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, cell_alignment, RS);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, background_fill_none, B);
-        CHK_SUBCLASS_CMC (cells[i], TABLE_Cell, background_color);
+        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, bg_fill_none, B);
+        CHK_SUBCLASS_CMC (cells[i], TABLE_Cell, bg_color);
         CHK_SUBCLASS_CMC (cells[i], TABLE_Cell, content_color);
         CHK_SUBCLASS_H (cells[i], TABLE_Cell, text_style);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, text_height, BD);

@@ -9639,7 +9639,7 @@ BS,	DXF 170
 BL,	DXF 91
 @item merge_flags
 BL,	DXF 92
-@item background_color
+@item bg_color
 CMC,	DXF 62
 @item content_layout
 BL,	DXF 93
@@ -10743,7 +10743,7 @@ BS
 BL
 @item cellstyle.merge_flags
 BL
-@item cellstyle.background_color
+@item cellstyle.bg_color
 CMC
 @item cellstyle.content_layout
 BL
@@ -10901,9 +10901,9 @@ BL,	DXF 177
 RC,	DXF 178
 @item cell_alignment
 RS,	DXF 170
-@item background_fill_none
+@item bg_fill_none
 B,	DXF 283
-@item background_color
+@item bg_color
 CMC,	DXF 63
 @item content_color
 CMC,	DXF 64

@@ -4846,7 +4846,7 @@ DWG_OBJECT_END
     {                                                                   \
       FIELD_BL (sty.property_override_flags, 91);                       \
       FIELD_BL (sty.merge_flags, 92);                                   \
-      FIELD_CMC (sty.background_color, 62);                             \
+      FIELD_CMC (sty.bg_color, 62);                             \
       FIELD_BL (sty.content_layout, 93);                                \
       ContentFormat_fields (sty.content_format);                        \
       FIELD_BS (sty.margin_override_flags, 171);                        \
@@ -5049,35 +5049,6 @@ DWG_OBJECT (TABLECONTENT)
   FIELD_HANDLE (tablestyle, 3, 340);
 DWG_OBJECT_END
 
-// pg.246 20.4.102 and TABLE
-// added with r2008, backcompat with r2007
-// The cellstyle map can contain custom cell styles, whereas the TABLESTYLE
-// only contains the Table (R24), _Title, _Header and _Data cell style.
-DWG_OBJECT (CELLSTYLEMAP)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbCellStyleMap)
-  FIELD_BL (num_cells, 90);
-  VALUEOUTOFBOUNDS (num_cells, 5000)
-  DECODER {
-    if (obj->size < 20)
-      {
-        LOG_ERROR ("CELLSTYLEMAP too small for 3 cells")
-        return DWG_ERR_VALUEOUTOFBOUNDS;
-      }
-  }
-  REPEAT (num_cells, cells, Dwg_TABLESTYLE_CellStyle)
-  REPEAT_BLOCK
-      CellStyle_fields (cells[rcount1].cellstyle);
-      SUB_FIELD_BL (cells[rcount1],id, 90);
-      SUB_FIELD_BL (cells[rcount1],type, 91);
-      SUB_FIELD_T (cells[rcount1],name, 300);
-  END_REPEAT_BLOCK
-  SET_PARENT_FIELD (cells, parent, (Dwg_Object_TABLESTYLE*)_obj)
-  END_REPEAT (cells);
-
-DWG_OBJECT_END
-
 // pg.229 20.4.96, as ACAD_TABLE (varies)
 // works ok for the pre-2010 variant, deriving from INSERT
 // r2010+ it is TABLECONTENT
@@ -5201,9 +5172,9 @@ DWG_ENTITY (TABLE)
                 if (cell_flag & 0x01)
                   SUB_FIELD_RS (cells[rcount1],cell_alignment, 170);
                 if (cell_flag & 0x02)
-                  SUB_FIELD_B (cells[rcount1],background_fill_none, 283);
+                  SUB_FIELD_B (cells[rcount1],bg_fill_none, 283);
                 if (cell_flag & 0x04)
-                  SUB_FIELD_CMC (cells[rcount1],background_color, 63);
+                  SUB_FIELD_CMC (cells[rcount1],bg_color, 63);
                 if (cell_flag & 0x08)
                   SUB_FIELD_CMC (cells[rcount1],content_color, 64);
                 if (cell_flag & 0x10) {
@@ -5550,6 +5521,26 @@ DWG_ENTITY_END
 #undef merged
 
 #endif /* DEBUG_CLASSES */
+
+// pg.246 20.4.102 and TABLE
+// added with r2008, backcompat with r2007
+// The cellstyle map can contain custom cell styles, whereas the TABLESTYLE
+// only contains the Table (R24), _Title, _Header and _Data cell style.
+DWG_OBJECT (CELLSTYLEMAP)
+  SUBCLASS (AcDbCellStyleMap)
+  FIELD_BL (num_cells, 90);
+  REPEAT (num_cells, cells, Dwg_TABLESTYLE_CellStyle)
+  REPEAT_BLOCK
+      DXF { VALUE_TFF ("CELLSTYLE", 300); }
+      CellStyle_fields (cells[rcount1].cellstyle);
+      SUB_FIELD_BL (cells[rcount1],id, 90);
+      SUB_FIELD_BL (cells[rcount1],type, 91);
+      SUB_FIELD_T (cells[rcount1],name, 300);
+  END_REPEAT_BLOCK
+  SET_PARENT_FIELD (cells, parent, (Dwg_Object_TABLESTYLE*)_obj)
+  END_REPEAT (cells);
+
+DWG_OBJECT_END
 
 //pg.246 20.4.103
 // stable
