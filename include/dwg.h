@@ -1264,7 +1264,8 @@ typedef struct _dwg_entity_POLYLINE_2D
 {
   COMMON_ENTITY_POLYLINE;
 
-  BITCODE_BS flag;
+  BITCODE_BS flag;        /* 1: closed, 2: curve_fit, 4: spline_fit, 8: 3d, 0x10: 3dmesh,
+                             0x20: mesh_closed_in_n, 0x40: polyface_mesh, 0x80: ltype_continuous */
   BITCODE_BS curve_type;
   BITCODE_BD start_width;
   BITCODE_BD end_width;
@@ -1330,7 +1331,7 @@ typedef struct _dwg_entity_LINE
  * Macro for common DIMENSION declaration
  *
  * flag 70: value & 31: 0-6 denote the type, + bitmask 32-128.
- * 0: linear, 1: aligned, 2: ang2ln, 3: diamater, 4: radius
+ * 0: linear, 1: aligned, 2: ang2ln, 3: diameter, 4: radius
  * 5: ang3pt, 6: ordinate.
  * 32: block (2) used by this dimension only.
  * 64: if set, ordinate is type X, else ordinate is type Y.
