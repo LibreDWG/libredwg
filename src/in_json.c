@@ -1633,6 +1633,8 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_blocks");
   else if (strEQc (key, "styles")) // conflicts? only for LTYPE
     strcpy (s, "num_dashes");
+  else if (strEQc (key, "cellstyle.borders"))
+    strcpy (s, "cellstyle.num_borders");
   else if (strEQc (key, "segs") || strEQc (key, "polyline_paths"))
     {
       s = realloc (s, strlen ("num_segs_or_paths") + 1);
@@ -1783,7 +1785,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   const Dwg_DYNAPI_field *f;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int error = 0;
-  LOG_INSANE ("-search %s.%s: %s %.*s\n", name, key, t_typename[t->type],
+  LOG_INSANE ("-search %s key %s: %s %.*s\n", name, key, t_typename[t->type],
               t->end - t->start, &dat->chain[t->start]);
   for (f = &fields[0]; f->name; f++) // linear search, not binary for now
     {
@@ -2179,6 +2181,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               else
                 elems = num_elems ? calloc (num_elems, size_elem) : NULL;
+              dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
               tokens->index++;
               // array of structs
               if (!num_elems)
@@ -2195,6 +2198,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                  t_typename[t->type], tokens->index,
                                  tokens->num_tokens, subclass, __FUNCTION__,
                                  __LINE__);
+                      free (subclass);
                       json_advance_unknown (dat, tokens, t->type, 0);
                       JSON_TOKENS_CHECK_OVERFLOW_ERR
                       return DWG_ERR_INVALIDTYPE;
@@ -2210,7 +2214,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       char *rest;
                       JSON_TOKENS_CHECK_OVERFLOW_ERR
                       json_fixed_key (key1, dat, tokens);
-                      LOG_INSANE ("-search %s.%s\n", subclass, key1);
+                      LOG_INSANE ("-search %s key: %s\n", subclass, key1);
                       f1 = dwg_dynapi_subclass_field (subclass, key1);
                       if (f1)
                         {
@@ -2293,7 +2297,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   char *rest;
                   JSON_TOKENS_CHECK_OVERFLOW_ERR
                   json_fixed_key (key1, dat, tokens);
-                  LOG_INSANE ("-search %s.%s\n", subclass, key1);
+                  LOG_INSANE ("-search %s key %s\n", subclass, key1);
                   f1 = dwg_dynapi_subclass_field (subclass, key1);
                   if (f1)
                     {
@@ -2342,10 +2346,33 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else
         {
-          // Currently we have 3 known static arrays
+          // Currently we have 3 known static arrays, and a few embedded subclasses.
           // TODO: => vertind BS[4]
           JSON_TOKENS_CHECK_OVERFLOW_ERR
-          if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
+          if (memBEGINc (key, "cellstyle.content_format.") ||
+              memBEGINc (key, "cellstyle.border."))
+            {
+              const Dwg_DYNAPI_field *f1;
+              char *rest = strchr (&key[10], '.');
+              *rest = '\0';
+              rest++;
+              f1 = dwg_dynapi_subclass_field ("TABLESTYLE_CellStyle", key);
+              if (f1 && *rest)
+                {
+                  void *off = &((char *)_obj)[f->offset + f1->offset];
+                  char *subclass1 = dwg_dynapi_subclass_name (f1->type);
+                  const Dwg_DYNAPI_field *sfields1
+                    = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
+                    : NULL;
+                  if (!sfields1
+                      || !_set_struct_field (dat, obj, tokens, off,
+                                             subclass1, rest, sfields1))
+                    ++tokens->index;
+                  free (subclass1);
+                }
+              break;
+            }
+          else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
               && strEQc (f->name, "vertind[4]"))
             {
               BITCODE_BS arr[4];

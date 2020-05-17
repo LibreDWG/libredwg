@@ -4841,7 +4841,7 @@ DWG_OBJECT_END
 #define CellStyle_fields(sty)						\
   DXF { VALUE_TFF ("TABLEFORMAT_BEGIN", 1) }				\
   FIELD_BL (sty.type, 90);						\
-  FIELD_BS (sty.data_flags, 170);					\
+  FIELD_BSx (sty.data_flags, 170);					\
   if (FIELD_VALUE (sty.data_flags))					\
     {									\
       FIELD_BL (sty.property_override_flags, 91);			\
