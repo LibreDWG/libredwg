@@ -42597,6 +42597,21 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       fail ("TABLESTYLE.name [T] '%s' <> '%s'", name, tablestyle->name);
   }
   {
+    BITCODE_BL num_overrides;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_overrides", &num_overrides, NULL)
+        && num_overrides == tablestyle->num_overrides)
+      pass ();
+    else
+      fail ("TABLESTYLE.num_overrides [BL] %u != %u", tablestyle->num_overrides, num_overrides);
+    num_overrides++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "num_overrides", &num_overrides, 0)
+        && num_overrides == tablestyle->num_overrides)
+      pass ();
+    else
+      fail ("TABLESTYLE.num_overrides [BL] set+1 %u != %u", tablestyle->num_overrides, num_overrides);
+    tablestyle->num_overrides--;
+  }
+  {
     BITCODE_BL num_rowstyles;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_rowstyles", &num_rowstyles, NULL)
         && num_rowstyles == tablestyle->num_rowstyles)
@@ -42610,6 +42625,24 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.num_rowstyles [BL] set+1 %u != %u", tablestyle->num_rowstyles, num_rowstyles);
     tablestyle->num_rowstyles--;
+  }
+  {
+    Dwg_TABLESTYLE_CellStyle ovr;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "ovr", &ovr, NULL)
+        && !memcmp (&ovr, &tablestyle->ovr, sizeof (tablestyle->ovr)))
+        pass ();
+    else
+        fail ("TABLESTYLE.ovr [Dwg_TABLESTYLE_CellStyle]");
+  }
+  {
+    BITCODE_T ovr.name;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "ovr.name", &ovr.name, NULL)
+        && ovr.name
+           ? strEQ ((char *)ovr.name, (char *)tablestyle->ovr.name)
+           : !tablestyle->ovr.name)
+      pass ();
+    else
+      fail ("TABLESTYLE.ovr.name [T] '%s' <> '%s'", ovr.name, tablestyle->ovr.name);
   }
   {
     struct _dwg_object_object* parent;
@@ -42674,6 +42707,21 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.unknown_bl2 [BL] set+1 %u != %u", tablestyle->unknown_bl2, unknown_bl2);
     tablestyle->unknown_bl2--;
+  }
+  {
+    BITCODE_BL unknown_bl3;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "unknown_bl3", &unknown_bl3, NULL)
+        && unknown_bl3 == tablestyle->unknown_bl3)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_bl3 [BL] %u != %u", tablestyle->unknown_bl3, unknown_bl3);
+    unknown_bl3++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "unknown_bl3", &unknown_bl3, 0)
+        && unknown_bl3 == tablestyle->unknown_bl3)
+      pass ();
+    else
+      fail ("TABLESTYLE.unknown_bl3 [BL] set+1 %u != %u", tablestyle->unknown_bl3, unknown_bl3);
+    tablestyle->unknown_bl3--;
   }
   {
     BITCODE_RC unknown_rc;

@@ -5594,6 +5594,7 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_HANDLE (template, DWG_HDL_HARDOWN, 0);
     FIELD_T (sty.name, 300);
     CellStyle_fields (sty.cellstyle);
+    CellStyle_fields (ovr.cellstyle);
 #endif
     FIELD_BS (flow_direction, 70);
     FIELD_BS (flags, 71);
@@ -5614,15 +5615,15 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_T0 (sty.name, 300);
 
     DECODER { FIELD_VALUE (flow_direction) = _obj->sty.cellstyle.property_override_flags & 0x10000; }
-    FIELD_BL (num_rowstyles, 0);
+    FIELD_BL (num_overrides, 0);
     // FIXME style overrides for 0-6
-    if (FIELD_VALUE (num_rowstyles))
+    if (FIELD_VALUE (num_overrides))
       {
-        FIELD_BL (unknown_bl1, 0);
-        CellStyle_fields (sty.cellstyle);
-        FIELD_BL0 (sty.id, 90);
-        FIELD_BL0 (sty.type, 91);
-        FIELD_T0 (sty.name, 300);
+        FIELD_BL (unknown_bl3, 0);
+        CellStyle_fields (ovr.cellstyle);
+        FIELD_BL0 (ovr.id, 90);
+        FIELD_BL0 (ovr.type, 91);
+        FIELD_T0 (ovr.name, 300);
       }
   }
 

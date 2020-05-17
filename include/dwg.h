@@ -3602,6 +3602,9 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_BL unknown_bl2;
   BITCODE_H template;            //r2007+ a cellstyle
   Dwg_TABLESTYLE_CellStyle sty;  //r2007+. Note: embedded struct
+  BITCODE_BL num_overrides; // ??
+  BITCODE_BL unknown_bl3;
+  Dwg_TABLESTYLE_CellStyle ovr; // ??
 
   // 0: data, 1: title, 2: header
   BITCODE_BL num_rowstyles; // always 3
