@@ -230,6 +230,7 @@
   UNSTABLE_CLASS     (ACTION, PLOTSETTINGS)
   UNSTABLE_CLASS     (ACTION, RAPIDRTRENDERSETTINGS)
   UNSTABLE_CLASS     (ACTION, RENDERSETTINGS)
+  UNSTABLE_CLASS     (ACTION, TABLESTYLE)        // stable only <r2010
   UNSTABLE_CLASS     (ACTION, SECTIONOBJECT)     /* ent */
   UNSTABLE_CLASS     (ACTION, SECTION_MANAGER)
   UNSTABLE_CLASS     (ACTION, SUN)
@@ -238,7 +239,6 @@
   // examples/unknown with all the unknown blobs of these.
   // PROXY_ENTITY has a fixed type
   // DXF output skipped, but some INDXF are done.
-  DEBUGGING_CLASS     (ACTION, TABLESTYLE)        // stable only <r2010
   DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /* ent, yet unsorted. no coverage */
   DEBUGGING_CLASS     (ACTION, NURBSURFACE)       /* ent */
   DEBUGGING_CLASS     (ACTION, PLANESURFACE)      /* ent */

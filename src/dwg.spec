@@ -5520,6 +5520,8 @@ DWG_ENTITY_END
 #undef attr
 #undef merged
 
+#endif /* DEBUG_CLASSES */
+
 // See TABLE and p20.4.101
 // Added with r2005. unstable for r2010+
 // TABLESTYLE only contains the Table (R24), _Title, _Header and _Data cell style.
@@ -5554,7 +5556,6 @@ DWG_OBJECT (TABLESTYLE)
 
     DECODER { FIELD_VALUE (flow_direction) = _obj->sty.cellstyle.property_override_flags & 0x10000; }
     FIELD_BL (num_overrides, 0);
-    LOG_WARN ("TODO TABLESTYLE r2010+")
     // FIXME style overrides for 0-6
     if (FIELD_VALUE (num_overrides))
       {
@@ -5563,6 +5564,7 @@ DWG_OBJECT (TABLESTYLE)
         FIELD_BL0 (ovr.id, 90);
         FIELD_BL0 (ovr.type, 91);
         FIELD_T0 (ovr.name, 300);
+        LOG_WARN ("TODO TABLESTYLE r2010+ missing fields")
       }
   }
 
@@ -5603,8 +5605,6 @@ DWG_OBJECT (TABLESTYLE)
   }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
-
-#endif /* DEBUG_CLASSES */
 
 // pg.246 20.4.102 and TABLE
 // added with r2008, backcompat with r2007
