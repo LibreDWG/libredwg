@@ -9667,7 +9667,7 @@ BD,	DXF 40
 BD,	DXF 40
 @item num_borders
 BL,	DXF 94
-@item border
+@item borders
 Dwg_GridFormat*
 @item tablerow_parent
 struct _dwg_TableRow*
@@ -9985,22 +9985,22 @@ BL
 @indentedblock
 @vtable @code
 
-@item edge_flags
-BL
-@item border_property_overrides_flag
-BL
+@item index_mask
+BL,	DXF 95
+@item border_overrides
+BL,	DXF 90
 @item border_type
-BL
+BL,	DXF 91
 @item color
-CMC
+CMC,	DXF 62
 @item linewt
-BLd
+BLd,	DXF 92
 @item ltype
-H
+H,	DXF 340
 @item visible
-B
+B,	DXF 93
 @item double_line_spacing
-BD
+BD,	DXF 40
 @item parent
 struct _dwg_CellStyle*
 
@@ -10771,7 +10771,7 @@ BD
 BD
 @item cellstyle.num_borders
 BL
-@item cellstyle.border
+@item cellstyle.borders
 Dwg_GridFormat*
 @item cellstyle.tablerow_parent
 struct _dwg_TableRow*

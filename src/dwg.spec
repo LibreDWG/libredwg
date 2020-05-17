@@ -4838,50 +4838,57 @@ DWG_OBJECT_END
   DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
 
 // Cell style 20.4.101.4 for TABLE, TABLECONTENT, TABLESTYLE, and CELLSTYLEMAP
-#define CellStyle_fields(sty)                                           \
-  DXF { VALUE_TFF ("TABLEFORMAT_BEGIN", 1) }                            \
-  FIELD_BL (sty.type, 90);                                              \
-  FIELD_BS (sty.data_flags, 170);                                       \
-  if (FIELD_VALUE (sty.data_flags))                                     \
-    {                                                                   \
-      FIELD_BL (sty.property_override_flags, 91);                       \
-      FIELD_BL (sty.merge_flags, 92);                                   \
-      FIELD_CMC (sty.bg_color, 62);                                     \
-      FIELD_BL (sty.content_layout, 93);                                \
-      ContentFormat_fields (sty.content_format);                        \
-      FIELD_BS (sty.margin_override_flags, 171);                        \
-      if (FIELD_VALUE (sty.margin_override_flags))                      \
-        {                                                               \
-          DXF { VALUE_TFF ("MARGIN", 301) }                             \
-          DXF { VALUE_TFF ("CELLMARGIN_BEGIN", 1) }                     \
-          FIELD_BD (sty.vert_margin, 40);                               \
-          FIELD_BD (sty.horiz_margin, 40);                              \
-          FIELD_BD (sty.bottom_margin, 40);                             \
-          FIELD_BD (sty.right_margin, 40);                              \
-          FIELD_BD (sty.margin_horiz_spacing, 40);                      \
-          FIELD_BD (sty.margin_vert_spacing, 40);                       \
-          DXF { VALUE_TFF ("CELLMARGIN_END", 309) }                     \
-        }                                                               \
-      FIELD_BL (sty.num_borders, 94); /* 0-6 */                         \
-      VALUEOUTOFBOUNDS (sty.num_borders, 7);                            \
-      REPEAT2 (sty.num_borders, sty.border, Dwg_GridFormat )            \
-      REPEAT_BLOCK                                                      \
-        DXF { VALUE_TFF ("GRIDFORMAT_BEGIN", 1) }                       \
-        SUB_FIELD_BL (sty.border[rcount2],edge_flags, 0); /* was 95 */  \
-        if (FIELD_VALUE (sty.border[rcount2].edge_flags))               \
-          {                                                             \
-            SUB_FIELD_BL (sty.border[rcount2],border_property_overrides_flag, 90);\
-            SUB_FIELD_BL (sty.border[rcount2],border_type, 91);                 \
-            SUB_FIELD_CMC (sty.border[rcount2],color, 62);                      \
-            SUB_FIELD_BLd (sty.border[rcount2],linewt, 92);                     \
-            SUB_FIELD_HANDLE (sty.border[rcount2],ltype, 3, 340);               \
-            SUB_FIELD_BL (sty.border[rcount2],visible, 93);                     \
-            SUB_FIELD_BD (sty.border[rcount2],double_line_spacing, 40);         \
-          }                                                                     \
-        DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }                               \
-      END_REPEAT_BLOCK                                                          \
-      END_REPEAT (sty.border);                                                  \
-    }                                                                           \
+#define CellStyle_fields(sty)						\
+  DXF { VALUE_TFF ("TABLEFORMAT_BEGIN", 1) }				\
+  FIELD_BL (sty.type, 90);						\
+  FIELD_BS (sty.data_flags, 170);					\
+  if (FIELD_VALUE (sty.data_flags))					\
+    {									\
+      FIELD_BL (sty.property_override_flags, 91);			\
+      FIELD_BL (sty.merge_flags, 92);					\
+      FIELD_CMC (sty.bg_color, 62);					\
+      FIELD_BL (sty.content_layout, 93);				\
+      ContentFormat_fields (sty.content_format);			\
+      FIELD_BS (sty.margin_override_flags, 171);			\
+      if (FIELD_VALUE (sty.margin_override_flags))			\
+	{								\
+	  DXF { VALUE_TFF ("MARGIN", 301) }				\
+	  DXF { VALUE_TFF ("CELLMARGIN_BEGIN", 1) }			\
+	  FIELD_BD (sty.vert_margin, 40);				\
+	  FIELD_BD (sty.horiz_margin, 40);				\
+	  FIELD_BD (sty.bottom_margin, 40);				\
+	  FIELD_BD (sty.right_margin, 40);				\
+	  FIELD_BD (sty.margin_horiz_spacing, 40);			\
+	  FIELD_BD (sty.margin_vert_spacing, 40);			\
+	  DXF { VALUE_TFF ("CELLMARGIN_END", 309) }			\
+	}								\
+      FIELD_BL (sty.num_borders, 94); /* 0-6 */			\
+      VALUEOUTOFBOUNDS (sty.num_borders, 6);				\
+      REPEAT2 (sty.num_borders, sty.borders, Dwg_GridFormat)		\
+      REPEAT_BLOCK							\
+	DXF {								\
+	  if (FIELD_VALUE (sty.borders[rcount2].index_mask))		\
+	    {								\
+	      SUB_FIELD_BL (sty.borders[rcount2],index_mask, 95);	\
+	      VALUE_TFF ("GRIDFORMAT", 302);				\
+	      VALUE_TFF ("GRIDFORMAT_BEGIN", 1);			\
+	    }								\
+	}								\
+	SUB_FIELD_BL (sty.borders[rcount2],index_mask, 0);		\
+	if (FIELD_VALUE (sty.borders[rcount2].index_mask))		\
+	  {								\
+	    SUB_FIELD_BL (sty.borders[rcount2],border_overrides, 90);	\
+	    SUB_FIELD_BL (sty.borders[rcount2],border_type, 91);	\
+	    SUB_FIELD_CMC (sty.borders[rcount2],color, 62);		\
+	    SUB_FIELD_BLd (sty.borders[rcount2],linewt, 92);		\
+	    SUB_FIELD_HANDLE (sty.borders[rcount2],ltype, 3, 340);	\
+	    SUB_FIELD_BL (sty.borders[rcount2],visible, 93);		\
+	    SUB_FIELD_BD (sty.borders[rcount2],double_line_spacing, 40);\
+	  }								\
+	DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }			\
+      END_REPEAT_BLOCK							\
+      END_REPEAT (sty.borders);						\
+    }									\
   DXF { VALUE_TFF ("TABLEFORMAT_END", 309) }
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
@@ -4895,148 +4902,148 @@ DWG_OBJECT_END
 #define merged fdata.merged_cells[rcount1]
 
 // pg.237 20.4.97 for TABLE (2010+) and TABLECONTENT
-#define TABLECONTENT_fields             \
-  SUBCLASS (AcDbDataTableContent)	\
-  FIELD_T (ldata.name, 1);		\
-  FIELD_T (ldata.description, 300);	\
-  FIELD_BL (tdata.num_cols, 90);	\
+#define TABLECONTENT_fields					\
+  SUBCLASS (AcDbDataTableContent)				\
+  FIELD_T (ldata.name, 1);					\
+  FIELD_T (ldata.description, 300);				\
+  FIELD_BL (tdata.num_cols, 90);				\
   REPEAT (tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
-  REPEAT_BLOCK                                                  \
+  REPEAT_BLOCK							\
       SUB_FIELD_T (tdata.cols[rcount1],name, 300);		\
       SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);	\
       CellStyle_fields (tdata.cols[rcount1].cellstyle);		\
-  END_REPEAT_BLOCK			\
-  SET_PARENT (tdata.cols, &_obj->tdata)	\
-  END_REPEAT (tdata.cols);		\
-  FIELD_BL (tdata.num_rows, 90);	\
-  REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)	\
-  REPEAT_BLOCK				\
-      FIELD_BL (row.num_cells, 90);	\
-      REPEAT2 (row.num_cells, row.cells, Dwg_TableCell)	\
-      REPEAT_BLOCK			\
-          SUB_FIELD_BL (cell,flag, 90);		\
-          SUB_FIELD_T (cell,tooltip, 300);	\
-          SUB_FIELD_BL (cell,customdata, 91);	\
-          SUB_FIELD_BL (cell,num_customdata_items, 90);	\
+  END_REPEAT_BLOCK						\
+  SET_PARENT (tdata.cols, &_obj->tdata)				\
+  END_REPEAT (tdata.cols);					\
+  FIELD_BL (tdata.num_rows, 90);				\
+  REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)		\
+  REPEAT_BLOCK							\
+      FIELD_BL (row.num_cells, 90);				\
+      REPEAT2 (row.num_cells, row.cells, Dwg_TableCell)		\
+      REPEAT_BLOCK						\
+          SUB_FIELD_BL (cell,flag, 90);				\
+          SUB_FIELD_T (cell,tooltip, 300);			\
+          SUB_FIELD_BL (cell,customdata, 91);			\
+          SUB_FIELD_BL (cell,num_customdata_items, 90);		\
           REPEAT3 (cell.num_customdata_items, cell.customdata_items, Dwg_TABLE_CustomDataItem) \
-          REPEAT_BLOCK				\
+          REPEAT_BLOCK						\
               SUB_FIELD_T (cell.customdata_items[rcount3],name, 300);	 \
               TABLE_value_fields (cell.customdata_items[rcount3].value); \
-              if (error & DWG_ERR_INVALIDTYPE)	\
-                {			\
-                  JSON_END_REPEAT (cell.customdata_items);      \
-                  JSON_END_REPEAT (row.cells);                  \
-                  JSON_END_REPEAT (tdata.rows);                 \
-                  return error;		\
-                }			\
-          END_REPEAT_BLOCK		\
+              if (error & DWG_ERR_INVALIDTYPE)			\
+                {						\
+                  JSON_END_REPEAT (cell.customdata_items);	\
+                  JSON_END_REPEAT (row.cells);			\
+                  JSON_END_REPEAT (tdata.rows);			\
+                  return error;					\
+                }						\
+          END_REPEAT_BLOCK					\
           SET_PARENT_FIELD (cell.customdata_items, cell_parent, &_obj->cell)	\
-          END_REPEAT (cell.customdata_items);		\
-          SUB_FIELD_BL (cell,has_linked_data, 92);	\
-          if (FIELD_VALUE (cell.has_linked_data))	\
-            {						\
-              SUB_FIELD_HANDLE (cell,data_link, 5, 340);  \
-              SUB_FIELD_BL (cell,num_rows, 93);		\
-              SUB_FIELD_BL (cell,num_cols, 94);		\
-              SUB_FIELD_BL (cell,unknown, 96);		\
-            }						\
-          SUB_FIELD_BL (cell,num_cell_contents, 95);	\
+          END_REPEAT (cell.customdata_items);			\
+          SUB_FIELD_BL (cell,has_linked_data, 92);		\
+          if (FIELD_VALUE (cell.has_linked_data))		\
+            {							\
+              SUB_FIELD_HANDLE (cell,data_link, 5, 340);	\
+              SUB_FIELD_BL (cell,num_rows, 93);			\
+              SUB_FIELD_BL (cell,num_cols, 94);			\
+              SUB_FIELD_BL (cell,unknown, 96);			\
+            }							\
+          SUB_FIELD_BL (cell,num_cell_contents, 95);		\
           REPEAT3 (cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent) \
-          REPEAT_BLOCK					\
-              SUB_FIELD_BL (content,type, 90);		\
-              if (FIELD_VALUE (content.type) == 1)	\
-                {					\
-                  /* 20.4.99 Value, page 241 */         \
-                  TABLE_value_fields (content.value)	\
-                  if (error & DWG_ERR_INVALIDTYPE)	\
-                    {					\
+          REPEAT_BLOCK						\
+              SUB_FIELD_BL (content,type, 90);			\
+              if (FIELD_VALUE (content.type) == 1)		\
+                {						\
+                  /* 20.4.99 Value, page 241 */         	\
+                  TABLE_value_fields (content.value)		\
+                  if (error & DWG_ERR_INVALIDTYPE)		\
+                    {						\
                       JSON_END_REPEAT (cell.cell_contents);	\
                       JSON_END_REPEAT (row.cells);		\
                       JSON_END_REPEAT (tdata.rows);		\
-                      return error;			\
-                    }					\
-                }					\
+                      return error;				\
+                    }						\
+                }						\
               else if (FIELD_VALUE (content.type) == 2) { /* Field */	\
                 SUB_FIELD_HANDLE (content,handle, 3, 340);	\
-              }						\
+              }							\
               else if (FIELD_VALUE (content.type) == 4) { /* Block */	\
                 SUB_FIELD_HANDLE (content,handle, 3, 340);	\
-              }						\
-              SUB_FIELD_BL (content,num_attrs, 91);	\
+              }							\
+              SUB_FIELD_BL (content,num_attrs, 91);		\
               REPEAT4 (content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)	\
-              REPEAT_BLOCK				\
-                  SUB_FIELD_HANDLE (attr,attdef, 5, 330); \
-                  SUB_FIELD_T (attr,value, 301);	\
-                  SUB_FIELD_BL (attr,index, 92);	\
-              END_REPEAT_BLOCK				\
+              REPEAT_BLOCK					\
+                  SUB_FIELD_HANDLE (attr,attdef, 5, 330);	\
+                  SUB_FIELD_T (attr,value, 301);		\
+                  SUB_FIELD_BL (attr,index, 92);		\
+              END_REPEAT_BLOCK					\
               SET_PARENT (content.attrs, &_obj->content)	\
-              END_REPEAT (content.attrs);		\
+              END_REPEAT (content.attrs);			\
               if (FIELD_VALUE (content.has_content_format_overrides))	\
-                {					\
-                  ContentFormat_fields (content.content_format);	\
-                }					\
-          END_REPEAT_BLOCK				\
-          SET_PARENT (cell.cell_contents, &_obj->cell)	\
-          END_REPEAT (cell.cell_contents);		\
-          SUB_FIELD_BL (cell, style_id, 90);		\
-          SUB_FIELD_BL (cell, has_geom_data, 91);	\
-          if (FIELD_VALUE (cell.has_geom_data))		\
-            {						\
-              SUB_FIELD_BL (cell,geom_data_flag, 91);	\
-              SUB_FIELD_BD (cell,width_w_gap, 40);	\
-              SUB_FIELD_BD (cell,height_w_gap, 41);	\
-              SUB_FIELD_BL (cell,num_geometry, 94);	\
-              SUB_FIELD_HANDLE (cell,tablegeometry, 4, 330); \
+                {						\
+                  ContentFormat_fields (content.content_format);\
+                }						\
+          END_REPEAT_BLOCK					\
+          SET_PARENT (cell.cell_contents, &_obj->cell)		\
+          END_REPEAT (cell.cell_contents);			\
+          SUB_FIELD_BL (cell, style_id, 90);			\
+          SUB_FIELD_BL (cell, has_geom_data, 91);		\
+          if (FIELD_VALUE (cell.has_geom_data))			\
+            {							\
+              SUB_FIELD_BL (cell,geom_data_flag, 91);		\
+              SUB_FIELD_BD (cell,width_w_gap, 40);		\
+              SUB_FIELD_BD (cell,height_w_gap, 41);		\
+              SUB_FIELD_BL (cell,num_geometry, 94);		\
+              SUB_FIELD_HANDLE (cell,tablegeometry, 4, 330);	\
               REPEAT (cell.num_geometry, cell.geometry, Dwg_CellContentGeometry) \
-              REPEAT_BLOCK \
-                  SUB_FIELD_3BD (geom,dist_top_left, 10); \
-                  SUB_FIELD_3BD (geom,dist_center, 11);	\
-                  SUB_FIELD_BD (geom,content_width, 43); \
-                  SUB_FIELD_BD (geom,content_height, 44); \
-                  SUB_FIELD_BD (geom,width, 45); \
-                  SUB_FIELD_BD (geom,height, 46); \
-                  SUB_FIELD_BL (geom,unknown, 95); \
-              END_REPEAT_BLOCK	\
+              REPEAT_BLOCK					\
+                  SUB_FIELD_3BD (geom,dist_top_left, 10);	\
+                  SUB_FIELD_3BD (geom,dist_center, 11);		\
+                  SUB_FIELD_BD (geom,content_width, 43);	\
+                  SUB_FIELD_BD (geom,content_height, 44);	\
+                  SUB_FIELD_BD (geom,width, 45);		\
+                  SUB_FIELD_BD (geom,height, 46);		\
+                  SUB_FIELD_BL (geom,unknown, 95);		\
+              END_REPEAT_BLOCK					\
               SET_PARENT_FIELD (cell.geometry, cell_parent, &_obj->cell) \
-              END_REPEAT (cell.geometry); \
-            }						\
-      END_REPEAT_BLOCK					\
+              END_REPEAT (cell.geometry);			\
+            }							\
+      END_REPEAT_BLOCK						\
       SET_PARENT_FIELD (row.cells, row_parent, &_obj->row)	\
-      END_REPEAT (row.cells);				\
-      SUB_FIELD_BL (row,custom_data, 91);		\
-      SUB_FIELD_BL (row,num_customdata_items, 90);	\
+      END_REPEAT (row.cells);					\
+      SUB_FIELD_BL (row,custom_data, 91);			\
+      SUB_FIELD_BL (row,num_customdata_items, 90);		\
       REPEAT3 (row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem) \
-      REPEAT_BLOCK					\
+      REPEAT_BLOCK						\
           SUB_FIELD_T (row.customdata_items[rcount3],name, 300);	\
           TABLE_value_fields (row.customdata_items[rcount3].value);	\
-          if (error & DWG_ERR_INVALIDTYPE)		\
-            {						\
+          if (error & DWG_ERR_INVALIDTYPE)			\
+            {							\
               JSON_END_REPEAT (row.customdata_items);		\
               JSON_END_REPEAT (tdata.rows);			\
-              return error;				\
-            }						\
-      END_REPEAT_BLOCK					\
+              return error;					\
+            }							\
+      END_REPEAT_BLOCK						\
       SET_PARENT_FIELD (row.customdata_items, row_parent, &_obj->row)	\
       END_REPEAT (row.customdata_items);			\
-      {							\
-        CellStyle_fields (row.cellstyle);		\
-        SUB_FIELD_BL (row,style_id, 90);		\
-        SUB_FIELD_BL (row,height, 40);			\
-      }							\
-  END_REPEAT_BLOCK					\
-  SET_PARENT (tdata.rows, &_obj->tdata)			\
-  END_REPEAT (tdata.rows);				\
-  FIELD_BL (tdata.num_field_refs, 0);			\
+      {								\
+        CellStyle_fields (row.cellstyle);			\
+        SUB_FIELD_BL (row,style_id, 90);			\
+        SUB_FIELD_BL (row,height, 40);				\
+      }								\
+  END_REPEAT_BLOCK						\
+  SET_PARENT (tdata.rows, &_obj->tdata)				\
+  END_REPEAT (tdata.rows);					\
+  FIELD_BL (tdata.num_field_refs, 0);				\
   HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);	\
-  FIELD_BL (fdata.num_merged_cells, 90);		\
+  FIELD_BL (fdata.num_merged_cells, 90);			\
   REPEAT (fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)	\
-  REPEAT_BLOCK						\
-      SUB_FIELD_BL (merged,top_row, 91);		\
-      SUB_FIELD_BL (merged,left_col, 92);		\
-      SUB_FIELD_BL (merged,bottom_row, 93);		\
-      SUB_FIELD_BL (merged,right_col, 94);		\
-  END_REPEAT_BLOCK					\
-  SET_PARENT (fdata.merged_cells, &_obj->fdata)		\
+  REPEAT_BLOCK							\
+      SUB_FIELD_BL (merged,top_row, 91);			\
+      SUB_FIELD_BL (merged,left_col, 92);			\
+      SUB_FIELD_BL (merged,bottom_row, 93);			\
+      SUB_FIELD_BL (merged,right_col, 94);			\
+  END_REPEAT_BLOCK						\
+  SET_PARENT (fdata.merged_cells, &_obj->fdata)			\
   END_REPEAT (fdata.merged_cells)
 
 // clang-format on
@@ -5530,12 +5537,6 @@ DWG_OBJECT (TABLESTYLE)
   SUBCLASS (AcDbTableStyle)
   UNTIL (R_2007) {
     FIELD_T (name, 3);
-#ifdef IS_FREE // leaks on downconvert
-    FIELD_HANDLE (template, DWG_HDL_HARDOWN, 0);
-    FIELD_T (sty.name, 300);
-    CellStyle_fields (sty.cellstyle);
-    CellStyle_fields (ovr.cellstyle);
-#endif
     FIELD_BS (flow_direction, 70);
     FIELD_BS (flags, 71);
     FIELD_BD (horiz_cell_margin, 40);

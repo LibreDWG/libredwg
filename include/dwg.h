@@ -3290,8 +3290,8 @@ typedef struct _dwg_TableCell
 // in ODA named OdTableGridLine, was BorderStyle
 typedef struct _dwg_GridFormat
 {
-  BITCODE_BL edge_flags;
-  BITCODE_BL border_property_overrides_flag;
+  BITCODE_BL index_mask; /* 95. ie: 1,2,4,8,16,32 */
+  BITCODE_BL border_overrides;
   BITCODE_BL border_type;
   BITCODE_CMC color;
   BITCODE_BLd linewt;
@@ -3322,8 +3322,8 @@ typedef struct _dwg_CellStyle
   BITCODE_BD right_margin;
   BITCODE_BD margin_horiz_spacing;
   BITCODE_BD margin_vert_spacing;
-  BITCODE_BL num_borders; /* 0-6 */
-  Dwg_GridFormat *border;
+  BITCODE_BL num_borders; /* 0-6, number of edge_flags set */
+  Dwg_GridFormat *borders;
 
   struct _dwg_TableRow *tablerow_parent;
   struct _dwg_TableDataColumn *tabledatacolumn_parent;

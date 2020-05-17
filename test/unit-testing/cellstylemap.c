@@ -56,16 +56,16 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (cells[i].cellstyle, CellStyle, num_borders, BL);
         for (j = 0; j < cells[i].cellstyle.num_borders; j++)
           {
-            CHK_SUBCLASS_TYPE (cells[i].cellstyle.border[j], GridFormat, edge_flags, BL);
-            if (!cells[i].cellstyle.border[j].edge_flags)
+            CHK_SUBCLASS_TYPE (cells[i].cellstyle.borders[j], GridFormat, index_mask, BL);
+            if (!cells[i].cellstyle.borders[j].index_mask)
               continue;
-            CHK_SUBCLASS_TYPE (cells[i].cellstyle.border[j], GridFormat, border_property_overrides_flag, BL);
-            CHK_SUBCLASS_TYPE (cells[i].cellstyle.border[j], GridFormat, border_type, BL);
-            CHK_SUBCLASS_CMC (cells[i].cellstyle.border[j], GridFormat, color);
-            CHK_SUBCLASS_TYPE (cells[i].cellstyle.border[j], GridFormat, linewt, BLd);
-            CHK_SUBCLASS_H (cells[i].cellstyle.border[j], GridFormat, ltype);
-            CHK_SUBCLASS_TYPE (cells[i].cellstyle.border[j], GridFormat, visible, B);
-            CHK_SUBCLASS_TYPE (cells[i].cellstyle.border[j], GridFormat, double_line_spacing, BD);
+            CHK_SUBCLASS_TYPE (cells[i].cellstyle.borders[j], GridFormat, border_overrides, BL);
+            CHK_SUBCLASS_TYPE (cells[i].cellstyle.borders[j], GridFormat, border_type, BL);
+            CHK_SUBCLASS_CMC (cells[i].cellstyle.borders[j], GridFormat, color);
+            CHK_SUBCLASS_TYPE (cells[i].cellstyle.borders[j], GridFormat, linewt, BLd);
+            CHK_SUBCLASS_H (cells[i].cellstyle.borders[j], GridFormat, ltype);
+            CHK_SUBCLASS_TYPE (cells[i].cellstyle.borders[j], GridFormat, visible, B);
+            CHK_SUBCLASS_TYPE (cells[i].cellstyle.borders[j], GridFormat, double_line_spacing, BD);
           }
       }
 }
