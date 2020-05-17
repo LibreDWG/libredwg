@@ -44,7 +44,6 @@ static const Dwg_Object_Type _classes_unstable[] =
    DWG_TYPE_SECTIONOBJECT,
    DWG_TYPE_SECTION_MANAGER,
    DWG_TYPE_SUN,
-   DWG_TYPE_TABLESTYLE,
   };
 static const Dwg_Object_Type _classes_debugging[] =
   {
@@ -107,6 +106,7 @@ static const Dwg_Object_Type _classes_debugging[] =
    DWG_TYPE_SWEPTSURFACE,
    DWG_TYPE_TABLE,
    DWG_TYPE_TABLECONTENT,
+   DWG_TYPE_TABLESTYLE,
    DWG_TYPE_TEXTOBJECTCONTEXTDATA,
    DWG_TYPE_TVDEVICEPROPERTIES,
   };
