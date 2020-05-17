@@ -8,7 +8,6 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BL i, j, num_cells;
   Dwg_TABLESTYLE_CellStyle* cells;
-  Dwg_CellStyle* sty;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_cellstylemap *_obj = dwg_object_to_CELLSTYLEMAP (obj);
