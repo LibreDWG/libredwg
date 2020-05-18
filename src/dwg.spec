@@ -4824,10 +4824,10 @@ DWG_OBJECT_END
 // 20.4.101.3 Content format for TABLECONTENT and CellStyle_Field
 #define ContentFormat_fields(fmt)                 \
   DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }        \
-  FIELD_BL (fmt.property_override_flags, 90);     \
-  FIELD_BL (fmt.property_flags, 91);              \
-  FIELD_BL (fmt.value_data_type, 92);             \
-  FIELD_BL (fmt.value_unit_type, 93);             \
+  FIELD_BLx (fmt.property_override_flags, 90);     \
+  FIELD_BLx (fmt.property_flags, 91);              \
+  FIELD_BLx (fmt.value_data_type, 92);             \
+  FIELD_BLx (fmt.value_unit_type, 93);             \
   FIELD_T (fmt.value_format_string, 300);         \
   FIELD_BD (fmt.rotation, 40);                    \
   FIELD_BD (fmt.block_scale, 140);                \
@@ -4844,12 +4844,12 @@ DWG_OBJECT_END
   FIELD_BSx (sty.data_flags, 170);					\
   if (FIELD_VALUE (sty.data_flags))					\
     {									\
-      FIELD_BL (sty.property_override_flags, 91);			\
-      FIELD_BL (sty.merge_flags, 92);					\
+      FIELD_BLx (sty.property_override_flags, 91);			\
+      FIELD_BLx (sty.merge_flags, 92);					\
       FIELD_CMC (sty.bg_color, 62);					\
       FIELD_BL (sty.content_layout, 93);				\
       ContentFormat_fields (sty.content_format);			\
-      FIELD_BS (sty.margin_override_flags, 171);			\
+      FIELD_BSx (sty.margin_override_flags, 171);			\
       if (FIELD_VALUE (sty.margin_override_flags))			\
 	{								\
 	  DXF { VALUE_TFF ("MARGIN", 301) }				\
@@ -4874,7 +4874,7 @@ DWG_OBJECT_END
 	      VALUE_TFF ("GRIDFORMAT_BEGIN", 1);			\
 	    }								\
 	}								\
-	SUB_FIELD_BL (sty.borders[rcount2],index_mask, 0);		\
+	SUB_FIELD_BLx (sty.borders[rcount2],index_mask, 0);		\
 	if (FIELD_VALUE (sty.borders[rcount2].index_mask))		\
 	  {								\
 	    SUB_FIELD_BL (sty.borders[rcount2],border_overrides, 90);	\
