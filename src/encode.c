@@ -335,12 +335,21 @@ static bool env_var_checked_p;
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
   }
-
+// force truecolor
+#define FIELD_CMTC(name, dxf)                                                 \
+  {                                                                           \
+    Dwg_Version_Type _ver = dat->version;                                     \
+    if (dat->version < R_2004)                                                \
+      dat->version = R_2004;                                                  \
+    FIELD_CMC (name, dxf);                                                    \
+    dat->version = _ver;                                                      \
+  }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
     bit_write_CMC (dat, str_dat, &_obj->o.color);                             \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
-    LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
+    LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
+                dat->bit)                                                     \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
@@ -352,7 +361,8 @@ static bool env_var_checked_p;
         if (_obj->o.color.flag & 2)                                           \
           LOG_TRACE (#color ".bookname: %s [CMC.T]\n",                        \
                      _obj->o.color.book_name);                                \
-        LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
+        LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, \
+                    dat->bit)                                                 \
       }                                                                       \
   }
 

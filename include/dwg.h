@@ -607,12 +607,14 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
                        */
   BITCODE_T  name;       /* DXF 430 */
   BITCODE_T  book_name;  /* DXF 430, DXF: "book_name$name" */
+  // Entities only:
   BITCODE_H  handle;
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
   BITCODE_RC alpha;      /* DXF 440. 0-255 */
 } Dwg_Color;
 
 typedef Dwg_Color BITCODE_CMC;
+typedef Dwg_Color BITCODE_CMTC; // truecolor even before r2004
 typedef Dwg_Color BITCODE_ENC;
 
 EXPORT const char* dwg_color_method_name (unsigned method);

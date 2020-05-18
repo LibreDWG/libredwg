@@ -4824,15 +4824,15 @@ DWG_OBJECT_END
 // 20.4.101.3 Content format for TABLECONTENT and CellStyle_Field
 #define ContentFormat_fields(fmt)                 \
   DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }        \
-  FIELD_BLx (fmt.property_override_flags, 90);     \
-  FIELD_BLx (fmt.property_flags, 91);              \
-  FIELD_BLx (fmt.value_data_type, 92);             \
-  FIELD_BLx (fmt.value_unit_type, 93);             \
+  FIELD_BLx (fmt.property_override_flags, 90);    \
+  FIELD_BLx (fmt.property_flags, 91);             \
+  FIELD_BLx (fmt.value_data_type, 92);            \
+  FIELD_BLx (fmt.value_unit_type, 93);            \
   FIELD_T (fmt.value_format_string, 300);         \
   FIELD_BD (fmt.rotation, 40);                    \
   FIELD_BD (fmt.block_scale, 140);                \
   FIELD_BL (fmt.cell_alignment, 94);              \
-  FIELD_CMC (fmt.content_color, 62);              \
+  FIELD_CMTC (fmt.content_color, 62);             \
   FIELD_HANDLE (fmt.text_style, 3, 92);           \
   FIELD_BD (fmt.text_height, 92);                 \
   DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
@@ -4846,7 +4846,7 @@ DWG_OBJECT_END
     {									\
       FIELD_BLx (sty.property_override_flags, 91);			\
       FIELD_BLx (sty.merge_flags, 92);					\
-      FIELD_CMC (sty.bg_color, 62);					\
+      FIELD_CMTC (sty.bg_color, 62);					\
       FIELD_BL (sty.content_layout, 93);				\
       ContentFormat_fields (sty.content_format);			\
       FIELD_BSx (sty.margin_override_flags, 171);			\
@@ -4879,7 +4879,7 @@ DWG_OBJECT_END
 	  {								\
 	    SUB_FIELD_BL (sty.borders[rcount2],border_overrides, 90);	\
 	    SUB_FIELD_BL (sty.borders[rcount2],border_type, 91);	\
-	    SUB_FIELD_CMC (sty.borders[rcount2],color, 62);		\
+	    SUB_FIELD_CMTC (sty.borders[rcount2],color, 62);		\
 	    SUB_FIELD_BLd (sty.borders[rcount2],linewt, 92);		\
 	    SUB_FIELD_HANDLE (sty.borders[rcount2],ltype, 3, 340);	\
 	    SUB_FIELD_BL (sty.borders[rcount2],visible, 93);		\

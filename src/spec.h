@@ -277,6 +277,27 @@
 #ifndef FIELD_BINARY
 #  define FIELD_BINARY(name, len, dxf) FIELD_TF (name, len, dxf)
 #endif
+// force truecolor
+#ifndef FIELD_CMTC
+#  define FIELD_CMTC(name, dxf)                                               \
+    {                                                                         \
+      Dwg_Version_Type _ver = dat->version;                                   \
+      if (dat->version < R_2004)                                              \
+        dat->version = R_2004;                                                \
+      FIELD_CMC (name, dxf);                                                  \
+      dat->version = _ver;                                                    \
+    }
+#endif
+#ifndef SUB_FIELD_CMTC
+#  define SUB_FIELD_CMTC(o, name, dxf)                                        \
+    {                                                                         \
+      Dwg_Version_Type _ver = dat->version;                                   \
+      if (dat->version < R_2004)                                              \
+        dat->version = R_2004;                                                \
+      SUB_FIELD_CMC (o, name, dxf);                                           \
+      dat->version = _ver;                                                    \
+    }
+#endif
 // on DXF skip if 0
 #ifndef FIELD_BD0
 #  define FIELD_BD0(name, dxf) FIELD_BD (name, dxf)

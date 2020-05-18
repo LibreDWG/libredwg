@@ -749,6 +749,23 @@
           }                                                                   \
       }                                                                       \
   }
+// force truecolor
+#define FIELD_CMTC(name, dxf)                                                 \
+  {                                                                           \
+    Dwg_Version_Type _ver = dat->from_version;                                \
+    if (dat->from_version < R_2004)                                           \
+      dat->from_version = R_2004;                                             \
+    FIELD_CMC (name, dxf);                                                    \
+    dat->from_version = _ver;                                                 \
+  }
+#define SUB_FIELD_CMTC(o, name, dxf)                                          \
+  {                                                                           \
+    Dwg_Version_Type _ver = dat->from_version;                                \
+    if (dat->from_version < R_2004)                                           \
+      dat->from_version = R_2004;                                             \
+    SUB_FIELD_CMC (o, name, dxf);                                             \
+    dat->from_version = _ver;                                                 \
+  }
 #define FIELD_ENC(color, dxf)                                                 \
   {                                                                           \
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->color);                       \
