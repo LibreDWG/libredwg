@@ -5579,8 +5579,8 @@ DWG_OBJECT (TABLESTYLE)
         SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
         SUB_FIELD_BD (rowstyle,text_height, 140);
         SUB_FIELD_BS (rowstyle,text_alignment, 170);
-        SUB_FIELD_CMC (rowstyle,text_color, 62); //FIXME
-        SUB_FIELD_CMC (rowstyle,fill_color, 63);
+        SUB_FIELD_CMTC (rowstyle,text_color, 62);
+        SUB_FIELD_CMTC (rowstyle,fill_color, 63);
         SUB_FIELD_B (rowstyle,has_bgcolor, 283);
 
         _obj->rowstyle.num_borders = 6;
@@ -5590,7 +5590,7 @@ DWG_OBJECT (TABLESTYLE)
             #define border rowstyle.borders[rcount2]
             SUB_FIELD_BSd (border,linewt, 274+rcount2);
             SUB_FIELD_B (border,visible, 284+rcount2);
-            SUB_FIELD_CMC (border,color, 64+rcount2);
+            SUB_FIELD_CMTC (border,color, 64+rcount2);
         END_REPEAT_BLOCK
         END_REPEAT (rowstyle.borders)
 
