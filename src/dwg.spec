@@ -4903,15 +4903,20 @@ DWG_OBJECT_END
 
 // pg.237 20.4.97 for TABLE (2010+) and TABLECONTENT
 #define TABLECONTENT_fields					\
-  SUBCLASS (AcDbDataTableContent)				\
+  SUBCLASS (AcDbLinkedData)                                     \
   FIELD_T (ldata.name, 1);					\
   FIELD_T (ldata.description, 300);				\
+  SUBCLASS (AcDbLinkedTableData)                                \
   FIELD_BL (tdata.num_cols, 90);				\
   REPEAT (tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
   REPEAT_BLOCK							\
       SUB_FIELD_T (tdata.cols[rcount1],name, 300);		\
+      DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_BEGIN", 1) }      \
       SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);	\
+      DXF { VALUE_TFF ("DATAMAP_BEGIN", 1) }                    \
       CellStyle_fields (tdata.cols[rcount1].cellstyle);		\
+      DXF { VALUE_TFF ("DATAMAP_END", 309) }                    \
+      DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_END", 309) }      \
   END_REPEAT_BLOCK						\
   SET_PARENT (tdata.cols, &_obj->tdata)				\
   END_REPEAT (tdata.cols);					\
@@ -4948,11 +4953,14 @@ DWG_OBJECT_END
               SUB_FIELD_BL (cell,unknown, 96);			\
             }							\
           SUB_FIELD_BL (cell,num_cell_contents, 95);		\
+          DXF { VALUE_TFF ("CONTENT", 302) }                    \
+          DXF { VALUE_TFF ("CELLCONTENT_BEGIN", 1) }            \
           REPEAT3 (cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent) \
           REPEAT_BLOCK						\
               SUB_FIELD_BL (content,type, 90);			\
               if (FIELD_VALUE (content.type) == 1)		\
                 {						\
+                  DXF { VALUE_TFF ("VALUE", 300) }              \
                   /* 20.4.99 Value, page 241 */         	\
                   TABLE_value_fields (content.value)		\
                   if (error & DWG_ERR_INVALIDTYPE)		\
@@ -4978,10 +4986,14 @@ DWG_OBJECT_END
               END_REPEAT_BLOCK					\
               SET_PARENT (content.attrs, &_obj->content)	\
               END_REPEAT (content.attrs);			\
+              DXF { VALUE_TFF ("CELLCONTENT_END", 309) }        \
+              DXF { VALUE_TFF ("FORMATTEDCELLCONTENT_BEGIN", 1) }  \
+              FIELD_BS (content.has_content_format_overrides, 170) \
               if (FIELD_VALUE (content.has_content_format_overrides))	\
                 {						\
                   ContentFormat_fields (content.content_format);\
                 }						\
+              DXF { VALUE_TFF ("FORMATTEDCELLCONTENT_END", 309) } \
           END_REPEAT_BLOCK					\
           SET_PARENT (cell.cell_contents, &_obj->cell)		\
           END_REPEAT (cell.cell_contents);			\
@@ -5181,34 +5193,34 @@ DWG_ENTITY (TABLE)
                 if (cell_flag & 0x02)
                   SUB_FIELD_B (cells[rcount1],bg_fill_none, 283);
                 if (cell_flag & 0x04)
-                  SUB_FIELD_CMC (cells[rcount1],bg_color, 63);
+                  SUB_FIELD_CMC (cells[rcount1],bg_color, 63); // CMTC?
                 if (cell_flag & 0x08)
-                  SUB_FIELD_CMC (cells[rcount1],content_color, 64);
+                  SUB_FIELD_CMC (cells[rcount1],content_color, 64); // CMTC?
                 if (cell_flag & 0x10) {
                   SUB_FIELD_HANDLE (cells[rcount1],text_style, 5, 7);
                 }
                 if (cell_flag & 0x20)
                   SUB_FIELD_BD (cells[rcount1],text_height, 140);
                 if (cell_flag & 0x00040)
-                  SUB_FIELD_CMC (cells[rcount1],top_grid_color, 69);
+                  SUB_FIELD_CMC (cells[rcount1],top_grid_color, 69); // CMTC?
                 if (cell_flag & 0x00400)
                   SUB_FIELD_BS (cells[rcount1],top_grid_linewt, 279);
                 if (cell_flag & 0x04000)
                   SUB_FIELD_BS (cells[rcount1],top_visibility, 289);
                 if (cell_flag & 0x00080)
-                  SUB_FIELD_CMC (cells[rcount1],right_grid_color, 65);
+                  SUB_FIELD_CMC (cells[rcount1],right_grid_color, 65); // CMTC?
                 if (cell_flag & 0x00800)
                   SUB_FIELD_BS (cells[rcount1],right_grid_linewt, 275);
                 if (cell_flag & 0x08000)
                   SUB_FIELD_BS (cells[rcount1],right_visibility, 285);
                 if (cell_flag & 0x00100)
-                  SUB_FIELD_CMC (cells[rcount1],bottom_grid_color, 66);
+                  SUB_FIELD_CMC (cells[rcount1],bottom_grid_color, 66); // CMTC?
                 if (cell_flag & 0x01000)
                   SUB_FIELD_BS (cells[rcount1],bottom_grid_linewt, 276);
                 if (cell_flag & 0x10000)
                   SUB_FIELD_BS (cells[rcount1],bottom_visibility, 286);
                 if (cell_flag & 0x00200)
-                  SUB_FIELD_CMC (cells[rcount1],left_grid_color, 68);
+                  SUB_FIELD_CMC (cells[rcount1],left_grid_color, 68);// CMTC?
                 if (cell_flag & 0x02000)
                   SUB_FIELD_BS (cells[rcount1],left_grid_linewt, 278);
                 if (cell_flag & 0x20000)
@@ -5250,9 +5262,9 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0010)
           FIELD_BD (vert_cell_margin, 41);
         if (table_flag & 0x0020)
-          FIELD_CMC (title_row_color, 64);
+          FIELD_CMC (title_row_color, 64); // CMTC?
         if (table_flag & 0x0040)
-          FIELD_CMC (header_row_color, 64);
+          FIELD_CMC (header_row_color, 64); // CMTC?
         if (table_flag & 0x0080)
           FIELD_CMC (data_row_color, 64);
         if (table_flag & 0x0100)
@@ -5262,11 +5274,11 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0400)
           FIELD_B (data_row_fill_none, 283);
         if (table_flag & 0x0800)
-          FIELD_CMC (title_row_fill_color, 63);
+          FIELD_CMC (title_row_fill_color, 63); // CMTC?
         if (table_flag & 0x1000)
-          FIELD_CMC (header_row_fill_color, 63);
+          FIELD_CMC (header_row_fill_color, 63); // CMTC?
         if (table_flag & 0x2000)
-          FIELD_CMC (data_row_fill_color, 63);
+          FIELD_CMC (data_row_fill_color, 63); // CMTC?
         if (table_flag & 0x4000)
           FIELD_BS (title_row_alignment, 170);
         if (table_flag & 0x8000)
@@ -5294,7 +5306,7 @@ DWG_ENTITY (TABLE)
         FIELD_BL (border_color_overrides_flag, 94);
         border_color = FIELD_VALUE (border_color_overrides_flag);
         if (border_color & 0x0001)
-          FIELD_CMC (title_horiz_top_color, 64);
+          FIELD_CMC (title_horiz_top_color, 64); // CMTC...
         if (border_color & 0x0002)
           FIELD_CMC (title_horiz_ins_color, 65);
         if (border_color & 0x0004)
@@ -5879,10 +5891,10 @@ DWG_ENTITY (MULTILEADER)
       FIELD_BD (ctx.content.txt.height, 44);
       FIELD_BD (ctx.content.txt.line_spacing_factor, 45);
       FIELD_BS (ctx.content.txt.line_spacing_style, 170);
-      FIELD_CMC (ctx.content.txt.color, 90);
+      FIELD_CMC (ctx.content.txt.color, 90); // CMTC?
       FIELD_BS (ctx.content.txt.alignment, 171);
       FIELD_BS (ctx.content.txt.flow, 172);
-      FIELD_CMC (ctx.content.txt.bg_color, 91);
+      FIELD_CMC (ctx.content.txt.bg_color, 91); // CMTC?
       FIELD_BD (ctx.content.txt.bg_scale, 141);
       FIELD_BL (ctx.content.txt.bg_transparency, 92);
       FIELD_B (ctx.content.txt.is_bg_fill, 291);
@@ -5908,7 +5920,7 @@ DWG_ENTITY (MULTILEADER)
           FIELD_3BD (ctx.content.blk.location, 15);
           FIELD_3BD (ctx.content.blk.scale, 16);
           FIELD_BD (ctx.content.blk.rotation, 46);
-          FIELD_CMC (ctx.content.blk.color, 93);
+          FIELD_CMC (ctx.content.blk.color, 93); // CMTC?
           FIELD_VECTOR_N (ctx.content.blk.transform, BD, 16, 47);
         }
     }
@@ -6839,7 +6851,7 @@ DWG_ENTITY (SECTIONOBJECT)
   FIELD_BD (top_height, 40);
   FIELD_BD (bottom_height, 41);
   FIELD_BL (indicator_alpha, 70);
-  FIELD_CMC (indicator_color, 62); //dxf doc bug: 63, 411
+  FIELD_CMTC (indicator_color, 62); //dxf doc bug: 63, 411
   FIELD_BL (num_verts, 92);
   FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
   FIELD_BL (num_blverts, 93);
