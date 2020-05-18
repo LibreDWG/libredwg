@@ -5737,18 +5737,16 @@ DWG_OBJECT_END
 //(80 + varies)
 /// DXF as ACDBPLACEHOLDER
 DWG_OBJECT (PLACEHOLDER)
-
   // no own data members
   START_OBJECT_HANDLE_STREAM;
   // no SUBCLASS marker
-
 DWG_OBJECT_END
 
 // SCALE (varies)
 // 20.4.92 page 221
 DWG_OBJECT (SCALE)
 
-  DECODE_UNKNOWN_BITS
+  //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbScale)
   FIELD_BS (flag, 70);
   PRE (R_2007) {
@@ -5764,9 +5762,7 @@ DWG_OBJECT (SCALE)
 #endif
     FIELD_T (name, 0);
   }
-
   START_OBJECT_HANDLE_STREAM;
-
 DWG_OBJECT_END
 
 // VBA_PROJECT (81 + varies), a blob
