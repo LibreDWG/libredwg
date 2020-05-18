@@ -42597,21 +42597,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       fail ("TABLESTYLE.name [T] '%s' <> '%s'", name, tablestyle->name);
   }
   {
-    BITCODE_BL num_overrides;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_overrides", &num_overrides, NULL)
-        && num_overrides == tablestyle->num_overrides)
-      pass ();
-    else
-      fail ("TABLESTYLE.num_overrides [BL] %u != %u", tablestyle->num_overrides, num_overrides);
-    num_overrides++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "num_overrides", &num_overrides, 0)
-        && num_overrides == tablestyle->num_overrides)
-      pass ();
-    else
-      fail ("TABLESTYLE.num_overrides [BL] set+1 %u != %u", tablestyle->num_overrides, num_overrides);
-    tablestyle->num_overrides--;
-  }
-  {
     BITCODE_BL num_rowstyles;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_rowstyles", &num_rowstyles, NULL)
         && num_rowstyles == tablestyle->num_rowstyles)
@@ -42625,6 +42610,21 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.num_rowstyles [BL] set+1 %u != %u", tablestyle->num_rowstyles, num_rowstyles);
     tablestyle->num_rowstyles--;
+  }
+  {
+    BITCODE_BL numoverrides;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "numoverrides", &numoverrides, NULL)
+        && numoverrides == tablestyle->numoverrides)
+      pass ();
+    else
+      fail ("TABLESTYLE.numoverrides [BL] %u != %u", tablestyle->numoverrides, numoverrides);
+    numoverrides++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "numoverrides", &numoverrides, 0)
+        && numoverrides == tablestyle->numoverrides)
+      pass ();
+    else
+      fail ("TABLESTYLE.numoverrides [BL] set+1 %u != %u", tablestyle->numoverrides, numoverrides);
+    tablestyle->numoverrides--;
   }
   {
     Dwg_TABLESTYLE_CellStyle ovr;

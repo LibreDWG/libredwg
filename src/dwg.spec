@@ -5556,9 +5556,9 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_T0 (sty.name, 300);
 
     DECODER { FIELD_VALUE (flow_direction) = _obj->sty.cellstyle.property_override_flags & 0x10000; }
-    FIELD_BL (num_overrides, 0);
+    FIELD_BL (numoverrides, 0);
     // FIXME style overrides for 0-6
-    if (FIELD_VALUE (num_overrides))
+    if (FIELD_VALUE (numoverrides))
       {
         FIELD_BL (unknown_bl3, 0);
         CellStyle_fields (ovr.cellstyle);

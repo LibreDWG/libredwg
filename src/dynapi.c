@@ -7224,7 +7224,7 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_fields[] = {
     1,0,0, 0 },
   { "sty",	"Dwg_TABLESTYLE_CellStyle", sizeof (Dwg_TABLESTYLE_CellStyle),  OFF (struct _dwg_object_TABLESTYLE, sty),
     0,0,0, 0 },
-  { "num_overrides",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, num_overrides),
+  { "numoverrides",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, numoverrides),
     0,0,0, 0 },
   { "unknown_bl3",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, unknown_bl3),
     0,0,0, 0 },

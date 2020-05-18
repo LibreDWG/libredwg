@@ -61,10 +61,21 @@ static BITCODE_BL rcount1, rcount2;
     ptr = NULL;                                                               \
   }
 
+#undef UNTIL
 #undef SINCE
+#undef PRE
+#undef VERSIONS
+#undef VERSION
+#define UNTIL(v)                                                              \
+  if (dat->from_version <= v)
 #define SINCE(v)                                                              \
-  cur_ver = v;                                                                \
   if (dat->from_version >= v)
+#define PRE(v)                                                                \
+  if (dat->from_version < v)
+#define VERSIONS(v1, v2)                                                      \
+  if (dat->from_version >= v1 && dat->from_version <= v2)
+#define VERSION(v)                                                            \
+  if (dat->from_version == v)
 
 #define VALUE(value, type, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)

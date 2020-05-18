@@ -8253,7 +8253,7 @@ BL
 H
 @item sty
 Dwg_TABLESTYLE_CellStyle
-@item num_overrides
+@item numoverrides
 BL
 @item unknown_bl3
 BL
