@@ -10879,9 +10879,9 @@ struct _dwg_entity_TABLE*
 BS,	DXF 171
 @item flags
 RC,	DXF 172
-@item merged_value
+@item is_merged_value
 B,	DXF 173
-@item autofit_flag
+@item is_autofit_flag
 B,	DXF 174
 @item merged_width_flag
 BL,	DXF 175
@@ -10896,7 +10896,7 @@ BD,	DXF 144
 @item additional_data_flag
 B
 @item attr_def_index
-BS
+BS,	DXF 179
 @item attr_def_text
 TV,	DXF 300
 @item additional_data_flag2
@@ -10946,9 +10946,9 @@ BL
 @item value
 Dwg_TABLE_value
 @item cell_handle
-H
+H,	DXF 1
 @item num_attr_defs
-BS,	DXF 179
+BS
 @item attr_def_id
 H*
 @item text_style_override

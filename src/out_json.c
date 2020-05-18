@@ -221,6 +221,7 @@ static char *_path_field (const char *path);
                            _path_field (#nam), _obj->o.nam);                  \
     }
 #define FIELD_CAST(nam, type, cast, dxf) FIELD (nam, cast, dxf)
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf) SUB_FIELD (o, nam, cast, dxf)
 #define FIELD_TRACE(nam, type)
 #define FIELD_G_TRACE(nam, type, dxf)
 #define FIELD_TEXT(nam, str)                                                  \

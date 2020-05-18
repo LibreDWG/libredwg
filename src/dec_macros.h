@@ -97,6 +97,11 @@
     _obj->nam = (BITCODE_##cast)bit_read_##type (dat);                        \
     FIELD_G_TRACE (nam, cast, dxf);                                           \
   }
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf)                               \
+  {                                                                           \
+    _obj->o.nam = (BITCODE_##cast)bit_read_##type (dat);                      \
+    FIELD_G_TRACE (o.nam, cast, dxf);                                         \
+  }
 
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \

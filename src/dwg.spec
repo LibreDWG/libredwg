@@ -5154,24 +5154,37 @@ DWG_ENTITY (TABLE)
         //SUBCLASS (AcDbDataCell)
         SUB_FIELD_BS (cells[rcount1],type, 171);
         SUB_FIELD_RC (cells[rcount1],flags, 172);
-        SUB_FIELD_B (cells[rcount1],merged_value, 173);
-        SUB_FIELD_B (cells[rcount1],autofit_flag, 174);
+        SUB_FIELD_B (cells[rcount1],is_merged_value, 173);
+        SUB_FIELD_B (cells[rcount1],is_autofit_flag, 174);
         SUB_FIELD_BL (cells[rcount1],merged_width_flag, 175);
         SUB_FIELD_BL (cells[rcount1],merged_height_flag, 176);
+        DXF {
+          PRE (R_2007) {
+            SUB_FIELD_CAST (cell,cell_flag_override, BS, BL, 177);
+          } LATER_VERSIONS {
+            SUB_FIELD_BL (cell,cell_flag_override, 91);
+          }
+          SUB_FIELD_BS (cell,virtual_edge_flag, 178);
+        }
         SUB_FIELD_BD (cells[rcount1],rotation_value, 145);
-  
+
         if (FIELD_VALUE (cells[rcount1].type) == 1)
           { /* text cell */
-            SUB_FIELD_T (cells[rcount1],text_value, 1);
+            SUB_FIELD_HANDLE (cell,text_style, 3, 344);
+            // <r2007 and empty style and shorter than 250, single dxf 1 line
+            // else split into mult. text lines
+            SUB_FIELD_T (cell,text_value, 1);
+            SUB_FIELD_B (cell,additional_data_flag, 0);
           }
         if (FIELD_VALUE (cells[rcount1].type) == 2)
           { /* block cell */
+            SUB_FIELD_HANDLE (cells[rcount1],text_style, 3, 7);
             SUB_FIELD_BD (cells[rcount1],block_scale, 144);
             SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
-            if (FIELD_VALUE (cells[rcount1].additional_data_flag) == 1)
+            if (FIELD_VALUE (cells[rcount1].additional_data_flag))
               {
-                SUB_FIELD_BS (cells[rcount1],num_attr_defs, 179);
-                SUB_FIELD_BS (cells[rcount1],attr_def_index, 0);
+                SUB_FIELD_H (cells[rcount1],attr_defs, 5, 0);
+                SUB_FIELD_BS (cells[rcount1],attr_def_index, 179);
                 SUB_FIELD_T (cells[rcount1],attr_def_text, 300);
                 //total_num_attr_defs += FIELD_VALUE (cells[rcount1].num_attr_defs);
               }
@@ -5184,9 +5197,9 @@ DWG_ENTITY (TABLE)
             if (FIELD_VALUE (cells[rcount1].additional_data_flag) == 1)
               {
                 BITCODE_BL cell_flag;
-                SUB_FIELD_BL (cells[rcount1],cell_flag_override, 177);
+                SUB_FIELD_BL (cells[rcount1],cell_flag_override, 0);
                 cell_flag = FIELD_VALUE (cells[rcount1].cell_flag_override);
-                SUB_FIELD_RC (cells[rcount1],virtual_edge_flag, 178);
+                SUB_FIELD_RC (cells[rcount1],virtual_edge_flag, 0);
   
                 if (cell_flag & 0x01)
                   SUB_FIELD_RS (cells[rcount1],cell_alignment, 170);

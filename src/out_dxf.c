@@ -75,6 +75,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
 #define FIELD_CAST(nam, type, cast, dxf) FIELDG (nam, cast, dxf)
 #define FIELD_TRACE(nam, type)
 #define SUB_FIELD(o, nam, type, dxf) FIELDG (o.nam, type, dxf)
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf) FIELDG (o.nam, cast, dxf)
 
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \

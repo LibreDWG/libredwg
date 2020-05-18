@@ -123,6 +123,11 @@ static bool env_var_checked_p;
     FIELD_G_TRACE (nam, cast, dxf);                                           \
   }
 #define SUB_FIELD(o, nam, type, dxf) FIELD (o.nam, type)
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf)                          \
+  {                                                                           \
+    bit_write_##type (dat, (BITCODE_##type)_obj->o.nam);                      \
+    FIELD_G_TRACE (o.nam, cast, dxf);                                         \
+  }
 
 #define FIELD_VALUE(nam) _obj->nam
 
@@ -334,15 +339,6 @@ static bool env_var_checked_p;
                      _obj->color.book_name);                                  \
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
-  }
-// force truecolor
-#define FIELD_CMTC(name, dxf)                                                 \
-  {                                                                           \
-    Dwg_Version_Type _ver = dat->version;                                     \
-    if (dat->version < R_2004)                                                \
-      dat->version = R_2004;                                                  \
-    FIELD_CMC (name, dxf);                                                    \
-    dat->version = _ver;                                                      \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \

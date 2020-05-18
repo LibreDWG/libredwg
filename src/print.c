@@ -48,8 +48,9 @@ static BITCODE_BL rcount1, rcount2;
   LOG_TRACE (#name ": " FORMAT_##type " [" #type "]\n", _obj->name)
 #define FIELD_G_TRACE(name, type, dxf)                                        \
   LOG_TRACE (#name ": " FORMAT_##type " [" #type " " #dxf "]\n", _obj->name)
-#define FIELD_CAST(name, type, cast, dxf) FIELD_G_TRACE (name, cast, dxf)
+#define FIELD_CAST(nam, type, cast, dxf) FIELD_G_TRACE (nam, cast, dxf)
 #define SUB_FIELD(o, nam, type, dxf) FIELDG (o.nam, type, dxf)
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf) FIELD_G_TRACE (o.nam, cast, dxf)
 
 #define LOG_INSANE_TF(var, len)
 #define FIELD_VALUE(name) _obj->name

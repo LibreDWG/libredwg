@@ -400,6 +400,7 @@ $DXF{'PROXY_ENTITY'}->{'version'} = 95; # or 91 <= r14
 $DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
 $DXF{'DIMASSOC_Ref'}->{'xrefpaths'} = 301;
 $DXF{'DIMSTYLE'}->{'flag'} = 70;
+$DXF{'TABLE_Cell'}->{'cell_flag_override'} = 177;
 # $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
 # $DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
 # $DXF{'DIMENSION_ORDINATE'}->{'leader_endpt'} = 14;

@@ -3143,8 +3143,8 @@ typedef struct _dwg_TABLE_Cell
 {
   BITCODE_BS type;
   BITCODE_RC flags;
-  BITCODE_B merged_value;
-  BITCODE_B autofit_flag;
+  BITCODE_B is_merged_value;
+  BITCODE_B is_autofit_flag;
   BITCODE_BL merged_width_flag;
   BITCODE_BL merged_height_flag;
   BITCODE_BD rotation_value;
@@ -3176,7 +3176,7 @@ typedef struct _dwg_TABLE_Cell
   BITCODE_BS left_visibility;
   BITCODE_BL unknown;
   Dwg_TABLE_value value;
-  BITCODE_H cell_handle;
+  BITCODE_H text_style;
   BITCODE_BS num_attr_defs;
   BITCODE_H* attr_def_id;
   BITCODE_H text_style_override;

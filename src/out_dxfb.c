@@ -81,6 +81,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define HEADER_VALUE_TU(nam, dxf, value) HEADER_VALUE (nam, TU, dxf, value)
 
 #define FIELD_CAST(nam, type, cast, dxf) FIELDG (nam, cast, dxf)
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf) FIELDG (o.nam, cast, dxf)
 #define FIELD_TRACE(nam, type)
 // TODO length?
 #define VALUE_TV(value, dxf)                                                  \
