@@ -49701,6 +49701,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"TABLESTYLE_rowstyles\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_TABLE_AttrDef);
+  size2 = dwg_dynapi_fields_size ("TABLE_AttrDef");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_TABLE_AttrDef): %d != "
+               "dwg_dynapi_fields_size (\"TABLE_AttrDef\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_TABLE_BreakHeight);
   size2 = dwg_dynapi_fields_size ("TABLE_BreakHeight");
   if (size1 != size2)

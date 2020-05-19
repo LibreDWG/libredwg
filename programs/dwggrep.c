@@ -716,7 +716,7 @@ match_TABLE (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  BITCODE_BL i;
+  BITCODE_BL i, j;
   const Dwg_Entity_TABLE *_obj = obj->tio.entity->tio.TABLE;
 
   for (i = 0; i < _obj->num_cells; i++)
@@ -726,9 +726,13 @@ match_TABLE (const char *restrict filename, const Dwg_Object *restrict obj)
           MATCH_ENTITY (TABLE, cells[i].text_value, 1);
         }
       else if (_obj->cells[i].type == 2
-               && _obj->cells[i].additional_data_flag == 1)
+               && _obj->cells[i].additional_data_flag == 1
+               && _obj->cells[i].num_attr_defs)
         {
-          MATCH_ENTITY (TABLE, cells[i].attr_def_text, 300);
+          for (j = 0; j < _obj->cells[i].num_attr_defs; j++)
+            {
+              MATCH_ENTITY (TABLE, cells[i].attr_defs[j].text, 300);
+            }
         }
     }
   return found;

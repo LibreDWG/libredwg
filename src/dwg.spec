@@ -5077,7 +5077,8 @@ DWG_ENTITY (TABLE)
   SINCE (R_2010) //AC1024
     {
       FIELD_RC (unknown_rc, 0);
-      FIELD_HANDLE (unknown_h, 5, 0);
+      FIELD_HANDLE (tablestyle, 5, 342);
+      //FIELD_HANDLE (unknown_h, 5, 0);
       FIELD_BL (unknown_bl, 0);
       VERSION (R_2010)
         FIELD_B (unknown_b, 0); // default 1
@@ -5085,6 +5086,14 @@ DWG_ENTITY (TABLE)
         FIELD_BL (unknown_bl1, 0);
       // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
       TABLECONTENT_fields;
+
+#undef row
+#undef cell
+#undef content
+#undef geom
+#undef attr
+#undef merged
+
     }
   else {
     SUBCLASS (AcDbBlockReference)
@@ -5138,8 +5147,30 @@ DWG_ENTITY (TABLE)
       FIELD_BL (num_owned, 0);
       VALUEOUTOFBOUNDS (num_owned, 10000)
     }
+    FIELD_HANDLE (block_header, 5, 2);
+    VERSIONS (R_13, R_2000)
+      {
+        if (FIELD_VALUE (has_attribs))
+          {
+            FIELD_HANDLE (first_attrib, 4, 0);
+            FIELD_HANDLE (last_attrib, 4, 0);
+          }
+      }
+  
+    SINCE (R_2004)
+      {
+  #if defined (IS_JSON) || defined (IS_DXF)
+        if (!_obj->attrib_handles && _obj->num_owned)
+          _obj->num_owned = 0;
+  #endif
+        HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
+      }
+    if (FIELD_VALUE (has_attribs)) {
+      FIELD_HANDLE (seqend, 3, 0);
+    }
   
     SUBCLASS (AcDbTable)
+    FIELD_HANDLE (tablestyle, 5, 342);
     FIELD_BS (flag_for_table_value, 90);
     FIELD_3BD (horiz_direction, 11);
     FIELD_BL (num_cols, 92);
@@ -5149,15 +5180,16 @@ DWG_ENTITY (TABLE)
     FIELD_VECTOR (col_widths, BD, num_cols, 142);
     FIELD_VECTOR (row_heights, BD, num_rows, 141);
     FIELD_VALUE (num_cells) = FIELD_VALUE (num_rows) * FIELD_VALUE (num_cols);
+    #define cell cells[rcount1]
     REPEAT (num_cells, cells, Dwg_TABLE_Cell)
     REPEAT_BLOCK
         //SUBCLASS (AcDbDataCell)
-        SUB_FIELD_BS (cells[rcount1],type, 171);
-        SUB_FIELD_RC (cells[rcount1],flags, 172);
-        SUB_FIELD_B (cells[rcount1],is_merged_value, 173);
-        SUB_FIELD_B (cells[rcount1],is_autofit_flag, 174);
-        SUB_FIELD_BL (cells[rcount1],merged_width_flag, 175);
-        SUB_FIELD_BL (cells[rcount1],merged_height_flag, 176);
+        SUB_FIELD_BS (cell,type, 171);
+        SUB_FIELD_RC (cell,flags, 172);
+        SUB_FIELD_B (cell,is_merged_value, 173);
+        SUB_FIELD_B (cell,is_autofit_flag, 174);
+        SUB_FIELD_BL (cell,merged_width_flag, 175);
+        SUB_FIELD_BL (cell,merged_height_flag, 176);
         DXF {
           PRE (R_2007) {
             SUB_FIELD_CAST (cell,cell_flag_override, BS, BL, 177);
@@ -5166,83 +5198,92 @@ DWG_ENTITY (TABLE)
           }
           SUB_FIELD_BS (cell,virtual_edge_flag, 178);
         }
-        SUB_FIELD_BD (cells[rcount1],rotation_value, 145);
+        SUB_FIELD_BD (cell,rotation, 145);
 
-        if (FIELD_VALUE (cells[rcount1].type) == 1)
+        if (FIELD_VALUE (cell.type) == 1)
           { /* text cell */
             SUB_FIELD_HANDLE (cell,text_style, 3, 344);
-            // <r2007 and empty style and shorter than 250, single dxf 1 line
+            // TODO: <r2007 and empty style and shorter than 250, single dxf 1 line
             // else split into mult. text lines
             SUB_FIELD_T (cell,text_value, 1);
             SUB_FIELD_B (cell,additional_data_flag, 0);
           }
-        if (FIELD_VALUE (cells[rcount1].type) == 2)
+        if (FIELD_VALUE (cell.type) == 2)
           { /* block cell */
-            SUB_FIELD_HANDLE (cells[rcount1],text_style, 3, 7);
-            SUB_FIELD_BD (cells[rcount1],block_scale, 144);
-            SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
-            if (FIELD_VALUE (cells[rcount1].additional_data_flag))
+            SUB_FIELD_HANDLE (cell,block_handle, 3, 340);
+            SUB_FIELD_BD (cell,block_scale, 144);
+            SUB_FIELD_B (cell,additional_data_flag, 0);
+            if (FIELD_VALUE (cell.additional_data_flag))
               {
-                SUB_FIELD_H (cells[rcount1],attr_defs, 5, 0);
-                SUB_FIELD_BS (cells[rcount1],attr_def_index, 179);
-                SUB_FIELD_T (cells[rcount1],attr_def_text, 300);
-                //total_num_attr_defs += FIELD_VALUE (cells[rcount1].num_attr_defs);
+                #define attr cell.attr_defs[rcount2]
+                REPEAT2 (cell.num_attr_defs, cell.attr_defs, Dwg_TABLE_AttrDef)
+                REPEAT_BLOCK
+                    SUB_FIELD_HANDLE (cell.attr_defs[rcount2],attdef, 4, 331);
+                    SUB_FIELD_BS (cell.attr_defs[rcount2],index, 179);
+                    SUB_FIELD_T (cell.attr_defs[rcount2],text, 300); // dxf?
+                END_REPEAT_BLOCK
+                END_REPEAT (cell.attr_defs);
+                //total_num_attr_defs += FIELD_VALUE (cell.num_attr_defs);
+                #undef attr
               }
           }
         if (FIELD_VALUE (cells) &&
-            (FIELD_VALUE (cells[rcount1].type) == 1 ||
-             FIELD_VALUE (cells[rcount1].type) == 2))
+            (FIELD_VALUE (cell.type) == 1 ||
+             FIELD_VALUE (cell.type) == 2))
           { /* common to both text and block cells */
-            SUB_FIELD_B (cells[rcount1],additional_data_flag, 0);
-            if (FIELD_VALUE (cells[rcount1].additional_data_flag) == 1)
+            SUB_FIELD_B (cell,additional_data_flag, 0);
+            if (FIELD_VALUE (cell.additional_data_flag) == 1)
               {
                 BITCODE_BL cell_flag;
-                SUB_FIELD_BL (cells[rcount1],cell_flag_override, 0);
-                cell_flag = FIELD_VALUE (cells[rcount1].cell_flag_override);
-                SUB_FIELD_RC (cells[rcount1],virtual_edge_flag, 0);
+                SUB_FIELD_BL (cell,cell_flag_override, 0);
+                cell_flag = FIELD_VALUE (cell.cell_flag_override);
+                SUB_FIELD_RC (cell,virtual_edge_flag, 0);
   
                 if (cell_flag & 0x01)
-                  SUB_FIELD_RS (cells[rcount1],cell_alignment, 170);
+                  SUB_FIELD_RS (cell,cell_alignment, 170);
                 if (cell_flag & 0x02)
-                  SUB_FIELD_B (cells[rcount1],bg_fill_none, 283);
+                  SUB_FIELD_B (cell,bg_fill_none, 283);
                 if (cell_flag & 0x04)
-                  SUB_FIELD_CMC (cells[rcount1],bg_color, 63); // CMTC?
+                  SUB_FIELD_CMTC (cell,bg_color, 63);
                 if (cell_flag & 0x08)
-                  SUB_FIELD_CMC (cells[rcount1],content_color, 64); // CMTC?
+                  {
+                    SUB_FIELD_CMTC (cell,content_color, 64);
+                    SUB_FIELD_HANDLE (cell,text_style, 3, 7); //?
+                  }
                 if (cell_flag & 0x10) {
-                  SUB_FIELD_HANDLE (cells[rcount1],text_style, 5, 7);
+                  SUB_FIELD_HANDLE (cell,text_style, 3, 7);
                 }
                 if (cell_flag & 0x20)
-                  SUB_FIELD_BD (cells[rcount1],text_height, 140);
+                  SUB_FIELD_BD (cell,text_height, 140);
                 if (cell_flag & 0x00040)
-                  SUB_FIELD_CMC (cells[rcount1],top_grid_color, 69); // CMTC?
+                  SUB_FIELD_CMTC (cell,top_grid_color, 69);
                 if (cell_flag & 0x00400)
-                  SUB_FIELD_BS (cells[rcount1],top_grid_linewt, 279);
+                  SUB_FIELD_BS (cell,top_grid_linewt, 279);
                 if (cell_flag & 0x04000)
-                  SUB_FIELD_BS (cells[rcount1],top_visibility, 289);
+                  SUB_FIELD_BS (cell,top_visibility, 289);
                 if (cell_flag & 0x00080)
-                  SUB_FIELD_CMC (cells[rcount1],right_grid_color, 65); // CMTC?
+                  SUB_FIELD_CMTC (cell,right_grid_color, 65);
                 if (cell_flag & 0x00800)
-                  SUB_FIELD_BS (cells[rcount1],right_grid_linewt, 275);
+                  SUB_FIELD_BS (cell,right_grid_linewt, 275);
                 if (cell_flag & 0x08000)
-                  SUB_FIELD_BS (cells[rcount1],right_visibility, 285);
+                  SUB_FIELD_BS (cell,right_visibility, 285);
                 if (cell_flag & 0x00100)
-                  SUB_FIELD_CMC (cells[rcount1],bottom_grid_color, 66); // CMTC?
+                  SUB_FIELD_CMTC (cell,bottom_grid_color, 66);
                 if (cell_flag & 0x01000)
-                  SUB_FIELD_BS (cells[rcount1],bottom_grid_linewt, 276);
+                  SUB_FIELD_BS (cell,bottom_grid_linewt, 276);
                 if (cell_flag & 0x10000)
-                  SUB_FIELD_BS (cells[rcount1],bottom_visibility, 286);
+                  SUB_FIELD_BS (cell,bottom_visibility, 286);
                 if (cell_flag & 0x00200)
-                  SUB_FIELD_CMC (cells[rcount1],left_grid_color, 68);// CMTC?
+                  SUB_FIELD_CMTC (cell,left_grid_color, 68);
                 if (cell_flag & 0x02000)
-                  SUB_FIELD_BS (cells[rcount1],left_grid_linewt, 278);
+                  SUB_FIELD_BS (cell,left_grid_linewt, 278);
                 if (cell_flag & 0x20000)
-                  SUB_FIELD_BS (cells[rcount1],left_visibility, 288);
+                  SUB_FIELD_BS (cell,left_visibility, 288);
   
-                SUB_FIELD_BL (cells[rcount1],unknown, 0);
+                SUB_FIELD_BL (cell,unknown, 0);
   
                 // 20.4.99 Value, page 241
-                TABLE_value_fields (cells[rcount1].value)
+                TABLE_value_fields (cell.value)
                 if (error & DWG_ERR_INVALIDTYPE)
                   {
                     JSON_END_REPEAT (cells);
@@ -5252,13 +5293,11 @@ DWG_ENTITY (TABLE)
           }
     END_REPEAT_BLOCK
     SET_PARENT_OBJ (cells)
-#ifndef IS_FREE
     END_REPEAT (cells);
-#endif
+    #undef cell
     /* End Cell Data (remaining data applies to entire table)*/
   
     /* COMMON: */
-  
     FIELD_B (has_table_overrides, 0);
     if (FIELD_VALUE (has_table_overrides))
       {
@@ -5275,11 +5314,11 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0010)
           FIELD_BD (vert_cell_margin, 41);
         if (table_flag & 0x0020)
-          FIELD_CMC (title_row_color, 64); // CMTC?
+          FIELD_CMTC (title_row_color, 64); // CMTC?
         if (table_flag & 0x0040)
-          FIELD_CMC (header_row_color, 64); // CMTC?
+          FIELD_CMTC (header_row_color, 64); // CMTC?
         if (table_flag & 0x0080)
-          FIELD_CMC (data_row_color, 64);
+          FIELD_CMTC (data_row_color, 64);
         if (table_flag & 0x0100)
           FIELD_B (title_row_fill_none, 283);
         if (table_flag & 0x0200)
@@ -5287,13 +5326,18 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0400)
           FIELD_B (data_row_fill_none, 283);
         if (table_flag & 0x0800)
-          FIELD_CMC (title_row_fill_color, 63); // CMTC?
+          FIELD_CMTC (title_row_fill_color, 63); // CMTC?
         if (table_flag & 0x1000)
-          FIELD_CMC (header_row_fill_color, 63); // CMTC?
+          FIELD_CMTC (header_row_fill_color, 63); // CMTC?
         if (table_flag & 0x2000)
-          FIELD_CMC (data_row_fill_color, 63); // CMTC?
+          {
+            FIELD_CMTC (data_row_fill_color, 63); // CMTC?
+            FIELD_HANDLE (title_row_style_override, ANYCODE, 7);
+          }
         if (table_flag & 0x4000)
-          FIELD_BS (title_row_alignment, 170);
+          {
+            FIELD_BS (title_row_alignment, 170);
+          }
         if (table_flag & 0x8000)
           FIELD_BS (header_row_alignment, 170);
         if (table_flag & 0x10000)
@@ -5301,7 +5345,10 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x20000)
           FIELD_HANDLE (title_text_style, 5, 7);
         if (table_flag & 0x40000)
-          FIELD_HANDLE (header_text_style, 5, 7);
+          {
+            FIELD_HANDLE (header_text_style, 5, 7);
+            //FIELD_HANDLE (header_row_style_override, ANYCODE, 7); ??
+          }
         if (table_flag & 0x80000)
           FIELD_HANDLE (data_text_style, 5, 7);
         if (table_flag & 0x100000)
@@ -5319,41 +5366,41 @@ DWG_ENTITY (TABLE)
         FIELD_BL (border_color_overrides_flag, 94);
         border_color = FIELD_VALUE (border_color_overrides_flag);
         if (border_color & 0x0001)
-          FIELD_CMC (title_horiz_top_color, 64); // CMTC...
+          FIELD_CMTC (title_horiz_top_color, 64);
         if (border_color & 0x0002)
-          FIELD_CMC (title_horiz_ins_color, 65);
+          FIELD_CMTC (title_horiz_ins_color, 65);
         if (border_color & 0x0004)
-          FIELD_CMC (title_horiz_bottom_color, 66);
+          FIELD_CMTC (title_horiz_bottom_color, 66);
         if (border_color & 0x0008)
-          FIELD_CMC (title_vert_left_color, 63);
+          FIELD_CMTC (title_vert_left_color, 63);
         if (border_color & 0x0010)
-          FIELD_CMC (title_vert_ins_color, 68);
+          FIELD_CMTC (title_vert_ins_color, 68);
         if (border_color & 0x0020)
-          FIELD_CMC (title_vert_right_color, 69);
+          FIELD_CMTC (title_vert_right_color, 69);
         if (border_color & 0x0040)
-          FIELD_CMC (header_horiz_top_color, 64);
+          FIELD_CMTC (header_horiz_top_color, 64);
         if (border_color & 0x0080)
-          FIELD_CMC (header_horiz_ins_color, 65);
+          FIELD_CMTC (header_horiz_ins_color, 65);
         if (border_color & 0x0100)
-          FIELD_CMC (header_horiz_bottom_color, 66);
+          FIELD_CMTC (header_horiz_bottom_color, 66);
         if (border_color & 0x0200)
-          FIELD_CMC (header_vert_left_color, 63);
+          FIELD_CMTC (header_vert_left_color, 63);
         if (border_color & 0x0400)
-          FIELD_CMC (header_vert_ins_color, 68);
+          FIELD_CMTC (header_vert_ins_color, 68);
         if (border_color & 0x0800)
-          FIELD_CMC (header_vert_right_color, 69);
+          FIELD_CMTC (header_vert_right_color, 69);
         if (border_color & 0x1000)
-          FIELD_CMC (data_horiz_top_color, 64);
+          FIELD_CMTC (data_horiz_top_color, 64);
         if (border_color & 0x2000)
-          FIELD_CMC (data_horiz_ins_color, 65);
+          FIELD_CMTC (data_horiz_ins_color, 65);
         if (border_color & 0x4000)
-          FIELD_CMC (data_horiz_bottom_color, 66);
+          FIELD_CMTC (data_horiz_bottom_color, 66);
         if (border_color & 0x8000)
-          FIELD_CMC (data_vert_left_color, 63);
+          FIELD_CMTC (data_vert_left_color, 63);
         if (border_color & 0x10000)
-          FIELD_CMC (data_vert_ins_color, 68);
+          FIELD_CMTC (data_vert_ins_color, 68);
         if (border_color & 0x20000)
-          FIELD_CMC (data_vert_right_color, 69);
+          FIELD_CMTC (data_vert_right_color, 69);
       }
   
     FIELD_B (has_border_lineweight_overrides, 0);
@@ -5445,62 +5492,6 @@ DWG_ENTITY (TABLE)
       }
   
     COMMON_ENTITY_HANDLE_DATA;
-    FIELD_HANDLE (block_header, 5, 2);
-    VERSIONS (R_13, R_2000)
-      {
-        if (FIELD_VALUE (has_attribs))
-          {
-            FIELD_HANDLE (first_attrib, 4, 0);
-            FIELD_HANDLE (last_attrib, 4, 0);
-          }
-      }
-  
-    SINCE (R_2004)
-      {
-  #if defined (IS_JSON) || defined (IS_DXF)
-        if (!_obj->attrib_handles && _obj->num_owned)
-          _obj->num_owned = 0;
-  #endif
-        HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
-      }
-  
-    if (FIELD_VALUE (has_attribs)) {
-      FIELD_HANDLE (seqend, 3, 0);
-    }
-    FIELD_HANDLE (tablestyle, 5, 342);
-    _REPEAT_CNF (_obj->num_cells, cells, Dwg_TABLE_Cell, 1)
-    REPEAT_BLOCK
-        if (FIELD_VALUE (cells[rcount1].type) == 1)
-          { /* text cell */
-            SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 344);
-          }
-        else
-          {
-            /* block cell */
-            SUB_FIELD_HANDLE (cells[rcount1],cell_handle, 5, 340)
-          }
-
-        if (FIELD_VALUE (cells[rcount1].type) == 2 &&
-            FIELD_VALUE (cells[rcount1].additional_data_flag) == 1)
-          HANDLE_VECTOR (cells[rcount1].attr_def_id, cells[rcount1].num_attr_defs, 4, 331);
-        if (FIELD_VALUE (cells[rcount1].additional_data_flag2) == 1 &&
-            FIELD_VALUE (cells[rcount1].cell_flag_override) & 0x08)
-          SUB_FIELD_HANDLE (cells[rcount1],text_style_override, ANYCODE, 7);
-    END_REPEAT_BLOCK
-    SET_PARENT_OBJ (cells)
-    END_REPEAT (cells);
-
-    if (FIELD_VALUE (has_table_overrides))
-      {
-        BITCODE_BL table_flag;
-        table_flag = FIELD_VALUE (table_flag_override);
-        if (table_flag & 0x20000)
-          FIELD_HANDLE (title_row_style_override, ANYCODE, 7);
-        if (table_flag & 0x40000)
-          FIELD_HANDLE (header_row_style_override, ANYCODE, 7);
-        if (table_flag & 0x80000)
-          FIELD_HANDLE (data_row_style_override, ANYCODE, 7);
-      }
   }
   SINCE (R_2010)
   {

@@ -3139,6 +3139,13 @@ typedef struct _dwg_TABLE_CustomDataItem
   struct _dwg_TableRow *row_parent;
 } Dwg_TABLE_CustomDataItem;
 
+typedef struct _dwg_TABLE_AttrDef
+{
+  BITCODE_H attdef;
+  BITCODE_BS index;
+  BITCODE_T text;
+} Dwg_TABLE_AttrDef;
+
 typedef struct _dwg_TABLE_Cell
 {
   BITCODE_BS type;
@@ -3147,12 +3154,11 @@ typedef struct _dwg_TABLE_Cell
   BITCODE_B is_autofit_flag;
   BITCODE_BL merged_width_flag;
   BITCODE_BL merged_height_flag;
-  BITCODE_BD rotation_value;
+  BITCODE_BD rotation;
   BITCODE_T text_value;
+  BITCODE_H block_handle;
   BITCODE_BD block_scale;
   BITCODE_B additional_data_flag;
-  BITCODE_BS attr_def_index;
-  BITCODE_TV attr_def_text;
   BITCODE_B additional_data_flag2;
   BITCODE_BL cell_flag_override;
   BITCODE_RC virtual_edge_flag;
@@ -3176,10 +3182,9 @@ typedef struct _dwg_TABLE_Cell
   BITCODE_BS left_visibility;
   BITCODE_BL unknown;
   Dwg_TABLE_value value;
-  BITCODE_H text_style;
-  BITCODE_BS num_attr_defs;
-  BITCODE_H* attr_def_id;
-  BITCODE_H text_style_override;
+  BITCODE_BL num_attr_defs;
+  Dwg_TABLE_AttrDef *attr_defs;
+  //BITCODE_H text_style_override;
 
   struct _dwg_entity_TABLE *parent;
 } Dwg_TABLE_Cell;

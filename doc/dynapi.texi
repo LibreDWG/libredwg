@@ -3826,9 +3826,9 @@ H
 @item title_row_style_override
 H,	DXF 7
 @item header_row_style_override
-H,	DXF 7
+H
 @item data_row_style_override
-H,	DXF 7
+H
 @item unknown_bs
 BS
 @item hor_dir
@@ -10833,6 +10833,22 @@ TU,	DXF 1
 @end vtable
 @end indentedblock
 
+@strong{Dwg_TABLE_AttrDef} @anchor{Dwg_TABLE_AttrDef}
+@vindex Dwg_TABLE_AttrDef
+
+@indentedblock
+@vtable @code
+
+@item attdef
+H,	DXF 331
+@item index
+BS,	DXF 179
+@item text
+T,	DXF 300
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_TABLE_BreakHeight} @anchor{Dwg_TABLE_BreakHeight}
 @vindex Dwg_TABLE_BreakHeight
 
@@ -10887,18 +10903,16 @@ B,	DXF 174
 BL,	DXF 175
 @item merged_height_flag
 BL,	DXF 176
-@item rotation_value
+@item rotation
 BD,	DXF 145
 @item text_value
 T,	DXF 1
+@item block_handle
+H,	DXF 340
 @item block_scale
 BD,	DXF 144
 @item additional_data_flag
 B
-@item attr_def_index
-BS,	DXF 179
-@item attr_def_text
-TV,	DXF 300
 @item additional_data_flag2
 B
 @item cell_flag_override
@@ -10945,14 +10959,10 @@ BS,	DXF 288
 BL
 @item value
 Dwg_TABLE_value
-@item cell_handle
-H,	DXF 1
 @item num_attr_defs
-BS
-@item attr_def_id
-H*
-@item text_style_override
-H
+BL
+@item attr_defs
+Dwg_TABLE_AttrDef*
 @item parent
 struct _dwg_entity_TABLE*
 
