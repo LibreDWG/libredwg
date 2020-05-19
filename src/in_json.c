@@ -2344,19 +2344,34 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           break;
         }
-      else
-        {
-          // Currently we have 3 known static arrays, and a few embedded subclasses.
-          // TODO: => vertind BS[4]
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
-          if (memBEGINc (key, "cellstyle.content_format.") ||
-              memBEGINc (key, "cellstyle.border."))
+      else // not found
+        {  // maybe it's an embedded subclass. look for the dot
+          char *rest = strchr (key, '.');
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+          // Currently we have 3 known static arrays, and a few embedded subclasses. Color e.g.
+          if (rest)
             {
               const Dwg_DYNAPI_field *f1;
-              char *rest = strchr (&key[10], '.');
+              const char *subclass = NULL;
+
               *rest = '\0';
               rest++;
-              f1 = dwg_dynapi_subclass_field ("TABLESTYLE_CellStyle", key);
+              f1 = dwg_dynapi_entity_field (name, key);
+              if (f1 && *rest)
+                {
+                  void *off = &((char *)_obj)[f->offset + f1->offset];
+                  char *subclass1 = dwg_dynapi_subclass_name (f1->type);
+                  const Dwg_DYNAPI_field *sfields1
+                    = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
+                    : NULL;
+                  if (!sfields1
+                      || !_set_struct_field (dat, obj, tokens, off,
+                                             subclass1, rest, sfields1))
+                    ++tokens->index;
+                  free (subclass1);
+                  break;
+                }
+              f1 = dwg_dynapi_subclass_field (name, key);
               if (f1 && *rest)
                 {
                   void *off = &((char *)_obj)[f->offset + f1->offset];
@@ -2976,7 +2991,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   else
                     LOG_ERROR ("%s.%s not found", name, key)
                 }
-              LOG_ERROR ("Unknown %s.%s %.*s ignored\n", name, key,
+              LOG_ERROR ("Unknown %s.%s %.*s ignored", name, key,
                          t->end - t->start, &dat->chain[t->start]);
               json_advance_unknown (dat, tokens, t->type, 0);
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
