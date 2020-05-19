@@ -10907,13 +10907,13 @@ BL,	DXF 176
 BD,	DXF 145
 @item text_value
 T,	DXF 1
+@item text_style
+H,	DXF 7
 @item block_handle
 H,	DXF 340
 @item block_scale
 BD,	DXF 144
 @item additional_data_flag
-B
-@item additional_data_flag2
 B
 @item cell_flag_override
 BL,	DXF 177
@@ -10927,8 +10927,6 @@ B,	DXF 283
 CMC,	DXF 63
 @item content_color
 CMC,	DXF 64
-@item text_style
-H,	DXF 7
 @item text_height
 BD,	DXF 140
 @item top_grid_color
@@ -10994,9 +10992,9 @@ struct _dwg_TableRow*
 @vtable @code
 
 @item flags
-BL,	DXF 90
-@item flags93
-BL,	DXF 93
+BL
+@item format_flags
+BL
 @item data_type
 BL,	DXF 90
 @item data_size

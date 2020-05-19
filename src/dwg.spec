@@ -5226,7 +5226,6 @@ DWG_ENTITY (TABLE)
             (FIELD_VALUE (cell.type) == 1 ||
              FIELD_VALUE (cell.type) == 2))
           { /* common to both text and block cells */
-            SUB_FIELD_B (cell,additional_data_flag, 0);
             if (FIELD_VALUE (cell.additional_data_flag) == 1)
               {
                 BITCODE_BL cell_flag;

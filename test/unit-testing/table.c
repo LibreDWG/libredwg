@@ -6,11 +6,11 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BL i;
+  BITCODE_BL i, j;
   Dwg_LinkedData ldata;
   Dwg_LinkedTableData tdata;
   Dwg_FormattedTableData fdata;
-  BITCODE_H table_style;
+  BITCODE_H tablestyle;
 
   BITCODE_RC unknown_rc;
   BITCODE_H unknown_h;
@@ -32,6 +32,8 @@ api_process (dwg_object *obj)
   BITCODE_BD* col_widths;
   BITCODE_BD* row_heights;
   Dwg_TABLE_Cell* cells;
+  BITCODE_BL num_attr_defs;
+  Dwg_TABLE_AttrDef* attr_defs;
   BITCODE_B has_table_overrides;
   BITCODE_BL table_flag_override;
   BITCODE_B title_suppressed;
@@ -145,7 +147,7 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2010)
     {
       printf ("TABLECONTENT r2010+ nyi\n"); // TODO
-      return;
+      //return;
     }
 
   CHK_ENTITY_TYPE (table, TABLE, unknown_rc, RC);
@@ -161,6 +163,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (table, TABLE, extrusion);
   CHK_ENTITY_TYPE (table, TABLE, has_attribs, B);
   CHK_ENTITY_TYPE (table, TABLE, num_owned, BL);
+
+  CHK_ENTITY_H (table, TABLE, tablestyle);
   CHK_ENTITY_TYPE (table, TABLE, flag_for_table_value, BS);
   CHK_ENTITY_3RD (table, TABLE, horiz_direction);
   CHK_ENTITY_TYPE (table, TABLE, num_cols, BL);
@@ -175,24 +179,37 @@ api_process (dwg_object *obj)
       {
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, type, BS);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, flags, RC);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, merged_value, B);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, autofit_flag, B);
+        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, is_merged_value, B);
+        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, is_autofit_flag, B);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, merged_width_flag, BL);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, merged_height_flag, BL);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, rotation_value, BD);
-        CHK_SUBCLASS_UTF8TEXT (cells[i], TABLE_Cell, text_value);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, block_scale, BD);
+        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, rotation, BD);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, additional_data_flag, B);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, attr_def_index, BS);
-        CHK_SUBCLASS_UTF8TEXT (cells[i], TABLE_Cell, attr_def_text);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, additional_data_flag2, B);
+        if (cells[i].type == 1)
+          {
+            CHK_SUBCLASS_UTF8TEXT (cells[i], TABLE_Cell, text_value);
+            CHK_SUBCLASS_H (cells[i], TABLE_Cell, text_style);
+          }
+        else
+          {
+            CHK_SUBCLASS_H (cells[i], TABLE_Cell, block_handle);
+            CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, block_scale, BD);
+            CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, num_attr_defs, BL);
+            if (!dwg_dynapi_subclass_value (&cells[i], "TABLE_Cell", "attr_defs", &attr_defs, NULL))
+              fail ("TABLE.attr_defs");
+            for (j = 0; j < cells[i].num_attr_defs; j++)
+              {
+                CHK_SUBCLASS_H (attr_defs[j], TABLE_AttrDef, attdef);
+                CHK_SUBCLASS_TYPE (attr_defs[j], TABLE_AttrDef, index, BS);
+                CHK_SUBCLASS_UTF8TEXT (attr_defs[j], TABLE_AttrDef, text);
+              }
+          }
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, cell_flag_override, BL);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, virtual_edge_flag, RC);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, cell_alignment, RS);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, bg_fill_none, B);
         CHK_SUBCLASS_CMC (cells[i], TABLE_Cell, bg_color);
         CHK_SUBCLASS_CMC (cells[i], TABLE_Cell, content_color);
-        CHK_SUBCLASS_H (cells[i], TABLE_Cell, text_style);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, text_height, BD);
         CHK_SUBCLASS_CMC (cells[i], TABLE_Cell, top_grid_color);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, top_grid_linewt, BS);
@@ -208,10 +225,6 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, left_visibility, BS);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, unknown, BL);
         //Dwg_TABLE_value value;
-        CHK_SUBCLASS_H (cells[i], TABLE_Cell, cell_handle);
-        CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, num_attr_defs, BS);
-        //CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, attr_def_id, H*);
-        CHK_SUBCLASS_H (cells[i], TABLE_Cell, text_style_override);
       }
   CHK_ENTITY_TYPE (table, TABLE, has_table_overrides, B);
   CHK_ENTITY_TYPE (table, TABLE, table_flag_override, BL);

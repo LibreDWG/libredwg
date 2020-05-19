@@ -3158,17 +3158,16 @@ typedef struct _dwg_TABLE_Cell
   BITCODE_BL merged_height_flag;
   BITCODE_BD rotation;
   BITCODE_T text_value;
+  BITCODE_H text_style;
   BITCODE_H block_handle;
   BITCODE_BD block_scale;
   BITCODE_B additional_data_flag;
-  BITCODE_B additional_data_flag2;
   BITCODE_BL cell_flag_override;
   BITCODE_RC virtual_edge_flag;
   BITCODE_RS cell_alignment;
   BITCODE_B bg_fill_none;
   BITCODE_CMC bg_color;
   BITCODE_CMC content_color;
-  BITCODE_H text_style;
   BITCODE_BD text_height;
   BITCODE_CMC top_grid_color;
   BITCODE_BS top_grid_linewt;
