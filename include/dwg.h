@@ -3115,7 +3115,8 @@ typedef struct _dwg_object_DICTIONARYWDFLT
 // 20.4.99. also for FIELD
 typedef struct _dwg_TABLE_value
 {
-  BITCODE_BL flags;
+  BITCODE_BL flags;        /* DXF 90 */
+  BITCODE_BL format_flags; /* DXF 93, r2007+ */
   BITCODE_BL data_type;
   BITCODE_BL data_size;
   BITCODE_BL data_long;
@@ -3124,6 +3125,7 @@ typedef struct _dwg_TABLE_value
   BITCODE_TF data_date;
   BITCODE_2RD data_point;
   BITCODE_3RD data_3dpoint;
+  BITCODE_H data_handle;
   BITCODE_BL unit_type;
   BITCODE_TV format_string;
   BITCODE_TV value_string;

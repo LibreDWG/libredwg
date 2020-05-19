@@ -4520,65 +4520,60 @@ DWG_OBJECT_END
 
 // 20.4.99 Value, page 241. for FIELD and TABLE
 #define TABLE_value_fields(value)                                             \
-  SINCE (R_2007) { FIELD_BL (value.flags, 93); }                              \
-  if ((FIELD_VALUE (value.flags) & 0x01) == 0x00)                             \
+  PRE (R_2007) { FIELD_VALUE (value.data_type) &= ~0x200; }                   \
+  LATER_VERSIONS { FIELD_BL (value.format_flags, 93); }                       \
+  FIELD_BL (value.data_type, 90);                                             \
+  if (!(dat->version >= R_2007 && FIELD_VALUE (value.format_flags) & 1))      \
     {                                                                         \
-      FIELD_BL (value.data_type, 90);                                         \
-    }                                                                         \
-  else                                                                        \
-    {                                                                         \
-      FIELD_VALUE (value.data_type) = 512; /* kGeneral since r2007*/          \
-    }                                                                         \
-  switch (FIELD_VALUE (value.data_type))                                      \
-    {                                                                         \
-    case 0: /* kUnknown */                                                    \
-      FIELD_BL (value.data_long, 0);                                          \
-      break;                                                                  \
-    case 1: /* kLong */                                                       \
-      FIELD_BL (value.data_long, 0);                                          \
-      break;                                                                  \
-    case 2: /* kDouble */                                                     \
-      FIELD_BD (value.data_double, 0);                                        \
-      break;                                                                  \
-    case 4: /* kString */                                                     \
-      FIELD_T (value.data_string, 0);                                         \
-      break;                                                                  \
-    case 8: /* kDate */                                                       \
-      FIELD_BL (value.data_size, 0);                                          \
-      FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size), 0);       \
-      break;                                                                  \
-    case 16: /* kPoint */                                                     \
-      FIELD_BL (value.data_size, 0);                                          \
-      FIELD_2RD (value.data_point, 0);                                        \
-      break;                                                                  \
-    case 32: /* k3dPoint */                                                   \
-      FIELD_BL (value.data_size, 0);                                          \
-      FIELD_3RD (value.data_3dpoint, 0);                                      \
-      break;                                                                  \
-    case 64: /* kObjectId */                                                  \
-      /* data is a HANDLE */                                                  \
-      /* read from appropriate place in handles section */                    \
-      break;                                                                  \
-    case 128: /* kBuffer */                                                   \
-      LOG_ERROR ("Unknown data type in TABLE entity: \"kBuffer\".\n")         \
-      break;                                                                  \
-    case 256: /* kResBuf */                                                   \
-      LOG_ERROR ("Unknown data type in TABLE entity: \"kResBuf\".\n")         \
-      break;                                                                  \
-    case 512: /* kGeneral since r2007*/                                       \
-      SINCE (R_2007) { FIELD_BL (value.data_size, 0); }                       \
-      else                                                                    \
-      {                                                                       \
-        LOG_ERROR ("Unknown data type in TABLE entity: \"kGeneral before "    \
-                   "R_2007\".\n")                                             \
-      }                                                                       \
-      break;                                                                  \
-    default:                                                                  \
-      LOG_ERROR ("Invalid data type in TABLE entity\n")                       \
-      DEBUG_HERE_OBJ                                                          \
-      error |= DWG_ERR_INVALIDTYPE;                                           \
-      break;                                                                  \
-      /*return DWG_ERR_INVALIDTYPE; */                                        \
+      switch (FIELD_VALUE (value.data_type))                                  \
+        {                                                                     \
+        case 0: /* kUnknown */                                                \
+          FIELD_BL (value.data_long, 91);                                     \
+          break;                                                              \
+        case 1: /* kLong */                                                   \
+          FIELD_BL (value.data_long, 91);                                     \
+          break;                                                              \
+        case 2: /* kDouble */                                                 \
+          FIELD_BD (value.data_double, 140);                                  \
+          break;                                                              \
+        case 4:                           /* kString */                       \
+          FIELD_T (value.data_string, 1); /* and 2. TODO multiple lines */    \
+          break;                                                              \
+        case 8: /* kDate */                                                   \
+          FIELD_BL (value.data_size, 92);                                     \
+          FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size), 310); \
+          break;                                                              \
+        case 16: /* kPoint */                                                 \
+          FIELD_2RD (value.data_point, 11);                                   \
+          break;                                                              \
+        case 32: /* k3dPoint */                                               \
+          FIELD_3RD (value.data_3dpoint, 11);                                 \
+          break;                                                              \
+        case 64: /* kObjectId */                                              \
+          FIELD_HANDLE (value.data_handle, -1, 330);                          \
+          break;                                                              \
+        case 128: /* kBuffer */                                               \
+          LOG_ERROR ("Unknown data type in TABLE entity: \"kBuffer\".\n")     \
+          break;                                                              \
+        case 256: /* kResBuf */                                               \
+          LOG_ERROR ("Unknown data type in TABLE entity: \"kResBuf\".\n")     \
+          break;                                                              \
+        case 512: /* kGeneral since r2007*/                                   \
+          SINCE (R_2007) { FIELD_BL (value.data_size, 0); }                   \
+          else                                                                \
+          {                                                                   \
+            LOG_ERROR (                                                       \
+                "Unknown data type in TABLE entity: \"kGeneral before "       \
+                "R_2007\".\n")                                                \
+          }                                                                   \
+          break;                                                              \
+        default:                                                              \
+          LOG_ERROR ("Invalid data type in TABLE entity\n")                   \
+          DEBUG_HERE_OBJ                                                      \
+          error |= DWG_ERR_INVALIDTYPE;                                       \
+          break;                                                              \
+          /*return DWG_ERR_INVALIDTYPE; */                                    \
+        }                                                                     \
     }                                                                         \
   SINCE (R_2007)                                                              \
   {                                                                           \

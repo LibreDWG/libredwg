@@ -10994,23 +10994,27 @@ struct _dwg_TableRow*
 @vtable @code
 
 @item flags
-BL
+BL,	DXF 90
+@item flags93
+BL,	DXF 93
 @item data_type
 BL,	DXF 90
 @item data_size
-BL
+BL,	DXF 92
 @item data_long
-BL
+BL,	DXF 91
 @item data_double
-BD
+BD,	DXF 140
 @item data_string
-T
+T,	DXF 1
 @item data_date
 TF
 @item data_point
-2RD
+2RD,	DXF 11
 @item data_3dpoint
-3RD
+3RD,	DXF 11
+@item data_handle
+H
 @item unit_type
 BL,	DXF 94
 @item format_string
