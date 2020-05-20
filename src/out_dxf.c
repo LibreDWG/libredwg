@@ -164,6 +164,11 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
     {                                                                         \
       FIELD_HANDLE (nam, handle_code, dxf);                                   \
     }
+#define SUB_FIELD_HANDLE0(o, nam, handle_code, dxf)                           \
+  if (_obj->o.nam && _obj->o.nam->absolute_ref)                               \
+    {                                                                         \
+      SUB_FIELD_HANDLE (o, nam, handle_code, dxf);                            \
+    }
 #define HEADER_9(nam)                                                         \
   GROUP (9);                                                                  \
   fprintf (dat->fh, "$%s\r\n", #nam)

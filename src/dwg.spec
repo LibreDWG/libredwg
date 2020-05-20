@@ -5197,7 +5197,7 @@ DWG_ENTITY (TABLE)
 
         if (FIELD_VALUE (cell.type) == 1)
           { /* text cell */
-            SUB_FIELD_HANDLE (cell,text_style, 3, 344);
+            SUB_FIELD_HANDLE0 (cell,text_style, 3, 344);
             // TODO: <r2007 and empty style and shorter than 250, single dxf 1 line
             // else split into mult. text lines
             SUB_FIELD_T (cell,text_value, 1);
@@ -5205,7 +5205,7 @@ DWG_ENTITY (TABLE)
           }
         if (FIELD_VALUE (cell.type) == 2)
           { /* block cell */
-            SUB_FIELD_HANDLE (cell,block_handle, 3, 340);
+            SUB_FIELD_HANDLE0 (cell,block_handle, 3, 340);
             SUB_FIELD_BD (cell,block_scale, 144);
             SUB_FIELD_B (cell,additional_data_flag, 0);
             if (FIELD_VALUE (cell.additional_data_flag))
@@ -5329,9 +5329,7 @@ DWG_ENTITY (TABLE)
             FIELD_HANDLE (title_row_style_override, ANYCODE, 7);
           }
         if (table_flag & 0x4000)
-          {
-            FIELD_BS (title_row_alignment, 170);
-          }
+          FIELD_BS (title_row_alignment, 170);
         if (table_flag & 0x8000)
           FIELD_BS (header_row_alignment, 170);
         if (table_flag & 0x10000)
