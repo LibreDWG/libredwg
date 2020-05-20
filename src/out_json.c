@@ -678,7 +678,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     ARRAY;                                                                    \
     for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
       {                                                                       \
-        PRINTFIRST; VALUE_2RD (FIELD_VALUE (nam[vcount]), dxf);               \
+        FIRSTPREFIX VALUE_2RD (FIELD_VALUE (nam[vcount]), dxf);                \
       }                                                                       \
     ENDARRAY;                                                                 \
   }

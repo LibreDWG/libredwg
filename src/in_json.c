@@ -2387,8 +2387,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               break;
             }
+          // TODO convert embedded array, vertind[0]: 0, vertind[1]: ... to normal
+          // array in json: vertind: [0, ...], and apply it here. The vertind dynapi type
+          // knows if it's a reference or embedded.
           else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
-              && strEQc (f->name, "vertind[4]"))
+                   && strEQc (f->name, "vertind[4]"))
             {
               BITCODE_BS arr[4];
               int index;
