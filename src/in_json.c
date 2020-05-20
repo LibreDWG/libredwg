@@ -420,7 +420,8 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
     }
   if (!buf)
     {
-      LOG_ERROR ("Out of memory");
+      if (len)
+        LOG_ERROR ("Out of memory");
       tokens->index++;
       return NULL;
     }
@@ -1801,8 +1802,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   || strEQc (f->type, "BT")))
             {
               double num = json_float (dat, tokens);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
-              LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
+              LOG_TRACE ("%s.%s: %f [%s]\n", name, key, num, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
             }
           // all numfields are calculated from actual array sizes
@@ -1841,7 +1842,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               long num = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_ERR
-              LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type);
+                LOG_TRACE ("%s.%s: %ld [%s]\n", name, key, num, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
             }
           // TFF not yet in dynapi.c
@@ -1900,7 +1901,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       str = realloc (str, f->size);
                       memset (&str[len + 1], 0, f->size - len - 1);
                     }
-                  LOG_TRACE ("%s: \"%s\" [%s %d]\n", key, str, f->type,
+                  LOG_TRACE ("%s.%s: \"%s\" [%s %d]\n", name, key, str, f->type,
                              f->size);
                   if (strNE (key, "strings_area"))
                     json_set_sizefield (_obj, fields, key, len);
@@ -1910,7 +1911,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               else
                 {
-                  LOG_TRACE ("%s: \"%s\" [%s] len=%d\n", key, str, f->type, (int)len);
+                  LOG_TRACE ("%s.%s: \"%s\" [%s] len=%d\n", name, key, str, f->type, (int)len);
                   dwg_dynapi_field_set_value (dwg, _obj, f, &str, 1);
                   free (str);
                 }
@@ -2034,19 +2035,19 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   if (k < (int)size1)
                     {
                       elems[k] = json_string (dat, tokens);
-                      LOG_TRACE ("%s[%d]: \"%s\" [%s]\n", key, k, elems[k],
+                      LOG_TRACE ("%s.%s[%d]: \"%s\" [%s]\n", name, key, k, elems[k],
                                  f->type);
                     }
                   else
                     {
                       tokens->index++;
                       t = &tokens->tokens[tokens->index];
-                      LOG_WARN ("%s[%d]: \"%.*s\" [%s] ignored", key, k,
+                      LOG_WARN ("%s.%s[%d]: \"%.*s\" [%s] ignored", name, key, k,
                                 t->end - t->start, &dat->chain[t->start], f->type);
                     }
                 }
               if (!t->size)
-                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+                LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "3DPOINT*"))
@@ -2061,7 +2062,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   json_3DPOINT (dat, tokens, key, f->type, &pts[k]);
                 }
               if (!size1)
-                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+                LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &pts, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "2RD*"))
@@ -2076,7 +2077,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   json_2DPOINT (dat, tokens, key, f->type, &pts[k]);
                 }
               if (!size1)
-                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+                LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &pts, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (f->type, "BD*"))
@@ -2105,10 +2106,10 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   JSON_TOKENS_CHECK_OVERFLOW_ERR
                   nums[k] = (BITCODE_BL)json_long (dat, tokens);
-                  LOG_TRACE ("%s[%d]: " FORMAT_BL " [BL]\n", key, k, nums[k]);
+                  LOG_TRACE ("%s.%s[%d]: " FORMAT_BL " [BL]\n", name, key, k, nums[k]);
                 }
               if (!size1)
-                LOG_TRACE ("%s: [%s] empty\n", key, f->type);
+                LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
             }
           else if (t->type == JSMN_ARRAY && strEQc (key, "xdata") && strEQc (name, "XRECORD"))
@@ -2385,6 +2386,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     ++tokens->index;
                   free (subclass1);
                 }
+              else
+                *(rest-1) = '.'; // unsuccesfull search, set the dot back
               break;
             }
           // TODO convert embedded array, vertind[0]: 0, vertind[1]: ... to normal
@@ -2911,6 +2914,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                          dwg_dynapi_common_object_fields ()))
                     continue;
                 }
+
               // first the MLEADER_AnnotContext union
               if (strEQc (name, "MULTILEADER"))
                 {
@@ -2929,6 +2933,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                               &key[strlen ("ctx.content.")], sf))
                         continue;
                     }
+                  // the rest
                   else if (memBEGINc (key, "ctx."))
                     {
                       Dwg_Entity_MULTILEADER *_o
@@ -2966,6 +2971,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   continue;
                 }
               // or starts with an embedded subclass, like TABLE_value "value.xxx"
+              // FIXME probably dead code. _set_struct_field does this already now
               if (strchr (key, '.'))
                 {
                   const Dwg_DYNAPI_field *f1;
