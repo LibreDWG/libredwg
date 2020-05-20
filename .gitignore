@@ -23,6 +23,7 @@ gcov.log
 /.build-*/
 /.build/
 /.fuzz-*/
+.vscode/
 /autom4te.cache/
 /compat_reports/
 /doc/LibreDWG.t2p/
@@ -36,6 +37,7 @@ gcov.log
 /test/test-data-20*/
 /test/test-data-r*/
 /test/test-data/
+/test/test-old/
 # test-data symlink
 /td
 
@@ -95,6 +97,7 @@ gcov.log
 /.upwork.sh
 /.version
 /.tarball-version
+/.vs.spec
 /.cproject
 /.project
 /.patches
