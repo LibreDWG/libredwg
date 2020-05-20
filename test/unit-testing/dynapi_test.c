@@ -42635,14 +42635,14 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         fail ("TABLESTYLE.ovr [Dwg_TABLESTYLE_CellStyle]");
   }
   {
-    BITCODE_T ovr.name;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "ovr.name", &ovr.name, NULL)
-        && ovr.name
-           ? strEQ ((char *)ovr.name, (char *)tablestyle->ovr.name)
+    BITCODE_T ovr_name;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "ovr.name", &ovr_name, NULL)
+        && ovr_name
+           ? strEQ ((char *)ovr_name, (char *)tablestyle->ovr.name)
            : !tablestyle->ovr.name)
       pass ();
     else
-      fail ("TABLESTYLE.ovr.name [T] '%s' <> '%s'", ovr.name, tablestyle->ovr.name);
+      fail ("TABLESTYLE.ovr.name [T] '%s' <> '%s'", ovr_name, tablestyle->ovr.name);
   }
   {
     struct _dwg_object_object* parent;
@@ -46821,7 +46821,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 44628 "dynapi_test.c"
+#line 46824 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -47577,7 +47577,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 45368 "dynapi_test.c"
+#line 47580 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

@@ -1125,6 +1125,7 @@ EOF
         $fmt = "\" FORMAT_$type \"";
       }
     }
+    my $key = $var;
     my $svar = $var;
     my $is_ptr = ($type =~ /^(struct|Dwg_)/ or
                   $type =~ /^[TH23]/ or
@@ -1132,6 +1133,10 @@ EOF
                   $var =~ /\[\d+\]$/ or
                   $type =~ /^(BE|CMC|BLL)$/)
       ? 1 : 0;
+    if ($var  =~ /\./) { # embedded structs, like ovr.name
+      $svar =~ s/\./_/g;
+      $var = $svar;
+    }
     if ($var  =~ /\[\d+\]$/) {
       $svar =~ s/\[\d+\]$//g;
     }
@@ -1143,24 +1148,24 @@ EOF
       print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
-        && $var == $lname->$svar)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$key", &$svar, NULL)
+        && $var == $lname->$key)
       pass ();
     else
-      fail ("$name.$var [$stype] $fmt != $fmt", $lname->$svar, $svar);
+      fail ("$name.$key [$stype] $fmt != $fmt", $lname->$key, $svar);
 EOF
       if ($type =~ /(int|long|short|char|double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
         print $fh "    $svar++;\n";
       }
       print $fh <<"EOF";
-    if (dwg_dynapi_entity_set_value ($lname, "$name", "$var", &$svar, 0)
-        && $var == $lname->$svar)
+    if (dwg_dynapi_entity_set_value ($lname, "$name", "$key", &$svar, 0)
+        && $var == $lname->$key)
       pass ();
     else
-      fail ("$name.$var [$stype] set+1 $fmt != $fmt", $lname->$svar, $svar);
+      fail ("$name.$key [$stype] set+1 $fmt != $fmt", $lname->$key, $svar);
 EOF
       if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
-        print $fh "    $lname->$svar--;";
+        print $fh "    $lname->$key--;";
       }
       print $fh "\n  }\n";
     } elsif ($type =~ /\*$/ and $type !~ /(RC\*|struct _dwg_object_)/
@@ -1193,11 +1198,11 @@ EOF
         print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$key", &$svar, NULL)
         && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))
       pass ();
     else
-      fail ("$name.$var [$stype]");
+      fail ("$name.$key [$stype]");
   }
 EOF
       }
@@ -1206,8 +1211,8 @@ EOF
   {
     $type $var;
     BITCODE_BL count = obj_obj->num_reactors;
-    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
-        && $svar == $lname->$svar)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$key", &$svar, NULL)
+        && $svar == $lname->$key)
       pass ();
     else
       fail ("$name.$var [$stype] * %u $countfield", count);
@@ -1255,13 +1260,13 @@ EOF
       print $fh <<"EOF";
   {
     $type $vardecl;
-    if (dwg_dynapi_entity_value ($lname, "$name", "$var", &$svar, NULL)
+    if (dwg_dynapi_entity_value ($lname, "$name", "$key", &$svar, NULL)
 EOF
         if ($stype =~ /^(TV|T|TU|RC\*|unsigned char\*|char\*)$/) {
           $is_str = 1;
           print $fh "        && $svar\n";
-          print $fh "           ? strEQ ((char *)$svar, (char *)$lname->$svar)\n";
-          print $fh "           : !$lname->$svar)\n";
+          print $fh "           ? strEQ ((char *)$svar, (char *)$lname->$key)\n";
+          print $fh "           : !$lname->$key)\n";
         } elsif (0 and $stype =~ /^TF/ and $size !~ /^sizeof/) {
           print $fh "        && !memcmp ($svar, $lname->$svar, $size))\n";
         } elsif ($type !~ /\*\*/) {
@@ -1273,14 +1278,14 @@ EOF
           print $fh <<"EOF";
       pass ();
     else
-      fail ("$name.$var [$stype] '$fmt' <> '$fmt'", $svar, $lname->$svar);
+      fail ("$name.$key [$stype] '$fmt' <> '$fmt'", $svar, $lname->$key);
   }
 EOF
         } else {
           print $fh <<"EOF";
         pass ();
     else
-        fail ("$name.$var [$stype]");
+        fail ("$name.$key [$stype]");
   }
 EOF
         }
