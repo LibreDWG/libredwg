@@ -2334,14 +2334,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       else // not found
         {  // maybe it's an embedded subclass. look for the dot
            // TODO: if that dot is not found look for the next one
+          int found = 0;
           char *rest = strchr (key, '.');
-          JSON_TOKENS_CHECK_OVERFLOW_ERR;
-          // Currently we have 3 known static arrays, and a few embedded subclasses. Color e.g.
-          if (rest)
+          while (rest)
             {
+              // Currently we have 3 known static arrays, and a few embedded subclasses. Color e.g.
               const Dwg_DYNAPI_field *f1;
               const char *subclass = NULL;
-
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
               *rest = '\0';
               rest++;
               f1 = dwg_dynapi_entity_field (name, key);
@@ -2357,6 +2357,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                              subclass1, rest, sfields1))
                     ++tokens->index;
                   free (subclass1);
+                  found++;
                   break;
                 }
               f1 = dwg_dynapi_subclass_field (name, key);
@@ -2372,16 +2373,31 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                              subclass1, rest, sfields1))
                     ++tokens->index;
                   free (subclass1);
+                  found++;
+                  break;
                 }
               else
-                *(rest-1) = '.'; // unsuccesfull search, set the dot back
-              break;
+                {
+                  // failed_key.rest.nextfieldatteept
+                  *(rest-1) = '.'; // unsuccesfull search, set the dot back
+                  rest = strchr (rest, '.');
+                  if (rest)
+                    {
+                      LOG_HANDLE ("Try next embedded struct with %s.%s\n", key, rest)
+                    }
+                  else if (strNE (key, "lt.index"))
+                    {
+                      LOG_HANDLE ("No embedded struct with %s\n", key)
+                    }
+                }
             }
+          if (found)
+            break;
           // TODO convert embedded array, vertind[0]: 0, vertind[1]: ... to normal
           // array in json: vertind: [0, ...], and apply it here. The vertind dynapi type
           // should know if it's a reference or embedded.
-          else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
-                   && strEQc (f->name, "vertind[4]"))
+          if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
+              && strEQc (f->name, "vertind[4]"))
             {
               BITCODE_BS arr[4];
               int index;
