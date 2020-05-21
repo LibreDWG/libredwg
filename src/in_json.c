@@ -1786,37 +1786,39 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                    const Dwg_DYNAPI_field *restrict fields)
 {
   Dwg_Data *restrict dwg = obj->parent;
-  const Dwg_DYNAPI_field *f;
+  const Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int error = 0;
   LOG_INSANE ("-search %s key %s: %s %.*s\n", name, key, t_typename[t->type],
               t->end - t->start, &dat->chain[t->start]);
-  for (f = &fields[0]; f->name; f++) // linear search, not binary for now
+  JSON_TOKENS_CHECK_OVERFLOW_ERR;
+  for (; f->name; f++)
     {
-      LOG_INSANE ("-%s.%s [%s]\n", name, f->name, f->type);
-      // common and entity dynapi, check types
-      JSON_TOKENS_CHECK_OVERFLOW_ERR
-      if (strEQ (f->name, key)) // found
+      if (strEQ (f->name, key))
+        break;
+    }
+  // Found common, subclass or entity key, check types
+  if (f && f->name)
+    {
+      LOG_INSANE ("-found %s [%s] %s\n", f->name, f->type,
+                  t_typename[t->type]);
+      if (t->type == JSMN_PRIMITIVE
+          && (strEQc (f->type, "BD") || strEQc (f->type, "RD")
+              || strEQc (f->type, "BT")))
         {
-          LOG_INSANE ("-found %s [%s] %s\n", f->name, f->type,
-                      t_typename[t->type]);
-          if (t->type == JSMN_PRIMITIVE
-              && (strEQc (f->type, "BD") || strEQc (f->type, "RD")
-                  || strEQc (f->type, "BT")))
-            {
-              double num = json_float (dat, tokens);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR;
-              LOG_TRACE ("%s.%s: %f [%s]\n", name, key, num, f->type);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
-            }
-          // all numfields are calculated from actual array sizes
-          // for easier adding or deleting entries.
-          else if (t->type == JSMN_PRIMITIVE && (memBEGINc (key, "num_")))
-            {
-              tokens->index++;
-              JSON_TOKENS_CHECK_OVERFLOW_ERR;
-              LOG_TRACE ("%s.%s: %.*s (ignored)\n", name, key, t->end - t->start, &dat->chain[t->start]);
-            }
+          double num = json_float (dat, tokens);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+          LOG_TRACE ("%s.%s: %f [%s]\n", name, key, num, f->type);
+          dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+        }
+      // all numfields are calculated from actual array sizes
+      // for easier adding or deleting entries.
+      else if (t->type == JSMN_PRIMITIVE && (memBEGINc (key, "num_")))
+        {
+          tokens->index++;
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+          LOG_TRACE ("%s.%s: %.*s (ignored)\n", name, key, t->end - t->start, &dat->chain[t->start]);
+        }
           else if (t->type == JSMN_PRIMITIVE
                    && (strEQc (f->type, "RC") || strEQc (f->type, "B")
                        || strEQc (f->type, "BB") || strEQc (f->type, "RS")
@@ -1952,18 +1954,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   LOG_ERROR ("Illegal old json format");
                   return DWG_ERR_INVALIDDWG;
-                  /*
-                  BITCODE_BL numitems; // check against existing texts[] size
-                  const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
-                  memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
-                  if (numitems != (BITCODE_BL)-1 && numitems != size1)
-                    {
-                      // already have texts. if less we leak them
-                      LOG_WARN ("Skip some itemhandles, only accept %d of %d",
-                                numitems, (int)size1)
-                      size1 = numitems;
-                    }
-                  */
                 }
               hdls = size1 ? calloc (size1, sizeof (BITCODE_H)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
@@ -1998,19 +1988,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   LOG_ERROR ("Illegal old json format");
                   return DWG_ERR_INVALIDDWG;
-                  /*
-                  BITCODE_BL numitems;
-                  const Dwg_DYNAPI_field *numf = find_numfield (fields, key);
-                  memcpy (&numitems, &((char *)_obj)[numf->offset], numf->size);
-                  if (numitems != (BITCODE_BL)-1)
-                    {
-                      // have less itemhandles. leak the texts
-                      LOG_WARN ("%s.texts must be before itemhandles", name)
-                      size1 = numitems;
-                    }
-                  else
-                    size1 = t->size;
-                  */
                 }
               elems = size1 ? calloc (size1, sizeof (BITCODE_T)) : NULL;
               json_set_numfield (_obj, fields, key, (long)size1);
@@ -2329,75 +2306,77 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               ++tokens->index;
               JSON_TOKENS_CHECK_OVERFLOW_ERR
             }
-          break;
-        }
-      else // not found
-        {  // maybe it's an embedded subclass. look for the dot
-           // TODO: if that dot is not found look for the next one
-          int found = 0;
-          char *rest = strchr (key, '.');
-          while (rest)
+      return error | (f->name ? 1 : 0); // found or not
+    }
+  else // not found
+    {  // maybe it's an embedded subclass. look for the dot
+      // TODO: if that dot is not found look for the next one
+      int found = 0;
+      char *rest = strchr (key, '.');
+      while (rest)
+        {
+          // Currently we have 3 known static arrays, and a few embedded
+          // subclasses. Color e.g.
+          const Dwg_DYNAPI_field *f1;
+          const char *subclass = NULL;
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+          *rest = '\0';
+          rest++;
+          f1 = dwg_dynapi_entity_field (name, key);
+          if (f1 && *rest)
             {
-              // Currently we have 3 known static arrays, and a few embedded subclasses. Color e.g.
-              const Dwg_DYNAPI_field *f1;
-              const char *subclass = NULL;
-              JSON_TOKENS_CHECK_OVERFLOW_ERR;
-              *rest = '\0';
-              rest++;
-              f1 = dwg_dynapi_entity_field (name, key);
-              if (f1 && *rest)
+              void *off = &((char *)_obj)[f1->offset];
+              char *subclass1 = dwg_dynapi_subclass_name (f1->type);
+              const Dwg_DYNAPI_field *sfields1
+                = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
+                : NULL;
+              if (!sfields1
+                  || !_set_struct_field (dat, obj, tokens, off, subclass1,
+                                         rest, sfields1))
+                ++tokens->index;
+              free (subclass1);
+              return error | (f1->name ? 1 : 0); // found or not
+            }
+          f1 = dwg_dynapi_subclass_field (name, key);
+          if (f1 && *rest)
+            {
+              void *off = &((char *)_obj)[f1->offset];
+              char *subclass1 = dwg_dynapi_subclass_name (f1->type);
+              const Dwg_DYNAPI_field *sfields1
+                = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
+                : NULL;
+              if (!sfields1
+                  || !_set_struct_field (dat, obj, tokens, off, subclass1,
+                                         rest, sfields1))
+                ++tokens->index;
+              free (subclass1);
+              return error | (f1->name ? 1 : 0); // found or not
+            }
+          else
+            {
+              // failed_key.rest.nextfieldatteept
+              *(rest - 1) = '.'; // unsuccesfull search, set the dot back
+              rest = strchr (rest, '.');
+              if (rest)
                 {
-                  void *off = &((char *)_obj)[f->offset + f1->offset];
-                  char *subclass1 = dwg_dynapi_subclass_name (f1->type);
-                  const Dwg_DYNAPI_field *sfields1
-                    = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
-                    : NULL;
-                  if (!sfields1
-                      || !_set_struct_field (dat, obj, tokens, off,
-                                             subclass1, rest, sfields1))
-                    ++tokens->index;
-                  free (subclass1);
-                  found++;
-                  break;
+                  LOG_HANDLE ("Try next embedded struct with %s.%s\n", key,
+                              rest);
                 }
-              f1 = dwg_dynapi_subclass_field (name, key);
-              if (f1 && *rest)
+              else if (strNE (key, "lt.index"))
                 {
-                  void *off = &((char *)_obj)[f->offset + f1->offset];
-                  char *subclass1 = dwg_dynapi_subclass_name (f1->type);
-                  const Dwg_DYNAPI_field *sfields1
-                    = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
-                    : NULL;
-                  if (!sfields1
-                      || !_set_struct_field (dat, obj, tokens, off,
-                                             subclass1, rest, sfields1))
-                    ++tokens->index;
-                  free (subclass1);
-                  found++;
-                  break;
-                }
-              else
-                {
-                  // failed_key.rest.nextfieldatteept
-                  *(rest-1) = '.'; // unsuccesfull search, set the dot back
-                  rest = strchr (rest, '.');
-                  if (rest)
-                    {
-                      LOG_HANDLE ("Try next embedded struct with %s.%s\n", key, rest)
-                    }
-                  else if (strNE (key, "lt.index"))
-                    {
-                      LOG_HANDLE ("No embedded struct with %s\n", key)
-                    }
+                  LOG_HANDLE ("No embedded struct with %s\n", key);
                 }
             }
-          if (found)
-            break;
-          // TODO convert embedded array, vertind[0]: 0, vertind[1]: ... to normal
-          // array in json: vertind: [0, ...], and apply it here. The vertind dynapi type
-          // should know if it's a reference or embedded.
-          if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind[")
-              && strEQc (f->name, "vertind[4]"))
+        }
+      // TODO convert embedded array, vertind[0]: 0, vertind[1]: ... to
+      // normal array in json: vertind: [0, ...], and apply it here. The
+      // vertind dynapi type should know if it's a reference or embedded.
+
+      // f is NULL
+      if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind["))
+        {
+          f = dwg_dynapi_entity_field (name, "vertind[4]");
+          if (f)
             {
               BITCODE_BS arr[4];
               int index;
@@ -2413,11 +2392,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   tokens->index++;
                 }
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
-              break;
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
             }
-          else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "edge[")
-                   && strEQc (f->name, "edge[4]"))
+        }
+      else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "edge["))
+        {
+          f = dwg_dynapi_entity_field (name, "edge[4]");
+          if (f)
             {
               BITCODE_BL arr[4];
               int index;
@@ -2433,11 +2414,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   tokens->index++;
                 }
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
-              break;
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
             }
-          else if (t->type == JSMN_ARRAY && memBEGINc (key, "workplane[")
-                   && strEQc (f->name, "workplane[3]"))
+        }
+      else if (t->type == JSMN_ARRAY && memBEGINc (key, "workplane["))
+        {
+          f = dwg_dynapi_entity_field (name, "workplane[3]");
+          if (f)
             {
               BITCODE_3BD arr[3];
               int index;
@@ -2450,12 +2433,12 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               else
                 json_advance_unknown (dat, tokens, t->type, 0);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
-              break;
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
             }
         }
-    }
-  return error | (f->name ? 1 : 0); // found or not
+        return error | (f && f->name ? 1 : 0); // found or not
+     }
+  return error;
 }
 
 /*
@@ -2918,11 +2901,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     continue;
                 }
 
-              // TODO: all this should be handled in _set_struct_field, recursively.
-              // esp for TABLEs
+              // This should now be handled in _set_struct_field, recursively.
+              // esp for TABLE's
               // first the MLEADER_AnnotContext union:
               if (strEQc (name, "MULTILEADER"))
                 {
+                  // assert (0);
                   // embedded structs
                   if (memBEGINc (key, "ctx.content.txt.")
                       || memBEGINc (key, "ctx.content.blk."))
@@ -2974,36 +2958,6 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   if (!o->numitems)
                     LOG_TRACE ("%s.%s empty\n", name, key);
                   continue;
-                }
-              // or starts with an embedded subclass, like TABLE_value "value.xxx"
-              // FIXME probably dead code. _set_struct_field does this already now
-              if (strchr (key, '.'))
-                {
-                  const Dwg_DYNAPI_field *f1;
-                  char *rest = strchr (key, '.');
-                  *rest = '\0';
-                  rest++;
-                  // find field for key prefix, like value.
-                  f1 = dwg_dynapi_entity_field (name, key);
-                  if (f1 && *rest)
-                    {
-                      void *off = &((char *)_obj)[f1->offset];
-                      char *subclass = dwg_dynapi_subclass_name (f1->type);
-                      const Dwg_DYNAPI_field *sfields
-                          = subclass ? dwg_dynapi_subclass_fields (subclass)
-                                     : NULL;
-                      // subclass offset for _obj
-                      if (sfields
-                          && _set_struct_field (dat, obj, tokens, off,
-                                                subclass, rest, sfields))
-                        {
-                          free (subclass);
-                          continue;
-                        }
-                      free (subclass);
-                    }
-                  else
-                    LOG_ERROR ("%s.%s not found", name, key)
                 }
               LOG_ERROR ("Unknown %s.%s %.*s ignored", name, key,
                          t->end - t->start, &dat->chain[t->start]);
