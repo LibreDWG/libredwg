@@ -6492,7 +6492,8 @@ DWG_OBJECT (VISUALSTYLE)
     FIELD_BL (display_settings, 93);          FIELD_BS (display_settings_int, 176);
     FIELD_BD (display_brightness, 44);        FIELD_BS (display_brightness_int, 176);
     DECODER {
-      FIELD_VALUE (display_brightness_bl) = (BITCODE_BL)FIELD_VALUE (display_brightness);
+      if (FIELD_VALUE (display_brightness) >= 0.0 && FIELD_VALUE (display_brightness) < INT32_MAX)
+        FIELD_VALUE (display_brightness_bl) = (BITCODE_BL)FIELD_VALUE (display_brightness);
     }
     FIELD_BL (display_shadow_type, 173);      FIELD_BS (display_shadow_type_int, 176);
 
