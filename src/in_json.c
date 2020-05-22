@@ -352,6 +352,8 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
     {
       len += 8;
       key = malloc (len);
+      if (!key)
+        goto outofmemory;
       dat->chain[t->end] = '\0';
       while (!bit_utf8_to_TV (key, &dat->chain[t->start], len))
         {
@@ -363,20 +365,28 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
                          t->end - t->start, t->end - t->start,
                          &dat->chain[t->start]);
               len = t->end - t->start;
+              free (key);
               goto normal;
             }
           key = realloc (key, len);
+          if (!key)
+            goto outofmemory;
         }
     }
   else
     {
     normal:
       key = malloc (len + 1);
+      if (!key)
+        goto outofmemory;
       memcpy (key, &dat->chain[t->start], len);
       key[len] = '\0';
     }
   tokens->index++;
   return key;
+ outofmemory:
+  LOG_ERROR ("Out of memory");
+  return NULL;
 }
 
 ATTRIBUTE_MALLOC
@@ -415,6 +425,7 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
     {
       LOG_ERROR ("Expected JSON STRING");
       json_advance_unknown (dat, tokens, t->type, 0);
+      free (buf);
       JSON_TOKENS_CHECK_OVERFLOW_NULL
       return NULL;
     }
@@ -938,10 +949,9 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const char *section = "HEADER";
   const char *name = section;
   jsmntok_t *t = &tokens->tokens[tokens->index];
-  Dwg_Header_Variables *_obj = &dwg->header_vars;
+  //Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   int size = t->size;
-  int is_utf = 1;
 
   if (t->type != JSMN_OBJECT)
     {
@@ -1612,6 +1622,8 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
 {
   const Dwg_DYNAPI_field *f;
   char *s = malloc (strlen (key) + 12);
+  if (!s)
+    return NULL;
   strcpy (s, "num_");
   strcat (s, key);
   // see gen-dynapi.pl:1102

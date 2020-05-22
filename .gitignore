@@ -30,6 +30,7 @@ gcov.log
 /doc/latex/
 /doc/manual/
 /doc/refman/
+/src/infer-out/
 /test/issues/
 /test/patch/
 /test/temp/
