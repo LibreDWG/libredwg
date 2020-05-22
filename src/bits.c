@@ -873,7 +873,7 @@ bit_write_MC (Bit_Chain *dat, BITCODE_MC val)
 {
   int i, j;
   int negative = 0;
-  unsigned char byte[5];
+  unsigned char byte[5] = { 0, 0, 0, 0, 0 };
   BITCODE_UMC mask = 0x0000007f;
   BITCODE_UMC value = (BITCODE_UMC)val;
 
@@ -910,7 +910,7 @@ bit_read_UMC (Bit_Chain *dat)
   int i, j;
   // eg handle FD485E65F
   #define MAX_BYTE_UMC 6
-  unsigned char byte[MAX_BYTE_UMC];
+  unsigned char byte[MAX_BYTE_UMC] = { 0, 0, 0, 0, 0, 0 };
   BITCODE_UMC result;
 
   result = 0;
@@ -1425,7 +1425,12 @@ BITCODE_TF
 bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
 {
   BITCODE_RC *chain = calloc (length + 1, 1);
-
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
   bit_read_fixed (dat, chain, length);
   chain[length] = '\0';
 
@@ -1443,6 +1448,12 @@ bit_read_bits (Bit_Chain *dat, unsigned long bits)
   unsigned bytes = bits / 8;
   int rest = bits % 8;
   BITCODE_RC *restrict chain = calloc (bytes + (rest ? 2 : 1), 1);
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
 
   bit_read_fixed (dat, chain, bytes);
   chain[bytes] = '\0';
@@ -1497,6 +1508,12 @@ bit_read_TV (Bit_Chain *restrict dat)
       return NULL;
     }
   chain = (unsigned char *)malloc (length + 1);
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
   for (i = 0; i < length; i++)
     chain[i] = bit_read_RC (dat);
   // normally not needed, as the DWG itself contains the ending \0 as last char
@@ -1526,6 +1543,8 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
     return NULL;
   size = len + 1;
   str = malloc (size);
+  if (!str)
+    return NULL;
   read = write = 0;
   while (read < len - 1)
     {
@@ -1783,6 +1802,12 @@ bit_read_TU (Bit_Chain *restrict dat)
       return NULL;
     }
   chain = (BITCODE_TU)malloc ((length + 1) * 2);
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
   for (i = 0; i < length; i++)
     chain[i] = bit_read_RS (dat); // probably without byte swapping
   // normally not needed, as the DWG itself contains the ending 0 as last char
@@ -1808,6 +1833,12 @@ bit_read_T16 (Bit_Chain *restrict dat)
       return NULL;
     }
   chain = (BITCODE_TV)malloc (length + 1);
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
   for (i = 0; i < length; i++)
     chain[i] = bit_read_RC (dat);
   chain[length] = 0;
@@ -1831,6 +1862,12 @@ bit_read_TU16 (Bit_Chain *restrict dat)
       return NULL;
     }
   chain = (BITCODE_TU)malloc ((length + 1) * 2);
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
   for (i = 0; i < length; i++)
     chain[i] = bit_read_RS (dat);
   chain[length] = 0;
@@ -1857,6 +1894,12 @@ bit_read_T32 (Bit_Chain *restrict dat)
             return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
+      if (!wstr)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory")
+            return NULL;
+        }
       for (i = 0; i < len; i++)
         wstr[i] = bit_read_RS (dat);
       wstr[len] = 0;
@@ -1873,6 +1916,12 @@ bit_read_T32 (Bit_Chain *restrict dat)
             return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
+      if (!str)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory")
+            return NULL;
+        }
       for (i = 0; i < size; i++)
         str[i] = bit_read_RC (dat);
       str[size] = 0;
@@ -1901,6 +1950,12 @@ bit_read_TU32 (Bit_Chain *restrict dat)
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
+      if (!wstr)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory")
+            return NULL;
+        }
       rl1 = bit_read_RL (dat);
       if (rl1 & 0x00ff0000) /* 00 xx 00 nn */
         { // only UCS-2
@@ -1934,6 +1989,12 @@ bit_read_TU32 (Bit_Chain *restrict dat)
             return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
+      if (!str)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory")
+            return NULL;
+        }
       for (i = 0; i < size; i++)
         str[i] = bit_read_RC (dat);
       str[size] = 0;
@@ -2081,6 +2142,12 @@ bit_convert_TU (BITCODE_TU restrict wstr)
 #endif
     }
   str = malloc (len + 1);
+  if (!str)
+    {
+      loglevel = 1;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
   i = 0;
 #ifdef HAVE_ALIGNED_ACCESS_REQUIRED
   if ((uintptr_t)wstr % SIZEOF_SIZE_T)
@@ -2264,6 +2331,12 @@ bit_utf8_to_TU (char *restrict str)
   unsigned char c;
 
   wstr = malloc (2 * (len + 1));
+  if (!wstr)
+    {
+      loglevel = 1;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
   while (len >= 0 && (c = *str++))
     {
       len--;
@@ -2492,6 +2565,12 @@ bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       if (flag & 0x40)
         {
           color->handle = calloc (1, sizeof (Dwg_Object_Ref));
+          if (!color->handle)
+            {
+              loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+              LOG_ERROR ("Out of memory")
+              return;
+            }
           bit_read_H (hdl_dat, &(color->handle->handleref)); // => DBCOLOR
           // else defer to dwg_decode_common_entity_handle_data ()
         }
@@ -2570,7 +2649,11 @@ bit_chain_init (Bit_Chain *dat, const int size)
 {
   dat->chain = (unsigned char *)calloc (1, size);
   if (!dat->chain)
-    abort();
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory")
+      abort();
+    }
   dat->size = (long unsigned int)size;
   dat->byte = 0;
   dat->bit = 0;
@@ -2593,7 +2676,11 @@ bit_chain_alloc (Bit_Chain *dat)
       dat->chain
           = (unsigned char *)realloc (dat->chain, dat->size + CHAIN_BLOCK);
       if (!dat->chain)
-        abort();
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory")
+          abort();
+        }
       memset (&dat->chain[dat->size], 0, CHAIN_BLOCK);
       dat->size += CHAIN_BLOCK;
     }
