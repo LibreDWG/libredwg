@@ -6426,7 +6426,7 @@ DWG_OBJECT (VISUALSTYLE)
     FIELD_BD (edge_crease_angle, 42);
     if (_obj->edge_crease_angle < -360.0 || _obj->edge_crease_angle > 360.0)
     {
-      LOG_ERROR ("Invalid edge_crease_angle, skipping");
+      LOG_ERROR ("Invalid edge_crease_angle %f, skipping", _obj->edge_crease_angle);
       _obj->edge_crease_angle = 0.0;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
@@ -6446,7 +6446,7 @@ DWG_OBJECT (VISUALSTYLE)
     FIELD_CAST (edge_style_apply, BS, BL, 174);
     FIELD_CAST (edge_intersection_ltype, BS, BL, 0); // DXF above
     FIELD_BL (display_settings, 93); // 1
-    FIELD_BL (display_brightness_bl, 44); // 0
+    FIELD_BLd (display_brightness_bl, 44); // 0
     DECODER {
       FIELD_VALUE (display_brightness) = (double)FIELD_VALUE (display_brightness_bl);
     }
@@ -6492,8 +6492,8 @@ DWG_OBJECT (VISUALSTYLE)
     FIELD_BL (display_settings, 93);          FIELD_BS (display_settings_int, 176);
     FIELD_BD (display_brightness, 44);        FIELD_BS (display_brightness_int, 176);
     DECODER {
-      if (FIELD_VALUE (display_brightness) >= 0.0 && FIELD_VALUE (display_brightness) < INT32_MAX)
-        FIELD_VALUE (display_brightness_bl) = (BITCODE_BL)FIELD_VALUE (display_brightness);
+      if (FIELD_VALUE (display_brightness) >= -INT32_MAX && FIELD_VALUE (display_brightness) < INT32_MAX)
+        FIELD_VALUE (display_brightness_bl) = (BITCODE_BLd)FIELD_VALUE (display_brightness);
     }
     FIELD_BL (display_shadow_type, 173);      FIELD_BS (display_shadow_type_int, 176);
 

@@ -7570,7 +7570,7 @@ static const Dwg_DYNAPI_field _dwg_VISUALSTYLE_fields[] = {
     0,0,0, 93 },
   { "display_settings_int",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VISUALSTYLE, display_settings_int),
     0,0,0, 176 },
-  { "display_brightness_bl",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_VISUALSTYLE, display_brightness_bl),
+  { "display_brightness_bl",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_VISUALSTYLE, display_brightness_bl),
     0,0,0, 44 },
   { "display_brightness",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_VISUALSTYLE, display_brightness),
     0,0,0, 44 },

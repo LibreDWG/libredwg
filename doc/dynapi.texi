@@ -8686,7 +8686,7 @@ BL,	DXF 93
 @item display_settings_int
 BS,	DXF 176
 @item display_brightness_bl
-BL,	DXF 44
+BLd,	DXF 44
 @item display_brightness
 BD,	DXF 44
 @item display_brightness_int

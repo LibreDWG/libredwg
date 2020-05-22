@@ -44769,18 +44769,17 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
     visualstyle->display_brightness--;
   }
   {
-    BITCODE_BL display_brightness_bl;
+    BITCODE_BLd display_brightness_bl;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "display_brightness_bl", &display_brightness_bl, NULL)
         && display_brightness_bl == visualstyle->display_brightness_bl)
       pass ();
     else
-      fail ("VISUALSTYLE.display_brightness_bl [BL] %u != %u", visualstyle->display_brightness_bl, display_brightness_bl);
-    display_brightness_bl++;
+      fail ("VISUALSTYLE.display_brightness_bl [BLd] " FORMAT_BLd " != " FORMAT_BLd "", visualstyle->display_brightness_bl, display_brightness_bl);
     if (dwg_dynapi_entity_set_value (visualstyle, "VISUALSTYLE", "display_brightness_bl", &display_brightness_bl, 0)
         && display_brightness_bl == visualstyle->display_brightness_bl)
       pass ();
     else
-      fail ("VISUALSTYLE.display_brightness_bl [BL] set+1 %u != %u", visualstyle->display_brightness_bl, display_brightness_bl);
+      fail ("VISUALSTYLE.display_brightness_bl [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", visualstyle->display_brightness_bl, display_brightness_bl);
     visualstyle->display_brightness_bl--;
   }
   {

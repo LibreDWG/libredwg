@@ -4137,7 +4137,7 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_BS edge_style_apply_int; 	/*!< DXF 176 r2010+  */
   BITCODE_BL display_settings;          /*!< DXF 93 flags  */
   BITCODE_BS display_settings_int;      /*!< DXF 176 r2010+ */
-  BITCODE_BL display_brightness_bl;     /*!< DXF 44 <=r2007 */
+  BITCODE_BLd display_brightness_bl;    /*!< DXF 44 <=r2007 */
   BITCODE_BD display_brightness;        /*!< DXF 44  r2010+ */
   BITCODE_BS display_brightness_int;    /*!< DXF 176 r2010+ */
   BITCODE_BL display_shadow_type;       /*!< DXF 173  */
