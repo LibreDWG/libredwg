@@ -2201,13 +2201,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                                   subclass, key1, sfields))
                             ++tokens->index;
                         }
-                      else if (strEQc (key1, "lt.index"))
-                        {
-                          if (!_set_struct_field (dat, obj, tokens,
-                                                  &elems[k * size_elem],
-                                                  subclass, "lt", sfields))
-                            ++tokens->index;
-                        }
                       else if ((rest = strchr (key1, '.'))) // embedded struct
                         {
                           *rest = '\0';
@@ -2374,7 +2367,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   LOG_HANDLE ("Try next embedded struct with %s.%s\n", key,
                               rest);
                 }
-              else if (strNE (key, "lt.index"))
+              else
                 {
                   LOG_HANDLE ("No embedded struct with %s\n", key);
                 }

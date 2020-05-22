@@ -37,9 +37,9 @@ api_process (dwg_object *obj)
           CHK_SUBCLASS_TYPE (lines[i], MLINESTYLE_line, offset, BD);
           CHK_SUBCLASS_CMC (lines[i], MLINESTYLE_line, color);
           if (dwg_version < R_2018)
-            CHK_SUBCLASS_TYPE (lines[i], MLINESTYLE_line, lt.index, BSd)
+            CHK_SUBCLASS_TYPE (lines[i], MLINESTYLE_line, lt_index, BSd)
           else
-            CHK_SUBCLASS_H (lines[i], MLINESTYLE_line, lt.ltype);
+            CHK_SUBCLASS_H (lines[i], MLINESTYLE_line, lt_ltype);
         }
     }
 }

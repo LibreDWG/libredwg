@@ -2472,12 +2472,10 @@ typedef struct _dwg_object_GROUP
 typedef struct _dwg_MLINESTYLE_line
 {
   struct _dwg_object_MLINESTYLE *parent;
-  BITCODE_BD offset;
+  BITCODE_BD  offset;
   BITCODE_CMC color;
-  union {
-    BITCODE_BSd index;   /* until 2018 */
-    BITCODE_H ltype;     /* since 2018 */
-  } lt;
+  BITCODE_BSd lt_index;   /* until 2018 */
+  BITCODE_H   lt_ltype;   /* since 2018 */
 } Dwg_MLINESTYLE_line;
 
 typedef struct _dwg_object_MLINESTYLE

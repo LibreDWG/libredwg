@@ -10539,10 +10539,10 @@ struct _dwg_object_MLINESTYLE*
 BD,	DXF 49
 @item color
 CMC,	DXF 62
-@item lt.index
-BSd
-@item lt.ltype
-H
+@item lt_index
+BSd,	DXF 6
+@item lt_ltype
+H,	DXF 6
 
 @end vtable
 @end indentedblock

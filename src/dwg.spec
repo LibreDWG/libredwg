@@ -3672,7 +3672,7 @@ DWG_OBJECT (MLINESTYLE)
       PRE (R_2018)
       {
 #if defined (IS_DXF) && !defined (IS_ENCODER)
-        switch (FIELD_VALUE (lines[rcount1].lt.index)) {
+        switch (FIELD_VALUE (lines[rcount1].lt_index)) {
         case 32767: VALUE_TFF ("BYLAYER", 6); break; /* default (SHRT_MAX) */
         case 32766: VALUE_TFF ("BYBLOCK", 6); break;
         case 0:  VALUE_TFF ("CONTINUOUS", 6); break;
@@ -3681,11 +3681,11 @@ DWG_OBJECT (MLINESTYLE)
                  VALUE_TFF ("", 6); break;
         }
 #else
-        SUB_FIELD_BSd (lines[rcount1], lt.index, 6);
+        SUB_FIELD_BSd (lines[rcount1], lt_index, 6);
 #endif
       }
       LATER_VERSIONS {
-        SUB_FIELD_HANDLE (lines[rcount1], lt.ltype, 5, 6);
+        SUB_FIELD_HANDLE (lines[rcount1], lt_ltype, 5, 6);
       }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (lines)
