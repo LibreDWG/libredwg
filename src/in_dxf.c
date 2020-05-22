@@ -4232,7 +4232,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 {
   Dwg_Object_DIMASSOC *o = obj->tio.object->tio.DIMASSOC;
   Dwg_Data *dwg = obj->parent;
-  int i = -1;
+  int i = -1, j = -1;
   int have_rotated_type = 0;
   o->ref = xcalloc (4, sizeof (Dwg_DIMASSOC_Ref));
   if (!o->ref)
@@ -4305,22 +4305,24 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             o->ref[i].num_xrefs++;
           }
           break;
-        case 332:
+        case 74:
           if (i < 0) break;
-          o->ref[i].intsectobj = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-          LOG_TRACE ("%s.ref[%d].intsectobj = " FORMAT_REF " [H %d]\n",
-                       obj->name, i, ARGS_REF(o->ref[i].intsectobj), pair->code);
+          o->ref[i].num_intsectobj = pair->value.i;
+          j = 0;
+          LOG_TRACE ("%s.ref[%d].num_intsectobj = %d [BS %d]\n",
+                     obj->name, i, pair->value.i, pair->code);
+          break;
+        case 332:
+          if (i < 0 || j < 0) break;
+          o->ref[i].intsectobj[j] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.ref[%d].intsectobj[%d] = " FORMAT_REF " [H %d]\n",
+                     obj->name, i, j, ARGS_REF(o->ref[i].intsectobj[j]), pair->code);
+          j++;
           break;
         case 73:
           if (i < 0) break;
           o->ref[i].main_subent_type = pair->value.i;
           LOG_TRACE ("%s.ref[%d].main_subent_type = %d [BS %d]\n",
-                     obj->name, i, pair->value.i, pair->code);
-          break;
-        case 74:
-          if (i < 0) break;
-          o->ref[i].intsect_subent_type = pair->value.i;
-          LOG_TRACE ("%s.ref[%d].intsect_subent_type = %d [BS %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 75:

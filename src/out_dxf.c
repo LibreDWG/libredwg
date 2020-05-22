@@ -500,6 +500,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           }                                                                   \
       }                                                                       \
   }
+#define SUB_FIELD_BL0(o, nam, dxf)                                            \
+  {                                                                           \
+    if (_obj->o.nam != 0)                                                     \
+      SUB_FIELD_BL (o, nam, dxf)                                              \
+  }
 
 #define FIELD_DD(nam, _default, dxf) FIELD_BD (nam, dxf)
 #define FIELD_2DD(nam, d1, d2, dxf)                                           \

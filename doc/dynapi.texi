@@ -9787,10 +9787,12 @@ BS
 TV*,	DXF 301
 @item has_lastpt_ref
 B,	DXF 75
+@item lastpt_ref
+3BD
+@item num_intsectobj
+BL,	DXF 74
 @item intsectobj
-H,	DXF 332
-@item intsect_subent_type
-BS,	DXF 74
+H*,	DXF 332
 
 @end vtable
 @end indentedblock

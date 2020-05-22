@@ -4891,9 +4891,9 @@ typedef struct _dwg_DIMASSOC_Ref
   BITCODE_BS num_xrefpaths;
   BITCODE_T *xrefpaths;        /*!< DXF 301 */
   BITCODE_B  has_lastpt_ref;   /*!< DXF 75 */
-  //FIXME
-  BITCODE_H intsectobj;        /*!< DXF 332 the intersection object, 1 or 2 */
-  BITCODE_BS intsect_subent_type; /*!< DXF 74 */
+  BITCODE_3BD lastpt_ref;      /*!< DXF ?? */
+  BITCODE_BL num_intsectobj;   /*!< DXF 74 */
+  BITCODE_H* intsectobj;       /*!< DXF 332 the intersection objects, 1 or 2 */
 } Dwg_DIMASSOC_Ref;
 
 typedef struct _dwg_object_DIMASSOC

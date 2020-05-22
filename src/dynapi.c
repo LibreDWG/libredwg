@@ -8411,10 +8411,12 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_Ref_fields[] = {
     1,1,0, 301 },
   { "has_lastpt_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_DIMASSOC_Ref, has_lastpt_ref),
     0,0,0, 75 },
-  { "intsectobj",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_DIMASSOC_Ref, intsectobj),
-    1,0,0, 332 },
-  { "intsect_subent_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, intsect_subent_type),
+  { "lastpt_ref",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_DIMASSOC_Ref, lastpt_ref),
+    1,0,0, 0 },
+  { "num_intsectobj",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_DIMASSOC_Ref, num_intsectobj),
     0,0,0, 74 },
+  { "intsectobj",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_DIMASSOC_Ref, intsectobj),
+    1,1,0, 332 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_DIMENSION_common: (sorted by offset) */

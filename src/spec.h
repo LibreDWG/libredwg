@@ -302,6 +302,7 @@
 #ifndef FIELD_BD0
 #  define FIELD_BD0(name, dxf) FIELD_BD (name, dxf)
 #  define FIELD_BL0(name, dxf) FIELD_BL (name, dxf)
+#  define SUB_FIELD_BL0(o, name, dxf) SUB_FIELD_BL (o, name, dxf)
 #  define FIELD_BS0(name, dxf) FIELD_BS (name, dxf)
 #  define FIELD_RC0(name, dxf) FIELD_RC (name, dxf)
 #  define FIELD_BT0(name, dxf) FIELD_BT (name, dxf)

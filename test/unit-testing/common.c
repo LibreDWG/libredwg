@@ -1140,7 +1140,7 @@ api_common_entity (dwg_object *obj)
       }                                                                       \
   }
 #define CHK_SUBCLASS_3RD(ptr, name, field)                                    \
-  {\
+  {                                                                           \
     BITCODE_3RD value;                                                        \
     if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL))       \
       fail (#name "." #field);                                                \
@@ -1214,6 +1214,29 @@ api_common_entity (dwg_object *obj)
           free (_hdlname);                                                    \
       }                                                                       \
   }
+#define CHK_SUBCLASS_HV(ptr, name, field, num)                                \
+  if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &field, NULL))         \
+    fail (#name "." #field);                                                  \
+  else if (!field)                                                            \
+    pass ();                                                                  \
+  else                                                                        \
+    {                                                                         \
+      for (int _i = 0; _i < (int)(num); _i++)                                 \
+        {                                                                     \
+          BITCODE_H _hdl = field[_i];                                         \
+          if (_hdl == ptr.field[_i])                                          \
+            {                                                                 \
+              if (g_counter > g_countmax)                                     \
+                pass ();                                                      \
+              else                                                            \
+                ok (#name "." #field "[%d]: " FORMAT_REF, _i, ARGS_REF (_hdl)); \
+            }                                                                 \
+          else                                                                \
+            {                                                                 \
+              fail (#name "." #field "[%d]: " FORMAT_REF, _i, ARGS_REF (_hdl)); \
+            }                                                                 \
+        }                                                                     \
+    }
 #define CHK_SUBCLASS_UTF8TEXT(ptr, name, field)                               \
   {                                                                           \
     BITCODE_TV field;                                                         \

@@ -719,6 +719,23 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
   HANDLE_VECTOR_N (nam, FIELD_VALUE (sizefield), code, dxf)
 
+#define SUB_HANDLE_VECTOR(o, nam, size, code, dxf)                            \
+  KEY (nam);                                                                  \
+  if (_obj->o.nam)                                                            \
+    {                                                                         \
+      ARRAY;                                                                  \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          SUB_FIELD_HANDLE_N (o, nam[vcount], code, dxf);                     \
+        }                                                                     \
+      ENDARRAY;                                                               \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      ARRAY;                                                                  \
+      ENDARRAY;                                                               \
+    }
+
 #define REACTORS(code)                                                        \
   if (dat->version >= R_13 && obj->tio.object->num_reactors                   \
       && obj->tio.object->reactors)                                           \
@@ -742,23 +759,6 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
           FIRSTPREFIX VALUE_HANDLE (ent->reactors[vcount], reactors, code, 330);   \
         }                                                                     \
       ENDARRAY;                                                               \
-    }
-
-#define SUB_HANDLE_VECTOR(o, nam, size, code, dxf)                            \
-  KEY (nam);                                                                  \
-  if (_obj->o.nam)                                                            \
-    {                                                                         \
-      ARRAY;                                                                  \
-      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
-        {                                                                     \
-          SUB_FIELD_HANDLE_N (o, nam[vcount], code, dxf);                     \
-        }                                                                     \
-      ENDARRAY;                                                               \
-    }                                                                         \
-  else                                                                        \
-    {                                                                         \
-      PRINTFIRST;                                                             \
-      fprintf (dat->fh, "[]");                                                \
     }
 
 // violates duplicate keys

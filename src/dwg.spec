@@ -5506,7 +5506,7 @@ DWG_ENTITY (TABLE)
         REPEAT_BLOCK
             SUB_FIELD_3BD (break_heights[rcount1],position, 0);
             SUB_FIELD_BD (break_heights[rcount1],height, 0);
-            SUB_FIELD_BL (break_heights[rcount1],flag, 0);
+            SUB_FIELD_BL (break_heights[rcount1],flag, 0); // default: 2
         END_REPEAT_BLOCK
         SET_PARENT_OBJ (break_heights)
         END_REPEAT (break_heights);
@@ -6323,11 +6323,11 @@ DWG_OBJECT (DIMASSOC)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDimAssoc)
-  FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_BLx (associativity, 90);
   FIELD_B (trans_space_flag, 70);
   FIELD_RC (rotated_type, 71);
-  REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref)
+  FIELD_HANDLE (dimensionobj, 4, 330);
+  REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
   REPEAT_BLOCK
       // TODO: there could be much more blocks, up to 5.
       // 0 1 2 3 => 1 2 4 8. skip unset bits
@@ -6342,27 +6342,31 @@ DWG_OBJECT (DIMASSOC)
       // DXF: 1, 72, 10, ??, 75
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
-     // TODO idpaths
-     /*
-        SUB_FIELD_BL (ref[rcount1], intsect_subent_type, 74); // if 0 not in DXF
-        if (FIELD_VALUE (ref[rcount1].intsect_subent_type))
-          SUB_FIELD_HANDLE (ref[rcount1], intsectobj, 4, 332); // 0 (absent), 1-3
-     */
+      // idpaths:
+      SUB_FIELD_BL0 (ref[rcount1], num_intsectobj, 74);
+      SUB_HANDLE_VECTOR (ref[rcount1], intsectobj, num_intsectobj, 5, 332);
+
       SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
       SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
 
-      if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
-        {
-          SUB_FIELD_BL (ref[rcount1], num_xrefs, 0); // 1 or 2
-          SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_xrefs, 100)
-          SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
+      // XrefFullSubentPath
+      SUB_FIELD_BL (ref[rcount1], num_xrefs, 0); // 1 or 2
+      SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_xrefs, 100)
+      SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
 
-          SUB_FIELD_BL (ref[rcount1], main_subent_type, 73);  // if 0 not in DXF
-          SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
-          SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
-          FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
-        }
+// restrict only when writing, not when reading?
+//if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
+//  {
+      SUB_FIELD_BL0 (ref[rcount1], main_subent_type, 73);
+      SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
+      SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
+      FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
+//  }
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
+      if (FIELD_VALUE (ref[rcount1].has_lastpt_ref))
+        {
+          SUB_FIELD_3BD (ref[rcount1], lastpt_ref, 0);
+        }
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ref)
   END_REPEAT (ref)
