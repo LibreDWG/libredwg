@@ -5046,10 +5046,14 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   hdl = dwg_add_handleref (dwg, 2, pair->value.u, obj);
   LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [H* %d]\n", obj->name, num,
              ARGS_REF (hdl), pair->code);
-  _obj->itemhandles
-      = realloc (_obj->itemhandles, (num + 1) * sizeof (BITCODE_H));
-  _obj->itemhandles[num] = hdl;
+  _obj->itemhandles = realloc (_obj->itemhandles, (num + 1) * sizeof (BITCODE_H));
   _obj->texts = realloc (_obj->texts, (num + 1) * sizeof (BITCODE_TV));
+  if (!_obj->itemhandles || !_obj->texts)
+    {
+      LOG_ERROR ("Out of memory");
+      return;
+    }
+  _obj->itemhandles[num] = hdl;
   if (dwg->header.version >= R_2007)
     _obj->texts[num] = (char *)bit_utf8_to_TU (text);
   else
