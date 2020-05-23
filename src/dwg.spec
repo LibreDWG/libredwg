@@ -6489,10 +6489,10 @@ DWG_OBJECT (VISUALSTYLE)
     FIELD_CMC (edge_silhouette_color, 67);    FIELD_BS (edge_silhouette_color_int, 176);
     FIELD_BL (edge_silhouette_width, 79);     FIELD_BS (edge_silhouette_width_int, 176);
     FIELD_BL (edge_halo_gap, 170);            FIELD_BS (edge_halo_gap_int, 176);
-    FIELD_BL (edge_isolines, 171);            
+    FIELD_BL (edge_isolines, 171);
     VALUEOUTOFBOUNDS (edge_isolines, 5000)    FIELD_BS (edge_isolines_int, 176);
     FIELD_B (edge_do_hide_precision, 290);    FIELD_BS (edge_do_hide_precision_int, 176);
-                                              
+
     FIELD_BL (display_settings, 93);          FIELD_BS (display_settings_int, 176);
     FIELD_BD (display_brightness, 44);        FIELD_BS (display_brightness_int, 176);
     DECODER {
@@ -7613,22 +7613,24 @@ DWG_ENTITY_END
 // call as dwg_##action_ASSOCACTION_private
 DWG_OBJECT (ASSOCACTION)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocAction)                               
-  /* until r2010: 1, 2013+: 2 */                           
-  FIELD_BS (class_version, 90);                            
-  FIELD_BL (geometry_status, 90); /* 0 */                  
-  FIELD_HANDLE (owningnetwork, 5, 330);                   
-  FIELD_HANDLE (actionbody, 4, 360);                       
+  SUBCLASS (AcDbAssocAction)
+  /* until r2010: 1, 2013+: 2 */
+  FIELD_BS (class_version, 90);
+  FIELD_BL (geometry_status, 90); /* 0 */
+  FIELD_HANDLE (owningnetwork, 5, 330);
+  FIELD_HANDLE (actionbody, 4, 360);
   FIELD_BL (action_index, 90);
   FIELD_BL (max_assoc_dep_index, 90);
   FIELD_BL (num_deps, 90);
   REPEAT (num_deps, deps, Dwg_ASSOCACTION_Deps)
-  REPEAT_BLOCK {
-      int dxf = _obj->deps[rcount1].is_soft ? 360 : 330;
-      int code = _obj->deps[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
-      SUB_FIELD_B (deps[rcount1], is_soft, 0);
-      SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);
-  } END_REPEAT_BLOCK
+  REPEAT_BLOCK
+  {
+    int dxf = _obj->deps[rcount1].is_soft ? 360 : 330;
+    int code = _obj->deps[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+    SUB_FIELD_B (deps[rcount1], is_soft, 0);
+    SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);
+  }
+  END_REPEAT_BLOCK
   END_REPEAT (deps);
   if (FIELD_VALUE (class_version) > 1)
   {
