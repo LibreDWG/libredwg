@@ -2458,24 +2458,10 @@ DWG_ENTITY (MLINE)
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_segparms, 74);
           VALUEOUTOFBOUNDS (verts[rcount1].lines[rcount2].num_segparms, 5000)
           FIELD_VECTOR (verts[rcount1].lines[rcount2].segparms, BD, verts[rcount1].lines[rcount2].num_segparms, 41)
-          //REPEAT3 (verts[rcount1].lines[rcount2].num_segparms,
-          //        verts[rcount1].lines[rcount2].segparms,
-          //        BITCODE_BD)
-          //REPEAT_BLOCK
-          //  SUB_FIELD_BD (verts[rcount1].lines[rcount2], segparms[rcount3], 41);
-          //END_REPEAT_BLOCK
-          //END_REPEAT (verts[rcount1].lines[rcount2].segparms);
 
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_areafillparms, 75);
           VALUEOUTOFBOUNDS (verts[rcount1].lines[rcount2].num_areafillparms, 5000)
           FIELD_VECTOR (verts[rcount1].lines[rcount2].areafillparms, BD, verts[rcount1].lines[rcount2].num_areafillparms, 42)
-          //REPEAT3 (verts[rcount1].lines[rcount2].num_areafillparms,
-          //        verts[rcount1].lines[rcount2].areafillparms,
-          //        BITCODE_BD)
-          //REPEAT_BLOCK
-          //  SUB_FIELD_BD (verts[rcount1].lines[rcount2], areafillparms[rcount3], 42);
-          //END_REPEAT_BLOCK
-          //END_REPEAT (verts[rcount1].lines[rcount2].areafillparms);
       END_REPEAT_BLOCK
       SET_PARENT (verts[rcount1].lines, &_obj->verts[rcount1])
       END_REPEAT (verts[rcount1].lines);

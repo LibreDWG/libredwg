@@ -5419,20 +5419,36 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           _o->num_verts = 0;
           return 0;
         }
+      if (_o->num_lines)
+        {
+          for (int _j = 0; _j < _o->num_verts; _j++)
+            {
+              _o->verts[_j].lines
+                = xcalloc (_o->num_lines, sizeof (Dwg_MLINE_line));
+              if (!_o->verts[_j].lines)
+                {
+                  _o->num_lines = 0;
+                  return 2;
+                }
+            }
+        }
       LOG_TRACE ("MLINE.num_verts = %d [BS 72]\n", _o->num_verts);
       *jp = 0;
     }
   else if (pair->code == 73)
     {
       _o->num_lines = pair->value.i;
-      for (int _j = 0; _j < _o->num_verts; _j++)
+      if (_o->num_verts && !_o->verts[0].lines)
         {
-          _o->verts[_j].lines
-              = xcalloc (_o->num_lines, sizeof (Dwg_MLINE_line));
-          if (!_o->verts[_j].lines)
+          for (int _j = 0; _j < _o->num_verts; _j++)
             {
-              _o->num_lines = 0;
-              return 2;
+              _o->verts[_j].lines
+                = xcalloc (_o->num_lines, sizeof (Dwg_MLINE_line));
+              if (!_o->verts[_j].lines)
+                {
+                  _o->num_lines = 0;
+                  return 2;
+                }
             }
         }
       LOG_TRACE ("MLINE.num_lines = %d [BS 73]\n", _o->num_lines);
