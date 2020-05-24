@@ -2849,16 +2849,40 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                                        &pair->value, 1);
           LOG_TRACE ("HATCH.gradient_name = %s [T 470]\n", pair->value.s);
         }
-      else if (pair->code == 462)
+      else if (pair->code == 450)
         {
-          o->gradient_tint = pair->value.d;
-          LOG_TRACE ("HATCH.gradient_tint = %f [BD 462]\n", pair->value.d);
+          o->is_gradient_fill = pair->value.u;
+          LOG_TRACE ("HATCH.is_gradient_fill = %u [BL 450]\n",
+                     pair->value.u);
+        }
+      else if (pair->code == 451)
+        {
+          o->reserved = pair->value.u;
+          LOG_TRACE ("HATCH.reserved = %u [BL 451]\n",
+                     pair->value.u);
+        }
+      else if (pair->code == 460)
+        {
+          o->gradient_angle = deg2rad (pair->value.d);
+          LOG_TRACE ("HATCH.gradient_angle = %f [BD 460]\n",
+                     pair->value.d);
+        }
+      else if (pair->code == 461)
+        {
+          o->gradient_shift = pair->value.d;
+          LOG_TRACE ("HATCH.gradient_shift = %f [BD 461]\n",
+                     pair->value.d);
         }
       else if (pair->code == 452)
         {
           o->single_color_gradient = pair->value.u;
           LOG_TRACE ("HATCH.single_color_gradient = %u [BL 452]\n",
                      pair->value.u);
+        }
+      else if (pair->code == 462)
+        {
+          o->gradient_tint = pair->value.d;
+          LOG_TRACE ("HATCH.gradient_tint = %f [BD 462]\n", pair->value.d);
         }
       else if (pair->code >= 1000 && pair->code < 1999)
         {
