@@ -36,7 +36,7 @@ api_process (dwg_object *obj)
   BITCODE_B edge_do_hide_precision;
   BITCODE_BL edge_style_apply;
   BITCODE_BL display_settings;
-  BITCODE_BL display_brightness_bl;     /*!< DXF 44 <=r2007 */
+  BITCODE_BLd display_brightness_bl;    /*!< DXF 44 <=r2007 */
   BITCODE_BD display_brightness;        /*!< DXF 44  r2010+ */
   BITCODE_BL display_shadow_type;
   BITCODE_BD bd2007_45;
@@ -124,7 +124,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_silhouette_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_do_hide_precision, B);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_settings, BL);
-  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness_bl, BL);
+  CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness_bl, BLd);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness, BD);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_shadow_type, BL);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, internal_only, B);
