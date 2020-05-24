@@ -42620,16 +42620,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         fail ("TABLESTYLE.ovr [Dwg_TABLESTYLE_CellStyle]");
   }
   {
-    BITCODE_T ovr_name;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "ovr.name", &ovr_name, NULL)
-        && ovr_name
-           ? strEQ ((char *)ovr_name, (char *)tablestyle->ovr.name)
-           : !tablestyle->ovr.name)
-      pass ();
-    else
-      fail ("TABLESTYLE.ovr.name [T] '%s' <> '%s'", ovr_name, tablestyle->ovr.name);
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "parent", &parent, NULL)
         && !memcmp (&parent, &tablestyle->parent, sizeof (tablestyle->parent)))

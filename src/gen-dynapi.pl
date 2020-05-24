@@ -1133,7 +1133,8 @@ EOF
                   $var =~ /\[\d+\]$/ or
                   $type =~ /^(BE|CMC|BLL)$/)
       ? 1 : 0;
-    if ($var  =~ /\./) { # embedded structs, like ovr.name
+    if ($var  =~ /\./) { # embedded structs, like ovr.name. some have fields, some not
+      next if $var =~ /^ovr\./;
       $svar =~ s/\./_/g;
       $var = $svar;
     }
