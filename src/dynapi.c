@@ -6332,8 +6332,6 @@ static const Dwg_DYNAPI_field _dwg_MLEADERSTYLE_fields[] = {
     0,0,0, 45 },
   { "has_text_frame",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MLEADERSTYLE, has_text_frame),
     0,0,0, 292 },
-  { "is_new_format",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MLEADERSTYLE, is_new_format),
-    0,0,0, 0 },
   { "text_always_left",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MLEADERSTYLE, text_always_left),
     0,0,0, 297 },
   { "align_space",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MLEADERSTYLE, align_space),

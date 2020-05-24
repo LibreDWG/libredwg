@@ -6046,9 +6046,9 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_HANDLE (text_style, 5, 342);
   FIELD_BS (attach_left, 174);
   FIELD_BS (attach_right, 178);
-  if (FIELD_VALUE (class_version) >= 2) {
+//if (FIELD_VALUE (class_version) >= 2) {
     FIELD_BS (text_angle_type, 175);
-  }
+//}
   FIELD_BS (text_align_type, 176);
   FIELD_CMC (text_color, 93); // as RGB only
   FIELD_BD (text_height, 45);

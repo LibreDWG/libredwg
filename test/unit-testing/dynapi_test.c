@@ -37316,21 +37316,6 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
     mleaderstyle->is_changed--;
   }
   {
-    BITCODE_B is_new_format;
-    if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "is_new_format", &is_new_format, NULL)
-        && is_new_format == mleaderstyle->is_new_format)
-      pass ();
-    else
-      fail ("MLEADERSTYLE.is_new_format [B] " FORMAT_B " != " FORMAT_B "", mleaderstyle->is_new_format, is_new_format);
-    is_new_format++;
-    if (dwg_dynapi_entity_set_value (mleaderstyle, "MLEADERSTYLE", "is_new_format", &is_new_format, 0)
-        && is_new_format == mleaderstyle->is_new_format)
-      pass ();
-    else
-      fail ("MLEADERSTYLE.is_new_format [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderstyle->is_new_format, is_new_format);
-    mleaderstyle->is_new_format--;
-  }
-  {
     BITCODE_BD landing_dist;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "landing_dist", &landing_dist, NULL)
         && landing_dist == mleaderstyle->landing_dist)
@@ -46820,7 +46805,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 46823 "dynapi_test.c"
+#line 46808 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -47576,7 +47561,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 47579 "dynapi_test.c"
+#line 47564 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

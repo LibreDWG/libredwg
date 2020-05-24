@@ -7215,47 +7215,6 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
-#if 0
-          //FIXME a normal CMC color
-          else if (obj->fixedtype == DWG_TYPE_DBCOLOR)
-            {
-              Dwg_Object_DBCOLOR *o = obj->tio.object->tio.DBCOLOR;
-              if (pair->code == 62)
-                {
-                  o->color.index = pair->value.i;
-                  LOG_TRACE ("DBCOLOR.color.index = %d [CMC %d]\n",
-                             pair->value.i, pair->code);
-                  goto next_pair;
-                }
-              else if (pair->code == 430)
-                {
-                  char *x;
-                  o->color.book_name = strdup (pair->value.s);
-                  x = strchr (o->color.book_name, '$');
-                  if (!x)
-                    goto search_field;
-                  o->color.name = strdup (x + 1);
-                  o->color |= 3;
-                  x[0] = '\0';
-                  LOG_TRACE ("DBCOLOR.catalog = %s [CMC %d]\n", o->color.book_name,
-                             pair->code);
-                  LOG_TRACE ("DBCOLOR.name = %s [CMC %d]\n", o->color.name,
-                             pair->code);
-                  if (dwg->header.version >= R_2007)
-                    {
-                      char *tmp = o->color.book_name;
-                      o->color.book_name = (BITCODE_T)bit_utf8_to_TU (o->color.book_name);
-                      free (tmp);
-                      tmp = o->color.name;
-                      o->color.name = (BITCODE_T)bit_utf8_to_TU (o->color.name);
-                      free (tmp);
-                    }
-                  goto next_pair;
-                }
-              else
-                goto search_field;
-            }
-#endif
           else if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
             {
               Dwg_Object_MLEADERSTYLE *o = obj->tio.object->tio.MLEADERSTYLE;
@@ -7270,15 +7229,13 @@ new_object (char *restrict name, char *restrict dxfname,
                       "MLEADERSTYLE.block_scale = (%f, %f, %f) [3BD 47]\n",
                       o->block_scale.x, o->block_scale.y, o->block_scale.z);
                 }
-              else if (pair->code == 297) // set is_new_format if this exists
+              else if (pair->code == 297 && o->class_version < 2)
                 {
-                  LOG_TRACE ("MLEADERSTYLE.text_always_left = %d [B 297] => is_new_format\n",
+                  LOG_TRACE ("MLEADERSTYLE.text_always_left = %d [B 297] => class_version 2\n",
                              pair->value.i);
-                  o->is_new_format = 1;
+                  o->text_always_left = pair->value.i;
+                  o->class_version = 2;
                 }
-              else if (pair->code == 298) // r2013+
-                LOG_TRACE ("Unknown DXF code %d for %s = %d [B %d]\n",
-                           pair->code, name, pair->value.i, pair->code)
               else
                 goto search_field;
             }

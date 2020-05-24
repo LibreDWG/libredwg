@@ -3932,9 +3932,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                           && appid->entries[j]->absolute_ref
                                  == ref.absolute_ref)
                         {
-                          Dwg_Object_MLEADERSTYLE *this
+                          Dwg_Object_MLEADERSTYLE *o
                               = obj->tio.MLEADERSTYLE;
-                          this->class_version = 2; // real value with code 70 follows
+                          o->class_version = 2; // real value with code 70 follows
                           LOG_TRACE (
                               "EED found ACAD_MLEADERVER %lX\n",
                               ref.absolute_ref);

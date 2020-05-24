@@ -783,15 +783,21 @@ bit_read_BD (Bit_Chain *dat)
     }
 }
 
-/* create a Not-A-Number (NaN) without libm dependency */
+/* Create a Not-A-Number (NaN) without libm dependency.
+   For releases this returns 0.0, nan is only used for errors during development.
+ */
 BITCODE_BD
 bit_nan (void)
 {
+#ifdef IS_RELEASE
+  return 0.0;
+#else
   double result;
   int32_t *res = (int32_t *)&result;
   res[0] = -1;
   res[1] = -1;
   return result;
+#endif
 }
 
 int

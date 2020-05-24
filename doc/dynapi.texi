@@ -7136,8 +7136,6 @@ CMC,	DXF 93
 BD,	DXF 45
 @item has_text_frame
 B,	DXF 292
-@item is_new_format
-B
 @item text_always_left
 B,	DXF 297
 @item align_space

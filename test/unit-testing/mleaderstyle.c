@@ -32,7 +32,7 @@ api_process (dwg_object *obj)
   BITCODE_CMC text_color;
   BITCODE_BD text_height;
   BITCODE_B has_text_frame;
-  BITCODE_B is_new_format; /* computed */
+  //BITCODE_B is_new_format; /* computed */
   BITCODE_B text_always_left;
   BITCODE_BD align_space;
   BITCODE_H block;
@@ -81,7 +81,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_CMC (_obj, MLEADERSTYLE, text_color);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, text_height, BD);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, has_text_frame, B);
-  CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, is_new_format, B); /* computed */
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, text_always_left, B);
   CHK_ENTITY_TYPE (_obj, MLEADERSTYLE, align_space, BD);
   CHK_ENTITY_H (_obj, MLEADERSTYLE, block);
