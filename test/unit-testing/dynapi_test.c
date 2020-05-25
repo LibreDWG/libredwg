@@ -34334,39 +34334,29 @@ static int test_LAYERFILTER (const Dwg_Object *obj)
   Dwg_Object_LAYERFILTER *restrict layerfilter = obj->tio.object->tio.LAYERFILTER;
   failed = 0;
   {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "class_version", &class_version, NULL)
-        && class_version == layerfilter->class_version)
+    BITCODE_TV* names;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "num_names", &count, NULL)
+        && dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "names", &names, NULL)
+        && names == layerfilter->names)
       pass ();
     else
-      fail ("LAYERFILTER.class_version [BS] %hu != %hu", layerfilter->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (layerfilter, "LAYERFILTER", "class_version", &class_version, 0)
-        && class_version == layerfilter->class_version)
-      pass ();
-    else
-      fail ("LAYERFILTER.class_version [BS] set+1 %hu != %hu", layerfilter->class_version, class_version);
-    layerfilter->class_version--;
+      fail ("LAYERFILTER.names [TV*] * %u num_names", count);
   }
   {
-    BITCODE_T description;
-    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "description", &description, NULL)
-        && description
-           ? strEQ ((char *)description, (char *)layerfilter->description)
-           : !layerfilter->description)
+    BITCODE_BL num_names;
+    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "num_names", &num_names, NULL)
+        && num_names == layerfilter->num_names)
       pass ();
     else
-      fail ("LAYERFILTER.description [T] '%s' <> '%s'", description, layerfilter->description);
-  }
-  {
-    BITCODE_T name;
-    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "name", &name, NULL)
-        && name
-           ? strEQ ((char *)name, (char *)layerfilter->name)
-           : !layerfilter->name)
+      fail ("LAYERFILTER.num_names [BL] %u != %u", layerfilter->num_names, num_names);
+    num_names++;
+    if (dwg_dynapi_entity_set_value (layerfilter, "LAYERFILTER", "num_names", &num_names, 0)
+        && num_names == layerfilter->num_names)
       pass ();
     else
-      fail ("LAYERFILTER.name [T] '%s' <> '%s'", name, layerfilter->name);
+      fail ("LAYERFILTER.num_names [BL] set+1 %u != %u", layerfilter->num_names, num_names);
+    layerfilter->num_names--;
   }
   {
     struct _dwg_object_object* parent;

@@ -7423,6 +7423,32 @@ new_object (char *restrict name, char *restrict dxfname,
                   j++;
                 }
             }
+          else if (pair->code == 8 &&
+                   obj->fixedtype == DWG_TYPE_LAYERFILTER &&
+                   strEQc (subclass, "AcDbLayerFilter"))
+            {
+              // num_names
+              Dwg_Object_LAYERFILTER *o = obj->tio.object->tio.LAYERFILTER;
+              if (!o->names)
+                {
+                  o->names = xcalloc (1, sizeof (BITCODE_T));
+                  j = 0;
+                }
+              else
+                o->names = realloc (o->names, (o->num_names + 1) * sizeof (BITCODE_T));
+              if (!o->names || j < 0 || j >= (int)o->num_names)
+                return NULL;
+              assert (j >= 0 && j < (int)o->num_names);
+              if (dwg->header.version >= R_2007)
+                o->names[j] = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+              else
+                o->names[j] = strdup (pair->value.s);
+              LOG_TRACE ("%s.%s[%d] = %s [%s %d]\n", name, "names", j,
+                         pair->value.s, "T", pair->code);
+              j++;
+              o->num_names = j;
+              goto next_pair;
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF

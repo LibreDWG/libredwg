@@ -5893,11 +5893,8 @@ typedef struct _dwg_object_SECTION_SETTINGS
 typedef struct _dwg_object_LAYERFILTER
 {
   struct _dwg_object_object *parent;
-
-  BITCODE_BS class_version; /*!< DXF 70 0 */
-  BITCODE_T name;
-  BITCODE_T description;
-  // ...
+  BITCODE_BL num_names;
+  BITCODE_T *names;
 } Dwg_Object_LAYERFILTER;
 
 typedef struct _dwg_entity_ATEXT
@@ -7486,6 +7483,7 @@ EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
+EXPORT int dwg_setup_LAYERFILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
@@ -7544,7 +7542,6 @@ EXPORT int dwg_setup_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);
 EXPORT int dwg_setup_GEOPOSITIONMARKER (Dwg_Object *obj);
-EXPORT int dwg_setup_LAYERFILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODEL (Dwg_Object *obj);
 EXPORT int dwg_setup_NAVISWORKSMODELDEF (Dwg_Object *obj);

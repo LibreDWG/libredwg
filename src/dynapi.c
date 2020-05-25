@@ -5826,12 +5826,10 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LAYERFILTER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYERFILTER, parent),
     1,1,0, 0 },
-  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYERFILTER, class_version),
+  { "num_names",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_LAYERFILTER, num_names),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_LAYERFILTER, name),
-    1,1,1, 2 },
-  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_LAYERFILTER, description),
-    1,1,1, 3 },
+  { "names",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_object_LAYERFILTER, names),
+    1,1,0, 8 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LAYER_CONTROL: (sorted by offset) */

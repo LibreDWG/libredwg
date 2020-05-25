@@ -4678,6 +4678,7 @@ DWG_OBJECT (GEODATA)
       FIELD_3BD (up_dir, 210);
       // TODO compute if upgrading
       FIELD_2RD (north_dir, 12); // obsolete: 1,1,1
+      // Civil3D fields:
       FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
                                 // User defined = 2, Grid scale at reference point = 3,
                                 // Prismodial = 4
@@ -7188,6 +7189,13 @@ DWG_ENTITY (ARC_DIMENSION)
   FIELD_HANDLE (block, 5, 0);
 DWG_ENTITY_END
 
+// as ACAD_LAYERFILTERS in the NOD
+DWG_OBJECT (LAYERFILTER)
+  SUBCLASS (AcDbLayerFilter)
+  FIELD_BL (num_names, 0);
+  FIELD_VECTOR_T (names, T, num_names, 8);
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -8375,16 +8383,6 @@ DWG_OBJECT (SECTION_SETTINGS)
     FIELD_HANDLE (plotstyle, ANYCODE, 0);
     FIELD_HANDLE (hatch_pattern, ANYCODE, 0);
   }
-DWG_OBJECT_END
-
-// as ACAD_LAYERFILTERS in the NOD
-DWG_OBJECT (LAYERFILTER)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbLayerFilter)
-  DEBUG_HERE_OBJ
-  FIELD_T (name, 2);
-  FIELD_T (description, 3);
-  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (LAYOUTPRINTCONFIG)

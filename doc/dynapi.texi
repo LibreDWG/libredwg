@@ -6527,12 +6527,10 @@ H,	DXF 6
 
 @item parent
 struct _dwg_object_object*
-@item class_version
-BS
-@item name
-T,	DXF 2
-@item description
-T,	DXF 3
+@item num_names
+BL
+@item names
+TV*,	DXF 8
 
 @end vtable
 @end indentedblock

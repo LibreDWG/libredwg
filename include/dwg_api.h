@@ -581,6 +581,7 @@ typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
 typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
 typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockpurgepreventer;
+typedef struct _dwg_object_LAYERFILTER                     dwg_obj_layerfilter;
 typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
 typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transaction;
 typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
@@ -626,7 +627,6 @@ typedef struct _dwg_object_DATATABLE                       dwg_obj_datatable;
 typedef struct _dwg_object_DETAILVIEWSTYLE                 dwg_obj_detailviewstyle;
 typedef struct _dwg_object_EVALUATION_GRAPH                dwg_obj_evaluation_graph;
 typedef struct _dwg_object_GEOMAPIMAGE                     dwg_obj_geomapimage;
-typedef struct _dwg_object_LAYERFILTER                     dwg_obj_layerfilter;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG               dwg_obj_layoutprintconfig;
 typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA         dwg_obj_leaderobjectcontextdata;
 typedef struct _dwg_object_CURVEPATH                       dwg_obj_curvepath;
@@ -811,6 +811,7 @@ DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DBCOLOR)
 DWG_GETALL_OBJECT_DECL (DIMASSOC)
 DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
+DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LIGHTLIST)
 DWG_GETALL_OBJECT_DECL (LONG_TRANSACTION)
 DWG_GETALL_OBJECT_DECL (MATERIAL)
@@ -851,7 +852,6 @@ DWG_GETALL_OBJECT_DECL (DATATABLE)
 DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (EVALUATION_GRAPH)
 DWG_GETALL_OBJECT_DECL (GEOMAPIMAGE)
-DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
 DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
@@ -1024,6 +1024,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (IDBUFFER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGEDEF)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGEDEF_REACTOR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYERFILTER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LONG_TRANSACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MATERIAL)
@@ -1069,7 +1070,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (EVALUATION_GRAPH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (GEOMAPIMAGE)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYERFILTER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUTPRINTCONFIG)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
@@ -1305,6 +1305,7 @@ dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
 dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
 dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);
+dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
 dwg_get_OBJECT_DECL (obj_material, MATERIAL);
@@ -1339,7 +1340,6 @@ dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_evaluation_graph, EVALUATION_GRAPH);
 dwg_get_OBJECT_DECL (obj_geomapimage, GEOMAPIMAGE)
-dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
 dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);
