@@ -5598,7 +5598,7 @@ static const Dwg_DYNAPI_field _dwg_GEODATA_fields[] = {
     0,0,0, 70 },
   { "design_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_GEODATA, design_pt),
     1,0,0, 10 },
-  { "ref_pt",	"3BD_1", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_GEODATA, ref_pt),
+  { "ref_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_GEODATA, ref_pt),
     1,0,0, 11 },
   { "obs_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_GEODATA, obs_pt),
     1,0,0, 0 },

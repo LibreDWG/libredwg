@@ -4632,7 +4632,6 @@ DWG_OBJECT_END
 // only one v2 testcase yet, but decodes fine
 DWG_OBJECT (GEODATA)
 
-  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbGeoData)
   UNTIL (R_2007) // r2009, class_version 1 really
     {
@@ -4646,7 +4645,7 @@ DWG_OBJECT (GEODATA)
       FIELD_HANDLE (host_block, 4, 330);
       FIELD_BS (coord_type, 0); // 0 unknown, 1 local grid, 2 projected grid,
                                 // 3 geographic (defined by latitude/longitude) (default)
-      FIELD_3BD_1 (ref_pt, 40); // wrong in ODA docs
+      FIELD_3BD (ref_pt, 11);   // wrong in ODA docs
       FIELD_BL (units_value_horiz, 91); // 0-12, hor_units
       FIELD_3BD (design_pt, 10);
       FIELD_3BD (obs_pt, 0);    // always 0,0,0

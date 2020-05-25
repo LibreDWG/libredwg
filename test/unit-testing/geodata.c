@@ -1,4 +1,3 @@
-// TODO unstable
 #define DWG_TYPE DWG_TYPE_GEODATA
 #include "common.c"
 
@@ -121,7 +120,6 @@ api_process (dwg_object *obj)
             CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face1, BL);
             CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face2, BL);
             CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face3, BL);
-            //CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face4, BL);
           }
     }
 

@@ -3735,6 +3735,85 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// returns with pair if not found, or NULL on error.
+// only for geomesh_pts (num 93, 13, 14) and geomesh_faces (num 96, 97-99)
+static Dxf_Pair *
+add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_GEODATA *o = obj->tio.object->tio.GEODATA;
+  int i = -1;
+
+  while (pair != NULL)
+    {
+      switch (pair->code)
+        {
+        case 93:
+          i = -1;
+          o->num_geomesh_pts = pair->value.u;
+          o->geomesh_pts = xcalloc (pair->value.u, sizeof (Dwg_GEODATA_meshpt));
+          if (!o->geomesh_pts && o->num_geomesh_pts)
+            return NULL;
+          LOG_TRACE ("%s.num_geomesh_pts = %u [BL %d]\n",
+                       obj->name, pair->value.u, pair->code);
+          break;
+        case 96:
+          i = -1;
+          o->num_geomesh_faces = pair->value.u;
+          o->geomesh_faces = xcalloc (pair->value.u, sizeof (Dwg_GEODATA_meshface));
+          if (!o->geomesh_faces && o->num_geomesh_faces)
+            return NULL;
+          LOG_TRACE ("%s.num_geomesh_faces = %u [BL %d]\n",
+                       obj->name, pair->value.u, pair->code);
+          break;
+        case 13:
+          i++;
+          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+          o->geomesh_pts[i].source_pt.x = pair->value.d;
+          break;
+        case 23:
+          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+          o->geomesh_pts[i].source_pt.y = pair->value.d;
+          LOG_TRACE ("%s.geomesh_pts[%d] = (%f, %f) [2RD %d]\n",
+                     obj->name, i, o->geomesh_pts[i].source_pt.x, pair->value.d, 13);
+          break;
+        case 14:
+          i++;
+          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+          o->geomesh_pts[i].dest_pt.x = pair->value.d;
+          break;
+        case 24:
+          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+          o->geomesh_pts[i].dest_pt.y = pair->value.d;
+          LOG_TRACE ("%s.geomesh_pts[%d].dest_pt = (%f, %f) [2RD %d]\n",
+                     obj->name, i, o->geomesh_pts[i].dest_pt.x, pair->value.d, 13);
+          break;
+        case 97:
+          i++;
+          assert (i >= 0 && i < (int)o->num_geomesh_faces);
+          o->geomesh_faces[i].face1 = pair->value.u;
+          break;
+        case 98:
+          assert (i >= 0 && i < (int)o->num_geomesh_faces);
+          o->geomesh_faces[i].face2 = pair->value.u;
+          break;
+        case 99:
+          assert (i >= 0 && i < (int)o->num_geomesh_faces);
+          o->geomesh_faces[i].face3 = pair->value.u;
+          LOG_TRACE ("%s.geomesh_faces[%d] = (%u, %u, %u) [3*BL %d]\n",
+                     obj->name, i, o->geomesh_faces[i].face1, o->geomesh_faces[i].face2,
+                     pair->value.u, 97);
+          break;
+        case 0:
+        default:
+          return pair;
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
 // returns with 0
 // subclass for multiple objects.
 // Only handle conflicts, codes with multiple keys.
@@ -7298,6 +7377,14 @@ new_object (char *restrict name, char *restrict dxfname,
               o->column_heights[j] = pair->value.d;
               LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 50]\n", j,
                          pair->value.d);
+            }
+          else if (obj->fixedtype == DWG_TYPE_GEODATA)
+            {
+              pair = add_GEODATA (obj, dat, pair);
+              if (pair && pair->code != 0)
+                goto search_field;
+              else
+                return pair;
             }
           else if (obj->fixedtype == DWG_TYPE_VPORT && pair->code == 41)
             {

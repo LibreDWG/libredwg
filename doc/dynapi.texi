@@ -6247,7 +6247,7 @@ BS,	DXF 70
 @item design_pt
 3BD,	DXF 10
 @item ref_pt
-3BD_1,	DXF 11
+3BD,	DXF 11
 @item obs_pt
 3BD
 @item scale_vec

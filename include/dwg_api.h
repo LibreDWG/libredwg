@@ -556,6 +556,7 @@ typedef struct _dwg_object_DICTIONARYWDFLT        dwg_obj_dictionarywdflt;
 typedef struct _dwg_object_DUMMY                  dwg_obj_dummy;
 typedef struct _dwg_object_FIELD                  dwg_obj_field;
 typedef struct _dwg_object_FIELDLIST              dwg_obj_fieldlist;
+typedef struct _dwg_object_GEODATA                dwg_obj_geodata;
 typedef struct _dwg_object_GROUP                  dwg_obj_group;
 typedef struct _dwg_object_IDBUFFER               dwg_obj_idbuffer;
 typedef struct _dwg_object_IMAGEDEF               dwg_obj_imagedef;
@@ -580,7 +581,6 @@ typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
 typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
 typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockpurgepreventer;
-typedef struct _dwg_object_GEODATA                         dwg_obj_geodata;
 typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
 typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transaction;
 typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
@@ -786,6 +786,7 @@ DWG_GETALL_OBJECT_DECL (DICTIONARYWDFLT)
 DWG_GETALL_OBJECT_DECL (DUMMY)
 DWG_GETALL_OBJECT_DECL (FIELD)
 DWG_GETALL_OBJECT_DECL (FIELDLIST)
+DWG_GETALL_OBJECT_DECL (GEODATA)
 DWG_GETALL_OBJECT_DECL (GROUP)
 DWG_GETALL_OBJECT_DECL (IDBUFFER)
 DWG_GETALL_OBJECT_DECL (IMAGEDEF)
@@ -810,7 +811,6 @@ DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DBCOLOR)
 DWG_GETALL_OBJECT_DECL (DIMASSOC)
 DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
-DWG_GETALL_OBJECT_DECL (GEODATA)
 DWG_GETALL_OBJECT_DECL (LIGHTLIST)
 DWG_GETALL_OBJECT_DECL (LONG_TRANSACTION)
 DWG_GETALL_OBJECT_DECL (MATERIAL)
@@ -1280,6 +1280,7 @@ dwg_get_OBJECT_DECL (obj_dictionarywdflt, DICTIONARYWDFLT);
 dwg_get_OBJECT_DECL (obj_dummy, DUMMY);
 dwg_get_OBJECT_DECL (obj_field, FIELD);
 dwg_get_OBJECT_DECL (obj_fieldlist, FIELDLIST);
+dwg_get_OBJECT_DECL (obj_geodata, GEODATA);
 dwg_get_OBJECT_DECL (obj_group, GROUP);
 dwg_get_OBJECT_DECL (obj_idbuffer, IDBUFFER);
 dwg_get_OBJECT_DECL (obj_imagedef, IMAGEDEF);
@@ -1304,7 +1305,6 @@ dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
 dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
 dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);
-dwg_get_OBJECT_DECL (obj_geodata, GEODATA);
 dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
 dwg_get_OBJECT_DECL (obj_material, MATERIAL);

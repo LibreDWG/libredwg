@@ -33218,7 +33218,7 @@ static int test_GEODATA (const Dwg_Object *obj)
         && !memcmp (&ref_pt, &geodata->ref_pt, sizeof (geodata->ref_pt)))
         pass ();
     else
-        fail ("GEODATA.ref_pt [3BD_1]");
+        fail ("GEODATA.ref_pt [3BD]");
   }
   {
     BITCODE_2RD ref_pt2d;

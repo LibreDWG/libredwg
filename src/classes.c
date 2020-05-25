@@ -30,7 +30,6 @@ static const Dwg_Object_Type _classes_unstable[] =
    DWG_TYPE_CELLSTYLEMAP,
    DWG_TYPE_DBCOLOR,
    DWG_TYPE_DIMASSOC,
-   DWG_TYPE_GEODATA,
    DWG_TYPE_HELIX,
    DWG_TYPE_LIGHTLIST,
    DWG_TYPE_MATERIAL,
