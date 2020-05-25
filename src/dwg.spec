@@ -4639,7 +4639,7 @@ DWG_OBJECT (GEODATA)
       // 1 for r2009, 2 for r2010 (default), 3 for r2013 (same as r2010)
       ENCODER {
         _obj->class_version = 1;
-        _obj->one3pt.x = _obj->one3pt.y = _obj->one3pt.z = 1.0;
+        _obj->scale_vec.x = _obj->scale_vec.y = _obj->scale_vec.z = 1.0;
       }
       FIELD_BL (class_version, 90);
       DXF { FIELD_BS (coord_type, 70); }
@@ -4647,17 +4647,17 @@ DWG_OBJECT (GEODATA)
       FIELD_BS (coord_type, 0); // 0 unknown, 1 local grid, 2 projected grid,
                                 // 3 geographic (defined by latitude/longitude) (default)
       FIELD_3BD_1 (ref_pt, 40); // wrong in ODA docs
-      FIELD_BL (units_value_horiz, 91); // 0-12
+      FIELD_BL (units_value_horiz, 91); // 0-12, hor_units
       FIELD_3BD (design_pt, 10);
-      FIELD_3BD (obs_pt, 0);
+      FIELD_3BD (obs_pt, 0);    // always 0,0,0
       FIELD_3BD (up_dir, 210);
       // TODO compute if downgrading
       FIELD_BD (north_dir_angle_deg, 52);
-      FIELD_3BD_1 (one3pt, 43);
+      FIELD_3BD_1 (scale_vec, 43); // always 1,1,1
 
       FIELD_T (coord_system_def, 301); // & 303
       FIELD_T (geo_rss_tag, 302);
-      FIELD_BD (unit_scale_horiz, 46);
+      FIELD_BD (unit_scale_horiz, 46); // hor_unit_scale
       FIELD_T (coord_system_datum, 303); //obsolete, ""
       FIELD_T (coord_system_wkt, 304);   //obsolete, ""
     }
@@ -4673,21 +4673,19 @@ DWG_OBJECT (GEODATA)
       FIELD_3BD (design_pt, 10);
       FIELD_3BD (ref_pt, 11);
       FIELD_BD (unit_scale_horiz, 40);
-      FIELD_BL (units_value_horiz, 91);
-      FIELD_BD (unit_scale_vert, 41); //0xffffffff
-      FIELD_BL (units_value_vert, 92);
+      FIELD_BL (units_value_horiz, 91); // hor_units
+      FIELD_BD (unit_scale_vert, 41);   // 0xffffffff
+      FIELD_BL (units_value_vert, 92);  // vert_units
       FIELD_3BD (up_dir, 210);
       // TODO compute if upgrading
-      FIELD_2BD (north_dir, 12); // obsolete: 1,1,1
+      FIELD_2RD (north_dir, 12); // obsolete: 1,1,1
       FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
                                 // User defined = 2, Grid scale at reference point = 3,
                                 // Prismodial = 4
       FIELD_BD (user_scale_factor, 141);
-      DXF {
-        FIELD_B (sea_level_corr, 294);
-        FIELD_BD (sea_level_elev, 142);
-        FIELD_BD (coord_proj_radius, 143);
-      }
+      FIELD_B (do_sea_level_corr, 294);
+      FIELD_BD (sea_level_elev, 142);
+      FIELD_BD (coord_proj_radius, 143);
       FIELD_T (coord_system_def, 301); // and 303 if longer
       FIELD_T (geo_rss_tag, 302);
     }
@@ -4716,20 +4714,23 @@ DWG_OBJECT (GEODATA)
 
   UNTIL (R_2007) // r2009, class_version 1
     {
+      ENCODER {
+        _obj->ref_pt2d.x = _obj->ref_pt.y; _obj->ref_pt2d.y = _obj->ref_pt.x;
+      }
       FIELD_B (has_civil_data, 0); // 1
       FIELD_B (obsolete_false, 0); // 0
-      FIELD_2BD (refpt0, 0);
-      FIELD_2BD (refpt1, 0);
+      FIELD_2RD (ref_pt2d, 0);     // (y, x)
+      FIELD_2RD (ref_pt2d, 0);
       FIELD_BL (unknown1, 0); // 0
       FIELD_BL (unknown2, 0); // 0
-      FIELD_2BD (zero1, 0);
-      FIELD_2BD (zero2, 0);
+      FIELD_2RD (zero1, 0);   // origin (0,0)
+      FIELD_2RD (zero2, 0);
       FIELD_B (unknown_b, 0); // 0
       FIELD_BD (north_dir_angle_deg, 0);
       FIELD_BD (north_dir_angle_rad, 0);
       FIELD_BL (scale_est, 0);
       FIELD_BD (user_scale_factor, 0);
-      FIELD_B (sea_level_corr, 0);
+      FIELD_B (do_sea_level_corr, 0);
       FIELD_BD (sea_level_elev, 0);
       FIELD_BD (coord_proj_radius, 0);
     }

@@ -3782,7 +3782,7 @@ typedef struct _dwg_object_GEODATA
   BITCODE_3BD design_pt;
   BITCODE_3BD ref_pt;
   BITCODE_3BD obs_pt;
-  BITCODE_3BD one3pt; // always 1.0,1.0,1.0
+  BITCODE_3BD scale_vec; // always 1.0,1.0,1.0
   BITCODE_BD unit_scale_horiz;
   BITCODE_BL units_value_horiz; // enum 0-20
   BITCODE_BD unit_scale_vert;
@@ -3792,7 +3792,7 @@ typedef struct _dwg_object_GEODATA
   BITCODE_BL scale_est; /* None = 1, User specified scale factor = 2,
                            Grid scale at reference point = 3, Prismodial = 4 */
   BITCODE_BD user_scale_factor;
-  BITCODE_B sea_level_corr;
+  BITCODE_B do_sea_level_corr;
   BITCODE_BD sea_level_elev;
   BITCODE_BD coord_proj_radius;
   BITCODE_T coord_system_def;
@@ -3810,8 +3810,7 @@ typedef struct _dwg_object_GEODATA
 
   BITCODE_B has_civil_data;
   BITCODE_B obsolete_false;
-  BITCODE_2BD refpt0;
-  BITCODE_2BD refpt1;
+  BITCODE_2RD ref_pt2d; // (y, x) of ref_pt reversed
   BITCODE_3BD zero1, zero2;
   BITCODE_BL unknown1;
   BITCODE_BL unknown2;

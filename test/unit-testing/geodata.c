@@ -13,6 +13,7 @@ api_process (dwg_object *obj)
                             3 geographic defined by latitude/longitude) */
   BITCODE_3BD design_pt;
   BITCODE_3BD ref_pt;
+  BITCODE_2RD ref_pt2d; // x reversed with y
   BITCODE_3BD obs_pt;
   BITCODE_BD unit_scale_horiz;
   BITCODE_BL units_value_horiz;
@@ -23,7 +24,7 @@ api_process (dwg_object *obj)
   BITCODE_BL scale_est; /* None = 1, User specified scale factor = 2,
                            Grid scale at reference point = 3, Prismodial = 4 */
   BITCODE_BD user_scale_factor;
-  BITCODE_B sea_level_corr;
+  BITCODE_B do_sea_level_corr;
   BITCODE_BD sea_level_elev;
   BITCODE_BD coord_proj_radius;
   BITCODE_T coord_system_def;
@@ -39,9 +40,14 @@ api_process (dwg_object *obj)
   Dwg_GEODATA_meshface *geomesh_faces;
   BITCODE_B has_civil_data;
   BITCODE_B obsolete_false;
+  BITCODE_3BD zero1, zero2;
+  BITCODE_BL unknown1;
+  BITCODE_BL unknown2;
+  BITCODE_B unknown_b;
   BITCODE_BD north_dir_angle_deg;
   BITCODE_BD north_dir_angle_rad;
-
+  
+  Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_geodata *geodata = dwg_object_to_GEODATA (obj);
 
   CHK_ENTITY_TYPE (geodata, GEODATA, class_version, BL);
@@ -61,7 +67,7 @@ api_process (dwg_object *obj)
   if (geodata->scale_est > 4)
     fail ("Invalid GEODATA.scale_est " FORMAT_BL " > 4", geodata->scale_est);
   CHK_ENTITY_TYPE (geodata, GEODATA, user_scale_factor, BD);
-  CHK_ENTITY_TYPE (geodata, GEODATA, sea_level_corr, B);
+  CHK_ENTITY_TYPE (geodata, GEODATA, do_sea_level_corr, B);
   CHK_ENTITY_TYPE (geodata, GEODATA, sea_level_elev, BD);
   CHK_ENTITY_TYPE (geodata, GEODATA, coord_proj_radius, BD);
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_def);
@@ -118,4 +124,23 @@ api_process (dwg_object *obj)
             //CHK_SUBCLASS_TYPE (geomesh_faces[i], GEODATA_meshface, face4, BL);
           }
     }
+
+  UNTIL (R_2007) {
+    CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B);
+    CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B);
+    CHK_ENTITY_2RD (geodata, GEODATA, ref_pt2d);
+    CHK_ENTITY_TYPE (geodata, GEODATA, unknown1, BL);
+    CHK_ENTITY_TYPE (geodata, GEODATA, unknown2, BL);
+    CHK_ENTITY_3RD (geodata, GEODATA, zero1);
+    CHK_ENTITY_3RD (geodata, GEODATA, zero2);
+    CHK_ENTITY_TYPE (geodata, GEODATA, unknown_b, B);
+    CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_deg, BD);
+    CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_rad, BD);
+    CHK_ENTITY_TYPE (geodata, GEODATA, scale_est, BL);
+    CHK_ENTITY_TYPE (geodata, GEODATA, user_scale_factor, BD);
+    CHK_ENTITY_TYPE (geodata, GEODATA, do_sea_level_corr, B);
+    CHK_ENTITY_TYPE (geodata, GEODATA, sea_level_elev, BD);
+    CHK_ENTITY_TYPE (geodata, GEODATA, coord_proj_radius, BD);
+  }
+
 }

@@ -33016,6 +33016,21 @@ static int test_GEODATA (const Dwg_Object *obj)
         fail ("GEODATA.design_pt [3BD]");
   }
   {
+    BITCODE_B do_sea_level_corr;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "do_sea_level_corr", &do_sea_level_corr, NULL)
+        && do_sea_level_corr == geodata->do_sea_level_corr)
+      pass ();
+    else
+      fail ("GEODATA.do_sea_level_corr [B] " FORMAT_B " != " FORMAT_B "", geodata->do_sea_level_corr, do_sea_level_corr);
+    do_sea_level_corr++;
+    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "do_sea_level_corr", &do_sea_level_corr, 0)
+        && do_sea_level_corr == geodata->do_sea_level_corr)
+      pass ();
+    else
+      fail ("GEODATA.do_sea_level_corr [B] set+1 " FORMAT_B " != " FORMAT_B "", geodata->do_sea_level_corr, do_sea_level_corr);
+    geodata->do_sea_level_corr--;
+  }
+  {
     BITCODE_T geo_rss_tag;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "geo_rss_tag", &geo_rss_tag, NULL)
         && geo_rss_tag
@@ -33190,14 +33205,6 @@ static int test_GEODATA (const Dwg_Object *obj)
     geodata->obsolete_false--;
   }
   {
-    BITCODE_3BD one3pt;
-    if (dwg_dynapi_entity_value (geodata, "GEODATA", "one3pt", &one3pt, NULL)
-        && !memcmp (&one3pt, &geodata->one3pt, sizeof (geodata->one3pt)))
-        pass ();
-    else
-        fail ("GEODATA.one3pt [3BD_1]");
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "parent", &parent, NULL)
         && !memcmp (&parent, &geodata->parent, sizeof (geodata->parent)))
@@ -33214,20 +33221,12 @@ static int test_GEODATA (const Dwg_Object *obj)
         fail ("GEODATA.ref_pt [3BD_1]");
   }
   {
-    BITCODE_2BD refpt0;
-    if (dwg_dynapi_entity_value (geodata, "GEODATA", "refpt0", &refpt0, NULL)
-        && !memcmp (&refpt0, &geodata->refpt0, sizeof (geodata->refpt0)))
+    BITCODE_2RD ref_pt2d;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "ref_pt2d", &ref_pt2d, NULL)
+        && !memcmp (&ref_pt2d, &geodata->ref_pt2d, sizeof (geodata->ref_pt2d)))
         pass ();
     else
-        fail ("GEODATA.refpt0 [2BD]");
-  }
-  {
-    BITCODE_2BD refpt1;
-    if (dwg_dynapi_entity_value (geodata, "GEODATA", "refpt1", &refpt1, NULL)
-        && !memcmp (&refpt1, &geodata->refpt1, sizeof (geodata->refpt1)))
-        pass ();
-    else
-        fail ("GEODATA.refpt1 [2BD]");
+        fail ("GEODATA.ref_pt2d [2RD]");
   }
   {
     BITCODE_BL scale_est;
@@ -33245,19 +33244,12 @@ static int test_GEODATA (const Dwg_Object *obj)
     geodata->scale_est--;
   }
   {
-    BITCODE_B sea_level_corr;
-    if (dwg_dynapi_entity_value (geodata, "GEODATA", "sea_level_corr", &sea_level_corr, NULL)
-        && sea_level_corr == geodata->sea_level_corr)
-      pass ();
+    BITCODE_3BD scale_vec;
+    if (dwg_dynapi_entity_value (geodata, "GEODATA", "scale_vec", &scale_vec, NULL)
+        && !memcmp (&scale_vec, &geodata->scale_vec, sizeof (geodata->scale_vec)))
+        pass ();
     else
-      fail ("GEODATA.sea_level_corr [B] " FORMAT_B " != " FORMAT_B "", geodata->sea_level_corr, sea_level_corr);
-    sea_level_corr++;
-    if (dwg_dynapi_entity_set_value (geodata, "GEODATA", "sea_level_corr", &sea_level_corr, 0)
-        && sea_level_corr == geodata->sea_level_corr)
-      pass ();
-    else
-      fail ("GEODATA.sea_level_corr [B] set+1 " FORMAT_B " != " FORMAT_B "", geodata->sea_level_corr, sea_level_corr);
-    geodata->sea_level_corr--;
+        fail ("GEODATA.scale_vec [3BD_1]");
   }
   {
     BITCODE_BD sea_level_elev;

@@ -6250,7 +6250,7 @@ BS,	DXF 70
 3BD_1,	DXF 11
 @item obs_pt
 3BD
-@item one3pt
+@item scale_vec
 3BD_1,	DXF 43
 @item unit_scale_horiz
 BD,	DXF 40
@@ -6268,7 +6268,7 @@ BL,	DXF 92
 BL,	DXF 95
 @item user_scale_factor
 BD,	DXF 141
-@item sea_level_corr
+@item do_sea_level_corr
 B,	DXF 294
 @item sea_level_elev
 BD,	DXF 142
@@ -6300,10 +6300,8 @@ Dwg_GEODATA_meshface*
 B
 @item obsolete_false
 B
-@item refpt0
-2BD
-@item refpt1
-2BD
+@item ref_pt2d
+2RD
 @item zero1
 3BD
 @item unknown1
