@@ -3816,18 +3816,19 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat, Dxf_Pair *restri
 
 // returns with 0
 // subclass for multiple objects.
-// Only handle conflicts, codes with multiple keys.
+// Only handle conflicts?, codes with multiple keys.
 // 1, 309
 static Dxf_Pair *
-add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o,
+add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
                Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
 {
   Dwg_Data *dwg = obj->parent;
   BITCODE_H hdl;
   enum {
-        TABLEFORMAT, CELLSTYLE, CELLMARGIN, GRIDFORMAT, NONE
+        TABLEFORMAT, CONTENTFORMAT, CELLMARGIN, GRIDFORMAT, NONE
   } mode;
   int i = -1, j = -1;
+  int grid = -1;
 
   while (pair != NULL && pair->code != 0)
     {
@@ -3839,8 +3840,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o,
           if (strEQc (pair->value.s, "TABLEFORMAT_BEGIN"))
             mode = TABLEFORMAT;
           else
-          if (strEQc (pair->value.s, "CELLSTYLE_BEGIN"))
-            mode = CELLSTYLE;
+          if (strEQc (pair->value.s, "CONTENTFORMAT_BEGIN"))
+            mode = CONTENTFORMAT;
           else
           if (strEQc (pair->value.s, "CELLMARGIN_BEGIN"))
             mode = CELLMARGIN;
@@ -3850,15 +3851,39 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o,
           else
             goto unknown_default;
           break;
+        case 300:
+          if (mode == CONTENTFORMAT)
+            {
+              if (obj->parent->header.version >= R_2007)
+                o->content_format.value_format_string = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+              else
+                o->content_format.value_format_string = strdup (pair->value.s);
+              LOG_TRACE ("%s.%s.content_format.value_format_string = \"%s\" [T %d]\n",
+                         obj->name, key, pair->value.s, pair->code);
+            }
+          else if (mode == TABLEFORMAT)
+            {
+              if (!strEQc (pair->value.s, "CONTENTFORMAT"))
+                goto unknown_default;
+            }
+          else
+            goto unknown_default;
+          break;
         case 301:
           // ignore MARGIN
           if (!strEQc (pair->value.s, "MARGIN"))
             goto unknown_default;
           break;
+        case 302:
+          // ignore GRIDFORMAT
+          if (!strEQc (pair->value.s, "GRIDFORMAT"))
+            goto unknown_default;
+          break;
         case 309:
-          if (strEQc (pair->value.s, "TABLEFORMAT_END"))
+          if (strEQc (pair->value.s, "TABLEFORMAT_END") ||
+              strEQc (pair->value.s, "CELLSTYLE_END"))
             mode = NONE;
-          else if (strEQc (pair->value.s, "CELLSTYLE_END") ||
+          else if (strEQc (pair->value.s, "CONTENTFORMAT_END") ||
                    strEQc (pair->value.s, "CELLMARGIN_END") ||
                    strEQc (pair->value.s, "GRIDFORMAT_END"))
             mode = TABLEFORMAT;
@@ -3866,19 +3891,284 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o,
             goto unknown_default;
           break;
         case 90:
-          o->type = pair->value.d;
-          LOG_TRACE ("%s.type = " FORMAT_BL " [BL %d]\n",
-                     obj->name, pair->value.i, pair->code);
-          break;
-        case 170:
-          o->data_flags = pair->value.i;
-          LOG_TRACE ("%s.data_flags = " FORMAT_BS " [BS %d]\n",
-                     obj->name, pair->value.i, pair->code);
+          if (mode == TABLEFORMAT)
+            {
+              o->type = pair->value.u;
+              LOG_TRACE ("%s.%s.type = " FORMAT_BL " [BL %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == CONTENTFORMAT)
+            {
+              o->content_format.property_override_flags = pair->value.u;
+              LOG_TRACE ("%s.%s.content_format.property_override_flags = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == GRIDFORMAT)
+            {
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
+              o->borders[grid].border_overrides = pair->value.u;
+              LOG_TRACE ("%s.%s.borders[%d].border_overrides = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, grid, pair->value.u, pair->code);
+            }
+          else if (mode == NONE)
+            {
+              return pair;
+            }
+          else
+            goto unknown_default;
           break;
         case 91:
-          o->property_override_flags = pair->value.d;
-          LOG_TRACE ("%s.property_override_flags = " FORMAT_BL " [BL %d]\n",
-                     obj->name, pair->value.i, pair->code);
+          if (mode == TABLEFORMAT)
+            {
+              o->property_override_flags = pair->value.u;
+              LOG_TRACE ("%s.%s.property_override_flags = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == CONTENTFORMAT)
+            {
+              o->content_format.property_flags = pair->value.u;
+              LOG_TRACE ("%s.%s.content_format.property_flags = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == GRIDFORMAT)
+            {
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
+              o->borders[grid].border_type = pair->value.u;
+              LOG_TRACE ("%s.%s.borders[%d].border_type = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, grid, pair->value.u, pair->code);
+            }
+          else if (mode == NONE)
+            {
+              return pair;
+            }
+          else
+            goto unknown_default;
+          break;
+        case 92:
+          if (mode == TABLEFORMAT)
+            {
+              o->merge_flags = pair->value.u;
+              LOG_TRACE ("%s.%s.merge_flags = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == CONTENTFORMAT)
+            {
+              o->content_format.value_data_type = pair->value.u;
+              LOG_TRACE ("%s.%s.content_format.value_data_type = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == GRIDFORMAT)
+            {
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
+              o->borders[grid].linewt = pair->value.i;
+              LOG_TRACE ("%s.%s.borders[%d].linewt = %d [BSd %d]\n",
+                         obj->name, key, grid, pair->value.i, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 93:
+          if (mode == TABLEFORMAT)
+            {
+              o->content_layout = pair->value.u;
+              LOG_TRACE ("%s.%s.content_layout = " FORMAT_BL " [BL %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == CONTENTFORMAT)
+            {
+              o->content_format.value_unit_type = pair->value.u;
+              LOG_TRACE ("%s.%s.content_format.value_unit_type = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == GRIDFORMAT)
+            {
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
+              o->borders[grid].visible = pair->value.i;
+              LOG_TRACE ("%s.%s.borders[%d].visible = %d [BL %d]\n",
+                         obj->name, key, grid, pair->value.i, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 94:
+          if (mode == TABLEFORMAT)
+            {
+              o->num_borders = pair->value.u;
+              j = 0;
+              LOG_TRACE ("%s.%s.num_borders = " FORMAT_BL " [BL %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+              o->borders = xcalloc (o->num_borders, sizeof (Dwg_GridFormat));
+            }
+          else if (mode == CONTENTFORMAT)
+            {
+              o->content_format.cell_alignment = pair->value.u;
+              LOG_TRACE ("%s.%s.content_format.cell_alignment = " FORMAT_BL " [BL %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 95:
+          if (mode == TABLEFORMAT)
+            {
+              grid++;
+              o->borders[grid].index_mask = pair->value.u;
+              LOG_TRACE ("%s.%s.borders[%d].index_mask = " FORMAT_BLx " [BLx %d]\n",
+                         obj->name, key, grid, pair->value.u, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 62:
+          if (mode == TABLEFORMAT)
+            {
+              o->bg_color.rgb = pair->value.u;
+              o->bg_color.method = pair->value.u >> 0x18;
+              o->bg_color.index = dwg_find_color_index (pair->value.u);
+              LOG_TRACE ("%s.%s.bg_color = %08x [CMTC %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == CONTENTFORMAT)
+            {
+              o->content_format.content_color.rgb = pair->value.u;
+              o->content_format.content_color.method = pair->value.u >> 0x18;
+              o->content_format.content_color.index = dwg_find_color_index (pair->value.u);
+              LOG_TRACE ("%s.%s.content_format.content_color = %08x [CMTC %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else if (mode == GRIDFORMAT)
+            {
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
+              o->borders[grid].color.rgb = pair->value.d;
+              o->borders[grid].color.rgb = pair->value.u;
+              o->borders[grid].color.method = pair->value.u >> 0x18;
+              o->borders[grid].color.index = dwg_find_color_index (pair->value.u);
+              LOG_TRACE ("%s.%s.o->borders[%d].color = %08x [CMTC %d]\n",
+                         obj->name, key, grid, pair->value.u, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 40:
+          if (mode == CELLMARGIN)
+            {
+              i++;
+              switch (i)
+                {
+                case 0:
+                  o->vert_margin = pair->value.d;
+                  LOG_TRACE ("%s.%s.vert_margin = %f [BD %d]\n",
+                             obj->name, key, pair->value.d, pair->code);
+                  break;
+                case 1:
+                  o->horiz_margin = pair->value.d;
+                  LOG_TRACE ("%s.%s.horiz_margin = %f [BD %d]\n",
+                             obj->name, key, pair->value.d, pair->code);
+                  break;
+                case 2:
+                  o->bottom_margin = pair->value.d;
+                  LOG_TRACE ("%s.%s.bottom_margin = %f [BD %d]\n",
+                             obj->name, key, pair->value.d, pair->code);
+                  break;
+                case 3:
+                  o->right_margin = pair->value.d;
+                  LOG_TRACE ("%s.%s.right_margin = %f [BD %d]\n",
+                             obj->name, key, pair->value.d, pair->code);
+                  break;
+                case 4:
+                  o->margin_horiz_spacing = pair->value.d;
+                  LOG_TRACE ("%s.%s.margin_horiz_spacing = %f [BD %d]\n",
+                             obj->name, key, pair->value.d, pair->code);
+                  break;
+                case 5:
+                  o->margin_vert_spacing = pair->value.d;
+                  LOG_TRACE ("%s.%s.margin_vert_spacing = %f [BD %d]\n",
+                             obj->name, key, pair->value.d, pair->code);
+                  break;
+                default:
+                  LOG_ERROR ("Invalid CELLMARGIN 40 index %d", i);
+                  goto unknown_default;
+                }
+            }
+          else if (mode == CONTENTFORMAT)
+            {
+              o->content_format.rotation = pair->value.d;
+              LOG_TRACE ("%s.%s.content_format.rotation = %f [BD %d]\n",
+                         obj->name, key, pair->value.d, pair->code);
+            }
+          else if (mode == GRIDFORMAT)
+            {
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
+              o->borders[grid].double_line_spacing = pair->value.d;
+              LOG_TRACE ("%s.%s.borders[%d].double_line_spacing = %f [BD %d]\n",
+                         obj->name, key, grid, pair->value.d, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 140:
+          if (mode == CONTENTFORMAT)
+            {
+              o->content_format.block_scale = pair->value.d;
+              LOG_TRACE ("%s.%s.content_format.block_scale = %f [BD %d]\n",
+                         obj->name, key, pair->value.d, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 144:
+          if (mode == CONTENTFORMAT)
+            {
+              o->content_format.text_height = pair->value.d;
+              LOG_TRACE ("%s.%s.content_format.text_height = %f [BD %d]\n",
+                         obj->name, key, pair->value.d, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 170:
+          if (mode == TABLEFORMAT)
+            {
+              o->data_flags = pair->value.u;
+              LOG_TRACE ("%s.%s.data_flags = " FORMAT_BSx " [BSx %d]\n",
+                         obj->name, key, pair->value.i, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 171:
+          if (mode == TABLEFORMAT)
+            {
+              o->margin_override_flags = pair->value.u;
+              LOG_TRACE ("%s.%s.margin_override_flags = " FORMAT_BSx " [BSx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
+            }
+          else
+            goto unknown_default;
+          break;
+        case 340:
+          if (mode == CONTENTFORMAT)
+            {
+              o->content_format.text_style = dwg_add_handleref (dwg, 3, pair->value.u, NULL);
+              LOG_TRACE ("%s.%s.content_format.text_style = " FORMAT_REF " [H 3 %d]\n",
+                         obj->name, key, ARGS_REF (o->content_format.text_style), pair->code);
+            }
+          else if (mode == GRIDFORMAT)
+            {
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
+              o->borders[grid].ltype = dwg_add_handleref (dwg, 3, pair->value.u, NULL);
+              LOG_TRACE ("%s.%s.borders[%d].ltype = " FORMAT_REF " [H 3 %d]\n",
+                         obj->name, key, grid, ARGS_REF (o->borders[grid].ltype), pair->code);
+            }
+          else
+            goto unknown_default;
           break;
         /*
         case 7:
@@ -3889,49 +4179,6 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o,
           LOG_TRACE ("%s.rowstyles[%d].text_style = " FORMAT_REF " [H %d]\n",
                        obj->name, i, ARGS_REF(hdl), pair->code);
           break;
-        case 140:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].text_height = pair->value.d;
-          LOG_TRACE ("%s.rowstyles[%d].text_height = %f [BD %d]\n",
-                       obj->name, i, pair->value.d, pair->code);
-          break;
-        case 62:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].text_color.index = pair->value.i;
-          //TODO rgb with 420
-          LOG_TRACE ("%s.rowstyles[%d].text_color.index = %d [CMC %d]\n",
-                     obj->name, i, pair->value.i, pair->code);
-          break;
-        case 63:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].fill_color.index = pair->value.i;
-          LOG_TRACE ("%s.rowstyles[%d].fill_color.index = %d [CMC %d]\n",
-                     obj->name, i, pair->value.i, pair->code);
-          break;
-        case 283:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].has_bgcolor = pair->value.i;
-          LOG_TRACE ("%s.rowstyles[%d].has_bgcolor = %d [B %d]\n",
-                     obj->name, i, pair->value.i, pair->code);
-          break;
-        case 90:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].data_type = pair->value.i;
-          LOG_TRACE ("%s.rowstyles[%d].data_type = %d [BL %d]\n",
-                     obj->name, i, pair->value.i, pair->code);
-          break;
-        case 91:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].unit_type = pair->value.i;
-          LOG_TRACE ("%s.rowstyles[%d].unit_type = %d [BL %d]\n",
-                     obj->name, i, pair->value.i, pair->code);
-          break;
         case 1:
           assert (i >= 0 && i < 3);
           assert (o->num_rowstyles);
@@ -3939,63 +4186,10 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o,
           LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
                      obj->name, i, pair->value.s, pair->code);
           break;
-        case 274:
-        case 275:
-        case 276:
-        case 277:
-        case 278:
-        case 279:
-          j = pair->code - 274;
-          assert (i >= 0 && i < 3);
-          assert (j >= 0 && j <= 6);
-          assert (o->num_rowstyles);
-          if (!o->rowstyles[i].borders)
-            {
-              o->rowstyles[i].borders = xcalloc (6, sizeof (Dwg_TABLESTYLE_border));
-              if (!o->rowstyles[i].borders)
-                {
-                  o->rowstyles[i].num_borders = 0;
-                  return NULL;
-                }
-              o->rowstyles[i].num_borders = 6;
-            }
-          assert (o->rowstyles[i].num_borders);
-          o->rowstyles[i].borders[j].linewt = dxf_find_lweight (pair->value.i);
-          LOG_TRACE ("%s.rowstyles[%d].borders[%d].linewt = %d [BSd %d]\n",
-                     obj->name, i, j, o->rowstyles[i].borders[j].linewt, pair->code);
-          break;
-        case 284:
-        case 285:
-        case 286:
-        case 287:
-        case 288:
-        case 289:
-          j = pair->code - 284;
-          assert (i >= 0 && i < 3);
-          assert (j >= 0 && j <= 6);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].borders[j].visible = pair->value.i;
-          LOG_TRACE ("%s.rowstyles[%d].borders[%d].visible = %d [B %d]\n",
-                     obj->name, i, j, pair->value.i, pair->code);
-          break;
-        case 64:
-        case 65:
-        case 66:
-        case 67:
-        case 68:
-        case 69:
-          j = pair->code - 64;
-          assert (i >= 0 && i < 3);
-          assert (j >= 0 && j <= 6);
-          assert (o->num_rowstyles);
-          o->rowstyles[i].borders[j].color.index = pair->value.i;
-          LOG_TRACE ("%s.rowstyles[%d].borders[%d].color.index = %d [CMC %d]\n",
-                     obj->name, i, j, pair->value.i, pair->code);
-          break;
         */
         default:
         unknown_default:
-          LOG_ERROR ("Unknown DXF code %d for %s.CellStyle", pair->code, obj->name);
+          LOG_ERROR ("Unknown DXF code %d for %s.%s", pair->code, obj->name, key);
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -4140,8 +4334,12 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      obj->name, i, j, pair->value.i, pair->code);
           break;
         default:
-          LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
-                     "TABLESTYLE");
+          if (is_type_stable (obj->fixedtype))
+            LOG_ERROR ("Unknown DXF code %d for %s", pair->code,
+                      "TABLESTYLE")
+          else
+            LOG_WARN ("Unknown DXF code %d for %s", pair->code,
+                      "TABLESTYLE");
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -6126,7 +6324,7 @@ new_object (char *restrict name, char *restrict dxfname,
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
-  int cur_cell = 0;
+  int cur_cell = -1;
   unsigned written = 0;
   BITCODE_RL curr_inserts = 0;
   BITCODE_RS flag = 0;
@@ -6322,7 +6520,7 @@ new_object (char *restrict name, char *restrict dxfname,
       if (!_o->rowstyles)
         {
           _o->num_rowstyles = 0;
-          return NULL;
+          goto invalid_dxf;
         }
       for (j = 0; j < 3; j++)
         {
@@ -6449,7 +6647,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                     num_entries * sizeof (Dwg_Object_Ref *));
                   }
                 if (pair->value.u && !hdls)
-                  return NULL;
+                  goto invalid_dxf;
                 hdls[i] = dwg_add_handleref (dwg, 2, pair->value.u, obj);
                 dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries", &hdls,
                                              0);
@@ -6659,7 +6857,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 inserts = xcalloc (num_inserts, sizeof (BITCODE_H));
               if (num_inserts && !inserts)
-                return NULL;
+                goto invalid_dxf;
               dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
                                            &inserts, 0);
               hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
@@ -7125,7 +7323,7 @@ new_object (char *restrict name, char *restrict dxfname,
               if (!_o->data)
                 {
                   _o->data_size = 0;
-                  return NULL;
+                  goto invalid_dxf;
                 }
               LOG_TRACE ("OLE2FRAME.data_size = %ld [BL 90]\n", pair->value.l);
             }
@@ -7167,11 +7365,10 @@ new_object (char *restrict name, char *restrict dxfname,
               assert (_o->data);
               if (blen + written > _o->data_size)
                 {
-                  dxf_free_pair (pair);
                   LOG_ERROR ("OLE2FRAME.data overflow: %u + written %u > "
                              "data_size: %u",
                              blen, written, _o->data_size);
-                  return NULL;
+                  goto invalid_dxf;
                 }
               for (unsigned _i = 0; _i < blen; _i++)
                 {
@@ -7371,7 +7568,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (!o->column_heights)
                     {
                       o->num_column_heights = 0;
-                      return NULL;
+                      goto invalid_dxf;
                     }
                 }
               assert (j < (int)o->num_column_heights);
@@ -7387,6 +7584,15 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 return pair;
             }
+          else if (pair->code == 300 &&
+                   obj->fixedtype == DWG_TYPE_CELLSTYLEMAP &&
+                   strEQc (pair->value.s, "CELLSTYLE"))
+            {
+              Dwg_Object_CELLSTYLEMAP *_o = obj->tio.object->tio.CELLSTYLEMAP;
+              cur_cell++;
+              if (cur_cell < 0 || cur_cell >= (int)_o->num_cells)
+                goto invalid_dxf;
+            }
           else if (pair->code == 1 &&
                    strEQc (pair->value.s, "TABLEFORMAT_BEGIN") &&
                    (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP ||
@@ -7397,22 +7603,55 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               Dwg_CellStyle *o = NULL;
               Dwg_TABLESTYLE_CellStyle *tbl_sty = NULL;
+              char key[80];
               // TODO, counters for the others
               if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
                 {
                   Dwg_Object_CELLSTYLEMAP *_o = obj->tio.object->tio.CELLSTYLEMAP;
                   if (cur_cell < 0 || cur_cell >= (int)_o->num_cells)
-                    return NULL;
+                    goto invalid_dxf;
                   if (cur_cell == 0 && !_o->cells)
                     _o->cells = xcalloc (_o->num_cells, sizeof (Dwg_TABLESTYLE_CellStyle));
                   tbl_sty = &_o->cells[cur_cell];
+                  sprintf (key, "cells[%d]", cur_cell);
                   o = &tbl_sty->cellstyle;
-                  cur_cell++;
                 }
               if (o)
-                pair = add_CellStyle (obj, o, dat, pair);
+                pair = add_CellStyle (obj, o, &key[0], dat, pair);
               if (pair && pair->code != 0)
-                goto search_field;
+                {
+                  if (tbl_sty && pair->code == 90)
+                    {
+                      tbl_sty->id = pair->value.u;
+                      LOG_TRACE ("%s.%s.id = " FORMAT_BL " [BL %d]\n",
+                                 obj->name, key, pair->value.u, pair->code);
+                      dxf_free_pair (pair);
+                      pair = dxf_read_pair (dat);
+                    }
+                  if (tbl_sty && pair->code == 91)
+                    {
+                      tbl_sty->type = pair->value.u;
+                      LOG_TRACE ("%s.%s.type = " FORMAT_BL " [BL %d]\n",
+                                 obj->name, key, pair->value.u, pair->code);
+                      dxf_free_pair (pair);
+                      pair = dxf_read_pair (dat);
+                    }
+                  if (tbl_sty && pair->code == 300)
+                    {
+                      if (dwg->header.version >= R_2007)
+                        tbl_sty->name = (char *)bit_utf8_to_TU (pair->value.s);
+                      else
+                        tbl_sty->name = strdup (pair->value.s);
+                      LOG_TRACE ("%s.%s.name = \"%s\" [BL %d]\n",
+                                 obj->name, key, pair->value.s, pair->code);
+                      dxf_free_pair (pair);
+                      pair = dxf_read_pair (dat);
+                    }
+                  if (tbl_sty && pair->code == 309 && strEQc (pair->value.s, "CELLSTYLE_END"))
+                    goto next_pair;
+                  else
+                    goto search_field;
+                }
               else
                 return pair;
             }
@@ -7435,7 +7674,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (!o->points)
                     {
                       o->num_points = 0;
-                      return NULL;
+                      goto invalid_dxf;
                     }
                 }
               assert (j >= 0);
@@ -7467,7 +7706,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 o->names = realloc (o->names, (o->num_names + 1) * sizeof (BITCODE_T));
               if (!o->names || j < 0 || j >= (int)o->num_names)
-                return NULL;
+                goto invalid_dxf;
               assert (j >= 0 && j < (int)o->num_names);
               if (dwg->header.version >= R_2007)
                 o->names[j] = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
@@ -7883,7 +8122,7 @@ new_object (char *restrict name, char *restrict dxfname,
                         {
                           matrix = xcalloc (16, sizeof (BITCODE_BD));
                           if (!matrix)
-                            return NULL;
+                            goto invalid_dxf;
                           j = 0;
                         }
                       assert (j >= 0 && j < 16);
@@ -8279,9 +8518,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               else if (is_class_stable (obj->name))
                 {
-                  LOG_ERROR ("Unknown DXF code %d for %s", pair->code, name)
-                  dxf_free_pair (pair);
-                  return NULL;
+                  goto invalid_dxf;
                 }
               else
                 LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
@@ -8306,8 +8543,12 @@ new_object (char *restrict name, char *restrict dxfname,
     postprocess_TEXTlike (obj);
 
   in_postprocess_handles (obj);
-
   return pair;
+
+ invalid_dxf:
+  LOG_ERROR ("Invalid DXF code %d for %s", pair->code, name)
+  dxf_free_pair (pair);
+  return NULL;
 }
 
 static int

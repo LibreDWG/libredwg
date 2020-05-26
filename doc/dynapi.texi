@@ -9698,7 +9698,7 @@ CMC,	DXF 62
 @item text_style
 H
 @item text_height
-BD,	DXF 92
+BD,	DXF 144
 
 @end vtable
 @end indentedblock

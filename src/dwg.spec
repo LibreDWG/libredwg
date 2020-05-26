@@ -4805,7 +4805,8 @@ DWG_OBJECT_END
 
 // 20.4.101.3 Content format for TABLECONTENT and CellStyle_Field
 #define ContentFormat_fields(fmt)                 \
-  DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }        \
+  DXF { VALUE_TFF ("CONTENTFORMAT", 300) }        \
+  DXF { VALUE_TFF ("CONTENTFORMAT_BEGIN", 1) }    \
   FIELD_BLx (fmt.property_override_flags, 90);    \
   FIELD_BLx (fmt.property_flags, 91);             \
   FIELD_BLx (fmt.value_data_type, 92);            \
@@ -4815,9 +4816,9 @@ DWG_OBJECT_END
   FIELD_BD (fmt.block_scale, 140);                \
   FIELD_BL (fmt.cell_alignment, 94);              \
   FIELD_CMTC (fmt.content_color, 62);             \
-  FIELD_HANDLE (fmt.text_style, 3, 92);           \
-  FIELD_BD (fmt.text_height, 92);                 \
-  DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
+  FIELD_HANDLE (fmt.text_style, 3, 340);          \
+  FIELD_BD (fmt.text_height, 144);                \
+  DXF { VALUE_TFF ("CONTENTFORMAT_END", 309) }
 
 // Cell style 20.4.101.4 for TABLE, TABLECONTENT, TABLESTYLE, and CELLSTYLEMAP
 #define CellStyle_fields(sty)						\
@@ -5546,9 +5547,11 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BL (unknown_bl2, 0);
     FIELD_HANDLE (template, DWG_HDL_HARDOWN, 0);
     CellStyle_fields (sty.cellstyle);
+    DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
     FIELD_BL0 (sty.id, 90);
     FIELD_BL0 (sty.type, 91);
     FIELD_T0 (sty.name, 300);
+    DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
 
     DECODER { FIELD_VALUE (flow_direction) = _obj->sty.cellstyle.property_override_flags & 0x10000; }
     FIELD_BL (numoverrides, 0);
@@ -5557,9 +5560,11 @@ DWG_OBJECT (TABLESTYLE)
       {
         FIELD_BL (unknown_bl3, 0);
         CellStyle_fields (ovr.cellstyle);
+        DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
         FIELD_BL0 (ovr.id, 90);
         FIELD_BL0 (ovr.type, 91);
         FIELD_T0 (ovr.name, 300);
+        DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
         LOG_WARN ("TODO TABLESTYLE r2010+ missing fields")
       }
   }
@@ -5613,9 +5618,11 @@ DWG_OBJECT (CELLSTYLEMAP)
   REPEAT_BLOCK
       DXF { VALUE_TFF ("CELLSTYLE", 300); }
       CellStyle_fields (cells[rcount1].cellstyle);
+      DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
       SUB_FIELD_BL (cells[rcount1],id, 90);
       SUB_FIELD_BL (cells[rcount1],type, 91);
       SUB_FIELD_T (cells[rcount1],name, 300);
+      DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
   END_REPEAT_BLOCK
   SET_PARENT_FIELD (cells, parent, (Dwg_Object_TABLESTYLE*)_obj)
   END_REPEAT (cells);

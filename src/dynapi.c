@@ -8346,7 +8346,7 @@ static const Dwg_DYNAPI_field _dwg_ContentFormat_fields[] = {
   { "text_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_ContentFormat, text_style),
     1,0,0, 0 },
   { "text_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_ContentFormat, text_height),
-    0,0,0, 92 },
+    0,0,0, 144 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_DATALINK_customdata: (sorted by offset) */

@@ -127,6 +127,7 @@ typedef int32_t BITCODE_RLd;
 //#ifdef HAVE_INTTYPES_H
 #define FORMAT_BS "%" PRIu16
 #define FORMAT_BSd "%" PRId16
+#define FORMAT_BSx "0x%" PRIx16
 #define FORMAT_RS "%" PRIu16
 #define FORMAT_RSx "0x%" PRIx16
 #define FORMAT_BL "%" PRIu32
