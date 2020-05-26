@@ -562,6 +562,7 @@ typedef struct _dwg_object_IDBUFFER               dwg_obj_idbuffer;
 typedef struct _dwg_object_IMAGEDEF               dwg_obj_imagedef;
 typedef struct _dwg_object_IMAGEDEF_REACTOR       dwg_obj_imagedef_reactor;
 typedef struct _dwg_object_LAYER_INDEX            dwg_obj_layer_index;
+typedef struct _dwg_object_LAYERFILTER            dwg_obj_layerfilter;
 typedef struct _dwg_object_LAYOUT                 dwg_obj_layout;
 typedef struct _dwg_object_MLEADERSTYLE           dwg_obj_mleaderstyle;
 typedef struct _dwg_object_PLACEHOLDER            dwg_obj_placeholder;
@@ -581,7 +582,6 @@ typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
 typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
 typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockpurgepreventer;
-typedef struct _dwg_object_LAYERFILTER                     dwg_obj_layerfilter;
 typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
 typedef struct _dwg_object_LONG_TRANSACTION                dwg_obj_long_transaction;
 typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
@@ -792,6 +792,7 @@ DWG_GETALL_OBJECT_DECL (IDBUFFER)
 DWG_GETALL_OBJECT_DECL (IMAGEDEF)
 DWG_GETALL_OBJECT_DECL (IMAGEDEF_REACTOR)
 DWG_GETALL_OBJECT_DECL (LAYER_INDEX)
+DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LAYOUT)
 DWG_GETALL_OBJECT_DECL (MLEADERSTYLE)
 DWG_GETALL_OBJECT_DECL (PLACEHOLDER)
@@ -811,7 +812,6 @@ DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DBCOLOR)
 DWG_GETALL_OBJECT_DECL (DIMASSOC)
 DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
-DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LIGHTLIST)
 DWG_GETALL_OBJECT_DECL (LONG_TRANSACTION)
 DWG_GETALL_OBJECT_DECL (MATERIAL)
@@ -1286,6 +1286,7 @@ dwg_get_OBJECT_DECL (obj_idbuffer, IDBUFFER);
 dwg_get_OBJECT_DECL (obj_imagedef, IMAGEDEF);
 dwg_get_OBJECT_DECL (obj_imagedef_reactor, REACTOR);
 dwg_get_OBJECT_DECL (obj_layer_index, LAYER_INDEX);
+dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_layout, LAYOUT);
 dwg_get_OBJECT_DECL (obj_mleaderstyle, MLEADERSTYLE);
 dwg_get_OBJECT_DECL (obj_placeholder, PLACEHOLDER);
@@ -1305,7 +1306,6 @@ dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
 dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
 dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);
-dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_long_transaction, LONG_TRANSACTION);
 dwg_get_OBJECT_DECL (obj_material, MATERIAL);

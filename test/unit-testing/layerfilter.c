@@ -1,4 +1,3 @@
-// TODO unstable
 #define DWG_TYPE DWG_TYPE_LAYERFILTER
 #include "common.c"
 #include "bits.h"
