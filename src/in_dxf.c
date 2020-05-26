@@ -6126,6 +6126,7 @@ new_object (char *restrict name, char *restrict dxfname,
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
+  int cur_cell = 0;
   unsigned written = 0;
   BITCODE_RL curr_inserts = 0;
   BITCODE_RS flag = 0;
@@ -7381,6 +7382,35 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (obj->fixedtype == DWG_TYPE_GEODATA)
             {
               pair = add_GEODATA (obj, dat, pair);
+              if (pair && pair->code != 0)
+                goto search_field;
+              else
+                return pair;
+            }
+          else if (pair->code == 1 &&
+                   strEQc (pair->value.s, "TABLEFORMAT_BEGIN") &&
+                   (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP ||
+                    obj->fixedtype == DWG_TYPE_TABLE ||
+                    obj->fixedtype == DWG_TYPE_TABLESTYLE ||
+                    obj->fixedtype == DWG_TYPE_TABLECONTENT)
+                   )
+            {
+              Dwg_CellStyle *o = NULL;
+              Dwg_TABLESTYLE_CellStyle *tbl_sty = NULL;
+              // TODO, counters for the others
+              if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
+                {
+                  Dwg_Object_CELLSTYLEMAP *_o = obj->tio.object->tio.CELLSTYLEMAP;
+                  if (cur_cell < 0 || cur_cell >= (int)_o->num_cells)
+                    return NULL;
+                  if (cur_cell == 0 && !_o->cells)
+                    _o->cells = xcalloc (_o->num_cells, sizeof (Dwg_TABLESTYLE_CellStyle));
+                  tbl_sty = &_o->cells[cur_cell];
+                  o = &tbl_sty->cellstyle;
+                  cur_cell++;
+                }
+              if (o)
+                pair = add_CellStyle (obj, o, dat, pair);
               if (pair && pair->code != 0)
                 goto search_field;
               else
