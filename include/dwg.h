@@ -7454,6 +7454,7 @@ EXPORT int dwg_setup_UNKNOWN_ENT (Dwg_Object *obj);
 EXPORT int dwg_setup_UNKNOWN_OBJ (Dwg_Object *obj);
 
 /* STABLE: */
+EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYWDFLT (Dwg_Object *obj);
 EXPORT int dwg_setup_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
@@ -7480,7 +7481,6 @@ EXPORT int dwg_setup_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_CAMERA (Dwg_Object *obj);
-EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);

@@ -551,6 +551,7 @@ typedef struct _dwg_object_MLINESTYLE             dwg_obj_mlinestyle;
 typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy;
 //typedef struct _dwg_object_PROXY_OBJECT           dwg_obj_proxy_object;
 // stable:
+typedef struct _dwg_object_CELLSTYLEMAP           dwg_obj_cellstylemap;
 typedef struct _dwg_object_DICTIONARYVAR          dwg_obj_dictionaryvar;
 typedef struct _dwg_object_DICTIONARYWDFLT        dwg_obj_dictionarywdflt;
 typedef struct _dwg_object_DUMMY                  dwg_obj_dummy;
@@ -578,7 +579,6 @@ typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY       dwg_obj_assocaligneddimactionbody;
 typedef struct _dwg_object_ASSOCDEPENDENCY                 dwg_obj_assocdependency;
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY     dwg_obj_assocplanesurfaceactionbody;
-typedef struct _dwg_object_CELLSTYLEMAP                    dwg_obj_cellstylemap;
 typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
 typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockpurgepreventer;
@@ -781,6 +781,7 @@ DWG_GETALL_OBJECT_DECL (DICTIONARY)
 DWG_GETALL_OBJECT_DECL (MLINESTYLE)
 DWG_GETALL_OBJECT_DECL (UNKNOWN_OBJ)
 // stable:
+DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DICTIONARYVAR)
 DWG_GETALL_OBJECT_DECL (DICTIONARYWDFLT)
 DWG_GETALL_OBJECT_DECL (DUMMY)
@@ -808,7 +809,6 @@ DWG_GETALL_OBJECT_DECL (XRECORD)
 DWG_GETALL_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCPLANESURFACEACTIONBODY)
-DWG_GETALL_OBJECT_DECL (CELLSTYLEMAP)
 DWG_GETALL_OBJECT_DECL (DBCOLOR)
 DWG_GETALL_OBJECT_DECL (DIMASSOC)
 DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
@@ -1275,6 +1275,7 @@ dwg_get_OBJECT_DECL (obj_dictionary, DICTIONARY);
 dwg_get_OBJECT_DECL (obj_mlinestyle, MLINESTYLE);
 dwg_get_OBJECT_DECL (obj_unknown, UNKNOWN_OBJ);
 // stable:
+dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_dictionaryvar, DICTIONARYVAR);
 dwg_get_OBJECT_DECL (obj_dictionarywdflt, DICTIONARYWDFLT);
 dwg_get_OBJECT_DECL (obj_dummy, DUMMY);
@@ -1302,7 +1303,6 @@ dwg_get_OBJECT_DECL (obj_xrecord, XRECORD);
 dwg_get_OBJECT_DECL (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assocdependency, ASSOCDEPENDENCY);
 dwg_get_OBJECT_DECL (obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY);
-dwg_get_OBJECT_DECL (obj_cellstylemap, CELLSTYLEMAP);
 dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
 dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
 dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);

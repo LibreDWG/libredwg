@@ -1,4 +1,3 @@
-// unstable
 #define DWG_TYPE DWG_TYPE_CELLSTYLEMAP
 #include "common.c"
 
