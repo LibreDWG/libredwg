@@ -59,7 +59,12 @@ script:
   - if [ -n "$DISTCHECK" ]; then
       travis_wait make -j4 distcheck && sha256sum libredwg-*.tar.* ;
     else
-      make -j4 check ;
+      if [ -n "$ASAN" ]; then
+        travis_wait make -j4 -C test/unit-testing check-prep ;
+        make -j4 check ;
+      else
+        make -j4 check ;
+      fi
     fi
 
 deploy:

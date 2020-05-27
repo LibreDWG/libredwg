@@ -240,6 +240,7 @@ check_PROGRAMS = \
 	dxf_test \
 	$(testobjects)
 
+check-prep: $(check_PROGRAMS)
 list:
 	echo $(testobjects) dynapi_test
 
