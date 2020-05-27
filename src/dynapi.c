@@ -10154,6 +10154,29 @@ dwg_dynapi_common_object_field (const char *restrict fieldname)
               sizeof (_dwg_object_object_fields[0]), _name_struct_cmp);
 }
 
+// search field by dxf
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_field_dxf (const Dwg_DYNAPI_field *restrict fields, const int dxf, int *restrict unique)
+{
+  const Dwg_DYNAPI_field *retval = NULL;
+  if (fields)
+    { /* linear search (unsorted) */
+      Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)fields;
+      *unique = 1;
+      for (; f->name; f++)
+        {
+          if (f->dxf == dxf)
+            {
+              if (retval)
+                unique = 0;
+              else
+                retval = f;
+            }
+        }
+    }
+  return retval;
+}
+
 EXPORT int
 dwg_dynapi_entity_size (const char *restrict name)
 {

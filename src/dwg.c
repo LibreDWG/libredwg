@@ -2048,13 +2048,13 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   if (!ctrl)
     { // TODO: silently search table_control. header_vars can be empty
       LOG_TRACE ("dwg_find_tablehandle: Empty header_vars table %s\n", table);
-      return 0;
+      return NULL;
     }
   obj = dwg_resolve_handle (dwg, ctrl->absolute_ref);
   if (!obj)
     {
       LOG_TRACE ("dwg_find_tablehandle: Could not resolve table %s\n", table);
-      return 0;
+      return NULL;
     }
   if (obj->type == DWG_TYPE_DICTIONARY)
     return dwg_find_dicthandle_objname (dwg, ctrl, name);
@@ -2063,15 +2063,15 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       LOG_ERROR ("dwg_find_tablehandle: Could not resolve CONTROL object %s "
                  "for table %s",
                  obj->name, table);
-      return 0;
+      return NULL;
     }
   _obj = obj->tio.object->tio.APPID_CONTROL; // just random type
   dwg_dynapi_entity_value (_obj, obj->name, "num_entries", &num_entries, NULL);
   if (!num_entries)
-    return 0;
+    return NULL;
   dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
   if (!hdlv)
-    return 0;
+    return NULL;
   for (i = 0; i < num_entries; i++)
     {
       char *hdlname;
@@ -2099,7 +2099,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
         free (hdlname);
     }
 
-  return 0;
+  return NULL;
 }
 
 // Search for handle in associated table, and return its name.
@@ -2113,7 +2113,9 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
   Dwg_Header_Variables *vars = &dwg->header_vars;
 
-  if (!dwg || !table || !handle || !handle->handleref.value)
+  if (!dwg || !table || !handle)
+    return NULL;
+  if (!handle->absolute_ref)
     return NULL;
   // look for the _CONTROL table, and search for name in all entries
   ctrl = dwg_ctrl_table (dwg, table);

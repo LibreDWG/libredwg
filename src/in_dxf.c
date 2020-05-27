@@ -6104,6 +6104,45 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   in_postprocess_SEQEND (obj, num_owned, owned);
 }
 
+static void
+dxf_postprocess_LAYOUT (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
+
+  if (dwg->header.version < R_2004)
+    {
+      _obj->plotsettings.plotview = dwg_find_tablehandle (
+        dwg, _obj->plotsettings.plotview_name, "PLOTVIEW");
+      /*
+      if (!_obj->plotsettings.plotview)
+        _obj->plotsettings.plotview = dwg_add_handleref (dwg, 0, 0, NULL);
+      */
+    }
+  else
+    _obj->plotsettings.plotview_name
+        = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotsettings.plotview);
+}
+
+static void
+dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
+
+  if (dwg->header.version < R_2004)
+    {
+      _obj->plotview
+        = dwg_find_tablehandle (dwg, _obj->plotview_name, "PLOTVIEW");
+      /*
+      if (!_obj->plotview)
+        _obj->plotview = dwg_add_handleref (dwg, 0, 0, NULL);
+      */
+    }
+  else
+    _obj->plotview_name = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotview);
+}
+
 // seperate model_space and model_space into its own fields, out of entries[]
 static void
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
@@ -6584,6 +6623,7 @@ new_object (char *restrict name, char *restrict dxfname,
                pair->value.l == 0L)
         goto next_pair;
 #endif
+      //start_switch:
       switch (pair->code)
         { // common flags: name, xref
         case 0:
@@ -7415,6 +7455,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 LOG_WARN ("Unhandled LAYOUT.1 in subclass %s", subclass);
               goto next_pair;
             }
+          /*
           else if (pair->code == 2 && obj->fixedtype == DWG_TYPE_LAYOUT)
             {
               Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
@@ -7424,6 +7465,7 @@ new_object (char *restrict name, char *restrict dxfname,
                          obj->name, pair->value.s);
               goto next_pair;
             }
+          */
           else if (pair->code == 370 && obj->fixedtype == DWG_TYPE_LAYER)
             {
               Dwg_Object_LAYER *layer = obj->tio.object->tio.LAYER;
@@ -8150,195 +8192,299 @@ new_object (char *restrict name, char *restrict dxfname,
                       goto next_pair;
                     }
                 }
-              LOG_INSANE ("----\n")
-
+              LOG_INSANE ("----\n");
+              if (*subclass) // embedded subclasses/objects
+                {
+                  if (obj->fixedtype == DWG_TYPE_LAYOUT && strEQc (subclass, "AcDbPlotSettings"))
+                    {
+                      Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+                      int unique;
+                      static double pt_x;
+                      static const Dwg_DYNAPI_field *pt_f;
+                      if (pair->code == 6 && *pair->value.s)
+                        {
+                          if (dwg->header.version < R_2004)
+                            {
+                              f = dwg_dynapi_entity_field ("PLOTSETTINGS", "plotview_name");
+                              dwg_dynapi_field_set_value (
+                                    dwg, &_o->plotsettings, f, &pair->value, 1);
+                            }
+                          else
+                            {
+                              BITCODE_H ref = find_tablehandle (dwg, pair);
+                              f = dwg_dynapi_entity_field ("PLOTSETTINGS", "plotview");
+                              dwg_dynapi_field_set_value (
+                                    dwg, &_o->plotsettings, f, &ref, 1);
+                            }
+                          goto next_pair;
+                        }
+                      fields = dwg_dynapi_entity_fields ("PLOTSETTINGS");
+                      f = dwg_dynapi_field_dxf (fields, pair->code, &unique);
+                      if (f && unique)
+                        {
+                          if (*f->type == '2') // 2D points
+                            {
+                              pt_f = f;
+                              pt_x = pair->value.d;
+                              goto next_pair;
+                            }
+                          else if (strEQc (f->type, "H"))
+                            {
+                              BITCODE_H ref = find_tablehandle (dwg, pair);
+                              if (!ref)
+                                {
+                                  if (pair->code > 300)
+                                    {
+                                      int code = 4;
+                                      ref = dwg_add_handleref (
+                                          dwg, code, pair->value.u, obj);
+                                      LOG_TRACE (
+                                          "%s.plotsettings.%s = " FORMAT_REF
+                                          " [H %d]\n",
+                                          name, f->name, ARGS_REF (ref),
+                                          pair->code);
+                                    }
+                                  goto next_pair; // found
+                                }
+                              else
+                                {
+                                  dwg_dynapi_field_set_value (
+                                      dwg, &_o->plotsettings, f, &ref, 1);
+                                  LOG_TRACE (
+                                      "set %s.plotsettings.%s " FORMAT_REF
+                                      " [H %d]\n",
+                                      obj->name, f->name, ARGS_REF (ref),
+                                      pair->code);
+                                  goto next_pair; // found
+                                }
+                            }
+                          else
+                            {
+                            LOG_TRACE ("set %s.plotsettings.%s [%s %d]\n",
+                                       obj->name, f->name, f->type,
+                                       pair->code);
+                            dwg_dynapi_field_set_value (dwg, &_o->plotsettings,
+                                                        f, &pair->value, 1);
+                            goto next_pair;
+                            }
+                        }
+                      else if (pair->code == 47 || pair->code == 49
+                               || pair->code == 141 || pair->code == 149)
+                        {
+                          BITCODE_2BD pt2;
+                          pt2.x = pt_x;
+                          pt2.y = pair->value.d;
+                          LOG_TRACE ("set %s.plotsettings.%s [%s %d]\n",
+                                     obj->name, pt_f->name, pt_f->type,
+                                     pt_f->dxf);
+                          dwg_dynapi_field_set_value (dwg, &_o->plotsettings,
+                                                      pt_f, &pt2, 1);
+                          goto next_pair;
+                        }
+                      else
+                        LOG_WARN ("Unknown DXF code %d for %s", pair->code,
+                                  subclass);
+                    }
+                }
               fields = is_entity ? dwg_dynapi_common_entity_fields ()
                                  : dwg_dynapi_common_object_fields ();
               for (f = &fields[0]; f->name; f++)
                 {
-                  LOG_INSANE ("-%s.%s [%d %s] vs %d\n", is_entity ? "ENTITY" : "OBJECT",
-                              f->name, f->dxf, f->type, pair->code)
-                  if ((pair->code == 62 || pair->code == 420
-                       || pair->code == 430 || pair->code == 440)
-                      && (f->size > 8
-                          && strEQc (f->type, "CMC"))) // alt. color fields
-                    {
-                      BITCODE_CMC color;
-                      dwg_dynapi_common_value (_obj, f->name, &color, NULL);
-                      if (pair->code == 62)
-                        {
-                          color.index = pair->value.i;
-                          LOG_TRACE ("COMMON.%s.index = %d [%s %d]\n", f->name,
-                                     pair->value.i, "CMC", pair->code);
-                        }
-                      else if (pair->code == 420)
-                        {
-                          color.rgb = pair->value.l;
-                          color.alpha = (pair->value.l & 0xFF000000) >> 24;
-                          if (color.alpha)
-                            color.alpha_type = 3;
-                          LOG_TRACE ("COMMON.%s.rgb = %08X [%s %d]\n", f->name,
-                                     pair->value.u, "CMC", pair->code);
-                        }
-                      else if (pair->code == 440)
-                        {
-                          color.flag |= 0x20;
-                          color.alpha = (pair->value.l & 0xFF000000) >> 24;
-                          color.alpha_type = pair->value.u >> 8;
-                          if (color.alpha && !color.alpha_type)
-                            color.alpha_type = 3;
-                          LOG_TRACE ("COMMON.%s.alpha = %08X [%s %d]\n", f->name,
-                                     pair->value.u, "CMC", pair->code);
-                        }
-                      else if (pair->code == 430)
-                        {
-                          color.flag |= 0x10;
-                          if (dwg->header.version >= R_2007)
-                            color.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                          else
-                            color.name = strdup (pair->value.s);
-                          // TODO: book_name or name?
-                          LOG_TRACE ("COMMON.%s.name = %s [%s %d]\n", f->name,
-                                     pair->value.s, "CMC", pair->code);
-                        }
-                      dwg_dynapi_common_set_value (_obj, f->name, &color,
-                                                   is_tu);
-                      goto next_pair; // found, early exit
-                    }
-                  else if (f->dxf == pair->code)
-                    {
-                      /// resolve handle (table entry) given by name or ref
-                      if (strEQc (f->type, "H"))
-                        {
-                          BITCODE_H handle = find_tablehandle (dwg, pair);
-                          if (!handle)
-                            {
-                              if (pair->code > 300)
-                                {
-                                  handle = dwg_add_handleref (
-                                      dwg, 5, pair->value.u, obj);
-                                  dwg_dynapi_common_set_value (_obj, f->name,
-                                                               &handle, 0);
-                                  LOG_TRACE ("COMMON.%s = %X [H %d]\n",
-                                             f->name, pair->value.u, pair->code)
-                                }
-                              else
-                                {
-                                  LOG_WARN (
-                                      "TODO resolve common handle name %s %s",
-                                      f->name, pair->value.s)
-                                }
-                            }
-                          else
-                            {
-                              if (pair->code > 300)
-                                LOG_TRACE ("COMMON.%s = %lX [H %d]\n",
-                                           f->name, pair->value.l, 
-                                           pair->code)
-                              else
-                                LOG_TRACE ("COMMON.%s = %s [H %d]\n", f->name,
-                                           pair->value.s, pair->code)
-                              dwg_dynapi_common_set_value (_obj, f->name,
-                                                           &handle, 0);
-                            }
-                          if (is_entity && pair->code == 6 && pair->value.s
-                              && dwg->header.version >= R_2000)
-                            {
-                              BITCODE_BB flags = 3;
-                              if (!strcasecmp (pair->value.s, "BYLAYER"))
-                                flags = 0;
-                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
-                                flags = 1;
-                              if (!strcasecmp (pair->value.s, "CONTINUOUS"))
-                                flags = 2;
-                              dwg_dynapi_common_set_value (_obj, "ltype_flags",
-                                                           &flags, 0);
-                              LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
-                                         "ltype_flags", flags);
-                            }
-                          if (is_entity && pair->code == 390
-                              && dwg->header.version >= R_2000)
-                            {
-                              BITCODE_BB flags = 3;
-                              /*
-                              if (!strcasecmp (pair->value.s, "BYLAYER"))
-                                flags = 0;
-                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
-                                flags = 1;
-                              */
-                              dwg_dynapi_common_set_value (
-                                  _obj, "plotstyle_flags", &flags, 0);
-                              LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
-                                         "plotstyle_flags", flags);
-                            }
-                          if (is_entity && pair->code == 347
-                              && dwg->header.version >= R_2007)
-                            {
-                              BITCODE_BB flags = 3;
-                              /*
-                              if (!strcasecmp (pair->value.s, "BYLAYER"))
-                                flags = 0;
-                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
-                                flags = 1;
-                              */
-                              dwg_dynapi_common_set_value (
-                                  _obj, "material_flags", &flags, 0);
-                              LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
-                                         "material_flags", flags);
-                            }
-                          goto next_pair; // found, early exit
-                        }
-                      else if (pair->code == 310 && is_entity
-                               && obj->tio.entity->preview_size
-                               && obj->fixedtype > DWG_TYPE_LAYOUT
-                               && strEQc (subclass, "AcDbEntity"))
-                        {
-                          // This would corrupt the previous preview chain,
-                          // don't append
-                          LOG_ERROR ("Skip duplicate/interrupted %s.preview",
-                                     obj->name)
-                          goto next_pair;
-                        }
-                      else
-                        {
-                          // Don't write a ptr twice. This will fuckup the num_
-                          // counter. Just add to 310 preview, when prefixed by 92
-                          if (f->is_malloc || f->is_string)
-                            {
-                              char *ptr = NULL;
-                              if (dwg_dynapi_common_value (_obj, f->name, &ptr,
-                                                           NULL)
-                                  && ptr != NULL)
-                                {
-                                  LOG_ERROR ("Skip duplicate %s.%s [%s %d]", obj->name,
-                                             f->name, f->type, pair->code)
-                                  goto next_pair;
-                                }
-                            }
-                          dwg_dynapi_common_set_value (_obj, f->name,
-                                                       &pair->value, 1);
-                          if (f->is_string)
-                            {
-                              LOG_TRACE ("COMMON.%s = %s [%s %d]\n", f->name,
-                                         pair->value.s, f->type, pair->code)
-                            }
-                          else
-                            {
-                              if (is_entity && pair->code == 160) //
-                                {
-                                  pair = add_ent_preview (obj, dat, pair);
-                                  goto start_loop; // already fresh pair
-                                }
-                              if (strchr (f->type, 'D'))
-                                LOG_TRACE ("COMMON.%s = %f [%s %d]\n", f->name,
-                                           pair->value.d, f->type, pair->code)
-                              else
-                                LOG_TRACE ("COMMON.%s = %ld [%s %d]\n", f->name,
-                                           pair->value.l, f->type, pair->code)
-                            }
-                          goto next_pair; // found, early exit
-                        }
-                    }
+                    LOG_INSANE ("-%s.%s [%d %s] vs %d\n",
+                                is_entity ? "ENTITY" : "OBJECT", f->name,
+                                f->dxf, f->type, pair->code)
+                    if ((pair->code == 62 || pair->code == 420
+                         || pair->code == 430 || pair->code == 440)
+                        && (f->size > 8
+                            && strEQc (f->type, "CMC"))) // alt. color fields
+                      {
+                        BITCODE_CMC color;
+                        dwg_dynapi_common_value (_obj, f->name, &color, NULL);
+                        if (pair->code == 62)
+                          {
+                            color.index = pair->value.i;
+                            LOG_TRACE ("COMMON.%s.index = %d [%s %d]\n",
+                                       f->name, pair->value.i, "CMC",
+                                       pair->code);
+                          }
+                        else if (pair->code == 420)
+                          {
+                            color.rgb = pair->value.l;
+                            color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                            if (color.alpha)
+                              color.alpha_type = 3;
+                            LOG_TRACE ("COMMON.%s.rgb = %08X [%s %d]\n",
+                                       f->name, pair->value.u, "CMC",
+                                       pair->code);
+                          }
+                        else if (pair->code == 440)
+                          {
+                            color.flag |= 0x20;
+                            color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                            color.alpha_type = pair->value.u >> 8;
+                            if (color.alpha && !color.alpha_type)
+                              color.alpha_type = 3;
+                            LOG_TRACE ("COMMON.%s.alpha = %08X [%s %d]\n",
+                                       f->name, pair->value.u, "CMC",
+                                       pair->code);
+                          }
+                        else if (pair->code == 430)
+                          {
+                            color.flag |= 0x10;
+                            if (dwg->header.version >= R_2007)
+                              color.name
+                                  = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+                            else
+                              color.name = strdup (pair->value.s);
+                            // TODO: book_name or name?
+                            LOG_TRACE ("COMMON.%s.name = %s [%s %d]\n",
+                                       f->name, pair->value.s, "CMC",
+                                       pair->code);
+                          }
+                        dwg_dynapi_common_set_value (_obj, f->name, &color,
+                                                     is_tu);
+                        goto next_pair; // found, early exit
+                      }
+                    else if (f->dxf == pair->code)
+                      {
+                        /// resolve handle (table entry) given by name or ref
+                        if (strEQc (f->type, "H"))
+                          {
+                            BITCODE_H handle = find_tablehandle (dwg, pair);
+                            if (!handle)
+                              {
+                                if (pair->code > 300)
+                                  {
+                                    handle = dwg_add_handleref (
+                                        dwg, 5, pair->value.u, obj);
+                                    dwg_dynapi_common_set_value (_obj, f->name,
+                                                                 &handle, 0);
+                                    LOG_TRACE ("COMMON.%s = %X [H %d]\n",
+                                               f->name, pair->value.u,
+                                               pair->code)
+                                  }
+                                else
+                                  {
+                                    LOG_WARN ("TODO resolve common handle "
+                                              "name %s %s",
+                                              f->name, pair->value.s)
+                                  }
+                              }
+                            else
+                              {
+                                if (pair->code > 300)
+                                  LOG_TRACE ("COMMON.%s = %lX [H %d]\n",
+                                             f->name, pair->value.l,
+                                             pair->code)
+                                else
+                                  LOG_TRACE ("COMMON.%s = %s [H %d]\n",
+                                             f->name, pair->value.s,
+                                             pair->code)
+                                dwg_dynapi_common_set_value (_obj, f->name,
+                                                             &handle, 0);
+                              }
+                            if (is_entity && pair->code == 6 && pair->value.s
+                                && dwg->header.version >= R_2000)
+                              {
+                                BITCODE_BB flags = 3;
+                                if (!strcasecmp (pair->value.s, "BYLAYER"))
+                                  flags = 0;
+                                if (!strcasecmp (pair->value.s, "BYBLOCK"))
+                                  flags = 1;
+                                if (!strcasecmp (pair->value.s, "CONTINUOUS"))
+                                  flags = 2;
+                                dwg_dynapi_common_set_value (
+                                    _obj, "ltype_flags", &flags, 0);
+                                LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
+                                           "ltype_flags", flags);
+                              }
+                            if (is_entity && pair->code == 390
+                                && dwg->header.version >= R_2000)
+                              {
+                                BITCODE_BB flags = 3;
+                                /*
+                                if (!strcasecmp (pair->value.s, "BYLAYER"))
+                                  flags = 0;
+                                if (!strcasecmp (pair->value.s, "BYBLOCK"))
+                                  flags = 1;
+                                */
+                                dwg_dynapi_common_set_value (
+                                    _obj, "plotstyle_flags", &flags, 0);
+                                LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
+                                           "plotstyle_flags", flags);
+                              }
+                            if (is_entity && pair->code == 347
+                                && dwg->header.version >= R_2007)
+                              {
+                                BITCODE_BB flags = 3;
+                                /*
+                                if (!strcasecmp (pair->value.s, "BYLAYER"))
+                                  flags = 0;
+                                if (!strcasecmp (pair->value.s, "BYBLOCK"))
+                                  flags = 1;
+                                */
+                                dwg_dynapi_common_set_value (
+                                    _obj, "material_flags", &flags, 0);
+                                LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
+                                           "material_flags", flags);
+                              }
+                            goto next_pair; // found, early exit
+                          }
+                        else if (pair->code == 310 && is_entity
+                                 && obj->tio.entity->preview_size
+                                 && obj->fixedtype > DWG_TYPE_LAYOUT
+                                 && strEQc (subclass, "AcDbEntity"))
+                          {
+                            // This would corrupt the previous preview chain,
+                            // don't append
+                            LOG_ERROR ("Skip duplicate/interrupted %s.preview",
+                                       obj->name)
+                            goto next_pair;
+                          }
+                        else
+                          {
+                            // Don't write a ptr twice. This will fuckup the
+                            // num_ counter. Just add to 310 preview, when
+                            // prefixed by 92
+                            if (f->is_malloc || f->is_string)
+                              {
+                                char *ptr = NULL;
+                                if (dwg_dynapi_common_value (_obj, f->name,
+                                                             &ptr, NULL)
+                                    && ptr != NULL)
+                                  {
+                                    LOG_ERROR ("Skip duplicate %s.%s [%s %d]",
+                                               obj->name, f->name, f->type,
+                                               pair->code)
+                                    goto next_pair;
+                                  }
+                              }
+                            dwg_dynapi_common_set_value (_obj, f->name,
+                                                         &pair->value, 1);
+                            if (f->is_string)
+                              {
+                                LOG_TRACE ("COMMON.%s = %s [%s %d]\n", f->name,
+                                           pair->value.s, f->type, pair->code)
+                              }
+                            else
+                              {
+                                if (is_entity && pair->code == 160) //
+                                  {
+                                    pair = add_ent_preview (obj, dat, pair);
+                                    goto start_loop; // already fresh pair
+                                  }
+                                if (strchr (f->type, 'D'))
+                                  LOG_TRACE ("COMMON.%s = %f [%s %d]\n",
+                                             f->name, pair->value.d, f->type,
+                                             pair->code)
+                                else
+                                  LOG_TRACE ("COMMON.%s = %ld [%s %d]\n",
+                                             f->name, pair->value.l, f->type,
+                                             pair->code)
+                              }
+                            goto next_pair; // found, early exit
+                          }
+                  }
                 }
               LOG_INSANE ("----\n")
               // still needed? already handled above
@@ -8547,6 +8693,10 @@ new_object (char *restrict name, char *restrict dxfname,
 
   if (obj->type == DWG_TYPE_SEQEND)
     dxf_postprocess_SEQEND (obj);
+  else if (obj->type == DWG_TYPE_LAYOUT)
+    dxf_postprocess_LAYOUT (obj);
+  else if (obj->type == DWG_TYPE_PLOTSETTINGS)
+    dxf_postprocess_PLOTSETTINGS (obj);
   // set defaults not in dxf:
   else if (obj->type == DWG_TYPE__3DFACE && dwg->header.version >= R_2000)
     {

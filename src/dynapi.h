@@ -160,6 +160,12 @@ EXPORT const Dwg_DYNAPI_field *dwg_dynapi_common_object_fields (void);
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_subclass_fields (const char *restrict name) __nonnull ((1));
 
+/* Search fields by dxf. Returns the first found field,
+   Sets unique to 1 if it's the only result */
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_field_dxf (const Dwg_DYNAPI_field *restrict fields,
+                      const int dxf, int *restrict unique);
+
 // The struct size of the object or entity
 EXPORT int
 dwg_dynapi_entity_size (const char *restrict name) __nonnull ((1));
