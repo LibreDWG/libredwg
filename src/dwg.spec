@@ -2673,14 +2673,17 @@ DWG_OBJECT (LAYER)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  IF_FREE_OR_SINCE (R_2000) {
+  SINCE (R_2000) {
     FIELD_HANDLE (plotstyle, 5, 390);
   }
-  IF_FREE_OR_SINCE (R_2007) {
+  SINCE (R_2007) {
     FIELD_HANDLE (material, 5, 347);
   }
   FIELD_HANDLE (ltype, 5, 6);
-  //TODO handle: DXF 370, 348
+  //TODO handle: DXF 370
+  SINCE (R_2013) {
+    FIELD_HANDLE (visualstyle, 5, 348);
+  }
 DWG_OBJECT_END
 
 /* STYLE table (52) */

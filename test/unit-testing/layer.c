@@ -20,11 +20,12 @@ api_process (dwg_object *obj)
   BITCODE_B plotflag;
   BITCODE_RC linewt;
   BITCODE_CMC color;
-  //short      color_rs;    /* preR13, needs to be signed */
-  BITCODE_RS ltype_rs;    /* preR13 */
+  //short     color_rs;    /* preR13, needs to be signed */
+  BITCODE_RS ltype_rs;     /* preR13 */
   BITCODE_H plotstyle;
   BITCODE_H material;
   BITCODE_H ltype;
+  BITCODE_H visualstyle;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_layer *layer = dwg_object_to_LAYER (obj);
@@ -48,4 +49,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (layer, LAYER, plotstyle);
   CHK_ENTITY_H (layer, LAYER, material);
   CHK_ENTITY_H (layer, LAYER, ltype);
+  CHK_ENTITY_H (layer, LAYER, visualstyle);
 }

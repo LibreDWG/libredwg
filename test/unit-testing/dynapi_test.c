@@ -34313,6 +34313,14 @@ static int test_LAYER (const Dwg_Object *obj)
     layer->used--;
   }
   {
+    BITCODE_H visualstyle;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "visualstyle", &visualstyle, NULL)
+        && !memcmp (&visualstyle, &layer->visualstyle, sizeof (layer->visualstyle)))
+        pass ();
+    else
+        fail ("LAYER.visualstyle [H]");
+  }
+  {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (layer, "LAYER", "xref", &xref, NULL)
         && !memcmp (&xref, &layer->xref, sizeof (layer->xref)))

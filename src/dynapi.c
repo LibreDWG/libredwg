@@ -5820,6 +5820,8 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
     1,0,0, 347 },
   { "ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LAYER, ltype),
     1,0,0, 6 },
+  { "visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LAYER, visualstyle),
+    1,0,0, 348 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LAYERFILTER: (sorted by offset) */

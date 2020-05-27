@@ -6514,6 +6514,8 @@ H,	DXF 390
 H,	DXF 347
 @item ltype
 H,	DXF 6
+@item visualstyle
+H,	DXF 348
 
 @end vtable
 @end indentedblock
