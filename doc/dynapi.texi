@@ -6588,11 +6588,13 @@ Dwg_LAYER_entry*
 
 @item parent
 struct _dwg_object_object*
-@item page_setup_name
+@item printer_cfg_file
 T,	DXF 1
-@item printer_or_config
-T,	DXF 2
-@item plot_layout_flags
+@item paper_size
+T,	DXF 4
+@item canonical_media_name
+T
+@item plot_flags
 BS,	DXF 70
 @item left_margin
 BD,	DXF 40
@@ -6606,13 +6608,11 @@ BD,	DXF 43
 BD,	DXF 44
 @item paper_height
 BD,	DXF 45
-@item paper_size
-T,	DXF 4
 @item plot_origin
 2BD_1,	DXF 46
 @item plot_paper_unit
 BS,	DXF 72
-@item plot_rotation
+@item plot_rotation_mode
 BS,	DXF 73
 @item plot_type
 BS,	DXF 74
@@ -6620,54 +6620,54 @@ BS,	DXF 74
 2BD_1,	DXF 48
 @item plot_window_ur
 2BD_1,	DXF 140
-@item plot_view_name
+@item plotview_name
 TV,	DXF 6
+@item plotview
+H,	DXF 6
 @item paper_units
 BD,	DXF 142
 @item drawing_units
 BD,	DXF 143
-@item current_style_sheet
+@item stylesheet
 T,	DXF 7
-@item scale_type
+@item std_scale_type
 BS,	DXF 75
-@item scale_factor
+@item std_scale_factor
 BD,	DXF 147
 @item paper_image_origin
 2BD_1,	DXF 148
-@item shade_plot_mode
+@item shadeplot_mode
 BS,	DXF 76
-@item shade_plot_reslevel
+@item shadeplot_reslevel
 BS,	DXF 77
-@item shade_plot_customdpi
+@item shadeplot_customdpi
 BS,	DXF 78
 @item layout_name
 T,	DXF 1
 @item tab_order
 BS,	DXF 71
-@item flag
+@item layout_flags
 BS,	DXF 70
-@item ucs_origin
-3DPOINT,	DXF 13
-@item minimum_limits
-2DPOINT,	DXF 10
-@item maximum_limits
-2DPOINT,	DXF 11
-@item ins_point
+@item INSBASE
 3DPOINT,	DXF 12
-@item ucs_x_axis
+@item LIMMIN
+2DPOINT,	DXF 10
+@item LIMMAX
+2DPOINT,	DXF 11
+@item UCSORG
+3DPOINT,	DXF 13
+@item UCSXDIR
 3DPOINT,	DXF 16
-@item ucs_y_axis
+@item UCSYDIR
 3DPOINT,	DXF 17
-@item elevation
+@item ucs_elevation
 BD,	DXF 146
-@item orthoview_type
+@item ucs_orthoview_type
 BS,	DXF 76
-@item extent_min
+@item EXTMIN
 3DPOINT,	DXF 14
-@item extent_max
+@item EXTMAX
 3DPOINT,	DXF 15
-@item plotview
-H,	DXF 6
 @item visualstyle
 H
 @item block_header
@@ -7385,16 +7385,16 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
-@item page_setup_name
-T,	DXF 1
 @item printer_cfg_file
 T,	DXF 2
 @item paper_size
 T,	DXF 3
 @item canonical_media_name
 T,	DXF 4
-@item flags
+@item plot_flags
 BS,	DXF 70
+@item plotview_name
+TV,	DXF 6
 @item plotview
 H,	DXF 6
 @item left_margin
@@ -7421,7 +7421,7 @@ BD,	DXF 142
 BD,	DXF 143
 @item plot_paper_unit
 BS,	DXF 72
-@item plot_rotation
+@item plot_rotation_mode
 BS,	DXF 73
 @item plot_type
 BS,	DXF 74
@@ -7431,14 +7431,14 @@ T,	DXF 7
 BS,	DXF 75
 @item std_scale_factor
 BD,	DXF 147
-@item shade_plot_mode
-BS,	DXF 76
-@item shade_plot_reslevel
-BS,	DXF 77
-@item shade_plot_customdpi
-BS,	DXF 78
 @item paper_image_origin
 2BD_1,	DXF 148
+@item shadeplot_mode
+BS,	DXF 76
+@item shadeplot_reslevel
+BS,	DXF 77
+@item shadeplot_customdpi
+BS,	DXF 78
 @item shadeplot
 H,	DXF 333
 

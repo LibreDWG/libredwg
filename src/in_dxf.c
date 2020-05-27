@@ -7100,19 +7100,19 @@ new_object (char *restrict name, char *restrict dxfname,
               Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
               if (strEQc (subclass, "AcDbPlotSettings"))
                 {
-                  _o->plot_layout_flags = pair->value.i;
-                  LOG_TRACE ("LAYOUT.plot_layout_flags = %d [BS 70]", pair->value.i);
+                  _o->plot_flags = pair->value.u;
+                  LOG_TRACE ("LAYOUT.plot_flags = 0x%x [BSx 70]", pair->value.u);
                 }
               else if (strEQc (subclass, "AcDbLayout"))
                 {
-                  _o->flag = pair->value.i;
-                  LOG_TRACE ("LAYOUT.flag = %d [BS 70]", pair->value.i);
+                  _o->layout_flags = pair->value.u;
+                  LOG_TRACE ("LAYOUT.layout_flags = %d [BSx 70]", pair->value.u);
                 }
               else
                 {
                   LOG_WARN ("Unhandled LAYOUT.70 in subclass %s", subclass);
-                  _o->flag = pair->value.i;
-                  LOG_TRACE ("LAYOUT.flag = %d [BS 70]", pair->value.i);
+                  _o->layout_flags = pair->value.u;
+                  LOG_TRACE ("LAYOUT.layout_flags = %d [BSx 70]", pair->value.u);
                 }
               break;
             }

@@ -672,14 +672,14 @@ match_LAYOUT (const char *restrict filename, const Dwg_Object *restrict obj)
   BITCODE_BL i;
   const Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
 
-  MATCH_OBJECT (LAYOUT, page_setup_name, 1);
-  MATCH_OBJECT (LAYOUT, printer_or_config, 2);
-  MATCH_OBJECT (LAYOUT, paper_size, 4);
-  MATCH_OBJECT (LAYOUT, plot_view_name, 6);
-  MATCH_OBJECT (LAYOUT, current_style_sheet, 7);
+  MATCH_OBJECT (LAYOUT, printer_cfg_file, 1);
+  MATCH_OBJECT (LAYOUT, paper_size, 2);
+  MATCH_OBJECT (LAYOUT, canonical_media_name, 4);
+  MATCH_OBJECT (LAYOUT, plotview_name, 6);
+  MATCH_OBJECT (LAYOUT, stylesheet, 7);
+  
   MATCH_OBJECT (LAYOUT, layout_name, 1);
-  MATCH_TABLE (LAYOUT, plot_view, ??, 6);
-  MATCH_TABLE (LAYOUT, visual_style, ??, 0);
+  MATCH_TABLE (LAYOUT, shadeplot, VISUALSTYLE, 333);
   MATCH_TABLE (LAYOUT, base_ucs, UCS, 346);
   MATCH_TABLE (LAYOUT, named_ucs, UCS, 345);
   for (i = 0; i < _obj->num_viewports; i++)
@@ -926,10 +926,12 @@ match_PLOTSETTINGS (const char *restrict filename,
   char *text;
   int found = 0;
   //const Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
-  MATCH_OBJECT (PLOTSETTINGS, page_setup_name, 1);
-  MATCH_OBJECT (PLOTSETTINGS, printer_cfg_file, 2);
-  MATCH_OBJECT (PLOTSETTINGS, paper_size,3);
+  MATCH_OBJECT (PLOTSETTINGS, printer_cfg_file, 1);
+  MATCH_OBJECT (PLOTSETTINGS, paper_size, 2);
   MATCH_OBJECT (PLOTSETTINGS, canonical_media_name, 4);
+  MATCH_OBJECT (PLOTSETTINGS, plotview_name, 6);
+  MATCH_OBJECT (PLOTSETTINGS, stylesheet, 7);
+  MATCH_TABLE (PLOTSETTINGS, VISUALSTYLE, shadeplot, 333);
   return found;
 }
 
