@@ -2975,7 +2975,7 @@ DWG_OBJECT (VIEW)
     FIELD_HANDLE (visualstyle, 5, 348);
     FIELD_HANDLE (sun, 3, 361);
   }
-  IF_FREE_OR_SINCE (R_2000)
+  SINCE (R_2000)
     {
       if (FIELD_VALUE (associated_ucs) & 1)
         {

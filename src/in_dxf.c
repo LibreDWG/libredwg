@@ -9181,27 +9181,32 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
         hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "BLOCK");
       else if (strEQc (field, "style"))
         {
-          p.code = 7;
+          if (is_entity)
+            p.code = 7;
           hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "STYLE");
         }
       else if (strEQc (field, "dimstyle"))
         {
-          p.code = 3;
+          if (is_entity)
+            p.code = 3;
           hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "DIMSTYLE");
         }
-      else if (is_entity && strEQc (field, "layer"))
+      else if (strEQc (field, "layer"))
         {
-          p.code = 8;
+          if (is_entity)
+            p.code = 8;
           hdl = find_tablehandle (dwg, &p);
         }
-      else if (is_entity && strEQc (field, "ltype"))
+      else if (strEQc (field, "ltype"))
         {
-          p.code = 6;
+          if (is_entity)
+            p.code = 6;
           hdl = find_tablehandle (dwg, &p);
         }
-      else if (is_entity && strEQc (field, "material"))
+      else if (strEQc (field, "material") && (is_entity || obj->fixedtype == DWG_TYPE_LAYER))
         {
-          p.code = 347;
+          if (is_entity)
+            p.code = 347;
           hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "MATERIAL");
         }
       else if (is_entity && strEQc (field, "shadow"))
@@ -9209,9 +9214,10 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
           p.code = 361;
           hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "SHADOW");
         }
-      else if (is_entity && strEQc (field, "plotstyle"))
+      else if (strEQc (field, "plotstyle") && (is_entity || obj->fixedtype == DWG_TYPE_LAYER))
         {
-          p.code = 390;
+          if (is_entity)
+            p.code = 390;
           hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "PLOTSTYLENAME");
         }
       else if (is_entity && strEQc (field, "full_visualstyle"))
@@ -9229,6 +9235,12 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
           p.code = 348;
           hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "VISUALSTYLE");
         }
+      else if (obj->fixedtype == DWG_TYPE_LAYER && strEQc (field, "visualstyle"))
+        {
+          hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "VISUALSTYLE");
+        }
+      // TODO: check if DXF by name:
+      // background, named_ucs, base_ucs, shadeplot, sun, livesection (VIEW, VIEWPORT)
       else
         LOG_WARN ("missing code for %s", field)
       if (hdl)
