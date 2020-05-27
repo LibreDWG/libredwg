@@ -565,6 +565,7 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR       dwg_obj_imagedef_reactor;
 typedef struct _dwg_object_LAYER_INDEX            dwg_obj_layer_index;
 typedef struct _dwg_object_LAYERFILTER            dwg_obj_layerfilter;
 typedef struct _dwg_object_LAYOUT                 dwg_obj_layout;
+typedef struct _dwg_object_PLOTSETTINGS           dwg_obj_plotsettings;
 typedef struct _dwg_object_MLEADERSTYLE           dwg_obj_mleaderstyle;
 typedef struct _dwg_object_PLACEHOLDER            dwg_obj_placeholder;
 typedef struct _dwg_object_RASTERVARIABLES        dwg_obj_rastervariables;
@@ -588,7 +589,6 @@ typedef struct _dwg_object_MATERIAL                        dwg_obj_material;
 typedef struct _dwg_object_MENTALRAYRENDERSETTINGS         dwg_obj_mentalrayrendersettings;
 typedef struct _dwg_object_OBJECT_PTR                      dwg_obj_object_ptr;
 typedef struct _dwg_object_PERSUBENTMGR                    dwg_obj_persubentmgr;
-typedef struct _dwg_object_PLOTSETTINGS                    dwg_obj_plotsettings;
 typedef struct _dwg_object_RAPIDRTRENDERSETTINGS           dwg_obj_rapidrtrendersettings;
 typedef struct _dwg_object_RENDERSETTINGS                  dwg_obj_rendersettings;
 typedef struct _dwg_object_SECTION_MANAGER                 dwg_obj_section_manager;
@@ -795,6 +795,7 @@ DWG_GETALL_OBJECT_DECL (IMAGEDEF_REACTOR)
 DWG_GETALL_OBJECT_DECL (LAYER_INDEX)
 DWG_GETALL_OBJECT_DECL (LAYERFILTER)
 DWG_GETALL_OBJECT_DECL (LAYOUT)
+DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
 DWG_GETALL_OBJECT_DECL (MLEADERSTYLE)
 DWG_GETALL_OBJECT_DECL (PLACEHOLDER)
 DWG_GETALL_OBJECT_DECL (RASTERVARIABLES)
@@ -818,7 +819,6 @@ DWG_GETALL_OBJECT_DECL (MATERIAL)
 DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
 DWG_GETALL_OBJECT_DECL (PERSUBENTMGR)
-DWG_GETALL_OBJECT_DECL (PLOTSETTINGS)
 DWG_GETALL_OBJECT_DECL (PROXY_OBJECT)
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (RENDERSETTINGS)
@@ -1289,6 +1289,7 @@ dwg_get_OBJECT_DECL (obj_imagedef_reactor, REACTOR);
 dwg_get_OBJECT_DECL (obj_layer_index, LAYER_INDEX);
 dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER)
 dwg_get_OBJECT_DECL (obj_layout, LAYOUT);
+dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
 dwg_get_OBJECT_DECL (obj_mleaderstyle, MLEADERSTYLE);
 dwg_get_OBJECT_DECL (obj_placeholder, PLACEHOLDER);
 dwg_get_OBJECT_DECL (obj_rastervariables, RASTERVARIABLES);
@@ -1312,7 +1313,6 @@ dwg_get_OBJECT_DECL (obj_material, MATERIAL);
 dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
 dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
 dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
-dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
 dwg_get_OBJECT_DECL (obj_proxy, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
 dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);

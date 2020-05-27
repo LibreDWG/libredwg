@@ -300,6 +300,7 @@ sub dxf_in {
         $f = $1;
         $n = 'MLEADER_AnnotContext';
       }
+      embedded_struct ('plotsettings', 'PLOTSETTINGS');
       embedded_struct ('cellstyle', 'TABLESTYLE_Cell');
       embedded_struct ('body', 'ACTIONBODY');
       embedded_struct ('ldata', 'LinkedData');
@@ -400,6 +401,8 @@ $DXF{'PROXY_ENTITY'}->{'version'} = 95; # or 91 <= r14
 $DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
 $DXF{'DIMASSOC_Ref'}->{'xrefpaths'} = 301;
 $DXF{'DIMSTYLE'}->{'flag'} = 70;
+$DXF{'PLOTSETTINGS'}->{'plotview'} = 6;
+$DXF{'PLOTSETTINGS'}->{'shadeplot'} = 333;
 $DXF{'TABLE_Cell'}->{'cell_flag_override'} = 177;
 # $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
 # $DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
@@ -1377,7 +1380,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1380 "gen-dynapi.pl"
+#line 1381 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1461,7 +1464,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1464 "gen-dynapi.pl"
+#line 1465 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

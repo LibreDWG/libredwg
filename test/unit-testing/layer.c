@@ -30,7 +30,7 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_layer *layer = dwg_object_to_LAYER (obj);
 
-  CHK_ENTITY_TYPE (layer, LAYER, flag, BS);
+  CHK_ENTITY_TYPE (layer, LAYER, flag, BSx);
   CHK_ENTITY_UTF8TEXT_W_OBJ (layer, LAYER, name);
   CHK_ENTITY_TYPE (layer, LAYER, used, RS);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_ref, B);

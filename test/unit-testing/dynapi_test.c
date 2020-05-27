@@ -34591,46 +34591,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
         fail ("LAYOUT.block_header [H]");
   }
   {
-    BITCODE_BD bottom_margin;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "bottom_margin", &bottom_margin, NULL)
-        && bottom_margin == layout->bottom_margin)
-      pass ();
-    else
-      fail ("LAYOUT.bottom_margin [BD] %g != %g", layout->bottom_margin, bottom_margin);
-    bottom_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "bottom_margin", &bottom_margin, 0)
-        && bottom_margin == layout->bottom_margin)
-      pass ();
-    else
-      fail ("LAYOUT.bottom_margin [BD] set+1 %g != %g", layout->bottom_margin, bottom_margin);
-    layout->bottom_margin--;
-  }
-  {
-    BITCODE_T canonical_media_name;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "canonical_media_name", &canonical_media_name, NULL)
-        && canonical_media_name
-           ? strEQ ((char *)canonical_media_name, (char *)layout->canonical_media_name)
-           : !layout->canonical_media_name)
-      pass ();
-    else
-      fail ("LAYOUT.canonical_media_name [T] '%s' <> '%s'", canonical_media_name, layout->canonical_media_name);
-  }
-  {
-    BITCODE_BD drawing_units;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "drawing_units", &drawing_units, NULL)
-        && drawing_units == layout->drawing_units)
-      pass ();
-    else
-      fail ("LAYOUT.drawing_units [BD] %g != %g", layout->drawing_units, drawing_units);
-    drawing_units++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "drawing_units", &drawing_units, 0)
-        && drawing_units == layout->drawing_units)
-      pass ();
-    else
-      fail ("LAYOUT.drawing_units [BD] set+1 %g != %g", layout->drawing_units, drawing_units);
-    layout->drawing_units--;
-  }
-  {
     BITCODE_BS layout_flags;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "layout_flags", &layout_flags, NULL)
         && layout_flags == layout->layout_flags)
@@ -34656,21 +34616,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
       fail ("LAYOUT.layout_name [T] '%s' <> '%s'", layout_name, layout->layout_name);
   }
   {
-    BITCODE_BD left_margin;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "left_margin", &left_margin, NULL)
-        && left_margin == layout->left_margin)
-      pass ();
-    else
-      fail ("LAYOUT.left_margin [BD] %g != %g", layout->left_margin, left_margin);
-    left_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "left_margin", &left_margin, 0)
-        && left_margin == layout->left_margin)
-      pass ();
-    else
-      fail ("LAYOUT.left_margin [BD] set+1 %g != %g", layout->left_margin, left_margin);
-    layout->left_margin--;
-  }
-  {
     BITCODE_H named_ucs;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "named_ucs", &named_ucs, NULL)
         && !memcmp (&named_ucs, &layout->named_ucs, sizeof (layout->named_ucs)))
@@ -34694,69 +34639,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     layout->num_viewports--;
   }
   {
-    BITCODE_BD paper_height;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_height", &paper_height, NULL)
-        && paper_height == layout->paper_height)
-      pass ();
-    else
-      fail ("LAYOUT.paper_height [BD] %g != %g", layout->paper_height, paper_height);
-    paper_height++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_height", &paper_height, 0)
-        && paper_height == layout->paper_height)
-      pass ();
-    else
-      fail ("LAYOUT.paper_height [BD] set+1 %g != %g", layout->paper_height, paper_height);
-    layout->paper_height--;
-  }
-  {
-    BITCODE_2BD paper_image_origin;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_image_origin", &paper_image_origin, NULL)
-        && !memcmp (&paper_image_origin, &layout->paper_image_origin, sizeof (layout->paper_image_origin)))
-        pass ();
-    else
-        fail ("LAYOUT.paper_image_origin [2BD_1]");
-  }
-  {
-    BITCODE_T paper_size;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_size", &paper_size, NULL)
-        && paper_size
-           ? strEQ ((char *)paper_size, (char *)layout->paper_size)
-           : !layout->paper_size)
-      pass ();
-    else
-      fail ("LAYOUT.paper_size [T] '%s' <> '%s'", paper_size, layout->paper_size);
-  }
-  {
-    BITCODE_BD paper_units;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_units", &paper_units, NULL)
-        && paper_units == layout->paper_units)
-      pass ();
-    else
-      fail ("LAYOUT.paper_units [BD] %g != %g", layout->paper_units, paper_units);
-    paper_units++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_units", &paper_units, 0)
-        && paper_units == layout->paper_units)
-      pass ();
-    else
-      fail ("LAYOUT.paper_units [BD] set+1 %g != %g", layout->paper_units, paper_units);
-    layout->paper_units--;
-  }
-  {
-    BITCODE_BD paper_width;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "paper_width", &paper_width, NULL)
-        && paper_width == layout->paper_width)
-      pass ();
-    else
-      fail ("LAYOUT.paper_width [BD] %g != %g", layout->paper_width, paper_width);
-    paper_width++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "paper_width", &paper_width, 0)
-        && paper_width == layout->paper_width)
-      pass ();
-    else
-      fail ("LAYOUT.paper_width [BD] set+1 %g != %g", layout->paper_width, paper_width);
-    layout->paper_width--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "parent", &parent, NULL)
         && !memcmp (&parent, &layout->parent, sizeof (layout->parent)))
@@ -34765,216 +34647,12 @@ static int test_LAYOUT (const Dwg_Object *obj)
         fail ("LAYOUT.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BS plot_flags;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_flags", &plot_flags, NULL)
-        && plot_flags == layout->plot_flags)
-      pass ();
-    else
-      fail ("LAYOUT.plot_flags [BS] %hu != %hu", layout->plot_flags, plot_flags);
-    plot_flags++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_flags", &plot_flags, 0)
-        && plot_flags == layout->plot_flags)
-      pass ();
-    else
-      fail ("LAYOUT.plot_flags [BS] set+1 %hu != %hu", layout->plot_flags, plot_flags);
-    layout->plot_flags--;
-  }
-  {
-    BITCODE_2BD plot_origin;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_origin", &plot_origin, NULL)
-        && !memcmp (&plot_origin, &layout->plot_origin, sizeof (layout->plot_origin)))
+    Dwg_Object_PLOTSETTINGS plotsettings;
+    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plotsettings", &plotsettings, NULL)
+        && !memcmp (&plotsettings, &layout->plotsettings, sizeof (layout->plotsettings)))
         pass ();
     else
-        fail ("LAYOUT.plot_origin [2BD_1]");
-  }
-  {
-    BITCODE_BS plot_paper_unit;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_paper_unit", &plot_paper_unit, NULL)
-        && plot_paper_unit == layout->plot_paper_unit)
-      pass ();
-    else
-      fail ("LAYOUT.plot_paper_unit [BS] %hu != %hu", layout->plot_paper_unit, plot_paper_unit);
-    plot_paper_unit++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_paper_unit", &plot_paper_unit, 0)
-        && plot_paper_unit == layout->plot_paper_unit)
-      pass ();
-    else
-      fail ("LAYOUT.plot_paper_unit [BS] set+1 %hu != %hu", layout->plot_paper_unit, plot_paper_unit);
-    layout->plot_paper_unit--;
-  }
-  {
-    BITCODE_BS plot_rotation_mode;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_rotation_mode", &plot_rotation_mode, NULL)
-        && plot_rotation_mode == layout->plot_rotation_mode)
-      pass ();
-    else
-      fail ("LAYOUT.plot_rotation_mode [BS] %hu != %hu", layout->plot_rotation_mode, plot_rotation_mode);
-    plot_rotation_mode++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_rotation_mode", &plot_rotation_mode, 0)
-        && plot_rotation_mode == layout->plot_rotation_mode)
-      pass ();
-    else
-      fail ("LAYOUT.plot_rotation_mode [BS] set+1 %hu != %hu", layout->plot_rotation_mode, plot_rotation_mode);
-    layout->plot_rotation_mode--;
-  }
-  {
-    BITCODE_BS plot_type;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_type", &plot_type, NULL)
-        && plot_type == layout->plot_type)
-      pass ();
-    else
-      fail ("LAYOUT.plot_type [BS] %hu != %hu", layout->plot_type, plot_type);
-    plot_type++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "plot_type", &plot_type, 0)
-        && plot_type == layout->plot_type)
-      pass ();
-    else
-      fail ("LAYOUT.plot_type [BS] set+1 %hu != %hu", layout->plot_type, plot_type);
-    layout->plot_type--;
-  }
-  {
-    BITCODE_2BD plot_window_ll;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_window_ll", &plot_window_ll, NULL)
-        && !memcmp (&plot_window_ll, &layout->plot_window_ll, sizeof (layout->plot_window_ll)))
-        pass ();
-    else
-        fail ("LAYOUT.plot_window_ll [2BD_1]");
-  }
-  {
-    BITCODE_2BD plot_window_ur;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plot_window_ur", &plot_window_ur, NULL)
-        && !memcmp (&plot_window_ur, &layout->plot_window_ur, sizeof (layout->plot_window_ur)))
-        pass ();
-    else
-        fail ("LAYOUT.plot_window_ur [2BD_1]");
-  }
-  {
-    BITCODE_H plotview;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plotview", &plotview, NULL)
-        && !memcmp (&plotview, &layout->plotview, sizeof (layout->plotview)))
-        pass ();
-    else
-        fail ("LAYOUT.plotview [H]");
-  }
-  {
-    BITCODE_TV plotview_name;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "plotview_name", &plotview_name, NULL)
-        && plotview_name
-           ? strEQ ((char *)plotview_name, (char *)layout->plotview_name)
-           : !layout->plotview_name)
-      pass ();
-    else
-      fail ("LAYOUT.plotview_name [TV] '%s' <> '%s'", plotview_name, layout->plotview_name);
-  }
-  {
-    BITCODE_T printer_cfg_file;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "printer_cfg_file", &printer_cfg_file, NULL)
-        && printer_cfg_file
-           ? strEQ ((char *)printer_cfg_file, (char *)layout->printer_cfg_file)
-           : !layout->printer_cfg_file)
-      pass ();
-    else
-      fail ("LAYOUT.printer_cfg_file [T] '%s' <> '%s'", printer_cfg_file, layout->printer_cfg_file);
-  }
-  {
-    BITCODE_BD right_margin;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "right_margin", &right_margin, NULL)
-        && right_margin == layout->right_margin)
-      pass ();
-    else
-      fail ("LAYOUT.right_margin [BD] %g != %g", layout->right_margin, right_margin);
-    right_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "right_margin", &right_margin, 0)
-        && right_margin == layout->right_margin)
-      pass ();
-    else
-      fail ("LAYOUT.right_margin [BD] set+1 %g != %g", layout->right_margin, right_margin);
-    layout->right_margin--;
-  }
-  {
-    BITCODE_BS shadeplot_customdpi;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "shadeplot_customdpi", &shadeplot_customdpi, NULL)
-        && shadeplot_customdpi == layout->shadeplot_customdpi)
-      pass ();
-    else
-      fail ("LAYOUT.shadeplot_customdpi [BS] %hu != %hu", layout->shadeplot_customdpi, shadeplot_customdpi);
-    shadeplot_customdpi++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shadeplot_customdpi", &shadeplot_customdpi, 0)
-        && shadeplot_customdpi == layout->shadeplot_customdpi)
-      pass ();
-    else
-      fail ("LAYOUT.shadeplot_customdpi [BS] set+1 %hu != %hu", layout->shadeplot_customdpi, shadeplot_customdpi);
-    layout->shadeplot_customdpi--;
-  }
-  {
-    BITCODE_BS shadeplot_mode;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "shadeplot_mode", &shadeplot_mode, NULL)
-        && shadeplot_mode == layout->shadeplot_mode)
-      pass ();
-    else
-      fail ("LAYOUT.shadeplot_mode [BS] %hu != %hu", layout->shadeplot_mode, shadeplot_mode);
-    shadeplot_mode++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shadeplot_mode", &shadeplot_mode, 0)
-        && shadeplot_mode == layout->shadeplot_mode)
-      pass ();
-    else
-      fail ("LAYOUT.shadeplot_mode [BS] set+1 %hu != %hu", layout->shadeplot_mode, shadeplot_mode);
-    layout->shadeplot_mode--;
-  }
-  {
-    BITCODE_BS shadeplot_reslevel;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "shadeplot_reslevel", &shadeplot_reslevel, NULL)
-        && shadeplot_reslevel == layout->shadeplot_reslevel)
-      pass ();
-    else
-      fail ("LAYOUT.shadeplot_reslevel [BS] %hu != %hu", layout->shadeplot_reslevel, shadeplot_reslevel);
-    shadeplot_reslevel++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "shadeplot_reslevel", &shadeplot_reslevel, 0)
-        && shadeplot_reslevel == layout->shadeplot_reslevel)
-      pass ();
-    else
-      fail ("LAYOUT.shadeplot_reslevel [BS] set+1 %hu != %hu", layout->shadeplot_reslevel, shadeplot_reslevel);
-    layout->shadeplot_reslevel--;
-  }
-  {
-    BITCODE_BD std_scale_factor;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "std_scale_factor", &std_scale_factor, NULL)
-        && std_scale_factor == layout->std_scale_factor)
-      pass ();
-    else
-      fail ("LAYOUT.std_scale_factor [BD] %g != %g", layout->std_scale_factor, std_scale_factor);
-    std_scale_factor++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "std_scale_factor", &std_scale_factor, 0)
-        && std_scale_factor == layout->std_scale_factor)
-      pass ();
-    else
-      fail ("LAYOUT.std_scale_factor [BD] set+1 %g != %g", layout->std_scale_factor, std_scale_factor);
-    layout->std_scale_factor--;
-  }
-  {
-    BITCODE_BS std_scale_type;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "std_scale_type", &std_scale_type, NULL)
-        && std_scale_type == layout->std_scale_type)
-      pass ();
-    else
-      fail ("LAYOUT.std_scale_type [BS] %hu != %hu", layout->std_scale_type, std_scale_type);
-    std_scale_type++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "std_scale_type", &std_scale_type, 0)
-        && std_scale_type == layout->std_scale_type)
-      pass ();
-    else
-      fail ("LAYOUT.std_scale_type [BS] set+1 %hu != %hu", layout->std_scale_type, std_scale_type);
-    layout->std_scale_type--;
-  }
-  {
-    BITCODE_T stylesheet;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "stylesheet", &stylesheet, NULL)
-        && stylesheet
-           ? strEQ ((char *)stylesheet, (char *)layout->stylesheet)
-           : !layout->stylesheet)
-      pass ();
-    else
-      fail ("LAYOUT.stylesheet [T] '%s' <> '%s'", stylesheet, layout->stylesheet);
+        fail ("LAYOUT.plotsettings [Dwg_Object_PLOTSETTINGS]");
   }
   {
     BITCODE_BS tab_order;
@@ -34990,21 +34668,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.tab_order [BS] set+1 %hu != %hu", layout->tab_order, tab_order);
     layout->tab_order--;
-  }
-  {
-    BITCODE_BD top_margin;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "top_margin", &top_margin, NULL)
-        && top_margin == layout->top_margin)
-      pass ();
-    else
-      fail ("LAYOUT.top_margin [BD] %g != %g", layout->top_margin, top_margin);
-    top_margin++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "top_margin", &top_margin, 0)
-        && top_margin == layout->top_margin)
-      pass ();
-    else
-      fail ("LAYOUT.top_margin [BD] set+1 %g != %g", layout->top_margin, top_margin);
-    layout->top_margin--;
   }
   {
     BITCODE_BD ucs_elevation;
@@ -35045,14 +34708,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
       pass ();
     else
       fail ("LAYOUT.viewports [H*] * %u num_viewports", count);
-  }
-  {
-    BITCODE_H visualstyle;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "visualstyle", &visualstyle, NULL)
-        && !memcmp (&visualstyle, &layout->visualstyle, sizeof (layout->visualstyle)))
-        pass ();
-    else
-        fail ("LAYOUT.visualstyle [H]");
   }
   if (failed && (is_class_unstable ("LAYOUT") || is_class_debugging ("LAYOUT")))
     {
@@ -38654,14 +38309,14 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
         fail ("PLOTSETTINGS.plotview [H]");
   }
   {
-    BITCODE_TV plotview_name;
+    BITCODE_T plotview_name;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "plotview_name", &plotview_name, NULL)
         && plotview_name
            ? strEQ ((char *)plotview_name, (char *)plotsettings->plotview_name)
            : !plotsettings->plotview_name)
       pass ();
     else
-      fail ("PLOTSETTINGS.plotview_name [TV] '%s' <> '%s'", plotview_name, plotsettings->plotview_name);
+      fail ("PLOTSETTINGS.plotview_name [T] '%s' <> '%s'", plotview_name, plotsettings->plotview_name);
   }
   {
     BITCODE_T printer_cfg_file;
@@ -38712,21 +38367,6 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     plotsettings->shadeplot_customdpi--;
   }
   {
-    BITCODE_BS shadeplot_mode;
-    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "shadeplot_mode", &shadeplot_mode, NULL)
-        && shadeplot_mode == plotsettings->shadeplot_mode)
-      pass ();
-    else
-      fail ("PLOTSETTINGS.shadeplot_mode [BS] %hu != %hu", plotsettings->shadeplot_mode, shadeplot_mode);
-    shadeplot_mode++;
-    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shadeplot_mode", &shadeplot_mode, 0)
-        && shadeplot_mode == plotsettings->shadeplot_mode)
-      pass ();
-    else
-      fail ("PLOTSETTINGS.shadeplot_mode [BS] set+1 %hu != %hu", plotsettings->shadeplot_mode, shadeplot_mode);
-    plotsettings->shadeplot_mode--;
-  }
-  {
     BITCODE_BS shadeplot_reslevel;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "shadeplot_reslevel", &shadeplot_reslevel, NULL)
         && shadeplot_reslevel == plotsettings->shadeplot_reslevel)
@@ -38740,6 +38380,21 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     else
       fail ("PLOTSETTINGS.shadeplot_reslevel [BS] set+1 %hu != %hu", plotsettings->shadeplot_reslevel, shadeplot_reslevel);
     plotsettings->shadeplot_reslevel--;
+  }
+  {
+    BITCODE_BS shadeplot_type;
+    if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "shadeplot_type", &shadeplot_type, NULL)
+        && shadeplot_type == plotsettings->shadeplot_type)
+      pass ();
+    else
+      fail ("PLOTSETTINGS.shadeplot_type [BS] %hu != %hu", plotsettings->shadeplot_type, shadeplot_type);
+    shadeplot_type++;
+    if (dwg_dynapi_entity_set_value (plotsettings, "PLOTSETTINGS", "shadeplot_type", &shadeplot_type, 0)
+        && shadeplot_type == plotsettings->shadeplot_type)
+      pass ();
+    else
+      fail ("PLOTSETTINGS.shadeplot_type [BS] set+1 %hu != %hu", plotsettings->shadeplot_type, shadeplot_type);
+    plotsettings->shadeplot_type--;
   }
   {
     BITCODE_BD std_scale_factor;

@@ -1864,23 +1864,15 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
   return ref;
 }
 
-// Search for name in associated table, and return its handle.
-// Note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
-// Note that we cannot set the ref->obj here, as it may still move by realloc
-// dwg->object[]
+// return the matching _CONTROL table, or NULL
 EXPORT BITCODE_H
-dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
-                      const char *restrict table)
+dwg_ctrl_table (Dwg_Data *restrict dwg, const char *restrict table)
 {
-  BITCODE_BL i, num_entries = 0;
-  BITCODE_H ctrl = NULL, *hdlv = NULL;
-  Dwg_Object *obj;
-  Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
+  BITCODE_H ctrl = NULL;
   Dwg_Header_Variables *vars = &dwg->header_vars;
 
-  if (!dwg || !name || !table)
+  if (!dwg || !table)
     return NULL;
-  // look for the _CONTROL table, and search for name in all entries
   if (strEQc (table, "BLOCK"))
     {
       if (!(ctrl = vars->BLOCK_CONTROL_OBJECT))
@@ -1904,21 +1896,6 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       if (!(ctrl = vars->LTYPE_CONTROL_OBJECT))
         vars->LTYPE_CONTROL_OBJECT = ctrl
             = dwg_find_table_control (dwg, "LTYPE_CONTROL");
-      if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
-        {
-          if (vars->LTYPE_BYLAYER)
-            return vars->LTYPE_BYLAYER;
-        }
-      else if (strEQc (name, "BYBLOCK") || strEQc (name, "ByBlock"))
-        {
-          if (vars->LTYPE_BYBLOCK)
-            return vars->LTYPE_BYBLOCK;
-        }
-      else if (strEQc (name, "CONTINUOUS") || strEQc (name, "Continuous"))
-        {
-          if (vars->LTYPE_CONTINUOUS)
-            return vars->LTYPE_CONTINUOUS;
-        }
     }
   else if (strEQc (table, "VIEW"))
     {
@@ -2026,8 +2003,47 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
     }
   else
     {
-      LOG_ERROR ("dwg_find_tablehandle: Unsupported table %s", table);
+      LOG_ERROR ("dwg_ctrl_table: Unsupported table %s", table);
       return 0;
+    }
+  return ctrl;
+}
+
+// Search for name in associated table, and return its handle.
+// Note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
+// Note that we cannot set the ref->obj here, as it may still move by realloc
+// dwg->object[]
+EXPORT BITCODE_H
+dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
+                      const char *restrict table)
+{
+  BITCODE_BL i, num_entries = 0;
+  BITCODE_H ctrl = NULL, *hdlv = NULL;
+  Dwg_Object *obj;
+  Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
+  Dwg_Header_Variables *vars = &dwg->header_vars;
+
+  if (!dwg || !name || !table)
+    return NULL;
+  // look for the _CONTROL table, and search for name in all entries
+  ctrl = dwg_ctrl_table (dwg, table);
+  if (strEQc (table, "LTYPE"))
+    {
+      if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
+        {
+          if (vars->LTYPE_BYLAYER)
+            return vars->LTYPE_BYLAYER;
+        }
+      else if (strEQc (name, "BYBLOCK") || strEQc (name, "ByBlock"))
+        {
+          if (vars->LTYPE_BYBLOCK)
+            return vars->LTYPE_BYBLOCK;
+        }
+      else if (strEQc (name, "CONTINUOUS") || strEQc (name, "Continuous"))
+        {
+          if (vars->LTYPE_CONTINUOUS)
+            return vars->LTYPE_CONTINUOUS;
+        }
     }
   if (!ctrl)
     { // TODO: silently search table_control. header_vars can be empty
@@ -2084,6 +2100,75 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
     }
 
   return 0;
+}
+
+// Search for handle in associated table, and return its name.
+EXPORT char*
+dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
+                 const BITCODE_H restrict handle)
+{
+  BITCODE_BL i, num_entries = 0;
+  BITCODE_H ctrl = NULL, *hdlv = NULL;
+  Dwg_Object *obj;
+  Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
+  Dwg_Header_Variables *vars = &dwg->header_vars;
+
+  if (!dwg || !table || !handle || !handle->handleref.value)
+    return NULL;
+  // look for the _CONTROL table, and search for name in all entries
+  ctrl = dwg_ctrl_table (dwg, table);
+  if (!ctrl)
+    { // TODO: silently search table_control. header_vars can be empty
+      LOG_TRACE ("dwg_handle_name: Empty header_vars table %s\n", table);
+      return 0;
+    }
+  obj = dwg_resolve_handle (dwg, ctrl->absolute_ref);
+  if (!obj)
+    {
+      LOG_TRACE ("dwg_handle_name: Could not resolve table %s\n", table);
+      return 0;
+    }
+  //if (obj->type == DWG_TYPE_DICTIONARY)
+  //  return dwg_find_dicthandle_objname (dwg, ctrl, name);
+  if (!dwg_obj_is_control (obj))
+    {
+      LOG_ERROR ("dwg_handle_name: Could not resolve CONTROL object %s "
+                 "for table %s",
+                 obj->name, table);
+      return 0;
+    }
+  _obj = obj->tio.object->tio.APPID_CONTROL; // just a random type
+  dwg_dynapi_entity_value (_obj, obj->name, "num_entries", &num_entries, NULL);
+  if (!num_entries)
+    return NULL;
+  dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
+  if (!hdlv)
+    return NULL;
+  for (i = 0; i < num_entries; i++)
+    {
+      char *hdlname;
+      Dwg_Object *hobj;
+      Dwg_Object_APPID *_o;
+      int isnew = 0;
+      bool ok;
+
+      if (!hdlv[i])
+        continue;
+      hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
+      if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
+        continue;
+      if (hdlv[i]->absolute_ref != handle->absolute_ref)
+        continue;
+      _o = hobj->tio.object->tio.APPID;
+      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, &isnew, NULL);
+      LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
+                  hobj->name, hdlname ? hdlname : "NULL");
+      if (ok)
+        return hdlname;
+      else
+        return NULL;
+    }
+  return NULL;
 }
 
 /* Returns the string value of the member of the AcDbVariableDictionary.

@@ -25,19 +25,19 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (cells[i].cellstyle, CellStyle, data_flags, BS);
         if (!cells[i].cellstyle.data_flags)
           continue;
-        CHK_SUBCLASS_TYPE (cells[i].cellstyle, CellStyle, property_override_flags, BL);
-        CHK_SUBCLASS_TYPE (cells[i].cellstyle, CellStyle, merge_flags, BL);
+        CHK_SUBCLASS_TYPE (cells[i].cellstyle, CellStyle, property_override_flags, BLx);
+        CHK_SUBCLASS_TYPE (cells[i].cellstyle, CellStyle, merge_flags, BLx);
         CHK_SUBCLASS_CMC (cells[i].cellstyle, CellStyle, bg_color);
         CHK_SUBCLASS_TYPE (cells[i].cellstyle, CellStyle, content_layout, BL);
-        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, property_override_flags, BL);
-        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, property_override_flags, BL);
-        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, property_flags, BL);
+        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, property_override_flags, BLx);
+        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, property_override_flags, BLx);
+        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, property_flags, BLx);
         CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, value_data_type, BL);
         CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, value_unit_type, BL);
         CHK_SUBCLASS_UTF8TEXT (cells[i].cellstyle.content_format, ContentFormat, value_format_string);
         CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, rotation, BD);
         CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, block_scale, BD);
-        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, cell_alignment, BL);
+        CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, cell_alignment, BLx);
         CHK_SUBCLASS_CMC (cells[i].cellstyle.content_format, ContentFormat, content_color);
         CHK_SUBCLASS_H (cells[i].cellstyle.content_format, ContentFormat, text_style);
         CHK_SUBCLASS_TYPE (cells[i].cellstyle.content_format, ContentFormat, text_height, BD);

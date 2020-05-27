@@ -1,4 +1,3 @@
-// TODO DEBUGGING only
 #define DWG_TYPE DWG_TYPE_PLOTSETTINGS
 #include "common.c"
 
@@ -8,7 +7,6 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_T printer_cfg_file;
   BITCODE_T paper_size;
-  BITCODE_T canonical_media_name;
   BITCODE_BD left_margin;
   BITCODE_BD bottom_margin;
   BITCODE_BD right_margin;
@@ -25,16 +23,16 @@ api_process (dwg_object *obj)
   BITCODE_BD drawing_units;
   BITCODE_BS plot_flags;
   BITCODE_BS plot_paper_unit;
-  BITCODE_BS plot_rotation;
+  BITCODE_BS plot_rotation_mode;
   BITCODE_BS plot_type;
   BITCODE_T stylesheet;
   BITCODE_BS std_scale_type;
   BITCODE_BD std_scale_factor;
   BITCODE_2BD_1 paper_image_origin;
-  BITCODE_BS shade_plot_mode;
-  BITCODE_BS shade_plot_reslevel;
-  BITCODE_BS shade_plot_customdpi;
-  BITCODE_H  shadeplot;
+  BITCODE_BS shadeplot_type;
+  BITCODE_BS shadeplot_reslevel;
+  BITCODE_BS shadeplot_customdpi;
+  BITCODE_H shadeplot;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_plotsettings *plt = dwg_object_to_PLOTSETTINGS (obj);
@@ -69,8 +67,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, std_scale_factor, BD);
   CHK_ENTITY_2RD (plt, PLOTSETTINGS, paper_image_origin);
   //2004+:
-  CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shadeplot_mode, BS);
-  CHK_ENTITY_MAX (plt, PLOTSETTINGS, shadeplot_mode, BS, 5);
+  CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shadeplot_type, BS);
+  CHK_ENTITY_MAX (plt, PLOTSETTINGS, shadeplot_type, BS, 5);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shadeplot_reslevel, BS);
   CHK_ENTITY_MAX (plt, PLOTSETTINGS, shadeplot_reslevel, BS, 5);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shadeplot_customdpi, BS);

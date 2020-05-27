@@ -672,13 +672,16 @@ match_LAYOUT (const char *restrict filename, const Dwg_Object *restrict obj)
   BITCODE_BL i;
   const Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
 
-  MATCH_OBJECT (LAYOUT, printer_cfg_file, 1);
-  MATCH_OBJECT (LAYOUT, paper_size, 2);
-  MATCH_OBJECT (LAYOUT, canonical_media_name, 4);
-  MATCH_OBJECT (LAYOUT, plotview_name, 6);
-  MATCH_OBJECT (LAYOUT, stylesheet, 7);
-  
+  MATCH_OBJECT (LAYOUT, plotsettings.printer_cfg_file, 1);
+  MATCH_OBJECT (LAYOUT, plotsettings.paper_size, 2);
+  MATCH_OBJECT (LAYOUT, plotsettings.canonical_media_name, 4);
+  MATCH_TABLE (LAYOUT, plotsettings.plotview, PLOTVIEW, 6);
+  MATCH_OBJECT (LAYOUT, plotsettings.plotview_name, 6);
+  MATCH_OBJECT (LAYOUT, plotsettings.stylesheet, 7);
+
   MATCH_OBJECT (LAYOUT, layout_name, 1);
+  MATCH_TABLE (LAYOUT, block_header, BLOCK, 330);
+  MATCH_TABLE (LAYOUT, active_viewport, VIEWPORT, 331);
   MATCH_TABLE (LAYOUT, shadeplot, VISUALSTYLE, 333);
   MATCH_TABLE (LAYOUT, base_ucs, UCS, 346);
   MATCH_TABLE (LAYOUT, named_ucs, UCS, 345);
@@ -930,6 +933,7 @@ match_PLOTSETTINGS (const char *restrict filename,
   MATCH_OBJECT (PLOTSETTINGS, paper_size, 2);
   MATCH_OBJECT (PLOTSETTINGS, canonical_media_name, 4);
   MATCH_OBJECT (PLOTSETTINGS, plotview_name, 6);
+  MATCH_TABLE (PLOTSETTINGS, PLOTVIEW, plotview, 6);
   MATCH_OBJECT (PLOTSETTINGS, stylesheet, 7);
   MATCH_TABLE (PLOTSETTINGS, VISUALSTYLE, shadeplot, 333);
   return found;
@@ -1105,6 +1109,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (IMAGEDEF)
       ELSEMATCH (LAYER_INDEX)
       ELSEMATCH (LAYOUT)
+      ELSEMATCH (PLOTSETTINGS)
       ELSEMATCH (SCALE)
       ELSEMATCH (FIELD)
       ELSEMATCH (TABLECONTENT)
@@ -1116,7 +1121,6 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (LIGHTLIST)
       ELSEMATCH (DBCOLOR)
       ELSEMATCH (MATERIAL)
-      ELSEMATCH (PLOTSETTINGS)
       ELSEMATCH (DIMASSOC)
       ELSEMATCH (ASSOCACTION)
       ELSEMATCH (ASSOCOSNAPPOINTREFACTIONPARAM)

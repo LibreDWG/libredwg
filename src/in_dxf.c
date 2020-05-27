@@ -6502,6 +6502,11 @@ new_object (char *restrict name, char *restrict dxfname,
   if (obj->fixedtype == DWG_TYPE_LAYOUT)
     {
       Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+      _o->plotsettings.paper_units = 1.0; // default
+    }
+  else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
+    {
+      Dwg_Object_PLOTSETTINGS *_o = obj->tio.object->tio.PLOTSETTINGS;
       _o->paper_units = 1.0; // default
     }
   else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
@@ -7098,21 +7103,21 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_LAYOUT)
             {
               Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
-              if (strEQc (subclass, "AcDbPlotSettings"))
+              if (strEQc (subclass, "AcDbPlotSettings")) // todo: embedded struct
                 {
-                  _o->plot_flags = pair->value.u;
-                  LOG_TRACE ("LAYOUT.plot_flags = 0x%x [BSx 70]", pair->value.u);
+                  _o->plotsettings.plot_flags = pair->value.i;
+                  LOG_TRACE ("LAYOUT.plotsettings.plot_flags = 0x%x [BSx 70]", pair->value.i);
                 }
               else if (strEQc (subclass, "AcDbLayout"))
                 {
                   _o->layout_flags = pair->value.u;
-                  LOG_TRACE ("LAYOUT.layout_flags = %d [BSx 70]", pair->value.u);
+                  LOG_TRACE ("LAYOUT.layout_flags = 0x%x [BSx 70]", pair->value.u);
                 }
               else
                 {
                   LOG_WARN ("Unhandled LAYOUT.70 in subclass %s", subclass);
                   _o->layout_flags = pair->value.u;
-                  LOG_TRACE ("LAYOUT.layout_flags = %d [BSx 70]", pair->value.u);
+                  LOG_TRACE ("LAYOUT.layout_flags = 0x%x [BSx 70]", pair->value.u);
                 }
               break;
             }
@@ -7394,9 +7399,9 @@ new_object (char *restrict name, char *restrict dxfname,
               Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
               if (strEQc (subclass, "AcDbPlotSettings"))
                 {
-                  dwg_dynapi_entity_set_value (_obj, obj->name, "page_setup_name",
-                                               &pair->value, 1);
-                  LOG_TRACE ("%s.page_setup_name = %s [T 1]\n",
+                  const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field ("PLOTSETTINGS", "printer_cfg_file");
+                  dwg_dynapi_field_set_value (dwg, &_o->plotsettings, f, &pair->value, 1);
+                  LOG_TRACE ("%s.plotsettings.printer_cfg_file = %s [T 1]\n",
                              obj->name, pair->value.s);
                 }
               else if (strEQc (subclass, "AcDbLayout"))
@@ -7410,6 +7415,15 @@ new_object (char *restrict name, char *restrict dxfname,
                 LOG_WARN ("Unhandled LAYOUT.1 in subclass %s", subclass);
               goto next_pair;
             }
+          else if (pair->code == 2 && obj->fixedtype == DWG_TYPE_LAYOUT)
+            {
+              Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
+              const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field ("PLOTSETTINGS", "paper_size");
+              dwg_dynapi_field_set_value (dwg, &_o->plotsettings, f, &pair->value, 1);
+              LOG_TRACE ("%s.plotsettings.paper_size = %s [T 2]\n",
+                         obj->name, pair->value.s);
+              goto next_pair;
+            }
           else if (pair->code == 370 && obj->fixedtype == DWG_TYPE_LAYER)
             {
               Dwg_Object_LAYER *layer = obj->tio.object->tio.LAYER;
@@ -7417,6 +7431,7 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("LAYER.linewt = %d\n", layer->linewt);
               layer->flag |= layer->linewt << 5;
               LOG_TRACE ("LAYER.flag = 0x%x [BS 70]\n", layer->flag);
+              goto next_pair;
             }
           else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
             {

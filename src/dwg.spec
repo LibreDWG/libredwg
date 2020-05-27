@@ -4043,9 +4043,9 @@ DWG_OBJECT (LAYER_INDEX)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-//pg.145
-DWG_OBJECT (LAYOUT)
-
+// (varies)
+DWG_OBJECT (PLOTSETTINGS)
+  // See also LAYOUT
   SUBCLASS (AcDbPlotSettings)
   FIELD_T (printer_cfg_file, 1);
   FIELD_T (paper_size, 2);
@@ -4064,10 +4064,29 @@ DWG_OBJECT (LAYOUT)
   FIELD_2BD_1 (plot_window_ll, 48);
   FIELD_2BD_1 (plot_window_ur, 140);
   UNTIL (R_2000) {
-    FIELD_TV (plotview_name, 6);
+    ENCODER {
+      if (_obj->plotview && !_obj->plotview_name)
+        _obj->plotview_name = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotview);
+    }
+    FIELD_T (plotview_name, 6);
+    DECODER {
+      _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "PLOTVIEW");
+    }
   }
-  SINCE (R_2004) {
-    FIELD_HANDLE (plotview, 5, 6);
+  LATER_VERSIONS {
+    DECODER {
+      if (!_obj->plotview && _obj->plotview_name)
+        _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "PLOTVIEW");
+    }
+    DXF {
+      FIELD_T (plotview_name, 6);
+    } else {
+      FIELD_HANDLE (plotview, 4, 6);
+    }
+    DECODER {
+      if (!_obj->plotview_name)
+        _obj->plotview_name = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotview);
+    }
   }
   FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
   FIELD_BD (paper_units, 142);
@@ -4084,10 +4103,86 @@ DWG_OBJECT (LAYOUT)
   FIELD_2BD_1 (paper_image_origin, 148);
   SINCE (R_2004)
     {
-      FIELD_BS (shadeplot_mode, 76);
+      FIELD_BS (shadeplot_type, 76);
       FIELD_BS (shadeplot_reslevel, 77);
       FIELD_BS (shadeplot_customdpi, 78);
     }
+  SINCE (R_2007) {
+    FIELD_HANDLE (shadeplot, 4, 333);
+  }
+DWG_OBJECT_END
+
+//pg.145
+DWG_OBJECT (LAYOUT)
+
+  SUBCLASS (AcDbPlotSettings)
+  FIELD_T (plotsettings.printer_cfg_file, 1);
+  FIELD_T (plotsettings.paper_size, 2);
+  FIELD_BSx (plotsettings.plot_flags, 0);
+  FIELD_BD (plotsettings.left_margin, 40);
+  FIELD_BD (plotsettings.bottom_margin, 41);
+  FIELD_BD (plotsettings.right_margin, 42);
+  FIELD_BD (plotsettings.top_margin, 43);
+  FIELD_BD (plotsettings.paper_width, 44);
+  FIELD_BD (plotsettings.paper_height, 45);
+  FIELD_T (plotsettings.canonical_media_name, 4);
+  FIELD_2BD_1 (plotsettings.plot_origin, 46);
+  FIELD_BS (plotsettings.plot_paper_unit, 0);
+  FIELD_BS (plotsettings.plot_rotation_mode, 0);
+  FIELD_BS (plotsettings.plot_type, 0);
+  FIELD_2BD_1 (plotsettings.plot_window_ll, 48);
+  FIELD_2BD_1 (plotsettings.plot_window_ur, 140);
+  UNTIL (R_2000) {
+    ENCODER {
+      if (_obj->plotsettings.plotview && !_obj->plotsettings.plotview_name)
+        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "PLOTVIEW",
+                                             _obj->plotsettings.plotview);
+    }
+    FIELD_T (plotsettings.plotview_name, 6);
+    DECODER {
+      _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
+                                      _obj->plotsettings.plotview_name, "PLOTVIEW");
+    }
+  }
+  LATER_VERSIONS {
+    DECODER {
+      if (!_obj->plotsettings.plotview && _obj->plotsettings.plotview_name)
+        _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
+                 _obj->plotsettings.plotview_name, "PLOTVIEW");
+    }
+    DXF {
+      FIELD_T (plotsettings.plotview_name, 6);
+    } else {
+      FIELD_HANDLE (plotsettings.plotview, 4, 6);
+    }
+    DECODER {
+      if (!_obj->plotsettings.plotview_name)
+        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "PLOTVIEW",
+                                              _obj->plotsettings.plotview);
+    }
+  }
+  FREE { FIELD_TV (plotsettings.plotview_name, 6); FIELD_HANDLE (plotsettings.plotview, 5, 6); }
+  FIELD_BD (plotsettings.paper_units, 142);
+  FIELD_BD (plotsettings.drawing_units, 143);
+  DXF {
+    FIELD_BS (plotsettings.plot_flags, 70);
+    FIELD_BS (plotsettings.plot_paper_unit, 72);
+    FIELD_BS (plotsettings.plot_rotation_mode, 73);
+    FIELD_BS (plotsettings.plot_type, 74);
+  }
+  FIELD_T (plotsettings.stylesheet, 7);
+  FIELD_BS (plotsettings.std_scale_type, 75);
+  FIELD_BD (plotsettings.std_scale_factor, 147);
+  FIELD_2BD_1 (plotsettings.paper_image_origin, 148);
+  SINCE (R_2004)
+    {
+      FIELD_BS (plotsettings.shadeplot_type, 76);
+      FIELD_BS (plotsettings.shadeplot_reslevel, 77);
+      FIELD_BS (plotsettings.shadeplot_customdpi, 78);
+    }
+  SINCE (R_2007) {
+    FIELD_HANDLE (plotsettings.shadeplot, 4, 333);
+  }
 
   SUBCLASS (AcDbLayout)
   FIELD_T (layout_name, 1);
@@ -4110,9 +4205,6 @@ DWG_OBJECT (LAYOUT)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  SINCE (R_2007) {
-    FIELD_HANDLE (visualstyle, 4, 0);
-  }
   FIELD_HANDLE (block_header, 4, 330); // => BLOCK_HEADER.pspace or mspace (ownerhandle)
   FIELD_HANDLE (active_viewport, 4, 331);
   FIELD_HANDLE (base_ucs, 5, 346);
@@ -6726,56 +6818,6 @@ DWG_ENTITY (HELIX)
   FIELD_BS (constraint_type, 280); //0 constrain turn height, 1 turns, 2 height
 
 DWG_ENTITY_END
-
-// (varies) UNSTABLE
-DWG_OBJECT (PLOTSETTINGS)
-  // See also LAYOUT
-  SUBCLASS (AcDbPlotSettings)
-  FIELD_T (printer_cfg_file, 2);
-  FIELD_T (paper_size, 3);
-  FIELD_BSx (plot_flags, 0);
-  FIELD_BD (left_margin, 40);
-  FIELD_BD (bottom_margin, 41);
-  FIELD_BD (right_margin, 42);
-  FIELD_BD (top_margin, 43);
-  FIELD_BD (paper_width, 44);
-  FIELD_BD (paper_height, 45);
-  FIELD_T (canonical_media_name, 4);
-  FIELD_2BD_1 (plot_origin, 46);
-  FIELD_BS (plot_paper_unit, 0);
-  FIELD_BS (plot_rotation_mode, 0);
-  FIELD_BS (plot_type, 0);
-  FIELD_2BD_1 (plot_window_ll, 48);
-  FIELD_2BD_1 (plot_window_ur, 140);
-  VERSIONS (R_13, R_2000) {
-    FIELD_TV (plotview_name, 6);
-  }
-  SINCE (R_2004) {
-    FIELD_HANDLE (plotview, 5, 6);
-  }
-  FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
-  FIELD_BD (paper_units, 142);
-  FIELD_BD (drawing_units, 143);
-  DXF {
-    FIELD_BS (plot_flags, 70);
-    FIELD_BS (plot_paper_unit, 72);
-    FIELD_BS (plot_rotation_mode, 73);
-    FIELD_BS (plot_type, 74);
-  }
-  FIELD_T (stylesheet, 7);
-  FIELD_BS (std_scale_type, 75);
-  FIELD_BD (std_scale_factor, 147);
-  FIELD_2BD_1 (paper_image_origin, 148);
-  SINCE (R_2004)
-    {
-      FIELD_BS (shadeplot_mode, 76);
-      FIELD_BS (shadeplot_reslevel, 77);
-      FIELD_BS (shadeplot_customdpi, 78);
-    }
-  SINCE (R_2007) {
-    FIELD_HANDLE (shadeplot, 4, 333);
-  }
-DWG_OBJECT_END
 
 // unstable
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
