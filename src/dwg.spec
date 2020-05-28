@@ -3272,12 +3272,7 @@ DWG_OBJECT (APPID)
 
   COMMON_TABLE_FLAGS (RegApp)
   SINCE (R_13) {
-    DXF {
-      if (FIELD_VALUE (unknown))
-        FIELD_RC (unknown, 71); // not in DXF if 0. has_something
-    } else {
-      FIELD_RC (unknown, 71);
-    }
+    FIELD_RC0 (unknown, 71); // in DXF only with ADE_PROJECTION
   }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
