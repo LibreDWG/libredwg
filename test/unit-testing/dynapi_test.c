@@ -46173,19 +46173,19 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     vport_entity_header->flag--;
   }
   {
-    BITCODE_B flag1;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag1", &flag1, NULL)
-        && flag1 == vport_entity_header->flag1)
+    BITCODE_B is_on;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_on", &is_on, NULL)
+        && is_on == vport_entity_header->is_on)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag1 [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->flag1, flag1);
-    flag1++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag1", &flag1, 0)
-        && flag1 == vport_entity_header->flag1)
+      fail ("VPORT_ENTITY_HEADER.is_on [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_on, is_on);
+    is_on++;
+    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_on", &is_on, 0)
+        && is_on == vport_entity_header->is_on)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag1 [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->flag1, flag1);
-    vport_entity_header->flag1--;
+      fail ("VPORT_ENTITY_HEADER.is_on [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_on, is_on);
+    vport_entity_header->is_on--;
   }
   {
     BITCODE_B is_xref_dep;
@@ -46243,27 +46243,20 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
       fail ("VPORT_ENTITY_HEADER.name [TV] '%s' <> '%s'", name, vport_entity_header->name);
   }
   {
-    BITCODE_BL num_viewports;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "num_viewports", &num_viewports, NULL)
-        && num_viewports == vport_entity_header->num_viewports)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_HEADER.num_viewports [BL] %u != %u", vport_entity_header->num_viewports, num_viewports);
-    num_viewports++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "num_viewports", &num_viewports, 0)
-        && num_viewports == vport_entity_header->num_viewports)
-      pass ();
-    else
-      fail ("VPORT_ENTITY_HEADER.num_viewports [BL] set+1 %u != %u", vport_entity_header->num_viewports, num_viewports);
-    vport_entity_header->num_viewports--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "parent", &parent, NULL)
         && !memcmp (&parent, &vport_entity_header->parent, sizeof (vport_entity_header->parent)))
         pass ();
     else
         fail ("VPORT_ENTITY_HEADER.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H prev_entry;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "prev_entry", &prev_entry, NULL)
+        && !memcmp (&prev_entry, &vport_entity_header->prev_entry, sizeof (vport_entity_header->prev_entry)))
+        pass ();
+    else
+        fail ("VPORT_ENTITY_HEADER.prev_entry [H]");
   }
   {
     BITCODE_RS used;
@@ -46281,14 +46274,12 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
     vport_entity_header->used--;
   }
   {
-    BITCODE_H* viewports;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "num_viewports", &count, NULL)
-        && dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "viewports", &viewports, NULL)
-        && viewports == vport_entity_header->viewports)
-      pass ();
+    BITCODE_H viewport;
+    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "viewport", &viewport, NULL)
+        && !memcmp (&viewport, &vport_entity_header->viewport, sizeof (vport_entity_header->viewport)))
+        pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.viewports [H*] * %u num_viewports", count);
+        fail ("VPORT_ENTITY_HEADER.viewport [H]");
   }
   {
     BITCODE_H xref;

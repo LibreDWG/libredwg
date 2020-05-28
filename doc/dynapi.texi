@@ -8961,12 +8961,12 @@ BS
 B
 @item xref
 H
-@item flag1
-B,	DXF 70
-@item num_viewports
-BL
-@item viewports
-H*
+@item is_on
+B,	DXF 290
+@item viewport
+H,	DXF 338
+@item prev_entry
+H,	DXF 340
 
 @end vtable
 @end indentedblock

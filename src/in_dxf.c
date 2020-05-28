@@ -7133,10 +7133,11 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               else if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_HEADER)
                 {
-                  BITCODE_B flag1 = pair->value.i & 2 ? 1 : 0;
-                  dwg_dynapi_entity_set_value (_obj, obj->name, "flag1",
-                                               &flag1, 1);
-                  LOG_TRACE ("%s.flag1 = %d [B]\n", name, flag1);
+                  // also set via 290
+                  BITCODE_B is_on = pair->value.i ? 2 : 0;
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "is_on",
+                                               &is_on, 1);
+                  LOG_TRACE ("%s.is_on = %d [B]\n", name, is_on);
                 }
               break;
             }

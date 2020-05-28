@@ -1529,6 +1529,7 @@ DWG_ENTITY (VIEWPORT)
       FIELD_BD (lens_length, 42);
       FIELD_BD (front_clip_z, 43);
       FIELD_BD (back_clip_z, 44);
+      // on R_2006: no snap_angle, no snap_base
       FIELD_BD (snap_angle, 50);
       FIELD_2RD (view_center, 12);
       FIELD_2RD (snap_base, 13);
@@ -3556,49 +3557,12 @@ DWG_OBJECT_END
 DWG_OBJECT (VPORT_ENTITY_HEADER)
 
   COMMON_TABLE_FLAGS (VX)
-  SINCE (R_13) {
-    DXF {
-      ;
-    } else {
-      FIELD_B (flag1, 70); // bit 1 of 70
-    }
-    FIELD_VALUE (flag) |= FIELD_VALUE (flag1) << 1;
+  FIELD_B (is_on, 290); // bit 1 of 70
+  FIELD_VALUE (flag) |= FIELD_VALUE (is_on) << 1;
 
-    START_OBJECT_HANDLE_STREAM;
-    DECODER
-    {
-      int _i = -1;
-      unsigned long _pos = bit_position (hdl_dat);
-      unsigned long _endpos = (hdl_dat->size - 1) * 8; // H reads an RC at first
-      FIELD_VALUE (viewports) = (BITCODE_H *)calloc (3, sizeof (BITCODE_H));
-      do
-        {
-          _i++;
-          if (_i > 2)
-            _obj->viewports = (BITCODE_H *)realloc (
-                _obj->viewports, (_i + 1) * sizeof (BITCODE_H));
-          FIELD_HANDLE_N (viewports[_i], _i, ANYCODE, 0); // 4 or 5
-          if (!_obj->viewports[_i])
-            {
-              _i--;
-              break;
-            }
-          _pos = bit_position (hdl_dat);
-        }
-      // it either ends with NULL (don't preserve) or 5.0.0 (preserve)
-      while (!(_obj->viewports[_i]->handleref.code == 5
-               && _obj->viewports[_i]->handleref.size == 0)
-             && _pos <= _endpos);
-      _obj->num_viewports = _i + 1;
-      if (!_obj->num_viewports)
-        free (_obj->viewports);
-    }
-    else
-    {
-      HANDLE_VECTOR (viewports, num_viewports, ANYCODE, 0); // 4.x until 5.0.0
-    }
-  }
-
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (viewport, 4, 338);
+  FIELD_HANDLE (prev_entry, 5, 340);
 DWG_OBJECT_END
 
 /*(72)*/

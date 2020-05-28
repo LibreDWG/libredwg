@@ -2447,9 +2447,9 @@ typedef struct _dwg_object_VPORT_ENTITY_CONTROL
 typedef struct _dwg_object_VPORT_ENTITY_HEADER
 {
   COMMON_TABLE_FIELDS(RC);
-  BITCODE_B flag1;
-  BITCODE_BL num_viewports; // calculated
-  BITCODE_H *viewports;
+  BITCODE_B is_on;
+  BITCODE_H viewport;
+  BITCODE_H prev_entry;
 } Dwg_Object_VPORT_ENTITY_HEADER;
 
 /**

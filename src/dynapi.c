@@ -7802,12 +7802,12 @@ static const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_HEADER_fields[] = {
     0,0,0, 0 },
   { "xref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, xref),
     1,0,0, 0 },
-  { "flag1",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, flag1),
-    0,0,0, 70 },
-  { "num_viewports",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, num_viewports),
-    0,0,0, 0 },
-  { "viewports",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, viewports),
-    1,1,0, 0 },
+  { "is_on",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, is_on),
+    0,0,0, 290 },
+  { "viewport",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, viewport),
+    1,0,0, 338 },
+  { "prev_entry",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, prev_entry),
+    1,0,0, 340 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_WIPEOUTVARIABLES: (sorted by offset) */
