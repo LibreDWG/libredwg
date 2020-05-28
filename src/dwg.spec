@@ -2693,7 +2693,7 @@ DWG_OBJECT (STYLE_CONTROL)
     // minus Standard
     VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
   } else {
-    FIELD_BL (num_entries, 70);
+    FIELD_BL (num_entries, 70); //RC?
   }
 
   CONTROL_HANDLE_STREAM;
@@ -2729,16 +2729,12 @@ DWG_OBJECT (STYLE)
   LATER_VERSIONS
   {
     FIELD_BD (text_size, 40);
-    FIELD_BD (width_factor, 41);
+    FIELD_BD (width_factor, 41); // xScale
     FIELD_BD (oblique_angle, 50);
     FIELD_RC (generation, 71);
     FIELD_BD (last_height, 42);
     FIELD_T (font_file, 3);
     FIELD_T (bigfont_file, 4);
-
-    FIELD_BL (ttf_flags, 0);
-    FIELD_T (ttf_typeface, 0);
-
     //1001 1000 1071 mandatory r2007+ if .ttf
     //long truetype font’s pitch and family, charset, and italic and bold flags
     DXF {

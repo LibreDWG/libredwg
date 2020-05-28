@@ -41,6 +41,7 @@
   FIELD_TIMERLL (TDCREATE, 0);
   FIELD_TIMERLL (TDUPDATE, 0);
 
+  // CustomSummaryInfo StrPair's
   FIELD_RS (num_props, 0);
   REPEAT (num_props, props, Dwg_SummaryInfo_Property)
   REPEAT_BLOCK

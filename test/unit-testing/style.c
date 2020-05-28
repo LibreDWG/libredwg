@@ -22,8 +22,8 @@ api_process (dwg_object *obj)
   BITCODE_BD last_height;
   BITCODE_TV font_file;
   BITCODE_TV bigfont_file;
-  BITCODE_BL ttf_flags;
-  BITCODE_T ttf_typeface;
+  //BITCODE_BL ttf_flags;
+  //BITCODE_T ttf_typeface;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_style *_obj = dwg_object_to_STYLE (obj);
@@ -45,6 +45,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, STYLE, last_height, BD);
   CHK_ENTITY_UTF8TEXT (_obj, STYLE, font_file);
   CHK_ENTITY_UTF8TEXT (_obj, STYLE, bigfont_file);
-  CHK_ENTITY_TYPE (_obj, STYLE, ttf_flags, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, STYLE, ttf_typeface);
+  //CHK_ENTITY_TYPE (_obj, STYLE, ttf_flags, BL);
+  //CHK_ENTITY_UTF8TEXT (_obj, STYLE, ttf_typeface);
 }

@@ -7991,10 +7991,6 @@ BD,	DXF 42
 T,	DXF 3
 @item bigfont_file
 T,	DXF 4
-@item ttf_flags
-BL
-@item ttf_typeface
-T
 
 @end vtable
 @end indentedblock

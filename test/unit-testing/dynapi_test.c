@@ -41347,31 +41347,6 @@ static int test_STYLE (const Dwg_Object *obj)
     style->text_size--;
   }
   {
-    BITCODE_BL ttf_flags;
-    if (dwg_dynapi_entity_value (style, "STYLE", "ttf_flags", &ttf_flags, NULL)
-        && ttf_flags == style->ttf_flags)
-      pass ();
-    else
-      fail ("STYLE.ttf_flags [BL] %u != %u", style->ttf_flags, ttf_flags);
-    ttf_flags++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "ttf_flags", &ttf_flags, 0)
-        && ttf_flags == style->ttf_flags)
-      pass ();
-    else
-      fail ("STYLE.ttf_flags [BL] set+1 %u != %u", style->ttf_flags, ttf_flags);
-    style->ttf_flags--;
-  }
-  {
-    BITCODE_T ttf_typeface;
-    if (dwg_dynapi_entity_value (style, "STYLE", "ttf_typeface", &ttf_typeface, NULL)
-        && ttf_typeface
-           ? strEQ ((char *)ttf_typeface, (char *)style->ttf_typeface)
-           : !style->ttf_typeface)
-      pass ();
-    else
-      fail ("STYLE.ttf_typeface [T] '%s' <> '%s'", ttf_typeface, style->ttf_typeface);
-  }
-  {
     BITCODE_RS used;
     if (dwg_dynapi_entity_value (style, "STYLE", "used", &used, NULL)
         && used == style->used)

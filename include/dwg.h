@@ -2112,10 +2112,6 @@ typedef struct _dwg_object_STYLE
   BITCODE_BD last_height;
   BITCODE_T font_file;
   BITCODE_T bigfont_file;
-  /* italic: 0x1000000, bold 0x2000000:
-     charset (bits 8-15), pitch&family (bits 0-7) */
-  BITCODE_BL ttf_flags;
-  BITCODE_T ttf_typeface;
 } Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */
