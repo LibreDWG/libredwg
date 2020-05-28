@@ -2314,8 +2314,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       return error | (f->name ? 1 : 0); // found or not
     }
   else // not found
-    {  // maybe it's an embedded subclass. look for the dot
-      // TODO: if that dot is not found look for the next one
+    {  // maybe it's an embedded subclass. look for the dot(s)
       int found = 0;
       char *rest = strchr (key, '.');
       while (rest)
@@ -2331,30 +2330,34 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           if (f1 && *rest)
             {
               void *off = &((char *)_obj)[f1->offset];
-              char *subclass1 = dwg_dynapi_subclass_name (f1->type);
+              const char *subclass1 = dwg_dynapi_subclass_name (f1->type);
               const Dwg_DYNAPI_field *sfields1
                 = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
                 : NULL;
+              if (!sfields1 && subclass1)
+                sfields1 = dwg_dynapi_entity_fields (subclass1);
               if (!sfields1
                   || !_set_struct_field (dat, obj, tokens, off, subclass1,
                                          rest, sfields1))
                 ++tokens->index;
-              free (subclass1);
+              free ((char*)subclass1);
               return error | (f1->name ? 1 : 0); // found or not
             }
           f1 = dwg_dynapi_subclass_field (name, key);
           if (f1 && *rest)
             {
               void *off = &((char *)_obj)[f1->offset];
-              char *subclass1 = dwg_dynapi_subclass_name (f1->type);
+              const char *subclass1 = dwg_dynapi_subclass_name (f1->type);
               const Dwg_DYNAPI_field *sfields1
                 = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
                 : NULL;
+              if (!sfields1 && subclass1)
+                sfields1 = dwg_dynapi_entity_fields (subclass1);
               if (!sfields1
                   || !_set_struct_field (dat, obj, tokens, off, subclass1,
                                          rest, sfields1))
                 ++tokens->index;
-              free (subclass1);
+              free ((char*)subclass1);
               return error | (f1->name ? 1 : 0); // found or not
             }
           else

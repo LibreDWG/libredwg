@@ -1380,7 +1380,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1381 "gen-dynapi.pl"
+#line 1384 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1464,7 +1464,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1465 "gen-dynapi.pl"
+#line 1468 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -2315,7 +2315,21 @@ dwg_dynapi_subclass_name (const char *restrict type)
 {
   char *name = NULL;
   int len = strlen (type);
-  if (memBEGINc (type, "Dwg_"))
+  if (memBEGINc (type, "Dwg_Object_"))
+    {
+      const int off = strlen ("Dwg_Object_"); // PLOTSETTINGS
+      name = strdup (&type[off]);
+      if (type[len - 1] == '*')
+        name[len - off - 1] = '\0';
+    }
+  else if (memBEGINc (type, "Dwg_Entity_"))
+    {
+      const int off = strlen ("Dwg_Entity_");
+      name = strdup (&type[off]);
+      if (type[len - 1] == '*')
+        name[len - off - 1] = '\0';
+    }
+  else if (memBEGINc (type, "Dwg_"))
     {
       name = strdup (&type[4]);
       if (type[len - 1] == '*')
