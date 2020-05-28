@@ -39,7 +39,8 @@ gcov.log
 /test/test-data-r*/
 /test/test-data/
 /test/test-old/
-# test-data symlink
+# test-data symlinks
+/test-data
 /td
 
 # globs, in specific dirs

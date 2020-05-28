@@ -264,6 +264,7 @@ TESTDATA = \
     test-data/2013/circle.dwg \
     test-data/2013/circle.jpg \
     test-data/2013/circle.txt \
+    test-data/2013/gh44-error.dwg \
     test-data/2013/gh109_1.dwg \
     test-data/2013/gh109_1.dxf \
     test-data/2018/Arc.dwg \
