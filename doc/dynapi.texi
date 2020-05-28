@@ -7904,7 +7904,7 @@ BE,	DXF 210
 @item origin
 3BD,	DXF 10
 @item display_boundary_on
-BS
+BS,	DXF 71
 @item front_clip_on
 BS,	DXF 72
 @item front_clip_dist
@@ -7930,12 +7930,18 @@ BD*,	DXF 40
 
 @item parent
 struct _dwg_object_object*
-@item timestamp1
-BL
-@item timestamp2
-BL
-@item unknown
-TV
+@item last_updated
+TIMEBLL,	DXF 40
+@item num1
+BD,	DXF 40
+@item num_hdls
+BL,	DXF 90
+@item hdls
+H*,	DXF 330
+@item bindata_size
+BL,	DXF 90
+@item bindata
+TF,	DXF 310
 
 @end vtable
 @end indentedblock

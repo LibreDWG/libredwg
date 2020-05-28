@@ -4025,14 +4025,18 @@ typedef struct _dwg_object_SPATIAL_FILTER
 
 /**
  Class SPATIAL_INDEX (varies)
+ ODA only covers the AcDbFilter class, but misses the rest.
  */
 typedef struct _dwg_object_SPATIAL_INDEX
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL timestamp1;
-  BITCODE_BL timestamp2;
-  BITCODE_TV unknown;
+  BITCODE_TIMEBLL last_updated;
+  BITCODE_BD num1, num2, num3, num4, num5, num6;
+  BITCODE_BL num_hdls;
+  BITCODE_H *hdls;
+  BITCODE_BL bindata_size;
+  BITCODE_TF bindata;
 } Dwg_Object_SPATIAL_INDEX;
 
 /**

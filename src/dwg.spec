@@ -4882,7 +4882,7 @@ DWG_OBJECT (SPATIAL_FILTER)
   FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 10);
   FIELD_3BD (extrusion, 210);
   FIELD_3BD (origin, 10);
-  FIELD_BS (display_boundary, 71);
+  FIELD_BS (display_boundary_on, 71);
   FIELD_BS (front_clip_on, 72);
   if (FIELD_VALUE (front_clip_on) == 1)
     FIELD_BD (front_clip_dist, 40);
@@ -4898,12 +4898,23 @@ DWG_OBJECT (SPATIAL_FILTER)
 
 DWG_OBJECT_END
 
-//pg.153
+//pg.153, unstable, no coverage
 DWG_OBJECT (SPATIAL_INDEX)
 
+  SUBCLASS (AcDbIndex)
+  FIELD_TIMEBLL (last_updated, 40);
   SUBCLASS (AcDbSpatialIndex)
-  FIELD_BL (timestamp1, 0);
-  FIELD_BL (timestamp2, 0);
+  FIELD_BD (num1, 40);
+  FIELD_BD (num2, 40);
+  FIELD_BD (num3, 40);
+  FIELD_BD (num4, 40);
+  FIELD_BD (num5, 40);
+  FIELD_BD (num6, 40);
+  FIELD_BL (num_hdls, 90);
+  HANDLE_VECTOR (hdls, num_hdls, 5, 330);
+  FIELD_BL (bindata_size, 90);
+  FIELD_BINARY (bindata, FIELD_VALUE (bindata_size), 310);
+  DXF { VALUE_TFF ("END ACDBSPATIALINDEX BINARY DATA", 1); }
 
   START_OBJECT_HANDLE_STREAM;
 

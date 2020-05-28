@@ -41067,52 +41067,83 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
   Dwg_Object_SPATIAL_INDEX *restrict spatial_index = obj->tio.object->tio.SPATIAL_INDEX;
   failed = 0;
   {
+    BITCODE_TF bindata;
+    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "bindata", &bindata, NULL)
+        && !memcmp (&bindata, &spatial_index->bindata, sizeof (spatial_index->bindata)))
+        pass ();
+    else
+        fail ("SPATIAL_INDEX.bindata [TF]");
+  }
+  {
+    BITCODE_BL bindata_size;
+    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "bindata_size", &bindata_size, NULL)
+        && bindata_size == spatial_index->bindata_size)
+      pass ();
+    else
+      fail ("SPATIAL_INDEX.bindata_size [BL] %u != %u", spatial_index->bindata_size, bindata_size);
+    bindata_size++;
+    if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "bindata_size", &bindata_size, 0)
+        && bindata_size == spatial_index->bindata_size)
+      pass ();
+    else
+      fail ("SPATIAL_INDEX.bindata_size [BL] set+1 %u != %u", spatial_index->bindata_size, bindata_size);
+    spatial_index->bindata_size--;
+  }
+  {
+    BITCODE_H* hdls;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "num_hdls", &count, NULL)
+        && dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "hdls", &hdls, NULL)
+        && hdls == spatial_index->hdls)
+      pass ();
+    else
+      fail ("SPATIAL_INDEX.hdls [H*] * %u num_hdls", count);
+  }
+  {
+    BITCODE_TIMEBLL last_updated;
+    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "last_updated", &last_updated, NULL)
+        && !memcmp (&last_updated, &spatial_index->last_updated, sizeof (spatial_index->last_updated)))
+        pass ();
+    else
+        fail ("SPATIAL_INDEX.last_updated [TIMEBLL]");
+  }
+  {
+    BITCODE_BD num1;
+    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "num1", &num1, NULL)
+        && num1 == spatial_index->num1)
+      pass ();
+    else
+      fail ("SPATIAL_INDEX.num1 [BD] %g != %g", spatial_index->num1, num1);
+    num1++;
+    if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "num1", &num1, 0)
+        && num1 == spatial_index->num1)
+      pass ();
+    else
+      fail ("SPATIAL_INDEX.num1 [BD] set+1 %g != %g", spatial_index->num1, num1);
+    spatial_index->num1--;
+  }
+  {
+    BITCODE_BL num_hdls;
+    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "num_hdls", &num_hdls, NULL)
+        && num_hdls == spatial_index->num_hdls)
+      pass ();
+    else
+      fail ("SPATIAL_INDEX.num_hdls [BL] %u != %u", spatial_index->num_hdls, num_hdls);
+    num_hdls++;
+    if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "num_hdls", &num_hdls, 0)
+        && num_hdls == spatial_index->num_hdls)
+      pass ();
+    else
+      fail ("SPATIAL_INDEX.num_hdls [BL] set+1 %u != %u", spatial_index->num_hdls, num_hdls);
+    spatial_index->num_hdls--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "parent", &parent, NULL)
         && !memcmp (&parent, &spatial_index->parent, sizeof (spatial_index->parent)))
         pass ();
     else
         fail ("SPATIAL_INDEX.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_BL timestamp1;
-    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "timestamp1", &timestamp1, NULL)
-        && timestamp1 == spatial_index->timestamp1)
-      pass ();
-    else
-      fail ("SPATIAL_INDEX.timestamp1 [BL] %u != %u", spatial_index->timestamp1, timestamp1);
-    timestamp1++;
-    if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "timestamp1", &timestamp1, 0)
-        && timestamp1 == spatial_index->timestamp1)
-      pass ();
-    else
-      fail ("SPATIAL_INDEX.timestamp1 [BL] set+1 %u != %u", spatial_index->timestamp1, timestamp1);
-    spatial_index->timestamp1--;
-  }
-  {
-    BITCODE_BL timestamp2;
-    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "timestamp2", &timestamp2, NULL)
-        && timestamp2 == spatial_index->timestamp2)
-      pass ();
-    else
-      fail ("SPATIAL_INDEX.timestamp2 [BL] %u != %u", spatial_index->timestamp2, timestamp2);
-    timestamp2++;
-    if (dwg_dynapi_entity_set_value (spatial_index, "SPATIAL_INDEX", "timestamp2", &timestamp2, 0)
-        && timestamp2 == spatial_index->timestamp2)
-      pass ();
-    else
-      fail ("SPATIAL_INDEX.timestamp2 [BL] set+1 %u != %u", spatial_index->timestamp2, timestamp2);
-    spatial_index->timestamp2--;
-  }
-  {
-    BITCODE_TV unknown;
-    if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "unknown", &unknown, NULL)
-        && unknown
-           ? strEQ ((char *)unknown, (char *)spatial_index->unknown)
-           : !spatial_index->unknown)
-      pass ();
-    else
-      fail ("SPATIAL_INDEX.unknown [TV] '%s' <> '%s'", unknown, spatial_index->unknown);
   }
   if (failed && (is_class_unstable ("SPATIAL_INDEX") || is_class_debugging ("SPATIAL_INDEX")))
     {
