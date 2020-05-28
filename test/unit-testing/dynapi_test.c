@@ -39782,19 +39782,19 @@ static int test_SCALE (const Dwg_Object *obj)
     scale->flag--;
   }
   {
-    BITCODE_B has_unit_scale;
-    if (dwg_dynapi_entity_value (scale, "SCALE", "has_unit_scale", &has_unit_scale, NULL)
-        && has_unit_scale == scale->has_unit_scale)
+    BITCODE_B is_unit_scale;
+    if (dwg_dynapi_entity_value (scale, "SCALE", "is_unit_scale", &is_unit_scale, NULL)
+        && is_unit_scale == scale->is_unit_scale)
       pass ();
     else
-      fail ("SCALE.has_unit_scale [B] " FORMAT_B " != " FORMAT_B "", scale->has_unit_scale, has_unit_scale);
-    has_unit_scale++;
-    if (dwg_dynapi_entity_set_value (scale, "SCALE", "has_unit_scale", &has_unit_scale, 0)
-        && has_unit_scale == scale->has_unit_scale)
+      fail ("SCALE.is_unit_scale [B] " FORMAT_B " != " FORMAT_B "", scale->is_unit_scale, is_unit_scale);
+    is_unit_scale++;
+    if (dwg_dynapi_entity_set_value (scale, "SCALE", "is_unit_scale", &is_unit_scale, 0)
+        && is_unit_scale == scale->is_unit_scale)
       pass ();
     else
-      fail ("SCALE.has_unit_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", scale->has_unit_scale, has_unit_scale);
-    scale->has_unit_scale--;
+      fail ("SCALE.is_unit_scale [B] set+1 " FORMAT_B " != " FORMAT_B "", scale->is_unit_scale, is_unit_scale);
+    scale->is_unit_scale--;
   }
   {
     BITCODE_T name;

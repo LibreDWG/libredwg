@@ -6742,7 +6742,7 @@ static const Dwg_DYNAPI_field _dwg_SCALE_fields[] = {
     0,0,0, 140 },
   { "drawing_units",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SCALE, drawing_units),
     0,0,0, 141 },
-  { "has_unit_scale",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SCALE, has_unit_scale),
+  { "is_unit_scale",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SCALE, is_unit_scale),
     0,0,0, 290 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

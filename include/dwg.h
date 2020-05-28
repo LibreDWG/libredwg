@@ -3983,11 +3983,11 @@ typedef struct _dwg_object_SCALE
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BS flag;
+  BITCODE_BS flag; /* 1: is_temporary */
   BITCODE_TV name;
   BITCODE_BD paper_units;
   BITCODE_BD drawing_units;
-  BITCODE_B has_unit_scale;
+  BITCODE_B is_unit_scale;
 } Dwg_Object_SCALE;
 
 /**

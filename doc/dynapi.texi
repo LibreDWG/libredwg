@@ -7672,7 +7672,7 @@ T,	DXF 300
 BD,	DXF 140
 @item drawing_units
 BD,	DXF 141
-@item has_unit_scale
+@item is_unit_scale
 B,	DXF 290
 
 @end vtable
