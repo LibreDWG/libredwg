@@ -3014,10 +3014,10 @@ DWG_OBJECT (UCS)
   }
   SINCE (R_2000)
   {
-    FIELD_BD (elevation, 146); // DXF optional since ver 22
-    FIELD_HANDLE (base_ucs, DWG_HDL_HARDPTR, 346);
-    FIELD_HANDLE (named_ucs, DWG_HDL_HARDPTR, 0);
+    FIELD_BD0 (elevation, 146);
     FIELD_BS (orthographic_view_type, 79);
+    FIELD_HANDLE0 (base_ucs, DWG_HDL_HARDPTR, 346);
+    FIELD_HANDLE (named_ucs, DWG_HDL_HARDPTR, 0);
 
     FIELD_BS (num_orthopts, 0);
     REPEAT (num_orthopts, orthopts, Dwg_UCS_orthopts)
