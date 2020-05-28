@@ -4853,11 +4853,22 @@ DWG_OBJECT (SORTENTSTABLE)
   SUBCLASS (AcDbSortentsTable)
   FIELD_BL (num_ents, 0);
   VALUEOUTOFBOUNDS (num_ents, 50000)
-  HANDLE_VECTOR (sort_ents, num_ents, 0, 5);
+  // read these handles from the normal stream
+  str_dat = hdl_dat; hdl_dat = dat;
+  HANDLE_VECTOR (sort_ents, num_ents, 0, 0);
+  hdl_dat = str_dat;
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (dictionary, 4, 0);
-  HANDLE_VECTOR_N (ents, FIELD_VALUE (num_ents), 4, 331);
+  //FIELD_HANDLE (dictionary, 4, 0); //??
+  HANDLE_VECTOR_N (ents, FIELD_VALUE (num_ents), 4, 0);
+
+  DXF {
+    for (vcount = 0; vcount < _obj->num_ents; vcount++)
+      {
+        FIELD_HANDLE (ents[vcount], 4, 331);
+        FIELD_HANDLE (sort_ents[vcount], 0, 5);
+      }
+  }
 
 DWG_OBJECT_END
 
