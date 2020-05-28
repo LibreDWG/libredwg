@@ -7878,7 +7878,7 @@ struct _dwg_object_object*
 BL
 @item sort_ents
 H*,	DXF 5
-@item dictionary
+@item block_owner
 H
 @item ents
 H*,	DXF 331
@@ -7895,16 +7895,16 @@ H*,	DXF 331
 
 @item parent
 struct _dwg_object_object*
-@item num_points
+@item num_clip_verts
 BS,	DXF 70
-@item points
+@item clip_verts
 2RD*,	DXF 10
 @item extrusion
 BE,	DXF 210
-@item clip_bound_origin
+@item origin
 3BD,	DXF 10
-@item display_boundary
-BS,	DXF 71
+@item display_boundary_on
+BS
 @item front_clip_on
 BS,	DXF 72
 @item front_clip_dist
@@ -7913,9 +7913,9 @@ BD,	DXF 40
 BS,	DXF 73
 @item back_clip_dist
 BD,	DXF 41
-@item inverse_block_transform
+@item inverse_transform
 BD*,	DXF 40
-@item clip_bound_transform
+@item transform
 BD*,	DXF 40
 
 @end vtable

@@ -6920,7 +6920,7 @@ static const Dwg_DYNAPI_field _dwg_SORTENTSTABLE_fields[] = {
     0,0,0, 0 },
   { "sort_ents",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_SORTENTSTABLE, sort_ents),
     1,1,0, 5 },
-  { "dictionary",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SORTENTSTABLE, dictionary),
+  { "block_owner",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SORTENTSTABLE, block_owner),
     1,0,0, 0 },
   { "ents",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_SORTENTSTABLE, ents),
     1,1,0, 331 },
@@ -6930,16 +6930,16 @@ static const Dwg_DYNAPI_field _dwg_SORTENTSTABLE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_SPATIAL_FILTER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_SPATIAL_FILTER, parent),
     1,1,0, 0 },
-  { "num_points",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SPATIAL_FILTER, num_points),
+  { "num_clip_verts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SPATIAL_FILTER, num_clip_verts),
     0,0,0, 70 },
-  { "points",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_object_SPATIAL_FILTER, points),
+  { "clip_verts",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_object_SPATIAL_FILTER, clip_verts),
     1,1,0, 10 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_object_SPATIAL_FILTER, extrusion),
     0,0,0, 210 },
-  { "clip_bound_origin",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_SPATIAL_FILTER, clip_bound_origin),
+  { "origin",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_SPATIAL_FILTER, origin),
     1,0,0, 10 },
-  { "display_boundary",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SPATIAL_FILTER, display_boundary),
-    0,0,0, 71 },
+  { "display_boundary_on",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SPATIAL_FILTER, display_boundary_on),
+    0,0,0, 0 },
   { "front_clip_on",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SPATIAL_FILTER, front_clip_on),
     0,0,0, 72 },
   { "front_clip_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SPATIAL_FILTER, front_clip_dist),
@@ -6948,9 +6948,9 @@ static const Dwg_DYNAPI_field _dwg_SPATIAL_FILTER_fields[] = {
     0,0,0, 73 },
   { "back_clip_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SPATIAL_FILTER, back_clip_dist),
     0,0,0, 41 },
-  { "inverse_block_transform",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_SPATIAL_FILTER, inverse_block_transform),
+  { "inverse_transform",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_SPATIAL_FILTER, inverse_transform),
     1,1,0, 40 },
-  { "clip_bound_transform",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_SPATIAL_FILTER, clip_bound_transform),
+  { "transform",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_SPATIAL_FILTER, transform),
     1,1,0, 40 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -9991,7 +9991,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 1468 "gen-dynapi.pl"
+#line 1470 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

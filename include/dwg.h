@@ -3999,7 +3999,7 @@ typedef struct _dwg_object_SORTENTSTABLE
 
   BITCODE_BL num_ents;
   BITCODE_H* sort_ents;
-  BITCODE_H dictionary;
+  BITCODE_H block_owner; // mspace or pspace
   BITCODE_H* ents;
 } Dwg_Object_SORTENTSTABLE;
 
@@ -4010,17 +4010,17 @@ typedef struct _dwg_object_SPATIAL_FILTER
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BS num_points;
-  BITCODE_2RD* points;
+  BITCODE_BS num_clip_verts;
+  BITCODE_2RD* clip_verts;
   BITCODE_BE extrusion;
-  BITCODE_3BD clip_bound_origin;
-  BITCODE_BS display_boundary;
+  BITCODE_3BD origin;
+  BITCODE_BS display_boundary_on;
   BITCODE_BS front_clip_on;
   BITCODE_BD front_clip_dist;
   BITCODE_BS back_clip_on;
   BITCODE_BD back_clip_dist;
-  BITCODE_BD* inverse_block_transform;
-  BITCODE_BD* clip_bound_transform;
+  BITCODE_BD* inverse_transform;
+  BITCODE_BD* transform;
 } Dwg_Object_SPATIAL_FILTER;
 
 /**

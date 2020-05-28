@@ -4853,13 +4853,13 @@ DWG_OBJECT (SORTENTSTABLE)
   SUBCLASS (AcDbSortentsTable)
   FIELD_BL (num_ents, 0);
   VALUEOUTOFBOUNDS (num_ents, 50000)
-  // read these handles from the normal stream
+  // read these code 0 handles from the normal stream
   str_dat = hdl_dat; hdl_dat = dat;
   HANDLE_VECTOR (sort_ents, num_ents, 0, 0);
   hdl_dat = str_dat;
 
   START_OBJECT_HANDLE_STREAM;
-  //FIELD_HANDLE (dictionary, 4, 0); //??
+  FIELD_HANDLE (block_owner, 4, 0); // mspace or pspace
   HANDLE_VECTOR_N (ents, FIELD_VALUE (num_ents), 4, 0);
 
   DXF {
@@ -4875,12 +4875,13 @@ DWG_OBJECT_END
 //pg.222, 20.4.94 to clip external references
 DWG_OBJECT (SPATIAL_FILTER)
 
+  SUBCLASS (AcDbFilter)
   SUBCLASS (AcDbSpatialFilter)
-  FIELD_BS (num_points, 70);
-  VALUEOUTOFBOUNDS (num_points, 10000)
-  FIELD_2RD_VECTOR (points, num_points, 10);
+  FIELD_BS (num_clip_verts, 70);
+  VALUEOUTOFBOUNDS (num_clip_verts, 10000)
+  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 10);
   FIELD_3BD (extrusion, 210);
-  FIELD_3BD (clip_bound_origin, 10);
+  FIELD_3BD (origin, 10);
   FIELD_BS (display_boundary, 71);
   FIELD_BS (front_clip_on, 72);
   if (FIELD_VALUE (front_clip_on) == 1)
@@ -4890,8 +4891,8 @@ DWG_OBJECT (SPATIAL_FILTER)
   if (FIELD_VALUE (back_clip_on) == 1)
     FIELD_BD (back_clip_dist, 41);
 
-  FIELD_VECTOR_N (inverse_block_transform, BD, 12, 40);
-  FIELD_VECTOR_N (clip_bound_transform, BD, 12, 40);
+  FIELD_VECTOR_N (inverse_transform, BD, 12, 40);
+  FIELD_VECTOR_N (transform, BD, 12, 40);
 
   START_OBJECT_HANDLE_STREAM;
 

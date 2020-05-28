@@ -40848,12 +40848,12 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
   Dwg_Object_SORTENTSTABLE *restrict sortentstable = obj->tio.object->tio.SORTENTSTABLE;
   failed = 0;
   {
-    BITCODE_H dictionary;
-    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "dictionary", &dictionary, NULL)
-        && !memcmp (&dictionary, &sortentstable->dictionary, sizeof (sortentstable->dictionary)))
+    BITCODE_H block_owner;
+    if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "block_owner", &block_owner, NULL)
+        && !memcmp (&block_owner, &sortentstable->block_owner, sizeof (sortentstable->block_owner)))
         pass ();
     else
-        fail ("SORTENTSTABLE.dictionary [H]");
+        fail ("SORTENTSTABLE.block_owner [H]");
   }
   {
     BITCODE_H* ents;
@@ -40942,35 +40942,29 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     spatial_filter->back_clip_on--;
   }
   {
-    BITCODE_3BD clip_bound_origin;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "clip_bound_origin", &clip_bound_origin, NULL)
-        && !memcmp (&clip_bound_origin, &spatial_filter->clip_bound_origin, sizeof (spatial_filter->clip_bound_origin)))
-        pass ();
-    else
-        fail ("SPATIAL_FILTER.clip_bound_origin [3BD]");
-  }
-  {
-    BITCODE_BD* clip_bound_transform;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "clip_bound_transform", &clip_bound_transform, NULL)
-        && !memcmp (&clip_bound_transform, &spatial_filter->clip_bound_transform, sizeof (spatial_filter->clip_bound_transform)))
-        pass ();
-    else
-        fail ("SPATIAL_FILTER.clip_bound_transform [BD*]");
-  }
-  {
-    BITCODE_BS display_boundary;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "display_boundary", &display_boundary, NULL)
-        && display_boundary == spatial_filter->display_boundary)
+    BITCODE_2RD* clip_verts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "num_clip_verts", &count, NULL)
+        && dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "clip_verts", &clip_verts, NULL)
+        && clip_verts == spatial_filter->clip_verts)
       pass ();
     else
-      fail ("SPATIAL_FILTER.display_boundary [BS] %hu != %hu", spatial_filter->display_boundary, display_boundary);
-    display_boundary++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "display_boundary", &display_boundary, 0)
-        && display_boundary == spatial_filter->display_boundary)
+      fail ("SPATIAL_FILTER.clip_verts [2RD*] * %u num_clip_verts", count);
+  }
+  {
+    BITCODE_BS display_boundary_on;
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "display_boundary_on", &display_boundary_on, NULL)
+        && display_boundary_on == spatial_filter->display_boundary_on)
       pass ();
     else
-      fail ("SPATIAL_FILTER.display_boundary [BS] set+1 %hu != %hu", spatial_filter->display_boundary, display_boundary);
-    spatial_filter->display_boundary--;
+      fail ("SPATIAL_FILTER.display_boundary_on [BS] %hu != %hu", spatial_filter->display_boundary_on, display_boundary_on);
+    display_boundary_on++;
+    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "display_boundary_on", &display_boundary_on, 0)
+        && display_boundary_on == spatial_filter->display_boundary_on)
+      pass ();
+    else
+      fail ("SPATIAL_FILTER.display_boundary_on [BS] set+1 %hu != %hu", spatial_filter->display_boundary_on, display_boundary_on);
+    spatial_filter->display_boundary_on--;
   }
   {
     BITCODE_BE extrusion;
@@ -41011,27 +41005,35 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     spatial_filter->front_clip_on--;
   }
   {
-    BITCODE_BD* inverse_block_transform;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "inverse_block_transform", &inverse_block_transform, NULL)
-        && !memcmp (&inverse_block_transform, &spatial_filter->inverse_block_transform, sizeof (spatial_filter->inverse_block_transform)))
+    BITCODE_BD* inverse_transform;
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "inverse_transform", &inverse_transform, NULL)
+        && !memcmp (&inverse_transform, &spatial_filter->inverse_transform, sizeof (spatial_filter->inverse_transform)))
         pass ();
     else
-        fail ("SPATIAL_FILTER.inverse_block_transform [BD*]");
+        fail ("SPATIAL_FILTER.inverse_transform [BD*]");
   }
   {
-    BITCODE_BS num_points;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "num_points", &num_points, NULL)
-        && num_points == spatial_filter->num_points)
+    BITCODE_BS num_clip_verts;
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "num_clip_verts", &num_clip_verts, NULL)
+        && num_clip_verts == spatial_filter->num_clip_verts)
       pass ();
     else
-      fail ("SPATIAL_FILTER.num_points [BS] %hu != %hu", spatial_filter->num_points, num_points);
-    num_points++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "num_points", &num_points, 0)
-        && num_points == spatial_filter->num_points)
+      fail ("SPATIAL_FILTER.num_clip_verts [BS] %hu != %hu", spatial_filter->num_clip_verts, num_clip_verts);
+    num_clip_verts++;
+    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "num_clip_verts", &num_clip_verts, 0)
+        && num_clip_verts == spatial_filter->num_clip_verts)
       pass ();
     else
-      fail ("SPATIAL_FILTER.num_points [BS] set+1 %hu != %hu", spatial_filter->num_points, num_points);
-    spatial_filter->num_points--;
+      fail ("SPATIAL_FILTER.num_clip_verts [BS] set+1 %hu != %hu", spatial_filter->num_clip_verts, num_clip_verts);
+    spatial_filter->num_clip_verts--;
+  }
+  {
+    BITCODE_3BD origin;
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "origin", &origin, NULL)
+        && !memcmp (&origin, &spatial_filter->origin, sizeof (spatial_filter->origin)))
+        pass ();
+    else
+        fail ("SPATIAL_FILTER.origin [3BD]");
   }
   {
     struct _dwg_object_object* parent;
@@ -41042,14 +41044,14 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         fail ("SPATIAL_FILTER.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_2RD* points;
+    BITCODE_BD* transform;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "num_points", &count, NULL)
-        && dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "points", &points, NULL)
-        && points == spatial_filter->points)
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "num_transform", &count, NULL)
+        && dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "transform", &transform, NULL)
+        && transform == spatial_filter->transform)
       pass ();
     else
-      fail ("SPATIAL_FILTER.points [2RD*] * %u num_points", count);
+      fail ("SPATIAL_FILTER.transform [BD*] * %u num_transform", count);
   }
   if (failed && (is_class_unstable ("SPATIAL_FILTER") || is_class_debugging ("SPATIAL_FILTER")))
     {
@@ -46440,7 +46442,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 46443 "dynapi_test.c"
+#line 46445 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -47196,7 +47198,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 47199 "dynapi_test.c"
+#line 47201 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");

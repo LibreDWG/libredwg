@@ -402,6 +402,18 @@ main (int argc, char *argv[])
               strcat (tmp, "2000/5.dwg");
               error += test_code (tmp, cov);
             }
+          if (DWG_TYPE == DWG_TYPE_SPATIAL_FILTER)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "gh44-error.dwg");
+              error += test_code (tmp, cov);
+              if (g_countmax == 1000) // only with -a
+                {
+                  strcpy (tmp, prefix);
+                  strcat (tmp, "../test-big/2007/big.dwg");
+                  error += test_code (tmp, cov);
+                }
+            }
           if (DWG_TYPE == DWG_TYPE_SECTIONOBJECT ||
               DWG_TYPE == DWG_TYPE_SECTION_MANAGER ||
               DWG_TYPE == DWG_TYPE_SECTION_SETTINGS)
