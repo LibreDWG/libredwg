@@ -4853,11 +4853,11 @@ DWG_OBJECT (SPATIAL_FILTER)
   FIELD_3BD (origin, 10);
   FIELD_BS (display_boundary_on, 71);
   FIELD_BS (front_clip_on, 72);
-  if (FIELD_VALUE (front_clip_on) == 1)
+  if (FIELD_VALUE (front_clip_on))
     FIELD_BD (front_clip_dist, 40);
 
   FIELD_BS (back_clip_on, 73);
-  if (FIELD_VALUE (back_clip_on) == 1)
+  if (FIELD_VALUE (back_clip_on))
     FIELD_BD (back_clip_dist, 41);
 
   FIELD_VECTOR_N (inverse_transform, BD, 12, 40);
@@ -5826,7 +5826,6 @@ DWG_OBJECT_END
 /// DXF as ACDBPLACEHOLDER
 DWG_OBJECT (PLACEHOLDER)
   // no own data members
-  START_OBJECT_HANDLE_STREAM;
   // no SUBCLASS marker
 DWG_OBJECT_END
 
@@ -5834,12 +5833,11 @@ DWG_OBJECT_END
 // 20.4.92 page 221
 DWG_OBJECT (SCALE)
   SUBCLASS (AcDbScale)
-  FIELD_BS (flag, 70);
+  FIELD_BS (flag, 70); // always 0
   FIELD_T (name, 300);
   FIELD_BD (paper_units, 140);
   FIELD_BD (drawing_units, 141);
   FIELD_B (is_unit_scale, 290);
-  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // VBA_PROJECT (81 + varies), a blob
