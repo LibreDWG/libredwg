@@ -1,23 +1,30 @@
 #!/bin/sh
 # create logs for all DWGs - serial (slow)
 srcdir="@srcdir@"
+abs_builddir="@abs_builddir@"
 
 make -s -j4
 
+echo test/test-data/
 for d in "$srcdir"/test/test-data/2*/*.dwg "$srcdir"/test/test-data/r*/*.dwg; do
     xd="$(dirname "$d")"
     dir="$(basename "$xd")"
-    log="$(basename "$d" .dwg)_$dir.log"
+    log="$(basename "$d" .dwg)_${dir}.log"
     echo "$d" || exit
     @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>"$log"
     #(sleep 10s; kill %1 2>/dev/null) &
 done
+echo test/test-data
 for d in "$srcdir"/test/test-data/*.dwg; do
     log="$(basename "$d" .dwg).log"
     echo "$d" || exit
     @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>"$log"
     #(sleep 10s; kill %1 2>/dev/null) &
 done
+
+if test -d "$srcdir/test/test-big"; then
+    echo test/test-big/
+fi
 for d in "$srcdir"/test/test-big/2*/*.dwg; do
     xd="$(dirname "$d")"
     dir="$(basename "$xd")"
@@ -26,6 +33,25 @@ for d in "$srcdir"/test/test-big/2*/*.dwg; do
     @TIMEOUT_30@ ./libtool --mode=execute programs/dwgread -v3 "$d" 2>"$log"
     #(sleep 10s; kill %1 2>/dev/null) &
 done
+
+if test -d "$srcdir/test/test-old"
+then
+    echo test/test-old
+    cd "$srcdir/test/test-old" || exit
+    for d in AC*
+    do
+        cd "$d" || exit
+        for f in */*.dwg
+        do
+            xd="$(dirname "$f")"
+            dir="$(basename "$xd")"
+            log="$(basename "$f" .dwg)_${dir}_${d}.log"
+            @TIMEOUT_10@ "$abs_builddir"/libtool --mode=execute "$abs_builddir"/programs/dwgread -v4 "$f" 2>"$abs_builddir/$log"
+        done
+        cd .. || exit
+    done
+    cd "$abs_builddir" || exit
+fi
 
 #with background killing we would need to wait for all processes to end
 # while pgrep dwgread; do sleep 1; done
