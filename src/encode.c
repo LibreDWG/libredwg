@@ -1808,26 +1808,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         switch (dwg->header.version)
           {
           case R_9:
-            _obj->dwg_version = 0x11; // ?
+            _obj->dwg_version = 0x0b;
             break;
           case R_10:
-            _obj->dwg_version = 0x12; // ?
+            _obj->dwg_version = 0x0d;
             break;
           case R_11:
-            _obj->dwg_version = 0x13; // ?
+            _obj->dwg_version = 0x10;
             break;
           case R_13:
-            _obj->dwg_version = 0x15;
+            _obj->dwg_version = 0x13;
+            break;
+          case R_13c3:
+            _obj->dwg_version = 0x14;
             break;
           case R_14:
-            _obj->dwg_version = 0x16;
+            _obj->dwg_version = 0x15;
             break;
           case R_2000:
             _obj->dwg_version = 0x17;
             _obj->is_maint = 0xf;
             break;
           case R_2004:
-            _obj->dwg_version = 0x19;
+            _obj->dwg_version = 0x19; // or 0x18
             _obj->is_maint = 0x68;
             break;
           case R_2007:
@@ -1854,6 +1857,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           case R_1_4:
           case R_2_0:
           case R_2_1:
+          case R_2_4:
           case R_2_5:
           case R_2_6:
           default:

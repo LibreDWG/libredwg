@@ -899,7 +899,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* section 0: header vars
    *         1: class section
    *         2: object map
-   *         3: (R13 c3 and later): 2nd header (special table, no sentinels)
+   *         3: (R13c3 and later): 2nd header (special table, no sentinels)
    *         4: optional: MEASUREMENT
    *         5: optional: AuxHeader (no sentinels)
    */
@@ -973,7 +973,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   /*-------------------------------------------------------------------------
-   * Picture (Pre-R13C3?)
+   * Picture (Pre-R13C3)
    */
 
   if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN)))
@@ -1335,7 +1335,7 @@ classes_section:
    */
 
   /*-------------------------------------------------------------------------
-   * Second header, section 3. R13-R2000 only.
+   * Second header, section 3. R13c3-R2000 only.
    * But partially also since r2004.
    */
 
@@ -1376,7 +1376,7 @@ classes_section:
               = dwg->second_header.size;
         }
 
-      // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
+      // AC1012, AC1013, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
       bit_read_fixed (dat, _obj->version, 12);
       LOG_TRACE ("version: %s [TFF 12]\n", _obj->version)
@@ -1449,7 +1449,7 @@ classes_section:
     }
 
   /*-------------------------------------------------------------------------
-   * Section 4: MEASUREMENT
+   * Section 4: MEASUREMENT (Called PADDING section in the ODA)
    */
 
   if (dwg->header.num_sections > 4)

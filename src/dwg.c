@@ -2455,6 +2455,8 @@ dwg_version_as (const char *version)
     return R_14;
   else if (strEQc (version, "r13"))
     return R_13;
+  else if (strEQc (version, "r13c3"))
+    return R_13c3;
   else if (strEQc (version, "r11") || strEQc (version, "r12"))
     return R_11;
   else if (strEQc (version, "r10"))
@@ -2465,6 +2467,8 @@ dwg_version_as (const char *version)
     return R_2_6;
   else if (strEQc (version, "r2.5"))
     return R_2_5;
+  else if (strEQc (version, "r2.4"))
+    return R_2_4;
   else if (strEQc (version, "r2.1"))
     return R_2_1;
   else if (strEQc (version, "r2.0"))
@@ -2501,6 +2505,8 @@ dwg_version_type (const Dwg_Version_Type version)
       return "r2.0";
     case R_2_1:
       return "r2.1";
+    case R_2_4:
+      return "r2.4";
     case R_2_5:
       return "r2.5";
     case R_2_6:
@@ -2513,6 +2519,8 @@ dwg_version_type (const Dwg_Version_Type version)
       return "r11";
     case R_13:
       return "r13";
+    case R_13c3:
+      return "r13c3";
     case R_14:
       return "r14";
     case R_2000:

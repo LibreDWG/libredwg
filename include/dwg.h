@@ -255,12 +255,14 @@ typedef enum DWG_VERSION_TYPE
   R_1_4,	/* AC1.40 AutoCAD Release 1.4 */
   R_2_0,	/* AC1.50 AutoCAD Release 2.0 */
   R_2_1,	/* AC2.10 AutoCAD Release 2.10 */
+  R_2_4,	/* AC1001 AutoCAD Release 2.4 */
   R_2_5,	/* AC1002 AutoCAD Release 2.5 */
   R_2_6,	/* AC1003 AutoCAD Release 2.6 */
   R_9,		/* AC1004 AutoCAD Release 9 */
   R_10,		/* AC1006 AutoCAD Release 10 */
   R_11,		/* AC1009 AutoCAD Release 11/12 (LT R1/R2) */
   R_13,		/* AC1012 AutoCAD Release 13 */
+  R_13c3,	/* AC1013 AutoCAD Release 13C3 */
   R_14,		/* AC1014 AutoCAD Release 14 */
   R_2000,	/* AC1015 AutoCAD Release 2000 */
   R_2004,	/* AC1018 AutoCAD Release 2004 */
