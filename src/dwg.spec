@@ -4141,18 +4141,27 @@ DWG_OBJECT (LAYOUT)
 
   SUBCLASS (AcDbLayout)
   FIELD_T (layout_name, 1);
+  DXF {
+    FIELD_BS (layout_flags, 70);
+  }
   FIELD_BS (tab_order, 71);
-  FIELD_BSx (layout_flags, 70);
-  FIELD_3DPOINT (INSBASE, 12);
+  FIELD_BSx (layout_flags, 0);
+  FIELD_3DPOINT (INSBASE, 0);
   FIELD_2RD (LIMMIN, 10);
   FIELD_2RD (LIMMAX, 11);
+  DXF {
+    FIELD_3DPOINT (INSBASE, 12);
+    FIELD_3DPOINT (EXTMIN, 14);
+    FIELD_3DPOINT (EXTMAX, 15);
+    FIELD_BD (ucs_elevation, 146);
+  }
   FIELD_3DPOINT (UCSORG, 13);
   FIELD_3DPOINT (UCSXDIR, 16);
   FIELD_3DPOINT (UCSYDIR, 17);
-  FIELD_BD (ucs_elevation, 146);
+  FIELD_BD (ucs_elevation, 0);
   FIELD_BS (ucs_orthoview_type, 76);
-  FIELD_3DPOINT (EXTMIN, 14);
-  FIELD_3DPOINT (EXTMAX, 15);
+  FIELD_3DPOINT (EXTMIN, 0);
+  FIELD_3DPOINT (EXTMAX, 0);
 
   SINCE (R_2004) {
     FIELD_BL (num_viewports, 0);
@@ -4160,10 +4169,10 @@ DWG_OBJECT (LAYOUT)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (block_header, 4, 330); // => BLOCK_HEADER.pspace or mspace (ownerhandle)
-  FIELD_HANDLE (active_viewport, 4, 331);
-  FIELD_HANDLE (base_ucs, 5, 346);
-  FIELD_HANDLE (named_ucs, 5, 345);
+  FIELD_HANDLE (block_header, 4, 330); // => pspace or mspace (owner)
+  FIELD_HANDLE0 (active_viewport, 4, 331);
+  FIELD_HANDLE0 (base_ucs, 5, 346);
+  FIELD_HANDLE0 (named_ucs, 5, 345);
 
   SINCE (R_2004) {
     HANDLE_VECTOR (viewports, num_viewports, 4, 0);
