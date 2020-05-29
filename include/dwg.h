@@ -1611,11 +1611,11 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_RC render_mode;
   BITCODE_B ucs_at_origin;
   BITCODE_B ucs_per_viewport;
-  BITCODE_3BD ucs_origin;
-  BITCODE_3BD ucs_x_axis;
-  BITCODE_3BD ucs_y_axis;
+  BITCODE_3BD ucsorg;
+  BITCODE_3BD ucsxdir;
+  BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_ortho_view_type;
+  BITCODE_BS ucs_orthoview_type;
   BITCODE_BS shadeplot_mode;
   BITCODE_B use_default_lights;
   BITCODE_RC default_lighting_type;
@@ -2194,12 +2194,12 @@ typedef struct _dwg_object_VIEW
   BITCODE_CMC ambient_color;
   BITCODE_B pspace_flag;
   BITCODE_B associated_ucs;
-  BITCODE_3BD origin;
-  BITCODE_3BD x_direction;
-  BITCODE_3BD y_direction;
-  BITCODE_BD elevation;
-  BITCODE_BS orthographic_view_type;
-  BITCODE_B camera_plottable;
+  BITCODE_3BD ucsorg;
+  BITCODE_3BD ucsxdir;
+  BITCODE_3BD ucsydir;
+  BITCODE_BD ucs_elevation;
+  BITCODE_BS ucs_orthoview_type;
+  BITCODE_B is_camera_plottable;
   BITCODE_H background;
   BITCODE_H visualstyle;
   BITCODE_H sun;
@@ -2229,11 +2229,11 @@ typedef struct _dwg_UCS_orthopts
 typedef struct _dwg_object_UCS
 {
   COMMON_TABLE_FIELDS(RC);
-  BITCODE_3BD origin;
-  BITCODE_3BD x_direction;
-  BITCODE_3BD y_direction;
-  BITCODE_BD elevation;
-  BITCODE_BS orthographic_view_type;
+  BITCODE_3BD ucsorg;
+  BITCODE_3BD ucsxdir;
+  BITCODE_3BD ucsydir;
+  BITCODE_BD ucs_elevation;
+  BITCODE_BS ucs_orthoview_type;
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
   BITCODE_BL num_orthopts; // missing in ODA docs
@@ -2287,11 +2287,11 @@ typedef struct _dwg_object_VPORT
   BITCODE_2RD SNAPUNIT;
   BITCODE_B unknown;
   BITCODE_B UCSVP;          /*!< DXF 65 */
-  BITCODE_3BD ucs_origin;
-  BITCODE_3BD ucs_x_axis;
-  BITCODE_3BD ucs_y_axis;
+  BITCODE_3BD ucsorg;
+  BITCODE_3BD ucsxdir;
+  BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthografic_type;
+  BITCODE_BS ucs_orthoview_type;
   BITCODE_BS grid_flags;
   BITCODE_BS grid_major;
   BITCODE_H background;

@@ -3900,26 +3900,26 @@ EXPORT void dwg_ent_viewport_set_snap_spacing (
     dwg_ent_viewport *restrict vp, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT void dwg_ent_viewport_set_ucs_origin (
+EXPORT void dwg_ent_viewport_set_ucsorg (
     dwg_ent_viewport *restrict vp, const dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT void dwg_ent_viewport_get_ucs_origin (
+EXPORT void dwg_ent_viewport_get_ucsorg (
     const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_ucs_x_axis (
+EXPORT void dwg_ent_viewport_set_ucsxdir (
     dwg_ent_viewport *restrict vp, const dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT void dwg_ent_viewport_get_ucs_x_axis (
+EXPORT void dwg_ent_viewport_get_ucsxdir (
     const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_ucs_y_axis (
+EXPORT void dwg_ent_viewport_set_ucsydir (
     dwg_ent_viewport *restrict vp, const dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
-EXPORT void dwg_ent_viewport_get_ucs_y_axis (
+EXPORT void dwg_ent_viewport_get_ucsydir (
     const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
@@ -3932,11 +3932,11 @@ dwg_ent_viewport_get_ucs_elevation (const dwg_ent_viewport *restrict vp,
                                     int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_ucs_ortho_view_type (
+EXPORT void dwg_ent_viewport_set_ucs_orthoview_type (
     dwg_ent_viewport *restrict vp, const BITCODE_BS type, int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
-EXPORT BITCODE_BS dwg_ent_viewport_get_ucs_ortho_view_type (
+EXPORT BITCODE_BS dwg_ent_viewport_get_ucs_orthoview_type (
     const dwg_ent_viewport *restrict vp, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 

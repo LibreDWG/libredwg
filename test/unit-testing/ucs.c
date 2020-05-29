@@ -12,11 +12,11 @@ api_process (dwg_object *obj)
   BITCODE_BS is_xref_resolved;
   BITCODE_B is_xref_dep;
   BITCODE_H xref;
-  BITCODE_3BD origin;
-  BITCODE_3BD x_direction;
-  BITCODE_3BD y_direction;
-  BITCODE_BD elevation;
-  BITCODE_BS orthographic_view_type;
+  BITCODE_3BD ucsorg;
+  BITCODE_3BD ucsxdir;
+  BITCODE_3BD ucsydir;
+  BITCODE_BD ucs_elevation;
+  BITCODE_BS ucs_orthoview_type;
   BITCODE_BS orthographic_type;
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
@@ -34,11 +34,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, UCS, is_xref_dep, B);
   CHK_ENTITY_H (_obj, UCS, xref);
 
-  CHK_ENTITY_3RD (_obj, UCS, origin);
-  CHK_ENTITY_3RD (_obj, UCS, x_direction);
-  CHK_ENTITY_3RD (_obj, UCS, y_direction);
-  CHK_ENTITY_TYPE (_obj, UCS, elevation, BD);
-  CHK_ENTITY_TYPE (_obj, UCS, orthographic_view_type, BS);
+  CHK_ENTITY_3RD (_obj, UCS, ucsorg);
+  CHK_ENTITY_3RD (_obj, UCS, ucsxdir);
+  CHK_ENTITY_3RD (_obj, UCS, ucsydir);
+  CHK_ENTITY_TYPE (_obj, UCS, ucs_elevation, BD);
+  CHK_ENTITY_TYPE (_obj, UCS, ucs_orthoview_type, BS);
   CHK_ENTITY_H (_obj, UCS, base_ucs);
   CHK_ENTITY_H (_obj, UCS, named_ucs);
   CHK_ENTITY_TYPE (_obj, UCS, num_orthopts, BS);

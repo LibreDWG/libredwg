@@ -25,9 +25,9 @@ api_process (dwg_object *obj)
   BITCODE_RC render_mode;
   BITCODE_B ucs_at_origin;
   BITCODE_B ucs_per_viewport;
-  dwg_point_3d ucs_origin, ucs_x_axis, ucs_y_axis;
+  dwg_point_3d ucsorg, ucsxdir, ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_ortho_view_type;
+  BITCODE_BS ucs_orthoview_type;
   BITCODE_BS shadeplot_mode;
   BITCODE_B use_default_lights;
   BITCODE_RC default_lighting_type;
@@ -68,11 +68,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, render_mode, RC);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_at_origin, B);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_per_viewport, B);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_origin);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_x_axis);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucs_y_axis);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucsorg);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucsxdir);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, ucsydir);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_elevation, BD);
-  CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_ortho_view_type, BS);
+  CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, ucs_orthoview_type, BS);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, shadeplot_mode, BS);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, use_default_lights, B);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, default_lighting_type, RC);

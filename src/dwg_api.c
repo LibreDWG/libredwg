@@ -13409,7 +13409,7 @@ dwg_ent_viewport_set_snap_spacing (dwg_ent_viewport *restrict vp,
 /** Sets viewport ucs origin
  */
 void
-dwg_ent_viewport_set_ucs_origin (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_ucsorg (dwg_ent_viewport *restrict vp,
                                  const dwg_point_3d *restrict point,
                                  int *restrict error)
 {
@@ -13420,9 +13420,9 @@ dwg_ent_viewport_set_ucs_origin (dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      vp->ucs_origin.x = point->x;
-      vp->ucs_origin.y = point->y;
-      vp->ucs_origin.z = point->z;
+      vp->ucsorg.x = point->x;
+      vp->ucsorg.y = point->y;
+      vp->ucsorg.z = point->z;
     }
   else
     {
@@ -13434,7 +13434,7 @@ dwg_ent_viewport_set_ucs_origin (dwg_ent_viewport *restrict vp,
 /** Returns viewport ucs origin
  */
 void
-dwg_ent_viewport_get_ucs_origin (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_ucsorg (const dwg_ent_viewport *restrict vp,
                                  dwg_point_3d *restrict point,
                                  int *restrict error)
 {
@@ -13445,9 +13445,9 @@ dwg_ent_viewport_get_ucs_origin (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->ucs_origin.x;
-      point->y = vp->ucs_origin.y;
-      point->z = vp->ucs_origin.z;
+      point->x = vp->ucsorg.x;
+      point->y = vp->ucsorg.y;
+      point->z = vp->ucsorg.z;
     }
   else
     {
@@ -13459,7 +13459,7 @@ dwg_ent_viewport_get_ucs_origin (const dwg_ent_viewport *restrict vp,
 /** Sets viewport ucs X axis
  */
 void
-dwg_ent_viewport_set_ucs_x_axis (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_ucsxdir (dwg_ent_viewport *restrict vp,
                                  const dwg_point_3d *restrict point,
                                  int *restrict error)
 {
@@ -13470,9 +13470,9 @@ dwg_ent_viewport_set_ucs_x_axis (dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      vp->ucs_x_axis.x = point->x;
-      vp->ucs_x_axis.y = point->y;
-      vp->ucs_x_axis.z = point->z;
+      vp->ucsxdir.x = point->x;
+      vp->ucsxdir.y = point->y;
+      vp->ucsxdir.z = point->z;
     }
   else
     {
@@ -13484,7 +13484,7 @@ dwg_ent_viewport_set_ucs_x_axis (dwg_ent_viewport *restrict vp,
 /** Returns viewport ucs X axis
  */
 void
-dwg_ent_viewport_get_ucs_x_axis (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_ucsxdir (const dwg_ent_viewport *restrict vp,
                                  dwg_point_3d *restrict point,
                                  int *restrict error)
 {
@@ -13495,9 +13495,9 @@ dwg_ent_viewport_get_ucs_x_axis (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->ucs_x_axis.x;
-      point->y = vp->ucs_x_axis.y;
-      point->z = vp->ucs_x_axis.z;
+      point->x = vp->ucsxdir.x;
+      point->y = vp->ucsxdir.y;
+      point->z = vp->ucsxdir.z;
     }
   else
     {
@@ -13509,7 +13509,7 @@ dwg_ent_viewport_get_ucs_x_axis (const dwg_ent_viewport *restrict vp,
 /** Sets viewport ucs y axis
  */
 void
-dwg_ent_viewport_set_ucs_y_axis (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_ucsydir (dwg_ent_viewport *restrict vp,
                                  const dwg_point_3d *restrict point,
                                  int *restrict error)
 {
@@ -13520,9 +13520,9 @@ dwg_ent_viewport_set_ucs_y_axis (dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      vp->ucs_y_axis.x = point->x;
-      vp->ucs_y_axis.y = point->y;
-      vp->ucs_y_axis.z = point->z;
+      vp->ucsydir.x = point->x;
+      vp->ucsydir.y = point->y;
+      vp->ucsydir.z = point->z;
     }
   else
     {
@@ -13534,7 +13534,7 @@ dwg_ent_viewport_set_ucs_y_axis (dwg_ent_viewport *restrict vp,
 /** Returns viewport ucs y axis
  */
 void
-dwg_ent_viewport_get_ucs_y_axis (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_ucsydir (const dwg_ent_viewport *restrict vp,
                                  dwg_point_3d *restrict point,
                                  int *restrict error)
 {
@@ -13545,9 +13545,9 @@ dwg_ent_viewport_get_ucs_y_axis (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->ucs_y_axis.x;
-      point->y = vp->ucs_y_axis.y;
-      point->z = vp->ucs_y_axis.z;
+      point->x = vp->ucsydir.x;
+      point->y = vp->ucsydir.y;
+      point->z = vp->ucsydir.z;
     }
   else
     {
@@ -13597,14 +13597,14 @@ dwg_ent_viewport_get_ucs_elevation (const dwg_ent_viewport *restrict vp,
 /** Sets UCS ortho view type
  */
 void
-dwg_ent_viewport_set_ucs_ortho_view_type (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_ucs_orthoview_type (dwg_ent_viewport *restrict vp,
                                           const BITCODE_BS type,
                                           int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      vp->ucs_ortho_view_type = type;
+      vp->ucs_orthoview_type = type;
     }
   else
     {
@@ -13616,13 +13616,13 @@ dwg_ent_viewport_set_ucs_ortho_view_type (dwg_ent_viewport *restrict vp,
 /** Returns UCS ortho view type
  */
 BITCODE_BS
-dwg_ent_viewport_get_ucs_ortho_view_type (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_ucs_orthoview_type (const dwg_ent_viewport *restrict vp,
                                           int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      return vp->ucs_ortho_view_type;
+      return vp->ucs_orthoview_type;
     }
   else
     {

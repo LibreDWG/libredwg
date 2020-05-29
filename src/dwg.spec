@@ -1550,11 +1550,11 @@ DWG_ENTITY (VIEWPORT)
       FIELD_RC (render_mode, 281);
       FIELD_B (ucs_at_origin, 74);
       FIELD_B (ucs_per_viewport, 71);
-      FIELD_3BD (ucs_origin, 110);
-      FIELD_3BD (ucs_x_axis, 111);
-      FIELD_3BD (ucs_y_axis, 112);
+      FIELD_3BD (ucsorg, 110);
+      FIELD_3BD (ucsxdir, 111);
+      FIELD_3BD (ucsydir, 112);
       FIELD_BD (ucs_elevation, 146);
-      FIELD_BS (ucs_ortho_view_type, 79);
+      FIELD_BS (ucs_orthoview_type, 79);
     }
 
   SINCE (R_2004) {
@@ -2949,39 +2949,34 @@ DWG_OBJECT (VIEW)
     FIELD_B (pspace_flag, 0);
     FIELD_VALUE (flag) |= FIELD_VALUE (pspace_flag);
   }
-  SINCE (R_2000)
-    {
-      FIELD_B (associated_ucs, 72);
-
-      if (FIELD_VALUE (associated_ucs) & 1)
-        {
-          FIELD_3BD (origin, 110);
-          FIELD_3BD (x_direction, 111);
-          FIELD_3BD (y_direction, 112);
-          FIELD_BD (elevation, 146);
-          FIELD_BS (orthographic_view_type, 79);
-        }
+  SINCE (R_2000) {
+    FIELD_B (associated_ucs, 72);
+    if (FIELD_VALUE (associated_ucs)) {
+      FIELD_3BD (ucsorg, 110);
+      FIELD_3BD (ucsxdir, 111);
+      FIELD_3BD (ucsydir, 112);
+      FIELD_BD (ucs_elevation, 146);
+      FIELD_BS (ucs_orthoview_type, 79);
     }
+  }
 
   SINCE (R_2007) {
-    FIELD_B (camera_plottable, 73);
+    FIELD_B (is_camera_plottable, 73);
   }
   START_OBJECT_HANDLE_STREAM;
   SINCE (R_2007) {
-    FIELD_HANDLE (background, 4, 332);
-    FIELD_HANDLE (visualstyle, 5, 348);
-    FIELD_HANDLE (sun, 3, 361);
+    FIELD_HANDLE0 (background, 4, 332);
+    FIELD_HANDLE0 (visualstyle, 5, 348);
+    FIELD_HANDLE0 (sun, 3, 361);
   }
-  SINCE (R_2000)
-    {
-      if (FIELD_VALUE (associated_ucs) & 1)
-        {
-          FIELD_HANDLE (base_ucs, 5, 346);
-          FIELD_HANDLE (named_ucs, 5, 345);
-        }
+  SINCE (R_2000) {
+    if (FIELD_VALUE (associated_ucs)) {
+      FIELD_HANDLE (base_ucs, 5, 346);
+      FIELD_HANDLE (named_ucs, 5, 345);
     }
+  }
   SINCE (R_2007) {
-    FIELD_HANDLE (livesection, 4, 334); // a SECTIONOBJECT?
+    FIELD_HANDLE0 (livesection, 4, 334); // a SECTIONOBJECT?
   }
 
 DWG_OBJECT_END
@@ -3000,23 +2995,22 @@ DWG_OBJECT_END
 DWG_OBJECT (UCS)
 
   COMMON_TABLE_FLAGS (Ucs)
-
   PRE (R_13)
   {
-    FIELD_3RD (origin, 10);
-    FIELD_3RD (x_direction, 11);
-    FIELD_3RD (y_direction, 12);
+    FIELD_3RD (ucsorg, 10);
+    FIELD_3RD (ucsxdir, 11);
+    FIELD_3RD (ucsydir, 12);
   }
   LATER_VERSIONS
   {
-    FIELD_3BD (origin, 10);
-    FIELD_3BD (x_direction, 11);
-    FIELD_3BD (y_direction, 12);
+    FIELD_3BD (ucsorg, 10);
+    FIELD_3BD (ucsxdir, 11);
+    FIELD_3BD (ucsydir, 12);
   }
   SINCE (R_2000)
   {
-    FIELD_BD0 (elevation, 146);
-    FIELD_BS (orthographic_view_type, 79);
+    FIELD_BD0 (ucs_elevation, 146);
+    FIELD_BS (ucs_orthoview_type, 79);
     FIELD_HANDLE0 (base_ucs, DWG_HDL_HARDPTR, 346);
     FIELD_HANDLE (named_ucs, DWG_HDL_HARDPTR, 0);
 
@@ -3090,14 +3084,14 @@ DWG_OBJECT (VPORT)
 
   IF_FREE_OR_SINCE (R_2000)
   {
-    FIELD_3BD (ucs_origin, 110);
-    FIELD_3BD (ucs_x_axis, 111);
-    FIELD_3BD (ucs_y_axis, 112);
+    FIELD_3BD (ucsorg, 110);
+    FIELD_3BD (ucsxdir, 111);
+    FIELD_3BD (ucsydir, 112);
     // TODO: skip if empty
     FIELD_HANDLE (named_ucs, 5, 345);
-    if (FIELD_VALUE (ucs_orthografic_type))
+    FIELD_BS (ucs_orthoview_type, 79);
+    if (FIELD_VALUE (ucs_orthoview_type))
       FIELD_HANDLE (base_ucs, 5, 346);
-    FIELD_BS (ucs_orthografic_type, 79);
     FIELD_BD (ucs_elevation, 146);
   }
   IF_FREE_OR_SINCE (R_2007)
@@ -3106,7 +3100,7 @@ DWG_OBJECT (VPORT)
     FIELD_BS (grid_flags, 60);
     FIELD_BS (grid_major, 61);
     FIELD_HANDLE (background, 4, 332);
-    FIELD_HANDLE (sun, 5, 361); //was shade_plot_handle
+    FIELD_HANDLE (sun, 5, 361); //was shadeplot_handle
 
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE (use_default_lights) = 1;
@@ -3222,11 +3216,11 @@ DWG_OBJECT (VPORT)
     {
       FIELD_B (unknown, 0);
       FIELD_B (UCSVP, 65); // bit 0 of 71
-      FIELD_3BD (ucs_origin, 110);
-      FIELD_3BD (ucs_x_axis, 111);
-      FIELD_3BD (ucs_y_axis, 112);
+      FIELD_3BD (ucsorg, 110);
+      FIELD_3BD (ucsxdir, 111);
+      FIELD_3BD (ucsydir, 112);
       FIELD_BD (ucs_elevation, 146);
-      FIELD_BS (ucs_orthografic_type, 79);
+      FIELD_BS (ucs_orthoview_type, 79);
     }
 
     SINCE (R_2007)

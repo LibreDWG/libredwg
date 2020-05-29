@@ -6149,7 +6149,7 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_BLOCK_CONTROL *restrict _ctrl,
                         const char *f)
 {
-  // move out of entries
+  // move out this entry
   for (BITCODE_BL j = 0; j < _ctrl->num_entries; j++)
     {
       if (_ctrl->entries[j]
@@ -6175,7 +6175,7 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_LTYPE_CONTROL *restrict _ctrl,
                         const char *f)
 {
-  // move out of entries
+  // move out this entry (byblock, bylayer, continuous)
   for (BITCODE_BL j = 0; j < _ctrl->num_entries; j++)
     {
       if (_ctrl->entries[j]

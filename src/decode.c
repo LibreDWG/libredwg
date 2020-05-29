@@ -467,9 +467,9 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RC (flag, 70);
           FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
-          FIELD_2RD (origin, 10);
-          FIELD_2RD (x_direction, 11);
-          FIELD_2RD (y_direction, 12);
+          FIELD_2RD (ucsorg, 10);
+          FIELD_2RD (ucsxdir, 11);
+          FIELD_2RD (ucsydir, 12);
 
           CHK_ENDPOS;
         }
