@@ -4259,6 +4259,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dwg_fixup_BLOCKS_entities (dwg);
 
   free (tokens.tokens);
+  free (created_by);
   return error;
 }
 
