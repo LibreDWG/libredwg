@@ -22228,6 +22228,75 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   Dwg_Entity_VIEWPORT *restrict viewport = obj->tio.entity->tio.VIEWPORT;
   failed = 0;
   {
+    BITCODE_2RD GRIDUNIT;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "GRIDUNIT", &GRIDUNIT, NULL)
+        && !memcmp (&GRIDUNIT, &viewport->GRIDUNIT, sizeof (viewport->GRIDUNIT)))
+        pass ();
+    else
+        fail ("VIEWPORT.GRIDUNIT [2RD]");
+  }
+  {
+    BITCODE_BD SNAPANG;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "SNAPANG", &SNAPANG, NULL)
+        && SNAPANG == viewport->SNAPANG)
+      pass ();
+    else
+      fail ("VIEWPORT.SNAPANG [BD] %g != %g", viewport->SNAPANG, SNAPANG);
+    SNAPANG++;
+    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "SNAPANG", &SNAPANG, 0)
+        && SNAPANG == viewport->SNAPANG)
+      pass ();
+    else
+      fail ("VIEWPORT.SNAPANG [BD] set+1 %g != %g", viewport->SNAPANG, SNAPANG);
+    viewport->SNAPANG--;
+  }
+  {
+    BITCODE_2RD SNAPBASE;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "SNAPBASE", &SNAPBASE, NULL)
+        && !memcmp (&SNAPBASE, &viewport->SNAPBASE, sizeof (viewport->SNAPBASE)))
+        pass ();
+    else
+        fail ("VIEWPORT.SNAPBASE [2RD]");
+  }
+  {
+    BITCODE_2RD SNAPUNIT;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "SNAPUNIT", &SNAPUNIT, NULL)
+        && !memcmp (&SNAPUNIT, &viewport->SNAPUNIT, sizeof (viewport->SNAPUNIT)))
+        pass ();
+    else
+        fail ("VIEWPORT.SNAPUNIT [2RD]");
+  }
+  {
+    BITCODE_BS UCSORTHOVIEW;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "UCSORTHOVIEW", &UCSORTHOVIEW, NULL)
+        && UCSORTHOVIEW == viewport->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("VIEWPORT.UCSORTHOVIEW [BS] %hu != %hu", viewport->UCSORTHOVIEW, UCSORTHOVIEW);
+    UCSORTHOVIEW++;
+    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "UCSORTHOVIEW", &UCSORTHOVIEW, 0)
+        && UCSORTHOVIEW == viewport->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("VIEWPORT.UCSORTHOVIEW [BS] set+1 %hu != %hu", viewport->UCSORTHOVIEW, UCSORTHOVIEW);
+    viewport->UCSORTHOVIEW--;
+  }
+  {
+    BITCODE_B UCSVP;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "UCSVP", &UCSVP, NULL)
+        && UCSVP == viewport->UCSVP)
+      pass ();
+    else
+      fail ("VIEWPORT.UCSVP [B] " FORMAT_B " != " FORMAT_B "", viewport->UCSVP, UCSVP);
+    UCSVP++;
+    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "UCSVP", &UCSVP, 0)
+        && UCSVP == viewport->UCSVP)
+      pass ();
+    else
+      fail ("VIEWPORT.UCSVP [B] set+1 " FORMAT_B " != " FORMAT_B "", viewport->UCSVP, UCSVP);
+    viewport->UCSVP--;
+  }
+  {
     BITCODE_2RD VIEWCTR;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "VIEWCTR", &VIEWCTR, NULL)
         && !memcmp (&VIEWCTR, &viewport->VIEWCTR, sizeof (viewport->VIEWCTR)))
@@ -22242,6 +22311,21 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         pass ();
     else
         fail ("VIEWPORT.VIEWDIR [3BD]");
+  }
+  {
+    BITCODE_BD VIEWSIZE;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "VIEWSIZE", &VIEWSIZE, NULL)
+        && VIEWSIZE == viewport->VIEWSIZE)
+      pass ();
+    else
+      fail ("VIEWPORT.VIEWSIZE [BD] %g != %g", viewport->VIEWSIZE, VIEWSIZE);
+    VIEWSIZE++;
+    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "VIEWSIZE", &VIEWSIZE, 0)
+        && VIEWSIZE == viewport->VIEWSIZE)
+      pass ();
+    else
+      fail ("VIEWPORT.VIEWSIZE [BD] set+1 %g != %g", viewport->VIEWSIZE, VIEWSIZE);
+    viewport->VIEWSIZE--;
   }
   {
     BITCODE_CMC ambient_color;
@@ -22399,14 +22483,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     viewport->grid_major--;
   }
   {
-    BITCODE_2RD grid_spacing;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "grid_spacing", &grid_spacing, NULL)
-        && !memcmp (&grid_spacing, &viewport->grid_spacing, sizeof (viewport->grid_spacing)))
-        pass ();
-    else
-        fail ("VIEWPORT.grid_spacing [2RD]");
-  }
-  {
     BITCODE_BD height;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "height", &height, NULL)
         && height == viewport->height)
@@ -22536,37 +22612,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     viewport->shadeplot_mode--;
   }
   {
-    BITCODE_BD snap_angle;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "snap_angle", &snap_angle, NULL)
-        && snap_angle == viewport->snap_angle)
-      pass ();
-    else
-      fail ("VIEWPORT.snap_angle [BD] %g != %g", viewport->snap_angle, snap_angle);
-    snap_angle++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "snap_angle", &snap_angle, 0)
-        && snap_angle == viewport->snap_angle)
-      pass ();
-    else
-      fail ("VIEWPORT.snap_angle [BD] set+1 %g != %g", viewport->snap_angle, snap_angle);
-    viewport->snap_angle--;
-  }
-  {
-    BITCODE_2RD snap_base;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "snap_base", &snap_base, NULL)
-        && !memcmp (&snap_base, &viewport->snap_base, sizeof (viewport->snap_base)))
-        pass ();
-    else
-        fail ("VIEWPORT.snap_base [2RD]");
-  }
-  {
-    BITCODE_2RD snap_spacing;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "snap_spacing", &snap_spacing, NULL)
-        && !memcmp (&snap_spacing, &viewport->snap_spacing, sizeof (viewport->snap_spacing)))
-        pass ();
-    else
-        fail ("VIEWPORT.snap_spacing [2RD]");
-  }
-  {
     BITCODE_BL status_flag;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "status_flag", &status_flag, NULL)
         && status_flag == viewport->status_flag)
@@ -22645,36 +22690,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     viewport->ucs_elevation--;
   }
   {
-    BITCODE_BS ucs_orthoview_type;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ucs_orthoview_type", &ucs_orthoview_type, NULL)
-        && ucs_orthoview_type == viewport->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("VIEWPORT.ucs_orthoview_type [BS] %hu != %hu", viewport->ucs_orthoview_type, ucs_orthoview_type);
-    ucs_orthoview_type++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_orthoview_type", &ucs_orthoview_type, 0)
-        && ucs_orthoview_type == viewport->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("VIEWPORT.ucs_orthoview_type [BS] set+1 %hu != %hu", viewport->ucs_orthoview_type, ucs_orthoview_type);
-    viewport->ucs_orthoview_type--;
-  }
-  {
-    BITCODE_B ucs_per_viewport;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ucs_per_viewport", &ucs_per_viewport, NULL)
-        && ucs_per_viewport == viewport->ucs_per_viewport)
-      pass ();
-    else
-      fail ("VIEWPORT.ucs_per_viewport [B] " FORMAT_B " != " FORMAT_B "", viewport->ucs_per_viewport, ucs_per_viewport);
-    ucs_per_viewport++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "ucs_per_viewport", &ucs_per_viewport, 0)
-        && ucs_per_viewport == viewport->ucs_per_viewport)
-      pass ();
-    else
-      fail ("VIEWPORT.ucs_per_viewport [B] set+1 " FORMAT_B " != " FORMAT_B "", viewport->ucs_per_viewport, ucs_per_viewport);
-    viewport->ucs_per_viewport--;
-  }
-  {
     BITCODE_3BD ucsorg;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ucsorg", &ucsorg, NULL)
         && !memcmp (&ucsorg, &viewport->ucsorg, sizeof (viewport->ucsorg)))
@@ -22712,21 +22727,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     else
       fail ("VIEWPORT.use_default_lights [B] set+1 " FORMAT_B " != " FORMAT_B "", viewport->use_default_lights, use_default_lights);
     viewport->use_default_lights--;
-  }
-  {
-    BITCODE_BD view_height;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "view_height", &view_height, NULL)
-        && view_height == viewport->view_height)
-      pass ();
-    else
-      fail ("VIEWPORT.view_height [BD] %g != %g", viewport->view_height, view_height);
-    view_height++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "view_height", &view_height, 0)
-        && view_height == viewport->view_height)
-      pass ();
-    else
-      fail ("VIEWPORT.view_height [BD] set+1 %g != %g", viewport->view_height, view_height);
-    viewport->view_height--;
   }
   {
     BITCODE_3BD view_target;
@@ -34551,6 +34551,21 @@ static int test_LAYOUT (const Dwg_Object *obj)
         fail ("LAYOUT.UCSORG [3DPOINT]");
   }
   {
+    BITCODE_BS UCSORTHOVIEW;
+    if (dwg_dynapi_entity_value (layout, "LAYOUT", "UCSORTHOVIEW", &UCSORTHOVIEW, NULL)
+        && UCSORTHOVIEW == layout->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("LAYOUT.UCSORTHOVIEW [BS] %hu != %hu", layout->UCSORTHOVIEW, UCSORTHOVIEW);
+    UCSORTHOVIEW++;
+    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "UCSORTHOVIEW", &UCSORTHOVIEW, 0)
+        && UCSORTHOVIEW == layout->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("LAYOUT.UCSORTHOVIEW [BS] set+1 %hu != %hu", layout->UCSORTHOVIEW, UCSORTHOVIEW);
+    layout->UCSORTHOVIEW--;
+  }
+  {
     BITCODE_3DPOINT UCSXDIR;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "UCSXDIR", &UCSXDIR, NULL)
         && !memcmp (&UCSXDIR, &layout->UCSXDIR, sizeof (layout->UCSXDIR)))
@@ -34683,21 +34698,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     else
       fail ("LAYOUT.ucs_elevation [BD] set+1 %g != %g", layout->ucs_elevation, ucs_elevation);
     layout->ucs_elevation--;
-  }
-  {
-    BITCODE_BS ucs_orthoview_type;
-    if (dwg_dynapi_entity_value (layout, "LAYOUT", "ucs_orthoview_type", &ucs_orthoview_type, NULL)
-        && ucs_orthoview_type == layout->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("LAYOUT.ucs_orthoview_type [BS] %hu != %hu", layout->ucs_orthoview_type, ucs_orthoview_type);
-    ucs_orthoview_type++;
-    if (dwg_dynapi_entity_set_value (layout, "LAYOUT", "ucs_orthoview_type", &ucs_orthoview_type, 0)
-        && ucs_orthoview_type == layout->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("LAYOUT.ucs_orthoview_type [BS] set+1 %hu != %hu", layout->ucs_orthoview_type, ucs_orthoview_type);
-    layout->ucs_orthoview_type--;
   }
   {
     BITCODE_H* viewports;
@@ -42650,6 +42650,21 @@ static int test_UCS (const Dwg_Object *obj)
   Dwg_Object_UCS *restrict ucs = obj->tio.object->tio.UCS;
   failed = 0;
   {
+    BITCODE_BS UCSORTHOVIEW;
+    if (dwg_dynapi_entity_value (ucs, "UCS", "UCSORTHOVIEW", &UCSORTHOVIEW, NULL)
+        && UCSORTHOVIEW == ucs->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("UCS.UCSORTHOVIEW [BS] %hu != %hu", ucs->UCSORTHOVIEW, UCSORTHOVIEW);
+    UCSORTHOVIEW++;
+    if (dwg_dynapi_entity_set_value (ucs, "UCS", "UCSORTHOVIEW", &UCSORTHOVIEW, 0)
+        && UCSORTHOVIEW == ucs->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("UCS.UCSORTHOVIEW [BS] set+1 %hu != %hu", ucs->UCSORTHOVIEW, UCSORTHOVIEW);
+    ucs->UCSORTHOVIEW--;
+  }
+  {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (ucs, "UCS", "base_ucs", &base_ucs, NULL)
         && !memcmp (&base_ucs, &ucs->base_ucs, sizeof (ucs->base_ucs)))
@@ -42782,21 +42797,6 @@ static int test_UCS (const Dwg_Object *obj)
     else
       fail ("UCS.ucs_elevation [BD] set+1 %g != %g", ucs->ucs_elevation, ucs_elevation);
     ucs->ucs_elevation--;
-  }
-  {
-    BITCODE_BS ucs_orthoview_type;
-    if (dwg_dynapi_entity_value (ucs, "UCS", "ucs_orthoview_type", &ucs_orthoview_type, NULL)
-        && ucs_orthoview_type == ucs->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("UCS.ucs_orthoview_type [BS] %hu != %hu", ucs->ucs_orthoview_type, ucs_orthoview_type);
-    ucs_orthoview_type++;
-    if (dwg_dynapi_entity_set_value (ucs, "UCS", "ucs_orthoview_type", &ucs_orthoview_type, 0)
-        && ucs_orthoview_type == ucs->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("UCS.ucs_orthoview_type [BS] set+1 %hu != %hu", ucs->ucs_orthoview_type, ucs_orthoview_type);
-    ucs->ucs_orthoview_type--;
   }
   {
     BITCODE_3BD ucsorg;
@@ -43004,6 +43004,21 @@ static int test_VIEW (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_VIEW *restrict view = obj->tio.object->tio.VIEW;
   failed = 0;
+  {
+    BITCODE_BS UCSORTHOVIEW;
+    if (dwg_dynapi_entity_value (view, "VIEW", "UCSORTHOVIEW", &UCSORTHOVIEW, NULL)
+        && UCSORTHOVIEW == view->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("VIEW.UCSORTHOVIEW [BS] %hu != %hu", view->UCSORTHOVIEW, UCSORTHOVIEW);
+    UCSORTHOVIEW++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "UCSORTHOVIEW", &UCSORTHOVIEW, 0)
+        && UCSORTHOVIEW == view->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("VIEW.UCSORTHOVIEW [BS] set+1 %hu != %hu", view->UCSORTHOVIEW, UCSORTHOVIEW);
+    view->UCSORTHOVIEW--;
+  }
   {
     BITCODE_3BD VIEWDIR;
     if (dwg_dynapi_entity_value (view, "VIEW", "VIEWDIR", &VIEWDIR, NULL)
@@ -43362,21 +43377,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.ucs_elevation [BD] set+1 %g != %g", view->ucs_elevation, ucs_elevation);
     view->ucs_elevation--;
-  }
-  {
-    BITCODE_BS ucs_orthoview_type;
-    if (dwg_dynapi_entity_value (view, "VIEW", "ucs_orthoview_type", &ucs_orthoview_type, NULL)
-        && ucs_orthoview_type == view->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("VIEW.ucs_orthoview_type [BS] %hu != %hu", view->ucs_orthoview_type, ucs_orthoview_type);
-    ucs_orthoview_type++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "ucs_orthoview_type", &ucs_orthoview_type, 0)
-        && ucs_orthoview_type == view->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("VIEW.ucs_orthoview_type [BS] set+1 %hu != %hu", view->ucs_orthoview_type, ucs_orthoview_type);
-    view->ucs_orthoview_type--;
   }
   {
     BITCODE_3BD ucsorg;
@@ -45511,6 +45511,21 @@ static int test_VPORT (const Dwg_Object *obj)
     vport->UCSICON--;
   }
   {
+    BITCODE_BS UCSORTHOVIEW;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "UCSORTHOVIEW", &UCSORTHOVIEW, NULL)
+        && UCSORTHOVIEW == vport->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("VPORT.UCSORTHOVIEW [BS] %hu != %hu", vport->UCSORTHOVIEW, UCSORTHOVIEW);
+    UCSORTHOVIEW++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "UCSORTHOVIEW", &UCSORTHOVIEW, 0)
+        && UCSORTHOVIEW == vport->UCSORTHOVIEW)
+      pass ();
+    else
+      fail ("VPORT.UCSORTHOVIEW [BS] set+1 %hu != %hu", vport->UCSORTHOVIEW, UCSORTHOVIEW);
+    vport->UCSORTHOVIEW--;
+  }
+  {
     BITCODE_B UCSVP;
     if (dwg_dynapi_entity_value (vport, "VPORT", "UCSVP", &UCSVP, NULL)
         && UCSVP == vport->UCSVP)
@@ -45862,6 +45877,21 @@ static int test_VPORT (const Dwg_Object *obj)
         fail ("VPORT.sun [H]");
   }
   {
+    BITCODE_B ucs_at_origin;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "ucs_at_origin", &ucs_at_origin, NULL)
+        && ucs_at_origin == vport->ucs_at_origin)
+      pass ();
+    else
+      fail ("VPORT.ucs_at_origin [B] " FORMAT_B " != " FORMAT_B "", vport->ucs_at_origin, ucs_at_origin);
+    ucs_at_origin++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_at_origin", &ucs_at_origin, 0)
+        && ucs_at_origin == vport->ucs_at_origin)
+      pass ();
+    else
+      fail ("VPORT.ucs_at_origin [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->ucs_at_origin, ucs_at_origin);
+    vport->ucs_at_origin--;
+  }
+  {
     BITCODE_BD ucs_elevation;
     if (dwg_dynapi_entity_value (vport, "VPORT", "ucs_elevation", &ucs_elevation, NULL)
         && ucs_elevation == vport->ucs_elevation)
@@ -45875,21 +45905,6 @@ static int test_VPORT (const Dwg_Object *obj)
     else
       fail ("VPORT.ucs_elevation [BD] set+1 %g != %g", vport->ucs_elevation, ucs_elevation);
     vport->ucs_elevation--;
-  }
-  {
-    BITCODE_BS ucs_orthoview_type;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "ucs_orthoview_type", &ucs_orthoview_type, NULL)
-        && ucs_orthoview_type == vport->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("VPORT.ucs_orthoview_type [BS] %hu != %hu", vport->ucs_orthoview_type, ucs_orthoview_type);
-    ucs_orthoview_type++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "ucs_orthoview_type", &ucs_orthoview_type, 0)
-        && ucs_orthoview_type == vport->ucs_orthoview_type)
-      pass ();
-    else
-      fail ("VPORT.ucs_orthoview_type [BS] set+1 %hu != %hu", vport->ucs_orthoview_type, ucs_orthoview_type);
-    vport->ucs_orthoview_type--;
   }
   {
     BITCODE_3BD ucsorg;
@@ -45914,21 +45929,6 @@ static int test_VPORT (const Dwg_Object *obj)
         pass ();
     else
         fail ("VPORT.ucsydir [3BD]");
-  }
-  {
-    BITCODE_B unknown;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "unknown", &unknown, NULL)
-        && unknown == vport->unknown)
-      pass ();
-    else
-      fail ("VPORT.unknown [B] " FORMAT_B " != " FORMAT_B "", vport->unknown, unknown);
-    unknown++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "unknown", &unknown, 0)
-        && unknown == vport->unknown)
-      pass ();
-    else
-      fail ("VPORT.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", vport->unknown, unknown);
-    vport->unknown--;
   }
   {
     BITCODE_2RD upper_right;

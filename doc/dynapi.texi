@@ -4098,7 +4098,7 @@ RS,	DXF 69
 3BD,	DXF 16
 @item twist_angle
 BD,	DXF 51
-@item view_height
+@item VIEWSIZE
 BD,	DXF 45
 @item lens_length
 BD,	DXF 42
@@ -4106,15 +4106,15 @@ BD,	DXF 42
 BD,	DXF 43
 @item back_clip_z
 BD,	DXF 44
-@item snap_angle
+@item SNAPANG
 BD,	DXF 50
 @item VIEWCTR
 2RD,	DXF 12
-@item snap_base
+@item SNAPBASE
 2RD,	DXF 13
-@item snap_spacing
+@item SNAPUNIT
 2RD,	DXF 14
-@item grid_spacing
+@item GRIDUNIT
 2RD,	DXF 15
 @item circle_zoom
 BS,	DXF 72
@@ -4130,7 +4130,7 @@ T,	DXF 1
 RC,	DXF 281
 @item ucs_at_origin
 B,	DXF 74
-@item ucs_per_viewport
+@item UCSVP
 B,	DXF 71
 @item ucsorg
 3BD,	DXF 110
@@ -4140,7 +4140,7 @@ B,	DXF 71
 3BD,	DXF 112
 @item ucs_elevation
 BD,	DXF 146
-@item ucs_orthoview_type
+@item UCSORTHOVIEW
 BS,	DXF 79
 @item shadeplot_mode
 BS,	DXF 170
@@ -6610,7 +6610,7 @@ BS,	DXF 70
 3DPOINT,	DXF 17
 @item ucs_elevation
 BD,	DXF 146
-@item ucs_orthoview_type
+@item UCSORTHOVIEW
 BS,	DXF 76
 @item EXTMIN
 3DPOINT,	DXF 14
@@ -8306,7 +8306,7 @@ H
 3BD,	DXF 12
 @item ucs_elevation
 BD,	DXF 146
-@item ucs_orthoview_type
+@item UCSORTHOVIEW
 BS,	DXF 79
 @item base_ucs
 H,	DXF 346
@@ -8461,7 +8461,7 @@ B,	DXF 72
 3BD,	DXF 112
 @item ucs_elevation
 BD,	DXF 146
-@item ucs_orthoview_type
+@item UCSORTHOVIEW
 BS,	DXF 79
 @item is_camera_plottable
 B,	DXF 73
@@ -8856,7 +8856,7 @@ BD,	DXF 50
 2RD,	DXF 13
 @item SNAPUNIT
 2RD,	DXF 14
-@item unknown
+@item ucs_at_origin
 B
 @item UCSVP
 B,	DXF 71
@@ -8868,7 +8868,7 @@ B,	DXF 71
 3BD,	DXF 112
 @item ucs_elevation
 BD,	DXF 146
-@item ucs_orthoview_type
+@item UCSORTHOVIEW
 BS,	DXF 79
 @item grid_flags
 BS,	DXF 60

@@ -3791,11 +3791,11 @@ dwg_ent_viewport_get_ucs_at_origin (const dwg_ent_viewport *restrict vp,
                                     int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_ucs_per_viewport (
+EXPORT void dwg_ent_viewport_set_UCSVP (
     dwg_ent_viewport *restrict vp, unsigned char viewport, int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 EXPORT unsigned char
-dwg_ent_viewport_get_ucs_per_viewport (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_UCSVP (const dwg_ent_viewport *restrict vp,
                                        int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
@@ -3822,12 +3822,12 @@ dwg_ent_viewport_get_twist_angle (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_view_height (dwg_ent_viewport *restrict vp,
+EXPORT void dwg_ent_viewport_set_VIEWSIZE (dwg_ent_viewport *restrict vp,
                                               const double height,
                                               int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 EXPORT double
-dwg_ent_viewport_get_view_height (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_VIEWSIZE (const dwg_ent_viewport *restrict vp,
                                   int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
@@ -3859,13 +3859,13 @@ dwg_ent_viewport_get_back_clip_z (const dwg_ent_viewport *restrict vp,
                                   int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_snap_angle (dwg_ent_viewport *restrict vp,
-                                             const double angle,
-                                             int *restrict error)
+EXPORT void dwg_ent_viewport_set_SNAPANG (dwg_ent_viewport *restrict vp,
+                                          const double angle,
+                                          int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 EXPORT double
-dwg_ent_viewport_get_snap_angle (const dwg_ent_viewport *restrict vp,
-                                 int *restrict error)
+dwg_ent_viewport_get_SNAPANG (const dwg_ent_viewport *restrict vp,
+                              int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
 EXPORT void dwg_ent_viewport_get_VIEWCTR (
@@ -3876,27 +3876,27 @@ EXPORT void dwg_ent_viewport_set_VIEWCTR (
     dwg_ent_viewport *restrict vp, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT void dwg_ent_viewport_get_grid_spacing (
+EXPORT void dwg_ent_viewport_get_GRIDUNIT (
     const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_grid_spacing (
+EXPORT void dwg_ent_viewport_set_GRIDUNIT (
     dwg_ent_viewport *restrict vp, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT void dwg_ent_viewport_get_snap_base (
+EXPORT void dwg_ent_viewport_get_SNAPBASE (
     const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_snap_base (dwg_ent_viewport *restrict vp,
+EXPORT void dwg_ent_viewport_set_SNAPBASE (dwg_ent_viewport *restrict vp,
                                             const dwg_point_2d *restrict point,
                                             int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT void dwg_ent_viewport_get_snap_spacing (
+EXPORT void dwg_ent_viewport_get_SNAPUNIT (
     const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
-EXPORT void dwg_ent_viewport_set_snap_spacing (
+EXPORT void dwg_ent_viewport_set_SNAPUNIT (
     dwg_ent_viewport *restrict vp, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
@@ -3932,11 +3932,11 @@ dwg_ent_viewport_get_ucs_elevation (const dwg_ent_viewport *restrict vp,
                                     int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_ucs_orthoview_type (
+EXPORT void dwg_ent_viewport_set_UCSORTHOVIEW (
     dwg_ent_viewport *restrict vp, const BITCODE_BS type, int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 
-EXPORT BITCODE_BS dwg_ent_viewport_get_ucs_orthoview_type (
+EXPORT BITCODE_BS dwg_ent_viewport_get_UCSORTHOVIEW (
     const dwg_ent_viewport *restrict vp, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 

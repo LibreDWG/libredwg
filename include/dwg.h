@@ -1594,15 +1594,15 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
   BITCODE_BD twist_angle;
-  BITCODE_BD view_height;
+  BITCODE_BD VIEWSIZE; // the height
   BITCODE_BD lens_length;
   BITCODE_BD front_clip_z;
   BITCODE_BD back_clip_z;
-  BITCODE_BD snap_angle;
+  BITCODE_BD SNAPANG;
   BITCODE_2RD VIEWCTR;
-  BITCODE_2RD snap_base;
-  BITCODE_2RD snap_spacing;
-  BITCODE_2RD grid_spacing;
+  BITCODE_2RD SNAPBASE;
+  BITCODE_2RD SNAPUNIT;
+  BITCODE_2RD GRIDUNIT;
   BITCODE_BS circle_zoom;
   BITCODE_BS grid_major;
   BITCODE_BL num_frozen_layers;
@@ -1610,12 +1610,12 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_TV style_sheet;
   BITCODE_RC render_mode;
   BITCODE_B ucs_at_origin;
-  BITCODE_B ucs_per_viewport;
+  BITCODE_B UCSVP;
   BITCODE_3BD ucsorg;
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_BS shadeplot_mode;
   BITCODE_B use_default_lights;
   BITCODE_RC default_lighting_type;
@@ -2185,7 +2185,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD lens_length;
   BITCODE_BD front_clip_z;
   BITCODE_BD back_clip_z;
-  BITCODE_4BITS VIEWMODE; // DXF 71. 0: presepctive, 1: front_clip_on, 2: back_clip_on, 3: front_clip_at_eye_on
+  BITCODE_4BITS VIEWMODE; // DXF 71. 0: perspective, 1: front_clip_on, 2: back_clip_on, 3: front_clip_at_eye_on
   BITCODE_RC render_mode;
   BITCODE_B use_default_lights;
   BITCODE_RC default_lightning_type;
@@ -2198,7 +2198,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_B is_camera_plottable;
   BITCODE_H background;
   BITCODE_H visualstyle;
@@ -2233,7 +2233,7 @@ typedef struct _dwg_object_UCS
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
   BITCODE_BL num_orthopts; // missing in ODA docs
@@ -2254,8 +2254,8 @@ typedef struct _dwg_object_VPORT_CONTROL
 typedef struct _dwg_object_VPORT
 {
   COMMON_TABLE_FIELDS(RC);
-  BITCODE_BD VIEWSIZE;  // really the view height
-  BITCODE_BD view_width; // in DWG r13+, needed to calc. aspect_ratio
+  BITCODE_BD VIEWSIZE;     // really the view height
+  BITCODE_BD view_width;   // in DWG r13+, needed to calc. aspect_ratio
   BITCODE_BD aspect_ratio; // DXF 41 = view_width / VIEWSIZE
   BITCODE_2RD VIEWCTR;
   BITCODE_3BD view_target;
@@ -2285,13 +2285,13 @@ typedef struct _dwg_object_VPORT
   BITCODE_BD SNAPANG;
   BITCODE_2RD SNAPBASE;
   BITCODE_2RD SNAPUNIT;
-  BITCODE_B unknown;
-  BITCODE_B UCSVP;        /*!< bit 0 of DXF 71 */
+  BITCODE_B ucs_at_origin;
+  BITCODE_B UCSVP;
   BITCODE_3BD ucsorg;
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_BS grid_flags; /* bit 1: bound to limits, bit 2: adaptive */
   BITCODE_BS grid_major;
   BITCODE_H background;
@@ -3098,7 +3098,7 @@ typedef struct _dwg_object_LAYOUT
   BITCODE_3DPOINT UCSXDIR;
   BITCODE_3DPOINT UCSYDIR;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_3DPOINT EXTMIN;
   BITCODE_3DPOINT EXTMAX;
   BITCODE_H block_header;

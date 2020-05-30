@@ -35,7 +35,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_B is_camera_plottable;
   BITCODE_H background;
   BITCODE_H visualstyle;
@@ -77,7 +77,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, VIEW, ucsxdir);
   CHK_ENTITY_3RD (_obj, VIEW, ucsydir);
   CHK_ENTITY_TYPE (_obj, VIEW, ucs_elevation, BD);
-  CHK_ENTITY_TYPE (_obj, VIEW, ucs_orthoview_type, BS);
+  CHK_ENTITY_TYPE (_obj, VIEW, UCSORTHOVIEW, BS);
   CHK_ENTITY_TYPE (_obj, VIEW, is_camera_plottable, B);
   CHK_ENTITY_H (_obj, VIEW, background);
   CHK_ENTITY_H (_obj, VIEW, visualstyle);

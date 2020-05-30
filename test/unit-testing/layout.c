@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   BITCODE_3DPOINT UCSXDIR;
   BITCODE_3DPOINT UCSYDIR;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_3DPOINT EXTMIN;
   BITCODE_3DPOINT EXTMAX;
   BITCODE_H block_header;
@@ -75,8 +75,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (layout, LAYOUT, UCSXDIR);
   CHK_ENTITY_3RD (layout, LAYOUT, UCSYDIR);
   CHK_ENTITY_TYPE (layout, LAYOUT, ucs_elevation, BD);
-  CHK_ENTITY_TYPE (layout, LAYOUT, ucs_orthoview_type, BS);
-  CHK_ENTITY_MAX (layout, LAYOUT, ucs_orthoview_type, BS, 6);
+  CHK_ENTITY_TYPE (layout, LAYOUT, UCSORTHOVIEW, BS);
+  CHK_ENTITY_MAX (layout, LAYOUT, UCSORTHOVIEW, BS, 6);
   CHK_ENTITY_3RD (layout, LAYOUT, EXTMIN);
   CHK_ENTITY_3RD (layout, LAYOUT, EXTMAX);
 

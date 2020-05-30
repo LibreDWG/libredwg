@@ -186,7 +186,7 @@
   FIELD_BS (SURFTAB2, 70);
   FIELD_BS (SPLINETYPE, 70);
   FIELD_BS (SHADEDGE, 70); // default: 3
-  FIELD_BS (SHADEDIF, 70); // default: 70
+  FIELD_BS (SHADEDIF, 70); // default: 70. percent ambient/diffuse light 1-100
   FIELD_BS (UNITMODE, 70);
   FIELD_BS (MAXACTVP, 70); // default: 64
   FIELD_BS (ISOLINES, 70);
@@ -549,7 +549,7 @@
 
   SINCE (R_2004)
     {
-      FIELD_RC (SORTENTS, 280);
+      FIELD_RC (SORTENTS, 280);   //bitmask, see docs
       FIELD_RC (INDEXCTL, 280);
       FIELD_RC (HIDETEXT, 280);
       FIELD_RC (XCLIPFRAME, 290); //2010+: 280
@@ -626,7 +626,7 @@
       FIELD_HANDLE (INTERFEREVPVS, 5, 346);
       FIELD_HANDLE (DRAGVS, 5, 349);
       FIELD_RC (CSHADOW, 280);
-      FIELD_BD (SHADOWPLANELOCATION, 40);
+      FIELD_BD (SHADOWPLANELOCATION, 40); // z height
     }
 
   SINCE (R_13)

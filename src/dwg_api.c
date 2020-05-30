@@ -12784,7 +12784,7 @@ dwg_ent_viewport_get_status_flag (const dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Returns viewport render mode
+/** Returns VIEWPORT.render_mode
  */
 char
 dwg_ent_viewport_get_render_mode (const dwg_ent_viewport *restrict vp,
@@ -12858,17 +12858,17 @@ dwg_ent_viewport_get_ucs_at_origin (const dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Sets viewport ucs per viewport
+/** Sets VIEWPORT.UCSVP
  */
 void
-dwg_ent_viewport_set_ucs_per_viewport (dwg_ent_viewport *restrict vp,
-                                       unsigned char viewport,
+dwg_ent_viewport_set_UCSVP (dwg_ent_viewport *restrict vp,
+                                       unsigned char ucsvp,
                                        int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      vp->ucs_per_viewport = viewport;
+      vp->UCSVP = ucsvp;
     }
   else
     {
@@ -12877,16 +12877,16 @@ dwg_ent_viewport_set_ucs_per_viewport (dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Returns viewport ucs per viewport
+/** Returns VIEWPORT.UCSVP
  */
 unsigned char
-dwg_ent_viewport_get_ucs_per_viewport (const dwg_ent_viewport *restrict vp,
-                                       int *restrict error)
+dwg_ent_viewport_get_UCSVP (const dwg_ent_viewport *restrict vp,
+                            int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      return vp->ucs_per_viewport;
+      return vp->UCSVP;
     }
   else
     {
@@ -13033,16 +13033,16 @@ dwg_ent_viewport_get_twist_angle (const dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Sets viewport view height
+/** Sets VIEWPORT.VIEWSIZE
  */
 void
-dwg_ent_viewport_set_view_height (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_VIEWSIZE (dwg_ent_viewport *restrict vp,
                                   const double height, int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      vp->view_height = height;
+      vp->VIEWSIZE = height;
     }
   else
     {
@@ -13051,16 +13051,16 @@ dwg_ent_viewport_set_view_height (dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Returns viewport view height
+/** Returns VIEWPORT.VIEWSIZE
  */
 double
-dwg_ent_viewport_get_view_height (const dwg_ent_viewport *restrict vp,
-                                  int *restrict error)
+dwg_ent_viewport_get_VIEWSIZE (const dwg_ent_viewport *restrict vp,
+                               int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      return vp->view_height;
+      return vp->VIEWSIZE;
     }
   else
     {
@@ -13184,13 +13184,13 @@ dwg_ent_viewport_get_back_clip_z (const dwg_ent_viewport *restrict vp,
 /** Sets viewport snap angle
  */
 void
-dwg_ent_viewport_set_snap_angle (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_SNAPANG (dwg_ent_viewport *restrict vp,
                                  const double angle, int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      vp->snap_angle = angle;
+      vp->SNAPANG = angle;
     }
   else
     {
@@ -13202,13 +13202,13 @@ dwg_ent_viewport_set_snap_angle (dwg_ent_viewport *restrict vp,
 /** Returns viewport snap angle
  */
 double
-dwg_ent_viewport_get_snap_angle (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_SNAPANG (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      return vp->snap_angle;
+      return vp->SNAPANG;
     }
   else
     {
@@ -13265,7 +13265,7 @@ dwg_ent_viewport_set_VIEWCTR (dwg_ent_viewport *restrict vp,
 /** Returns grid spacing
  */
 void
-dwg_ent_viewport_get_grid_spacing (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_GRIDUNIT (const dwg_ent_viewport *restrict vp,
                                    dwg_point_2d *restrict point,
                                    int *restrict error)
 {
@@ -13276,8 +13276,8 @@ dwg_ent_viewport_get_grid_spacing (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->grid_spacing.x;
-      point->y = vp->grid_spacing.y;
+      point->x = vp->GRIDUNIT.x;
+      point->y = vp->GRIDUNIT.y;
     }
   else
     {
@@ -13289,7 +13289,7 @@ dwg_ent_viewport_get_grid_spacing (const dwg_ent_viewport *restrict vp,
 /** Sets grid spacing
  */
 void
-dwg_ent_viewport_set_grid_spacing (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_GRIDUNIT (dwg_ent_viewport *restrict vp,
                                    const dwg_point_2d *restrict point,
                                    int *restrict error)
 {
@@ -13300,8 +13300,8 @@ dwg_ent_viewport_set_grid_spacing (dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      vp->grid_spacing.x = point->x;
-      vp->grid_spacing.y = point->y;
+      vp->GRIDUNIT.x = point->x;
+      vp->GRIDUNIT.y = point->y;
     }
   else
     {
@@ -13313,7 +13313,7 @@ dwg_ent_viewport_set_grid_spacing (dwg_ent_viewport *restrict vp,
 /** Returns viewport snap base
  */
 void
-dwg_ent_viewport_get_snap_base (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_SNAPBASE (const dwg_ent_viewport *restrict vp,
                                 dwg_point_2d *restrict point,
                                 int *restrict error)
 {
@@ -13324,8 +13324,8 @@ dwg_ent_viewport_get_snap_base (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->snap_base.x;
-      point->y = vp->snap_base.y;
+      point->x = vp->SNAPBASE.x;
+      point->y = vp->SNAPBASE.y;
     }
   else
     {
@@ -13337,7 +13337,7 @@ dwg_ent_viewport_get_snap_base (const dwg_ent_viewport *restrict vp,
 /** Sets viewport snap base
  */
 void
-dwg_ent_viewport_set_snap_base (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_SNAPBASE (dwg_ent_viewport *restrict vp,
                                 const dwg_point_2d *restrict point,
                                 int *restrict error)
 {
@@ -13348,8 +13348,8 @@ dwg_ent_viewport_set_snap_base (dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      vp->snap_base.x = point->x;
-      vp->snap_base.y = point->y;
+      vp->SNAPBASE.x = point->x;
+      vp->SNAPBASE.y = point->y;
     }
   else
     {
@@ -13361,7 +13361,7 @@ dwg_ent_viewport_set_snap_base (dwg_ent_viewport *restrict vp,
 /** Returns viewport snap spacing
  */
 void
-dwg_ent_viewport_get_snap_spacing (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_SNAPUNIT (const dwg_ent_viewport *restrict vp,
                                    dwg_point_2d *restrict point,
                                    int *restrict error)
 {
@@ -13372,8 +13372,8 @@ dwg_ent_viewport_get_snap_spacing (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->snap_spacing.x;
-      point->y = vp->snap_spacing.y;
+      point->x = vp->SNAPUNIT.x;
+      point->y = vp->SNAPUNIT.y;
     }
   else
     {
@@ -13385,7 +13385,7 @@ dwg_ent_viewport_get_snap_spacing (const dwg_ent_viewport *restrict vp,
 /** Sets viewport snap spacing
  */
 void
-dwg_ent_viewport_set_snap_spacing (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_SNAPUNIT (dwg_ent_viewport *restrict vp,
                                    const dwg_point_2d *restrict point,
                                    int *restrict error)
 {
@@ -13396,8 +13396,8 @@ dwg_ent_viewport_set_snap_spacing (dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      vp->snap_spacing.x = point->x;
-      vp->snap_spacing.y = point->y;
+      vp->SNAPUNIT.x = point->x;
+      vp->SNAPUNIT.y = point->y;
     }
   else
     {
@@ -13597,14 +13597,14 @@ dwg_ent_viewport_get_ucs_elevation (const dwg_ent_viewport *restrict vp,
 /** Sets UCS ortho view type
  */
 void
-dwg_ent_viewport_set_ucs_orthoview_type (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_UCSORTHOVIEW (dwg_ent_viewport *restrict vp,
                                           const BITCODE_BS type,
                                           int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      vp->ucs_orthoview_type = type;
+      vp->UCSORTHOVIEW = type;
     }
   else
     {
@@ -13616,13 +13616,13 @@ dwg_ent_viewport_set_ucs_orthoview_type (dwg_ent_viewport *restrict vp,
 /** Returns UCS ortho view type
  */
 BITCODE_BS
-dwg_ent_viewport_get_ucs_orthoview_type (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_UCSORTHOVIEW (const dwg_ent_viewport *restrict vp,
                                           int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      return vp->ucs_orthoview_type;
+      return vp->UCSORTHOVIEW;
     }
   else
     {

@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
-  BITCODE_BS ucs_orthoview_type;
+  BITCODE_BS UCSORTHOVIEW;
   BITCODE_BS orthographic_type;
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
@@ -38,7 +38,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, UCS, ucsxdir);
   CHK_ENTITY_3RD (_obj, UCS, ucsydir);
   CHK_ENTITY_TYPE (_obj, UCS, ucs_elevation, BD);
-  CHK_ENTITY_TYPE (_obj, UCS, ucs_orthoview_type, BS);
+  CHK_ENTITY_TYPE (_obj, UCS, UCSORTHOVIEW, BS);
   CHK_ENTITY_H (_obj, UCS, base_ucs);
   CHK_ENTITY_H (_obj, UCS, named_ucs);
   CHK_ENTITY_TYPE (_obj, UCS, num_orthopts, BS);

@@ -1525,16 +1525,16 @@ DWG_ENTITY (VIEWPORT)
       FIELD_3BD (view_target, 17);
       FIELD_3BD (VIEWDIR, 16);
       FIELD_BD (twist_angle, 51);
-      FIELD_BD (view_height, 45);
+      FIELD_BD (VIEWSIZE, 45);
       FIELD_BD (lens_length, 42);
       FIELD_BD (front_clip_z, 43);
       FIELD_BD (back_clip_z, 44);
       // on R_2006: no snap_angle, no snap_base
-      FIELD_BD (snap_angle, 50);
+      FIELD_BD (SNAPANG, 50);
       FIELD_2RD (VIEWCTR, 12);
-      FIELD_2RD (snap_base, 13);
-      FIELD_2RD (snap_spacing, 14);
-      FIELD_2RD (grid_spacing, 15);
+      FIELD_2RD (SNAPBASE, 13);
+      FIELD_2RD (SNAPUNIT, 14);
+      FIELD_2RD (GRIDUNIT, 15);
       FIELD_BS (circle_zoom, 72);
     }
 
@@ -1549,12 +1549,12 @@ DWG_ENTITY (VIEWPORT)
       FIELD_T (style_sheet, 1);
       FIELD_RC (render_mode, 281);
       FIELD_B (ucs_at_origin, 74);
-      FIELD_B (ucs_per_viewport, 71);
+      FIELD_B (UCSVP, 71);
       FIELD_3BD (ucsorg, 110);
       FIELD_3BD (ucsxdir, 111);
       FIELD_3BD (ucsydir, 112);
       FIELD_BD (ucs_elevation, 146);
-      FIELD_BS (ucs_orthoview_type, 79);
+      FIELD_BS (UCSORTHOVIEW, 79);
     }
 
   SINCE (R_2004) {
@@ -2972,7 +2972,7 @@ DWG_OBJECT (VIEW)
       FIELD_3BD (ucsxdir, 111);
       FIELD_3BD (ucsydir, 112);
       FIELD_BD (ucs_elevation, 146);
-      FIELD_BS (ucs_orthoview_type, 79);
+      FIELD_BS (UCSORTHOVIEW, 79);
       FIELD_HANDLE (base_ucs, 5, 346);
       FIELD_HANDLE0 (named_ucs, 5, 345);
     }
@@ -3017,7 +3017,7 @@ DWG_OBJECT (UCS)
   SINCE (R_2000)
   {
     FIELD_BD0 (ucs_elevation, 146);
-    FIELD_BS (ucs_orthoview_type, 79);
+    FIELD_BS (UCSORTHOVIEW, 79);
     FIELD_HANDLE0 (base_ucs, DWG_HDL_HARDPTR, 346);
     FIELD_HANDLE (named_ucs, DWG_HDL_HARDPTR, 0);
 
@@ -3075,7 +3075,7 @@ DWG_OBJECT (VPORT)
   }
   else {
     FIELD_VALUE (VIEWMODE) |= ((FIELD_VALUE (UCSFOLLOW) << 2) | FIELD_VALUE (UCSVP));
-    FIELD_4BITS (VIEWMODE, 71); // UCSFOLLOW is bit 3 of 71, UCSVP bit 0
+    FIELD_4BITS (VIEWMODE, 71); // UCSFOLLOW is bit 3 of 71, UCSVP bit 0, ucs_at_origin bit 1
   }
   FIELD_RS (circle_zoom, 72);
   FIELD_RC (FASTZOOM, 73);
@@ -3092,9 +3092,9 @@ DWG_OBJECT (VPORT)
     FIELD_3BD (ucsxdir, 111);
     FIELD_3BD (ucsydir, 112);
     FIELD_HANDLE0 (named_ucs, 5, 345);
-    if (FIELD_VALUE (ucs_orthoview_type))
+    if (FIELD_VALUE (UCSORTHOVIEW))
       FIELD_HANDLE (base_ucs, 5, 346);
-    FIELD_BS (ucs_orthoview_type, 79);
+    FIELD_BS (UCSORTHOVIEW, 79);
     FIELD_BD (ucs_elevation, 146);
   }
   SINCE (R_2007)
@@ -3216,13 +3216,13 @@ DWG_OBJECT (VPORT)
     FIELD_2RD (SNAPUNIT, 14);
 
     SINCE (R_2000) {
-      FIELD_B (unknown, 0);
-      FIELD_B (UCSVP, 71); // bit 0 of 71
+      FIELD_B (ucs_at_origin, 0);
+      FIELD_B (UCSVP, 71);
       FIELD_3BD (ucsorg, 110);
       FIELD_3BD (ucsxdir, 111);
       FIELD_3BD (ucsydir, 112);
       FIELD_BD (ucs_elevation, 146);
-      FIELD_BS (ucs_orthoview_type, 79);
+      FIELD_BS (UCSORTHOVIEW, 79);
     }
 
     SINCE (R_2007) {
@@ -4145,7 +4145,7 @@ DWG_OBJECT (LAYOUT)
   FIELD_3DPOINT (UCSXDIR, 16);
   FIELD_3DPOINT (UCSYDIR, 17);
   FIELD_BD (ucs_elevation, 0);
-  FIELD_BS (ucs_orthoview_type, 76);
+  FIELD_BS (UCSORTHOVIEW, 76);
   FIELD_3DPOINT (EXTMIN, 0);
   FIELD_3DPOINT (EXTMAX, 0);
 
