@@ -25,7 +25,7 @@ matrix:
       #  apt:
       #    packages:
       #      - valgrind
-    - compiler: clang
+    - compiler: gcc
       #addons:
       #  apt:
       #    packages:
@@ -45,7 +45,7 @@ install:
 
 script:
   - if [ -n "$ASAN" ]; then
-      CC="clang -O0 -fno-omit-frame-pointer -fsanitize=address,undefined" ;
+      CC="gcc -O0 -fno-omit-frame-pointer -fsanitize=address,undefined" ;
     fi
   - ./configure $CONF
   # starts swapping with only 8GB. seperate the biggest
