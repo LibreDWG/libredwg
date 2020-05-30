@@ -8796,7 +8796,7 @@ B
 H
 @item VIEWSIZE
 BD,	DXF 40
-@item viewwidth
+@item view_width
 BD
 @item aspect_ratio
 BD,	DXF 41
@@ -8859,7 +8859,7 @@ BD,	DXF 50
 @item unknown
 B
 @item UCSVP
-B,	DXF 65
+B,	DXF 71
 @item ucsorg
 3BD,	DXF 110
 @item ucsxdir

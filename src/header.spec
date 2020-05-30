@@ -36,7 +36,7 @@
     for (i = 0; i < 3; i++) { // 3, 5, 205
       FIELD_RS (unknown_s[i], 0);
     }
-    FIELD_RC (maint_version, 0); // 0
+    FIELD_RC (dwg_version, 0); // 0
   } LATER_VERSIONS {
     FIELD_RC (zero_one_or_three, 0);
     FIELD_RL (thumbnail_address, 0); //@0x0d

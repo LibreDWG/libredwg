@@ -1830,7 +1830,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             _obj->is_maint = 0xf;
             break;
           case R_2004:
-            _obj->dwg_version = 0x19; // or 0x18
+            _obj->dwg_version = 0x19; // or 0x18/0x1a
             _obj->is_maint = 0x68;
             break;
           case R_2007:

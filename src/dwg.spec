@@ -1560,7 +1560,6 @@ DWG_ENTITY (VIEWPORT)
   SINCE (R_2004) {
     FIELD_BS (shadeplot_mode, 170);
   }
-
   SINCE (R_2007)
     {
       FIELD_B (use_default_lights, 292);
@@ -3057,13 +3056,12 @@ DWG_OBJECT (VPORT)
   FIELD_3RD (VIEWDIR, 16);
   FIELD_3RD (view_target, 17);
   FIELD_RD (VIEWSIZE, 40);
-  FIELD_RD (aspect_ratio, 41); // = viewwidth / VIEWSIZE
+  FIELD_RD (aspect_ratio, 41); // = view_width / VIEWSIZE
   FIELD_RD (lens_length, 42);
   FIELD_RD (front_clip, 43);
   FIELD_RD (back_clip, 44);
   FIELD_RD (SNAPANG, 50);
   FIELD_RD (view_twist, 51);
-
   PRE (R_13) {
     FIELD_RC (UCSFOLLOW, 71);
   }
@@ -3074,49 +3072,37 @@ DWG_OBJECT (VPORT)
   FIELD_RS (circle_zoom, 72);
   FIELD_RC (FASTZOOM, 73);
   FIELD_RC (UCSICON, 74);
+  FIELD_RS (SNAPMODE, 75);
   FIELD_RC (GRIDMODE, 76);
-  FIELD_CAST (SNAPMODE, RS, B, 75);
   FIELD_RC (SNAPSTYLE, 77);
   FIELD_RS (SNAPISOPAIR, 78);
+
   SINCE (R_2000) {
     FIELD_RC (render_mode, 281);
-  }
-
-  IF_FREE_OR_SINCE (R_2000)
-  {
+    FIELD_B (UCSVP, 71); // bit 0 of 71
     FIELD_3BD (ucsorg, 110);
     FIELD_3BD (ucsxdir, 111);
     FIELD_3BD (ucsydir, 112);
-    // TODO: skip if empty
-    FIELD_HANDLE (named_ucs, 5, 345);
-    FIELD_BS (ucs_orthoview_type, 79);
+    FIELD_HANDLE0 (named_ucs, 5, 345);
     if (FIELD_VALUE (ucs_orthoview_type))
       FIELD_HANDLE (base_ucs, 5, 346);
+    FIELD_BS (ucs_orthoview_type, 79);
     FIELD_BD (ucs_elevation, 146);
   }
-  IF_FREE_OR_SINCE (R_2007)
+  SINCE (R_2007)
   {
-    FIELD_HANDLE (visualstyle, 5, 348);
+    FIELD_HANDLE0 (background, 4, 332);
+    FIELD_HANDLE0 (visualstyle, 5, 348);
     FIELD_BS (grid_flags, 60);
     FIELD_BS (grid_major, 61);
-    FIELD_HANDLE (background, 4, 332);
-    FIELD_HANDLE (sun, 5, 361); //was shadeplot_handle
-
-    IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE (use_default_lights) = 1;
-      FIELD_VALUE (default_lightning_type) = 1;
-      FIELD_VALUE (ambient_color.index) = 250;
-      //TODO FIELD_VALUE (ambient_color.rgb) = ?;
-      //TODO FIELD_VALUE (ambient_color.byte) = ?; //+ name, book_name
-    }
     FIELD_B (use_default_lights, 292);
     FIELD_RC (default_lightning_type, 282);
     FIELD_BD (brightness, 141);
     FIELD_BD (contrast, 142);
-    //TODO: 63, 421, 423 only when non-black
-    FIELD_CMC (ambient_color, 63); // +421, 431
+    FIELD_CMC (ambient_color, 63);
+    FIELD_HANDLE0 (sun, 5, 361);
   }
-  //TODO 1001 1070
+  //TODO convert back 1001 1070 xdata
   REACTORS (4);
   XDICOBJHANDLE (3);
 
@@ -3129,8 +3115,8 @@ DWG_OBJECT (VPORT)
     FIELD_RD (VIEWSIZE, 40);
     FIELD_RD (aspect_ratio, 41);
     DECODER {
-      FIELD_VALUE (viewwidth) = FIELD_VALUE (aspect_ratio) * FIELD_VALUE (VIEWSIZE);
-      LOG_TRACE ("viewwidth: %f (calc)\n", FIELD_VALUE (viewwidth))
+      FIELD_VALUE (view_width) = FIELD_VALUE (aspect_ratio) * FIELD_VALUE (VIEWSIZE);
+      LOG_TRACE ("view_width: %f (calc)\n", FIELD_VALUE (view_width))
     }
     FIELD_2RD (VIEWCTR, 12);
     FIELD_3RD (view_target, 17);
@@ -3159,11 +3145,11 @@ DWG_OBJECT (VPORT)
   else
   {
     FIELD_BD (VIEWSIZE, 40); // i.e view height
-    FIELD_BD (viewwidth, 0);
+    FIELD_BD (view_width, 0);
     DECODER {
       FIELD_VALUE (aspect_ratio) = FIELD_VALUE (VIEWSIZE) == 0.0
         ? 0.0
-        : FIELD_VALUE (viewwidth) / FIELD_VALUE (VIEWSIZE);
+        : FIELD_VALUE (view_width) / FIELD_VALUE (VIEWSIZE);
       LOG_TRACE ("aspect_ratio: %f (calc)\n", FIELD_VALUE (aspect_ratio))
     }
     JSON {
@@ -3181,8 +3167,7 @@ DWG_OBJECT (VPORT)
     SINCE (R_2000) {
       FIELD_RC (render_mode, 281);
     }
-    SINCE (R_2007)
-    {
+    SINCE (R_2007) {
       IF_ENCODE_FROM_EARLIER {
         FIELD_VALUE (use_default_lights) = 1;
         FIELD_VALUE (default_lightning_type) = 1;
@@ -3202,20 +3187,21 @@ DWG_OBJECT (VPORT)
     FIELD_B (UCSFOLLOW, 0); // bit 3 of 71
     FIELD_BS (circle_zoom, 72);
     FIELD_B (FASTZOOM, 73);
-    FIELD_BB (UCSICON, 74);
+    FIELD_BB (UCSICON, 74); // bits 0 and 1 of 71: uscicon_on, ucsicon_at_origin
     FIELD_B (GRIDMODE, 76);
     FIELD_2RD (GRIDUNIT, 15);
     FIELD_B (SNAPMODE, 75);
     FIELD_B (SNAPSTYLE, 77);
     FIELD_BS (SNAPISOPAIR, 78);
-    FIELD_BD (SNAPANG, 50);
-    FIELD_2RD (SNAPBASE, 13);
+    if (dwg->header.dwg_version != 0x1a) { // AC1020/R_2006 only here
+      FIELD_BD (SNAPANG, 50);
+      FIELD_2RD (SNAPBASE, 13);
+    }
     FIELD_2RD (SNAPUNIT, 14);
 
-    SINCE (R_2000)
-    {
+    SINCE (R_2000) {
       FIELD_B (unknown, 0);
-      FIELD_B (UCSVP, 65); // bit 0 of 71
+      FIELD_B (UCSVP, 71); // bit 0 of 71
       FIELD_3BD (ucsorg, 110);
       FIELD_3BD (ucsxdir, 111);
       FIELD_3BD (ucsydir, 112);
@@ -3223,27 +3209,22 @@ DWG_OBJECT (VPORT)
       FIELD_BS (ucs_orthoview_type, 79);
     }
 
-    SINCE (R_2007)
-    {
+    SINCE (R_2007) {
       FIELD_BS (grid_flags, 60);
       FIELD_BS (grid_major, 61);
     }
-
-    START_OBJECT_HANDLE_STREAM;
   }
 
-  IF_FREE_OR_SINCE (R_2007)
-    {
-      FIELD_HANDLE (background, 4, 332); //soft ptr
-      FIELD_HANDLE (visualstyle, 5, 348); //hard ptr
-      FIELD_HANDLE (sun, 3, 361); //hard owner
-    }
-
-  IF_FREE_OR_SINCE (R_2000)
-    {
-      FIELD_HANDLE (named_ucs, 5, 345);
-      FIELD_HANDLE (base_ucs, 5, 346);
-    }
+  START_OBJECT_HANDLE_STREAM;
+  SINCE (R_2007) {
+    FIELD_HANDLE (background, 4, 332); //soft ptr
+    FIELD_HANDLE (visualstyle, 5, 348); //hard ptr
+    FIELD_HANDLE (sun, 3, 361); //hard owner
+  }
+  SINCE (R_2000) {
+    FIELD_HANDLE (named_ucs, 5, 345);
+    FIELD_HANDLE (base_ucs, 5, 346);
+  }
  }
 
 DWG_OBJECT_END

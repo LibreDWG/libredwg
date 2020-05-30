@@ -68,7 +68,7 @@ const char version_codes[DWG_VERSIONS][7] = {
   "AC1.3",  /* DWG Release 1.3 */
   "AC1.40", /* DWG Release 1.4 */
   "AC1.50", /* DWG Release 2.0 */
-  "AC2.10", /* DWG Release 2.10 */
+  "AC2.10", /* DWG Release 2.10                  dwg_version: */
   "AC1001", // DWG Release 2.4 (?)               8
   "AC1002", // DWG Release 2.5                   9
   "AC1003", // DWG Release 2.6                   10
@@ -79,7 +79,7 @@ const char version_codes[DWG_VERSIONS][7] = {
   "AC1013", // R_13c3                            0x14
   "AC1014", // R_14                              0x15
   "AC1015", // R_2000 (r15)                      0x17
-  "AC1018", // R_2004                            0x18, 0x19
+  "AC1018", // R_2004                            0x18, 0x19, 0x1a
   "AC1021", // R_2007                            0x1b
   "AC1024", // R_2010                            0x1d
   "AC1027", // R_2013                            0x1f

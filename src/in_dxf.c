@@ -7717,9 +7717,9 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               Dwg_Object_VPORT *o = obj->tio.object->tio.VPORT;
               o->aspect_ratio = pair->value.d;
-              o->viewwidth = o->aspect_ratio * o->VIEWSIZE;
+              o->view_width = o->aspect_ratio * o->VIEWSIZE;
               LOG_TRACE ("VPORT.aspect_ratio = %f [BD 41]\n", o->aspect_ratio);
-              LOG_TRACE ("VPORT.viewwidth = %f [BD 0]\n", o->viewwidth);
+              LOG_TRACE ("VPORT.view_width = %f [BD 0]\n", o->view_width);
             }
           else if (obj->fixedtype == DWG_TYPE_LEADER
                    && (pair->code == 10 || pair->code == 20

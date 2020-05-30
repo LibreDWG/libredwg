@@ -265,7 +265,7 @@ typedef enum DWG_VERSION_TYPE
   R_13c3,	/* AC1013 AutoCAD Release 13C3 */
   R_14,		/* AC1014 AutoCAD Release 14 */
   R_2000,	/* AC1015 AutoCAD Release 2000 */
-  R_2004,	/* AC1018 AutoCAD Release 2004 */
+  R_2004,	/* AC1018 AutoCAD Release 2004 (includes versions AC1019/0x19 and AC1020/0x1a) */
   R_2007,	/* AC1021 AutoCAD Release 2007 */
   R_2010,	/* AC1024 AutoCAD Release 2010 */
   R_2013,	/* AC1027 AutoCAD Release 2013 */
@@ -2255,8 +2255,8 @@ typedef struct _dwg_object_VPORT
 {
   COMMON_TABLE_FIELDS(RC);
   BITCODE_BD VIEWSIZE;  // really the view height
-  BITCODE_BD viewwidth; // in DWG r13+, needed to calc. aspect_ratio
-  BITCODE_BD aspect_ratio; // DXF 41 = viewwidth / VIEWSIZE
+  BITCODE_BD view_width; // in DWG r13+, needed to calc. aspect_ratio
+  BITCODE_BD aspect_ratio; // DXF 41 = view_width / VIEWSIZE
   BITCODE_2RD VIEWCTR;
   BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
@@ -2276,23 +2276,23 @@ typedef struct _dwg_object_VPORT
   BITCODE_B UCSFOLLOW;
   BITCODE_BS circle_zoom; /* circle sides: nr of tesselations */
   BITCODE_B FASTZOOM;
-  BITCODE_RC UCSICON;
-  BITCODE_B GRIDMODE;
+  BITCODE_RC UCSICON;     /* DXF 71:  0: icon_on, 1: icon_at_ucsorg */
+  BITCODE_B GRIDMODE;     /* DXF 76: on or off */
   BITCODE_2RD GRIDUNIT;
-  BITCODE_B SNAPMODE;
+  BITCODE_B SNAPMODE;     /* DXF 75: on or off */
   BITCODE_B SNAPSTYLE;
   BITCODE_BS SNAPISOPAIR;
   BITCODE_BD SNAPANG;
   BITCODE_2RD SNAPBASE;
   BITCODE_2RD SNAPUNIT;
   BITCODE_B unknown;
-  BITCODE_B UCSVP;          /*!< DXF 65 */
+  BITCODE_B UCSVP;        /*!< bit 0 of DXF 71 */
   BITCODE_3BD ucsorg;
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
   BITCODE_BD ucs_elevation;
   BITCODE_BS ucs_orthoview_type;
-  BITCODE_BS grid_flags;
+  BITCODE_BS grid_flags; /* bit 1: bound to limits, bit 2: adaptive */
   BITCODE_BS grid_major;
   BITCODE_H background;
   BITCODE_H visualstyle;

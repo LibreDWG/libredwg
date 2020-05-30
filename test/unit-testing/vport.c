@@ -13,8 +13,8 @@ api_process (dwg_object *obj)
   BITCODE_B is_xref_dep;
   BITCODE_H xref;
   BITCODE_BD VIEWSIZE;  // really the view height
-  BITCODE_BD viewwidth; // in DWG r13+, needed to calc. aspect_ratio
-  BITCODE_BD aspect_ratio; // DXF 41 = viewwidth / VIEWSIZE
+  BITCODE_BD view_width; // in DWG r13+, needed to calc. aspect_ratio
+  BITCODE_BD aspect_ratio; // DXF 41 = view_width / VIEWSIZE
   BITCODE_2RD VIEWCTR;
   BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
@@ -70,8 +70,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (_obj, VPORT, xref);
 
   CHK_ENTITY_TYPE (_obj, VPORT, VIEWSIZE, BD);  // really the view height
-  CHK_ENTITY_TYPE (_obj, VPORT, viewwidth, BD); // in DWG r13+, needed to calc. aspect_ratio
-  CHK_ENTITY_TYPE (_obj, VPORT, aspect_ratio, BD); // DXF 41 = viewwidth / VIEWSIZE
+  CHK_ENTITY_TYPE (_obj, VPORT, view_width, BD); // in DWG r13+, needed to calc. aspect_ratio
+  CHK_ENTITY_TYPE (_obj, VPORT, aspect_ratio, BD); // DXF 41 = view_width / VIEWSIZE
   CHK_ENTITY_2RD (_obj, VPORT, VIEWCTR);
   CHK_ENTITY_3RD (_obj, VPORT, view_target);
   CHK_ENTITY_3RD (_obj, VPORT, VIEWDIR);
