@@ -12803,7 +12803,7 @@ dwg_ent_viewport_get_render_mode (const dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Sets viewport render mode
+/** Sets VIEWPORT.render_mode
  */
 void
 dwg_ent_viewport_set_render_mode (dwg_ent_viewport *restrict vp, char mode,
@@ -12821,7 +12821,7 @@ dwg_ent_viewport_set_render_mode (dwg_ent_viewport *restrict vp, char mode,
     }
 }
 
-/** Sets viewport ucs at origin
+/** Sets VIEWPORT.ucs_at_origin
  */
 void
 dwg_ent_viewport_set_ucs_at_origin (dwg_ent_viewport *restrict vp,
@@ -12839,7 +12839,7 @@ dwg_ent_viewport_set_ucs_at_origin (dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Returns viewport ucs at origini value
+/** Returns VIEWPORT.ucs_at_origin
  */
 unsigned char
 dwg_ent_viewport_get_ucs_at_origin (const dwg_ent_viewport *restrict vp,
@@ -12946,12 +12946,12 @@ dwg_ent_viewport_get_view_target (const dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Sets viewport view direction
+/** Sets VIEWPORT.VIEWDIR
  */
 void
-dwg_ent_viewport_set_view_direction (dwg_ent_viewport *restrict vp,
-                                     const dwg_point_3d *restrict point,
-                                     int *restrict error)
+dwg_ent_viewport_set_VIEWDIR (dwg_ent_viewport *restrict vp,
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
   if (vp
 #  ifndef HAVE_NONNULL
@@ -12960,9 +12960,9 @@ dwg_ent_viewport_set_view_direction (dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      vp->view_direction.x = point->x;
-      vp->view_direction.y = point->y;
-      vp->view_direction.z = point->z;
+      vp->VIEWDIR.x = point->x;
+      vp->VIEWDIR.y = point->y;
+      vp->VIEWDIR.z = point->z;
     }
   else
     {
@@ -12974,9 +12974,9 @@ dwg_ent_viewport_set_view_direction (dwg_ent_viewport *restrict vp,
 /** Returns viewport view direction
  */
 void
-dwg_ent_viewport_get_view_direction (const dwg_ent_viewport *restrict vp,
-                                     dwg_point_3d *restrict point,
-                                     int *restrict error)
+dwg_ent_viewport_get_VIEWDIR (const dwg_ent_viewport *restrict vp,
+                              dwg_point_3d *restrict point,
+                              int *restrict error)
 {
   if (vp
 #  ifndef HAVE_NONNULL
@@ -12985,9 +12985,9 @@ dwg_ent_viewport_get_view_direction (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->view_direction.x;
-      point->y = vp->view_direction.y;
-      point->z = vp->view_direction.z;
+      point->x = vp->VIEWDIR.x;
+      point->y = vp->VIEWDIR.y;
+      point->z = vp->VIEWDIR.z;
     }
   else
     {
@@ -12996,16 +12996,16 @@ dwg_ent_viewport_get_view_direction (const dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Sets view twist angle
+/** Sets VIEWPORT.twist_angle
  */
 void
-dwg_ent_viewport_set_view_twist (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_twist_angle (dwg_ent_viewport *restrict vp,
                                  const double angle, int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      vp->view_twist = angle;
+      vp->twist_angle = angle;
     }
   else
     {
@@ -13014,16 +13014,16 @@ dwg_ent_viewport_set_view_twist (dwg_ent_viewport *restrict vp,
     }
 }
 
-/** Returns view twist angle
+/** Returns VIEWPORT.twist_angle
  */
 double
-dwg_ent_viewport_get_view_twist (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_twist_angle (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      return vp->view_twist;
+      return vp->twist_angle;
     }
   else
     {
@@ -13221,7 +13221,7 @@ dwg_ent_viewport_get_snap_angle (const dwg_ent_viewport *restrict vp,
 /** Returns viewport view center
  */
 void
-dwg_ent_viewport_get_view_center (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_VIEWCTR (const dwg_ent_viewport *restrict vp,
                                   dwg_point_2d *restrict point,
                                   int *restrict error)
 {
@@ -13232,8 +13232,8 @@ dwg_ent_viewport_get_view_center (const dwg_ent_viewport *restrict vp,
   )
     {
       *error = 0;
-      point->x = vp->view_center.x;
-      point->y = vp->view_center.y;
+      point->x = vp->VIEWCTR.x;
+      point->y = vp->VIEWCTR.y;
     }
   else
     {
@@ -13245,15 +13245,15 @@ dwg_ent_viewport_get_view_center (const dwg_ent_viewport *restrict vp,
 /** Sets viewport view center
  */
 void
-dwg_ent_viewport_set_view_center (dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_set_VIEWCTR (dwg_ent_viewport *restrict vp,
                                   const dwg_point_2d *restrict point,
                                   int *restrict error)
 {
   if (vp)
     {
       *error = 0;
-      vp->view_center.x = point->x;
-      vp->view_center.y = point->y;
+      vp->VIEWCTR.x = point->x;
+      vp->VIEWCTR.y = point->y;
     }
   else
     {

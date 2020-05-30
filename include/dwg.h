@@ -1592,14 +1592,14 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_RS on_off; /* DXF 68, -1 should be accepted also */
   BITCODE_RS id;     /* DXF 69 */
   BITCODE_3BD view_target;
-  BITCODE_3BD view_direction;
-  BITCODE_BD view_twist;
+  BITCODE_3BD VIEWDIR;
+  BITCODE_BD twist_angle;
   BITCODE_BD view_height;
   BITCODE_BD lens_length;
   BITCODE_BD front_clip_z;
   BITCODE_BD back_clip_z;
   BITCODE_BD snap_angle;
-  BITCODE_2RD view_center;
+  BITCODE_2RD VIEWCTR;
   BITCODE_2RD snap_base;
   BITCODE_2RD snap_spacing;
   BITCODE_2RD grid_spacing;
@@ -2180,12 +2180,12 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD width;
   BITCODE_2RD center;
   BITCODE_3BD target;
-  BITCODE_3BD direction;
+  BITCODE_3BD VIEWDIR;
   BITCODE_BD twist_angle;
   BITCODE_BD lens_length;
-  BITCODE_BD front_clip;
-  BITCODE_BD back_clip;
-  BITCODE_4BITS VIEWMODE;
+  BITCODE_BD front_clip_z;
+  BITCODE_BD back_clip_z;
+  BITCODE_4BITS VIEWMODE; // DXF 71. 0: presepctive, 1: front_clip_on, 2: back_clip_on, 3: front_clip_at_eye_on
   BITCODE_RC render_mode;
   BITCODE_B use_default_lights;
   BITCODE_RC default_lightning_type;
@@ -2262,8 +2262,8 @@ typedef struct _dwg_object_VPORT
   BITCODE_3BD VIEWDIR;
   BITCODE_BD view_twist;
   BITCODE_BD lens_length;
-  BITCODE_BD front_clip;
-  BITCODE_BD back_clip;
+  BITCODE_BD front_clip_z;
+  BITCODE_BD back_clip_z;
   BITCODE_4BITS VIEWMODE;
   BITCODE_RC render_mode;
   BITCODE_B use_default_lights;
@@ -4014,9 +4014,9 @@ typedef struct _dwg_object_SPATIAL_FILTER
   BITCODE_3BD origin;
   BITCODE_BS display_boundary_on;
   BITCODE_BS front_clip_on;
-  BITCODE_BD front_clip_dist;
+  BITCODE_BD front_clip_z;
   BITCODE_BS back_clip_on;
-  BITCODE_BD back_clip_dist;
+  BITCODE_BD back_clip_z;
   BITCODE_BD* inverse_transform;
   BITCODE_BD* transform;
 } Dwg_Object_SPATIAL_FILTER;

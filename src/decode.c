@@ -449,11 +449,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_2RD (center, 10);
           FIELD_RD (width, 41);
           FIELD_3RD (target, 12);
-          FIELD_3RD (direction, 11);
+          FIELD_3RD (VIEWDIR, 11);
           FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
           FIELD_RD (lens_length, 42);
-          FIELD_RD (front_clip, 43);
-          FIELD_RD (back_clip, 44);
+          FIELD_RD (front_clip_z, 43);
+          FIELD_RD (back_clip_z, 44);
           FIELD_RD (twist_angle, 50);
           CHK_ENDPOS;
         }
@@ -491,8 +491,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_3RD (VIEWDIR, 16);
           FIELD_RD (view_twist, 50);
           FIELD_RD (lens_length, 42);
-          FIELD_RD (front_clip, 43);
-          FIELD_RD (back_clip, 33);
+          FIELD_RD (front_clip_z, 43);
+          FIELD_RD (back_clip_z, 33);
           FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
 
           FIELD_2RD (lower_left, 10);

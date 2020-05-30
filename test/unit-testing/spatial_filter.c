@@ -11,9 +11,9 @@ api_process (dwg_object *obj)
   BITCODE_3BD origin;
   BITCODE_BS display_boundary_on;
   BITCODE_BS front_clip_on;
-  BITCODE_BD front_clip_dist;
+  BITCODE_BD front_clip_z;
   BITCODE_BS back_clip_on;
-  BITCODE_BD back_clip_dist;
+  BITCODE_BD back_clip_z;
   BITCODE_BD* inverse_transform;
   BITCODE_BD* transform;
 
@@ -32,12 +32,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_on, BS);
   if (front_clip_on)
     {
-      CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_dist, BD);
+      CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, front_clip_z, BD);
     }
   CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, back_clip_on, BS);
   if (back_clip_on)
     {
-      CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, back_clip_dist, BD);
+      CHK_ENTITY_TYPE (_obj, SPATIAL_FILTER, back_clip_z, BD);
     }
   if (!dwg_dynapi_entity_value (_obj, "SPATIAL_FILTER",
                                 "inverse_transform",

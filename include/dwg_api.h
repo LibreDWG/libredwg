@@ -3806,19 +3806,19 @@ EXPORT void dwg_ent_viewport_get_view_target (
     const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_view_direction (
+EXPORT void dwg_ent_viewport_set_VIEWDIR (
     dwg_ent_viewport *restrict vp, const dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
-EXPORT void dwg_ent_viewport_get_view_direction (
+EXPORT void dwg_ent_viewport_get_VIEWDIR (
     const dwg_ent_viewport *restrict vp, dwg_point_3d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_view_twist (dwg_ent_viewport *restrict vp,
+EXPORT void dwg_ent_viewport_set_twist_angle (dwg_ent_viewport *restrict vp,
                                              const double angle,
                                              int *restrict error)
     __nonnull ((3)) _deprecated_dynapi_setter;
 EXPORT double
-dwg_ent_viewport_get_view_twist (const dwg_ent_viewport *restrict vp,
+dwg_ent_viewport_get_twist_angle (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
@@ -3868,11 +3868,11 @@ dwg_ent_viewport_get_snap_angle (const dwg_ent_viewport *restrict vp,
                                  int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_get_view_center (
+EXPORT void dwg_ent_viewport_get_VIEWCTR (
     const dwg_ent_viewport *restrict vp, dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_viewport_set_view_center (
+EXPORT void dwg_ent_viewport_set_VIEWCTR (
     dwg_ent_viewport *restrict vp, const dwg_point_2d *restrict point,
     int *restrict error) __nonnull ((2, 3)) _deprecated_dynapi_setter;
 

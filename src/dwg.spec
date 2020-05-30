@@ -1523,15 +1523,15 @@ DWG_ENTITY (VIEWPORT)
   SINCE (R_2000)
     {
       FIELD_3BD (view_target, 17);
-      FIELD_3BD (view_direction, 16);
-      FIELD_BD (view_twist, 51);
+      FIELD_3BD (VIEWDIR, 16);
+      FIELD_BD (twist_angle, 51);
       FIELD_BD (view_height, 45);
       FIELD_BD (lens_length, 42);
       FIELD_BD (front_clip_z, 43);
       FIELD_BD (back_clip_z, 44);
       // on R_2006: no snap_angle, no snap_base
       FIELD_BD (snap_angle, 50);
-      FIELD_2RD (view_center, 12);
+      FIELD_2RD (VIEWCTR, 12);
       FIELD_2RD (snap_base, 13);
       FIELD_2RD (snap_spacing, 14);
       FIELD_2RD (grid_spacing, 15);
@@ -2901,30 +2901,42 @@ DWG_OBJECT (VIEW)
 
   COMMON_TABLE_FLAGS (View)
 
+  // subclass AbstractViewTableRecord:
   PRE (R_13)
   {
     FIELD_RD (height, 40);
     FIELD_2RD (center, 10);
     FIELD_RD (width, 41);
-    FIELD_3RD (target, 12);
-    FIELD_3RD (direction, 11);
-    FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
-    FIELD_RD (lens_length, 42);
-    FIELD_RD (front_clip, 43);
-    FIELD_RD (back_clip, 44);
-    FIELD_RD (twist_angle, 50);
+    DXF {
+      FIELD_3RD (VIEWDIR, 11);
+    }
+    SINCE (R_10) {
+      FIELD_3RD (target, 12);
+      FIELD_3RD (VIEWDIR, 0);
+      FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
+      FIELD_RD (lens_length, 42);
+      FIELD_RD (front_clip_z, 43);
+      FIELD_RD (back_clip_z, 44);
+      FIELD_RD (twist_angle, 50);
+    }
   }
   LATER_VERSIONS
   {
     FIELD_BD (height, 40);
-    FIELD_BD (width, 41);
+    FIELD_BD (width, 0);
+
+    // subclass ViInfo:
     FIELD_2RD (center, 10);
+    DXF {
+      FIELD_BD (width, 41);
+      FIELD_3BD (VIEWDIR, 11);
+    }
     FIELD_3BD (target, 12);
-    FIELD_3BD (direction, 11);
+    FIELD_3BD (VIEWDIR, 0);
     FIELD_BD (twist_angle, 50);
     FIELD_BD (lens_length, 42);
-    FIELD_BD (front_clip, 43);
-    FIELD_BD (back_clip, 44);
+    FIELD_BD (front_clip_z, 43);
+    FIELD_BD (back_clip_z, 44);
     FIELD_4BITS (VIEWMODE, 71);
   }
   SINCE (R_2000) {
@@ -2936,14 +2948,19 @@ DWG_OBJECT (VIEW)
       FIELD_VALUE (default_lightning_type) = 1;
       FIELD_VALUE (ambient_color.index) = 250;
       //TODO FIELD_VALUE (ambient_color.rgb) = ?;
-      //TODO FIELD_VALUE (ambient_color.byte) = ?; //+ name, book_name
     }
+    FIELD_HANDLE0 (background, 4, 332);
+    FIELD_HANDLE0 (visualstyle, 5, 348);
     FIELD_B (use_default_lights, 292);
     FIELD_RC (default_lightning_type, 282);
     FIELD_BD (brightness, 141);
     FIELD_BD (contrast, 142);
     FIELD_CMC (ambient_color, 63);
+    FIELD_HANDLE0 (sun, 3, 361);
   }
+  // end of ViInfo
+
+  // subclass ViewTableRecord:
   SINCE (R_13) {
     FIELD_B (pspace_flag, 0);
     FIELD_VALUE (flag) |= FIELD_VALUE (pspace_flag);
@@ -2956,6 +2973,8 @@ DWG_OBJECT (VIEW)
       FIELD_3BD (ucsydir, 112);
       FIELD_BD (ucs_elevation, 146);
       FIELD_BS (ucs_orthoview_type, 79);
+      FIELD_HANDLE (base_ucs, 5, 346);
+      FIELD_HANDLE0 (named_ucs, 5, 345);
     }
   }
 
@@ -2963,17 +2982,6 @@ DWG_OBJECT (VIEW)
     FIELD_B (is_camera_plottable, 73);
   }
   START_OBJECT_HANDLE_STREAM;
-  SINCE (R_2007) {
-    FIELD_HANDLE0 (background, 4, 332);
-    FIELD_HANDLE0 (visualstyle, 5, 348);
-    FIELD_HANDLE0 (sun, 3, 361);
-  }
-  SINCE (R_2000) {
-    if (FIELD_VALUE (associated_ucs)) {
-      FIELD_HANDLE (base_ucs, 5, 346);
-      FIELD_HANDLE (named_ucs, 5, 345);
-    }
-  }
   SINCE (R_2007) {
     FIELD_HANDLE0 (livesection, 4, 334); // a SECTIONOBJECT?
   }
@@ -3058,8 +3066,8 @@ DWG_OBJECT (VPORT)
   FIELD_RD (VIEWSIZE, 40);
   FIELD_RD (aspect_ratio, 41); // = view_width / VIEWSIZE
   FIELD_RD (lens_length, 42);
-  FIELD_RD (front_clip, 43);
-  FIELD_RD (back_clip, 44);
+  FIELD_RD (front_clip_z, 43);
+  FIELD_RD (back_clip_z, 44);
   FIELD_RD (SNAPANG, 50);
   FIELD_RD (view_twist, 51);
   PRE (R_13) {
@@ -3123,8 +3131,8 @@ DWG_OBJECT (VPORT)
     FIELD_3RD (VIEWDIR, 16);
     FIELD_RD (view_twist, 51);
     FIELD_RD (lens_length, 42);
-    FIELD_RD (front_clip, 43);
-    FIELD_RD (back_clip, 44);
+    FIELD_RD (front_clip_z, 43);
+    FIELD_RD (back_clip_z, 44);
     FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
 
     FIELD_2RD (lower_left, 10);
@@ -3160,8 +3168,8 @@ DWG_OBJECT (VPORT)
     FIELD_3BD (VIEWDIR, 16);
     FIELD_BD (view_twist, 51);
     FIELD_BD (lens_length, 42);
-    FIELD_BD (front_clip, 43);
-    FIELD_BD (back_clip, 44);
+    FIELD_BD (front_clip_z, 43);
+    FIELD_BD (back_clip_z, 44);
     FIELD_4BITS (VIEWMODE, 71);
 
     SINCE (R_2000) {
@@ -3174,6 +3182,14 @@ DWG_OBJECT (VPORT)
         FIELD_VALUE (ambient_color.index) = 250;
         //TODO FIELD_VALUE (ambient_color.rgb) = ?;
         //TODO FIELD_VALUE (ambient_color.byte) = ?; //+ name, book_name
+      }
+      VERSIONS (R_13, R_2004) {
+        FIELD_HANDLE (sun, 3, 361);
+      }
+      SINCE (R_2007) {
+        FIELD_HANDLE (background, 4, 332); //soft ptr
+        FIELD_HANDLE (visualstyle, 5, 348); //hard ptr
+        FIELD_HANDLE (sun, 3, 361); //hard owner
       }
       FIELD_B (use_default_lights, 292);
       FIELD_RC (default_lightning_type, 282);
@@ -3216,14 +3232,9 @@ DWG_OBJECT (VPORT)
   }
 
   START_OBJECT_HANDLE_STREAM;
-  SINCE (R_2007) {
-    FIELD_HANDLE (background, 4, 332); //soft ptr
-    FIELD_HANDLE (visualstyle, 5, 348); //hard ptr
-    FIELD_HANDLE (sun, 3, 361); //hard owner
-  }
   SINCE (R_2000) {
-    FIELD_HANDLE (named_ucs, 5, 345);
-    FIELD_HANDLE (base_ucs, 5, 346);
+    FIELD_HANDLE0 (named_ucs, 5, 345);
+    FIELD_HANDLE0 (base_ucs, 5, 346);
   }
  }
 
@@ -4829,11 +4840,11 @@ DWG_OBJECT (SPATIAL_FILTER)
   FIELD_BS (display_boundary_on, 71);
   FIELD_BS (front_clip_on, 72);
   if (FIELD_VALUE (front_clip_on))
-    FIELD_BD (front_clip_dist, 40);
+    FIELD_BD (front_clip_z, 40);
 
   FIELD_BS (back_clip_on, 73);
   if (FIELD_VALUE (back_clip_on))
-    FIELD_BD (back_clip_dist, 41);
+    FIELD_BD (back_clip_z, 41);
 
   FIELD_VECTOR_N (inverse_transform, BD, 12, 40);
   FIELD_VECTOR_N (transform, BD, 12, 40);

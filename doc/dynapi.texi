@@ -4094,9 +4094,9 @@ RS,	DXF 68
 RS,	DXF 69
 @item view_target
 3BD,	DXF 17
-@item view_direction
+@item VIEWDIR
 3BD,	DXF 16
-@item view_twist
+@item twist_angle
 BD,	DXF 51
 @item view_height
 BD,	DXF 45
@@ -4108,7 +4108,7 @@ BD,	DXF 43
 BD,	DXF 44
 @item snap_angle
 BD,	DXF 50
-@item view_center
+@item VIEWCTR
 2RD,	DXF 12
 @item snap_base
 2RD,	DXF 13
@@ -7907,11 +7907,11 @@ BE,	DXF 210
 BS,	DXF 71
 @item front_clip_on
 BS,	DXF 72
-@item front_clip_dist
+@item front_clip_z
 BD,	DXF 40
 @item back_clip_on
 BS,	DXF 73
-@item back_clip_dist
+@item back_clip_z
 BD,	DXF 41
 @item inverse_transform
 BD*,	DXF 40
@@ -8425,15 +8425,15 @@ BD,	DXF 41
 2RD,	DXF 10
 @item target
 3BD,	DXF 12
-@item direction
+@item VIEWDIR
 3BD,	DXF 11
 @item twist_angle
 BD,	DXF 50
 @item lens_length
 BD,	DXF 42
-@item front_clip
+@item front_clip_z
 BD,	DXF 43
-@item back_clip
+@item back_clip_z
 BD,	DXF 44
 @item VIEWMODE
 4BITS,	DXF 71
@@ -8810,9 +8810,9 @@ BD,	DXF 41
 BD,	DXF 51
 @item lens_length
 BD,	DXF 42
-@item front_clip
+@item front_clip_z
 BD,	DXF 43
-@item back_clip
+@item back_clip_z
 BD,	DXF 44
 @item VIEWMODE
 4BITS,	DXF 71

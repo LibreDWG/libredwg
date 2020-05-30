@@ -20,8 +20,8 @@ api_process (dwg_object *obj)
   BITCODE_3BD VIEWDIR;
   BITCODE_BD view_twist;
   BITCODE_BD lens_length;
-  BITCODE_BD front_clip;
-  BITCODE_BD back_clip;
+  BITCODE_BD front_clip_z;
+  BITCODE_BD back_clip_z;
   BITCODE_4BITS VIEWMODE;
   BITCODE_RC render_mode;
   BITCODE_B use_default_lights;
@@ -43,7 +43,7 @@ api_process (dwg_object *obj)
   BITCODE_BD SNAPANG;
   BITCODE_2RD SNAPBASE;
   BITCODE_2RD SNAPUNIT;
-  BITCODE_B unknown;
+  BITCODE_B ucs_at_origin;
   BITCODE_B UCSVP;
   BITCODE_3BD ucsorg;
   BITCODE_3BD ucsxdir;
@@ -77,8 +77,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, VPORT, VIEWDIR);
   CHK_ENTITY_TYPE (_obj, VPORT, view_twist, BD);
   CHK_ENTITY_TYPE (_obj, VPORT, lens_length, BD);
-  CHK_ENTITY_TYPE (_obj, VPORT, front_clip, BD);
-  CHK_ENTITY_TYPE (_obj, VPORT, back_clip, BD);
+  CHK_ENTITY_TYPE (_obj, VPORT, front_clip_z, BD);
+  CHK_ENTITY_TYPE (_obj, VPORT, back_clip_z, BD);
   CHK_ENTITY_TYPE (_obj, VPORT, VIEWMODE, 4BITS);
   CHK_ENTITY_TYPE (_obj, VPORT, render_mode, RC);
   CHK_ENTITY_TYPE (_obj, VPORT, use_default_lights, B);
@@ -100,7 +100,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT, SNAPANG, BD);
   CHK_ENTITY_2RD (_obj, VPORT, SNAPBASE);
   CHK_ENTITY_2RD (_obj, VPORT, SNAPUNIT);
-  CHK_ENTITY_TYPE (_obj, VPORT, unknown, B);
+  CHK_ENTITY_TYPE (_obj, VPORT, ucs_at_origin, B);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSVP, B);
   CHK_ENTITY_3RD (_obj, VPORT, ucsorg);
   CHK_ENTITY_3RD (_obj, VPORT, ucsxdir);

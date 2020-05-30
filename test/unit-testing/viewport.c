@@ -5,18 +5,18 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  dwg_point_3d center, view_target, view_direction;
+  dwg_point_3d center, view_target, VIEWDIR;
   BITCODE_BD width;
   BITCODE_BD height;
   BITCODE_RS on_off;
   BITCODE_RS id;
-  BITCODE_BD view_twist;
+  BITCODE_BD twist_angle;
   BITCODE_BD view_height;
   BITCODE_BD lens_length;
   BITCODE_BD front_clip_z;
   BITCODE_BD back_clip_z;
   BITCODE_BD snap_angle;
-  dwg_point_2d view_center, snap_base, snap_spacing, grid_spacing;
+  dwg_point_2d VIEWCTR, snap_base, snap_spacing, grid_spacing;
   BITCODE_BS circle_zoom;
   BITCODE_BS grid_major;
   BITCODE_BL num_frozen_layers;
@@ -48,12 +48,12 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, center);
   CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, view_target);
-  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, view_direction);
+  CHK_ENTITY_3RD_W_OLD (viewport, VIEWPORT, VIEWDIR);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, width, BD);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, height, BD);
   CHK_ENTITY_TYPE (viewport, VIEWPORT, on_off, RS);
   CHK_ENTITY_TYPE (viewport, VIEWPORT, id, RS);
-  CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, view_twist, BD);
+  CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, twist_angle, BD);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, view_height, BD);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, lens_length, BD);
   CHK_ENTITY_TYPE_W_OLD (viewport, VIEWPORT, front_clip_z, BD);

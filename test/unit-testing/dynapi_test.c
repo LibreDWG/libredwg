@@ -22228,6 +22228,22 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   Dwg_Entity_VIEWPORT *restrict viewport = obj->tio.entity->tio.VIEWPORT;
   failed = 0;
   {
+    BITCODE_2RD VIEWCTR;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "VIEWCTR", &VIEWCTR, NULL)
+        && !memcmp (&VIEWCTR, &viewport->VIEWCTR, sizeof (viewport->VIEWCTR)))
+        pass ();
+    else
+        fail ("VIEWPORT.VIEWCTR [2RD]");
+  }
+  {
+    BITCODE_3BD VIEWDIR;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "VIEWDIR", &VIEWDIR, NULL)
+        && !memcmp (&VIEWDIR, &viewport->VIEWDIR, sizeof (viewport->VIEWDIR)))
+        pass ();
+    else
+        fail ("VIEWPORT.VIEWDIR [3BD]");
+  }
+  {
     BITCODE_CMC ambient_color;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ambient_color", &ambient_color, NULL)
         && !memcmp (&ambient_color, &viewport->ambient_color, sizeof (viewport->ambient_color)))
@@ -22584,6 +22600,21 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         fail ("VIEWPORT.sun [H]");
   }
   {
+    BITCODE_BD twist_angle;
+    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "twist_angle", &twist_angle, NULL)
+        && twist_angle == viewport->twist_angle)
+      pass ();
+    else
+      fail ("VIEWPORT.twist_angle [BD] %g != %g", viewport->twist_angle, twist_angle);
+    twist_angle++;
+    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "twist_angle", &twist_angle, 0)
+        && twist_angle == viewport->twist_angle)
+      pass ();
+    else
+      fail ("VIEWPORT.twist_angle [BD] set+1 %g != %g", viewport->twist_angle, twist_angle);
+    viewport->twist_angle--;
+  }
+  {
     BITCODE_B ucs_at_origin;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ucs_at_origin", &ucs_at_origin, NULL)
         && ucs_at_origin == viewport->ucs_at_origin)
@@ -22683,22 +22714,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     viewport->use_default_lights--;
   }
   {
-    BITCODE_2RD view_center;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "view_center", &view_center, NULL)
-        && !memcmp (&view_center, &viewport->view_center, sizeof (viewport->view_center)))
-        pass ();
-    else
-        fail ("VIEWPORT.view_center [2RD]");
-  }
-  {
-    BITCODE_3BD view_direction;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "view_direction", &view_direction, NULL)
-        && !memcmp (&view_direction, &viewport->view_direction, sizeof (viewport->view_direction)))
-        pass ();
-    else
-        fail ("VIEWPORT.view_direction [3BD]");
-  }
-  {
     BITCODE_BD view_height;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "view_height", &view_height, NULL)
         && view_height == viewport->view_height)
@@ -22720,21 +22735,6 @@ static int test_VIEWPORT (const Dwg_Object *obj)
         pass ();
     else
         fail ("VIEWPORT.view_target [3BD]");
-  }
-  {
-    BITCODE_BD view_twist;
-    if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "view_twist", &view_twist, NULL)
-        && view_twist == viewport->view_twist)
-      pass ();
-    else
-      fail ("VIEWPORT.view_twist [BD] %g != %g", viewport->view_twist, view_twist);
-    view_twist++;
-    if (dwg_dynapi_entity_set_value (viewport, "VIEWPORT", "view_twist", &view_twist, 0)
-        && view_twist == viewport->view_twist)
-      pass ();
-    else
-      fail ("VIEWPORT.view_twist [BD] set+1 %g != %g", viewport->view_twist, view_twist);
-    viewport->view_twist--;
   }
   {
     BITCODE_H visualstyle;
@@ -40912,21 +40912,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   Dwg_Object_SPATIAL_FILTER *restrict spatial_filter = obj->tio.object->tio.SPATIAL_FILTER;
   failed = 0;
   {
-    BITCODE_BD back_clip_dist;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "back_clip_dist", &back_clip_dist, NULL)
-        && back_clip_dist == spatial_filter->back_clip_dist)
-      pass ();
-    else
-      fail ("SPATIAL_FILTER.back_clip_dist [BD] %g != %g", spatial_filter->back_clip_dist, back_clip_dist);
-    back_clip_dist++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "back_clip_dist", &back_clip_dist, 0)
-        && back_clip_dist == spatial_filter->back_clip_dist)
-      pass ();
-    else
-      fail ("SPATIAL_FILTER.back_clip_dist [BD] set+1 %g != %g", spatial_filter->back_clip_dist, back_clip_dist);
-    spatial_filter->back_clip_dist--;
-  }
-  {
     BITCODE_BS back_clip_on;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "back_clip_on", &back_clip_on, NULL)
         && back_clip_on == spatial_filter->back_clip_on)
@@ -40940,6 +40925,21 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.back_clip_on [BS] set+1 %hu != %hu", spatial_filter->back_clip_on, back_clip_on);
     spatial_filter->back_clip_on--;
+  }
+  {
+    BITCODE_BD back_clip_z;
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "back_clip_z", &back_clip_z, NULL)
+        && back_clip_z == spatial_filter->back_clip_z)
+      pass ();
+    else
+      fail ("SPATIAL_FILTER.back_clip_z [BD] %g != %g", spatial_filter->back_clip_z, back_clip_z);
+    back_clip_z++;
+    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "back_clip_z", &back_clip_z, 0)
+        && back_clip_z == spatial_filter->back_clip_z)
+      pass ();
+    else
+      fail ("SPATIAL_FILTER.back_clip_z [BD] set+1 %g != %g", spatial_filter->back_clip_z, back_clip_z);
+    spatial_filter->back_clip_z--;
   }
   {
     BITCODE_2RD* clip_verts;
@@ -40975,21 +40975,6 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
         fail ("SPATIAL_FILTER.extrusion [BE]");
   }
   {
-    BITCODE_BD front_clip_dist;
-    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "front_clip_dist", &front_clip_dist, NULL)
-        && front_clip_dist == spatial_filter->front_clip_dist)
-      pass ();
-    else
-      fail ("SPATIAL_FILTER.front_clip_dist [BD] %g != %g", spatial_filter->front_clip_dist, front_clip_dist);
-    front_clip_dist++;
-    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "front_clip_dist", &front_clip_dist, 0)
-        && front_clip_dist == spatial_filter->front_clip_dist)
-      pass ();
-    else
-      fail ("SPATIAL_FILTER.front_clip_dist [BD] set+1 %g != %g", spatial_filter->front_clip_dist, front_clip_dist);
-    spatial_filter->front_clip_dist--;
-  }
-  {
     BITCODE_BS front_clip_on;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "front_clip_on", &front_clip_on, NULL)
         && front_clip_on == spatial_filter->front_clip_on)
@@ -41003,6 +40988,21 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
     else
       fail ("SPATIAL_FILTER.front_clip_on [BS] set+1 %hu != %hu", spatial_filter->front_clip_on, front_clip_on);
     spatial_filter->front_clip_on--;
+  }
+  {
+    BITCODE_BD front_clip_z;
+    if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "front_clip_z", &front_clip_z, NULL)
+        && front_clip_z == spatial_filter->front_clip_z)
+      pass ();
+    else
+      fail ("SPATIAL_FILTER.front_clip_z [BD] %g != %g", spatial_filter->front_clip_z, front_clip_z);
+    front_clip_z++;
+    if (dwg_dynapi_entity_set_value (spatial_filter, "SPATIAL_FILTER", "front_clip_z", &front_clip_z, 0)
+        && front_clip_z == spatial_filter->front_clip_z)
+      pass ();
+    else
+      fail ("SPATIAL_FILTER.front_clip_z [BD] set+1 %g != %g", spatial_filter->front_clip_z, front_clip_z);
+    spatial_filter->front_clip_z--;
   }
   {
     BITCODE_BD* inverse_transform;
@@ -43005,6 +43005,14 @@ static int test_VIEW (const Dwg_Object *obj)
   Dwg_Object_VIEW *restrict view = obj->tio.object->tio.VIEW;
   failed = 0;
   {
+    BITCODE_3BD VIEWDIR;
+    if (dwg_dynapi_entity_value (view, "VIEW", "VIEWDIR", &VIEWDIR, NULL)
+        && !memcmp (&VIEWDIR, &view->VIEWDIR, sizeof (view->VIEWDIR)))
+        pass ();
+    else
+        fail ("VIEW.VIEWDIR [3BD]");
+  }
+  {
     BITCODE_4BITS VIEWMODE;
     if (dwg_dynapi_entity_value (view, "VIEW", "VIEWMODE", &VIEWMODE, NULL)
         && VIEWMODE == view->VIEWMODE)
@@ -43042,19 +43050,19 @@ static int test_VIEW (const Dwg_Object *obj)
     view->associated_ucs--;
   }
   {
-    BITCODE_BD back_clip;
-    if (dwg_dynapi_entity_value (view, "VIEW", "back_clip", &back_clip, NULL)
-        && back_clip == view->back_clip)
+    BITCODE_BD back_clip_z;
+    if (dwg_dynapi_entity_value (view, "VIEW", "back_clip_z", &back_clip_z, NULL)
+        && back_clip_z == view->back_clip_z)
       pass ();
     else
-      fail ("VIEW.back_clip [BD] %g != %g", view->back_clip, back_clip);
-    back_clip++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "back_clip", &back_clip, 0)
-        && back_clip == view->back_clip)
+      fail ("VIEW.back_clip_z [BD] %g != %g", view->back_clip_z, back_clip_z);
+    back_clip_z++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "back_clip_z", &back_clip_z, 0)
+        && back_clip_z == view->back_clip_z)
       pass ();
     else
-      fail ("VIEW.back_clip [BD] set+1 %g != %g", view->back_clip, back_clip);
-    view->back_clip--;
+      fail ("VIEW.back_clip_z [BD] set+1 %g != %g", view->back_clip_z, back_clip_z);
+    view->back_clip_z--;
   }
   {
     BITCODE_H background;
@@ -43126,14 +43134,6 @@ static int test_VIEW (const Dwg_Object *obj)
     view->default_lightning_type--;
   }
   {
-    BITCODE_3BD direction;
-    if (dwg_dynapi_entity_value (view, "VIEW", "direction", &direction, NULL)
-        && !memcmp (&direction, &view->direction, sizeof (view->direction)))
-        pass ();
-    else
-        fail ("VIEW.direction [3BD]");
-  }
-  {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (view, "VIEW", "flag", &flag, NULL)
         && flag == view->flag)
@@ -43149,19 +43149,19 @@ static int test_VIEW (const Dwg_Object *obj)
     view->flag--;
   }
   {
-    BITCODE_BD front_clip;
-    if (dwg_dynapi_entity_value (view, "VIEW", "front_clip", &front_clip, NULL)
-        && front_clip == view->front_clip)
+    BITCODE_BD front_clip_z;
+    if (dwg_dynapi_entity_value (view, "VIEW", "front_clip_z", &front_clip_z, NULL)
+        && front_clip_z == view->front_clip_z)
       pass ();
     else
-      fail ("VIEW.front_clip [BD] %g != %g", view->front_clip, front_clip);
-    front_clip++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "front_clip", &front_clip, 0)
-        && front_clip == view->front_clip)
+      fail ("VIEW.front_clip_z [BD] %g != %g", view->front_clip_z, front_clip_z);
+    front_clip_z++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "front_clip_z", &front_clip_z, 0)
+        && front_clip_z == view->front_clip_z)
       pass ();
     else
-      fail ("VIEW.front_clip [BD] set+1 %g != %g", view->front_clip, front_clip);
-    view->front_clip--;
+      fail ("VIEW.front_clip_z [BD] set+1 %g != %g", view->front_clip_z, front_clip_z);
+    view->front_clip_z--;
   }
   {
     BITCODE_BD height;
@@ -45594,19 +45594,19 @@ static int test_VPORT (const Dwg_Object *obj)
     vport->aspect_ratio--;
   }
   {
-    BITCODE_BD back_clip;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "back_clip", &back_clip, NULL)
-        && back_clip == vport->back_clip)
+    BITCODE_BD back_clip_z;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "back_clip_z", &back_clip_z, NULL)
+        && back_clip_z == vport->back_clip_z)
       pass ();
     else
-      fail ("VPORT.back_clip [BD] %g != %g", vport->back_clip, back_clip);
-    back_clip++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "back_clip", &back_clip, 0)
-        && back_clip == vport->back_clip)
+      fail ("VPORT.back_clip_z [BD] %g != %g", vport->back_clip_z, back_clip_z);
+    back_clip_z++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "back_clip_z", &back_clip_z, 0)
+        && back_clip_z == vport->back_clip_z)
       pass ();
     else
-      fail ("VPORT.back_clip [BD] set+1 %g != %g", vport->back_clip, back_clip);
-    vport->back_clip--;
+      fail ("VPORT.back_clip_z [BD] set+1 %g != %g", vport->back_clip_z, back_clip_z);
+    vport->back_clip_z--;
   }
   {
     BITCODE_H background;
@@ -45700,19 +45700,19 @@ static int test_VPORT (const Dwg_Object *obj)
     vport->flag--;
   }
   {
-    BITCODE_BD front_clip;
-    if (dwg_dynapi_entity_value (vport, "VPORT", "front_clip", &front_clip, NULL)
-        && front_clip == vport->front_clip)
+    BITCODE_BD front_clip_z;
+    if (dwg_dynapi_entity_value (vport, "VPORT", "front_clip_z", &front_clip_z, NULL)
+        && front_clip_z == vport->front_clip_z)
       pass ();
     else
-      fail ("VPORT.front_clip [BD] %g != %g", vport->front_clip, front_clip);
-    front_clip++;
-    if (dwg_dynapi_entity_set_value (vport, "VPORT", "front_clip", &front_clip, 0)
-        && front_clip == vport->front_clip)
+      fail ("VPORT.front_clip_z [BD] %g != %g", vport->front_clip_z, front_clip_z);
+    front_clip_z++;
+    if (dwg_dynapi_entity_set_value (vport, "VPORT", "front_clip_z", &front_clip_z, 0)
+        && front_clip_z == vport->front_clip_z)
       pass ();
     else
-      fail ("VPORT.front_clip [BD] set+1 %g != %g", vport->front_clip, front_clip);
-    vport->front_clip--;
+      fail ("VPORT.front_clip_z [BD] set+1 %g != %g", vport->front_clip_z, front_clip_z);
+    vport->front_clip_z--;
   }
   {
     BITCODE_BS grid_flags;
