@@ -43020,6 +43020,14 @@ static int test_VIEW (const Dwg_Object *obj)
     view->UCSORTHOVIEW--;
   }
   {
+    BITCODE_2RD VIEWCTR;
+    if (dwg_dynapi_entity_value (view, "VIEW", "VIEWCTR", &VIEWCTR, NULL)
+        && !memcmp (&VIEWCTR, &view->VIEWCTR, sizeof (view->VIEWCTR)))
+        pass ();
+    else
+        fail ("VIEW.VIEWCTR [2RD]");
+  }
+  {
     BITCODE_3BD VIEWDIR;
     if (dwg_dynapi_entity_value (view, "VIEW", "VIEWDIR", &VIEWDIR, NULL)
         && !memcmp (&VIEWDIR, &view->VIEWDIR, sizeof (view->VIEWDIR)))
@@ -43042,12 +43050,42 @@ static int test_VIEW (const Dwg_Object *obj)
     view->VIEWMODE--;
   }
   {
+    BITCODE_BD VIEWSIZE;
+    if (dwg_dynapi_entity_value (view, "VIEW", "VIEWSIZE", &VIEWSIZE, NULL)
+        && VIEWSIZE == view->VIEWSIZE)
+      pass ();
+    else
+      fail ("VIEW.VIEWSIZE [BD] %g != %g", view->VIEWSIZE, VIEWSIZE);
+    VIEWSIZE++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "VIEWSIZE", &VIEWSIZE, 0)
+        && VIEWSIZE == view->VIEWSIZE)
+      pass ();
+    else
+      fail ("VIEW.VIEWSIZE [BD] set+1 %g != %g", view->VIEWSIZE, VIEWSIZE);
+    view->VIEWSIZE--;
+  }
+  {
     BITCODE_CMC ambient_color;
     if (dwg_dynapi_entity_value (view, "VIEW", "ambient_color", &ambient_color, NULL)
         && !memcmp (&ambient_color, &view->ambient_color, sizeof (view->ambient_color)))
         pass ();
     else
         fail ("VIEW.ambient_color [CMC]");
+  }
+  {
+    BITCODE_BD aspect_ratio;
+    if (dwg_dynapi_entity_value (view, "VIEW", "aspect_ratio", &aspect_ratio, NULL)
+        && aspect_ratio == view->aspect_ratio)
+      pass ();
+    else
+      fail ("VIEW.aspect_ratio [BD] %g != %g", view->aspect_ratio, aspect_ratio);
+    aspect_ratio++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "aspect_ratio", &aspect_ratio, 0)
+        && aspect_ratio == view->aspect_ratio)
+      pass ();
+    else
+      fail ("VIEW.aspect_ratio [BD] set+1 %g != %g", view->aspect_ratio, aspect_ratio);
+    view->aspect_ratio--;
   }
   {
     BITCODE_B associated_ucs;
@@ -43111,14 +43149,6 @@ static int test_VIEW (const Dwg_Object *obj)
     view->brightness--;
   }
   {
-    BITCODE_2RD center;
-    if (dwg_dynapi_entity_value (view, "VIEW", "center", &center, NULL)
-        && !memcmp (&center, &view->center, sizeof (view->center)))
-        pass ();
-    else
-        fail ("VIEW.center [2RD]");
-  }
-  {
     BITCODE_BD contrast;
     if (dwg_dynapi_entity_value (view, "VIEW", "contrast", &contrast, NULL)
         && contrast == view->contrast)
@@ -43177,21 +43207,6 @@ static int test_VIEW (const Dwg_Object *obj)
     else
       fail ("VIEW.front_clip_z [BD] set+1 %g != %g", view->front_clip_z, front_clip_z);
     view->front_clip_z--;
-  }
-  {
-    BITCODE_BD height;
-    if (dwg_dynapi_entity_value (view, "VIEW", "height", &height, NULL)
-        && height == view->height)
-      pass ();
-    else
-      fail ("VIEW.height [BD] %g != %g", view->height, height);
-    height++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "height", &height, 0)
-        && height == view->height)
-      pass ();
-    else
-      fail ("VIEW.height [BD] set+1 %g != %g", view->height, height);
-    view->height--;
   }
   {
     BITCODE_B is_camera_plottable;
@@ -43341,14 +43356,6 @@ static int test_VIEW (const Dwg_Object *obj)
         fail ("VIEW.sun [H]");
   }
   {
-    BITCODE_3BD target;
-    if (dwg_dynapi_entity_value (view, "VIEW", "target", &target, NULL)
-        && !memcmp (&target, &view->target, sizeof (view->target)))
-        pass ();
-    else
-        fail ("VIEW.target [3BD]");
-  }
-  {
     BITCODE_BD twist_angle;
     if (dwg_dynapi_entity_value (view, "VIEW", "twist_angle", &twist_angle, NULL)
         && twist_angle == view->twist_angle)
@@ -43433,27 +43440,35 @@ static int test_VIEW (const Dwg_Object *obj)
     view->used--;
   }
   {
+    BITCODE_3BD view_target;
+    if (dwg_dynapi_entity_value (view, "VIEW", "view_target", &view_target, NULL)
+        && !memcmp (&view_target, &view->view_target, sizeof (view->view_target)))
+        pass ();
+    else
+        fail ("VIEW.view_target [3BD]");
+  }
+  {
+    BITCODE_BD view_width;
+    if (dwg_dynapi_entity_value (view, "VIEW", "view_width", &view_width, NULL)
+        && view_width == view->view_width)
+      pass ();
+    else
+      fail ("VIEW.view_width [BD] %g != %g", view->view_width, view_width);
+    view_width++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "view_width", &view_width, 0)
+        && view_width == view->view_width)
+      pass ();
+    else
+      fail ("VIEW.view_width [BD] set+1 %g != %g", view->view_width, view_width);
+    view->view_width--;
+  }
+  {
     BITCODE_H visualstyle;
     if (dwg_dynapi_entity_value (view, "VIEW", "visualstyle", &visualstyle, NULL)
         && !memcmp (&visualstyle, &view->visualstyle, sizeof (view->visualstyle)))
         pass ();
     else
         fail ("VIEW.visualstyle [H]");
-  }
-  {
-    BITCODE_BD width;
-    if (dwg_dynapi_entity_value (view, "VIEW", "width", &width, NULL)
-        && width == view->width)
-      pass ();
-    else
-      fail ("VIEW.width [BD] %g != %g", view->width, width);
-    width++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "width", &width, 0)
-        && width == view->width)
-      pass ();
-    else
-      fail ("VIEW.width [BD] set+1 %g != %g", view->width, width);
-    view->width--;
   }
   {
     BITCODE_H xref;

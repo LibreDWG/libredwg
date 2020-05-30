@@ -1591,6 +1591,7 @@ typedef struct _dwg_entity_VIEWPORT
   BITCODE_BD height;
   BITCODE_RS on_off; /* DXF 68, -1 should be accepted also */
   BITCODE_RS id;     /* DXF 69 */
+
   BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
   BITCODE_BD twist_angle;
@@ -2176,10 +2177,11 @@ typedef struct _dwg_object_VIEW_CONTROL
 typedef struct _dwg_object_VIEW
 {
   COMMON_TABLE_FIELDS(RC);
-  BITCODE_BD height;
-  BITCODE_BD width;
-  BITCODE_2RD center;
-  BITCODE_3BD target;
+  BITCODE_BD VIEWSIZE;
+  BITCODE_BD view_width;
+  BITCODE_BD aspect_ratio;
+  BITCODE_2RD VIEWCTR;
+  BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
   BITCODE_BD twist_angle;
   BITCODE_BD lens_length;

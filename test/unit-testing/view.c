@@ -13,10 +13,11 @@ api_process (dwg_object *obj)
   BITCODE_B is_xref_dep;
   BITCODE_H xref;
 
-  BITCODE_BD height;
-  BITCODE_BD width;
-  BITCODE_2RD center;
-  BITCODE_3BD target;
+  BITCODE_BD VIEWSIZE;
+  BITCODE_BD view_width;
+  BITCODE_BD aspect_ratio;
+  BITCODE_2RD VIEWCTR;
+  BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
   BITCODE_BD twist_angle;
   BITCODE_BD lens_length;
@@ -29,6 +30,10 @@ api_process (dwg_object *obj)
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
+  BITCODE_H background;
+  BITCODE_H visualstyle;
+  BITCODE_H sun;
+
   BITCODE_B pspace_flag;
   BITCODE_B associated_ucs;
   BITCODE_3BD ucsorg;
@@ -37,9 +42,6 @@ api_process (dwg_object *obj)
   BITCODE_BD ucs_elevation;
   BITCODE_BS UCSORTHOVIEW;
   BITCODE_B is_camera_plottable;
-  BITCODE_H background;
-  BITCODE_H visualstyle;
-  BITCODE_H sun;
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
   BITCODE_H livesection;
@@ -55,10 +57,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VIEW, is_xref_dep, B);
   CHK_ENTITY_H (_obj, VIEW, xref);
 
-  CHK_ENTITY_TYPE (_obj, VIEW, height, BD);
-  CHK_ENTITY_TYPE (_obj, VIEW, width, BD);
-  CHK_ENTITY_2RD (_obj, VIEW, center);
-  CHK_ENTITY_3RD (_obj, VIEW, target);
+  CHK_ENTITY_TYPE (_obj, VIEW, VIEWSIZE, BD);
+  CHK_ENTITY_TYPE (_obj, VIEW, view_width, BD);
+  CHK_ENTITY_TYPE (_obj, VIEW, aspect_ratio, BD);
+  CHK_ENTITY_2RD (_obj, VIEW, VIEWCTR);
+  CHK_ENTITY_3RD (_obj, VIEW, view_target);
   CHK_ENTITY_3RD (_obj, VIEW, VIEWDIR);
   CHK_ENTITY_TYPE (_obj, VIEW, twist_angle, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, lens_length, BD);
@@ -71,6 +74,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VIEW, brightness, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, contrast, BD);
   CHK_ENTITY_CMC (_obj, VIEW, ambient_color);
+  CHK_ENTITY_H (_obj, VIEW, background);
+  CHK_ENTITY_H (_obj, VIEW, visualstyle);
+  CHK_ENTITY_H (_obj, VIEW, sun);
+
   CHK_ENTITY_TYPE (_obj, VIEW, pspace_flag, B);
   CHK_ENTITY_TYPE (_obj, VIEW, associated_ucs, B);
   CHK_ENTITY_3RD (_obj, VIEW, ucsorg);
@@ -79,9 +86,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VIEW, ucs_elevation, BD);
   CHK_ENTITY_TYPE (_obj, VIEW, UCSORTHOVIEW, BS);
   CHK_ENTITY_TYPE (_obj, VIEW, is_camera_plottable, B);
-  CHK_ENTITY_H (_obj, VIEW, background);
-  CHK_ENTITY_H (_obj, VIEW, visualstyle);
-  CHK_ENTITY_H (_obj, VIEW, sun);
   CHK_ENTITY_H (_obj, VIEW, base_ucs);
   CHK_ENTITY_H (_obj, VIEW, named_ucs);
   CHK_ENTITY_H (_obj, VIEW, livesection);

@@ -8417,13 +8417,15 @@ BS
 B
 @item xref
 H
-@item height
+@item VIEWSIZE
 BD,	DXF 40
-@item width
+@item view_width
 BD,	DXF 41
-@item center
+@item aspect_ratio
+BD
+@item VIEWCTR
 2RD,	DXF 10
-@item target
+@item view_target
 3BD,	DXF 12
 @item VIEWDIR
 3BD,	DXF 11

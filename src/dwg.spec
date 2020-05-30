@@ -1520,54 +1520,54 @@ DWG_ENTITY (VIEWPORT)
     FIELD_RS (id, 69);
   }
 
-  SINCE (R_2000)
-    {
-      FIELD_3BD (view_target, 17);
-      FIELD_3BD (VIEWDIR, 16);
-      FIELD_BD (twist_angle, 51);
-      FIELD_BD (VIEWSIZE, 45);
-      FIELD_BD (lens_length, 42);
-      FIELD_BD (front_clip_z, 43);
-      FIELD_BD (back_clip_z, 44);
-      // on R_2006: no snap_angle, no snap_base
+  SINCE (R_2000) {
+    FIELD_3BD (view_target, 17);
+    FIELD_3BD (VIEWDIR, 16);
+    FIELD_BD (twist_angle, 51);
+    FIELD_BD (VIEWSIZE, 45);
+    FIELD_BD (lens_length, 42);
+    FIELD_BD (front_clip_z, 43);
+    FIELD_BD (back_clip_z, 44);
+    if (dwg->header.dwg_version != 0x1a) { // AC1020/R_2006 only here
       FIELD_BD (SNAPANG, 50);
       FIELD_2RD (VIEWCTR, 12);
       FIELD_2RD (SNAPBASE, 13);
-      FIELD_2RD (SNAPUNIT, 14);
-      FIELD_2RD (GRIDUNIT, 15);
-      FIELD_BS (circle_zoom, 72);
+    } else {
+      // on R_2006: no SNAPANG, SNAPBASE
+      FIELD_2RD (VIEWCTR, 12);
     }
-
+    FIELD_2RD (SNAPUNIT, 14);
+    FIELD_2RD (GRIDUNIT, 15);
+    FIELD_BS (circle_zoom, 72);
+  }
   SINCE (R_2007) {
     FIELD_BS (grid_major, 61);
   }
 
-  IF_FREE_OR_SINCE (R_2000)
-    {
-      FIELD_BL (num_frozen_layers, 0);
-      FIELD_BL (status_flag, 90);
-      FIELD_T (style_sheet, 1);
-      FIELD_RC (render_mode, 281);
-      FIELD_B (ucs_at_origin, 74);
-      FIELD_B (UCSVP, 71);
-      FIELD_3BD (ucsorg, 110);
-      FIELD_3BD (ucsxdir, 111);
-      FIELD_3BD (ucsydir, 112);
-      FIELD_BD (ucs_elevation, 146);
-      FIELD_BS (UCSORTHOVIEW, 79);
-    }
+  SINCE (R_2000) {
+    FIELD_BL (num_frozen_layers, 0);
+    FIELD_BL (status_flag, 90);
+    FIELD_T (style_sheet, 1);
+    FIELD_RC (render_mode, 281);
+    FIELD_B (ucs_at_origin, 74);
+    FIELD_B (UCSVP, 71);
+    FIELD_3BD (ucsorg, 110);
+    FIELD_3BD (ucsxdir, 111);
+    FIELD_3BD (ucsydir, 112);
+    FIELD_BD (ucs_elevation, 146);
+    FIELD_BS (UCSORTHOVIEW, 79);
+  }
 
   SINCE (R_2004) {
     FIELD_BS (shadeplot_mode, 170);
   }
-  SINCE (R_2007)
-    {
-      FIELD_B (use_default_lights, 292);
-      FIELD_RC (default_lighting_type, 282);
-      FIELD_BD (brightness, 141);
-      FIELD_BD (contrast, 142);
-      FIELD_CMC (ambient_color, 63);
-    }
+  SINCE (R_2007) {
+    FIELD_B (use_default_lights, 292);
+    FIELD_RC (default_lighting_type, 282);
+    FIELD_BD (brightness, 141);
+    FIELD_BD (contrast, 142);
+    FIELD_CMC (ambient_color, 63);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
   VERSIONS (R_13, R_14) {
@@ -2904,14 +2904,14 @@ DWG_OBJECT (VIEW)
   // subclass AbstractViewTableRecord:
   PRE (R_13)
   {
-    FIELD_RD (height, 40);
-    FIELD_2RD (center, 10);
-    FIELD_RD (width, 41);
+    FIELD_RD (VIEWSIZE, 40);
+    FIELD_2RD (VIEWCTR, 10);
+    FIELD_RD (view_width, 41);
     DXF {
       FIELD_3RD (VIEWDIR, 11);
     }
     SINCE (R_10) {
-      FIELD_3RD (target, 12);
+      FIELD_3RD (view_target, 12);
       FIELD_3RD (VIEWDIR, 0);
       FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
       FIELD_RD (lens_length, 42);
@@ -2922,16 +2922,24 @@ DWG_OBJECT (VIEW)
   }
   LATER_VERSIONS
   {
-    FIELD_BD (height, 40);
-    FIELD_BD (width, 0);
-
-    // subclass ViInfo:
-    FIELD_2RD (center, 10);
+    FIELD_BD (VIEWSIZE, 40); // i.e view height
+    FIELD_BD (view_width, 0);
+    DECODER {
+      FIELD_VALUE (aspect_ratio) = FIELD_VALUE (VIEWSIZE) == 0.0
+        ? 0.0
+        : FIELD_VALUE (view_width) / FIELD_VALUE (VIEWSIZE);
+      LOG_TRACE ("aspect_ratio: %f (calc)\n", FIELD_VALUE (aspect_ratio))
+    }
+    JSON {
+      FIELD_BD (aspect_ratio, 0);
+    }
+    // subclass ViInfo (shared with VPORT, but different DXF codes)
+    FIELD_2RD (VIEWCTR, 10);
     DXF {
-      FIELD_BD (width, 41);
+      FIELD_BD (view_width, 41);
       FIELD_3BD (VIEWDIR, 11);
     }
-    FIELD_3BD (target, 12);
+    FIELD_3BD (view_target, 12);
     FIELD_3BD (VIEWDIR, 0);
     FIELD_BD (twist_angle, 50);
     FIELD_BD (lens_length, 42);
@@ -3097,8 +3105,7 @@ DWG_OBJECT (VPORT)
     FIELD_BS (UCSORTHOVIEW, 79);
     FIELD_BD (ucs_elevation, 146);
   }
-  SINCE (R_2007)
-  {
+  SINCE (R_2007) {
     FIELD_HANDLE0 (background, 4, 332);
     FIELD_HANDLE0 (visualstyle, 5, 348);
     FIELD_BS (grid_flags, 60);
@@ -3110,6 +3117,7 @@ DWG_OBJECT (VPORT)
     FIELD_CMC (ambient_color, 63);
     FIELD_HANDLE0 (sun, 5, 361);
   }
+
   //TODO convert back 1001 1070 xdata
   REACTORS (4);
   XDICOBJHANDLE (3);
@@ -3163,6 +3171,7 @@ DWG_OBJECT (VPORT)
     JSON {
       FIELD_BD (aspect_ratio, 0);
     }
+    // subclass ViInfo (shared with VIEW, but different DXF codes)
     FIELD_2RD (VIEWCTR, 12);
     FIELD_3BD (view_target, 17);
     FIELD_3BD (VIEWDIR, 16);
@@ -3171,7 +3180,6 @@ DWG_OBJECT (VPORT)
     FIELD_BD (front_clip_z, 43);
     FIELD_BD (back_clip_z, 44);
     FIELD_4BITS (VIEWMODE, 71);
-
     SINCE (R_2000) {
       FIELD_RC (render_mode, 281);
     }

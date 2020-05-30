@@ -12,6 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BS is_xref_resolved;
   BITCODE_B is_xref_dep;
   BITCODE_H xref;
+
   BITCODE_BD VIEWSIZE;     // really the view height
   BITCODE_BD view_width;   // in DWG r13+, needed to calc. aspect_ratio
   BITCODE_BD aspect_ratio; // DXF 41 = view_width / VIEWSIZE
@@ -29,6 +30,10 @@ api_process (dwg_object *obj)
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
+  BITCODE_H background;
+  BITCODE_H visualstyle;
+  BITCODE_H sun;
+
   BITCODE_2RD lower_left;
   BITCODE_2RD upper_right;
   BITCODE_B UCSFOLLOW;
@@ -52,9 +57,6 @@ api_process (dwg_object *obj)
   BITCODE_BS UCSORTHOVIEW;
   BITCODE_BS grid_flags;
   BITCODE_BS grid_major;
-  BITCODE_H background;
-  BITCODE_H visualstyle;
-  BITCODE_H sun;
   BITCODE_H named_ucs;
   BITCODE_H base_ucs;
 
@@ -86,6 +88,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT, brightness, BD);
   CHK_ENTITY_TYPE (_obj, VPORT, contrast, BD);
   CHK_ENTITY_CMC (_obj, VPORT, ambient_color);
+  CHK_ENTITY_H (_obj, VPORT, background);
+  CHK_ENTITY_H (_obj, VPORT, visualstyle);
+  CHK_ENTITY_H (_obj, VPORT, sun);
+
   CHK_ENTITY_2RD (_obj, VPORT, lower_left);
   CHK_ENTITY_2RD (_obj, VPORT, upper_right);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSFOLLOW, B);
@@ -109,9 +115,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT, UCSORTHOVIEW, BS);
   CHK_ENTITY_TYPE (_obj, VPORT, grid_flags, BS);
   CHK_ENTITY_TYPE (_obj, VPORT, grid_major, BS);
-  CHK_ENTITY_H (_obj, VPORT, background);
-  CHK_ENTITY_H (_obj, VPORT, visualstyle);
-  CHK_ENTITY_H (_obj, VPORT, sun);
   CHK_ENTITY_H (_obj, VPORT, named_ucs);
   CHK_ENTITY_H (_obj, VPORT, base_ucs);
 }

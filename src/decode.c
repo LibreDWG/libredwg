@@ -445,10 +445,10 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
-          FIELD_RD (height, 40);
-          FIELD_2RD (center, 10);
-          FIELD_RD (width, 41);
-          FIELD_3RD (target, 12);
+          FIELD_RD (VIEWSIZE, 40);
+          FIELD_2RD (VIEWCTR, 10);
+          FIELD_RD (view_width, 41);
+          FIELD_3RD (view_target, 12);
           FIELD_3RD (VIEWDIR, 11);
           FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
           FIELD_RD (lens_length, 42);
