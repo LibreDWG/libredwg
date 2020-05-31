@@ -45,7 +45,7 @@ install:
 
 script:
   - if [ -n "$ASAN" ]; then
-      CC="clang -O0 -fno-omit-frame-pointer -fsanitize=address,undefined" ;
+      CC="clang -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking" ;
     fi
   - ./configure $CONF
   # starts swapping with only 8GB. seperate the biggest
