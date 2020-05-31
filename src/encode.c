@@ -3805,7 +3805,34 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       {
         PRE (R_2007)
         {
-          if (data->u.eed_0.length + 3 <= size)
+          if (dat->from_version >= R_2007)
+            {
+              BITCODE_RS length = data->u.eed_0_r2007.length;
+              BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
+              BITCODE_RS codepage = 30; //FIXME
+              if (length > 255)
+                {
+                  LOG_ERROR ("eed: overlong string %d stripped", (int)length);
+                  length = 255;
+                }
+              if (length + 3 <= size)
+                {
+                  char *dest = bit_embed_TU_size (s, length);
+                  bit_write_RC (dat, length);
+                  bit_write_RS_LE (dat, codepage);
+                  bit_write_TF (dat, (unsigned char *)dest, length);
+                  LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]",
+                             length, codepage, dest);
+                  free (dest);
+                }
+              else
+                {
+                  bit_write_RC (dat, 0);
+                  LOG_WARN ("string overflow: len=%d + 3 > size %d",
+                            data->u.eed_0.length, size);
+                }
+            }
+          else if (data->u.eed_0.length + 3 <= size)
             {
               if (!*data->u.eed_0.string)
                 data->u.eed_0.length = 0;
@@ -3825,9 +3852,26 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         }
         LATER_VERSIONS
         {
-          BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
-          if (data->u.eed_0.length * 2 + 2 <= size)
+          if (dat->from_version < R_2007)
             {
+              BITCODE_RS length = data->u.eed_0.length;
+              BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string);
+              if (length * 2 + 2 <= size)
+                {
+                  bit_write_RS (dat, length);
+                  for (int j = 0; j < length; j++)
+                    bit_write_RS (dat, *dest++);
+                }
+              else
+                {
+                  bit_write_RS (dat, 0);
+                  LOG_WARN ("string overflow: len=%d *2 + 2 > size %d",
+                            length, size);
+                }
+            }
+          else if (data->u.eed_0.length * 2 + 2 <= size)
+            {
+              BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
               bit_write_RS (dat, data->u.eed_0_r2007.length);
               for (int j = 0; j < data->u.eed_0_r2007.length; j++)
                 bit_write_RS (dat, *s++);
