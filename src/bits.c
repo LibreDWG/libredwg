@@ -1552,12 +1552,27 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
   if (!str)
     return NULL;
   read = write = 0;
-  while (read < len - 1)
+  while (read < len)
     {
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+      // for strict alignment CPU's like sparc only. also for UBSAN.
+      if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+        {
+          unsigned char *b = (unsigned char *)wstr;
+          c = (b[1] << 8) + b[0];
+          wstr++;
+        }
+      else
+#endif
       c = *wstr++;
       read++;
       if (c < 256)
         {
+          if (write + 1 >= size) // TODO should not happen
+            {
+              size += 2;
+              str = realloc (str, size);
+            }
           str[write++] = c & 0xFF;
         }
       else
@@ -1698,7 +1713,7 @@ bit_embed_TU (BITCODE_TU restrict wstr)
     return NULL;
   while ((c = *tmp++))
     len++;
-  return bit_embed_TU_size (wstr, len + 1);
+  return bit_embed_TU_size (wstr, len);
 }
 
 /** Write ASCIIZ text.
