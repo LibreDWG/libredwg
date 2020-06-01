@@ -3791,8 +3791,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 /** writes the data part, if there's no raw.
  */
 static int
-dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
-                     int size, const int i)
+dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const int i)
 {
   unsigned long pos = bit_position (dat);
   bit_write_RC (dat, data->code);
@@ -3929,8 +3928,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       dat->byte--;
       LOG_ERROR ("unknown EED code %d", data->code);
     }
-  size = bit_position (dat) - pos;
-  return size;
+  return (int)(bit_position (dat) - pos);
 }
 
 #define dat_flush(orig, dat) bit_copy_chain (orig, dat)
@@ -3944,11 +3942,14 @@ static int
 dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   unsigned long off = obj->address;
-  unsigned long last_handle = 0;
   unsigned dat_size = 0;
+  Dwg_Handle *last_handle;
   Bit_Chain dat1 = { 0 };
   int i, num_eed = obj->tio.object->num_eed;
   BITCODE_BS size = 0;
+  int last_size = 0;
+  int new_size = 0;
+  int did_raw = 0;
   int need_recalc = does_cross_unicode_datversion (dat);
 
   bit_chain_init (&dat1, 1024);
@@ -3958,14 +3959,14 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 
   for (i = 0; i < num_eed; i++)
     {
-      int new_size;
       Dwg_Eed *eed = &obj->tio.object->eed[i];
-      if (eed->size)
+      if (eed->size) // start of a new EED appid section
         {
           size = eed->size;
-          last_handle = eed->handle.value;
+          last_handle = &eed->handle;
           if (eed->raw && !need_recalc)
             {
+              did_raw = 1;
               bit_write_BS (dat, size);
               LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", i, size); LOG_POS
               bit_write_H (dat, &eed->handle);
@@ -3974,33 +3975,48 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
               bit_write_TF (dat, eed->raw, size);
               LOG_TRACE_TF (eed->raw, size);
+              new_size = 0;
             }
           // indxf
           else if (eed->data)
             {
-              goto do_eed_data;
+              did_raw = 0;
+              if (new_size) // flush old
+                {
+                  eed->size = new_size;
+                  bit_write_BS (dat, new_size);
+                  LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
+                  bit_write_H (dat, &eed->handle);
+                  LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
+                             ARGS_H (eed->handle)); LOG_POS;
+                  LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
+                  dat_flush (dat, &dat1);
+                  new_size = 0;
+                }
+              new_size = dwg_encode_eed_data (&dat1, eed->data, i);
+              LOG_POS;
             }
+          last_size = i;
         }
       // and if not already written by the previous raw (this has size=0)
-      else if (eed->data != NULL && eed->handle.value != last_handle)
+      else if (!did_raw)
         {
-        do_eed_data:
-          new_size = dwg_encode_eed_data (&dat1, eed->data, size, i);
+          new_size += dwg_encode_eed_data (&dat1, eed->data, i);
           LOG_POS;
-          if (need_recalc || new_size != size)
-            {
-              eed->size = new_size;
-              bit_write_BS (dat, new_size);
-              LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", i, new_size); LOG_POS;
-              bit_write_H (dat, &eed->handle);
-              LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", i,
-                         ARGS_H (eed->handle)); LOG_POS;
-              dat_flush (dat, &dat1);
-            }
         }
     }
+  if (new_size) // flush remainding rest
+    {
+      bit_write_BS (dat, new_size);
+      LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
+      bit_write_H (dat, last_handle);
+      LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
+                 ARGS_H (*last_handle)); LOG_POS;
+    }
+  if (dat1.byte)
+    LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
+  dat_flush (dat, &dat1);
   bit_write_BS (dat, 0);
-  LOG_POS
   if (i)
     LOG_TRACE ("EED[%d] size: 0 [BS] (end)\n", i);
   LOG_TRACE ("num_eed: %d\n", num_eed);
