@@ -2976,28 +2976,31 @@ bool does_cross_unicode_datversion (Bit_Chain *restrict dat)
     return false;
 }
 
-/* Copy the whole content of tmp_data to dat, and reset tmp_dat */
-// yet unoptimized
-void bit_copy_chain (Bit_Chain *restrict orig_dat, Bit_Chain *restrict tmp_dat)
+/* Copy the whole content of tmp_data to dat, and reset tmp_dat. */
+void bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
 {
   unsigned long i;
   unsigned long dat_size = bit_position (tmp_dat);
-  bit_set_position (tmp_dat, 0);
   // check if dat is byte aligned, tmp_dat always is. we can use memcpy then.
-#if 1
-  for (i = 0; i < dat_size / 8; i++)
+  if (!dat->bit)
     {
-      bit_write_RC (orig_dat, bit_read_RC (tmp_dat));
+      unsigned long size = tmp_dat->byte;
+      if (dat->byte + size > dat->size)
+        bit_chain_alloc (dat);
+      memcpy (&dat->chain[dat->byte], &tmp_dat->chain[0], size);
+      dat->byte += size;
     }
-  for (i = 0; i < dat_size % 8; i++)
+  else
     {
-      bit_write_B (orig_dat, bit_read_B (tmp_dat));
+      bit_set_position (tmp_dat, 0);
+      for (i = 0; i < dat_size / 8; i++)
+        {
+          bit_write_RC (dat, bit_read_RC (tmp_dat));
+        }
+      for (i = 0; i < dat_size % 8; i++)
+        {
+          bit_write_B (dat, bit_read_B (tmp_dat));
+        }
     }
-#else
-  for (i = 0; i < dat_size; i++)
-    {
-      bit_write_B (orig_dat, bit_read_B (tmp_dat));
-    }
-#endif
   bit_set_position (tmp_dat, 0);
 }
