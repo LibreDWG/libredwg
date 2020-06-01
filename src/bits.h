@@ -44,6 +44,7 @@
 #  include <wchar.h>
 #endif
 #include <stdio.h>
+#include <stdbool.h>
 #include "common.h"
 #include "dwg.h"
 
@@ -315,5 +316,8 @@ BITCODE_BD
 bit_nan (void);
 
 int bit_isnan (BITCODE_BD number);
+
+// which would require different text sizes and recalc.
+bool does_cross_unicode_datversion (Bit_Chain *restrict dat);
 
 #endif

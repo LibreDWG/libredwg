@@ -320,17 +320,6 @@ json_fixed_key (char *key, Bit_Chain *restrict dat,
   return;
 }
 
-// which would require a different size, need to recalc.
-static inline bool
-does_cross_unicode_datversion (Bit_Chain *restrict dat)
-{
-  if ((dat->version < R_2007 && dat->from_version >= R_2007)
-      || (dat->version >= R_2007 && dat->from_version < R_2007))
-    return true;
-  else
-    return false;
-}
-
 ATTRIBUTE_MALLOC
 static char *
 json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)

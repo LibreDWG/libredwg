@@ -2966,3 +2966,12 @@ bit_calc_CRC32 (const uint32_t seed, unsigned char *addr, long len)
     }
   return ~dx;
 }
+
+bool does_cross_unicode_datversion (Bit_Chain *restrict dat)
+{
+  if ((dat->version < R_2007 && dat->from_version >= R_2007)
+      || (dat->version >= R_2007 && dat->from_version < R_2007))
+    return true;
+  else
+    return false;
+}
