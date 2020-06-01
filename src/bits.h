@@ -312,12 +312,12 @@ void bit_print_bits (unsigned char *bits, long unsigned int bitsize);
 void bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int bitsize);
 void bit_explore_chain (Bit_Chain *dat, long unsigned int datsize);
 
-BITCODE_BD
-bit_nan (void);
-
+BITCODE_BD bit_nan (void);
 int bit_isnan (BITCODE_BD number);
 
 // which would require different text sizes and recalc.
 bool does_cross_unicode_datversion (Bit_Chain *restrict dat);
+/* Copy the whole content of tmp_data to dat, and reset tmp_dat */
+void bit_copy_chain (Bit_Chain *restrict orig_dat, Bit_Chain *restrict tmp_dat);
 
 #endif
