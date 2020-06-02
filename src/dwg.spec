@@ -2124,24 +2124,23 @@ DWG_OBJECT (DICTIONARY)
 
 #ifdef IS_DXF
   SUBCLASS (AcDbDictionary)
+  SINCE (R_13c3)
+    FIELD_RC0 (hard_owner, 280);
   SINCE (R_2000)
-  {
-    if (FIELD_VALUE (hard_owner))
-      FIELD_RC (hard_owner, 280);
-    FIELD_BS (cloning, 281);
-  }
+    FIELD_BS0 (cloning, 281);
 #else
   FIELD_BL (numitems, 0);
-  VERSION (R_14)
-    FIELD_RC (hard_owner, 0); // always 0
-  SINCE (R_2000)
-    {
-      IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE (cloning) = FIELD_VALUE (hard_owner) & 0xffff;
+  SINCE (R_13c3) {
+    SINCE (R_2000)
+      {
+        IF_ENCODE_FROM_EARLIER {
+          FIELD_VALUE (cloning) = FIELD_VALUE (hard_owner) & 0xffff;
+        }
+        FIELD_BS (cloning, 281);
       }
-      FIELD_BS (cloning, 281);
+    if (dat->version != R_13c3 || dwg->header.maint_version > 4)
       FIELD_RC (hard_owner, 280);
-    }
+  }
   VALUEOUTOFBOUNDS (numitems, 10000)
 #endif
 
@@ -2150,6 +2149,38 @@ DWG_OBJECT (DICTIONARY)
      REPEAT (numitems, texts, T)
       {
         int dxf = FIELD_VALUE (hard_owner) & 1 ? 360 : 350;
+        // ACAD_SORTENTS, ACAD_FILTER and SPATIAL are always hard 360
+        if (dxf == 350 && dat->from_version >= R_2007)
+          {
+            char *text = FIELD_VALUE (texts[rcount1]);
+#ifdef HAVE_NATIVE_WCHAR2
+            const wchar_t *wstr1 = L"ACAD_SORTENTS";
+            const wchar_t *wstr2 = L"ACAD_FILTER";
+            const wchar_t *wstr3 = L"SPATIAL";
+#else
+            const uint8_t wstr1[]
+                = { 'A', 0, 'C', 0, 'A', 0, 'D', 0, '_', 0, 'S', 0,
+                    'O', 0, 'R', 0, 'T', 0, 'E', 0, 'N', 0, 'T', 0,  'S',
+                     0,  0,  0 };
+            const uint8_t wstr2[]
+                = { 'A', 0, 'C', 0, 'A', 0, 'D', 0, '_', 0, 'F', 0,
+                    'I', 0, 'L', 0, 'T', 0, 'E', 0, 'R', 0,  0,  0 };
+            const uint8_t wstr3[] = { 'S', 0, 'P', 0, 'A', 0, 'T', 0,
+                                      'I', 0, 'A', 0, 'L', 0,  0,  0 };
+#endif
+            if (bit_eq_TU (text, (BITCODE_TU)wstr1) ||
+                bit_eq_TU (text, (BITCODE_TU)wstr2) ||
+                bit_eq_TU (text, (BITCODE_TU)wstr3))
+              dxf = 360;
+          }
+        else if (dxf == 350)
+          {
+            char *text = FIELD_VALUE (texts[rcount1]);
+            if (strEQc (text, "ACAD_SORTENTS") ||
+                strEQc (text, "ACAD_FILTER") ||
+                strEQc (text, "SPATIAL"))
+              dxf = 360;
+          }
         FIELD_T (texts[rcount1], 3);
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, dxf);
       }
