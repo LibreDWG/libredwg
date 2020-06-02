@@ -61,7 +61,7 @@ script:
     else
       if [ -n "$ASAN" ]; then
         travis_wait 25 make -j4 -C test/unit-testing check-prep ;
-        travis_wait make -j4 check ;
+        travis_wait 20 make -j4 check ;
       else
         make -j4 check ;
       fi
