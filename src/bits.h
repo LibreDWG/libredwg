@@ -55,7 +55,7 @@
 #endif
 
 /**
- Structure for DWG-files raw data storage
+ Structure for DWG-files raw data streams.
  */
 typedef struct _bit_chain
 {
@@ -64,9 +64,9 @@ typedef struct _bit_chain
   long unsigned int byte;
   unsigned char bit;
   unsigned char opts; // from dwg->opts, see DWG_OPTS_*
-  FILE *fh;
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
+  FILE *fh;
 } Bit_Chain;
 
 /* Functions for raw data manipulations.
@@ -295,13 +295,15 @@ int bit_search_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
 void bit_write_sentinel (Bit_Chain *dat, unsigned char sentinel[16]);
 
 void bit_chain_init (Bit_Chain *dat, const int size);
+void bit_chain_init_dat (Bit_Chain *restrict dat, const int size,
+                         const Bit_Chain *restrict from_dat);
 void bit_chain_alloc (Bit_Chain *dat);
 void bit_chain_free (Bit_Chain *dat);
 // after bit_chain_init
 #define bit_chain_set_version(to, from)                                       \
+  (to)->opts = (from)->opts;                                                  \
   (to)->version = (from)->version;                                            \
   (to)->from_version = (from)->from_version;                                  \
-  (to)->opts = (from)->opts;                                                  \
   (to)->fh = (from)->fh
 
 void bit_print (Bit_Chain *dat, long unsigned int size);

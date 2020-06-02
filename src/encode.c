@@ -715,7 +715,7 @@ static bool env_var_checked_p;
         /* save away special accumulated hdls, need to write common first */  \
         Bit_Chain dat1 = *hdl_dat;                                            \
         Bit_Chain dat2;                                                       \
-        bit_chain_init (&dat2, 12);                                           \
+        bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
         ENCODE_COMMON_OBJECT_HANDLES                                          \
         obj_flush_hdlstream (obj, dat, hdl_dat); /* common */                 \
@@ -741,8 +741,9 @@ obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   unsigned long datpos = bit_position (dat);
   unsigned long hdlpos = bit_position (hdl_dat);
   unsigned long objpos = obj->address * 8;
-  LOG_TRACE ("Flush handle stream of size %lu to @%lu.%lu\n", hdlpos,
-             (datpos  - objpos) / 8, (datpos  - objpos) % 8);
+  LOG_TRACE ("Flush handle stream of size %lu (@%lu.%u) to @%lu.%lu\n", hdlpos,
+             hdl_dat->byte, hdl_dat->bit, (datpos - objpos) / 8,
+             (datpos - objpos) % 8);
   bit_copy_chain (dat, hdl_dat);
 }
 
@@ -822,7 +823,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     Bit_Chain *hdl_dat = &_hdl_dat; /* a new copy */                          \
     Bit_Chain *str_dat = dat; /* a ref */                                     \
     LOG_INFO ("Encode entity " #token "\n");                                  \
-    bit_chain_init (hdl_dat, 128);                                            \
+    bit_chain_init_dat (hdl_dat, 128, dat);                                   \
     error = dwg_encode_entity (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       {                                                                       \
@@ -869,7 +870,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     Bit_Chain *hdl_dat = &_hdl_dat; /* a new copy */                          \
     Bit_Chain *str_dat = dat;       /* a ref */                               \
     LOG_INFO ("Encode object " #token "\n");                                  \
-    bit_chain_init (hdl_dat, 128);                                            \
+    bit_chain_init_dat (hdl_dat, 128, dat);                                   \
     error = dwg_encode_object (obj, dat, hdl_dat, str_dat);                   \
     if (error)                                                                \
       {                                                                       \
@@ -2004,9 +2005,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   old_dat = dat;
   SINCE (R_2004)
   {
-    bit_chain_init (&sec_dat[SECTION_PREVIEW], dwg->thumbnail.size + 64);
+    bit_chain_init_dat (&sec_dat[SECTION_PREVIEW], dwg->thumbnail.size + 64, dat);
     str_dat = hdl_dat = dat = &sec_dat[SECTION_PREVIEW];
-    bit_chain_set_version (dat, old_dat);
   }
   else
   {
@@ -2045,9 +2045,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
   {
     sec_id = SECTION_HEADER;
-    bit_chain_init (&sec_dat[sec_id], sizeof (struct Dwg_Header) + 64);
+    bit_chain_init_dat (&sec_dat[sec_id], sizeof (struct Dwg_Header) + 64, dat);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
-    bit_chain_set_version (dat, old_dat);
   }
   assert (!dat->bit);
   LOG_INFO ("\n=======> Header Variables:   %4u\n", (unsigned)dat->byte);
@@ -2080,10 +2079,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
   {
     sec_id = SECTION_CLASSES;
-    bit_chain_init (&sec_dat[sec_id],
-                    (sizeof (Dwg_Class) * dwg->num_classes) + 32);
+    bit_chain_init_dat (&sec_dat[sec_id],
+                    (sizeof (Dwg_Class) * dwg->num_classes) + 32, dat);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
-    bit_chain_set_version (dat, old_dat);
   }
   else sec_id = SECTION_CLASSES_R13;
   LOG_INFO ("\n=======> Classes: %4u (%d)\n", (unsigned)dat->byte,
@@ -2279,9 +2277,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
   {
     sec_id = SECTION_HANDLES;
-    bit_chain_init (&sec_dat[sec_id], (8 * dwg->num_objects) + 32);
+    bit_chain_init_dat (&sec_dat[sec_id], (8 * dwg->num_objects) + 32, dat);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
-    bit_chain_set_version (dat, old_dat);
   }
   else
   {
@@ -2489,9 +2486,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004)
   {
     sec_id = SECTION_TEMPLATE;
-    bit_chain_init (&sec_dat[sec_id], 16);
+    bit_chain_init_dat (&sec_dat[sec_id], 16, dat);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
-    bit_chain_set_version (dat, old_dat);
   }
   else sec_id = SECTION_MEASUREMENT_R13;
 

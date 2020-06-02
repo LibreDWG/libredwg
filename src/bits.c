@@ -2680,6 +2680,14 @@ bit_chain_init (Bit_Chain *dat, const int size)
   dat->bit = 0;
 }
 
+void
+bit_chain_init_dat (Bit_Chain *restrict dat, const int size,
+                    const Bit_Chain *restrict from_dat)
+{
+  bit_chain_init (dat, size);
+  bit_chain_set_version (dat, from_dat);
+}
+
 /*
  * Allocates or adds more memory space for bit_chain
  * adds a 1kB page.
