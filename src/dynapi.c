@@ -3173,7 +3173,7 @@ static const Dwg_DYNAPI_field _dwg_SECTIONOBJECT_fields[] = {
     0,0,0, 40 },
   { "bottom_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SECTIONOBJECT, bottom_height),
     0,0,0, 41 },
-  { "indicator_alpha",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_SECTIONOBJECT, indicator_alpha),
+  { "indicator_alpha",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SECTIONOBJECT, indicator_alpha),
     0,0,0, 70 },
   { "indicator_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_entity_SECTIONOBJECT, indicator_color),
     1,0,0, 62 },
@@ -3185,7 +3185,7 @@ static const Dwg_DYNAPI_field _dwg_SECTIONOBJECT_fields[] = {
     0,0,0, 93 },
   { "blverts",	"3BD*", sizeof (BITCODE_3BD*),  OFF (struct _dwg_entity_SECTIONOBJECT, blverts),
     1,1,0, 12 },
-  { "setting",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SECTIONOBJECT, setting),
+  { "section_settings",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SECTIONOBJECT, section_settings),
     1,0,0, 360 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

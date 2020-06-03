@@ -4093,13 +4093,13 @@ typedef struct _dwg_entity_SECTIONOBJECT
   BITCODE_3BD vert_dir;	        /*!< DXF 10. normal to the segment line, on the plane */
   BITCODE_BD top_height;	/*!< DXF 40 */
   BITCODE_BD bottom_height;	/*!< DXF 41 */
-  BITCODE_RC indicator_alpha;	/*!< DXF 70 */
+  BITCODE_BS indicator_alpha;	/*!< DXF 70 */
   BITCODE_CMC indicator_color;	/*!< DXF 62/420 (but documented as 63/411) */
   BITCODE_BL num_verts;		/*!< DXF 92 */
   BITCODE_3BD *verts;		/*!< DXF 11 */
   BITCODE_BL num_blverts;	/*!< DXF 93 */
   BITCODE_3BD *blverts;		/*!< DXF 12 */
-  BITCODE_H setting;		/*!< DXF 360 */
+  BITCODE_H section_settings;	/*!< DXF 360 */
 
 } Dwg_Entity_SECTIONOBJECT;
 

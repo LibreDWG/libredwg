@@ -1744,6 +1744,26 @@ my $known = {
     290 => 'show_all_bend_indentifiers',
     290 => 'show_end_and_bend_lines',
     ],
+  SECTIONOBJECT => [
+    # AcDbSection
+    90 => 'state',
+    91 => 'flags',
+    1 => 'name',
+    10 => 'vert_dir',
+    40 => 'top_height',
+    41 => 'bottom_height',
+    70 => 'indicator_alpha',
+    62 => 'indicator_color',
+    92 => 'num_verts',
+    11 => 'verts.x',
+    21 => 'verts.y',
+    31 => 'verts.z',
+    93 => 'num_blverts',
+    12 => 'blverts.x',
+    22 => 'blverts.y',
+    32 => 'blverts.z',
+    360 => 'section_settings',
+  ]
   LAYERFILTER => [
     2 => 'name',
     3 => 'description',

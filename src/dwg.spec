@@ -6843,7 +6843,7 @@ DWG_ENTITY (SECTIONOBJECT)
   FIELD_3BD (vert_dir, 10);
   FIELD_BD (top_height, 40);
   FIELD_BD (bottom_height, 41);
-  FIELD_BL (indicator_alpha, 70);
+  FIELD_BS (indicator_alpha, 70);
   FIELD_CMTC (indicator_color, 62); //dxf doc bug: 63, 411
   FIELD_BL (num_verts, 92);
   FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
@@ -6851,7 +6851,7 @@ DWG_ENTITY (SECTIONOBJECT)
   FIELD_3DPOINT_VECTOR (blverts, num_blverts, 12);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (setting, 5, 360);
+  FIELD_HANDLE (section_settings, 5, 360);
 DWG_ENTITY_END
 
 DWG_OBJECT (SECTION_MANAGER)

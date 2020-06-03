@@ -18384,18 +18384,18 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
     sectionobject->flags--;
   }
   {
-    BITCODE_RC indicator_alpha;
+    BITCODE_BS indicator_alpha;
     if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "indicator_alpha", &indicator_alpha, NULL)
         && indicator_alpha == sectionobject->indicator_alpha)
       pass ();
     else
-      fail ("SECTIONOBJECT.indicator_alpha [RC] %u != %u", sectionobject->indicator_alpha, indicator_alpha);
+      fail ("SECTIONOBJECT.indicator_alpha [BS] %hu != %hu", sectionobject->indicator_alpha, indicator_alpha);
     indicator_alpha++;
     if (dwg_dynapi_entity_set_value (sectionobject, "SECTIONOBJECT", "indicator_alpha", &indicator_alpha, 0)
         && indicator_alpha == sectionobject->indicator_alpha)
       pass ();
     else
-      fail ("SECTIONOBJECT.indicator_alpha [RC] set+1 %u != %u", sectionobject->indicator_alpha, indicator_alpha);
+      fail ("SECTIONOBJECT.indicator_alpha [BS] set+1 %hu != %hu", sectionobject->indicator_alpha, indicator_alpha);
     sectionobject->indicator_alpha--;
   }
   {
@@ -18455,12 +18455,12 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
         fail ("SECTIONOBJECT.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_H setting;
-    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "setting", &setting, NULL)
-        && !memcmp (&setting, &sectionobject->setting, sizeof (sectionobject->setting)))
+    BITCODE_H section_settings;
+    if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "section_settings", &section_settings, NULL)
+        && !memcmp (&section_settings, &sectionobject->section_settings, sizeof (sectionobject->section_settings)))
         pass ();
     else
-        fail ("SECTIONOBJECT.setting [H]");
+        fail ("SECTIONOBJECT.section_settings [H]");
   }
   {
     BITCODE_BL state;

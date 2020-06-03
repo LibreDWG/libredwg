@@ -3318,7 +3318,7 @@ BD,	DXF 40
 @item bottom_height
 BD,	DXF 41
 @item indicator_alpha
-RC,	DXF 70
+BS,	DXF 70
 @item indicator_color
 CMC,	DXF 62
 @item num_verts
@@ -3329,7 +3329,7 @@ BL,	DXF 92
 BL,	DXF 93
 @item blverts
 3BD*,	DXF 12
-@item setting
+@item section_settings
 H,	DXF 360
 
 @end vtable
