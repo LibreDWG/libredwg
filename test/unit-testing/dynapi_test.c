@@ -27042,12 +27042,72 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     assocperssubentmanager->class_version--;
   }
   {
+    BITCODE_BL num_steps;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_steps", &num_steps, NULL)
+        && num_steps == assocperssubentmanager->num_steps)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.num_steps [BL] %u != %u", assocperssubentmanager->num_steps, num_steps);
+    num_steps++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_steps", &num_steps, 0)
+        && num_steps == assocperssubentmanager->num_steps)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.num_steps [BL] set+1 %u != %u", assocperssubentmanager->num_steps, num_steps);
+    assocperssubentmanager->num_steps--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "parent", &parent, NULL)
         && !memcmp (&parent, &assocperssubentmanager->parent, sizeof (assocperssubentmanager->parent)))
         pass ();
     else
         fail ("ASSOCPERSSUBENTMANAGER.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL unknown_0;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_0", &unknown_0, NULL)
+        && unknown_0 == assocperssubentmanager->unknown_0)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_0 [BL] %u != %u", assocperssubentmanager->unknown_0, unknown_0);
+    unknown_0++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_0", &unknown_0, 0)
+        && unknown_0 == assocperssubentmanager->unknown_0)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_0 [BL] set+1 %u != %u", assocperssubentmanager->unknown_0, unknown_0);
+    assocperssubentmanager->unknown_0--;
+  }
+  {
+    BITCODE_BL unknown_2;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_2", &unknown_2, NULL)
+        && unknown_2 == assocperssubentmanager->unknown_2)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_2 [BL] %u != %u", assocperssubentmanager->unknown_2, unknown_2);
+    unknown_2++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_2", &unknown_2, 0)
+        && unknown_2 == assocperssubentmanager->unknown_2)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_2 [BL] set+1 %u != %u", assocperssubentmanager->unknown_2, unknown_2);
+    assocperssubentmanager->unknown_2--;
+  }
+  {
+    BITCODE_BL unknown_3;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_3", &unknown_3, NULL)
+        && unknown_3 == assocperssubentmanager->unknown_3)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_3 [BL] %u != %u", assocperssubentmanager->unknown_3, unknown_3);
+    unknown_3++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_3", &unknown_3, 0)
+        && unknown_3 == assocperssubentmanager->unknown_3)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_3 [BL] set+1 %u != %u", assocperssubentmanager->unknown_3, unknown_3);
+    assocperssubentmanager->unknown_3--;
   }
   {
     BITCODE_B unknown_b37;
@@ -27063,21 +27123,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_b37 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocperssubentmanager->unknown_b37, unknown_b37);
     assocperssubentmanager->unknown_b37--;
-  }
-  {
-    BITCODE_BL unknown_bl1;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, NULL)
-        && unknown_bl1 == assocperssubentmanager->unknown_bl1)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl1 [BL] %u != %u", assocperssubentmanager->unknown_bl1, unknown_bl1);
-    unknown_bl1++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, 0)
-        && unknown_bl1 == assocperssubentmanager->unknown_bl1)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl1 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl1, unknown_bl1);
-    assocperssubentmanager->unknown_bl1--;
   }
   {
     BITCODE_BL unknown_bl10;
@@ -27230,21 +27275,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     assocperssubentmanager->unknown_bl19--;
   }
   {
-    BITCODE_BL unknown_bl2;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, NULL)
-        && unknown_bl2 == assocperssubentmanager->unknown_bl2)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl2 [BL] %u != %u", assocperssubentmanager->unknown_bl2, unknown_bl2);
-    unknown_bl2++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, 0)
-        && unknown_bl2 == assocperssubentmanager->unknown_bl2)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl2 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl2, unknown_bl2);
-    assocperssubentmanager->unknown_bl2--;
-  }
-  {
     BITCODE_BL unknown_bl20;
     if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl20", &unknown_bl20, NULL)
         && unknown_bl20 == assocperssubentmanager->unknown_bl20)
@@ -27395,21 +27425,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     assocperssubentmanager->unknown_bl29--;
   }
   {
-    BITCODE_BL unknown_bl3;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, NULL)
-        && unknown_bl3 == assocperssubentmanager->unknown_bl3)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl3 [BL] %u != %u", assocperssubentmanager->unknown_bl3, unknown_bl3);
-    unknown_bl3++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, 0)
-        && unknown_bl3 == assocperssubentmanager->unknown_bl3)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl3 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl3, unknown_bl3);
-    assocperssubentmanager->unknown_bl3--;
-  }
-  {
     BITCODE_BL unknown_bl30;
     if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl30", &unknown_bl30, NULL)
         && unknown_bl30 == assocperssubentmanager->unknown_bl30)
@@ -27513,21 +27528,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     else
       fail ("ASSOCPERSSUBENTMANAGER.unknown_bl36 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl36, unknown_bl36);
     assocperssubentmanager->unknown_bl36--;
-  }
-  {
-    BITCODE_BL unknown_bl4;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4, NULL)
-        && unknown_bl4 == assocperssubentmanager->unknown_bl4)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl4 [BL] %u != %u", assocperssubentmanager->unknown_bl4, unknown_bl4);
-    unknown_bl4++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl4", &unknown_bl4, 0)
-        && unknown_bl4 == assocperssubentmanager->unknown_bl4)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl4 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl4, unknown_bl4);
-    assocperssubentmanager->unknown_bl4--;
   }
   {
     BITCODE_BL unknown_bl5;
@@ -37959,6 +37959,21 @@ static int test_PERSUBENTMGR (const Dwg_Object *obj)
     persubentmgr->class_version--;
   }
   {
+    BITCODE_BL num_steps;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_steps", &num_steps, NULL)
+        && num_steps == persubentmgr->num_steps)
+      pass ();
+    else
+      fail ("PERSUBENTMGR.num_steps [BL] %u != %u", persubentmgr->num_steps, num_steps);
+    num_steps++;
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "num_steps", &num_steps, 0)
+        && num_steps == persubentmgr->num_steps)
+      pass ();
+    else
+      fail ("PERSUBENTMGR.num_steps [BL] set+1 %u != %u", persubentmgr->num_steps, num_steps);
+    persubentmgr->num_steps--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "parent", &parent, NULL)
         && !memcmp (&parent, &persubentmgr->parent, sizeof (persubentmgr->parent)))
@@ -37967,34 +37982,44 @@ static int test_PERSUBENTMGR (const Dwg_Object *obj)
         fail ("PERSUBENTMGR.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BL unknown_bl1;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl1", &unknown_bl1, NULL)
-        && unknown_bl1 == persubentmgr->unknown_bl1)
+    BITCODE_BL* steps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_steps", &count, NULL)
+        && dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "steps", &steps, NULL)
+        && steps == persubentmgr->steps)
       pass ();
     else
-      fail ("PERSUBENTMGR.unknown_bl1 [BL] %u != %u", persubentmgr->unknown_bl1, unknown_bl1);
-    unknown_bl1++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl1", &unknown_bl1, 0)
-        && unknown_bl1 == persubentmgr->unknown_bl1)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.unknown_bl1 [BL] set+1 %u != %u", persubentmgr->unknown_bl1, unknown_bl1);
-    persubentmgr->unknown_bl1--;
+      fail ("PERSUBENTMGR.steps [BL*] * %u num_steps", count);
   }
   {
-    BITCODE_BL unknown_bl2;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl2", &unknown_bl2, NULL)
-        && unknown_bl2 == persubentmgr->unknown_bl2)
+    BITCODE_BL unknown_0;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_0", &unknown_0, NULL)
+        && unknown_0 == persubentmgr->unknown_0)
       pass ();
     else
-      fail ("PERSUBENTMGR.unknown_bl2 [BL] %u != %u", persubentmgr->unknown_bl2, unknown_bl2);
-    unknown_bl2++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl2", &unknown_bl2, 0)
-        && unknown_bl2 == persubentmgr->unknown_bl2)
+      fail ("PERSUBENTMGR.unknown_0 [BL] %u != %u", persubentmgr->unknown_0, unknown_0);
+    unknown_0++;
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_0", &unknown_0, 0)
+        && unknown_0 == persubentmgr->unknown_0)
       pass ();
     else
-      fail ("PERSUBENTMGR.unknown_bl2 [BL] set+1 %u != %u", persubentmgr->unknown_bl2, unknown_bl2);
-    persubentmgr->unknown_bl2--;
+      fail ("PERSUBENTMGR.unknown_0 [BL] set+1 %u != %u", persubentmgr->unknown_0, unknown_0);
+    persubentmgr->unknown_0--;
+  }
+  {
+    BITCODE_BL unknown_2;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_2", &unknown_2, NULL)
+        && unknown_2 == persubentmgr->unknown_2)
+      pass ();
+    else
+      fail ("PERSUBENTMGR.unknown_2 [BL] %u != %u", persubentmgr->unknown_2, unknown_2);
+    unknown_2++;
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_2", &unknown_2, 0)
+        && unknown_2 == persubentmgr->unknown_2)
+      pass ();
+    else
+      fail ("PERSUBENTMGR.unknown_2 [BL] set+1 %u != %u", persubentmgr->unknown_2, unknown_2);
+    persubentmgr->unknown_2--;
   }
   {
     BITCODE_BL unknown_bl3;
@@ -38025,36 +38050,6 @@ static int test_PERSUBENTMGR (const Dwg_Object *obj)
     else
       fail ("PERSUBENTMGR.unknown_bl4 [BL] set+1 %u != %u", persubentmgr->unknown_bl4, unknown_bl4);
     persubentmgr->unknown_bl4--;
-  }
-  {
-    BITCODE_BL unknown_bl5;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl5", &unknown_bl5, NULL)
-        && unknown_bl5 == persubentmgr->unknown_bl5)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.unknown_bl5 [BL] %u != %u", persubentmgr->unknown_bl5, unknown_bl5);
-    unknown_bl5++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl5", &unknown_bl5, 0)
-        && unknown_bl5 == persubentmgr->unknown_bl5)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.unknown_bl5 [BL] set+1 %u != %u", persubentmgr->unknown_bl5, unknown_bl5);
-    persubentmgr->unknown_bl5--;
-  }
-  {
-    BITCODE_BL unknown_bl6;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl6", &unknown_bl6, NULL)
-        && unknown_bl6 == persubentmgr->unknown_bl6)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.unknown_bl6 [BL] %u != %u", persubentmgr->unknown_bl6, unknown_bl6);
-    unknown_bl6++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl6", &unknown_bl6, 0)
-        && unknown_bl6 == persubentmgr->unknown_bl6)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.unknown_bl6 [BL] set+1 %u != %u", persubentmgr->unknown_bl6, unknown_bl6);
-    persubentmgr->unknown_bl6--;
   }
   if (failed && (is_class_unstable ("PERSUBENTMGR") || is_class_debugging ("PERSUBENTMGR")))
     {

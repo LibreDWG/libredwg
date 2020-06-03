@@ -5099,22 +5099,22 @@ typedef struct _dwg_object_PERSUBENTMGR
 {
   struct _dwg_object_object *parent;
   BITCODE_BL class_version; /*!< DXF 90 2 */
-  BITCODE_BL unknown_bl1;   /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl2;   /*!< DXF 90 2 */
+  BITCODE_BL unknown_0;     /*!< DXF 90 0 */
+  BITCODE_BL unknown_2;     /*!< DXF 90 2 */
   BITCODE_BL unknown_bl3;   /*!< DXF 90 3 */
   BITCODE_BL unknown_bl4;   /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl5;   /*!< DXF 90 1 */
-  BITCODE_BL unknown_bl6;   /*!< DXF 90 1 */
+  BITCODE_BL num_steps;     /*!< DXF 90 1 */
+  BITCODE_BL *steps;        /*!< DXF 90 */
 } Dwg_Object_PERSUBENTMGR;
 
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL class_version; /*!< DXF 90 1 */
-  BITCODE_BL unknown_bl1;   /*!< DXF 90 3 */
-  BITCODE_BL unknown_bl2;   /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl3;   /*!< DXF 90 2 */
-  BITCODE_BL unknown_bl4;   /*!< DXF 90 3 */
+  BITCODE_BL class_version; /*!< DXF 90 0 or r2013+ 1 */
+  BITCODE_BL unknown_3;     /*!< DXF 90 always 3 */
+  BITCODE_BL unknown_0;     /*!< DXF 90 always 0 */
+  BITCODE_BL unknown_2;     /*!< DXF 90 always 2 */
+  BITCODE_BL num_steps;     /*!< DXF 90 3 */
   BITCODE_BL unknown_bl5;   /*!< DXF 90 1 */
   BITCODE_BL unknown_bl6;   /*!< DXF 90 5 */
   BITCODE_BL unknown_bl6a;  /*!< DXF 90 0 */

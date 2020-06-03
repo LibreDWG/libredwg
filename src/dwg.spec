@@ -6327,15 +6327,15 @@ DWG_OBJECT (PERSUBENTMGR)
   SUBCLASS (AcDbPersSubentManager)
   FIELD_BL (class_version, 90); //2
   VALUEOUTOFBOUNDS (class_version, 10)
-  FIELD_BL (unknown_bl1, 90); //0
-  FIELD_BL (unknown_bl2, 90); //2
+  FIELD_BL (unknown_0, 90); //always 0
+  FIELD_BL (unknown_2, 90); //always 2
+
   FIELD_BL (unknown_bl3, 90); //3
   FIELD_BL (unknown_bl4, 90); //0
-  FIELD_BL (unknown_bl5, 90); //1
-  FIELD_BL (unknown_bl6, 90); //1
+  FIELD_BL (num_steps, 90);   //1
+  FIELD_VECTOR (steps, BL, num_steps, 90); //1
 
   START_OBJECT_HANDLE_STREAM;
-
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
@@ -7712,15 +7712,16 @@ DWG_OBJECT (ASSOCVERTEXACTIONPARAM)
   DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
-// See AcDbAssocPersSubentIdPE.h?
+// See AcDbAssocPersSubentIdPE.h
 DWG_OBJECT (ASSOCPERSSUBENTMANAGER)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocPersSubentManager)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (unknown_bl1, 90); //3
-  FIELD_BL (unknown_bl2, 90); //0
-  FIELD_BL (unknown_bl3, 90); //2
-  FIELD_BL (unknown_bl4, 90); //3
+  FIELD_BL (class_version, 90); //0 or 1 (r2013+)
+  FIELD_BL (unknown_3, 90); //3
+  FIELD_BL (unknown_0, 90); //0
+  FIELD_BL (unknown_2, 90); //2
+
+  FIELD_BL (num_steps, 90); //3
   FIELD_BL (unknown_bl5, 90); //1
   FIELD_BL (unknown_bl6, 90); //5
   FIELD_BL (unknown_bl6a, 90); //0 10 0100000100 0100000011
