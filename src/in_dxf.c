@@ -4588,7 +4588,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           have_rotated_type = 0;
           break;
         case 72:
-          if (i < 0) break;
+          if (i < 0 || i > 3) break;
           o->ref[i].osnap_type = pair->value.i;
           LOG_TRACE ("%s.ref[%d].osnap_type = %d [RC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
@@ -4597,7 +4597,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 331:
           {
             BITCODE_BS n;
-            if (i < 0) break;
+            if (i < 0 || i > 3) break;
             n = o->ref[i].num_xrefs;
             o->ref[i].xrefs = realloc (o->ref[i].xrefs, (n + 1) * sizeof (BITCODE_H));
             o->ref[i].xrefs[n] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
@@ -4607,14 +4607,15 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           }
           break;
         case 74:
-          if (i < 0) break;
+          if (i < 0 || i > 3) break;
           o->ref[i].num_intsectobj = pair->value.i;
+          o->ref[i].intsectobj = xcalloc (pair->value.i, sizeof (BITCODE_H));
           j = 0;
           LOG_TRACE ("%s.ref[%d].num_intsectobj = %d [BS %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 332:
-          if (i < 0 || j < 0) break;
+          if (i < 0 || j < 0 || i > 3 || j >= (int)o->ref[i].num_intsectobj) break;
           o->ref[i].intsectobj[j] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
           LOG_TRACE ("%s.ref[%d].intsectobj[%d] = " FORMAT_REF " [H %d]\n",
                      obj->name, i, j, ARGS_REF(o->ref[i].intsectobj[j]), pair->code);
