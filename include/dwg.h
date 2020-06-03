@@ -5216,6 +5216,16 @@ typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY
   BITCODE_BL ssab_status;       /*!< DXF 90  */
 } Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY;
 
+typedef struct _dwg_ACSH_HistoryNode
+{
+  BITCODE_BL bl90; //33
+  BITCODE_BL bl91; //29
+  BITCODE_BD* trans; //last 16x nums 40-55
+  BITCODE_CMC color;   /*!< DXF 62 */
+  BITCODE_BL  bl92;    /*!< DXF 92 */
+  BITCODE_BL  h347;    /*!< DXF 347 */
+} Dwg_ACSH_HistoryNode;
+  
 // i.e. planesurf?
 typedef struct _dwg_object_ACSH_BOX_CLASS
 {
@@ -5224,21 +5234,14 @@ typedef struct _dwg_object_ACSH_BOX_CLASS
   BITCODE_BL class_version; // 90
   BITCODE_BL ee_bl98; //33
   BITCODE_BL ee_bl99; //29
-  // AcDbShHistoryNode
-  BITCODE_BL shhn_bl90; //33
-  BITCODE_BL shhn_bl91; //29
-  BITCODE_BD* shhn_pts; //last 16x nums 40-55
-  BITCODE_CMC color;      /*!< DXF 62 */
-  BITCODE_B  shhn_b92;    /*!< DXF 92 */
-  BITCODE_BL shhn_bl347;  /*!< DXF 347 */
-
+  Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShBox
-  BITCODE_BL shb_bl90;       /*!< DXF 90 (33) */
-  BITCODE_BL shb_bl91;       /*!< DXF 91 (29) */
-  BITCODE_BD shb_bd40;       /*!< DXF 40 1300.0 (length?) */
-  BITCODE_BD shb_bd41;       /*!< DXF 41 20.0 (width?) */
-  BITCODE_BD shb_bd42;       /*!< DXF 42 420.0 (height?) */
+  BITCODE_BL bl90;       /*!< DXF 90 (33) */
+  BITCODE_BL bl91;       /*!< DXF 91 (29) */
+  BITCODE_BD length;       /*!< DXF 40 1300.0 (length?) */
+  BITCODE_BD width;       /*!< DXF 41 20.0 (width?) */
+  BITCODE_BD height;       /*!< DXF 42 420.0 (height?) */
 
 } Dwg_Object_ACSH_BOX_CLASS;
 
@@ -5249,13 +5252,7 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   BITCODE_BL class_version; // 90
   BITCODE_BL ee_bl98; //33
   BITCODE_BL ee_bl99; //29
-  // AcDbShHistoryNode
-  BITCODE_BL shhn_bl90; //33
-  BITCODE_BL shhn_bl91; //29
-  BITCODE_BD* shhn_pts; //last 16x nums 40-55
-  BITCODE_CMC color; /*!< DXF 62 */
-  BITCODE_B  shhn_b92; /*!< DXF 92 */
-  BITCODE_BL shhn_bl347; /*!< DXF 347 */
+  Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShSweepBase
   BITCODE_BL shsw_bl90;       /*!< DXF 90 */
@@ -5296,18 +5293,12 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   BITCODE_BL class_version; // 90
   BITCODE_BL ee_bl98; //33
   BITCODE_BL ee_bl99; //29
-  // AcDbShHistoryNode
-  BITCODE_BL shhn_bl90; //33
-  BITCODE_BL shhn_bl91; //29
-  BITCODE_BD* shhn_pts; //last 16x nums 40-55
-  BITCODE_CMC color; /*!< DXF 62 */
-  BITCODE_B  shhn_b92; /*!< DXF 92 */
-  BITCODE_BL shhn_bl347; /*!< DXF 347 */
+  Dwg_ACSH_HistoryNode history_node;
 
   // AcDbShPrimitive
   // AcDbShSweepBase
-  BITCODE_BL shsw_bl90;       /*!< DXF 90 */
-  BITCODE_BL shsw_bl91;       /*!< DXF 91 */
+  BITCODE_BL bl90;       /*!< DXF 90 */
+  BITCODE_BL bl91;       /*!< DXF 91 */
   BITCODE_3BD basept;         /*!< DXF 10 */
   BITCODE_BL shsw_bl92;       /*!< DXF 92 */
   BITCODE_BL shsw_text_size;  /*!< DXF 90 */
@@ -5336,6 +5327,25 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   // AcDbShExtrusion
 
 } Dwg_Object_ACSH_EXTRUSION_CLASS;
+
+typedef struct _dwg_object_ACSH_LOFT_CLASS
+{
+  struct _dwg_object_object *parent;
+  // AcDbEvalExpr
+  BITCODE_BL class_version; // 90
+  BITCODE_BL ee_bl98; //33
+  BITCODE_BL ee_bl99; //29
+  Dwg_ACSH_HistoryNode history_node;
+  // AcDbShPrimitive
+  // AcDbShLoft
+  BITCODE_BL bl90;       /*!< DXF 90 */
+  BITCODE_BL bl91;       /*!< DXF 91 */
+  BITCODE_BL num_crossects; /*!< DXF 92 */
+  struct _dwg_object *crossects;
+  BITCODE_BL num_guides; /*!< DXF 95 */
+  struct _dwg_object *guides;
+
+} Dwg_Object_ACSH_LOFT_CLASS;
 
 // called COORDINATION_MODEL in the DXF docs
 typedef struct _dwg_entity_NAVISWORKSMODEL
@@ -5978,7 +5988,7 @@ typedef struct _dwg_object_ACSH_HISTORY_CLASS
   BITCODE_BL shhn_bl91; //29
   BITCODE_BD* shhn_pts; //last 16x nums 40-55
   BITCODE_CMC color; /*!< DXF 62 */
-  BITCODE_B  shhn_b92; /*!< DXF 92 */
+  BITCODE_BL  shhn_bl92; /*!< DXF 92 */
   BITCODE_BL shhn_bl347; /*!< DXF 347 */
   //?
 } Dwg_Object_ACSH_HISTORY_CLASS;

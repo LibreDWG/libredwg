@@ -4294,27 +4294,17 @@ BL,	DXF 90
 BL,	DXF 98
 @item ee_bl99
 BL,	DXF 99
-@item shhn_bl90
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
 BL,	DXF 90
-@item shhn_bl91
+@item bl91
 BL,	DXF 91
-@item shhn_pts
-BD*,	DXF 40
-@item color
-CMC,	DXF 62
-@item shhn_b92
-B,	DXF 92
-@item shhn_bl347
-BL,	DXF 347
-@item shb_bl90
-BL,	DXF 90
-@item shb_bl91
-BL,	DXF 91
-@item shb_bd40
+@item length
 BD,	DXF 40
-@item shb_bd41
+@item width
 BD,	DXF 41
-@item shb_bd42
+@item height
 BD,	DXF 42
 
 @end vtable
@@ -4335,26 +4325,16 @@ BL,	DXF 90
 BL,	DXF 98
 @item ee_bl99
 BL,	DXF 99
-@item shhn_bl90
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
 BL,	DXF 90
-@item shhn_bl91
-BL,	DXF 91
-@item shhn_pts
-BD*,	DXF 40
-@item color
-CMC,	DXF 62
-@item shhn_b92
-B,	DXF 92
-@item shhn_bl347
-BL,	DXF 347
-@item shsw_bl90
-BL,	DXF 90
-@item shsw_bl91
+@item bl91
 BL,	DXF 91
 @item basept
-3BD,	DXF 10
+3BD
 @item shsw_bl92
-BL,	DXF 92
+BL
 @item shsw_text_size
 BL,	DXF 90
 @item shsw_text
@@ -4419,17 +4399,50 @@ BL,	DXF 98
 @item ee_bl99
 BL,	DXF 99
 @item shhn_bl90
-BL,	DXF 90
+BL
 @item shhn_bl91
-BL,	DXF 91
+BL
 @item shhn_pts
-BD*,	DXF 40
+BD*
 @item color
-CMC,	DXF 62
-@item shhn_b92
-B,	DXF 92
+CMC
+@item shhn_bl92
+BL
 @item shhn_bl347
-BL,	DXF 347
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_LOFT_CLASS} @anchor{ACSH_LOFT_CLASS}
+@cindex object, ACSH_LOFT_CLASS
+@vindex ACSH_LOFT_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item num_crossects
+BL
+@item crossects
+struct _dwg_object*
+@item num_guides
+BL,	DXF 95
+@item guides
+struct _dwg_object*
 
 @end vtable
 @end indentedblock
@@ -4449,26 +4462,16 @@ BL,	DXF 90
 BL,	DXF 98
 @item ee_bl99
 BL,	DXF 99
-@item shhn_bl90
-BL,	DXF 90
-@item shhn_bl91
-BL,	DXF 91
-@item shhn_pts
-BD*,	DXF 40
-@item color
-CMC,	DXF 62
-@item shhn_b92
-B,	DXF 92
-@item shhn_bl347
-BL,	DXF 347
+@item history_node
+Dwg_ACSH_HistoryNode
 @item shsw_bl90
-BL,	DXF 90
+BL
 @item shsw_bl91
-BL,	DXF 91
+BL
 @item basept
-3BD,	DXF 10
+3BD
 @item shsw_bl92
-BL,	DXF 92
+BL
 @item shsw_text_size
 BL,	DXF 90
 @item shsw_text
@@ -9059,6 +9062,28 @@ B
 B
 @item has_shear
 B
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_ACSH_HistoryNode} @anchor{Dwg_ACSH_HistoryNode}
+@vindex Dwg_ACSH_HistoryNode
+
+@indentedblock
+@vtable @code
+
+@item bl90
+BL
+@item bl91
+BL
+@item trans
+BD*
+@item color
+CMC
+@item bl92
+BL
+@item h347
+BL
 
 @end vtable
 @end indentedblock

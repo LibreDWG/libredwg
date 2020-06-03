@@ -606,3 +606,5 @@
                hdl_dat, str_dat, (Dwg_Object *)obj)
 #define CALL_ENTITY(name, xobj)                                               \
   error |= DWG_PRIVATE_N (ACTION, name) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)
+#define CALL_OBJECT(xobj)                                                     \
+  error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)
