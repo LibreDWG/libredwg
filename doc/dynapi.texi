@@ -5054,6 +5054,10 @@ BL,	DXF 90
 BL,	DXF 90
 @item numassocsubents
 BL,	DXF 90
+@item assocsteps
+BL*,	DXF 90
+@item assocsubents
+BL*
 @item unknown_bl6
 BL,	DXF 90
 @item unknown_bl6a

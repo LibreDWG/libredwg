@@ -5105,20 +5105,23 @@ typedef struct _dwg_object_PERSUBENTMGR
   BITCODE_BL numassocsubents; /*!< DXF 90 0 from ASSOCPERSSUBENTMANAGER */
   BITCODE_BL num_steps;       /*!< DXF 90 1 */
   BITCODE_BL *steps;          /*!< DXF 90 */
-  BITCODE_BL num_subents;     /*!< DXF 90  */
-  BITCODE_BL *subents;        /*!< DXF 90 */
+  BITCODE_BL num_subents;     /*!< DXF 90 */
+  BITCODE_BL *subents;        /*!< DXF 90 types/handles? */
 } Dwg_Object_PERSUBENTMGR;
 
 // The dynamic variant of above. May be frozen as static PERSUBENTMGR
+// TODO subentities
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL class_version; /*!< DXF 90 0 or r2013+ 1 */
+  BITCODE_BL class_version; /*!< DXF 90 1 or r2013+ 2 */
   BITCODE_BL unknown_3;     /*!< DXF 90 always 3 */
   BITCODE_BL unknown_0;     /*!< DXF 90 always 0 */
   BITCODE_BL unknown_2;     /*!< DXF 90 always 2 */
-  BITCODE_BL numassocsteps;     /*!< DXF 90 3 */
-  BITCODE_BL numassocsubents;   /*!< DXF 90 1 */
+  BITCODE_BL numassocsteps;   /*!< DXF 90 3 */
+  BITCODE_BL numassocsubents; /*!< DXF 90 5 */
+  BITCODE_BL *assocsteps;     /*!< DXF 90 */
+  BITCODE_BL *assocsubents;   /*!< DXF 90 */
   BITCODE_BL unknown_bl6;   /*!< DXF 90 5 */
   BITCODE_BL unknown_bl6a;  /*!< DXF 90 0 */
   BITCODE_BL unknown_bl7a;  /*!< DXF 90 3 */

@@ -7719,13 +7719,14 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCPERSSUBENTMANAGER)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocPersSubentManager)
-  FIELD_BL (class_version, 90); //0 or 1 (r2013+)
+  FIELD_BL (class_version, 90); //1 or 2 (r2013+)
   FIELD_BL (unknown_3, 90); //3
   FIELD_BL (unknown_0, 90); //0
   FIELD_BL (unknown_2, 90); //2
 
   FIELD_BL (numassocsteps, 90);   //3
-  FIELD_BL (numassocsubents, 90); //1
+  FIELD_VECTOR (assocsteps, BL, numassocsteps, 90);
+  FIELD_BL (numassocsubents, 90);
 
   FIELD_BL (unknown_bl6, 90); //5
   FIELD_BL (unknown_bl6a, 90); //0 10 0100000100 0100000011

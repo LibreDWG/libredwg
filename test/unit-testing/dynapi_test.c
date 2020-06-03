@@ -27027,6 +27027,26 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
   Dwg_Object_ASSOCPERSSUBENTMANAGER *restrict assocperssubentmanager = obj->tio.object->tio.ASSOCPERSSUBENTMANAGER;
   failed = 0;
   {
+    BITCODE_BL* assocsteps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_assocsteps", &count, NULL)
+        && dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "assocsteps", &assocsteps, NULL)
+        && assocsteps == assocperssubentmanager->assocsteps)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.assocsteps [BL*] * %u num_assocsteps", count);
+  }
+  {
+    BITCODE_BL* assocsubents;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_assocsubents", &count, NULL)
+        && dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "assocsubents", &assocsubents, NULL)
+        && assocsubents == assocperssubentmanager->assocsubents)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.assocsubents [BL*] * %u num_assocsubents", count);
+  }
+  {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "class_version", &class_version, NULL)
         && class_version == assocperssubentmanager->class_version)
