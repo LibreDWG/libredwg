@@ -40,14 +40,14 @@ if ($len_o < 100) {
 open my $fm, "<", $makefile or die "$makefile not found: $!";
 my ($in, %m, $m);
 while ( <$fm> ) {
-  if ($in and /^[#\w]/) {
+  if ($in and /^check_PROGRAMS/) {
     $in = 0;
     last;
   }
-  if (/^testobjects =/) {
+  if (/^testobjects (\+)?=/) {
     $in = 1;
   }
-  if ($in and /^\s+(\S+)/) {
+  if ($in and /^\t+(\S+)/) {
     $m = $1;
     my $u = uc ($m);
     $m{ $u }++;

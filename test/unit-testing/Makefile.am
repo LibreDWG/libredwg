@@ -42,40 +42,14 @@ dxf_test_LDADD = $(LDADD) \
 testobjects = \
 	3dface \
 	3dsolid \
-	acmecommandhistory \
-	acmescope \
-	acmestatemgr \
-	acsh_box_class \
-	acsh_extrusion_class \
-	acsh_history_class \
-	acsh_sweep_class \
-	aldimobjectcontextdata \
 	appid \
 	appid_control \
 	arc \
 	arc_dimension \
-	assoc2dconstraintgroup \
-	assocaction \
-	assocaligneddimactionbody \
 	assocdependency \
-	assocextrudedsurfaceactionbody \
-	assocgeomdependency \
-	assocloftedsurfaceactionbody \
-	assocnetwork \
-	assocosnappointrefactionparam \
-	assocosnappointrefactionparam \
-	assocperssubentmanager \
 	assocplanesurfaceactionbody \
-	assocrevolvedsurfaceactionbody \
-	assocsweptsurfaceactionbody \
-	assocvertexactionparam \
-	atext \
 	attdef \
 	attrib \
-	blkrefobjectcontextdata \
-	blockgriplocationcomponent \
-	blockvisibilitygrip \
-	blockvisibilityparameter \
 	block \
 	block_control \
 	block_header \
@@ -83,12 +57,7 @@ testobjects = \
 	camera \
 	cellstylemap \
 	circle \
-	csacdocumentoptions \
-	curvepath \
-	datalink \
-	datatable \
 	dbcolor \
-	detailviewstyle \
 	dictionary \
 	dictionaryvar \
 	dictionarywdflt \
@@ -106,14 +75,9 @@ testobjects = \
 	dynamicblockpurgepreventer \
 	ellipse \
 	endblk \
-	evaluation_graph \
-	extrudedsurface \
-	fcfobjectcontextdata \
 	field \
 	fieldlist \
 	geodata \
-	geomapimage \
-	geopositionmarker \
 	group \
 	hatch \
 	helix \
@@ -127,13 +91,10 @@ testobjects = \
 	layer_index \
 	layerfilter \
 	layout \
-	layoutprintconfig \
 	leader \
-	leaderobjectcontextdata \
 	light \
 	lightlist \
 	line \
-	loftedsurface \
 	long_transaction \
 	ltype \
 	ltype_control \
@@ -142,27 +103,17 @@ testobjects = \
 	mentalrayrendersettings \
 	mesh \
 	minsert \
-	mleaderobjectcontextdata \
 	mleaderstyle \
 	mline \
 	mlinestyle \
-	motionpath \
 	mtext \
-	mtextattributeobjectcontextdata \
-	mtextobjectcontextdata \
 	multileader \
-	navisworksmodel \
-	navisworksmodeldef \
-	nurbsurface \
 	object_ptr \
 	ole2frame \
 	oleframe \
-	persubentmgr \
 	placeholder \
-	planesurface \
 	plotsettings \
 	point \
-	pointpath \
 	polyline_2d \
 	polyline_3d \
 	polyline_mesh \
@@ -173,15 +124,9 @@ testobjects = \
 	rastervariables \
 	ray \
 	region \
-	renderenvironment \
-	renderentry \
-	renderglobal \
 	rendersettings \
-	revolvedsurface \
-	rtext \
 	scale \
 	section_manager \
-	section_settings \
 	sectionobject \
 	sectionviewstyle \
 	seqend \
@@ -195,16 +140,11 @@ testobjects = \
 	style_control \
 	sun \
 	sunstudy \
-	sweptsurface \
-	table \
-	tablecontent \
 	tablegeometry \
 	tablestyle \
 	text \
-	textobjectcontextdata \
 	tolerance \
 	trace \
-	tvdeviceproperties \
 	ucs \
 	ucs_control \
 	underlay \
@@ -229,6 +169,77 @@ testobjects = \
 	wipeoutvariables \
 	xline \
 	xrecord
+
+if ENABLE_DEBUG
+testobjects += \
+	acmecommandhistory \
+	acmescope \
+	acmestatemgr \
+	acsh_box_class \
+	acsh_extrusion_class \
+	acsh_history_class \
+	acsh_sweep_class \
+	aldimobjectcontextdata \
+	arc_dimension \
+	assoc2dconstraintgroup \
+	assocaction \
+	assocaligneddimactionbody \
+	assocdependency \
+	assocextrudedsurfaceactionbody \
+	assocgeomdependency \
+	assocloftedsurfaceactionbody \
+	assocnetwork \
+	assocosnappointrefactionparam \
+	assocperssubentmanager \
+	assocplanesurfaceactionbody \
+	assocrevolvedsurfaceactionbody \
+	assocsweptsurfaceactionbody \
+	assocvertexactionparam \
+	atext \
+	blkrefobjectcontextdata \
+	blockgriplocationcomponent \
+	blockvisibilitygrip \
+	blockvisibilityparameter \
+	cellstylemap \
+	csacdocumentoptions \
+	curvepath \
+	datalink \
+	datatable \
+	detailviewstyle \
+	evaluation_graph \
+	extrudedsurface \
+	fcfobjectcontextdata \
+	geomapimage \
+	geopositionmarker \
+	helix \
+	layoutprintconfig \
+	leaderobjectcontextdata \
+	loftedsurface \
+	mesh \
+	mleaderobjectcontextdata \
+	motionpath \
+	mtextattributeobjectcontextdata \
+	mtextobjectcontextdata \
+	navisworksmodel \
+	navisworksmodeldef \
+	nurbsurface \
+	persubentmgr \
+	planesurface \
+	pointpath \
+	renderenvironment \
+	renderentry \
+	renderglobal \
+	revolvedsurface \
+	rtext \
+	section_settings \
+	sectionviewstyle \
+	sunstudy \
+	sweptsurface \
+	table \
+	tablecontent \
+	textobjectcontextdata \
+	tvdeviceproperties
+endif
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.
