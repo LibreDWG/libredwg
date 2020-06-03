@@ -6326,15 +6326,17 @@ DWG_OBJECT (PERSUBENTMGR)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbPersSubentManager)
   FIELD_BL (class_version, 90); //2
-  VALUEOUTOFBOUNDS (class_version, 10)
+  VALUEOUTOFBOUNDS (class_version, 3)
   FIELD_BL (unknown_0, 90); //always 0
   FIELD_BL (unknown_2, 90); //always 2
 
-  FIELD_BL (unknown_bl3, 90); //3
-  FIELD_BL (unknown_bl4, 90); //0
-  FIELD_BL (num_steps, 90);   //1
+  FIELD_BL (numassocsteps, 90);  //3
+  FIELD_BL (numassocsubents, 90);//0
+  FIELD_BL (num_steps, 90);      //1
   FIELD_VECTOR (steps, BL, num_steps, 90); //1
-
+  FIELD_BL (num_subents, 90);
+  // nope: 3x BL and CALL_SUBENTITY
+  FIELD_VECTOR (subents, BL, num_subents, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -6347,7 +6349,7 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocDependency)
   FIELD_BL (class_version, 90); //2
-  VALUEOUTOFBOUNDS (class_version, 10)
+  VALUEOUTOFBOUNDS (class_version, 3)
   FIELD_BL (status, 90); //1 or depbody
   FIELD_B  (isread_dep, 290); //0
   FIELD_B  (iswrite_dep, 290); //1
@@ -7721,8 +7723,9 @@ DWG_OBJECT (ASSOCPERSSUBENTMANAGER)
   FIELD_BL (unknown_0, 90); //0
   FIELD_BL (unknown_2, 90); //2
 
-  FIELD_BL (num_steps, 90); //3
-  FIELD_BL (unknown_bl5, 90); //1
+  FIELD_BL (numassocsteps, 90);   //3
+  FIELD_BL (numassocsubents, 90); //1
+
   FIELD_BL (unknown_bl6, 90); //5
   FIELD_BL (unknown_bl6a, 90); //0 10 0100000100 0100000011
   FIELD_BL (unknown_bl7a, 90); //4

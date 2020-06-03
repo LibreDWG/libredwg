@@ -7,21 +7,25 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BL class_version;
-  BITCODE_BL unknown_bl1;
-  BITCODE_BL unknown_bl2;
-  BITCODE_BL unknown_bl3;
-  BITCODE_BL unknown_bl4;
-  BITCODE_BL unknown_bl5;
-  BITCODE_BL unknown_bl6;
+  BITCODE_BL unknown_0;
+  BITCODE_BL unknown_2;
+  BITCODE_BL numassocsteps;
+  BITCODE_BL numassocsubents;
+  BITCODE_BL i, num_steps;
+  BITCODE_BL *steps;
+  BITCODE_BL num_subents;
+  BITCODE_BL *subents;
 
   dwg_obj_persubentmgr *_obj = dwg_object_to_PERSUBENTMGR (obj);
  
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, class_version, BL);
   CHK_ENTITY_MAX (_obj, PERSUBENTMGR, class_version, BL, 2);
-  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_bl1, BL);
-  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_bl2, BL);
-  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_bl3, BL);
-  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_bl4, BL);
-  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_bl5, BL);
-  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_bl6, BL);
+  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_0, BL);
+  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_2, BL);
+  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, numassocsteps, BL);
+  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, numassocsubents, BL);
+  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, num_steps, BL);
+  CHK_ENTITY_VECTOR (_obj, PERSUBENTMGR, steps, num_steps);
+  CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, num_subents, BL);
+  CHK_ENTITY_VECTOR (_obj, PERSUBENTMGR, subents, num_subents);
 }

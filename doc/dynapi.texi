@@ -5050,9 +5050,9 @@ BL,	DXF 90
 BL,	DXF 90
 @item unknown_2
 BL,	DXF 90
-@item num_steps
+@item numassocsteps
 BL,	DXF 90
-@item unknown_bl5
+@item numassocsubents
 BL,	DXF 90
 @item unknown_bl6
 BL,	DXF 90
@@ -7297,13 +7297,17 @@ BL,	DXF 90
 BL,	DXF 90
 @item unknown_2
 BL,	DXF 90
-@item unknown_bl3
+@item numassocsteps
 BL,	DXF 90
-@item unknown_bl4
+@item numassocsubents
 BL,	DXF 90
 @item num_steps
 BL,	DXF 90
 @item steps
+BL*,	DXF 90
+@item num_subents
+BL,	DXF 90
+@item subents
 BL*,	DXF 90
 
 @end vtable

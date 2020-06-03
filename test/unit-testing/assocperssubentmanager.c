@@ -7,11 +7,12 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BL class_version;
-  BITCODE_BL unknown_bl1;
-  BITCODE_BL unknown_bl2;
-  BITCODE_BL unknown_bl3;
-  BITCODE_BL unknown_bl4;
-  BITCODE_BL unknown_bl5;
+  BITCODE_BL unknown_3;
+  BITCODE_BL unknown_0;
+  BITCODE_BL unknown_2;
+  BITCODE_BL i, numassocsteps;
+  BITCODE_BL numassocsubents;
+
   BITCODE_BL unknown_bl6;
   BITCODE_BL unknown_bl6a;
   BITCODE_BL unknown_bl7a;
@@ -53,12 +54,16 @@ api_process (dwg_object *obj)
     return;
  
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, class_version, BL);
-  CHK_ENTITY_MAX (_obj, ASSOCPERSSUBENTMANAGER, class_version, BL, 10);
-  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl1, BL);
-  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl2, BL);
-  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl3, BL);
-  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl4, BL);
-  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl5, BL);
+  CHK_ENTITY_MAX (_obj, ASSOCPERSSUBENTMANAGER, class_version, BL, 3);
+  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_3, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_0, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_2, BL);
+
+  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, numassocsteps, BL);
+  //CHK_ENTITY_VECTOR (_obj, ASSOCPERSSUBENTMANAGER, steps, num_steps);
+  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, numassocsubents, BL);
+  //CHK_ENTITY_VECTOR (_obj, ASSOCPERSSUBENTMANAGER, subents, num_subents);
+  
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl6, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl6a, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl7a, BL);
