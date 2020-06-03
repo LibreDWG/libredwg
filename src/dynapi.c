@@ -6861,11 +6861,11 @@ static const Dwg_DYNAPI_field _dwg_SECTION_MANAGER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_SECTION_MANAGER, parent),
     1,1,0, 0 },
   { "is_live",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTION_MANAGER, is_live),
-    0,0,0, 0 },
-  { "num_sections",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_MANAGER, num_sections),
     0,0,0, 70 },
+  { "num_sections",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_MANAGER, num_sections),
+    0,0,0, 90 },
   { "sections",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_SECTION_MANAGER, sections),
-    1,1,0, 0 },
+    1,1,0, 330 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_SECTION_SETTINGS: (sorted by offset) */

@@ -6244,7 +6244,6 @@ DWG_OBJECT_END
 // in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
 // looks perfect, but no DWF, DGN coverage yet
 DWG_ENTITY (UNDERLAY)
-
   //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbUnderlayReference)
   FIELD_3BD (extrusion, 210);
@@ -6262,16 +6261,22 @@ DWG_ENTITY (UNDERLAY)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (underlay_layer, 5, 0);
   FIELD_HANDLE (definition_id, 5, 340);
-
 DWG_ENTITY_END
 
 DWG_ENTITY (CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
-
   //DECODE_UNKNOWN_BITS
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (view, 5, 0);
-
 DWG_ENTITY_END
+
+DWG_OBJECT (SECTION_MANAGER)
+  //DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSectionManager)
+  FIELD_B (is_live, 70);
+  FIELD_BS (num_sections, 90);
+  START_OBJECT_HANDLE_STREAM;
+  HANDLE_VECTOR (sections, num_sections, 5, 330);
+DWG_OBJECT_END
 
 #ifndef IS_DXF
 
@@ -6853,15 +6858,6 @@ DWG_ENTITY (SECTIONOBJECT)
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (section_settings, 5, 360);
 DWG_ENTITY_END
-
-DWG_OBJECT (SECTION_MANAGER)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbSectionManager)
-  FIELD_B (is_live, 0);
-  FIELD_BS (num_sections, 70);
-  START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (sections, num_sections, 5, 0);
-DWG_OBJECT_END
 
 // undocumented fields, unstable, but looks stable.
 // types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid

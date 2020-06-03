@@ -5832,13 +5832,12 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE
   BITCODE_B show_hatching;
 } Dwg_Object_SECTIONVIEWSTYLE;
 
-// Unstable
 typedef struct _dwg_object_SECTION_MANAGER
 {
   struct _dwg_object_object *parent;
-  BITCODE_B is_live;
-  BITCODE_BS num_sections; 		/*!< DXF 70 1 */
-  BITCODE_H *sections;
+  BITCODE_B is_live; 		/*!< DXF 70 */
+  BITCODE_BS num_sections; 	/*!< DXF 90 */
+  BITCODE_H *sections; 		/*!< DXF 330 */
 } Dwg_Object_SECTION_MANAGER;
 
 // Debugging
@@ -7462,6 +7461,7 @@ EXPORT int dwg_setup_LAYER_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_MLEADERSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_RASTERVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_setup_SCALE (Dwg_Object *obj);
+EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
@@ -7491,7 +7491,6 @@ EXPORT int dwg_setup_PLOTSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
-EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);

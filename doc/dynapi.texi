@@ -7805,11 +7805,11 @@ B
 @item parent
 struct _dwg_object_object*
 @item is_live
-B
+B,	DXF 70
 @item num_sections
-BS,	DXF 70
+BS,	DXF 90
 @item sections
-H*
+H*,	DXF 330
 
 @end vtable
 @end indentedblock

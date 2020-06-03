@@ -570,6 +570,7 @@ typedef struct _dwg_object_MLEADERSTYLE           dwg_obj_mleaderstyle;
 typedef struct _dwg_object_PLACEHOLDER            dwg_obj_placeholder;
 typedef struct _dwg_object_RASTERVARIABLES        dwg_obj_rastervariables;
 typedef struct _dwg_object_SCALE                  dwg_obj_scale;
+typedef struct _dwg_object_SECTION_MANAGER        dwg_obj_section_manager;
 typedef struct _dwg_object_SORTENTSTABLE          dwg_obj_sortentstable;
 typedef struct _dwg_object_SPATIAL_FILTER         dwg_obj_spatial_filter;
 typedef struct _dwg_object_SPATIAL_INDEX          dwg_obj_spatial_index;
@@ -590,7 +591,6 @@ typedef struct _dwg_object_MENTALRAYRENDERSETTINGS         dwg_obj_mentalrayrend
 typedef struct _dwg_object_OBJECT_PTR                      dwg_obj_object_ptr;
 typedef struct _dwg_object_RAPIDRTRENDERSETTINGS           dwg_obj_rapidrtrendersettings;
 typedef struct _dwg_object_RENDERSETTINGS                  dwg_obj_rendersettings;
-typedef struct _dwg_object_SECTION_MANAGER                 dwg_obj_section_manager;
 typedef struct _dwg_object_TABLEGEOMETRY                   dwg_obj_tablegeometry;
 typedef struct _dwg_object_TABLESTYLE                      dwg_obj_tablestyle;
 typedef struct _dwg_object_UNDERLAYDEFINITION              dwg_obj_underlaydefinition;
@@ -800,6 +800,7 @@ DWG_GETALL_OBJECT_DECL (MLEADERSTYLE)
 DWG_GETALL_OBJECT_DECL (PLACEHOLDER)
 DWG_GETALL_OBJECT_DECL (RASTERVARIABLES)
 DWG_GETALL_OBJECT_DECL (SCALE)
+DWG_GETALL_OBJECT_DECL (SECTION_MANAGER)
 DWG_GETALL_OBJECT_DECL (SORTENTSTABLE)
 DWG_GETALL_OBJECT_DECL (SPATIAL_FILTER)
 DWG_GETALL_OBJECT_DECL (SPATIAL_INDEX)
@@ -821,7 +822,6 @@ DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
 DWG_GETALL_OBJECT_DECL (PROXY_OBJECT)
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (RENDERSETTINGS)
-DWG_GETALL_OBJECT_DECL (SECTION_MANAGER)
 DWG_GETALL_OBJECT_DECL (SUN)
 DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY)
 DWG_GETALL_OBJECT_DECL (TABLESTYLE)
@@ -1294,6 +1294,7 @@ dwg_get_OBJECT_DECL (obj_mleaderstyle, MLEADERSTYLE);
 dwg_get_OBJECT_DECL (obj_placeholder, PLACEHOLDER);
 dwg_get_OBJECT_DECL (obj_rastervariables, RASTERVARIABLES);
 dwg_get_OBJECT_DECL (obj_scale, SCALE);
+dwg_get_OBJECT_DECL (obj_section_manager, SECTION_MANAGER)
 dwg_get_OBJECT_DECL (obj_sortentstable, SORTENTSTABLE);
 dwg_get_OBJECT_DECL (obj_spatial_filter, SPATIAL_FILTER);
 dwg_get_OBJECT_DECL (obj_spatial_index, SPATIAL_INDEX);
@@ -1315,7 +1316,6 @@ dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
 dwg_get_OBJECT_DECL (obj_proxy, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
 dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);
-dwg_get_OBJECT_DECL (obj_section_manager, SECTION_MANAGER)
 dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
 dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
 dwg_get_OBJECT_DECL (obj_underlaydefinition, UNDERLAYDEFINITION);

@@ -1,4 +1,3 @@
-// Unstable
 #define DWG_TYPE DWG_TYPE_SECTION_MANAGER
 #include "common.c"
 
