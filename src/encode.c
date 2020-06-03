@@ -3939,7 +3939,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   unsigned long off = obj->address;
   unsigned dat_size = 0;
-  Dwg_Handle *last_handle;
+  Dwg_Handle *last_handle = NULL;
   Bit_Chain dat1 = { 0 };
   int i, num_eed = obj->tio.object->num_eed;
   BITCODE_BS size = 0;
@@ -4001,13 +4001,14 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           LOG_POS;
         }
     }
-  if (new_size) // flush remainding rest
+  if (new_size && last_handle) // flush remainding rest
     {
       bit_write_BS (dat, new_size);
       LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
       bit_write_H (dat, last_handle);
       LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
                  ARGS_H (*last_handle)); LOG_POS;
+      last_handle = NULL;
     }
   if (dat1.byte)
     LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
