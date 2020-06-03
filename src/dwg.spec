@@ -6320,27 +6320,6 @@ DWG_OBJECT_END
  */
 
 // (varies) UNSTABLE
-// works ok on all example_20* but this coverage seems limited
-DWG_OBJECT (PERSUBENTMGR)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbPersSubentManager)
-  FIELD_BL (class_version, 90); //2
-  VALUEOUTOFBOUNDS (class_version, 3)
-  FIELD_BL (unknown_0, 90); //always 0
-  FIELD_BL (unknown_2, 90); //always 2
-
-  FIELD_BL (numassocsteps, 90);  //3
-  FIELD_BL (numassocsubents, 90);//0
-  FIELD_BL (num_steps, 90);      //1
-  FIELD_VECTOR (steps, BL, num_steps, 90); //1
-  FIELD_BL (num_subents, 90);
-  // nope: 3x BL and CALL_SUBENTITY
-  FIELD_VECTOR (subents, BL, num_subents, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
 // field names may change.
 // See AcDbAssocDependency.h
@@ -7714,7 +7693,29 @@ DWG_OBJECT (ASSOCVERTEXACTIONPARAM)
   DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
+// (varies)
+// works ok on all example_20* but this coverage seems limited
+// The static variant
+DWG_OBJECT (PERSUBENTMGR)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPersSubentManager)
+  FIELD_BL (class_version, 90); //2
+  VALUEOUTOFBOUNDS (class_version, 3)
+  FIELD_BL (unknown_0, 90); //always 0
+  FIELD_BL (unknown_2, 90); //always 2
+
+  FIELD_BL (numassocsteps, 90);  //3
+  FIELD_BL (numassocsubents, 90);//0
+  FIELD_BL (num_steps, 90);      //1
+  FIELD_VECTOR (steps, BL, num_steps, 90); //1
+  FIELD_BL (num_subents, 90);
+  // nope: 3x BL and CALL_SUBENTITY
+  FIELD_VECTOR (subents, BL, num_subents, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 // See AcDbAssocPersSubentIdPE.h
+// The dynamic variant
 DWG_OBJECT (ASSOCPERSSUBENTMANAGER)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocPersSubentManager)

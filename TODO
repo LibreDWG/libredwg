@@ -1,21 +1,20 @@
 * pre-R13: finish remaining entities and the blocks.
 * PROXY subentities, PROXY_ENTITY
-* CELLSTYLEMAP TABLE_Cell struct
+* TABLE_Cell
 * Enabled, but un(der)tested:
   ASSOCDEPENDENCY ASSOC*SURFACEACTIONBODY DBCOLOR DIMASSOC HELIX
-  OBJECT_PTR PERSSUBENTMANAGER PROXY_OBJECT
-  PLOTSETTINGS VISUALSTYLE TABLESTYLE (works only pre-2010)
+  OBJECT_PTR PROXY_OBJECT PLOTSETTINGS VISUALSTYLE TABLESTYLE (works only pre-2010)
 * Unhandled (fields spec'ed but broken/untested):
   GEOPOSITIONMARKER PLANESURFACE EXTRUDEDSURFACE
   LOFTEDSURFACE REVOLVEDSURFACE SWEPTSURFACE TABLE
   TABLECONTENT CELLSTYLEMAP MATERIAL PLOTSETTINGS SUN
   SUNSTUDY VBA_PROJECT ASSOCACTION ASSOCNETWORK
   ASSOCALIGNEDDIMACTIONBODY ASSOCOSNAPPOINTREFACTIONPARAM
-  ASSOCPERSSUBENTMANAGER ASSOC2DCONSTRAINTGROUP EVALUATION_GRAPH
+  ASSOCPERSSUBENTMANAGER PERSUBENTMGR ASSOC2DCONSTRAINTGROUP EVALUATION_GRAPH
   ACSH_HISTORY_CLASS ACSH_SWEEP_CLASS ACDBNAVISWORKSMODELDEF
   LIGHTLIST *OBJECTCONTEXTDATA ARC_DIMENSION ASSOCGEOMDEPENDENCY
   ASSOCOSNAPPOINTREFACTIONPARAM ASSOCVERTEXACTIONPARAM DATATABLE
-  DATALINK DETAILVIEWSTYLE SECTIONVIEWSTYLE LAYOUTPRINTCONFIG
+  DATALINK DETAILVIEWSTYLE SECTIONVIEWSTYLE LAYOUTPRINTCONFIG ...
 * Unhandled (i.e. passed through, no DXF and fields):
   ARCALIGNEDTEXT CSACDOCUMENTOPTIONS NPOCOLLECTION
   POINTCLOUD RTEXT XREFPANELOBJECT
@@ -27,13 +26,12 @@
   OLE2FRAME OLEFRAME POLYLINE_2D POLYLINE_MESH
   PROXY_ENTITY SHAPE TOLERANCE VERTEX_2D VERTEX_MESH
 * likewise for the following missing objects:
-  ARCALIGNEDTEXT  CSACDOCUMENTOPTIONS  DETAILVIEWSTYLE
+  ATEXT CSACDOCUMENTOPTIONS  DETAILVIEWSTYLE
   DWFDEFINITION DGNDEFINITION
-  XREFPANELOBJECT GEODATA IDBUFFER IMAGEDEF
-  IMAGEDEF_REACTOR LAYER_INDEX LIGHTLIST
-  NPOCOLLECTION OBJECT_PTR PLOTSETTINGS PROXY_OBJECT
-  RASTERVARIABLES SPATIAL_INDEX UCS VBA_PROJECT VPORT_ENTITY_CONTROL
-  VPORT_ENTITY_HEADER
+  XREFPANELOBJECT IDBUFFER IMAGEDEF
+  IMAGEDEF_REACTOR LIGHTLIST
+  NPOCOLLECTION OBJECT_PTR PROXY_OBJECT
+  RASTERVARIABLES UCS VBA_PROJECT
 * check-dxf/outdxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
   VERTEX_3D, MLINE.
 * DXFIN errors:
@@ -54,7 +52,7 @@
 * finish GeoJSON http://geojson.org/geojson-spec.html
   ELLIPSE, ARC, CIRCLE: needs segmentation into lines
   MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)
-* maybe dwgfilter, as from the osmctools, with keep and drop rules.
+* more dwgfilter examples, as from the osmctools, with keep and drop rules.
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.
   Check OpenStreetMap XML and PBF formats.
@@ -71,12 +69,14 @@
   autolisp (via ARX).
   Did so, I dislike it. Too much work, valabind crashes and requires glib and gobject.
   See the work/vapi branch.
+* add gamba3 bindings, a Visual Basic variant for linux. See GauchoCAD on gitlab.
+  Should be driven from gen-dynapi.pl. Merge work/c++ branch for CXX
 * add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
   Started with perl-tk
 
 * fix the remaining leaks: indxf
 * finish documentation of the API functions, refman.
-* add the basic DWG layout and API to the docs.
+* add the basic DWG layout, sections and API to the docs.
 * add fuzzing and solver-based test generation (bits)
 * check testsuite errors when cross-compiled under wine.
 * check for a waiver/copyright assignment from

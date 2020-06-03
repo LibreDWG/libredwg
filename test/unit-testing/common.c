@@ -968,6 +968,22 @@ api_common_entity (dwg_object *obj)
     }
 
 // i must be defined as type of num
+#define CHK_ENTITY_VECTOR_TYPE(ent, name, field, num, type)                   \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
+    fail (#name "." #field);                                                  \
+  else if (!field)                                                            \
+    pass ();                                                                  \
+  else                                                                        \
+    {                                                                         \
+      for (i = 0; i < (num); i++)                                             \
+        {                                                                     \
+          if (memcmp (&ent->field[i], &field[i], sizeof (field[i])))          \
+            fail (#name "." #field "[%d]: " FORMAT_##type, i, field[i]);      \
+          else                                                                \
+            ok (#name "." #field "[%d]: " FORMAT_##type, i, field[i]);        \
+        }                                                                     \
+    }
+
 #define CHK_ENTITY_VECTOR(ent, name, field, num)                              \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
     fail (#name "." #field);                                                  \
@@ -977,9 +993,10 @@ api_common_entity (dwg_object *obj)
     {                                                                         \
       for (i = 0; i < (num); i++)                                             \
         {                                                                     \
-          ok ("%s.%s[%d]:", #name, #field, i);                                \
           if (memcmp (&ent->field[i], &field[i], sizeof (field[i])))          \
             fail ("%s.%s[%d]:", #name, #field, i);                            \
+          else                                                                \
+            ok ("%s.%s[%d]:", #name, #field, i);                              \
         }                                                                     \
     }
 

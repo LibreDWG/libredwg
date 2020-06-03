@@ -1,4 +1,4 @@
-// TODO unstable
+// TODO debugging
 #define DWG_TYPE DWG_TYPE_PERSUBENTMGR
 #include "common.c"
 
@@ -16,6 +16,7 @@ api_process (dwg_object *obj)
   BITCODE_BL num_subents;
   BITCODE_BL *subents;
 
+#ifdef DEBUG_CLASSES
   dwg_obj_persubentmgr *_obj = dwg_object_to_PERSUBENTMGR (obj);
  
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, class_version, BL);
@@ -25,7 +26,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, numassocsteps, BL);
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, numassocsubents, BL);
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, num_steps, BL);
-  CHK_ENTITY_VECTOR (_obj, PERSUBENTMGR, steps, num_steps);
+  CHK_ENTITY_MAX (_obj, PERSUBENTMGR, num_steps, BL, 500);
+  CHK_ENTITY_VECTOR_TYPE (_obj, PERSUBENTMGR, steps, num_steps, BL);
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, num_subents, BL);
-  CHK_ENTITY_VECTOR (_obj, PERSUBENTMGR, subents, num_subents);
+  CHK_ENTITY_MAX (_obj, PERSUBENTMGR, num_subents, BL, 100);
+  CHK_ENTITY_VECTOR_TYPE (_obj, PERSUBENTMGR, subents, num_subents, BL);
+#endif
 }
