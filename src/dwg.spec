@@ -8378,36 +8378,49 @@ DWG_OBJECT_END
 DWG_OBJECT (SECTION_SETTINGS)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbSectionSettings)
-  FIELD_BS (type, 90);
-  FIELD_BS (geometry, 91);
-  if (FIELD_VALUE(type) == 1) { // live
-    DEBUG_HERE_OBJ
-    FIELD_BS (generation, 0);
-    FIELD_BL (num_sources, 0);
-    FIELD_T (destfile, 0);
-    FIELD_B (visibility, 0);
-    FIELD_CMC (color, 0);
-    FIELD_BD (ltype_scale, 0);
-    FIELD_RC (linewt, 0);
-    FIELD_BS (face_transparency, 0);
-    FIELD_BS (edge_transparency, 0);
-    FIELD_B (hatch_visibility, 0);
-    FIELD_BD (hatch_angle, 0);
-    FIELD_BD (hatch_spacing, 0);
-    FIELD_BD (hatch_scale, 0);
-    FIELD_B (hidden_line, 0);
-    FIELD_B (division_lines, 0);
-  }
-
+  FIELD_BL (curr_type, 90);
+  FIELD_BL (num_types, 91);
+  VALUEOUTOFBOUNDS (num_types, 4) // max 4 types: live on/off, 2d, 3d
+  REPEAT (num_types, types, Dwg_SECTION_typesettings)
+  REPEAT_BLOCK
+      VALUE_TFF ("SectionTypeSettings", 1);
+      SUB_FIELD_BL (types[rcount1], type, 90);
+      SUB_FIELD_BL (types[rcount1], generation, 91);
+      SUB_FIELD_BL (types[rcount1], num_sources, 92);
+      SUB_HANDLE_VECTOR (types[rcount1], sources, num_sources, 5, 330);
+      SUB_FIELD_HANDLE (types[rcount1], destblock, DWG_HDL_HARDOWN, 331);
+      SUB_FIELD_T (types[rcount1], destfile, 1);
+      SUB_FIELD_BL (types[rcount1], num_geom, 0);
+      REPEAT (types[rcount1].num_geom, types[rcount1].geom, Dwg_SECTION_geometrysettings)
+      REPEAT_BLOCK
+          SUB_FIELD_BL (types[rcount1].geom[rcount2], class_version, 0); //?
+          SUB_FIELD_BL (types[rcount1].geom[rcount2], unknown1, 0);
+          SUB_FIELD_BL (types[rcount1].geom[rcount2], flags, 92);
+          SUB_FIELD_CMC (types[rcount1].geom[rcount2], color, 62);
+          SUB_FIELD_T (types[rcount1].geom[rcount2], layer, 8);
+          SUB_FIELD_T (types[rcount1].geom[rcount2], ltype, 6);
+          SUB_FIELD_BD (types[rcount1].geom[rcount2], ltype_scale, 40);
+          SUB_FIELD_T (types[rcount1].geom[rcount2], plotstyle, 1);
+          SINCE (R_2000)
+            SUB_FIELD_BLd (types[rcount1].geom[rcount2], linewt, 370);
+          SUB_FIELD_BS (types[rcount1].geom[rcount2], face_transparency, 70);
+          SUB_FIELD_BS (types[rcount1].geom[rcount2], edge_transparency, 71);
+          SUB_FIELD_BS (types[rcount1].geom[rcount2], is_hatch_visible, 72);
+          SUB_FIELD_T (types[rcount1].geom[rcount2], hatch_pattern, 2);
+          if (FIELD_VALUE (types[rcount1].geom[rcount2].is_hatch_visible))
+            {
+              SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_angle, 41);
+              SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_spacing, 42);
+              SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_scale, 43);
+            }
+      END_REPEAT_BLOCK
+      SET_PARENT (types[rcount1].geom, &_obj->types[rcount1]);
+      END_REPEAT (types[rcount1].geom)
+      VALUE_TFF ("SectionTypeSettingsEnd", 3);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (types);
+  END_REPEAT (types)
   START_OBJECT_HANDLE_STREAM;
-  if (FIELD_VALUE(type) == 1) { // live
-    HANDLE_VECTOR (sources, num_sources, ANYCODE, 0);
-    FIELD_HANDLE (destblock, ANYCODE, 0);
-    FIELD_HANDLE (layer, ANYCODE, 0);
-    FIELD_HANDLE (ltype, ANYCODE, 0);
-    FIELD_HANDLE (plotstyle, ANYCODE, 0);
-    FIELD_HANDLE (hatch_pattern, ANYCODE, 0);
-  }
 DWG_OBJECT_END
 
 DWG_OBJECT (LAYOUTPRINTCONFIG)

@@ -5840,37 +5840,52 @@ typedef struct _dwg_object_SECTION_MANAGER
   BITCODE_H *sections; 		/*!< DXF 330 */
 } Dwg_Object_SECTION_MANAGER;
 
-// Debugging
-typedef struct _dwg_object_SECTION_SETTINGS
+typedef struct _dwg_SECTION_geometrysettings
 {
-  struct _dwg_object_object *parent;
-  BITCODE_BS type;      	/*!< DXF 90. type: live=1, 2d=2, 3d=4.  */
-  BITCODE_BS geometry;  	/*!< intersectionboundary=1, intersectionfill=2, fg_geom=4, bg_geom=8
-                                     curvetangencylines=16 */
-  BITCODE_BS generation;  	/*!< DXF 91? source and destination flags:
+  struct _dwg_SECTION_typesettings *parent;
+  BITCODE_BL class_version;
+  BITCODE_BL unknown1;
+  BITCODE_BL flags; 		/* DXF 92. 4: is_hiddenline, 8: has_division_lines */
+  BITCODE_CMC color;		/* DXF 62 */
+  BITCODE_T layer;		/* DXF 8 Default: 0 */
+  BITCODE_T ltype;		/* DXF 6 Default: Continuous */
+  BITCODE_BD ltype_scale;	/* DXF 40 */
+  BITCODE_T plotstyle;          /* DXF 1 Default: ByColor */
+  BITCODE_BLd linewt;		/* DXF 370 */
+  BITCODE_BS face_transparency;	/* DXF 70 */
+  BITCODE_BS edge_transparency;	/* DXF 71 */
+  BITCODE_BS is_hatch_visible;	/* DXF 72 */
+  BITCODE_T hatch_pattern;	/* DXF 2 */
+  BITCODE_BD hatch_angle;	/* DXF 41 */
+  BITCODE_BD hatch_spacing;	/* DXF 42 */
+  BITCODE_BD hatch_scale;	/* DXF 43 */
+} Dwg_SECTION_geometrysettings;
+
+typedef struct _dwg_SECTION_typesettings
+{
+  struct _dwg_object_SECTION_SETTINGS *parent;
+  BITCODE_BS type;      	/*!< DXF 90: type: live=1, 2d=2, 3d=4 */
+  BITCODE_BS generation;  	/*!< DXF 91: source and destination flags.
                                      sourceall=1, sourceselected=2.
                                      destnewblock=16, destreplaceblock=32, destfile=64
                                  */
+  /* or geometry: intersectionboundary=1, intersectionfill=2, fg_geom=4, bg_geom=8
+                  curvetangencylines=16 */
   BITCODE_BL num_sources;
   BITCODE_H *sources;
   BITCODE_H destblock;
   BITCODE_T destfile;
-  BITCODE_B visibility;
-  BITCODE_CMC color;
-  BITCODE_H layer;
-  BITCODE_H ltype;
-  BITCODE_BD ltype_scale;
-  BITCODE_H plotstyle;
-  BITCODE_RC linewt;
-  BITCODE_BS face_transparency;
-  BITCODE_BS edge_transparency;
-  BITCODE_B hatch_visibility;
-  BITCODE_H hatch_pattern;
-  BITCODE_BD hatch_angle;
-  BITCODE_BD hatch_spacing;
-  BITCODE_BD hatch_scale;
-  BITCODE_B hidden_line;
-  BITCODE_B division_lines;
+  BITCODE_BL num_geom;
+  Dwg_SECTION_geometrysettings *geom;
+} Dwg_SECTION_typesettings;
+
+// Debugging
+typedef struct _dwg_object_SECTION_SETTINGS
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS curr_type;       /* DXF 90 */
+  BITCODE_BL num_types;       /* DXF 91 */
+  Dwg_SECTION_typesettings *types;
 } Dwg_Object_SECTION_SETTINGS;
 
 typedef struct _dwg_object_LAYERFILTER

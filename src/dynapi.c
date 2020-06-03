@@ -6872,52 +6872,12 @@ static const Dwg_DYNAPI_field _dwg_SECTION_MANAGER_fields[] = {
 static const Dwg_DYNAPI_field _dwg_SECTION_SETTINGS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_SECTION_SETTINGS, parent),
     1,1,0, 0 },
-  { "type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_SETTINGS, type),
+  { "curr_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_SETTINGS, curr_type),
     0,0,0, 90 },
-  { "geometry",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_SETTINGS, geometry),
+  { "num_types",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_SECTION_SETTINGS, num_types),
     0,0,0, 91 },
-  { "generation",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_SETTINGS, generation),
-    0,0,0, 0 },
-  { "num_sources",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_SECTION_SETTINGS, num_sources),
-    0,0,0, 0 },
-  { "sources",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_SECTION_SETTINGS, sources),
+  { "types",	"Dwg_SECTION_typesettings*", sizeof (Dwg_SECTION_typesettings*),  OFF (struct _dwg_object_SECTION_SETTINGS, types),
     1,1,0, 0 },
-  { "destblock",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTION_SETTINGS, destblock),
-    1,0,0, 0 },
-  { "destfile",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_SECTION_SETTINGS, destfile),
-    1,1,1, 0 },
-  { "visibility",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTION_SETTINGS, visibility),
-    0,0,0, 0 },
-  { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_SECTION_SETTINGS, color),
-    1,0,0, 0 },
-  { "layer",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTION_SETTINGS, layer),
-    1,0,0, 0 },
-  { "ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTION_SETTINGS, ltype),
-    1,0,0, 0 },
-  { "ltype_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTION_SETTINGS, ltype_scale),
-    0,0,0, 0 },
-  { "plotstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTION_SETTINGS, plotstyle),
-    1,0,0, 0 },
-  { "linewt",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_SECTION_SETTINGS, linewt),
-    0,0,0, 0 },
-  { "face_transparency",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_SETTINGS, face_transparency),
-    0,0,0, 0 },
-  { "edge_transparency",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SECTION_SETTINGS, edge_transparency),
-    0,0,0, 0 },
-  { "hatch_visibility",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTION_SETTINGS, hatch_visibility),
-    0,0,0, 0 },
-  { "hatch_pattern",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTION_SETTINGS, hatch_pattern),
-    1,0,0, 0 },
-  { "hatch_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTION_SETTINGS, hatch_angle),
-    0,0,0, 0 },
-  { "hatch_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTION_SETTINGS, hatch_spacing),
-    0,0,0, 0 },
-  { "hatch_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTION_SETTINGS, hatch_scale),
-    0,0,0, 0 },
-  { "hidden_line",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTION_SETTINGS, hidden_line),
-    0,0,0, 0 },
-  { "division_lines",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_SECTION_SETTINGS, division_lines),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_SORTENTSTABLE: (sorted by offset) */
@@ -9023,6 +8983,66 @@ static const Dwg_DYNAPI_field _dwg_R2004_Header_fields[] = {
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_SECTION_geometrysettings: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_SECTION_geometrysettings_fields[] = {
+  { "parent",	"struct _dwg_SECTION_typesettings*", sizeof (void *),  OFF (struct _dwg_SECTION_geometrysettings, parent),
+    1,1,0, 0 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_SECTION_geometrysettings, class_version),
+    0,0,0, 0 },
+  { "unknown1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_SECTION_geometrysettings, unknown1),
+    0,0,0, 0 },
+  { "flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_SECTION_geometrysettings, flags),
+    0,0,0, 92 },
+  { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_SECTION_geometrysettings, color),
+    1,0,0, 62 },
+  { "layer",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SECTION_geometrysettings, layer),
+    1,1,1, 8 },
+  { "ltype",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SECTION_geometrysettings, ltype),
+    1,1,1, 6 },
+  { "ltype_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_SECTION_geometrysettings, ltype_scale),
+    0,0,0, 40 },
+  { "plotstyle",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SECTION_geometrysettings, plotstyle),
+    1,1,1, 1 },
+  { "linewt",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_SECTION_geometrysettings, linewt),
+    0,0,0, 370 },
+  { "face_transparency",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_SECTION_geometrysettings, face_transparency),
+    0,0,0, 70 },
+  { "edge_transparency",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_SECTION_geometrysettings, edge_transparency),
+    0,0,0, 71 },
+  { "is_hatch_visible",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_SECTION_geometrysettings, is_hatch_visible),
+    0,0,0, 72 },
+  { "hatch_pattern",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SECTION_geometrysettings, hatch_pattern),
+    1,1,1, 2 },
+  { "hatch_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_SECTION_geometrysettings, hatch_angle),
+    0,0,0, 41 },
+  { "hatch_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_SECTION_geometrysettings, hatch_spacing),
+    0,0,0, 42 },
+  { "hatch_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_SECTION_geometrysettings, hatch_scale),
+    0,0,0, 43 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_SECTION_typesettings: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_SECTION_typesettings_fields[] = {
+  { "parent",	"struct _dwg_object_SECTION_SETTINGS*", sizeof (void *),  OFF (struct _dwg_SECTION_typesettings, parent),
+    1,1,0, 0 },
+  { "type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_SECTION_typesettings, type),
+    0,0,0, 90 },
+  { "generation",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_SECTION_typesettings, generation),
+    0,0,0, 91 },
+  { "num_sources",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_SECTION_typesettings, num_sources),
+    0,0,0, 92 },
+  { "sources",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_SECTION_typesettings, sources),
+    1,1,0, 330 },
+  { "destblock",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_SECTION_typesettings, destblock),
+    1,0,0, 0 },
+  { "destfile",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SECTION_typesettings, destfile),
+    1,1,1, 1 },
+  { "num_geom",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_SECTION_typesettings, num_geom),
+    0,0,0, 0 },
+  { "geom",	"Dwg_SECTION_geometrysettings*", sizeof (Dwg_SECTION_geometrysettings*),  OFF (struct _dwg_SECTION_typesettings, geom),
+    1,1,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_SPLINE_control_point: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_SPLINE_control_point_fields[] = {
   { "parent",	"struct _dwg_entity_SPLINE*", sizeof (void *),  OFF (struct _dwg_SPLINE_control_point, parent),
@@ -9981,25 +10001,27 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 67 */
   { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 68 */
   { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 69 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 70 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 71 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 72 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 73 */
-  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 74 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 75 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 76 */
-  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 77 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 78 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 79 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 80 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 81 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 82 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 83 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 84 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 85 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 86 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 87 */
-  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 88 */
+  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 70 */
+  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 71 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 72 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 73 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 74 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 75 */
+  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 76 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 77 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 78 */
+  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 79 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 80 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 81 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 82 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 83 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 84 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 85 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 86 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 87 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 88 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 89 */
+  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 90 */
 
 };
 

@@ -7823,52 +7823,12 @@ H*,	DXF 330
 
 @item parent
 struct _dwg_object_object*
-@item type
+@item curr_type
 BS,	DXF 90
-@item geometry
-BS,	DXF 91
-@item generation
-BS
-@item num_sources
-BL
-@item sources
-H*
-@item destblock
-H
-@item destfile
-T
-@item visibility
-B
-@item color
-CMC
-@item layer
-H
-@item ltype
-H
-@item ltype_scale
-BD
-@item plotstyle
-H
-@item linewt
-RC
-@item face_transparency
-BS
-@item edge_transparency
-BS
-@item hatch_visibility
-B
-@item hatch_pattern
-H
-@item hatch_angle
-BD
-@item hatch_spacing
-BD
-@item hatch_scale
-BD
-@item hidden_line
-B
-@item division_lines
-B
+@item num_types
+BL,	DXF 91
+@item types
+Dwg_SECTION_typesettings*
 
 @end vtable
 @end indentedblock
@@ -10607,6 +10567,78 @@ RL
 RL
 @item checksum
 RLx
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_SECTION_geometrysettings} @anchor{Dwg_SECTION_geometrysettings}
+@vindex Dwg_SECTION_geometrysettings
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_SECTION_typesettings*
+@item class_version
+BL
+@item unknown1
+BL
+@item flags
+BL,	DXF 92
+@item color
+CMC,	DXF 62
+@item layer
+T,	DXF 8
+@item ltype
+T,	DXF 6
+@item ltype_scale
+BD,	DXF 40
+@item plotstyle
+T,	DXF 1
+@item linewt
+BLd,	DXF 370
+@item face_transparency
+BS,	DXF 70
+@item edge_transparency
+BS,	DXF 71
+@item is_hatch_visible
+BS,	DXF 72
+@item hatch_pattern
+T,	DXF 2
+@item hatch_angle
+BD,	DXF 41
+@item hatch_spacing
+BD,	DXF 42
+@item hatch_scale
+BD,	DXF 43
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_SECTION_typesettings} @anchor{Dwg_SECTION_typesettings}
+@vindex Dwg_SECTION_typesettings
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_SECTION_SETTINGS*
+@item type
+BS,	DXF 90
+@item generation
+BS,	DXF 91
+@item num_sources
+BL,	DXF 92
+@item sources
+H*,	DXF 330
+@item destblock
+H
+@item destfile
+T,	DXF 1
+@item num_geom
+BL
+@item geom
+Dwg_SECTION_geometrysettings*
 
 @end vtable
 @end indentedblock
