@@ -4076,7 +4076,7 @@ typedef struct _dwg_object_WIPEOUTVARIABLES
   BITCODE_BS display_frame;    /*!< DXF 70  */
 } Dwg_Object_WIPEOUTVARIABLES;
 
-/* SECTIONPLANE, r2007+, Unstable
+/* SECTIONPLANE, r2007+
  * Looks like the livesection ptr from VIEW
  */
 typedef struct _dwg_entity_SECTIONOBJECT
@@ -7462,6 +7462,7 @@ EXPORT int dwg_setup_MLEADERSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_RASTERVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_setup_SCALE (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
+EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
@@ -7490,7 +7491,6 @@ EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
 EXPORT int dwg_setup_PLOTSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
-EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);

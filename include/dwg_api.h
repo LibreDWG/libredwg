@@ -503,6 +503,7 @@ typedef struct _dwg_entity_POINT                  dwg_ent_generic;
 typedef struct _dwg_entity_CAMERA                 dwg_ent_camera;
 typedef struct _dwg_entity_HELIX                  dwg_ent_helix;
 typedef struct _dwg_entity_LIGHT                  dwg_ent_light;
+typedef struct _dwg_entity_SECTIONOBJECT          dwg_ent_sectionobject;
 typedef struct _dwg_entity_UNDERLAY               dwg_ent_underlay;
 typedef struct _dwg_entity_WIPEOUT                dwg_ent_wipeout;
 typedef struct _dwg_entity_ARC_DIMENSION          dwg_ent_arc_dimension;
@@ -515,7 +516,6 @@ typedef struct _dwg_entity_LOFTEDSURFACE          dwg_ent_loftedsurface;
 typedef struct _dwg_entity_REVOLVEDSURFACE        dwg_ent_revolvedsurface;
 typedef struct _dwg_entity_SWEPTSURFACE           dwg_ent_sweptsurface;
 typedef struct _dwg_entity_GEOPOSITIONMARKER      dwg_ent_geopositionmarker;
-typedef struct _dwg_entity_SECTIONOBJECT          dwg_ent_sectionobject;
 typedef struct _dwg_entity_MESH                   dwg_ent_mesh;
 typedef struct _dwg_entity_NAVISWORKSMODEL        dwg_ent_navisworksmodel;
 typedef struct _dwg_entity_PROXY_ENTITY           dwg_ent_proxy;
@@ -1228,6 +1228,7 @@ dwg_get_OBJECT_DECL (ent_proxy, PROXY_ENTITY);
 dwg_get_OBJECT_DECL (ent_hatch, HATCH);
 dwg_get_OBJECT_DECL (ent_image, IMAGE);
 dwg_get_OBJECT_DECL (ent_light, LIGHT);
+dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 dwg_get_OBJECT_DECL (ent_underlay, UNDERLAY);
 dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
 dwg_get_OBJECT_DECL (ent_unknown, UNKNOWN_ENT);
@@ -1236,7 +1237,6 @@ dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
 dwg_get_OBJECT_DECL (ent_camera, CAMERA);
 dwg_get_OBJECT_DECL (ent_helix, HELIX);
 dwg_get_OBJECT_DECL (ent_mesh, MESH);
-dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 #ifdef DEBUG_CLASSES
 dwg_get_OBJECT_DECL (ent_atext, ATEXT)
 dwg_get_OBJECT_DECL (ent_rtext, RTEXT)

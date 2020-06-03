@@ -221,6 +221,7 @@ EXPORT Dwg_Entity_OLE2FRAME** dwg_getall_OLE2FRAME (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_LWPOLYLINE** dwg_getall_LWPOLYLINE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_HATCH** dwg_getall_HATCH (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_PROXY_ENTITY **dwg_getall_PROXY_ENTITY (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_SECTIONOBJECT **dwg_getall_SECTIONOBJECT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_UNKNOWN_ENT** dwg_getall_UNKNOWN_ENT (Dwg_Object_Ref* hdr);
 //unstable:
 EXPORT Dwg_Entity_CAMERA** dwg_getall_CAMERA (Dwg_Object_Ref* hdr);
@@ -228,7 +229,6 @@ EXPORT Dwg_Entity_HELIX** dwg_getall_HELIX (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_IMAGE** dwg_getall_IMAGE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_LIGHT** dwg_getall_LIGHT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_MULTILEADER **dwg_getall_MULTILEADER (Dwg_Object_Ref* hdr);
-EXPORT Dwg_Entity_SECTIONOBJECT **dwg_getall_SECTIONOBJECT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_UNDERLAY** dwg_getall_UNDERLAY (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_WIPEOUT** dwg_getall_WIPEOUT (Dwg_Object_Ref* hdr);
 // DEBUG_CLASSES

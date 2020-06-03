@@ -6269,6 +6269,27 @@ DWG_ENTITY (CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY
   FIELD_HANDLE (view, 5, 0);
 DWG_ENTITY_END
 
+// sectionplane, r2007+
+DWG_ENTITY (SECTIONOBJECT)
+  //DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSection)
+  FIELD_BL (state, 90);
+  FIELD_BL (flags, 91);
+  FIELD_T (name, 1);
+  FIELD_3BD (vert_dir, 10);
+  FIELD_BD (top_height, 40);
+  FIELD_BD (bottom_height, 41);
+  FIELD_BS (indicator_alpha, 70);
+  FIELD_CMTC (indicator_color, 62); //dxf doc bug: 63, 411
+  FIELD_BL (num_verts, 92);
+  FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
+  FIELD_BL (num_blverts, 93);
+  FIELD_3DPOINT_VECTOR (blverts, num_blverts, 12);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  FIELD_HANDLE (section_settings, 5, 360);
+DWG_ENTITY_END
+
 DWG_OBJECT (SECTION_MANAGER)
   //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbSectionManager)
@@ -6836,28 +6857,6 @@ DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
     FIELD_HANDLE (r_node, 4, 330);
   }
 DWG_OBJECT_END
-
-// sectionplane, r2007+
-DWG_ENTITY (SECTIONOBJECT)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbSection)
-  FIELD_BL (state, 90);
-  FIELD_BL (flags, 91);
-  FIELD_T (name, 1);
-  FIELD_3BD (vert_dir, 10);
-  FIELD_BD (top_height, 40);
-  FIELD_BD (bottom_height, 41);
-  FIELD_BS (indicator_alpha, 70);
-  FIELD_CMTC (indicator_color, 62); //dxf doc bug: 63, 411
-  FIELD_BL (num_verts, 92);
-  FIELD_3DPOINT_VECTOR (verts, num_verts, 11);
-  FIELD_BL (num_blverts, 93);
-  FIELD_3DPOINT_VECTOR (blverts, num_blverts, 12);
-
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (section_settings, 5, 360);
-DWG_ENTITY_END
 
 // undocumented fields, unstable, but looks stable.
 // types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid

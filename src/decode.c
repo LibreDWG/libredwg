@@ -331,23 +331,22 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       free (_obj);                                                            \
       return DWG_ERR_INVALIDDWG;                                              \
     }                                                                         \
-  obj->index = num + i;                                                       \
   obj->tio.object = calloc (1, sizeof (Dwg_Object_Object));                   \
   if (!_obj || !obj->tio.object)                                              \
     {                                                                         \
       if (_obj) free (_obj);                                                  \
       return DWG_ERR_OUTOFMEM;                                                \
     } 	                                                                      \
+  obj->index = num + i;                                                       \
   dwg->num_objects++;                                                         \
   obj->tio.object->tio.token = _obj;                                          \
   obj->tio.object->objid = obj->index;                                        \
+  obj->tio.object->dwg = obj->parent;                                         \
   obj->supertype = DWG_SUPERTYPE_OBJECT;                                      \
   obj->parent = dwg;                                                          \
   obj->name = obj->dxfname = (char *)#token;                                  \
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
   _obj->parent = obj->tio.object;                                             \
-  obj->tio.object->dwg = obj->parent;                                         \
-  obj->tio.object->objid = obj->index; /* obj ptr itself might move */        \
   LOG_TRACE ("\n-- table entry " #token " [%d]:\n", i)
 
 #define CHK_ENDPOS                                                            \
