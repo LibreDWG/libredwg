@@ -10579,10 +10579,10 @@ RLx
 
 @item parent
 struct _dwg_SECTION_typesettings*
-@item class_version
-BL
-@item unknown1
-BL
+@item num_geoms
+BL,	DXF 90
+@item hexindex
+BL,	DXF 91
 @item flags
 BL,	DXF 92
 @item color
@@ -10601,7 +10601,7 @@ BLd,	DXF 370
 BS,	DXF 70
 @item edge_transparency
 BS,	DXF 71
-@item is_hatch_visible
+@item hatch_type
 BS,	DXF 72
 @item hatch_pattern
 T,	DXF 2
@@ -10632,11 +10632,11 @@ BL,	DXF 92
 @item sources
 H*,	DXF 330
 @item destblock
-H
+H,	DXF 331
 @item destfile
 T,	DXF 1
 @item num_geom
-BL
+BL,	DXF 93
 @item geom
 Dwg_SECTION_geometrysettings*
 

@@ -272,7 +272,7 @@ EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str) ATTRIBUTE_MALLOC;
 int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);
 /* check if the string (ascii or unicode) is empty */
 int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str);
-
+BITCODE_T bit_set_T (Bit_Chain *restrict dat, const char* restrict src);
 
 BITCODE_RL bit_read_L (Bit_Chain *dat);
 void bit_write_L (Bit_Chain *dat, BITCODE_RL value);

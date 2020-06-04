@@ -5843,9 +5843,9 @@ typedef struct _dwg_object_SECTION_MANAGER
 typedef struct _dwg_SECTION_geometrysettings
 {
   struct _dwg_SECTION_typesettings *parent;
-  BITCODE_BL class_version;
-  BITCODE_BL unknown1;
-  BITCODE_BL flags; 		/* DXF 92. 4: is_hiddenline, 8: has_division_lines */
+  BITCODE_BL num_geoms;         /* DXF 90 */
+  BITCODE_BL hexindex;          /* DXF 91 */
+  BITCODE_BL flags; 		/* DXF 92. 2: hatchvisible, 4: is_hiddenline, 8: has_division_lines */
   BITCODE_CMC color;		/* DXF 62 */
   BITCODE_T layer;		/* DXF 8 Default: 0 */
   BITCODE_T ltype;		/* DXF 6 Default: Continuous */
@@ -5854,7 +5854,7 @@ typedef struct _dwg_SECTION_geometrysettings
   BITCODE_BLd linewt;		/* DXF 370 */
   BITCODE_BS face_transparency;	/* DXF 70 */
   BITCODE_BS edge_transparency;	/* DXF 71 */
-  BITCODE_BS is_hatch_visible;	/* DXF 72 */
+  BITCODE_BS hatch_type;	/* DXF 72 */
   BITCODE_T hatch_pattern;	/* DXF 2 */
   BITCODE_BD hatch_angle;	/* DXF 41 */
   BITCODE_BD hatch_spacing;	/* DXF 42 */

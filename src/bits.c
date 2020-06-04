@@ -2431,6 +2431,14 @@ int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str)
     }
 }
 
+BITCODE_T
+bit_set_T (Bit_Chain *dat, const char* restrict src)
+{
+  if (dat->from_version < R_2007)
+    return strdup (src);
+  else
+    return (BITCODE_T)bit_utf8_to_TU ((char*)src);
+}
 
 /** Read 1 bitlong according to normal order
  */

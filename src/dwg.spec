@@ -6299,6 +6299,65 @@ DWG_OBJECT (SECTION_MANAGER)
   HANDLE_VECTOR (sections, num_sections, 5, 330);
 DWG_OBJECT_END
 
+// Unstable
+DWG_OBJECT (SECTION_SETTINGS)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbSectionSettings)
+  FIELD_BL (curr_type, 90);
+  FIELD_BL (num_types, 91);
+  VALUEOUTOFBOUNDS (num_types, 4) // max 4 types: live on/off, 2d, 3d
+  REPEAT (num_types, types, Dwg_SECTION_typesettings)
+  REPEAT_BLOCK
+      DXF { VALUE_TFF ("SectionTypeSettings", 1); }
+      SUB_FIELD_BL (types[rcount1], type, 90);
+      SUB_FIELD_BL (types[rcount1], generation, 91);
+      SUB_FIELD_BL (types[rcount1], num_sources, 92);
+      SUB_HANDLE_VECTOR (types[rcount1], sources, num_sources, 5, 330);
+      SUB_FIELD_HANDLE (types[rcount1], destblock, 4, 331);
+      SUB_FIELD_T (types[rcount1], destfile, 1);
+      SUB_FIELD_BL (types[rcount1], num_geom, 93);
+      REPEAT2 (types[rcount1].num_geom, types[rcount1].geom, Dwg_SECTION_geometrysettings)
+      REPEAT_BLOCK
+          DXF { VALUE_TFF ("SectionGeometrySettings", 2); }
+          SUB_FIELD_BL (types[rcount1].geom[rcount2], num_geoms, 90);
+          SUB_FIELD_BL (types[rcount1].geom[rcount2], hexindex, 91);
+          SUB_FIELD_BL (types[rcount1].geom[rcount2], flags, 92);
+          SUB_FIELD_CMC (types[rcount1].geom[rcount2], color, 62);
+          SUB_FIELD_T (types[rcount1].geom[rcount2], layer, 8);
+          SUB_FIELD_T (types[rcount1].geom[rcount2], ltype, 6);
+          SUB_FIELD_BD (types[rcount1].geom[rcount2], ltype_scale, 40);
+          SUB_FIELD_T (types[rcount1].geom[rcount2], plotstyle, 1);
+          SINCE (R_2000)
+            SUB_FIELD_BLd (types[rcount1].geom[rcount2], linewt, 370);
+          SUB_FIELD_BS (types[rcount1].geom[rcount2], face_transparency, 70);
+          SUB_FIELD_BS (types[rcount1].geom[rcount2], edge_transparency, 71);
+          SUB_FIELD_BS (types[rcount1].geom[rcount2], hatch_type, 72);
+          ENCODER {
+            if (bit_empty_T (dat, _obj->types[rcount1].geom[rcount2].hatch_pattern))
+              _obj->types[rcount1].geom[rcount2].hatch_pattern = bit_set_T (dat, "SOLID");
+          }
+          SUB_FIELD_T (types[rcount1].geom[rcount2], hatch_pattern, 2);
+          DECODER {
+            if (bit_empty_T (dat, _obj->types[rcount1].geom[rcount2].hatch_pattern))
+              {
+                free (_obj->types[rcount1].geom[rcount2].hatch_pattern);
+                _obj->types[rcount1].geom[rcount2].hatch_pattern = bit_set_T (dat, "SOLID");
+              }
+          }
+          SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_angle, 41);
+          SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_spacing, 42);
+          SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_scale, 43);
+          DXF { VALUE_TFF ("SectionGeometrySettingsEnd", 3); }
+      END_REPEAT_BLOCK
+      SET_PARENT (types[rcount1].geom, &_obj->types[rcount1]);
+      END_REPEAT (types[rcount1].geom)
+      DXF { VALUE_TFF ("SectionTypeSettingsEnd", 3); }
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (types);
+  END_REPEAT (types)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #ifndef IS_DXF
 
 /* UNKNOWN (varies)
@@ -8372,54 +8431,6 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_B (show_all_bend_indentifiers, 290);
   FIELD_B (show_end_and_bend_lines, 290);
 
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (SECTION_SETTINGS)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbSectionSettings)
-  FIELD_BL (curr_type, 90);
-  FIELD_BL (num_types, 91);
-  VALUEOUTOFBOUNDS (num_types, 4) // max 4 types: live on/off, 2d, 3d
-  REPEAT (num_types, types, Dwg_SECTION_typesettings)
-  REPEAT_BLOCK
-      VALUE_TFF ("SectionTypeSettings", 1);
-      SUB_FIELD_BL (types[rcount1], type, 90);
-      SUB_FIELD_BL (types[rcount1], generation, 91);
-      SUB_FIELD_BL (types[rcount1], num_sources, 92);
-      SUB_HANDLE_VECTOR (types[rcount1], sources, num_sources, 5, 330);
-      SUB_FIELD_HANDLE (types[rcount1], destblock, DWG_HDL_HARDOWN, 331);
-      SUB_FIELD_T (types[rcount1], destfile, 1);
-      SUB_FIELD_BL (types[rcount1], num_geom, 0);
-      REPEAT (types[rcount1].num_geom, types[rcount1].geom, Dwg_SECTION_geometrysettings)
-      REPEAT_BLOCK
-          SUB_FIELD_BL (types[rcount1].geom[rcount2], class_version, 0); //?
-          SUB_FIELD_BL (types[rcount1].geom[rcount2], unknown1, 0);
-          SUB_FIELD_BL (types[rcount1].geom[rcount2], flags, 92);
-          SUB_FIELD_CMC (types[rcount1].geom[rcount2], color, 62);
-          SUB_FIELD_T (types[rcount1].geom[rcount2], layer, 8);
-          SUB_FIELD_T (types[rcount1].geom[rcount2], ltype, 6);
-          SUB_FIELD_BD (types[rcount1].geom[rcount2], ltype_scale, 40);
-          SUB_FIELD_T (types[rcount1].geom[rcount2], plotstyle, 1);
-          SINCE (R_2000)
-            SUB_FIELD_BLd (types[rcount1].geom[rcount2], linewt, 370);
-          SUB_FIELD_BS (types[rcount1].geom[rcount2], face_transparency, 70);
-          SUB_FIELD_BS (types[rcount1].geom[rcount2], edge_transparency, 71);
-          SUB_FIELD_BS (types[rcount1].geom[rcount2], is_hatch_visible, 72);
-          SUB_FIELD_T (types[rcount1].geom[rcount2], hatch_pattern, 2);
-          if (FIELD_VALUE (types[rcount1].geom[rcount2].is_hatch_visible))
-            {
-              SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_angle, 41);
-              SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_spacing, 42);
-              SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_scale, 43);
-            }
-      END_REPEAT_BLOCK
-      SET_PARENT (types[rcount1].geom, &_obj->types[rcount1]);
-      END_REPEAT (types[rcount1].geom)
-      VALUE_TFF ("SectionTypeSettingsEnd", 3);
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ (types);
-  END_REPEAT (types)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
