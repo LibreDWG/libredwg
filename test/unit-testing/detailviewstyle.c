@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_DETAILVIEWSTYLE
 #include "common.c"
 
@@ -40,7 +39,6 @@ api_process (dwg_object *obj)
   BITCODE_CMC borderline_color;
   BITCODE_RC model_edge;
 
-#ifdef DEBUG_CLASSES
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_detailviewstyle *_obj = dwg_object_to_DETAILVIEWSTYLE (obj);
 
@@ -79,5 +77,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, borderline_linewt, BLd);
   CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, borderline_color);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, model_edge, RC);
-#endif
 }

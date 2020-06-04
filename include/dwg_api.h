@@ -582,6 +582,7 @@ typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY       dwg_obj_assocalignedd
 typedef struct _dwg_object_ASSOCDEPENDENCY                 dwg_obj_assocdependency;
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY     dwg_obj_assocplanesurfaceactionbody;
 typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
+typedef struct _dwg_object_DETAILVIEWSTYLE                 dwg_obj_detailviewstyle;
 typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
 typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER      dwg_obj_dynamicblockpurgepreventer;
 typedef struct _dwg_object_LIGHTLIST                       dwg_obj_lightlist;
@@ -626,7 +627,6 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER        dwg_obj_blockvisibili
 typedef struct _dwg_object_CSACDOCUMENTOPTIONS             dwg_obj_csacdocumentoptions;
 typedef struct _dwg_object_DATALINK                        dwg_obj_datalink;
 typedef struct _dwg_object_DATATABLE                       dwg_obj_datatable;
-typedef struct _dwg_object_DETAILVIEWSTYLE                 dwg_obj_detailviewstyle;
 typedef struct _dwg_object_EVALUATION_GRAPH                dwg_obj_evaluation_graph;
 typedef struct _dwg_object_GEOMAPIMAGE                     dwg_obj_geomapimage;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG               dwg_obj_layoutprintconfig;
@@ -812,6 +812,7 @@ DWG_GETALL_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCPLANESURFACEACTIONBODY)
 DWG_GETALL_OBJECT_DECL (DBCOLOR)
+DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (DIMASSOC)
 DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER)
 DWG_GETALL_OBJECT_DECL (LIGHTLIST)
@@ -851,7 +852,6 @@ DWG_GETALL_OBJECT_DECL (BLOCKVISIBILITYGRIP)
 DWG_GETALL_OBJECT_DECL (BLOCKVISIBILITYPARAMETER)
 DWG_GETALL_OBJECT_DECL (DATALINK)
 DWG_GETALL_OBJECT_DECL (DATATABLE)
-DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (EVALUATION_GRAPH)
 DWG_GETALL_OBJECT_DECL (GEOMAPIMAGE)
 DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
@@ -1012,6 +1012,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPLANESURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CELLSTYLEMAP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DBCOLOR)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DICTIONARYVAR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DICTIONARYWDFLT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DIMASSOC)
@@ -1069,7 +1070,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKVISIBILITYGRIP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKVISIBILITYPARAMETER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (EVALUATION_GRAPH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (GEOMAPIMAGE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUTPRINTCONFIG)
@@ -1306,6 +1306,7 @@ dwg_get_OBJECT_DECL (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assocdependency, ASSOCDEPENDENCY);
 dwg_get_OBJECT_DECL (obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY);
 dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
+dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
 dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);
 dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
@@ -1340,7 +1341,6 @@ dwg_get_OBJECT_DECL (obj_blockvisibilitygrip, BLOCKVISIBILITYGRIP);
 dwg_get_OBJECT_DECL (obj_blockvisibilityparameter, BLOCKVISIBILITYPARAMETER);
 dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
 dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
-dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_evaluation_graph, EVALUATION_GRAPH);
 dwg_get_OBJECT_DECL (obj_geomapimage, GEOMAPIMAGE)
 dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)

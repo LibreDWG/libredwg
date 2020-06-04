@@ -129,6 +129,7 @@ testobjects = \
 	section_manager \
 	section_settings \
 	sectionobject \
+	detailviewstyle \
 	sectionviewstyle \
 	seqend \
 	shape \
@@ -206,7 +207,6 @@ testobjects += \
 	curvepath \
 	datalink \
 	datatable \
-	detailviewstyle \
 	evaluation_graph \
 	extrudedsurface \
 	fcfobjectcontextdata \
