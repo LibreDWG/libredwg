@@ -420,7 +420,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_SECTION_SETTINGS)
             {
               strcpy (tmp, prefix);
-              strcat (tmp, "2018/LiveSection.dwg");
+              strcat (tmp, "2018/LiveSection1.dwg");
               error += test_code (tmp, cov);
             }
         }

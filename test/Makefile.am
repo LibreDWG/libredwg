@@ -283,6 +283,8 @@ TESTDATA = \
     test-data/2018/Leader.dxf \
     test-data/2018/Line.dwg \
     test-data/2018/Line.txt \
+    test-data/2018/LiveSection1.dwg \
+    test-data/2018/LiveSection1.dxf \
     test-data/2018/Multiline.dwg \
     test-data/2018/Multiline.txt \
     test-data/2018/Point.dwg \
