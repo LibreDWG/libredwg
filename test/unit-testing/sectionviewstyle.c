@@ -50,7 +50,6 @@ api_process (dwg_object *obj)
   BITCODE_BL i, num_hatch_angles;
   BITCODE_BD *hatch_angles;
 
-#ifdef DEBUG_CLASSES
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_sectionviewstyle *_obj = dwg_object_to_SECTIONVIEWSTYLE (obj);
 
@@ -109,5 +108,4 @@ api_process (dwg_object *obj)
   //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_bend_indentifiers, B);
   //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_end_and_bend_lines, B);
   //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_hatching, B);
-#endif
 }

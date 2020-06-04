@@ -232,7 +232,6 @@ testobjects += \
 	renderglobal \
 	revolvedsurface \
 	rtext \
-	sectionviewstyle \
 	sunstudy \
 	sweptsurface \
 	table \
