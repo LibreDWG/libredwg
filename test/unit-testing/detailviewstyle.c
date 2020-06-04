@@ -7,9 +7,11 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BITCODE_BS class_version; /*!< DXF 70 0 */
-  BITCODE_T name;
-  BITCODE_T description;
+  BITCODE_T desc;
   BITCODE_B is_modified_for_recompute;
+  BITCODE_T display_name;
+  BITCODE_BL viewstyle_flags;
+
   BITCODE_H identifier_style;
   BITCODE_CMC identifier_color;
   BITCODE_BD identifier_height;
@@ -43,9 +45,13 @@ api_process (dwg_object *obj)
   dwg_obj_detailviewstyle *_obj = dwg_object_to_DETAILVIEWSTYLE (obj);
 
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, class_version, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, name);
-  //CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, description);
+  CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, desc);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, is_modified_for_recompute, B);
+  SINCE (R_2018) {
+    CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, display_name);
+    CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, viewstyle_flags, BL);
+  }
+
   CHK_ENTITY_H (_obj, DETAILVIEWSTYLE, identifier_style);
   CHK_ENTITY_CMC (_obj, DETAILVIEWSTYLE, identifier_color);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, identifier_height, BD);

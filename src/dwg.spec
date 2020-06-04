@@ -6349,7 +6349,7 @@ DWG_OBJECT (SECTION_SETTINGS)
           SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_scale, 43);
           DXF { VALUE_TFF ("SectionGeometrySettingsEnd", 3); }
       END_REPEAT_BLOCK
-      SET_PARENT (types[rcount1].geom, &_obj->types[rcount1]);
+      //SET_PARENT (types[rcount1].geom, &_obj->types[rcount1]);
       END_REPEAT (types[rcount1].geom)
       DXF { VALUE_TFF ("SectionTypeSettingsEnd", 3); }
   END_REPEAT_BLOCK
@@ -8332,8 +8332,12 @@ DWG_OBJECT (DETAILVIEWSTYLE)
 
   SUBCLASS (AcDbModelDocViewStyle)
   FIELD_BS (class_version, 70); // 0
-  FIELD_T (name, 3);
+  FIELD_T (desc, 3);
   FIELD_B (is_modified_for_recompute, 290);
+  SINCE (R_2018) {
+    FIELD_T (display_name, 300);
+    FIELD_BL (viewstyle_flags, 90);
+  }
 
   SUBCLASS (AcDbDetailViewStyle)
   FIELD_BS (identifier_placement, 70);
@@ -8379,58 +8383,66 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbModelDocViewStyle)
   FIELD_BS (class_version, 70); // 0
-  FIELD_T (name, 3);
+  FIELD_T (desc, 3);
   FIELD_B (is_modified_for_recompute, 290);
-  FIELD_T (description, 300);
+  SINCE (R_2018) {
+    FIELD_T (display_name, 300);
+    FIELD_BL (viewstyle_flags, 90);
+  }
+
   SUBCLASS (AcDbSectionViewStyle)
-  FIELD_BS (identifier_exclude_characters, 90); // 102
-  DEBUG_HERE_OBJ
-  // DXF: 100 70 3 290 3 90 100 70 71 90 71 340 62 40 340 340 62 40 300 40 90 40 90 71 340 90 62 340 90 62 40 40 40 71 340 62 40 90 40 90 300(field) 71 62 62 300 40 90 290 290 90 6 40 40 40 40 40
-  //pi: 70 3 290
-  FIELD_CMC (identifier_color, 62);
-  DEBUG_HERE_OBJ
-  FIELD_BD (identifier_height, 40); // 5.0
-  FIELD_CMC (plane_line_color, 62);
-  FIELD_BD (identifier_offset, 42); // 5.0
-  FIELD_T (viewlabel_text, 300); // I, O, Q, S, X, Z
-  // 40 90 62 40 40 62 40 62 40 300 71
-  FIELD_BD (arrow_symbol_size, 40);
-  FIELD_BS (viewlabel_pattern, 90);
-  FIELD_CMC (arrow_symbol_color, 62);
-  FIELD_BL (hatch_pattern, 90);
-  FIELD_CMC (bend_line_color, 62);
-  FIELD_BD (identifier_position, 40);
-  FIELD_BD (viewlabel_text_height, 40);
-  FIELD_CMC (viewlabel_text_color, 62);
-  FIELD_BD (bend_line_length, 40);
-  DEBUG_HERE_OBJ
-  FIELD_CMC (hatch_color, 62);
-  FIELD_CMC (hatch_bg_color, 62);
+  FIELD_BS (class_version, 70); // 0
+  DXF { VALUE_BS (0, 71); }
+  FIELD_BL (flags, 90); // 102
+  DXF { VALUE_BS (1, 71); }
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
+  FIELD_CMC (identifier_color, 62); // in dxf all colors only r2004+
+  FIELD_BD (identifier_height, 40); // 5.0
   FIELD_HANDLE (arrow_start_symbol, 5, 340);
   FIELD_HANDLE (arrow_end_symbol, 5, 340);
-  FIELD_BD (arrow_symbol_extension_length, 40);
-  FIELD_BS (plane_line_weight, 71);
+  FIELD_CMC (arrow_symbol_color, 62);
+  FIELD_BD (arrow_symbol_size, 40);
+  FIELD_T (identifier_exclude_characters, 300); // I, O, Q, S, X, Z
+  DXF {
+    FIELD_BLd (identifier_position, 90);
+    FIELD_BD (identifier_offset, 42);
+    FIELD_BLd (arrow_position, 90);
+    VALUE_BS (2, 71);
+  }
+  FIELD_BD (arrow_symbol_extension_length, 0);
   FIELD_HANDLE (plane_line_type, 5, 340); // ltype
+  FIELD_BLd (plane_line_weight, 90);
+  FIELD_CMC (plane_line_color, 62);
   FIELD_HANDLE (bend_line_type, 5, 340); // ltype
+  FIELD_BLd (bend_line_weight, 90);
+  FIELD_CMC (bend_line_color, 62);
+  FIELD_BD (bend_line_length, 40);
+  DXF {
+    FIELD_BD (end_line_overshoot, 40);
+  }
+  FIELD_BD (end_line_length, 40);
+  DXF { VALUE_BS (3, 71); }
   FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
-  FIELD_BS (bend_line_weight, 0);
-  FIELD_BD (end_line_length, 0);
-  FIELD_BD (arrow_position, 40);
-  FIELD_T (viewlabel_field, 300);
-  FIELD_BD (viewlabel_offset, 42);
-  FIELD_BS (viewlabel_attachment, 70);
-  FIELD_BS (viewlabel_alignment, 72);
-  FIELD_BD (hatch_scale, 0);
-  FIELD_BD (hatch_angles, 0);
-  FIELD_BS (hatch_transparency, 0);
-  FIELD_B (is_continuous_labeling, 290);
-  FIELD_B (show_arrowheads, 290);
-  FIELD_B (show_viewlabel, 290);
-  FIELD_B (show_all_plane_lines, 290);
-  FIELD_B (show_all_bend_indentifiers, 290);
-  FIELD_B (show_end_and_bend_lines, 290);
-
+  FIELD_CMC (viewlabel_text_color, 62);
+  FIELD_BD (viewlabel_text_height, 40);
+  FIELD_BL (viewlabel_attachment, 90);
+  FIELD_BD (viewlabel_offset, 40); // 5.0
+  FIELD_BL (viewlabel_alignment, 90);
+  FIELD_T (viewlabel_pattern, 300);
+  DXF { VALUE_BS (4, 71); }
+  FIELD_CMC (hatch_color, 62);
+  FIELD_CMC (hatch_bg_color, 62);
+  FIELD_T (hatch_pattern, 300);
+  FIELD_BD (hatch_scale, 40);
+  FIELD_BLd (hatch_transparency, 90);
+  FIELD_B (unknown_b1, 290);
+  FIELD_B (unknown_b2, 290);
+  FIELD_BLd (identifier_position, 0);
+  FIELD_BD (identifier_offset, 0);
+  FIELD_BLd (arrow_position, 0);
+  FIELD_BD (end_line_overshoot, 0);
+  FIELD_BL (num_hatch_angles, 90);
+  FIELD_VECTOR (hatch_angles, BD, num_hatch_angles, 40);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

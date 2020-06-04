@@ -30307,6 +30307,26 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
     detailviewstyle->connection_line_weight--;
   }
   {
+    BITCODE_T desc;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "desc", &desc, NULL)
+        && desc
+           ? strEQ ((char *)desc, (char *)detailviewstyle->desc)
+           : !detailviewstyle->desc)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.desc [T] '%s' <> '%s'", desc, detailviewstyle->desc);
+  }
+  {
+    BITCODE_T display_name;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "display_name", &display_name, NULL)
+        && display_name
+           ? strEQ ((char *)display_name, (char *)detailviewstyle->display_name)
+           : !detailviewstyle->display_name)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.display_name [T] '%s' <> '%s'", display_name, detailviewstyle->display_name);
+  }
+  {
     BITCODE_CMC identifier_color;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_color", &identifier_color, NULL)
         && !memcmp (&identifier_color, &detailviewstyle->identifier_color, sizeof (detailviewstyle->identifier_color)))
@@ -30396,16 +30416,6 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
     else
       fail ("DETAILVIEWSTYLE.model_edge [B] set+1 " FORMAT_B " != " FORMAT_B "", detailviewstyle->model_edge, model_edge);
     detailviewstyle->model_edge--;
-  }
-  {
-    BITCODE_T name;
-    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "name", &name, NULL)
-        && name
-           ? strEQ ((char *)name, (char *)detailviewstyle->name)
-           : !detailviewstyle->name)
-      pass ();
-    else
-      fail ("DETAILVIEWSTYLE.name [T] '%s' <> '%s'", name, detailviewstyle->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -30545,6 +30555,21 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("DETAILVIEWSTYLE.viewlabel_text_style [H]");
+  }
+  {
+    BITCODE_BL viewstyle_flags;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewstyle_flags", &viewstyle_flags, NULL)
+        && viewstyle_flags == detailviewstyle->viewstyle_flags)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewstyle_flags [BL] %u != %u", detailviewstyle->viewstyle_flags, viewstyle_flags);
+    viewstyle_flags++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "viewstyle_flags", &viewstyle_flags, 0)
+        && viewstyle_flags == detailviewstyle->viewstyle_flags)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.viewstyle_flags [BL] set+1 %u != %u", detailviewstyle->viewstyle_flags, viewstyle_flags);
+    detailviewstyle->viewstyle_flags--;
   }
   if (failed && (is_class_unstable ("DETAILVIEWSTYLE") || is_class_debugging ("DETAILVIEWSTYLE")))
     {
@@ -39891,18 +39916,17 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
         fail ("SECTIONVIEWSTYLE.arrow_end_symbol [H]");
   }
   {
-    BITCODE_BD arrow_position;
+    BITCODE_BLd arrow_position;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "arrow_position", &arrow_position, NULL)
         && arrow_position == sectionviewstyle->arrow_position)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.arrow_position [BD] %g != %g", sectionviewstyle->arrow_position, arrow_position);
-    arrow_position++;
+      fail ("SECTIONVIEWSTYLE.arrow_position [BLd] " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->arrow_position, arrow_position);
     if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "arrow_position", &arrow_position, 0)
         && arrow_position == sectionviewstyle->arrow_position)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.arrow_position [BD] set+1 %g != %g", sectionviewstyle->arrow_position, arrow_position);
+      fail ("SECTIONVIEWSTYLE.arrow_position [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->arrow_position, arrow_position);
     sectionviewstyle->arrow_position--;
   }
   {
@@ -39983,18 +40007,17 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
         fail ("SECTIONVIEWSTYLE.bend_line_type [H]");
   }
   {
-    BITCODE_BS bend_line_weight;
+    BITCODE_BLd bend_line_weight;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "bend_line_weight", &bend_line_weight, NULL)
         && bend_line_weight == sectionviewstyle->bend_line_weight)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.bend_line_weight [BS] %hu != %hu", sectionviewstyle->bend_line_weight, bend_line_weight);
-    bend_line_weight++;
+      fail ("SECTIONVIEWSTYLE.bend_line_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->bend_line_weight, bend_line_weight);
     if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "bend_line_weight", &bend_line_weight, 0)
         && bend_line_weight == sectionviewstyle->bend_line_weight)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.bend_line_weight [BS] set+1 %hu != %hu", sectionviewstyle->bend_line_weight, bend_line_weight);
+      fail ("SECTIONVIEWSTYLE.bend_line_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->bend_line_weight, bend_line_weight);
     sectionviewstyle->bend_line_weight--;
   }
   {
@@ -40013,14 +40036,24 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     sectionviewstyle->class_version--;
   }
   {
-    BITCODE_T description;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "description", &description, NULL)
-        && description
-           ? strEQ ((char *)description, (char *)sectionviewstyle->description)
-           : !sectionviewstyle->description)
+    BITCODE_T desc;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "desc", &desc, NULL)
+        && desc
+           ? strEQ ((char *)desc, (char *)sectionviewstyle->desc)
+           : !sectionviewstyle->desc)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.description [T] '%s' <> '%s'", description, sectionviewstyle->description);
+      fail ("SECTIONVIEWSTYLE.desc [T] '%s' <> '%s'", desc, sectionviewstyle->desc);
+  }
+  {
+    BITCODE_T display_name;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "display_name", &display_name, NULL)
+        && display_name
+           ? strEQ ((char *)display_name, (char *)sectionviewstyle->display_name)
+           : !sectionviewstyle->display_name)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.display_name [T] '%s' <> '%s'", display_name, sectionviewstyle->display_name);
   }
   {
     BITCODE_BD end_line_length;
@@ -40038,19 +40071,44 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     sectionviewstyle->end_line_length--;
   }
   {
-    BITCODE_BD hatch_angles;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_angles", &hatch_angles, NULL)
+    BITCODE_BD end_line_overshoot;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "end_line_overshoot", &end_line_overshoot, NULL)
+        && end_line_overshoot == sectionviewstyle->end_line_overshoot)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.end_line_overshoot [BD] %g != %g", sectionviewstyle->end_line_overshoot, end_line_overshoot);
+    end_line_overshoot++;
+    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "end_line_overshoot", &end_line_overshoot, 0)
+        && end_line_overshoot == sectionviewstyle->end_line_overshoot)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.end_line_overshoot [BD] set+1 %g != %g", sectionviewstyle->end_line_overshoot, end_line_overshoot);
+    sectionviewstyle->end_line_overshoot--;
+  }
+  {
+    BITCODE_BL flags;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "flags", &flags, NULL)
+        && flags == sectionviewstyle->flags)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.flags [BL] %u != %u", sectionviewstyle->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "flags", &flags, 0)
+        && flags == sectionviewstyle->flags)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.flags [BL] set+1 %u != %u", sectionviewstyle->flags, flags);
+    sectionviewstyle->flags--;
+  }
+  {
+    BITCODE_BD* hatch_angles;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "num_hatch_angles", &count, NULL)
+        && dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_angles", &hatch_angles, NULL)
         && hatch_angles == sectionviewstyle->hatch_angles)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.hatch_angles [BD] %g != %g", sectionviewstyle->hatch_angles, hatch_angles);
-    hatch_angles++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_angles", &hatch_angles, 0)
-        && hatch_angles == sectionviewstyle->hatch_angles)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.hatch_angles [BD] set+1 %g != %g", sectionviewstyle->hatch_angles, hatch_angles);
-    sectionviewstyle->hatch_angles--;
+      fail ("SECTIONVIEWSTYLE.hatch_angles [BD*] * %u num_hatch_angles", count);
   }
   {
     BITCODE_CMC hatch_bg_color;
@@ -40069,19 +40127,14 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
         fail ("SECTIONVIEWSTYLE.hatch_color [CMC]");
   }
   {
-    BITCODE_BS hatch_pattern;
+    BITCODE_T hatch_pattern;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_pattern", &hatch_pattern, NULL)
-        && hatch_pattern == sectionviewstyle->hatch_pattern)
+        && hatch_pattern
+           ? strEQ ((char *)hatch_pattern, (char *)sectionviewstyle->hatch_pattern)
+           : !sectionviewstyle->hatch_pattern)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.hatch_pattern [BS] %hu != %hu", sectionviewstyle->hatch_pattern, hatch_pattern);
-    hatch_pattern++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_pattern", &hatch_pattern, 0)
-        && hatch_pattern == sectionviewstyle->hatch_pattern)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.hatch_pattern [BS] set+1 %hu != %hu", sectionviewstyle->hatch_pattern, hatch_pattern);
-    sectionviewstyle->hatch_pattern--;
+      fail ("SECTIONVIEWSTYLE.hatch_pattern [T] '%s' <> '%s'", hatch_pattern, sectionviewstyle->hatch_pattern);
   }
   {
     BITCODE_BD hatch_scale;
@@ -40099,18 +40152,17 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     sectionviewstyle->hatch_scale--;
   }
   {
-    BITCODE_BS hatch_transparency;
+    BITCODE_BLd hatch_transparency;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_transparency", &hatch_transparency, NULL)
         && hatch_transparency == sectionviewstyle->hatch_transparency)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.hatch_transparency [BS] %hu != %hu", sectionviewstyle->hatch_transparency, hatch_transparency);
-    hatch_transparency++;
+      fail ("SECTIONVIEWSTYLE.hatch_transparency [BLd] " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->hatch_transparency, hatch_transparency);
     if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_transparency", &hatch_transparency, 0)
         && hatch_transparency == sectionviewstyle->hatch_transparency)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.hatch_transparency [BS] set+1 %hu != %hu", sectionviewstyle->hatch_transparency, hatch_transparency);
+      fail ("SECTIONVIEWSTYLE.hatch_transparency [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->hatch_transparency, hatch_transparency);
     sectionviewstyle->hatch_transparency--;
   }
   {
@@ -40122,19 +40174,14 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
         fail ("SECTIONVIEWSTYLE.identifier_color [CMC]");
   }
   {
-    BITCODE_BL identifier_exclude_characters;
+    BITCODE_T identifier_exclude_characters;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "identifier_exclude_characters", &identifier_exclude_characters, NULL)
-        && identifier_exclude_characters == sectionviewstyle->identifier_exclude_characters)
+        && identifier_exclude_characters
+           ? strEQ ((char *)identifier_exclude_characters, (char *)sectionviewstyle->identifier_exclude_characters)
+           : !sectionviewstyle->identifier_exclude_characters)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.identifier_exclude_characters [BL] %u != %u", sectionviewstyle->identifier_exclude_characters, identifier_exclude_characters);
-    identifier_exclude_characters++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "identifier_exclude_characters", &identifier_exclude_characters, 0)
-        && identifier_exclude_characters == sectionviewstyle->identifier_exclude_characters)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.identifier_exclude_characters [BL] set+1 %u != %u", sectionviewstyle->identifier_exclude_characters, identifier_exclude_characters);
-    sectionviewstyle->identifier_exclude_characters--;
+      fail ("SECTIONVIEWSTYLE.identifier_exclude_characters [T] '%s' <> '%s'", identifier_exclude_characters, sectionviewstyle->identifier_exclude_characters);
   }
   {
     BITCODE_BD identifier_height;
@@ -40167,18 +40214,17 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     sectionviewstyle->identifier_offset--;
   }
   {
-    BITCODE_BD identifier_position;
+    BITCODE_BLd identifier_position;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "identifier_position", &identifier_position, NULL)
         && identifier_position == sectionviewstyle->identifier_position)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.identifier_position [BD] %g != %g", sectionviewstyle->identifier_position, identifier_position);
-    identifier_position++;
+      fail ("SECTIONVIEWSTYLE.identifier_position [BLd] " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->identifier_position, identifier_position);
     if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "identifier_position", &identifier_position, 0)
         && identifier_position == sectionviewstyle->identifier_position)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.identifier_position [BD] set+1 %g != %g", sectionviewstyle->identifier_position, identifier_position);
+      fail ("SECTIONVIEWSTYLE.identifier_position [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->identifier_position, identifier_position);
     sectionviewstyle->identifier_position--;
   }
   {
@@ -40188,21 +40234,6 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.identifier_style [H]");
-  }
-  {
-    BITCODE_B is_continuous_labeling;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "is_continuous_labeling", &is_continuous_labeling, NULL)
-        && is_continuous_labeling == sectionviewstyle->is_continuous_labeling)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.is_continuous_labeling [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->is_continuous_labeling, is_continuous_labeling);
-    is_continuous_labeling++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "is_continuous_labeling", &is_continuous_labeling, 0)
-        && is_continuous_labeling == sectionviewstyle->is_continuous_labeling)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.is_continuous_labeling [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->is_continuous_labeling, is_continuous_labeling);
-    sectionviewstyle->is_continuous_labeling--;
   }
   {
     BITCODE_B is_modified_for_recompute;
@@ -40220,14 +40251,19 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     sectionviewstyle->is_modified_for_recompute--;
   }
   {
-    BITCODE_T name;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "name", &name, NULL)
-        && name
-           ? strEQ ((char *)name, (char *)sectionviewstyle->name)
-           : !sectionviewstyle->name)
+    BITCODE_BL num_hatch_angles;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "num_hatch_angles", &num_hatch_angles, NULL)
+        && num_hatch_angles == sectionviewstyle->num_hatch_angles)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.name [T] '%s' <> '%s'", name, sectionviewstyle->name);
+      fail ("SECTIONVIEWSTYLE.num_hatch_angles [BL] %u != %u", sectionviewstyle->num_hatch_angles, num_hatch_angles);
+    num_hatch_angles++;
+    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "num_hatch_angles", &num_hatch_angles, 0)
+        && num_hatch_angles == sectionviewstyle->num_hatch_angles)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.num_hatch_angles [BL] set+1 %u != %u", sectionviewstyle->num_hatch_angles, num_hatch_angles);
+    sectionviewstyle->num_hatch_angles--;
   }
   {
     struct _dwg_object_object* parent;
@@ -40254,179 +40290,78 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
         fail ("SECTIONVIEWSTYLE.plane_line_type [H]");
   }
   {
-    BITCODE_BS plane_line_weight;
+    BITCODE_BLd plane_line_weight;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "plane_line_weight", &plane_line_weight, NULL)
         && plane_line_weight == sectionviewstyle->plane_line_weight)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.plane_line_weight [BS] %hu != %hu", sectionviewstyle->plane_line_weight, plane_line_weight);
-    plane_line_weight++;
+      fail ("SECTIONVIEWSTYLE.plane_line_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->plane_line_weight, plane_line_weight);
     if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "plane_line_weight", &plane_line_weight, 0)
         && plane_line_weight == sectionviewstyle->plane_line_weight)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.plane_line_weight [BS] set+1 %hu != %hu", sectionviewstyle->plane_line_weight, plane_line_weight);
+      fail ("SECTIONVIEWSTYLE.plane_line_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", sectionviewstyle->plane_line_weight, plane_line_weight);
     sectionviewstyle->plane_line_weight--;
   }
   {
-    BITCODE_B show_all_bend_indentifiers;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_all_bend_indentifiers", &show_all_bend_indentifiers, NULL)
-        && show_all_bend_indentifiers == sectionviewstyle->show_all_bend_indentifiers)
+    BITCODE_B unknown_b1;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_b1", &unknown_b1, NULL)
+        && unknown_b1 == sectionviewstyle->unknown_b1)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.show_all_bend_indentifiers [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_all_bend_indentifiers, show_all_bend_indentifiers);
-    show_all_bend_indentifiers++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_all_bend_indentifiers", &show_all_bend_indentifiers, 0)
-        && show_all_bend_indentifiers == sectionviewstyle->show_all_bend_indentifiers)
+      fail ("SECTIONVIEWSTYLE.unknown_b1 [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->unknown_b1, unknown_b1);
+    unknown_b1++;
+    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_b1", &unknown_b1, 0)
+        && unknown_b1 == sectionviewstyle->unknown_b1)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.show_all_bend_indentifiers [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_all_bend_indentifiers, show_all_bend_indentifiers);
-    sectionviewstyle->show_all_bend_indentifiers--;
+      fail ("SECTIONVIEWSTYLE.unknown_b1 [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->unknown_b1, unknown_b1);
+    sectionviewstyle->unknown_b1--;
   }
   {
-    BITCODE_B show_all_plane_lines;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_all_plane_lines", &show_all_plane_lines, NULL)
-        && show_all_plane_lines == sectionviewstyle->show_all_plane_lines)
+    BITCODE_B unknown_b2;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_b2", &unknown_b2, NULL)
+        && unknown_b2 == sectionviewstyle->unknown_b2)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.show_all_plane_lines [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_all_plane_lines, show_all_plane_lines);
-    show_all_plane_lines++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_all_plane_lines", &show_all_plane_lines, 0)
-        && show_all_plane_lines == sectionviewstyle->show_all_plane_lines)
+      fail ("SECTIONVIEWSTYLE.unknown_b2 [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->unknown_b2, unknown_b2);
+    unknown_b2++;
+    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_b2", &unknown_b2, 0)
+        && unknown_b2 == sectionviewstyle->unknown_b2)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.show_all_plane_lines [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_all_plane_lines, show_all_plane_lines);
-    sectionviewstyle->show_all_plane_lines--;
+      fail ("SECTIONVIEWSTYLE.unknown_b2 [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->unknown_b2, unknown_b2);
+    sectionviewstyle->unknown_b2--;
   }
   {
-    BITCODE_B show_arrowheads;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_arrowheads", &show_arrowheads, NULL)
-        && show_arrowheads == sectionviewstyle->show_arrowheads)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_arrowheads [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_arrowheads, show_arrowheads);
-    show_arrowheads++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_arrowheads", &show_arrowheads, 0)
-        && show_arrowheads == sectionviewstyle->show_arrowheads)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_arrowheads [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_arrowheads, show_arrowheads);
-    sectionviewstyle->show_arrowheads--;
-  }
-  {
-    BITCODE_B show_end_and_bend_lines;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_end_and_bend_lines", &show_end_and_bend_lines, NULL)
-        && show_end_and_bend_lines == sectionviewstyle->show_end_and_bend_lines)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_end_and_bend_lines [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_end_and_bend_lines, show_end_and_bend_lines);
-    show_end_and_bend_lines++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_end_and_bend_lines", &show_end_and_bend_lines, 0)
-        && show_end_and_bend_lines == sectionviewstyle->show_end_and_bend_lines)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_end_and_bend_lines [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_end_and_bend_lines, show_end_and_bend_lines);
-    sectionviewstyle->show_end_and_bend_lines--;
-  }
-  {
-    BITCODE_B show_hatching;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_hatching", &show_hatching, NULL)
-        && show_hatching == sectionviewstyle->show_hatching)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_hatching [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_hatching, show_hatching);
-    show_hatching++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_hatching", &show_hatching, 0)
-        && show_hatching == sectionviewstyle->show_hatching)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_hatching [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_hatching, show_hatching);
-    sectionviewstyle->show_hatching--;
-  }
-  {
-    BITCODE_B show_viewlabel;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_viewlabel", &show_viewlabel, NULL)
-        && show_viewlabel == sectionviewstyle->show_viewlabel)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_viewlabel [B] " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_viewlabel, show_viewlabel);
-    show_viewlabel++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "show_viewlabel", &show_viewlabel, 0)
-        && show_viewlabel == sectionviewstyle->show_viewlabel)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.show_viewlabel [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->show_viewlabel, show_viewlabel);
-    sectionviewstyle->show_viewlabel--;
-  }
-  {
-    BITCODE_BB unknown_bb1;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_bb1", &unknown_bb1, NULL)
-        && unknown_bb1 == sectionviewstyle->unknown_bb1)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.unknown_bb1 [BB] " FORMAT_BB " != " FORMAT_BB "", sectionviewstyle->unknown_bb1, unknown_bb1);
-    unknown_bb1++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_bb1", &unknown_bb1, 0)
-        && unknown_bb1 == sectionviewstyle->unknown_bb1)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.unknown_bb1 [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", sectionviewstyle->unknown_bb1, unknown_bb1);
-    sectionviewstyle->unknown_bb1--;
-  }
-  {
-    BITCODE_BB unknown_bb2;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_bb2", &unknown_bb2, NULL)
-        && unknown_bb2 == sectionviewstyle->unknown_bb2)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.unknown_bb2 [BB] " FORMAT_BB " != " FORMAT_BB "", sectionviewstyle->unknown_bb2, unknown_bb2);
-    unknown_bb2++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "unknown_bb2", &unknown_bb2, 0)
-        && unknown_bb2 == sectionviewstyle->unknown_bb2)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.unknown_bb2 [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", sectionviewstyle->unknown_bb2, unknown_bb2);
-    sectionviewstyle->unknown_bb2--;
-  }
-  {
-    BITCODE_BS viewlabel_alignment;
+    BITCODE_BL viewlabel_alignment;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_alignment", &viewlabel_alignment, NULL)
         && viewlabel_alignment == sectionviewstyle->viewlabel_alignment)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.viewlabel_alignment [BS] %hu != %hu", sectionviewstyle->viewlabel_alignment, viewlabel_alignment);
+      fail ("SECTIONVIEWSTYLE.viewlabel_alignment [BL] %u != %u", sectionviewstyle->viewlabel_alignment, viewlabel_alignment);
     viewlabel_alignment++;
     if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_alignment", &viewlabel_alignment, 0)
         && viewlabel_alignment == sectionviewstyle->viewlabel_alignment)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.viewlabel_alignment [BS] set+1 %hu != %hu", sectionviewstyle->viewlabel_alignment, viewlabel_alignment);
+      fail ("SECTIONVIEWSTYLE.viewlabel_alignment [BL] set+1 %u != %u", sectionviewstyle->viewlabel_alignment, viewlabel_alignment);
     sectionviewstyle->viewlabel_alignment--;
   }
   {
-    BITCODE_BS viewlabel_attachment;
+    BITCODE_BL viewlabel_attachment;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_attachment", &viewlabel_attachment, NULL)
         && viewlabel_attachment == sectionviewstyle->viewlabel_attachment)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.viewlabel_attachment [BS] %hu != %hu", sectionviewstyle->viewlabel_attachment, viewlabel_attachment);
+      fail ("SECTIONVIEWSTYLE.viewlabel_attachment [BL] %u != %u", sectionviewstyle->viewlabel_attachment, viewlabel_attachment);
     viewlabel_attachment++;
     if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_attachment", &viewlabel_attachment, 0)
         && viewlabel_attachment == sectionviewstyle->viewlabel_attachment)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.viewlabel_attachment [BS] set+1 %hu != %hu", sectionviewstyle->viewlabel_attachment, viewlabel_attachment);
+      fail ("SECTIONVIEWSTYLE.viewlabel_attachment [BL] set+1 %u != %u", sectionviewstyle->viewlabel_attachment, viewlabel_attachment);
     sectionviewstyle->viewlabel_attachment--;
-  }
-  {
-    BITCODE_T viewlabel_field;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_field", &viewlabel_field, NULL)
-        && viewlabel_field
-           ? strEQ ((char *)viewlabel_field, (char *)sectionviewstyle->viewlabel_field)
-           : !sectionviewstyle->viewlabel_field)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.viewlabel_field [T] '%s' <> '%s'", viewlabel_field, sectionviewstyle->viewlabel_field);
   }
   {
     BITCODE_BD viewlabel_offset;
@@ -40444,29 +40379,14 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     sectionviewstyle->viewlabel_offset--;
   }
   {
-    BITCODE_BS viewlabel_pattern;
+    BITCODE_T viewlabel_pattern;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_pattern", &viewlabel_pattern, NULL)
-        && viewlabel_pattern == sectionviewstyle->viewlabel_pattern)
+        && viewlabel_pattern
+           ? strEQ ((char *)viewlabel_pattern, (char *)sectionviewstyle->viewlabel_pattern)
+           : !sectionviewstyle->viewlabel_pattern)
       pass ();
     else
-      fail ("SECTIONVIEWSTYLE.viewlabel_pattern [BS] %hu != %hu", sectionviewstyle->viewlabel_pattern, viewlabel_pattern);
-    viewlabel_pattern++;
-    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_pattern", &viewlabel_pattern, 0)
-        && viewlabel_pattern == sectionviewstyle->viewlabel_pattern)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.viewlabel_pattern [BS] set+1 %hu != %hu", sectionviewstyle->viewlabel_pattern, viewlabel_pattern);
-    sectionviewstyle->viewlabel_pattern--;
-  }
-  {
-    BITCODE_T viewlabel_text;
-    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_text", &viewlabel_text, NULL)
-        && viewlabel_text
-           ? strEQ ((char *)viewlabel_text, (char *)sectionviewstyle->viewlabel_text)
-           : !sectionviewstyle->viewlabel_text)
-      pass ();
-    else
-      fail ("SECTIONVIEWSTYLE.viewlabel_text [T] '%s' <> '%s'", viewlabel_text, sectionviewstyle->viewlabel_text);
+      fail ("SECTIONVIEWSTYLE.viewlabel_pattern [T] '%s' <> '%s'", viewlabel_pattern, sectionviewstyle->viewlabel_pattern);
   }
   {
     BITCODE_CMC viewlabel_text_color;
@@ -40498,6 +40418,21 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.viewlabel_text_style [H]");
+  }
+  {
+    BITCODE_BL viewstyle_flags;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewstyle_flags", &viewstyle_flags, NULL)
+        && viewstyle_flags == sectionviewstyle->viewstyle_flags)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.viewstyle_flags [BL] %u != %u", sectionviewstyle->viewstyle_flags, viewstyle_flags);
+    viewstyle_flags++;
+    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewstyle_flags", &viewstyle_flags, 0)
+        && viewstyle_flags == sectionviewstyle->viewstyle_flags)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.viewstyle_flags [BL] set+1 %u != %u", sectionviewstyle->viewstyle_flags, viewstyle_flags);
+    sectionviewstyle->viewstyle_flags--;
   }
   if (failed && (is_class_unstable ("SECTIONVIEWSTYLE") || is_class_debugging ("SECTIONVIEWSTYLE")))
     {
