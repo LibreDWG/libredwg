@@ -5691,62 +5691,60 @@ B,	DXF 290
 T,	DXF 300
 @item viewstyle_flags
 BL,	DXF 90
+@item flags
+BL,	DXF 90
 @item identifier_style
 H,	DXF 340
 @item identifier_color
 CMC,	DXF 62
 @item identifier_height
 BD,	DXF 40
+@item identifier_exclude_characters
+T,	DXF 300
 @item identifier_offset
-BD,	DXF 42
+BD,	DXF 40
 @item identifier_placement
-BS,	DXF 70
+RC,	DXF 280
 @item arrow_symbol
 H,	DXF 340
 @item arrow_symbol_color
 CMC,	DXF 62
 @item arrow_symbol_size
 BD,	DXF 40
-@item show_arrowheads
-B,	DXF 280
-@item boundary_line_weight
-BS,	DXF 71
+@item boundary_ltype
+H,	DXF 340
+@item boundary_linewt
+BLd,	DXF 90
 @item boundary_line_color
 CMC,	DXF 62
-@item boundary_line_type
-H,	DXF 340
-@item connection_line_weight
-BS,	DXF 71
-@item connection_line_color
-CMC,	DXF 62
-@item connection_line_type
-H,	DXF 340
 @item viewlabel_text_style
 H,	DXF 340
 @item viewlabel_text_color
 CMC,	DXF 62
 @item viewlabel_text_height
 BD,	DXF 40
-@item viewlabel_field
-T,	DXF 300
-@item viewlabel_offset
-BD,	DXF 42
 @item viewlabel_attachment
-BS,	DXF 70
+BL,	DXF 90
+@item viewlabel_offset
+BD,	DXF 40
 @item viewlabel_alignment
-BS,	DXF 72
+BL,	DXF 90
 @item viewlabel_pattern
-BS
-@item show_viewlabel
-B,	DXF 280
-@item model_edge
-B,	DXF 90
-@item borderline_weight
-BD,	DXF 71
+T,	DXF 300
+@item connection_ltype
+H,	DXF 340
+@item connection_linewt
+BLd,	DXF 90
+@item connection_line_color
+CMC,	DXF 62
+@item borderline_ltype
+H,	DXF 340
+@item borderline_linewt
+BLd,	DXF 90
 @item borderline_color
 CMC,	DXF 62
-@item borderline_type
-H,	DXF 340
+@item model_edge
+RC,	DXF 280
 
 @end vtable
 @end indentedblock
@@ -7730,20 +7728,20 @@ T,	DXF 300
 @item identifier_position
 BLd,	DXF 90
 @item identifier_offset
-BD,	DXF 42
+BD,	DXF 40
 @item arrow_position
 BLd,	DXF 90
 @item arrow_symbol_extension_length
 BD
-@item plane_line_type
+@item plane_ltype
 H,	DXF 340
-@item plane_line_weight
+@item plane_linewt
 BLd,	DXF 90
 @item plane_line_color
 CMC,	DXF 62
-@item bend_line_type
+@item bend_ltype
 H,	DXF 340
-@item bend_line_weight
+@item bend_linewt
 BLd,	DXF 90
 @item bend_line_color
 CMC,	DXF 62

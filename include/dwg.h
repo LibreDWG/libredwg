@@ -5749,34 +5749,33 @@ typedef struct _dwg_object_DETAILVIEWSTYLE
   BITCODE_T display_name;
   BITCODE_BL viewstyle_flags; /* DXF 90. 1: cannot_rename */
 
+  BITCODE_BL flags;
   BITCODE_H identifier_style;
   BITCODE_CMC identifier_color;
   BITCODE_BD identifier_height;
+  BITCODE_T identifier_exclude_characters;
   BITCODE_BD identifier_offset;
-  BITCODE_BS identifier_placement;
+  BITCODE_RC identifier_placement;
   BITCODE_H arrow_symbol;
   BITCODE_CMC arrow_symbol_color;
   BITCODE_BD arrow_symbol_size;
-  BITCODE_B show_arrowheads;
-  BITCODE_BS boundary_line_weight;
+  BITCODE_H boundary_ltype;
+  BITCODE_BLd boundary_linewt;
   BITCODE_CMC boundary_line_color;
-  BITCODE_H boundary_line_type;
-  BITCODE_BS connection_line_weight;
-  BITCODE_CMC connection_line_color;
-  BITCODE_H connection_line_type;
   BITCODE_H viewlabel_text_style;
   BITCODE_CMC viewlabel_text_color;
   BITCODE_BD viewlabel_text_height;
-  BITCODE_T viewlabel_field;
+  BITCODE_BL viewlabel_attachment;
   BITCODE_BD viewlabel_offset;
-  BITCODE_BS viewlabel_attachment;
-  BITCODE_BS viewlabel_alignment;
-  BITCODE_BS viewlabel_pattern;
-  BITCODE_B show_viewlabel;
-  BITCODE_B model_edge;
-  BITCODE_BD borderline_weight;
+  BITCODE_BL viewlabel_alignment;
+  BITCODE_T viewlabel_pattern;
+  BITCODE_H connection_ltype;
+  BITCODE_BLd connection_linewt;
+  BITCODE_CMC connection_line_color;
+  BITCODE_H borderline_ltype;
+  BITCODE_BLd borderline_linewt;
   BITCODE_CMC borderline_color;
-  BITCODE_H borderline_type;
+  BITCODE_RC model_edge;
 } Dwg_Object_DETAILVIEWSTYLE;
 
 typedef struct _dwg_object_SECTIONVIEWSTYLE
@@ -5804,11 +5803,11 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE
   BITCODE_BD identifier_offset;
   BITCODE_BLd arrow_position;
   BITCODE_BD arrow_symbol_extension_length;
-  BITCODE_H plane_line_type;
-  BITCODE_BLd plane_line_weight;
+  BITCODE_H plane_ltype;
+  BITCODE_BLd plane_linewt;
   BITCODE_CMC plane_line_color;
-  BITCODE_H bend_line_type;  
-  BITCODE_BLd bend_line_weight;
+  BITCODE_H bend_ltype;
+  BITCODE_BLd bend_linewt;
   BITCODE_CMC bend_line_color;
   BITCODE_BD bend_line_length;
   BITCODE_BD end_line_overshoot;
