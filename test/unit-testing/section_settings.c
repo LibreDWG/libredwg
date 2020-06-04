@@ -1,4 +1,4 @@
-// DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_SECTION_SETTINGS
 #include "common.c"
 
@@ -16,22 +16,19 @@ api_process (dwg_object *obj)
   BITCODE_H destblock;
   BITCODE_T destfile;
   BITCODE_CMC color;
-  BITCODE_H layer;
-  BITCODE_H ltype;
+  BITCODE_T layer;
+  BITCODE_T ltype;
   BITCODE_BD ltype_scale;
-  BITCODE_H plotstyle;
-  BITCODE_RC linewt;
+  BITCODE_T plotstyle;
+  BITCODE_BLd linewt;
   BITCODE_BS face_transparency;
   BITCODE_BS edge_transparency;
-  BITCODE_B hatch_visibility;
-  BITCODE_H hatch_pattern;
+  BITCODE_BS hatch_type;
+  BITCODE_T hatch_pattern;
   BITCODE_BD hatch_angle;
   BITCODE_BD hatch_spacing;
   BITCODE_BD hatch_scale;
-  BITCODE_B hidden_line;
-  BITCODE_B division_lines;
 
-#ifdef DEBUG_CLASSES
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_section_settings *_obj = dwg_object_to_SECTION_SETTINGS (obj);
 
@@ -86,5 +83,4 @@ api_process (dwg_object *obj)
               CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hatch_scale, BD);
             }
       }
-#endif
 }

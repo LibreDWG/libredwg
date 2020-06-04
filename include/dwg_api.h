@@ -594,6 +594,7 @@ typedef struct _dwg_object_RENDERSETTINGS                  dwg_obj_rendersetting
 typedef struct _dwg_object_TABLEGEOMETRY                   dwg_obj_tablegeometry;
 typedef struct _dwg_object_TABLESTYLE                      dwg_obj_tablestyle;
 typedef struct _dwg_object_UNDERLAYDEFINITION              dwg_obj_underlaydefinition;
+typedef struct _dwg_object_SECTION_SETTINGS                dwg_obj_section_settings;
 typedef struct _dwg_object_SUN                             dwg_obj_sun;
 typedef struct _dwg_object_VISUALSTYLE                     dwg_obj_visualstyle;
 // DEBUG_CLASSES
@@ -641,7 +642,6 @@ typedef struct _dwg_object_RENDERENTRY                     dwg_obj_renderentry;
 typedef struct _dwg_object_RENDERGLOBAL                    dwg_obj_renderglobal;
 typedef struct _dwg_object_TVDEVICEPROPERTIES              dwg_obj_tvdeviceproperties;
 typedef struct _dwg_object_SECTIONVIEWSTYLE                dwg_obj_sectionviewstyle;
-typedef struct _dwg_object_SECTION_SETTINGS                dwg_obj_section_settings;
 typedef struct _dwg_object_SUNSTUDY                        dwg_obj_sunstudy;
 typedef struct _dwg_object_TABLECONTENT                    dwg_obj_tablecontent;
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA           dwg_obj_textobjectcontextdata;
@@ -822,6 +822,7 @@ DWG_GETALL_OBJECT_DECL (OBJECT_PTR)
 DWG_GETALL_OBJECT_DECL (PROXY_OBJECT)
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS)
 DWG_GETALL_OBJECT_DECL (RENDERSETTINGS)
+DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS)
 DWG_GETALL_OBJECT_DECL (SUN)
 DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY)
 DWG_GETALL_OBJECT_DECL (TABLESTYLE)
@@ -866,7 +867,6 @@ DWG_GETALL_OBJECT_DECL (RENDERENTRY)
 DWG_GETALL_OBJECT_DECL (RENDERGLOBAL)
 DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES)
 DWG_GETALL_OBJECT_DECL (SECTIONVIEWSTYLE)
-DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS)
 DWG_GETALL_OBJECT_DECL (SUNSTUDY)
 DWG_GETALL_OBJECT_DECL (TABLECONTENT)
 DWG_GETALL_OBJECT_DECL (TEXTOBJECTCONTEXTDATA)
@@ -1039,6 +1039,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_MANAGER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SORTENTSTABLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_FILTER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_INDEX)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_SETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SUN)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLEGEOMETRY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE)
@@ -1084,7 +1085,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERENTRY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERGLOBAL)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTIONVIEWSTYLE)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_SETTINGS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SUNSTUDY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TEXTOBJECTCONTEXTDATA)
@@ -1316,6 +1316,8 @@ dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
 dwg_get_OBJECT_DECL (obj_proxy, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
 dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);
+dwg_get_OBJECT_DECL (obj_section_settings, SECTION_SETTINGS)
+dwg_get_OBJECT_DECL (obj_sun, SUN);
 dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
 dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
 dwg_get_OBJECT_DECL (obj_underlaydefinition, UNDERLAYDEFINITION);
@@ -1350,9 +1352,7 @@ dwg_get_OBJECT_DECL (obj_renderenvironment, RENDERENVIRONMENT);
 dwg_get_OBJECT_DECL (obj_renderentry, RENDERENTRY);
 dwg_get_OBJECT_DECL (obj_renderglobal, RENDERGLOBAL);
 dwg_get_OBJECT_DECL (obj_tvdeviceproperties, TVDEVICEPROPERTIES);
-dwg_get_OBJECT_DECL (obj_section_settings, SECTION_SETTINGS)
 dwg_get_OBJECT_DECL (obj_sectionviewstyle, SECTIONVIEWSTYLE)
-dwg_get_OBJECT_DECL (obj_sun, SUN);
 dwg_get_OBJECT_DECL (obj_sunstudy, SUNSTUDY);
 dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
 dwg_get_OBJECT_DECL (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA);

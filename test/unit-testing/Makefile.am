@@ -127,6 +127,7 @@ testobjects = \
 	rendersettings \
 	scale \
 	section_manager \
+	section_settings \
 	sectionobject \
 	sectionviewstyle \
 	seqend \
@@ -231,7 +232,6 @@ testobjects += \
 	renderglobal \
 	revolvedsurface \
 	rtext \
-	section_settings \
 	sectionviewstyle \
 	sunstudy \
 	sweptsurface \

@@ -445,7 +445,7 @@ test_subdirs (const char *dir, int cov)
 
 #ifdef HAVE_SCANDIR
   n = scandir (dir, &namelist, NULL, NULL);
-  if (n == -1)
+  if (n < 0)
     {
       perror ("scandir");
       exit (1);

@@ -4721,7 +4721,7 @@ typedef struct _dwg_entity_MESH
 } Dwg_Entity_MESH;
 
 /**
- Object SUN (varies)
+ Object SUN (varies), unstable
  wrongly documented by ACAD DXF as entity
  */
 typedef struct _dwg_object_SUN
@@ -5879,7 +5879,7 @@ typedef struct _dwg_SECTION_typesettings
   Dwg_SECTION_geometrysettings *geom;
 } Dwg_SECTION_typesettings;
 
-// Debugging
+// Unstable
 typedef struct _dwg_object_SECTION_SETTINGS
 {
   struct _dwg_object_object *parent;
@@ -7506,6 +7506,7 @@ EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
 EXPORT int dwg_setup_PLOTSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_SECTION_SETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
@@ -7574,7 +7575,6 @@ EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_LOFTEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
-EXPORT int dwg_setup_SECTION_SETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
