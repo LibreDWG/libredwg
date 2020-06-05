@@ -8175,6 +8175,7 @@ DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// TOLERANCE
 DWG_OBJECT (FCFOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
@@ -8652,11 +8653,8 @@ DWG_ENTITY (RTEXT)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbRotatedText);
   FIELD_3BD (pt, 10);
-#ifdef IS_DXF
-  FIELD_BE (extrusion, 210);
-#else
-  FIELD_3DPOINT (extrusion, 210);
-#endif
+  DXF  { FIELD_BE (extrusion, 210); }
+  else { FIELD_3DPOINT (extrusion, 210); }
   FIELD_BD (rotation, 50);
   FIELD_BD (height, 50);
   DXF {
