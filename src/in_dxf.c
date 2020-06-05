@@ -59,6 +59,9 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
+// from in_json.c
+const Dwg_DYNAPI_field * find_numfield (const Dwg_DYNAPI_field *restrict fields,
+                                        const char *restrict key);
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
@@ -6342,6 +6345,50 @@ in_postprocess_handles (Dwg_Object *restrict obj)
     }
 }
 
+#define GET_NUMFIELD(type)                                                    \
+  {                                                                           \
+    BITCODE_##type _size;                                                     \
+    memcpy (&_size, &((char *)_obj)[f->offset], f->size);                     \
+    LOG_TRACE ("%s = " FORMAT_##type "\n", f->name, _size);                   \
+    return (long)_size;                                                       \
+  }                                                                           \
+  break;
+
+static long
+get_numfield_value (void *restrict _obj, const Dwg_DYNAPI_field *restrict f)
+{
+  long num = 0;
+  if (f)
+    {
+      switch (f->size)
+        {
+        case 1:
+          GET_NUMFIELD (B)
+        case 2:
+          GET_NUMFIELD (BS)
+        case 4:
+          GET_NUMFIELD (BL)
+        case 8:
+          GET_NUMFIELD (BLL)
+        default:
+          LOG_ERROR ("Unknown %s dynapi size %d", f->name, f->size);
+        }
+    }
+  else if (strEQc (f->name, "transmatrix"))
+    num = 16 * 8; // ignore
+  else if (strEQc (f->name, "ref"))
+    {
+      if (f->size != 4) // fixed size
+        LOG_WARN ("Need 4 ref array elements, have %ld", num)
+      else
+        LOG_TRACE ("Check ref[] 4 ok\n")
+    }
+  else
+    LOG_ERROR ("Unknown num_%s field", f->name);
+  return 0;
+}
+#undef GET_NUMFIELD
+
 /* For tables, entities and objects.
  */
 static Dxf_Pair *
@@ -7800,6 +7847,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (pair->code != 3 && f->is_malloc && !f->is_string
                       && strNE (f->name, "parent")) // parent set in NEW_OBJECT
                     {
+                      const Dwg_DYNAPI_field *num_f;
                       // FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11|14);
                       if (pair->code >= 10 && pair->code <= 24
                           && strEQc (f->name, "clip_verts")) // 11 or 14
@@ -7866,6 +7914,58 @@ new_object (char *restrict name, char *restrict dxfname,
                                 }
                             }
                           goto next_pair;
+                        }
+                      // point vectors with known num_field
+                      else if ((*f->type == '2' || *f->type == '3')
+                               && (f->type[2] == 'D' || strEQc (&f->type[1], "DPOINT*"))
+                               && (num_f = find_numfield (fields, f->name)))
+                        {
+                          long size = get_numfield_value (_obj, num_f); // how many points
+                          double *pts;
+                          int is2d = *f->type == '2';
+                          if (!size) {
+                            LOG_TRACE ("Ignore empty %s.%s VECTOR [%s %d]\n",
+                                      name, f->name, f->type, pair->code);
+                            goto next_pair;
+                          }
+                          else if (j == 0 && pair->code < 20)
+                            {
+                              pts = xcalloc (size, is2d ? 16 : 24);
+                              if (!pts)
+                                return NULL;
+                              LOG_TRACE ("%s.%s size: %ld\n", name, f->name, size);
+                              pts[0] = pair->value.d;
+                              dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &pts, 0);
+                            }
+                          else if (j < size)
+                            {
+                              int _i = is2d ? j * 2 : j * 3;
+                              dwg_dynapi_entity_value (_obj, obj->name, f->name, &pts,
+                                                       NULL);
+                              if (pair->code < 20)
+                                {
+                                  pts[_i] = pair->value.d;
+                                }
+                              else if (pair->code < 30)
+                                {
+                                  if (is2d)
+                                    LOG_TRACE ("%s.%s[%d] = (%f, %f) [%s %d]\n",
+                                               name, f->name, j, pts[_i], pair->value.d,
+                                               f->type, pair->code);
+                                  pts[_i + 1] = pair->value.d;
+                                }
+                              else if (*f->type == '3')
+                                {
+                                  LOG_TRACE ("%s.%s[%d] = (%f, %f, %f) [%s %d]\n",
+                                             name, f->name, j, pts[_i], pts[_i + 1],
+                                             pair->value.d, f->type, pair->code);
+                                  pts[_i + 2] = pair->value.d;
+                                  if (j == size - 1)
+                                    j = 0; // restart
+                                }
+                            }
+                          else
+                            LOG_ERROR ("%s.%s overflow %d > %ld", name, num_f->name, j, size)
                         }
                       else if (f->dxf == pair->code)
                         {

@@ -49,7 +49,7 @@ typedef struct dwg_field_name_type_offset
   const unsigned short
       is_indirect : 1; // for pointers, references, like 3BD, CMC, H, TV
   const unsigned short is_malloc : 1; // for strings and dynamic arrays only,
-                                      // H*, TV, unknown size
+                                      // H*, TV, 3BD*, unknown size
   const unsigned short is_string : 1; // for null-terminated strings, use
                                       // strcpy/wcscpy. not memcpy
   const short dxf;

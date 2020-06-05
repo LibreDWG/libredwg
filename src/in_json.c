@@ -49,6 +49,9 @@ static unsigned int loglevel;
 #undef JSMN_STRICT
 #include "../jsmn/jsmn.h"
 
+const Dwg_DYNAPI_field * find_numfield (const Dwg_DYNAPI_field *restrict fields,
+                                        const char *restrict key);
+
 typedef struct jsmntokens
 {
   unsigned int index;
@@ -1605,14 +1608,12 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
              : DWG_ERR_INVALIDTYPE;
 }
 
-static const Dwg_DYNAPI_field *
+const Dwg_DYNAPI_field *
 find_numfield (const Dwg_DYNAPI_field *restrict fields,
                const char *restrict key)
 {
   const Dwg_DYNAPI_field *f;
-  char *s = malloc (strlen (key) + 12);
-  if (!s)
-    return NULL;
+  char s[80];
   strcpy (s, "num_");
   strcat (s, key);
   // see gen-dynapi.pl:1102
@@ -1641,22 +1642,14 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
   else if (strEQc (key, "cellstyle.borders"))
     strcpy (s, "cellstyle.num_borders");
   else if (strEQc (key, "segs") || strEQc (key, "polyline_paths"))
-    {
-      s = realloc (s, strlen ("num_segs_or_paths") + 1);
-      strcpy (s, "num_segs_or_paths");
-    }
+    strcpy (s, "num_segs_or_paths");
   else if (strEQc (key, "txt.col_sizes"))
-    {
-      strcpy (s, "txt.num_col_sizes");
-    }
+    strcpy (s, "txt.num_col_sizes");
 search:
   for (f = &fields[0]; f->name; f++)
     {
       if (strEQ (s, f->name))
-        {
-          free (s);
-          return f;
-        }
+        return f;
     }
   // or num_owner
   if (strEQc (key, "vertex"))
@@ -1667,11 +1660,9 @@ search:
   // there are two of them
   if (strEQc (key, "paths") && strNE (s, "num_segs_or_paths"))
     {
-      s = realloc (s, strlen ("num_segs_or_paths") + 1);
       strcpy (s, "num_segs_or_paths");
       goto search;
     }
-  free (s);
   return NULL;
 }
 
