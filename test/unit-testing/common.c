@@ -565,9 +565,15 @@ output_test (dwg_data *dwg)
   dwg_obj_block_control *_ctrl;
   dwg_object_ref *ref, **hdr_refs;
 
+  if (!dwg)
+    return;
   dwg_api_init_version (dwg);
   _hdr = dwg_get_block_header (dwg, &error);
+  if (!_hdr || error)
+    return;
   _ctrl = dwg_block_header_get_block_control (_hdr, &error);
+  if (!_ctrl || error)
+    return;
 
 #ifndef DWG_TYPE
   /* process all owned entities */

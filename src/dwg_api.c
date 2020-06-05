@@ -20302,9 +20302,9 @@ dwg_get_block_header (dwg_data *restrict dwg, int *restrict error)
           return NULL;
         }
       blk = obj->tio.object->tio.BLOCK_HEADER;
-      if (strEQc (blk->name, "*Paper_Space"))
+      if (blk->name && strEQc (blk->name, "*Paper_Space"))
         dwg->pspace_block = obj;
-      else if (strEQc (blk->name, "*Model_Space"))
+      else if (blk->name && strEQc (blk->name, "*Model_Space"))
         dwg->mspace_block = obj;
       return blk;
     }
