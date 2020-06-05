@@ -8262,12 +8262,12 @@ new_object (char *restrict name, char *restrict dxfname,
                             }
                           else
                             {
-                            LOG_TRACE ("set %s.plotsettings.%s [%s %d]\n",
-                                       obj->name, f->name, f->type,
-                                       pair->code);
-                            dwg_dynapi_field_set_value (dwg, &_o->plotsettings,
-                                                        f, &pair->value, 1);
-                            goto next_pair;
+                              LOG_TRACE ("set %s.plotsettings.%s [%s %d]\n",
+                                         obj->name, f->name, f->type,
+                                         pair->code);
+                              dwg_dynapi_field_set_value (dwg, &_o->plotsettings,
+                                                          f, &pair->value, 1);
+                              goto next_pair;
                             }
                         }
                       else if (pair->code == 47 || pair->code == 49
