@@ -136,58 +136,58 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_left, BS);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_right, BS);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_angletype, BS);
-  CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.text_angletype, BS, 2);
+  CHK_SUBCLASS_MAX (ctx, MLEADER_AnnotContext, text_angletype, BS, 2);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, text_alignment, BS);
-  CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.text_alignment, BS, 1);
+  CHK_SUBCLASS_MAX (ctx, MLEADER_AnnotContext, text_alignment, BS, 1);
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_txt, B);
   if (ctx.has_content_txt)
     {
-      CHK_SUBCLASS_UTF8TEXT (ctx.content, MLEADER_Content, txt.default_text);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.normal);
-      CHK_SUBCLASS_H (ctx.content, MLEADER_Content, txt.style);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.location);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, txt.direction);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.rotation, BD);
-      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.rotation, BD, MAX_ANGLE);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.width, BD);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_factor, BD);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.line_spacing_style, BS);
-      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.line_spacing_style, BS, 2);
-      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.color);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.alignment, BS);
-      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.alignment, BS, 3);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.flow, BS);
-      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.txt.flow, BS, 6);
-      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, txt.bg_color);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_scale, BD); // FIXME! r2000
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.bg_transparency, BL);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_bg_fill, B);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_bg_mask_fill, B);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_type, BS);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_height_auto, B);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_width, BD);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.col_gutter, BD);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.is_col_flow_reversed, B);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.num_col_sizes, BL);
+      CHK_SUBCLASS_UTF8TEXT (ctx.content.txt, MLEADER_Content_MText, default_text);
+      CHK_SUBCLASS_3RD (ctx.content.txt, MLEADER_Content_MText, normal);
+      CHK_SUBCLASS_H (ctx.content.txt, MLEADER_Content_MText, style);
+      CHK_SUBCLASS_3RD (ctx.content.txt, MLEADER_Content_MText, location);
+      CHK_SUBCLASS_3RD (ctx.content.txt, MLEADER_Content_MText, direction);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, rotation, BD);
+      CHK_SUBCLASS_MAX (ctx.content.txt, MLEADER_Content_MText, rotation, BD, MAX_ANGLE);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, width, BD);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, line_spacing_factor, BD);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, line_spacing_style, BS);
+      CHK_SUBCLASS_MAX (ctx.content.txt, MLEADER_Content_MText, line_spacing_style, BS, 2);
+      CHK_SUBCLASS_CMC (ctx.content.txt, MLEADER_Content_MText, color);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, alignment, BS);
+      CHK_SUBCLASS_MAX (ctx.content.txt, MLEADER_Content_MText, alignment, BS, 3);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, flow, BS);
+      CHK_SUBCLASS_MAX (ctx.content.txt, MLEADER_Content_MText, flow, BS, 6);
+      CHK_SUBCLASS_CMC (ctx.content.txt, MLEADER_Content_MText, bg_color);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, bg_scale, BD); // FIXME! r2000
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, bg_transparency, BL);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, is_bg_fill, B);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, is_bg_mask_fill, B);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, col_type, BS);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, is_height_auto, B);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, col_width, BD);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, col_gutter, BD);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, is_col_flow_reversed, B);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, num_col_sizes, BL);
       for (i = 0; i < ctx.content.txt.num_col_sizes; i++)
         {
           ok ("MULTILEADER.ctx.content.txt.col_sizes[%d]: %f", i, ctx.content.txt.col_sizes[i]);
         }
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.word_break, B);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, txt.unknown, B);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, word_break, B);
+      CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, unknown, B);
     }
   CHK_SUBCLASS_TYPE (ctx, MLEADER_AnnotContext, has_content_blk, B);
   if (ctx.has_content_blk)
     {
       if (ctx.has_content_txt)
         fail ("ctx.has_content_blk && ctx.has_content_txt");
-      CHK_SUBCLASS_H (ctx.content, MLEADER_Content, blk.block_table);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.normal);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.location);
-      CHK_SUBCLASS_3RD (ctx.content, MLEADER_Content, blk.scale);
-      CHK_SUBCLASS_TYPE (ctx.content, MLEADER_Content, blk.rotation, BD);
-      CHK_ENTITY_MAX (ctx.content, MLEADER_Content, ctx.content.blk.rotation, BD, MAX_ANGLE);
-      CHK_SUBCLASS_CMC (ctx.content, MLEADER_Content, blk.color);
+      CHK_SUBCLASS_H (ctx.content.blk, MLEADER_Content_Block, block_table);
+      CHK_SUBCLASS_3RD (ctx.content.blk, MLEADER_Content_Block, normal);
+      CHK_SUBCLASS_3RD (ctx.content.blk, MLEADER_Content_Block, location);
+      CHK_SUBCLASS_3RD (ctx.content.blk, MLEADER_Content_Block, scale);
+      CHK_SUBCLASS_TYPE (ctx.content.blk, MLEADER_Content_Block, rotation, BD);
+      CHK_SUBCLASS_MAX (ctx.content.blk, MLEADER_Content_Block, rotation, BD, MAX_ANGLE);
+      CHK_SUBCLASS_CMC (ctx.content.blk, MLEADER_Content_Block, color);
       ok ("MULTILEADER.ctx.content.txt.transform:");
       for (i = 0; i < 16; i++)
         {
