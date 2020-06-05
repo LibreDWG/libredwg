@@ -80,7 +80,6 @@ testobjects = \
 	geodata \
 	group \
 	hatch \
-	helix \
 	idbuffer \
 	image \
 	imagedef \
@@ -141,7 +140,6 @@ testobjects = \
 	style \
 	style_control \
 	sun \
-	sunstudy \
 	tablegeometry \
 	tablestyle \
 	text \
@@ -182,18 +180,15 @@ testobjects += \
 	acsh_history_class \
 	acsh_sweep_class \
 	aldimobjectcontextdata \
-	arc_dimension \
 	assoc2dconstraintgroup \
 	assocaction \
 	assocaligneddimactionbody \
-	assocdependency \
 	assocextrudedsurfaceactionbody \
 	assocgeomdependency \
 	assocloftedsurfaceactionbody \
 	assocnetwork \
 	assocosnappointrefactionparam \
 	assocperssubentmanager \
-	assocplanesurfaceactionbody \
 	assocrevolvedsurfaceactionbody \
 	assocsweptsurfaceactionbody \
 	assocvertexactionparam \
@@ -202,7 +197,6 @@ testobjects += \
 	blockgriplocationcomponent \
 	blockvisibilitygrip \
 	blockvisibilityparameter \
-	cellstylemap \
 	csacdocumentoptions \
 	curvepath \
 	datalink \
@@ -216,7 +210,6 @@ testobjects += \
 	layoutprintconfig \
 	leaderobjectcontextdata \
 	loftedsurface \
-	mesh \
 	mleaderobjectcontextdata \
 	motionpath \
 	mtextattributeobjectcontextdata \
