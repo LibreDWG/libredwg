@@ -7480,12 +7480,21 @@ DWG_ENTITY (EXTRUDEDSURFACE)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
   SUBCLASS (AcDbExtrudedSurface)
+#ifdef IS_DXF
+  FIELD_BL (class_version, 90); // or entity type?
   //CALL_SUBENTITY (entity, 90)
-  FIELD_BL (class_version, 90); // or entity type
-  //VALUEOUTOFBOUNDS (class_version, 10)
-  FIELD_3BD (sweep_vector, 10);
+#else
   // here and at SweptSurface
   SweepOptions_fields;
+#endif
+  FIELD_3BD (sweep_vector, 10);
+  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
+#ifdef IS_DXF
+  SweepOptions_fields;
+#else
+  FIELD_BL (class_version, 90); // or entity type?
+  //CALL_SUBENTITY (entity, 90)
+#endif
 
   COMMON_ENTITY_HANDLE_DATA;
   //FIELD_HANDLE (sweep_entity, 5, 0);

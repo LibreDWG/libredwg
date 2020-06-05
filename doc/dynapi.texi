@@ -1760,12 +1760,6 @@ BS,	DXF 71
 BS,	DXF 72
 @item class_version
 BL,	DXF 90
-@item height
-BD
-@item sweep_vector
-3BD,	DXF 10
-@item sweep_transmatrix
-BD*,	DXF 40
 @item draft_angle
 BD,	DXF 42
 @item draft_start_distance
@@ -1782,10 +1776,12 @@ BD,	DXF 49
 BD*,	DXF 46
 @item path_entity_transmatrix
 BD*,	DXF 47
-@item solid
+@item is_solid
 B,	DXF 290
 @item sweep_alignment_flags
-BS,	DXF 290
+BS,	DXF 70
+@item path_flags
+BS,	DXF 71
 @item align_start
 B,	DXF 292
 @item bank
@@ -1802,6 +1798,10 @@ B,	DXF 296
 H
 @item path_entity
 H
+@item sweep_vector
+3BD,	DXF 10
+@item sweep_transmatrix
+BD*,	DXF 40
 
 @end vtable
 @end indentedblock
@@ -3546,10 +3546,6 @@ BL,	DXF 90
 BL,	DXF 90
 @item pathdata
 TF,	DXF 310
-@item sweep_entity_transmatrix
-BD*,	DXF 40
-@item path_entity_transmatrix
-BD*,	DXF 41
 @item draft_angle
 BD,	DXF 42
 @item draft_start_distance
@@ -3558,18 +3554,20 @@ BD,	DXF 43
 BD,	DXF 44
 @item twist_angle
 BD,	DXF 45
-@item sweep_entity_transmatrix1
-BD*,	DXF 46
-@item path_entity_transmatrix1
-BD*,	DXF 47
 @item scale_factor
 BD,	DXF 48
 @item align_angle
 BD,	DXF 49
-@item solid
+@item sweep_entity_transmatrix
+BD*,	DXF 46
+@item path_entity_transmatrix
+BD*,	DXF 47
+@item is_solid
 B,	DXF 290
-@item sweep_alignment
-RC,	DXF 70
+@item sweep_alignment_flags
+BS,	DXF 70
+@item path_flags
+BS,	DXF 71
 @item align_start
 B,	DXF 292
 @item bank
@@ -3582,6 +3580,10 @@ B,	DXF 295
 B,	DXF 296
 @item reference_vector_for_controlling_twist
 3BD,	DXF 11
+@item sweep_entity
+H
+@item path_entity
+H
 
 @end vtable
 @end indentedblock
@@ -4828,35 +4830,35 @@ H,	DXF 330
 @item parent
 struct _dwg_object_object*
 @item aab_version
-BL
+BL,	DXF 90
 @item pab_status
-BL
+BL,	DXF 90
 @item pab_l2
-BL
+BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
 H*,	DXF 360
 @item pab_l4
-BL
+BL,	DXF 90
 @item pab_l5
-BL
+BL,	DXF 90
 @item readdeps
 H*,	DXF 360
 @item descriptions
 TV*,	DXF 1
 @item sab_status
-BL
+BL,	DXF 90
 @item sab_b1
-B
+B,	DXF 290
 @item sab_l2
-BL
+BL,	DXF 90
 @item sab_b2
-B
+B,	DXF 290
 @item sab_s1
-BS
+BS,	DXF 70
 @item pbsab_status
-BL
+BL,	DXF 90
 @item esab_status
 BL,	DXF 90
 
@@ -4920,35 +4922,35 @@ B,	DXF 290
 @item parent
 struct _dwg_object_object*
 @item aab_version
-BL
+BL,	DXF 90
 @item pab_status
-BL
+BL,	DXF 90
 @item pab_l2
-BL
+BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
 H*,	DXF 360
 @item pab_l4
-BL
+BL,	DXF 90
 @item pab_l5
-BL
+BL,	DXF 90
 @item readdeps
 H*,	DXF 360
 @item descriptions
 TV*,	DXF 1
 @item sab_status
-BL
+BL,	DXF 90
 @item sab_b1
-B
+B,	DXF 290
 @item sab_l2
-BL
+BL,	DXF 90
 @item sab_b2
-B
+B,	DXF 290
 @item sab_s1
-BS
+BS,	DXF 70
 @item pbsab_status
-BL
+BL,	DXF 90
 @item lsab_status
 BL,	DXF 90
 
@@ -5140,35 +5142,35 @@ B,	DXF 290
 @item parent
 struct _dwg_object_object*
 @item aab_version
-BL
+BL,	DXF 90
 @item pab_status
-BL
+BL,	DXF 90
 @item pab_l2
-BL
+BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
 H*,	DXF 360
 @item pab_l4
-BL
+BL,	DXF 90
 @item pab_l5
-BL
+BL,	DXF 90
 @item readdeps
 H*,	DXF 360
 @item descriptions
 TV*,	DXF 1
 @item sab_status
-BL
+BL,	DXF 90
 @item sab_b1
-B
+B,	DXF 290
 @item sab_l2
-BL
+BL,	DXF 90
 @item sab_b2
-B
+B,	DXF 290
 @item sab_s1
-BS
+BS,	DXF 70
 @item pbsab_status
-BL
+BL,	DXF 90
 @item psab_status
 BL,	DXF 90
 
@@ -5185,35 +5187,35 @@ BL,	DXF 90
 @item parent
 struct _dwg_object_object*
 @item aab_version
-BL
+BL,	DXF 90
 @item pab_status
-BL
+BL,	DXF 90
 @item pab_l2
-BL
+BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
 H*,	DXF 360
 @item pab_l4
-BL
+BL,	DXF 90
 @item pab_l5
-BL
+BL,	DXF 90
 @item readdeps
 H*,	DXF 360
 @item descriptions
 TV*,	DXF 1
 @item sab_status
-BL
+BL,	DXF 90
 @item sab_b1
-B
+B,	DXF 290
 @item sab_l2
-BL
+BL,	DXF 90
 @item sab_b2
-B
+B,	DXF 290
 @item sab_s1
-BS
+BS,	DXF 70
 @item pbsab_status
-BL
+BL,	DXF 90
 @item rsab_status
 BL,	DXF 90
 
@@ -5230,35 +5232,35 @@ BL,	DXF 90
 @item parent
 struct _dwg_object_object*
 @item aab_version
-BL
+BL,	DXF 90
 @item pab_status
-BL
+BL,	DXF 90
 @item pab_l2
-BL
+BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
 H*,	DXF 360
 @item pab_l4
-BL
+BL,	DXF 90
 @item pab_l5
-BL
+BL,	DXF 90
 @item readdeps
 H*,	DXF 360
 @item descriptions
 TV*,	DXF 1
 @item sab_status
-BL
+BL,	DXF 90
 @item sab_b1
-B
+B,	DXF 290
 @item sab_l2
-BL
+BL,	DXF 90
 @item sab_b2
-B
+B,	DXF 290
 @item sab_s1
-BS
+BS,	DXF 70
 @item pbsab_status
-BL
+BL,	DXF 90
 @item ssab_status
 BL,	DXF 90
 
@@ -6152,13 +6154,13 @@ H*,	DXF 360
 @item parent
 struct _dwg_object_object*
 @item class_version
-BS
+BS,	DXF 70
 @item is_default
-B
+B,	DXF 290
 @item in_dwg
 B
 @item scale
-H
+H,	DXF 340
 @item location
 3BD,	DXF 10
 @item horiz_dir
@@ -6891,25 +6893,25 @@ Dwg_MATERIAL_gentexture*
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL
+BL,	DXF 90
 @item name
-TV
+T,	DXF 1
 @item fog_enabled
-B
+B,	DXF 290
 @item fog_background_enabled
-B
+B,	DXF 290
 @item backfaces_enabled
-B
+B,	DXF 290
 @item environ_image_enabled
-B
+B,	DXF 290
 @item environ_image_filename
-TV
+T,	DXF 1
 @item description
-TV
+T,	DXF 1
 @item display_index
-BL
+BL,	DXF 90
 @item has_predefined
-B
+B,	DXF 290
 @item mr_version
 BL,	DXF 90
 @item sampling1
@@ -7459,23 +7461,23 @@ H*,	DXF 340
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL
+BL,	DXF 90
 @item name
-TV
+T,	DXF 1
 @item fog_enabled
-B
+B,	DXF 290
 @item fog_background_enabled
-B
+B,	DXF 290
 @item backfaces_enabled
-B
+B,	DXF 290
 @item environ_image_enabled
-B
+B,	DXF 290
 @item environ_image_filename
-TV
+T,	DXF 1
 @item description
-TV
+T,	DXF 1
 @item display_index
-BL
+BL,	DXF 90
 @item has_predefined
 B,	DXF 290
 @item rapidrt_version
@@ -7642,25 +7644,25 @@ B,	DXF 290
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL
+BL,	DXF 90
 @item name
-TV
+T,	DXF 1
 @item fog_enabled
-B
+B,	DXF 290
 @item fog_background_enabled
-B
+B,	DXF 290
 @item backfaces_enabled
-B
+B,	DXF 290
 @item environ_image_enabled
-B
+B,	DXF 290
 @item environ_image_filename
-TV
+T,	DXF 1
 @item description
-TV
+T,	DXF 1
 @item display_index
-BL
+BL,	DXF 90
 @item has_predefined
-B
+B,	DXF 290
 
 @end vtable
 @end indentedblock

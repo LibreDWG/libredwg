@@ -190,6 +190,7 @@ sub dxf_in {
   my $v = qr /[\w\.\[\]]+/;
   my $vx = qr /[\w\.\[\]>-]+/;
   my $outdef;
+  my %defined; #define subclass_fields
   while (<$in>) {
     $f = '';
     s/DXF \{ //;
@@ -209,11 +210,13 @@ sub dxf_in {
         warn $n;
       } elsif (/^\#define (\w+)_fields/) {
         $n = $1;
-        warn "define $n";
+        $defined{$n}++;
+        warn "define $n fields";
       }
     } elsif (/^\#define (\w+)_fields/) {
       $n = $1;
-      warn "define $n";
+      $defined{$n}++;
+      warn "define $n fields";
     # i.e. after #define
     } elsif (/^DWG_(ENTITY|OBJECT)\s?\((\w+)\)/) {
       $n = $2;
@@ -374,6 +377,19 @@ sub dxf_in {
       $f = $2;
       $DXF{$n}->{$f} = $3 if $3;
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
+    } elsif (/^\s+(\w+)_fields;/) {
+      my $def = $1;
+      if (exists $defined{$def}) {
+        warn "expand defined $def fields";
+        for (keys %{$DXF{$def}}) {
+          $DXF{$n}->{$_} = $DXF{$def}->{$_};
+        }
+        for (keys %{$ENT{$def}}) {
+          $ENT{$n}->{$_} = $ENT{$def}->{$_};
+        }
+      } else {
+        warn "TODO $def fields not defined";
+      }
     }
     if ($f and $n and exists $DXF{$n}->{$f}) {
       warn "  $f $DXF{$n}->{$f}\n";

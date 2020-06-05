@@ -4558,13 +4558,12 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BL bindata_size; // 90
   BITCODE_TF bindata; // 310|1
-  BITCODE_BS u_isolines;         /*!< DXF 71 */
-  BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version; /*!< DXF 90 */
-  BITCODE_BD height;
-  BITCODE_3BD sweep_vector; /*!< DXF 10 */
-  BITCODE_BD* sweep_transmatrix; /*!< DXF 40: 16x BD */
+  BITCODE_BS u_isolines;        /*!< DXF 71 */
+  BITCODE_BS v_isolines;        /*!< DXF 72 */
+  BITCODE_BL class_version; 	/*!< DXF 90 */
   SweepOptions_FIELDS;
+  BITCODE_3BD sweep_vector; 	/*!< DXF 10 */
+  BITCODE_BD* sweep_transmatrix; /*!< DXF 40: 16x BD */
 } Dwg_Entity_EXTRUDEDSURFACE;
 
 /**

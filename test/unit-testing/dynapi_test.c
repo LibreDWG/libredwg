@@ -10372,27 +10372,27 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     extrudedsurface->has_revision_guid--;
   }
   {
-    BITCODE_BD height;
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "height", &height, NULL)
-        && height == extrudedsurface->height)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.height [BD] %g != %g", extrudedsurface->height, height);
-    height++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "height", &height, 0)
-        && height == extrudedsurface->height)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.height [BD] set+1 %g != %g", extrudedsurface->height, height);
-    extrudedsurface->height--;
-  }
-  {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "history_id", &history_id, NULL)
         && !memcmp (&history_id, &extrudedsurface->history_id, sizeof (extrudedsurface->history_id)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.history_id [H]");
+  }
+  {
+    BITCODE_B is_solid;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "is_solid", &is_solid, NULL)
+        && is_solid == extrudedsurface->is_solid)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.is_solid [B] " FORMAT_B " != " FORMAT_B "", extrudedsurface->is_solid, is_solid);
+    is_solid++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "is_solid", &is_solid, 0)
+        && is_solid == extrudedsurface->is_solid)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.is_solid [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->is_solid, is_solid);
+    extrudedsurface->is_solid--;
   }
   {
     BITCODE_B isoline_present;
@@ -10549,6 +10549,21 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         fail ("EXTRUDEDSURFACE.path_entity_transmatrix [BD*]");
   }
   {
+    BITCODE_BS path_flags;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "path_flags", &path_flags, NULL)
+        && path_flags == extrudedsurface->path_flags)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.path_flags [BS] %hu != %hu", extrudedsurface->path_flags, path_flags);
+    path_flags++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "path_flags", &path_flags, 0)
+        && path_flags == extrudedsurface->path_flags)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.path_flags [BS] set+1 %hu != %hu", extrudedsurface->path_flags, path_flags);
+    extrudedsurface->path_flags--;
+  }
+  {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "point", &point, NULL)
         && !memcmp (&point, &extrudedsurface->point, sizeof (extrudedsurface->point)))
@@ -10664,21 +10679,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
       pass ();
     else
       fail ("EXTRUDEDSURFACE.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
-  }
-  {
-    BITCODE_B solid;
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "solid", &solid, NULL)
-        && solid == extrudedsurface->solid)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.solid [B] " FORMAT_B " != " FORMAT_B "", extrudedsurface->solid, solid);
-    solid++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "solid", &solid, 0)
-        && solid == extrudedsurface->solid)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->solid, solid);
-    extrudedsurface->solid--;
   }
   {
     BITCODE_BS sweep_alignment_flags;
@@ -19299,6 +19299,21 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         fail ("SWEPTSURFACE.history_id [H]");
   }
   {
+    BITCODE_B is_solid;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "is_solid", &is_solid, NULL)
+        && is_solid == sweptsurface->is_solid)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.is_solid [B] " FORMAT_B " != " FORMAT_B "", sweptsurface->is_solid, is_solid);
+    is_solid++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "is_solid", &is_solid, 0)
+        && is_solid == sweptsurface->is_solid)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.is_solid [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->is_solid, is_solid);
+    sweptsurface->is_solid--;
+  }
+  {
     BITCODE_B isoline_present;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "isoline_present", &isoline_present, NULL)
         && isoline_present == sweptsurface->isoline_present)
@@ -19422,6 +19437,14 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         fail ("SWEPTSURFACE.parent [struct _dwg_object_entity*]");
   }
   {
+    BITCODE_H path_entity;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "path_entity", &path_entity, NULL)
+        && !memcmp (&path_entity, &sweptsurface->path_entity, sizeof (sweptsurface->path_entity)))
+        pass ();
+    else
+        fail ("SWEPTSURFACE.path_entity [H]");
+  }
+  {
     BITCODE_BL path_entity_id;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "path_entity_id", &path_entity_id, NULL)
         && path_entity_id == sweptsurface->path_entity_id)
@@ -19460,12 +19483,19 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         fail ("SWEPTSURFACE.path_entity_transmatrix [BD*]");
   }
   {
-    BITCODE_BD* path_entity_transmatrix1;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "path_entity_transmatrix1", &path_entity_transmatrix1, NULL)
-        && !memcmp (&path_entity_transmatrix1, &sweptsurface->path_entity_transmatrix1, sizeof (sweptsurface->path_entity_transmatrix1)))
-        pass ();
+    BITCODE_BS path_flags;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "path_flags", &path_flags, NULL)
+        && path_flags == sweptsurface->path_flags)
+      pass ();
     else
-        fail ("SWEPTSURFACE.path_entity_transmatrix1 [BD*]");
+      fail ("SWEPTSURFACE.path_flags [BS] %hu != %hu", sweptsurface->path_flags, path_flags);
+    path_flags++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "path_flags", &path_flags, 0)
+        && path_flags == sweptsurface->path_flags)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.path_flags [BS] set+1 %hu != %hu", sweptsurface->path_flags, path_flags);
+    sweptsurface->path_flags--;
   }
   {
     BITCODE_TF pathdata;
@@ -19608,34 +19638,27 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
       fail ("SWEPTSURFACE.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
   }
   {
-    BITCODE_B solid;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "solid", &solid, NULL)
-        && solid == sweptsurface->solid)
+    BITCODE_BS sweep_alignment_flags;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_alignment_flags", &sweep_alignment_flags, NULL)
+        && sweep_alignment_flags == sweptsurface->sweep_alignment_flags)
       pass ();
     else
-      fail ("SWEPTSURFACE.solid [B] " FORMAT_B " != " FORMAT_B "", sweptsurface->solid, solid);
-    solid++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "solid", &solid, 0)
-        && solid == sweptsurface->solid)
+      fail ("SWEPTSURFACE.sweep_alignment_flags [BS] %hu != %hu", sweptsurface->sweep_alignment_flags, sweep_alignment_flags);
+    sweep_alignment_flags++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_alignment_flags", &sweep_alignment_flags, 0)
+        && sweep_alignment_flags == sweptsurface->sweep_alignment_flags)
       pass ();
     else
-      fail ("SWEPTSURFACE.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->solid, solid);
-    sweptsurface->solid--;
+      fail ("SWEPTSURFACE.sweep_alignment_flags [BS] set+1 %hu != %hu", sweptsurface->sweep_alignment_flags, sweep_alignment_flags);
+    sweptsurface->sweep_alignment_flags--;
   }
   {
-    BITCODE_RC sweep_alignment;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_alignment", &sweep_alignment, NULL)
-        && sweep_alignment == sweptsurface->sweep_alignment)
-      pass ();
+    BITCODE_H sweep_entity;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_entity", &sweep_entity, NULL)
+        && !memcmp (&sweep_entity, &sweptsurface->sweep_entity, sizeof (sweptsurface->sweep_entity)))
+        pass ();
     else
-      fail ("SWEPTSURFACE.sweep_alignment [RC] %u != %u", sweptsurface->sweep_alignment, sweep_alignment);
-    sweep_alignment++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_alignment", &sweep_alignment, 0)
-        && sweep_alignment == sweptsurface->sweep_alignment)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.sweep_alignment [RC] set+1 %u != %u", sweptsurface->sweep_alignment, sweep_alignment);
-    sweptsurface->sweep_alignment--;
+        fail ("SWEPTSURFACE.sweep_entity [H]");
   }
   {
     BITCODE_BL sweep_entity_id;
@@ -19674,14 +19697,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("SWEPTSURFACE.sweep_entity_transmatrix [BD*]");
-  }
-  {
-    BITCODE_BD* sweep_entity_transmatrix1;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_transmatrix1", &sweep_entity_transmatrix1, NULL)
-        && !memcmp (&sweep_entity_transmatrix1, &sweptsurface->sweep_entity_transmatrix1, sizeof (sweptsurface->sweep_entity_transmatrix1)))
-        pass ();
-    else
-        fail ("SWEPTSURFACE.sweep_entity_transmatrix1 [BD*]");
   }
   {
     BITCODE_TF sweepdata;
@@ -35816,14 +35831,14 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->class_version--;
   }
   {
-    BITCODE_TV description;
+    BITCODE_T description;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)mentalrayrendersettings->description)
            : !mentalrayrendersettings->description)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.description [TV] '%s' <> '%s'", description, mentalrayrendersettings->description);
+      fail ("MENTALRAYRENDERSETTINGS.description [T] '%s' <> '%s'", description, mentalrayrendersettings->description);
   }
   {
     BITCODE_BS diagnostics_bsp_mode;
@@ -35961,14 +35976,14 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->environ_image_enabled--;
   }
   {
-    BITCODE_TV environ_image_filename;
+    BITCODE_T environ_image_filename;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
         && environ_image_filename
            ? strEQ ((char *)environ_image_filename, (char *)mentalrayrendersettings->environ_image_filename)
            : !mentalrayrendersettings->environ_image_filename)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.environ_image_filename [TV] '%s' <> '%s'", environ_image_filename, mentalrayrendersettings->environ_image_filename);
+      fail ("MENTALRAYRENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, mentalrayrendersettings->environ_image_filename);
   }
   {
     BITCODE_B export_mi_enabled;
@@ -36266,14 +36281,14 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->mr_version--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)mentalrayrendersettings->name)
            : !mentalrayrendersettings->name)
       pass ();
     else
-      fail ("MENTALRAYRENDERSETTINGS.name [TV] '%s' <> '%s'", name, mentalrayrendersettings->name);
+      fail ("MENTALRAYRENDERSETTINGS.name [T] '%s' <> '%s'", name, mentalrayrendersettings->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -38725,14 +38740,14 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
     rapidrtrendersettings->class_version--;
   }
   {
-    BITCODE_TV description;
+    BITCODE_T description;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)rapidrtrendersettings->description)
            : !rapidrtrendersettings->description)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.description [TV] '%s' <> '%s'", description, rapidrtrendersettings->description);
+      fail ("RAPIDRTRENDERSETTINGS.description [T] '%s' <> '%s'", description, rapidrtrendersettings->description);
   }
   {
     BITCODE_BL display_index;
@@ -38765,14 +38780,14 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
     rapidrtrendersettings->environ_image_enabled--;
   }
   {
-    BITCODE_TV environ_image_filename;
+    BITCODE_T environ_image_filename;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
         && environ_image_filename
            ? strEQ ((char *)environ_image_filename, (char *)rapidrtrendersettings->environ_image_filename)
            : !rapidrtrendersettings->environ_image_filename)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.environ_image_filename [TV] '%s' <> '%s'", environ_image_filename, rapidrtrendersettings->environ_image_filename);
+      fail ("RAPIDRTRENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, rapidrtrendersettings->environ_image_filename);
   }
   {
     BITCODE_BD filter_height;
@@ -38880,14 +38895,14 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
     rapidrtrendersettings->lighting_model--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)rapidrtrendersettings->name)
            : !rapidrtrendersettings->name)
       pass ();
     else
-      fail ("RAPIDRTRENDERSETTINGS.name [TV] '%s' <> '%s'", name, rapidrtrendersettings->name);
+      fail ("RAPIDRTRENDERSETTINGS.name [T] '%s' <> '%s'", name, rapidrtrendersettings->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -39668,14 +39683,14 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
     rendersettings->class_version--;
   }
   {
-    BITCODE_TV description;
+    BITCODE_T description;
     if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "description", &description, NULL)
         && description
            ? strEQ ((char *)description, (char *)rendersettings->description)
            : !rendersettings->description)
       pass ();
     else
-      fail ("RENDERSETTINGS.description [TV] '%s' <> '%s'", description, rendersettings->description);
+      fail ("RENDERSETTINGS.description [T] '%s' <> '%s'", description, rendersettings->description);
   }
   {
     BITCODE_BL display_index;
@@ -39708,14 +39723,14 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
     rendersettings->environ_image_enabled--;
   }
   {
-    BITCODE_TV environ_image_filename;
+    BITCODE_T environ_image_filename;
     if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "environ_image_filename", &environ_image_filename, NULL)
         && environ_image_filename
            ? strEQ ((char *)environ_image_filename, (char *)rendersettings->environ_image_filename)
            : !rendersettings->environ_image_filename)
       pass ();
     else
-      fail ("RENDERSETTINGS.environ_image_filename [TV] '%s' <> '%s'", environ_image_filename, rendersettings->environ_image_filename);
+      fail ("RENDERSETTINGS.environ_image_filename [T] '%s' <> '%s'", environ_image_filename, rendersettings->environ_image_filename);
   }
   {
     BITCODE_B fog_background_enabled;
@@ -39763,14 +39778,14 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
     rendersettings->has_predefined--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)rendersettings->name)
            : !rendersettings->name)
       pass ();
     else
-      fail ("RENDERSETTINGS.name [TV] '%s' <> '%s'", name, rendersettings->name);
+      fail ("RENDERSETTINGS.name [T] '%s' <> '%s'", name, rendersettings->name);
   }
   {
     struct _dwg_object_object* parent;
