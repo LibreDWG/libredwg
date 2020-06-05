@@ -7451,6 +7451,25 @@ DWG_ENTITY (GEOPOSITIONMARKER)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+#define SweepOptions_fields  \
+  FIELD_BD (draft_angle, 42); \
+  FIELD_BD (draft_start_distance, 43); \
+  FIELD_BD (draft_end_distance, 44); \
+  FIELD_BD (twist_angle, 45); \
+  FIELD_BD (scale_factor, 48); \
+  FIELD_BD (align_angle, 49); \
+  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 46); \
+  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 47); \
+  FIELD_B (is_solid, 290); \
+  FIELD_BS (sweep_alignment_flags, 70); \
+  FIELD_BS (path_flags, 71); \
+  FIELD_B (align_start, 292); \
+  FIELD_B (bank, 293); \
+  FIELD_B (base_point_set, 294); \
+  FIELD_B (sweep_entity_transform_computed, 295); \
+  FIELD_B (path_entity_transform_computed, 296); \
+  FIELD_3BD (reference_vector_for_controlling_twist, 11)
+
 // r2007+
 DWG_ENTITY (EXTRUDEDSURFACE)
 
@@ -7461,31 +7480,16 @@ DWG_ENTITY (EXTRUDEDSURFACE)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
   SUBCLASS (AcDbExtrudedSurface)
-  FIELD_BL (class_version, 90);
-  VALUEOUTOFBOUNDS (class_version, 10)
+  //CALL_SUBENTITY (entity, 90)
+  FIELD_BL (class_version, 90); // or entity type
+  //VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_3BD (sweep_vector, 10);
-  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
-  FIELD_BD (draft_angle, 42);
-  FIELD_BD (draft_start_distance, 43);
-  FIELD_BD (draft_end_distance, 44);
-  FIELD_BD (twist_angle, 45);
-  FIELD_BD (scale_factor, 48);
-  FIELD_BD (align_angle, 49);
-  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 46);
-  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 47);
-  FIELD_B (solid, 290);
-  FIELD_BS (sweep_alignment_flags, 290); //0=No alignment; 1=Align sweep entity to path
-                  // 2=Translate sweep entity to path; 3=Translate path to sweep entity
-  FIELD_B (align_start, 292);
-  FIELD_B (bank, 293);
-  FIELD_B (base_point_set, 294);
-  FIELD_B (sweep_entity_transform_computed, 295);
-  FIELD_B (path_entity_transform_computed, 296);
-  FIELD_3BD (reference_vector_for_controlling_twist, 11);
+  // here and at SweptSurface
+  SweepOptions_fields;
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (sweep_entity, 5, 0);
-  FIELD_HANDLE (path_entity, 5, 0);
+  //FIELD_HANDLE (sweep_entity, 5, 0);
+  //FIELD_HANDLE (path_entity, 5, 0);
 
 DWG_ENTITY_END
 
@@ -7595,24 +7599,8 @@ DWG_ENTITY (SWEPTSURFACE)
 #endif
   VALUEOUTOFBOUNDS (pathdata_size, 5000)
   FIELD_BINARY (pathdata, FIELD_VALUE (pathdata_size), 310);
-  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 40);
-  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 41);
-  FIELD_BD (draft_angle, 42);
-  FIELD_BD (draft_start_distance, 43);
-  FIELD_BD (draft_end_distance, 44);
-  FIELD_BD (twist_angle, 45);
-  FIELD_VECTOR_N (sweep_entity_transmatrix1, BD, 16, 46);
-  FIELD_VECTOR_N (path_entity_transmatrix1, BD, 16, 47);
-  FIELD_BD (scale_factor, 48);
-  FIELD_BD (align_angle, 49);
-  FIELD_B (solid, 290);
-  FIELD_RC (sweep_alignment, 70);
-  FIELD_B (align_start, 292);
-  FIELD_B (bank, 293);
-  FIELD_B (base_point_set, 294);
-  FIELD_B (sweep_entity_transform_computed, 295);
-  FIELD_B (path_entity_transform_computed, 296);
-  FIELD_3BD (reference_vector_for_controlling_twist, 11);
+  // here and at ExtrudedSurface
+  SweepOptions_fields;
 
   COMMON_ENTITY_HANDLE_DATA;
 

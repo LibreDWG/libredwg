@@ -4522,6 +4522,30 @@ typedef struct _dwg_entity_HELIX
 
 } Dwg_Entity_HELIX;
 
+#define SweepOptions_FIELDS  \
+  BITCODE_BD draft_angle;   	   /*!< DXF 42 */ \
+  BITCODE_BD draft_start_distance; /*!< DXF 43 */ \
+  BITCODE_BD draft_end_distance;   /*!< DXF 44 */ \
+  BITCODE_BD twist_angle;   	   /*!< DXF 45 */ \
+  BITCODE_BD scale_factor;  /*!< DXF 48 */ \
+  BITCODE_BD align_angle;   /*!< DXF 49 */ \
+  BITCODE_BD* sweep_entity_transmatrix; /*!< DXF 46: 16x BD */ \
+  BITCODE_BD* path_entity_transmatrix;  /*!< DXF 47: 16x BD */ \
+  BITCODE_B is_solid;          /*!< DXF 290 */ \
+  BITCODE_BS sweep_alignment_flags; /*!< DXF 70. \
+                                      0=No alignment, 1=Align sweep entity to path, \
+                                      2=Translate sweep entity to path, \
+                                      3=Translate path to sweep entity */ \
+  BITCODE_BS path_flags; /*!< DXF 71 */                                 \
+  BITCODE_B align_start;                        /*!< DXF 292 */ \
+  BITCODE_B bank;                               /*!< DXF 293 */ \
+  BITCODE_B base_point_set;                     /*!< DXF 294 */ \
+  BITCODE_B sweep_entity_transform_computed;    /*!< DXF 295 */ \
+  BITCODE_B path_entity_transform_computed;     /*!< DXF 296 */ \
+  BITCODE_3BD reference_vector_for_controlling_twist; /*!< DXF 11 */ \
+  BITCODE_H sweep_entity; \
+  BITCODE_H path_entity
+
 /**
  Entity EXTRUDEDSURFACE (varies)
  in DXF encrypted.
@@ -4537,32 +4561,32 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
-  //sweep_options?
   BITCODE_BD height;
   BITCODE_3BD sweep_vector; /*!< DXF 10 */
   BITCODE_BD* sweep_transmatrix; /*!< DXF 40: 16x BD */
-  BITCODE_BD draft_angle;   /*!< DXF 42 */
-  BITCODE_BD draft_start_distance; /*!< DXF 43 */
-  BITCODE_BD draft_end_distance;   /*!< DXF 44 */
-  BITCODE_BD twist_angle;   /*!< DXF 45 */
-  BITCODE_BD scale_factor;  /*!< DXF 48 */
-  BITCODE_BD align_angle;   /*!< DXF 49 */
-  BITCODE_BD* sweep_entity_transmatrix; /*!< DXF 46: 16x BD */
-  BITCODE_BD* path_entity_transmatrix;  /*!< DXF 47: 16x BD */
-  BITCODE_B solid;          /*!< DXF 290 */
-  BITCODE_BS sweep_alignment_flags; /*!< DXF 290.
-                                      0=No alignment, 1=Align sweep entity to path,
-                                      2=Translate sweep entity to path,
-                                      3=Translate path to sweep entity */
-  BITCODE_B align_start;                        /*!< DXF 292 */
-  BITCODE_B bank;                               /*!< DXF 293 */
-  BITCODE_B base_point_set;                     /*!< DXF 294 */
-  BITCODE_B sweep_entity_transform_computed;    /*!< DXF 295 */
-  BITCODE_B path_entity_transform_computed;     /*!< DXF 296 */
-  BITCODE_3BD reference_vector_for_controlling_twist; /*!< DXF 11 */
-  BITCODE_H sweep_entity;
-  BITCODE_H path_entity;
+  SweepOptions_FIELDS;
 } Dwg_Entity_EXTRUDEDSURFACE;
+
+/**
+ Entity SWEPTSURFACE (varies)
+*/
+typedef struct _dwg_entity_SWEPTSURFACE
+{
+  struct _dwg_object_entity *parent;
+  _3DSOLID_FIELDS;
+  BITCODE_BS modeler_format_version; /*!< DXF 70 */
+  BITCODE_BS u_isolines;         /*!< DXF 71 */
+  BITCODE_BS v_isolines;         /*!< DXF 72 */
+  BITCODE_BL class_version; /*!< DXF 90 */
+
+  BITCODE_BL sweep_entity_id; // 90
+  BITCODE_BL sweepdata_size;
+  BITCODE_TF sweepdata;
+  BITCODE_BL path_entity_id;
+  BITCODE_BL pathdata_size;
+  BITCODE_TF pathdata;
+  SweepOptions_FIELDS;
+} Dwg_Entity_SWEPTSURFACE;
 
 /**
  Entity LOFTEDSURFACE (varies)
@@ -4652,45 +4676,6 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
   BITCODE_B close_to_axis; // 291
 
 } Dwg_Entity_REVOLVEDSURFACE;
-
-/**
- Entity SWEPTSURFACE (varies)
-*/
-typedef struct _dwg_entity_SWEPTSURFACE
-{
-  struct _dwg_object_entity *parent;
-  _3DSOLID_FIELDS;
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
-  BITCODE_BS u_isolines;         /*!< DXF 71 */
-  BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version; /*!< DXF 90 */
-
-  BITCODE_BL sweep_entity_id; // 90
-  BITCODE_BL sweepdata_size;
-  BITCODE_TF sweepdata;
-  BITCODE_BL path_entity_id;
-  BITCODE_BL pathdata_size;
-  BITCODE_TF pathdata;
-  BITCODE_BD* sweep_entity_transmatrix; // 40
-  BITCODE_BD* path_entity_transmatrix; // 41
-  BITCODE_BD draft_angle; // 42
-  BITCODE_BD draft_start_distance; // 43
-  BITCODE_BD draft_end_distance; // 44
-  BITCODE_BD twist_angle; // 45
-  BITCODE_BD* sweep_entity_transmatrix1; // 46
-  BITCODE_BD* path_entity_transmatrix1; // 47
-  BITCODE_BD scale_factor; // 48
-  BITCODE_BD align_angle; // 49
-  BITCODE_B solid; // 290
-  BITCODE_RC sweep_alignment; // 70
-  BITCODE_B align_start; // 292
-  BITCODE_B bank; // 293
-  BITCODE_B base_point_set; // 294
-  BITCODE_B sweep_entity_transform_computed; // 295
-  BITCODE_B path_entity_transform_computed; // 296
-  BITCODE_3BD reference_vector_for_controlling_twist; // 11
-
-} Dwg_Entity_SWEPTSURFACE;
 
 /**
  Entity MESH (varies)
