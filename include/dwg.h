@@ -4692,8 +4692,8 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
 typedef struct _dwg_MESH_edge
 {
   struct _dwg_entity_MESH *parent;
-  BITCODE_BL from;
-  BITCODE_BL to;
+  BITCODE_BL idxfrom; // index from
+  BITCODE_BL idxto; // index to
 } Dwg_MESH_edge;
 
 typedef struct _dwg_entity_MESH

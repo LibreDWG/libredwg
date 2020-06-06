@@ -10433,9 +10433,9 @@ Dwg_MATERIAL_color
 
 @item parent
 struct _dwg_entity_MESH*
-@item from
+@item idxfrom
 BL,	DXF 90
-@item to
+@item idxto
 BL,	DXF 90
 
 @end vtable

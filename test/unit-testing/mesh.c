@@ -51,8 +51,8 @@ api_process (dwg_object *obj)
     fail ("MESH.edges");
   for (i = 0; i < num_edges; i++)
     {
-      CHK_SUBCLASS_TYPE (edges[i], MESH_edge, from, BL);
-      CHK_SUBCLASS_TYPE (edges[i], MESH_edge, to, BL);
+      CHK_SUBCLASS_TYPE (edges[i], MESH_edge, idxfrom, BL);
+      CHK_SUBCLASS_TYPE (edges[i], MESH_edge, idxto, BL);
     }
   CHK_ENTITY_TYPE (_obj, MESH, num_crease, BL);
   if (!dwg_dynapi_entity_value (_obj, "MESH", "crease", &crease, NULL))

@@ -6932,8 +6932,8 @@ DWG_ENTITY (MESH)
   FIELD_BL (num_edges, 94); // 19
   REPEAT (num_edges, edges, Dwg_MESH_edge)
   REPEAT_BLOCK
-      SUB_FIELD_BL (edges[rcount1], from, 90);
-      SUB_FIELD_BL (edges[rcount1], to, 90);
+      SUB_FIELD_BL (edges[rcount1], idxfrom, 90);
+      SUB_FIELD_BL (edges[rcount1], idxto, 90);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (edges);
   END_REPEAT (edges);

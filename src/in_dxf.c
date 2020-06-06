@@ -2111,13 +2111,13 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               assert (j < 2 * o->num_edges);
               if (j % 2 == 0)
                 {
-                  o->edges[i].from = pair->value.u;
+                  o->edges[i].idxfrom = pair->value.u;
                 }
               else
                 {
-                  o->edges[i].to = pair->value.u;
+                  o->edges[i].idxto = pair->value.u;
                   LOG_TRACE ("MESH.edges[%d] = (%u, %u) [2BL %d]\n", i,
-                             o->edges[i].from, pair->value.u, pair->code);
+                             o->edges[i].idxfrom, pair->value.u, pair->code);
                 }
               j++;
             }

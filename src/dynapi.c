@@ -8871,9 +8871,9 @@ static const Dwg_DYNAPI_field _dwg_MATERIAL_mapper_fields[] = {
 static const Dwg_DYNAPI_field _dwg_MESH_edge_fields[] = {
   { "parent",	"struct _dwg_entity_MESH*", sizeof (void *),  OFF (struct _dwg_MESH_edge, parent),
     1,1,0, 0 },
-  { "from",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_MESH_edge, from),
+  { "idxfrom",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_MESH_edge, idxfrom),
     0,0,0, 90 },
-  { "to",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_MESH_edge, to),
+  { "idxto",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_MESH_edge, idxto),
     0,0,0, 90 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
