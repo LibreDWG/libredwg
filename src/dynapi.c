@@ -3144,7 +3144,7 @@ static const Dwg_DYNAPI_field _dwg_RTEXT_fields[] = {
   { "pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_RTEXT, pt),
     1,0,0, 10 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_RTEXT, extrusion),
-    0,0,0, 0 },
+    0,0,0, 210 },
   { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_RTEXT, rotation),
     0,0,0, 50 },
   { "height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_RTEXT, height),

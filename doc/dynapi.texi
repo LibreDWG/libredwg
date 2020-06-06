@@ -3281,7 +3281,7 @@ struct _dwg_object_entity*
 @item pt
 3BD,	DXF 10
 @item extrusion
-BE
+BE,	DXF 210
 @item rotation
 BD,	DXF 50
 @item height
