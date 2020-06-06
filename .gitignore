@@ -25,6 +25,8 @@ gcov.log
 /.fuzz-*/
 .vscode/
 /autom4te.cache/
+# will be a submodule
+/bindings/gambas/
 /compat_reports/
 /doc/LibreDWG.t2p/
 /doc/latex/
