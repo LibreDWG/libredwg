@@ -850,7 +850,7 @@ dxfb_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                         ? rbuf->type
                         : rbuf->type + 1000;
 
-      tmp = rbuf->next;
+      tmp = rbuf->nextrb;
       switch (type)
         {
         case VT_STRING:

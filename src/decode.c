@@ -4736,7 +4736,7 @@ dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf)
 {
   while (rbuf)
     {
-      Dwg_Resbuf *next = rbuf->next;
+      Dwg_Resbuf *next = rbuf->nextrb;
       short type = get_base_value_type (rbuf->type);
       if (type == VT_STRING || type == VT_BINARY)
         free (rbuf->value.str.u.data);
@@ -4787,7 +4787,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           dwg_free_xdata_resbuf (root);
           return NULL;
         }
-      rbuf->next = NULL;
+      rbuf->nextrb = NULL;
       rbuf->type = bit_read_RS (dat);
       LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS]\n", num_xdata, rbuf->type)
       if (dat->byte == curr_address || dat->byte >= end_address)
@@ -4931,7 +4931,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
           dwg_free_xdata_resbuf (rbuf);
           if (curr)
-            curr->next = NULL;
+            curr->nextrb = NULL;
           dat->byte = end_address;
           obj->num_xdata = num_xdata;
           return root;
@@ -4944,7 +4944,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         }
       else
         {
-          curr->next = rbuf;
+          curr->nextrb = rbuf;
           curr = rbuf;
         }
       curr_address = dat->byte;

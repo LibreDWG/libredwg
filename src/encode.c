@@ -4434,7 +4434,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           error = DWG_ERR_INVALIDEED;
           break;
         }
-      rbuf = rbuf->next;
+      rbuf = rbuf->nextrb;
       if (j > _obj->num_xdata)
         break;
       if (dat->byte >= end)

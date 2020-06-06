@@ -655,7 +655,7 @@ typedef struct _dwg_resbuf
     Dwg_Handle h;
     struct _dwg_binary_chunk str;
   } value;
-  struct _dwg_resbuf *next; /* FIXME: this is a perl keyword */
+  struct _dwg_resbuf *nextrb;
 } Dwg_Resbuf;
 
 /**
@@ -6637,7 +6637,7 @@ typedef struct _dwg_section
   int64_t  num_pages;
   DWGCHAR *name;
   r2007_section_page **pages;
-  struct _r2007_section *next;
+  struct _r2007_section *nextsec;
  */
 
 // ODA 4.5

@@ -1070,7 +1070,7 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
         }
 
-      tmp = rbuf->next;
+      tmp = rbuf->nextrb;
       switch (type)
         {
         case VT_STRING:

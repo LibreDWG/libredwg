@@ -5217,9 +5217,9 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       while (xdata)
         {
           prev = xdata;
-          xdata = xdata->next;
+          xdata = xdata->nextrb;
         }
-      prev->next = rbuf;
+      prev->nextrb = rbuf;
     }
   else
     _obj->xdata = rbuf;

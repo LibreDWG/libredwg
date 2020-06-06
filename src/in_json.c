@@ -1549,7 +1549,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               break;
             }
           rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
-          old->next = rbuf;
+          old->nextrb = rbuf;
         }
       else
         {

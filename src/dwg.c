@@ -2277,22 +2277,22 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
 
   _xrec = xrec->tio.object->tio.XRECORD;
   xdata = _xrec->xdata;
-  xdata = xdata->next;
+  xdata = xdata->nextrb;
   if (xdata->type == 1) // pairs of 1: old name, 2: new name
     {
       // step to the matching name
     cmp:
       if (!xdata_string_match (dwg, xdata, 1, name))
         {
-          xdata = xdata->next;
+          xdata = xdata->nextrb;
           while (xdata && xdata->type != 1 && xdata->type != 102)
-            xdata = xdata->next;
+            xdata = xdata->nextrb;
           if (xdata)
             goto cmp;
         }
       if (!xdata)
         return NULL;
-      xdata = xdata->next;
+      xdata = xdata->nextrb;
       if (xdata->type == 2) // new name
         {
           if (dwg->header.from_version < R_2007)

@@ -1079,7 +1079,7 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
         default:
           break;
         }
-      rbuf = rbuf->next;
+      rbuf = rbuf->nextrb;
       ENDARRAY
     }
   ENDARRAY;
