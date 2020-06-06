@@ -2770,15 +2770,15 @@ DWG_OBJECT (STYLE)
     DXF {
       char _buf[256];
       char *s;
-      if (_obj->font_file)
+      if (FIELD_VALUE (font_file))
         {
           SINCE (R_2007) {
-            s = bit_convert_TU ((BITCODE_TU)_obj->font_file);
+            s = bit_convert_TU ((BITCODE_TU)FIELD_VALUE (font_file));
             strncpy (_buf, s, 255);
             free (s);
           }
           else {
-            strncpy (_buf, _obj->font_file, 255);
+            strncpy (_buf, FIELD_VALUE (font_file), 255);
           }
           _buf[255] = '\0';
           if ((s = strstr (_buf, ".ttf")) ||
@@ -2786,8 +2786,8 @@ DWG_OBJECT (STYLE)
             {
               *s = 0;
               VALUE_TFF ("ACAD", 1001);
-              VALUE_TFF (_buf, 1000);
-              VALUE_RL (34, 1071); // typeface
+              VALUE_TFF (_buf, 1000); // typeface
+              VALUE_RL (34, 1071); // ttf_flags
             }
         }
     }
