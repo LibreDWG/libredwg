@@ -8837,7 +8837,7 @@ static const Dwg_DYNAPI_field _dwg_MATERIAL_gentexture_fields[] = {
     1,1,0, 0 },
   { "genprocname",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_MATERIAL_gentexture, genprocname),
     1,1,1, 0 },
-  { "self",	"struct _dwg_object_MATERIAL*", sizeof (void *),  OFF (struct _dwg_MATERIAL_gentexture, self),
+  { "material",	"struct _dwg_object_MATERIAL*", sizeof (void *),  OFF (struct _dwg_MATERIAL_gentexture, material),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

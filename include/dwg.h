@@ -4280,7 +4280,7 @@ typedef struct _dwg_MATERIAL_gentexture
 {
   struct _dwg_object_MATERIAL *parent;
   BITCODE_T genprocname;
-  struct _dwg_object_MATERIAL *self;
+  struct _dwg_object_MATERIAL *material;
 } Dwg_MATERIAL_gentexture;
 
 /**

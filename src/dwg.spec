@@ -7118,10 +7118,10 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
           FIELD_BS (num_gentextures, 0);                                      \
           REPEAT (num_gentextures, gentextures, Dwg_MATERIAL_gentexture)      \
           REPEAT_BLOCK                                                        \
-            _obj->gentextures[rcount1].self = _obj;                           \
+            _obj->gentextures[rcount1].material = _obj;                       \
             SUB_FIELD_T (gentextures[rcount1], genprocname, 300);             \
             LOG_WARN ("recursive MATERIAL.gentextures")                       \
-            CALL_SUBCLASS (_obj->gentextures[rcount1].self, MATERIAL,         \
+            CALL_SUBCLASS (_obj->gentextures[rcount1].material, MATERIAL,     \
                            Texture_diffusemap);                               \
           END_REPEAT_BLOCK                                                    \
           SET_PARENT_OBJ (gentextures);                                       \

@@ -10387,7 +10387,7 @@ BL
 struct _dwg_object_MATERIAL*
 @item genprocname
 T
-@item self
+@item material
 struct _dwg_object_MATERIAL*
 
 @end vtable
