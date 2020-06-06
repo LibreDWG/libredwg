@@ -28,6 +28,8 @@
 %include "stdint.i"
 %array_functions(Dwg_Object, Dwg_Object_Array);
 
+// swig cpp parser error confusing an enum with a define
+#pragma SWIG nowarn=305
 %include "dwg.h"
 //too large. TODO ifdef there
 //%include "dwg_api.h"
