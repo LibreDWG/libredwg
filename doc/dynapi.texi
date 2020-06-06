@@ -8155,7 +8155,7 @@ RC,	DXF 70
 BL
 @item unknown_bl2
 BL
-@item template
+@item cellstyle
 H
 @item sty
 Dwg_TABLESTYLE_CellStyle

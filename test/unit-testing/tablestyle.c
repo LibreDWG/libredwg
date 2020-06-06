@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   BITCODE_RC unknown_rc;
   BITCODE_BL unknown_bl1;
   BITCODE_BL unknown_bl2;
-  BITCODE_H template;
+  BITCODE_H cellstyle;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_tablestyle *tblstyle = dwg_object_to_TABLESTYLE (obj);
@@ -52,7 +52,7 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_rc, RC);
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl1, BL);
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl2, BL);
-      CHK_ENTITY_H (tblstyle, TABLESTYLE, template);
+      CHK_ENTITY_H (tblstyle, TABLESTYLE, cellstyle);
 
       if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "sty", &sty, NULL))
         fail ("TABLESTYLE.sty");

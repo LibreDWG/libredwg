@@ -5655,7 +5655,7 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_T (name, 3);
     FIELD_BL (unknown_bl1, 0);
     FIELD_BL (unknown_bl2, 0);
-    FIELD_HANDLE (template, DWG_HDL_HARDOWN, 0);
+    FIELD_HANDLE (cellstyle, DWG_HDL_HARDOWN, 0);
     CellStyle_fields (sty.cellstyle);
     DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
     FIELD_BL0 (sty.id, 90);

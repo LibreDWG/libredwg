@@ -41849,6 +41849,14 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   Dwg_Object_TABLESTYLE *restrict tablestyle = obj->tio.object->tio.TABLESTYLE;
   failed = 0;
   {
+    BITCODE_H cellstyle;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cellstyle", &cellstyle, NULL)
+        && !memcmp (&cellstyle, &tablestyle->cellstyle, sizeof (tablestyle->cellstyle)))
+        pass ();
+    else
+        fail ("TABLESTYLE.cellstyle [H]");
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "class_version", &class_version, NULL)
         && class_version == tablestyle->class_version)
@@ -42011,14 +42019,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("TABLESTYLE.sty [Dwg_TABLESTYLE_CellStyle]");
-  }
-  {
-    BITCODE_H template;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "template", &template, NULL)
-        && !memcmp (&template, &tablestyle->template, sizeof (tablestyle->template)))
-        pass ();
-    else
-        fail ("TABLESTYLE.template [H]");
   }
   {
     BITCODE_BL unknown_bl1;

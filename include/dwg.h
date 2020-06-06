@@ -3652,7 +3652,7 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_RC unknown_rc;         //r2007+ signed
   BITCODE_BL unknown_bl1;
   BITCODE_BL unknown_bl2;
-  BITCODE_H template;            //r2007+ a cellstyle
+  BITCODE_H cellstyle;           //r2007+. was called template
   Dwg_TABLESTYLE_CellStyle sty;  //r2007+. Note: embedded struct
   BITCODE_BL numoverrides;      // ??
   BITCODE_BL unknown_bl3;
