@@ -4435,14 +4435,13 @@ DWG_ENTITY (PROXY_ENTITY)
   }
   JSON {
     FIELD_BL (data_numbits, 0);
-    FIELD_BL (data_size, 93);
   }
   DXF_OR_PRINT {
     // preview 92/310 is also proxy data
     FIELD_BL (data_size, 93);
   }
 #ifndef IS_DECODER
-  FIELD_TF (data, _obj->data_size, 310);
+  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 #endif
 #if defined IS_DECODER || defined IS_ENCODER
   {
@@ -4528,14 +4527,13 @@ DWG_OBJECT (PROXY_OBJECT)
   }
   JSON {
     FIELD_BL (data_numbits, 0);
-    FIELD_BL (data_size, 93);
   }
   DXF_OR_PRINT {
     // preview 92/310 is also proxy data
     FIELD_BL (data_size, 93);
   }
 #ifndef IS_DECODER
-  FIELD_TF (data, _obj->data_size, 310);
+  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 #endif
 #if defined IS_DECODER || defined IS_ENCODER
   {
