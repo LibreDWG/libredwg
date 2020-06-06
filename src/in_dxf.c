@@ -3846,6 +3846,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
   } mode;
   int i = -1, j = -1;
   int grid = -1;
+  mode = NONE;
 
   while (pair != NULL && pair->code != 0)
     {
