@@ -313,6 +313,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + ((unsigned long long)tbl->number * tbl->size)))
   dat->byte = tbl->address;
+  dat->bit = 0;
   if ((unsigned long)(tbl->number * tbl->size) > dat->size - dat->byte)
     {
       LOG_ERROR ("Invalid table number %ld or size %ld for %-8s [%2d]", (long)tbl->number, (long)tbl->size,

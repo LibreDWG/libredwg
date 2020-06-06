@@ -2094,16 +2094,21 @@ typedef struct _dwg_object_STYLE_CONTROL
 
 /**
  STYLE (53) object, table entry.
- Textstyle. Some call it SHAPEFILE.
+ TextStyleTableRecord. Some call it SHAPEFILE.
  */
 typedef struct _dwg_object_STYLE
 {
-  /* flag 70:
+  /*<! flag DXF 70:
      1:  is_vertical
      2:  is_upsidedown
      4:  is_shape
-     64: pre_loaded
-    128: is_backward
+     8:  underlined
+     16: overlined (0x10)
+     32: is_shx
+     64: pre_loaded (0x40)
+    128: is_backward (0x80)
+    256: shape_loaded (0x100)
+    512: is_striked (0x200)
  */
   COMMON_TABLE_FIELDS(RC);
   BITCODE_B is_shape;

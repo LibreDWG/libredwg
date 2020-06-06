@@ -2751,9 +2751,8 @@ DWG_OBJECT (STYLE)
     FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
-    FIELD_TFv (font_file, 128, 3);
-    //FIELD_TFv (bigfont_file, 128, 4); ??
-
+    FIELD_TFv (font_file, 64, 3);
+    FIELD_TFv (bigfont_file, 64, 4);
     FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
     FIELD_VALUE (is_vertical) = FIELD_VALUE (flag) & 1;
   }
@@ -2788,7 +2787,7 @@ DWG_OBJECT (STYLE)
               *s = 0;
               VALUE_TFF ("ACAD", 1001);
               VALUE_TFF (_buf, 1000);
-              VALUE_RL (34, 1071); // typeface?
+              VALUE_RL (34, 1071); // typeface
             }
         }
     }
