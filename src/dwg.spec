@@ -2322,7 +2322,7 @@ DWG_ENTITY (MTEXT)
   FIELD_BS (attachment, 71);
   FIELD_BS (drawing_dir, 72);
   FIELD_BD (extents_height, 42);
-  FIELD_BD (extents_width, 43);
+  FIELD_BD (extents_width, 43); // nan's!
   FIELD_T (text, 1); // or 3 if >250
   /* doc error:
   UNTIL (R_2007) {
@@ -3191,8 +3191,8 @@ DWG_OBJECT (VPORT)
   }
   else
   {
-    FIELD_BD (VIEWSIZE, 40); // i.e view height
-    FIELD_BD (view_width, 0);
+    FIELD_BD (VIEWSIZE, 40);  // i.e view height
+    FIELD_BD (view_width, 0); // -nan in example_2000
     DECODER {
       FIELD_VALUE (aspect_ratio) = FIELD_VALUE (VIEWSIZE) == 0.0
         ? 0.0
@@ -8653,7 +8653,9 @@ DWG_ENTITY (RTEXT)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbRotatedText);
   FIELD_3BD (pt, 10);
-  DXF  { FIELD_BE (extrusion, 210); }
+  DXF  {
+    FIELD_BE (extrusion, 210);
+  }
   else { FIELD_3DPOINT (extrusion, 210); }
   FIELD_BD (rotation, 50);
   FIELD_BD (height, 50);
