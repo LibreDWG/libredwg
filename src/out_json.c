@@ -1614,6 +1614,8 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_json_PLACEHOLDER (dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
       return dwg_json_PROXY_ENTITY (dat, obj);
+    case DWG_TYPE_PROXY_OBJECT:
+      return dwg_json_PROXY_OBJECT (dat, obj);
     case DWG_TYPE_OLEFRAME:
       return dwg_json_OLEFRAME (dat, obj);
     case DWG_TYPE_VBA_PROJECT:
