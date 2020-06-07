@@ -604,7 +604,10 @@
 #define CALL_SUBCLASS(_xobj, parenttype, subtype)                             \
   error |= DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (_xobj, dat,        \
                hdl_dat, str_dat, (Dwg_Object *)obj)
+// if the name is compile-time known
 #define CALL_ENTITY(name, xobj)                                               \
-  error |= DWG_PRIVATE_N (ACTION, name) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)
-#define CALL_OBJECT(xobj)                                                     \
-  error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)
+  error |= DWG_PRIVATE_N (ACTION, name) (dat, hdl_dat, str_dat,               \
+                                             (Dwg_Object *)xobj)
+// TODO: dispatch on the type
+#define CALL_SUBENT(hdl, dxf)
+//error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)

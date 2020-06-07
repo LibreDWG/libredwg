@@ -1759,7 +1759,7 @@ BS,	DXF 71
 @item v_isolines
 BS,	DXF 72
 @item class_version
-BL,	DXF 90
+BL
 @item draft_angle
 BD,	DXF 42
 @item draft_start_distance
@@ -4508,11 +4508,11 @@ BL,	DXF 91
 @item num_crosssects
 BL,	DXF 92
 @item crosssects
-struct _dwg_object*
+H*
 @item num_guides
 BL,	DXF 95
 @item guides
-struct _dwg_object*
+H*
 
 @end vtable
 @end indentedblock
@@ -4592,7 +4592,7 @@ B,	DXF 290
 @item is_close_to_axis
 B,	DXF 291
 @item sweep_entity
-struct _dwg_object_entity*
+H
 
 @end vtable
 @end indentedblock

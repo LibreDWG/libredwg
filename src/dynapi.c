@@ -1844,7 +1844,7 @@ static const Dwg_DYNAPI_field _dwg_EXTRUDEDSURFACE_fields[] = {
   { "v_isolines",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, v_isolines),
     0,0,0, 72 },
   { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, class_version),
-    0,0,0, 90 },
+    0,0,0, 0 },
   { "draft_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, draft_angle),
     0,0,0, 42 },
   { "draft_start_distance",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_EXTRUDEDSURFACE, draft_start_distance),
@@ -4178,11 +4178,11 @@ static const Dwg_DYNAPI_field _dwg_ACSH_LOFT_CLASS_fields[] = {
     0,0,0, 91 },
   { "num_crosssects",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, num_crosssects),
     0,0,0, 92 },
-  { "crosssects",	"struct _dwg_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, crosssects),
+  { "crosssects",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, crosssects),
     1,1,0, 0 },
   { "num_guides",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, num_guides),
     0,0,0, 95 },
-  { "guides",	"struct _dwg_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, guides),
+  { "guides",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, guides),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -4248,8 +4248,8 @@ static const Dwg_DYNAPI_field _dwg_ACSH_REVOLVE_CLASS_fields[] = {
     0,0,0, 290 },
   { "is_close_to_axis",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_REVOLVE_CLASS, is_close_to_axis),
     0,0,0, 291 },
-  { "sweep_entity",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_object_ACSH_REVOLVE_CLASS, sweep_entity),
-    1,1,0, 0 },
+  { "sweep_entity",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ACSH_REVOLVE_CLASS, sweep_entity),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_ACSH_SPHERE_CLASS: (sorted by offset) */

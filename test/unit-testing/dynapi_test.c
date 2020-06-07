@@ -24229,14 +24229,14 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
     acsh_loft_class->class_version--;
   }
   {
-    struct _dwg_object* crosssects;
+    BITCODE_H* crosssects;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "num_crosssects", &count, NULL)
         && dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "crosssects", &crosssects, NULL)
         && crosssects == acsh_loft_class->crosssects)
       pass ();
     else
-      fail ("ACSH_LOFT_CLASS.crosssects [struct _dwg_object*] * %u num_crosssects", count);
+      fail ("ACSH_LOFT_CLASS.crosssects [H*] * %u num_crosssects", count);
   }
   {
     BITCODE_BL ee_bl98;
@@ -24269,14 +24269,14 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
     acsh_loft_class->ee_bl99--;
   }
   {
-    struct _dwg_object* guides;
+    BITCODE_H* guides;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "num_guides", &count, NULL)
         && dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "guides", &guides, NULL)
         && guides == acsh_loft_class->guides)
       pass ();
     else
-      fail ("ACSH_LOFT_CLASS.guides [struct _dwg_object*] * %u num_guides", count);
+      fail ("ACSH_LOFT_CLASS.guides [H*] * %u num_guides", count);
   }
   {
     Dwg_ACSH_HistoryNode history_node;
@@ -24714,12 +24714,12 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
     acsh_revolve_class->start_angle--;
   }
   {
-    struct _dwg_object_entity* sweep_entity;
+    BITCODE_H sweep_entity;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "sweep_entity", &sweep_entity, NULL)
         && !memcmp (&sweep_entity, &acsh_revolve_class->sweep_entity, sizeof (acsh_revolve_class->sweep_entity)))
         pass ();
     else
-        fail ("ACSH_REVOLVE_CLASS.sweep_entity [struct _dwg_object_entity*]");
+        fail ("ACSH_REVOLVE_CLASS.sweep_entity [H]");
   }
   {
     BITCODE_BD twist_angle;

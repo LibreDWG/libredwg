@@ -7478,8 +7478,8 @@ DWG_ENTITY (EXTRUDEDSURFACE)
   FIELD_BS (v_isolines, 72);
   SUBCLASS (AcDbExtrudedSurface)
 #ifdef IS_DXF
-  FIELD_BL (class_version, 90); // or entity type?
-  //CALL_SUBENTITY (entity, 90)
+  //FIELD_BL (class_version, 90); // or entity type?
+  CALL_SUBENT (_obj->entity, 90)
 #else
   // here and at SweptSurface
   SweepOptions_fields;
@@ -7489,8 +7489,8 @@ DWG_ENTITY (EXTRUDEDSURFACE)
 #ifdef IS_DXF
   SweepOptions_fields;
 #else
-  FIELD_BL (class_version, 90); // or entity type?
-  //CALL_SUBENTITY (entity, 90)
+  //FIELD_BL (class_version, 90); // or entity type?
+  CALL_SUBENT (_obj->entity, 90)
 #endif
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -7757,7 +7757,7 @@ DWG_OBJECT (PERSUBENTMGR)
   FIELD_BL (num_steps, 90);      //1
   FIELD_VECTOR (steps, BL, num_steps, 90); //1
   FIELD_BL (num_subents, 90);
-  // nope: 3x BL and CALL_SUBENTITY
+  // nope: 3x BL and CALL_SUBENT
   FIELD_VECTOR (subents, BL, num_subents, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8152,19 +8152,19 @@ DWG_OBJECT (ACSH_LOFT_CLASS)
   FIELD_BL (bl90, 90);
   FIELD_BL (bl91, 91);
   FIELD_BL (num_crosssects, 92);
-  REPEAT (num_crosssects, crosssects, Dwg_Object)
+  REPEAT (num_crosssects, crosssects, BITCODE_H)
   REPEAT_BLOCK
   {
-    CALL_ENTITY (ANY, _obj->crosssects[rcount1]);
+    CALL_SUBENT (_obj->crosssects[rcount1], 93);
   }
   END_REPEAT_BLOCK
   END_REPEAT (crosssects);
 
   FIELD_BL (num_guides, 95);
-  REPEAT (num_guides. guides, Dwg_Object)
+  REPEAT (num_guides, guides, BITCODE_H)
   REPEAT_BLOCK
   {
-    CALL_ENTITY (ANY, _obj->guides[rcount1]);
+    CALL_SUBENT (_obj->guides[rcount1], 96);
   }
   END_REPEAT_BLOCK
   END_REPEAT (guides);
@@ -8194,7 +8194,7 @@ DWG_OBJECT (ACSH_REVOLVE_CLASS)
   FIELD_BD (twist_angle, 46);
   FIELD_B (b290, 290);
   FIELD_B (is_close_to_axis, 291);
-  //CALL_OBJECT (obj->sweep_entity);
+  CALL_SUBENT (obj->sweep_entity, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

@@ -5374,9 +5374,9 @@ typedef struct _dwg_object_ACSH_LOFT_CLASS
   BITCODE_BL bl90;       /*!< DXF 90 */
   BITCODE_BL bl91;       /*!< DXF 91 */
   BITCODE_BL num_crosssects; /*!< DXF 92 */
-  struct _dwg_object **crosssects;
+  BITCODE_H *crosssects;
   BITCODE_BL num_guides; /*!< DXF 95 */
-  struct _dwg_object **guides;
+  BITCODE_H *guides;
 
 } Dwg_Object_ACSH_LOFT_CLASS;
 
@@ -5498,7 +5498,7 @@ typedef struct _dwg_object_ACSH_REVOLVE_CLASS
   BITCODE_BD twist_angle;	/*!< DXF 46 */
   BITCODE_B b290;		/*!< DXF 290 */
   BITCODE_B is_close_to_axis;	/*!< DXF 291 */
-  struct _dwg_object_entity  *sweep_entity;
+  BITCODE_H sweep_entity;
 
 } Dwg_Object_ACSH_REVOLVE_CLASS;
 
