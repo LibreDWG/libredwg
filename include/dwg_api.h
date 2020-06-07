@@ -607,6 +607,14 @@ typedef struct _dwg_object_ACSH_BOX_CLASS                  dwg_obj_acsh_box_clas
 typedef struct _dwg_object_ACSH_EXTRUSION_CLASS            dwg_obj_acsh_extrusion_class;
 typedef struct _dwg_object_ACSH_HISTORY_CLASS              dwg_obj_acsh_history_class;
 typedef struct _dwg_object_ACSH_SWEEP_CLASS                dwg_obj_acsh_sweep_class;
+typedef struct _dwg_object_ACSH_CHAMFER_CLASS		   dwg_obj_acsh_chamfer_class;
+typedef struct _dwg_object_ACSH_FILLET_CLASS		   dwg_obj_acsh_fillet_class;
+typedef struct _dwg_object_ACSH_LOFT_CLASS		   dwg_obj_acsh_loft_class;
+typedef struct _dwg_object_ACSH_PYRAMID_CLASS		   dwg_obj_acsh_pyramid_class;
+typedef struct _dwg_object_ACSH_REVOLVE_CLASS		   dwg_obj_acsh_revolve_class;
+typedef struct _dwg_object_ACSH_SPHERE_CLASS               dwg_obj_acsh_sphere_class;
+typedef struct _dwg_object_ACSH_TORUS_CLASS		   dwg_obj_acsh_torus_class;
+typedef struct _dwg_object_ACSH_WEDGE_CLASS		   dwg_obj_acsh_wedge_class;
 typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA          dwg_obj_aldimobjectcontextdata;
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP          dwg_obj_assoc2dconstraintgroup;
 typedef struct _dwg_object_ASSOCACTION                     dwg_obj_assocaction;
@@ -835,6 +843,14 @@ DWG_GETALL_OBJECT_DECL (VISUALSTYLE)
 DWG_GETALL_OBJECT_DECL (ACSH_BOX_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_FILLET_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_LOFT_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_SPHERE_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_TORUS_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_WEDGE_CLASS)
 DWG_GETALL_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP)
 DWG_GETALL_OBJECT_DECL (ASSOCACTION)
@@ -1053,6 +1069,14 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (WIPEOUTVARIABLES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BOX_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_FILLET_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_LOFT_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SPHERE_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_TORUS_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_WEDGE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION)
@@ -1328,6 +1352,14 @@ dwg_get_OBJECT_DECL (obj_visualstyle, VISUALSTYLE);
 dwg_get_OBJECT_DECL (obj_acsh_box_class, ACSH_BOX_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_fillet_class, ACSH_FILLET_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_LOFT_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_REVOLVE_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_sphere_class, ACSH_SPHERE_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_wedge_class, ACSH_WEDGE_CLASS);
 dwg_get_OBJECT_DECL (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP);
 dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);

@@ -8013,7 +8013,7 @@ DWG_OBJECT (ACSH_PYRAMID_CLASS)
   FIELD_BL (bl90, 90); //33
   FIELD_BL (bl91, 91); //1
   FIELD_BD (height, 40);
-  FIELD_BD (sides, 92);
+  FIELD_BL (sides, 92);
   FIELD_BD (radius, 41);
   FIELD_BD (topradius, 42);
   START_OBJECT_HANDLE_STREAM;
@@ -8032,13 +8032,13 @@ DWG_OBJECT (ACSH_FILLET_CLASS)
   FIELD_BL (bl91, 91); //1
   FIELD_BL (bl92, 92);
   FIELD_BL (num_edges, 93);
-  FIELD_VECTOR (num_edges, edges, BL, 94)
+  FIELD_VECTOR (edges, BL, num_edges, 94)
   FIELD_BL (num_radiuses, 95);
-  FIELD_VECTOR (num_radiuses, radiuses, BD, 41)
+  FIELD_VECTOR (radiuses, BD, num_radiuses, 41)
   FIELD_BL (num_startsetbacks, 96);
   FIELD_BL (num_endsetbacks, 97);
-  FIELD_VECTOR (num_endsetbacks, endsetbacks, BD, 43)
-  FIELD_VECTOR (num_startsetbacks, startsetbacks, BD, 42)
+  FIELD_VECTOR (endsetbacks, BD, num_endsetbacks, 43)
+  FIELD_VECTOR (startsetbacks, BD, num_startsetbacks, 42)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8057,7 +8057,7 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
   FIELD_BD (base_dist, 41);
   FIELD_BD (other_dist, 42);
   FIELD_BL (num_edges, 93);
-  FIELD_VECTOR (num_edges, edges, BL, 94)
+  FIELD_VECTOR (edges, BL, num_edges, 94)
   FIELD_BL (bl95, 95);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8070,7 +8070,7 @@ DWG_OBJECT (ACSH_TORUS_CLASS)
   FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShChamfer)
+  SUBCLASS (AcDbShTorus)
   FIELD_BL (bl90, 90); //33
   FIELD_BL (bl91, 91); //1
   FIELD_BD (major_radius, 40);
@@ -8135,7 +8135,6 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   FIELD_BL (ee_bl98, 98); //33 major/minor?
   FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
-  //??
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8156,7 +8155,7 @@ DWG_OBJECT (ACSH_LOFT_CLASS)
   REPEAT (num_crosssects, crosssects, Dwg_Object)
   REPEAT_BLOCK
   {
-    CALL_ENTITY (OBJECT, _obj->crossects[rcount1]);
+    CALL_ENTITY (ANY, _obj->crosssects[rcount1]);
   }
   END_REPEAT_BLOCK
   END_REPEAT (crosssects);
@@ -8165,13 +8164,38 @@ DWG_OBJECT (ACSH_LOFT_CLASS)
   REPEAT (num_guides. guides, Dwg_Object)
   REPEAT_BLOCK
   {
-    CALL_ENTITY (OBJECT, _obj->guides[rcount1]);
+    CALL_ENTITY (ANY, _obj->guides[rcount1]);
   }
   END_REPEAT_BLOCK
   END_REPEAT (guides);
 
   START_OBJECT_HANDLE_STREAM;
 
+DWG_OBJECT_END
+
+DWG_OBJECT (ACSH_REVOLVE_CLASS)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbEvalExpr)
+  FIELD_BL (class_version, 90); //1
+  FIELD_BL (ee_bl98, 98); //33 major/minor?
+  FIELD_BL (ee_bl99, 99); //29
+  AcDbShHistoryNode_fields;
+  SUBCLASS (AcDbShPrimitive)
+  SUBCLASS (AcDbShRevolve)
+  FIELD_BL (bl90, 90); //33
+  FIELD_BL (bl91, 91); //29
+  FIELD_3BD (axis_pt, 10);
+  FIELD_2RD (direction, 11); // 3d in dxf
+  FIELD_BD (revolve_angle, 40);
+  FIELD_BD (start_angle, 41);
+  FIELD_BD (draft_angle, 43);
+  FIELD_BD (bd44, 44);
+  FIELD_BD (bd45, 45);
+  FIELD_BD (twist_angle, 46);
+  FIELD_B (b290, 290);
+  FIELD_B (is_close_to_axis, 291);
+  //CALL_OBJECT (obj->sweep_entity);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // called COORDINATION_MODEL in the DXF docs
@@ -8917,7 +8941,6 @@ DWG_OBJECT_END
   ACDBPOINTCLOUDEX ARRAY
   ATTBLOCKREF ATTDYNBLOCKREF BLOCKREF DYNBLOCKREF XREF
   CENTERMARK CENTERLINE
-  ACSH_PYRAMID_CLASS
 */
 
 DWG_OBJECT (BACKGROUND)
@@ -8996,35 +9019,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACDSSCHEMA)
   DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-DWG_OBJECT (ACSH_PYRAMID_CLASS)
-  DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-DWG_OBJECT (ACSH_REVOLVE_CLASS)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
-  AcDbShHistoryNode_fields;
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShBox)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //29
-  FIELD_3BD (axis_pt, 10);
-  FIELD_2RD (direction, 11); // 3d in dxf
-  FIELD_BD (revolve_angle, 40);
-  FIELD_BD (start_angle, 41);
-  FIELD_BD (draft_angle, 43);
-  FIELD_BD (bd44, 44);
-  FIELD_BD (bd45, 45);
-  FIELD_BD (twist_angle, 46);
-  FIELD_B (b290, 290);
-  FIELD_B (is_close_to_axis, 291);
-  CALL_OBJECT (obj->sweep_entity);
-  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (RAPIDRTRENDERENVIRONMENT)

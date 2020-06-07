@@ -4310,6 +4310,43 @@ BD,	DXF 42
 @end vtable
 @end indentedblock
 
+@strong{ACSH_CHAMFER_CLASS} @anchor{ACSH_CHAMFER_CLASS}
+@cindex object, ACSH_CHAMFER_CLASS
+@vindex ACSH_CHAMFER_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item bl92
+BL,	DXF 92
+@item base_dist
+BD,	DXF 41
+@item other_dist
+BD,	DXF 42
+@item num_edges
+BL,	DXF 93
+@item edges
+BL*,	DXF 94
+@item bl95
+BL,	DXF 95
+
+@end vtable
+@end indentedblock
+
 @strong{ACSH_EXTRUSION_CLASS} @anchor{ACSH_EXTRUSION_CLASS}
 @cindex object, ACSH_EXTRUSION_CLASS
 @vindex ACSH_EXTRUSION_CLASS
@@ -4331,10 +4368,10 @@ Dwg_ACSH_HistoryNode
 BL,	DXF 90
 @item bl91
 BL,	DXF 91
-@item basept
-3BD
-@item shsw_bl92
-BL
+@item direction
+3BD,	DXF 10
+@item bl92
+BL,	DXF 92
 @item shsw_text_size
 BL,	DXF 90
 @item shsw_text
@@ -4383,6 +4420,49 @@ B,	DXF 296
 @end vtable
 @end indentedblock
 
+@strong{ACSH_FILLET_CLASS} @anchor{ACSH_FILLET_CLASS}
+@cindex object, ACSH_FILLET_CLASS
+@vindex ACSH_FILLET_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item bl92
+BL,	DXF 92
+@item num_edges
+BL,	DXF 93
+@item edges
+BL*,	DXF 94
+@item num_radiuses
+BL,	DXF 95
+@item num_startsetbacks
+BL,	DXF 96
+@item num_endsetbacks
+BL,	DXF 97
+@item radiuses
+BD*,	DXF 41
+@item startsetbacks
+BD*,	DXF 42
+@item endsetbacks
+BD*,	DXF 43
+
+@end vtable
+@end indentedblock
+
 @strong{ACSH_HISTORY_CLASS} @anchor{ACSH_HISTORY_CLASS}
 @cindex object, ACSH_HISTORY_CLASS
 @vindex ACSH_HISTORY_CLASS
@@ -4398,18 +4478,8 @@ BL,	DXF 90
 BL,	DXF 98
 @item ee_bl99
 BL,	DXF 99
-@item shhn_bl90
-BL
-@item shhn_bl91
-BL
-@item shhn_pts
-BD*
-@item color
-CMC
-@item shhn_bl92
-BL
-@item shhn_bl347
-BL
+@item history_node
+Dwg_ACSH_HistoryNode
 
 @end vtable
 @end indentedblock
@@ -4435,14 +4505,121 @@ Dwg_ACSH_HistoryNode
 BL,	DXF 90
 @item bl91
 BL,	DXF 91
-@item num_crossects
-BL
-@item crossects
+@item num_crosssects
+BL,	DXF 92
+@item crosssects
 struct _dwg_object*
 @item num_guides
 BL,	DXF 95
 @item guides
 struct _dwg_object*
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_PYRAMID_CLASS} @anchor{ACSH_PYRAMID_CLASS}
+@cindex object, ACSH_PYRAMID_CLASS
+@vindex ACSH_PYRAMID_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item height
+BD,	DXF 40
+@item sides
+BL,	DXF 92
+@item radius
+BD,	DXF 41
+@item topradius
+BD,	DXF 42
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_REVOLVE_CLASS} @anchor{ACSH_REVOLVE_CLASS}
+@cindex object, ACSH_REVOLVE_CLASS
+@vindex ACSH_REVOLVE_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item axis_pt
+3BD,	DXF 10
+@item direction
+2RD,	DXF 11
+@item revolve_angle
+BD,	DXF 40
+@item start_angle
+BD,	DXF 41
+@item draft_angle
+BD,	DXF 43
+@item bd44
+BD,	DXF 44
+@item bd45
+BD,	DXF 45
+@item twist_angle
+BD,	DXF 46
+@item b290
+B,	DXF 290
+@item is_close_to_axis
+B,	DXF 291
+@item sweep_entity
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_SPHERE_CLASS} @anchor{ACSH_SPHERE_CLASS}
+@cindex object, ACSH_SPHERE_CLASS
+@vindex ACSH_SPHERE_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item radius
+BD,	DXF 40
 
 @end vtable
 @end indentedblock
@@ -4464,14 +4641,14 @@ BL,	DXF 98
 BL,	DXF 99
 @item history_node
 Dwg_ACSH_HistoryNode
-@item shsw_bl90
-BL
-@item shsw_bl91
-BL
-@item basept
-3BD
-@item shsw_bl92
-BL
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item direction
+3BD,	DXF 10
+@item bl92
+BL,	DXF 92
 @item shsw_text_size
 BL,	DXF 90
 @item shsw_text
@@ -4516,6 +4693,66 @@ B,	DXF 295
 B,	DXF 296
 @item pt2
 3BD,	DXF 11
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_TORUS_CLASS} @anchor{ACSH_TORUS_CLASS}
+@cindex object, ACSH_TORUS_CLASS
+@vindex ACSH_TORUS_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item major_radius
+BD,	DXF 40
+@item minor_radius
+BD,	DXF 41
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_WEDGE_CLASS} @anchor{ACSH_WEDGE_CLASS}
+@cindex object, ACSH_WEDGE_CLASS
+@vindex ACSH_WEDGE_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item length
+BD,	DXF 40
+@item width
+BD,	DXF 41
+@item height
+BD,	DXF 42
 
 @end vtable
 @end indentedblock
@@ -9083,7 +9320,7 @@ CMC
 @item bl92
 BL
 @item h347
-BL
+H
 
 @end vtable
 @end indentedblock
