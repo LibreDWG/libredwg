@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
   BITCODE_BD* loft_entity_transmatrix;
-  BITCODE_BL plane_normal_lofting_type;
+  BITCODE_BL i, plane_normal_lofting_type;
   BITCODE_BD start_draft_angle;
   BITCODE_BD end_draft_angle;
   BITCODE_BD start_draft_magnitude;

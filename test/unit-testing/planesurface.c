@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version; /*!< DXF 90 */
+  BITCODE_BL i, class_version; /*!< DXF 90 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES

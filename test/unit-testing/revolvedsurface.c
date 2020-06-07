@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_BS modeler_format_version;
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
-  BITCODE_BL class_version;
+  BITCODE_BL i, class_version;
 
   BITCODE_BL id;
   BITCODE_3BD axis_point;

@@ -35,10 +35,8 @@ api_process (dwg_object *obj)
   //Dwg_ASSOCACTION_Deps *deps;
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCACTION, owned_params, num_owned_params);
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_value_param_names,
-                   BL, num_owned_value_param_names);
-  CHK_ENTITY_HV (_obj, ASSOCACTION, owned_value_param_names,
-                 owned_value_param_names, num_owned_value_param_names);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_value_param_names, BL);
+  CHK_ENTITY_HV (_obj, ASSOCACTION, owned_value_param_names, num_owned_value_param_names);
 
   //CHK_SUBCLASS_UTF8TEXT (_obj->body, ACTIONBODY, evaluatorid);
   //CHK_SUBCLASS_UTF8TEXT (_obj->body, ACTIONBODY, expression);

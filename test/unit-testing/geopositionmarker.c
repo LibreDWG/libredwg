@@ -36,7 +36,7 @@ api_process (dwg_object *obj)
     fail ("GEOPOSITIONMARKER.mtext");
   else if (mtext)
     {
-      Dwg_Entity_MTEXT *_obj = mtext->tio.entity->tio.MTEXT;
+      Dwg_Entity_MTEXT *sub = mtext->tio.entity->tio.MTEXT;
       if (mtext->fixedtype != DWG_TYPE_MTEXT)
         fail ("Wrong MTEXT.mtext.fixedtype %d", mtext->fixedtype);
     }

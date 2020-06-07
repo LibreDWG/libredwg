@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_BS modeler_format_version;
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
-  BITCODE_BL class_version;
+  BITCODE_BL i, class_version;
 
   BITCODE_BL sweep_entity_id;
   BITCODE_BL sweepdata_size;
@@ -30,8 +30,8 @@ api_process (dwg_object *obj)
   BITCODE_BD* path_entity_transmatrix1;
   BITCODE_BD scale_factor;
   BITCODE_BD align_angle;
-  BITCODE_B solid;
-  BITCODE_RC sweep_alignment;
+  BITCODE_B is_solid;
+  BITCODE_RC sweep_alignment_flags;
   BITCODE_B align_start;
   BITCODE_B bank;
   BITCODE_B base_point_set;
@@ -129,8 +129,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, twist_angle, BD);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, scale_factor, BD);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, align_angle, BD);
-  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, solid, B);
-  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_alignment, RC);
+  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, is_solid, B);
+  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_alignment_flags, RC);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, align_start, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, bank, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, base_point_set, B);

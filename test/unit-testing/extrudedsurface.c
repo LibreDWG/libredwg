@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
   //sweep_options?
-  BITCODE_BD height;
+  //BITCODE_BD height;
   BITCODE_3BD sweep_vector; /*!< DXF 10 */
   BITCODE_BD* sweep_transmatrix; /*!< DXF 40: 16x BD */
   BITCODE_BD draft_angle;   /*!< DXF 42 */
@@ -27,7 +27,7 @@ api_process (dwg_object *obj)
   BITCODE_BD align_angle;   /*!< DXF 49 */
   BITCODE_BD* sweep_entity_transmatrix; /*!< DXF 46: 16x BD */
   BITCODE_BD* path_entity_transmatrix;  /*!< DXF 47: 16x BD */
-  BITCODE_B solid;          /*!< DXF 290 */
+  BITCODE_B is_solid;          /*!< DXF 290 */
   BITCODE_BS sweep_alignment_flags; /*!< DXF 290.
                                       0=No alignment, 1=Align sweep entity to path,
                                       2=Translate sweep entity to path,
@@ -80,7 +80,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, u_isolines, BS);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, v_isolines, BS);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, class_version, BL);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, height, BD);
+
+  //CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, height, BD);
   CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, sweep_vector);
   if (!dwg_dynapi_entity_value (_obj, "EXTRUDEDSURFACE", "sweep_transmatrix", &sweep_transmatrix, NULL))
     fail ("EXTRUDEDSURFACE.sweep_transmatrix");
@@ -115,18 +116,14 @@ api_process (dwg_object *obj)
         ok ("EXTRUDEDSURFACE.path_entity_transmatrix[%d]: %f", i,
             path_entity_transmatrix[i]);
       }
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, solid, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, is_solid, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, sweep_alignment_flags, BS);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, align_start, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bank, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, base_point_set, B);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, sweep_entity_transform_computed, B,
-                   sweep_entity_transform_computed);
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, path_entity_transform_computed, B,
-                   path_entity_transform_computed);
-  CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE,
-                  reference_vector_for_controlling_twist,
-                  reference_vector_for_controlling_twist);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, sweep_entity_transform_computed, B);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, path_entity_transform_computed, B);
+  CHK_ENTITY_3RD (_obj, EXTRUDEDSURFACE, reference_vector_for_controlling_twist);
   CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, sweep_entity);
   CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, path_entity);
 #endif

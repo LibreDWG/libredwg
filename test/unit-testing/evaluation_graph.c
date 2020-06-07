@@ -28,15 +28,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, nodeid, BL);
   CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, edge_flags, BL);
   CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, num_evalexpr, BL);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge1, BLd, node_edge1);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge2, BLd, node_edge2);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge3, BLd, node_edge3);
-  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge4, BLd, node_edge4);
-  if (!dwg_dynapi_entity_value (_obj, "EVALUATION_GRAPH", "evalexpr", &evalexpr, NULL))
-    fail ("EVALUATION_GRAPH.evalexpr");
-  for (BITCODE_BL i = 0; i < num_evalexpr; i++)
-    {
-      ok ("EVALUATION_GRAPH.evalexpr[%d]: " FORMAT_REF, i, ARGS_REF (evalexpr[i]));
-    }
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge1, BLd);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge2, BLd);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge3, BLd);
+  CHK_ENTITY_TYPE (_obj, EVALUATION_GRAPH, node_edge4, BLd);
+  CHK_ENTITY_HV (_obj, EVALUATION_GRAPH, evalexpr, num_evalexpr);
 #endif
 }

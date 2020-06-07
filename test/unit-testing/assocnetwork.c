@@ -41,21 +41,14 @@ api_process (dwg_object *obj)
   //Dwg_ASSOCACTION_Deps *deps;
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_params, num_owned_params);
-  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_value_param_names,
-                   BL, num_owned_value_param_names);
-  CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_value_param_names,
-                 owned_value_param_names, num_owned_value_param_names);
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_value_param_names, BL);
+  CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_value_param_names, num_owned_value_param_names);
 
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, unknown_assoc, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, unknown_n1, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, unknown_n2, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_actions, BL);
   CHK_ENTITY_MAX (_obj, ASSOCNETWORK, num_actions, BL, 5000);
-  if (!dwg_dynapi_entity_value (_obj, "ASSOCNETWORK", "actions", &actions, NULL))
-    fail ("ASSOCNETWORK.actions");
-  for (BITCODE_BL i = 0; i < num_actions; i++)
-    {
-      ok ("ASSOCNETWORK.actions[%d]: " FORMAT_REF, i, ARGS_REF (actions[i]));
-    }
+  CHK_ENTITY_HV (_obj, ASSOCNETWORK, actions, num_actions);
 #endif
 }
