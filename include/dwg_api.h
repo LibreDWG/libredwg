@@ -640,6 +640,7 @@ typedef struct _dwg_object_DATATABLE                       dwg_obj_datatable;
 typedef struct _dwg_object_EVALUATION_GRAPH                dwg_obj_evaluation_graph;
 typedef struct _dwg_object_GEOMAPIMAGE                     dwg_obj_geomapimage;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG               dwg_obj_layoutprintconfig;
+typedef struct _dwg_object_FCFOBJECTCONTEXTDATA            dwg_obj_fcfobjectcontextdata;
 typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA         dwg_obj_leaderobjectcontextdata;
 typedef struct _dwg_object_CURVEPATH                       dwg_obj_curvepath;
 typedef struct _dwg_object_MOTIONPATH                      dwg_obj_motionpath;
@@ -875,6 +876,7 @@ DWG_GETALL_OBJECT_DECL (DATATABLE)
 DWG_GETALL_OBJECT_DECL (EVALUATION_GRAPH)
 DWG_GETALL_OBJECT_DECL (GEOMAPIMAGE)
 DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
+DWG_GETALL_OBJECT_DECL (FCFOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
@@ -1101,6 +1103,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKVISIBILITYPARAMETER)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (EVALUATION_GRAPH)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (FCFOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (GEOMAPIMAGE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUTPRINTCONFIG)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
@@ -1384,6 +1387,7 @@ dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 dwg_get_OBJECT_DECL (obj_evaluation_graph, EVALUATION_GRAPH);
 dwg_get_OBJECT_DECL (obj_geomapimage, GEOMAPIMAGE)
 dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
+dwg_get_OBJECT_DECL (obj_fcfobjectcontextdata, FCFOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_mtextattributeobjectcontextdata, MTEXTATRIBUTEOBJECTCONTEXTDATA);
