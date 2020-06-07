@@ -45,9 +45,11 @@ all-local: Doxyfile footer
 clean-local:
 	rm -rf $(builddir)/doc/refman
 	rm -rf $(builddir)/doc/manual
+	rm -f $(srcdir)/doc/LibreDWG.info
 else
 clean-local:
 	rm -rf $(builddir)/doc/manual
+	rm -f $(srcdir)/doc/LibreDWG.info
 endif
 
 DISTCLEANFILES = LibreDWG.ps LibreDWG.{aux,cp,cps,log,t2p,toc}
