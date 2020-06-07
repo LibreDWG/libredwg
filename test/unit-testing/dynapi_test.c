@@ -30786,6 +30786,60 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_CONTEXTDATAMANAGER (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_CONTEXTDATAMANAGER *restrict contextdatamanager = obj->tio.object->tio.CONTEXTDATAMANAGER;
+  failed = 0;
+  {
+    BITCODE_BL num_submgrs;
+    if (dwg_dynapi_entity_value (contextdatamanager, "CONTEXTDATAMANAGER", "num_submgrs", &num_submgrs, NULL)
+        && num_submgrs == contextdatamanager->num_submgrs)
+      pass ();
+    else
+      fail ("CONTEXTDATAMANAGER.num_submgrs [BL] %u != %u", contextdatamanager->num_submgrs, num_submgrs);
+    num_submgrs++;
+    if (dwg_dynapi_entity_set_value (contextdatamanager, "CONTEXTDATAMANAGER", "num_submgrs", &num_submgrs, 0)
+        && num_submgrs == contextdatamanager->num_submgrs)
+      pass ();
+    else
+      fail ("CONTEXTDATAMANAGER.num_submgrs [BL] set+1 %u != %u", contextdatamanager->num_submgrs, num_submgrs);
+    contextdatamanager->num_submgrs--;
+  }
+  {
+    BITCODE_H objectcontext;
+    if (dwg_dynapi_entity_value (contextdatamanager, "CONTEXTDATAMANAGER", "objectcontext", &objectcontext, NULL)
+        && !memcmp (&objectcontext, &contextdatamanager->objectcontext, sizeof (contextdatamanager->objectcontext)))
+        pass ();
+    else
+        fail ("CONTEXTDATAMANAGER.objectcontext [H]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (contextdatamanager, "CONTEXTDATAMANAGER", "parent", &parent, NULL)
+        && !memcmp (&parent, &contextdatamanager->parent, sizeof (contextdatamanager->parent)))
+        pass ();
+    else
+        fail ("CONTEXTDATAMANAGER.parent [struct _dwg_object_object*]");
+  }
+  {
+    Dwg_CONTEXTDATA_submgr* submgrs;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (contextdatamanager, "CONTEXTDATAMANAGER", "num_submgrs", &count, NULL)
+        && dwg_dynapi_entity_value (contextdatamanager, "CONTEXTDATAMANAGER", "submgrs", &submgrs, NULL)
+        && submgrs == contextdatamanager->submgrs)
+      pass ();
+    else
+      fail ("CONTEXTDATAMANAGER.submgrs [Dwg_CONTEXTDATA_submgr*] * %u num_submgrs", count);
+  }
+  if (failed && (is_class_unstable ("CONTEXTDATAMANAGER") || is_class_debugging ("CONTEXTDATAMANAGER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "CONTEXTDATAMANAGER", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_CSACDOCUMENTOPTIONS (const Dwg_Object *obj)
 {
   int error = 0;
@@ -39053,6 +39107,72 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("NAVISWORKSMODELDEF") || is_class_debugging ("NAVISWORKSMODELDEF")))
     {
       ok ("%s failed %d tests (TODO unstable)", "NAVISWORKSMODELDEF", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_OBJECTCONTEXTDATA *restrict objectcontextdata = obj->tio.object->tio.OBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == objectcontextdata->class_version)
+      pass ();
+    else
+      fail ("OBJECTCONTEXTDATA.class_version [BS] %hu != %hu", objectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == objectcontextdata->class_version)
+      pass ();
+    else
+      fail ("OBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", objectcontextdata->class_version, class_version);
+    objectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == objectcontextdata->in_dwg)
+      pass ();
+    else
+      fail ("OBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", objectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == objectcontextdata->in_dwg)
+      pass ();
+    else
+      fail ("OBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->in_dwg, in_dwg);
+    objectcontextdata->in_dwg--;
+  }
+  {
+    BITCODE_B is_default;
+    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "is_default", &is_default, NULL)
+        && is_default == objectcontextdata->is_default)
+      pass ();
+    else
+      fail ("OBJECTCONTEXTDATA.is_default [B] " FORMAT_B " != " FORMAT_B "", objectcontextdata->is_default, is_default);
+    is_default++;
+    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "is_default", &is_default, 0)
+        && is_default == objectcontextdata->is_default)
+      pass ();
+    else
+      fail ("OBJECTCONTEXTDATA.is_default [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->is_default, is_default);
+    objectcontextdata->is_default--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &objectcontextdata->parent, sizeof (objectcontextdata->parent)))
+        pass ();
+    else
+        fail ("OBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("OBJECTCONTEXTDATA") || is_class_debugging ("OBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "OBJECTCONTEXTDATA", failed);
       failed = 0;
     }
   return failed;
@@ -47492,6 +47612,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLOCK_HEADER(obj);
   else  if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
     error += test_CELLSTYLEMAP(obj);
+  else  if (obj->fixedtype == DWG_TYPE_CONTEXTDATAMANAGER)
+    error += test_CONTEXTDATAMANAGER(obj);
   else  if (obj->fixedtype == DWG_TYPE_CSACDOCUMENTOPTIONS)
     error += test_CSACDOCUMENTOPTIONS(obj);
   else  if (obj->fixedtype == DWG_TYPE_CURVEPATH)
@@ -47580,6 +47702,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXTOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF(obj);
+  else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
+    error += test_OBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR(obj);
   else  if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
@@ -47880,6 +48004,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLOCK_HEADER (obj);
   else  if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
     error += test_CELLSTYLEMAP (obj);
+  else  if (obj->fixedtype == DWG_TYPE_CONTEXTDATAMANAGER)
+    error += test_CONTEXTDATAMANAGER (obj);
   else  if (obj->fixedtype == DWG_TYPE_CSACDOCUMENTOPTIONS)
     error += test_CSACDOCUMENTOPTIONS (obj);
   else  if (obj->fixedtype == DWG_TYPE_CURVEPATH)
@@ -47968,6 +48094,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXTOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF (obj);
+  else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
+    error += test_OBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR (obj);
   else  if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
@@ -48952,6 +49080,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"CELLSTYLEMAP\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_CONTEXTDATAMANAGER);
+  size2 = dwg_dynapi_fields_size ("CONTEXTDATAMANAGER");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_CONTEXTDATAMANAGER): %d != "
+               "dwg_dynapi_fields_size (\"CONTEXTDATAMANAGER\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_CSACDOCUMENTOPTIONS);
   size2 = dwg_dynapi_fields_size ("CSACDOCUMENTOPTIONS");
   if (size1 != size2)
@@ -49302,6 +49438,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_NAVISWORKSMODELDEF): %d != "
                "dwg_dynapi_fields_size (\"NAVISWORKSMODELDEF\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_OBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("OBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_OBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"OBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_OBJECT_PTR);
@@ -49870,6 +50014,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_BLOCKVISIBILITYPARAMETER_state): %d != "
                "dwg_dynapi_fields_size (\"BLOCKVISIBILITYPARAMETER_state\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_CONTEXTDATA_dict);
+  size2 = dwg_dynapi_fields_size ("CONTEXTDATA_dict");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_CONTEXTDATA_dict): %d != "
+               "dwg_dynapi_fields_size (\"CONTEXTDATA_dict\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_CONTEXTDATA_submgr);
+  size2 = dwg_dynapi_fields_size ("CONTEXTDATA_submgr");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_CONTEXTDATA_submgr): %d != "
+               "dwg_dynapi_fields_size (\"CONTEXTDATA_submgr\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_CellContentGeometry);

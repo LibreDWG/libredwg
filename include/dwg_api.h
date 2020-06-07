@@ -615,6 +615,8 @@ typedef struct _dwg_object_ACSH_REVOLVE_CLASS		   dwg_obj_acsh_revolve_class;
 typedef struct _dwg_object_ACSH_SPHERE_CLASS               dwg_obj_acsh_sphere_class;
 typedef struct _dwg_object_ACSH_TORUS_CLASS		   dwg_obj_acsh_torus_class;
 typedef struct _dwg_object_ACSH_WEDGE_CLASS		   dwg_obj_acsh_wedge_class;
+typedef struct _dwg_object_CONTEXTDATAMANAGER              dwg_obj_contextdatamanager;
+typedef struct _dwg_object_OBJECTCONTEXTDATA               dwg_obj_objectcontextdata;
 typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA          dwg_obj_aldimobjectcontextdata;
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP          dwg_obj_assoc2dconstraintgroup;
 typedef struct _dwg_object_ASSOCACTION                     dwg_obj_assocaction;
@@ -851,6 +853,8 @@ DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_SPHERE_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_TORUS_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_WEDGE_CLASS)
+DWG_GETALL_OBJECT_DECL (CONTEXTDATAMANAGER)
+DWG_GETALL_OBJECT_DECL (OBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP)
 DWG_GETALL_OBJECT_DECL (ASSOCACTION)
@@ -1077,6 +1081,8 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SPHERE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_TORUS_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_WEDGE_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (CONTEXTDATAMANAGER)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION)
@@ -1360,6 +1366,8 @@ dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_REVOLVE_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_sphere_class, ACSH_SPHERE_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_wedge_class, ACSH_WEDGE_CLASS);
+dwg_get_OBJECT_DECL (obj_contextdatamanager, CONTEXTDATAMANAGER);
+dwg_get_OBJECT_DECL (obj_objectcontextdata, OBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP);
 dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);

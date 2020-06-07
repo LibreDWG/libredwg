@@ -418,6 +418,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
   DWG_TYPE_CSACDOCUMENTOPTIONS,
+  DWG_TYPE_CONTEXTDATAMANAGER,
   DWG_TYPE_CURVEPATH,
   DWG_TYPE_DATALINK,
   DWG_TYPE_DATATABLE,
@@ -461,6 +462,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NPOCOLLECTION,
   DWG_TYPE_NURBSURFACE,
   DWG_TYPE_OBJECT_PTR,
+  DWG_TYPE_OBJECTCONTEXTDATA,
   DWG_TYPE_PERSUBENTMGR,
   DWG_TYPE_PLANESURFACE,
   DWG_TYPE_PLOTSETTINGS,
@@ -5802,6 +5804,40 @@ typedef struct _dwg_object_BACKGROUND
 /**
  * R2010+
  */
+typedef struct _dwg_object_OBJECTCONTEXTDATA
+{
+  OBJECTCONTEXTDATA_fields;
+} Dwg_Object_OBJECTCONTEXTDATA;
+
+typedef struct _dwg_CONTEXTDATA_dict
+{
+  BITCODE_T text;
+  BITCODE_H itemhandle;
+} Dwg_CONTEXTDATA_dict;
+
+typedef struct _dwg_CONTEXTDATA_submgr
+{
+  struct _dwg_object_CONTEXTDATAMANAGER *parent;
+  BITCODE_H handle;
+  BITCODE_BL num_entries;
+  Dwg_CONTEXTDATA_dict *entries;
+} Dwg_CONTEXTDATA_submgr;
+
+/**
+ * R2010+
+ * A special DICTIONARY
+ */
+typedef struct _dwg_object_CONTEXTDATAMANAGER
+{
+  struct _dwg_object_object *parent;
+  BITCODE_H objectcontext;
+  BITCODE_BL num_submgrs;
+  Dwg_CONTEXTDATA_submgr *submgrs;
+} Dwg_Object_CONTEXTDATAMANAGER;
+
+/**
+ * R2010+
+ */
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
@@ -6537,6 +6573,7 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCKVISIBILITYGRIP *BLOCKVISIBILITYGRIP;
     Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *BLOCKGRIPLOCATIONCOMPONENT;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
+    Dwg_Object_CONTEXTDATAMANAGER *CONTEXTDATAMANAGER;
     Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_DATALINK *DATALINK;
     Dwg_Object_DATATABLE *DATATABLE;
@@ -6577,6 +6614,7 @@ typedef struct _dwg_object_object
     Dwg_Object_CURVEPATH *CURVEPATH;
     Dwg_Object_MOTIONPATH *MOTIONPATH;
     Dwg_Object_POINTPATH *POINTPATH;
+    Dwg_Object_OBJECTCONTEXTDATA *OBJECTCONTEXTDATA;
     Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
     Dwg_Object_OBJECT_PTR *OBJECT_PTR;
@@ -7717,6 +7755,8 @@ EXPORT int dwg_setup_ACSH_SPHERE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_WEDGE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
+EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
+EXPORT int dwg_setup_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_ALDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_BLKREFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);

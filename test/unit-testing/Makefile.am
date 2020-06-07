@@ -205,6 +205,7 @@ testobjects += \
 	blockgriplocationcomponent \
 	blockvisibilitygrip \
 	blockvisibilityparameter \
+	contextdatamanager \
 	csacdocumentoptions \
 	curvepath \
 	datalink \
@@ -225,6 +226,7 @@ testobjects += \
 	navisworksmodel \
 	navisworksmodeldef \
 	nurbsurface \
+	objectcontextdata \
 	persubentmgr \
 	planesurface \
 	pointpath \

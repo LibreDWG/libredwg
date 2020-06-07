@@ -4571,24 +4571,6 @@ DWG_OBJECT (PROXY_OBJECT)
 
 DWG_OBJECT_END
 
-#if 0
-DWG_OBJECT (OBJECTCONTEXTDATA)
-  SUBCLASS (AcDbObjectContextData)
-  SINCE (R_2010) {
-    IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE (class_version) = 3;
-    }
-    FIELD_BS (class_version, 70);
-    if (FIELD_VALUE (class_version) > 10)
-      return DWG_ERR_VALUEOUTOFBOUNDS;
-  }
-  FIELD_B (is_default, 0);
-  FIELD_B (in_dwg, 290);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-#endif
-
 // 20.4.99 Value, page 241. for FIELD and TABLE
 #define TABLE_value_fields(value)                                             \
   PRE (R_2007) { FIELD_VALUE (value.data_type) &= ~0x200; }                   \
@@ -7259,6 +7241,45 @@ DWG_OBJECT_END
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
+
+DWG_OBJECT (OBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbObjectContextData)
+  SINCE (R_2010) {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE (class_version) = 3;
+    }
+    FIELD_BS (class_version, 70);
+    if (FIELD_VALUE (class_version) > 10)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+  }
+  FIELD_B (is_default, 0);
+  FIELD_B (in_dwg, 290);
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (CONTEXTDATAMANAGER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbContextDataManager)
+  FIELD_HANDLE (objectcontext, 5, 0);
+  FIELD_BL (num_submgrs, 0);
+  REPEAT (num_submgrs, submgrs, Dwg_CONTEXTDATA_submgr)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (submgrs[rcount1],handle, 5, 0);
+      SUB_FIELD_BL (submgrs[rcount1],num_entries, 90);
+      REPEAT2 (submgrs[rcount1].num_entries, submgrs[rcount1].entries, Dwg_CONTEXTDATA_dict)
+      REPEAT_BLOCK
+          SUB_FIELD_HANDLE (submgrs[rcount1].entries[rcount2],itemhandle, 5, 350);
+          SUB_FIELD_T (submgrs[rcount1].entries[rcount2],text, 3);
+      END_REPEAT_BLOCK
+      END_REPEAT (submgrs[rcount1].entries)
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (submgrs)
+  END_REPEAT (submgrs)
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 // (varies) DEBUGGING
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
