@@ -176,9 +176,17 @@ testobjects += \
 	acmescope \
 	acmestatemgr \
 	acsh_box_class \
+	acsh_chamfer_class \
 	acsh_extrusion_class \
+	acsh_fillet_class \
 	acsh_history_class \
+	acsh_loft_class \
+	acsh_pyramid_class \
+	acsh_revolve_class \
+	acsh_sphere_class \
 	acsh_sweep_class \
+	acsh_torus_class \
+	acsh_wedge_class \
 	aldimobjectcontextdata \
 	assoc2dconstraintgroup \
 	assocaction \

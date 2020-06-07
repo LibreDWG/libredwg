@@ -10,24 +10,18 @@ api_process (dwg_object *obj)
   BITCODE_BL class_version; // 90
   BITCODE_BL ee_bl98; //33
   BITCODE_BL ee_bl99; //29
-  // AcDbShHistoryNode
-  BITCODE_BL shhn_bl90; //33
-  BITCODE_BL shhn_bl91; //29
-  BITCODE_BD* shhn_pts; //last 16x nums 40-55
-  BITCODE_CMC color; /*!< DXF 62 */
-  BITCODE_B  shhn_b92; /*!< DXF 92 */
-  BITCODE_BL shhn_bl347; /*!< DXF 347 */
-  // AcDbShPrimitive
+  Dwg_ACSH_HistoryNode history_node;
+  BITCODE_BD* trans;
   // AcDbShSweepBase
-  BITCODE_BL shsw_bl90;       /*!< DXF 90 */
-  BITCODE_BL shsw_bl91;       /*!< DXF 91 */
-  BITCODE_3BD basept;         /*!< DXF 10 */
-  BITCODE_BL shsw_bl92;       /*!< DXF 92 */
+  BITCODE_BL bl90;       /*!< DXF 90 */
+  BITCODE_BL bl91;       /*!< DXF 91 */
+  BITCODE_3BD direction;         /*!< DXF 10 */
+  BITCODE_BL bl92;       /*!< DXF 92 */
   BITCODE_BL shsw_text_size;  /*!< DXF 90 */
-  BITCODE_TF shsw_text;       /*!< DXF 310 */
+  BITCODE_T shsw_text;       /*!< DXF 310 */
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */
   BITCODE_BL shsw_text2_size; /*!< DXF 90 */
-  BITCODE_TF shsw_text2;      /*!< DXF 310 */
+  BITCODE_T shsw_text2;      /*!< DXF 310 */
   BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
   BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
   BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
@@ -53,33 +47,37 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, class_version, BL); // 90
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, ee_bl98, BL); //33
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, ee_bl99, BL); //29
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shhn_bl90, BL); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shhn_bl91, BL); //29
+
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl90, BL); //33
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl91, BL);
   // last 16x nums 40-55
-  if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shhn_pts", &shhn_pts, NULL))
-    fail ("ACSH_SWEEP_CLASS.shhn_pts");
+  if (!dwg_dynapi_entity_value (_obj, "ACSH_HistoryNode", "trans", &trans, NULL))
+    fail ("ACSH_HistoryNode.trans");
   for (int i = 0; i < 16; i++)
     {
-      ok ("ACSH_SWEEP_CLASS.shhn_pts[%d]: %f", i, shhn_pts[i]);
+      if (trans[i] == _obj->history_node.trans[i]) // catches nan
+        ok ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);
+      else
+        fail ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);
     }
-  CHK_ENTITY_CMC (_obj, ACSH_SWEEP_CLASS, color);
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shhn_b92, B);
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shhn_bl347, BL);
-  // AcDbShPrimitive
+  CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl92, BL);
+  CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, h347);
+
   // AcDbShSweepBase
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_bl90, BL);       /*!< DXF 90 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_bl91, BL);       /*!< DXF 91 */
-  CHK_ENTITY_3RD (_obj, ACSH_SWEEP_CLASS, basept);                  /*!< DXF 10 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_bl92, BL);       /*!< DXF 92 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, bl90, BL);       /*!< DXF 90 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, bl91, BL);       /*!< DXF 91 */
+  CHK_ENTITY_3RD (_obj, ACSH_SWEEP_CLASS, direction);                  /*!< DXF 10 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, bl92, BL);       /*!< DXF 92 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_text_size, BL); /*!< DXF 90 */
-  if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shsw_text", &shsw_text, NULL))
-    fail ("ACSH_SWEEP_CLASS.shsw_text");
-  //CHK_ENTITY_UTF8TEXT (_obj, ACSH_SWEEP_CLASS, shsw_text);       /*!< DXF 310 */
+  //if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shsw_text", &shsw_text, NULL))
+  //  fail ("ACSH_SWEEP_CLASS.shsw_text");
+  CHK_ENTITY_UTF8TEXT (_obj, ACSH_SWEEP_CLASS, shsw_text);       /*!< DXF 310 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_bl93, BL);       /*!< DXF 93 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_text2_size, BL); /*!< DXF 90 */
-  if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shsw_text2", &shsw_text2, NULL))
-    fail ("ACSH_SWEEP_CLASS.shsw_text2");
-  //CHK_ENTITY_UTF8TEXT (_obj, ACSH_SWEEP_CLASS, shsw_text2);      /*!< DXF 310 */
+  //if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shsw_text2", &shsw_text2, NULL))
+  //  fail ("ACSH_SWEEP_CLASS.shsw_text2");
+  CHK_ENTITY_UTF8TEXT (_obj, ACSH_SWEEP_CLASS, shsw_text2);      /*!< DXF 310 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, draft_angle, BD);    /*!< DXF 42 0.0 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, start_draft_dist, BD); /*!< DXF 43 0.0 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, end_draft_dist, BD); /*!< DXF 44 0.0 */

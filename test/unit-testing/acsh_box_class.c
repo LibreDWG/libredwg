@@ -10,20 +10,14 @@ api_process (dwg_object *obj)
   BITCODE_BL class_version; // 90
   BITCODE_BL ee_bl98; //33
   BITCODE_BL ee_bl99; //29
-  // AcDbShHistoryNode
-  BITCODE_BL shhn_bl90; //33
-  BITCODE_BL shhn_bl91; //29
-  BITCODE_BD* shhn_pts; //last 16x nums 40-55
-  BITCODE_CMC color;      /*!< DXF 62 */
-  BITCODE_B  shhn_b92;    /*!< DXF 92 */
-  BITCODE_BL shhn_bl347;  /*!< DXF 347 */
-  // AcDbShPrimitive
+  Dwg_ACSH_HistoryNode history_node;
+  BITCODE_BD* trans;
   // AcDbShBox
-  BITCODE_BL shb_bl90;       /*!< DXF 90 (33) */
-  BITCODE_BL shb_bl91;       /*!< DXF 91 (29) */
-  BITCODE_BD shb_bd40;       /*!< DXF 40 1300.0 (length?) */
-  BITCODE_BD shb_bd41;       /*!< DXF 41 20.0 (width?) */
-  BITCODE_BD shb_bd42;       /*!< DXF 42 420.0 (height?) */
+  BITCODE_BL bl90;       /*!< DXF 90 (33) */
+  BITCODE_BL bl91;       /*!< DXF 91 (29) */
+  BITCODE_BD length;     /*!< DXF 40 1300.0 (length?) */
+  BITCODE_BD width;      /*!< DXF 41 20.0 (width?) */
+  BITCODE_BD height;     /*!< DXF 42 420.0 (height?) */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -32,22 +26,26 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, class_version, BL); // 90
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, ee_bl98, BL); //33
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, ee_bl99, BL); //29
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl90, BL); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl91, BL); //29
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl90, BL); //33
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl91, BL);
   // last 16x nums 40-55
-  if (!dwg_dynapi_entity_value (_obj, "ACSH_BOX_CLASS", "shhn_pts", &shhn_pts, NULL))
-    fail ("ACSH_BOX_CLASS.shhn_pts");
+  if (!dwg_dynapi_entity_value (_obj, "ACSH_HistoryNode", "trans", &trans, NULL))
+    fail ("ACSH_HistoryNode.trans");
   for (int i = 0; i < 16; i++)
     {
-      ok ("ACSH_BOX_CLASS.shhn_pts[%d]: %f", i, shhn_pts[i]);
+      if (trans[i] == _obj->history_node.trans[i]) // catches nan
+        ok ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);
+      else
+        fail ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);
     }
-  CHK_ENTITY_CMC (_obj, ACSH_BOX_CLASS, color);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_b92, B);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shhn_bl347, BL);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bl90, BL);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bl91, BL);
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd40, BD);       /*!< DXF 40 1300.0 (length?) */
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd41, BD);       /*!< DXF 41 20.0 (width?) */
-  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, shb_bd42, BD);       /*!< DXF 42 420.0 (height?) */
+  CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl92, BL);
+  CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, h347);
+
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, bl90, BL);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, bl91, BL);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, length, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, width, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, height, BD);
 #endif
 }
