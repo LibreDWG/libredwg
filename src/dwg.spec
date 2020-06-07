@@ -3000,8 +3000,8 @@ DWG_OBJECT (VIEW)
 
   // subclass ViewTableRecord:
   SINCE (R_13) {
-    FIELD_B (pspace_flag, 0);
-    FIELD_VALUE (flag) |= FIELD_VALUE (pspace_flag);
+    FIELD_B (is_pspace, 0);
+    FIELD_VALUE (flag) |= FIELD_VALUE (is_pspace);
   }
   SINCE (R_2000) {
     FIELD_B (associated_ucs, 72);

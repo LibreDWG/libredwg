@@ -2187,9 +2187,11 @@ typedef struct _dwg_object_VIEW_CONTROL
 typedef struct _dwg_object_VIEW
 {
   COMMON_TABLE_FIELDS(RC);
+  // AbstractViewTableRecord
   BITCODE_BD VIEWSIZE;
   BITCODE_BD view_width;
   BITCODE_BD aspect_ratio;
+  // ViInfo
   BITCODE_2RD VIEWCTR;
   BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
@@ -2204,7 +2206,8 @@ typedef struct _dwg_object_VIEW
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
-  BITCODE_B pspace_flag;
+  // ViewTableRecord
+  BITCODE_B is_pspace;
   BITCODE_B associated_ucs;
   BITCODE_3BD ucsorg;
   BITCODE_3BD ucsxdir;
@@ -2266,9 +2269,11 @@ typedef struct _dwg_object_VPORT_CONTROL
 typedef struct _dwg_object_VPORT
 {
   COMMON_TABLE_FIELDS(RC);
+  // AbstractViewTableRecord
   BITCODE_BD VIEWSIZE;     // really the view height
   BITCODE_BD view_width;   // in DWG r13+, needed to calc. aspect_ratio
   BITCODE_BD aspect_ratio; // DXF 41 = view_width / VIEWSIZE
+  // ViInfo
   BITCODE_2RD VIEWCTR;
   BITCODE_3BD view_target;
   BITCODE_3BD VIEWDIR;
@@ -2283,6 +2288,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_BD brightness;
   BITCODE_BD contrast;
   BITCODE_CMC ambient_color;
+  // ViewportTableRecord
   BITCODE_2RD lower_left;
   BITCODE_2RD upper_right;
   BITCODE_B UCSFOLLOW;

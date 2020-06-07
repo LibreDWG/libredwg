@@ -7508,7 +7508,7 @@ static const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
     0,0,0, 142 },
   { "ambient_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_object_VIEW, ambient_color),
     1,0,0, 63 },
-  { "pspace_flag",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VIEW, pspace_flag),
+  { "is_pspace",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VIEW, is_pspace),
     0,0,0, 0 },
   { "associated_ucs",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VIEW, associated_ucs),
     0,0,0, 72 },

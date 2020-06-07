@@ -34,7 +34,7 @@ api_process (dwg_object *obj)
   BITCODE_H visualstyle;
   BITCODE_H sun;
 
-  BITCODE_B pspace_flag;
+  BITCODE_B is_pspace;
   BITCODE_B associated_ucs;
   BITCODE_3BD ucsorg;
   BITCODE_3BD ucsxdir;
@@ -78,7 +78,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (_obj, VIEW, visualstyle);
   CHK_ENTITY_H (_obj, VIEW, sun);
 
-  CHK_ENTITY_TYPE (_obj, VIEW, pspace_flag, B);
+  CHK_ENTITY_TYPE (_obj, VIEW, is_pspace, B);
   CHK_ENTITY_TYPE (_obj, VIEW, associated_ucs, B);
   CHK_ENTITY_3RD (_obj, VIEW, ucsorg);
   CHK_ENTITY_3RD (_obj, VIEW, ucsxdir);

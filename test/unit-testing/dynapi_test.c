@@ -44042,6 +44042,21 @@ static int test_VIEW (const Dwg_Object *obj)
     view->is_camera_plottable--;
   }
   {
+    BITCODE_B is_pspace;
+    if (dwg_dynapi_entity_value (view, "VIEW", "is_pspace", &is_pspace, NULL)
+        && is_pspace == view->is_pspace)
+      pass ();
+    else
+      fail ("VIEW.is_pspace [B] " FORMAT_B " != " FORMAT_B "", view->is_pspace, is_pspace);
+    is_pspace++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "is_pspace", &is_pspace, 0)
+        && is_pspace == view->is_pspace)
+      pass ();
+    else
+      fail ("VIEW.is_pspace [B] set+1 " FORMAT_B " != " FORMAT_B "", view->is_pspace, is_pspace);
+    view->is_pspace--;
+  }
+  {
     BITCODE_B is_xref_dep;
     if (dwg_dynapi_entity_value (view, "VIEW", "is_xref_dep", &is_xref_dep, NULL)
         && is_xref_dep == view->is_xref_dep)
@@ -44134,21 +44149,6 @@ static int test_VIEW (const Dwg_Object *obj)
         pass ();
     else
         fail ("VIEW.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_B pspace_flag;
-    if (dwg_dynapi_entity_value (view, "VIEW", "pspace_flag", &pspace_flag, NULL)
-        && pspace_flag == view->pspace_flag)
-      pass ();
-    else
-      fail ("VIEW.pspace_flag [B] " FORMAT_B " != " FORMAT_B "", view->pspace_flag, pspace_flag);
-    pspace_flag++;
-    if (dwg_dynapi_entity_set_value (view, "VIEW", "pspace_flag", &pspace_flag, 0)
-        && pspace_flag == view->pspace_flag)
-      pass ();
-    else
-      fail ("VIEW.pspace_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", view->pspace_flag, pspace_flag);
-    view->pspace_flag--;
   }
   {
     BITCODE_RC render_mode;

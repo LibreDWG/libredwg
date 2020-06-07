@@ -8653,7 +8653,7 @@ BD,	DXF 141
 BD,	DXF 142
 @item ambient_color
 CMC,	DXF 63
-@item pspace_flag
+@item is_pspace
 B
 @item associated_ucs
 B,	DXF 72
