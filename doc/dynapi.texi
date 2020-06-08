@@ -2663,7 +2663,7 @@ Dwg_LEADER_ArrowHead*
 BL
 @item blocklabels
 Dwg_LEADER_BlockLabel*
-@item neg_textdir
+@item is_neg_textdir
 B,	DXF 294
 @item ipe_alignment
 BS,	DXF 178
@@ -2677,7 +2677,7 @@ BS,	DXF 271
 BS,	DXF 273
 @item attach_bottom
 BS,	DXF 272
-@item text_extended
+@item is_text_extended
 B,	DXF 295
 
 @end vtable
@@ -10831,16 +10831,18 @@ BS,	DXF 272
 @indentedblock
 @vtable @code
 
-@item block_table
-H
+@item type
+RC
 @item normal
 3BD
 @item location
 3BD
-@item scale
-3BD
 @item rotation
 BD
+@item block_table
+H
+@item scale
+3BD
 @item color
 CMC
 @item transform
@@ -10855,18 +10857,20 @@ BD*
 @indentedblock
 @vtable @code
 
-@item default_text
-T
+@item type
+RC
 @item normal
 3BD
-@item style
-H
 @item location
-3BD
-@item direction
 3BD
 @item rotation
 BD
+@item default_text
+T
+@item style
+H
+@item direction
+3BD
 @item width
 BD
 @item height

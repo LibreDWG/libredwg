@@ -38,14 +38,14 @@ api_process (dwg_object *obj)
   Dwg_LEADER_ArrowHead *arrowheads;
   BITCODE_BL num_blocklabels;
   Dwg_LEADER_BlockLabel *blocklabels;
-  BITCODE_B neg_textdir;
+  BITCODE_B is_neg_textdir;
   BITCODE_BS ipe_alignment;
   BITCODE_BS justification;
   BITCODE_BD scale_factor;
   BITCODE_BS attach_dir;
   BITCODE_BS attach_top;
   BITCODE_BS attach_bottom;
-  BITCODE_B text_extended;
+  BITCODE_B is_text_extended;
   BITCODE_3RD *points;
   BITCODE_BD *transform;
 
@@ -159,15 +159,6 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, num_col_sizes, BL);
       CHK_SUBCLASS_VECTOR_TYPE (ctx.content.txt, MLEADER_Content_MText, col_sizes,
                                 ctx.content.txt.num_col_sizes, BD);
-      /*
-      for (i = 0; i < ctx.content.txt.num_col_sizes; i++)
-        {
-          if (ctx.content.txt.col_sizes[i] == ctx.content.txt.col_sizes[i]) // catch nan
-            ok ("MULTILEADER.ctx.content.txt.col_sizes[%d]: %f", i, ctx.content.txt.col_sizes[i]);
-          else
-            fail ("MULTILEADER.ctx.content.txt.col_sizes[%d]: %f", i, ctx.content.txt.col_sizes[i]);
-        }
-      */
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, word_break, B);
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, unknown, B);
     }
@@ -184,20 +175,6 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_MAX (ctx.content.blk, MLEADER_Content_Block, rotation, BD, MAX_ANGLE);
       CHK_SUBCLASS_CMC (ctx.content.blk, MLEADER_Content_Block, color);
       CHK_SUBCLASS_VECTOR_TYPE (ctx.content.blk, MLEADER_Content_Block, transform, 16, BD);
-      /*
-      if (!dwg_dynapi_subclass_value (&ctx.content.blk, "MLEADER_Content_Block", "transform", &transform, NULL))
-        fail ("MULTILEADER.content.txt.transform");
-      else
-        ok ("MULTILEADER.ctx.content.txt.transform:");
-      for (i = 0; i < 16; i++)
-        {
-          if (ctx.content.blk.transform[i] == transform[i])
-            ok (" %f", transform[i]);
-          else
-            fail (" %f", transform[i]);
-        }
-      printf ("\n");
-      */
     }
   else
     if (!ctx.has_content_txt)
@@ -279,7 +256,7 @@ api_process (dwg_object *obj)
         if (blocklabels)
           fail ("MULTILEADER.blocklabels but 0 num_blocklabels");
 
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, neg_textdir, B);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, is_neg_textdir, B);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, ipe_alignment, BS);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, justification, BS);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, scale_factor, BD);
@@ -296,6 +273,6 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2013)
     {
-      CHK_ENTITY_TYPE (mleader, MULTILEADER, text_extended, B);
+      CHK_ENTITY_TYPE (mleader, MULTILEADER, is_text_extended, B);
     }
 }

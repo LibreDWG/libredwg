@@ -15327,6 +15327,36 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     multileader->is_annotative--;
   }
   {
+    BITCODE_B is_neg_textdir;
+    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "is_neg_textdir", &is_neg_textdir, NULL)
+        && is_neg_textdir == multileader->is_neg_textdir)
+      pass ();
+    else
+      fail ("MULTILEADER.is_neg_textdir [B] " FORMAT_B " != " FORMAT_B "", multileader->is_neg_textdir, is_neg_textdir);
+    is_neg_textdir++;
+    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "is_neg_textdir", &is_neg_textdir, 0)
+        && is_neg_textdir == multileader->is_neg_textdir)
+      pass ();
+    else
+      fail ("MULTILEADER.is_neg_textdir [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->is_neg_textdir, is_neg_textdir);
+    multileader->is_neg_textdir--;
+  }
+  {
+    BITCODE_B is_text_extended;
+    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "is_text_extended", &is_text_extended, NULL)
+        && is_text_extended == multileader->is_text_extended)
+      pass ();
+    else
+      fail ("MULTILEADER.is_text_extended [B] " FORMAT_B " != " FORMAT_B "", multileader->is_text_extended, is_text_extended);
+    is_text_extended++;
+    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "is_text_extended", &is_text_extended, 0)
+        && is_text_extended == multileader->is_text_extended)
+      pass ();
+    else
+      fail ("MULTILEADER.is_text_extended [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->is_text_extended, is_text_extended);
+    multileader->is_text_extended--;
+  }
+  {
     BITCODE_BS justification;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "justification", &justification, NULL)
         && justification == multileader->justification)
@@ -15385,21 +15415,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         pass ();
     else
         fail ("MULTILEADER.mleaderstyle [H]");
-  }
-  {
-    BITCODE_B neg_textdir;
-    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "neg_textdir", &neg_textdir, NULL)
-        && neg_textdir == multileader->neg_textdir)
-      pass ();
-    else
-      fail ("MULTILEADER.neg_textdir [B] " FORMAT_B " != " FORMAT_B "", multileader->neg_textdir, neg_textdir);
-    neg_textdir++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "neg_textdir", &neg_textdir, 0)
-        && neg_textdir == multileader->neg_textdir)
-      pass ();
-    else
-      fail ("MULTILEADER.neg_textdir [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->neg_textdir, neg_textdir);
-    multileader->neg_textdir--;
   }
   {
     BITCODE_BL num_arrowheads;
@@ -15521,21 +15536,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
         pass ();
     else
         fail ("MULTILEADER.text_color [CMC]");
-  }
-  {
-    BITCODE_B text_extended;
-    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "text_extended", &text_extended, NULL)
-        && text_extended == multileader->text_extended)
-      pass ();
-    else
-      fail ("MULTILEADER.text_extended [B] " FORMAT_B " != " FORMAT_B "", multileader->text_extended, text_extended);
-    text_extended++;
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "text_extended", &text_extended, 0)
-        && text_extended == multileader->text_extended)
-      pass ();
-    else
-      fail ("MULTILEADER.text_extended [B] set+1 " FORMAT_B " != " FORMAT_B "", multileader->text_extended, text_extended);
-    multileader->text_extended--;
   }
   {
     BITCODE_BS text_left;

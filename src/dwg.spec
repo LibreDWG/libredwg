@@ -5948,6 +5948,7 @@ DWG_ENTITY (MULTILEADER)
   FIELD_B (ctx.has_content_txt, 290);
   if (FIELD_VALUE (ctx.has_content_txt))
     {
+      DECODER { FIELD_VALUE (ctx.content.txt.type) = 2; }
       FIELD_T (ctx.content.txt.default_text, 304);
       FIELD_3BD (ctx.content.txt.normal, 11);
       FIELD_HANDLE (ctx.content.txt.style, 5, 340);
@@ -5982,6 +5983,7 @@ DWG_ENTITY (MULTILEADER)
       FIELD_B (ctx.has_content_blk, 296);
       if (FIELD_VALUE (ctx.has_content_blk))
         {
+          DECODER { FIELD_VALUE (ctx.content.txt.type) = 1; }
           FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
           FIELD_3BD (ctx.content.blk.normal, 14);
           FIELD_3BD (ctx.content.blk.location, 15);
@@ -6031,7 +6033,7 @@ DWG_ENTITY (MULTILEADER)
   FIELD_BS (text_alignment, 175); // unknown at ODA
   FIELD_CMC (text_color, 92);
   FIELD_B (has_text_frame, 292);
-  FIELD_HANDLE (block_style, 5, 344);
+  FIELD_HANDLE0 (block_style, 5, 344);
   FIELD_CMC (block_color, 93);
   FIELD_3BD (block_scale, 10);
   FIELD_BD (block_rotation, 43);
@@ -6061,7 +6063,7 @@ DWG_ENTITY (MULTILEADER)
       END_REPEAT_BLOCK
       SET_PARENT_OBJ (blocklabels)
       END_REPEAT (blocklabels)
-      FIELD_B (neg_textdir, 294);
+      FIELD_B (is_neg_textdir, 294);
       FIELD_BS (ipe_alignment, 178);
       FIELD_BS (justification, 179);
       FIELD_BD (scale_factor, 45);
@@ -6074,7 +6076,7 @@ DWG_ENTITY (MULTILEADER)
       FIELD_BS (attach_bottom, 272);
     }
   SINCE (R_2013)
-    FIELD_B (text_extended, 295);
+    FIELD_B (is_text_extended, 295);
 
   COMMON_ENTITY_HANDLE_DATA;
 
