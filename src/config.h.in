@@ -97,6 +97,9 @@
 /* Define to 1 if you have the `memchr' function. */
 #undef HAVE_MEMCHR
 
+/* Define to 1 if you have the `memmem' function. */
+#undef HAVE_MEMMEM
+
 /* Define to 1 if you have the `memmove' function. */
 #undef HAVE_MEMMOVE
 

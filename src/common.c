@@ -164,6 +164,38 @@ strrplc (const char *s, const char *from, const char *to)
     return NULL;
 }
 
+#if !defined(HAVE_MEMMEM) || defined(COMMON_TEST_C)
+// naive from scratch implementation, not from glibc.
+void *my_memmem (void *h0, size_t k, void *n0, size_t l)
+{
+  const unsigned char *h = h0, *n = n0;
+  unsigned char *plast;
+
+  if (!l)
+    return (void *)h; // empty needle
+  if (k < l)
+    return NULL;      // needle longer than haystack
+  h = memchr (h0, *n, k);
+  if (!h || l == 1)
+    return (void *)h; // first needle char not found
+  k -= h - (const unsigned char *)h0;
+  if (k < l)
+    return NULL;      // no room for needle
+
+  plast = (unsigned char*)h + (k - l);
+  do // naive 2 loops: O(n^2)
+    {
+      size_t i = 0;
+      while (h[i] == n[i])
+        {
+          if (++i == l)
+            return (void *)h;
+        }
+    }
+  while (++h <= plast);
+  return NULL;
+}
+#endif
 
 enum RES_BUF_VALUE_TYPE
 get_base_value_type (short gc)

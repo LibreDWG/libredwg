@@ -38,6 +38,7 @@ dynapi_test_LDADD = $(LDADD) \
 dxf_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/dynapi.lo
+common_test_LDADD =
 
 testobjects = \
 	3dface \
@@ -247,6 +248,7 @@ endif
 #     and include this directory's .gitignore in the commit.
 check_PROGRAMS = \
 	bits_test \
+	common_test \
 	decode_test \
 	hash_test \
 	dynapi_test \

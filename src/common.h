@@ -283,4 +283,10 @@ char *strrplc (const char *s, const char *from, const char *to);
 #define rad2deg(ang) (ang) * 90.0 / M_PI_2
 #define deg2rad(ang) (ang) * M_PI_2 / 90.0
 
+#if !defined(HAVE_MEMMEM) || defined(COMMON_TEST_C)
+// only in _GNU_SOURCE
+void *my_memmem (void *h0, size_t k, void *n0, size_t l);
+#define memmem my_memmem
+#endif
+
 #endif
