@@ -47,6 +47,7 @@ api_process (dwg_object *obj)
   BITCODE_BS attach_bottom;
   BITCODE_B text_extended;
   BITCODE_3RD *points;
+  BITCODE_BD *transform;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_mleader *mleader = dwg_object_to_MULTILEADER (obj);
@@ -81,18 +82,10 @@ api_process (dwg_object *obj)
             CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, num_lines, BL);
             for (BITCODE_BL j = 0; j < ctx.leaders[i].num_lines; j++)
               {
+                BITCODE_BL num_points = ctx.leaders[i].lines[j].num_points;
                 CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, num_points, BL);
-                if (!dwg_dynapi_subclass_value (&ctx.leaders[i].lines[j], "LEADER_Line", "points",
-                                                &points, NULL))
-                  fail ("LEADER_Line.points");
-                else
-                  for (BITCODE_BL k = 0; k < ctx.leaders[i].lines[j].num_points; k++)
-                    {
-                      ok ("LEADER_Line.points[%d]: (%f, %f, %f)", k,
-                          points[k].x, points[k].y, points[k].z);
-                    }
-                CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line,
-                                   num_breaks, BL);
+                CHK_SUBCLASS_3DPOINTS (ctx.leaders[i].lines[j], LEADER_Line, points, num_points);
+                CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, num_breaks, BL);
                 for (BITCODE_BL k = 0; k < ctx.leaders[i].lines[j].num_breaks; k++)
                   {
                     CHK_SUBCLASS_3RD (ctx.leaders[i].lines[j].breaks[k], LEADER_Break, start);
@@ -103,25 +96,20 @@ api_process (dwg_object *obj)
                   {
                     type = ctx.leaders[i].lines[j].type;
                     CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, type, BS);
-                    if (type > 2)
-                      fail ("Invalid LEADER_Line.type " FORMAT_BS " > 2", type);
+                    CHK_SUBCLASS_MAX (ctx.leaders[i].lines[j], LEADER_Line, type, BS, 3);
                     CHK_SUBCLASS_CMC (ctx.leaders[i].lines[j], LEADER_Line, color);
                     CHK_SUBCLASS_H (ctx.leaders[i].lines[j], LEADER_Line, ltype);
                     CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, linewt, BLd);
                     CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, arrow_size, BD);
                     CHK_SUBCLASS_H (ctx.leaders[i].lines[j], LEADER_Line, arrow_handle);
                     CHK_SUBCLASS_TYPE (ctx.leaders[i].lines[j], LEADER_Line, flags, BL);
-                    flags = ctx.leaders[i].lines[j].flags;
-                    if (flags > 63)
-                      fail ("Invalid LEADER_Line.flags " FORMAT_BLx " > 63", flags);
+                    CHK_SUBCLASS_MAX (ctx.leaders[i].lines[j], LEADER_Line, flags, BL, 63);
                   }
               }
             if (dwg_version >= R_2010)
               {
                 CHK_SUBCLASS_TYPE (ctx.leaders[i], LEADER_Node, attach_dir, BS);
-                attach_dir = ctx.leaders[i].attach_dir;
-                if (attach_dir > 1)
-                  fail ("Invalid LEADER_Node.attach_dir " FORMAT_BS " > 1", attach_dir);
+                CHK_SUBCLASS_MAX (ctx.leaders[i], LEADER_Node, attach_dir, BS, 1);
               }
           }
         }
@@ -169,10 +157,17 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, col_gutter, BD);
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, is_col_flow_reversed, B);
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, num_col_sizes, BL);
+      CHK_SUBCLASS_VECTOR_TYPE (ctx.content.txt, MLEADER_Content_MText, col_sizes,
+                                ctx.content.txt.num_col_sizes, BD);
+      /*
       for (i = 0; i < ctx.content.txt.num_col_sizes; i++)
         {
-          ok ("MULTILEADER.ctx.content.txt.col_sizes[%d]: %f", i, ctx.content.txt.col_sizes[i]);
+          if (ctx.content.txt.col_sizes[i] == ctx.content.txt.col_sizes[i]) // catch nan
+            ok ("MULTILEADER.ctx.content.txt.col_sizes[%d]: %f", i, ctx.content.txt.col_sizes[i]);
+          else
+            fail ("MULTILEADER.ctx.content.txt.col_sizes[%d]: %f", i, ctx.content.txt.col_sizes[i]);
         }
+      */
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, word_break, B);
       CHK_SUBCLASS_TYPE (ctx.content.txt, MLEADER_Content_MText, unknown, B);
     }
@@ -188,12 +183,21 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ctx.content.blk, MLEADER_Content_Block, rotation, BD);
       CHK_SUBCLASS_MAX (ctx.content.blk, MLEADER_Content_Block, rotation, BD, MAX_ANGLE);
       CHK_SUBCLASS_CMC (ctx.content.blk, MLEADER_Content_Block, color);
-      ok ("MULTILEADER.ctx.content.txt.transform:");
+      CHK_SUBCLASS_VECTOR_TYPE (ctx.content.blk, MLEADER_Content_Block, transform, 16, BD);
+      /*
+      if (!dwg_dynapi_subclass_value (&ctx.content.blk, "MLEADER_Content_Block", "transform", &transform, NULL))
+        fail ("MULTILEADER.content.txt.transform");
+      else
+        ok ("MULTILEADER.ctx.content.txt.transform:");
       for (i = 0; i < 16; i++)
         {
-          printf (" %f", ctx.content.blk.transform[i]);
+          if (ctx.content.blk.transform[i] == transform[i])
+            ok (" %f", transform[i]);
+          else
+            fail (" %f", transform[i]);
         }
       printf ("\n");
+      */
     }
   else
     if (!ctx.has_content_txt)
@@ -202,6 +206,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (mleader, MULTILEADER, mleaderstyle);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, flags, BL);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, type, BS);
+  //CHK_ENTITY_MAX (mleader, MULTILEADER, type, BS, 3);
   CHK_ENTITY_CMC (mleader, MULTILEADER, color);
   CHK_ENTITY_H (mleader, MULTILEADER, ltype);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, linewt, BLd);
@@ -283,9 +288,11 @@ api_process (dwg_object *obj)
     {
       attach_dir = mleader->attach_dir;
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_dir, BS);
-      CHK_ENTITY_MAX (mleader, MULTILEADER, attach_dir, BS, 1);
+      CHK_ENTITY_MAX (mleader, MULTILEADER, attach_dir, BS, 2);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_top, BS);
+      //CHK_ENTITY_MAX (mleader, MULTILEADER, attach_top, BS, 160);
       CHK_ENTITY_TYPE (mleader, MULTILEADER, attach_bottom, BS);
+      //CHK_ENTITY_MAX (mleader, MULTILEADER, attach_bottom, BS, 4786);
     }
   if (dwg_version >= R_2013)
     {

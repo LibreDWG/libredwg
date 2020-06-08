@@ -983,7 +983,7 @@ api_common_entity (dwg_object *obj)
     {                                                                         \
       for (i = 0; i < (num); i++)                                             \
         {                                                                     \
-          if (memcmp (&ent->field[i], &field[i], sizeof (field[i])))          \
+          if (ent->field[i] != field[i])                                      \
             fail (#name "." #field "[%d]: " FORMAT_##type, i, field[i]);      \
           else                                                                \
             ok (#name "." #field "[%d]: " FORMAT_##type, i, field[i]);        \
@@ -1206,6 +1206,39 @@ api_common_entity (dwg_object *obj)
                 value.z);                                                     \
       }                                                                       \
   }
+
+#define CHK_SUBCLASS_3DPOINTS(ptr, name, field, num)                          \
+  {                                                                           \
+    BITCODE_3RD *value = NULL;                                                \
+    bool _ok;                                                                 \
+    if (dwg_dynapi_entity_fields (#name))                                     \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+    else                                                                      \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+    if (!_ok)                                                                 \
+      fail (#name "." #field);                                                \
+    else if (!value)                                                          \
+      pass ();                                                                \
+    else                                                                      \
+      {                                                                       \
+        for (unsigned _i = 0; _i < (num); _i++)                               \
+          {                                                                   \
+            if (value[_i].x == ptr.field[_i].x                                \
+                && value[_i].y == ptr.field[_i].y                             \
+                && value[_i].z == ptr.field[_i].z)                            \
+              {                                                               \
+                if (g_counter > g_countmax)                                   \
+                  pass ();                                                    \
+                else                                                          \
+                  ok (#name "." #field "[%d]:\t(%f, %f, %f)", i, value[_i].x, \
+                      value[_i].y, value[_i].z);                              \
+              }                                                               \
+            else                                                              \
+              fail (#name "." #field "[%d]:\t(%f, %f, %f)", i, value[_i].x,   \
+                    value[_i].y, value[_i].z);                                \
+          }                                                                   \
+      }                                                                       \
+  }
 #define CHK_SUBCLASS_2RD(ptr, name, field)                                    \
   {                                                                           \
     BITCODE_2RD value;                                                        \
@@ -1293,6 +1326,36 @@ api_common_entity (dwg_object *obj)
             }                                                                 \
         }                                                                     \
     }
+#define CHK_SUBCLASS_VECTOR_TYPE(ptr, name, field, num, type)                 \
+  {                                                                           \
+    BITCODE_##type *value = NULL;                                             \
+    bool _ok;                                                                 \
+    if (dwg_dynapi_entity_fields (#name))                                     \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+    else                                                                      \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+    if (!_ok)                                                                 \
+      fail (#name "." #field);                                                \
+    else if (!value)                                                          \
+      pass ();                                                                \
+    else                                                                      \
+      {                                                                       \
+        for (unsigned _i = 0; _i < (num); _i++)                               \
+          {                                                                   \
+            if (value[_i] == ptr.field[_i])                                   \
+              {                                                               \
+                if (g_counter > g_countmax)                                   \
+                  pass ();                                                    \
+                else                                                          \
+                  ok (#name "." #field "[%d]:\t " FORMAT_##type, i,           \
+                      value[_i]);                                             \
+              }                                                               \
+            else                                                              \
+              fail (#name "." #field "[%d]:\t " FORMAT_##type, i,             \
+                    value[_i]);                                               \
+          }                                                                   \
+      }                                                                       \
+  }
 #define CHK_SUBCLASS_UTF8TEXT(ptr, name, field)                               \
   {                                                                           \
     BITCODE_TV value;                                                         \

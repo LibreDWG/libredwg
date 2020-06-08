@@ -2791,7 +2791,7 @@ typedef struct _dwg_LEADER_Line // as documented by DXF
 
   /*!< r2010+: */
   BITCODE_BS type; // 0 = invisible leader, 1 = straight leader, 2 = spline leader
-  BITCODE_CMC color;
+  BITCODE_CMC color; // of the line
   BITCODE_H ltype; // 5 340
   BITCODE_BLd linewt;
   BITCODE_BD arrow_size;
