@@ -1808,26 +1808,37 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
            R?? (2018) release     223.0.1.1930
         */
         {
-          FIELD_VALUE (acis_data) = NULL;
+          FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
+          FIELD_VALUE (encr_sat_data) = NULL;
           //TODO string in strhdl, even <r2007
-          FIELD_VALUE (num_blocks) = 2;
-          LOG_TRACE ("num_blocks: 2\n");
-          FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (3, sizeof (BITCODE_BL));
-          FIELD_VALUE (encr_sat_data) = (char**)calloc (3, sizeof (char*));
-          FIELD_TFv (encr_sat_data[0], 15, 1); // "ACIS BinaryFile"
-          FIELD_VALUE (block_size[0]) = 15;
-          FIELD_RL (block_size[1], 0);
-          //TODO AcDs blob
-          if (FIELD_VALUE (block_size[1]) > obj->size)
+          // either has_ds_data (r2013+) or the blob is here
+          if (!obj->tio.entity->has_ds_data)
             {
-              LOG_ERROR ("Invalid ACIS 2 SAB block_size[1] %d. Max. %d",
-                         _obj->block_size[1], obj->size);
-              _obj->block_size[1] = 0;
-              return DWG_ERR_VALUEOUTOFBOUNDS;
+              char *p;
+              const char *const end = "\016\003End\016\002of\016\004ACIS\r\004data";
+              long pos = dat->byte;
+              BITCODE_BL size = dat->size - dat->byte - 1;
+              _obj->block_size[0] = size;
+              FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
+              // Binary SAB, unencrypted, readable ascii strings until "End of ACIS data"
+              FIELD_TFF (acis_data, size, 1); // SAB "ACIS BinaryFile"
+              LOG_TRACE ("Unknown ACIS 2 SAB block_size[0] " FORMAT_BL " starting at %ld\n",
+                         size, pos);
+              if ((p = (char*)memmem (_obj->acis_data, size, end, strlen (end))))
+                {
+                  size = p - (char*)_obj->acis_data;
+                  size += strlen (end);
+                  dat->byte = pos + size;
+                  _obj->block_size[0] = size;
+                  LOG_TRACE ("Found %s marker: block_size[0]: " FORMAT_BL ", new pos: %lu\n",
+                             end, size, dat->byte);
+                }
+              else
+                LOG_TRACE ("%s marker not found\n", end);
             }
-          // Binary SAB, unencrypted
-          FIELD_TFv (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
-          total_size = FIELD_VALUE (block_size[1]);
+          else
+            LOG_WARN ("SAB read from AcDs blob not yet implemented");
+          total_size = FIELD_VALUE (block_size[0]);
         }
     }
   return error;

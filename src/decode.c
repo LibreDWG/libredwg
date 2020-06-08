@@ -21,6 +21,7 @@
  */
 
 #include "config.h"
+#define _GNU_SOURCE
 #ifdef __STDC_ALLOC_LIB__
 #  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
 #else
@@ -901,7 +902,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    *         2: object map
    *         3: (R13c3 and later): 2nd header (special table, no sentinels)
    *         4: optional: MEASUREMENT
-   *         5: optional: AuxHeader (no sentinels)
+   *         5: optional: AuxHeader (no sentinels, since r13c3
    */
   for (j = 0; j < dwg->header.num_sections; j++)
     {
@@ -941,7 +942,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    * R2000+, mostly redundant file header information
    */
 
-  if (dwg->header.num_sections == 6 && dwg->header.version >= R_2000)
+  if (dwg->header.num_sections == 6 && dwg->header.version >= R_13c3)
     {
       int i;
       Dwg_AuxHeader *_obj = &dwg->auxheader;

@@ -13,6 +13,7 @@
 #ifndef SPEC_H
 #  define SPEC_H
 
+#  define _GNU_SOURCE
 #  include <string.h>
 #  include "decode.h"
 

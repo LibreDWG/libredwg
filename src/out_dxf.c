@@ -1289,7 +1289,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);
-      FIELD_BS (version, 70);
+      FIELD_BS (version, 70); // TODO always write as 1
       if (FIELD_VALUE (version) == 1)
         {
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
