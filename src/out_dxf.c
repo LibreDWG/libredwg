@@ -1281,93 +1281,185 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 int
 convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
 {
-  int i = 0, num_blocks = 2, size = 0, left;
+  Bit_Chain dest = { NULL, 0, 0, 0 };
+  Bit_Chain src = { NULL, 0, 0, 0 };
+  int i = 0, num_blocks = 2, size = 0;
+  BITCODE_RC c;
   char *p = (char*)&_obj->acis_data[15];
-  char *end, *dest, *enddest;
-  uint32_t magic, version;
+  //char *end, *dest, *enddest;
+  BITCODE_RL version, num_records, num_entities, has_history;
   const char *const enddata = "\016\003End\016\002of\016\004ACIS\r\004data";
+  int first = 1;
+  int forward = 0;
 
   if (_obj->num_blocks)
     num_blocks = _obj->num_blocks;
   if (!_obj->block_size)
     _obj->block_size = calloc (num_blocks, sizeof (BITCODE_BL));
   if (!_obj->encr_sat_data)
-    {
-      _obj->encr_sat_data = calloc (num_blocks, sizeof (char *));
-      size = 80;
-      for (int j=0; j<num_blocks; j++)
-        _obj->encr_sat_data[j] = calloc (80, 1);
-    }
-  else
-    size = strlen (_obj->encr_sat_data[0]);
+    _obj->encr_sat_data = calloc (num_blocks, sizeof (char *));
 
   _obj->_dxf_sab_converted = 1;
   if (!_obj->sab_size)
     _obj->sab_size = _obj->block_size[0];
-  end = &p[_obj->sab_size];
+  //end = &p[_obj->sab_size];
 
   if (!memBEGINc ((char*)_obj->acis_data, "ACIS BinaryFile"))
     {
       LOG_ERROR ("acis_data is not a SAB 2 'ACIS BinaryFile'");
       return 1;
     }
-  dest = &_obj->encr_sat_data[0][0];
-  enddest = &dest[size];
+  //dest = &_obj->encr_sat_data[0][0];
+  //enddest = &dest[size];
+  bit_chain_alloc (&dest);
+  src.chain = &_obj->acis_data[15];
+  src.size = _obj->sab_size - 15;
 
-#define NEED_RESIZE(len)                                                      \
-  {                                                                           \
-    int pos =  p - &_obj->encr_sat_data[i][0];                                \
-    size += len + 1;                                                          \
-    _obj->encr_sat_data[i] = realloc (_obj->encr_sat_data[i], size);          \
-    dest = &_obj->encr_sat_data[i][pos];                                      \
-    enddest = &dest[size];                                                    \
-  }
+#define SAB_RL(key) \
+  key = bit_read_RL (&src); \
+  LOG_TRACE (#key ": " FORMAT_RL "\n", key)
+#define SAB_RD(key) \
+  key = bit_read_RD (&src); \
+  LOG_TRACE (#key ": " FORMAT_RD "\n", key)
+#define SAB_T(key) \
+  key = bit_read_RC (&src); \
+  LOG_TRACE (#key ": " FORMAT_RD "\n", key)
 
   // first get two words, magic 0x40 0x51 and version 2
   // create the two vectors encr_sat_data[] and block_size[] on the fly from the SAB
-  magic = *(uint32_t*)p;
-  p += 8;
-  version = *(uint32_t*)p;
-  p += 8;
-  while (p < end)
+  // http://paulbourke.net/dataformats/sat/sat.pdf
+  /* ACIS BinaryFile [64 81 6x0[ [2 7x0] 
+     "\a\020Autodesk AutoCAD\a\024ASM 223.0.1.1930 OSX\a\030Mon Jun 18 11:09:32 2018\006"
+     6x0 16 63 "\006\215\355\265\240\367ư>" "\006\273\275\327\331\337|\333= "\r\tasmheader" \f\377\377\377\377\004\377\377\377\377\a\f223.0.1.1930\021 \r\004body \f\377\377\377\377\004\377\377\377\377\f\377\377\377\377\f\002"
+   */
+  SAB_RL (version);
+  SAB_RL (num_records); //if 0 until end marker
+  SAB_RL (num_entities);
+  SAB_RL (has_history);
+  //SAB_T (acis_ver);
+
+  c = bit_read_RC (&src);
+  while (src.byte < src.size)
     {
-      char c = *p++;
-      if (enddest - dest < 2)
-        NEED_RESIZE (0)
+      LOG_HANDLE ("[%d:] ", c)
       switch (c)
         {
           // check size, realloc encr_sat_data[i], set dest
-        case 0x07: // text in-between
-        case 0xe:  // text at very end "End of ACIS"
+        case 17:   //  # end of record
+          first = 1;
+          forward = 0;
+          if (dest.byte + 1 > dest.size)
+            bit_chain_alloc (&dest);
+          dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#");
+          LOG_TRACE ("#\n")
+          break;
+        case 13:   // start new record
+          first = 1;
+          // save away dest line
+          if (i + 1 >= num_blocks)
+            {
+              _obj->encr_sat_data = realloc (_obj->encr_sat_data, (i + 2) * sizeof (char*));
+              _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+              num_blocks = _obj->num_blocks = i + 1;
+            }
+          _obj->encr_sat_data[i] = calloc (dest.byte, 1); // fresh, the dest buf is too large
+          memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
+          _obj->block_size[i] = dest.byte;
+          bit_set_position (&dest, 0);
+          i++;
+          _obj->encr_sat_data[i] = (char*)dest.chain;
+          // fallthru
+        case 7:  // text in-between
+        case 14: // prefix type
           {
-            int len = *p++;
-            if (enddest - dest < len + 4)
-              NEED_RESIZE (len);
-            dest += sprintf (dest, "%d ", len);
-            dest += sprintf (dest, "%.*s ", len, p);
-            p += len;
+            int len = bit_read_RC (&src);
+            if (dest.byte + len + 4 > dest.size)
+              bit_chain_alloc (&dest);
+            if (c == 7)
+              {
+                dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%d ", len);
+                LOG_TRACE ("%d ", len);
+              }
+            LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], c == 14 ? "-" : " ")
+            bit_write_TF (&dest, &src.chain[src.byte], len);
+            src.byte += len;
+            if (c == 14)
+              bit_write_TF (&dest, (BITCODE_TF)"-", 1);
+            else
+              bit_write_TF (&dest, (BITCODE_TF)" ", 1);
             break;
           }
-        case 0x06: // eol, new line/block
-          ++i;
-          if (i >= num_blocks)
+        case 4: // 4 byte index?
+          {
+            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
+            if (dest.byte + 8 > dest.size)
+              bit_chain_alloc (&dest);
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", l);
+            LOG_TRACE ("$%" PRId32 " ", l)
+          }
+          break;
+        case 10: // 0 byte double marker
+          if (dest.byte + 8 > dest.size)
+            bit_chain_alloc (&dest);
+          dest.byte += sprintf ((char*)&dest.chain[dest.byte], "double ");
+          LOG_TRACE ("double ")
+          break;
+        case 11: // 0 byte forward marker
+          if (dest.byte + 8 > dest.size)
+            bit_chain_alloc (&dest);
+          if (!forward)
             {
-              _obj->block_size = realloc (_obj->block_size, i * sizeof (BITCODE_BL));
-              _obj->encr_sat_data = realloc (_obj->encr_sat_data, i * sizeof (char *));
+              dest.byte += sprintf ((char*)&dest.chain[dest.byte], "forward ");
+              LOG_TRACE ("forward ");
+              forward = 1;
             }
-          size = _obj->block_size[i];
-          if (size < 80)
+          else
             {
-              size = _obj->block_size[i] = 80;
-              _obj->encr_sat_data[i] = realloc (_obj->encr_sat_data[i], 80);
+              dest.byte += sprintf ((char*)&dest.chain[dest.byte], "out ");
+              LOG_TRACE ("out ");
+              forward = 0;
             }
-          dest = &_obj->encr_sat_data[i][0];
-          enddest = &dest[size];
+          break;
+        case 12: // 4 byte index?
+          {
+            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
+            if (dest.byte + 8 > dest.size)
+              bit_chain_alloc (&dest);
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", l);
+            LOG_TRACE ("$%" PRId32 " ", l)
+          }
+          break;
+        case 6: // 8 byte double-float
+          {
+            double f = bit_read_RD (&src);
+            if (dest.byte + 16 > dest.size)
+              bit_chain_alloc (&dest);
+            if (first)
+              {
+                LOG_TRACE ("\n1 ");
+                dest.byte += sprintf ((char*)&dest.chain[dest.byte], "1 ");
+              }
+            first = 0;
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], FORMAT_RD " ", f);
+            LOG_TRACE ("%f ", f)
+          }
           break;
         default:
           LOG_ERROR ("Unknown SAB code %d", c);
         }
+      c = bit_read_RC (&src);
     }
+
+  num_blocks = _obj->num_blocks = i;
+  _obj->encr_sat_data[i] = calloc (dest.byte, 1); // shrink it
+  memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
+  _obj->block_size[i] = dest.byte;
+  bit_set_position (&dest, 0);
+  bit_chain_free (&dest);
+
+  if (i + 2 >= num_blocks)
+    _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+  _obj->block_size[i+1] = 0;
   return 0;
 }
 
