@@ -1329,7 +1329,7 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           FIRSTPREFIX fprintf (dat->fh, "\"\"");
         }
-      else
+      else if (_obj->version < 2)
         { // split lines by \n
           for (; *p; p++)
             {
@@ -1346,14 +1346,22 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               FIRSTPREFIX VALUE_TEXT (s);
             }
         }
-      ENDARRAY;
-      KEY (encr_sat_data);
-      ARRAY;
-      for (i = 0; i < FIELD_VALUE (num_blocks); i++)
+      else // version 2, SAB. split into two lines for easier identification
         {
-          FIRSTPREFIX VALUE_BINARY (FIELD_VALUE (encr_sat_data[i]), FIELD_VALUE (block_size[i]), 1);
+          FIRSTPREFIX fprintf (dat->fh, "\"%.*s\"", 15, _obj->acis_data);
+          FIRSTPREFIX VALUE_BINARY (&_obj->acis_data[15], _obj->block_size[0] - 15, 1);
         }
       ENDARRAY;
+      if (_obj->encr_sat_data)
+        {
+          KEY (encr_sat_data);
+          ARRAY;
+          for (i = 0; i < FIELD_VALUE (num_blocks); i++)
+            {
+              FIRSTPREFIX VALUE_BINARY (FIELD_VALUE (encr_sat_data[i]), FIELD_VALUE (block_size[i]), 1);
+            }
+          ENDARRAY;
+        }
 
       FIELD_B (wireframe_data_present, 0);
       if (FIELD_VALUE (wireframe_data_present))

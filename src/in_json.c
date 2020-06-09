@@ -1578,8 +1578,12 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   int alloc = t->end - t->start;
   int size = t->size;
   char *s = calloc (alloc, 1);
+  Dwg_Entity__3DSOLID *_obj = obj->tio.entity->tio._3DSOLID;
+  BITCODE_BS acis_version;
+
+  dwg_dynapi_entity_value (_obj, obj->name, "version", &acis_version, NULL);
   LOG_INSANE ("acis lines: %d\n", t->size);
-  tokens->index++; // array of strings
+  tokens->index++; // array of strings with version 1
   for (int i = 0; i < size; i++)
     {
       JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -1587,20 +1591,65 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (t->type == JSMN_STRING)
         {
           int l = t->end - t->start;
-          len += l + 1;
-          if (len > alloc) // cannot happen, as we take the length of the json source array
-            {
-              LOG_WARN ("Internal surprise, acis_data overshoot %d > %d", len, alloc);
-              alloc += 60;
-              s = realloc (s, alloc);
-            }
           // could be made faster, but those strings are short, and not that often.
-          strncat (s, (char*)&dat->chain[t->start], l);
-          strcat (s, "\n");
+          if (acis_version == 1)
+            {
+              len += l + 1;
+              if (len > alloc) // cannot happen, as we take the length of the json source array
+                {
+                  LOG_WARN ("Internal surprise, acis_data overshoot %d > %d", len, alloc);
+                  alloc += 60;
+                  s = realloc (s, alloc);
+                }
+              strncat (s, (char*)&dat->chain[t->start], l);
+              strcat (s, "\n");
+            }
+          else
+            {
+              len += l;
+              if (len > alloc)
+                {
+                  alloc = len;
+                  s = realloc (s, alloc);
+                }
+              if (i == 0) // first line is plain, second is binary
+                strncat (s, (char*)&dat->chain[t->start], l);
+              else
+                {
+                  // 15 is the length of the first line: "ACIS BinaryFile"
+                  const unsigned long blen = l / 2;
+                  char *pos = (char *)&dat->chain[t->start];
+                  if ((len - l) != 15 || size != 2)
+                    LOG_ERROR ("Invalid %s ACIS %u json format. len %d, size %d",
+                               obj->name, acis_version, len - l, size);
+                  for (unsigned j = 15; j < blen + 15; j++)
+                    {
+                      if (sscanf (pos, "%2hhX", &s[j]) != EOF)
+                        pos += 2;
+                      else
+                        {
+                          LOG_ERROR ("json_binary sscanf error %s with key %s at pos %u of %lu",
+                                     strerror(errno), "acis_data", j, blen);
+                          break;
+                        }
+                    }
+                  len = 15 + blen;
+                }
+            }
         }
       tokens->index++;
     }
-  LOG_TRACE ("acis_data: %s\n", s);
+  LOG_TRACE ("%s.acis_data: %s\n", obj->name, s);
+  if (acis_version > 1)
+    {
+      BITCODE_BL num_blocks = 1;
+      BITCODE_BL *block_size = calloc (2, sizeof (BITCODE_BL));
+      block_size[0] = len;
+      block_size[1] = 0;
+      LOG_TRACE ("block_size[0]: %d [BL]\n", block_size[0]);
+      dwg_dynapi_entity_set_value (_obj, obj->name, "num_blocks", &num_blocks, true);
+      dwg_dynapi_entity_set_value (_obj, obj->name, "block_size", &block_size, true);
+    }
   // just keep this s ptr, no utf8
   return dwg_dynapi_entity_set_value (obj->tio.entity->tio._3DSOLID, obj->name,
                                       "acis_data", &s, false)
@@ -2079,7 +2128,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (key, "acis_data") && strEQc (f->type, "RC*"))
             {
               error |= json_acis_data (dat, dwg, tokens, obj);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
             }
           else if (t->type == JSMN_ARRAY && strEQc (key, "encr_sat_data") && strEQc (f->type, "char **"))
             {

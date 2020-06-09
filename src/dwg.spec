@@ -1837,7 +1837,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                 LOG_TRACE ("%s marker not found\n", end);
             }
           else
-            LOG_WARN ("SAB read from AcDs blob not yet implemented");
+            LOG_WARN ("SAB from AcDs blob not yet implemented");
           total_size = FIELD_VALUE (block_size[0]);
         }
     }
@@ -1910,40 +1910,19 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
         }
       else //if (FIELD_VALUE (version)==2)
         {
-          LOG_TRACE ("acis_data:\n%s\n", FIELD_VALUE (acis_data));
-          VALUE_RL (15, 0);
-          if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (encr_sat_data[0]))
-            bit_write_TF (dat, (BITCODE_TF)"ACIS BinaryFile", 15);
-          else
-            FIELD_TF (encr_sat_data[0], 15, 1);
-          if (!FIELD_VALUE (block_size))
+          if (_obj->acis_data && _obj->block_size)
             {
-              FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (3, sizeof (BITCODE_BL));
-              FIELD_VALUE (block_size[0]) = 15;
-              if (!FIELD_VALUE (acis_data))
+              LOG_TRACE ("acis_data [TF %u 1]:\n%.*s\n", (unsigned)FIELD_VALUE (block_size[0]),
+                         15, FIELD_VALUE (acis_data));
+              // Binary SAB, unencrypted
+              if (obj->tio.entity->has_ds_data)
                 {
-                  VALUE_RL (0, 0);
-                  return error;
+                  LOG_WARN ("Disable SAB from AcDs blob"); // TODO AcDs support
+                  obj->tio.entity->has_ds_data = 0;
                 }
-              FIELD_VALUE (block_size[1]) = strlen ((char*)FIELD_VALUE (acis_data));
-              LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[1]));
+              bit_write_TF (dat, _obj->acis_data, _obj->block_size[0]);
+              LOG_TRACE_TF (&_obj->acis_data[15], (int)(_obj->block_size[0] - 15));
             }
-          //TODO AcDs blob
-          if (!FIELD_VALUE (block_size[1]))
-            {
-              if (FIELD_VALUE (acis_data))
-                FIELD_VALUE (block_size[1]) = strlen ((char*)FIELD_VALUE (acis_data));
-              else if (FIELD_VALUE (encr_sat_data[1]))
-                FIELD_VALUE (block_size[1]) = strlen (FIELD_VALUE (encr_sat_data[1]));
-              else
-                {
-                  VALUE_RL (0, 0);
-                  return error;
-                }
-            }
-          FIELD_RL (block_size[1], 0);
-          // Binary SAB, unencrypted
-          FIELD_TF (encr_sat_data[1], FIELD_VALUE (block_size[1]), 1);
         }
     }
   return error;
