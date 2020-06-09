@@ -19,6 +19,14 @@ addons:
 matrix:
   fast_finish: true
   include:
+    - compiler: clang
+      #addons:
+      #  apt:
+      #    packages:
+      #      clang-3.8
+      env: ASAN=1 CONF="--disable-bindings"
+    - compiler: gcc
+      env: DISTCHECK=1 CONF="--enable-release"
     - compiler: gcc
       env: CONF="--enable-trace --disable-write"
       #addons:
@@ -26,14 +34,6 @@ matrix:
       #    packages:
       #      - valgrind
     - compiler: clang
-      #addons:
-      #  apt:
-      #    packages:
-      #      clang-3.8
-      env: ASAN=1 CONF="--disable-bindings"
-    - compiler: clang
-    - compiler: gcc
-      env: DISTCHECK=1 CONF="--enable-release"
 
 branches:
   except:
