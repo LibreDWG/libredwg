@@ -35,24 +35,110 @@ api_process (dwg_object *obj)
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
-        printf ("wire of region :" FORMAT_BL "\n", wires[i].selection_marker);
+        {
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, type, RC);
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, selection_marker, BL);
+          PRE (R_2004) {
+            CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BS);
+          } else {
+            CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BL);
+          }
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, acis_index, BL);
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, num_points, BL);
+          CHK_SUBCLASS_3DPOINTS (wires[i], 3DSOLID_wire, points, wires[i].num_points);
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, transform_present, B);
+          if (wires[i].transform_present)
+            {
+              CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_x);
+              CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_y);
+              CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_z);
+              CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, translation);
+              CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, scale);
+              CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, has_rotation, B);
+              CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, has_reflection, B);
+              CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, has_shear, B);
+            }
+        }
       free (wires);
     }
   else
-    printf ("error in reading num wires");
+    fail ("dwg_ent_region_get_wires");
 
   silhouettes = dwg_ent_region_get_silhouettes (region, &error);
   if (!error)
     {
       for (i = 0; i < num_silhouettes; i++)
-        printf ("silhouettes of region :" FORMAT_BL "\n", silhouettes[i].vp_id);
+        {
+          CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, vp_id, BL);
+          CHK_SUBCLASS_3RD (silhouettes[i], 3DSOLID_silhouette, vp_target);
+          CHK_SUBCLASS_3RD (silhouettes[i], 3DSOLID_silhouette, vp_dir_from_target);
+          CHK_SUBCLASS_3RD (silhouettes[i], 3DSOLID_silhouette, vp_up_dir);
+          CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, vp_perspective, B);
+          CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, has_wires, B);
+          if (silhouettes[i].has_wires)
+            {
+              wires = silhouettes[i].wires;
+              CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, num_wires, BL);
+              for (unsigned j = 0; j < silhouettes[i].num_wires; j++)
+                {
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, type, RC);
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, selection_marker, BL);
+                  PRE (R_2004) {
+                    CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BS);
+                  } else {
+                    CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BL);
+                  }
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, acis_index, BL);
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, num_points, BL);
+                  CHK_SUBCLASS_3DPOINTS (wires[j], 3DSOLID_wire, points, wires[i].num_points);
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, transform_present, B);
+                  if (wires[j].transform_present)
+                    {
+                      CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, axis_x);
+                      CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, axis_y);
+                      CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, axis_z);
+                      CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, translation);
+                      CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, scale);
+                      CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, has_rotation, B);
+                      CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, has_reflection, B);
+                      CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, has_shear, B);
+                    }
+                }
+            }
+        }
       free (silhouettes);
     }
   else
-    printf ("error in reading silhouettes");
+    fail ("dwg_ent_body_get_silhouettes");
 
-  if (dwg_version >= R_2007 && region->history_id) // if it did not fail before
+  if (version > 1)
     {
-      CHK_ENTITY_H (region, REGION, history_id);
+      CHK_ENTITY_TYPE (region, REGION, num_materials, BL);
+      SINCE (R_2007) {
+        if (!dwg_dynapi_entity_value (region, "REGION", "materials", &materials, NULL))
+          fail ("REGION.materials");
+        else
+          {
+            for (i = 0; i < num_materials; i++)
+              {
+                CHK_SUBCLASS_TYPE (materials[i], 3DSOLID_material, array_index, BL);
+                CHK_SUBCLASS_TYPE (materials[i], 3DSOLID_material, mat_absref, BL);
+                CHK_SUBCLASS_H (materials[i], 3DSOLID_material, material_handle);
+              }
+          }
+      }
     }
+  CHK_ENTITY_TYPE (region, REGION, has_revision_guid, B);
+  if (has_revision_guid)
+    {
+      CHK_ENTITY_TYPE (region, REGION, revision_major, BL);
+      CHK_ENTITY_TYPE (region, REGION, revision_minor1, BS);
+      CHK_ENTITY_TYPE (region, REGION, revision_minor2, BS);
+      CHK_ENTITY_TYPE (region, REGION, revision_bytes, TV);
+      CHK_ENTITY_TYPE (region, REGION, end_marker, BL);
+    }
+
+  SINCE (R_2007) {
+    CHK_ENTITY_H (region, REGION, history_id);
+  }
 }
