@@ -1275,6 +1275,102 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 
 #include "dwg.spec"
 
+/* converts SAB acis_data in-place to SAT encr_sat_data[].
+   sets dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
+   encrypted acis_data anymore, rather the encrypted conversion from SAB for DXF */
+int
+convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
+{
+  int i = 0, num_blocks = 2, size = 0, left;
+  char *p = (char*)&_obj->acis_data[15];
+  char *end, *dest, *enddest;
+  uint32_t magic, version;
+  const char *const enddata = "\016\003End\016\002of\016\004ACIS\r\004data";
+
+  if (_obj->num_blocks)
+    num_blocks = _obj->num_blocks;
+  if (!_obj->block_size)
+    _obj->block_size = calloc (num_blocks, sizeof (BITCODE_BL));
+  if (!_obj->encr_sat_data)
+    {
+      _obj->encr_sat_data = calloc (num_blocks, sizeof (char *));
+      size = 80;
+      for (int j=0; j<num_blocks; j++)
+        _obj->encr_sat_data[j] = calloc (80, 1);
+    }
+  else
+    size = strlen (_obj->encr_sat_data[0]);
+
+  _obj->_dxf_sab_converted = 1;
+  if (!_obj->sab_size)
+    _obj->sab_size = _obj->block_size[0];
+  end = &p[_obj->sab_size];
+
+  if (!memBEGINc ((char*)_obj->acis_data, "ACIS BinaryFile"))
+    {
+      LOG_ERROR ("acis_data is not a SAB 2 'ACIS BinaryFile'");
+      return 1;
+    }
+  dest = &_obj->encr_sat_data[0][0];
+  enddest = &dest[size];
+
+#define NEED_RESIZE(len)                                                      \
+  {                                                                           \
+    int pos =  p - &_obj->encr_sat_data[i][0];                                \
+    size += len + 1;                                                          \
+    _obj->encr_sat_data[i] = realloc (_obj->encr_sat_data[i], size);          \
+    dest = &_obj->encr_sat_data[i][pos];                                      \
+    enddest = &dest[size];                                                    \
+  }
+
+  // first get two words, magic 0x40 0x51 and version 2
+  // create the two vectors encr_sat_data[] and block_size[] on the fly from the SAB
+  magic = *(uint32_t*)p;
+  p += 8;
+  version = *(uint32_t*)p;
+  p += 8;
+  while (p < end)
+    {
+      char c = *p++;
+      if (enddest - dest < 2)
+        NEED_RESIZE (0)
+      switch (c)
+        {
+          // check size, realloc encr_sat_data[i], set dest
+        case 0x07: // text in-between
+        case 0xe:  // text at very end "End of ACIS"
+          {
+            int len = *p++;
+            if (enddest - dest < len + 4)
+              NEED_RESIZE (len);
+            dest += sprintf (dest, "%d ", len);
+            dest += sprintf (dest, "%.*s ", len, p);
+            p += len;
+            break;
+          }
+        case 0x06: // eol, new line/block
+          ++i;
+          if (i >= num_blocks)
+            {
+              _obj->block_size = realloc (_obj->block_size, i * sizeof (BITCODE_BL));
+              _obj->encr_sat_data = realloc (_obj->encr_sat_data, i * sizeof (char *));
+            }
+          size = _obj->block_size[i];
+          if (size < 80)
+            {
+              size = _obj->block_size[i] = 80;
+              _obj->encr_sat_data[i] = realloc (_obj->encr_sat_data[i], 80);
+            }
+          dest = &_obj->encr_sat_data[i][0];
+          enddest = &dest[size];
+          break;
+        default:
+          LOG_ERROR ("Unknown SAB code %d", c);
+        }
+    }
+  return 0;
+}
+
 static int
 dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
              Dwg_Entity_3DSOLID *restrict _obj)
@@ -1329,7 +1425,9 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else // if (FIELD_VALUE(version)==2)
         {
+          BITCODE_RC *acis_data;
           LOG_ERROR ("ACIS BinaryFile v2 not yet supported");
+          error |= convert_SAB_to_encrypted_SAT (_obj);
         }
     }
   // the rest is done in COMMON_3DSOLID in the spec.

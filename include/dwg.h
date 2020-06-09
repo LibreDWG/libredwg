@@ -1748,6 +1748,7 @@ typedef struct _dwg_3DSOLID_material
   BITCODE_BL num_blocks; \
   BITCODE_BL* block_size; \
   char** encr_sat_data; \
+  BITCODE_BL sab_size; \
   BITCODE_RC* acis_data; \
   BITCODE_B wireframe_data_present; \
   BITCODE_B point_present; \
@@ -1758,6 +1759,7 @@ typedef struct _dwg_3DSOLID_material
   Dwg_3DSOLID_wire * wires; \
   BITCODE_BL num_silhouettes; \
   Dwg_3DSOLID_silhouette * silhouettes; \
+  BITCODE_B _dxf_sab_converted;  /* internally calculated */ \
   BITCODE_B acis_empty2; \
   struct _dwg_entity_3DSOLID* extra_acis_data; \
   BITCODE_BL num_materials; \

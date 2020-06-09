@@ -1349,10 +1349,10 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       else // version 2, SAB. split into two lines for easier identification
         {
           FIRSTPREFIX fprintf (dat->fh, "\"%.*s\"", 15, _obj->acis_data);
-          FIRSTPREFIX VALUE_BINARY (&_obj->acis_data[15], _obj->block_size[0] - 15, 1);
+          FIRSTPREFIX VALUE_BINARY (&_obj->acis_data[15], _obj->sab_size - 15, 1);
         }
       ENDARRAY;
-      if (_obj->encr_sat_data)
+      if (_obj->encr_sat_data) // dxfin/out may create this for SAB
         {
           KEY (encr_sat_data);
           ARRAY;

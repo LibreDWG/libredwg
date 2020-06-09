@@ -1643,12 +1643,14 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   if (acis_version > 1)
     {
       BITCODE_BL num_blocks = 1;
+      BITCODE_BL sab_size = len;
       BITCODE_BL *block_size = calloc (2, sizeof (BITCODE_BL));
       block_size[0] = len;
       block_size[1] = 0;
       LOG_TRACE ("block_size[0]: %d [BL]\n", block_size[0]);
       dwg_dynapi_entity_set_value (_obj, obj->name, "num_blocks", &num_blocks, true);
       dwg_dynapi_entity_set_value (_obj, obj->name, "block_size", &block_size, true);
+      dwg_dynapi_entity_set_value (_obj, obj->name, "sab_size", &sab_size, true);
     }
   // just keep this s ptr, no utf8
   return dwg_dynapi_entity_set_value (obj->tio.entity->tio._3DSOLID, obj->name,

@@ -778,6 +778,8 @@ BL
 BL*
 @item encr_sat_data
 char **,	DXF 1
+@item sab_size
+BL
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -798,6 +800,8 @@ Dwg_3DSOLID_wire*
 BL
 @item silhouettes
 Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
 @item acis_empty2
 B
 @item extra_acis_data
@@ -1702,6 +1706,8 @@ BL
 BL*
 @item encr_sat_data
 char **,	DXF 1
+@item sab_size
+BL
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -1722,6 +1728,8 @@ Dwg_3DSOLID_wire*
 BL
 @item silhouettes
 Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
 @item acis_empty2
 B
 @item extra_acis_data
@@ -2273,6 +2281,8 @@ BL
 BL*
 @item encr_sat_data
 char **,	DXF 1
+@item sab_size
+BL
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -2293,6 +2303,8 @@ Dwg_3DSOLID_wire*
 BL
 @item silhouettes
 Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
 @item acis_empty2
 B
 @item extra_acis_data
@@ -2723,6 +2735,8 @@ BL
 BL*
 @item encr_sat_data
 char **
+@item sab_size
+BL
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -2743,6 +2757,8 @@ Dwg_3DSOLID_wire*
 BL
 @item silhouettes
 Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
 @item acis_empty2
 B
 @item extra_acis_data
@@ -2854,6 +2870,8 @@ BL
 BL*
 @item encr_sat_data
 char **,	DXF 1
+@item sab_size
+BL
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -2874,6 +2892,8 @@ Dwg_3DSOLID_wire*
 BL
 @item silhouettes
 Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
 @item acis_empty2
 B
 @item extra_acis_data
@@ -3187,6 +3207,8 @@ BL
 BL*
 @item encr_sat_data
 char **,	DXF 1
+@item sab_size
+BL
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -3207,6 +3229,8 @@ Dwg_3DSOLID_wire*
 BL
 @item silhouettes
 Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
 @item acis_empty2
 B
 @item extra_acis_data
@@ -3480,6 +3504,8 @@ BL
 BL*
 @item encr_sat_data
 char **,	DXF 1
+@item sab_size
+BL
 @item acis_data
 RC*
 @item wireframe_data_present
@@ -3500,6 +3526,8 @@ Dwg_3DSOLID_wire*
 BL
 @item silhouettes
 Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
 @item acis_empty2
 B
 @item extra_acis_data

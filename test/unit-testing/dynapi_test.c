@@ -5484,6 +5484,21 @@ static int test__3DSOLID (const Dwg_Object *obj)
   Dwg_Entity__3DSOLID *restrict _3dsolid = obj->tio.entity->tio._3DSOLID;
   failed = 0;
   {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == _3dsolid->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("3DSOLID._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", _3dsolid->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == _3dsolid->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("3DSOLID._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", _3dsolid->_dxf_sab_converted, _dxf_sab_converted);
+    _3dsolid->_dxf_sab_converted--;
+  }
+  {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "acis_data", &acis_data, NULL)
         && acis_data
@@ -5791,6 +5806,21 @@ static int test__3DSOLID (const Dwg_Object *obj)
     else
       fail ("3DSOLID.revision_minor2 [BS] set+1 %hu != %hu", _3dsolid->revision_minor2, revision_minor2);
     _3dsolid->revision_minor2--;
+  }
+  {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "sab_size", &sab_size, NULL)
+        && sab_size == _3dsolid->sab_size)
+      pass ();
+    else
+      fail ("3DSOLID.sab_size [BL] %u != %u", _3dsolid->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (_3dsolid, "3DSOLID", "sab_size", &sab_size, 0)
+        && sab_size == _3dsolid->sab_size)
+      pass ();
+    else
+      fail ("3DSOLID.sab_size [BL] set+1 %u != %u", _3dsolid->sab_size, sab_size);
+    _3dsolid->sab_size--;
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -10120,6 +10150,21 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   Dwg_Entity_EXTRUDEDSURFACE *restrict extrudedsurface = obj->tio.entity->tio.EXTRUDEDSURFACE;
   failed = 0;
   {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == extrudedsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", extrudedsurface->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == extrudedsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", extrudedsurface->_dxf_sab_converted, _dxf_sab_converted);
+    extrudedsurface->_dxf_sab_converted--;
+  }
+  {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
@@ -10654,6 +10699,21 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     else
       fail ("EXTRUDEDSURFACE.revision_minor2 [BS] set+1 %hu != %hu", extrudedsurface->revision_minor2, revision_minor2);
     extrudedsurface->revision_minor2--;
+  }
+  {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "sab_size", &sab_size, NULL)
+        && sab_size == extrudedsurface->sab_size)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.sab_size [BL] %u != %u", extrudedsurface->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "sab_size", &sab_size, 0)
+        && sab_size == extrudedsurface->sab_size)
+      pass ();
+    else
+      fail ("EXTRUDEDSURFACE.sab_size [BL] set+1 %u != %u", extrudedsurface->sab_size, sab_size);
+    extrudedsurface->sab_size--;
   }
   {
     BITCODE_BD scale_factor;
@@ -13265,6 +13325,21 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   Dwg_Entity_LOFTEDSURFACE *restrict loftedsurface = obj->tio.entity->tio.LOFTEDSURFACE;
   failed = 0;
   {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == loftedsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", loftedsurface->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == loftedsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->_dxf_sab_converted, _dxf_sab_converted);
+    loftedsurface->_dxf_sab_converted--;
+  }
+  {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
@@ -13773,6 +13848,21 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
     else
       fail ("LOFTEDSURFACE.ruled_surface [B] set+1 " FORMAT_B " != " FORMAT_B "", loftedsurface->ruled_surface, ruled_surface);
     loftedsurface->ruled_surface--;
+  }
+  {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "sab_size", &sab_size, NULL)
+        && sab_size == loftedsurface->sab_size)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.sab_size [BL] %u != %u", loftedsurface->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (loftedsurface, "LOFTEDSURFACE", "sab_size", &sab_size, 0)
+        && sab_size == loftedsurface->sab_size)
+      pass ();
+    else
+      fail ("LOFTEDSURFACE.sab_size [BL] set+1 %u != %u", loftedsurface->sab_size, sab_size);
+    loftedsurface->sab_size--;
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -15658,6 +15748,21 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   Dwg_Entity_NURBSURFACE *restrict nurbsurface = obj->tio.entity->tio.NURBSURFACE;
   failed = 0;
   {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == nurbsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("NURBSURFACE._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", nurbsurface->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == nurbsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("NURBSURFACE._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", nurbsurface->_dxf_sab_converted, _dxf_sab_converted);
+    nurbsurface->_dxf_sab_converted--;
+  }
+  {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
@@ -15997,6 +16102,21 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
     nurbsurface->revision_minor2--;
   }
   {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "sab_size", &sab_size, NULL)
+        && sab_size == nurbsurface->sab_size)
+      pass ();
+    else
+      fail ("NURBSURFACE.sab_size [BL] %u != %u", nurbsurface->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (nurbsurface, "NURBSURFACE", "sab_size", &sab_size, 0)
+        && sab_size == nurbsurface->sab_size)
+      pass ();
+    else
+      fail ("NURBSURFACE.sab_size [BL] set+1 %u != %u", nurbsurface->sab_size, sab_size);
+    nurbsurface->sab_size--;
+  }
+  {
     Dwg_3DSOLID_silhouette* silhouettes;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "num_silhouettes", &count, NULL)
@@ -16306,6 +16426,21 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_PLANESURFACE *restrict planesurface = obj->tio.entity->tio.PLANESURFACE;
   failed = 0;
+  {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == planesurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("PLANESURFACE._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", planesurface->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == planesurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("PLANESURFACE._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", planesurface->_dxf_sab_converted, _dxf_sab_converted);
+    planesurface->_dxf_sab_converted--;
+  }
   {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "acis_data", &acis_data, NULL)
@@ -16644,6 +16779,21 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
     else
       fail ("PLANESURFACE.revision_minor2 [BS] set+1 %hu != %hu", planesurface->revision_minor2, revision_minor2);
     planesurface->revision_minor2--;
+  }
+  {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "sab_size", &sab_size, NULL)
+        && sab_size == planesurface->sab_size)
+      pass ();
+    else
+      fail ("PLANESURFACE.sab_size [BL] %u != %u", planesurface->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "sab_size", &sab_size, 0)
+        && sab_size == planesurface->sab_size)
+      pass ();
+    else
+      fail ("PLANESURFACE.sab_size [BL] set+1 %u != %u", planesurface->sab_size, sab_size);
+    planesurface->sab_size--;
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -17638,6 +17788,21 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   Dwg_Entity_REVOLVEDSURFACE *restrict revolvedsurface = obj->tio.entity->tio.REVOLVEDSURFACE;
   failed = 0;
   {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == revolvedsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", revolvedsurface->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == revolvedsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", revolvedsurface->_dxf_sab_converted, _dxf_sab_converted);
+    revolvedsurface->_dxf_sab_converted--;
+  }
+  {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
@@ -18089,6 +18254,21 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("REVOLVEDSURFACE.revolved_entity_transmatrix [BD*]");
+  }
+  {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "sab_size", &sab_size, NULL)
+        && sab_size == revolvedsurface->sab_size)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.sab_size [BL] %u != %u", revolvedsurface->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "sab_size", &sab_size, 0)
+        && sab_size == revolvedsurface->sab_size)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.sab_size [BL] set+1 %u != %u", revolvedsurface->sab_size, sab_size);
+    revolvedsurface->sab_size--;
   }
   {
     Dwg_3DSOLID_silhouette* silhouettes;
@@ -19062,6 +19242,21 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   Dwg_Entity_SWEPTSURFACE *restrict sweptsurface = obj->tio.entity->tio.SWEPTSURFACE;
   failed = 0;
   {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == sweptsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("SWEPTSURFACE._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", sweptsurface->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == sweptsurface->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("SWEPTSURFACE._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", sweptsurface->_dxf_sab_converted, _dxf_sab_converted);
+    sweptsurface->_dxf_sab_converted--;
+  }
+  {
     BITCODE_RC* acis_data;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "acis_data", &acis_data, NULL)
         && acis_data
@@ -19611,6 +19806,21 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.revision_minor2 [BS] set+1 %hu != %hu", sweptsurface->revision_minor2, revision_minor2);
     sweptsurface->revision_minor2--;
+  }
+  {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sab_size", &sab_size, NULL)
+        && sab_size == sweptsurface->sab_size)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.sab_size [BL] %u != %u", sweptsurface->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sab_size", &sab_size, 0)
+        && sab_size == sweptsurface->sab_size)
+      pass ();
+    else
+      fail ("SWEPTSURFACE.sab_size [BL] set+1 %u != %u", sweptsurface->sab_size, sab_size);
+    sweptsurface->sab_size--;
   }
   {
     BITCODE_BD scale_factor;

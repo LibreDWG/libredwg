@@ -1780,7 +1780,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
             {
               for (j = 0; j < FIELD_VALUE (block_size[i]); j++)
                 {
-                  if (FIELD_VALUE (encr_sat_data[i][j] <= 32))
+                  if (FIELD_VALUE (encr_sat_data[i][j]) <= 32)
                     {
                       FIELD_VALUE (acis_data)[idx++]
                         = FIELD_VALUE (encr_sat_data[i][j]);
@@ -1818,27 +1818,28 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               const char *const end = "\016\003End\016\002of\016\004ACIS\r\004data";
               long pos = dat->byte;
               BITCODE_BL size = dat->size - dat->byte - 1;
-              _obj->block_size[0] = size;
+              _obj->sab_size = size;
               FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
               // Binary SAB, unencrypted, readable ascii strings until "End of ACIS data"
               FIELD_TFF (acis_data, size, 1); // SAB "ACIS BinaryFile"
-              LOG_TRACE ("Unknown ACIS 2 SAB block_size[0] " FORMAT_BL " starting at %ld\n",
+              LOG_TRACE ("Unknown ACIS 2 SAB sab_size " FORMAT_BL " starting at %ld\n",
                          size, pos);
               if ((p = (char*)memmem (_obj->acis_data, size, end, strlen (end))))
                 {
                   size = p - (char*)_obj->acis_data;
                   size += strlen (end);
                   dat->byte = pos + size;
-                  _obj->block_size[0] = size;
-                  LOG_TRACE ("Found %s marker: block_size[0]: " FORMAT_BL ", new pos: %lu\n",
+                  _obj->sab_size = size;
+                  LOG_TRACE ("Found %s marker: sab_size: " FORMAT_BL ", new pos: %lu\n",
                              end, size, dat->byte);
                 }
               else
                 LOG_TRACE ("%s marker not found\n", end);
+              _obj->block_size[0] = size;
             }
           else
             LOG_WARN ("SAB from AcDs blob not yet implemented");
-          total_size = FIELD_VALUE (block_size[0]);
+          //total_size = FIELD_VALUE (_obj->block_size[0]);
         }
     }
   return error;
@@ -1910,9 +1911,9 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
         }
       else //if (FIELD_VALUE (version)==2)
         {
-          if (_obj->acis_data && _obj->block_size)
+          if (_obj->acis_data && _obj->sab_size)
             {
-              LOG_TRACE ("acis_data [TF %u 1]:\n%.*s\n", (unsigned)FIELD_VALUE (block_size[0]),
+              LOG_TRACE ("acis_data [TF %u 1]:\n%.*s\n", (unsigned)FIELD_VALUE (sab_size),
                          15, FIELD_VALUE (acis_data));
               // Binary SAB, unencrypted
               if (obj->tio.entity->has_ds_data)
@@ -1920,8 +1921,8 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   LOG_WARN ("Disable SAB from AcDs blob"); // TODO AcDs support
                   obj->tio.entity->has_ds_data = 0;
                 }
-              bit_write_TF (dat, _obj->acis_data, _obj->block_size[0]);
-              LOG_TRACE_TF (&_obj->acis_data[15], (int)(_obj->block_size[0] - 15));
+              bit_write_TF (dat, _obj->acis_data, _obj->sab_size);
+              LOG_TRACE_TF (&_obj->acis_data[15], (int)(_obj->sab_size - 15));
             }
         }
     }
