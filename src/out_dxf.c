@@ -1275,6 +1275,24 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 
 #include "dwg.spec"
 
+static int
+new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
+                        unsigned int i)
+{
+  if (i + 1 >= _obj->num_blocks)
+    {
+      _obj->encr_sat_data = realloc (_obj->encr_sat_data, (i + 2) * sizeof (char*));
+      _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+      _obj->num_blocks = i + 1;
+    }
+  _obj->encr_sat_data[i] = calloc (dest->byte, 1); // fresh, the dest buf is too large
+  memcpy (_obj->encr_sat_data[i], dest->chain, dest->byte);
+  _obj->block_size[i] = dest->byte;
+  bit_set_position (dest, 0);
+  i++;
+  return i;
+}
+
 /* converts SAB acis_data in-place to SAT encr_sat_data[].
    sets dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
    encrypted acis_data anymore, rather the encrypted conversion from SAB for DXF */
@@ -1283,11 +1301,13 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
 {
   Bit_Chain dest = { NULL, 0, 0, 0 };
   Bit_Chain src = { NULL, 0, 0, 0 };
-  int i = 0, num_blocks = 2, size = 0;
+  unsigned int i = 0, num_blocks = 2, size = 0;
   BITCODE_RC c;
   char *p = (char*)&_obj->acis_data[15];
   //char *end, *dest, *enddest;
   BITCODE_RL version, num_records, num_entities, has_history;
+  //char *product_string, *acis_version, *date;
+  BITCODE_RD num_mm_units, resabs, resnor;
   const char *const enddata = "\016\003End\016\002of\016\004ACIS\r\004data";
   int first = 1;
   int forward = 0;
@@ -1315,36 +1335,74 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
   src.chain = &_obj->acis_data[15];
   src.size = _obj->sab_size - 15;
 
-#define SAB_RL(key) \
-  key = bit_read_RL (&src); \
-  LOG_TRACE (#key ": " FORMAT_RL "\n", key)
-#define SAB_RD(key) \
-  key = bit_read_RD (&src); \
-  LOG_TRACE (#key ": " FORMAT_RD "\n", key)
-#define SAB_T(key) \
-  key = bit_read_RC (&src); \
-  LOG_TRACE (#key ": " FORMAT_RD "\n", key)
+// header only
+#define SAB_RD(key)                                                     \
+  c = bit_read_RC (&src); /* 6 */                                       \
+  LOG_HANDLE (#key " [%d] ", c)                                         \
+  key = bit_read_RD (&src);                                             \
+  dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%g ", key);     \
+  LOG_TRACE ("%g ", key)
+// record variant
+#define SAB_RD1()                                                       \
+  {                                                                     \
+    double f = bit_read_RD (&src);                                      \
+    if (dest.byte + 16 > dest.size)                                     \
+      bit_chain_alloc (&dest);                                          \
+    dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%-16.14f ", f); \
+    LOG_TRACE ("%-16.14f ", f);                                         \
+  }
+// key is ignored here. header only
+#define SAB_T(key)                                                      \
+  {                                                                     \
+    int len;                                                            \
+    c = bit_read_RC (&src);                                             \
+    LOG_HANDLE (#key " [%d] ", c)                                       \
+    len = bit_read_RC (&src);                                           \
+    dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%d ", len);   \
+    LOG_TRACE ("%d %.*s ", len, len, &src.chain[src.byte]);             \
+    bit_write_TF (&dest, &src.chain[src.byte], len);                    \
+    bit_write_TF (&dest, (BITCODE_TF) " ", 1);                          \
+    src.byte += len;                                                    \
+  }
+#define SAB_TF(x)                                                       \
+  bit_write_TF (&dest, (BITCODE_TF) x, sizeof (x) - 1);                 \
+  bit_write_TF (&dest, (BITCODE_TF) " ", 1);                            \
+  LOG_TRACE ("%s ", x)
 
-  // first get two words, magic 0x40 0x51 and version 2
   // create the two vectors encr_sat_data[] and block_size[] on the fly from the SAB
   // http://paulbourke.net/dataformats/sat/sat.pdf
   /* ACIS BinaryFile [64 81 6x0[ [2 7x0] 
      "\a\020Autodesk AutoCAD\a\024ASM 223.0.1.1930 OSX\a\030Mon Jun 18 11:09:32 2018\006"
      6x0 16 63 "\006\215\355\265\240\367ư>" "\006\273\275\327\331\337|\333= "\r\tasmheader" \f\377\377\377\377\004\377\377\377\377\a\f223.0.1.1930\021 \r\004body \f\377\377\377\377\004\377\377\377\377\f\377\377\377\377\f\002"
    */
-  SAB_RL (version);
-  SAB_RL (num_records); //if 0 until end marker
-  SAB_RL (num_entities);
-  SAB_RL (has_history);
-  //SAB_T (acis_ver);
+  version = bit_read_RL (&src);
+  num_records = bit_read_RL (&src); //if 0 until end marker
+  num_entities = bit_read_RL (&src);
+  has_history = bit_read_RL (&src);
+  dest.byte += sprintf ((char*)dest.chain, "%d %d %d %d ", version, num_records,
+                        num_entities, has_history);
+  LOG_TRACE ("%d %d %d %d \n", version, num_records, num_entities, has_history);
+  i = new_encr_sat_data_line (_obj, &dest, i);
 
-  c = bit_read_RC (&src);
+  SAB_T (product_string)
+  SAB_T (acis_version)
+  SAB_T (date)
+  i = new_encr_sat_data_line (_obj, &dest, i);
+  LOG_TRACE ("\n");
+
+  SAB_RD (num_mm_units);
+  SAB_RD (resabs);
+  SAB_RD (resnor);
+  i = new_encr_sat_data_line (_obj, &dest, i);
+  LOG_TRACE ("\n");
+
+  c = bit_read_RC (&src); // type tag
   while (src.byte < src.size)
     {
-      LOG_HANDLE ("[%d:] ", c)
+      LOG_HANDLE ("[%d] ", c)
       switch (c)
         {
-          // check size, realloc encr_sat_data[i], set dest
+        // check size, realloc encr_sat_data[i], set dest
         case 17:   //  # end of record
           first = 1;
           forward = 0;
@@ -1352,36 +1410,31 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
             bit_chain_alloc (&dest);
           dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#");
           LOG_TRACE ("#\n")
+          i = new_encr_sat_data_line (_obj, &dest, i);
           break;
         case 13:   // start new record
           first = 1;
-          // save away dest line
-          if (i + 1 >= num_blocks)
-            {
-              _obj->encr_sat_data = realloc (_obj->encr_sat_data, (i + 2) * sizeof (char*));
-              _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
-              num_blocks = _obj->num_blocks = i + 1;
-            }
-          _obj->encr_sat_data[i] = calloc (dest.byte, 1); // fresh, the dest buf is too large
-          memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
-          _obj->block_size[i] = dest.byte;
-          bit_set_position (&dest, 0);
-          i++;
           _obj->encr_sat_data[i] = (char*)dest.chain;
           // fallthru
-        case 7:  // text in-between
+        case 7:  // header text
         case 14: // prefix type
           {
             int len = bit_read_RC (&src);
             if (dest.byte + len + 4 > dest.size)
               bit_chain_alloc (&dest);
-            if (c == 7)
+            /*
+            if (c == 7 && i < 3)
               {
                 dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%d ", len);
                 LOG_TRACE ("%d ", len);
               }
+            */
             LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], c == 14 ? "-" : " ")
             bit_write_TF (&dest, &src.chain[src.byte], len);
+            // TODO Begin-of-ACIS-History-Data => new line
+            // TODO End-of-ACIS-History-Section => new line
+            //if (has_history && c == 13 && len = 4 && memBEGINc (&src.chain[src.byte], "Data"))
+            //  i = new_encr_sat_data_line (_obj, &dest, i);
             src.byte += len;
             if (c == 14)
               bit_write_TF (&dest, (BITCODE_TF)"-", 1);
@@ -1389,7 +1442,34 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
               bit_write_TF (&dest, (BITCODE_TF)" ", 1);
             break;
           }
-        case 4: // 4 byte index?
+        case 9: // 0 or 4 byte
+          SAB_TF ("forward");
+          break;
+        case 10: // 0 byte
+          SAB_TF ("reversed");
+          break;
+        case 11: // 0 byte I Infinity
+          SAB_TF ("I");
+          break;
+        case 15: // 0 byte subtype start
+          SAB_TF ("{");
+          break;
+        case 16: // 1 byte subtype end
+          SAB_TF ("}");
+          LOG_HANDLE ("[%c] ", src.chain[src.byte]);
+          src.byte++;
+          break;
+        case 3: // integer constant
+          {
+            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
+            if (dest.byte + 8 > dest.size)
+              bit_chain_alloc (&dest);
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%" PRId32 " ", l);
+            LOG_TRACE ("%" PRId32 " ", l)
+          }
+          break;
+        case 4: // pointer index, (often NULL, i.e. -1)
+        case 12: // 4 byte pointer index
           {
             BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
             if (dest.byte + 8 > dest.size)
@@ -1398,64 +1478,29 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
             LOG_TRACE ("$%" PRId32 " ", l)
           }
           break;
-        case 10: // 0 byte double marker
-          if (dest.byte + 8 > dest.size)
-            bit_chain_alloc (&dest);
-          dest.byte += sprintf ((char*)&dest.chain[dest.byte], "double ");
-          LOG_TRACE ("double ")
-          break;
-        case 11: // 0 byte forward marker
-          if (dest.byte + 8 > dest.size)
-            bit_chain_alloc (&dest);
-          if (!forward)
-            {
-              dest.byte += sprintf ((char*)&dest.chain[dest.byte], "forward ");
-              LOG_TRACE ("forward ");
-              forward = 1;
-            }
-          else
-            {
-              dest.byte += sprintf ((char*)&dest.chain[dest.byte], "out ");
-              LOG_TRACE ("out ");
-              forward = 0;
-            }
-          break;
-        case 12: // 4 byte index?
-          {
-            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
-            if (dest.byte + 8 > dest.size)
-              bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", l);
-            LOG_TRACE ("$%" PRId32 " ", l)
-          }
-          break;
-        case 6: // 8 byte double-float
-          {
-            double f = bit_read_RD (&src);
-            if (dest.byte + 16 > dest.size)
-              bit_chain_alloc (&dest);
-            if (first)
-              {
-                LOG_TRACE ("\n1 ");
-                dest.byte += sprintf ((char*)&dest.chain[dest.byte], "1 ");
-              }
-            first = 0;
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], FORMAT_RD " ", f);
-            LOG_TRACE ("%f ", f)
-          }
+        case 19: // 3x double-float in a record
+        case 20: // 3x double-float in a record
+          SAB_RD1();
+          SAB_RD1();
+          // fallthru
+        case 6:  // 8 byte double-float, e.g. in the 2nd header line
+          SAB_RD1();
           break;
         default:
-          LOG_ERROR ("Unknown SAB code %d", c);
+          LOG_ERROR ("Unknown SAB tag %d", c);
         }
       c = bit_read_RC (&src);
     }
 
+  if (c != 17) // last line didn't end with #, but End-of-ACIS-data
+    i = new_encr_sat_data_line (_obj, &dest, i);
   num_blocks = _obj->num_blocks = i;
   _obj->encr_sat_data[i] = calloc (dest.byte, 1); // shrink it
   memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
   _obj->block_size[i] = dest.byte;
   bit_set_position (&dest, 0);
   bit_chain_free (&dest);
+  LOG_TRACE ("\n");
 
   if (i + 2 >= num_blocks)
     _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
@@ -1477,49 +1522,45 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);
-      FIELD_BS (version, 70); // TODO always write as 1
-      if (FIELD_VALUE (version) == 1)
-        {
-          for (i = 0; i < FIELD_VALUE (num_blocks); i++)
-            {
-              char *s = FIELD_VALUE (encr_sat_data[i]);
-              int len = strlen (s);
-              // FIELD_BL (block_size[i], 0);
-              // DXF 1 + 3 if >255
-              while (len > 0)
-                {
-                  char *n = strchr (s, '\n');
-                  int l = len > 255 ? 255 : len;
-                  if (n && (n - s < len))
-                    l = n - s;
-                  if (l)
-                    {
-                      if (l < 255)
-                        GROUP (1);
-                      else
-                        GROUP (3);
-                      if (s[l - 1] == '\r')
-                        fprintf (dat->fh, "%.*s\n", l, s);
-                      else
-                        fprintf (dat->fh, "%.*s\r\n", l, s);
-                      l++;
-                      len -= l;
-                      s += l;
-                    }
-                  else
-                    {
-                      len--;
-                      s++;
-                    }
-                }
-            }
-          // LOG_TRACE("acis_data [1]:\n%s\n", FIELD_VALUE (acis_data));
-        }
-      else // if (FIELD_VALUE(version)==2)
+      if (FIELD_VALUE (version) == 2)
         {
           BITCODE_RC *acis_data;
-          LOG_ERROR ("ACIS BinaryFile v2 not yet supported");
+          LOG_WARN ("ACIS BinaryFile v2 unstable");
           error |= convert_SAB_to_encrypted_SAT (_obj);
+          // TODO encrypt
+        }
+      FIELD_BS (version, 70); // TODO always write as 1
+      for (i = 0; i < FIELD_VALUE (num_blocks); i++)
+        {
+          char *s = FIELD_VALUE (encr_sat_data[i]);
+          int len = strlen (s);
+          // DXF 1 + 3 if >255
+          while (len > 0)
+            {
+              char *n = strchr (s, '\n');
+              int l = len > 255 ? 255 : len;
+              if (n && (n - s < len))
+                l = n - s;
+              if (l)
+                {
+                  if (l < 255)
+                    GROUP (1);
+                  else
+                    GROUP (3);
+                  if (s[l - 1] == '\r')
+                    fprintf (dat->fh, "%.*s\n", l, s);
+                  else
+                    fprintf (dat->fh, "%.*s\r\n", l, s);
+                  l++;
+                  len -= l;
+                  s += l;
+                }
+              else
+                {
+                  len--;
+                  s++;
+                }
+            }
         }
     }
   // the rest is done in COMMON_3DSOLID in the spec.
