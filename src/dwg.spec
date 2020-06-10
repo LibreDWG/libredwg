@@ -1776,7 +1776,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           FIELD_VALUE (num_blocks) = num_blocks;
           LOG_TRACE ("num_blocks: " FORMAT_BL "\n", FIELD_VALUE (num_blocks));
           acis_data_idx = 0;
-          for ( i =0; i < num_blocks; i++)
+          for ( i = 0; i < num_blocks; i++)
             {
               for (j = 0; j < FIELD_VALUE (block_size[i]); j++)
                 {

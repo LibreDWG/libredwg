@@ -1280,6 +1280,7 @@ static int
 new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
                         unsigned int i)
 {
+  /*
   if (i + 1 >= _obj->num_blocks)
     {
       _obj->encr_sat_data = realloc (_obj->encr_sat_data, (i + 2) * sizeof (char*));
@@ -1292,6 +1293,8 @@ new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
   _obj->block_size[i] = dest->byte - 1; // dont count the final 0
   bit_set_position (dest, 0);
   i++;
+  */
+  bit_write_TF (dest, (BITCODE_TF) "\n", 1); // ensure proper eol, dxf out relies on that
   return i;
 }
 
@@ -1529,9 +1532,9 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
           forward = 0;
           if (dest.byte + 2 >= dest.size)
             bit_chain_alloc (&dest);
-          dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#");
+          dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#\n");
           LOG_TRACE ("#\n")
-          i = new_encr_sat_data_line (_obj, &dest, i);
+          //i = new_encr_sat_data_line (_obj, &dest, i);
           break;
         case 13:   // ident
           first = 1;
@@ -1665,19 +1668,19 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
       c = bit_read_RC (&src);
     }
 
-  if (c != 17) // last line didn't end with #, but End-of-ACIS-data
-    i = new_encr_sat_data_line (_obj, &dest, i);
+  //if (c != 17) // last line didn't end with #, but End-of-ACIS-data
+  //  i = new_encr_sat_data_line (_obj, &dest, i);
   num_blocks = _obj->num_blocks = i;
-  bit_write_TF (&dest, (BITCODE_TF)"\n\000", 2);
+  bit_write_TF (&dest, (BITCODE_TF)"\n", 1);
   _obj->encr_sat_data[i] = calloc (dest.byte, 1); // shrink it
   memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
-  _obj->block_size[i] = dest.byte - 1;
+  _obj->block_size[i] = dest.byte;
   bit_chain_free (&dest);
   LOG_TRACE ("\n");
 
   if (i + 2 >= num_blocks)
     _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
-  _obj->block_size[i+1] = 0;
+  _obj->block_size[i + 1] = 0;
   return 0;
 }
 
@@ -1713,10 +1716,12 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           _obj->version = 1; // conversion complete
         }
-      FIELD_BS (version, 70); // always write as 1
+      FIELD_BS (version, 70); // always 1
       for (i = 0; i < FIELD_VALUE (num_blocks); i++)
         {
           char *s = FIELD_VALUE (encr_sat_data[i]);
+          // FIXME
+          //int len = _obj->_dxf_sab_converted ? FIELD_VALUE (block_size[i]) : strlen (s);
           int len = FIELD_VALUE (block_size[i]);
           // DXF 1 + 3 if >255
           while (len > 0)
