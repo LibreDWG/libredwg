@@ -1295,6 +1295,120 @@ new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
   return i;
 }
 
+// logical values are class-specific, and must be strings.
+static const char*
+SAT_boolean (const char *act_record, bool value)
+{
+  static int argc = 0;
+  if (!strEQc (act_record, "varblendsplsur") &&
+      !strEQc (act_record, "face") &&
+      !strEQc (act_record, "bdy_geom"))
+    argc = 0;
+
+  if (strEQc (act_record, "sphere") ||
+      strEQc (act_record, "plane") ||
+      strEQc (act_record, "stripc") ||
+      strEQc (act_record, "torus"))
+    return !value ? "forward_v" : "reverse_v";
+  else if (strEQc (act_record, "spline") ||
+           strEQc (act_record, "edge") ||
+           strEQc (act_record, "meshsurf") ||
+           strEQc (act_record, "pcurve") ||
+           strEQc (act_record, "intcurve"))
+    return !value ? "forward" : "reversed";
+  else if (strEQc (act_record, "surfcur") ||
+           strEQc (act_record, "bldcur") ||
+           strEQc (act_record, "parcur") ||
+           strEQc (act_record, "projcur") ||
+           strEQc (act_record, "perspsil"))
+    return !value ? "surf2" : "surf1";
+  else if (strEQc (act_record, "sweepsur"))
+    return !value ? "normal" : "angled";
+  else if (strEQc (act_record, "var_cross_section"))
+    return value ? "radius" : "no_radius";
+  else if (strEQc (act_record, "var_radius"))
+    return value ? "uncalibrated" : "calibrated";
+  else if (strEQc (act_record, "wire"))
+    return value ? "in" : "out";
+  else if (strEQc (act_record, "adv_var_blend"))
+    return !value ? "sharp" : "smooth";
+  else if (strEQc (act_record, "attrib_fhlhead"))
+    return !value ? "invalid" : "valid";
+  else if (strEQc (act_record, "attrib_fhlplist") ||
+           strEQc (act_record, "attrib_fhl_slist"))
+    return !value ? "invisible" : "visible";
+  else if (strEQc (act_record, "bl_ent_ent") ||
+           strEQc (act_record, "bl_inst"))
+    return !value ? "unset" : "set";
+
+  // TODO orthosur undocumented
+  // now the few classes with mult. locical args
+  else if (strEQc (act_record, "face"))
+    {
+      if (!argc)
+        {
+          argc++;
+          return !value ? "forward" : "reversed";
+        }
+      else if (argc == 1)
+        {
+          argc++;
+          return !value ? "single" : "double";
+        }
+      else
+        {
+          argc = 0;
+          return !value ? "out" : "in";
+        }
+    }
+  else if (strEQc (act_record, "varblendsplsur"))
+    {
+      if (!argc)
+        {
+          argc++;
+          return !value ? "concave" : "convex";
+        }
+      else
+        {
+          argc = 0;
+          return !value ? "rb_snapshot" : "rb_envelope";
+        }
+    }
+  else if (strEQc (act_record, "attrib_var_blend"))
+    {
+      if (!argc)
+        {
+          argc++;
+          return value ? "uncalibrated" : "calibrated";
+        }
+      else if (argc == 1)
+        {
+          argc++;
+          return !value ? "one_radius" : "two_radii";
+        }
+      else
+        {
+          argc = 0;
+          return !value ? "forward" : "reversed";
+        }
+    }
+  else if (strEQc (act_record, "bdy_geom"))
+    {
+      if (!argc)
+        {
+          argc++;
+          return value ? "non_cross" : "cross";
+        }
+      else
+        {
+          argc++;
+          return !value ? "non_smooth" : "smooth";
+        }
+    }
+  else
+    return value ? "I" : "F";
+}
+
 /* converts SAB acis_data in-place to SAT encr_sat_data[].
    sets dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
    encrypted acis_data anymore, rather the encrypted conversion from SAB for DXF */
@@ -1313,6 +1427,7 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
   const char *const enddata = "\016\003End\016\002of\016\004ACIS\r\004data";
   int first = 1;
   int forward = 0;
+  char act_record [80];
 
   if (_obj->num_blocks)
     num_blocks = _obj->num_blocks;
@@ -1348,10 +1463,10 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
 #define SAB_RD1()                                                       \
   {                                                                     \
     double f = bit_read_RD (&src);                                      \
-    if (dest.byte + 16 > dest.size)                                     \
+    if (dest.byte + 16 >= dest.size)                                     \
       bit_chain_alloc (&dest);                                          \
-    dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%-16.14f ", f); \
-    LOG_TRACE ("%-16.14f ", f);                                         \
+    dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%g ", f);     \
+    LOG_TRACE ("%g ", f);                                               \
   }
 // key is ignored here. header only
 #define SAB_T(key)                                                      \
@@ -1370,6 +1485,10 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
   bit_write_TF (&dest, (BITCODE_TF) x, sizeof (x) - 1);                 \
   bit_write_TF (&dest, (BITCODE_TF) " ", 1);                            \
   LOG_TRACE ("%s ", x)
+#define SAB_TV(x)                                                       \
+  bit_write_TF (&dest, (BITCODE_TF) x, strlen (x));                     \
+  bit_write_TF (&dest, (BITCODE_TF) " ", 1);                            \
+  LOG_TRACE ("%s ", x)
 
   // create the two vectors encr_sat_data[] and block_size[] on the fly from the SAB
   // http://paulbourke.net/dataformats/sat/sat.pdf
@@ -1378,9 +1497,9 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
      6x0 16 63 "\006\215\355\265\240\367ư>" "\006\273\275\327\331\337|\333= "\r\tasmheader" \f\377\377\377\377\004\377\377\377\377\a\f223.0.1.1930\021 \r\004body \f\377\377\377\377\004\377\377\377\377\f\377\377\377\377\f\002"
    */
   version = bit_read_RL (&src);
-  num_records = bit_read_RL (&src); //if 0 until end marker
-  num_entities = bit_read_RL (&src);
-  has_history = bit_read_RL (&src);
+  num_records = bit_read_RL (&src);  // if 0 until end marker. total
+  num_entities = bit_read_RL (&src); // named top in the ACIS docs
+  has_history = bit_read_RL (&src);  // named as flags in the ACIS docs
   dest.byte += sprintf ((char*)dest.chain, "%d %d %d %d ", version, num_records,
                         num_entities, has_history);
   LOG_TRACE ("%d %d %d %d \n", version, num_records, num_entities, has_history);
@@ -1408,31 +1527,34 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
         case 17:   //  # end of record
           first = 1;
           forward = 0;
-          if (dest.byte + 1 > dest.size)
+          if (dest.byte + 2 >= dest.size)
             bit_chain_alloc (&dest);
           dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#");
           LOG_TRACE ("#\n")
           i = new_encr_sat_data_line (_obj, &dest, i);
           break;
-        case 13:   // start new record
+        case 13:   // ident
           first = 1;
           _obj->encr_sat_data[i] = (char*)dest.chain;
           // fallthru
-        case 7:  // header text
-        case 14: // prefix type
+        case 7:  // char len
+        case 14: // subident
           {
             int len = bit_read_RC (&src);
-            if (dest.byte + len + 4 > dest.size)
+            if (dest.byte + len + 4 >= dest.size)
               bit_chain_alloc (&dest);
-            /*
             if (c == 7 && i < 3)
               {
                 dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%d ", len);
                 LOG_TRACE ("%d ", len);
               }
-            */
             LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], c == 14 ? "-" : " ")
             bit_write_TF (&dest, &src.chain[src.byte], len);
+            if (c == 13 && len < 80)
+              {
+                memcpy (act_record, &src.chain[src.byte], len);
+                act_record[len] = '\0'; // to find identifier-specific true/false strings
+              }
             // TODO Begin-of-ACIS-History-Data => new line
             // TODO End-of-ACIS-History-Section => new line
             //if (has_history && c == 13 && len = 4 && memBEGINc (&src.chain[src.byte], "Data"))
@@ -1444,14 +1566,35 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
               bit_write_TF (&dest, (BITCODE_TF)" ", 1);
             break;
           }
-        case 9: // 0 or 4 byte
-          SAB_TF ("forward");
+        case 8:  // short len
+          {
+            int len = bit_read_RS (&src);
+            LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], " ")
+            bit_write_TF (&dest, &src.chain[src.byte], len);
+            src.byte += len;
+            bit_write_TF (&dest, (BITCODE_TF)" ", 1);
+            break;
+          }
+        case 9:  // long len
+          {
+            int len = bit_read_RL (&src);
+            LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], " ")
+            bit_write_TF (&dest, &src.chain[src.byte], len);
+            src.byte += len;
+            bit_write_TF (&dest, (BITCODE_TF)" ", 1);
+            break;
+          }
+        case 10: // 0 byte TRUE
+          {
+            const char *s = SAT_boolean (act_record, 1);
+            SAB_TV (s);
+          }
           break;
-        case 10: // 0 byte
-          SAB_TF ("reversed");
-          break;
-        case 11: // 0 byte I Infinity
-          SAB_TF ("I");
+        case 11: // 0 byte FALSE
+          {
+            const char *s = SAT_boolean (act_record, 0);
+            SAB_TV (s);
+          }
           break;
         case 15: // 0 byte subtype start
           SAB_TF ("{");
@@ -1459,35 +1602,63 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
         case 16: // 1 byte subtype end
           SAB_TF ("}");
           LOG_HANDLE ("[%c] ", src.chain[src.byte]);
-          src.byte++;
+          //src.byte++;
           break;
-        case 3: // integer constant
+        case 2: // char constant
           {
-            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
-            if (dest.byte + 8 > dest.size)
+            int8_t l = (int8_t)bit_read_RC (&src);
+            if (dest.byte + 4 >= dest.size)
               bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%" PRId32 " ", l);
-            LOG_TRACE ("%" PRId32 " ", l)
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%" PRId8 " ", l);
+            LOG_TRACE ("%" PRId8 " ", l)
           }
           break;
-        case 4: // pointer index, (often NULL, i.e. -1)
-        case 12: // 4 byte pointer index
+        case 3: // short constant
+          {
+            int16_t l = (int16_t)bit_read_RS (&src);
+            if (dest.byte + 8 >= dest.size)
+              bit_chain_alloc (&dest);
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%" PRId16 " ", l);
+            LOG_TRACE ("%" PRId16 " ", l)
+          }
+          break;
+        case 4: // long constant
           {
             BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
-            if (dest.byte + 8 > dest.size)
+            if (dest.byte + 8 >= dest.size)
               bit_chain_alloc (&dest);
             dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", l);
             LOG_TRACE ("$%" PRId32 " ", l)
           }
           break;
-        case 19: // 3x double-float in a record
-        case 20: // 3x double-float in a record
+        case 5: // float constant
+          {
+            float f = bit_read_RL (&src);
+            if (dest.byte + 16 >= dest.size)
+              bit_chain_alloc (&dest);
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%g ", (double)f);
+            LOG_TRACE ("%g ", (double)f)
+          }
+          break;
+        case 12: // 4 byte pointer index
+          {
+            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
+            if (dest.byte + 8 >= dest.size)
+              bit_chain_alloc (&dest);
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", l);
+            LOG_TRACE ("$%" PRId32 " ", l)
+          }
+          break;
+        case 19: // 3x double-float position
+        case 20: // 3x double-float vector
           SAB_RD1();
           SAB_RD1();
           // fallthru
         case 6:  // 8 byte double-float, e.g. in the 2nd header line
           SAB_RD1();
           break;
+        //case 21:  // enum
+        //  break;
         default:
           LOG_ERROR ("Unknown SAB tag %d", c);
         }
