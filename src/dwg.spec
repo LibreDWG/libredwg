@@ -1805,7 +1805,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
            R21 (2007) release     21200
            R24 (2010) release     21500
            R27 (2013) release     21800
-           R?? (2018) release     223.0.1.1930
+           R?? (2018) release            223.0.1.1930
         */
         {
           FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
@@ -1818,9 +1818,13 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               const char *const end = "\016\003End\016\002of\016\004ACIS\r\004data";
               long pos = dat->byte;
               BITCODE_BL size = dat->size - dat->byte - 1;
-              _obj->sab_size = size;
               FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
-              // Binary SAB, unencrypted, readable ascii strings until "End of ACIS data"
+              // Binary SAB. unencrypted, documented format until "End-of-ACIS-data"
+              // TODO There exist also SAB streams with a given number of records, but I
+              // haven't seen them here. See out_dxf.c:convert_SAB_to_encrypted_SAT
+              // Better read the first header line here, to check for num_records 0.
+              // Or even parse the whole SAB format here, and store the SAB different
+              // to the ASCII acis_data.
               FIELD_TFF (acis_data, size, 1); // SAB "ACIS BinaryFile"
               LOG_TRACE ("Unknown ACIS 2 SAB sab_size " FORMAT_BL " starting at %ld\n",
                          size, pos);
@@ -1830,12 +1834,12 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   size += strlen (end);
                   dat->byte = pos + size;
                   _obj->sab_size = size;
-                  LOG_TRACE ("Found %s marker: sab_size: " FORMAT_BL ", new pos: %lu\n",
-                             end, size, dat->byte);
+                  LOG_TRACE ("Found End-of-ACIS-data. sab_size: " FORMAT_BL ", new pos: %lu\n",
+                             size, dat->byte);
                 }
               else
-                LOG_TRACE ("%s marker not found\n", end);
-              _obj->block_size[0] = size;
+                LOG_TRACE ("End-of-ACIS-data marker not found\n");
+              _obj->sab_size = _obj->block_size[0] = size;
             }
           else
             LOG_WARN ("SAB from AcDs blob not yet implemented");

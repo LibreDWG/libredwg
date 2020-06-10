@@ -7402,6 +7402,8 @@ typedef struct _dwg_struct
   Dwg_Second_Header second_header;
 
   unsigned int layout_type;
+  unsigned int num_acis_sab_data; // temporary, until we can parse acds for SAB data, r2013+
+  char **acis_sab_data;
 } Dwg_Data;
 
 #define DWG_OPTS_LOGLEVEL 0xf

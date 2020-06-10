@@ -967,6 +967,13 @@ dwg_free (Dwg_Data *dwg)
       dwg_free_filedeplist (dwg);
       dwg_free_security (dwg);
       dwg_free_acds (dwg);
+      for (i = 0; i < dwg->num_acis_sab_data; ++i)
+        {
+          FREE_IF (dwg->acis_sab_data[i]);
+        }
+      dwg->num_acis_sab_data = 0;
+      FREE_IF (dwg->acis_sab_data);
+
       FREE_IF (dwg->vbaproject.unknown_bits);
       FREE_IF (dwg->revhistory.histories);
       FREE_IF (dwg->appinfohistory.unknown_bits);

@@ -302,3 +302,43 @@
 #ifdef IS_FREE
   END_REPEAT (segidx)
 #endif
+
+#ifdef IS_DECODER
+  DECODER {
+    char *s, *e;
+    int i = 0;
+    // 414349532042696E61727946696C65
+    const char start[] = "ACIS BinaryFile";
+    // 03456E640E026F660E0341534D0D0464617461
+    const char end[] = "\016\003End\016\002of\016\004ACIS\r\004data";
+    LOG_TRACE ("Search for ACIS BinaryFile data\n");
+    dwg->acis_sab_data = calloc (1, sizeof (char**));
+    dwg->num_acis_sab_data = 0;
+    while ((s = memmem (&dat->chain[i], dat->size - i, start, strlen (start))))
+      {
+        int j = s - (char*)&dat->chain[0]; // absolute_offset of found range
+        if ((e = memmem (s, dat->size - j, end, strlen (end))))
+          {
+            int size = e - s;
+            size += strlen (end);
+            LOG_TRACE ("acis_sab_data[%d]: found %s at %d, size %d\n",
+                       dwg->num_acis_sab_data, start, j, size);
+            // TODO find matching solid entity. for now we store them globally.
+            dwg->acis_sab_data
+                = realloc (dwg->acis_sab_data,
+                           (dwg->num_acis_sab_data + 1) * sizeof (char **));
+            // not NULL terminated
+            dwg->acis_sab_data[dwg->num_acis_sab_data] = malloc (size);
+            memcpy (dwg->acis_sab_data[dwg->num_acis_sab_data], s, size);
+            dwg->num_acis_sab_data++;
+            i = j + size; // next offset to try
+          }
+        else
+          {
+            LOG_TRACE ("No End-of-ACIS-data found at %d for %d-th SAB data\n",
+                       j, dwg->num_acis_sab_data);
+            i = j + 20;
+          }
+      }
+  }
+#endif
