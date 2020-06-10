@@ -2,30 +2,168 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.11
+LibreDWG version 0.11 - planned 2020/06 - beta:
 
 New features:
-  * Can now read all major 2004+ section types: added AppInfo, FileDepList,
+  * new programs dwgfilter, dxfwrite. dwgfilter allows custom jq queries.
+    dxfwrite allows version conversions, which dwgwrite does not yet supports.
+  * Can now read all 2004+ section types: added AppInfo, FileDepList,
     Template, ObjFreeSpace;
-    and as blob: RevHistory, Security, AppInfoHistory
+    and as blob: RevHistory, Security, AppInfoHistory.
+    AcDsPrototype_1b datastore not fully yet, so we cannot yet read new ACIS r2013+
+    SAB blobs stored there.
   * Added new string types: T and T16, TU16, T32 (for those sections)
+  * Convert ACIS BinaryFile v2 SAB to old encrypted ACIS SAT v1 data, needed
+    to convert pre-r2013 ACIS v2 entities to DXF.
+  * Added support for many object/entity types:
+    Now stable: LIGHT, MESH, CELLSTYLEMAP, DYNAMICBLOCKPURGEPREVENTER, GEODATA,
+    LAYERFILTER, MULTILEADER, PLOTSETTINGS, SECTION_MANAGER, SECTIONOBJECT,
+    TABLEGEOMETRY, VBA_PROJECT, VISUALSTYLE.
+    New unstable: ARC_DIMENSION, ASSOCALIGNEDDIMACTIONBODY, LIGHTLIST, MATERIAL,
+    MENTALRAYRENDERSETTINGS, RAPIDRTRENDERSETTINGS, RENDERSETTINGS, SPATIAL_INDEX,
+    TABLESTYLE, SECTION_SETTINGS, DETAILVIEWSTYLE, SECTIONVIEWSTYLE, SUN.
+    Fixed PROXY_OBJECT, PROXY_ENTITY.
+    Note: Unstable objects are not preserved via DXF conversion.
+
+    Debugging classes added (needs --with-debug option):
+    NURBSURFACE, ATEXT, RTEXT, NAVISWORKSMODEL, ACSH_SWEEP_CLASS,
+    ACSH_BOX_CLASS, ACSH_WEDGE_CLASS, ACSH_EXTRUSION_CLASS,
+    ACSH_CHAMFER_CLASS, ACSH_FILLET_CLASS, ACSH_LOFT_CLASS,
+    ACSH_PYRAMID_CLASS, ACSH_SPHERE_CLASS, ACSH_REVOLVE_CLASS,
+    ACSH_TORUS_CLASS, ACSH_HISTORY_CLASS,
+    ASSOCEXTRUDEDSURFACEACTIONBODY, ASSOCLOFTEDSURFACEACTIONBODY,
+    ASSOCREVOLVEDSURFACEACTIONBODY, ASSOCSWEPTSURFACEACTIONBODY,
+    PERSUBENTMGR, DATALINK, DATATABLE, LAYOUTPRINTCONFIG,
+    CONTEXTDATAMANAGER, ALDIMOBJECTCONTEXTDATA,
+    BLKREFOBJECTCONTEXTDATA, FCFOBJECTCONTEXTDATA,
+    LEADEROBJECTCONTEXTDATA, MLEADEROBJECTCONTEXTDATA,
+    MTEXTATTRIBUTEOBJECTCONTEXTDATA, MTEXTOBJECTCONTEXTDATA,
+    TEXTOBJECTCONTEXTDATA, ACMECOMMANDHISTORY, ACMESCOPE,
+    ACMESTATEMGR, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY,
+    ASSOCOSNAPPOINTREFACTIONPARAM,
+    ACDBASSOCOSNAPPOINTREFACTIONPARAM, ASSOCVERTEXACTIONPARAM,
+    ACDBASSOCVERTEXACTIONPARAM, CSACDOCUMENTOPTIONS, CURVEPATH,
+    ACDBCURVEPATH, MOTIONPATH, POINTPATH, ACDBPOINTPATH,
+    TVDEVICEPROPERTIES) BLOCKVISIBILITYGRIP
+    BLOCKVISIBILITYPARAMETER, BLOCKGRIPLOCATIONCOMPONENT.
+  * Added support to write r2004+ format DWG's (which includes also r2010,
+    r2013, r2018, but not r2007), but this does not work fully yet.
+  * Added new Dwg_Version types: R_1_3 for AC1.3, R_2_4 for AC1001, and
+    AC1013 for R_13c3.
+  * The header can now be compiled wth C++ compilers, needed for some bindings.
+    Re-arranged nested structs, names, malloc casts, reserved keywords like this,
+    template.
+    Started with the gambas bindings, a Visual Basic clone for unix.
+  * DXF and JSON importers now create PLACEHOLDER objects for unsupported
+    objects.
+  * 3DSOLID got now material properties and revisionguid fields.
+  * new API functions:
+    dwg_ctrl_table, dwg_handle_name, dwg_find_dicthandle_objname, dwg_variable_dict,
+    dwg_next_entity, get_next_owned_block_entity, dwg_section_name,
+    dwg_version_type, dwg_version_as, dwg_errstrings,  dwg_rgb_palette,
+    dwg_find_color_index.
+  * new dynapi functions: dwg_dynapi_subclass_value, dwg_dynapi_subclass_field,
+    dwg_dynapi_fields_size.
+    (BTW. the dynapi proved to be a godsend for the json importer)
 
 API breaking changes:
   * Renamed dwg_section_type to dwg_section_wtype, added a new dwg_section_type
     for ASCII names.
+  * Removed all extra null_handle fields, and add the missing handle fields.
+  * Renamed all dwg_add_OBJECT functions to dwg_setup_OBJECT. They didn't add them, just setup
+    the internal structures.
+  * Hundreds of field renames due to harmonization efforts with the more generic
+    JSON importer. Note that some deprecated dwg_api accessor functions were also
+    renamed accordingly, but not all.
+
+    For the stable objects:
+    TEXT,ATTRIB,ATTDEF,SHAPE,STYLE: oblique_ang => oblique_angle,
+    DIMENSION_* _13_pt => xline1_pt, _14_pt => xline2_pt,
+      ext_line_rotation => oblique_angle
+    DIMENSION_ANG2LN _16_pt => xline1start_pt, _14_pt => xline2start_pt,
+      _13_pt => xline1end_pt, first_arc_pt => xline2end_pt
+    VIEW,VIEWPORT: view_direction => VIEWDIR (as it overrides this header),
+      view_twist => twist_angle,
+      view_height => VIEWSIZE,
+      snap_angle => SNAPANG,
+      view_center => VIEWCTR,
+      snap_base => SNAPBASE,
+      snap_spacing => SNAPUNIT,
+      grid_spacing => GRIDUNIT,
+      ucs_per_viewport => UCSVP,
+      ucs_origin => ucsorg,
+      ucs_x_axis => ucsxdir,
+      ucs_y_axis => ucsydir,
+      ucs_ortho_view_type => UCSORTHOVIEW
+    OLEFRAME.data_length => data_size,
+    LEADER.offset_to_block_ins_pt => inspt_offset
+    TOLERANCE.text_string => text_value
+    STYLE.vertical => is_vertical, shape_file => is_shape, fixed_height => text_size,
+      extref => xref
+
+    COMMON_TABLE_FIELDS: xrefref => is_xref_ref, xrefindex_plus1 => is_xref_resolved,
+      xrefdep => is_xref_dep. new common xref HANDLE field (was null_handle in many objects)
+
+    LAYER got a new visualstyle handle.
+    LTYPE.dashes got a new style handle and text field.
+    LTYPE has no styles H* anymore, moved to dashes.
+    LTYPE.text_area_is_present => has_strings_area, extref_handle => xref.
+    VIEW, VIEWPORT:
+      height => VIEWSIZE, width => view_width, center => VIEWCTR, target => view_target,
+      direction => VIEWDIR, front_clip => front_clip_z, back_clip => back_clip_z,
+      pspace_flag => is_pspace,
+      origin => ucsorg, x_direction => ucsxdir, y_direction => ucsydir,
+      elevation => ucs_elevation, orthographic_view_type => UCSORTHOVIEW,
+      camera_plottable => is_camera_plottable
+
+    UCS got a new orthopts array, and the renames as above.
+    DIMSTYLE got a new flag0. flag is computed from that.
+    VPORT_ENTITY_HEADER flag1 => is_on, vport_entity => viewport, xref_handle => xref,
+      new prev_entity handle.
+    MLINESTYLE index/ltype union changed to seperate lt_index, lt_ltype fields.
+      They were overwriting each other on version conversions.
+    MLINESTYLE.desc => description, data_length => data_size.
+    HATCH booleans got a is_ prefix.
+    XRECORD.num-databytes => xdata_size
+    MLEADERSTYLE text_frame => is_text_frame, is_new_format removed.
+      changed => is_changed.
+    DICTIONARYYWDFLT got a new format_flags and data_handle
+    SCALE.has_unit_scale => is_unit_scale
+    SORTENTSTABLE.dictionary => block_owner
+
+    Type changes in stable objects:
+    SPLINE.fit_pts are now ordinary BITCODE_3DPOINT*
+    SPLINE.color is BL, scale is now 3BD
 
 Major bugfixes:
   * Fixed converting ASCII from and to Unicode strings, when converting across
     versions. Embed Unicode as \U+XXXX into ASCII, and decode it back to Unicode.
     Honor dat,dwg->from_version and use the new FIELD_T as seperate type. (#185)
+  * Invalid numbers (read failures) are converted to 0.0 in the released version.
+  * Fixed wrong CMC color reads and writes, check the method, lookup the index,
+    support a CMTC truecolor-only type.
+  * Fixed EED writes, by writing to seperate streams and merging them at the end,
+    with proper size calculation.
 
 Minor bugfixes:
   * Fixed uncompressed sections overflows, some fuzzed (#183), some
     with the new sections.
+  * Normalize extrusion vectors.
+  * Fix bit_write_BT, the thickness vector pre-R2000.
+  * Added many overflow checks, due to extensive fuzzing campains.
+  * Fixed wrong julian date conversions with TIMEBLL types.
+  * Fxed keyword conflicts with the bindings: No next, from, self fieldnames.
+  * Many more, see the ChangeLog.
 
 Other newsworthy changes:
   * Harmonized 2004 section search with the better 2007 variant. Added a new
     section and info fixedtype field.
+  * Added unit-tests for all supported objects.
+  * Added src/classes.c defining the class stability (stable, unstable, debugging, unhandled).
+  * Need now -lm, the system math library, in all cases.
+  * Got a complete collection of old DWGs to cross-check against. Many new object types
+    could be stabilized because of this.
+  * CMC color got 2 new fields: raw (EMC only), method (the first rgb byte).
 
 LibreDWG version 0.10.1 - released 2020/01/13 - beta:
 
