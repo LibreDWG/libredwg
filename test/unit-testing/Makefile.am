@@ -177,6 +177,7 @@ testobjects += \
 	acmescope \
 	acmestatemgr \
 	acsh_box_class \
+	acsh_brep_class \
 	acsh_chamfer_class \
 	acsh_extrusion_class \
 	acsh_fillet_class \

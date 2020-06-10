@@ -604,6 +604,7 @@ typedef struct _dwg_object_ACMECOMMANDHISTORY              dwg_obj_acmecommandhi
 typedef struct _dwg_object_ACMESCOPE                       dwg_obj_acmescope;
 typedef struct _dwg_object_ACMESTATEMGR                    dwg_obj_acmestatemgr;
 typedef struct _dwg_object_ACSH_BOX_CLASS                  dwg_obj_acsh_box_class;
+typedef struct _dwg_object_ACSH_BREP_CLASS                 dwg_obj_acsh_brep_class;
 typedef struct _dwg_object_ACSH_EXTRUSION_CLASS            dwg_obj_acsh_extrusion_class;
 typedef struct _dwg_object_ACSH_HISTORY_CLASS              dwg_obj_acsh_history_class;
 typedef struct _dwg_object_ACSH_SWEEP_CLASS                dwg_obj_acsh_sweep_class;
@@ -844,6 +845,7 @@ DWG_GETALL_OBJECT_DECL (VISUALSTYLE)
 
 #ifdef DEBUG_CLASSES
 DWG_GETALL_OBJECT_DECL (ACSH_BOX_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS)
@@ -1073,6 +1075,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (WIPEOUTVARIABLES)
 
 #ifdef DEBUG_CLASSES
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BOX_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS)
@@ -1359,6 +1362,7 @@ dwg_get_OBJECT_DECL (obj_underlaydefinition, UNDERLAYDEFINITION);
 dwg_get_OBJECT_DECL (obj_visualstyle, VISUALSTYLE);
 #ifdef DEBUG_CLASSES
 dwg_get_OBJECT_DECL (obj_acsh_box_class, ACSH_BOX_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);

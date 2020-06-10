@@ -382,6 +382,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ACMESCOPE,
   DWG_TYPE_ACMESTATEMGR,
   DWG_TYPE_ACSH_BOX_CLASS,
+  DWG_TYPE_ACSH_BREP_CLASS,
   DWG_TYPE_ACSH_CHAMFER_CLASS,
   DWG_TYPE_ACSH_EXTRUSION_CLASS,
   DWG_TYPE_ACSH_FILLET_CLASS,
@@ -5295,6 +5296,22 @@ typedef struct _dwg_object_ACSH_WEDGE_CLASS
 
 } Dwg_Object_ACSH_WEDGE_CLASS;
 
+typedef struct _dwg_object_ACSH_BREP_CLASS
+{
+  struct _dwg_object_object *parent;
+  // AcDbEvalExpr
+  BITCODE_BL class_version; // 90
+  BITCODE_BL ee_bl98; //33
+  BITCODE_BL ee_bl99; //29
+  Dwg_ACSH_HistoryNode history_node;
+  // AcDbShPrimitive
+  // AcDbShBrep
+  BITCODE_BL bl90;            /*!< DXF 90 */
+  BITCODE_BL bl91;            /*!< DXF 91 */
+  _3DSOLID_FIELDS;
+
+} Dwg_Object_ACSH_BREP_CLASS;
+
 typedef struct _dwg_object_ACSH_SWEEP_CLASS
 {
   struct _dwg_object_object *parent;
@@ -6552,6 +6569,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ACMESCOPE *ACMESCOPE;
     Dwg_Object_ACMESTATEMGR *ACMESTATEMGR;
     Dwg_Object_ACSH_BOX_CLASS *ACSH_BOX_CLASS;
+    Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
     Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
     Dwg_Object_ACSH_FILLET_CLASS *ACSH_FILLET_CLASS;
@@ -7752,6 +7770,7 @@ int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
 int dwg_setup_ACMESCOPE (Dwg_Object *obj);
 int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);

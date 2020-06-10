@@ -4310,6 +4310,93 @@ BD,	DXF 42
 @end vtable
 @end indentedblock
 
+@strong{ACSH_BREP_CLASS} @anchor{ACSH_BREP_CLASS}
+@cindex object, ACSH_BREP_CLASS
+@vindex ACSH_BREP_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item ee_bl98
+BL,	DXF 98
+@item ee_bl99
+BL,	DXF 99
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
+@item acis_empty
+B
+@item unknown
+B
+@item version
+BS
+@item num_blocks
+BL
+@item block_size
+BL*
+@item encr_sat_data
+char **
+@item sab_size
+BL
+@item acis_data
+RC*
+@item wireframe_data_present
+B
+@item point_present
+B
+@item point
+3BD
+@item isolines
+BL
+@item isoline_present
+B
+@item num_wires
+BL
+@item wires
+Dwg_3DSOLID_wire*
+@item num_silhouettes
+BL
+@item silhouettes
+Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
+@item acis_empty2
+B
+@item extra_acis_data
+struct _dwg_entity_3DSOLID*
+@item num_materials
+BL
+@item materials
+Dwg_3DSOLID_material*
+@item has_revision_guid
+B
+@item revision_guid[38]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
+@item history_id
+H
+@item acis_empty_bit
+B
+
+@end vtable
+@end indentedblock
+
 @strong{ACSH_CHAMFER_CLASS} @anchor{ACSH_CHAMFER_CLASS}
 @cindex object, ACSH_CHAMFER_CLASS
 @vindex ACSH_CHAMFER_CLASS
