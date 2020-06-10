@@ -35,6 +35,7 @@ TODO:
 #include "myalloca.h"
 #include "dwg.h"
 #include "decode.h"
+#include "encode.h"
 #include "out_dxf.h"
 
 static unsigned int loglevel;
@@ -1285,9 +1286,10 @@ new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
       _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
       _obj->num_blocks = i + 1;
     }
-  _obj->encr_sat_data[i] = calloc (dest->byte, 1); // fresh, the dest buf is too large
+  _obj->encr_sat_data[i] = calloc (dest->byte + 2, 1); // fresh, the dest buf is too large
+  bit_write_TF (dest, (BITCODE_TF) "\n\000", 2); // ensure proper eol, dxf out relies on that.
   memcpy (_obj->encr_sat_data[i], dest->chain, dest->byte);
-  _obj->block_size[i] = dest->byte;
+  _obj->block_size[i] = dest->byte - 1; // dont count the final 0
   bit_set_position (dest, 0);
   i++;
   return i;
@@ -1495,10 +1497,10 @@ convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
   if (c != 17) // last line didn't end with #, but End-of-ACIS-data
     i = new_encr_sat_data_line (_obj, &dest, i);
   num_blocks = _obj->num_blocks = i;
+  bit_write_TF (&dest, (BITCODE_TF)"\n\000", 2);
   _obj->encr_sat_data[i] = calloc (dest.byte, 1); // shrink it
   memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
-  _obj->block_size[i] = dest.byte;
-  bit_set_position (&dest, 0);
+  _obj->block_size[i] = dest.byte - 1;
   bit_chain_free (&dest);
   LOG_TRACE ("\n");
 
@@ -1525,15 +1527,26 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       if (FIELD_VALUE (version) == 2)
         {
           BITCODE_RC *acis_data;
-          LOG_WARN ("ACIS BinaryFile v2 unstable");
+          LOG_TRACE ("Convert SAB ACIS BinaryFile v2 to encrypted SAT v1\n");
           error |= convert_SAB_to_encrypted_SAT (_obj);
-          // TODO encrypt
+
+          for (i = 0; i < FIELD_VALUE (num_blocks); i++)
+            {
+              int idx = 0; // here idx is just local, always starting at 0. ignored
+              char *ptr
+                  = encrypt_sat1 (_obj->block_size[i],
+                                  (BITCODE_RC *)_obj->encr_sat_data[i], &idx);
+
+              free (_obj->encr_sat_data[i]);
+              _obj->encr_sat_data[i] = ptr;
+            }
+          _obj->version = 1; // conversion complete
         }
-      FIELD_BS (version, 70); // TODO always write as 1
+      FIELD_BS (version, 70); // always write as 1
       for (i = 0; i < FIELD_VALUE (num_blocks); i++)
         {
           char *s = FIELD_VALUE (encr_sat_data[i]);
-          int len = strlen (s);
+          int len = FIELD_VALUE (block_size[i]);
           // DXF 1 + 3 if >255
           while (len > 0)
             {

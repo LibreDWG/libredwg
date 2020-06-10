@@ -4464,7 +4464,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
 }
 
 char *
-encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *acis_data, int *idx)
+encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data, int *restrict idx)
 {
   char *encr_sat_data = (char*)calloc (blocksize, 1);
   int i = *idx;
@@ -4475,12 +4475,6 @@ encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *acis_data, int *idx)
         encr_sat_data[i++] = acis_data[j];
       else
         encr_sat_data[i++] = acis_data[j] - 159;
-      /* TODO reversion of:
-      if (encr_sat_data[j] <= 32)
-        acis_data[i++] = encr_sat_data[j];
-      else
-        acis_data[i++] = 159 - encr_sat_data[j];
-      */
     }
   *idx = i;
   return encr_sat_data;

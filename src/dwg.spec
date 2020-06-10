@@ -1735,7 +1735,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
   BITCODE_BL i = 0;
   BITCODE_BL total_size = 0;
   BITCODE_BL num_blocks = 0;
-  int idx;
+  int acis_data_idx;
   int error = 0;
 
   FIELD_B (acis_empty, 0);
@@ -1775,24 +1775,24 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           num_blocks = i - 1;
           FIELD_VALUE (num_blocks) = num_blocks;
           LOG_TRACE ("num_blocks: " FORMAT_BL "\n", FIELD_VALUE (num_blocks));
-          idx = 0;
+          acis_data_idx = 0;
           for ( i =0; i < num_blocks; i++)
             {
               for (j = 0; j < FIELD_VALUE (block_size[i]); j++)
                 {
                   if (FIELD_VALUE (encr_sat_data[i][j]) <= 32)
                     {
-                      FIELD_VALUE (acis_data)[idx++]
+                      FIELD_VALUE (acis_data)[acis_data_idx++]
                         = FIELD_VALUE (encr_sat_data[i][j]);
                     }
                   else
                     {
-                      FIELD_VALUE (acis_data)[idx++]
+                      FIELD_VALUE (acis_data)[acis_data_idx++]
                         = 159 - FIELD_VALUE (encr_sat_data[i][j]);
                     }
                 }
             }
-          FIELD_VALUE (acis_data)[idx] = '\0';
+          FIELD_VALUE (acis_data)[acis_data_idx] = '\0';
           // DXF 1 + 3 if >255
           LOG_TRACE ("acis_data:\n%s\n", FIELD_VALUE (acis_data));
         }
@@ -1856,11 +1856,9 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                            Dwg_Entity_3DSOLID *restrict _obj)
 {
   Dwg_Data* dwg = obj->parent;
-  //BITCODE_BL j;
-  //BITCODE_BL vcount;
   BITCODE_BL i = 0;
   BITCODE_BL num_blocks = FIELD_VALUE (num_blocks);
-  int idx = 0;
+  int acis_data_idx = 0;
   int error = 0;
 
   FIELD_B (acis_empty, 0);
@@ -1899,9 +1897,10 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                       VALUE_RL (0, 0);
                       return error;
                     }
+                  // global acis_data_idx is need for the global acis_data
                   FIELD_VALUE (encr_sat_data[i])
                     = encrypt_sat1 (FIELD_VALUE (block_size[i]),
-                                    FIELD_VALUE (acis_data), &idx);
+                                    FIELD_VALUE (acis_data), &acis_data_idx);
                   LOG_TRACE ("encrypt_sat1 %d\n", i);
                 }
               FIELD_BL (block_size[i], 0);

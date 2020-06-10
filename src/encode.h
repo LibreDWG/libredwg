@@ -40,7 +40,8 @@ int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
     If obj->dxfname is NULL, the search is done by index, without any fixups.
  */
 Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
-char *encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data, int *restrict idx);
+char *encrypt_sat1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
+                    int *restrict acis_data_idx) ATTRIBUTE_MALLOC;
 
 // push to entities and entries handles array
 #define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
