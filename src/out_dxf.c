@@ -1450,7 +1450,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   BITCODE_RL version, num_records, num_entities, has_history;
   //char *product_string, *acis_version, *date;
   BITCODE_RD num_mm_units, resabs, resnor;
-  const char *const enddata = "\016\003End\016\002of\016\004ACIS\r\004data";
+  const char enddata[] = "\016\003End\016\002of\016\004ACIS\r\004data";
   int first = 1;
   int forward = 0;
   char act_record [80];
