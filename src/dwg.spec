@@ -2059,6 +2059,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
     }
 
 #define ACTION_3DSOLID \
+  SUBCLASS (AcDbModelerGeometry); \
   DXF_OR_PRINT { \
     DXF_3DSOLID \
   } \
@@ -7520,7 +7521,6 @@ DWG_ENTITY_END
 DWG_ENTITY (LOFTEDSURFACE)
 
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
   VALUEOUTOFBOUNDS (modeler_format_version, 3)
@@ -7566,7 +7566,6 @@ DWG_ENTITY_END
 DWG_ENTITY (REVOLVEDSURFACE)
 
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
 
@@ -7599,7 +7598,6 @@ DWG_ENTITY_END
 DWG_ENTITY (SWEPTSURFACE)
 
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
 
@@ -7633,7 +7631,6 @@ DWG_ENTITY_END
 DWG_ENTITY (NURBSURFACE)
 
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
   //FIELD_BL (bindata_size, 90);
@@ -7655,7 +7652,6 @@ DWG_ENTITY_END
 DWG_ENTITY (PLANESURFACE)
 
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbModelerGeometry)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
   //FIELD_BL (bindata_size, 90);

@@ -7526,6 +7526,8 @@ EXPORT int dwg_obj_is_subentity (const Dwg_Object *restrict obj);
 
 EXPORT int dwg_obj_has_subentity (const Dwg_Object *restrict obj);
 
+EXPORT int dwg_obj_is_3dsolid (const Dwg_Object *restrict obj);
+
 EXPORT BITCODE_BL dwg_get_num_entities (const Dwg_Data *restrict);
 
 EXPORT Dwg_Object_Entity **dwg_get_entities (const Dwg_Data *restrict);

@@ -1370,6 +1370,25 @@ dwg_obj_has_subentity (const Dwg_Object *obj)
              || type == DWG_TYPE_POLYLINE_MESH);
 }
 
+// All entities deriving from 3DSOLID/AcDbModelerGeometry
+EXPORT int
+dwg_obj_is_3dsolid (const Dwg_Object *obj)
+{
+  const Dwg_Object_Type type = obj->fixedtype;
+  return (obj->supertype == DWG_SUPERTYPE_ENTITY)
+         && (type == DWG_TYPE__3DSOLID ||
+             type == DWG_TYPE_REGION ||
+             type == DWG_TYPE_BODY ||
+             type == DWG_TYPE_EXTRUDEDSURFACE ||
+             type == DWG_TYPE_LOFTEDSURFACE ||
+             type == DWG_TYPE_NURBSURFACE ||
+             type == DWG_TYPE_PLANESURFACE ||
+             type == DWG_TYPE_REVOLVEDSURFACE ||
+             type == DWG_TYPE_SWEPTSURFACE ||
+             type == DWG_TYPE_ACSH_BREP_CLASS
+             );
+}
+
 EXPORT Dwg_Section_Type
 dwg_section_type (const char* restrict name)
 {
