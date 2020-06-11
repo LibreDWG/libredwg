@@ -1276,6 +1276,29 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 
 #include "dwg.spec"
 
+/* This was previously in encode, but since out_dxf needs it for r2013+ 3DSOLIDs
+   and --disable-write is still an option, we need to move it here.
+   A global acis_data_idx is needed, since encr_acis_data is split into blocks, but
+   acis_data is a single stream, so we need to keep track of the current position.
+ */
+EXPORT char *
+dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
+                  int *restrict acis_data_idx)
+{
+  char *encr_sat_data = (char*)calloc (blocksize, 1);
+  int i = *acis_data_idx;
+  int j;
+  for (j = 0; j < (int)blocksize; j++)
+    {
+      if (acis_data[j] <= 32)
+        encr_sat_data[i++] = acis_data[j];
+      else
+        encr_sat_data[i++] = acis_data[j] - 159;
+    }
+  *acis_data_idx = i;
+  return encr_sat_data;
+}
+
 static int
 new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
                         unsigned int i)
@@ -1412,11 +1435,11 @@ SAT_boolean (const char *act_record, bool value)
     return value ? "I" : "F";
 }
 
-/* converts SAB acis_data in-place to SAT encr_sat_data[].
-   sets dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
-   encrypted acis_data anymore, rather the encrypted conversion from SAB for DXF */
-int
-convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj)
+/* Converts v2 SAB acis_data in-place to SAT v1 encr_sat_data[].
+   Sets dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
+   encrypted acis_data anymore, rather the converted from SAB for DXF */
+EXPORT int
+dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 {
   Bit_Chain dest = { NULL, 0, 0, 0 };
   Bit_Chain src = { NULL, 0, 0, 0 };
@@ -1700,13 +1723,13 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           BITCODE_RC *acis_data;
           LOG_TRACE ("Convert SAB ACIS BinaryFile v2 to encrypted SAT v1\n");
-          error |= convert_SAB_to_encrypted_SAT (_obj);
+          error |= dwg_convert_SAB_to_SAT1 (_obj);
 
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
             {
               int idx = 0; // here idx is just local, always starting at 0. ignored
               char *ptr
-                  = encrypt_sat1 (_obj->block_size[i],
+                  = dwg_encrypt_SAT1 (_obj->block_size[i],
                                   (BITCODE_RC *)_obj->encr_sat_data[i], &idx);
 
               free (_obj->encr_sat_data[i]);

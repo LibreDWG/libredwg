@@ -30,7 +30,6 @@ const char *dxf_codepage (int code, Dwg_Data *dwg)  RETURNS_NONNULL;
 int dxf_is_sorted_INSERT (const Dwg_Object *restrict obj);
 int dxf_is_sorted_POLYLINE (const Dwg_Object *restrict obj);
 int dxf_validate_DICTIONARY (Dwg_Object *obj);
-int convert_SAB_to_encrypted_SAT (Dwg_Entity_3DSOLID *restrict _obj);
 
 EXPORT int dwg_write_dxf (Bit_Chain *dat, Dwg_Data *dwg);
 EXPORT int dwg_write_dxfb (Bit_Chain *dat, Dwg_Data *dwg);

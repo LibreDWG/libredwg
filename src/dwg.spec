@@ -1821,7 +1821,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
               // Binary SAB. unencrypted, documented format until "End-of-ACIS-data"
               // TODO There exist also SAB streams with a given number of records, but I
-              // haven't seen them here. See out_dxf.c:convert_SAB_to_encrypted_SAT
+              // haven't seen them here. See dwg_convert_SAB_to_SAT1
               // Better read the first header line here, to check for num_records 0.
               // Or even parse the whole SAB format here, and store the SAB different
               // to the ASCII acis_data.
@@ -1903,9 +1903,9 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                     }
                   // global acis_data_idx is need for the global acis_data
                   FIELD_VALUE (encr_sat_data[i])
-                    = encrypt_sat1 (FIELD_VALUE (block_size[i]),
+                    = dwg_encrypt_SAT1 (FIELD_VALUE (block_size[i]),
                                     FIELD_VALUE (acis_data), &acis_data_idx);
-                  LOG_TRACE ("encrypt_sat1 %d\n", i);
+                  LOG_TRACE ("dwg_encrypt_SAT1 %d\n", i);
                 }
               FIELD_BL (block_size[i], 0);
               FIELD_TF (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);

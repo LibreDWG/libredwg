@@ -1749,7 +1749,7 @@ typedef struct _dwg_3DSOLID_material
   BITCODE_BL* block_size; \
   char** encr_sat_data; \
   BITCODE_BL sab_size; \
-  BITCODE_RC* acis_data; \
+  BITCODE_RC* acis_data; /* The decrypted SAT v1 or the SAB v2 stream */ \
   BITCODE_B wireframe_data_present; \
   BITCODE_B point_present; \
   BITCODE_3BD point; \
@@ -7603,6 +7603,15 @@ EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT Dwg_Version_Type dwg_version_as (const char *version);
 EXPORT void dwg_errstrings (int error);
+
+EXPORT char *dwg_encrypt_SAT1 (BITCODE_BL blocksize,
+                               BITCODE_RC *restrict acis_data,
+                               int *restrict acis_data_offset);
+/* Converts v2 SAB acis_data in-place to SAT v1 encr_sat_data[].
+   Sets _obj->_dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
+   encrypted acis_data anymore, rather the converted from SAB for DXF */
+EXPORT int dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj);
+
 
 /* The old color.index 0-256 */
 typedef struct rgbpalette {
