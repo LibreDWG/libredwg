@@ -1967,8 +1967,8 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
         }
       FREE_IF (FIELD_VALUE (encr_sat_data));
       FREE_IF (FIELD_VALUE (block_size));
-      FREE_IF (FIELD_VALUE (acis_data));
     }
+  FREE_IF (FIELD_VALUE (acis_data));
   return error;
 }
 #else

@@ -336,9 +336,10 @@
                            wanted, num_acis_sab_data)
                 return DWG_ERR_INVALIDHANDLE;
               }
-            hdl = POP_HV (dwg, num_acis_sab_hdl, acis_sab_hdl);
+            hdl = SHIFT_HV (dwg, num_acis_sab_hdl, acis_sab_hdl);
             o = dwg_resolve_handle (dwg, hdl->handleref.value);
-            //free (hdl);
+            LOG_TRACE ("%s.acis_sab_hdl[%u] = " FORMAT_REF "\n", o->name,
+                       dwg->num_acis_sab_hdl + 1, ARGS_REF (hdl))
             if (!o || !dwg_obj_is_3dsolid (o))
               {
                 LOG_ERROR ("Matching object %s " FORMAT_REF " not a 3DSOLID",
@@ -359,6 +360,7 @@
             dwg_dynapi_entity_set_value (sol, o->name, "acis_empty", &acis_empty, 0);
             // o->tio.entity->has_ds_data = 0; // maybe there is more, like the wires and silhuettes
             LOG_TRACE ("%s.acis_data = %u " FORMAT_REF "\n", o->name, size, ARGS_REF (hdl))
+            free (hdl);
             i = j + size; // next offset to try
           }
         else
@@ -374,7 +376,11 @@
                    wanted)
       }
     else
-      LOG_WARN ("Not matching number of %u 3DSOLID entities and %u AcDs SAB data\n",
-                wanted, num_acis_sab_data)
+      {
+        LOG_WARN ("Not matching number of %u 3DSOLID entities and %u AcDs SAB data\n",
+                  wanted, num_acis_sab_data);
+        while (dwg->num_acis_sab_hdl > 0)
+          free (SHIFT_HV (dwg, num_acis_sab_hdl, acis_sab_hdl));
+      }
   }
 #endif

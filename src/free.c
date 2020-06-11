@@ -1003,10 +1003,6 @@ dwg_free (Dwg_Data *dwg)
               FREE_IF (dwg->object_ref[i]);
             }
         }
-      for (i = 0; i < dwg->max_acis_sab_hdl; ++i)
-        {
-          FREE_IF (dwg->acis_sab_hdl[i]);
-        }
       FREE_IF (dwg->acis_sab_hdl);
       FREE_IF (dwg->object_ref);
       FREE_IF (dwg->object);

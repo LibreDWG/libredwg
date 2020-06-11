@@ -386,3 +386,13 @@ const unsigned char _dwg_VISUALSTYLE_proptypes[58] =
    /* [52] */    3,  2,  5,  1,
    /* [56] */    3,  3
   };
+
+// need to return the first ref from the handle vector.
+BITCODE_H
+shift_hv (BITCODE_H *hv, BITCODE_BL *num_p)
+{
+  BITCODE_H ref = hv[0];
+  *num_p = *num_p - 1;
+  memmove (&hv[0], &hv[1], *num_p * sizeof (BITCODE_H));
+  return ref;
+}

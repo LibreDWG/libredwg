@@ -7403,7 +7403,6 @@ typedef struct _dwg_struct
 
   unsigned int layout_type;
   unsigned int num_acis_sab_hdl;  // temporary, until we can parse acds for SAB data, r2013+
-  unsigned int max_acis_sab_hdl;
   BITCODE_H *acis_sab_hdl;
 } Dwg_Data;
 

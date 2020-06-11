@@ -295,7 +295,7 @@ void *my_memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((
 void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 3));
 #endif
 
-// push to handle vector
+// push to handle vector at the end. It really is unshift.
 #define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
   {                                                                           \
     _obj->hvfield                                                             \
@@ -306,7 +306,11 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 
     _obj->numfield++;                                                         \
   }
 
-// no need to free global handles, just the HV
+// no need to free global handles, just the HV.
+// returns the last
 #define POP_HV(_obj, numfield, hvfield) _obj->hvfield[--_obj->numfield]
+// returns the first
+#define SHIFT_HV(_obj, numfield, hvfield) shift_hv (_obj->hvfield, &_obj->numfield)
+BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p);
 
 #endif
