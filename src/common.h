@@ -25,6 +25,7 @@
 #  undef __XSI_VISIBLE /* redefined in config.h */
 #endif
 #include "config.h"
+#include <stddef.h>
 #include <stdint.h>
 #include <inttypes.h>
 #include "dwg.h"
@@ -284,9 +285,14 @@ char *strrplc (const char *s, const char *from, const char *to);
 #define deg2rad(ang) (ang) * M_PI_2 / 90.0
 
 #if !defined(HAVE_MEMMEM) || defined(COMMON_TEST_C)
-// only in _GNU_SOURCE
-void *my_memmem (void *h0, size_t k, void *n0, size_t l);
+// only if _GNU_SOURCE
+void *my_memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 3));
 #define memmem my_memmem
+#elif !defined(_GNU_SOURCE) && defined(IS_DECODER)
+/* HAVE_MEMMEM and _GNU_SOURCE are unreliable on non-Linux systems.
+   This fails on FreeBSD and macos.
+   Rather declare it by ourselves, and don't use _GNU_SOURCE. */
+void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 3));
 #endif
 
 #endif

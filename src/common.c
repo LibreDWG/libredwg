@@ -166,7 +166,9 @@ strrplc (const char *s, const char *from, const char *to)
 
 #if !defined(HAVE_MEMMEM) || defined(COMMON_TEST_C)
 // naive from scratch implementation, not from glibc.
-void *my_memmem (void *h0, size_t k, void *n0, size_t l)
+// see also examples/unknown.c:membits
+void *  __nonnull((1, 3))
+my_memmem (const void *h0, size_t k, const void *n0, size_t l)
 {
   const unsigned char *h = h0, *n = n0;
   unsigned char *plast;

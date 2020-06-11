@@ -17,7 +17,6 @@
  */
 
 #include "config.h"
-#define _GNU_SOURCE /* for memmem */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
