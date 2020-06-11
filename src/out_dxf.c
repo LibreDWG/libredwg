@@ -1450,7 +1450,9 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   BITCODE_RL version, num_records, num_entities, has_history;
   //char *product_string, *acis_version, *date;
   BITCODE_RD num_mm_units, resabs, resnor;
-  const char enddata[] = "\016\003End\016\002of\016\004ACIS\r\004data";
+  // Note that r2013+ has ASM data instead.
+  // const char enddata[] = "\016\003End\016\002of\016\004ACIS\r\004data";
+  // const char enddata1[] = "\016\003End\016\002of\016\003ASM\r\004data";
   int first = 1;
   int forward = 0;
   char act_record [80];
@@ -1683,7 +1685,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 6:  // 8 byte double-float, e.g. in the 2nd header line
           SAB_RD1();
           break;
-        //case 21:  // enum
+        //case 21:  // enum <identifier>
         //  break;
         default:
           LOG_ERROR ("Unknown SAB tag %d", c);
@@ -1691,7 +1693,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       c = bit_read_RC (&src);
     }
 
-  //if (c != 17) // last line didn't end with #, but End-of-ACIS-data
+  //if (c != 17) // last line didn't end with #, but End-of-ACIS-data or End-of-ASM-data
   //  i = new_encr_sat_data_line (_obj, &dest, i);
   num_blocks = _obj->num_blocks = i;
   bit_write_TF (&dest, (BITCODE_TF)"\n", 1);

@@ -314,8 +314,8 @@
     const unsigned int wanted = dwg->num_acis_sab_hdl;
     // 414349532042696E61727946696C65 @10504/2 = 5252
     const char start[] = "ACIS BinaryFile";
-    // 03456E640E026F660E0341534D0D0464617461
-    const char end[] = "\016\003End\016\002of\016\004ACIS\r\004data";
+    // 0E03456E640E026F660E0341534D0D0464617461 @13822/2 = 6911
+    const char end[] = "\016\003End\016\002of\016\003ASM\r\004data";
     LOG_TRACE ("\nSearch for ACIS BinaryFile data:\n");
     num_acis_sab_data = 0;
     while ((s = memmem (&dat->chain[i], dat->size - i, start, strlen (start))))
@@ -332,7 +332,8 @@
                        num_acis_sab_data, start, j, size);
             if (!dwg->num_acis_sab_hdl)
               {
-                LOG_ERROR ("Not enough 3DSOLIDs for a AcDs SAB data")
+                LOG_ERROR ("Not enough %u 3DSOLIDs for the %u-th AcDs SAB data",
+                           wanted, num_acis_sab_data)
                 return DWG_ERR_INVALIDHANDLE;
               }
             hdl = POP_HV (dwg, num_acis_sab_hdl, acis_sab_hdl);
@@ -362,7 +363,7 @@
           }
         else
           {
-            LOG_WARN ("No End-of-ACIS-data found from %u - %lu for %d-th SAB data",
+            LOG_WARN ("No End-of-ASM-data found from %u - %lu for %d-th SAB data",
                        j, dat->size, num_acis_sab_data);
             i = j + 20;
           }

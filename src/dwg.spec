@@ -1815,7 +1815,9 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           if (!obj->tio.entity->has_ds_data)
             {
               char *p;
-              const char *const end = "\016\003End\016\002of\016\004ACIS\r\004data";
+              // Note that r2013+ has End-of-ASM-data (not ACIS anymore, but their fork)
+              const char end[] = "\016\003End\016\002of\016\004ACIS\r\004data";
+              const char end1[] = "\016\003End\016\002of\016\003ASM\r\004data";
               long pos = dat->byte;
               BITCODE_BL size = dat->size - dat->byte - 1;
               FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
@@ -1837,8 +1839,17 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   LOG_TRACE ("Found End-of-ACIS-data. sab_size: " FORMAT_BL ", new pos: %lu\n",
                              size, dat->byte);
                 }
+              else if ((p = (char*)memmem (_obj->acis_data, size, end1, strlen (end1))))
+                {
+                  size = p - (char*)_obj->acis_data;
+                  size += strlen (end1);
+                  dat->byte = pos + size;
+                  _obj->sab_size = size;
+                  LOG_TRACE ("Found End-of-ASM-data. sab_size: " FORMAT_BL ", new pos: %lu\n",
+                             size, dat->byte);
+                }
               else
-                LOG_TRACE ("End-of-ACIS-data marker not found\n");
+                LOG_TRACE ("No End-of-ACIS or ASM data marker found\n");
               _obj->sab_size = _obj->block_size[0] = size;
             }
           else
