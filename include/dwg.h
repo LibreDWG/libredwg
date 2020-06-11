@@ -7599,6 +7599,9 @@ EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
                                           const BITCODE_RC code,
                                           const unsigned long value,
                                           const Dwg_Object *restrict obj);
+/* Creates a non-global, free'able handle ref. Never relative */
+EXPORT Dwg_Object_Ref *
+dwg_add_handleref_free (const BITCODE_RC code, const unsigned long absref);
 
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT Dwg_Version_Type dwg_version_as (const char *version);

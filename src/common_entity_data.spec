@@ -98,8 +98,9 @@
 #ifdef IS_DECODER
       if (_obj->has_ds_data && dwg_obj_is_3dsolid (obj))
         {
-          PUSH_HV (obj->parent, num_acis_sab_hdl, acis_sab_hdl,
-                   dwg_add_handleref (obj->parent, 5, obj->handle.value, NULL));
+          // not global, needs to be freed individually. (SHIFT_HV)
+          BITCODE_H ref = dwg_add_handleref_free (5, obj->handle.value);
+          PUSH_HV (obj->parent, num_acis_sab_hdl, acis_sab_hdl, ref);
         }
 #endif
     }

@@ -360,7 +360,7 @@
             dwg_dynapi_entity_set_value (sol, o->name, "acis_empty", &acis_empty, 0);
             // o->tio.entity->has_ds_data = 0; // maybe there is more, like the wires and silhuettes
             LOG_TRACE ("%s.acis_data = %u " FORMAT_REF "\n", o->name, size, ARGS_REF (hdl))
-            free (hdl);
+            free (hdl); // it is a non-global, free'able handleref. Created in common_entity_data.spec
             i = j + size; // next offset to try
           }
         else
