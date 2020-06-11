@@ -967,12 +967,6 @@ dwg_free (Dwg_Data *dwg)
       dwg_free_filedeplist (dwg);
       dwg_free_security (dwg);
       dwg_free_acds (dwg);
-      for (i = 0; i < dwg->num_acis_sab_data; ++i)
-        {
-          FREE_IF (dwg->acis_sab_data[i]);
-        }
-      dwg->num_acis_sab_data = 0;
-      FREE_IF (dwg->acis_sab_data);
 
       FREE_IF (dwg->vbaproject.unknown_bits);
       FREE_IF (dwg->revhistory.histories);
@@ -1009,6 +1003,11 @@ dwg_free (Dwg_Data *dwg)
               FREE_IF (dwg->object_ref[i]);
             }
         }
+      for (i = 0; i < dwg->max_acis_sab_hdl; ++i)
+        {
+          FREE_IF (dwg->acis_sab_hdl[i]);
+        }
+      FREE_IF (dwg->acis_sab_hdl);
       FREE_IF (dwg->object_ref);
       FREE_IF (dwg->object);
       if (dwg->object_map)

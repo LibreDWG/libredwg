@@ -295,4 +295,18 @@ void *my_memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((
 void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 3));
 #endif
 
+// push to handle vector
+#define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
+  {                                                                           \
+    _obj->hvfield                                                             \
+        = realloc (_obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H)); \
+    _obj->hvfield[_obj->numfield] = ref;                                      \
+    LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,     \
+               ARGS_REF (_obj->hvfield[_obj->numfield]));                     \
+    _obj->numfield++;                                                         \
+  }
+
+// no need to free global handles, just the HV
+#define POP_HV(_obj, numfield, hvfield) _obj->hvfield[--_obj->numfield]
+
 #endif

@@ -32,6 +32,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
+#define IS_DECODER
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"

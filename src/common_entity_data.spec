@@ -94,7 +94,14 @@
     }
   SINCE (R_2013)
     {
-      FIELD_B (has_ds_data, 0)
+      FIELD_B (has_ds_data, 0);
+#ifdef IS_DECODER
+      if (_obj->has_ds_data && dwg_obj_is_3dsolid (obj))
+        {
+          PUSH_HV (obj->parent, num_acis_sab_hdl, acis_sab_hdl,
+                   dwg_add_handleref (obj->parent, 5, obj->handle.value, NULL));
+        }
+#endif
     }
 
   // no ENC type as it's only used once, here, and we would need to write

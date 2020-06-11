@@ -16,6 +16,8 @@
  * modified by Reini Urban
  */
 
+#define IS_DECODER
+
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +29,7 @@
 #include "common.h"
 #include "bits.h"
 #include "decode.h"
+#include "dynapi.h"
 
 /* The logging level for the read (decode) path.  */
 static unsigned int loglevel;
