@@ -1461,12 +1461,22 @@ api_common_object (dwg_object *obj)
                "ACSH_HistoryNode", "trans", &trans, NULL))              \
     fail ("ACSH_HistoryNode.trans");                                    \
   else                                                                  \
-  for (int i = 0; i < 16; i++)                                          \
     {                                                                   \
-      if (trans[i] == _obj->history_node.trans[i]) /* catches nan */    \
-        ok ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);             \
-      else                                                              \
-        fail ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);           \
+      bool good = 1;                                                    \
+      for (int i = 0; i < 16; i += 4)                                   \
+        {                                                               \
+          for (int j = i; j < i+4; j++)                                 \
+            { /* catches nan */                                         \
+              if (trans[j] != _obj->history_node.trans[j])              \
+                good = 0;                                               \
+            }                                                           \
+          if (good)                                                     \
+            ok ("ACSH_HistoryNode.trans[%d]: (%f, %f, %f, %f)", i,      \
+              trans[i], trans[i+1], trans[i+2], trans[i+3]);            \
+          else                                                          \
+            fail ("ACSH_HistoryNode.trans[%d]: (%f, %f, %f, %f)", i,    \
+              trans[i], trans[i+1], trans[i+2], trans[i+3]);            \
+        }                                                               \
     }                                                                   \
   CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);       \
   CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL); \

@@ -73,8 +73,12 @@ api_process (dwg_object *obj)
   else
   for (int i = 0; i < 16; i++)
     {
-      ok ("ACSH_SWEEP_CLASS.sweepentity_transform[%d]: %f", i,
-          sweepentity_transform[i]);
+      if (sweepentity_transform[i] == _obj->sweepentity_transform[i])
+        ok ("ACSH_SWEEP_CLASS.sweepentity_transform[%d]: %f", i,
+            sweepentity_transform[i]);
+      else
+        fail ("ACSH_SWEEP_CLASS.sweepentity_transform[%d]: %f", i,
+            sweepentity_transform[i]);
     }
   if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS",
                                 "pathentity_transform",
@@ -86,8 +90,12 @@ api_process (dwg_object *obj)
   else
   for (int i = 0; i < 16; i++)
     {
-      ok ("ACSH_SWEEP_CLASS.pathentity_transform[%d]: %f", i,
-          pathentity_transform[i]);
+      if (pathentity_transform[i] == _obj->pathentity_transform[i])
+        ok ("ACSH_SWEEP_CLASS.pathentity_transform[%d]: %f", i,
+            pathentity_transform[i]);
+      else
+        fail ("ACSH_SWEEP_CLASS.pathentity_transform[%d]: %f", i,
+              pathentity_transform[i]);
     }
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, align_option, RC);      /*!< DXF 70 2 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, miter_option, RC);      /*!< DXF 71 2 */
