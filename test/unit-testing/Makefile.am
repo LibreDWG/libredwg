@@ -180,6 +180,8 @@ testobjects += \
 	acsh_box_class \
 	acsh_brep_class \
 	acsh_chamfer_class \
+	acsh_cone_class \
+	acsh_cylinder_class \
 	acsh_extrusion_class \
 	acsh_fillet_class \
 	acsh_history_class \

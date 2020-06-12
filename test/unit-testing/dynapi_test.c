@@ -24749,6 +24749,548 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACSH_CONE_CLASS *restrict acsh_cone_class = obj->tio.object->tio.ACSH_CONE_CLASS;
+  failed = 0;
+  {
+    BITCODE_BD base_radius;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "base_radius", &base_radius, NULL)
+        && base_radius == acsh_cone_class->base_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.base_radius [BD] %g != %g", acsh_cone_class->base_radius, base_radius);
+    base_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "base_radius", &base_radius, 0)
+        && base_radius == acsh_cone_class->base_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.base_radius [BD] set+1 %g != %g", acsh_cone_class->base_radius, base_radius);
+    acsh_cone_class->base_radius--;
+  }
+  {
+    BITCODE_2RD ee_2dpt;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_2dpt", &ee_2dpt, NULL)
+        && !memcmp (&ee_2dpt, &acsh_cone_class->ee_2dpt, sizeof (acsh_cone_class->ee_2dpt)))
+        pass ();
+    else
+        fail ("ACSH_CONE_CLASS.ee_2dpt [2RD]");
+  }
+  {
+    BITCODE_3BD ee_3dpt;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_3dpt", &ee_3dpt, NULL)
+        && !memcmp (&ee_3dpt, &acsh_cone_class->ee_3dpt, sizeof (acsh_cone_class->ee_3dpt)))
+        pass ();
+    else
+        fail ("ACSH_CONE_CLASS.ee_3dpt [3BD]");
+  }
+  {
+    BITCODE_BD ee_bd40;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_bd40", &ee_bd40, NULL)
+        && ee_bd40 == acsh_cone_class->ee_bd40)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_bd40 [BD] %g != %g", acsh_cone_class->ee_bd40, ee_bd40);
+    ee_bd40++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_bd40", &ee_bd40, 0)
+        && ee_bd40 == acsh_cone_class->ee_bd40)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_bd40 [BD] set+1 %g != %g", acsh_cone_class->ee_bd40, ee_bd40);
+    acsh_cone_class->ee_bd40--;
+  }
+  {
+    BITCODE_BL ee_bl90;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_bl90", &ee_bl90, NULL)
+        && ee_bl90 == acsh_cone_class->ee_bl90)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_bl90 [BL] %u != %u", acsh_cone_class->ee_bl90, ee_bl90);
+    ee_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_bl90", &ee_bl90, 0)
+        && ee_bl90 == acsh_cone_class->ee_bl90)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_bl90 [BL] set+1 %u != %u", acsh_cone_class->ee_bl90, ee_bl90);
+    acsh_cone_class->ee_bl90--;
+  }
+  {
+    BITCODE_BS ee_bs70;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_bs70", &ee_bs70, NULL)
+        && ee_bs70 == acsh_cone_class->ee_bs70)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_bs70 [BS] %hu != %hu", acsh_cone_class->ee_bs70, ee_bs70);
+    ee_bs70++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_bs70", &ee_bs70, 0)
+        && ee_bs70 == acsh_cone_class->ee_bs70)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_bs70 [BS] set+1 %hu != %hu", acsh_cone_class->ee_bs70, ee_bs70);
+    acsh_cone_class->ee_bs70--;
+  }
+  {
+    BITCODE_H ee_h91;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_h91", &ee_h91, NULL)
+        && !memcmp (&ee_h91, &acsh_cone_class->ee_h91, sizeof (acsh_cone_class->ee_h91)))
+        pass ();
+    else
+        fail ("ACSH_CONE_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_cone_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_cone_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_cone_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_cone_class->ee_int, ee_int);
+    acsh_cone_class->ee_int--;
+  }
+  {
+    BITCODE_BL ee_major;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_major", &ee_major, NULL)
+        && ee_major == acsh_cone_class->ee_major)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_major [BL] %u != %u", acsh_cone_class->ee_major, ee_major);
+    ee_major++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_major", &ee_major, 0)
+        && ee_major == acsh_cone_class->ee_major)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_major [BL] set+1 %u != %u", acsh_cone_class->ee_major, ee_major);
+    acsh_cone_class->ee_major--;
+  }
+  {
+    BITCODE_BL ee_minor;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_minor", &ee_minor, NULL)
+        && ee_minor == acsh_cone_class->ee_minor)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_minor [BL] %u != %u", acsh_cone_class->ee_minor, ee_minor);
+    ee_minor++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_minor", &ee_minor, 0)
+        && ee_minor == acsh_cone_class->ee_minor)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_minor [BL] set+1 %u != %u", acsh_cone_class->ee_minor, ee_minor);
+    acsh_cone_class->ee_minor--;
+  }
+  {
+    BITCODE_T ee_text;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_text", &ee_text, NULL)
+        && ee_text
+           ? strEQ ((char *)ee_text, (char *)acsh_cone_class->ee_text)
+           : !acsh_cone_class->ee_text)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.ee_text [T] '%s' <> '%s'", ee_text, acsh_cone_class->ee_text);
+  }
+  {
+    BITCODE_BSd eval_type;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "eval_type", &eval_type, NULL)
+        && eval_type == acsh_cone_class->eval_type)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.eval_type [BSd] " FORMAT_BSd " != " FORMAT_BSd "", acsh_cone_class->eval_type, eval_type);
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "eval_type", &eval_type, 0)
+        && eval_type == acsh_cone_class->eval_type)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.eval_type [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", acsh_cone_class->eval_type, eval_type);
+    acsh_cone_class->eval_type--;
+  }
+  {
+    Dwg_ACSH_HistoryNode history_node;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "history_node", &history_node, NULL)
+        && !memcmp (&history_node, &acsh_cone_class->history_node, sizeof (acsh_cone_class->history_node)))
+        pass ();
+    else
+        fail ("ACSH_CONE_CLASS.history_node [Dwg_ACSH_HistoryNode]");
+  }
+  {
+    BITCODE_BL major;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "major", &major, NULL)
+        && major == acsh_cone_class->major)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.major [BL] %u != %u", acsh_cone_class->major, major);
+    major++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "major", &major, 0)
+        && major == acsh_cone_class->major)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.major [BL] set+1 %u != %u", acsh_cone_class->major, major);
+    acsh_cone_class->major--;
+  }
+  {
+    BITCODE_BL minor;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "minor", &minor, NULL)
+        && minor == acsh_cone_class->minor)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.minor [BL] %u != %u", acsh_cone_class->minor, minor);
+    minor++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "minor", &minor, 0)
+        && minor == acsh_cone_class->minor)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.minor [BL] set+1 %u != %u", acsh_cone_class->minor, minor);
+    acsh_cone_class->minor--;
+  }
+  {
+    BITCODE_BL nodeid;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "nodeid", &nodeid, NULL)
+        && nodeid == acsh_cone_class->nodeid)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.nodeid [BL] %u != %u", acsh_cone_class->nodeid, nodeid);
+    nodeid++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "nodeid", &nodeid, 0)
+        && nodeid == acsh_cone_class->nodeid)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.nodeid [BL] set+1 %u != %u", acsh_cone_class->nodeid, nodeid);
+    acsh_cone_class->nodeid--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "parent", &parent, NULL)
+        && !memcmp (&parent, &acsh_cone_class->parent, sizeof (acsh_cone_class->parent)))
+        pass ();
+    else
+        fail ("ACSH_CONE_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD top_major_radius;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_major_radius", &top_major_radius, NULL)
+        && top_major_radius == acsh_cone_class->top_major_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.top_major_radius [BD] %g != %g", acsh_cone_class->top_major_radius, top_major_radius);
+    top_major_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_major_radius", &top_major_radius, 0)
+        && top_major_radius == acsh_cone_class->top_major_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.top_major_radius [BD] set+1 %g != %g", acsh_cone_class->top_major_radius, top_major_radius);
+    acsh_cone_class->top_major_radius--;
+  }
+  {
+    BITCODE_BD top_minor_radius;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_minor_radius", &top_minor_radius, NULL)
+        && top_minor_radius == acsh_cone_class->top_minor_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.top_minor_radius [BD] %g != %g", acsh_cone_class->top_minor_radius, top_minor_radius);
+    top_minor_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_minor_radius", &top_minor_radius, 0)
+        && top_minor_radius == acsh_cone_class->top_minor_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.top_minor_radius [BD] set+1 %g != %g", acsh_cone_class->top_minor_radius, top_minor_radius);
+    acsh_cone_class->top_minor_radius--;
+  }
+  {
+    BITCODE_BD top_x_radius;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_x_radius", &top_x_radius, NULL)
+        && top_x_radius == acsh_cone_class->top_x_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.top_x_radius [BD] %g != %g", acsh_cone_class->top_x_radius, top_x_radius);
+    top_x_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_x_radius", &top_x_radius, 0)
+        && top_x_radius == acsh_cone_class->top_x_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.top_x_radius [BD] set+1 %g != %g", acsh_cone_class->top_x_radius, top_x_radius);
+    acsh_cone_class->top_x_radius--;
+  }
+  if (failed && (is_class_unstable ("ACSH_CONE_CLASS") || is_class_debugging ("ACSH_CONE_CLASS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACSH_CONE_CLASS", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ACSH_CYLINDER_CLASS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACSH_CYLINDER_CLASS *restrict acsh_cylinder_class = obj->tio.object->tio.ACSH_CYLINDER_CLASS;
+  failed = 0;
+  {
+    BITCODE_2RD ee_2dpt;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_2dpt", &ee_2dpt, NULL)
+        && !memcmp (&ee_2dpt, &acsh_cylinder_class->ee_2dpt, sizeof (acsh_cylinder_class->ee_2dpt)))
+        pass ();
+    else
+        fail ("ACSH_CYLINDER_CLASS.ee_2dpt [2RD]");
+  }
+  {
+    BITCODE_3BD ee_3dpt;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_3dpt", &ee_3dpt, NULL)
+        && !memcmp (&ee_3dpt, &acsh_cylinder_class->ee_3dpt, sizeof (acsh_cylinder_class->ee_3dpt)))
+        pass ();
+    else
+        fail ("ACSH_CYLINDER_CLASS.ee_3dpt [3BD]");
+  }
+  {
+    BITCODE_BD ee_bd40;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_bd40", &ee_bd40, NULL)
+        && ee_bd40 == acsh_cylinder_class->ee_bd40)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_bd40 [BD] %g != %g", acsh_cylinder_class->ee_bd40, ee_bd40);
+    ee_bd40++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_bd40", &ee_bd40, 0)
+        && ee_bd40 == acsh_cylinder_class->ee_bd40)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_bd40 [BD] set+1 %g != %g", acsh_cylinder_class->ee_bd40, ee_bd40);
+    acsh_cylinder_class->ee_bd40--;
+  }
+  {
+    BITCODE_BL ee_bl90;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_bl90", &ee_bl90, NULL)
+        && ee_bl90 == acsh_cylinder_class->ee_bl90)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_bl90 [BL] %u != %u", acsh_cylinder_class->ee_bl90, ee_bl90);
+    ee_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_bl90", &ee_bl90, 0)
+        && ee_bl90 == acsh_cylinder_class->ee_bl90)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_bl90 [BL] set+1 %u != %u", acsh_cylinder_class->ee_bl90, ee_bl90);
+    acsh_cylinder_class->ee_bl90--;
+  }
+  {
+    BITCODE_BS ee_bs70;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_bs70", &ee_bs70, NULL)
+        && ee_bs70 == acsh_cylinder_class->ee_bs70)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_bs70 [BS] %hu != %hu", acsh_cylinder_class->ee_bs70, ee_bs70);
+    ee_bs70++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_bs70", &ee_bs70, 0)
+        && ee_bs70 == acsh_cylinder_class->ee_bs70)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_bs70 [BS] set+1 %hu != %hu", acsh_cylinder_class->ee_bs70, ee_bs70);
+    acsh_cylinder_class->ee_bs70--;
+  }
+  {
+    BITCODE_H ee_h91;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_h91", &ee_h91, NULL)
+        && !memcmp (&ee_h91, &acsh_cylinder_class->ee_h91, sizeof (acsh_cylinder_class->ee_h91)))
+        pass ();
+    else
+        fail ("ACSH_CYLINDER_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_cylinder_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_cylinder_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_cylinder_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_cylinder_class->ee_int, ee_int);
+    acsh_cylinder_class->ee_int--;
+  }
+  {
+    BITCODE_BL ee_major;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_major", &ee_major, NULL)
+        && ee_major == acsh_cylinder_class->ee_major)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_major [BL] %u != %u", acsh_cylinder_class->ee_major, ee_major);
+    ee_major++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_major", &ee_major, 0)
+        && ee_major == acsh_cylinder_class->ee_major)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_major [BL] set+1 %u != %u", acsh_cylinder_class->ee_major, ee_major);
+    acsh_cylinder_class->ee_major--;
+  }
+  {
+    BITCODE_BL ee_minor;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_minor", &ee_minor, NULL)
+        && ee_minor == acsh_cylinder_class->ee_minor)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_minor [BL] %u != %u", acsh_cylinder_class->ee_minor, ee_minor);
+    ee_minor++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_minor", &ee_minor, 0)
+        && ee_minor == acsh_cylinder_class->ee_minor)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_minor [BL] set+1 %u != %u", acsh_cylinder_class->ee_minor, ee_minor);
+    acsh_cylinder_class->ee_minor--;
+  }
+  {
+    BITCODE_T ee_text;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_text", &ee_text, NULL)
+        && ee_text
+           ? strEQ ((char *)ee_text, (char *)acsh_cylinder_class->ee_text)
+           : !acsh_cylinder_class->ee_text)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.ee_text [T] '%s' <> '%s'", ee_text, acsh_cylinder_class->ee_text);
+  }
+  {
+    BITCODE_BSd eval_type;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "eval_type", &eval_type, NULL)
+        && eval_type == acsh_cylinder_class->eval_type)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.eval_type [BSd] " FORMAT_BSd " != " FORMAT_BSd "", acsh_cylinder_class->eval_type, eval_type);
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "eval_type", &eval_type, 0)
+        && eval_type == acsh_cylinder_class->eval_type)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.eval_type [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", acsh_cylinder_class->eval_type, eval_type);
+    acsh_cylinder_class->eval_type--;
+  }
+  {
+    BITCODE_BD height;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "height", &height, NULL)
+        && height == acsh_cylinder_class->height)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.height [BD] %g != %g", acsh_cylinder_class->height, height);
+    height++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "height", &height, 0)
+        && height == acsh_cylinder_class->height)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.height [BD] set+1 %g != %g", acsh_cylinder_class->height, height);
+    acsh_cylinder_class->height--;
+  }
+  {
+    Dwg_ACSH_HistoryNode history_node;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "history_node", &history_node, NULL)
+        && !memcmp (&history_node, &acsh_cylinder_class->history_node, sizeof (acsh_cylinder_class->history_node)))
+        pass ();
+    else
+        fail ("ACSH_CYLINDER_CLASS.history_node [Dwg_ACSH_HistoryNode]");
+  }
+  {
+    BITCODE_BL major;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "major", &major, NULL)
+        && major == acsh_cylinder_class->major)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.major [BL] %u != %u", acsh_cylinder_class->major, major);
+    major++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "major", &major, 0)
+        && major == acsh_cylinder_class->major)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.major [BL] set+1 %u != %u", acsh_cylinder_class->major, major);
+    acsh_cylinder_class->major--;
+  }
+  {
+    BITCODE_BD major_radius;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "major_radius", &major_radius, NULL)
+        && major_radius == acsh_cylinder_class->major_radius)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.major_radius [BD] %g != %g", acsh_cylinder_class->major_radius, major_radius);
+    major_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "major_radius", &major_radius, 0)
+        && major_radius == acsh_cylinder_class->major_radius)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.major_radius [BD] set+1 %g != %g", acsh_cylinder_class->major_radius, major_radius);
+    acsh_cylinder_class->major_radius--;
+  }
+  {
+    BITCODE_BL minor;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "minor", &minor, NULL)
+        && minor == acsh_cylinder_class->minor)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.minor [BL] %u != %u", acsh_cylinder_class->minor, minor);
+    minor++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "minor", &minor, 0)
+        && minor == acsh_cylinder_class->minor)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.minor [BL] set+1 %u != %u", acsh_cylinder_class->minor, minor);
+    acsh_cylinder_class->minor--;
+  }
+  {
+    BITCODE_BD minor_radius;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "minor_radius", &minor_radius, NULL)
+        && minor_radius == acsh_cylinder_class->minor_radius)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.minor_radius [BD] %g != %g", acsh_cylinder_class->minor_radius, minor_radius);
+    minor_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "minor_radius", &minor_radius, 0)
+        && minor_radius == acsh_cylinder_class->minor_radius)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.minor_radius [BD] set+1 %g != %g", acsh_cylinder_class->minor_radius, minor_radius);
+    acsh_cylinder_class->minor_radius--;
+  }
+  {
+    BITCODE_BL nodeid;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "nodeid", &nodeid, NULL)
+        && nodeid == acsh_cylinder_class->nodeid)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.nodeid [BL] %u != %u", acsh_cylinder_class->nodeid, nodeid);
+    nodeid++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "nodeid", &nodeid, 0)
+        && nodeid == acsh_cylinder_class->nodeid)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.nodeid [BL] set+1 %u != %u", acsh_cylinder_class->nodeid, nodeid);
+    acsh_cylinder_class->nodeid--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "parent", &parent, NULL)
+        && !memcmp (&parent, &acsh_cylinder_class->parent, sizeof (acsh_cylinder_class->parent)))
+        pass ();
+    else
+        fail ("ACSH_CYLINDER_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD x_radius;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "x_radius", &x_radius, NULL)
+        && x_radius == acsh_cylinder_class->x_radius)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.x_radius [BD] %g != %g", acsh_cylinder_class->x_radius, x_radius);
+    x_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "x_radius", &x_radius, 0)
+        && x_radius == acsh_cylinder_class->x_radius)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.x_radius [BD] set+1 %g != %g", acsh_cylinder_class->x_radius, x_radius);
+    acsh_cylinder_class->x_radius--;
+  }
+  if (failed && (is_class_unstable ("ACSH_CYLINDER_CLASS") || is_class_debugging ("ACSH_CYLINDER_CLASS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACSH_CYLINDER_CLASS", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
 {
   int error = 0;
@@ -50097,6 +50639,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_BREP_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_CHAMFER_CLASS)
     error += test_ACSH_CHAMFER_CLASS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_CONE_CLASS)
+    error += test_ACSH_CONE_CLASS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_CYLINDER_CLASS)
+    error += test_ACSH_CYLINDER_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
     error += test_ACSH_EXTRUSION_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_FILLET_CLASS)
@@ -50493,6 +51039,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_BREP_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_CHAMFER_CLASS)
     error += test_ACSH_CHAMFER_CLASS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_CONE_CLASS)
+    error += test_ACSH_CONE_CLASS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_CYLINDER_CLASS)
+    error += test_ACSH_CYLINDER_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
     error += test_ACSH_EXTRUSION_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_FILLET_CLASS)
@@ -51379,6 +51929,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ACSH_CHAMFER_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_CHAMFER_CLASS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACSH_CONE_CLASS);
+  size2 = dwg_dynapi_fields_size ("ACSH_CONE_CLASS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_CONE_CLASS): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_CONE_CLASS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACSH_CYLINDER_CLASS);
+  size2 = dwg_dynapi_fields_size ("ACSH_CYLINDER_CLASS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_CYLINDER_CLASS): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_CYLINDER_CLASS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ACSH_EXTRUSION_CLASS);

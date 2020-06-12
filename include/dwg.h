@@ -385,6 +385,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ACSH_BOX_CLASS,
   DWG_TYPE_ACSH_BREP_CLASS,
   DWG_TYPE_ACSH_CHAMFER_CLASS,
+  DWG_TYPE_ACSH_CONE_CLASS,
+  DWG_TYPE_ACSH_CYLINDER_CLASS,
   DWG_TYPE_ACSH_EXTRUSION_CLASS,
   DWG_TYPE_ACSH_FILLET_CLASS,
   DWG_TYPE_ACSH_HISTORY_CLASS,
@@ -5457,16 +5459,45 @@ typedef struct _dwg_object_ACSH_CHAMFER_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShChamfer
-  BITCODE_BL major;       /*!< DXF 90 */
-  BITCODE_BL minor;       /*!< DXF 91 */
+  BITCODE_BL major;     /*!< DXF 90 */
+  BITCODE_BL minor;     /*!< DXF 91 */
   BITCODE_BL bl92;	/*!< DXF 92 */
   BITCODE_BD base_dist;	/*!< DXF 41 */
   BITCODE_BD other_dist;/*!< DXF 42 */
   BITCODE_BL num_edges;	/*!< DXF 93 */
   BITCODE_BL *edges;    /*!< DXF 94 */
   BITCODE_BL bl95;	/*!< DXF 95 */
-
 } Dwg_Object_ACSH_CHAMFER_CLASS;
+
+typedef struct _dwg_object_ACSH_CYLINDER_CLASS
+{
+  struct _dwg_object_object *parent;
+  ACDBEVALEXPR_fields;
+  Dwg_ACSH_HistoryNode history_node;
+  // AcDbShPrimitive
+  // AcDbShCylinder
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
+  BITCODE_BD height;      /*!< DXF 40 */
+  BITCODE_BD major_radius;/*!< DXF 41 */
+  BITCODE_BD minor_radius;/*!< DXF 42 */
+  BITCODE_BD x_radius;    /*!< DXF 43 */
+} Dwg_Object_ACSH_CYLINDER_CLASS;
+
+typedef struct _dwg_object_ACSH_CONE_CLASS
+{
+  struct _dwg_object_object *parent;
+  ACDBEVALEXPR_fields;
+  Dwg_ACSH_HistoryNode history_node;
+  // AcDbShPrimitive
+  // AcDbShCone
+  BITCODE_BL major;      /*!< DXF 90 */
+  BITCODE_BL minor;      /*!< DXF 91 */
+  BITCODE_BD base_radius; /*!< DXF 40 */
+  BITCODE_BD top_major_radius;/*!< DXF 41 */
+  BITCODE_BD top_minor_radius;/*!< DXF 42 */
+  BITCODE_BD top_x_radius;    /*!< DXF 43 */
+} Dwg_Object_ACSH_CONE_CLASS;
 
 typedef struct _dwg_object_ACSH_PYRAMID_CLASS
 {
@@ -6547,6 +6578,8 @@ typedef struct _dwg_object_object
     Dwg_Object_ACSH_BOX_CLASS *ACSH_BOX_CLASS;
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
+    Dwg_Object_ACSH_CONE_CLASS *ACSH_CONE_CLASS;
+    Dwg_Object_ACSH_CYLINDER_CLASS *ACSH_CYLINDER_CLASS;
     Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
     Dwg_Object_ACSH_FILLET_CLASS *ACSH_FILLET_CLASS;
     Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
@@ -7768,6 +7801,8 @@ EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_CYLINDER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_FILLET_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);

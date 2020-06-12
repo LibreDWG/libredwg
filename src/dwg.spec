@@ -8055,6 +8055,34 @@ DWG_OBJECT (ACSH_SPHERE_CLASS)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (ACSH_CYLINDER_CLASS)
+  DECODE_UNKNOWN_BITS
+  AcDbShHistoryNode_fields;
+  SUBCLASS (AcDbShPrimitive)
+  SUBCLASS (AcDbShCylinder)
+  FIELD_BL (major, 90);
+  FIELD_BL (minor, 91);
+  FIELD_BD (height, 40);
+  FIELD_BD (major_radius, 41);
+  FIELD_BD (minor_radius, 42);
+  FIELD_BD (x_radius, 43);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ACSH_CONE_CLASS)
+  DECODE_UNKNOWN_BITS
+  AcDbShHistoryNode_fields;
+  SUBCLASS (AcDbShPrimitive)
+  SUBCLASS (AcDbShCone)
+  FIELD_BL (major, 90);
+  FIELD_BL (minor, 91);
+  FIELD_BD (base_radius, 40);
+  FIELD_BD (top_major_radius, 41);
+  FIELD_BD (top_minor_radius, 42);
+  FIELD_BD (top_x_radius, 43);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (ACSH_PYRAMID_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbShHistoryNode_fields;

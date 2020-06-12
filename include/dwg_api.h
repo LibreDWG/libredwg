@@ -606,15 +606,17 @@ typedef struct _dwg_object_ACMESTATEMGR                    dwg_obj_acmestatemgr;
 typedef struct _dwg_object_ACSH_BOOLEAN_CLASS              dwg_obj_acsh_boolean_class;
 typedef struct _dwg_object_ACSH_BOX_CLASS                  dwg_obj_acsh_box_class;
 typedef struct _dwg_object_ACSH_BREP_CLASS                 dwg_obj_acsh_brep_class;
-typedef struct _dwg_object_ACSH_EXTRUSION_CLASS            dwg_obj_acsh_extrusion_class;
-typedef struct _dwg_object_ACSH_HISTORY_CLASS              dwg_obj_acsh_history_class;
-typedef struct _dwg_object_ACSH_SWEEP_CLASS                dwg_obj_acsh_sweep_class;
 typedef struct _dwg_object_ACSH_CHAMFER_CLASS		   dwg_obj_acsh_chamfer_class;
+typedef struct _dwg_object_ACSH_CONE_CLASS		   dwg_obj_acsh_cone_class;
+typedef struct _dwg_object_ACSH_CYLINDER_CLASS		   dwg_obj_acsh_cylinder_class;
+typedef struct _dwg_object_ACSH_EXTRUSION_CLASS            dwg_obj_acsh_extrusion_class;
 typedef struct _dwg_object_ACSH_FILLET_CLASS		   dwg_obj_acsh_fillet_class;
+typedef struct _dwg_object_ACSH_HISTORY_CLASS              dwg_obj_acsh_history_class;
 typedef struct _dwg_object_ACSH_LOFT_CLASS		   dwg_obj_acsh_loft_class;
 typedef struct _dwg_object_ACSH_PYRAMID_CLASS		   dwg_obj_acsh_pyramid_class;
 typedef struct _dwg_object_ACSH_REVOLVE_CLASS		   dwg_obj_acsh_revolve_class;
 typedef struct _dwg_object_ACSH_SPHERE_CLASS               dwg_obj_acsh_sphere_class;
+typedef struct _dwg_object_ACSH_SWEEP_CLASS                dwg_obj_acsh_sweep_class;
 typedef struct _dwg_object_ACSH_TORUS_CLASS		   dwg_obj_acsh_torus_class;
 typedef struct _dwg_object_ACSH_WEDGE_CLASS		   dwg_obj_acsh_wedge_class;
 typedef struct _dwg_object_CONTEXTDATAMANAGER              dwg_obj_contextdatamanager;
@@ -661,9 +663,6 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA           dwg_obj_textobjectcon
 // unhandled:
 //typedef struct _dwg_object_ACDSRECORD           dwg_obj_acdsrecord;
 //typedef struct _dwg_object_ACDSSCHEMA           dwg_obj_acdsschema;
-//typedef struct _dwg_object_ACSH_PYRAMID_CLASS   dwg_obj_acsh_pyramid_class;
-//typedef struct _dwg_object_ACSH_REVOLVE_CLASS   dwg_obj_acsh_revolve_class;
-//typedef struct _dwg_object_ACSH_SPHERE_CLASS    dwg_obj_acsh_sphere_class;
 //typedef struct _dwg_object_NPOCOLLECTION        dwg_obj_npocollection;
 //typedef struct _dwg_object_POINTCLOUD           dwg_obj_pointcloud;
 //typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT    dwg_obj_rapidrtrenderenvironment;
@@ -848,14 +847,17 @@ DWG_GETALL_OBJECT_DECL (VISUALSTYLE)
 DWG_GETALL_OBJECT_DECL (ACSH_BOOLEAN_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_BOX_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS)
-DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
-DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_CONE_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_CYLINDER_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_FILLET_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_LOFT_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_SPHERE_CLASS)
+DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_TORUS_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_WEDGE_CLASS)
 DWG_GETALL_OBJECT_DECL (CONTEXTDATAMANAGER)
@@ -902,10 +904,6 @@ DWG_GETALL_OBJECT_DECL (TEXTOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (ACMECOMMANDHISTORY)
 DWG_GETALL_OBJECT_DECL (ACMESCOPE)
 DWG_GETALL_OBJECT_DECL (ACMESTATEMGR)
-DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS)
-// DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS)
-// DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS)
-// DWG_GETALL_OBJECT_DECL (ACSH_SPHERE_CLASS)
 DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (CSACDOCUMENTOPTIONS)
@@ -1079,14 +1077,17 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (WIPEOUTVARIABLES)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BOOLEAN_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BOX_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CONE_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CYLINDER_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_FILLET_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_LOFT_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SPHERE_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_TORUS_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_WEDGE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CONTEXTDATAMANAGER)
@@ -1133,10 +1134,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (TEXTOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMECOMMANDHISTORY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESCOPE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESTATEMGR)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS)
-// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS)
-// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS)
-// CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SPHERE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CSACDOCUMENTOPTIONS)
@@ -1367,14 +1364,17 @@ dwg_get_OBJECT_DECL (obj_visualstyle, VISUALSTYLE);
 dwg_get_OBJECT_DECL (obj_acsh_boolean_class, ACSH_BOOLEAN_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_box_class, ACSH_BOX_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
-dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
-dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_cone_class, ACSH_CONE_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_cylinder_class, ACSH_CYLINDER_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_fillet_class, ACSH_FILLET_CLASS);
-dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_LOFT_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
+dwg_get_OBJECT_DECL (obj_acsh_loft_class, ACSH_LOFT_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
-dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_REVOLVE_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_sphere_class, ACSH_SPHERE_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_wedge_class, ACSH_WEDGE_CLASS);
 dwg_get_OBJECT_DECL (obj_contextdatamanager, CONTEXTDATAMANAGER);
@@ -1414,10 +1414,6 @@ dwg_get_OBJECT_DECL (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_acmecommandhistory, ACMECOMMANDHISTORY)
 dwg_get_OBJECT_DECL (obj_acmescope, ACMESCOPE)
 dwg_get_OBJECT_DECL (obj_acmestatemgr, ACMESTATEMGR)
-dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS)
-// dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS)
-// dwg_get_OBJECT_DECL (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS)
-// dwg_get_OBJECT_DECL (obj_acsh_sphere_class, ACSH_SPHERE_CLASS)
 dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)

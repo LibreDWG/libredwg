@@ -4565,6 +4565,108 @@ BL,	DXF 95
 @end vtable
 @end indentedblock
 
+@strong{ACSH_CONE_CLASS} @anchor{ACSH_CONE_CLASS}
+@cindex object, ACSH_CONE_CLASS
+@vindex ACSH_CONE_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item ee_int
+BLd
+@item ee_major
+BL,	DXF 98
+@item ee_minor
+BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
+@item history_node
+Dwg_ACSH_HistoryNode
+@item major
+BL,	DXF 90
+@item minor
+BL,	DXF 91
+@item base_radius
+BD,	DXF 40
+@item top_major_radius
+BD,	DXF 41
+@item top_minor_radius
+BD,	DXF 42
+@item top_x_radius
+BD,	DXF 43
+
+@end vtable
+@end indentedblock
+
+@strong{ACSH_CYLINDER_CLASS} @anchor{ACSH_CYLINDER_CLASS}
+@cindex object, ACSH_CYLINDER_CLASS
+@vindex ACSH_CYLINDER_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item ee_int
+BLd
+@item ee_major
+BL,	DXF 98
+@item ee_minor
+BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
+@item history_node
+Dwg_ACSH_HistoryNode
+@item major
+BL,	DXF 90
+@item minor
+BL,	DXF 91
+@item height
+BD,	DXF 40
+@item major_radius
+BD,	DXF 41
+@item minor_radius
+BD,	DXF 42
+@item x_radius
+BD,	DXF 43
+
+@end vtable
+@end indentedblock
+
 @strong{ACSH_EXTRUSION_CLASS} @anchor{ACSH_EXTRUSION_CLASS}
 @cindex object, ACSH_EXTRUSION_CLASS
 @vindex ACSH_EXTRUSION_CLASS
