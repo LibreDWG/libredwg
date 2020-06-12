@@ -7905,12 +7905,12 @@ DWG_OBJECT_END
 
 #define AcDbShHistory_fields                                                  \
     SUBCLASS (AcDbShHistory)                                                  \
-    FIELD_BL (history.major, 90);                                             \
-    FIELD_BL (history.minor, 91);                                             \
-    FIELD_HANDLE (history.owner, 2, 360);                                     \
-    FIELD_BL (history.bl92, 92);                                              \
-    FIELD_B (history.b280, 280);                                              \
-    FIELD_B (history.b281, 281)
+    FIELD_BL (major, 90);                                             \
+    FIELD_BL (minor, 91);                                             \
+    FIELD_HANDLE (owner, 2, 360);                                     \
+    FIELD_BL (h_nodeid, 92);                                          \
+    FIELD_B (b280, 280);                                              \
+    FIELD_B (b281, 281)
 
 #define CLASS_HAS(x) 1
 
@@ -8173,6 +8173,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_HISTORY_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbShHistory_fields;
   AcDbShHistoryNode_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

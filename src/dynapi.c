@@ -4377,6 +4377,18 @@ static const Dwg_DYNAPI_field _dwg_ACSH_HISTORY_CLASS_fields[] = {
     0,0,0, 70 },
   { "history_node",	"Dwg_ACSH_HistoryNode", sizeof (Dwg_ACSH_HistoryNode),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, history_node),
     0,0,0, 0 },
+  { "major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, major),
+    0,0,0, 90 },
+  { "minor",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, minor),
+    0,0,0, 91 },
+  { "owner",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, owner),
+    1,0,0, 360 },
+  { "h_nodeid",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, h_nodeid),
+    0,0,0, 92 },
+  { "b280",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, b280),
+    0,0,0, 280 },
+  { "b281",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, b281),
+    0,0,0, 281 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_ACSH_LOFT_CLASS: (sorted by offset) */

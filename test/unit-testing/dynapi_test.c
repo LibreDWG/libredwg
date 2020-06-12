@@ -25360,6 +25360,36 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
   Dwg_Object_ACSH_HISTORY_CLASS *restrict acsh_history_class = obj->tio.object->tio.ACSH_HISTORY_CLASS;
   failed = 0;
   {
+    BITCODE_B b280;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b280", &b280, NULL)
+        && b280 == acsh_history_class->b280)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.b280 [B] " FORMAT_B " != " FORMAT_B "", acsh_history_class->b280, b280);
+    b280++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b280", &b280, 0)
+        && b280 == acsh_history_class->b280)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.b280 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_history_class->b280, b280);
+    acsh_history_class->b280--;
+  }
+  {
+    BITCODE_B b281;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b281", &b281, NULL)
+        && b281 == acsh_history_class->b281)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.b281 [B] " FORMAT_B " != " FORMAT_B "", acsh_history_class->b281, b281);
+    b281++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b281", &b281, 0)
+        && b281 == acsh_history_class->b281)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.b281 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_history_class->b281, b281);
+    acsh_history_class->b281--;
+  }
+  {
     BITCODE_2RD ee_2dpt;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_2dpt", &ee_2dpt, NULL)
         && !memcmp (&ee_2dpt, &acsh_history_class->ee_2dpt, sizeof (acsh_history_class->ee_2dpt)))
@@ -25498,12 +25528,57 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
     acsh_history_class->eval_type--;
   }
   {
+    BITCODE_BL h_nodeid;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "h_nodeid", &h_nodeid, NULL)
+        && h_nodeid == acsh_history_class->h_nodeid)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.h_nodeid [BL] %u != %u", acsh_history_class->h_nodeid, h_nodeid);
+    h_nodeid++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "h_nodeid", &h_nodeid, 0)
+        && h_nodeid == acsh_history_class->h_nodeid)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.h_nodeid [BL] set+1 %u != %u", acsh_history_class->h_nodeid, h_nodeid);
+    acsh_history_class->h_nodeid--;
+  }
+  {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "history_node", &history_node, NULL)
         && !memcmp (&history_node, &acsh_history_class->history_node, sizeof (acsh_history_class->history_node)))
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.history_node [Dwg_ACSH_HistoryNode]");
+  }
+  {
+    BITCODE_BL major;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "major", &major, NULL)
+        && major == acsh_history_class->major)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.major [BL] %u != %u", acsh_history_class->major, major);
+    major++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "major", &major, 0)
+        && major == acsh_history_class->major)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.major [BL] set+1 %u != %u", acsh_history_class->major, major);
+    acsh_history_class->major--;
+  }
+  {
+    BITCODE_BL minor;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "minor", &minor, NULL)
+        && minor == acsh_history_class->minor)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.minor [BL] %u != %u", acsh_history_class->minor, minor);
+    minor++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "minor", &minor, 0)
+        && minor == acsh_history_class->minor)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.minor [BL] set+1 %u != %u", acsh_history_class->minor, minor);
+    acsh_history_class->minor--;
   }
   {
     BITCODE_BL nodeid;
@@ -25519,6 +25594,14 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_HISTORY_CLASS.nodeid [BL] set+1 %u != %u", acsh_history_class->nodeid, nodeid);
     acsh_history_class->nodeid--;
+  }
+  {
+    BITCODE_H owner;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "owner", &owner, NULL)
+        && !memcmp (&owner, &acsh_history_class->owner, sizeof (acsh_history_class->owner)))
+        pass ();
+    else
+        fail ("ACSH_HISTORY_CLASS.owner [H]");
   }
   {
     struct _dwg_object_object* parent;

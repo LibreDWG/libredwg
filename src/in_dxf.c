@@ -8099,7 +8099,16 @@ new_object (char *restrict name, char *restrict dxfname,
                                              name, f->name, ARGS_REF (ref),
                                              pair->code);
                                 }
-                              else if (pair->value.s)
+                              else if (pair->type == VT_INT32 && pair->value.u)
+                                {
+                                  ref = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+                                  LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",
+                                             name, f->name, ARGS_REF (ref),
+                                             pair->code);
+                                }
+                              else if ((pair->type == VT_STRING
+                                       || pair->type == VT_HANDLE)
+                                       && pair->value.s)
                                 {
                                   obj_hdls = array_push (
                                       obj_hdls, f->name, pair->value.s,

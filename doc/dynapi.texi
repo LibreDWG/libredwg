@@ -4703,6 +4703,18 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
+@item major
+BL,	DXF 90
+@item minor
+BL,	DXF 91
+@item owner
+H,	DXF 360
+@item h_nodeid
+BL,	DXF 92
+@item b280
+B,	DXF 280
+@item b281
+B,	DXF 281
 
 @end vtable
 @end indentedblock

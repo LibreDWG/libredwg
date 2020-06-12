@@ -5270,6 +5270,12 @@ typedef struct _dwg_object_ACSH_HISTORY_CLASS
   struct _dwg_object_object *parent;
   ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
+  BITCODE_BL major;
+  BITCODE_BL minor;
+  BITCODE_H owner;
+  BITCODE_BL h_nodeid;
+  BITCODE_B b280;
+  BITCODE_B b281;
 } Dwg_Object_ACSH_HISTORY_CLASS;
 
 // i.e. planesurf?
