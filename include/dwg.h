@@ -5258,6 +5258,23 @@ typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY
   BITCODE_H ee_h91;                                                           \
   BITCODE_BS ee_bs70
 
+typedef struct _dwg_ACSH_SubentMaterial
+{
+  BITCODE_BL major;
+  BITCODE_BL minor;
+  BITCODE_BL reflectance;
+  BITCODE_BL displacement;
+} Dwg_ACSH_SubentMaterial;
+
+typedef struct _dwg_ACSH_SubentColor
+{
+  BITCODE_BL major;
+  BITCODE_BL minor;
+  BITCODE_BL transparency;
+  BITCODE_BL bl93;
+  BITCODE_B  is_face_variable;
+} Dwg_ACSH_SubentColor;
+
 typedef struct _dwg_ACSH_HistoryNode
 {
   BITCODE_BL major;    //33
@@ -5412,7 +5429,6 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   BITCODE_3BD pt2;      /*!< DXF 11 0,0,0 */
 
   // AcDbShExtrusion
-
 } Dwg_Object_ACSH_EXTRUSION_CLASS;
 
 typedef struct _dwg_object_ACSH_LOFT_CLASS
@@ -5428,7 +5444,6 @@ typedef struct _dwg_object_ACSH_LOFT_CLASS
   BITCODE_H *crosssects;
   BITCODE_BL num_guides; /*!< DXF 95 */
   BITCODE_H *guides;
-
 } Dwg_Object_ACSH_LOFT_CLASS;
 
 typedef struct _dwg_object_ACSH_FILLET_CLASS

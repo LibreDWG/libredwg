@@ -52955,6 +52955,22 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ACSH_HistoryNode\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_ACSH_SubentColor);
+  size2 = dwg_dynapi_fields_size ("ACSH_SubentColor");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_ACSH_SubentColor): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_SubentColor\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_ACSH_SubentMaterial);
+  size2 = dwg_dynapi_fields_size ("ACSH_SubentMaterial");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_ACSH_SubentMaterial): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_SubentMaterial\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_ACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ACTIONBODY");
   if (size1 != size2)

@@ -7879,38 +7879,22 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-#define AcDbShBoolean_fields                                                  \
-    SUBCLASS (AcDbShBoolean)                                                  \
-    FIELD_BL (boolean.bl90, 90);                                              \
-    FIELD_BL (boolean.bl91, 91);                                              \
-    FIELD_RCd (boolean.operation, 280);                                       \
-    FIELD_B (boolean.operand1, 92);                                           \
-    FIELD_B (boolean.operand2, 93)
-
 #define AcDbShSubentMaterial_fields                                           \
     SUBCLASS (AcDbShSubentMaterial)                                           \
-    FIELD_BL (material.bl90, 90);                                             \
-    FIELD_BL (material.bl91, 91);                                             \
-    FIELD_BL (material.bl92, 92);                                             \
-    FIELD_BL (material.bl93, 93);                                             \
+    FIELD_BL (material.major, 90);                                            \
+    FIELD_BL (material.minor, 91);                                            \
+    FIELD_BL (material.reflectance, 92);                                      \
+    FIELD_BL (material.displacement, 93);                                     \
     FIELD_HANDLE (material.material, 5, 331)
 
 #define AcDbShSubentColor_fields                                              \
     SUBCLASS (AcDbShSubentColor)                                              \
-    FIELD_BL (color.bl90, 90);                                                \
-    FIELD_BL (color.bl91, 91);                                                \
-    FIELD_BL (color.bl92, 92);                                                \
+    FIELD_BL (color.major, 90); /* 33 */                                      \
+    FIELD_BL (color.minor, 91); /* 1 */                                       \
+    FIELD_BL (color.transparency, 92);                                        \
     FIELD_BL (color.bl93, 93);                                                \
+    FIELD_BL (color.is_face_variable, 290);                                   \
     FIELD_CMC (color.color,62)
-
-#define AcDbShHistory_fields                                                  \
-    SUBCLASS (AcDbShHistory)                                                  \
-    FIELD_BL (major, 90);                                             \
-    FIELD_BL (minor, 91);                                             \
-    FIELD_HANDLE (owner, 2, 360);                                     \
-    FIELD_BL (h_nodeid, 92);                                          \
-    FIELD_B (b280, 280);                                              \
-    FIELD_B (b281, 281)
 
 #define CLASS_HAS(x) 1
 

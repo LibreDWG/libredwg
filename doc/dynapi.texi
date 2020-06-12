@@ -9897,6 +9897,44 @@ H
 @end vtable
 @end indentedblock
 
+@strong{Dwg_ACSH_SubentColor} @anchor{Dwg_ACSH_SubentColor}
+@vindex Dwg_ACSH_SubentColor
+
+@indentedblock
+@vtable @code
+
+@item major
+BL
+@item minor
+BL
+@item transparency
+BL
+@item bl93
+BL
+@item is_face_variable
+B
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_ACSH_SubentMaterial} @anchor{Dwg_ACSH_SubentMaterial}
+@vindex Dwg_ACSH_SubentMaterial
+
+@indentedblock
+@vtable @code
+
+@item major
+BL
+@item minor
+BL
+@item reflectance
+BL
+@item displacement
+BL
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_ACTIONBODY} @anchor{Dwg_ACTIONBODY}
 @vindex Dwg_ACTIONBODY
 
