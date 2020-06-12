@@ -1695,7 +1695,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 
   //if (c != 17) // last line didn't end with #, but End-of-ACIS-data or End-of-ASM-data
   //  i = new_encr_sat_data_line (_obj, &dest, i);
-  num_blocks = _obj->num_blocks = i;
+  num_blocks = _obj->num_blocks = i; // i.e. 2
   bit_write_TF (&dest, (BITCODE_TF)"\n", 1);
   _obj->encr_sat_data[i] = calloc (dest.byte, 1); // shrink it
   memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);

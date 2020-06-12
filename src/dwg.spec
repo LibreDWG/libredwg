@@ -7905,33 +7905,75 @@ DWG_OBJECT_END
 
 #define AcDbShHistory_fields                                                  \
     SUBCLASS (AcDbShHistory)                                                  \
-    FIELD_BL (history.bl90, 90);                                              \
-    FIELD_BL (history.bl91, 91);                                              \
+    FIELD_BL (history.major, 90);                                             \
+    FIELD_BL (history.minor, 91);                                             \
     FIELD_HANDLE (history.owner, 2, 360);                                     \
     FIELD_BL (history.bl92, 92);                                              \
     FIELD_B (history.b280, 280);                                              \
     FIELD_B (history.b281, 281)
 
+#define CLASS_HAS(x) 1
+
+// abstract subclass. requires evalexpr
+#define AcDbEvalExpr_fields                     \
+  FIELD_BL (ee_class_version, 90);              \
+  FIELD_BL (ee_major, 98);                      \
+  FIELD_BL (ee_minor, 99);                      \
+  DXF { FIELD_BL (nodeid, 90); }                \
+  if (!CLASS_HAS (evalexpr))                    \
+    {                                           \
+      VALUE_BSd (-9999, 70);                    \
+    }                                           \
+  else                                          \
+    {                                           \
+      DXF { VALUE_TFF ("", 1); }                \
+      FIELD_BSd (eval_type, 70);                \
+      /* TODO not a union yet */                \
+      switch (_obj->eval_type)                  \
+        {                                       \
+        case 40:                                \
+          FIELD_BS (ee_bd40, 40);             \
+          break;                                \
+        case 10:                                \
+          FIELD_2RD (ee_2dpt, 10);            \
+          break;                                \
+        case 11:                                \
+          FIELD_2RD (ee_3dpt, 11);            \
+          break;                                \
+        case 1:                                 \
+          FIELD_T (ee_text, 1);               \
+          break;                                \
+        case 90:                                \
+          FIELD_BL (ee_bl90, 90);             \
+          break;                                \
+        case 91:                                \
+          FIELD_HANDLE (ee_h91, 5, 91);       \
+          break;                                \
+        case 70:                                \
+          FIELD_BS (ee_bs70, 70);               \
+          break;                                \
+        case -9999:                             \
+        default:                                \
+          break;                                \
+        }                                       \
+    }                                           \
+  FIELD_BL (nodeid, 0)
+
 #define AcDbShHistoryNode_fields                                              \
+    AcDbEvalExpr_fields;                                                      \
     SUBCLASS (AcDbShHistoryNode)                                              \
-    FIELD_BL (history_node.bl90, 90);                                         \
-    FIELD_BL (history_node.bl91, 91);                                         \
+    FIELD_BL (history_node.major, 90);                                        \
+    FIELD_BL (history_node.minor, 91);                                        \
     FIELD_VECTOR_N1 (history_node.trans, BD, 16, 40);                         \
     FIELD_CMC (history_node.color, 62);                                       \
-    FIELD_BL (history_node.bl92, 92);                                         \
-    FIELD_HANDLE (history_node.h347, 5, 347)
+    FIELD_BL (history_node.step_id, 92);                                      \
+    FIELD_HANDLE (history_node.material, 5, 347)
 
 // Class AcDbSweepOptions? DEBUGGING
 // dbSweepOptions.h dbsurf.h
 DWG_OBJECT (ACSH_SWEEP_CLASS)
-
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
-
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
   FIELD_BL (bl90, 90); //33
@@ -7978,10 +8020,6 @@ DWG_OBJECT_END
 // Same as Wedge?
 DWG_OBJECT (ACSH_BOX_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBox)
@@ -7995,10 +8033,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_WEDGE_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShWedge)
@@ -8012,10 +8046,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_SPHERE_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSpere)
@@ -8027,10 +8057,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_PYRAMID_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShPyramid)
@@ -8045,10 +8071,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_FILLET_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShFillet)
@@ -8068,10 +8090,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_CHAMFER_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShChamfer)
@@ -8088,10 +8106,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_TORUS_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShTorus)
@@ -8104,10 +8118,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BREP_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBrep)
@@ -8118,14 +8128,8 @@ DWG_OBJECT (ACSH_BREP_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_EXTRUSION_CLASS)
-
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
-
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
   FIELD_BL (bl90, 90); //33
@@ -8169,10 +8173,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_HISTORY_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8180,12 +8180,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_LOFT_CLASS)
 
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
-
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShLoft)
   FIELD_BL (bl90, 90);
@@ -8214,10 +8209,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_REVOLVE_CLASS)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbEvalExpr)
-  FIELD_BL (class_version, 90); //1
-  FIELD_BL (ee_bl98, 98); //33 major/minor?
-  FIELD_BL (ee_bl99, 99); //29
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShRevolve)
@@ -8551,7 +8542,7 @@ DWG_OBJECT (DATALINK)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-#endif
+#endif /* DEBUG_CLASS || IS_FREE */
 
 DWG_OBJECT (DETAILVIEWSTYLE)
   //DECODE_UNKNOWN_BITS
@@ -8912,36 +8903,12 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   END_REPEAT (states)
 DWG_OBJECT_END
 
-#define CLASS_HAS(x) 0
-
-// abstract subclass. requires eval_expr
-#define AcDbEvalExpr_fields \
-  FIELD_BL (ee_bl1, 0); \
-  FIELD_BL (ee_bl2, 0); \
-  FIELD_BL (ee_bl3, 0); \
-  if (!CLASS_HAS (eval_expr)) \
-    { \
-      FIELD_BL (ee_bs1, 0); \
-    } \
-  else \
-    { \
-      FIELD_BS (ee_type, 0); \
-      /* switch on ee_eval_type \
-       40: BD \
-       10: 2RD \
-       11: 3BD \
-       1: T \
-       90: BL \
-       91: H \
-       70: BS */ \
-    } \
-  FIELD_BL (ee_bl4, 0)
-
-DWG_SUBCLASS (BLOCKVISIBILITYGRIP, AcDbEvalExpr);
+//DWG_SUBCLASS (BLOCKVISIBILITYGRIP, AcDbEvalExpr);
 
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
   DECODE_UNKNOWN_BITS;
-  CALL_SUBCLASS (_obj, BLOCKVISIBILITYGRIP, AcDbEvalExpr);
+  //CALL_SUBCLASS (_obj, BLOCKVISIBILITYGRIP, AcDbEvalExpr);
+  AcDbEvalExpr_fields;
   SUBCLASS (AcDbBlockElement)
   FIELD_T (be_t, 0);
   FIELD_BL (be_bl1, 0);
@@ -8958,15 +8925,15 @@ DWG_OBJECT (BLOCKVISIBILITYGRIP)
   SUBCLASS (AcDbBlockVisibilityGrip)
 DWG_OBJECT_END
 
-DWG_SUBCLASS (BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
+//DWG_SUBCLASS (BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
 
 DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   DECODE_UNKNOWN_BITS
-  CALL_SUBCLASS (_obj, BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
+  //CALL_SUBCLASS (_obj, BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
   AcDbEvalExpr_fields;
   SUBCLASS (AcDbBlockGripExpr)
-  FIELD_BL (eval_type, 91); //??
-  FIELD_T (eval_expr, 300);
+  //FIELD_BL (eval_type, 91); //??
+  FIELD_T (evalexpr, 300);
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */

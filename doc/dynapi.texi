@@ -4316,12 +4316,30 @@ BS
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4347,18 +4365,6 @@ BD,	DXF 42
 
 @item parent
 struct _dwg_object_object*
-@item class_version
-BL,	DXF 90
-@item ee_bl98
-BL,	DXF 98
-@item ee_bl99
-BL,	DXF 99
-@item history_node
-Dwg_ACSH_HistoryNode
-@item bl90
-BL,	DXF 90
-@item bl91
-BL,	DXF 91
 @item acis_empty
 B
 @item unknown
@@ -4421,6 +4427,36 @@ BL
 H
 @item acis_empty_bit
 B
+@item ee_class_version
+BL,	DXF 90
+@item ee_major
+BL,	DXF 98
+@item ee_minor
+BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
+@item history_node
+Dwg_ACSH_HistoryNode
+@item bl90
+BL,	DXF 90
+@item bl91
+BL,	DXF 91
 
 @end vtable
 @end indentedblock
@@ -4434,12 +4470,30 @@ B
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4471,12 +4525,30 @@ BL,	DXF 95
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4544,12 +4616,30 @@ B,	DXF 296
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4587,12 +4677,30 @@ BD*,	DXF 43
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 
@@ -4608,12 +4716,30 @@ Dwg_ACSH_HistoryNode
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4641,12 +4767,30 @@ H*
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4674,12 +4818,30 @@ BD,	DXF 42
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4721,12 +4883,30 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4748,12 +4928,30 @@ BD,	DXF 40
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4821,12 +5019,30 @@ B,	DXF 296
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -4850,12 +5066,30 @@ BD,	DXF 41
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item ee_class_version
 BL,	DXF 90
-@item ee_bl98
+@item ee_major
 BL,	DXF 98
-@item ee_bl99
+@item ee_minor
 BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
 @item bl90
@@ -5691,21 +5925,31 @@ BD,	DXF 50
 
 @item parent
 struct _dwg_object_object*
-@item ee_bl1
-BL
-@item ee_bl2
-BL
-@item ee_bl3
-BL
-@item ee_bs1
-BL
-@item ee_type
-BS
-@item ee_bl4
-BL
+@item ee_class_version
+BL,	DXF 90
+@item ee_major
+BL,	DXF 98
+@item ee_minor
+BL,	DXF 99
+@item nodeid
+BL,	DXF 90
 @item eval_type
-BL,	DXF 91
-@item eval_expr
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
+@item evalexpr
 T,	DXF 300
 
 @end vtable
@@ -5720,18 +5964,30 @@ T,	DXF 300
 
 @item parent
 struct _dwg_object_object*
-@item ee_bl1
-BL
-@item ee_bl2
-BL
-@item ee_bl3
-BL
-@item ee_bs1
-BL
-@item ee_type
-BS
-@item ee_bl4
-BL
+@item ee_class_version
+BL,	DXF 90
+@item ee_major
+BL,	DXF 98
+@item ee_minor
+BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
 @item be_t
 T
 @item be_bl1
@@ -9462,17 +9718,17 @@ B
 @indentedblock
 @vtable @code
 
-@item bl90
+@item major
 BL
-@item bl91
+@item minor
 BL
 @item trans
 BD*
 @item color
 CMC
-@item bl92
+@item step_id
 BL
-@item h347
+@item material
 H
 
 @end vtable

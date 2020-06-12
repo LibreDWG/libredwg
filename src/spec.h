@@ -119,6 +119,9 @@
 #ifndef VALUE_BS
 #  define VALUE_BS(value, dxf)
 #endif
+#ifndef VALUE_BSd
+#  define VALUE_BSd(value, dxf)
+#endif
 #ifndef VALUE_BL
 #  define VALUE_BL(value, dxf)
 #endif

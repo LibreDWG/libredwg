@@ -5241,23 +5241,34 @@ typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY
   BITCODE_BL ssab_status;       /*!< DXF 90  */
 } Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY;
 
+#define ACDBEVALEXPR_fields                                                   \
+  BITCODE_BL ee_class_version;                                                \
+  BITCODE_BL ee_major;                                                        \
+  BITCODE_BL ee_minor;                                                        \
+  BITCODE_BL nodeid;                                                          \
+  BITCODE_BSd eval_type;                                                      \
+  BITCODE_BD ee_bd40;                                                         \
+  BITCODE_2RD ee_2dpt;                                                        \
+  BITCODE_3BD ee_3dpt;                                                        \
+  BITCODE_T ee_text;                                                          \
+  BITCODE_BL ee_bl90;                                                         \
+  BITCODE_H ee_h91;                                                           \
+  BITCODE_BS ee_bs70
+
 typedef struct _dwg_ACSH_HistoryNode
 {
-  BITCODE_BL bl90; //33
-  BITCODE_BL bl91; //29
-  BITCODE_BD* trans; //last 16x nums 40-55
+  BITCODE_BL major;    //33
+  BITCODE_BL minor;    //29
+  BITCODE_BD* trans;   //last 16x nums 40-55
   BITCODE_CMC color;   /*!< DXF 62 */
-  BITCODE_BL bl92;    /*!< DXF 92 */
-  BITCODE_H  h347;    /*!< DXF 347 */
+  BITCODE_BL step_id;  /*!< DXF 92 */
+  BITCODE_H  material; /*!< DXF 347 */
 } Dwg_ACSH_HistoryNode;
 
 typedef struct _dwg_object_ACSH_HISTORY_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
 } Dwg_Object_ACSH_HISTORY_CLASS;
 
@@ -5265,10 +5276,7 @@ typedef struct _dwg_object_ACSH_HISTORY_CLASS
 typedef struct _dwg_object_ACSH_BOX_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShBox
@@ -5283,10 +5291,7 @@ typedef struct _dwg_object_ACSH_BOX_CLASS
 typedef struct _dwg_object_ACSH_WEDGE_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShWedge
@@ -5301,26 +5306,20 @@ typedef struct _dwg_object_ACSH_WEDGE_CLASS
 typedef struct _dwg_object_ACSH_BREP_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  _3DSOLID_FIELDS;
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShBrep
   BITCODE_BL bl90;            /*!< DXF 90 */
   BITCODE_BL bl91;            /*!< DXF 91 */
-  _3DSOLID_FIELDS;
 
 } Dwg_Object_ACSH_BREP_CLASS;
 
 typedef struct _dwg_object_ACSH_SWEEP_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShSweepBase
@@ -5358,12 +5357,8 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
 typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
-
   // AcDbShPrimitive
   // AcDbShSweepBase
   BITCODE_BL bl90;        /*!< DXF 90 */
@@ -5400,10 +5395,7 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
 typedef struct _dwg_object_ACSH_LOFT_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShLoft
@@ -5419,10 +5411,7 @@ typedef struct _dwg_object_ACSH_LOFT_CLASS
 typedef struct _dwg_object_ACSH_FILLET_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShFillet
@@ -5443,10 +5432,7 @@ typedef struct _dwg_object_ACSH_FILLET_CLASS
 typedef struct _dwg_object_ACSH_CHAMFER_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShChamfer
@@ -5464,10 +5450,7 @@ typedef struct _dwg_object_ACSH_CHAMFER_CLASS
 typedef struct _dwg_object_ACSH_PYRAMID_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShPyramid
@@ -5482,10 +5465,7 @@ typedef struct _dwg_object_ACSH_PYRAMID_CLASS
 typedef struct _dwg_object_ACSH_SPHERE_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShTorus
@@ -5498,10 +5478,7 @@ typedef struct _dwg_object_ACSH_SPHERE_CLASS
 typedef struct _dwg_object_ACSH_TORUS_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShTorus
@@ -5515,10 +5492,7 @@ typedef struct _dwg_object_ACSH_TORUS_CLASS
 typedef struct _dwg_object_ACSH_REVOLVE_CLASS
 {
   struct _dwg_object_object *parent;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShRevolve?
@@ -6254,14 +6228,6 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   Dwg_BLOCKVISIBILITYPARAMETER_state *states;
 } Dwg_Object_BLOCKVISIBILITYPARAMETER;
 
-#define ACDBEVALEXPR_fields \
-  BITCODE_BL ee_bl1; \
-  BITCODE_BL ee_bl2; \
-  BITCODE_BL ee_bl3; \
-  BITCODE_BL ee_bs1; \
-  BITCODE_BS ee_type; \
-  BITCODE_BL ee_bl4
-
 #define ACDBBLOCKELEMENT_fields \
   BITCODE_T be_t;    \
   BITCODE_BL be_bl1; \
@@ -6271,14 +6237,7 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
 typedef struct _dwg_object_BLOCKVISIBILITYGRIP
 {
   struct _dwg_object_object *parent;
-  //ACDBEVALEXPR_fields;
-  // AcDbEvalExpr
-  BITCODE_BL ee_bl1;
-  BITCODE_BL ee_bl2;
-  BITCODE_BL ee_bl3;
-  BITCODE_BL ee_bs1;
-  BITCODE_BS ee_type;
-  BITCODE_BL ee_bl4;
+  ACDBEVALEXPR_fields;
   ACDBBLOCKELEMENT_fields;
   // AcDbBlockGrip
   BITCODE_BL bg_bl1;
@@ -6294,17 +6253,10 @@ typedef struct _dwg_object_BLOCKVISIBILITYGRIP
 typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT
 {
   struct _dwg_object_object *parent;
-  // ACDBEVALEXPR_fields;
-  // AcDbEvalExpr  
-  BITCODE_BL ee_bl1;
-  BITCODE_BL ee_bl2;
-  BITCODE_BL ee_bl3;
-  BITCODE_BL ee_bs1;
-  BITCODE_BS ee_type;
-  BITCODE_BL ee_bl4;
+  ACDBEVALEXPR_fields;
   // AcDbBlockGripExpr
-  BITCODE_BL eval_type;
-  BITCODE_T eval_expr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
+  //BITCODE_BL eval_type;
+  BITCODE_T evalexpr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
 } Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT;
 
 /**
