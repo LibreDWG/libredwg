@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ACSH_FILLET_CLASS
 #include "common.c"
 
@@ -23,7 +22,6 @@ api_process (dwg_object *obj)
   BITCODE_BD *endsetbacks;	/*!< DXF 43 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_fillet_class *_obj = dwg_object_to_ACSH_FILLET_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_FILLET_CLASS);
@@ -42,5 +40,4 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (_obj, ACSH_FILLET_CLASS, num_endsetbacks, BL);
     CHK_ENTITY_VECTOR_TYPE (_obj, ACSH_FILLET_CLASS, endsetbacks, num_endsetbacks, BD);
   }
-#endif
 }

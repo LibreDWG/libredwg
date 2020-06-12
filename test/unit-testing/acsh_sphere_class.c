@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ACSH_SPHERE_CLASS
 #include "common.c"
 
@@ -14,7 +13,6 @@ api_process (dwg_object *obj)
   BITCODE_BD radius;	/*!< DXF 40 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_sphere_class *_obj = dwg_object_to_ACSH_SPHERE_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_SPHERE_CLASS);
@@ -23,5 +21,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_SPHERE_CLASS, major, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_SPHERE_CLASS, minor, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_SPHERE_CLASS, radius, BD);
-#endif
 }

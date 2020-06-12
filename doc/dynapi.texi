@@ -6924,13 +6924,13 @@ BL,	DXF 93
 @item num_evalexpr
 BL,	DXF 95
 @item node_edge1
-BL,	DXF 92
+BLd,	DXF 92
 @item node_edge2
-BL,	DXF 92
+BLd,	DXF 92
 @item node_edge3
-BL,	DXF 92
+BLd,	DXF 92
 @item node_edge4
-BL,	DXF 92
+BLd,	DXF 92
 @item evalexpr
 H*,	DXF 360
 

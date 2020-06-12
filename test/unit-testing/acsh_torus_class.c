@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ACSH_TORUS_CLASS
 #include "common.c"
 
@@ -15,7 +15,6 @@ api_process (dwg_object *obj)
   BITCODE_BD minor_radius;	/*!< DXF 41 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_torus_class *_obj = dwg_object_to_ACSH_TORUS_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_TORUS_CLASS);
@@ -25,5 +24,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_TORUS_CLASS, minor, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_TORUS_CLASS, major_radius, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_TORUS_CLASS, minor_radius, BD);
-#endif
 }

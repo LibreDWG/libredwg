@@ -591,6 +591,15 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           VALUE_##type (_obj->nam[vcount], dxf);                              \
         }                                                                     \
     }
+#define FIELD_VECTOR_N1(nam, type, size, dxf)                                 \
+  if (dxf && _obj->nam)                                                       \
+    {                                                                         \
+      int _dxf = dxf;                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)size; _dxf++, vcount++)           \
+        {                                                                     \
+          VALUE_##type (_obj->nam[vcount], _dxf);                             \
+        }                                                                     \
+    }
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \

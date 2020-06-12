@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ACSH_CYLINDER_CLASS
 #include "common.c"
 
@@ -17,10 +16,9 @@ api_process (dwg_object *obj)
   BITCODE_BD x_radius;     /*!< DXF 43 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_cylinder_class *_obj = dwg_object_to_ACSH_CYLINDER_CLASS (obj);
 
-  CHK_EVALEXPR (ACSH_CONE_CLASS);
+  CHK_EVALEXPR (ACSH_CYLINDER_CLASS);
   CHK_ACSH_HISTORYNODE();
 
   CHK_ENTITY_TYPE (_obj, ACSH_CYLINDER_CLASS, major, BL);
@@ -29,5 +27,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_CYLINDER_CLASS, major_radius, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_CYLINDER_CLASS, minor_radius, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_CYLINDER_CLASS, x_radius, BD);
-#endif
 }

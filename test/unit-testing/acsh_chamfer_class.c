@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable, just some field names missing
 #define DWG_TYPE DWG_TYPE_ACSH_CHAMFER_CLASS
 #include "common.c"
 
@@ -20,7 +20,6 @@ api_process (dwg_object *obj)
   BITCODE_BL bl95;	/*!< DXF 95 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_chamfer_class *_obj = dwg_object_to_ACSH_CHAMFER_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_CHAMFER_CLASS);
@@ -37,5 +36,4 @@ api_process (dwg_object *obj)
     CHK_ENTITY_VECTOR_TYPE (_obj, ACSH_CHAMFER_CLASS, edges, num_edges, BL);
   }
   CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, bl95, BL);
-#endif
 }

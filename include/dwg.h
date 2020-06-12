@@ -5101,10 +5101,10 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_BL nodeid;      // 91
   BITCODE_BL edge_flags;  // 93
   BITCODE_BL num_evalexpr;// 95
-  BITCODE_BL node_edge1;  // 92
-  BITCODE_BL node_edge2;  // 92
-  BITCODE_BL node_edge3;  // 92
-  BITCODE_BL node_edge4;  // 92
+  BITCODE_BLd node_edge1;  // 92
+  BITCODE_BLd node_edge2;  // 92
+  BITCODE_BLd node_edge3;  // 92
+  BITCODE_BLd node_edge4;  // 92
   BITCODE_H  *evalexpr;    //360
 } Dwg_Object_EVALUATION_GRAPH;
 
@@ -7749,6 +7749,11 @@ EXPORT int dwg_setup_UNKNOWN_ENT (Dwg_Object *obj);
 EXPORT int dwg_setup_UNKNOWN_OBJ (Dwg_Object *obj);
 
 /* STABLE: */
+EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_CYLINDER_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_FILLET_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_SPHERE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_WEDGE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYWDFLT (Dwg_Object *obj);
@@ -7773,6 +7778,12 @@ EXPORT int dwg_setup_WIPEOUTVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 
 /* UNSTABLE: */
+EXPORT int dwg_setup_ACSH_BOOLEAN_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
@@ -7806,30 +7817,19 @@ EXPORT int dwg_setup_VISUALSTYLE (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
 
 /* DEBUGGING and UNHANDLED: */
+EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCNETWORK (Dwg_Object *obj);
 //EXPORT int dwg_setup_ACDSRECORD (Dwg_Object *obj);
 //EXPORT int dwg_setup_ACDSSCHEMA (Dwg_Object *obj);
-int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
-int dwg_setup_ACMESCOPE (Dwg_Object *obj);
-int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_BOOLEAN_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_CYLINDER_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_FILLET_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_SPHERE_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_WEDGE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
+EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
+EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
 EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECTCONTEXTDATA (Dwg_Object *obj);

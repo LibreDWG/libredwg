@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ACSH_PYRAMID_CLASS
 #include "common.c"
 
@@ -17,7 +17,6 @@ api_process (dwg_object *obj)
   BITCODE_BD topradius;  /*!< DXF 42 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_pyramid_class *_obj = dwg_object_to_ACSH_PYRAMID_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_PYRAMID_CLASS);
@@ -29,5 +28,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_PYRAMID_CLASS, height, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_PYRAMID_CLASS, radius, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_PYRAMID_CLASS, topradius, BD);
-#endif
 }

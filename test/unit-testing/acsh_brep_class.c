@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable. 3dsolid point still wrong
 #define DWG_TYPE DWG_TYPE_ACSH_BREP_CLASS
 #include "common.c"
 
@@ -15,7 +15,6 @@ api_process (dwg_object *obj)
   _3DSOLID_FIELDS;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_brep_class *_obj = dwg_object_to_ACSH_BREP_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_BREP_CLASS);
@@ -139,5 +138,4 @@ api_process (dwg_object *obj)
   SINCE (R_2007) {
     CHK_ENTITY_H (_obj, ACSH_BREP_CLASS, history_id);
   }
-#endif
 }

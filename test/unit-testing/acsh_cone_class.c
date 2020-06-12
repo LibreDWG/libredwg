@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// no coverage yet
 #define DWG_TYPE DWG_TYPE_ACSH_CONE_CLASS
 #include "common.c"
 
@@ -17,7 +17,6 @@ api_process (dwg_object *obj)
   BITCODE_BD top_x_radius;    /*!< DXF 43 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_cone_class *_obj = dwg_object_to_ACSH_CONE_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_CONE_CLASS);
@@ -29,5 +28,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, top_major_radius, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, top_minor_radius, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, top_x_radius, BD);
-#endif
 }

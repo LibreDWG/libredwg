@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ACSH_WEDGE_CLASS
 #include "common.c"
 
@@ -16,7 +15,6 @@ api_process (dwg_object *obj)
   BITCODE_BD height;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_wedge_class *_obj = dwg_object_to_ACSH_WEDGE_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_WEDGE_CLASS);
@@ -27,5 +25,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_WEDGE_CLASS, length, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_WEDGE_CLASS, width, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_WEDGE_CLASS, height, BD);
-#endif
 }

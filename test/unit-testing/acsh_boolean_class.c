@@ -17,7 +17,6 @@ api_process (dwg_object *obj)
   BITCODE_BL operand2;	  /*!< DXF 93 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_boolean_class *_obj = dwg_object_to_ACSH_BOOLEAN_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_BOOLEAN_CLASS);
@@ -28,5 +27,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_BOOLEAN_CLASS, operation, RCd);
   CHK_ENTITY_TYPE (_obj, ACSH_BOOLEAN_CLASS, operand1, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_BOOLEAN_CLASS, operand2, BL);
-#endif
 }

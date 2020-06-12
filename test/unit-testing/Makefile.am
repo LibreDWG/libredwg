@@ -43,6 +43,17 @@ common_test_LDADD =
 testobjects = \
 	3dface \
 	3dsolid \
+	acsh_boolean_class \
+	acsh_box_class \
+	acsh_brep_class \
+	acsh_chamfer_class \
+	acsh_cone_class \
+	acsh_cylinder_class \
+	acsh_fillet_class \
+	acsh_pyramid_class \
+	acsh_torus_class \
+	acsh_wedge_class \
+	acsh_sphere_class \
 	appid \
 	appid_control \
 	arc \
@@ -176,22 +187,11 @@ testobjects += \
 	acmecommandhistory \
 	acmescope \
 	acmestatemgr \
-	acsh_boolean_class \
-	acsh_box_class \
-	acsh_brep_class \
-	acsh_chamfer_class \
-	acsh_cone_class \
-	acsh_cylinder_class \
 	acsh_extrusion_class \
-	acsh_fillet_class \
 	acsh_history_class \
 	acsh_loft_class \
-	acsh_pyramid_class \
 	acsh_revolve_class \
-	acsh_sphere_class \
 	acsh_sweep_class \
-	acsh_torus_class \
-	acsh_wedge_class \
 	aldimobjectcontextdata \
 	assoc2dconstraintgroup \
 	assocaction \

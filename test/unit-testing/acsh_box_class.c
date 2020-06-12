@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ACSH_BOX_CLASS
 #include "common.c"
 
@@ -17,7 +16,6 @@ api_process (dwg_object *obj)
   BITCODE_BD height;     /*!< DXF 42 420.0 (height?) */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_box_class *_obj = dwg_object_to_ACSH_BOX_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_BOX_CLASS);
@@ -28,5 +26,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, length, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, width, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_BOX_CLASS, height, BD);
-#endif
 }

@@ -36683,63 +36683,59 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
     evaluation_graph->has_graph--;
   }
   {
-    BITCODE_BL node_edge1;
+    BITCODE_BLd node_edge1;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge1", &node_edge1, NULL)
         && node_edge1 == evaluation_graph->node_edge1)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge1 [BL] %u != %u", evaluation_graph->node_edge1, node_edge1);
-    node_edge1++;
+      fail ("EVALUATION_GRAPH.node_edge1 [BLd] " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge1, node_edge1);
     if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge1", &node_edge1, 0)
         && node_edge1 == evaluation_graph->node_edge1)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge1 [BL] set+1 %u != %u", evaluation_graph->node_edge1, node_edge1);
+      fail ("EVALUATION_GRAPH.node_edge1 [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge1, node_edge1);
     evaluation_graph->node_edge1--;
   }
   {
-    BITCODE_BL node_edge2;
+    BITCODE_BLd node_edge2;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge2", &node_edge2, NULL)
         && node_edge2 == evaluation_graph->node_edge2)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge2 [BL] %u != %u", evaluation_graph->node_edge2, node_edge2);
-    node_edge2++;
+      fail ("EVALUATION_GRAPH.node_edge2 [BLd] " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge2, node_edge2);
     if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge2", &node_edge2, 0)
         && node_edge2 == evaluation_graph->node_edge2)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge2 [BL] set+1 %u != %u", evaluation_graph->node_edge2, node_edge2);
+      fail ("EVALUATION_GRAPH.node_edge2 [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge2, node_edge2);
     evaluation_graph->node_edge2--;
   }
   {
-    BITCODE_BL node_edge3;
+    BITCODE_BLd node_edge3;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge3", &node_edge3, NULL)
         && node_edge3 == evaluation_graph->node_edge3)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge3 [BL] %u != %u", evaluation_graph->node_edge3, node_edge3);
-    node_edge3++;
+      fail ("EVALUATION_GRAPH.node_edge3 [BLd] " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge3, node_edge3);
     if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge3", &node_edge3, 0)
         && node_edge3 == evaluation_graph->node_edge3)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge3 [BL] set+1 %u != %u", evaluation_graph->node_edge3, node_edge3);
+      fail ("EVALUATION_GRAPH.node_edge3 [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge3, node_edge3);
     evaluation_graph->node_edge3--;
   }
   {
-    BITCODE_BL node_edge4;
+    BITCODE_BLd node_edge4;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge4", &node_edge4, NULL)
         && node_edge4 == evaluation_graph->node_edge4)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge4 [BL] %u != %u", evaluation_graph->node_edge4, node_edge4);
-    node_edge4++;
+      fail ("EVALUATION_GRAPH.node_edge4 [BLd] " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge4, node_edge4);
     if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "node_edge4", &node_edge4, 0)
         && node_edge4 == evaluation_graph->node_edge4)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.node_edge4 [BL] set+1 %u != %u", evaluation_graph->node_edge4, node_edge4);
+      fail ("EVALUATION_GRAPH.node_edge4 [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->node_edge4, node_edge4);
     evaluation_graph->node_edge4--;
   }
   {

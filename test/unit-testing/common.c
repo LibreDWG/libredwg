@@ -126,7 +126,7 @@ main (int argc, char *argv[])
               //"2000/PolyLine2D.dwg",
               //"2007/PolyLine3D.dwg",
               NULL };
-      const char *prefix = "../test-data/";
+      const char *prefix = "../test-data";
 
       if (dir)
         {
@@ -141,9 +141,9 @@ main (int argc, char *argv[])
 
       /* ../configure out-of-tree. find srcdir */
       if (stat (prefix, &attrib))
-        prefix = "../../../test/test-data/";
+        prefix = "../../../test/test-data";
       if (stat (prefix, &attrib)) /* dir not found. one more level up */
-        prefix = "../../../../test/test-data/";
+        prefix = "../../../../test/test-data";
 
       for (ptr = (char **)&files[0]; *ptr; ptr++)
         {
@@ -151,6 +151,7 @@ main (int argc, char *argv[])
             {
               char tmp[80];
               strcpy (tmp, prefix);
+              strcat (tmp, "/");
               strcat (tmp, *ptr);
               if (stat (tmp, &attrib))
                 fprintf (stderr, "Env var INPUT not defined, %s not found\n",
@@ -289,13 +290,6 @@ main (int argc, char *argv[])
               strcat (tmp, "2013/Constraints.dwg");
               error += test_code (tmp, cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ACSH_BOX_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS)
-            {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2013/JW.dwg");
-              error += test_code (tmp, cov);
-            }
           if (DWG_TYPE == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
             {
               strcpy (tmp, prefix);
@@ -423,19 +417,23 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/LiveSection1.dwg");
               error += test_code (tmp, cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ACSH_CYLINDER_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_CHAMFER_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_WEDGE_CLASS ||
+          if (DWG_TYPE == DWG_TYPE_ACSH_BOOLEAN_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_BOX_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_BOOLEAN_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_TORUS_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_BREP_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_CHAMFER_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_CYLINDER_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_FILLET_CLASS)
+              DWG_TYPE == DWG_TYPE_ACSH_FILLET_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_HISTORY_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_TORUS_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_WEDGE_CLASS)
             {
               strcpy (tmp, prefix);
               strcat (tmp, "2007/ATMOS-DC22S.dwg");
+              error += test_code (tmp, cov);
+              strcpy (tmp, prefix);
+              strcat (tmp, "2013/JW.dwg");
               error += test_code (tmp, cov);
             }
         }
