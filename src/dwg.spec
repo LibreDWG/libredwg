@@ -7916,10 +7916,10 @@ DWG_OBJECT_END
 
 // abstract subclass. requires evalexpr
 #define AcDbEvalExpr_fields                     \
-  FIELD_BL (ee_class_version, 90);              \
+  DXF { FIELD_BL (nodeid, 90); }                \
+  FIELD_BLd (ee_int, 0);                        \
   FIELD_BL (ee_major, 98);                      \
   FIELD_BL (ee_minor, 99);                      \
-  DXF { FIELD_BL (nodeid, 90); }                \
   if (!CLASS_HAS (evalexpr))                    \
     {                                           \
       VALUE_BSd (-9999, 70);                    \
@@ -8232,6 +8232,19 @@ DWG_OBJECT (ACSH_REVOLVE_CLASS)
   FIELD_B (b290, 290);
   FIELD_B (is_close_to_axis, 291);
   CALL_SUBENT (obj->sweep_entity, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ACSH_BOOLEAN_CLASS)
+  DECODE_UNKNOWN_BITS
+  AcDbShHistoryNode_fields;
+  SUBCLASS (AcDbShPrimitive)
+  SUBCLASS (AcDbShBoolean)
+  FIELD_BL (major, 90);
+  FIELD_BL (minor, 91);
+  FIELD_RCd (operation, 280);
+  FIELD_BL (operand1, 92);
+  FIELD_BL (operand2, 93);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

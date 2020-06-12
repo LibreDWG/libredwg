@@ -23334,6 +23334,262 @@ static int test_ACMESTATEMGR (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ACSH_BOOLEAN_CLASS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ACSH_BOOLEAN_CLASS *restrict acsh_boolean_class = obj->tio.object->tio.ACSH_BOOLEAN_CLASS;
+  failed = 0;
+  {
+    BITCODE_2RD ee_2dpt;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_2dpt", &ee_2dpt, NULL)
+        && !memcmp (&ee_2dpt, &acsh_boolean_class->ee_2dpt, sizeof (acsh_boolean_class->ee_2dpt)))
+        pass ();
+    else
+        fail ("ACSH_BOOLEAN_CLASS.ee_2dpt [2RD]");
+  }
+  {
+    BITCODE_3BD ee_3dpt;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_3dpt", &ee_3dpt, NULL)
+        && !memcmp (&ee_3dpt, &acsh_boolean_class->ee_3dpt, sizeof (acsh_boolean_class->ee_3dpt)))
+        pass ();
+    else
+        fail ("ACSH_BOOLEAN_CLASS.ee_3dpt [3BD]");
+  }
+  {
+    BITCODE_BD ee_bd40;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_bd40", &ee_bd40, NULL)
+        && ee_bd40 == acsh_boolean_class->ee_bd40)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_bd40 [BD] %g != %g", acsh_boolean_class->ee_bd40, ee_bd40);
+    ee_bd40++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_bd40", &ee_bd40, 0)
+        && ee_bd40 == acsh_boolean_class->ee_bd40)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_bd40 [BD] set+1 %g != %g", acsh_boolean_class->ee_bd40, ee_bd40);
+    acsh_boolean_class->ee_bd40--;
+  }
+  {
+    BITCODE_BL ee_bl90;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_bl90", &ee_bl90, NULL)
+        && ee_bl90 == acsh_boolean_class->ee_bl90)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_bl90 [BL] %u != %u", acsh_boolean_class->ee_bl90, ee_bl90);
+    ee_bl90++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_bl90", &ee_bl90, 0)
+        && ee_bl90 == acsh_boolean_class->ee_bl90)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_bl90 [BL] set+1 %u != %u", acsh_boolean_class->ee_bl90, ee_bl90);
+    acsh_boolean_class->ee_bl90--;
+  }
+  {
+    BITCODE_BS ee_bs70;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_bs70", &ee_bs70, NULL)
+        && ee_bs70 == acsh_boolean_class->ee_bs70)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_bs70 [BS] %hu != %hu", acsh_boolean_class->ee_bs70, ee_bs70);
+    ee_bs70++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_bs70", &ee_bs70, 0)
+        && ee_bs70 == acsh_boolean_class->ee_bs70)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_bs70 [BS] set+1 %hu != %hu", acsh_boolean_class->ee_bs70, ee_bs70);
+    acsh_boolean_class->ee_bs70--;
+  }
+  {
+    BITCODE_H ee_h91;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_h91", &ee_h91, NULL)
+        && !memcmp (&ee_h91, &acsh_boolean_class->ee_h91, sizeof (acsh_boolean_class->ee_h91)))
+        pass ();
+    else
+        fail ("ACSH_BOOLEAN_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_boolean_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_boolean_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_boolean_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_boolean_class->ee_int, ee_int);
+    acsh_boolean_class->ee_int--;
+  }
+  {
+    BITCODE_BL ee_major;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_major", &ee_major, NULL)
+        && ee_major == acsh_boolean_class->ee_major)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_major [BL] %u != %u", acsh_boolean_class->ee_major, ee_major);
+    ee_major++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_major", &ee_major, 0)
+        && ee_major == acsh_boolean_class->ee_major)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_major [BL] set+1 %u != %u", acsh_boolean_class->ee_major, ee_major);
+    acsh_boolean_class->ee_major--;
+  }
+  {
+    BITCODE_BL ee_minor;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_minor", &ee_minor, NULL)
+        && ee_minor == acsh_boolean_class->ee_minor)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_minor [BL] %u != %u", acsh_boolean_class->ee_minor, ee_minor);
+    ee_minor++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_minor", &ee_minor, 0)
+        && ee_minor == acsh_boolean_class->ee_minor)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_minor [BL] set+1 %u != %u", acsh_boolean_class->ee_minor, ee_minor);
+    acsh_boolean_class->ee_minor--;
+  }
+  {
+    BITCODE_T ee_text;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_text", &ee_text, NULL)
+        && ee_text
+           ? strEQ ((char *)ee_text, (char *)acsh_boolean_class->ee_text)
+           : !acsh_boolean_class->ee_text)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.ee_text [T] '%s' <> '%s'", ee_text, acsh_boolean_class->ee_text);
+  }
+  {
+    BITCODE_BSd eval_type;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "eval_type", &eval_type, NULL)
+        && eval_type == acsh_boolean_class->eval_type)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.eval_type [BSd] " FORMAT_BSd " != " FORMAT_BSd "", acsh_boolean_class->eval_type, eval_type);
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "eval_type", &eval_type, 0)
+        && eval_type == acsh_boolean_class->eval_type)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.eval_type [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", acsh_boolean_class->eval_type, eval_type);
+    acsh_boolean_class->eval_type--;
+  }
+  {
+    Dwg_ACSH_HistoryNode history_node;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "history_node", &history_node, NULL)
+        && !memcmp (&history_node, &acsh_boolean_class->history_node, sizeof (acsh_boolean_class->history_node)))
+        pass ();
+    else
+        fail ("ACSH_BOOLEAN_CLASS.history_node [Dwg_ACSH_HistoryNode]");
+  }
+  {
+    BITCODE_BL major;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "major", &major, NULL)
+        && major == acsh_boolean_class->major)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.major [BL] %u != %u", acsh_boolean_class->major, major);
+    major++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "major", &major, 0)
+        && major == acsh_boolean_class->major)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.major [BL] set+1 %u != %u", acsh_boolean_class->major, major);
+    acsh_boolean_class->major--;
+  }
+  {
+    BITCODE_BL minor;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "minor", &minor, NULL)
+        && minor == acsh_boolean_class->minor)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.minor [BL] %u != %u", acsh_boolean_class->minor, minor);
+    minor++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "minor", &minor, 0)
+        && minor == acsh_boolean_class->minor)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.minor [BL] set+1 %u != %u", acsh_boolean_class->minor, minor);
+    acsh_boolean_class->minor--;
+  }
+  {
+    BITCODE_BL nodeid;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "nodeid", &nodeid, NULL)
+        && nodeid == acsh_boolean_class->nodeid)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.nodeid [BL] %u != %u", acsh_boolean_class->nodeid, nodeid);
+    nodeid++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "nodeid", &nodeid, 0)
+        && nodeid == acsh_boolean_class->nodeid)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.nodeid [BL] set+1 %u != %u", acsh_boolean_class->nodeid, nodeid);
+    acsh_boolean_class->nodeid--;
+  }
+  {
+    BITCODE_BL operand1;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "operand1", &operand1, NULL)
+        && operand1 == acsh_boolean_class->operand1)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.operand1 [BL] %u != %u", acsh_boolean_class->operand1, operand1);
+    operand1++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "operand1", &operand1, 0)
+        && operand1 == acsh_boolean_class->operand1)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.operand1 [BL] set+1 %u != %u", acsh_boolean_class->operand1, operand1);
+    acsh_boolean_class->operand1--;
+  }
+  {
+    BITCODE_BL operand2;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "operand2", &operand2, NULL)
+        && operand2 == acsh_boolean_class->operand2)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.operand2 [BL] %u != %u", acsh_boolean_class->operand2, operand2);
+    operand2++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "operand2", &operand2, 0)
+        && operand2 == acsh_boolean_class->operand2)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.operand2 [BL] set+1 %u != %u", acsh_boolean_class->operand2, operand2);
+    acsh_boolean_class->operand2--;
+  }
+  {
+    BITCODE_RCd operation;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "operation", &operation, NULL)
+        && operation == acsh_boolean_class->operation)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.operation [RCd] " FORMAT_RCd " != " FORMAT_RCd "", acsh_boolean_class->operation, operation);
+    operation++;
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "operation", &operation, 0)
+        && operation == acsh_boolean_class->operation)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.operation [RCd] set+1 " FORMAT_RCd " != " FORMAT_RCd "", acsh_boolean_class->operation, operation);
+    acsh_boolean_class->operation--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "parent", &parent, NULL)
+        && !memcmp (&parent, &acsh_boolean_class->parent, sizeof (acsh_boolean_class->parent)))
+        pass ();
+    else
+        fail ("ACSH_BOOLEAN_CLASS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ACSH_BOOLEAN_CLASS") || is_class_debugging ("ACSH_BOOLEAN_CLASS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACSH_BOOLEAN_CLASS", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
 {
   int error = 0;
@@ -23402,27 +23658,26 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
     acsh_box_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_box_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_BOX_CLASS.ee_class_version [BL] %u != %u", acsh_box_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_box_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_BOX_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_box_class->ee_class_version, ee_class_version);
-    acsh_box_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_box_class->ee_h91, sizeof (acsh_box_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_BOX_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_box_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_box_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_box_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_box_class->ee_int, ee_int);
+    acsh_box_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -23737,27 +23992,26 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
     acsh_brep_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_brep_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_BREP_CLASS.ee_class_version [BL] %u != %u", acsh_brep_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_brep_class, "ACSH_BREP_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_brep_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_BREP_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_brep_class->ee_class_version, ee_class_version);
-    acsh_brep_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_brep_class->ee_h91, sizeof (acsh_brep_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_brep_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_BREP_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_brep_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_brep_class, "ACSH_BREP_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_brep_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_BREP_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_brep_class->ee_int, ee_int);
+    acsh_brep_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -24322,27 +24576,26 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
     acsh_chamfer_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_chamfer_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.ee_class_version [BL] %u != %u", acsh_chamfer_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_chamfer_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_chamfer_class->ee_class_version, ee_class_version);
-    acsh_chamfer_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_chamfer_class->ee_h91, sizeof (acsh_chamfer_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_CHAMFER_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_chamfer_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_chamfer_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_chamfer_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_chamfer_class->ee_int, ee_int);
+    acsh_chamfer_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -24662,27 +24915,26 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     acsh_extrusion_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_extrusion_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_EXTRUSION_CLASS.ee_class_version [BL] %u != %u", acsh_extrusion_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_extrusion_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_EXTRUSION_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_extrusion_class->ee_class_version, ee_class_version);
-    acsh_extrusion_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_extrusion_class->ee_h91, sizeof (acsh_extrusion_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_extrusion_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_extrusion_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_extrusion_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_extrusion_class->ee_int, ee_int);
+    acsh_extrusion_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -25119,27 +25371,26 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
     acsh_fillet_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_fillet_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_FILLET_CLASS.ee_class_version [BL] %u != %u", acsh_fillet_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_fillet_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_FILLET_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_fillet_class->ee_class_version, ee_class_version);
-    acsh_fillet_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_fillet_class->ee_h91, sizeof (acsh_fillet_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_FILLET_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_fillet_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_FILLET_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_fillet_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_fillet_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_FILLET_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_fillet_class->ee_int, ee_int);
+    acsh_fillet_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -25451,27 +25702,26 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
     acsh_history_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_history_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.ee_class_version [BL] %u != %u", acsh_history_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_history_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_history_class->ee_class_version, ee_class_version);
-    acsh_history_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_history_class->ee_h91, sizeof (acsh_history_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_history_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_history_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_history_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_history_class->ee_int, ee_int);
+    acsh_history_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -25696,27 +25946,26 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
     acsh_loft_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_loft_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_LOFT_CLASS.ee_class_version [BL] %u != %u", acsh_loft_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_loft_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_LOFT_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_loft_class->ee_class_version, ee_class_version);
-    acsh_loft_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_loft_class->ee_h91, sizeof (acsh_loft_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_LOFT_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_loft_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_loft_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_loft_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_loft_class->ee_int, ee_int);
+    acsh_loft_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -25948,27 +26197,26 @@ static int test_ACSH_PYRAMID_CLASS (const Dwg_Object *obj)
     acsh_pyramid_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_pyramid_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_PYRAMID_CLASS.ee_class_version [BL] %u != %u", acsh_pyramid_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_pyramid_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_PYRAMID_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_pyramid_class->ee_class_version, ee_class_version);
-    acsh_pyramid_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_pyramid_class->ee_h91, sizeof (acsh_pyramid_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_PYRAMID_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_pyramid_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_PYRAMID_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_pyramid_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_pyramid_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_PYRAMID_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_pyramid_class->ee_int, ee_int);
+    acsh_pyramid_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -26296,27 +26544,26 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
     acsh_revolve_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_revolve_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.ee_class_version [BL] %u != %u", acsh_revolve_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_revolve_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_revolve_class->ee_class_version, ee_class_version);
-    acsh_revolve_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_revolve_class->ee_h91, sizeof (acsh_revolve_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_revolve_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_revolve_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_revolve_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_revolve_class->ee_int, ee_int);
+    acsh_revolve_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -26576,27 +26823,26 @@ static int test_ACSH_SPHERE_CLASS (const Dwg_Object *obj)
     acsh_sphere_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_sphere_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_SPHERE_CLASS.ee_class_version [BL] %u != %u", acsh_sphere_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_sphere_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_SPHERE_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_sphere_class->ee_class_version, ee_class_version);
-    acsh_sphere_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_sphere_class->ee_h91, sizeof (acsh_sphere_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_SPHERE_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_sphere_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_SPHERE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_sphere_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_sphere_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_SPHERE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_sphere_class->ee_int, ee_int);
+    acsh_sphere_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -26901,27 +27147,26 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     acsh_sweep_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_sweep_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.ee_class_version [BL] %u != %u", acsh_sweep_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_sweep_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_sweep_class->ee_class_version, ee_class_version);
-    acsh_sweep_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_sweep_class->ee_h91, sizeof (acsh_sweep_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_sweep_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_sweep_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_sweep_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_sweep_class->ee_int, ee_int);
+    acsh_sweep_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -27333,27 +27578,26 @@ static int test_ACSH_TORUS_CLASS (const Dwg_Object *obj)
     acsh_torus_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_torus_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_TORUS_CLASS.ee_class_version [BL] %u != %u", acsh_torus_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_torus_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_TORUS_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_torus_class->ee_class_version, ee_class_version);
-    acsh_torus_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_torus_class->ee_h91, sizeof (acsh_torus_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_TORUS_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_torus_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_TORUS_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_torus_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_torus_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_TORUS_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_torus_class->ee_int, ee_int);
+    acsh_torus_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -27575,27 +27819,26 @@ static int test_ACSH_WEDGE_CLASS (const Dwg_Object *obj)
     acsh_wedge_class->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == acsh_wedge_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_WEDGE_CLASS.ee_class_version [BL] %u != %u", acsh_wedge_class->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == acsh_wedge_class->ee_class_version)
-      pass ();
-    else
-      fail ("ACSH_WEDGE_CLASS.ee_class_version [BL] set+1 %u != %u", acsh_wedge_class->ee_class_version, ee_class_version);
-    acsh_wedge_class->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &acsh_wedge_class->ee_h91, sizeof (acsh_wedge_class->ee_h91)))
         pass ();
     else
         fail ("ACSH_WEDGE_CLASS.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "ee_int", &ee_int, NULL)
+        && ee_int == acsh_wedge_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_WEDGE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_wedge_class->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "ee_int", &ee_int, 0)
+        && ee_int == acsh_wedge_class->ee_int)
+      pass ();
+    else
+      fail ("ACSH_WEDGE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_wedge_class->ee_int, ee_int);
+    acsh_wedge_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -32042,27 +32285,26 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
     blockgriplocationcomponent->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == blockgriplocationcomponent->ee_class_version)
-      pass ();
-    else
-      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_class_version [BL] %u != %u", blockgriplocationcomponent->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == blockgriplocationcomponent->ee_class_version)
-      pass ();
-    else
-      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_class_version [BL] set+1 %u != %u", blockgriplocationcomponent->ee_class_version, ee_class_version);
-    blockgriplocationcomponent->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &blockgriplocationcomponent->ee_h91, sizeof (blockgriplocationcomponent->ee_h91)))
         pass ();
     else
         fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_int", &ee_int, NULL)
+        && ee_int == blockgriplocationcomponent->ee_int)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockgriplocationcomponent->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_int", &ee_int, 0)
+        && ee_int == blockgriplocationcomponent->ee_int)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockgriplocationcomponent->ee_int, ee_int);
+    blockgriplocationcomponent->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -32349,27 +32591,26 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
     blockvisibilitygrip->ee_bs70--;
   }
   {
-    BITCODE_BL ee_class_version;
-    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_class_version", &ee_class_version, NULL)
-        && ee_class_version == blockvisibilitygrip->ee_class_version)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYGRIP.ee_class_version [BL] %u != %u", blockvisibilitygrip->ee_class_version, ee_class_version);
-    ee_class_version++;
-    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_class_version", &ee_class_version, 0)
-        && ee_class_version == blockvisibilitygrip->ee_class_version)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYGRIP.ee_class_version [BL] set+1 %u != %u", blockvisibilitygrip->ee_class_version, ee_class_version);
-    blockvisibilitygrip->ee_class_version--;
-  }
-  {
     BITCODE_H ee_h91;
     if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_h91", &ee_h91, NULL)
         && !memcmp (&ee_h91, &blockvisibilitygrip->ee_h91, sizeof (blockvisibilitygrip->ee_h91)))
         pass ();
     else
         fail ("BLOCKVISIBILITYGRIP.ee_h91 [H]");
+  }
+  {
+    BITCODE_BLd ee_int;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_int", &ee_int, NULL)
+        && ee_int == blockvisibilitygrip->ee_int)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->ee_int, ee_int);
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_int", &ee_int, 0)
+        && ee_int == blockvisibilitygrip->ee_int)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->ee_int, ee_int);
+    blockvisibilitygrip->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -49848,6 +50089,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACMESCOPE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMESTATEMGR)
     error += test_ACMESTATEMGR(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_BOOLEAN_CLASS)
+    error += test_ACSH_BOOLEAN_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_BOX_CLASS)
     error += test_ACSH_BOX_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_BREP_CLASS)
@@ -50242,6 +50485,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACMESCOPE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMESTATEMGR)
     error += test_ACMESTATEMGR (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACSH_BOOLEAN_CLASS)
+    error += test_ACSH_BOOLEAN_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_BOX_CLASS)
     error += test_ACSH_BOX_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACSH_BREP_CLASS)
@@ -51102,6 +51347,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ACMESTATEMGR): %d != "
                "dwg_dynapi_fields_size (\"ACMESTATEMGR\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ACSH_BOOLEAN_CLASS);
+  size2 = dwg_dynapi_fields_size ("ACSH_BOOLEAN_CLASS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_BOOLEAN_CLASS): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_BOOLEAN_CLASS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ACSH_BOX_CLASS);

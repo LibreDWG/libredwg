@@ -381,6 +381,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ACMECOMMANDHISTORY,
   DWG_TYPE_ACMESCOPE,
   DWG_TYPE_ACMESTATEMGR,
+  DWG_TYPE_ACSH_BOOLEAN_CLASS,
   DWG_TYPE_ACSH_BOX_CLASS,
   DWG_TYPE_ACSH_BREP_CLASS,
   DWG_TYPE_ACSH_CHAMFER_CLASS,
@@ -5242,7 +5243,7 @@ typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY
 } Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY;
 
 #define ACDBEVALEXPR_fields                                                   \
-  BITCODE_BL ee_class_version;                                                \
+  BITCODE_BLd ee_int; /* -1 */                                                \
   BITCODE_BL ee_major;                                                        \
   BITCODE_BL ee_minor;                                                        \
   BITCODE_BL nodeid;                                                          \
@@ -5308,6 +5309,20 @@ typedef struct _dwg_object_ACSH_WEDGE_CLASS
   BITCODE_BD height;     /*!< DXF 42 420.0 (height?) */
 
 } Dwg_Object_ACSH_WEDGE_CLASS;
+
+typedef struct _dwg_object_ACSH_BOOLEAN_CLASS
+{
+  struct _dwg_object_object *parent;
+  ACDBEVALEXPR_fields;
+  Dwg_ACSH_HistoryNode history_node;
+  // AcDbShPrimitive
+  // AcDbShBoolean
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
+  BITCODE_RCd operation;  /*!< DXF 280 */
+  BITCODE_BL operand1;	  /*!< DXF 92 */
+  BITCODE_BL operand2;	  /*!< DXF 93 */
+} Dwg_Object_ACSH_BOOLEAN_CLASS;
 
 typedef struct _dwg_object_ACSH_BREP_CLASS
 {
@@ -6528,6 +6543,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ACMECOMMANDHISTORY *ACMECOMMANDHISTORY;
     Dwg_Object_ACMESCOPE *ACMESCOPE;
     Dwg_Object_ACMESTATEMGR *ACMESTATEMGR;
+    Dwg_Object_ACSH_BOOLEAN_CLASS *ACSH_BOOLEAN_CLASS;
     Dwg_Object_ACSH_BOX_CLASS *ACSH_BOX_CLASS;
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
@@ -7745,6 +7761,7 @@ EXPORT int dwg_setup_ASSOCNETWORK (Dwg_Object *obj);
 int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
 int dwg_setup_ACMESCOPE (Dwg_Object *obj);
 int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_BOOLEAN_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);

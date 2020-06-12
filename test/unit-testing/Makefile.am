@@ -176,6 +176,7 @@ testobjects += \
 	acmecommandhistory \
 	acmescope \
 	acmestatemgr \
+	acsh_boolean_class \
 	acsh_box_class \
 	acsh_brep_class \
 	acsh_chamfer_class \

@@ -4307,6 +4307,55 @@ BS
 @end vtable
 @end indentedblock
 
+@strong{ACSH_BOOLEAN_CLASS} @anchor{ACSH_BOOLEAN_CLASS}
+@cindex object, ACSH_BOOLEAN_CLASS
+@vindex ACSH_BOOLEAN_CLASS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item ee_int
+BLd
+@item ee_major
+BL,	DXF 98
+@item ee_minor
+BL,	DXF 99
+@item nodeid
+BL,	DXF 90
+@item eval_type
+BSd,	DXF 70
+@item ee_bd40
+BD,	DXF 40
+@item ee_2dpt
+2RD,	DXF 10
+@item ee_3dpt
+3BD,	DXF 11
+@item ee_text
+T,	DXF 1
+@item ee_bl90
+BL,	DXF 90
+@item ee_h91
+H,	DXF 91
+@item ee_bs70
+BS,	DXF 70
+@item history_node
+Dwg_ACSH_HistoryNode
+@item major
+BL,	DXF 90
+@item minor
+BL,	DXF 91
+@item operation
+RCd,	DXF 280
+@item operand1
+BL,	DXF 92
+@item operand2
+BL,	DXF 93
+
+@end vtable
+@end indentedblock
+
 @strong{ACSH_BOX_CLASS} @anchor{ACSH_BOX_CLASS}
 @cindex object, ACSH_BOX_CLASS
 @vindex ACSH_BOX_CLASS
@@ -4316,8 +4365,8 @@ BS
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4427,8 +4476,8 @@ BL
 H
 @item acis_empty_bit
 B
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4470,8 +4519,8 @@ BL,	DXF 91
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4525,8 +4574,8 @@ BL,	DXF 95
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4616,8 +4665,8 @@ B,	DXF 296
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4677,8 +4726,8 @@ BD*,	DXF 43
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4728,8 +4777,8 @@ B,	DXF 281
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4779,8 +4828,8 @@ H*
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4830,8 +4879,8 @@ BD,	DXF 42
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4895,8 +4944,8 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -4940,8 +4989,8 @@ BD,	DXF 40
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -5031,8 +5080,8 @@ B,	DXF 296
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -5078,8 +5127,8 @@ BD,	DXF 41
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -5937,8 +5986,8 @@ BD,	DXF 50
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
@@ -5976,8 +6025,8 @@ T,	DXF 300
 
 @item parent
 struct _dwg_object_object*
-@item ee_class_version
-BL,	DXF 90
+@item ee_int
+BLd
 @item ee_major
 BL,	DXF 98
 @item ee_minor
