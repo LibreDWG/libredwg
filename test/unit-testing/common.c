@@ -1417,6 +1417,59 @@ api_common_object (dwg_object *obj)
   CHK_COMMON_TYPE (_obj, num_eed, BL);
 }
 
+#define CHK_EVALEXPR(type)                                           \
+  CHK_ENTITY_TYPE (_obj, type, ee_class_version, BL);                \
+  CHK_ENTITY_TYPE (_obj, type, ee_major, BL);                        \
+  CHK_ENTITY_TYPE (_obj, type, ee_minor, BL);                        \
+  CHK_ENTITY_TYPE (_obj, type, nodeid, BL);                          \
+  CHK_ENTITY_TYPE (_obj, type, eval_type, BSd);                      \
+  switch (eval_type)                                                 \
+    {                                                                \
+    case 40:                                                         \
+      CHK_ENTITY_TYPE (_obj, type, ee_bd40, BD);                     \
+      break;                                                         \
+    case 10:                                                         \
+      CHK_ENTITY_2RD (_obj, type, ee_2dpt);                          \
+      break;                                                         \
+    case 11:                                                         \
+      CHK_ENTITY_3RD (_obj, type, ee_3dpt);                          \
+      break;                                                         \
+    case 1:                                                          \
+      CHK_ENTITY_UTF8TEXT (_obj, type, ee_text);                     \
+      break;                                                         \
+    case 90:                                                         \
+      CHK_ENTITY_TYPE (_obj, type, ee_bl90, BL);                     \
+      break;                                                         \
+    case 91:                                                         \
+      CHK_ENTITY_H (_obj, type, ee_h91);                             \
+      break;                                                         \
+    case 70:                                                         \
+      CHK_ENTITY_TYPE (_obj, type, ee_bs70, BS);                     \
+      break;                                                         \
+    case -9999:                                                      \
+    default:                                                         \
+      break;                                                         \
+    }
+
+#define CHK_ACSH_HISTORYNODE()                                          \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, major, BL);  \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, minor, BL);  \
+  /* last 16x nums 40-55 */                                             \
+  if (!dwg_dynapi_subclass_value (&_obj->history_node,                  \
+               "ACSH_HistoryNode", "trans", &trans, NULL))              \
+    fail ("ACSH_HistoryNode.trans");                                    \
+  else                                                                  \
+  for (int i = 0; i < 16; i++)                                          \
+    {                                                                   \
+      if (trans[i] == _obj->history_node.trans[i]) /* catches nan */    \
+        ok ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);             \
+      else                                                              \
+        fail ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);           \
+    }                                                                   \
+  CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);       \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL); \
+  CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, material)
+
 // allow old deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
 GCC46_DIAG_IGNORE (-Wdeprecated-declarations)

@@ -6,12 +6,7 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BL ee_bl1;
-  BITCODE_BL ee_bl2;
-  BITCODE_BL ee_bl3;
-  BITCODE_BL ee_bs1;
-  BITCODE_BS ee_type;
-  BITCODE_BL ee_bl4;
+  ACDBEVALEXPR_fields;
   BITCODE_T be_t;
   BITCODE_BL be_bl1;
   BITCODE_BL be_bl2;
@@ -26,12 +21,8 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_blockvisibilitygrip *_obj = dwg_object_to_BLOCKVISIBILITYGRIP (obj);
 
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl1, BL);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl2, BL);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl3, BL);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bs1, BL);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_type, BS);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, ee_bl4, BL);
+  CHK_EVALEXPR (BLOCKVISIBILITYGRIP);
+
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYGRIP, be_t);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl1, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_bl2, BL);

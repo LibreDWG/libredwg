@@ -5286,8 +5286,8 @@ typedef struct _dwg_object_ACSH_BOX_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShBox
-  BITCODE_BL bl90;       /*!< DXF 90 (33) */
-  BITCODE_BL bl91;       /*!< DXF 91 (29) */
+  BITCODE_BL major;       /*!< DXF 90 (33) */
+  BITCODE_BL minor;       /*!< DXF 91 (29) */
   BITCODE_BD length;     /*!< DXF 40 1300.0 (length?) */
   BITCODE_BD width;      /*!< DXF 41 20.0 (width?) */
   BITCODE_BD height;     /*!< DXF 42 420.0 (height?) */
@@ -5301,8 +5301,8 @@ typedef struct _dwg_object_ACSH_WEDGE_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShWedge
-  BITCODE_BL bl90;       /*!< DXF 90 (33) */
-  BITCODE_BL bl91;       /*!< DXF 91 (29) */
+  BITCODE_BL major;       /*!< DXF 90 (33) */
+  BITCODE_BL minor;       /*!< DXF 91 (29) */
   BITCODE_BD length;     /*!< DXF 40 1300.0 (length?) */
   BITCODE_BD width;      /*!< DXF 41 20.0 (width?) */
   BITCODE_BD height;     /*!< DXF 42 420.0 (height?) */
@@ -5317,8 +5317,8 @@ typedef struct _dwg_object_ACSH_BREP_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShBrep
-  BITCODE_BL bl90;            /*!< DXF 90 */
-  BITCODE_BL bl91;            /*!< DXF 91 */
+  BITCODE_BL major;            /*!< DXF 90 */
+  BITCODE_BL minor;            /*!< DXF 91 */
 
 } Dwg_Object_ACSH_BREP_CLASS;
 
@@ -5329,8 +5329,8 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShSweepBase
-  BITCODE_BL bl90;            /*!< DXF 90 */
-  BITCODE_BL bl91;            /*!< DXF 91 */
+  BITCODE_BL major;            /*!< DXF 90 */
+  BITCODE_BL minor;            /*!< DXF 91 */
   BITCODE_3BD direction;      /*!< DXF 10 */
   BITCODE_BL bl92;            /*!< DXF 92 */
   BITCODE_BL shsw_text_size;  /*!< DXF 90 */
@@ -5367,8 +5367,8 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShSweepBase
-  BITCODE_BL bl90;        /*!< DXF 90 */
-  BITCODE_BL bl91;        /*!< DXF 91 */
+  BITCODE_BL major;        /*!< DXF 90 */
+  BITCODE_BL minor;        /*!< DXF 91 */
   BITCODE_3BD direction;  /*!< DXF 10 */
   BITCODE_BL bl92;        /*!< DXF 92 */
   BITCODE_BL shsw_text_size;  /*!< DXF 90 */
@@ -5405,8 +5405,8 @@ typedef struct _dwg_object_ACSH_LOFT_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShLoft
-  BITCODE_BL bl90;       /*!< DXF 90 */
-  BITCODE_BL bl91;       /*!< DXF 91 */
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BL num_crosssects; /*!< DXF 92 */
   BITCODE_H *crosssects;
   BITCODE_BL num_guides; /*!< DXF 95 */
@@ -5421,8 +5421,8 @@ typedef struct _dwg_object_ACSH_FILLET_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShFillet
-  BITCODE_BL bl90;       /*!< DXF 90 */
-  BITCODE_BL bl91;       /*!< DXF 91 */
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BL bl92;	 /*!< DXF 92 */
   BITCODE_BL num_edges;	 /*!< DXF 93 */
   BITCODE_BL *edges;     /*!< DXF 94 */
@@ -5442,8 +5442,8 @@ typedef struct _dwg_object_ACSH_CHAMFER_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShChamfer
-  BITCODE_BL bl90;	/*!< DXF 90 */
-  BITCODE_BL bl91;	/*!< DXF 91 */
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BL bl92;	/*!< DXF 92 */
   BITCODE_BD base_dist;	/*!< DXF 41 */
   BITCODE_BD other_dist;/*!< DXF 42 */
@@ -5460,8 +5460,8 @@ typedef struct _dwg_object_ACSH_PYRAMID_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShPyramid
-  BITCODE_BL bl90;       /*!< DXF 90 */
-  BITCODE_BL bl91;       /*!< DXF 91 */
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BD height;     /*!< DXF 40 */
   BITCODE_BL sides;      /*!< DXF 92 */
   BITCODE_BD radius;     /*!< DXF 41 */
@@ -5475,8 +5475,8 @@ typedef struct _dwg_object_ACSH_SPHERE_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShTorus
-  BITCODE_BL bl90;	/*!< DXF 90 */
-  BITCODE_BL bl91;	/*!< DXF 91 */
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BD radius;	/*!< DXF 40 */
 
 } Dwg_Object_ACSH_SPHERE_CLASS;
@@ -5488,8 +5488,8 @@ typedef struct _dwg_object_ACSH_TORUS_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShTorus
-  BITCODE_BL bl90;	/*!< DXF 90 */
-  BITCODE_BL bl91;	/*!< DXF 91 */
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BD major_radius;	/*!< DXF 40 */
   BITCODE_BD minor_radius;	/*!< DXF 41 */
 
@@ -5502,8 +5502,8 @@ typedef struct _dwg_object_ACSH_REVOLVE_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShRevolve?
-  BITCODE_BL bl90;	/*!< DXF 90 */
-  BITCODE_BL bl91;	/*!< DXF 91 */
+  BITCODE_BL major;       /*!< DXF 90 */
+  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_3BD axis_pt;	/*!< DXF 10 */
   BITCODE_2RD direction;	/*!< DXF 11 */
   BITCODE_BD revolve_angle;	/*!< DXF 40 */

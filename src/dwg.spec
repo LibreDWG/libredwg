@@ -7932,7 +7932,7 @@ DWG_OBJECT_END
       switch (_obj->eval_type)                  \
         {                                       \
         case 40:                                \
-          FIELD_BS (ee_bd40, 40);             \
+          FIELD_BD (ee_bd40, 40);             \
           break;                                \
         case 10:                                \
           FIELD_2RD (ee_2dpt, 10);            \
@@ -7976,8 +7976,8 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //29
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
   FIELD_3BD (direction, 10); //0,0,0
   // sweep_options
   // sweep_entity
@@ -8023,8 +8023,8 @@ DWG_OBJECT (ACSH_BOX_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBox)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //29
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
   FIELD_BD (length, 40);
   FIELD_BD (width, 41);
   FIELD_BD (height, 42);
@@ -8036,8 +8036,8 @@ DWG_OBJECT (ACSH_WEDGE_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShWedge)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //29
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
   FIELD_BD (length, 40);
   FIELD_BD (width, 41);
   FIELD_BD (height, 42);
@@ -8049,8 +8049,8 @@ DWG_OBJECT (ACSH_SPHERE_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSpere)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //1
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
   FIELD_BD (radius, 40);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8060,8 +8060,8 @@ DWG_OBJECT (ACSH_PYRAMID_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShPyramid)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //1
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
   FIELD_BD (height, 40);
   FIELD_BL (sides, 92);
   FIELD_BD (radius, 41);
@@ -8074,8 +8074,8 @@ DWG_OBJECT (ACSH_FILLET_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShFillet)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //1
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //1
   FIELD_BL (bl92, 92);
   FIELD_BL (num_edges, 93);
   FIELD_VECTOR (edges, BL, num_edges, 94)
@@ -8093,8 +8093,8 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShChamfer)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //1
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //1
   FIELD_BL (bl92, 92);
   FIELD_BD (base_dist, 41);
   FIELD_BD (other_dist, 42);
@@ -8109,8 +8109,8 @@ DWG_OBJECT (ACSH_TORUS_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShTorus)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //1
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //1
   FIELD_BD (major_radius, 40);
   FIELD_BD (minor_radius, 41);
   START_OBJECT_HANDLE_STREAM;
@@ -8121,8 +8121,8 @@ DWG_OBJECT (ACSH_BREP_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBrep)
-  FIELD_BL (bl90, 90); // also in DWG?
-  FIELD_BL (bl91, 91);
+  FIELD_BL (major, 90); // also in DWG?
+  FIELD_BL (minor, 91);
   ACTION_3DSOLID;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8132,8 +8132,8 @@ DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //29
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
   FIELD_3BD (direction, 10); //0,0,0
   // sweep_options
   // sweep_entity
@@ -8173,7 +8173,13 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_HISTORY_CLASS)
   DECODE_UNKNOWN_BITS
-  AcDbShHistory_fields;
+  SUBCLASS (AcDbShHistory)
+  FIELD_BL (major, 90);
+  FIELD_BL (minor, 91);
+  FIELD_HANDLE (owner, 2, 360);
+  FIELD_BL (h_nodeid, 92);
+  FIELD_B (b280, 280);
+  FIELD_B (b281, 281);
   AcDbShHistoryNode_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8184,8 +8190,8 @@ DWG_OBJECT (ACSH_LOFT_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShLoft)
-  FIELD_BL (bl90, 90);
-  FIELD_BL (bl91, 91);
+  FIELD_BL (major, 90);
+  FIELD_BL (minor, 91);
   FIELD_BL (num_crosssects, 92);
   REPEAT (num_crosssects, crosssects, BITCODE_H)
   REPEAT_BLOCK
@@ -8213,8 +8219,8 @@ DWG_OBJECT (ACSH_REVOLVE_CLASS)
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShRevolve)
-  FIELD_BL (bl90, 90); //33
-  FIELD_BL (bl91, 91); //29
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
   FIELD_3BD (axis_pt, 10);
   FIELD_2RD (direction, 11); // 3d in dxf
   FIELD_BD (revolve_angle, 40);

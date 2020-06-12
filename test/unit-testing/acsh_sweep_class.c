@@ -6,22 +6,18 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  // AcDbEvalExpr
-  BITCODE_BL class_version; // 90
-  BITCODE_BL ee_bl98; //33
-  BITCODE_BL ee_bl99; //29
+  ACDBEVALEXPR_fields;
   Dwg_ACSH_HistoryNode history_node;
-  BITCODE_BD* trans;
-  // AcDbShSweepBase
-  BITCODE_BL bl90;       /*!< DXF 90 */
-  BITCODE_BL bl91;       /*!< DXF 91 */
+  BITCODE_BD *trans;
+  BITCODE_BL major;
+  BITCODE_BL minor;
   BITCODE_3BD direction;         /*!< DXF 10 */
   BITCODE_BL bl92;       /*!< DXF 92 */
   BITCODE_BL shsw_text_size;  /*!< DXF 90 */
-  BITCODE_T shsw_text;       /*!< DXF 310 */
+  BITCODE_TF shsw_text;       /*!< DXF 310 */
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */
   BITCODE_BL shsw_text2_size; /*!< DXF 90 */
-  BITCODE_T shsw_text2;      /*!< DXF 310 */
+  BITCODE_TF shsw_text2;      /*!< DXF 310 */
   BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
   BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
   BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
@@ -44,50 +40,37 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_acsh_sweep_class *_obj = dwg_object_to_ACSH_SWEEP_CLASS (obj);
 
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, class_version, BL); // 90
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, ee_bl98, BL); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, ee_bl99, BL); //29
-
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl90, BL); //33
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl91, BL);
-  // last 16x nums 40-55
-  if (!dwg_dynapi_entity_value (_obj, "ACSH_HistoryNode", "trans", &trans, NULL))
-    fail ("ACSH_HistoryNode.trans");
-  for (int i = 0; i < 16; i++)
-    {
-      if (trans[i] == _obj->history_node.trans[i]) // catches nan
-        ok ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);
-      else
-        fail ("ACSH_HistoryNode.trans[%d]: %f", i, trans[i]);
-    }
-  CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, bl92, BL);
-  CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, h347);
+  CHK_EVALEXPR (ACSH_SWEEP_CLASS);
+  CHK_ACSH_HISTORYNODE();
 
   // AcDbShSweepBase
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, bl90, BL);       /*!< DXF 90 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, bl91, BL);       /*!< DXF 91 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, major, BL);       /*!< DXF 90 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, minor, BL);       /*!< DXF 91 */
   CHK_ENTITY_3RD (_obj, ACSH_SWEEP_CLASS, direction);                  /*!< DXF 10 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, bl92, BL);       /*!< DXF 92 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_text_size, BL); /*!< DXF 90 */
   //if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shsw_text", &shsw_text, NULL))
   //  fail ("ACSH_SWEEP_CLASS.shsw_text");
-  CHK_ENTITY_UTF8TEXT (_obj, ACSH_SWEEP_CLASS, shsw_text);       /*!< DXF 310 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_text, TF);       /*!< DXF 310 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_bl93, BL);       /*!< DXF 93 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_text2_size, BL); /*!< DXF 90 */
   //if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shsw_text2", &shsw_text2, NULL))
   //  fail ("ACSH_SWEEP_CLASS.shsw_text2");
-  CHK_ENTITY_UTF8TEXT (_obj, ACSH_SWEEP_CLASS, shsw_text2);      /*!< DXF 310 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, draft_angle, BD);    /*!< DXF 42 0.0 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_text2, TF);       /*!< DXF 310 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, draft_angle, BD);      /*!< DXF 42 0.0 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, start_draft_dist, BD); /*!< DXF 43 0.0 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, end_draft_dist, BD); /*!< DXF 44 0.0 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, end_draft_dist, BD);   /*!< DXF 44 0.0 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, scale_factor, BD);     /*!< DXF 45 1.0 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, twist_angle, BD);       /*!< DXF 48 0.0 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, align_angle, BD);       /*!< DXF 49 0.0 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, twist_angle, BD);      /*!< DXF 48 0.0 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, align_angle, BD);      /*!< DXF 49 0.0 */
   if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS",
                                 "sweepentity_transform",
                                 &sweepentity_transform, NULL))
     fail ("ACSH_SWEEP_CLASS.sweepentity_transform");
+  else
+  if (!sweepentity_transform)
+    ok ("ACSH_SWEEP_CLASS.sweepentity_transform: NULL");
+  else
   for (int i = 0; i < 16; i++)
     {
       ok ("ACSH_SWEEP_CLASS.sweepentity_transform[%d]: %f", i,
@@ -97,6 +80,10 @@ api_process (dwg_object *obj)
                                 "pathentity_transform",
                                 &pathentity_transform, NULL))
     fail ("ACSH_SWEEP_CLASS.pathentity_transform");
+  else
+  if (!pathentity_transform)
+    ok ("ACSH_SWEEP_CLASS.pathentity_transform: NULL");
+  else
   for (int i = 0; i < 16; i++)
     {
       ok ("ACSH_SWEEP_CLASS.pathentity_transform[%d]: %f", i,

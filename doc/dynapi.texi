@@ -4342,9 +4342,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item length
 BD,	DXF 40
@@ -4453,9 +4453,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 
 @end vtable
@@ -4496,9 +4496,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item bl92
 BL,	DXF 92
@@ -4551,9 +4551,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item direction
 3BD,	DXF 10
@@ -4642,9 +4642,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item bl92
 BL,	DXF 92
@@ -4754,9 +4754,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item num_crosssects
 BL,	DXF 92
@@ -4805,9 +4805,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item height
 BD,	DXF 40
@@ -4856,9 +4856,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item axis_pt
 3BD,	DXF 10
@@ -4921,9 +4921,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item radius
 BD,	DXF 40
@@ -4966,9 +4966,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item direction
 3BD,	DXF 10
@@ -5057,9 +5057,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item major_radius
 BD,	DXF 40
@@ -5104,9 +5104,9 @@ H,	DXF 91
 BS,	DXF 70
 @item history_node
 Dwg_ACSH_HistoryNode
-@item bl90
+@item major
 BL,	DXF 90
-@item bl91
+@item minor
 BL,	DXF 91
 @item length
 BD,	DXF 40
