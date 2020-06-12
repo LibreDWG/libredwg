@@ -10,10 +10,10 @@ api_process (dwg_object *obj)
   BITCODE_BL unknown_3;
   BITCODE_BL unknown_0;
   BITCODE_BL unknown_2;
-  BITCODE_BL i, numassocsteps;
-  BITCODE_BL numassocsubents;
-  BITCODE_BL *assocsteps;
-  BITCODE_BL *assocsubents;
+  BITCODE_BL i, num_steps;
+  BITCODE_BL num_subents;
+  BITCODE_BL *steps;
+  BITCODE_BL *subents; // FIXME
 
   BITCODE_BL unknown_bl6;
   BITCODE_BL unknown_bl6a;
@@ -61,11 +61,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_0, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_2, BL);
 
-  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, numassocsteps, BL);
-  CHK_ENTITY_VECTOR_TYPE (_obj, ASSOCPERSSUBENTMANAGER, assocsteps, numassocsteps, BL);
-  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, numassocsubents, BL);
-  CHK_ENTITY_VECTOR_TYPE (_obj, ASSOCPERSSUBENTMANAGER, assocsubents, numassocsubents, BL);
-  
+  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, num_steps, BL);
+  CHK_ENTITY_VECTOR_TYPE (_obj, ASSOCPERSSUBENTMANAGER, steps, num_steps, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, num_subents, BL);
+  CHK_ENTITY_VECTOR_TYPE (_obj, ASSOCPERSSUBENTMANAGER, subents, num_subents, BL);
+  // FIXME
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl6, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl6a, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl7a, BL);

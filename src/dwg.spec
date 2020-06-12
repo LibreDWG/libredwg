@@ -7796,10 +7796,10 @@ DWG_OBJECT (ASSOCPERSSUBENTMANAGER)
   FIELD_BL (unknown_0, 90); //0
   FIELD_BL (unknown_2, 90); //2
 
-  FIELD_BL (numassocsteps, 90);   //3
-  FIELD_VECTOR (assocsteps, BL, numassocsteps, 90);
-  FIELD_BL (numassocsubents, 90);
-
+  FIELD_BL (num_steps, 90);   //3
+  FIELD_VECTOR (steps, BL, num_steps, 90);
+  FIELD_BL (num_subents, 90);
+  // TODO subent struct
   FIELD_BL (unknown_bl6, 90); //5
   FIELD_BL (unknown_bl6a, 90); //0 10 0100000100 0100000011
   FIELD_BL (unknown_bl7a, 90); //4

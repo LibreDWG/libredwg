@@ -5804,13 +5804,13 @@ BL,	DXF 90
 BL,	DXF 90
 @item unknown_2
 BL,	DXF 90
-@item numassocsteps
+@item num_steps
 BL,	DXF 90
-@item numassocsubents
+@item num_subents
 BL,	DXF 90
-@item assocsteps
+@item steps
 BL*,	DXF 90
-@item assocsubents
+@item subents
 BL*
 @item unknown_bl6
 BL,	DXF 90

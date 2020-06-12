@@ -31128,26 +31128,6 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
   Dwg_Object_ASSOCPERSSUBENTMANAGER *restrict assocperssubentmanager = obj->tio.object->tio.ASSOCPERSSUBENTMANAGER;
   failed = 0;
   {
-    BITCODE_BL* assocsteps;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_assocsteps", &count, NULL)
-        && dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "assocsteps", &assocsteps, NULL)
-        && assocsteps == assocperssubentmanager->assocsteps)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.assocsteps [BL*] * %u num_assocsteps", count);
-  }
-  {
-    BITCODE_BL* assocsubents;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_assocsubents", &count, NULL)
-        && dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "assocsubents", &assocsubents, NULL)
-        && assocsubents == assocperssubentmanager->assocsubents)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.assocsubents [BL*] * %u num_assocsubents", count);
-  }
-  {
     BITCODE_BL class_version;
     if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "class_version", &class_version, NULL)
         && class_version == assocperssubentmanager->class_version)
@@ -31163,34 +31143,34 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     assocperssubentmanager->class_version--;
   }
   {
-    BITCODE_BL numassocsteps;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "numassocsteps", &numassocsteps, NULL)
-        && numassocsteps == assocperssubentmanager->numassocsteps)
+    BITCODE_BL num_steps;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_steps", &num_steps, NULL)
+        && num_steps == assocperssubentmanager->num_steps)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.numassocsteps [BL] %u != %u", assocperssubentmanager->numassocsteps, numassocsteps);
-    numassocsteps++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "numassocsteps", &numassocsteps, 0)
-        && numassocsteps == assocperssubentmanager->numassocsteps)
+      fail ("ASSOCPERSSUBENTMANAGER.num_steps [BL] %u != %u", assocperssubentmanager->num_steps, num_steps);
+    num_steps++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_steps", &num_steps, 0)
+        && num_steps == assocperssubentmanager->num_steps)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.numassocsteps [BL] set+1 %u != %u", assocperssubentmanager->numassocsteps, numassocsteps);
-    assocperssubentmanager->numassocsteps--;
+      fail ("ASSOCPERSSUBENTMANAGER.num_steps [BL] set+1 %u != %u", assocperssubentmanager->num_steps, num_steps);
+    assocperssubentmanager->num_steps--;
   }
   {
-    BITCODE_BL numassocsubents;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "numassocsubents", &numassocsubents, NULL)
-        && numassocsubents == assocperssubentmanager->numassocsubents)
+    BITCODE_BL num_subents;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_subents", &num_subents, NULL)
+        && num_subents == assocperssubentmanager->num_subents)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.numassocsubents [BL] %u != %u", assocperssubentmanager->numassocsubents, numassocsubents);
-    numassocsubents++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "numassocsubents", &numassocsubents, 0)
-        && numassocsubents == assocperssubentmanager->numassocsubents)
+      fail ("ASSOCPERSSUBENTMANAGER.num_subents [BL] %u != %u", assocperssubentmanager->num_subents, num_subents);
+    num_subents++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_subents", &num_subents, 0)
+        && num_subents == assocperssubentmanager->num_subents)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.numassocsubents [BL] set+1 %u != %u", assocperssubentmanager->numassocsubents, numassocsubents);
-    assocperssubentmanager->numassocsubents--;
+      fail ("ASSOCPERSSUBENTMANAGER.num_subents [BL] set+1 %u != %u", assocperssubentmanager->num_subents, num_subents);
+    assocperssubentmanager->num_subents--;
   }
   {
     struct _dwg_object_object* parent;
@@ -31199,6 +31179,26 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCPERSSUBENTMANAGER.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL* steps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_steps", &count, NULL)
+        && dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "steps", &steps, NULL)
+        && steps == assocperssubentmanager->steps)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.steps [BL*] * %u num_steps", count);
+  }
+  {
+    BITCODE_BL* subents;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "num_subents", &count, NULL)
+        && dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "subents", &subents, NULL)
+        && subents == assocperssubentmanager->subents)
+      pass ();
+    else
+      fail ("ASSOCPERSSUBENTMANAGER.subents [BL*] * %u num_subents", count);
   }
   {
     BITCODE_BL unknown_0;

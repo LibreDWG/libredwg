@@ -5139,10 +5139,11 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   BITCODE_BL unknown_3;     /*!< DXF 90 always 3 */
   BITCODE_BL unknown_0;     /*!< DXF 90 always 0 */
   BITCODE_BL unknown_2;     /*!< DXF 90 always 2 */
-  BITCODE_BL numassocsteps;   /*!< DXF 90 3 */
-  BITCODE_BL numassocsubents; /*!< DXF 90 5 */
-  BITCODE_BL *assocsteps;     /*!< DXF 90 */
-  BITCODE_BL *assocsubents;   /*!< DXF 90 */
+  BITCODE_BL num_steps;   /*!< DXF 90 3 */
+  BITCODE_BL num_subents; /*!< DXF 90 5 */
+  BITCODE_BL *steps;      /*!< DXF 90 */
+  BITCODE_BL *subents;    /*!< FIXME: subent struct */
+
   BITCODE_BL unknown_bl6;   /*!< DXF 90 5 */
   BITCODE_BL unknown_bl6a;  /*!< DXF 90 0 */
   BITCODE_BL unknown_bl7a;  /*!< DXF 90 3 */
@@ -5266,6 +5267,7 @@ typedef struct _dwg_ACSH_SubentMaterial
   BITCODE_BL displacement;
 } Dwg_ACSH_SubentMaterial;
 
+// on body, face or edge
 typedef struct _dwg_ACSH_SubentColor
 {
   BITCODE_BL major;
