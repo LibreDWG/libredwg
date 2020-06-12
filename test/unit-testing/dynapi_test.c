@@ -23410,20 +23410,6 @@ static int test_ACSH_BOOLEAN_CLASS (const Dwg_Object *obj)
         fail ("ACSH_BOOLEAN_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_boolean_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_BOOLEAN_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_boolean_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_boolean_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_BOOLEAN_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_boolean_class->ee_int, ee_int);
-    acsh_boolean_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_boolean_class->ee_major)
@@ -23583,6 +23569,20 @@ static int test_ACSH_BOOLEAN_CLASS (const Dwg_Object *obj)
     else
         fail ("ACSH_BOOLEAN_CLASS.parent [struct _dwg_object_object*]");
   }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_boolean_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_boolean_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_boolean_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_BOOLEAN_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_boolean_class->parentid, parentid);
+    acsh_boolean_class->parentid--;
+  }
   if (failed && (is_class_unstable ("ACSH_BOOLEAN_CLASS") || is_class_debugging ("ACSH_BOOLEAN_CLASS")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ACSH_BOOLEAN_CLASS", failed);
@@ -23664,20 +23664,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_BOX_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_box_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_BOX_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_box_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_box_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_BOX_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_box_class->ee_int, ee_int);
-    acsh_box_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -23823,6 +23809,20 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_BOX_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_box_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_box_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_box_class, "ACSH_BOX_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_box_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_BOX_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_box_class->parentid, parentid);
+    acsh_box_class->parentid--;
   }
   {
     BITCODE_BD width;
@@ -23998,20 +23998,6 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_BREP_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_brep_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_BREP_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_brep_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_brep_class, "ACSH_BREP_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_brep_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_BREP_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_brep_class->ee_int, ee_int);
-    acsh_brep_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -24281,6 +24267,20 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_BREP_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_brep_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_BREP_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_brep_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_brep_class, "ACSH_BREP_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_brep_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_BREP_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_brep_class->parentid, parentid);
+    acsh_brep_class->parentid--;
   }
   {
     BITCODE_3BD point;
@@ -24584,20 +24584,6 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
         fail ("ACSH_CHAMFER_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_chamfer_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_chamfer_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_chamfer_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_chamfer_class->ee_int, ee_int);
-    acsh_chamfer_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_chamfer_class->ee_major)
@@ -24742,6 +24728,20 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
     else
         fail ("ACSH_CHAMFER_CLASS.parent [struct _dwg_object_object*]");
   }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_chamfer_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_chamfer_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_chamfer_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_chamfer_class->parentid, parentid);
+    acsh_chamfer_class->parentid--;
+  }
   if (failed && (is_class_unstable ("ACSH_CHAMFER_CLASS") || is_class_debugging ("ACSH_CHAMFER_CLASS")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ACSH_CHAMFER_CLASS", failed);
@@ -24838,20 +24838,6 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_CONE_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_cone_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_cone_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_cone_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_cone_class->ee_int, ee_int);
-    acsh_cone_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -24967,6 +24953,20 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_CONE_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_cone_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_cone_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_cone_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_cone_class->parentid, parentid);
+    acsh_cone_class->parentid--;
   }
   {
     BITCODE_BD top_major_radius;
@@ -25094,20 +25094,6 @@ static int test_ACSH_CYLINDER_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_CYLINDER_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_cylinder_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_CYLINDER_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_cylinder_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_cylinder_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_CYLINDER_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_cylinder_class->ee_int, ee_int);
-    acsh_cylinder_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -25268,6 +25254,20 @@ static int test_ACSH_CYLINDER_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_CYLINDER_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_cylinder_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_cylinder_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_cylinder_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_CYLINDER_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_cylinder_class->parentid, parentid);
+    acsh_cylinder_class->parentid--;
   }
   {
     BITCODE_BD x_radius;
@@ -25465,20 +25465,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
         fail ("ACSH_EXTRUSION_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_extrusion_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_EXTRUSION_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_extrusion_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_extrusion_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_EXTRUSION_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_extrusion_class->ee_int, ee_int);
-    acsh_extrusion_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_extrusion_class->ee_major)
@@ -25637,6 +25623,20 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_extrusion_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_extrusion_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_extrusion_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_extrusion_class->parentid, parentid);
+    acsh_extrusion_class->parentid--;
   }
   {
     BITCODE_BD* pathentity_transform;
@@ -25921,20 +25921,6 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
         fail ("ACSH_FILLET_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_fillet_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_FILLET_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_fillet_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_fillet_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_FILLET_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_fillet_class->ee_int, ee_int);
-    acsh_fillet_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_fillet_class->ee_major)
@@ -26120,6 +26106,20 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
         fail ("ACSH_FILLET_CLASS.parent [struct _dwg_object_object*]");
   }
   {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_fillet_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_FILLET_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_fillet_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_fillet_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_FILLET_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_fillet_class->parentid, parentid);
+    acsh_fillet_class->parentid--;
+  }
+  {
     BITCODE_BD* radiuses;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "num_radiuses", &count, NULL)
@@ -26250,20 +26250,6 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_history_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_history_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_history_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_history_class->ee_int, ee_int);
-    acsh_history_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -26403,6 +26389,20 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
     else
         fail ("ACSH_HISTORY_CLASS.parent [struct _dwg_object_object*]");
   }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_history_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_history_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_history_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_history_class->parentid, parentid);
+    acsh_history_class->parentid--;
+  }
   if (failed && (is_class_unstable ("ACSH_HISTORY_CLASS") || is_class_debugging ("ACSH_HISTORY_CLASS")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ACSH_HISTORY_CLASS", failed);
@@ -26494,20 +26494,6 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_LOFT_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_loft_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_LOFT_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_loft_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_loft_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_LOFT_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_loft_class->ee_int, ee_int);
-    acsh_loft_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -26664,6 +26650,20 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
     else
         fail ("ACSH_LOFT_CLASS.parent [struct _dwg_object_object*]");
   }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_loft_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_loft_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_loft_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_loft_class->parentid, parentid);
+    acsh_loft_class->parentid--;
+  }
   if (failed && (is_class_unstable ("ACSH_LOFT_CLASS") || is_class_debugging ("ACSH_LOFT_CLASS")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ACSH_LOFT_CLASS", failed);
@@ -26745,20 +26745,6 @@ static int test_ACSH_PYRAMID_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_PYRAMID_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_pyramid_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_PYRAMID_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_pyramid_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_pyramid_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_PYRAMID_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_pyramid_class->ee_int, ee_int);
-    acsh_pyramid_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -26889,6 +26875,20 @@ static int test_ACSH_PYRAMID_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_PYRAMID_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_pyramid_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_PYRAMID_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_pyramid_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_pyramid_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_PYRAMID_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_pyramid_class->parentid, parentid);
+    acsh_pyramid_class->parentid--;
   }
   {
     BITCODE_BD radius;
@@ -27094,20 +27094,6 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
         fail ("ACSH_REVOLVE_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_revolve_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_revolve_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_revolve_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_revolve_class->ee_int, ee_int);
-    acsh_revolve_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_revolve_class->ee_major)
@@ -27236,6 +27222,20 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_revolve_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_revolve_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_revolve_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_revolve_class->parentid, parentid);
+    acsh_revolve_class->parentid--;
   }
   {
     BITCODE_BD revolve_angle;
@@ -27373,20 +27373,6 @@ static int test_ACSH_SPHERE_CLASS (const Dwg_Object *obj)
         fail ("ACSH_SPHERE_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_sphere_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_SPHERE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_sphere_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_sphere_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_SPHERE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_sphere_class->ee_int, ee_int);
-    acsh_sphere_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_sphere_class->ee_major)
@@ -27500,6 +27486,20 @@ static int test_ACSH_SPHERE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_SPHERE_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_sphere_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_SPHERE_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_sphere_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_sphere_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_SPHERE_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_sphere_class->parentid, parentid);
+    acsh_sphere_class->parentid--;
   }
   {
     BITCODE_BD radius;
@@ -27697,20 +27697,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         fail ("ACSH_SWEEP_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_sweep_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_sweep_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_sweep_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_sweep_class->ee_int, ee_int);
-    acsh_sweep_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_sweep_class->ee_major)
@@ -27869,6 +27855,20 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_sweep_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_sweep_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_sweep_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_sweep_class->parentid, parentid);
+    acsh_sweep_class->parentid--;
   }
   {
     BITCODE_BD* pathentity_transform;
@@ -28128,20 +28128,6 @@ static int test_ACSH_TORUS_CLASS (const Dwg_Object *obj)
         fail ("ACSH_TORUS_CLASS.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_torus_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_TORUS_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_torus_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_torus_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_TORUS_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_torus_class->ee_int, ee_int);
-    acsh_torus_class->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "ee_major", &ee_major, NULL)
         && ee_major == acsh_torus_class->ee_major)
@@ -28286,6 +28272,20 @@ static int test_ACSH_TORUS_CLASS (const Dwg_Object *obj)
     else
         fail ("ACSH_TORUS_CLASS.parent [struct _dwg_object_object*]");
   }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_torus_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_TORUS_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_torus_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_torus_class, "ACSH_TORUS_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_torus_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_TORUS_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_torus_class->parentid, parentid);
+    acsh_torus_class->parentid--;
+  }
   if (failed && (is_class_unstable ("ACSH_TORUS_CLASS") || is_class_debugging ("ACSH_TORUS_CLASS")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ACSH_TORUS_CLASS", failed);
@@ -28367,20 +28367,6 @@ static int test_ACSH_WEDGE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_WEDGE_CLASS.ee_h91 [H]");
-  }
-  {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "ee_int", &ee_int, NULL)
-        && ee_int == acsh_wedge_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_WEDGE_CLASS.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_wedge_class->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "ee_int", &ee_int, 0)
-        && ee_int == acsh_wedge_class->ee_int)
-      pass ();
-    else
-      fail ("ACSH_WEDGE_CLASS.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_wedge_class->ee_int, ee_int);
-    acsh_wedge_class->ee_int--;
   }
   {
     BITCODE_BL ee_major;
@@ -28526,6 +28512,20 @@ static int test_ACSH_WEDGE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_WEDGE_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "parentid", &parentid, NULL)
+        && parentid == acsh_wedge_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_WEDGE_CLASS.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", acsh_wedge_class->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "parentid", &parentid, 0)
+        && parentid == acsh_wedge_class->parentid)
+      pass ();
+    else
+      fail ("ACSH_WEDGE_CLASS.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", acsh_wedge_class->parentid, parentid);
+    acsh_wedge_class->parentid--;
   }
   {
     BITCODE_BD width;
@@ -32835,20 +32835,6 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
         fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_int", &ee_int, NULL)
-        && ee_int == blockgriplocationcomponent->ee_int)
-      pass ();
-    else
-      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockgriplocationcomponent->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_int", &ee_int, 0)
-        && ee_int == blockgriplocationcomponent->ee_int)
-      pass ();
-    else
-      fail ("BLOCKGRIPLOCATIONCOMPONENT.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockgriplocationcomponent->ee_int, ee_int);
-    blockgriplocationcomponent->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "ee_major", &ee_major, NULL)
         && ee_major == blockgriplocationcomponent->ee_major)
@@ -32934,6 +32920,20 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKGRIPLOCATIONCOMPONENT.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "parentid", &parentid, NULL)
+        && parentid == blockgriplocationcomponent->parentid)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockgriplocationcomponent->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "parentid", &parentid, 0)
+        && parentid == blockgriplocationcomponent->parentid)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockgriplocationcomponent->parentid, parentid);
+    blockgriplocationcomponent->parentid--;
   }
   if (failed && (is_class_unstable ("BLOCKGRIPLOCATIONCOMPONENT") || is_class_debugging ("BLOCKGRIPLOCATIONCOMPONENT")))
     {
@@ -33141,20 +33141,6 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
         fail ("BLOCKVISIBILITYGRIP.ee_h91 [H]");
   }
   {
-    BITCODE_BLd ee_int;
-    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_int", &ee_int, NULL)
-        && ee_int == blockvisibilitygrip->ee_int)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYGRIP.ee_int [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->ee_int, ee_int);
-    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_int", &ee_int, 0)
-        && ee_int == blockvisibilitygrip->ee_int)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYGRIP.ee_int [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->ee_int, ee_int);
-    blockvisibilitygrip->ee_int--;
-  }
-  {
     BITCODE_BL ee_major;
     if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "ee_major", &ee_major, NULL)
         && ee_major == blockvisibilitygrip->ee_major)
@@ -33230,6 +33216,20 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKVISIBILITYGRIP.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BLd parentid;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "parentid", &parentid, NULL)
+        && parentid == blockvisibilitygrip->parentid)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.parentid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->parentid, parentid);
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "parentid", &parentid, 0)
+        && parentid == blockvisibilitygrip->parentid)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.parentid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->parentid, parentid);
+    blockvisibilitygrip->parentid--;
   }
   if (failed && (is_class_unstable ("BLOCKVISIBILITYGRIP") || is_class_debugging ("BLOCKVISIBILITYGRIP")))
     {

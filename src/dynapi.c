@@ -4028,7 +4028,7 @@ static const Dwg_DYNAPI_field _dwg_ACMESTATEMGR_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_BOOLEAN_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_BOOLEAN_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_BOOLEAN_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_BOOLEAN_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOOLEAN_CLASS, ee_major),
     0,0,0, 98 },
@@ -4070,7 +4070,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_BOOLEAN_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_BOX_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_BOX_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_BOX_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_BOX_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BOX_CLASS, ee_major),
     0,0,0, 98 },
@@ -4174,7 +4174,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_BREP_CLASS_fields[] = {
     1,0,0, 0 },
   { "acis_empty_bit",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ACSH_BREP_CLASS, acis_empty_bit),
     0,0,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_BREP_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_BREP_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_BREP_CLASS, ee_major),
     0,0,0, 98 },
@@ -4210,7 +4210,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_BREP_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_CHAMFER_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_CHAMFER_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_CHAMFER_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_CHAMFER_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_CHAMFER_CLASS, ee_major),
     0,0,0, 98 },
@@ -4258,7 +4258,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_CHAMFER_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_CONE_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_CONE_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_CONE_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_CONE_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_CONE_CLASS, ee_major),
     0,0,0, 98 },
@@ -4302,7 +4302,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_CONE_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_CYLINDER_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_CYLINDER_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_CYLINDER_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_CYLINDER_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_CYLINDER_CLASS, ee_major),
     0,0,0, 98 },
@@ -4346,7 +4346,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_CYLINDER_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_EXTRUSION_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_EXTRUSION_CLASS, ee_major),
     0,0,0, 98 },
@@ -4430,7 +4430,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_EXTRUSION_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_FILLET_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_FILLET_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_FILLET_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_FILLET_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_FILLET_CLASS, ee_major),
     0,0,0, 98 },
@@ -4484,7 +4484,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_FILLET_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_HISTORY_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_HISTORY_CLASS, ee_major),
     0,0,0, 98 },
@@ -4528,7 +4528,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_HISTORY_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_LOFT_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_LOFT_CLASS, ee_major),
     0,0,0, 98 },
@@ -4572,7 +4572,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_LOFT_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_PYRAMID_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_PYRAMID_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_PYRAMID_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_PYRAMID_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_PYRAMID_CLASS, ee_major),
     0,0,0, 98 },
@@ -4616,7 +4616,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_PYRAMID_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_REVOLVE_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_REVOLVE_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_REVOLVE_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_REVOLVE_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_REVOLVE_CLASS, ee_major),
     0,0,0, 98 },
@@ -4674,7 +4674,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_REVOLVE_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_SPHERE_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_SPHERE_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_SPHERE_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_SPHERE_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_SPHERE_CLASS, ee_major),
     0,0,0, 98 },
@@ -4712,7 +4712,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_SPHERE_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_SWEEP_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_SWEEP_CLASS, ee_major),
     0,0,0, 98 },
@@ -4796,7 +4796,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_SWEEP_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_TORUS_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_TORUS_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_TORUS_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_TORUS_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_TORUS_CLASS, ee_major),
     0,0,0, 98 },
@@ -4836,7 +4836,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_TORUS_CLASS_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ACSH_WEDGE_CLASS_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ACSH_WEDGE_CLASS, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_WEDGE_CLASS, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_ACSH_WEDGE_CLASS, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_WEDGE_CLASS, ee_major),
     0,0,0, 98 },
@@ -5554,7 +5554,7 @@ static const Dwg_DYNAPI_field _dwg_BLKREFOBJECTCONTEXTDATA_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCKGRIPLOCATIONCOMPONENT_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT, ee_major),
     0,0,0, 98 },
@@ -5586,7 +5586,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKGRIPLOCATIONCOMPONENT_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYGRIP_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, parent),
     1,1,0, 0 },
-  { "ee_int",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, ee_int),
+  { "parentid",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, parentid),
     0,0,0, 0 },
   { "ee_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, ee_major),
     0,0,0, 98 },

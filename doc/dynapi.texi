@@ -4316,7 +4316,7 @@ BS
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4365,7 +4365,7 @@ BL,	DXF 93
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4476,7 +4476,7 @@ BL
 H
 @item acis_empty_bit
 B
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4519,7 +4519,7 @@ BL,	DXF 91
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4574,7 +4574,7 @@ BL,	DXF 95
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4625,7 +4625,7 @@ BD,	DXF 43
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4676,7 +4676,7 @@ BD,	DXF 43
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4767,7 +4767,7 @@ B,	DXF 296
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4828,7 +4828,7 @@ BD*,	DXF 43
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4879,7 +4879,7 @@ B,	DXF 281
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4930,7 +4930,7 @@ H*
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -4981,7 +4981,7 @@ BD,	DXF 42
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -5046,7 +5046,7 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -5091,7 +5091,7 @@ BD,	DXF 40
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -5182,7 +5182,7 @@ B,	DXF 296
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -5229,7 +5229,7 @@ BD,	DXF 41
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -6088,7 +6088,7 @@ BD,	DXF 50
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98
@@ -6127,7 +6127,7 @@ T,	DXF 300
 
 @item parent
 struct _dwg_object_object*
-@item ee_int
+@item parentid
 BLd
 @item ee_major
 BL,	DXF 98

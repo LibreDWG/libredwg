@@ -7901,7 +7901,7 @@ DWG_OBJECT_END
 // abstract subclass. requires evalexpr
 #define AcDbEvalExpr_fields                     \
   DXF { FIELD_BL (nodeid, 90); }                \
-  FIELD_BLd (ee_int, 0);                        \
+  FIELD_BLd (parentid, 0);                      \
   FIELD_BL (ee_major, 98);                      \
   FIELD_BL (ee_minor, 99);                      \
   if (!CLASS_HAS (evalexpr))                    \

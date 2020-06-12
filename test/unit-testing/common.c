@@ -1418,11 +1418,13 @@ api_common_object (dwg_object *obj)
 }
 
 #define CHK_EVALEXPR(type)                                           \
-  CHK_ENTITY_TYPE (_obj, type, ee_int, BLd);                         \
+  CHK_ENTITY_TYPE (_obj, type, parentid, BLd);                       \
   CHK_ENTITY_TYPE (_obj, type, ee_major, BL);                        \
   CHK_ENTITY_TYPE (_obj, type, ee_minor, BL);                        \
   CHK_ENTITY_TYPE (_obj, type, nodeid, BL);                          \
+  /* variant_type */                                                 \
   CHK_ENTITY_TYPE (_obj, type, eval_type, BSd);                      \
+  /* variant_value's */                                              \
   switch (eval_type)                                                 \
     {                                                                \
     case 40:                                                         \

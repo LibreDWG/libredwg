@@ -5245,12 +5245,15 @@ typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY
   BITCODE_BL ssab_status;       /*!< DXF 90  */
 } Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY;
 
+/* A node in the EVALUATION_GRAPH */
 #define ACDBEVALEXPR_fields                                                   \
-  BITCODE_BLd ee_int; /* -1 */                                                \
+  BITCODE_BLd parentid; /* -1 if none */                                      \
   BITCODE_BL ee_major;                                                        \
   BITCODE_BL ee_minor;                                                        \
   BITCODE_BL nodeid;                                                          \
+  /* variant_type */                                                          \
   BITCODE_BSd eval_type;                                                      \
+  /* variant_value's */                                                       \
   BITCODE_BD ee_bd40;                                                         \
   BITCODE_2RD ee_2dpt;                                                        \
   BITCODE_3BD ee_3dpt;                                                        \
