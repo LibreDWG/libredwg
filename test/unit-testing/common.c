@@ -423,6 +423,21 @@ main (int argc, char *argv[])
               strcat (tmp, "2018/LiveSection1.dwg");
               error += test_code (tmp, cov);
             }
+          if (DWG_TYPE == DWG_TYPE_ACSH_CYLINDER_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_CHAMFER_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_WEDGE_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_BOX_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_BOOLEAN_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_TORUS_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_BREP_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_FILLET_CLASS)
+            {
+              strcpy (tmp, prefix);
+              strcat (tmp, "2007/ATMOS-DC22S.dwg");
+              error += test_code (tmp, cov);
+            }
         }
 #ifdef DWG_TYPE
       if (cov && !numpassed () && !numfailed ())

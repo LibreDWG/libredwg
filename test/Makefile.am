@@ -115,6 +115,7 @@ TESTDATA = \
     test-data/2004/circle.txt \
     test-data/2004/material.dwg \
     test-data/2004/material.dxf \
+    test-data/2007/ATMOS-DC22S.dwg \
     test-data/2007/Arc.dwg \
     test-data/2007/Arc.jpg \
     test-data/2007/Arc.txt \
