@@ -9886,7 +9886,7 @@ BL
 @item minor
 BL
 @item trans
-BD*
+BD*,	DXF 40
 @item color
 CMC
 @item step_id

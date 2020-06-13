@@ -7789,6 +7789,74 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("VPORT.aspect_ratio = %f [BD 41]\n", o->aspect_ratio);
               LOG_TRACE ("VPORT.view_width = %f [BD 0]\n", o->view_width);
             }
+          else if (strEQc (subclass, "AcDbShHistoryNode"))
+            {
+              Dwg_ACSH_HistoryNode *hn;
+              const Dwg_DYNAPI_field *f1 = dwg_dynapi_entity_field (obj->name, "history_node");
+              if (!f1)
+                goto search_field;
+              hn = (Dwg_ACSH_HistoryNode *)&((char*)_obj)[f1->offset];
+              if (pair->code == 90)
+                {
+                  hn->major = pair->value.u;
+                  LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", name, "history_node", "major",
+                             pair->value.u, pair->code);
+                }
+              else if (pair->code == 91)
+                {
+                  hn->minor = pair->value.u;
+                  LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", name, "history_node", "minor",
+                             pair->value.u, pair->code);
+                }
+              else if (pair->code == 92)
+                {
+                  hn->step_id = pair->value.u;
+                  LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", name, "history_node", "step_id",
+                             pair->value.u, pair->code);
+                }
+              else if (pair->code == 62)
+                {
+                hn_color:
+                  hn->color.index = pair->value.l;
+                  LOG_TRACE ("%s.%s.%s.index = %u [CMC %d]\n", name, "history_node", "color",
+                             pair->value.u, pair->code);
+                }
+              else if (pair->code == 347)
+                {
+                  hn->material = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+                  LOG_TRACE ("%s.%s.%s = " FORMAT_REF " [H %d]\n", name, "history_node", "material",
+                             ARGS_REF (hn->material), pair->code);
+                }
+              else if (hn && pair->code == 40) // VECTOR_N1
+                {
+                  hn->trans = xcalloc (16, sizeof (BITCODE_BD));
+                  if (!hn->trans)
+                    return NULL;
+                  // BD* starting at 40-55
+                  for (j = 0; j < 16; j++)
+                    {
+                      hn->trans[j] = pair->value.d;
+                      LOG_TRACE ("%s.history_node.trans[%d] = %f [BD %d]\n", obj->name, j,
+                                 pair->value.d, j + 40);
+                      dxf_free_pair (pair);
+                      pair = dxf_read_pair (dat);
+                      if (pair->code == 62)
+                        goto hn_color;
+                      if (pair->code != j + 41)
+                        goto search_field;
+                    }
+                }
+            }
+          else if (dwg_obj_is_acsh (obj) && memBEGINc (subclass, "AcDbSh") &&
+                   (pair->code == 90 || pair->code == 91))
+            {
+              const char *_key = pair->code == 90 ? "major" : "minor";
+              const Dwg_DYNAPI_field *f1 = dwg_dynapi_entity_field (obj->name, _key);
+              if (!f1)
+                goto search_field;
+              dwg_dynapi_field_set_value (dwg, _obj, f1, &pair->value, 0);
+              LOG_TRACE ("%s.%s = %u [BL %d]\n", name, _key, pair->value.u, pair->code);
+            }
           else if (obj->fixedtype == DWG_TYPE_LEADER
                    && (pair->code == 10 || pair->code == 20
                        || pair->code == 30))

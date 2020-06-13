@@ -422,6 +422,7 @@ $DXF{'SORTENTSTABLE'}->{'ents'} = 331;
 $DXF{'SORTENTSTABLE'}->{'sort_ents'} = 5;
 $DXF{'PLOTSETTINGS'}->{'shadeplot'} = 333;
 $DXF{'TABLE_Cell'}->{'cell_flag_override'} = 177;
+$DXF{'ACSH_HistoryNode'}->{'trans'} = 40; # but inc by 1 for 16
 # $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
 # $DXF{'DIMENSION_ORDINATE'}->{'feature_location_pt'} = 13;
 # $DXF{'DIMENSION_ORDINATE'}->{'leader_endpt'} = 14;
@@ -511,6 +512,7 @@ dxfin_spec "$srcdir/summaryinfo.spec";
   "HATCH_path" => "",
   "HATCH_pathseg" => "",
   "HATCH_polylinepath" => "",
+  "ACSH_HistoryNode," => 'AcDbShHistoryNode',
   "LEADER_ArrowHead" => "",
   "LEADER_BlockLabel" => "",
   "LEADER_Break" => "",

@@ -7550,14 +7550,11 @@ EXPORT BITCODE_BL dwg_get_object_num_objects (const Dwg_Data *restrict dwg);
 EXPORT int dwg_class_is_entity (const Dwg_Class *restrict klass);
 
 EXPORT int dwg_obj_is_control (const Dwg_Object *restrict obj);
-
 EXPORT int dwg_obj_is_table (const Dwg_Object *restrict obj);
-
 EXPORT int dwg_obj_is_subentity (const Dwg_Object *restrict obj);
-
 EXPORT int dwg_obj_has_subentity (const Dwg_Object *restrict obj);
-
 EXPORT int dwg_obj_is_3dsolid (const Dwg_Object *restrict obj);
+EXPORT int dwg_obj_is_acsh (const Dwg_Object *restrict obj);
 
 EXPORT BITCODE_BL dwg_get_num_entities (const Dwg_Data *restrict);
 

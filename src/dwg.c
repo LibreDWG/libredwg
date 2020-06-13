@@ -1375,18 +1375,40 @@ EXPORT int
 dwg_obj_is_3dsolid (const Dwg_Object *obj)
 {
   const Dwg_Object_Type type = obj->fixedtype;
-  return (obj->supertype == DWG_SUPERTYPE_ENTITY)
-         && (type == DWG_TYPE__3DSOLID ||
-             type == DWG_TYPE_REGION ||
-             type == DWG_TYPE_BODY ||
-             type == DWG_TYPE_EXTRUDEDSURFACE ||
-             type == DWG_TYPE_LOFTEDSURFACE ||
-             type == DWG_TYPE_NURBSURFACE ||
-             type == DWG_TYPE_PLANESURFACE ||
-             type == DWG_TYPE_REVOLVEDSURFACE ||
-             type == DWG_TYPE_SWEPTSURFACE ||
-             type == DWG_TYPE_ACSH_BREP_CLASS
-             );
+  return type == DWG_TYPE_ACSH_BREP_CLASS ||
+    (obj->supertype == DWG_SUPERTYPE_ENTITY
+     && (type == DWG_TYPE__3DSOLID ||
+         type == DWG_TYPE_REGION ||
+         type == DWG_TYPE_BODY ||
+         type == DWG_TYPE_EXTRUDEDSURFACE ||
+         type == DWG_TYPE_LOFTEDSURFACE ||
+         type == DWG_TYPE_NURBSURFACE ||
+         type == DWG_TYPE_PLANESURFACE ||
+         type == DWG_TYPE_REVOLVEDSURFACE ||
+         type == DWG_TYPE_SWEPTSURFACE));
+}
+
+EXPORT int
+dwg_obj_is_acsh (const Dwg_Object *obj)
+{
+  const Dwg_Object_Type type = obj->fixedtype;
+  return (obj->supertype == DWG_SUPERTYPE_OBJECT
+         && (type == DWG_TYPE_ACSH_BOOLEAN_CLASS
+             || type == DWG_TYPE_ACSH_BOX_CLASS
+             || type == DWG_TYPE_ACSH_BREP_CLASS
+             || type == DWG_TYPE_ACSH_CHAMFER_CLASS
+             || type == DWG_TYPE_ACSH_CONE_CLASS
+             || type == DWG_TYPE_ACSH_CYLINDER_CLASS
+             || type == DWG_TYPE_ACSH_EXTRUSION_CLASS
+             || type == DWG_TYPE_ACSH_FILLET_CLASS
+             || type == DWG_TYPE_ACSH_HISTORY_CLASS
+             || type == DWG_TYPE_ACSH_LOFT_CLASS
+             || type == DWG_TYPE_ACSH_PYRAMID_CLASS
+             || type == DWG_TYPE_ACSH_REVOLVE_CLASS
+             || type == DWG_TYPE_ACSH_SPHERE_CLASS
+             || type == DWG_TYPE_ACSH_SWEEP_CLASS
+             || type == DWG_TYPE_ACSH_TORUS_CLASS
+             || type == DWG_TYPE_ACSH_WEDGE_CLASS));
 }
 
 EXPORT Dwg_Section_Type

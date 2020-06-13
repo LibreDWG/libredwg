@@ -8606,7 +8606,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_HistoryNode_fields[] = {
   { "minor",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ACSH_HistoryNode, minor),
     0,0,0, 0 },
   { "trans",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_ACSH_HistoryNode, trans),
-    1,1,0, 0 },
+    1,1,0, 40 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_ACSH_HistoryNode, color),
     1,0,0, 0 },
   { "step_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ACSH_HistoryNode, step_id),
