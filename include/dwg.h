@@ -4558,7 +4558,9 @@ typedef struct _dwg_entity_HELIX
 
 } Dwg_Entity_HELIX;
 
-#define SweepOptions_FIELDS  \
+// TODO ACSH_SWEEP_CLASS has different names,
+// ACIS (sweep:options) even more so. ACIS key names are weird though, Acad didnt take them.
+#define SWEEPOPTIONS_fields  \
   BITCODE_BD draft_angle;   	   /*!< DXF 42 */ \
   BITCODE_BD draft_start_distance; /*!< DXF 43 */ \
   BITCODE_BD draft_end_distance;   /*!< DXF 44 */ \
@@ -4597,7 +4599,7 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   BITCODE_BS u_isolines;        /*!< DXF 71 */
   BITCODE_BS v_isolines;        /*!< DXF 72 */
   BITCODE_BL class_version; 	/*!< DXF 90 */
-  SweepOptions_FIELDS;
+  SWEEPOPTIONS_fields;
   //BITCODE_BD height;
   BITCODE_3BD sweep_vector; 	 /*!< DXF 10 */
   BITCODE_BD* sweep_transmatrix; /*!< DXF 40: 16x BD */
@@ -4621,7 +4623,7 @@ typedef struct _dwg_entity_SWEPTSURFACE
   BITCODE_BL path_entity_id;
   BITCODE_BL pathdata_size;
   BITCODE_TF pathdata;
-  SweepOptions_FIELDS;
+  SWEEPOPTIONS_fields;
 } Dwg_Entity_SWEPTSURFACE;
 
 /**
@@ -5377,6 +5379,7 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */
   BITCODE_BL shsw_text2_size; /*!< DXF 90 */
   BITCODE_TF shsw_text2;      /*!< DXF 310 */
+  // compare to SWEEPOPTIONS_fields
   BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
   BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
   BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
@@ -5415,6 +5418,7 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */
   BITCODE_BL shsw_text2_size; /*!< DXF 90 */
   BITCODE_TF shsw_text2;      /*!< DXF 310 */
+  // compare to SWEEPOPTIONS_fields
   BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
   BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
   BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
@@ -5481,12 +5485,12 @@ typedef struct _dwg_object_ACSH_CHAMFER_CLASS
   // AcDbShChamfer
   BITCODE_BL major;     /*!< DXF 90 */
   BITCODE_BL minor;     /*!< DXF 91 */
-  BITCODE_BL bl92;	/*!< DXF 92 */
-  BITCODE_BD base_dist;	/*!< DXF 41 */
-  BITCODE_BD other_dist;/*!< DXF 42 */
+  BITCODE_BL bl92;	/*!< DXF 92, flat or edge chamfer options? */
+  BITCODE_BD base_dist;	/*!< DXF 41 (left_range?) */
+  BITCODE_BD other_dist;/*!< DXF 42 (right_range or -1)? */
   BITCODE_BL num_edges;	/*!< DXF 93 */
   BITCODE_BL *edges;    /*!< DXF 94 */
-  BITCODE_BL bl95;	/*!< DXF 95 */
+  BITCODE_BL bl95;	/*!< DXF 95 probably our nodeid */
 } Dwg_Object_ACSH_CHAMFER_CLASS;
 
 typedef struct _dwg_object_ACSH_CYLINDER_CLASS
