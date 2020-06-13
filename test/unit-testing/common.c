@@ -41,7 +41,7 @@ int g_countmax = MAX_COUNTER;
 #define LATER_VERSIONS else
 
 /// test a DWG file
-int test_code (const char *filename, int cov);
+int test_code (const char *path, const char *filename, int cov);
 
 /// test all DWG's in a subdir
 int test_subdirs (const char *dirname, int cov);
@@ -157,265 +157,158 @@ main (int argc, char *argv[])
                 fprintf (stderr, "Env var INPUT not defined, %s not found\n",
                          tmp);
               else
-                error += test_code (tmp, cov);
+                error += test_code (prefix, *ptr, cov);
             }
           else
-            error += test_code (*ptr, cov);
+            error += test_code (prefix, *ptr, cov);
         }
       // if no coverage
       if (!numpassed () && !numfailed ())
         {
           char tmp[80];
-          if (DWG_TYPE == DWG_TYPE_POLYLINE_2D || DWG_TYPE == DWG_TYPE_SEQEND
-              || DWG_TYPE == DWG_TYPE_VERTEX_2D)
+          if (DWG_TYPE == DWG_TYPE_POLYLINE_2D ||
+              DWG_TYPE == DWG_TYPE_SEQEND ||
+              DWG_TYPE == DWG_TYPE_VERTEX_2D)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/PolyLine2D.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/PolyLine2D.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_POLYLINE_3D
-              || DWG_TYPE == DWG_TYPE_VERTEX_3D)
+          if (DWG_TYPE == DWG_TYPE_POLYLINE_3D ||
+              DWG_TYPE == DWG_TYPE_VERTEX_3D)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/PolyLine3D.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/PolyLine3D.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2018/PolyLine3D.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/PolyLine3D.dwg", cov);
+              error += test_code (prefix, "2004/PolyLine3D.dwg", cov);
+              error += test_code (prefix, "2018/PolyLine3D.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_POLYLINE_MESH
-              || DWG_TYPE == DWG_TYPE_VERTEX_MESH || DWG_TYPE == DWG_TYPE_TRACE
-              || DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT
-              || DWG_TYPE == DWG_TYPE_DIMENSION_DIAMETER
-              || DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS
-              || DWG_TYPE == DWG_TYPE_OLE2FRAME)
+          if (DWG_TYPE == DWG_TYPE_POLYLINE_MESH ||
+              DWG_TYPE == DWG_TYPE_VERTEX_MESH ||
+              DWG_TYPE == DWG_TYPE_TRACE ||
+              DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT ||
+              DWG_TYPE == DWG_TYPE_DIMENSION_DIAMETER ||
+              DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS ||
+              DWG_TYPE == DWG_TYPE_OLE2FRAME)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/TS1.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/TS1.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_IMAGE || DWG_TYPE == DWG_TYPE_LEADER)
+          if (DWG_TYPE == DWG_TYPE_IMAGE ||
+              DWG_TYPE == DWG_TYPE_LEADER)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/Leader.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Leader.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2018/Leader.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/Leader.dwg", cov);
+              error += test_code (prefix, "2004/Leader.dwg", cov);
+              error += test_code (prefix, "2018/Leader.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_HATCH)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/HatchG.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2004/HatchG.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_UNDERLAY || DWG_TYPE == DWG_TYPE_UNDERLAYDEFINITION)
+          if (DWG_TYPE == DWG_TYPE_UNDERLAY ||
+              DWG_TYPE == DWG_TYPE_UNDERLAYDEFINITION)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Underlay.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2004/Underlay.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_LIGHT || DWG_TYPE == DWG_TYPE_VISUALSTYLE)
+          if (DWG_TYPE == DWG_TYPE_LIGHT ||
+              DWG_TYPE == DWG_TYPE_VISUALSTYLE)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Visualstyle.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2018/Visualstyle.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
+              error += test_code (prefix, "2004/Visualstyle.dwg", cov);
+              error += test_code (prefix, "2018/Visualstyle.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_GEODATA)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/gh209_1.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2010/gh209_1.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_PLOTSETTINGS)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2013/gh109_1.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2013/gh109_1.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_DBCOLOR)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/dbcolor.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Truecolor.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2004/dbcolor.dwg", cov);
+              error += test_code (prefix, "2004/Truecolor.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_HELIX)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/work.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Helix.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2018/Helix.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/work.dwg", cov);
+              error += test_code (prefix, "2004/Helix.dwg", cov);
+              error += test_code (prefix, "2018/Helix.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY ||
               DWG_TYPE == DWG_TYPE_ASSOCPERSSUBENTMANAGER ||
               DWG_TYPE == DWG_TYPE_ASSOCACTION)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Surface.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2004/Surface.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCNETWORK)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/Constraints.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Constraints.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2007/Constraints.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/Constraints.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2013/Constraints.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/Constraints.dwg", cov);
+              error += test_code (prefix, "2004/Constraints.dwg", cov);
+              error += test_code (prefix, "2007/Constraints.dwg", cov);
+              error += test_code (prefix, "2010/Constraints.dwg", cov);
+              error += test_code (prefix, "2013/Constraints.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Visualstyle.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2018/Visualstyle.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/ACI_20160321_A_30_east.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2004/Visualstyle.dwg", cov);
+              error += test_code (prefix, "2018/Visualstyle.dwg", cov);
+              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/Leader.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Leader.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2013/gh55-ltype.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/Leader.dwg", cov);
+              error += test_code (prefix, "2004/Leader.dwg", cov);
+              error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA ||
               DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/ACI_20160321_A_30_east.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2013/gh55-ltype.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/ACI_20160321_A_30_east.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
+              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/TS1.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/5151-024.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/TS1.dwg", cov);
+              error += test_code (prefix, "2010/5151-024.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_DATALINK)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/5151-019.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/5151-022.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/5151-023.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2010/5151-024.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2010/5151-019.dwg", cov);
+              error += test_code (prefix, "2010/5151-022.dwg", cov);
+              error += test_code (prefix, "2010/5151-023.dwg", cov);
+              error += test_code (prefix, "2010/5151-024.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_DATATABLE)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/fr05_b101_ref.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/TS1.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "r13/TS1.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2004/fr05_b101_ref.dwg", cov);
+              error += test_code (prefix, "2000/TS1.dwg", cov);
+              error += test_code (prefix, "r13/TS1.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_SORTENTSTABLE)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/PolyLine2D.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Surface.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "r13/PolyLine2D.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2004/Publish.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/PolyLine2D.dwg", cov);
+              error += test_code (prefix, "2004/Surface.dwg", cov);
+              error += test_code (prefix, "r13/PolyLine2D.dwg", cov);
+              error += test_code (prefix, "2004/Publish.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_SUN)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/2.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/3.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/4.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2000/5.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2000/2.dwg", cov);
+              error += test_code (prefix, "2000/3.dwg", cov);
+              error += test_code (prefix, "2000/4.dwg", cov);
+              error += test_code (prefix, "2000/5.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_SPATIAL_FILTER)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2013/gh44-error.dwg");
-              error += test_code (tmp, cov);
-
+              error += test_code (prefix, "2013/gh44-error.dwg", cov);
               if (g_countmax == 1000) // only with -a
-                {
-                  strcpy (tmp, prefix);
-                  strcat (tmp, "../test-big/2007/big.dwg");
-                  error += test_code (tmp, cov);
-                }
+                error += test_code (prefix, "../test-big/2007/big.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_SECTIONOBJECT ||
               DWG_TYPE == DWG_TYPE_SECTION_MANAGER ||
               DWG_TYPE == DWG_TYPE_SECTION_SETTINGS)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2018/LiveSection1.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2018/LiveSection1.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ACSH_BOOLEAN_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_BOX_CLASS ||
@@ -429,12 +322,8 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_ACSH_TORUS_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_WEDGE_CLASS)
             {
-              strcpy (tmp, prefix);
-              strcat (tmp, "2007/ATMOS-DC22S.dwg");
-              error += test_code (tmp, cov);
-              strcpy (tmp, prefix);
-              strcat (tmp, "2013/JW.dwg");
-              error += test_code (tmp, cov);
+              error += test_code (prefix, "2007/ATMOS-DC22S.dwg", cov);
+              error += test_code (prefix, "2013/JW.dwg", cov);
             }
         }
 #ifdef DWG_TYPE
@@ -443,7 +332,7 @@ main (int argc, char *argv[])
 #endif
     }
   else
-    error = test_code (input, cov);
+    error = test_code (NULL, input, cov);
 
   return error;
 }
@@ -466,21 +355,22 @@ test_subdirs (const char *dir, int cov)
   while (n--)
     {
       char *elem = namelist[n]->d_name;
-      char path[256];
-      path[255] = '\0';
-      strncpy (path, dir, 254);
-      strncat (path, "/", 254);
-      strncat (path, elem, 254);
-      path[255] = '\0';
 
       if (namelist[n]->d_type == DT_DIR && *elem != '.')
         {
+          char path[256];
+          path[255] = '\0';
+          strncpy (path, dir, 254);
+          strncat (path, "/", 254);
+          strncat (path, elem, 254);
+          path[255] = '\0';
+
           error += test_subdirs (path, cov);
         }
       if (namelist[n]->d_type == DT_REG &&
           (strstr (elem, ".dwg") || strstr (elem, ".DWG")))
         {
-          error += test_code (path, cov);
+          error += test_code (dir, elem, cov);
         }
 
       free (namelist[n]);
@@ -492,26 +382,37 @@ test_subdirs (const char *dir, int cov)
 
 /// test a DWG file
 int
-test_code (const char *filename, int cov)
+test_code (const char *dir, const char *filename, int cov)
 {
   int error;
-
+  char path[256];
+  path[255] = '\0';
+  if (dir)
+    {
+      strncpy (path, dir, 254);
+      strncat (path, "/", 254);
+      strncat (path, filename, 254);
+    }
+  else
+    strncpy (path, filename, 254);
+  path[255] = '\0';
+  
 #ifdef DWG_TYPE
   // only process if no coverage yet, or when we are crossing the unicode boundary.
-  if (strstr (filename, "2018") ||
-      strstr (filename, "2007") ||
+  if (strstr (path, "2018") ||
+      strstr (path, "2007") ||
       (!numpassed () && !numfailed ()))
     {
       if (cov)
-        printf ("Testing with %s:\n", filename);
+        printf ("Testing with %s:\n", path);
     }
   else if (cov)
     {
-      printf ("Skipping %s:\n", filename);
+      printf ("Skipping %s:\n", path);
       return 0;
     }
 #endif
-  error = dwg_read_file (filename, &g_dwg);
+  error = dwg_read_file (path, &g_dwg);
   if (error < DWG_ERR_CRITICAL)
     {
       output_test (&g_dwg);
@@ -524,12 +425,12 @@ test_code (const char *filename, int cov)
   if (is_type_unstable (DWG_TYPE) || is_type_debugging (DWG_TYPE))
     {
       if (cov && error)
-        printf ("%s failed (TODO: unstable)\n", filename);
+        printf ("%s failed (TODO: unstable)\n", path);
       return 0;
     }
 #endif
   if (cov && error)
-    printf ("%s failed\n", filename);
+    printf ("%s failed\n", path);
   return error;
 }
 
