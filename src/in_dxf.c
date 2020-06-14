@@ -5987,6 +5987,99 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return found;
 }
 
+static Dxf_Pair *
+add_AcDbEvalExpr (Dwg_Object *restrict obj,
+                  char *_obj,
+                  Bit_Chain *restrict dat,
+                  Dxf_Pair *restrict pair)
+{
+  Dwg_EvalExpr *ee;
+  Dwg_Data *dwg = obj->parent;
+  const Dwg_DYNAPI_field *f1 = dwg_dynapi_entity_field (obj->name, "evalexpr");
+  if (!f1)
+    return pair;
+  ee = (Dwg_EvalExpr *)&(_obj)[f1->offset];
+  ee->parentid = -1;
+  while (pair && pair->code != 100)
+    {
+      if (pair->code == 90)
+        {
+          ee->nodeid = pair->value.u;
+          LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", obj->name, "evalexpr", "nodeid",
+                     pair->value.u, pair->code);
+        }
+      else if (pair->code == 98)
+        {
+          ee->minor = pair->value.u;
+          LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", obj->name, "evalexpr", "major",
+                     pair->value.u, pair->code);
+        }
+      else if (pair->code == 99)
+        {
+          ee->minor = pair->value.u;
+          LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", obj->name, "evalexpr", "minor",
+                     pair->value.u, pair->code);
+        }
+      else if (pair->code == 70 && !ee->value_type)
+        {
+          ee->value_type = pair->value.i;
+          LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value_type",
+                     pair->value.i, pair->code);
+        }
+      else if (pair->code == 40)
+        {
+          ee->value.num40 = pair->value.d;
+          LOG_TRACE ("%s.%s.%s = %f [BD %d]\n", obj->name, "evalexpr", "value.num_40",
+                     pair->value.d, pair->code);
+        }
+      else if (pair->code == 10)
+        {
+          ee->value.pt2d.x = pair->value.d;
+        }
+      else if (pair->code == 20)
+        {
+          ee->value.pt2d.y = pair->value.d;
+          LOG_TRACE ("%s.%s.%s = (%f, %f) [2RD %d]\n", obj->name, "evalexpr", "value.pt2d",
+                     ee->value.pt2d.x, pair->value.d, pair->code);
+        }
+      else if (pair->code == 11)
+        {
+          ee->value.pt3d.x = pair->value.d;
+        }
+      else if (pair->code == 21)
+        {
+          ee->value.pt3d.y = pair->value.d;
+        }
+      else if (pair->code == 31)
+        {
+          ee->value.pt3d.z = pair->value.d;
+          LOG_TRACE ("%s.%s.%s = (%f, %f, %f) [3RD %d]\n", obj->name, "evalexpr", "value.pt3d",
+                     ee->value.pt3d.x, ee->value.pt3d.y, pair->value.d, pair->code);
+        }
+      else if (pair->code == 1)
+        {
+          ee->value.text1 = strdup (pair->value.s);
+          LOG_TRACE ("%s.%s.%s = %s [T %d]\n", obj->name, "evalexpr", "value.text1",
+                     pair->value.s, pair->code);
+        }
+      else if (pair->code == 70 && ee->value_type)
+        {
+          ee->value.short70 = pair->value.i;
+          LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value.short70",
+                     pair->value.i, pair->code);
+        }
+      else if (pair->code == 91)
+        {
+          ee->value.handle91 = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "evalexpr", "value.handle91",
+                     ARGS_REF (ee->value.handle91), pair->code);
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
 // Also exported to in_json. To set list of children in POLYLINE_*/*INSERT
 void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned, BITCODE_H *owned)
@@ -7842,6 +7935,7 @@ new_object (char *restrict name, char *restrict dxfname,
             }
           else if (strEQc (subclass, "AcDbShHistoryNode"))
             {
+              //add_AcDbShHistoryNode (obj, _obj)
               Dwg_ACSH_HistoryNode *hn;
               const Dwg_DYNAPI_field *f1 = dwg_dynapi_entity_field (obj->name, "history_node");
               if (!f1)
@@ -7907,6 +8001,11 @@ new_object (char *restrict name, char *restrict dxfname,
                 goto search_field;
               dwg_dynapi_field_set_value (dwg, _obj, f1, &pair->value, 0);
               LOG_TRACE ("%s.%s = %u [BL %d]\n", name, _key, pair->value.u, pair->code);
+            }
+          else if (strEQc (subclass, "AcDbEvalExpr"))
+            {
+              pair = add_AcDbEvalExpr (obj, (char*)_obj, dat, pair);
+              goto start_loop;
             }
           else if (obj->fixedtype == DWG_TYPE_LEADER
                    && (pair->code == 10 || pair->code == 20
