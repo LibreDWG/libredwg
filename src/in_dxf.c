@@ -7188,6 +7188,52 @@ new_object (char *restrict name, char *restrict dxfname,
               // ignore name of mlinestyle, already set by ->mlinestyle
               break;
             }
+          if (pair->code == 2 && dwg_obj_is_3dsolid (obj))
+            {
+              BITCODE_BL revision_major;
+              BITCODE_BS revision_minor1;
+              BITCODE_BS revision_minor2;
+              BITCODE_RC revision_bytes[9];
+              // no malloc, it is copied into the dwg. but it needs to be large enough,
+              // pair->value.s might be smaller on corrupt DXF's. Also we null-terminate it.
+              char revision_guid[39];
+              char *p = &revision_guid[0];
+              unsigned u[3];
+              // "{00000100-0100-00CA-D300-80010A7B10C3}"
+              strncpy (revision_guid, pair->value.s, 38);
+              revision_guid[38] = '\0';
+              if (!dwg_dynapi_entity_set_value (_obj, obj->name, "revision_guid[38]", revision_guid, 0))
+                break;
+              if (revision_guid[0] != '{' ||  /* 8 */
+                  revision_guid[9] != '-' ||  /* 4 */
+                  revision_guid[14] != '-' || /* 4 */
+                  revision_guid[19] != '-' || /* 4 */
+                  revision_guid[24] != '-' || /* 12 */
+                  revision_guid[37] != '}')
+                {
+                  LOG_ERROR ("Invalid %s.revision_guid %s", obj->name, revision_guid);
+                  break;
+                }
+              sscanf (p, "{%8" PRIx32 "-%4X-%4X-%4X-", &revision_major, &u[0], &u[1], &u[2]);
+              revision_minor1 = (BITCODE_BS)u[0];
+              revision_minor2 = (BITCODE_BS)u[1];
+              p += 20;
+              sscanf (p, "%2hhX", &revision_bytes[0]);
+              p += 2;
+              sscanf (p, "%2hhX", &revision_bytes[1]);
+              p += 3;
+              for (int _i = 2; _i < 8; _i++)
+                {
+                  sscanf (p, "%2hhX", &revision_bytes[_i]);
+                  p += 2;
+                }
+              revision_bytes[8] = '\0'; // insist on an ending 0 byte, even if never used.
+              dwg_dynapi_entity_set_value (_obj, obj->name, "revision_major", &revision_major, 0);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "revision_minor1", &revision_minor1, 0);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "revision_minor2", &revision_minor2, 0);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "revision_bytes[9]", revision_bytes, 0);
+              break;
+            }
           // fall through
         case 70:
           if (ctrl_id && pair->code == 70)

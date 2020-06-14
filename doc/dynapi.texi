@@ -810,10 +810,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -826,6 +824,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 
@@ -1738,10 +1738,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -1754,6 +1752,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -2313,10 +2313,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -2329,6 +2327,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -2767,10 +2767,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -2783,6 +2781,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -2902,10 +2902,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -2918,6 +2916,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -3239,10 +3239,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -3255,6 +3253,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -3536,10 +3536,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -3552,6 +3550,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 @item modeler_format_version
@@ -4414,10 +4414,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item has_revision_guid
-B,	DXF 290
 @item revision_guid[38]
-RC
+RC,	DXF 2
 @item revision_major
 BL
 @item revision_minor1
@@ -4430,6 +4428,8 @@ RC
 BL
 @item history_id
 H,	DXF 350
+@item has_revision_guid
+B,	DXF 290
 @item acis_empty_bit
 B
 @item evalexpr

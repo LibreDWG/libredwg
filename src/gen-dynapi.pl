@@ -439,7 +439,7 @@ $DXF{$_}->{'version'} = 70 for @solids;
 $DXF{$_}->{'encr_sat_data'} = 1 for @solids;
 $DXF{$_}->{'history_id'} = 350 for @solids;
 $DXF{$_}->{'has_revision_guid'} = 290 for @solids;
-$DXF{$_}->{'revision_guid'} = 2 for @solids;
+$DXF{$_}->{'revision_guid[38]'} = 2 for @solids;
 my @annotscale = qw (TEXTOBJECTCONTEXTDATA MTEXTOBJECTCONTEXTDATA ALDIMOBJECTCONTEXTDATA
                      MTEXTATTRIBUTEOBJECTCONTEXTDATA MLEADEROBJECTCONTEXTDATA LEADEROBJECTCONTEXTDATA
                      BLKREFOBJECTCONTEXTDATA);
@@ -1405,7 +1405,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1403 "gen-dynapi.pl"
+#line 1409 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1489,7 +1489,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1487 "gen-dynapi.pl"
+#line 1493 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

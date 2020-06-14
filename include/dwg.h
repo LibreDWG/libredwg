@@ -1744,37 +1744,37 @@ typedef struct _dwg_3DSOLID_material
   BITCODE_H  material_handle; /* code 5 */
 } Dwg_3DSOLID_material;
 
-#define _3DSOLID_FIELDS \
-  BITCODE_B acis_empty; \
-  BITCODE_B unknown; \
-  BITCODE_BS version; \
-  BITCODE_BL num_blocks; \
-  BITCODE_BL* block_size; \
-  char** encr_sat_data; \
-  BITCODE_BL sab_size; \
+#define _3DSOLID_FIELDS                                                 \
+  BITCODE_B acis_empty;                                                 \
+  BITCODE_B unknown;                                                    \
+  BITCODE_BS version;                                                   \
+  BITCODE_BL num_blocks;                                                \
+  BITCODE_BL* block_size;                                               \
+  char** encr_sat_data;                                                 \
+  BITCODE_BL sab_size;                                                  \
   BITCODE_RC* acis_data; /* The decrypted SAT v1 or the SAB v2 stream */ \
-  BITCODE_B wireframe_data_present; \
-  BITCODE_B point_present; \
-  BITCODE_3BD point; \
-  BITCODE_BL isolines; /* i.e. wires */ \
-  BITCODE_B isoline_present; /* ie. has_wires */ \
-  BITCODE_BL num_wires; \
-  Dwg_3DSOLID_wire * wires; \
-  BITCODE_BL num_silhouettes; \
-  Dwg_3DSOLID_silhouette * silhouettes; \
-  BITCODE_B _dxf_sab_converted;  /* internally calculated */ \
-  BITCODE_B acis_empty2; \
-  struct _dwg_entity_3DSOLID* extra_acis_data; \
-  BITCODE_BL num_materials; \
-  Dwg_3DSOLID_material *materials; \
-  BITCODE_B has_revision_guid; \
-  BITCODE_RC revision_guid[38]; \
-  BITCODE_BL revision_major; \
-  BITCODE_BS revision_minor1; \
-  BITCODE_BS revision_minor2; \
-  BITCODE_RC revision_bytes[9]; \
-  BITCODE_BL end_marker; \
-  BITCODE_H history_id; \
+  BITCODE_B wireframe_data_present;                                     \
+  BITCODE_B point_present;                                              \
+  BITCODE_3BD point;                                                    \
+  BITCODE_BL isolines; /* i.e. wires */                                 \
+  BITCODE_B isoline_present; /* ie. has_wires */                        \
+  BITCODE_BL num_wires;                                                 \
+  Dwg_3DSOLID_wire * wires;                                             \
+  BITCODE_BL num_silhouettes;                                           \
+  Dwg_3DSOLID_silhouette * silhouettes;                                 \
+  BITCODE_B _dxf_sab_converted;  /* internally calculated */            \
+  BITCODE_B acis_empty2;                                                \
+  struct _dwg_entity_3DSOLID* extra_acis_data;                          \
+  BITCODE_BL num_materials;                                             \
+  Dwg_3DSOLID_material *materials;                                      \
+  BITCODE_RC revision_guid[38];                                         \
+  BITCODE_BL revision_major;                                            \
+  BITCODE_BS revision_minor1;                                           \
+  BITCODE_BS revision_minor2;                                           \
+  BITCODE_RC revision_bytes[9];                                         \
+  BITCODE_BL end_marker;                                                \
+  BITCODE_H history_id;                                                 \
+  BITCODE_B has_revision_guid;                                          \
   BITCODE_B acis_empty_bit
 
 typedef struct _dwg_entity_3DSOLID
