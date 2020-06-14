@@ -5388,7 +5388,7 @@ static int test__3DFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD corner1;
     if (dwg_dynapi_entity_value (_3dface, "3DFACE", "corner1", &corner1, NULL)
-        && !memcmp (&corner1, &_3dface->corner1, sizeof (_3dface->corner1)))
+        && !memcmp (&corner1, &_3dface->corner1, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("3DFACE.corner1 [3BD]");
@@ -5396,7 +5396,7 @@ static int test__3DFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD corner2;
     if (dwg_dynapi_entity_value (_3dface, "3DFACE", "corner2", &corner2, NULL)
-        && !memcmp (&corner2, &_3dface->corner2, sizeof (_3dface->corner2)))
+        && !memcmp (&corner2, &_3dface->corner2, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("3DFACE.corner2 [3BD]");
@@ -5404,7 +5404,7 @@ static int test__3DFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD corner3;
     if (dwg_dynapi_entity_value (_3dface, "3DFACE", "corner3", &corner3, NULL)
-        && !memcmp (&corner3, &_3dface->corner3, sizeof (_3dface->corner3)))
+        && !memcmp (&corner3, &_3dface->corner3, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("3DFACE.corner3 [3BD]");
@@ -5412,7 +5412,7 @@ static int test__3DFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD corner4;
     if (dwg_dynapi_entity_value (_3dface, "3DFACE", "corner4", &corner4, NULL)
-        && !memcmp (&corner4, &_3dface->corner4, sizeof (_3dface->corner4)))
+        && !memcmp (&corner4, &_3dface->corner4, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("3DFACE.corner4 [3BD]");
@@ -5450,7 +5450,7 @@ static int test__3DFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (_3dface, "3DFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &_3dface->parent, sizeof (_3dface->parent)))
+        && !memcmp (&parent, &_3dface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("3DFACE.parent [struct _dwg_object_entity*]");
@@ -5556,7 +5556,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &_3dsolid->block_size, sizeof (_3dsolid->block_size)))
+        && !memcmp (&block_size, &_3dsolid->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("3DSOLID.block_size [BL*]");
@@ -5587,7 +5587,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &_3dsolid->extra_acis_data, sizeof (_3dsolid->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &_3dsolid->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("3DSOLID.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -5610,7 +5610,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &_3dsolid->history_id, sizeof (_3dsolid->history_id)))
+        && !memcmp (&history_id, &_3dsolid->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("3DSOLID.history_id [H]");
@@ -5718,7 +5718,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "parent", &parent, NULL)
-        && !memcmp (&parent, &_3dsolid->parent, sizeof (_3dsolid->parent)))
+        && !memcmp (&parent, &_3dsolid->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("3DSOLID.parent [struct _dwg_object_entity*]");
@@ -5726,7 +5726,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "point", &point, NULL)
-        && !memcmp (&point, &_3dsolid->point, sizeof (_3dsolid->point)))
+        && !memcmp (&point, &_3dsolid->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("3DSOLID.point [3BD]");
@@ -5749,7 +5749,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &_3dsolid->revision_bytes, sizeof (_3dsolid->revision_bytes)))
+        && !memcmp (&revision_bytes, &_3dsolid->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("3DSOLID.revision_bytes[9] [RC]");
@@ -5757,7 +5757,7 @@ static int test__3DSOLID (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &_3dsolid->revision_guid, sizeof (_3dsolid->revision_guid)))
+        && !memcmp (&revision_guid, &_3dsolid->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("3DSOLID.revision_guid[38] [RC]");
@@ -5903,7 +5903,7 @@ static int test_ARC (const Dwg_Object *obj)
   {
     BITCODE_3BD center;
     if (dwg_dynapi_entity_value (arc, "ARC", "center", &center, NULL)
-        && !memcmp (&center, &arc->center, sizeof (arc->center)))
+        && !memcmp (&center, &arc->center, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC.center [3BD]");
@@ -5926,7 +5926,7 @@ static int test_ARC (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (arc, "ARC", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &arc->extrusion, sizeof (arc->extrusion)))
+        && !memcmp (&extrusion, &arc->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("ARC.extrusion [BE]");
@@ -5934,7 +5934,7 @@ static int test_ARC (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (arc, "ARC", "parent", &parent, NULL)
-        && !memcmp (&parent, &arc->parent, sizeof (arc->parent)))
+        && !memcmp (&parent, &arc->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("ARC.parent [struct _dwg_object_entity*]");
@@ -6059,7 +6059,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "block", &block, NULL)
-        && !memcmp (&block, &arc_dimension->block, sizeof (arc_dimension->block)))
+        && !memcmp (&block, &arc_dimension->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ARC_DIMENSION.block [H]");
@@ -6077,7 +6077,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_3BD center_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "center_pt", &center_pt, NULL)
-        && !memcmp (&center_pt, &arc_dimension->center_pt, sizeof (arc_dimension->center_pt)))
+        && !memcmp (&center_pt, &arc_dimension->center_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC_DIMENSION.center_pt [3BD]");
@@ -6100,7 +6100,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &arc_dimension->clone_ins_pt, sizeof (arc_dimension->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &arc_dimension->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("ARC_DIMENSION.clone_ins_pt [2RD]");
@@ -6108,7 +6108,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &arc_dimension->def_pt, sizeof (arc_dimension->def_pt)))
+        && !memcmp (&def_pt, &arc_dimension->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC_DIMENSION.def_pt [3BD]");
@@ -6116,7 +6116,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &arc_dimension->dimstyle, sizeof (arc_dimension->dimstyle)))
+        && !memcmp (&dimstyle, &arc_dimension->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ARC_DIMENSION.dimstyle [H]");
@@ -6139,7 +6139,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &arc_dimension->extrusion, sizeof (arc_dimension->extrusion)))
+        && !memcmp (&extrusion, &arc_dimension->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("ARC_DIMENSION.extrusion [BE]");
@@ -6252,7 +6252,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &arc_dimension->ins_scale, sizeof (arc_dimension->ins_scale)))
+        && !memcmp (&ins_scale, &arc_dimension->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC_DIMENSION.ins_scale [3BD]");
@@ -6275,7 +6275,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_3BD leader1_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "leader1_pt", &leader1_pt, NULL)
-        && !memcmp (&leader1_pt, &arc_dimension->leader1_pt, sizeof (arc_dimension->leader1_pt)))
+        && !memcmp (&leader1_pt, &arc_dimension->leader1_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC_DIMENSION.leader1_pt [3BD]");
@@ -6283,7 +6283,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_3BD leader2_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "leader2_pt", &leader2_pt, NULL)
-        && !memcmp (&leader2_pt, &arc_dimension->leader2_pt, sizeof (arc_dimension->leader2_pt)))
+        && !memcmp (&leader2_pt, &arc_dimension->leader2_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC_DIMENSION.leader2_pt [3BD]");
@@ -6321,7 +6321,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "parent", &parent, NULL)
-        && !memcmp (&parent, &arc_dimension->parent, sizeof (arc_dimension->parent)))
+        && !memcmp (&parent, &arc_dimension->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("ARC_DIMENSION.parent [struct _dwg_object_entity*]");
@@ -6329,7 +6329,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &arc_dimension->text_midpt, sizeof (arc_dimension->text_midpt)))
+        && !memcmp (&text_midpt, &arc_dimension->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("ARC_DIMENSION.text_midpt [2RD]");
@@ -6377,7 +6377,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_3BD xline1_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "xline1_pt", &xline1_pt, NULL)
-        && !memcmp (&xline1_pt, &arc_dimension->xline1_pt, sizeof (arc_dimension->xline1_pt)))
+        && !memcmp (&xline1_pt, &arc_dimension->xline1_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC_DIMENSION.xline1_pt [3BD]");
@@ -6385,7 +6385,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   {
     BITCODE_3BD xline2_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "xline2_pt", &xline2_pt, NULL)
-        && !memcmp (&xline2_pt, &arc_dimension->xline2_pt, sizeof (arc_dimension->xline2_pt)))
+        && !memcmp (&xline2_pt, &arc_dimension->xline2_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ARC_DIMENSION.xline2_pt [3BD]");
@@ -6421,7 +6421,7 @@ static int test_ATEXT (const Dwg_Object *obj)
   {
     BITCODE_H arc_handle;
     if (dwg_dynapi_entity_value (atext, "ATEXT", "arc_handle", &arc_handle, NULL)
-        && !memcmp (&arc_handle, &atext->arc_handle, sizeof (atext->arc_handle)))
+        && !memcmp (&arc_handle, &atext->arc_handle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ATEXT.arc_handle [H]");
@@ -6459,7 +6459,7 @@ static int test_ATEXT (const Dwg_Object *obj)
   {
     BITCODE_3BD center;
     if (dwg_dynapi_entity_value (atext, "ATEXT", "center", &center, NULL)
-        && !memcmp (&center, &atext->center, sizeof (atext->center)))
+        && !memcmp (&center, &atext->center, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ATEXT.center [3BD]");
@@ -6511,7 +6511,7 @@ static int test_ATEXT (const Dwg_Object *obj)
   {
     BITCODE_3BD extrusion;
     if (dwg_dynapi_entity_value (atext, "ATEXT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &atext->extrusion, sizeof (atext->extrusion)))
+        && !memcmp (&extrusion, &atext->extrusion, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ATEXT.extrusion [3BD]");
@@ -6622,7 +6622,7 @@ static int test_ATEXT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (atext, "ATEXT", "parent", &parent, NULL)
-        && !memcmp (&parent, &atext->parent, sizeof (atext->parent)))
+        && !memcmp (&parent, &atext->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("ATEXT.parent [struct _dwg_object_entity*]");
@@ -6800,7 +6800,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT alignment_pt;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "alignment_pt", &alignment_pt, NULL)
-        && !memcmp (&alignment_pt, &attdef->alignment_pt, sizeof (attdef->alignment_pt)))
+        && !memcmp (&alignment_pt, &attdef->alignment_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("ATTDEF.alignment_pt [2DPOINT]");
@@ -6808,7 +6808,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_H annotative_app;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "annotative_app", &annotative_app, NULL)
-        && !memcmp (&annotative_app, &attdef->annotative_app, sizeof (attdef->annotative_app)))
+        && !memcmp (&annotative_app, &attdef->annotative_app, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ATTDEF.annotative_app [H]");
@@ -6931,7 +6931,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &attdef->extrusion, sizeof (attdef->extrusion)))
+        && !memcmp (&extrusion, &attdef->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("ATTDEF.extrusion [BE]");
@@ -7014,7 +7014,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT insertion_pt;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &attdef->insertion_pt, sizeof (attdef->insertion_pt)))
+        && !memcmp (&insertion_pt, &attdef->insertion_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("ATTDEF.insertion_pt [2DPOINT]");
@@ -7037,7 +7037,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_H mtext_handles;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "mtext_handles", &mtext_handles, NULL)
-        && !memcmp (&mtext_handles, &attdef->mtext_handles, sizeof (attdef->mtext_handles)))
+        && !memcmp (&mtext_handles, &attdef->mtext_handles, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ATTDEF.mtext_handles [H]");
@@ -7060,7 +7060,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "parent", &parent, NULL)
-        && !memcmp (&parent, &attdef->parent, sizeof (attdef->parent)))
+        && !memcmp (&parent, &attdef->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("ATTDEF.parent [struct _dwg_object_entity*]");
@@ -7093,7 +7093,7 @@ static int test_ATTDEF (const Dwg_Object *obj)
   {
     BITCODE_H style;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "style", &style, NULL)
-        && !memcmp (&style, &attdef->style, sizeof (attdef->style)))
+        && !memcmp (&style, &attdef->style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ATTDEF.style [H]");
@@ -7184,7 +7184,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT alignment_pt;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "alignment_pt", &alignment_pt, NULL)
-        && !memcmp (&alignment_pt, &attrib->alignment_pt, sizeof (attrib->alignment_pt)))
+        && !memcmp (&alignment_pt, &attrib->alignment_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("ATTRIB.alignment_pt [2DPOINT]");
@@ -7192,7 +7192,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     BITCODE_H annotative_app;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "annotative_app", &annotative_app, NULL)
-        && !memcmp (&annotative_app, &attrib->annotative_app, sizeof (attrib->annotative_app)))
+        && !memcmp (&annotative_app, &attrib->annotative_app, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ATTRIB.annotative_app [H]");
@@ -7290,7 +7290,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &attrib->extrusion, sizeof (attrib->extrusion)))
+        && !memcmp (&extrusion, &attrib->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("ATTRIB.extrusion [BE]");
@@ -7373,7 +7373,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT insertion_pt;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &attrib->insertion_pt, sizeof (attrib->insertion_pt)))
+        && !memcmp (&insertion_pt, &attrib->insertion_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("ATTRIB.insertion_pt [2DPOINT]");
@@ -7396,7 +7396,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     BITCODE_H mtext_handles;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext_handles", &mtext_handles, NULL)
-        && !memcmp (&mtext_handles, &attrib->mtext_handles, sizeof (attrib->mtext_handles)))
+        && !memcmp (&mtext_handles, &attrib->mtext_handles, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ATTRIB.mtext_handles [H]");
@@ -7419,7 +7419,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "parent", &parent, NULL)
-        && !memcmp (&parent, &attrib->parent, sizeof (attrib->parent)))
+        && !memcmp (&parent, &attrib->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("ATTRIB.parent [struct _dwg_object_entity*]");
@@ -7442,7 +7442,7 @@ static int test_ATTRIB (const Dwg_Object *obj)
   {
     BITCODE_H style;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "style", &style, NULL)
-        && !memcmp (&style, &attrib->style, sizeof (attrib->style)))
+        && !memcmp (&style, &attrib->style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ATTRIB.style [H]");
@@ -7553,7 +7553,7 @@ static int test_BLOCK (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (block, "BLOCK", "parent", &parent, NULL)
-        && !memcmp (&parent, &block->parent, sizeof (block->parent)))
+        && !memcmp (&parent, &block->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("BLOCK.parent [struct _dwg_object_entity*]");
@@ -7587,7 +7587,7 @@ static int test_CAMERA (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (camera, "CAMERA", "parent", &parent, NULL)
-        && !memcmp (&parent, &camera->parent, sizeof (camera->parent)))
+        && !memcmp (&parent, &camera->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("CAMERA.parent [struct _dwg_object_entity*]");
@@ -7595,7 +7595,7 @@ static int test_CAMERA (const Dwg_Object *obj)
   {
     BITCODE_H view;
     if (dwg_dynapi_entity_value (camera, "CAMERA", "view", &view, NULL)
-        && !memcmp (&view, &camera->view, sizeof (camera->view)))
+        && !memcmp (&view, &camera->view, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("CAMERA.view [H]");
@@ -7616,7 +7616,7 @@ static int test_CIRCLE (const Dwg_Object *obj)
   {
     BITCODE_3BD center;
     if (dwg_dynapi_entity_value (circle, "CIRCLE", "center", &center, NULL)
-        && !memcmp (&center, &circle->center, sizeof (circle->center)))
+        && !memcmp (&center, &circle->center, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("CIRCLE.center [3BD]");
@@ -7624,7 +7624,7 @@ static int test_CIRCLE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (circle, "CIRCLE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &circle->extrusion, sizeof (circle->extrusion)))
+        && !memcmp (&extrusion, &circle->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("CIRCLE.extrusion [BE]");
@@ -7632,7 +7632,7 @@ static int test_CIRCLE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (circle, "CIRCLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &circle->parent, sizeof (circle->parent)))
+        && !memcmp (&parent, &circle->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("CIRCLE.parent [struct _dwg_object_entity*]");
@@ -7712,7 +7712,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "block", &block, NULL)
-        && !memcmp (&block, &dimension_aligned->block, sizeof (dimension_aligned->block)))
+        && !memcmp (&block, &dimension_aligned->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.block [H]");
@@ -7745,7 +7745,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &dimension_aligned->clone_ins_pt, sizeof (dimension_aligned->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &dimension_aligned->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.clone_ins_pt [2RD]");
@@ -7753,7 +7753,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &dimension_aligned->def_pt, sizeof (dimension_aligned->def_pt)))
+        && !memcmp (&def_pt, &dimension_aligned->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.def_pt [3BD]");
@@ -7761,7 +7761,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &dimension_aligned->dimstyle, sizeof (dimension_aligned->dimstyle)))
+        && !memcmp (&dimstyle, &dimension_aligned->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.dimstyle [H]");
@@ -7784,7 +7784,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dimension_aligned->extrusion, sizeof (dimension_aligned->extrusion)))
+        && !memcmp (&extrusion, &dimension_aligned->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.extrusion [BE]");
@@ -7882,7 +7882,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &dimension_aligned->ins_scale, sizeof (dimension_aligned->ins_scale)))
+        && !memcmp (&ins_scale, &dimension_aligned->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.ins_scale [3BD]");
@@ -7935,7 +7935,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimension_aligned->parent, sizeof (dimension_aligned->parent)))
+        && !memcmp (&parent, &dimension_aligned->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.parent [struct _dwg_object_entity*]");
@@ -7943,7 +7943,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &dimension_aligned->text_midpt, sizeof (dimension_aligned->text_midpt)))
+        && !memcmp (&text_midpt, &dimension_aligned->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.text_midpt [2RD]");
@@ -7991,7 +7991,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_3BD xline1_pt;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "xline1_pt", &xline1_pt, NULL)
-        && !memcmp (&xline1_pt, &dimension_aligned->xline1_pt, sizeof (dimension_aligned->xline1_pt)))
+        && !memcmp (&xline1_pt, &dimension_aligned->xline1_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.xline1_pt [3BD]");
@@ -7999,7 +7999,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
   {
     BITCODE_3BD xline2_pt;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "xline2_pt", &xline2_pt, NULL)
-        && !memcmp (&xline2_pt, &dimension_aligned->xline2_pt, sizeof (dimension_aligned->xline2_pt)))
+        && !memcmp (&xline2_pt, &dimension_aligned->xline2_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ALIGNED.xline2_pt [3BD]");
@@ -8050,7 +8050,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "block", &block, NULL)
-        && !memcmp (&block, &dimension_ang2ln->block, sizeof (dimension_ang2ln->block)))
+        && !memcmp (&block, &dimension_ang2ln->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.block [H]");
@@ -8083,7 +8083,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &dimension_ang2ln->clone_ins_pt, sizeof (dimension_ang2ln->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &dimension_ang2ln->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.clone_ins_pt [2RD]");
@@ -8091,7 +8091,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &dimension_ang2ln->def_pt, sizeof (dimension_ang2ln->def_pt)))
+        && !memcmp (&def_pt, &dimension_ang2ln->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.def_pt [3BD]");
@@ -8099,7 +8099,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &dimension_ang2ln->dimstyle, sizeof (dimension_ang2ln->dimstyle)))
+        && !memcmp (&dimstyle, &dimension_ang2ln->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.dimstyle [H]");
@@ -8122,7 +8122,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dimension_ang2ln->extrusion, sizeof (dimension_ang2ln->extrusion)))
+        && !memcmp (&extrusion, &dimension_ang2ln->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.extrusion [BE]");
@@ -8220,7 +8220,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &dimension_ang2ln->ins_scale, sizeof (dimension_ang2ln->ins_scale)))
+        && !memcmp (&ins_scale, &dimension_ang2ln->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.ins_scale [3BD]");
@@ -8258,7 +8258,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimension_ang2ln->parent, sizeof (dimension_ang2ln->parent)))
+        && !memcmp (&parent, &dimension_ang2ln->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.parent [struct _dwg_object_entity*]");
@@ -8266,7 +8266,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &dimension_ang2ln->text_midpt, sizeof (dimension_ang2ln->text_midpt)))
+        && !memcmp (&text_midpt, &dimension_ang2ln->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.text_midpt [2RD]");
@@ -8314,7 +8314,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_3BD xline1end_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline1end_pt", &xline1end_pt, NULL)
-        && !memcmp (&xline1end_pt, &dimension_ang2ln->xline1end_pt, sizeof (dimension_ang2ln->xline1end_pt)))
+        && !memcmp (&xline1end_pt, &dimension_ang2ln->xline1end_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.xline1end_pt [3BD]");
@@ -8322,7 +8322,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_3BD xline1start_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline1start_pt", &xline1start_pt, NULL)
-        && !memcmp (&xline1start_pt, &dimension_ang2ln->xline1start_pt, sizeof (dimension_ang2ln->xline1start_pt)))
+        && !memcmp (&xline1start_pt, &dimension_ang2ln->xline1start_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.xline1start_pt [3BD]");
@@ -8330,7 +8330,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_3BD xline2end_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline2end_pt", &xline2end_pt, NULL)
-        && !memcmp (&xline2end_pt, &dimension_ang2ln->xline2end_pt, sizeof (dimension_ang2ln->xline2end_pt)))
+        && !memcmp (&xline2end_pt, &dimension_ang2ln->xline2end_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.xline2end_pt [3BD]");
@@ -8338,7 +8338,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
   {
     BITCODE_3BD xline2start_pt;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "xline2start_pt", &xline2start_pt, NULL)
-        && !memcmp (&xline2start_pt, &dimension_ang2ln->xline2start_pt, sizeof (dimension_ang2ln->xline2start_pt)))
+        && !memcmp (&xline2start_pt, &dimension_ang2ln->xline2start_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG2LN.xline2start_pt [3BD]");
@@ -8389,7 +8389,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "block", &block, NULL)
-        && !memcmp (&block, &dimension_ang3pt->block, sizeof (dimension_ang3pt->block)))
+        && !memcmp (&block, &dimension_ang3pt->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.block [H]");
@@ -8407,7 +8407,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_3BD center_pt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "center_pt", &center_pt, NULL)
-        && !memcmp (&center_pt, &dimension_ang3pt->center_pt, sizeof (dimension_ang3pt->center_pt)))
+        && !memcmp (&center_pt, &dimension_ang3pt->center_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.center_pt [3BD]");
@@ -8430,7 +8430,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &dimension_ang3pt->clone_ins_pt, sizeof (dimension_ang3pt->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &dimension_ang3pt->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.clone_ins_pt [2RD]");
@@ -8438,7 +8438,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &dimension_ang3pt->def_pt, sizeof (dimension_ang3pt->def_pt)))
+        && !memcmp (&def_pt, &dimension_ang3pt->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.def_pt [3BD]");
@@ -8446,7 +8446,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &dimension_ang3pt->dimstyle, sizeof (dimension_ang3pt->dimstyle)))
+        && !memcmp (&dimstyle, &dimension_ang3pt->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.dimstyle [H]");
@@ -8469,7 +8469,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dimension_ang3pt->extrusion, sizeof (dimension_ang3pt->extrusion)))
+        && !memcmp (&extrusion, &dimension_ang3pt->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.extrusion [BE]");
@@ -8567,7 +8567,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &dimension_ang3pt->ins_scale, sizeof (dimension_ang3pt->ins_scale)))
+        && !memcmp (&ins_scale, &dimension_ang3pt->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.ins_scale [3BD]");
@@ -8605,7 +8605,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimension_ang3pt->parent, sizeof (dimension_ang3pt->parent)))
+        && !memcmp (&parent, &dimension_ang3pt->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.parent [struct _dwg_object_entity*]");
@@ -8613,7 +8613,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &dimension_ang3pt->text_midpt, sizeof (dimension_ang3pt->text_midpt)))
+        && !memcmp (&text_midpt, &dimension_ang3pt->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.text_midpt [2RD]");
@@ -8661,7 +8661,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_3BD xline1_pt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "xline1_pt", &xline1_pt, NULL)
-        && !memcmp (&xline1_pt, &dimension_ang3pt->xline1_pt, sizeof (dimension_ang3pt->xline1_pt)))
+        && !memcmp (&xline1_pt, &dimension_ang3pt->xline1_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.xline1_pt [3BD]");
@@ -8669,7 +8669,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
   {
     BITCODE_3BD xline2_pt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "xline2_pt", &xline2_pt, NULL)
-        && !memcmp (&xline2_pt, &dimension_ang3pt->xline2_pt, sizeof (dimension_ang3pt->xline2_pt)))
+        && !memcmp (&xline2_pt, &dimension_ang3pt->xline2_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ANG3PT.xline2_pt [3BD]");
@@ -8720,7 +8720,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "block", &block, NULL)
-        && !memcmp (&block, &dimension_diameter->block, sizeof (dimension_diameter->block)))
+        && !memcmp (&block, &dimension_diameter->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.block [H]");
@@ -8753,7 +8753,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &dimension_diameter->clone_ins_pt, sizeof (dimension_diameter->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &dimension_diameter->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.clone_ins_pt [2RD]");
@@ -8761,7 +8761,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &dimension_diameter->def_pt, sizeof (dimension_diameter->def_pt)))
+        && !memcmp (&def_pt, &dimension_diameter->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.def_pt [3BD]");
@@ -8769,7 +8769,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &dimension_diameter->dimstyle, sizeof (dimension_diameter->dimstyle)))
+        && !memcmp (&dimstyle, &dimension_diameter->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.dimstyle [H]");
@@ -8792,7 +8792,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dimension_diameter->extrusion, sizeof (dimension_diameter->extrusion)))
+        && !memcmp (&extrusion, &dimension_diameter->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.extrusion [BE]");
@@ -8800,7 +8800,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_3BD first_arc_pt;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "first_arc_pt", &first_arc_pt, NULL)
-        && !memcmp (&first_arc_pt, &dimension_diameter->first_arc_pt, sizeof (dimension_diameter->first_arc_pt)))
+        && !memcmp (&first_arc_pt, &dimension_diameter->first_arc_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.first_arc_pt [3BD]");
@@ -8898,7 +8898,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &dimension_diameter->ins_scale, sizeof (dimension_diameter->ins_scale)))
+        && !memcmp (&ins_scale, &dimension_diameter->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.ins_scale [3BD]");
@@ -8951,7 +8951,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimension_diameter->parent, sizeof (dimension_diameter->parent)))
+        && !memcmp (&parent, &dimension_diameter->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.parent [struct _dwg_object_entity*]");
@@ -8959,7 +8959,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &dimension_diameter->text_midpt, sizeof (dimension_diameter->text_midpt)))
+        && !memcmp (&text_midpt, &dimension_diameter->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_DIAMETER.text_midpt [2RD]");
@@ -9050,7 +9050,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "block", &block, NULL)
-        && !memcmp (&block, &dimension_linear->block, sizeof (dimension_linear->block)))
+        && !memcmp (&block, &dimension_linear->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.block [H]");
@@ -9083,7 +9083,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &dimension_linear->clone_ins_pt, sizeof (dimension_linear->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &dimension_linear->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.clone_ins_pt [2RD]");
@@ -9091,7 +9091,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &dimension_linear->def_pt, sizeof (dimension_linear->def_pt)))
+        && !memcmp (&def_pt, &dimension_linear->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.def_pt [3BD]");
@@ -9114,7 +9114,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &dimension_linear->dimstyle, sizeof (dimension_linear->dimstyle)))
+        && !memcmp (&dimstyle, &dimension_linear->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.dimstyle [H]");
@@ -9137,7 +9137,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dimension_linear->extrusion, sizeof (dimension_linear->extrusion)))
+        && !memcmp (&extrusion, &dimension_linear->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.extrusion [BE]");
@@ -9235,7 +9235,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &dimension_linear->ins_scale, sizeof (dimension_linear->ins_scale)))
+        && !memcmp (&ins_scale, &dimension_linear->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.ins_scale [3BD]");
@@ -9288,7 +9288,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimension_linear->parent, sizeof (dimension_linear->parent)))
+        && !memcmp (&parent, &dimension_linear->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.parent [struct _dwg_object_entity*]");
@@ -9296,7 +9296,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &dimension_linear->text_midpt, sizeof (dimension_linear->text_midpt)))
+        && !memcmp (&text_midpt, &dimension_linear->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.text_midpt [2RD]");
@@ -9344,7 +9344,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_3BD xline1_pt;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "xline1_pt", &xline1_pt, NULL)
-        && !memcmp (&xline1_pt, &dimension_linear->xline1_pt, sizeof (dimension_linear->xline1_pt)))
+        && !memcmp (&xline1_pt, &dimension_linear->xline1_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.xline1_pt [3BD]");
@@ -9352,7 +9352,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
   {
     BITCODE_3BD xline2_pt;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "xline2_pt", &xline2_pt, NULL)
-        && !memcmp (&xline2_pt, &dimension_linear->xline2_pt, sizeof (dimension_linear->xline2_pt)))
+        && !memcmp (&xline2_pt, &dimension_linear->xline2_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_LINEAR.xline2_pt [3BD]");
@@ -9403,7 +9403,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "block", &block, NULL)
-        && !memcmp (&block, &dimension_ordinate->block, sizeof (dimension_ordinate->block)))
+        && !memcmp (&block, &dimension_ordinate->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.block [H]");
@@ -9436,7 +9436,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &dimension_ordinate->clone_ins_pt, sizeof (dimension_ordinate->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &dimension_ordinate->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.clone_ins_pt [2RD]");
@@ -9444,7 +9444,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &dimension_ordinate->def_pt, sizeof (dimension_ordinate->def_pt)))
+        && !memcmp (&def_pt, &dimension_ordinate->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.def_pt [3BD]");
@@ -9452,7 +9452,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &dimension_ordinate->dimstyle, sizeof (dimension_ordinate->dimstyle)))
+        && !memcmp (&dimstyle, &dimension_ordinate->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.dimstyle [H]");
@@ -9475,7 +9475,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dimension_ordinate->extrusion, sizeof (dimension_ordinate->extrusion)))
+        && !memcmp (&extrusion, &dimension_ordinate->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.extrusion [BE]");
@@ -9483,7 +9483,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_3BD feature_location_pt;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "feature_location_pt", &feature_location_pt, NULL)
-        && !memcmp (&feature_location_pt, &dimension_ordinate->feature_location_pt, sizeof (dimension_ordinate->feature_location_pt)))
+        && !memcmp (&feature_location_pt, &dimension_ordinate->feature_location_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.feature_location_pt [3BD]");
@@ -9596,7 +9596,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &dimension_ordinate->ins_scale, sizeof (dimension_ordinate->ins_scale)))
+        && !memcmp (&ins_scale, &dimension_ordinate->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.ins_scale [3BD]");
@@ -9604,7 +9604,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_3BD leader_endpt;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "leader_endpt", &leader_endpt, NULL)
-        && !memcmp (&leader_endpt, &dimension_ordinate->leader_endpt, sizeof (dimension_ordinate->leader_endpt)))
+        && !memcmp (&leader_endpt, &dimension_ordinate->leader_endpt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.leader_endpt [3BD]");
@@ -9642,7 +9642,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimension_ordinate->parent, sizeof (dimension_ordinate->parent)))
+        && !memcmp (&parent, &dimension_ordinate->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.parent [struct _dwg_object_entity*]");
@@ -9650,7 +9650,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &dimension_ordinate->text_midpt, sizeof (dimension_ordinate->text_midpt)))
+        && !memcmp (&text_midpt, &dimension_ordinate->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_ORDINATE.text_midpt [2RD]");
@@ -9741,7 +9741,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "block", &block, NULL)
-        && !memcmp (&block, &dimension_radius->block, sizeof (dimension_radius->block)))
+        && !memcmp (&block, &dimension_radius->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.block [H]");
@@ -9774,7 +9774,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_2RD clone_ins_pt;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "clone_ins_pt", &clone_ins_pt, NULL)
-        && !memcmp (&clone_ins_pt, &dimension_radius->clone_ins_pt, sizeof (dimension_radius->clone_ins_pt)))
+        && !memcmp (&clone_ins_pt, &dimension_radius->clone_ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.clone_ins_pt [2RD]");
@@ -9782,7 +9782,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &dimension_radius->def_pt, sizeof (dimension_radius->def_pt)))
+        && !memcmp (&def_pt, &dimension_radius->def_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.def_pt [3BD]");
@@ -9790,7 +9790,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &dimension_radius->dimstyle, sizeof (dimension_radius->dimstyle)))
+        && !memcmp (&dimstyle, &dimension_radius->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.dimstyle [H]");
@@ -9813,7 +9813,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dimension_radius->extrusion, sizeof (dimension_radius->extrusion)))
+        && !memcmp (&extrusion, &dimension_radius->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.extrusion [BE]");
@@ -9821,7 +9821,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_3BD first_arc_pt;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "first_arc_pt", &first_arc_pt, NULL)
-        && !memcmp (&first_arc_pt, &dimension_radius->first_arc_pt, sizeof (dimension_radius->first_arc_pt)))
+        && !memcmp (&first_arc_pt, &dimension_radius->first_arc_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.first_arc_pt [3BD]");
@@ -9919,7 +9919,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_scale;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "ins_scale", &ins_scale, NULL)
-        && !memcmp (&ins_scale, &dimension_radius->ins_scale, sizeof (dimension_radius->ins_scale)))
+        && !memcmp (&ins_scale, &dimension_radius->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.ins_scale [3BD]");
@@ -9972,7 +9972,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimension_radius->parent, sizeof (dimension_radius->parent)))
+        && !memcmp (&parent, &dimension_radius->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.parent [struct _dwg_object_entity*]");
@@ -9980,7 +9980,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   {
     BITCODE_2RD text_midpt;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "text_midpt", &text_midpt, NULL)
-        && !memcmp (&text_midpt, &dimension_radius->text_midpt, sizeof (dimension_radius->text_midpt)))
+        && !memcmp (&text_midpt, &dimension_radius->text_midpt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("DIMENSION_RADIUS.text_midpt [2RD]");
@@ -10056,7 +10056,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
   {
     BITCODE_3BD center;
     if (dwg_dynapi_entity_value (ellipse, "ELLIPSE", "center", &center, NULL)
-        && !memcmp (&center, &ellipse->center, sizeof (ellipse->center)))
+        && !memcmp (&center, &ellipse->center, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ELLIPSE.center [3BD]");
@@ -10079,7 +10079,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (ellipse, "ELLIPSE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &ellipse->extrusion, sizeof (ellipse->extrusion)))
+        && !memcmp (&extrusion, &ellipse->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("ELLIPSE.extrusion [BE]");
@@ -10087,7 +10087,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (ellipse, "ELLIPSE", "parent", &parent, NULL)
-        && !memcmp (&parent, &ellipse->parent, sizeof (ellipse->parent)))
+        && !memcmp (&parent, &ellipse->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("ELLIPSE.parent [struct _dwg_object_entity*]");
@@ -10095,7 +10095,7 @@ static int test_ELLIPSE (const Dwg_Object *obj)
   {
     BITCODE_3BD sm_axis;
     if (dwg_dynapi_entity_value (ellipse, "ELLIPSE", "sm_axis", &sm_axis, NULL)
-        && !memcmp (&sm_axis, &ellipse->sm_axis, sizeof (ellipse->sm_axis)))
+        && !memcmp (&sm_axis, &ellipse->sm_axis, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ELLIPSE.sm_axis [3BD]");
@@ -10131,7 +10131,7 @@ static int test_ENDBLK (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (endblk, "ENDBLK", "parent", &parent, NULL)
-        && !memcmp (&parent, &endblk->parent, sizeof (endblk->parent)))
+        && !memcmp (&parent, &endblk->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("ENDBLK.parent [struct _dwg_object_entity*]");
@@ -10282,7 +10282,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_TF bindata;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "bindata", &bindata, NULL)
-        && !memcmp (&bindata, &extrudedsurface->bindata, sizeof (extrudedsurface->bindata)))
+        && !memcmp (&bindata, &extrudedsurface->bindata, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.bindata [TF]");
@@ -10305,7 +10305,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &extrudedsurface->block_size, sizeof (extrudedsurface->block_size)))
+        && !memcmp (&block_size, &extrudedsurface->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.block_size [BL*]");
@@ -10396,7 +10396,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &extrudedsurface->extra_acis_data, sizeof (extrudedsurface->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &extrudedsurface->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -10419,7 +10419,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &extrudedsurface->history_id, sizeof (extrudedsurface->history_id)))
+        && !memcmp (&history_id, &extrudedsurface->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.history_id [H]");
@@ -10557,7 +10557,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &extrudedsurface->parent, sizeof (extrudedsurface->parent)))
+        && !memcmp (&parent, &extrudedsurface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.parent [struct _dwg_object_entity*]");
@@ -10565,7 +10565,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H path_entity;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "path_entity", &path_entity, NULL)
-        && !memcmp (&path_entity, &extrudedsurface->path_entity, sizeof (extrudedsurface->path_entity)))
+        && !memcmp (&path_entity, &extrudedsurface->path_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.path_entity [H]");
@@ -10588,7 +10588,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BD* path_entity_transmatrix;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "path_entity_transmatrix", &path_entity_transmatrix, NULL)
-        && !memcmp (&path_entity_transmatrix, &extrudedsurface->path_entity_transmatrix, sizeof (extrudedsurface->path_entity_transmatrix)))
+        && !memcmp (&path_entity_transmatrix, &extrudedsurface->path_entity_transmatrix, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.path_entity_transmatrix [BD*]");
@@ -10611,7 +10611,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "point", &point, NULL)
-        && !memcmp (&point, &extrudedsurface->point, sizeof (extrudedsurface->point)))
+        && !memcmp (&point, &extrudedsurface->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.point [3BD]");
@@ -10634,7 +10634,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD reference_vector_for_controlling_twist;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "reference_vector_for_controlling_twist", &reference_vector_for_controlling_twist, NULL)
-        && !memcmp (&reference_vector_for_controlling_twist, &extrudedsurface->reference_vector_for_controlling_twist, sizeof (extrudedsurface->reference_vector_for_controlling_twist)))
+        && !memcmp (&reference_vector_for_controlling_twist, &extrudedsurface->reference_vector_for_controlling_twist, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.reference_vector_for_controlling_twist [3BD]");
@@ -10642,7 +10642,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &extrudedsurface->revision_bytes, sizeof (extrudedsurface->revision_bytes)))
+        && !memcmp (&revision_bytes, &extrudedsurface->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.revision_bytes[9] [RC]");
@@ -10650,7 +10650,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &extrudedsurface->revision_guid, sizeof (extrudedsurface->revision_guid)))
+        && !memcmp (&revision_guid, &extrudedsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.revision_guid[38] [RC]");
@@ -10758,7 +10758,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H sweep_entity;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_entity", &sweep_entity, NULL)
-        && !memcmp (&sweep_entity, &extrudedsurface->sweep_entity, sizeof (extrudedsurface->sweep_entity)))
+        && !memcmp (&sweep_entity, &extrudedsurface->sweep_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.sweep_entity [H]");
@@ -10781,7 +10781,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BD* sweep_entity_transmatrix;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_entity_transmatrix", &sweep_entity_transmatrix, NULL)
-        && !memcmp (&sweep_entity_transmatrix, &extrudedsurface->sweep_entity_transmatrix, sizeof (extrudedsurface->sweep_entity_transmatrix)))
+        && !memcmp (&sweep_entity_transmatrix, &extrudedsurface->sweep_entity_transmatrix, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.sweep_entity_transmatrix [BD*]");
@@ -10789,7 +10789,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BD* sweep_transmatrix;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_transmatrix", &sweep_transmatrix, NULL)
-        && !memcmp (&sweep_transmatrix, &extrudedsurface->sweep_transmatrix, sizeof (extrudedsurface->sweep_transmatrix)))
+        && !memcmp (&sweep_transmatrix, &extrudedsurface->sweep_transmatrix, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.sweep_transmatrix [BD*]");
@@ -10797,7 +10797,7 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD sweep_vector;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "sweep_vector", &sweep_vector, NULL)
-        && !memcmp (&sweep_vector, &extrudedsurface->sweep_vector, sizeof (extrudedsurface->sweep_vector)))
+        && !memcmp (&sweep_vector, &extrudedsurface->sweep_vector, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("EXTRUDEDSURFACE.sweep_vector [3BD]");
@@ -10983,7 +10983,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "parent", &parent, NULL)
-        && !memcmp (&parent, &geopositionmarker->parent, sizeof (geopositionmarker->parent)))
+        && !memcmp (&parent, &geopositionmarker->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("GEOPOSITIONMARKER.parent [struct _dwg_object_entity*]");
@@ -10991,7 +10991,7 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
   {
     BITCODE_3BD position;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "position", &position, NULL)
-        && !memcmp (&position, &geopositionmarker->position, sizeof (geopositionmarker->position)))
+        && !memcmp (&position, &geopositionmarker->position, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEOPOSITIONMARKER.position [3BD]");
@@ -11132,7 +11132,7 @@ static int test_HATCH (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &hatch->extrusion, sizeof (hatch->extrusion)))
+        && !memcmp (&extrusion, &hatch->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("HATCH.extrusion [BE]");
@@ -11340,7 +11340,7 @@ static int test_HATCH (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "parent", &parent, NULL)
-        && !memcmp (&parent, &hatch->parent, sizeof (hatch->parent)))
+        && !memcmp (&parent, &hatch->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("HATCH.parent [struct _dwg_object_entity*]");
@@ -11471,7 +11471,7 @@ static int test_HELIX (const Dwg_Object *obj)
   {
     BITCODE_3BD axis_base_pt;
     if (dwg_dynapi_entity_value (helix, "HELIX", "axis_base_pt", &axis_base_pt, NULL)
-        && !memcmp (&axis_base_pt, &helix->axis_base_pt, sizeof (helix->axis_base_pt)))
+        && !memcmp (&axis_base_pt, &helix->axis_base_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("HELIX.axis_base_pt [3BD]");
@@ -11479,7 +11479,7 @@ static int test_HELIX (const Dwg_Object *obj)
   {
     BITCODE_3BD axis_vector;
     if (dwg_dynapi_entity_value (helix, "HELIX", "axis_vector", &axis_vector, NULL)
-        && !memcmp (&axis_vector, &helix->axis_vector, sizeof (helix->axis_vector)))
+        && !memcmp (&axis_vector, &helix->axis_vector, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("HELIX.axis_vector [3BD_1]");
@@ -11487,7 +11487,7 @@ static int test_HELIX (const Dwg_Object *obj)
   {
     BITCODE_3BD beg_tan_vec;
     if (dwg_dynapi_entity_value (helix, "HELIX", "beg_tan_vec", &beg_tan_vec, NULL)
-        && !memcmp (&beg_tan_vec, &helix->beg_tan_vec, sizeof (helix->beg_tan_vec)))
+        && !memcmp (&beg_tan_vec, &helix->beg_tan_vec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("HELIX.beg_tan_vec [3BD]");
@@ -11565,7 +11565,7 @@ static int test_HELIX (const Dwg_Object *obj)
   {
     BITCODE_3BD end_tan_vec;
     if (dwg_dynapi_entity_value (helix, "HELIX", "end_tan_vec", &end_tan_vec, NULL)
-        && !memcmp (&end_tan_vec, &helix->end_tan_vec, sizeof (helix->end_tan_vec)))
+        && !memcmp (&end_tan_vec, &helix->end_tan_vec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("HELIX.end_tan_vec [3BD]");
@@ -11758,7 +11758,7 @@ static int test_HELIX (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (helix, "HELIX", "parent", &parent, NULL)
-        && !memcmp (&parent, &helix->parent, sizeof (helix->parent)))
+        && !memcmp (&parent, &helix->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("HELIX.parent [struct _dwg_object_entity*]");
@@ -11841,7 +11841,7 @@ static int test_HELIX (const Dwg_Object *obj)
   {
     BITCODE_3BD start_pt;
     if (dwg_dynapi_entity_value (helix, "HELIX", "start_pt", &start_pt, NULL)
-        && !memcmp (&start_pt, &helix->start_pt, sizeof (helix->start_pt)))
+        && !memcmp (&start_pt, &helix->start_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("HELIX.start_pt [3BD_1]");
@@ -12022,7 +12022,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   {
     BITCODE_H imagedef;
     if (dwg_dynapi_entity_value (image, "IMAGE", "imagedef", &imagedef, NULL)
-        && !memcmp (&imagedef, &image->imagedef, sizeof (image->imagedef)))
+        && !memcmp (&imagedef, &image->imagedef, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("IMAGE.imagedef [H]");
@@ -12030,7 +12030,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   {
     BITCODE_H imagedefreactor;
     if (dwg_dynapi_entity_value (image, "IMAGE", "imagedefreactor", &imagedefreactor, NULL)
-        && !memcmp (&imagedefreactor, &image->imagedefreactor, sizeof (image->imagedefreactor)))
+        && !memcmp (&imagedefreactor, &image->imagedefreactor, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("IMAGE.imagedefreactor [H]");
@@ -12053,7 +12053,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (image, "IMAGE", "parent", &parent, NULL)
-        && !memcmp (&parent, &image->parent, sizeof (image->parent)))
+        && !memcmp (&parent, &image->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("IMAGE.parent [struct _dwg_object_entity*]");
@@ -12061,7 +12061,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   {
     BITCODE_3BD pt0;
     if (dwg_dynapi_entity_value (image, "IMAGE", "pt0", &pt0, NULL)
-        && !memcmp (&pt0, &image->pt0, sizeof (image->pt0)))
+        && !memcmp (&pt0, &image->pt0, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("IMAGE.pt0 [3BD]");
@@ -12069,7 +12069,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   {
     BITCODE_2RD size;
     if (dwg_dynapi_entity_value (image, "IMAGE", "size", &size, NULL)
-        && !memcmp (&size, &image->size, sizeof (image->size)))
+        && !memcmp (&size, &image->size, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("IMAGE.size [2RD]");
@@ -12077,7 +12077,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   {
     BITCODE_3BD uvec;
     if (dwg_dynapi_entity_value (image, "IMAGE", "uvec", &uvec, NULL)
-        && !memcmp (&uvec, &image->uvec, sizeof (image->uvec)))
+        && !memcmp (&uvec, &image->uvec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("IMAGE.uvec [3BD]");
@@ -12085,7 +12085,7 @@ static int test_IMAGE (const Dwg_Object *obj)
   {
     BITCODE_3BD vvec;
     if (dwg_dynapi_entity_value (image, "IMAGE", "vvec", &vvec, NULL)
-        && !memcmp (&vvec, &image->vvec, sizeof (image->vvec)))
+        && !memcmp (&vvec, &image->vvec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("IMAGE.vvec [3BD]");
@@ -12116,7 +12116,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     BITCODE_H block_header;
     if (dwg_dynapi_entity_value (insert, "INSERT", "block_header", &block_header, NULL)
-        && !memcmp (&block_header, &insert->block_header, sizeof (insert->block_header)))
+        && !memcmp (&block_header, &insert->block_header, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("INSERT.block_header [H]");
@@ -12124,7 +12124,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (insert, "INSERT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &insert->extrusion, sizeof (insert->extrusion)))
+        && !memcmp (&extrusion, &insert->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("INSERT.extrusion [BE]");
@@ -12132,7 +12132,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     BITCODE_H first_attrib;
     if (dwg_dynapi_entity_value (insert, "INSERT", "first_attrib", &first_attrib, NULL)
-        && !memcmp (&first_attrib, &insert->first_attrib, sizeof (insert->first_attrib)))
+        && !memcmp (&first_attrib, &insert->first_attrib, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("INSERT.first_attrib [H]");
@@ -12155,7 +12155,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT ins_pt;
     if (dwg_dynapi_entity_value (insert, "INSERT", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &insert->ins_pt, sizeof (insert->ins_pt)))
+        && !memcmp (&ins_pt, &insert->ins_pt, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("INSERT.ins_pt [3DPOINT]");
@@ -12163,7 +12163,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     BITCODE_H last_attrib;
     if (dwg_dynapi_entity_value (insert, "INSERT", "last_attrib", &last_attrib, NULL)
-        && !memcmp (&last_attrib, &insert->last_attrib, sizeof (insert->last_attrib)))
+        && !memcmp (&last_attrib, &insert->last_attrib, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("INSERT.last_attrib [H]");
@@ -12186,7 +12186,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (insert, "INSERT", "parent", &parent, NULL)
-        && !memcmp (&parent, &insert->parent, sizeof (insert->parent)))
+        && !memcmp (&parent, &insert->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("INSERT.parent [struct _dwg_object_entity*]");
@@ -12209,7 +12209,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     BITCODE_3BD scale;
     if (dwg_dynapi_entity_value (insert, "INSERT", "scale", &scale, NULL)
-        && !memcmp (&scale, &insert->scale, sizeof (insert->scale)))
+        && !memcmp (&scale, &insert->scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("INSERT.scale [3BD_1]");
@@ -12232,7 +12232,7 @@ static int test_INSERT (const Dwg_Object *obj)
   {
     BITCODE_H seqend;
     if (dwg_dynapi_entity_value (insert, "INSERT", "seqend", &seqend, NULL)
-        && !memcmp (&seqend, &insert->seqend, sizeof (insert->seqend)))
+        && !memcmp (&seqend, &insert->seqend, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("INSERT.seqend [H]");
@@ -12298,7 +12298,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     BITCODE_H associated_annotation;
     if (dwg_dynapi_entity_value (leader, "LEADER", "associated_annotation", &associated_annotation, NULL)
-        && !memcmp (&associated_annotation, &leader->associated_annotation, sizeof (leader->associated_annotation)))
+        && !memcmp (&associated_annotation, &leader->associated_annotation, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LEADER.associated_annotation [H]");
@@ -12381,7 +12381,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (leader, "LEADER", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &leader->dimstyle, sizeof (leader->dimstyle)))
+        && !memcmp (&dimstyle, &leader->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LEADER.dimstyle [H]");
@@ -12389,7 +12389,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT endptproj;
     if (dwg_dynapi_entity_value (leader, "LEADER", "endptproj", &endptproj, NULL)
-        && !memcmp (&endptproj, &leader->endptproj, sizeof (leader->endptproj)))
+        && !memcmp (&endptproj, &leader->endptproj, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LEADER.endptproj [3DPOINT]");
@@ -12397,7 +12397,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (leader, "LEADER", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &leader->extrusion, sizeof (leader->extrusion)))
+        && !memcmp (&extrusion, &leader->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("LEADER.extrusion [BE]");
@@ -12435,7 +12435,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT inspt_offset;
     if (dwg_dynapi_entity_value (leader, "LEADER", "inspt_offset", &inspt_offset, NULL)
-        && !memcmp (&inspt_offset, &leader->inspt_offset, sizeof (leader->inspt_offset)))
+        && !memcmp (&inspt_offset, &leader->inspt_offset, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LEADER.inspt_offset [3DPOINT]");
@@ -12458,7 +12458,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT origin;
     if (dwg_dynapi_entity_value (leader, "LEADER", "origin", &origin, NULL)
-        && !memcmp (&origin, &leader->origin, sizeof (leader->origin)))
+        && !memcmp (&origin, &leader->origin, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LEADER.origin [3DPOINT]");
@@ -12466,7 +12466,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (leader, "LEADER", "parent", &parent, NULL)
-        && !memcmp (&parent, &leader->parent, sizeof (leader->parent)))
+        && !memcmp (&parent, &leader->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("LEADER.parent [struct _dwg_object_entity*]");
@@ -12574,7 +12574,7 @@ static int test_LEADER (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT x_direction;
     if (dwg_dynapi_entity_value (leader, "LEADER", "x_direction", &x_direction, NULL)
-        && !memcmp (&x_direction, &leader->x_direction, sizeof (leader->x_direction)))
+        && !memcmp (&x_direction, &leader->x_direction, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LEADER.x_direction [3DPOINT]");
@@ -12670,7 +12670,7 @@ static int test_LIGHT (const Dwg_Object *obj)
   {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (light, "LIGHT", "color", &color, NULL)
-        && !memcmp (&color, &light->color, sizeof (light->color)))
+        && !memcmp (&color, &light->color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("LIGHT.color [CMC]");
@@ -12943,7 +12943,7 @@ static int test_LIGHT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (light, "LIGHT", "parent", &parent, NULL)
-        && !memcmp (&parent, &light->parent, sizeof (light->parent)))
+        && !memcmp (&parent, &light->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("LIGHT.parent [struct _dwg_object_entity*]");
@@ -12996,7 +12996,7 @@ static int test_LIGHT (const Dwg_Object *obj)
   {
     BITCODE_3BD position;
     if (dwg_dynapi_entity_value (light, "LIGHT", "position", &position, NULL)
-        && !memcmp (&position, &light->position, sizeof (light->position)))
+        && !memcmp (&position, &light->position, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("LIGHT.position [3BD]");
@@ -13064,7 +13064,7 @@ static int test_LIGHT (const Dwg_Object *obj)
   {
     BITCODE_3BD target;
     if (dwg_dynapi_entity_value (light, "LIGHT", "target", &target, NULL)
-        && !memcmp (&target, &light->target, sizeof (light->target)))
+        && !memcmp (&target, &light->target, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("LIGHT.target [3BD]");
@@ -13192,7 +13192,7 @@ static int test_LIGHT (const Dwg_Object *obj)
   {
     BITCODE_3BD web_rotation;
     if (dwg_dynapi_entity_value (light, "LIGHT", "web_rotation", &web_rotation, NULL)
-        && !memcmp (&web_rotation, &light->web_rotation, sizeof (light->web_rotation)))
+        && !memcmp (&web_rotation, &light->web_rotation, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("LIGHT.web_rotation [3BD_1]");
@@ -13253,7 +13253,7 @@ static int test_LINE (const Dwg_Object *obj)
   {
     BITCODE_3BD end;
     if (dwg_dynapi_entity_value (line, "LINE", "end", &end, NULL)
-        && !memcmp (&end, &line->end, sizeof (line->end)))
+        && !memcmp (&end, &line->end, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("LINE.end [3BD]");
@@ -13261,7 +13261,7 @@ static int test_LINE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (line, "LINE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &line->extrusion, sizeof (line->extrusion)))
+        && !memcmp (&extrusion, &line->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("LINE.extrusion [BE]");
@@ -13269,7 +13269,7 @@ static int test_LINE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (line, "LINE", "parent", &parent, NULL)
-        && !memcmp (&parent, &line->parent, sizeof (line->parent)))
+        && !memcmp (&parent, &line->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("LINE.parent [struct _dwg_object_entity*]");
@@ -13277,7 +13277,7 @@ static int test_LINE (const Dwg_Object *obj)
   {
     BITCODE_3BD start;
     if (dwg_dynapi_entity_value (line, "LINE", "start", &start, NULL)
-        && !memcmp (&start, &line->start, sizeof (line->start)))
+        && !memcmp (&start, &line->start, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("LINE.start [3BD]");
@@ -13427,7 +13427,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &loftedsurface->block_size, sizeof (loftedsurface->block_size)))
+        && !memcmp (&block_size, &loftedsurface->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("LOFTEDSURFACE.block_size [BL*]");
@@ -13513,7 +13513,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &loftedsurface->extra_acis_data, sizeof (loftedsurface->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &loftedsurface->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("LOFTEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -13546,7 +13546,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &loftedsurface->history_id, sizeof (loftedsurface->history_id)))
+        && !memcmp (&history_id, &loftedsurface->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LOFTEDSURFACE.history_id [H]");
@@ -13584,7 +13584,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BD* loft_entity_transmatrix;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "loft_entity_transmatrix", &loft_entity_transmatrix, NULL)
-        && !memcmp (&loft_entity_transmatrix, &loftedsurface->loft_entity_transmatrix, sizeof (loftedsurface->loft_entity_transmatrix)))
+        && !memcmp (&loft_entity_transmatrix, &loftedsurface->loft_entity_transmatrix, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("LOFTEDSURFACE.loft_entity_transmatrix [BD*]");
@@ -13722,7 +13722,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &loftedsurface->parent, sizeof (loftedsurface->parent)))
+        && !memcmp (&parent, &loftedsurface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("LOFTEDSURFACE.parent [struct _dwg_object_entity*]");
@@ -13730,7 +13730,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H path_curve;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "path_curve", &path_curve, NULL)
-        && !memcmp (&path_curve, &loftedsurface->path_curve, sizeof (loftedsurface->path_curve)))
+        && !memcmp (&path_curve, &loftedsurface->path_curve, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LOFTEDSURFACE.path_curve [H]");
@@ -13753,7 +13753,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "point", &point, NULL)
-        && !memcmp (&point, &loftedsurface->point, sizeof (loftedsurface->point)))
+        && !memcmp (&point, &loftedsurface->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("LOFTEDSURFACE.point [3BD]");
@@ -13776,7 +13776,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &loftedsurface->revision_bytes, sizeof (loftedsurface->revision_bytes)))
+        && !memcmp (&revision_bytes, &loftedsurface->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("LOFTEDSURFACE.revision_bytes[9] [RC]");
@@ -13784,7 +13784,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &loftedsurface->revision_guid, sizeof (loftedsurface->revision_guid)))
+        && !memcmp (&revision_guid, &loftedsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("LOFTEDSURFACE.revision_guid[38] [RC]");
@@ -14090,7 +14090,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (lwpolyline, "LWPOLYLINE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &lwpolyline->extrusion, sizeof (lwpolyline->extrusion)))
+        && !memcmp (&extrusion, &lwpolyline->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("LWPOLYLINE.extrusion [BE]");
@@ -14173,7 +14173,7 @@ static int test_LWPOLYLINE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (lwpolyline, "LWPOLYLINE", "parent", &parent, NULL)
-        && !memcmp (&parent, &lwpolyline->parent, sizeof (lwpolyline->parent)))
+        && !memcmp (&parent, &lwpolyline->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("LWPOLYLINE.parent [struct _dwg_object_entity*]");
@@ -14374,7 +14374,7 @@ static int test_MESH (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (mesh, "MESH", "parent", &parent, NULL)
-        && !memcmp (&parent, &mesh->parent, sizeof (mesh->parent)))
+        && !memcmp (&parent, &mesh->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("MESH.parent [struct _dwg_object_entity*]");
@@ -14425,7 +14425,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     BITCODE_H block_header;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "block_header", &block_header, NULL)
-        && !memcmp (&block_header, &minsert->block_header, sizeof (minsert->block_header)))
+        && !memcmp (&block_header, &minsert->block_header, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MINSERT.block_header [H]");
@@ -14448,7 +14448,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &minsert->extrusion, sizeof (minsert->extrusion)))
+        && !memcmp (&extrusion, &minsert->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("MINSERT.extrusion [BE]");
@@ -14456,7 +14456,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     BITCODE_H first_attrib;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "first_attrib", &first_attrib, NULL)
-        && !memcmp (&first_attrib, &minsert->first_attrib, sizeof (minsert->first_attrib)))
+        && !memcmp (&first_attrib, &minsert->first_attrib, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MINSERT.first_attrib [H]");
@@ -14479,7 +14479,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT ins_pt;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &minsert->ins_pt, sizeof (minsert->ins_pt)))
+        && !memcmp (&ins_pt, &minsert->ins_pt, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("MINSERT.ins_pt [3DPOINT]");
@@ -14487,7 +14487,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     BITCODE_H last_attrib;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "last_attrib", &last_attrib, NULL)
-        && !memcmp (&last_attrib, &minsert->last_attrib, sizeof (minsert->last_attrib)))
+        && !memcmp (&last_attrib, &minsert->last_attrib, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MINSERT.last_attrib [H]");
@@ -14540,7 +14540,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "parent", &parent, NULL)
-        && !memcmp (&parent, &minsert->parent, sizeof (minsert->parent)))
+        && !memcmp (&parent, &minsert->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("MINSERT.parent [struct _dwg_object_entity*]");
@@ -14578,7 +14578,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     BITCODE_3BD scale;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "scale", &scale, NULL)
-        && !memcmp (&scale, &minsert->scale, sizeof (minsert->scale)))
+        && !memcmp (&scale, &minsert->scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MINSERT.scale [3BD_1]");
@@ -14601,7 +14601,7 @@ static int test_MINSERT (const Dwg_Object *obj)
   {
     BITCODE_H seqend;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "seqend", &seqend, NULL)
-        && !memcmp (&seqend, &minsert->seqend, sizeof (minsert->seqend)))
+        && !memcmp (&seqend, &minsert->seqend, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MINSERT.seqend [H]");
@@ -14622,7 +14622,7 @@ static int test_MLINE (const Dwg_Object *obj)
   {
     BITCODE_3BD base_point;
     if (dwg_dynapi_entity_value (mline, "MLINE", "base_point", &base_point, NULL)
-        && !memcmp (&base_point, &mline->base_point, sizeof (mline->base_point)))
+        && !memcmp (&base_point, &mline->base_point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MLINE.base_point [3BD]");
@@ -14630,7 +14630,7 @@ static int test_MLINE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (mline, "MLINE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &mline->extrusion, sizeof (mline->extrusion)))
+        && !memcmp (&extrusion, &mline->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("MLINE.extrusion [BE]");
@@ -14668,7 +14668,7 @@ static int test_MLINE (const Dwg_Object *obj)
   {
     BITCODE_H mlinestyle;
     if (dwg_dynapi_entity_value (mline, "MLINE", "mlinestyle", &mlinestyle, NULL)
-        && !memcmp (&mlinestyle, &mline->mlinestyle, sizeof (mline->mlinestyle)))
+        && !memcmp (&mlinestyle, &mline->mlinestyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MLINE.mlinestyle [H]");
@@ -14706,7 +14706,7 @@ static int test_MLINE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (mline, "MLINE", "parent", &parent, NULL)
-        && !memcmp (&parent, &mline->parent, sizeof (mline->parent)))
+        && !memcmp (&parent, &mline->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("MLINE.parent [struct _dwg_object_entity*]");
@@ -14767,7 +14767,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     BITCODE_H appid;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "appid", &appid, NULL)
-        && !memcmp (&appid, &mtext->appid, sizeof (mtext->appid)))
+        && !memcmp (&appid, &mtext->appid, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MTEXT.appid [H]");
@@ -14805,7 +14805,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     BITCODE_CMC bg_fill_color;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "bg_fill_color", &bg_fill_color, NULL)
-        && !memcmp (&bg_fill_color, &mtext->bg_fill_color, sizeof (mtext->bg_fill_color)))
+        && !memcmp (&bg_fill_color, &mtext->bg_fill_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MTEXT.bg_fill_color [CMC]");
@@ -14973,7 +14973,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &mtext->extrusion, sizeof (mtext->extrusion)))
+        && !memcmp (&extrusion, &mtext->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("MTEXT.extrusion [BE]");
@@ -15011,7 +15011,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     BITCODE_3BD insertion_pt;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &mtext->insertion_pt, sizeof (mtext->insertion_pt)))
+        && !memcmp (&insertion_pt, &mtext->insertion_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MTEXT.insertion_pt [3BD]");
@@ -15064,7 +15064,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "parent", &parent, NULL)
-        && !memcmp (&parent, &mtext->parent, sizeof (mtext->parent)))
+        && !memcmp (&parent, &mtext->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("MTEXT.parent [struct _dwg_object_entity*]");
@@ -15102,7 +15102,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     BITCODE_H style;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "style", &style, NULL)
-        && !memcmp (&style, &mtext->style, sizeof (mtext->style)))
+        && !memcmp (&style, &mtext->style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MTEXT.style [H]");
@@ -15150,7 +15150,7 @@ static int test_MTEXT (const Dwg_Object *obj)
   {
     BITCODE_3BD x_axis_dir;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "x_axis_dir", &x_axis_dir, NULL)
-        && !memcmp (&x_axis_dir, &mtext->x_axis_dir, sizeof (mtext->x_axis_dir)))
+        && !memcmp (&x_axis_dir, &mtext->x_axis_dir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MTEXT.x_axis_dir [3BD]");
@@ -15171,7 +15171,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_H arrow_handle;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "arrow_handle", &arrow_handle, NULL)
-        && !memcmp (&arrow_handle, &multileader->arrow_handle, sizeof (multileader->arrow_handle)))
+        && !memcmp (&arrow_handle, &multileader->arrow_handle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MULTILEADER.arrow_handle [H]");
@@ -15249,7 +15249,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_CMC block_color;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "block_color", &block_color, NULL)
-        && !memcmp (&block_color, &multileader->block_color, sizeof (multileader->block_color)))
+        && !memcmp (&block_color, &multileader->block_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MULTILEADER.block_color [CMC]");
@@ -15272,7 +15272,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_3BD block_scale;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "block_scale", &block_scale, NULL)
-        && !memcmp (&block_scale, &multileader->block_scale, sizeof (multileader->block_scale)))
+        && !memcmp (&block_scale, &multileader->block_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MULTILEADER.block_scale [3BD]");
@@ -15280,7 +15280,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_H block_style;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "block_style", &block_style, NULL)
-        && !memcmp (&block_style, &multileader->block_style, sizeof (multileader->block_style)))
+        && !memcmp (&block_style, &multileader->block_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MULTILEADER.block_style [H]");
@@ -15313,7 +15313,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "color", &color, NULL)
-        && !memcmp (&color, &multileader->color, sizeof (multileader->color)))
+        && !memcmp (&color, &multileader->color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MULTILEADER.color [CMC]");
@@ -15321,7 +15321,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     Dwg_MLEADER_AnnotContext ctx;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "ctx", &ctx, NULL)
-        && !memcmp (&ctx, &multileader->ctx, sizeof (multileader->ctx)))
+        && !memcmp (&ctx, &multileader->ctx, sizeof (Dwg_MLEADER_AnnotContext)))
         pass ();
     else
         fail ("MULTILEADER.ctx [Dwg_MLEADER_AnnotContext]");
@@ -15493,7 +15493,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_H ltype;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "ltype", &ltype, NULL)
-        && !memcmp (&ltype, &multileader->ltype, sizeof (multileader->ltype)))
+        && !memcmp (&ltype, &multileader->ltype, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MULTILEADER.ltype [H]");
@@ -15501,7 +15501,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_H mleaderstyle;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "mleaderstyle", &mleaderstyle, NULL)
-        && !memcmp (&mleaderstyle, &multileader->mleaderstyle, sizeof (multileader->mleaderstyle)))
+        && !memcmp (&mleaderstyle, &multileader->mleaderstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MULTILEADER.mleaderstyle [H]");
@@ -15539,7 +15539,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "parent", &parent, NULL)
-        && !memcmp (&parent, &multileader->parent, sizeof (multileader->parent)))
+        && !memcmp (&parent, &multileader->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("MULTILEADER.parent [struct _dwg_object_entity*]");
@@ -15622,7 +15622,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_CMC text_color;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "text_color", &text_color, NULL)
-        && !memcmp (&text_color, &multileader->text_color, sizeof (multileader->text_color)))
+        && !memcmp (&text_color, &multileader->text_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MULTILEADER.text_color [CMC]");
@@ -15660,7 +15660,7 @@ static int test_MULTILEADER (const Dwg_Object *obj)
   {
     BITCODE_H text_style;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "text_style", &text_style, NULL)
-        && !memcmp (&text_style, &multileader->text_style, sizeof (multileader->text_style)))
+        && !memcmp (&text_style, &multileader->text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MULTILEADER.text_style [H]");
@@ -15696,7 +15696,7 @@ static int test_NAVISWORKSMODEL (const Dwg_Object *obj)
   {
     BITCODE_H defhandle;
     if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "defhandle", &defhandle, NULL)
-        && !memcmp (&defhandle, &navisworksmodel->defhandle, sizeof (navisworksmodel->defhandle)))
+        && !memcmp (&defhandle, &navisworksmodel->defhandle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("NAVISWORKSMODEL.defhandle [H]");
@@ -15704,7 +15704,7 @@ static int test_NAVISWORKSMODEL (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "parent", &parent, NULL)
-        && !memcmp (&parent, &navisworksmodel->parent, sizeof (navisworksmodel->parent)))
+        && !memcmp (&parent, &navisworksmodel->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("NAVISWORKSMODEL.parent [struct _dwg_object_entity*]");
@@ -15820,7 +15820,7 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &nurbsurface->block_size, sizeof (nurbsurface->block_size)))
+        && !memcmp (&block_size, &nurbsurface->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("NURBSURFACE.block_size [BL*]");
@@ -15866,7 +15866,7 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &nurbsurface->extra_acis_data, sizeof (nurbsurface->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &nurbsurface->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("NURBSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -15889,7 +15889,7 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &nurbsurface->history_id, sizeof (nurbsurface->history_id)))
+        && !memcmp (&history_id, &nurbsurface->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("NURBSURFACE.history_id [H]");
@@ -16012,7 +16012,7 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &nurbsurface->parent, sizeof (nurbsurface->parent)))
+        && !memcmp (&parent, &nurbsurface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("NURBSURFACE.parent [struct _dwg_object_entity*]");
@@ -16020,7 +16020,7 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "point", &point, NULL)
-        && !memcmp (&point, &nurbsurface->point, sizeof (nurbsurface->point)))
+        && !memcmp (&point, &nurbsurface->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("NURBSURFACE.point [3BD]");
@@ -16043,7 +16043,7 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &nurbsurface->revision_bytes, sizeof (nurbsurface->revision_bytes)))
+        && !memcmp (&revision_bytes, &nurbsurface->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("NURBSURFACE.revision_bytes[9] [RC]");
@@ -16051,7 +16051,7 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &nurbsurface->revision_guid, sizeof (nurbsurface->revision_guid)))
+        && !memcmp (&revision_guid, &nurbsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("NURBSURFACE.revision_guid[38] [RC]");
@@ -16227,7 +16227,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "data", &data, NULL)
-        && !memcmp (&data, &ole2frame->data, sizeof (ole2frame->data)))
+        && !memcmp (&data, &ole2frame->data, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("OLE2FRAME.data [TF]");
@@ -16280,7 +16280,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   {
     BITCODE_TF oleclient;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "oleclient", &oleclient, NULL)
-        && !memcmp (&oleclient, &ole2frame->oleclient, sizeof (ole2frame->oleclient)))
+        && !memcmp (&oleclient, &ole2frame->oleclient, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("OLE2FRAME.oleclient [TF]");
@@ -16303,7 +16303,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "parent", &parent, NULL)
-        && !memcmp (&parent, &ole2frame->parent, sizeof (ole2frame->parent)))
+        && !memcmp (&parent, &ole2frame->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("OLE2FRAME.parent [struct _dwg_object_entity*]");
@@ -16311,7 +16311,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   {
     BITCODE_3BD pt1;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "pt1", &pt1, NULL)
-        && !memcmp (&pt1, &ole2frame->pt1, sizeof (ole2frame->pt1)))
+        && !memcmp (&pt1, &ole2frame->pt1, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("OLE2FRAME.pt1 [3BD]");
@@ -16319,7 +16319,7 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
   {
     BITCODE_3BD pt2;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "pt2", &pt2, NULL)
-        && !memcmp (&pt2, &ole2frame->pt2, sizeof (ole2frame->pt2)))
+        && !memcmp (&pt2, &ole2frame->pt2, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("OLE2FRAME.pt2 [3BD]");
@@ -16355,7 +16355,7 @@ static int test_OLEFRAME (const Dwg_Object *obj)
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (oleframe, "OLEFRAME", "data", &data, NULL)
-        && !memcmp (&data, &oleframe->data, sizeof (oleframe->data)))
+        && !memcmp (&data, &oleframe->data, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("OLEFRAME.data [TF]");
@@ -16408,7 +16408,7 @@ static int test_OLEFRAME (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (oleframe, "OLEFRAME", "parent", &parent, NULL)
-        && !memcmp (&parent, &oleframe->parent, sizeof (oleframe->parent)))
+        && !memcmp (&parent, &oleframe->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("OLEFRAME.parent [struct _dwg_object_entity*]");
@@ -16499,7 +16499,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &planesurface->block_size, sizeof (planesurface->block_size)))
+        && !memcmp (&block_size, &planesurface->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("PLANESURFACE.block_size [BL*]");
@@ -16545,7 +16545,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &planesurface->extra_acis_data, sizeof (planesurface->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &planesurface->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("PLANESURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -16568,7 +16568,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &planesurface->history_id, sizeof (planesurface->history_id)))
+        && !memcmp (&history_id, &planesurface->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("PLANESURFACE.history_id [H]");
@@ -16691,7 +16691,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &planesurface->parent, sizeof (planesurface->parent)))
+        && !memcmp (&parent, &planesurface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("PLANESURFACE.parent [struct _dwg_object_entity*]");
@@ -16699,7 +16699,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "point", &point, NULL)
-        && !memcmp (&point, &planesurface->point, sizeof (planesurface->point)))
+        && !memcmp (&point, &planesurface->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("PLANESURFACE.point [3BD]");
@@ -16722,7 +16722,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &planesurface->revision_bytes, sizeof (planesurface->revision_bytes)))
+        && !memcmp (&revision_bytes, &planesurface->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("PLANESURFACE.revision_bytes[9] [RC]");
@@ -16730,7 +16730,7 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &planesurface->revision_guid, sizeof (planesurface->revision_guid)))
+        && !memcmp (&revision_guid, &planesurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("PLANESURFACE.revision_guid[38] [RC]");
@@ -16906,7 +16906,7 @@ static int test_POINT (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (point, "POINT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &point->extrusion, sizeof (point->extrusion)))
+        && !memcmp (&extrusion, &point->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("POINT.extrusion [BE]");
@@ -16914,7 +16914,7 @@ static int test_POINT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (point, "POINT", "parent", &parent, NULL)
-        && !memcmp (&parent, &point->parent, sizeof (point->parent)))
+        && !memcmp (&parent, &point->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("POINT.parent [struct _dwg_object_entity*]");
@@ -17054,7 +17054,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &polyline_2d->extrusion, sizeof (polyline_2d->extrusion)))
+        && !memcmp (&extrusion, &polyline_2d->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("POLYLINE_2D.extrusion [BE]");
@@ -17062,7 +17062,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
   {
     BITCODE_H first_vertex;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "first_vertex", &first_vertex, NULL)
-        && !memcmp (&first_vertex, &polyline_2d->first_vertex, sizeof (polyline_2d->first_vertex)))
+        && !memcmp (&first_vertex, &polyline_2d->first_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_2D.first_vertex [H]");
@@ -17100,7 +17100,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
   {
     BITCODE_H last_vertex;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "last_vertex", &last_vertex, NULL)
-        && !memcmp (&last_vertex, &polyline_2d->last_vertex, sizeof (polyline_2d->last_vertex)))
+        && !memcmp (&last_vertex, &polyline_2d->last_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_2D.last_vertex [H]");
@@ -17123,7 +17123,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "parent", &parent, NULL)
-        && !memcmp (&parent, &polyline_2d->parent, sizeof (polyline_2d->parent)))
+        && !memcmp (&parent, &polyline_2d->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("POLYLINE_2D.parent [struct _dwg_object_entity*]");
@@ -17131,7 +17131,7 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
   {
     BITCODE_H seqend;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "seqend", &seqend, NULL)
-        && !memcmp (&seqend, &polyline_2d->seqend, sizeof (polyline_2d->seqend)))
+        && !memcmp (&seqend, &polyline_2d->seqend, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_2D.seqend [H]");
@@ -17206,7 +17206,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
   {
     BITCODE_H first_vertex;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "first_vertex", &first_vertex, NULL)
-        && !memcmp (&first_vertex, &polyline_3d->first_vertex, sizeof (polyline_3d->first_vertex)))
+        && !memcmp (&first_vertex, &polyline_3d->first_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_3D.first_vertex [H]");
@@ -17244,7 +17244,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
   {
     BITCODE_H last_vertex;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "last_vertex", &last_vertex, NULL)
-        && !memcmp (&last_vertex, &polyline_3d->last_vertex, sizeof (polyline_3d->last_vertex)))
+        && !memcmp (&last_vertex, &polyline_3d->last_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_3D.last_vertex [H]");
@@ -17267,7 +17267,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "parent", &parent, NULL)
-        && !memcmp (&parent, &polyline_3d->parent, sizeof (polyline_3d->parent)))
+        && !memcmp (&parent, &polyline_3d->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("POLYLINE_3D.parent [struct _dwg_object_entity*]");
@@ -17275,7 +17275,7 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
   {
     BITCODE_H seqend;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "seqend", &seqend, NULL)
-        && !memcmp (&seqend, &polyline_3d->seqend, sizeof (polyline_3d->seqend)))
+        && !memcmp (&seqend, &polyline_3d->seqend, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_3D.seqend [H]");
@@ -17321,7 +17321,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
   {
     BITCODE_H first_vertex;
     if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "first_vertex", &first_vertex, NULL)
-        && !memcmp (&first_vertex, &polyline_mesh->first_vertex, sizeof (polyline_mesh->first_vertex)))
+        && !memcmp (&first_vertex, &polyline_mesh->first_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_MESH.first_vertex [H]");
@@ -17359,7 +17359,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
   {
     BITCODE_H last_vertex;
     if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "last_vertex", &last_vertex, NULL)
-        && !memcmp (&last_vertex, &polyline_mesh->last_vertex, sizeof (polyline_mesh->last_vertex)))
+        && !memcmp (&last_vertex, &polyline_mesh->last_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_MESH.last_vertex [H]");
@@ -17442,7 +17442,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "parent", &parent, NULL)
-        && !memcmp (&parent, &polyline_mesh->parent, sizeof (polyline_mesh->parent)))
+        && !memcmp (&parent, &polyline_mesh->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("POLYLINE_MESH.parent [struct _dwg_object_entity*]");
@@ -17450,7 +17450,7 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
   {
     BITCODE_H seqend;
     if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "seqend", &seqend, NULL)
-        && !memcmp (&seqend, &polyline_mesh->seqend, sizeof (polyline_mesh->seqend)))
+        && !memcmp (&seqend, &polyline_mesh->seqend, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_MESH.seqend [H]");
@@ -17481,7 +17481,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
   {
     BITCODE_H first_vertex;
     if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "first_vertex", &first_vertex, NULL)
-        && !memcmp (&first_vertex, &polyline_pface->first_vertex, sizeof (polyline_pface->first_vertex)))
+        && !memcmp (&first_vertex, &polyline_pface->first_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_PFACE.first_vertex [H]");
@@ -17504,7 +17504,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
   {
     BITCODE_H last_vertex;
     if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "last_vertex", &last_vertex, NULL)
-        && !memcmp (&last_vertex, &polyline_pface->last_vertex, sizeof (polyline_pface->last_vertex)))
+        && !memcmp (&last_vertex, &polyline_pface->last_vertex, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_PFACE.last_vertex [H]");
@@ -17557,7 +17557,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &polyline_pface->parent, sizeof (polyline_pface->parent)))
+        && !memcmp (&parent, &polyline_pface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("POLYLINE_PFACE.parent [struct _dwg_object_entity*]");
@@ -17565,7 +17565,7 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
   {
     BITCODE_H seqend;
     if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "seqend", &seqend, NULL)
-        && !memcmp (&seqend, &polyline_pface->seqend, sizeof (polyline_pface->seqend)))
+        && !memcmp (&seqend, &polyline_pface->seqend, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("POLYLINE_PFACE.seqend [H]");
@@ -17611,7 +17611,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "data", &data, NULL)
-        && !memcmp (&data, &proxy_entity->data, sizeof (proxy_entity->data)))
+        && !memcmp (&data, &proxy_entity->data, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("PROXY_ENTITY.data [TF]");
@@ -17704,7 +17704,7 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "parent", &parent, NULL)
-        && !memcmp (&parent, &proxy_entity->parent, sizeof (proxy_entity->parent)))
+        && !memcmp (&parent, &proxy_entity->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("PROXY_ENTITY.parent [struct _dwg_object_entity*]");
@@ -17740,7 +17740,7 @@ static int test_RAY (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (ray, "RAY", "parent", &parent, NULL)
-        && !memcmp (&parent, &ray->parent, sizeof (ray->parent)))
+        && !memcmp (&parent, &ray->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("RAY.parent [struct _dwg_object_entity*]");
@@ -17748,7 +17748,7 @@ static int test_RAY (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (ray, "RAY", "point", &point, NULL)
-        && !memcmp (&point, &ray->point, sizeof (ray->point)))
+        && !memcmp (&point, &ray->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("RAY.point [3BD]");
@@ -17756,7 +17756,7 @@ static int test_RAY (const Dwg_Object *obj)
   {
     BITCODE_3BD vector;
     if (dwg_dynapi_entity_value (ray, "RAY", "vector", &vector, NULL)
-        && !memcmp (&vector, &ray->vector, sizeof (ray->vector)))
+        && !memcmp (&vector, &ray->vector, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("RAY.vector [3BD]");
@@ -17860,7 +17860,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD axis_point;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "axis_point", &axis_point, NULL)
-        && !memcmp (&axis_point, &revolvedsurface->axis_point, sizeof (revolvedsurface->axis_point)))
+        && !memcmp (&axis_point, &revolvedsurface->axis_point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.axis_point [3BD]");
@@ -17868,7 +17868,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD axis_vector;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "axis_vector", &axis_vector, NULL)
-        && !memcmp (&axis_vector, &revolvedsurface->axis_vector, sizeof (revolvedsurface->axis_vector)))
+        && !memcmp (&axis_vector, &revolvedsurface->axis_vector, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.axis_vector [3BD]");
@@ -17876,7 +17876,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &revolvedsurface->block_size, sizeof (revolvedsurface->block_size)))
+        && !memcmp (&block_size, &revolvedsurface->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.block_size [BL*]");
@@ -17982,7 +17982,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &revolvedsurface->extra_acis_data, sizeof (revolvedsurface->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &revolvedsurface->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -18005,7 +18005,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &revolvedsurface->history_id, sizeof (revolvedsurface->history_id)))
+        && !memcmp (&history_id, &revolvedsurface->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.history_id [H]");
@@ -18143,7 +18143,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &revolvedsurface->parent, sizeof (revolvedsurface->parent)))
+        && !memcmp (&parent, &revolvedsurface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.parent [struct _dwg_object_entity*]");
@@ -18151,7 +18151,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "point", &point, NULL)
-        && !memcmp (&point, &revolvedsurface->point, sizeof (revolvedsurface->point)))
+        && !memcmp (&point, &revolvedsurface->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.point [3BD]");
@@ -18174,7 +18174,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &revolvedsurface->revision_bytes, sizeof (revolvedsurface->revision_bytes)))
+        && !memcmp (&revision_bytes, &revolvedsurface->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.revision_bytes[9] [RC]");
@@ -18182,7 +18182,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &revolvedsurface->revision_guid, sizeof (revolvedsurface->revision_guid)))
+        && !memcmp (&revision_guid, &revolvedsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.revision_guid[38] [RC]");
@@ -18250,7 +18250,7 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BD* revolved_entity_transmatrix;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revolved_entity_transmatrix", &revolved_entity_transmatrix, NULL)
-        && !memcmp (&revolved_entity_transmatrix, &revolvedsurface->revolved_entity_transmatrix, sizeof (revolvedsurface->revolved_entity_transmatrix)))
+        && !memcmp (&revolved_entity_transmatrix, &revolvedsurface->revolved_entity_transmatrix, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("REVOLVEDSURFACE.revolved_entity_transmatrix [BD*]");
@@ -18426,7 +18426,7 @@ static int test_RTEXT (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (rtext, "RTEXT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &rtext->extrusion, sizeof (rtext->extrusion)))
+        && !memcmp (&extrusion, &rtext->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("RTEXT.extrusion [BE]");
@@ -18464,7 +18464,7 @@ static int test_RTEXT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (rtext, "RTEXT", "parent", &parent, NULL)
-        && !memcmp (&parent, &rtext->parent, sizeof (rtext->parent)))
+        && !memcmp (&parent, &rtext->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("RTEXT.parent [struct _dwg_object_entity*]");
@@ -18472,7 +18472,7 @@ static int test_RTEXT (const Dwg_Object *obj)
   {
     BITCODE_3BD pt;
     if (dwg_dynapi_entity_value (rtext, "RTEXT", "pt", &pt, NULL)
-        && !memcmp (&pt, &rtext->pt, sizeof (rtext->pt)))
+        && !memcmp (&pt, &rtext->pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("RTEXT.pt [3BD]");
@@ -18495,7 +18495,7 @@ static int test_RTEXT (const Dwg_Object *obj)
   {
     BITCODE_H style;
     if (dwg_dynapi_entity_value (rtext, "RTEXT", "style", &style, NULL)
-        && !memcmp (&style, &rtext->style, sizeof (rtext->style)))
+        && !memcmp (&style, &rtext->style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("RTEXT.style [H]");
@@ -18581,7 +18581,7 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
   {
     BITCODE_CMC indicator_color;
     if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "indicator_color", &indicator_color, NULL)
-        && !memcmp (&indicator_color, &sectionobject->indicator_color, sizeof (sectionobject->indicator_color)))
+        && !memcmp (&indicator_color, &sectionobject->indicator_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONOBJECT.indicator_color [CMC]");
@@ -18629,7 +18629,7 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "parent", &parent, NULL)
-        && !memcmp (&parent, &sectionobject->parent, sizeof (sectionobject->parent)))
+        && !memcmp (&parent, &sectionobject->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("SECTIONOBJECT.parent [struct _dwg_object_entity*]");
@@ -18637,7 +18637,7 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
   {
     BITCODE_H section_settings;
     if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "section_settings", &section_settings, NULL)
-        && !memcmp (&section_settings, &sectionobject->section_settings, sizeof (sectionobject->section_settings)))
+        && !memcmp (&section_settings, &sectionobject->section_settings, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SECTIONOBJECT.section_settings [H]");
@@ -18675,7 +18675,7 @@ static int test_SECTIONOBJECT (const Dwg_Object *obj)
   {
     BITCODE_3BD vert_dir;
     if (dwg_dynapi_entity_value (sectionobject, "SECTIONOBJECT", "vert_dir", &vert_dir, NULL)
-        && !memcmp (&vert_dir, &sectionobject->vert_dir, sizeof (sectionobject->vert_dir)))
+        && !memcmp (&vert_dir, &sectionobject->vert_dir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("SECTIONOBJECT.vert_dir [3BD]");
@@ -18706,7 +18706,7 @@ static int test_SEQEND (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (seqend, "SEQEND", "parent", &parent, NULL)
-        && !memcmp (&parent, &seqend->parent, sizeof (seqend->parent)))
+        && !memcmp (&parent, &seqend->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("SEQEND.parent [struct _dwg_object_entity*]");
@@ -18727,7 +18727,7 @@ static int test_SHAPE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &shape->extrusion, sizeof (shape->extrusion)))
+        && !memcmp (&extrusion, &shape->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("SHAPE.extrusion [BE]");
@@ -18735,7 +18735,7 @@ static int test_SHAPE (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_pt;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &shape->ins_pt, sizeof (shape->ins_pt)))
+        && !memcmp (&ins_pt, &shape->ins_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("SHAPE.ins_pt [3BD]");
@@ -18758,7 +18758,7 @@ static int test_SHAPE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "parent", &parent, NULL)
-        && !memcmp (&parent, &shape->parent, sizeof (shape->parent)))
+        && !memcmp (&parent, &shape->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("SHAPE.parent [struct _dwg_object_entity*]");
@@ -18796,7 +18796,7 @@ static int test_SHAPE (const Dwg_Object *obj)
   {
     BITCODE_H style;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "style", &style, NULL)
-        && !memcmp (&style, &shape->style, sizeof (shape->style)))
+        && !memcmp (&style, &shape->style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SHAPE.style [H]");
@@ -18862,7 +18862,7 @@ static int test_SOLID (const Dwg_Object *obj)
   {
     BITCODE_2RD corner1;
     if (dwg_dynapi_entity_value (solid, "SOLID", "corner1", &corner1, NULL)
-        && !memcmp (&corner1, &solid->corner1, sizeof (solid->corner1)))
+        && !memcmp (&corner1, &solid->corner1, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("SOLID.corner1 [2RD]");
@@ -18870,7 +18870,7 @@ static int test_SOLID (const Dwg_Object *obj)
   {
     BITCODE_2RD corner2;
     if (dwg_dynapi_entity_value (solid, "SOLID", "corner2", &corner2, NULL)
-        && !memcmp (&corner2, &solid->corner2, sizeof (solid->corner2)))
+        && !memcmp (&corner2, &solid->corner2, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("SOLID.corner2 [2RD]");
@@ -18878,7 +18878,7 @@ static int test_SOLID (const Dwg_Object *obj)
   {
     BITCODE_2RD corner3;
     if (dwg_dynapi_entity_value (solid, "SOLID", "corner3", &corner3, NULL)
-        && !memcmp (&corner3, &solid->corner3, sizeof (solid->corner3)))
+        && !memcmp (&corner3, &solid->corner3, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("SOLID.corner3 [2RD]");
@@ -18886,7 +18886,7 @@ static int test_SOLID (const Dwg_Object *obj)
   {
     BITCODE_2RD corner4;
     if (dwg_dynapi_entity_value (solid, "SOLID", "corner4", &corner4, NULL)
-        && !memcmp (&corner4, &solid->corner4, sizeof (solid->corner4)))
+        && !memcmp (&corner4, &solid->corner4, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("SOLID.corner4 [2RD]");
@@ -18909,7 +18909,7 @@ static int test_SOLID (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (solid, "SOLID", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &solid->extrusion, sizeof (solid->extrusion)))
+        && !memcmp (&extrusion, &solid->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("SOLID.extrusion [BE]");
@@ -18917,7 +18917,7 @@ static int test_SOLID (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (solid, "SOLID", "parent", &parent, NULL)
-        && !memcmp (&parent, &solid->parent, sizeof (solid->parent)))
+        && !memcmp (&parent, &solid->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("SOLID.parent [struct _dwg_object_entity*]");
@@ -18952,7 +18952,7 @@ static int test_SPLINE (const Dwg_Object *obj)
   {
     BITCODE_3BD beg_tan_vec;
     if (dwg_dynapi_entity_value (spline, "SPLINE", "beg_tan_vec", &beg_tan_vec, NULL)
-        && !memcmp (&beg_tan_vec, &spline->beg_tan_vec, sizeof (spline->beg_tan_vec)))
+        && !memcmp (&beg_tan_vec, &spline->beg_tan_vec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("SPLINE.beg_tan_vec [3BD]");
@@ -19015,7 +19015,7 @@ static int test_SPLINE (const Dwg_Object *obj)
   {
     BITCODE_3BD end_tan_vec;
     if (dwg_dynapi_entity_value (spline, "SPLINE", "end_tan_vec", &end_tan_vec, NULL)
-        && !memcmp (&end_tan_vec, &spline->end_tan_vec, sizeof (spline->end_tan_vec)))
+        && !memcmp (&end_tan_vec, &spline->end_tan_vec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("SPLINE.end_tan_vec [3BD]");
@@ -19148,7 +19148,7 @@ static int test_SPLINE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (spline, "SPLINE", "parent", &parent, NULL)
-        && !memcmp (&parent, &spline->parent, sizeof (spline->parent)))
+        && !memcmp (&parent, &spline->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("SPLINE.parent [struct _dwg_object_entity*]");
@@ -19374,7 +19374,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &sweptsurface->block_size, sizeof (sweptsurface->block_size)))
+        && !memcmp (&block_size, &sweptsurface->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("SWEPTSURFACE.block_size [BL*]");
@@ -19465,7 +19465,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &sweptsurface->extra_acis_data, sizeof (sweptsurface->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &sweptsurface->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("SWEPTSURFACE.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -19488,7 +19488,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &sweptsurface->history_id, sizeof (sweptsurface->history_id)))
+        && !memcmp (&history_id, &sweptsurface->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SWEPTSURFACE.history_id [H]");
@@ -19626,7 +19626,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &sweptsurface->parent, sizeof (sweptsurface->parent)))
+        && !memcmp (&parent, &sweptsurface->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("SWEPTSURFACE.parent [struct _dwg_object_entity*]");
@@ -19634,7 +19634,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H path_entity;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "path_entity", &path_entity, NULL)
-        && !memcmp (&path_entity, &sweptsurface->path_entity, sizeof (sweptsurface->path_entity)))
+        && !memcmp (&path_entity, &sweptsurface->path_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SWEPTSURFACE.path_entity [H]");
@@ -19672,7 +19672,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BD* path_entity_transmatrix;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "path_entity_transmatrix", &path_entity_transmatrix, NULL)
-        && !memcmp (&path_entity_transmatrix, &sweptsurface->path_entity_transmatrix, sizeof (sweptsurface->path_entity_transmatrix)))
+        && !memcmp (&path_entity_transmatrix, &sweptsurface->path_entity_transmatrix, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("SWEPTSURFACE.path_entity_transmatrix [BD*]");
@@ -19695,7 +19695,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_TF pathdata;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "pathdata", &pathdata, NULL)
-        && !memcmp (&pathdata, &sweptsurface->pathdata, sizeof (sweptsurface->pathdata)))
+        && !memcmp (&pathdata, &sweptsurface->pathdata, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("SWEPTSURFACE.pathdata [TF]");
@@ -19718,7 +19718,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "point", &point, NULL)
-        && !memcmp (&point, &sweptsurface->point, sizeof (sweptsurface->point)))
+        && !memcmp (&point, &sweptsurface->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("SWEPTSURFACE.point [3BD]");
@@ -19741,7 +19741,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_3BD reference_vector_for_controlling_twist;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "reference_vector_for_controlling_twist", &reference_vector_for_controlling_twist, NULL)
-        && !memcmp (&reference_vector_for_controlling_twist, &sweptsurface->reference_vector_for_controlling_twist, sizeof (sweptsurface->reference_vector_for_controlling_twist)))
+        && !memcmp (&reference_vector_for_controlling_twist, &sweptsurface->reference_vector_for_controlling_twist, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("SWEPTSURFACE.reference_vector_for_controlling_twist [3BD]");
@@ -19749,7 +19749,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &sweptsurface->revision_bytes, sizeof (sweptsurface->revision_bytes)))
+        && !memcmp (&revision_bytes, &sweptsurface->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("SWEPTSURFACE.revision_bytes[9] [RC]");
@@ -19757,7 +19757,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &sweptsurface->revision_guid, sizeof (sweptsurface->revision_guid)))
+        && !memcmp (&revision_guid, &sweptsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("SWEPTSURFACE.revision_guid[38] [RC]");
@@ -19865,7 +19865,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_H sweep_entity;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_entity", &sweep_entity, NULL)
-        && !memcmp (&sweep_entity, &sweptsurface->sweep_entity, sizeof (sweptsurface->sweep_entity)))
+        && !memcmp (&sweep_entity, &sweptsurface->sweep_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SWEPTSURFACE.sweep_entity [H]");
@@ -19903,7 +19903,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_BD* sweep_entity_transmatrix;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_transmatrix", &sweep_entity_transmatrix, NULL)
-        && !memcmp (&sweep_entity_transmatrix, &sweptsurface->sweep_entity_transmatrix, sizeof (sweptsurface->sweep_entity_transmatrix)))
+        && !memcmp (&sweep_entity_transmatrix, &sweptsurface->sweep_entity_transmatrix, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("SWEPTSURFACE.sweep_entity_transmatrix [BD*]");
@@ -19911,7 +19911,7 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
   {
     BITCODE_TF sweepdata;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweepdata", &sweepdata, NULL)
-        && !memcmp (&sweepdata, &sweptsurface->sweepdata, sizeof (sweptsurface->sweepdata)))
+        && !memcmp (&sweepdata, &sweptsurface->sweepdata, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("SWEPTSURFACE.sweepdata [TF]");
@@ -20057,7 +20057,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H block_header;
     if (dwg_dynapi_entity_value (table, "TABLE", "block_header", &block_header, NULL)
-        && !memcmp (&block_header, &table->block_header, sizeof (table->block_header)))
+        && !memcmp (&block_header, &table->block_header, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.block_header [H]");
@@ -20240,7 +20240,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_horiz_bottom_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_horiz_bottom_color", &data_horiz_bottom_color, NULL)
-        && !memcmp (&data_horiz_bottom_color, &table->data_horiz_bottom_color, sizeof (table->data_horiz_bottom_color)))
+        && !memcmp (&data_horiz_bottom_color, &table->data_horiz_bottom_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_horiz_bottom_color [CMC]");
@@ -20278,7 +20278,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_horiz_ins_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_horiz_ins_color", &data_horiz_ins_color, NULL)
-        && !memcmp (&data_horiz_ins_color, &table->data_horiz_ins_color, sizeof (table->data_horiz_ins_color)))
+        && !memcmp (&data_horiz_ins_color, &table->data_horiz_ins_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_horiz_ins_color [CMC]");
@@ -20316,7 +20316,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_horiz_top_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_horiz_top_color", &data_horiz_top_color, NULL)
-        && !memcmp (&data_horiz_top_color, &table->data_horiz_top_color, sizeof (table->data_horiz_top_color)))
+        && !memcmp (&data_horiz_top_color, &table->data_horiz_top_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_horiz_top_color [CMC]");
@@ -20369,7 +20369,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_row_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_row_color", &data_row_color, NULL)
-        && !memcmp (&data_row_color, &table->data_row_color, sizeof (table->data_row_color)))
+        && !memcmp (&data_row_color, &table->data_row_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_row_color [CMC]");
@@ -20377,7 +20377,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_row_fill_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_row_fill_color", &data_row_fill_color, NULL)
-        && !memcmp (&data_row_fill_color, &table->data_row_fill_color, sizeof (table->data_row_fill_color)))
+        && !memcmp (&data_row_fill_color, &table->data_row_fill_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_row_fill_color [CMC]");
@@ -20415,7 +20415,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H data_row_style_override;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_row_style_override", &data_row_style_override, NULL)
-        && !memcmp (&data_row_style_override, &table->data_row_style_override, sizeof (table->data_row_style_override)))
+        && !memcmp (&data_row_style_override, &table->data_row_style_override, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.data_row_style_override [H]");
@@ -20423,7 +20423,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H data_text_style;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_text_style", &data_text_style, NULL)
-        && !memcmp (&data_text_style, &table->data_text_style, sizeof (table->data_text_style)))
+        && !memcmp (&data_text_style, &table->data_text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.data_text_style [H]");
@@ -20431,7 +20431,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_vert_ins_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_vert_ins_color", &data_vert_ins_color, NULL)
-        && !memcmp (&data_vert_ins_color, &table->data_vert_ins_color, sizeof (table->data_vert_ins_color)))
+        && !memcmp (&data_vert_ins_color, &table->data_vert_ins_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_vert_ins_color [CMC]");
@@ -20469,7 +20469,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_vert_left_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_vert_left_color", &data_vert_left_color, NULL)
-        && !memcmp (&data_vert_left_color, &table->data_vert_left_color, sizeof (table->data_vert_left_color)))
+        && !memcmp (&data_vert_left_color, &table->data_vert_left_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_vert_left_color [CMC]");
@@ -20507,7 +20507,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC data_vert_right_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_vert_right_color", &data_vert_right_color, NULL)
-        && !memcmp (&data_vert_right_color, &table->data_vert_right_color, sizeof (table->data_vert_right_color)))
+        && !memcmp (&data_vert_right_color, &table->data_vert_right_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.data_vert_right_color [CMC]");
@@ -20545,7 +20545,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (table, "TABLE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &table->extrusion, sizeof (table->extrusion)))
+        && !memcmp (&extrusion, &table->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("TABLE.extrusion [BE]");
@@ -20553,7 +20553,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     Dwg_FormattedTableData fdata;
     if (dwg_dynapi_entity_value (table, "TABLE", "fdata", &fdata, NULL)
-        && !memcmp (&fdata, &table->fdata, sizeof (table->fdata)))
+        && !memcmp (&fdata, &table->fdata, sizeof (Dwg_FormattedTableData)))
         pass ();
     else
         fail ("TABLE.fdata [Dwg_FormattedTableData]");
@@ -20561,7 +20561,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H first_attrib;
     if (dwg_dynapi_entity_value (table, "TABLE", "first_attrib", &first_attrib, NULL)
-        && !memcmp (&first_attrib, &table->first_attrib, sizeof (table->first_attrib)))
+        && !memcmp (&first_attrib, &table->first_attrib, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.first_attrib [H]");
@@ -20689,7 +20689,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_horiz_bottom_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_horiz_bottom_color", &header_horiz_bottom_color, NULL)
-        && !memcmp (&header_horiz_bottom_color, &table->header_horiz_bottom_color, sizeof (table->header_horiz_bottom_color)))
+        && !memcmp (&header_horiz_bottom_color, &table->header_horiz_bottom_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_horiz_bottom_color [CMC]");
@@ -20727,7 +20727,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_horiz_ins_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_horiz_ins_color", &header_horiz_ins_color, NULL)
-        && !memcmp (&header_horiz_ins_color, &table->header_horiz_ins_color, sizeof (table->header_horiz_ins_color)))
+        && !memcmp (&header_horiz_ins_color, &table->header_horiz_ins_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_horiz_ins_color [CMC]");
@@ -20765,7 +20765,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_horiz_top_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_horiz_top_color", &header_horiz_top_color, NULL)
-        && !memcmp (&header_horiz_top_color, &table->header_horiz_top_color, sizeof (table->header_horiz_top_color)))
+        && !memcmp (&header_horiz_top_color, &table->header_horiz_top_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_horiz_top_color [CMC]");
@@ -20818,7 +20818,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_row_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_row_color", &header_row_color, NULL)
-        && !memcmp (&header_row_color, &table->header_row_color, sizeof (table->header_row_color)))
+        && !memcmp (&header_row_color, &table->header_row_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_row_color [CMC]");
@@ -20826,7 +20826,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_row_fill_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_row_fill_color", &header_row_fill_color, NULL)
-        && !memcmp (&header_row_fill_color, &table->header_row_fill_color, sizeof (table->header_row_fill_color)))
+        && !memcmp (&header_row_fill_color, &table->header_row_fill_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_row_fill_color [CMC]");
@@ -20864,7 +20864,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H header_row_style_override;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_row_style_override", &header_row_style_override, NULL)
-        && !memcmp (&header_row_style_override, &table->header_row_style_override, sizeof (table->header_row_style_override)))
+        && !memcmp (&header_row_style_override, &table->header_row_style_override, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.header_row_style_override [H]");
@@ -20887,7 +20887,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H header_text_style;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_text_style", &header_text_style, NULL)
-        && !memcmp (&header_text_style, &table->header_text_style, sizeof (table->header_text_style)))
+        && !memcmp (&header_text_style, &table->header_text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.header_text_style [H]");
@@ -20895,7 +20895,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_vert_ins_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_vert_ins_color", &header_vert_ins_color, NULL)
-        && !memcmp (&header_vert_ins_color, &table->header_vert_ins_color, sizeof (table->header_vert_ins_color)))
+        && !memcmp (&header_vert_ins_color, &table->header_vert_ins_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_vert_ins_color [CMC]");
@@ -20933,7 +20933,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_vert_left_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_vert_left_color", &header_vert_left_color, NULL)
-        && !memcmp (&header_vert_left_color, &table->header_vert_left_color, sizeof (table->header_vert_left_color)))
+        && !memcmp (&header_vert_left_color, &table->header_vert_left_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_vert_left_color [CMC]");
@@ -20971,7 +20971,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC header_vert_right_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "header_vert_right_color", &header_vert_right_color, NULL)
-        && !memcmp (&header_vert_right_color, &table->header_vert_right_color, sizeof (table->header_vert_right_color)))
+        && !memcmp (&header_vert_right_color, &table->header_vert_right_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.header_vert_right_color [CMC]");
@@ -21009,7 +21009,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_3BD hor_dir;
     if (dwg_dynapi_entity_value (table, "TABLE", "hor_dir", &hor_dir, NULL)
-        && !memcmp (&hor_dir, &table->hor_dir, sizeof (table->hor_dir)))
+        && !memcmp (&hor_dir, &table->hor_dir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("TABLE.hor_dir [3BD]");
@@ -21032,7 +21032,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_3BD horiz_direction;
     if (dwg_dynapi_entity_value (table, "TABLE", "horiz_direction", &horiz_direction, NULL)
-        && !memcmp (&horiz_direction, &table->horiz_direction, sizeof (table->horiz_direction)))
+        && !memcmp (&horiz_direction, &table->horiz_direction, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("TABLE.horiz_direction [3BD]");
@@ -21040,7 +21040,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_3BD insertion_pt;
     if (dwg_dynapi_entity_value (table, "TABLE", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &table->insertion_pt, sizeof (table->insertion_pt)))
+        && !memcmp (&insertion_pt, &table->insertion_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("TABLE.insertion_pt [3BD]");
@@ -21048,7 +21048,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H last_attrib;
     if (dwg_dynapi_entity_value (table, "TABLE", "last_attrib", &last_attrib, NULL)
-        && !memcmp (&last_attrib, &table->last_attrib, sizeof (table->last_attrib)))
+        && !memcmp (&last_attrib, &table->last_attrib, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.last_attrib [H]");
@@ -21056,7 +21056,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     Dwg_LinkedData ldata;
     if (dwg_dynapi_entity_value (table, "TABLE", "ldata", &ldata, NULL)
-        && !memcmp (&ldata, &table->ldata, sizeof (table->ldata)))
+        && !memcmp (&ldata, &table->ldata, sizeof (Dwg_LinkedData)))
         pass ();
     else
         fail ("TABLE.ldata [Dwg_LinkedData]");
@@ -21154,7 +21154,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (table, "TABLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &table->parent, sizeof (table->parent)))
+        && !memcmp (&parent, &table->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("TABLE.parent [struct _dwg_object_entity*]");
@@ -21187,7 +21187,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_3BD scale;
     if (dwg_dynapi_entity_value (table, "TABLE", "scale", &scale, NULL)
-        && !memcmp (&scale, &table->scale, sizeof (table->scale)))
+        && !memcmp (&scale, &table->scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("TABLE.scale [3BD_1]");
@@ -21195,7 +21195,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H seqend;
     if (dwg_dynapi_entity_value (table, "TABLE", "seqend", &seqend, NULL)
-        && !memcmp (&seqend, &table->seqend, sizeof (table->seqend)))
+        && !memcmp (&seqend, &table->seqend, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.seqend [H]");
@@ -21218,7 +21218,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H tablestyle;
     if (dwg_dynapi_entity_value (table, "TABLE", "tablestyle", &tablestyle, NULL)
-        && !memcmp (&tablestyle, &table->tablestyle, sizeof (table->tablestyle)))
+        && !memcmp (&tablestyle, &table->tablestyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.tablestyle [H]");
@@ -21226,7 +21226,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     Dwg_LinkedTableData tdata;
     if (dwg_dynapi_entity_value (table, "TABLE", "tdata", &tdata, NULL)
-        && !memcmp (&tdata, &table->tdata, sizeof (table->tdata)))
+        && !memcmp (&tdata, &table->tdata, sizeof (Dwg_LinkedTableData)))
         pass ();
     else
         fail ("TABLE.tdata [Dwg_LinkedTableData]");
@@ -21234,7 +21234,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_horiz_bottom_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_horiz_bottom_color", &title_horiz_bottom_color, NULL)
-        && !memcmp (&title_horiz_bottom_color, &table->title_horiz_bottom_color, sizeof (table->title_horiz_bottom_color)))
+        && !memcmp (&title_horiz_bottom_color, &table->title_horiz_bottom_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_horiz_bottom_color [CMC]");
@@ -21272,7 +21272,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_horiz_ins_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_horiz_ins_color", &title_horiz_ins_color, NULL)
-        && !memcmp (&title_horiz_ins_color, &table->title_horiz_ins_color, sizeof (table->title_horiz_ins_color)))
+        && !memcmp (&title_horiz_ins_color, &table->title_horiz_ins_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_horiz_ins_color [CMC]");
@@ -21310,7 +21310,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_horiz_top_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_horiz_top_color", &title_horiz_top_color, NULL)
-        && !memcmp (&title_horiz_top_color, &table->title_horiz_top_color, sizeof (table->title_horiz_top_color)))
+        && !memcmp (&title_horiz_top_color, &table->title_horiz_top_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_horiz_top_color [CMC]");
@@ -21363,7 +21363,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_row_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_row_color", &title_row_color, NULL)
-        && !memcmp (&title_row_color, &table->title_row_color, sizeof (table->title_row_color)))
+        && !memcmp (&title_row_color, &table->title_row_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_row_color [CMC]");
@@ -21371,7 +21371,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_row_fill_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_row_fill_color", &title_row_fill_color, NULL)
-        && !memcmp (&title_row_fill_color, &table->title_row_fill_color, sizeof (table->title_row_fill_color)))
+        && !memcmp (&title_row_fill_color, &table->title_row_fill_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_row_fill_color [CMC]");
@@ -21409,7 +21409,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H title_row_style_override;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_row_style_override", &title_row_style_override, NULL)
-        && !memcmp (&title_row_style_override, &table->title_row_style_override, sizeof (table->title_row_style_override)))
+        && !memcmp (&title_row_style_override, &table->title_row_style_override, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.title_row_style_override [H]");
@@ -21432,7 +21432,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H title_text_style;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_text_style", &title_text_style, NULL)
-        && !memcmp (&title_text_style, &table->title_text_style, sizeof (table->title_text_style)))
+        && !memcmp (&title_text_style, &table->title_text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.title_text_style [H]");
@@ -21440,7 +21440,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_vert_ins_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_vert_ins_color", &title_vert_ins_color, NULL)
-        && !memcmp (&title_vert_ins_color, &table->title_vert_ins_color, sizeof (table->title_vert_ins_color)))
+        && !memcmp (&title_vert_ins_color, &table->title_vert_ins_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_vert_ins_color [CMC]");
@@ -21478,7 +21478,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_vert_left_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_vert_left_color", &title_vert_left_color, NULL)
-        && !memcmp (&title_vert_left_color, &table->title_vert_left_color, sizeof (table->title_vert_left_color)))
+        && !memcmp (&title_vert_left_color, &table->title_vert_left_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_vert_left_color [CMC]");
@@ -21516,7 +21516,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_CMC title_vert_right_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "title_vert_right_color", &title_vert_right_color, NULL)
-        && !memcmp (&title_vert_right_color, &table->title_vert_right_color, sizeof (table->title_vert_right_color)))
+        && !memcmp (&title_vert_right_color, &table->title_vert_right_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("TABLE.title_vert_right_color [CMC]");
@@ -21614,7 +21614,7 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_H unknown_h;
     if (dwg_dynapi_entity_value (table, "TABLE", "unknown_h", &unknown_h, NULL)
-        && !memcmp (&unknown_h, &table->unknown_h, sizeof (table->unknown_h)))
+        && !memcmp (&unknown_h, &table->unknown_h, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLE.unknown_h [H]");
@@ -21665,7 +21665,7 @@ static int test_TEXT (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT alignment_pt;
     if (dwg_dynapi_entity_value (text, "TEXT", "alignment_pt", &alignment_pt, NULL)
-        && !memcmp (&alignment_pt, &text->alignment_pt, sizeof (text->alignment_pt)))
+        && !memcmp (&alignment_pt, &text->alignment_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("TEXT.alignment_pt [2DPOINT]");
@@ -21703,7 +21703,7 @@ static int test_TEXT (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (text, "TEXT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &text->extrusion, sizeof (text->extrusion)))
+        && !memcmp (&extrusion, &text->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("TEXT.extrusion [BE]");
@@ -21756,7 +21756,7 @@ static int test_TEXT (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT insertion_pt;
     if (dwg_dynapi_entity_value (text, "TEXT", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &text->insertion_pt, sizeof (text->insertion_pt)))
+        && !memcmp (&insertion_pt, &text->insertion_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("TEXT.insertion_pt [2DPOINT]");
@@ -21779,7 +21779,7 @@ static int test_TEXT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (text, "TEXT", "parent", &parent, NULL)
-        && !memcmp (&parent, &text->parent, sizeof (text->parent)))
+        && !memcmp (&parent, &text->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("TEXT.parent [struct _dwg_object_entity*]");
@@ -21802,7 +21802,7 @@ static int test_TEXT (const Dwg_Object *obj)
   {
     BITCODE_H style;
     if (dwg_dynapi_entity_value (text, "TEXT", "style", &style, NULL)
-        && !memcmp (&style, &text->style, sizeof (text->style)))
+        && !memcmp (&style, &text->style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TEXT.style [H]");
@@ -21893,7 +21893,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
   {
     BITCODE_H dimstyle;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "dimstyle", &dimstyle, NULL)
-        && !memcmp (&dimstyle, &tolerance->dimstyle, sizeof (tolerance->dimstyle)))
+        && !memcmp (&dimstyle, &tolerance->dimstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TOLERANCE.dimstyle [H]");
@@ -21901,7 +21901,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &tolerance->extrusion, sizeof (tolerance->extrusion)))
+        && !memcmp (&extrusion, &tolerance->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("TOLERANCE.extrusion [BE]");
@@ -21924,7 +21924,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
   {
     BITCODE_3BD ins_pt;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &tolerance->ins_pt, sizeof (tolerance->ins_pt)))
+        && !memcmp (&ins_pt, &tolerance->ins_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("TOLERANCE.ins_pt [3BD]");
@@ -21932,7 +21932,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "parent", &parent, NULL)
-        && !memcmp (&parent, &tolerance->parent, sizeof (tolerance->parent)))
+        && !memcmp (&parent, &tolerance->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("TOLERANCE.parent [struct _dwg_object_entity*]");
@@ -21965,7 +21965,7 @@ static int test_TOLERANCE (const Dwg_Object *obj)
   {
     BITCODE_3BD x_direction;
     if (dwg_dynapi_entity_value (tolerance, "TOLERANCE", "x_direction", &x_direction, NULL)
-        && !memcmp (&x_direction, &tolerance->x_direction, sizeof (tolerance->x_direction)))
+        && !memcmp (&x_direction, &tolerance->x_direction, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("TOLERANCE.x_direction [3BD]");
@@ -21986,7 +21986,7 @@ static int test_TRACE (const Dwg_Object *obj)
   {
     BITCODE_2RD corner1;
     if (dwg_dynapi_entity_value (trace, "TRACE", "corner1", &corner1, NULL)
-        && !memcmp (&corner1, &trace->corner1, sizeof (trace->corner1)))
+        && !memcmp (&corner1, &trace->corner1, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("TRACE.corner1 [2RD]");
@@ -21994,7 +21994,7 @@ static int test_TRACE (const Dwg_Object *obj)
   {
     BITCODE_2RD corner2;
     if (dwg_dynapi_entity_value (trace, "TRACE", "corner2", &corner2, NULL)
-        && !memcmp (&corner2, &trace->corner2, sizeof (trace->corner2)))
+        && !memcmp (&corner2, &trace->corner2, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("TRACE.corner2 [2RD]");
@@ -22002,7 +22002,7 @@ static int test_TRACE (const Dwg_Object *obj)
   {
     BITCODE_2RD corner3;
     if (dwg_dynapi_entity_value (trace, "TRACE", "corner3", &corner3, NULL)
-        && !memcmp (&corner3, &trace->corner3, sizeof (trace->corner3)))
+        && !memcmp (&corner3, &trace->corner3, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("TRACE.corner3 [2RD]");
@@ -22010,7 +22010,7 @@ static int test_TRACE (const Dwg_Object *obj)
   {
     BITCODE_2RD corner4;
     if (dwg_dynapi_entity_value (trace, "TRACE", "corner4", &corner4, NULL)
-        && !memcmp (&corner4, &trace->corner4, sizeof (trace->corner4)))
+        && !memcmp (&corner4, &trace->corner4, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("TRACE.corner4 [2RD]");
@@ -22033,7 +22033,7 @@ static int test_TRACE (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (trace, "TRACE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &trace->extrusion, sizeof (trace->extrusion)))
+        && !memcmp (&extrusion, &trace->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("TRACE.extrusion [BE]");
@@ -22041,7 +22041,7 @@ static int test_TRACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (trace, "TRACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &trace->parent, sizeof (trace->parent)))
+        && !memcmp (&parent, &trace->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("TRACE.parent [struct _dwg_object_entity*]");
@@ -22116,7 +22116,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   {
     BITCODE_H definition_id;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "definition_id", &definition_id, NULL)
-        && !memcmp (&definition_id, &underlay->definition_id, sizeof (underlay->definition_id)))
+        && !memcmp (&definition_id, &underlay->definition_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("UNDERLAY.definition_id [H]");
@@ -22124,7 +22124,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &underlay->extrusion, sizeof (underlay->extrusion)))
+        && !memcmp (&extrusion, &underlay->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("UNDERLAY.extrusion [BE]");
@@ -22162,7 +22162,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   {
     BITCODE_3BD insertion_pt;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &underlay->insertion_pt, sizeof (underlay->insertion_pt)))
+        && !memcmp (&insertion_pt, &underlay->insertion_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("UNDERLAY.insertion_pt [3BD]");
@@ -22185,7 +22185,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "parent", &parent, NULL)
-        && !memcmp (&parent, &underlay->parent, sizeof (underlay->parent)))
+        && !memcmp (&parent, &underlay->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("UNDERLAY.parent [struct _dwg_object_entity*]");
@@ -22193,7 +22193,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   {
     BITCODE_3BD scale;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "scale", &scale, NULL)
-        && !memcmp (&scale, &underlay->scale, sizeof (underlay->scale)))
+        && !memcmp (&scale, &underlay->scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("UNDERLAY.scale [3BD_1]");
@@ -22201,7 +22201,7 @@ static int test_UNDERLAY (const Dwg_Object *obj)
   {
     BITCODE_H underlay_layer;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "underlay_layer", &underlay_layer, NULL)
-        && !memcmp (&underlay_layer, &underlay->underlay_layer, sizeof (underlay->underlay_layer)))
+        && !memcmp (&underlay_layer, &underlay->underlay_layer, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("UNDERLAY.underlay_layer [H]");
@@ -22282,7 +22282,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (vertex_2d, "VERTEX_2D", "parent", &parent, NULL)
-        && !memcmp (&parent, &vertex_2d->parent, sizeof (vertex_2d->parent)))
+        && !memcmp (&parent, &vertex_2d->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("VERTEX_2D.parent [struct _dwg_object_entity*]");
@@ -22290,7 +22290,7 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (vertex_2d, "VERTEX_2D", "point", &point, NULL)
-        && !memcmp (&point, &vertex_2d->point, sizeof (vertex_2d->point)))
+        && !memcmp (&point, &vertex_2d->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VERTEX_2D.point [3BD]");
@@ -22356,7 +22356,7 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "parent", &parent, NULL)
-        && !memcmp (&parent, &vertex_3d->parent, sizeof (vertex_3d->parent)))
+        && !memcmp (&parent, &vertex_3d->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("VERTEX_3D.parent [struct _dwg_object_entity*]");
@@ -22364,7 +22364,7 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "point", &point, NULL)
-        && !memcmp (&point, &vertex_3d->point, sizeof (vertex_3d->point)))
+        && !memcmp (&point, &vertex_3d->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VERTEX_3D.point [3BD]");
@@ -22426,7 +22426,7 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "parent", &parent, NULL)
-        && !memcmp (&parent, &vertex_pface_face->parent, sizeof (vertex_pface_face->parent)))
+        && !memcmp (&parent, &vertex_pface_face->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("VERTEX_PFACE_FACE.parent [struct _dwg_object_entity*]");
@@ -22434,7 +22434,7 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
   {
     BITCODE_BS vertind[4];
     if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "vertind[4]", &vertind, NULL)
-        && !memcmp (&vertind, &vertex_pface_face->vertind, sizeof (vertex_pface_face->vertind)))
+        && !memcmp (&vertind, &vertex_pface_face->vertind, sizeof (BITCODE_BS)))
         pass ();
     else
         fail ("VERTEX_PFACE_FACE.vertind[4] [BS]");
@@ -22455,7 +22455,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD GRIDUNIT;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "GRIDUNIT", &GRIDUNIT, NULL)
-        && !memcmp (&GRIDUNIT, &viewport->GRIDUNIT, sizeof (viewport->GRIDUNIT)))
+        && !memcmp (&GRIDUNIT, &viewport->GRIDUNIT, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VIEWPORT.GRIDUNIT [2RD]");
@@ -22478,7 +22478,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD SNAPBASE;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "SNAPBASE", &SNAPBASE, NULL)
-        && !memcmp (&SNAPBASE, &viewport->SNAPBASE, sizeof (viewport->SNAPBASE)))
+        && !memcmp (&SNAPBASE, &viewport->SNAPBASE, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VIEWPORT.SNAPBASE [2RD]");
@@ -22486,7 +22486,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD SNAPUNIT;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "SNAPUNIT", &SNAPUNIT, NULL)
-        && !memcmp (&SNAPUNIT, &viewport->SNAPUNIT, sizeof (viewport->SNAPUNIT)))
+        && !memcmp (&SNAPUNIT, &viewport->SNAPUNIT, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VIEWPORT.SNAPUNIT [2RD]");
@@ -22524,7 +22524,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD VIEWCTR;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "VIEWCTR", &VIEWCTR, NULL)
-        && !memcmp (&VIEWCTR, &viewport->VIEWCTR, sizeof (viewport->VIEWCTR)))
+        && !memcmp (&VIEWCTR, &viewport->VIEWCTR, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VIEWPORT.VIEWCTR [2RD]");
@@ -22532,7 +22532,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD VIEWDIR;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "VIEWDIR", &VIEWDIR, NULL)
-        && !memcmp (&VIEWDIR, &viewport->VIEWDIR, sizeof (viewport->VIEWDIR)))
+        && !memcmp (&VIEWDIR, &viewport->VIEWDIR, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEWPORT.VIEWDIR [3BD]");
@@ -22555,7 +22555,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_CMC ambient_color;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ambient_color", &ambient_color, NULL)
-        && !memcmp (&ambient_color, &viewport->ambient_color, sizeof (viewport->ambient_color)))
+        && !memcmp (&ambient_color, &viewport->ambient_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VIEWPORT.ambient_color [CMC]");
@@ -22578,7 +22578,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H background;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "background", &background, NULL)
-        && !memcmp (&background, &viewport->background, sizeof (viewport->background)))
+        && !memcmp (&background, &viewport->background, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.background [H]");
@@ -22586,7 +22586,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "base_ucs", &base_ucs, NULL)
-        && !memcmp (&base_ucs, &viewport->base_ucs, sizeof (viewport->base_ucs)))
+        && !memcmp (&base_ucs, &viewport->base_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.base_ucs [H]");
@@ -22609,7 +22609,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD center;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "center", &center, NULL)
-        && !memcmp (&center, &viewport->center, sizeof (viewport->center)))
+        && !memcmp (&center, &viewport->center, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEWPORT.center [3BD]");
@@ -22632,7 +22632,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H clip_boundary;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "clip_boundary", &clip_boundary, NULL)
-        && !memcmp (&clip_boundary, &viewport->clip_boundary, sizeof (viewport->clip_boundary)))
+        && !memcmp (&clip_boundary, &viewport->clip_boundary, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.clip_boundary [H]");
@@ -22755,7 +22755,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H named_ucs;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "named_ucs", &named_ucs, NULL)
-        && !memcmp (&named_ucs, &viewport->named_ucs, sizeof (viewport->named_ucs)))
+        && !memcmp (&named_ucs, &viewport->named_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.named_ucs [H]");
@@ -22793,7 +22793,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "parent", &parent, NULL)
-        && !memcmp (&parent, &viewport->parent, sizeof (viewport->parent)))
+        && !memcmp (&parent, &viewport->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("VIEWPORT.parent [struct _dwg_object_entity*]");
@@ -22816,7 +22816,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H shadeplot;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "shadeplot", &shadeplot, NULL)
-        && !memcmp (&shadeplot, &viewport->shadeplot, sizeof (viewport->shadeplot)))
+        && !memcmp (&shadeplot, &viewport->shadeplot, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.shadeplot [H]");
@@ -22864,7 +22864,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H sun;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "sun", &sun, NULL)
-        && !memcmp (&sun, &viewport->sun, sizeof (viewport->sun)))
+        && !memcmp (&sun, &viewport->sun, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.sun [H]");
@@ -22917,7 +22917,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsorg;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ucsorg", &ucsorg, NULL)
-        && !memcmp (&ucsorg, &viewport->ucsorg, sizeof (viewport->ucsorg)))
+        && !memcmp (&ucsorg, &viewport->ucsorg, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEWPORT.ucsorg [3BD]");
@@ -22925,7 +22925,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsxdir;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ucsxdir", &ucsxdir, NULL)
-        && !memcmp (&ucsxdir, &viewport->ucsxdir, sizeof (viewport->ucsxdir)))
+        && !memcmp (&ucsxdir, &viewport->ucsxdir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEWPORT.ucsxdir [3BD]");
@@ -22933,7 +22933,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsydir;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "ucsydir", &ucsydir, NULL)
-        && !memcmp (&ucsydir, &viewport->ucsydir, sizeof (viewport->ucsydir)))
+        && !memcmp (&ucsydir, &viewport->ucsydir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEWPORT.ucsydir [3BD]");
@@ -22956,7 +22956,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD view_target;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "view_target", &view_target, NULL)
-        && !memcmp (&view_target, &viewport->view_target, sizeof (viewport->view_target)))
+        && !memcmp (&view_target, &viewport->view_target, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEWPORT.view_target [3BD]");
@@ -22964,7 +22964,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H visualstyle;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "visualstyle", &visualstyle, NULL)
-        && !memcmp (&visualstyle, &viewport->visualstyle, sizeof (viewport->visualstyle)))
+        && !memcmp (&visualstyle, &viewport->visualstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.visualstyle [H]");
@@ -22972,7 +22972,7 @@ static int test_VIEWPORT (const Dwg_Object *obj)
   {
     BITCODE_H vport_entity_header;
     if (dwg_dynapi_entity_value (viewport, "VIEWPORT", "vport_entity_header", &vport_entity_header, NULL)
-        && !memcmp (&vport_entity_header, &viewport->vport_entity_header, sizeof (viewport->vport_entity_header)))
+        && !memcmp (&vport_entity_header, &viewport->vport_entity_header, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEWPORT.vport_entity_header [H]");
@@ -23138,7 +23138,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   {
     BITCODE_H imagedef;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "imagedef", &imagedef, NULL)
-        && !memcmp (&imagedef, &wipeout->imagedef, sizeof (wipeout->imagedef)))
+        && !memcmp (&imagedef, &wipeout->imagedef, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("WIPEOUT.imagedef [H]");
@@ -23146,7 +23146,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   {
     BITCODE_H imagedefreactor;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "imagedefreactor", &imagedefreactor, NULL)
-        && !memcmp (&imagedefreactor, &wipeout->imagedefreactor, sizeof (wipeout->imagedefreactor)))
+        && !memcmp (&imagedefreactor, &wipeout->imagedefreactor, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("WIPEOUT.imagedefreactor [H]");
@@ -23169,7 +23169,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "parent", &parent, NULL)
-        && !memcmp (&parent, &wipeout->parent, sizeof (wipeout->parent)))
+        && !memcmp (&parent, &wipeout->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("WIPEOUT.parent [struct _dwg_object_entity*]");
@@ -23177,7 +23177,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   {
     BITCODE_3BD pt0;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "pt0", &pt0, NULL)
-        && !memcmp (&pt0, &wipeout->pt0, sizeof (wipeout->pt0)))
+        && !memcmp (&pt0, &wipeout->pt0, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("WIPEOUT.pt0 [3BD]");
@@ -23185,7 +23185,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   {
     BITCODE_2RD size;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "size", &size, NULL)
-        && !memcmp (&size, &wipeout->size, sizeof (wipeout->size)))
+        && !memcmp (&size, &wipeout->size, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("WIPEOUT.size [2RD]");
@@ -23193,7 +23193,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   {
     BITCODE_3BD uvec;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "uvec", &uvec, NULL)
-        && !memcmp (&uvec, &wipeout->uvec, sizeof (wipeout->uvec)))
+        && !memcmp (&uvec, &wipeout->uvec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("WIPEOUT.uvec [3BD]");
@@ -23201,7 +23201,7 @@ static int test_WIPEOUT (const Dwg_Object *obj)
   {
     BITCODE_3BD vvec;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "vvec", &vvec, NULL)
-        && !memcmp (&vvec, &wipeout->vvec, sizeof (wipeout->vvec)))
+        && !memcmp (&vvec, &wipeout->vvec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("WIPEOUT.vvec [3BD]");
@@ -23250,7 +23250,7 @@ static int test_ACMECOMMANDHISTORY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acmecommandhistory, "ACMECOMMANDHISTORY", "parent", &parent, NULL)
-        && !memcmp (&parent, &acmecommandhistory->parent, sizeof (acmecommandhistory->parent)))
+        && !memcmp (&parent, &acmecommandhistory->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACMECOMMANDHISTORY.parent [struct _dwg_object_object*]");
@@ -23286,7 +23286,7 @@ static int test_ACMESCOPE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acmescope, "ACMESCOPE", "parent", &parent, NULL)
-        && !memcmp (&parent, &acmescope->parent, sizeof (acmescope->parent)))
+        && !memcmp (&parent, &acmescope->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACMESCOPE.parent [struct _dwg_object_object*]");
@@ -23322,7 +23322,7 @@ static int test_ACMESTATEMGR (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acmestatemgr, "ACMESTATEMGR", "parent", &parent, NULL)
-        && !memcmp (&parent, &acmestatemgr->parent, sizeof (acmestatemgr->parent)))
+        && !memcmp (&parent, &acmestatemgr->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACMESTATEMGR.parent [struct _dwg_object_object*]");
@@ -23343,7 +23343,7 @@ static int test_ACSH_BOOLEAN_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_boolean_class->evalexpr, sizeof (acsh_boolean_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_boolean_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_BOOLEAN_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -23361,7 +23361,7 @@ static int test_ACSH_BOOLEAN_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_boolean_class->history_node, sizeof (acsh_boolean_class->history_node)))
+        && !memcmp (&history_node, &acsh_boolean_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_BOOLEAN_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -23444,7 +23444,7 @@ static int test_ACSH_BOOLEAN_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_boolean_class->parent, sizeof (acsh_boolean_class->parent)))
+        && !memcmp (&parent, &acsh_boolean_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_BOOLEAN_CLASS.parent [struct _dwg_object_object*]");
@@ -23465,7 +23465,7 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_box_class->evalexpr, sizeof (acsh_box_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_box_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_BOX_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -23498,7 +23498,7 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_box_class->history_node, sizeof (acsh_box_class->history_node)))
+        && !memcmp (&history_node, &acsh_box_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_BOX_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -23551,7 +23551,7 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_box_class->parent, sizeof (acsh_box_class->parent)))
+        && !memcmp (&parent, &acsh_box_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_BOX_CLASS.parent [struct _dwg_object_object*]");
@@ -23657,7 +23657,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "block_size", &block_size, NULL)
-        && !memcmp (&block_size, &acsh_brep_class->block_size, sizeof (acsh_brep_class->block_size)))
+        && !memcmp (&block_size, &acsh_brep_class->block_size, sizeof (BITCODE_BL*)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.block_size [BL*]");
@@ -23688,7 +23688,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_brep_class->evalexpr, sizeof (acsh_brep_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_brep_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -23706,7 +23706,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "extra_acis_data", &extra_acis_data, NULL)
-        && !memcmp (&extra_acis_data, &acsh_brep_class->extra_acis_data, sizeof (acsh_brep_class->extra_acis_data)))
+        && !memcmp (&extra_acis_data, &acsh_brep_class->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.extra_acis_data [struct _dwg_entity_3DSOLID*]");
@@ -23729,7 +23729,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_H history_id;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "history_id", &history_id, NULL)
-        && !memcmp (&history_id, &acsh_brep_class->history_id, sizeof (acsh_brep_class->history_id)))
+        && !memcmp (&history_id, &acsh_brep_class->history_id, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.history_id [H]");
@@ -23737,7 +23737,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_brep_class->history_node, sizeof (acsh_brep_class->history_node)))
+        && !memcmp (&history_node, &acsh_brep_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -23875,7 +23875,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_brep_class->parent, sizeof (acsh_brep_class->parent)))
+        && !memcmp (&parent, &acsh_brep_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.parent [struct _dwg_object_object*]");
@@ -23883,7 +23883,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "point", &point, NULL)
-        && !memcmp (&point, &acsh_brep_class->point, sizeof (acsh_brep_class->point)))
+        && !memcmp (&point, &acsh_brep_class->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.point [3BD]");
@@ -23906,7 +23906,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_RC revision_bytes[9];
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "revision_bytes[9]", &revision_bytes, NULL)
-        && !memcmp (&revision_bytes, &acsh_brep_class->revision_bytes, sizeof (acsh_brep_class->revision_bytes)))
+        && !memcmp (&revision_bytes, &acsh_brep_class->revision_bytes, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.revision_bytes[9] [RC]");
@@ -23914,7 +23914,7 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_RC revision_guid[38];
     if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "revision_guid[38]", &revision_guid, NULL)
-        && !memcmp (&revision_guid, &acsh_brep_class->revision_guid, sizeof (acsh_brep_class->revision_guid)))
+        && !memcmp (&revision_guid, &acsh_brep_class->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
         fail ("ACSH_BREP_CLASS.revision_guid[38] [RC]");
@@ -24115,7 +24115,7 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_chamfer_class->evalexpr, sizeof (acsh_chamfer_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_chamfer_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_CHAMFER_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -24133,7 +24133,7 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_chamfer_class->history_node, sizeof (acsh_chamfer_class->history_node)))
+        && !memcmp (&history_node, &acsh_chamfer_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_CHAMFER_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -24201,7 +24201,7 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_chamfer_class->parent, sizeof (acsh_chamfer_class->parent)))
+        && !memcmp (&parent, &acsh_chamfer_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_CHAMFER_CLASS.parent [struct _dwg_object_object*]");
@@ -24237,7 +24237,7 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_cone_class->evalexpr, sizeof (acsh_cone_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_cone_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_CONE_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -24255,7 +24255,7 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_cone_class->history_node, sizeof (acsh_cone_class->history_node)))
+        && !memcmp (&history_node, &acsh_cone_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_CONE_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -24293,7 +24293,7 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_cone_class->parent, sizeof (acsh_cone_class->parent)))
+        && !memcmp (&parent, &acsh_cone_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_CONE_CLASS.parent [struct _dwg_object_object*]");
@@ -24359,7 +24359,7 @@ static int test_ACSH_CYLINDER_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_cylinder_class->evalexpr, sizeof (acsh_cylinder_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_cylinder_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_CYLINDER_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -24392,7 +24392,7 @@ static int test_ACSH_CYLINDER_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_cylinder_class->history_node, sizeof (acsh_cylinder_class->history_node)))
+        && !memcmp (&history_node, &acsh_cylinder_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_CYLINDER_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -24460,7 +24460,7 @@ static int test_ACSH_CYLINDER_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_cylinder_class->parent, sizeof (acsh_cylinder_class->parent)))
+        && !memcmp (&parent, &acsh_cylinder_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_CYLINDER_CLASS.parent [struct _dwg_object_object*]");
@@ -24571,7 +24571,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     BITCODE_3BD direction;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "direction", &direction, NULL)
-        && !memcmp (&direction, &acsh_extrusion_class->direction, sizeof (acsh_extrusion_class->direction)))
+        && !memcmp (&direction, &acsh_extrusion_class->direction, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.direction [3BD]");
@@ -24609,7 +24609,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_extrusion_class->evalexpr, sizeof (acsh_extrusion_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_extrusion_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -24642,7 +24642,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_extrusion_class->history_node, sizeof (acsh_extrusion_class->history_node)))
+        && !memcmp (&history_node, &acsh_extrusion_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -24695,7 +24695,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_extrusion_class->parent, sizeof (acsh_extrusion_class->parent)))
+        && !memcmp (&parent, &acsh_extrusion_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.parent [struct _dwg_object_object*]");
@@ -24703,7 +24703,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     BITCODE_BD* pathentity_transform;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "pathentity_transform", &pathentity_transform, NULL)
-        && !memcmp (&pathentity_transform, &acsh_extrusion_class->pathentity_transform, sizeof (acsh_extrusion_class->pathentity_transform)))
+        && !memcmp (&pathentity_transform, &acsh_extrusion_class->pathentity_transform, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.pathentity_transform [BD*]");
@@ -24711,7 +24711,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     BITCODE_3BD pt2;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "pt2", &pt2, NULL)
-        && !memcmp (&pt2, &acsh_extrusion_class->pt2, sizeof (acsh_extrusion_class->pt2)))
+        && !memcmp (&pt2, &acsh_extrusion_class->pt2, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.pt2 [3BD]");
@@ -24794,7 +24794,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     BITCODE_TF shsw_text;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text", &shsw_text, NULL)
-        && !memcmp (&shsw_text, &acsh_extrusion_class->shsw_text, sizeof (acsh_extrusion_class->shsw_text)))
+        && !memcmp (&shsw_text, &acsh_extrusion_class->shsw_text, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.shsw_text [TF]");
@@ -24802,7 +24802,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     BITCODE_TF shsw_text2;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_text2", &shsw_text2, NULL)
-        && !memcmp (&shsw_text2, &acsh_extrusion_class->shsw_text2, sizeof (acsh_extrusion_class->shsw_text2)))
+        && !memcmp (&shsw_text2, &acsh_extrusion_class->shsw_text2, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.shsw_text2 [TF]");
@@ -24855,7 +24855,7 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
   {
     BITCODE_BD* sweepentity_transform;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "sweepentity_transform", &sweepentity_transform, NULL)
-        && !memcmp (&sweepentity_transform, &acsh_extrusion_class->sweepentity_transform, sizeof (acsh_extrusion_class->sweepentity_transform)))
+        && !memcmp (&sweepentity_transform, &acsh_extrusion_class->sweepentity_transform, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.sweepentity_transform [BD*]");
@@ -24926,7 +24926,7 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_fillet_class->evalexpr, sizeof (acsh_fillet_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_fillet_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_FILLET_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -24944,7 +24944,7 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_fillet_class->history_node, sizeof (acsh_fillet_class->history_node)))
+        && !memcmp (&history_node, &acsh_fillet_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_FILLET_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -25042,7 +25042,7 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_fillet_class->parent, sizeof (acsh_fillet_class->parent)))
+        && !memcmp (&parent, &acsh_fillet_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_FILLET_CLASS.parent [struct _dwg_object_object*]");
@@ -25113,7 +25113,7 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_history_class->evalexpr, sizeof (acsh_history_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_history_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -25146,7 +25146,7 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_history_class->history_node, sizeof (acsh_history_class->history_node)))
+        && !memcmp (&history_node, &acsh_history_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -25184,7 +25184,7 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
   {
     BITCODE_H owner;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "owner", &owner, NULL)
-        && !memcmp (&owner, &acsh_history_class->owner, sizeof (acsh_history_class->owner)))
+        && !memcmp (&owner, &acsh_history_class->owner, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.owner [H]");
@@ -25192,7 +25192,7 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_history_class->parent, sizeof (acsh_history_class->parent)))
+        && !memcmp (&parent, &acsh_history_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.parent [struct _dwg_object_object*]");
@@ -25223,7 +25223,7 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_loft_class->evalexpr, sizeof (acsh_loft_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_loft_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_LOFT_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -25251,7 +25251,7 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_loft_class->history_node, sizeof (acsh_loft_class->history_node)))
+        && !memcmp (&history_node, &acsh_loft_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_LOFT_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -25319,7 +25319,7 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_loft_class->parent, sizeof (acsh_loft_class->parent)))
+        && !memcmp (&parent, &acsh_loft_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_LOFT_CLASS.parent [struct _dwg_object_object*]");
@@ -25340,7 +25340,7 @@ static int test_ACSH_PYRAMID_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_pyramid_class->evalexpr, sizeof (acsh_pyramid_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_pyramid_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_PYRAMID_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -25373,7 +25373,7 @@ static int test_ACSH_PYRAMID_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_pyramid_class->history_node, sizeof (acsh_pyramid_class->history_node)))
+        && !memcmp (&history_node, &acsh_pyramid_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_PYRAMID_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -25411,7 +25411,7 @@ static int test_ACSH_PYRAMID_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_pyramid_class->parent, sizeof (acsh_pyramid_class->parent)))
+        && !memcmp (&parent, &acsh_pyramid_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_PYRAMID_CLASS.parent [struct _dwg_object_object*]");
@@ -25477,7 +25477,7 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
   {
     BITCODE_3BD axis_pt;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "axis_pt", &axis_pt, NULL)
-        && !memcmp (&axis_pt, &acsh_revolve_class->axis_pt, sizeof (acsh_revolve_class->axis_pt)))
+        && !memcmp (&axis_pt, &acsh_revolve_class->axis_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.axis_pt [3BD]");
@@ -25530,7 +25530,7 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
   {
     BITCODE_2RD direction;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "direction", &direction, NULL)
-        && !memcmp (&direction, &acsh_revolve_class->direction, sizeof (acsh_revolve_class->direction)))
+        && !memcmp (&direction, &acsh_revolve_class->direction, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.direction [2RD]");
@@ -25553,7 +25553,7 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_revolve_class->evalexpr, sizeof (acsh_revolve_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_revolve_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -25571,7 +25571,7 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_revolve_class->history_node, sizeof (acsh_revolve_class->history_node)))
+        && !memcmp (&history_node, &acsh_revolve_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -25624,7 +25624,7 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_revolve_class->parent, sizeof (acsh_revolve_class->parent)))
+        && !memcmp (&parent, &acsh_revolve_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.parent [struct _dwg_object_object*]");
@@ -25662,7 +25662,7 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
   {
     BITCODE_H sweep_entity;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "sweep_entity", &sweep_entity, NULL)
-        && !memcmp (&sweep_entity, &acsh_revolve_class->sweep_entity, sizeof (acsh_revolve_class->sweep_entity)))
+        && !memcmp (&sweep_entity, &acsh_revolve_class->sweep_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ACSH_REVOLVE_CLASS.sweep_entity [H]");
@@ -25698,7 +25698,7 @@ static int test_ACSH_SPHERE_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_sphere_class->evalexpr, sizeof (acsh_sphere_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_sphere_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_SPHERE_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -25716,7 +25716,7 @@ static int test_ACSH_SPHERE_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_sphere_class->history_node, sizeof (acsh_sphere_class->history_node)))
+        && !memcmp (&history_node, &acsh_sphere_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_SPHERE_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -25754,7 +25754,7 @@ static int test_ACSH_SPHERE_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_sphere_class->parent, sizeof (acsh_sphere_class->parent)))
+        && !memcmp (&parent, &acsh_sphere_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_SPHERE_CLASS.parent [struct _dwg_object_object*]");
@@ -25865,7 +25865,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_3BD direction;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "direction", &direction, NULL)
-        && !memcmp (&direction, &acsh_sweep_class->direction, sizeof (acsh_sweep_class->direction)))
+        && !memcmp (&direction, &acsh_sweep_class->direction, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.direction [3BD]");
@@ -25903,7 +25903,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_sweep_class->evalexpr, sizeof (acsh_sweep_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_sweep_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -25936,7 +25936,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_sweep_class->history_node, sizeof (acsh_sweep_class->history_node)))
+        && !memcmp (&history_node, &acsh_sweep_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -25989,7 +25989,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_sweep_class->parent, sizeof (acsh_sweep_class->parent)))
+        && !memcmp (&parent, &acsh_sweep_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.parent [struct _dwg_object_object*]");
@@ -25997,7 +25997,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_BD* pathentity_transform;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "pathentity_transform", &pathentity_transform, NULL)
-        && !memcmp (&pathentity_transform, &acsh_sweep_class->pathentity_transform, sizeof (acsh_sweep_class->pathentity_transform)))
+        && !memcmp (&pathentity_transform, &acsh_sweep_class->pathentity_transform, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.pathentity_transform [BD*]");
@@ -26005,7 +26005,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_3BD pt2;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "pt2", &pt2, NULL)
-        && !memcmp (&pt2, &acsh_sweep_class->pt2, sizeof (acsh_sweep_class->pt2)))
+        && !memcmp (&pt2, &acsh_sweep_class->pt2, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.pt2 [3BD]");
@@ -26088,7 +26088,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_TF shsw_text;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_text", &shsw_text, NULL)
-        && !memcmp (&shsw_text, &acsh_sweep_class->shsw_text, sizeof (acsh_sweep_class->shsw_text)))
+        && !memcmp (&shsw_text, &acsh_sweep_class->shsw_text, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.shsw_text [TF]");
@@ -26096,7 +26096,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_TF shsw_text2;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_text2", &shsw_text2, NULL)
-        && !memcmp (&shsw_text2, &acsh_sweep_class->shsw_text2, sizeof (acsh_sweep_class->shsw_text2)))
+        && !memcmp (&shsw_text2, &acsh_sweep_class->shsw_text2, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.shsw_text2 [TF]");
@@ -26149,7 +26149,7 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
   {
     BITCODE_BD* sweepentity_transform;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "sweepentity_transform", &sweepentity_transform, NULL)
-        && !memcmp (&sweepentity_transform, &acsh_sweep_class->sweepentity_transform, sizeof (acsh_sweep_class->sweepentity_transform)))
+        && !memcmp (&sweepentity_transform, &acsh_sweep_class->sweepentity_transform, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.sweepentity_transform [BD*]");
@@ -26185,7 +26185,7 @@ static int test_ACSH_TORUS_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_torus_class->evalexpr, sizeof (acsh_torus_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_torus_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_TORUS_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -26203,7 +26203,7 @@ static int test_ACSH_TORUS_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_torus_class->history_node, sizeof (acsh_torus_class->history_node)))
+        && !memcmp (&history_node, &acsh_torus_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_TORUS_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -26271,7 +26271,7 @@ static int test_ACSH_TORUS_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_torus_class->parent, sizeof (acsh_torus_class->parent)))
+        && !memcmp (&parent, &acsh_torus_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_TORUS_CLASS.parent [struct _dwg_object_object*]");
@@ -26292,7 +26292,7 @@ static int test_ACSH_WEDGE_CLASS (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_wedge_class->evalexpr, sizeof (acsh_wedge_class->evalexpr)))
+        && !memcmp (&evalexpr, &acsh_wedge_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_WEDGE_CLASS.evalexpr [Dwg_EvalExpr]");
@@ -26325,7 +26325,7 @@ static int test_ACSH_WEDGE_CLASS (const Dwg_Object *obj)
   {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_wedge_class->history_node, sizeof (acsh_wedge_class->history_node)))
+        && !memcmp (&history_node, &acsh_wedge_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
         pass ();
     else
         fail ("ACSH_WEDGE_CLASS.history_node [Dwg_ACSH_HistoryNode]");
@@ -26378,7 +26378,7 @@ static int test_ACSH_WEDGE_CLASS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "parent", &parent, NULL)
-        && !memcmp (&parent, &acsh_wedge_class->parent, sizeof (acsh_wedge_class->parent)))
+        && !memcmp (&parent, &acsh_wedge_class->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ACSH_WEDGE_CLASS.parent [struct _dwg_object_object*]");
@@ -26414,7 +26414,7 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3BD _11pt;
     if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "_11pt", &_11pt, NULL)
-        && !memcmp (&_11pt, &aldimobjectcontextdata->_11pt, sizeof (aldimobjectcontextdata->_11pt)))
+        && !memcmp (&_11pt, &aldimobjectcontextdata->_11pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ALDIMOBJECTCONTEXTDATA._11pt [3BD]");
@@ -26602,7 +26602,7 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_2RD def_pt;
     if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "def_pt", &def_pt, NULL)
-        && !memcmp (&def_pt, &aldimobjectcontextdata->def_pt, sizeof (aldimobjectcontextdata->def_pt)))
+        && !memcmp (&def_pt, &aldimobjectcontextdata->def_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("ALDIMOBJECTCONTEXTDATA.def_pt [2RD]");
@@ -26665,7 +26665,7 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &aldimobjectcontextdata->parent, sizeof (aldimobjectcontextdata->parent)))
+        && !memcmp (&parent, &aldimobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ALDIMOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -26673,7 +26673,7 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &aldimobjectcontextdata->scale, sizeof (aldimobjectcontextdata->scale)))
+        && !memcmp (&scale, &aldimobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ALDIMOBJECTCONTEXTDATA.scale [H]");
@@ -26764,7 +26764,7 @@ static int test_APPID (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (appid, "APPID", "parent", &parent, NULL)
-        && !memcmp (&parent, &appid->parent, sizeof (appid->parent)))
+        && !memcmp (&parent, &appid->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("APPID.parent [struct _dwg_object_object*]");
@@ -26802,7 +26802,7 @@ static int test_APPID (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (appid, "APPID", "xref", &xref, NULL)
-        && !memcmp (&xref, &appid->xref, sizeof (appid->xref)))
+        && !memcmp (&xref, &appid->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("APPID.xref [H]");
@@ -26863,7 +26863,7 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &appid_control->parent, sizeof (appid_control->parent)))
+        && !memcmp (&parent, &appid_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("APPID_CONTROL.parent [struct _dwg_object_object*]");
@@ -26899,7 +26899,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_H actionbody;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "actionbody", &actionbody, NULL)
-        && !memcmp (&actionbody, &assoc2dconstraintgroup->actionbody, sizeof (assoc2dconstraintgroup->actionbody)))
+        && !memcmp (&actionbody, &assoc2dconstraintgroup->actionbody, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.actionbody [H]");
@@ -26932,7 +26932,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_3BD c1;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "c1", &c1, NULL)
-        && !memcmp (&c1, &assoc2dconstraintgroup->c1, sizeof (assoc2dconstraintgroup->c1)))
+        && !memcmp (&c1, &assoc2dconstraintgroup->c1, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.c1 [3BD]");
@@ -26940,7 +26940,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_3BD c2;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "c2", &c2, NULL)
-        && !memcmp (&c2, &assoc2dconstraintgroup->c2, sizeof (assoc2dconstraintgroup->c2)))
+        && !memcmp (&c2, &assoc2dconstraintgroup->c2, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.c2 [3BD]");
@@ -26948,7 +26948,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_3BD c3;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "c3", &c3, NULL)
-        && !memcmp (&c3, &assoc2dconstraintgroup->c3, sizeof (assoc2dconstraintgroup->c3)))
+        && !memcmp (&c3, &assoc2dconstraintgroup->c3, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.c3 [3BD]");
@@ -27071,7 +27071,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_H h1;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h1", &h1, NULL)
-        && !memcmp (&h1, &assoc2dconstraintgroup->h1, sizeof (assoc2dconstraintgroup->h1)))
+        && !memcmp (&h1, &assoc2dconstraintgroup->h1, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.h1 [H]");
@@ -27079,7 +27079,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_H h2;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h2", &h2, NULL)
-        && !memcmp (&h2, &assoc2dconstraintgroup->h2, sizeof (assoc2dconstraintgroup->h2)))
+        && !memcmp (&h2, &assoc2dconstraintgroup->h2, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.h2 [H]");
@@ -27087,7 +27087,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_H h3;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h3", &h3, NULL)
-        && !memcmp (&h3, &assoc2dconstraintgroup->h3, sizeof (assoc2dconstraintgroup->h3)))
+        && !memcmp (&h3, &assoc2dconstraintgroup->h3, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.h3 [H]");
@@ -27235,7 +27235,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_H owningnetwork;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "owningnetwork", &owningnetwork, NULL)
-        && !memcmp (&owningnetwork, &assoc2dconstraintgroup->owningnetwork, sizeof (assoc2dconstraintgroup->owningnetwork)))
+        && !memcmp (&owningnetwork, &assoc2dconstraintgroup->owningnetwork, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.owningnetwork [H]");
@@ -27243,7 +27243,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "parent", &parent, NULL)
-        && !memcmp (&parent, &assoc2dconstraintgroup->parent, sizeof (assoc2dconstraintgroup->parent)))
+        && !memcmp (&parent, &assoc2dconstraintgroup->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.parent [struct _dwg_object_object*]");
@@ -27316,7 +27316,7 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
   {
     BITCODE_3BD workplane[3];
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "workplane[3]", &workplane, NULL)
-        && !memcmp (&workplane, &assoc2dconstraintgroup->workplane, sizeof (assoc2dconstraintgroup->workplane)))
+        && !memcmp (&workplane, &assoc2dconstraintgroup->workplane, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.workplane[3] [3BD]");
@@ -27352,7 +27352,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
   {
     BITCODE_H actionbody;
     if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "actionbody", &actionbody, NULL)
-        && !memcmp (&actionbody, &assocaction->actionbody, sizeof (assocaction->actionbody)))
+        && !memcmp (&actionbody, &assocaction->actionbody, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCACTION.actionbody [H]");
@@ -27480,7 +27480,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
   {
     BITCODE_H owningnetwork;
     if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "owningnetwork", &owningnetwork, NULL)
-        && !memcmp (&owningnetwork, &assocaction->owningnetwork, sizeof (assocaction->owningnetwork)))
+        && !memcmp (&owningnetwork, &assocaction->owningnetwork, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCACTION.owningnetwork [H]");
@@ -27488,7 +27488,7 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocaction->parent, sizeof (assocaction->parent)))
+        && !memcmp (&parent, &assocaction->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCACTION.parent [struct _dwg_object_object*]");
@@ -27524,7 +27524,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   {
     BITCODE_H d_node;
     if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "d_node", &d_node, NULL)
-        && !memcmp (&d_node, &assocaligneddimactionbody->d_node, sizeof (assocaligneddimactionbody->d_node)))
+        && !memcmp (&d_node, &assocaligneddimactionbody->d_node, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCALIGNEDDIMACTIONBODY.d_node [H]");
@@ -27637,7 +27637,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocaligneddimactionbody->parent, sizeof (assocaligneddimactionbody->parent)))
+        && !memcmp (&parent, &assocaligneddimactionbody->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCALIGNEDDIMACTIONBODY.parent [struct _dwg_object_object*]");
@@ -27645,7 +27645,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   {
     BITCODE_H r_node;
     if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "r_node", &r_node, NULL)
-        && !memcmp (&r_node, &assocaligneddimactionbody->r_node, sizeof (assocaligneddimactionbody->r_node)))
+        && !memcmp (&r_node, &assocaligneddimactionbody->r_node, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCALIGNEDDIMACTIONBODY.r_node [H]");
@@ -27653,7 +27653,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   {
     BITCODE_H readdep;
     if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "readdep", &readdep, NULL)
-        && !memcmp (&readdep, &assocaligneddimactionbody->readdep, sizeof (assocaligneddimactionbody->readdep)))
+        && !memcmp (&readdep, &assocaligneddimactionbody->readdep, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCALIGNEDDIMACTIONBODY.readdep [H]");
@@ -27661,7 +27661,7 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   {
     BITCODE_H writedep;
     if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &assocaligneddimactionbody->writedep, sizeof (assocaligneddimactionbody->writedep)))
+        && !memcmp (&writedep, &assocaligneddimactionbody->writedep, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCALIGNEDDIMACTIONBODY.writedep [H]");
@@ -27757,7 +27757,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H node;
     if (dwg_dynapi_entity_value (assocdependency, "ASSOCDEPENDENCY", "node", &node, NULL)
-        && !memcmp (&node, &assocdependency->node, sizeof (assocdependency->node)))
+        && !memcmp (&node, &assocdependency->node, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCDEPENDENCY.node [H]");
@@ -27780,7 +27780,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H owner;
     if (dwg_dynapi_entity_value (assocdependency, "ASSOCDEPENDENCY", "owner", &owner, NULL)
-        && !memcmp (&owner, &assocdependency->owner, sizeof (assocdependency->owner)))
+        && !memcmp (&owner, &assocdependency->owner, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCDEPENDENCY.owner [H]");
@@ -27788,7 +27788,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocdependency, "ASSOCDEPENDENCY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocdependency->parent, sizeof (assocdependency->parent)))
+        && !memcmp (&parent, &assocdependency->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCDEPENDENCY.parent [struct _dwg_object_object*]");
@@ -27796,7 +27796,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H readdep;
     if (dwg_dynapi_entity_value (assocdependency, "ASSOCDEPENDENCY", "readdep", &readdep, NULL)
-        && !memcmp (&readdep, &assocdependency->readdep, sizeof (assocdependency->readdep)))
+        && !memcmp (&readdep, &assocdependency->readdep, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCDEPENDENCY.readdep [H]");
@@ -27849,7 +27849,7 @@ static int test_ASSOCDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H writedep;
     if (dwg_dynapi_entity_value (assocdependency, "ASSOCDEPENDENCY", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &assocdependency->writedep, sizeof (assocdependency->writedep)))
+        && !memcmp (&writedep, &assocdependency->writedep, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCDEPENDENCY.writedep [H]");
@@ -27985,7 +27985,7 @@ static int test_ASSOCEXTRUDEDSURFACEACTIONBODY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocextrudedsurfaceactionbody, "ASSOCEXTRUDEDSURFACEACTIONBODY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocextrudedsurfaceactionbody->parent, sizeof (assocextrudedsurfaceactionbody->parent)))
+        && !memcmp (&parent, &assocextrudedsurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCEXTRUDEDSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
@@ -28236,7 +28236,7 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H h330_1;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h330_1", &h330_1, NULL)
-        && !memcmp (&h330_1, &assocgeomdependency->h330_1, sizeof (assocgeomdependency->h330_1)))
+        && !memcmp (&h330_1, &assocgeomdependency->h330_1, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCGEOMDEPENDENCY.h330_1 [H]");
@@ -28244,7 +28244,7 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H h330_2;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h330_2", &h330_2, NULL)
-        && !memcmp (&h330_2, &assocgeomdependency->h330_2, sizeof (assocgeomdependency->h330_2)))
+        && !memcmp (&h330_2, &assocgeomdependency->h330_2, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCGEOMDEPENDENCY.h330_2 [H]");
@@ -28252,7 +28252,7 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H h330_3;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h330_3", &h330_3, NULL)
-        && !memcmp (&h330_3, &assocgeomdependency->h330_3, sizeof (assocgeomdependency->h330_3)))
+        && !memcmp (&h330_3, &assocgeomdependency->h330_3, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCGEOMDEPENDENCY.h330_3 [H]");
@@ -28260,7 +28260,7 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
   {
     BITCODE_H h360;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "h360", &h360, NULL)
-        && !memcmp (&h360, &assocgeomdependency->h360, sizeof (assocgeomdependency->h360)))
+        && !memcmp (&h360, &assocgeomdependency->h360, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCGEOMDEPENDENCY.h360 [H]");
@@ -28328,7 +28328,7 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocgeomdependency->parent, sizeof (assocgeomdependency->parent)))
+        && !memcmp (&parent, &assocgeomdependency->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCGEOMDEPENDENCY.parent [struct _dwg_object_object*]");
@@ -28474,7 +28474,7 @@ static int test_ASSOCLOFTEDSURFACEACTIONBODY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocloftedsurfaceactionbody, "ASSOCLOFTEDSURFACEACTIONBODY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocloftedsurfaceactionbody->parent, sizeof (assocloftedsurfaceactionbody->parent)))
+        && !memcmp (&parent, &assocloftedsurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCLOFTEDSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
@@ -28620,7 +28620,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
   {
     BITCODE_H actionbody;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "actionbody", &actionbody, NULL)
-        && !memcmp (&actionbody, &assocnetwork->actionbody, sizeof (assocnetwork->actionbody)))
+        && !memcmp (&actionbody, &assocnetwork->actionbody, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCNETWORK.actionbody [H]");
@@ -28773,7 +28773,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
   {
     BITCODE_H owningnetwork;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "owningnetwork", &owningnetwork, NULL)
-        && !memcmp (&owningnetwork, &assocnetwork->owningnetwork, sizeof (assocnetwork->owningnetwork)))
+        && !memcmp (&owningnetwork, &assocnetwork->owningnetwork, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCNETWORK.owningnetwork [H]");
@@ -28781,7 +28781,7 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocnetwork->parent, sizeof (assocnetwork->parent)))
+        && !memcmp (&parent, &assocnetwork->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCNETWORK.parent [struct _dwg_object_object*]");
@@ -28897,7 +28897,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocosnappointrefactionparam->parent, sizeof (assocosnappointrefactionparam->parent)))
+        && !memcmp (&parent, &assocosnappointrefactionparam->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCOSNAPPOINTREFACTIONPARAM.parent [struct _dwg_object_object*]");
@@ -28965,7 +28965,7 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
   {
     BITCODE_H writedep;
     if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &assocosnappointrefactionparam->writedep, sizeof (assocosnappointrefactionparam->writedep)))
+        && !memcmp (&writedep, &assocosnappointrefactionparam->writedep, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCOSNAPPOINTREFACTIONPARAM.writedep [H]");
@@ -29031,7 +29031,7 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocperssubentmanager->parent, sizeof (assocperssubentmanager->parent)))
+        && !memcmp (&parent, &assocperssubentmanager->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCPERSSUBENTMANAGER.parent [struct _dwg_object_object*]");
@@ -29727,7 +29727,7 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocplanesurfaceactionbody, "ASSOCPLANESURFACEACTIONBODY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocplanesurfaceactionbody->parent, sizeof (assocplanesurfaceactionbody->parent)))
+        && !memcmp (&parent, &assocplanesurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCPLANESURFACEACTIONBODY.parent [struct _dwg_object_object*]");
@@ -29973,7 +29973,7 @@ static int test_ASSOCREVOLVEDSURFACEACTIONBODY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocrevolvedsurfaceactionbody, "ASSOCREVOLVEDSURFACEACTIONBODY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocrevolvedsurfaceactionbody->parent, sizeof (assocrevolvedsurfaceactionbody->parent)))
+        && !memcmp (&parent, &assocrevolvedsurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCREVOLVEDSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
@@ -30219,7 +30219,7 @@ static int test_ASSOCSWEPTSURFACEACTIONBODY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocsweptsurfaceactionbody, "ASSOCSWEPTSURFACEACTIONBODY", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocsweptsurfaceactionbody->parent, sizeof (assocsweptsurfaceactionbody->parent)))
+        && !memcmp (&parent, &assocsweptsurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCSWEPTSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
@@ -30430,7 +30430,7 @@ static int test_ASSOCVERTEXACTIONPARAM (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocvertexactionparam->parent, sizeof (assocvertexactionparam->parent)))
+        && !memcmp (&parent, &assocvertexactionparam->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("ASSOCVERTEXACTIONPARAM.parent [struct _dwg_object_object*]");
@@ -30498,7 +30498,7 @@ static int test_ASSOCVERTEXACTIONPARAM (const Dwg_Object *obj)
   {
     BITCODE_H writedep;
     if (dwg_dynapi_entity_value (assocvertexactionparam, "ASSOCVERTEXACTIONPARAM", "writedep", &writedep, NULL)
-        && !memcmp (&writedep, &assocvertexactionparam->writedep, sizeof (assocvertexactionparam->writedep)))
+        && !memcmp (&writedep, &assocvertexactionparam->writedep, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("ASSOCVERTEXACTIONPARAM.writedep [H]");
@@ -30517,84 +30517,92 @@ static int test_BACKGROUND (const Dwg_Object *obj)
   Dwg_Object_BACKGROUND *restrict background = obj->tio.object->tio.BACKGROUND;
   failed = 0;
   {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "class_version", &class_version, NULL)
+        && class_version == background->class_version)
+      pass ();
+    else
+      fail ("BACKGROUND.class_version [BL] %u != %u", background->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (background, "BACKGROUND", "class_version", &class_version, 0)
+        && class_version == background->class_version)
+      pass ();
+    else
+      fail ("BACKGROUND.class_version [BL] set+1 %u != %u", background->class_version, class_version);
+    background->class_version--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "parent", &parent, NULL)
-        && !memcmp (&parent, &background->parent, sizeof (background->parent)))
+        && !memcmp (&parent, &background->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BACKGROUND.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BL type;
+    Dwg_BACKGROUND_type type;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "type", &type, NULL)
-        && type == background->type)
-      pass ();
+        && !memcmp (&type, &background->type, sizeof (Dwg_BACKGROUND_type)))
+        pass ();
     else
-      fail ("BACKGROUND.type [BL] %u != %u", background->type, type);
-    type++;
-    if (dwg_dynapi_entity_set_value (background, "BACKGROUND", "type", &type, 0)
-        && type == background->type)
-      pass ();
-    else
-      fail ("BACKGROUND.type [BL] set+1 %u != %u", background->type, type);
-    background->type--;
+        fail ("BACKGROUND.type [Dwg_BACKGROUND_type]");
   }
   {
     Dwg_BACKGROUND_Gradient u_gradient;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.gradient", &u_gradient, NULL)
-        && !memcmp (&u_gradient, &background->u_gradient, sizeof (background->u_gradient)))
+        && !memcmp (&u_gradient, &background->u.gradient, sizeof (Dwg_BACKGROUND_Gradient)))
         pass ();
     else
         fail ("BACKGROUND.u.gradient [Dwg_BACKGROUND_Gradient]");
   }
   {
-    Dwg_BACKGROUND_GroundPlane u_groundplane;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.groundplane", &u_groundplane, NULL)
-        && !memcmp (&u_groundplane, &background->u_groundplane, sizeof (background->u_groundplane)))
+    Dwg_BACKGROUND_GroundPlane u_ground_plane;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ground_plane", &u_ground_plane, NULL)
+        && !memcmp (&u_ground_plane, &background->u.ground_plane, sizeof (Dwg_BACKGROUND_GroundPlane)))
         pass ();
     else
-        fail ("BACKGROUND.u.groundplane [Dwg_BACKGROUND_GroundPlane]");
+        fail ("BACKGROUND.u.ground_plane [Dwg_BACKGROUND_GroundPlane]");
   }
   {
     Dwg_BACKGROUND_IBL u_ibl;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ibl", &u_ibl, NULL)
-        && !memcmp (&u_ibl, &background->u_ibl, sizeof (background->u_ibl)))
+        && !memcmp (&u_ibl, &background->u.ibl, sizeof (Dwg_BACKGROUND_IBL)))
         pass ();
     else
         fail ("BACKGROUND.u.ibl [Dwg_BACKGROUND_IBL]");
   }
   {
-    BITCODE_T u_ibl_image_name;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ibl.image_name", &u_ibl_image_name, NULL)
-        && u_ibl_image_name
-           ? strEQ ((char *)u_ibl_image_name, (char *)background->u.ibl.image_name)
-           : !background->u.ibl.image_name)
+    BITCODE_T u_ibl_name;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ibl.name", &u_ibl_name, NULL)
+        && u_ibl_name
+           ? strEQ ((char *)u_ibl_name, (char *)background->u.ibl.name)
+           : !background->u.ibl.name)
       pass ();
     else
-      fail ("BACKGROUND.u.ibl.image_name [T] '%s' <> '%s'", u_ibl_image_name, background->u.ibl.image_name);
+      fail ("BACKGROUND.u.ibl.name [T] '%s' <> '%s'", u_ibl_name, background->u.ibl.name);
   }
   {
     Dwg_BACKGROUND_Image u_image;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image", &u_image, NULL)
-        && !memcmp (&u_image, &background->u_image, sizeof (background->u_image)))
+        && !memcmp (&u_image, &background->u.image, sizeof (Dwg_BACKGROUND_Image)))
         pass ();
     else
         fail ("BACKGROUND.u.image [Dwg_BACKGROUND_Image]");
   }
   {
-    BITCODE_T u_image_image_filename;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.image_filename", &u_image_image_filename, NULL)
-        && u_image_image_filename
-           ? strEQ ((char *)u_image_image_filename, (char *)background->u.image.image_filename)
-           : !background->u.image.image_filename)
+    BITCODE_T u_image_filename;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.filename", &u_image_filename, NULL)
+        && u_image_filename
+           ? strEQ ((char *)u_image_filename, (char *)background->u.image.filename)
+           : !background->u.image.filename)
       pass ();
     else
-      fail ("BACKGROUND.u.image.image_filename [T] '%s' <> '%s'", u_image_image_filename, background->u.image.image_filename);
+      fail ("BACKGROUND.u.image.filename [T] '%s' <> '%s'", u_image_filename, background->u.image.filename);
   }
   {
     BITCODE_2BD u_image_offset;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.offset", &u_image_offset, NULL)
-        && !memcmp (&u_image_offset, &background->u_image_offset, sizeof (background->u_image_offset)))
+        && !memcmp (&u_image_offset, &background->u.image.offset, sizeof (BITCODE_2BD)))
         pass ();
     else
         fail ("BACKGROUND.u.image.offset [2BD_1]");
@@ -30602,7 +30610,7 @@ static int test_BACKGROUND (const Dwg_Object *obj)
   {
     BITCODE_2BD u_image_scale;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.scale", &u_image_scale, NULL)
-        && !memcmp (&u_image_scale, &background->u_image_scale, sizeof (background->u_image_scale)))
+        && !memcmp (&u_image_scale, &background->u.image.scale, sizeof (BITCODE_2BD)))
         pass ();
     else
         fail ("BACKGROUND.u.image.scale [2BD_1]");
@@ -30610,7 +30618,7 @@ static int test_BACKGROUND (const Dwg_Object *obj)
   {
     Dwg_BACKGROUND_Sky u_sky;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.sky", &u_sky, NULL)
-        && !memcmp (&u_sky, &background->u_sky, sizeof (background->u_sky)))
+        && !memcmp (&u_sky, &background->u.sky, sizeof (Dwg_BACKGROUND_Sky)))
         pass ();
     else
         fail ("BACKGROUND.u.sky [Dwg_BACKGROUND_Sky]");
@@ -30618,7 +30626,7 @@ static int test_BACKGROUND (const Dwg_Object *obj)
   {
     Dwg_BACKGROUND_Solid u_solid;
     if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.solid", &u_solid, NULL)
-        && !memcmp (&u_solid, &background->u_solid, sizeof (background->u_solid)))
+        && !memcmp (&u_solid, &background->u.solid, sizeof (Dwg_BACKGROUND_Solid)))
         pass ();
     else
         fail ("BACKGROUND.u.solid [Dwg_BACKGROUND_Solid]");
@@ -30669,7 +30677,7 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3BD insertion_pt;
     if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &blkrefobjectcontextdata->insertion_pt, sizeof (blkrefobjectcontextdata->insertion_pt)))
+        && !memcmp (&insertion_pt, &blkrefobjectcontextdata->insertion_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("BLKREFOBJECTCONTEXTDATA.insertion_pt [3BD]");
@@ -30692,7 +30700,7 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &blkrefobjectcontextdata->parent, sizeof (blkrefobjectcontextdata->parent)))
+        && !memcmp (&parent, &blkrefobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLKREFOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -30715,7 +30723,7 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &blkrefobjectcontextdata->scale, sizeof (blkrefobjectcontextdata->scale)))
+        && !memcmp (&scale, &blkrefobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLKREFOBJECTCONTEXTDATA.scale [H]");
@@ -30723,7 +30731,7 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3BD scale_factor;
     if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "scale_factor", &scale_factor, NULL)
-        && !memcmp (&scale_factor, &blkrefobjectcontextdata->scale_factor, sizeof (blkrefobjectcontextdata->scale_factor)))
+        && !memcmp (&scale_factor, &blkrefobjectcontextdata->scale_factor, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("BLKREFOBJECTCONTEXTDATA.scale_factor [3BD_1]");
@@ -30744,7 +30752,7 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &blockgriplocationcomponent->evalexpr, sizeof (blockgriplocationcomponent->evalexpr)))
+        && !memcmp (&evalexpr, &blockgriplocationcomponent->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("BLOCKGRIPLOCATIONCOMPONENT.evalexpr [Dwg_EvalExpr]");
@@ -30787,7 +30795,7 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "parent", &parent, NULL)
-        && !memcmp (&parent, &blockgriplocationcomponent->parent, sizeof (blockgriplocationcomponent->parent)))
+        && !memcmp (&parent, &blockgriplocationcomponent->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKGRIPLOCATIONCOMPONENT.parent [struct _dwg_object_object*]");
@@ -30923,7 +30931,7 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
   {
     BITCODE_3BD bg_pt;
     if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockvisibilitygrip->bg_pt, sizeof (blockvisibilitygrip->bg_pt)))
+        && !memcmp (&bg_pt, &blockvisibilitygrip->bg_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("BLOCKVISIBILITYGRIP.bg_pt [3BD]");
@@ -30931,7 +30939,7 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
   {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &blockvisibilitygrip->evalexpr, sizeof (blockvisibilitygrip->evalexpr)))
+        && !memcmp (&evalexpr, &blockvisibilitygrip->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("BLOCKVISIBILITYGRIP.evalexpr [Dwg_EvalExpr]");
@@ -30949,7 +30957,7 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "parent", &parent, NULL)
-        && !memcmp (&parent, &blockvisibilitygrip->parent, sizeof (blockvisibilitygrip->parent)))
+        && !memcmp (&parent, &blockvisibilitygrip->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKVISIBILITYGRIP.parent [struct _dwg_object_object*]");
@@ -31035,7 +31043,7 @@ static int test_BLOCKVISIBILITYPARAMETER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "parent", &parent, NULL)
-        && !memcmp (&parent, &blockvisibilityparameter->parent, sizeof (blockvisibilityparameter->parent)))
+        && !memcmp (&parent, &blockvisibilityparameter->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKVISIBILITYPARAMETER.parent [struct _dwg_object_object*]");
@@ -31076,7 +31084,7 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
   {
     BITCODE_H model_space;
     if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "model_space", &model_space, NULL)
-        && !memcmp (&model_space, &block_control->model_space, sizeof (block_control->model_space)))
+        && !memcmp (&model_space, &block_control->model_space, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_CONTROL.model_space [H]");
@@ -31114,7 +31122,7 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
   {
     BITCODE_H paper_space;
     if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "paper_space", &paper_space, NULL)
-        && !memcmp (&paper_space, &block_control->paper_space, sizeof (block_control->paper_space)))
+        && !memcmp (&paper_space, &block_control->paper_space, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_CONTROL.paper_space [H]");
@@ -31122,7 +31130,7 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &block_control->parent, sizeof (block_control->parent)))
+        && !memcmp (&parent, &block_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCK_CONTROL.parent [struct _dwg_object_object*]");
@@ -31173,7 +31181,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT base_pt;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "base_pt", &base_pt, NULL)
-        && !memcmp (&base_pt, &block_header->base_pt, sizeof (block_header->base_pt)))
+        && !memcmp (&base_pt, &block_header->base_pt, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("BLOCK_HEADER.base_pt [3DPOINT]");
@@ -31196,7 +31204,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H block_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "block_entity", &block_entity, NULL)
-        && !memcmp (&block_entity, &block_header->block_entity, sizeof (block_header->block_entity)))
+        && !memcmp (&block_entity, &block_header->block_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_HEADER.block_entity [H]");
@@ -31229,7 +31237,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H endblk_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "endblk_entity", &endblk_entity, NULL)
-        && !memcmp (&endblk_entity, &block_header->endblk_entity, sizeof (block_header->endblk_entity)))
+        && !memcmp (&endblk_entity, &block_header->endblk_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_HEADER.endblk_entity [H]");
@@ -31262,7 +31270,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H first_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "first_entity", &first_entity, NULL)
-        && !memcmp (&first_entity, &block_header->first_entity, sizeof (block_header->first_entity)))
+        && !memcmp (&first_entity, &block_header->first_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_HEADER.first_entity [H]");
@@ -31400,7 +31408,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H last_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "last_entity", &last_entity, NULL)
-        && !memcmp (&last_entity, &block_header->last_entity, sizeof (block_header->last_entity)))
+        && !memcmp (&last_entity, &block_header->last_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_HEADER.last_entity [H]");
@@ -31408,7 +31416,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H layout;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "layout", &layout, NULL)
-        && !memcmp (&layout, &block_header->layout, sizeof (block_header->layout)))
+        && !memcmp (&layout, &block_header->layout, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_HEADER.layout [H]");
@@ -31471,7 +31479,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "parent", &parent, NULL)
-        && !memcmp (&parent, &block_header->parent, sizeof (block_header->parent)))
+        && !memcmp (&parent, &block_header->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCK_HEADER.parent [struct _dwg_object_object*]");
@@ -31479,7 +31487,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_TF preview;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "preview", &preview, NULL)
-        && !memcmp (&preview, &block_header->preview, sizeof (block_header->preview)))
+        && !memcmp (&preview, &block_header->preview, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("BLOCK_HEADER.preview [TF]");
@@ -31517,7 +31525,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xref", &xref, NULL)
-        && !memcmp (&xref, &block_header->xref, sizeof (block_header->xref)))
+        && !memcmp (&xref, &block_header->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_HEADER.xref [H]");
@@ -31588,7 +31596,7 @@ static int test_CELLSTYLEMAP (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (cellstylemap, "CELLSTYLEMAP", "parent", &parent, NULL)
-        && !memcmp (&parent, &cellstylemap->parent, sizeof (cellstylemap->parent)))
+        && !memcmp (&parent, &cellstylemap->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("CELLSTYLEMAP.parent [struct _dwg_object_object*]");
@@ -31624,7 +31632,7 @@ static int test_CONTEXTDATAMANAGER (const Dwg_Object *obj)
   {
     BITCODE_H objectcontext;
     if (dwg_dynapi_entity_value (contextdatamanager, "CONTEXTDATAMANAGER", "objectcontext", &objectcontext, NULL)
-        && !memcmp (&objectcontext, &contextdatamanager->objectcontext, sizeof (contextdatamanager->objectcontext)))
+        && !memcmp (&objectcontext, &contextdatamanager->objectcontext, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("CONTEXTDATAMANAGER.objectcontext [H]");
@@ -31632,7 +31640,7 @@ static int test_CONTEXTDATAMANAGER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (contextdatamanager, "CONTEXTDATAMANAGER", "parent", &parent, NULL)
-        && !memcmp (&parent, &contextdatamanager->parent, sizeof (contextdatamanager->parent)))
+        && !memcmp (&parent, &contextdatamanager->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("CONTEXTDATAMANAGER.parent [struct _dwg_object_object*]");
@@ -31678,7 +31686,7 @@ static int test_CSACDOCUMENTOPTIONS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (csacdocumentoptions, "CSACDOCUMENTOPTIONS", "parent", &parent, NULL)
-        && !memcmp (&parent, &csacdocumentoptions->parent, sizeof (csacdocumentoptions->parent)))
+        && !memcmp (&parent, &csacdocumentoptions->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("CSACDOCUMENTOPTIONS.parent [struct _dwg_object_object*]");
@@ -31714,7 +31722,7 @@ static int test_CURVEPATH (const Dwg_Object *obj)
   {
     BITCODE_H entity;
     if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "entity", &entity, NULL)
-        && !memcmp (&entity, &curvepath->entity, sizeof (curvepath->entity)))
+        && !memcmp (&entity, &curvepath->entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("CURVEPATH.entity [H]");
@@ -31722,7 +31730,7 @@ static int test_CURVEPATH (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (curvepath, "CURVEPATH", "parent", &parent, NULL)
-        && !memcmp (&parent, &curvepath->parent, sizeof (curvepath->parent)))
+        && !memcmp (&parent, &curvepath->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("CURVEPATH.parent [struct _dwg_object_object*]");
@@ -31843,7 +31851,7 @@ static int test_DATALINK (const Dwg_Object *obj)
   {
     BITCODE_H hardowner;
     if (dwg_dynapi_entity_value (datalink, "DATALINK", "hardowner", &hardowner, NULL)
-        && !memcmp (&hardowner, &datalink->hardowner, sizeof (datalink->hardowner)))
+        && !memcmp (&hardowner, &datalink->hardowner, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DATALINK.hardowner [H]");
@@ -31941,7 +31949,7 @@ static int test_DATALINK (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (datalink, "DATALINK", "parent", &parent, NULL)
-        && !memcmp (&parent, &datalink->parent, sizeof (datalink->parent)))
+        && !memcmp (&parent, &datalink->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DATALINK.parent [struct _dwg_object_object*]");
@@ -32097,7 +32105,7 @@ static int test_DATATABLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (datatable, "DATATABLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &datatable->parent, sizeof (datatable->parent)))
+        && !memcmp (&parent, &datatable->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DATATABLE.parent [struct _dwg_object_object*]");
@@ -32128,7 +32136,7 @@ static int test_DBCOLOR (const Dwg_Object *obj)
   {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "color", &color, NULL)
-        && !memcmp (&color, &dbcolor->color, sizeof (dbcolor->color)))
+        && !memcmp (&color, &dbcolor->color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DBCOLOR.color [CMC]");
@@ -32136,7 +32144,7 @@ static int test_DBCOLOR (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dbcolor, "DBCOLOR", "parent", &parent, NULL)
-        && !memcmp (&parent, &dbcolor->parent, sizeof (dbcolor->parent)))
+        && !memcmp (&parent, &dbcolor->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DBCOLOR.parent [struct _dwg_object_object*]");
@@ -32157,7 +32165,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H arrow_symbol;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "arrow_symbol", &arrow_symbol, NULL)
-        && !memcmp (&arrow_symbol, &detailviewstyle->arrow_symbol, sizeof (detailviewstyle->arrow_symbol)))
+        && !memcmp (&arrow_symbol, &detailviewstyle->arrow_symbol, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.arrow_symbol [H]");
@@ -32165,7 +32173,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC arrow_symbol_color;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "arrow_symbol_color", &arrow_symbol_color, NULL)
-        && !memcmp (&arrow_symbol_color, &detailviewstyle->arrow_symbol_color, sizeof (detailviewstyle->arrow_symbol_color)))
+        && !memcmp (&arrow_symbol_color, &detailviewstyle->arrow_symbol_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.arrow_symbol_color [CMC]");
@@ -32188,7 +32196,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC borderline_color;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "borderline_color", &borderline_color, NULL)
-        && !memcmp (&borderline_color, &detailviewstyle->borderline_color, sizeof (detailviewstyle->borderline_color)))
+        && !memcmp (&borderline_color, &detailviewstyle->borderline_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.borderline_color [CMC]");
@@ -32210,7 +32218,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H borderline_ltype;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "borderline_ltype", &borderline_ltype, NULL)
-        && !memcmp (&borderline_ltype, &detailviewstyle->borderline_ltype, sizeof (detailviewstyle->borderline_ltype)))
+        && !memcmp (&borderline_ltype, &detailviewstyle->borderline_ltype, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.borderline_ltype [H]");
@@ -32218,7 +32226,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC boundary_line_color;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "boundary_line_color", &boundary_line_color, NULL)
-        && !memcmp (&boundary_line_color, &detailviewstyle->boundary_line_color, sizeof (detailviewstyle->boundary_line_color)))
+        && !memcmp (&boundary_line_color, &detailviewstyle->boundary_line_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.boundary_line_color [CMC]");
@@ -32240,7 +32248,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H boundary_ltype;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "boundary_ltype", &boundary_ltype, NULL)
-        && !memcmp (&boundary_ltype, &detailviewstyle->boundary_ltype, sizeof (detailviewstyle->boundary_ltype)))
+        && !memcmp (&boundary_ltype, &detailviewstyle->boundary_ltype, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.boundary_ltype [H]");
@@ -32263,7 +32271,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC connection_line_color;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "connection_line_color", &connection_line_color, NULL)
-        && !memcmp (&connection_line_color, &detailviewstyle->connection_line_color, sizeof (detailviewstyle->connection_line_color)))
+        && !memcmp (&connection_line_color, &detailviewstyle->connection_line_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.connection_line_color [CMC]");
@@ -32285,7 +32293,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H connection_ltype;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "connection_ltype", &connection_ltype, NULL)
-        && !memcmp (&connection_ltype, &detailviewstyle->connection_ltype, sizeof (detailviewstyle->connection_ltype)))
+        && !memcmp (&connection_ltype, &detailviewstyle->connection_ltype, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.connection_ltype [H]");
@@ -32328,7 +32336,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC identifier_color;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_color", &identifier_color, NULL)
-        && !memcmp (&identifier_color, &detailviewstyle->identifier_color, sizeof (detailviewstyle->identifier_color)))
+        && !memcmp (&identifier_color, &detailviewstyle->identifier_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.identifier_color [CMC]");
@@ -32391,7 +32399,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H identifier_style;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "identifier_style", &identifier_style, NULL)
-        && !memcmp (&identifier_style, &detailviewstyle->identifier_style, sizeof (detailviewstyle->identifier_style)))
+        && !memcmp (&identifier_style, &detailviewstyle->identifier_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.identifier_style [H]");
@@ -32429,7 +32437,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &detailviewstyle->parent, sizeof (detailviewstyle->parent)))
+        && !memcmp (&parent, &detailviewstyle->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.parent [struct _dwg_object_object*]");
@@ -32492,7 +32500,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC viewlabel_text_color;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_text_color", &viewlabel_text_color, NULL)
-        && !memcmp (&viewlabel_text_color, &detailviewstyle->viewlabel_text_color, sizeof (detailviewstyle->viewlabel_text_color)))
+        && !memcmp (&viewlabel_text_color, &detailviewstyle->viewlabel_text_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.viewlabel_text_color [CMC]");
@@ -32515,7 +32523,7 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H viewlabel_text_style;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "viewlabel_text_style", &viewlabel_text_style, NULL)
-        && !memcmp (&viewlabel_text_style, &detailviewstyle->viewlabel_text_style, sizeof (detailviewstyle->viewlabel_text_style)))
+        && !memcmp (&viewlabel_text_style, &detailviewstyle->viewlabel_text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DETAILVIEWSTYLE.viewlabel_text_style [H]");
@@ -32621,7 +32629,7 @@ static int test_DICTIONARY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "parent", &parent, NULL)
-        && !memcmp (&parent, &dictionary->parent, sizeof (dictionary->parent)))
+        && !memcmp (&parent, &dictionary->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DICTIONARY.parent [struct _dwg_object_object*]");
@@ -32667,7 +32675,7 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "parent", &parent, NULL)
-        && !memcmp (&parent, &dictionaryvar->parent, sizeof (dictionaryvar->parent)))
+        && !memcmp (&parent, &dictionaryvar->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DICTIONARYVAR.parent [struct _dwg_object_object*]");
@@ -32728,7 +32736,7 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
   {
     BITCODE_H defaultid;
     if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "defaultid", &defaultid, NULL)
-        && !memcmp (&defaultid, &dictionarywdflt->defaultid, sizeof (dictionarywdflt->defaultid)))
+        && !memcmp (&defaultid, &dictionarywdflt->defaultid, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DICTIONARYWDFLT.defaultid [H]");
@@ -32776,7 +32784,7 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "parent", &parent, NULL)
-        && !memcmp (&parent, &dictionarywdflt->parent, sizeof (dictionarywdflt->parent)))
+        && !memcmp (&parent, &dictionarywdflt->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DICTIONARYWDFLT.parent [struct _dwg_object_object*]");
@@ -32822,7 +32830,7 @@ static int test_DIMASSOC (const Dwg_Object *obj)
   {
     BITCODE_H dimensionobj;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "dimensionobj", &dimensionobj, NULL)
-        && !memcmp (&dimensionobj, &dimassoc->dimensionobj, sizeof (dimassoc->dimensionobj)))
+        && !memcmp (&dimensionobj, &dimassoc->dimensionobj, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMASSOC.dimensionobj [H]");
@@ -32830,7 +32838,7 @@ static int test_DIMASSOC (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimassoc->parent, sizeof (dimassoc->parent)))
+        && !memcmp (&parent, &dimassoc->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DIMASSOC.parent [struct _dwg_object_object*]");
@@ -32838,7 +32846,7 @@ static int test_DIMASSOC (const Dwg_Object *obj)
   {
     Dwg_DIMASSOC_Ref* ref;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "ref", &ref, NULL)
-        && !memcmp (&ref, &dimassoc->ref, sizeof (dimassoc->ref)))
+        && !memcmp (&ref, &dimassoc->ref, sizeof (Dwg_DIMASSOC_Ref*)))
         pass ();
     else
         fail ("DIMASSOC.ref [Dwg_DIMASSOC_Ref*]");
@@ -33134,7 +33142,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMBLK;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMBLK", &DIMBLK, NULL)
-        && !memcmp (&DIMBLK, &dimstyle->DIMBLK, sizeof (dimstyle->DIMBLK)))
+        && !memcmp (&DIMBLK, &dimstyle->DIMBLK, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMBLK [H]");
@@ -33142,7 +33150,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMBLK1;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMBLK1", &DIMBLK1, NULL)
-        && !memcmp (&DIMBLK1, &dimstyle->DIMBLK1, sizeof (dimstyle->DIMBLK1)))
+        && !memcmp (&DIMBLK1, &dimstyle->DIMBLK1, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMBLK1 [H]");
@@ -33160,7 +33168,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMBLK2;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMBLK2", &DIMBLK2, NULL)
-        && !memcmp (&DIMBLK2, &dimstyle->DIMBLK2, sizeof (dimstyle->DIMBLK2)))
+        && !memcmp (&DIMBLK2, &dimstyle->DIMBLK2, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMBLK2 [H]");
@@ -33203,7 +33211,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC DIMCLRD;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRD", &DIMCLRD, NULL)
-        && !memcmp (&DIMCLRD, &dimstyle->DIMCLRD, sizeof (dimstyle->DIMCLRD)))
+        && !memcmp (&DIMCLRD, &dimstyle->DIMCLRD, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DIMSTYLE.DIMCLRD [CMC]");
@@ -33226,7 +33234,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC DIMCLRE;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRE", &DIMCLRE, NULL)
-        && !memcmp (&DIMCLRE, &dimstyle->DIMCLRE, sizeof (dimstyle->DIMCLRE)))
+        && !memcmp (&DIMCLRE, &dimstyle->DIMCLRE, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DIMSTYLE.DIMCLRE [CMC]");
@@ -33249,7 +33257,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC DIMCLRT;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRT", &DIMCLRT, NULL)
-        && !memcmp (&DIMCLRT, &dimstyle->DIMCLRT, sizeof (dimstyle->DIMCLRT)))
+        && !memcmp (&DIMCLRT, &dimstyle->DIMCLRT, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DIMSTYLE.DIMCLRT [CMC]");
@@ -33467,7 +33475,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMLDRBLK;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMLDRBLK", &DIMLDRBLK, NULL)
-        && !memcmp (&DIMLDRBLK, &dimstyle->DIMLDRBLK, sizeof (dimstyle->DIMLDRBLK)))
+        && !memcmp (&DIMLDRBLK, &dimstyle->DIMLDRBLK, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMLDRBLK [H]");
@@ -33505,7 +33513,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMLTEX1;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMLTEX1", &DIMLTEX1, NULL)
-        && !memcmp (&DIMLTEX1, &dimstyle->DIMLTEX1, sizeof (dimstyle->DIMLTEX1)))
+        && !memcmp (&DIMLTEX1, &dimstyle->DIMLTEX1, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMLTEX1 [H]");
@@ -33513,7 +33521,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMLTEX2;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMLTEX2", &DIMLTEX2, NULL)
-        && !memcmp (&DIMLTEX2, &dimstyle->DIMLTEX2, sizeof (dimstyle->DIMLTEX2)))
+        && !memcmp (&DIMLTEX2, &dimstyle->DIMLTEX2, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMLTEX2 [H]");
@@ -33521,7 +33529,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMLTYPE;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMLTYPE", &DIMLTYPE, NULL)
-        && !memcmp (&DIMLTYPE, &dimstyle->DIMLTYPE, sizeof (dimstyle->DIMLTYPE)))
+        && !memcmp (&DIMLTYPE, &dimstyle->DIMLTYPE, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMLTYPE [H]");
@@ -33817,7 +33825,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC DIMTFILLCLR;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMTFILLCLR", &DIMTFILLCLR, NULL)
-        && !memcmp (&DIMTFILLCLR, &dimstyle->DIMTFILLCLR, sizeof (dimstyle->DIMTFILLCLR)))
+        && !memcmp (&DIMTFILLCLR, &dimstyle->DIMTFILLCLR, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DIMSTYLE.DIMTFILLCLR [CMC]");
@@ -33990,7 +33998,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H DIMTXSTY;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMTXSTY", &DIMTXSTY, NULL)
-        && !memcmp (&DIMTXSTY, &dimstyle->DIMTXSTY, sizeof (dimstyle->DIMTXSTY)))
+        && !memcmp (&DIMTXSTY, &dimstyle->DIMTXSTY, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.DIMTXSTY [H]");
@@ -34173,7 +34181,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimstyle->parent, sizeof (dimstyle->parent)))
+        && !memcmp (&parent, &dimstyle->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DIMSTYLE.parent [struct _dwg_object_object*]");
@@ -34196,7 +34204,7 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "xref", &xref, NULL)
-        && !memcmp (&xref, &dimstyle->xref, sizeof (dimstyle->xref)))
+        && !memcmp (&xref, &dimstyle->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DIMSTYLE.xref [H]");
@@ -34282,7 +34290,7 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &dimstyle_control->parent, sizeof (dimstyle_control->parent)))
+        && !memcmp (&parent, &dimstyle_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DIMSTYLE_CONTROL.parent [struct _dwg_object_object*]");
@@ -34303,7 +34311,7 @@ static int test_DUMMY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dummy, "DUMMY", "parent", &parent, NULL)
-        && !memcmp (&parent, &dummy->parent, sizeof (dummy->parent)))
+        && !memcmp (&parent, &dummy->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DUMMY.parent [struct _dwg_object_object*]");
@@ -34324,7 +34332,7 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "block", &block, NULL)
-        && !memcmp (&block, &dynamicblockpurgepreventer->block, sizeof (dynamicblockpurgepreventer->block)))
+        && !memcmp (&block, &dynamicblockpurgepreventer->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("DYNAMICBLOCKPURGEPREVENTER.block [H]");
@@ -34347,7 +34355,7 @@ static int test_DYNAMICBLOCKPURGEPREVENTER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dynamicblockpurgepreventer, "DYNAMICBLOCKPURGEPREVENTER", "parent", &parent, NULL)
-        && !memcmp (&parent, &dynamicblockpurgepreventer->parent, sizeof (dynamicblockpurgepreventer->parent)))
+        && !memcmp (&parent, &dynamicblockpurgepreventer->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("DYNAMICBLOCKPURGEPREVENTER.parent [struct _dwg_object_object*]");
@@ -34494,7 +34502,7 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "parent", &parent, NULL)
-        && !memcmp (&parent, &evaluation_graph->parent, sizeof (evaluation_graph->parent)))
+        && !memcmp (&parent, &evaluation_graph->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("EVALUATION_GRAPH.parent [struct _dwg_object_object*]");
@@ -34560,7 +34568,7 @@ static int test_FCFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3BD horiz_dir;
     if (dwg_dynapi_entity_value (fcfobjectcontextdata, "FCFOBJECTCONTEXTDATA", "horiz_dir", &horiz_dir, NULL)
-        && !memcmp (&horiz_dir, &fcfobjectcontextdata->horiz_dir, sizeof (fcfobjectcontextdata->horiz_dir)))
+        && !memcmp (&horiz_dir, &fcfobjectcontextdata->horiz_dir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("FCFOBJECTCONTEXTDATA.horiz_dir [3BD]");
@@ -34598,7 +34606,7 @@ static int test_FCFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3BD location;
     if (dwg_dynapi_entity_value (fcfobjectcontextdata, "FCFOBJECTCONTEXTDATA", "location", &location, NULL)
-        && !memcmp (&location, &fcfobjectcontextdata->location, sizeof (fcfobjectcontextdata->location)))
+        && !memcmp (&location, &fcfobjectcontextdata->location, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("FCFOBJECTCONTEXTDATA.location [3BD]");
@@ -34606,7 +34614,7 @@ static int test_FCFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (fcfobjectcontextdata, "FCFOBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &fcfobjectcontextdata->parent, sizeof (fcfobjectcontextdata->parent)))
+        && !memcmp (&parent, &fcfobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("FCFOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -34614,7 +34622,7 @@ static int test_FCFOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (fcfobjectcontextdata, "FCFOBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &fcfobjectcontextdata->scale, sizeof (fcfobjectcontextdata->scale)))
+        && !memcmp (&scale, &fcfobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("FCFOBJECTCONTEXTDATA.scale [H]");
@@ -34825,7 +34833,7 @@ static int test_FIELD (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (field, "FIELD", "parent", &parent, NULL)
-        && !memcmp (&parent, &field->parent, sizeof (field->parent)))
+        && !memcmp (&parent, &field->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("FIELD.parent [struct _dwg_object_object*]");
@@ -34833,7 +34841,7 @@ static int test_FIELD (const Dwg_Object *obj)
   {
     Dwg_TABLE_value value;
     if (dwg_dynapi_entity_value (field, "FIELD", "value", &value, NULL)
-        && !memcmp (&value, &field->value, sizeof (field->value)))
+        && !memcmp (&value, &field->value, sizeof (Dwg_TABLE_value)))
         pass ();
     else
         fail ("FIELD.value [Dwg_TABLE_value]");
@@ -34904,7 +34912,7 @@ static int test_FIELDLIST (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (fieldlist, "FIELDLIST", "parent", &parent, NULL)
-        && !memcmp (&parent, &fieldlist->parent, sizeof (fieldlist->parent)))
+        && !memcmp (&parent, &fieldlist->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("FIELDLIST.parent [struct _dwg_object_object*]");
@@ -35015,7 +35023,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_3BD design_pt;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "design_pt", &design_pt, NULL)
-        && !memcmp (&design_pt, &geodata->design_pt, sizeof (geodata->design_pt)))
+        && !memcmp (&design_pt, &geodata->design_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEODATA.design_pt [3BD]");
@@ -35083,7 +35091,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_H host_block;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "host_block", &host_block, NULL)
-        && !memcmp (&host_block, &geodata->host_block, sizeof (geodata->host_block)))
+        && !memcmp (&host_block, &geodata->host_block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("GEODATA.host_block [H]");
@@ -35091,7 +35099,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_3BD north_dir;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "north_dir", &north_dir, NULL)
-        && !memcmp (&north_dir, &geodata->north_dir, sizeof (geodata->north_dir)))
+        && !memcmp (&north_dir, &geodata->north_dir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEODATA.north_dir [3BD]");
@@ -35159,7 +35167,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_3BD obs_pt;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "obs_pt", &obs_pt, NULL)
-        && !memcmp (&obs_pt, &geodata->obs_pt, sizeof (geodata->obs_pt)))
+        && !memcmp (&obs_pt, &geodata->obs_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEODATA.obs_pt [3BD]");
@@ -35212,7 +35220,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &geodata->parent, sizeof (geodata->parent)))
+        && !memcmp (&parent, &geodata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("GEODATA.parent [struct _dwg_object_object*]");
@@ -35220,7 +35228,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_3BD ref_pt;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "ref_pt", &ref_pt, NULL)
-        && !memcmp (&ref_pt, &geodata->ref_pt, sizeof (geodata->ref_pt)))
+        && !memcmp (&ref_pt, &geodata->ref_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEODATA.ref_pt [3BD]");
@@ -35228,7 +35236,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_2RD ref_pt2d;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "ref_pt2d", &ref_pt2d, NULL)
-        && !memcmp (&ref_pt2d, &geodata->ref_pt2d, sizeof (geodata->ref_pt2d)))
+        && !memcmp (&ref_pt2d, &geodata->ref_pt2d, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("GEODATA.ref_pt2d [2RD]");
@@ -35251,7 +35259,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_3BD scale_vec;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "scale_vec", &scale_vec, NULL)
-        && !memcmp (&scale_vec, &geodata->scale_vec, sizeof (geodata->scale_vec)))
+        && !memcmp (&scale_vec, &geodata->scale_vec, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEODATA.scale_vec [3BD_1]");
@@ -35379,7 +35387,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_3BD up_dir;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "up_dir", &up_dir, NULL)
-        && !memcmp (&up_dir, &geodata->up_dir, sizeof (geodata->up_dir)))
+        && !memcmp (&up_dir, &geodata->up_dir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEODATA.up_dir [3BD]");
@@ -35402,7 +35410,7 @@ static int test_GEODATA (const Dwg_Object *obj)
   {
     BITCODE_3BD zero1;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "zero1", &zero1, NULL)
-        && !memcmp (&zero1, &geodata->zero1, sizeof (geodata->zero1)))
+        && !memcmp (&zero1, &geodata->zero1, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEODATA.zero1 [3BD]");
@@ -35688,7 +35696,7 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "parent", &parent, NULL)
-        && !memcmp (&parent, &geomapimage->parent, sizeof (geomapimage->parent)))
+        && !memcmp (&parent, &geomapimage->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("GEOMAPIMAGE.parent [struct _dwg_object_object*]");
@@ -35696,7 +35704,7 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
   {
     BITCODE_3BD pt0;
     if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "pt0", &pt0, NULL)
-        && !memcmp (&pt0, &geomapimage->pt0, sizeof (geomapimage->pt0)))
+        && !memcmp (&pt0, &geomapimage->pt0, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("GEOMAPIMAGE.pt0 [3BD]");
@@ -35749,7 +35757,7 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
   {
     BITCODE_2RD size;
     if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "size", &size, NULL)
-        && !memcmp (&size, &geomapimage->size, sizeof (geomapimage->size)))
+        && !memcmp (&size, &geomapimage->size, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("GEOMAPIMAGE.size [2RD]");
@@ -35835,7 +35843,7 @@ static int test_GROUP (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (group, "GROUP", "parent", &parent, NULL)
-        && !memcmp (&parent, &group->parent, sizeof (group->parent)))
+        && !memcmp (&parent, &group->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("GROUP.parent [struct _dwg_object_object*]");
@@ -35911,7 +35919,7 @@ static int test_IDBUFFER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (idbuffer, "IDBUFFER", "parent", &parent, NULL)
-        && !memcmp (&parent, &idbuffer->parent, sizeof (idbuffer->parent)))
+        && !memcmp (&parent, &idbuffer->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("IDBUFFER.parent [struct _dwg_object_object*]");
@@ -35972,7 +35980,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
   {
     BITCODE_2RD image_size;
     if (dwg_dynapi_entity_value (imagedef, "IMAGEDEF", "image_size", &image_size, NULL)
-        && !memcmp (&image_size, &imagedef->image_size, sizeof (imagedef->image_size)))
+        && !memcmp (&image_size, &imagedef->image_size, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("IMAGEDEF.image_size [2RD]");
@@ -35995,7 +36003,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (imagedef, "IMAGEDEF", "parent", &parent, NULL)
-        && !memcmp (&parent, &imagedef->parent, sizeof (imagedef->parent)))
+        && !memcmp (&parent, &imagedef->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("IMAGEDEF.parent [struct _dwg_object_object*]");
@@ -36003,7 +36011,7 @@ static int test_IMAGEDEF (const Dwg_Object *obj)
   {
     BITCODE_2RD pixel_size;
     if (dwg_dynapi_entity_value (imagedef, "IMAGEDEF", "pixel_size", &pixel_size, NULL)
-        && !memcmp (&pixel_size, &imagedef->pixel_size, sizeof (imagedef->pixel_size)))
+        && !memcmp (&pixel_size, &imagedef->pixel_size, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("IMAGEDEF.pixel_size [2RD]");
@@ -36054,7 +36062,7 @@ static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (imagedef_reactor, "IMAGEDEF_REACTOR", "parent", &parent, NULL)
-        && !memcmp (&parent, &imagedef_reactor->parent, sizeof (imagedef_reactor->parent)))
+        && !memcmp (&parent, &imagedef_reactor->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("IMAGEDEF_REACTOR.parent [struct _dwg_object_object*]");
@@ -36075,7 +36083,7 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (layer, "LAYER", "color", &color, NULL)
-        && !memcmp (&color, &layer->color, sizeof (layer->color)))
+        && !memcmp (&color, &layer->color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("LAYER.color [CMC]");
@@ -36218,7 +36226,7 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     BITCODE_H ltype;
     if (dwg_dynapi_entity_value (layer, "LAYER", "ltype", &ltype, NULL)
-        && !memcmp (&ltype, &layer->ltype, sizeof (layer->ltype)))
+        && !memcmp (&ltype, &layer->ltype, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYER.ltype [H]");
@@ -36241,7 +36249,7 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     BITCODE_H material;
     if (dwg_dynapi_entity_value (layer, "LAYER", "material", &material, NULL)
-        && !memcmp (&material, &layer->material, sizeof (layer->material)))
+        && !memcmp (&material, &layer->material, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYER.material [H]");
@@ -36274,7 +36282,7 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layer, "LAYER", "parent", &parent, NULL)
-        && !memcmp (&parent, &layer->parent, sizeof (layer->parent)))
+        && !memcmp (&parent, &layer->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LAYER.parent [struct _dwg_object_object*]");
@@ -36297,7 +36305,7 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     BITCODE_H plotstyle;
     if (dwg_dynapi_entity_value (layer, "LAYER", "plotstyle", &plotstyle, NULL)
-        && !memcmp (&plotstyle, &layer->plotstyle, sizeof (layer->plotstyle)))
+        && !memcmp (&plotstyle, &layer->plotstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYER.plotstyle [H]");
@@ -36320,7 +36328,7 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     BITCODE_H visualstyle;
     if (dwg_dynapi_entity_value (layer, "LAYER", "visualstyle", &visualstyle, NULL)
-        && !memcmp (&visualstyle, &layer->visualstyle, sizeof (layer->visualstyle)))
+        && !memcmp (&visualstyle, &layer->visualstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYER.visualstyle [H]");
@@ -36328,7 +36336,7 @@ static int test_LAYER (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (layer, "LAYER", "xref", &xref, NULL)
-        && !memcmp (&xref, &layer->xref, sizeof (layer->xref)))
+        && !memcmp (&xref, &layer->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYER.xref [H]");
@@ -36374,7 +36382,7 @@ static int test_LAYERFILTER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "parent", &parent, NULL)
-        && !memcmp (&parent, &layerfilter->parent, sizeof (layerfilter->parent)))
+        && !memcmp (&parent, &layerfilter->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LAYERFILTER.parent [struct _dwg_object_object*]");
@@ -36435,7 +36443,7 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &layer_control->parent, sizeof (layer_control->parent)))
+        && !memcmp (&parent, &layer_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LAYER_CONTROL.parent [struct _dwg_object_object*]");
@@ -36466,7 +36474,7 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
   {
     BITCODE_TIMEBLL last_updated;
     if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "last_updated", &last_updated, NULL)
-        && !memcmp (&last_updated, &layer_index->last_updated, sizeof (layer_index->last_updated)))
+        && !memcmp (&last_updated, &layer_index->last_updated, sizeof (BITCODE_TIMEBLL)))
         pass ();
     else
         fail ("LAYER_INDEX.last_updated [TIMEBLL]");
@@ -36489,7 +36497,7 @@ static int test_LAYER_INDEX (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layer_index, "LAYER_INDEX", "parent", &parent, NULL)
-        && !memcmp (&parent, &layer_index->parent, sizeof (layer_index->parent)))
+        && !memcmp (&parent, &layer_index->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LAYER_INDEX.parent [struct _dwg_object_object*]");
@@ -36510,7 +36518,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT EXTMAX;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "EXTMAX", &EXTMAX, NULL)
-        && !memcmp (&EXTMAX, &layout->EXTMAX, sizeof (layout->EXTMAX)))
+        && !memcmp (&EXTMAX, &layout->EXTMAX, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LAYOUT.EXTMAX [3DPOINT]");
@@ -36518,7 +36526,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT EXTMIN;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "EXTMIN", &EXTMIN, NULL)
-        && !memcmp (&EXTMIN, &layout->EXTMIN, sizeof (layout->EXTMIN)))
+        && !memcmp (&EXTMIN, &layout->EXTMIN, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LAYOUT.EXTMIN [3DPOINT]");
@@ -36526,7 +36534,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT INSBASE;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "INSBASE", &INSBASE, NULL)
-        && !memcmp (&INSBASE, &layout->INSBASE, sizeof (layout->INSBASE)))
+        && !memcmp (&INSBASE, &layout->INSBASE, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LAYOUT.INSBASE [3DPOINT]");
@@ -36534,7 +36542,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT LIMMAX;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "LIMMAX", &LIMMAX, NULL)
-        && !memcmp (&LIMMAX, &layout->LIMMAX, sizeof (layout->LIMMAX)))
+        && !memcmp (&LIMMAX, &layout->LIMMAX, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("LAYOUT.LIMMAX [2DPOINT]");
@@ -36542,7 +36550,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_2DPOINT LIMMIN;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "LIMMIN", &LIMMIN, NULL)
-        && !memcmp (&LIMMIN, &layout->LIMMIN, sizeof (layout->LIMMIN)))
+        && !memcmp (&LIMMIN, &layout->LIMMIN, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
         fail ("LAYOUT.LIMMIN [2DPOINT]");
@@ -36550,7 +36558,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT UCSORG;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "UCSORG", &UCSORG, NULL)
-        && !memcmp (&UCSORG, &layout->UCSORG, sizeof (layout->UCSORG)))
+        && !memcmp (&UCSORG, &layout->UCSORG, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LAYOUT.UCSORG [3DPOINT]");
@@ -36573,7 +36581,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT UCSXDIR;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "UCSXDIR", &UCSXDIR, NULL)
-        && !memcmp (&UCSXDIR, &layout->UCSXDIR, sizeof (layout->UCSXDIR)))
+        && !memcmp (&UCSXDIR, &layout->UCSXDIR, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LAYOUT.UCSXDIR [3DPOINT]");
@@ -36581,7 +36589,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT UCSYDIR;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "UCSYDIR", &UCSYDIR, NULL)
-        && !memcmp (&UCSYDIR, &layout->UCSYDIR, sizeof (layout->UCSYDIR)))
+        && !memcmp (&UCSYDIR, &layout->UCSYDIR, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LAYOUT.UCSYDIR [3DPOINT]");
@@ -36589,7 +36597,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_H active_viewport;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "active_viewport", &active_viewport, NULL)
-        && !memcmp (&active_viewport, &layout->active_viewport, sizeof (layout->active_viewport)))
+        && !memcmp (&active_viewport, &layout->active_viewport, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYOUT.active_viewport [H]");
@@ -36597,7 +36605,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "base_ucs", &base_ucs, NULL)
-        && !memcmp (&base_ucs, &layout->base_ucs, sizeof (layout->base_ucs)))
+        && !memcmp (&base_ucs, &layout->base_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYOUT.base_ucs [H]");
@@ -36605,7 +36613,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_H block_header;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "block_header", &block_header, NULL)
-        && !memcmp (&block_header, &layout->block_header, sizeof (layout->block_header)))
+        && !memcmp (&block_header, &layout->block_header, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYOUT.block_header [H]");
@@ -36638,7 +36646,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     BITCODE_H named_ucs;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "named_ucs", &named_ucs, NULL)
-        && !memcmp (&named_ucs, &layout->named_ucs, sizeof (layout->named_ucs)))
+        && !memcmp (&named_ucs, &layout->named_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LAYOUT.named_ucs [H]");
@@ -36661,7 +36669,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "parent", &parent, NULL)
-        && !memcmp (&parent, &layout->parent, sizeof (layout->parent)))
+        && !memcmp (&parent, &layout->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LAYOUT.parent [struct _dwg_object_object*]");
@@ -36669,7 +36677,7 @@ static int test_LAYOUT (const Dwg_Object *obj)
   {
     Dwg_Object_PLOTSETTINGS plotsettings;
     if (dwg_dynapi_entity_value (layout, "LAYOUT", "plotsettings", &plotsettings, NULL)
-        && !memcmp (&plotsettings, &layout->plotsettings, sizeof (layout->plotsettings)))
+        && !memcmp (&plotsettings, &layout->plotsettings, sizeof (Dwg_Object_PLOTSETTINGS)))
         pass ();
     else
         fail ("LAYOUT.plotsettings [Dwg_Object_PLOTSETTINGS]");
@@ -36760,7 +36768,7 @@ static int test_LAYOUTPRINTCONFIG (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "parent", &parent, NULL)
-        && !memcmp (&parent, &layoutprintconfig->parent, sizeof (layoutprintconfig->parent)))
+        && !memcmp (&parent, &layoutprintconfig->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LAYOUTPRINTCONFIG.parent [struct _dwg_object_object*]");
@@ -36811,7 +36819,7 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT endptproj;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "endptproj", &endptproj, NULL)
-        && !memcmp (&endptproj, &leaderobjectcontextdata->endptproj, sizeof (leaderobjectcontextdata->endptproj)))
+        && !memcmp (&endptproj, &leaderobjectcontextdata->endptproj, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LEADEROBJECTCONTEXTDATA.endptproj [3DPOINT]");
@@ -36834,7 +36842,7 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT inspt_offset;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "inspt_offset", &inspt_offset, NULL)
-        && !memcmp (&inspt_offset, &leaderobjectcontextdata->inspt_offset, sizeof (leaderobjectcontextdata->inspt_offset)))
+        && !memcmp (&inspt_offset, &leaderobjectcontextdata->inspt_offset, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LEADEROBJECTCONTEXTDATA.inspt_offset [3DPOINT]");
@@ -36872,7 +36880,7 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &leaderobjectcontextdata->parent, sizeof (leaderobjectcontextdata->parent)))
+        && !memcmp (&parent, &leaderobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LEADEROBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -36890,7 +36898,7 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &leaderobjectcontextdata->scale, sizeof (leaderobjectcontextdata->scale)))
+        && !memcmp (&scale, &leaderobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LEADEROBJECTCONTEXTDATA.scale [H]");
@@ -36898,7 +36906,7 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3DPOINT x_direction;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "x_direction", &x_direction, NULL)
-        && !memcmp (&x_direction, &leaderobjectcontextdata->x_direction, sizeof (leaderobjectcontextdata->x_direction)))
+        && !memcmp (&x_direction, &leaderobjectcontextdata->x_direction, sizeof (BITCODE_3DPOINT)))
         pass ();
     else
         fail ("LEADEROBJECTCONTEXTDATA.x_direction [3DPOINT]");
@@ -36959,7 +36967,7 @@ static int test_LIGHTLIST (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (lightlist, "LIGHTLIST", "parent", &parent, NULL)
-        && !memcmp (&parent, &lightlist->parent, sizeof (lightlist->parent)))
+        && !memcmp (&parent, &lightlist->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LIGHTLIST.parent [struct _dwg_object_object*]");
@@ -36980,7 +36988,7 @@ static int test_LONG_TRANSACTION (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (long_transaction, "LONG_TRANSACTION", "parent", &parent, NULL)
-        && !memcmp (&parent, &long_transaction->parent, sizeof (long_transaction->parent)))
+        && !memcmp (&parent, &long_transaction->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LONG_TRANSACTION.parent [struct _dwg_object_object*]");
@@ -37146,7 +37154,7 @@ static int test_LTYPE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "parent", &parent, NULL)
-        && !memcmp (&parent, &ltype->parent, sizeof (ltype->parent)))
+        && !memcmp (&parent, &ltype->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LTYPE.parent [struct _dwg_object_object*]");
@@ -37169,7 +37177,7 @@ static int test_LTYPE (const Dwg_Object *obj)
   {
     BITCODE_TF strings_area;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "strings_area", &strings_area, NULL)
-        && !memcmp (&strings_area, &ltype->strings_area, sizeof (ltype->strings_area)))
+        && !memcmp (&strings_area, &ltype->strings_area, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("LTYPE.strings_area [TF]");
@@ -37192,7 +37200,7 @@ static int test_LTYPE (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "xref", &xref, NULL)
-        && !memcmp (&xref, &ltype->xref, sizeof (ltype->xref)))
+        && !memcmp (&xref, &ltype->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LTYPE.xref [H]");
@@ -37213,7 +37221,7 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
   {
     BITCODE_H byblock;
     if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "byblock", &byblock, NULL)
-        && !memcmp (&byblock, &ltype_control->byblock, sizeof (ltype_control->byblock)))
+        && !memcmp (&byblock, &ltype_control->byblock, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LTYPE_CONTROL.byblock [H]");
@@ -37221,7 +37229,7 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
   {
     BITCODE_H bylayer;
     if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "bylayer", &bylayer, NULL)
-        && !memcmp (&bylayer, &ltype_control->bylayer, sizeof (ltype_control->bylayer)))
+        && !memcmp (&bylayer, &ltype_control->bylayer, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("LTYPE_CONTROL.bylayer [H]");
@@ -37269,7 +37277,7 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &ltype_control->parent, sizeof (ltype_control->parent)))
+        && !memcmp (&parent, &ltype_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("LTYPE_CONTROL.parent [struct _dwg_object_object*]");
@@ -37290,7 +37298,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_color ambient_color;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "ambient_color", &ambient_color, NULL)
-        && !memcmp (&ambient_color, &material->ambient_color, sizeof (material->ambient_color)))
+        && !memcmp (&ambient_color, &material->ambient_color, sizeof (Dwg_MATERIAL_color)))
         pass ();
     else
         fail ("MATERIAL.ambient_color [Dwg_MATERIAL_color]");
@@ -37298,7 +37306,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_mapper bumpmap;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "bumpmap", &bumpmap, NULL)
-        && !memcmp (&bumpmap, &material->bumpmap, sizeof (material->bumpmap)))
+        && !memcmp (&bumpmap, &material->bumpmap, sizeof (Dwg_MATERIAL_mapper)))
         pass ();
     else
         fail ("MATERIAL.bumpmap [Dwg_MATERIAL_mapper]");
@@ -37346,7 +37354,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_color diffuse_color;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "diffuse_color", &diffuse_color, NULL)
-        && !memcmp (&diffuse_color, &material->diffuse_color, sizeof (material->diffuse_color)))
+        && !memcmp (&diffuse_color, &material->diffuse_color, sizeof (Dwg_MATERIAL_color)))
         pass ();
     else
         fail ("MATERIAL.diffuse_color [Dwg_MATERIAL_color]");
@@ -37354,7 +37362,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_mapper diffusemap;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "diffusemap", &diffusemap, NULL)
-        && !memcmp (&diffusemap, &material->diffusemap, sizeof (material->diffusemap)))
+        && !memcmp (&diffusemap, &material->diffusemap, sizeof (Dwg_MATERIAL_mapper)))
         pass ();
     else
         fail ("MATERIAL.diffusemap [Dwg_MATERIAL_mapper]");
@@ -37417,7 +37425,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     BITCODE_CMC genprocvalcolor;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "genprocvalcolor", &genprocvalcolor, NULL)
-        && !memcmp (&genprocvalcolor, &material->genprocvalcolor, sizeof (material->genprocvalcolor)))
+        && !memcmp (&genprocvalcolor, &material->genprocvalcolor, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MATERIAL.genprocvalcolor [CMC]");
@@ -37590,7 +37598,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_mapper opacitymap;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "opacitymap", &opacitymap, NULL)
-        && !memcmp (&opacitymap, &material->opacitymap, sizeof (material->opacitymap)))
+        && !memcmp (&opacitymap, &material->opacitymap, sizeof (Dwg_MATERIAL_mapper)))
         pass ();
     else
         fail ("MATERIAL.opacitymap [Dwg_MATERIAL_mapper]");
@@ -37598,7 +37606,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "parent", &parent, NULL)
-        && !memcmp (&parent, &material->parent, sizeof (material->parent)))
+        && !memcmp (&parent, &material->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MATERIAL.parent [struct _dwg_object_object*]");
@@ -37621,7 +37629,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_mapper reflectionmap;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "reflectionmap", &reflectionmap, NULL)
-        && !memcmp (&reflectionmap, &material->reflectionmap, sizeof (material->reflectionmap)))
+        && !memcmp (&reflectionmap, &material->reflectionmap, sizeof (Dwg_MATERIAL_mapper)))
         pass ();
     else
         fail ("MATERIAL.reflectionmap [Dwg_MATERIAL_mapper]");
@@ -37659,7 +37667,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_mapper refractionmap;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "refractionmap", &refractionmap, NULL)
-        && !memcmp (&refractionmap, &material->refractionmap, sizeof (material->refractionmap)))
+        && !memcmp (&refractionmap, &material->refractionmap, sizeof (Dwg_MATERIAL_mapper)))
         pass ();
     else
         fail ("MATERIAL.refractionmap [Dwg_MATERIAL_mapper]");
@@ -37682,7 +37690,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_color specular_color;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "specular_color", &specular_color, NULL)
-        && !memcmp (&specular_color, &material->specular_color, sizeof (material->specular_color)))
+        && !memcmp (&specular_color, &material->specular_color, sizeof (Dwg_MATERIAL_color)))
         pass ();
     else
         fail ("MATERIAL.specular_color [Dwg_MATERIAL_color]");
@@ -37705,7 +37713,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   {
     Dwg_MATERIAL_mapper specularmap;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "specularmap", &specularmap, NULL)
-        && !memcmp (&specularmap, &material->specularmap, sizeof (material->specularmap)))
+        && !memcmp (&specularmap, &material->specularmap, sizeof (Dwg_MATERIAL_mapper)))
         pass ();
     else
         fail ("MATERIAL.specularmap [Dwg_MATERIAL_mapper]");
@@ -38261,7 +38269,7 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "parent", &parent, NULL)
-        && !memcmp (&parent, &mentalrayrendersettings->parent, sizeof (mentalrayrendersettings->parent)))
+        && !memcmp (&parent, &mentalrayrendersettings->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MENTALRAYRENDERSETTINGS.parent [struct _dwg_object_object*]");
@@ -38627,7 +38635,7 @@ static int test_MLEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &mleaderobjectcontextdata->parent, sizeof (mleaderobjectcontextdata->parent)))
+        && !memcmp (&parent, &mleaderobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MLEADEROBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -38635,7 +38643,7 @@ static int test_MLEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &mleaderobjectcontextdata->scale, sizeof (mleaderobjectcontextdata->scale)))
+        && !memcmp (&scale, &mleaderobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MLEADEROBJECTCONTEXTDATA.scale [H]");
@@ -38671,7 +38679,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H arrow_head;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "arrow_head", &arrow_head, NULL)
-        && !memcmp (&arrow_head, &mleaderstyle->arrow_head, sizeof (mleaderstyle->arrow_head)))
+        && !memcmp (&arrow_head, &mleaderstyle->arrow_head, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MLEADERSTYLE.arrow_head [H]");
@@ -38769,7 +38777,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H block;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "block", &block, NULL)
-        && !memcmp (&block, &mleaderstyle->block, sizeof (mleaderstyle->block)))
+        && !memcmp (&block, &mleaderstyle->block, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MLEADERSTYLE.block [H]");
@@ -38777,7 +38785,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC block_color;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "block_color", &block_color, NULL)
-        && !memcmp (&block_color, &mleaderstyle->block_color, sizeof (mleaderstyle->block_color)))
+        && !memcmp (&block_color, &mleaderstyle->block_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MLEADERSTYLE.block_color [CMC]");
@@ -38815,7 +38823,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_3BD block_scale;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "block_scale", &block_scale, NULL)
-        && !memcmp (&block_scale, &mleaderstyle->block_scale, sizeof (mleaderstyle->block_scale)))
+        && !memcmp (&block_scale, &mleaderstyle->block_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MLEADERSTYLE.block_scale [3BD]");
@@ -39013,7 +39021,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC line_color;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "line_color", &line_color, NULL)
-        && !memcmp (&line_color, &mleaderstyle->line_color, sizeof (mleaderstyle->line_color)))
+        && !memcmp (&line_color, &mleaderstyle->line_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MLEADERSTYLE.line_color [CMC]");
@@ -39021,7 +39029,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H line_type;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "line_type", &line_type, NULL)
-        && !memcmp (&line_type, &mleaderstyle->line_type, sizeof (mleaderstyle->line_type)))
+        && !memcmp (&line_type, &mleaderstyle->line_type, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MLEADERSTYLE.line_type [H]");
@@ -39073,7 +39081,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &mleaderstyle->parent, sizeof (mleaderstyle->parent)))
+        && !memcmp (&parent, &mleaderstyle->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MLEADERSTYLE.parent [struct _dwg_object_object*]");
@@ -39156,7 +39164,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC text_color;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "text_color", &text_color, NULL)
-        && !memcmp (&text_color, &mleaderstyle->text_color, sizeof (mleaderstyle->text_color)))
+        && !memcmp (&text_color, &mleaderstyle->text_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MLEADERSTYLE.text_color [CMC]");
@@ -39204,7 +39212,7 @@ static int test_MLEADERSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H text_style;
     if (dwg_dynapi_entity_value (mleaderstyle, "MLEADERSTYLE", "text_style", &text_style, NULL)
-        && !memcmp (&text_style, &mleaderstyle->text_style, sizeof (mleaderstyle->text_style)))
+        && !memcmp (&text_style, &mleaderstyle->text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MLEADERSTYLE.text_style [H]");
@@ -39295,7 +39303,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC fill_color;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "fill_color", &fill_color, NULL)
-        && !memcmp (&fill_color, &mlinestyle->fill_color, sizeof (mlinestyle->fill_color)))
+        && !memcmp (&fill_color, &mlinestyle->fill_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("MLINESTYLE.fill_color [CMC]");
@@ -39353,7 +39361,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &mlinestyle->parent, sizeof (mlinestyle->parent)))
+        && !memcmp (&parent, &mlinestyle->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MLINESTYLE.parent [struct _dwg_object_object*]");
@@ -39389,7 +39397,7 @@ static int test_MOTIONPATH (const Dwg_Object *obj)
   {
     BITCODE_H camera_path;
     if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "camera_path", &camera_path, NULL)
-        && !memcmp (&camera_path, &motionpath->camera_path, sizeof (motionpath->camera_path)))
+        && !memcmp (&camera_path, &motionpath->camera_path, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MOTIONPATH.camera_path [H]");
@@ -39457,7 +39465,7 @@ static int test_MOTIONPATH (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "parent", &parent, NULL)
-        && !memcmp (&parent, &motionpath->parent, sizeof (motionpath->parent)))
+        && !memcmp (&parent, &motionpath->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MOTIONPATH.parent [struct _dwg_object_object*]");
@@ -39465,7 +39473,7 @@ static int test_MOTIONPATH (const Dwg_Object *obj)
   {
     BITCODE_H target_path;
     if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "target_path", &target_path, NULL)
-        && !memcmp (&target_path, &motionpath->target_path, sizeof (motionpath->target_path)))
+        && !memcmp (&target_path, &motionpath->target_path, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MOTIONPATH.target_path [H]");
@@ -39473,7 +39481,7 @@ static int test_MOTIONPATH (const Dwg_Object *obj)
   {
     BITCODE_H viewtable;
     if (dwg_dynapi_entity_value (motionpath, "MOTIONPATH", "viewtable", &viewtable, NULL)
-        && !memcmp (&viewtable, &motionpath->viewtable, sizeof (motionpath->viewtable)))
+        && !memcmp (&viewtable, &motionpath->viewtable, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MOTIONPATH.viewtable [H]");
@@ -39539,7 +39547,7 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &mtextattributeobjectcontextdata->parent, sizeof (mtextattributeobjectcontextdata->parent)))
+        && !memcmp (&parent, &mtextattributeobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -39547,7 +39555,7 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &mtextattributeobjectcontextdata->scale, sizeof (mtextattributeobjectcontextdata->scale)))
+        && !memcmp (&scale, &mtextattributeobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.scale [H]");
@@ -39718,7 +39726,7 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3BD insertion_pt;
     if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &mtextobjectcontextdata->insertion_pt, sizeof (mtextobjectcontextdata->insertion_pt)))
+        && !memcmp (&insertion_pt, &mtextobjectcontextdata->insertion_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MTEXTOBJECTCONTEXTDATA.insertion_pt [3BD]");
@@ -39771,7 +39779,7 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &mtextobjectcontextdata->parent, sizeof (mtextobjectcontextdata->parent)))
+        && !memcmp (&parent, &mtextobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("MTEXTOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -39809,7 +39817,7 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &mtextobjectcontextdata->scale, sizeof (mtextobjectcontextdata->scale)))
+        && !memcmp (&scale, &mtextobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("MTEXTOBJECTCONTEXTDATA.scale [H]");
@@ -39832,7 +39840,7 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_3BD x_axis_dir;
     if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "x_axis_dir", &x_axis_dir, NULL)
-        && !memcmp (&x_axis_dir, &mtextobjectcontextdata->x_axis_dir, sizeof (mtextobjectcontextdata->x_axis_dir)))
+        && !memcmp (&x_axis_dir, &mtextobjectcontextdata->x_axis_dir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MTEXTOBJECTCONTEXTDATA.x_axis_dir [3BD]");
@@ -39868,7 +39876,7 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
   {
     BITCODE_3BD max_extent;
     if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "max_extent", &max_extent, NULL)
-        && !memcmp (&max_extent, &navisworksmodeldef->max_extent, sizeof (navisworksmodeldef->max_extent)))
+        && !memcmp (&max_extent, &navisworksmodeldef->max_extent, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("NAVISWORKSMODELDEF.max_extent [3BD]");
@@ -39876,7 +39884,7 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
   {
     BITCODE_3BD min_extent;
     if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "min_extent", &min_extent, NULL)
-        && !memcmp (&min_extent, &navisworksmodeldef->min_extent, sizeof (navisworksmodeldef->min_extent)))
+        && !memcmp (&min_extent, &navisworksmodeldef->min_extent, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("NAVISWORKSMODELDEF.min_extent [3BD]");
@@ -39884,7 +39892,7 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "parent", &parent, NULL)
-        && !memcmp (&parent, &navisworksmodeldef->parent, sizeof (navisworksmodeldef->parent)))
+        && !memcmp (&parent, &navisworksmodeldef->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("NAVISWORKSMODELDEF.parent [struct _dwg_object_object*]");
@@ -39975,7 +39983,7 @@ static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &objectcontextdata->parent, sizeof (objectcontextdata->parent)))
+        && !memcmp (&parent, &objectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("OBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -39996,7 +40004,7 @@ static int test_OBJECT_PTR (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (object_ptr, "OBJECT_PTR", "parent", &parent, NULL)
-        && !memcmp (&parent, &object_ptr->parent, sizeof (object_ptr->parent)))
+        && !memcmp (&parent, &object_ptr->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("OBJECT_PTR.parent [struct _dwg_object_object*]");
@@ -40092,7 +40100,7 @@ static int test_PERSUBENTMGR (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "parent", &parent, NULL)
-        && !memcmp (&parent, &persubentmgr->parent, sizeof (persubentmgr->parent)))
+        && !memcmp (&parent, &persubentmgr->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("PERSUBENTMGR.parent [struct _dwg_object_object*]");
@@ -40163,7 +40171,7 @@ static int test_PLACEHOLDER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (placeholder, "PLACEHOLDER", "parent", &parent, NULL)
-        && !memcmp (&parent, &placeholder->parent, sizeof (placeholder->parent)))
+        && !memcmp (&parent, &placeholder->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("PLACEHOLDER.parent [struct _dwg_object_object*]");
@@ -40254,7 +40262,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_2BD paper_image_origin;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "paper_image_origin", &paper_image_origin, NULL)
-        && !memcmp (&paper_image_origin, &plotsettings->paper_image_origin, sizeof (plotsettings->paper_image_origin)))
+        && !memcmp (&paper_image_origin, &plotsettings->paper_image_origin, sizeof (BITCODE_2BD)))
         pass ();
     else
         fail ("PLOTSETTINGS.paper_image_origin [2BD_1]");
@@ -40302,7 +40310,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "parent", &parent, NULL)
-        && !memcmp (&parent, &plotsettings->parent, sizeof (plotsettings->parent)))
+        && !memcmp (&parent, &plotsettings->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("PLOTSETTINGS.parent [struct _dwg_object_object*]");
@@ -40325,7 +40333,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_2BD plot_origin;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "plot_origin", &plot_origin, NULL)
-        && !memcmp (&plot_origin, &plotsettings->plot_origin, sizeof (plotsettings->plot_origin)))
+        && !memcmp (&plot_origin, &plotsettings->plot_origin, sizeof (BITCODE_2BD)))
         pass ();
     else
         fail ("PLOTSETTINGS.plot_origin [2BD_1]");
@@ -40378,7 +40386,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_2BD plot_window_ll;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "plot_window_ll", &plot_window_ll, NULL)
-        && !memcmp (&plot_window_ll, &plotsettings->plot_window_ll, sizeof (plotsettings->plot_window_ll)))
+        && !memcmp (&plot_window_ll, &plotsettings->plot_window_ll, sizeof (BITCODE_2BD)))
         pass ();
     else
         fail ("PLOTSETTINGS.plot_window_ll [2BD_1]");
@@ -40386,7 +40394,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_2BD plot_window_ur;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "plot_window_ur", &plot_window_ur, NULL)
-        && !memcmp (&plot_window_ur, &plotsettings->plot_window_ur, sizeof (plotsettings->plot_window_ur)))
+        && !memcmp (&plot_window_ur, &plotsettings->plot_window_ur, sizeof (BITCODE_2BD)))
         pass ();
     else
         fail ("PLOTSETTINGS.plot_window_ur [2BD_1]");
@@ -40394,7 +40402,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_H plotview;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "plotview", &plotview, NULL)
-        && !memcmp (&plotview, &plotsettings->plotview, sizeof (plotsettings->plotview)))
+        && !memcmp (&plotview, &plotsettings->plotview, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("PLOTSETTINGS.plotview [H]");
@@ -40437,7 +40445,7 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
   {
     BITCODE_H shadeplot;
     if (dwg_dynapi_entity_value (plotsettings, "PLOTSETTINGS", "shadeplot", &shadeplot, NULL)
-        && !memcmp (&shadeplot, &plotsettings->shadeplot, sizeof (plotsettings->shadeplot)))
+        && !memcmp (&shadeplot, &plotsettings->shadeplot, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("PLOTSETTINGS.shadeplot [H]");
@@ -40573,7 +40581,7 @@ static int test_POINTPATH (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (pointpath, "POINTPATH", "parent", &parent, NULL)
-        && !memcmp (&parent, &pointpath->parent, sizeof (pointpath->parent)))
+        && !memcmp (&parent, &pointpath->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("POINTPATH.parent [struct _dwg_object_object*]");
@@ -40581,7 +40589,7 @@ static int test_POINTPATH (const Dwg_Object *obj)
   {
     BITCODE_3BD point;
     if (dwg_dynapi_entity_value (pointpath, "POINTPATH", "point", &point, NULL)
-        && !memcmp (&point, &pointpath->point, sizeof (pointpath->point)))
+        && !memcmp (&point, &pointpath->point, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("POINTPATH.point [3BD]");
@@ -40617,7 +40625,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "data", &data, NULL)
-        && !memcmp (&data, &proxy_object->data, sizeof (proxy_object->data)))
+        && !memcmp (&data, &proxy_object->data, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("PROXY_OBJECT.data [TF]");
@@ -40710,7 +40718,7 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "parent", &parent, NULL)
-        && !memcmp (&parent, &proxy_object->parent, sizeof (proxy_object->parent)))
+        && !memcmp (&parent, &proxy_object->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("PROXY_OBJECT.parent [struct _dwg_object_object*]");
@@ -40941,7 +40949,7 @@ static int test_RAPIDRTRENDERSETTINGS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (rapidrtrendersettings, "RAPIDRTRENDERSETTINGS", "parent", &parent, NULL)
-        && !memcmp (&parent, &rapidrtrendersettings->parent, sizeof (rapidrtrendersettings->parent)))
+        && !memcmp (&parent, &rapidrtrendersettings->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("RAPIDRTRENDERSETTINGS.parent [struct _dwg_object_object*]");
@@ -41067,7 +41075,7 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (rastervariables, "RASTERVARIABLES", "parent", &parent, NULL)
-        && !memcmp (&parent, &rastervariables->parent, sizeof (rastervariables->parent)))
+        && !memcmp (&parent, &rastervariables->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("RASTERVARIABLES.parent [struct _dwg_object_object*]");
@@ -41218,7 +41226,7 @@ static int test_RENDERENTRY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "parent", &parent, NULL)
-        && !memcmp (&parent, &renderentry->parent, sizeof (renderentry->parent)))
+        && !memcmp (&parent, &renderentry->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("RENDERENTRY.parent [struct _dwg_object_object*]");
@@ -41434,7 +41442,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
   {
     BITCODE_CMC fog_color;
     if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "fog_color", &fog_color, NULL)
-        && !memcmp (&fog_color, &renderenvironment->fog_color, sizeof (renderenvironment->fog_color)))
+        && !memcmp (&fog_color, &renderenvironment->fog_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("RENDERENVIRONMENT.fog_color [CMC]");
@@ -41517,7 +41525,7 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "parent", &parent, NULL)
-        && !memcmp (&parent, &renderenvironment->parent, sizeof (renderenvironment->parent)))
+        && !memcmp (&parent, &renderenvironment->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("RENDERENVIRONMENT.parent [struct _dwg_object_object*]");
@@ -41613,7 +41621,7 @@ static int test_RENDERGLOBAL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (renderglobal, "RENDERGLOBAL", "parent", &parent, NULL)
-        && !memcmp (&parent, &renderglobal->parent, sizeof (renderglobal->parent)))
+        && !memcmp (&parent, &renderglobal->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("RENDERGLOBAL.parent [struct _dwg_object_object*]");
@@ -41824,7 +41832,7 @@ static int test_RENDERSETTINGS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (rendersettings, "RENDERSETTINGS", "parent", &parent, NULL)
-        && !memcmp (&parent, &rendersettings->parent, sizeof (rendersettings->parent)))
+        && !memcmp (&parent, &rendersettings->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("RENDERSETTINGS.parent [struct _dwg_object_object*]");
@@ -41915,7 +41923,7 @@ static int test_SCALE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (scale, "SCALE", "parent", &parent, NULL)
-        && !memcmp (&parent, &scale->parent, sizeof (scale->parent)))
+        && !memcmp (&parent, &scale->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SCALE.parent [struct _dwg_object_object*]");
@@ -41936,7 +41944,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H arrow_end_symbol;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "arrow_end_symbol", &arrow_end_symbol, NULL)
-        && !memcmp (&arrow_end_symbol, &sectionviewstyle->arrow_end_symbol, sizeof (sectionviewstyle->arrow_end_symbol)))
+        && !memcmp (&arrow_end_symbol, &sectionviewstyle->arrow_end_symbol, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.arrow_end_symbol [H]");
@@ -41958,7 +41966,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H arrow_start_symbol;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "arrow_start_symbol", &arrow_start_symbol, NULL)
-        && !memcmp (&arrow_start_symbol, &sectionviewstyle->arrow_start_symbol, sizeof (sectionviewstyle->arrow_start_symbol)))
+        && !memcmp (&arrow_start_symbol, &sectionviewstyle->arrow_start_symbol, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.arrow_start_symbol [H]");
@@ -41966,7 +41974,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC arrow_symbol_color;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "arrow_symbol_color", &arrow_symbol_color, NULL)
-        && !memcmp (&arrow_symbol_color, &sectionviewstyle->arrow_symbol_color, sizeof (sectionviewstyle->arrow_symbol_color)))
+        && !memcmp (&arrow_symbol_color, &sectionviewstyle->arrow_symbol_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.arrow_symbol_color [CMC]");
@@ -42004,7 +42012,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC bend_line_color;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "bend_line_color", &bend_line_color, NULL)
-        && !memcmp (&bend_line_color, &sectionviewstyle->bend_line_color, sizeof (sectionviewstyle->bend_line_color)))
+        && !memcmp (&bend_line_color, &sectionviewstyle->bend_line_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.bend_line_color [CMC]");
@@ -42041,7 +42049,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H bend_ltype;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "bend_ltype", &bend_ltype, NULL)
-        && !memcmp (&bend_ltype, &sectionviewstyle->bend_ltype, sizeof (sectionviewstyle->bend_ltype)))
+        && !memcmp (&bend_ltype, &sectionviewstyle->bend_ltype, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.bend_ltype [H]");
@@ -42139,7 +42147,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC hatch_bg_color;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_bg_color", &hatch_bg_color, NULL)
-        && !memcmp (&hatch_bg_color, &sectionviewstyle->hatch_bg_color, sizeof (sectionviewstyle->hatch_bg_color)))
+        && !memcmp (&hatch_bg_color, &sectionviewstyle->hatch_bg_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.hatch_bg_color [CMC]");
@@ -42147,7 +42155,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC hatch_color;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "hatch_color", &hatch_color, NULL)
-        && !memcmp (&hatch_color, &sectionviewstyle->hatch_color, sizeof (sectionviewstyle->hatch_color)))
+        && !memcmp (&hatch_color, &sectionviewstyle->hatch_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.hatch_color [CMC]");
@@ -42194,7 +42202,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC identifier_color;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "identifier_color", &identifier_color, NULL)
-        && !memcmp (&identifier_color, &sectionviewstyle->identifier_color, sizeof (sectionviewstyle->identifier_color)))
+        && !memcmp (&identifier_color, &sectionviewstyle->identifier_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.identifier_color [CMC]");
@@ -42256,7 +42264,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H identifier_style;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "identifier_style", &identifier_style, NULL)
-        && !memcmp (&identifier_style, &sectionviewstyle->identifier_style, sizeof (sectionviewstyle->identifier_style)))
+        && !memcmp (&identifier_style, &sectionviewstyle->identifier_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.identifier_style [H]");
@@ -42294,7 +42302,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &sectionviewstyle->parent, sizeof (sectionviewstyle->parent)))
+        && !memcmp (&parent, &sectionviewstyle->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.parent [struct _dwg_object_object*]");
@@ -42302,7 +42310,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC plane_line_color;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "plane_line_color", &plane_line_color, NULL)
-        && !memcmp (&plane_line_color, &sectionviewstyle->plane_line_color, sizeof (sectionviewstyle->plane_line_color)))
+        && !memcmp (&plane_line_color, &sectionviewstyle->plane_line_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.plane_line_color [CMC]");
@@ -42324,7 +42332,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H plane_ltype;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "plane_ltype", &plane_ltype, NULL)
-        && !memcmp (&plane_ltype, &sectionviewstyle->plane_ltype, sizeof (sectionviewstyle->plane_ltype)))
+        && !memcmp (&plane_ltype, &sectionviewstyle->plane_ltype, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.plane_ltype [H]");
@@ -42417,7 +42425,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC viewlabel_text_color;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_text_color", &viewlabel_text_color, NULL)
-        && !memcmp (&viewlabel_text_color, &sectionviewstyle->viewlabel_text_color, sizeof (sectionviewstyle->viewlabel_text_color)))
+        && !memcmp (&viewlabel_text_color, &sectionviewstyle->viewlabel_text_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.viewlabel_text_color [CMC]");
@@ -42440,7 +42448,7 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
   {
     BITCODE_H viewlabel_text_style;
     if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "viewlabel_text_style", &viewlabel_text_style, NULL)
-        && !memcmp (&viewlabel_text_style, &sectionviewstyle->viewlabel_text_style, sizeof (sectionviewstyle->viewlabel_text_style)))
+        && !memcmp (&viewlabel_text_style, &sectionviewstyle->viewlabel_text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SECTIONVIEWSTYLE.viewlabel_text_style [H]");
@@ -42506,7 +42514,7 @@ static int test_SECTION_MANAGER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "parent", &parent, NULL)
-        && !memcmp (&parent, &section_manager->parent, sizeof (section_manager->parent)))
+        && !memcmp (&parent, &section_manager->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SECTION_MANAGER.parent [struct _dwg_object_object*]");
@@ -42567,7 +42575,7 @@ static int test_SECTION_SETTINGS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (section_settings, "SECTION_SETTINGS", "parent", &parent, NULL)
-        && !memcmp (&parent, &section_settings->parent, sizeof (section_settings->parent)))
+        && !memcmp (&parent, &section_settings->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SECTION_SETTINGS.parent [struct _dwg_object_object*]");
@@ -42598,7 +42606,7 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
   {
     BITCODE_H block_owner;
     if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "block_owner", &block_owner, NULL)
-        && !memcmp (&block_owner, &sortentstable->block_owner, sizeof (sortentstable->block_owner)))
+        && !memcmp (&block_owner, &sortentstable->block_owner, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SORTENTSTABLE.block_owner [H]");
@@ -42631,7 +42639,7 @@ static int test_SORTENTSTABLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (sortentstable, "SORTENTSTABLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &sortentstable->parent, sizeof (sortentstable->parent)))
+        && !memcmp (&parent, &sortentstable->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SORTENTSTABLE.parent [struct _dwg_object_object*]");
@@ -42717,7 +42725,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &spatial_filter->extrusion, sizeof (spatial_filter->extrusion)))
+        && !memcmp (&extrusion, &spatial_filter->extrusion, sizeof (BITCODE_BE)))
         pass ();
     else
         fail ("SPATIAL_FILTER.extrusion [BE]");
@@ -42755,7 +42763,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   {
     BITCODE_BD* inverse_transform;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "inverse_transform", &inverse_transform, NULL)
-        && !memcmp (&inverse_transform, &spatial_filter->inverse_transform, sizeof (spatial_filter->inverse_transform)))
+        && !memcmp (&inverse_transform, &spatial_filter->inverse_transform, sizeof (BITCODE_BD*)))
         pass ();
     else
         fail ("SPATIAL_FILTER.inverse_transform [BD*]");
@@ -42778,7 +42786,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   {
     BITCODE_3BD origin;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "origin", &origin, NULL)
-        && !memcmp (&origin, &spatial_filter->origin, sizeof (spatial_filter->origin)))
+        && !memcmp (&origin, &spatial_filter->origin, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("SPATIAL_FILTER.origin [3BD]");
@@ -42786,7 +42794,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "parent", &parent, NULL)
-        && !memcmp (&parent, &spatial_filter->parent, sizeof (spatial_filter->parent)))
+        && !memcmp (&parent, &spatial_filter->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SPATIAL_FILTER.parent [struct _dwg_object_object*]");
@@ -42817,7 +42825,7 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
   {
     BITCODE_TF bindata;
     if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "bindata", &bindata, NULL)
-        && !memcmp (&bindata, &spatial_index->bindata, sizeof (spatial_index->bindata)))
+        && !memcmp (&bindata, &spatial_index->bindata, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("SPATIAL_INDEX.bindata [TF]");
@@ -42850,7 +42858,7 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
   {
     BITCODE_TIMEBLL last_updated;
     if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "last_updated", &last_updated, NULL)
-        && !memcmp (&last_updated, &spatial_index->last_updated, sizeof (spatial_index->last_updated)))
+        && !memcmp (&last_updated, &spatial_index->last_updated, sizeof (BITCODE_TIMEBLL)))
         pass ();
     else
         fail ("SPATIAL_INDEX.last_updated [TIMEBLL]");
@@ -42888,7 +42896,7 @@ static int test_SPATIAL_INDEX (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (spatial_index, "SPATIAL_INDEX", "parent", &parent, NULL)
-        && !memcmp (&parent, &spatial_index->parent, sizeof (spatial_index->parent)))
+        && !memcmp (&parent, &spatial_index->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SPATIAL_INDEX.parent [struct _dwg_object_object*]");
@@ -43074,7 +43082,7 @@ static int test_STYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (style, "STYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &style->parent, sizeof (style->parent)))
+        && !memcmp (&parent, &style->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("STYLE.parent [struct _dwg_object_object*]");
@@ -43127,7 +43135,7 @@ static int test_STYLE (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (style, "STYLE", "xref", &xref, NULL)
-        && !memcmp (&xref, &style->xref, sizeof (style->xref)))
+        && !memcmp (&xref, &style->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("STYLE.xref [H]");
@@ -43188,7 +43196,7 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &style_control->parent, sizeof (style_control->parent)))
+        && !memcmp (&parent, &style_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("STYLE_CONTROL.parent [struct _dwg_object_object*]");
@@ -43224,7 +43232,7 @@ static int test_SUN (const Dwg_Object *obj)
   {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (sun, "SUN", "color", &color, NULL)
-        && !memcmp (&color, &sun->color, sizeof (sun->color)))
+        && !memcmp (&color, &sun->color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("SUN.color [CMC]");
@@ -43322,7 +43330,7 @@ static int test_SUN (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (sun, "SUN", "parent", &parent, NULL)
-        && !memcmp (&parent, &sun->parent, sizeof (sun->parent)))
+        && !memcmp (&parent, &sun->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SUN.parent [struct _dwg_object_object*]");
@@ -43583,7 +43591,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     BITCODE_H page_setup_wizard;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "page_setup_wizard", &page_setup_wizard, NULL)
-        && !memcmp (&page_setup_wizard, &sunstudy->page_setup_wizard, sizeof (sunstudy->page_setup_wizard)))
+        && !memcmp (&page_setup_wizard, &sunstudy->page_setup_wizard, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SUNSTUDY.page_setup_wizard [H]");
@@ -43591,7 +43599,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "parent", &parent, NULL)
-        && !memcmp (&parent, &sunstudy->parent, sizeof (sunstudy->parent)))
+        && !memcmp (&parent, &sunstudy->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("SUNSTUDY.parent [struct _dwg_object_object*]");
@@ -43704,7 +43712,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     BITCODE_H text_style;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "text_style", &text_style, NULL)
-        && !memcmp (&text_style, &sunstudy->text_style, sizeof (sunstudy->text_style)))
+        && !memcmp (&text_style, &sunstudy->text_style, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SUNSTUDY.text_style [H]");
@@ -43727,7 +43735,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     BITCODE_H view;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "view", &view, NULL)
-        && !memcmp (&view, &sunstudy->view, sizeof (sunstudy->view)))
+        && !memcmp (&view, &sunstudy->view, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SUNSTUDY.view [H]");
@@ -43735,7 +43743,7 @@ static int test_SUNSTUDY (const Dwg_Object *obj)
   {
     BITCODE_H visualstyle;
     if (dwg_dynapi_entity_value (sunstudy, "SUNSTUDY", "visualstyle", &visualstyle, NULL)
-        && !memcmp (&visualstyle, &sunstudy->visualstyle, sizeof (sunstudy->visualstyle)))
+        && !memcmp (&visualstyle, &sunstudy->visualstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("SUNSTUDY.visualstyle [H]");
@@ -43756,7 +43764,7 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
   {
     Dwg_FormattedTableData fdata;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "fdata", &fdata, NULL)
-        && !memcmp (&fdata, &tablecontent->fdata, sizeof (tablecontent->fdata)))
+        && !memcmp (&fdata, &tablecontent->fdata, sizeof (Dwg_FormattedTableData)))
         pass ();
     else
         fail ("TABLECONTENT.fdata [Dwg_FormattedTableData]");
@@ -43764,7 +43772,7 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
   {
     Dwg_LinkedData ldata;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "ldata", &ldata, NULL)
-        && !memcmp (&ldata, &tablecontent->ldata, sizeof (tablecontent->ldata)))
+        && !memcmp (&ldata, &tablecontent->ldata, sizeof (Dwg_LinkedData)))
         pass ();
     else
         fail ("TABLECONTENT.ldata [Dwg_LinkedData]");
@@ -43772,7 +43780,7 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "parent", &parent, NULL)
-        && !memcmp (&parent, &tablecontent->parent, sizeof (tablecontent->parent)))
+        && !memcmp (&parent, &tablecontent->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("TABLECONTENT.parent [struct _dwg_object_object*]");
@@ -43780,7 +43788,7 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
   {
     BITCODE_H tablestyle;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "tablestyle", &tablestyle, NULL)
-        && !memcmp (&tablestyle, &tablecontent->tablestyle, sizeof (tablecontent->tablestyle)))
+        && !memcmp (&tablestyle, &tablecontent->tablestyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLECONTENT.tablestyle [H]");
@@ -43788,7 +43796,7 @@ static int test_TABLECONTENT (const Dwg_Object *obj)
   {
     Dwg_LinkedTableData tdata;
     if (dwg_dynapi_entity_value (tablecontent, "TABLECONTENT", "tdata", &tdata, NULL)
-        && !memcmp (&tdata, &tablecontent->tdata, sizeof (tablecontent->tdata)))
+        && !memcmp (&tdata, &tablecontent->tdata, sizeof (Dwg_LinkedTableData)))
         pass ();
     else
         fail ("TABLECONTENT.tdata [Dwg_LinkedTableData]");
@@ -43864,7 +43872,7 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tablegeometry, "TABLEGEOMETRY", "parent", &parent, NULL)
-        && !memcmp (&parent, &tablegeometry->parent, sizeof (tablegeometry->parent)))
+        && !memcmp (&parent, &tablegeometry->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("TABLEGEOMETRY.parent [struct _dwg_object_object*]");
@@ -43885,7 +43893,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   {
     BITCODE_H cellstyle;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cellstyle", &cellstyle, NULL)
-        && !memcmp (&cellstyle, &tablestyle->cellstyle, sizeof (tablestyle->cellstyle)))
+        && !memcmp (&cellstyle, &tablestyle->cellstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TABLESTYLE.cellstyle [H]");
@@ -44023,7 +44031,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   {
     Dwg_TABLESTYLE_CellStyle ovr;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "ovr", &ovr, NULL)
-        && !memcmp (&ovr, &tablestyle->ovr, sizeof (tablestyle->ovr)))
+        && !memcmp (&ovr, &tablestyle->ovr, sizeof (Dwg_TABLESTYLE_CellStyle)))
         pass ();
     else
         fail ("TABLESTYLE.ovr [Dwg_TABLESTYLE_CellStyle]");
@@ -44031,7 +44039,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &tablestyle->parent, sizeof (tablestyle->parent)))
+        && !memcmp (&parent, &tablestyle->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("TABLESTYLE.parent [struct _dwg_object_object*]");
@@ -44049,7 +44057,7 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
   {
     Dwg_TABLESTYLE_CellStyle sty;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "sty", &sty, NULL)
-        && !memcmp (&sty, &tablestyle->sty, sizeof (tablestyle->sty)))
+        && !memcmp (&sty, &tablestyle->sty, sizeof (Dwg_TABLESTYLE_CellStyle)))
         pass ();
     else
         fail ("TABLESTYLE.sty [Dwg_TABLESTYLE_CellStyle]");
@@ -44145,7 +44153,7 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_2RD alignment_pt;
     if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "alignment_pt", &alignment_pt, NULL)
-        && !memcmp (&alignment_pt, &textobjectcontextdata->alignment_pt, sizeof (textobjectcontextdata->alignment_pt)))
+        && !memcmp (&alignment_pt, &textobjectcontextdata->alignment_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("TEXTOBJECTCONTEXTDATA.alignment_pt [2RD]");
@@ -44198,7 +44206,7 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_2RD insertion_pt;
     if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &textobjectcontextdata->insertion_pt, sizeof (textobjectcontextdata->insertion_pt)))
+        && !memcmp (&insertion_pt, &textobjectcontextdata->insertion_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("TEXTOBJECTCONTEXTDATA.insertion_pt [2RD]");
@@ -44221,7 +44229,7 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &textobjectcontextdata->parent, sizeof (textobjectcontextdata->parent)))
+        && !memcmp (&parent, &textobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("TEXTOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
@@ -44244,7 +44252,7 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   {
     BITCODE_H scale;
     if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "scale", &scale, NULL)
-        && !memcmp (&scale, &textobjectcontextdata->scale, sizeof (textobjectcontextdata->scale)))
+        && !memcmp (&scale, &textobjectcontextdata->scale, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("TEXTOBJECTCONTEXTDATA.scale [H]");
@@ -44265,7 +44273,7 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
   {
     BITCODE_BLL alt_hlt;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hlt", &alt_hlt, NULL)
-        && !memcmp (&alt_hlt, &tvdeviceproperties->alt_hlt, sizeof (tvdeviceproperties->alt_hlt)))
+        && !memcmp (&alt_hlt, &tvdeviceproperties->alt_hlt, sizeof (BITCODE_BLL)))
         pass ();
     else
         fail ("TVDEVICEPROPERTIES.alt_hlt [BLL]");
@@ -44273,7 +44281,7 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
   {
     BITCODE_BLL alt_hltcolor;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hltcolor", &alt_hltcolor, NULL)
-        && !memcmp (&alt_hltcolor, &tvdeviceproperties->alt_hltcolor, sizeof (tvdeviceproperties->alt_hltcolor)))
+        && !memcmp (&alt_hltcolor, &tvdeviceproperties->alt_hltcolor, sizeof (BITCODE_BLL)))
         pass ();
     else
         fail ("TVDEVICEPROPERTIES.alt_hltcolor [BLL]");
@@ -44341,7 +44349,7 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
   {
     BITCODE_BLL geom_shader_usage;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "geom_shader_usage", &geom_shader_usage, NULL)
-        && !memcmp (&geom_shader_usage, &tvdeviceproperties->geom_shader_usage, sizeof (tvdeviceproperties->geom_shader_usage)))
+        && !memcmp (&geom_shader_usage, &tvdeviceproperties->geom_shader_usage, sizeof (BITCODE_BLL)))
         pass ();
     else
         fail ("TVDEVICEPROPERTIES.geom_shader_usage [BLL]");
@@ -44364,7 +44372,7 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "parent", &parent, NULL)
-        && !memcmp (&parent, &tvdeviceproperties->parent, sizeof (tvdeviceproperties->parent)))
+        && !memcmp (&parent, &tvdeviceproperties->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("TVDEVICEPROPERTIES.parent [struct _dwg_object_object*]");
@@ -44415,7 +44423,7 @@ static int test_UCS (const Dwg_Object *obj)
   {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (ucs, "UCS", "base_ucs", &base_ucs, NULL)
-        && !memcmp (&base_ucs, &ucs->base_ucs, sizeof (ucs->base_ucs)))
+        && !memcmp (&base_ucs, &ucs->base_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("UCS.base_ucs [H]");
@@ -44493,7 +44501,7 @@ static int test_UCS (const Dwg_Object *obj)
   {
     BITCODE_H named_ucs;
     if (dwg_dynapi_entity_value (ucs, "UCS", "named_ucs", &named_ucs, NULL)
-        && !memcmp (&named_ucs, &ucs->named_ucs, sizeof (ucs->named_ucs)))
+        && !memcmp (&named_ucs, &ucs->named_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("UCS.named_ucs [H]");
@@ -44526,7 +44534,7 @@ static int test_UCS (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (ucs, "UCS", "parent", &parent, NULL)
-        && !memcmp (&parent, &ucs->parent, sizeof (ucs->parent)))
+        && !memcmp (&parent, &ucs->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("UCS.parent [struct _dwg_object_object*]");
@@ -44549,7 +44557,7 @@ static int test_UCS (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsorg;
     if (dwg_dynapi_entity_value (ucs, "UCS", "ucsorg", &ucsorg, NULL)
-        && !memcmp (&ucsorg, &ucs->ucsorg, sizeof (ucs->ucsorg)))
+        && !memcmp (&ucsorg, &ucs->ucsorg, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("UCS.ucsorg [3BD]");
@@ -44557,7 +44565,7 @@ static int test_UCS (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsxdir;
     if (dwg_dynapi_entity_value (ucs, "UCS", "ucsxdir", &ucsxdir, NULL)
-        && !memcmp (&ucsxdir, &ucs->ucsxdir, sizeof (ucs->ucsxdir)))
+        && !memcmp (&ucsxdir, &ucs->ucsxdir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("UCS.ucsxdir [3BD]");
@@ -44565,7 +44573,7 @@ static int test_UCS (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsydir;
     if (dwg_dynapi_entity_value (ucs, "UCS", "ucsydir", &ucsydir, NULL)
-        && !memcmp (&ucsydir, &ucs->ucsydir, sizeof (ucs->ucsydir)))
+        && !memcmp (&ucsydir, &ucs->ucsydir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("UCS.ucsydir [3BD]");
@@ -44588,7 +44596,7 @@ static int test_UCS (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (ucs, "UCS", "xref", &xref, NULL)
-        && !memcmp (&xref, &ucs->xref, sizeof (ucs->xref)))
+        && !memcmp (&xref, &ucs->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("UCS.xref [H]");
@@ -44649,7 +44657,7 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &ucs_control->parent, sizeof (ucs_control->parent)))
+        && !memcmp (&parent, &ucs_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("UCS_CONTROL.parent [struct _dwg_object_object*]");
@@ -44690,7 +44698,7 @@ static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "parent", &parent, NULL)
-        && !memcmp (&parent, &underlaydefinition->parent, sizeof (underlaydefinition->parent)))
+        && !memcmp (&parent, &underlaydefinition->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("UNDERLAYDEFINITION.parent [struct _dwg_object_object*]");
@@ -44711,7 +44719,7 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
   {
     BITCODE_TF data;
     if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "data", &data, NULL)
-        && !memcmp (&data, &vba_project->data, sizeof (vba_project->data)))
+        && !memcmp (&data, &vba_project->data, sizeof (BITCODE_TF)))
         pass ();
     else
         fail ("VBA_PROJECT.data [TF]");
@@ -44734,7 +44742,7 @@ static int test_VBA_PROJECT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vba_project, "VBA_PROJECT", "parent", &parent, NULL)
-        && !memcmp (&parent, &vba_project->parent, sizeof (vba_project->parent)))
+        && !memcmp (&parent, &vba_project->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VBA_PROJECT.parent [struct _dwg_object_object*]");
@@ -44770,7 +44778,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_2RD VIEWCTR;
     if (dwg_dynapi_entity_value (view, "VIEW", "VIEWCTR", &VIEWCTR, NULL)
-        && !memcmp (&VIEWCTR, &view->VIEWCTR, sizeof (view->VIEWCTR)))
+        && !memcmp (&VIEWCTR, &view->VIEWCTR, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VIEW.VIEWCTR [2RD]");
@@ -44778,7 +44786,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_3BD VIEWDIR;
     if (dwg_dynapi_entity_value (view, "VIEW", "VIEWDIR", &VIEWDIR, NULL)
-        && !memcmp (&VIEWDIR, &view->VIEWDIR, sizeof (view->VIEWDIR)))
+        && !memcmp (&VIEWDIR, &view->VIEWDIR, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEW.VIEWDIR [3BD]");
@@ -44815,7 +44823,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_CMC ambient_color;
     if (dwg_dynapi_entity_value (view, "VIEW", "ambient_color", &ambient_color, NULL)
-        && !memcmp (&ambient_color, &view->ambient_color, sizeof (view->ambient_color)))
+        && !memcmp (&ambient_color, &view->ambient_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VIEW.ambient_color [CMC]");
@@ -44868,7 +44876,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_H background;
     if (dwg_dynapi_entity_value (view, "VIEW", "background", &background, NULL)
-        && !memcmp (&background, &view->background, sizeof (view->background)))
+        && !memcmp (&background, &view->background, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEW.background [H]");
@@ -44876,7 +44884,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (view, "VIEW", "base_ucs", &base_ucs, NULL)
-        && !memcmp (&base_ucs, &view->base_ucs, sizeof (view->base_ucs)))
+        && !memcmp (&base_ucs, &view->base_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEW.base_ucs [H]");
@@ -45049,7 +45057,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_H livesection;
     if (dwg_dynapi_entity_value (view, "VIEW", "livesection", &livesection, NULL)
-        && !memcmp (&livesection, &view->livesection, sizeof (view->livesection)))
+        && !memcmp (&livesection, &view->livesection, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEW.livesection [H]");
@@ -45067,7 +45075,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_H named_ucs;
     if (dwg_dynapi_entity_value (view, "VIEW", "named_ucs", &named_ucs, NULL)
-        && !memcmp (&named_ucs, &view->named_ucs, sizeof (view->named_ucs)))
+        && !memcmp (&named_ucs, &view->named_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEW.named_ucs [H]");
@@ -45075,7 +45083,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (view, "VIEW", "parent", &parent, NULL)
-        && !memcmp (&parent, &view->parent, sizeof (view->parent)))
+        && !memcmp (&parent, &view->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VIEW.parent [struct _dwg_object_object*]");
@@ -45098,7 +45106,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_H sun;
     if (dwg_dynapi_entity_value (view, "VIEW", "sun", &sun, NULL)
-        && !memcmp (&sun, &view->sun, sizeof (view->sun)))
+        && !memcmp (&sun, &view->sun, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEW.sun [H]");
@@ -45136,7 +45144,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsorg;
     if (dwg_dynapi_entity_value (view, "VIEW", "ucsorg", &ucsorg, NULL)
-        && !memcmp (&ucsorg, &view->ucsorg, sizeof (view->ucsorg)))
+        && !memcmp (&ucsorg, &view->ucsorg, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEW.ucsorg [3BD]");
@@ -45144,7 +45152,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsxdir;
     if (dwg_dynapi_entity_value (view, "VIEW", "ucsxdir", &ucsxdir, NULL)
-        && !memcmp (&ucsxdir, &view->ucsxdir, sizeof (view->ucsxdir)))
+        && !memcmp (&ucsxdir, &view->ucsxdir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEW.ucsxdir [3BD]");
@@ -45152,7 +45160,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsydir;
     if (dwg_dynapi_entity_value (view, "VIEW", "ucsydir", &ucsydir, NULL)
-        && !memcmp (&ucsydir, &view->ucsydir, sizeof (view->ucsydir)))
+        && !memcmp (&ucsydir, &view->ucsydir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEW.ucsydir [3BD]");
@@ -45190,7 +45198,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_3BD view_target;
     if (dwg_dynapi_entity_value (view, "VIEW", "view_target", &view_target, NULL)
-        && !memcmp (&view_target, &view->view_target, sizeof (view->view_target)))
+        && !memcmp (&view_target, &view->view_target, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VIEW.view_target [3BD]");
@@ -45213,7 +45221,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_H visualstyle;
     if (dwg_dynapi_entity_value (view, "VIEW", "visualstyle", &visualstyle, NULL)
-        && !memcmp (&visualstyle, &view->visualstyle, sizeof (view->visualstyle)))
+        && !memcmp (&visualstyle, &view->visualstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEW.visualstyle [H]");
@@ -45221,7 +45229,7 @@ static int test_VIEW (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (view, "VIEW", "xref", &xref, NULL)
-        && !memcmp (&xref, &view->xref, sizeof (view->xref)))
+        && !memcmp (&xref, &view->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VIEW.xref [H]");
@@ -45282,7 +45290,7 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &view_control->parent, sizeof (view_control->parent)))
+        && !memcmp (&parent, &view_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VIEW_CONTROL.parent [struct _dwg_object_object*]");
@@ -46068,7 +46076,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC c_prop29;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop29", &c_prop29, NULL)
-        && !memcmp (&c_prop29, &visualstyle->c_prop29, sizeof (visualstyle->c_prop29)))
+        && !memcmp (&c_prop29, &visualstyle->c_prop29, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.c_prop29 [CMC]");
@@ -46091,7 +46099,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC c_prop2c;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop2c", &c_prop2c, NULL)
-        && !memcmp (&c_prop2c, &visualstyle->c_prop2c, sizeof (visualstyle->c_prop2c)))
+        && !memcmp (&c_prop2c, &visualstyle->c_prop2c, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.c_prop2c [CMC]");
@@ -46114,7 +46122,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC c_prop33;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "c_prop33", &c_prop33, NULL)
-        && !memcmp (&c_prop33, &visualstyle->c_prop33, sizeof (visualstyle->c_prop33)))
+        && !memcmp (&c_prop33, &visualstyle->c_prop33, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.c_prop33 [CMC]");
@@ -46251,7 +46259,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC edge_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_color", &edge_color, NULL)
-        && !memcmp (&edge_color, &visualstyle->edge_color, sizeof (visualstyle->edge_color)))
+        && !memcmp (&edge_color, &visualstyle->edge_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.edge_color [CMC]");
@@ -46364,7 +46372,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC edge_intersection_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_intersection_color", &edge_intersection_color, NULL)
-        && !memcmp (&edge_intersection_color, &visualstyle->edge_intersection_color, sizeof (visualstyle->edge_intersection_color)))
+        && !memcmp (&edge_intersection_color, &visualstyle->edge_intersection_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.edge_intersection_color [CMC]");
@@ -46537,7 +46545,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC edge_obscured_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_obscured_color", &edge_obscured_color, NULL)
-        && !memcmp (&edge_obscured_color, &visualstyle->edge_obscured_color, sizeof (visualstyle->edge_obscured_color)))
+        && !memcmp (&edge_obscured_color, &visualstyle->edge_obscured_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.edge_obscured_color [CMC]");
@@ -46650,7 +46658,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC edge_silhouette_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "edge_silhouette_color", &edge_silhouette_color, NULL)
-        && !memcmp (&edge_silhouette_color, &visualstyle->edge_silhouette_color, sizeof (visualstyle->edge_silhouette_color)))
+        && !memcmp (&edge_silhouette_color, &visualstyle->edge_silhouette_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.edge_silhouette_color [CMC]");
@@ -46958,7 +46966,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     BITCODE_CMC face_mono_color;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "face_mono_color", &face_mono_color, NULL)
-        && !memcmp (&face_mono_color, &visualstyle->face_mono_color, sizeof (visualstyle->face_mono_color)))
+        && !memcmp (&face_mono_color, &visualstyle->face_mono_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VISUALSTYLE.face_mono_color [CMC]");
@@ -47071,7 +47079,7 @@ static int test_VISUALSTYLE (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (visualstyle, "VISUALSTYLE", "parent", &parent, NULL)
-        && !memcmp (&parent, &visualstyle->parent, sizeof (visualstyle->parent)))
+        && !memcmp (&parent, &visualstyle->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VISUALSTYLE.parent [struct _dwg_object_object*]");
@@ -47162,7 +47170,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD GRIDUNIT;
     if (dwg_dynapi_entity_value (vport, "VPORT", "GRIDUNIT", &GRIDUNIT, NULL)
-        && !memcmp (&GRIDUNIT, &vport->GRIDUNIT, sizeof (vport->GRIDUNIT)))
+        && !memcmp (&GRIDUNIT, &vport->GRIDUNIT, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VPORT.GRIDUNIT [2RD]");
@@ -47185,7 +47193,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD SNAPBASE;
     if (dwg_dynapi_entity_value (vport, "VPORT", "SNAPBASE", &SNAPBASE, NULL)
-        && !memcmp (&SNAPBASE, &vport->SNAPBASE, sizeof (vport->SNAPBASE)))
+        && !memcmp (&SNAPBASE, &vport->SNAPBASE, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VPORT.SNAPBASE [2RD]");
@@ -47238,7 +47246,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD SNAPUNIT;
     if (dwg_dynapi_entity_value (vport, "VPORT", "SNAPUNIT", &SNAPUNIT, NULL)
-        && !memcmp (&SNAPUNIT, &vport->SNAPUNIT, sizeof (vport->SNAPUNIT)))
+        && !memcmp (&SNAPUNIT, &vport->SNAPUNIT, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VPORT.SNAPUNIT [2RD]");
@@ -47306,7 +47314,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD VIEWCTR;
     if (dwg_dynapi_entity_value (vport, "VPORT", "VIEWCTR", &VIEWCTR, NULL)
-        && !memcmp (&VIEWCTR, &vport->VIEWCTR, sizeof (vport->VIEWCTR)))
+        && !memcmp (&VIEWCTR, &vport->VIEWCTR, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VPORT.VIEWCTR [2RD]");
@@ -47314,7 +47322,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD VIEWDIR;
     if (dwg_dynapi_entity_value (vport, "VPORT", "VIEWDIR", &VIEWDIR, NULL)
-        && !memcmp (&VIEWDIR, &vport->VIEWDIR, sizeof (vport->VIEWDIR)))
+        && !memcmp (&VIEWDIR, &vport->VIEWDIR, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VPORT.VIEWDIR [3BD]");
@@ -47351,7 +47359,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_CMC ambient_color;
     if (dwg_dynapi_entity_value (vport, "VPORT", "ambient_color", &ambient_color, NULL)
-        && !memcmp (&ambient_color, &vport->ambient_color, sizeof (vport->ambient_color)))
+        && !memcmp (&ambient_color, &vport->ambient_color, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("VPORT.ambient_color [CMC]");
@@ -47389,7 +47397,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_H background;
     if (dwg_dynapi_entity_value (vport, "VPORT", "background", &background, NULL)
-        && !memcmp (&background, &vport->background, sizeof (vport->background)))
+        && !memcmp (&background, &vport->background, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT.background [H]");
@@ -47397,7 +47405,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_H base_ucs;
     if (dwg_dynapi_entity_value (vport, "VPORT", "base_ucs", &base_ucs, NULL)
-        && !memcmp (&base_ucs, &vport->base_ucs, sizeof (vport->base_ucs)))
+        && !memcmp (&base_ucs, &vport->base_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT.base_ucs [H]");
@@ -47585,7 +47593,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD lower_left;
     if (dwg_dynapi_entity_value (vport, "VPORT", "lower_left", &lower_left, NULL)
-        && !memcmp (&lower_left, &vport->lower_left, sizeof (vport->lower_left)))
+        && !memcmp (&lower_left, &vport->lower_left, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VPORT.lower_left [2RD]");
@@ -47603,7 +47611,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_H named_ucs;
     if (dwg_dynapi_entity_value (vport, "VPORT", "named_ucs", &named_ucs, NULL)
-        && !memcmp (&named_ucs, &vport->named_ucs, sizeof (vport->named_ucs)))
+        && !memcmp (&named_ucs, &vport->named_ucs, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT.named_ucs [H]");
@@ -47611,7 +47619,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vport, "VPORT", "parent", &parent, NULL)
-        && !memcmp (&parent, &vport->parent, sizeof (vport->parent)))
+        && !memcmp (&parent, &vport->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VPORT.parent [struct _dwg_object_object*]");
@@ -47634,7 +47642,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_H sun;
     if (dwg_dynapi_entity_value (vport, "VPORT", "sun", &sun, NULL)
-        && !memcmp (&sun, &vport->sun, sizeof (vport->sun)))
+        && !memcmp (&sun, &vport->sun, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT.sun [H]");
@@ -47672,7 +47680,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsorg;
     if (dwg_dynapi_entity_value (vport, "VPORT", "ucsorg", &ucsorg, NULL)
-        && !memcmp (&ucsorg, &vport->ucsorg, sizeof (vport->ucsorg)))
+        && !memcmp (&ucsorg, &vport->ucsorg, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VPORT.ucsorg [3BD]");
@@ -47680,7 +47688,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsxdir;
     if (dwg_dynapi_entity_value (vport, "VPORT", "ucsxdir", &ucsxdir, NULL)
-        && !memcmp (&ucsxdir, &vport->ucsxdir, sizeof (vport->ucsxdir)))
+        && !memcmp (&ucsxdir, &vport->ucsxdir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VPORT.ucsxdir [3BD]");
@@ -47688,7 +47696,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD ucsydir;
     if (dwg_dynapi_entity_value (vport, "VPORT", "ucsydir", &ucsydir, NULL)
-        && !memcmp (&ucsydir, &vport->ucsydir, sizeof (vport->ucsydir)))
+        && !memcmp (&ucsydir, &vport->ucsydir, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VPORT.ucsydir [3BD]");
@@ -47696,7 +47704,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_2RD upper_right;
     if (dwg_dynapi_entity_value (vport, "VPORT", "upper_right", &upper_right, NULL)
-        && !memcmp (&upper_right, &vport->upper_right, sizeof (vport->upper_right)))
+        && !memcmp (&upper_right, &vport->upper_right, sizeof (BITCODE_2RD)))
         pass ();
     else
         fail ("VPORT.upper_right [2RD]");
@@ -47734,7 +47742,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_3BD view_target;
     if (dwg_dynapi_entity_value (vport, "VPORT", "view_target", &view_target, NULL)
-        && !memcmp (&view_target, &vport->view_target, sizeof (vport->view_target)))
+        && !memcmp (&view_target, &vport->view_target, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("VPORT.view_target [3BD]");
@@ -47772,7 +47780,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_H visualstyle;
     if (dwg_dynapi_entity_value (vport, "VPORT", "visualstyle", &visualstyle, NULL)
-        && !memcmp (&visualstyle, &vport->visualstyle, sizeof (vport->visualstyle)))
+        && !memcmp (&visualstyle, &vport->visualstyle, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT.visualstyle [H]");
@@ -47780,7 +47788,7 @@ static int test_VPORT (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (vport, "VPORT", "xref", &xref, NULL)
-        && !memcmp (&xref, &vport->xref, sizeof (vport->xref)))
+        && !memcmp (&xref, &vport->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT.xref [H]");
@@ -47841,7 +47849,7 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &vport_control->parent, sizeof (vport_control->parent)))
+        && !memcmp (&parent, &vport_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VPORT_CONTROL.parent [struct _dwg_object_object*]");
@@ -47902,7 +47910,7 @@ static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &vport_entity_control->parent, sizeof (vport_entity_control->parent)))
+        && !memcmp (&parent, &vport_entity_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VPORT_ENTITY_CONTROL.parent [struct _dwg_object_object*]");
@@ -48008,7 +48016,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "parent", &parent, NULL)
-        && !memcmp (&parent, &vport_entity_header->parent, sizeof (vport_entity_header->parent)))
+        && !memcmp (&parent, &vport_entity_header->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("VPORT_ENTITY_HEADER.parent [struct _dwg_object_object*]");
@@ -48016,7 +48024,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H prev_entry;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "prev_entry", &prev_entry, NULL)
-        && !memcmp (&prev_entry, &vport_entity_header->prev_entry, sizeof (vport_entity_header->prev_entry)))
+        && !memcmp (&prev_entry, &vport_entity_header->prev_entry, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT_ENTITY_HEADER.prev_entry [H]");
@@ -48039,7 +48047,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H viewport;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "viewport", &viewport, NULL)
-        && !memcmp (&viewport, &vport_entity_header->viewport, sizeof (vport_entity_header->viewport)))
+        && !memcmp (&viewport, &vport_entity_header->viewport, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT_ENTITY_HEADER.viewport [H]");
@@ -48047,7 +48055,7 @@ static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
   {
     BITCODE_H xref;
     if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xref", &xref, NULL)
-        && !memcmp (&xref, &vport_entity_header->xref, sizeof (vport_entity_header->xref)))
+        && !memcmp (&xref, &vport_entity_header->xref, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("VPORT_ENTITY_HEADER.xref [H]");
@@ -48083,7 +48091,7 @@ static int test_WIPEOUTVARIABLES (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (wipeoutvariables, "WIPEOUTVARIABLES", "parent", &parent, NULL)
-        && !memcmp (&parent, &wipeoutvariables->parent, sizeof (wipeoutvariables->parent)))
+        && !memcmp (&parent, &wipeoutvariables->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("WIPEOUTVARIABLES.parent [struct _dwg_object_object*]");
@@ -48159,7 +48167,7 @@ static int test_XRECORD (const Dwg_Object *obj)
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (xrecord, "XRECORD", "parent", &parent, NULL)
-        && !memcmp (&parent, &xrecord->parent, sizeof (xrecord->parent)))
+        && !memcmp (&parent, &xrecord->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("XRECORD.parent [struct _dwg_object_object*]");

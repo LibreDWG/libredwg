@@ -206,6 +206,7 @@ testobjects += \
 	assocsweptsurfaceactionbody \
 	assocvertexactionparam \
 	atext \
+	background \
 	blkrefobjectcontextdata \
 	blockgriplocationcomponent \
 	blockvisibilitygrip \

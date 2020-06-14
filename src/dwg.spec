@@ -8980,49 +8980,74 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BACKGROUND)
   DECODE_UNKNOWN_BITS
-  // FIXME how subytped?
-  FIELD_BL (type, 90);
+  FIELD_BL (class_version, 90); // 1 or 2
+  // subytped by dxfname
+  DECODER {
+    const char *dxfname = obj->dxfname;
+    if (strEQc (dxfname, "SKYLIGHT_BACKGROUND"))
+      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Sky;
+    else if (strEQc (dxfname, "SOLID_BACKGROUND"))
+      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Solid;
+    else if (strEQc (dxfname, "IMAGE_BACKGROUND")) //?
+      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Image;
+    else if (strEQc (dxfname, "IBL_BACKGROUND")) //?
+      FIELD_VALUE (type) = Dwg_BACKGROUND_type_IBL;
+    else if (strEQc (dxfname, "GROUND_PLANE_BACKGROUND"))
+      FIELD_VALUE (type) = Dwg_BACKGROUND_type_GroundPlane;
+    else if (strEQc (dxfname, "GRADIENT_BACKGROUND")) //?
+      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Gradient;
+    else
+      LOG_ERROR ("Unknown BACKGROUND %s", dxfname)
+  }
   switch (FIELD_VALUE (type))
   {
-  case 1:
+  case Dwg_BACKGROUND_type_Sky:
     SUBCLASS (AcDbSkyBackground);
     FIELD_HANDLE (u.sky.sunid, 5, 340);
     break;
-  case 2:
+  case Dwg_BACKGROUND_type_Image:
     SUBCLASS (AcDbImageBackground)
-    FIELD_T (u.image.image_filename, 300);
+    FIELD_T (u.image.filename, 300);
     FIELD_B (u.image.fit_to_screen, 290);
     FIELD_B (u.image.maintain_aspect_ratio, 291);
     FIELD_B (u.image.use_tiling, 292);
     FIELD_2BD_1 (u.image.offset, 140);
     FIELD_2BD_1 (u.image.scale, 142);
     break;
-  case 3:
+  case Dwg_BACKGROUND_type_Solid:
     SUBCLASS (AcDbSolidBackground)
-    FIELD_BLx (u.solid.rgb, 90);
+    FIELD_BLx (u.solid.color, 90);
     break;
-  case 4:
+  case Dwg_BACKGROUND_type_IBL:
     SUBCLASS (AcDbIBLBackground)
     FIELD_B (u.ibl.enable, 290);
-    FIELD_T (u.ibl.image_name, 1);
+    FIELD_T (u.ibl.name, 1);
     FIELD_BD (u.ibl.rotation, 40);
     FIELD_B (u.ibl.display_image, 290);
     FIELD_HANDLE (u.ibl.secondary_background, 5, 340);
     break;
-  case 5:
+  case Dwg_BACKGROUND_type_GroundPlane:
     SUBCLASS (AcDbGroundPlaneBackground)
-    FIELD_BL (u.groundplane.color_sky_zenith, 90);
-    FIELD_BL (u.groundplane.color_sky_horizon, 91);
-    FIELD_BL (u.groundplane.color_underground_horizon, 92);
-    FIELD_BL (u.groundplane.color_underground_azimuth, 93);
-    FIELD_BL (u.groundplane.color_near, 94);
-    FIELD_BL (u.groundplane.color_far, 95);
+    // all rgb's with method c2
+    FIELD_BLx (u.ground_plane.color_sky_zenith, 90);
+    FIELD_BLx (u.ground_plane.color_sky_horizon, 91);
+    FIELD_BLx (u.ground_plane.color_underground_horizon, 92);
+    FIELD_BLx (u.ground_plane.color_underground_azimuth, 93);
+    FIELD_BLx (u.ground_plane.color_near, 94);
+    FIELD_BLx (u.ground_plane.color_far, 95);
     break;
-  case 6:
+  case Dwg_BACKGROUND_type_Gradient:
     SUBCLASS (AcDbGradientBackground)
-    // fallthrough
+    // all rgb's with method c2
+    FIELD_BLx (u.gradient.color_top, 90);
+    FIELD_BLx (u.gradient.color_middle, 91);
+    FIELD_BLx (u.gradient.color_bottom, 92);
+    FIELD_BD (u.gradient.horizon, 140);
+    FIELD_BD (u.gradient.height, 141);
+    FIELD_BD (u.gradient.rotation, 142);
+    break;
   default:
-    LOG_ERROR ("BACKGROUND.type %d nyi", _obj->type)
+    LOG_ERROR ("Invalid BACKGROUND.type %d", _obj->type)
     break;
   }
 DWG_OBJECT_END

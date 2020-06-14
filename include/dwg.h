@@ -5837,22 +5837,24 @@ typedef struct _dwg_object_TVDEVICEPROPERTIES
   BITCODE_BD bd2;
 } Dwg_Object_TVDEVICEPROPERTIES;
 
+// SKYLIGHT_BACKGROUND
 typedef struct _dwg_BACKGROUND_Sky
 {
-  // type 1
+  // version 1
   BITCODE_H sunid;		/*!< DXF 340 */
 } Dwg_BACKGROUND_Sky;
 
+// SOLID_BACKGROUND
 typedef struct _dwg_BACKGROUND_Solid
 {
-  // type 1
-  BITCODE_BLx rgb;		/*!< DXF 90 */
+  // version 1
+  BITCODE_BLx color;		/*!< DXF 90 */
 } Dwg_BACKGROUND_Solid;
 
 typedef struct _dwg_BACKGROUND_Image
 {
-  // type 1
-  BITCODE_T image_filename;	/*!< DXF 300 */
+  // version 1
+  BITCODE_T filename;		/*!< DXF 300 */
   BITCODE_B fit_to_screen;	/*!< DXF 290 */
   BITCODE_B maintain_aspect_ratio;	/*!< DXF 291 */
   BITCODE_B use_tiling;		/*!< DXF 292 */
@@ -5860,46 +5862,64 @@ typedef struct _dwg_BACKGROUND_Image
   BITCODE_2BD scale;		/*!< DXF 142,143 */
 } Dwg_BACKGROUND_Image;
 
+// Image Based Lightning
 typedef struct _dwg_BACKGROUND_IBL
 {
-  // type 2:
+  // version 2
   BITCODE_B enable;             /*!< DXF 290 */
-  BITCODE_T image_name;     	/*!< DXF 1 */
-  BITCODE_BD rotation;          /*!< DXF 40, normalized, in degrees */
+  BITCODE_T name;     		/*!< DXF 1 */
+  BITCODE_BD rotation;          /*!< DXF 40, normalized -180 +180, in degrees */
   BITCODE_B display_image;      /*!< DXF 290 */
   BITCODE_H secondary_background;/*!< DXF 340 */
 } Dwg_BACKGROUND_IBL;
 
 typedef struct _dwg_BACKGROUND_Gradient
 {
-  // type 1
-  BITCODE_BLx rgb;		/*!< DXF 90 */
+  // version 1
+  BITCODE_BLx color_top;	/*!< DXF 90 */
+  BITCODE_BLx color_middle;	/*!< DXF 91 */
+  BITCODE_BLx color_bottom;	/*!< DXF 91 */
+  BITCODE_BD horizon;		/*!< DXF 140 */
+  BITCODE_BD height;		/*!< DXF 141 */
+  BITCODE_BD rotation;		/*!< DXF 142 */
 } Dwg_BACKGROUND_Gradient;
 
+// GROUND_PLANE_BACKGROUND
 typedef struct _dwg_BACKGROUND_GroundPlane
 {
-  // type 1
-  BITCODE_BL color_sky_zenith;		/*!< DXF 90 */
-  BITCODE_BL color_sky_horizon;		/*!< DXF 91 */
-  BITCODE_BL color_underground_horizon;	/*!< DXF 92 */
-  BITCODE_BL color_underground_azimuth;	/*!< DXF 93 */
-  BITCODE_BL color_near;		/*!< DXF 94 groundplane color */
-  BITCODE_BL color_far;			/*!< DXF 95 groundplane color */
+  // version 1
+  BITCODE_BLx color_sky_zenith;		/*!< DXF 90 */
+  BITCODE_BLx color_sky_horizon;	/*!< DXF 91 */
+  BITCODE_BLx color_underground_horizon;/*!< DXF 92 */
+  BITCODE_BLx color_underground_azimuth;/*!< DXF 93 */
+  BITCODE_BLx color_near;		/*!< DXF 94 groundplane */
+  BITCODE_BLx color_far;		/*!< DXF 95 groundplane */
 } Dwg_BACKGROUND_GroundPlane;
 
 // Debugging, ACAD_BACKGROUND
 // one of IBLBACKGROUND, SKY..., IMAGE..., SOLID..., GRADIENT..., GROUNDPLANE...
+typedef enum DWG_BACKGROUND_TYPE
+{
+  Dwg_BACKGROUND_type_Sky = 1,
+  Dwg_BACKGROUND_type_Image,
+  Dwg_BACKGROUND_type_Solid,
+  Dwg_BACKGROUND_type_IBL,
+  Dwg_BACKGROUND_type_GroundPlane,
+  Dwg_BACKGROUND_type_Gradient,
+} Dwg_BACKGROUND_type;
+
 typedef struct _dwg_object_BACKGROUND
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL type;     		/*!< DXF 90 */
+  BITCODE_BL class_version;     		/*!< DXF 90 */
+  Dwg_BACKGROUND_type type;
   union {
     Dwg_BACKGROUND_Sky sky;			// 1
     Dwg_BACKGROUND_Image image;			// 2
     Dwg_BACKGROUND_Solid solid;			// 3
     Dwg_BACKGROUND_IBL ibl;			// 4
-    Dwg_BACKGROUND_Gradient gradient; 		// 5
-    Dwg_BACKGROUND_GroundPlane groundplane;	// 6
+    Dwg_BACKGROUND_GroundPlane ground_plane;	// 5
+    Dwg_BACKGROUND_Gradient gradient; 		// 6
   } u;
 } Dwg_Object_BACKGROUND;
 

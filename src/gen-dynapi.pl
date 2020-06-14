@@ -1153,6 +1153,7 @@ EOF
     }
     my $key = $var;
     my $svar = $var;
+    my $skey = $var;
     my $is_ptr = ($type =~ /^(struct|Dwg_)/ or
                   $type =~ /^[TH23]/ or
                   $type =~ /\*$/ or
@@ -1166,6 +1167,7 @@ EOF
     }
     if ($var  =~ /\[\d+\]$/) {
       $svar =~ s/\[\d+\]$//g;
+      $skey =~ s/\[\d+\]$//g;
     }
     my $stype = $type;
     $type =~ s/D_1$/D/;
@@ -1226,7 +1228,7 @@ EOF
   {
     $type $var;
     if (dwg_dynapi_entity_value ($lname, "$name", "$key", &$svar, NULL)
-        && !memcmp (&$svar, &$lname->$svar, sizeof ($lname->$svar)))
+        && !memcmp (&$svar, &$lname->$skey, sizeof ($lname->$skey)))
       pass ();
     else
       fail ("$name.$key [$stype]");
@@ -1270,7 +1272,7 @@ EOF
     } else { # is_ptr
       my $is_str;
       my $vardecl = $var;
-      my $size = "sizeof ($lname->$svar)";
+      my $size = "sizeof ($type)";
       if (0 and $stype =~ /^TF/) {
         my $_size = $SIZE{$name}->{$var};
         if ($_size && $_size =~ /^\d+$/) {
@@ -1295,9 +1297,9 @@ EOF
           print $fh "           ? strEQ ((char *)$svar, (char *)$lname->$key)\n";
           print $fh "           : !$lname->$key)\n";
         } elsif (0 and $stype =~ /^TF/ and $size !~ /^sizeof/) {
-          print $fh "        && !memcmp ($svar, $lname->$svar, $size))\n";
+          print $fh "        && !memcmp ($svar, $lname->$skey, $size))\n";
         } elsif ($type !~ /\*\*/) {
-          print $fh "        && !memcmp (&$svar, &$lname->$svar, $size))\n";
+          print $fh "        && !memcmp (&$svar, &$lname->$skey, $size))\n";
         } else {
           print $fh ")\n";
         }
@@ -1305,7 +1307,7 @@ EOF
           print $fh <<"EOF";
       pass ();
     else
-      fail ("$name.$key [$stype] '$fmt' <> '$fmt'", $svar, $lname->$key);
+      fail ("$name.$key [$stype] '$fmt' <> '$fmt'", $svar, $lname->$skey);
   }
 EOF
         } else {

@@ -2788,6 +2788,28 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_TRACE ("dxfname: %s\n", obj->dxfname)
               if (!obj->dxfname)
                 obj->dxfname = strdup (name);
+
+              // some objects have various subtypes under one name: TODO UNDERLAY, ...
+              if (strEQc (name, "BACKGROUND"))
+                {
+                  Dwg_Object_BACKGROUND *_o = obj->tio.object->tio.BACKGROUND;
+                  obj->fixedtype = DWG_TYPE_BACKGROUND;
+                  if (strEQc (obj->dxfname, "SKYLIGHT_BACKGROUND"))
+                    _o->type = Dwg_BACKGROUND_type_Sky;
+                  else if (strEQc (obj->dxfname, "SOLID_BACKGROUND"))
+                    _o->type = Dwg_BACKGROUND_type_Solid;
+                  else if (strEQc (obj->dxfname, "IMAGE_BACKGROUND")) //?
+                    _o->type = Dwg_BACKGROUND_type_Image;
+                  else if (strEQc (obj->dxfname, "IBL_BACKGROUND")) //?
+                    _o->type = Dwg_BACKGROUND_type_IBL;
+                  else if (strEQc (obj->dxfname, "GROUND_PLANE_BACKGROUND"))
+                    _o->type = Dwg_BACKGROUND_type_GroundPlane;
+                  else if (strEQc (obj->dxfname, "GRADIENT_BACKGROUND")) //?
+                    _o->type = Dwg_BACKGROUND_type_Gradient;
+                  else
+                    LOG_ERROR ("Unknown BACKGROUND %s", obj->dxfname);
+                  LOG_TRACE("BACKGROUND.type => %d\n", _o->type);
+                }
             }
           else if (strEQc (key, "index") && strNE (name, "TableCellContent_Attr"))
             {

@@ -5709,8 +5709,10 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item type
+@item class_version
 BL,	DXF 90
+@item type
+Dwg_BACKGROUND_type
 @item u.sky
 Dwg_BACKGROUND_Sky
 @item u.image
@@ -5719,10 +5721,10 @@ Dwg_BACKGROUND_Image
 Dwg_BACKGROUND_Solid
 @item u.ibl
 Dwg_BACKGROUND_IBL
+@item u.ground_plane
+Dwg_BACKGROUND_GroundPlane
 @item u.gradient
 Dwg_BACKGROUND_Gradient
-@item u.groundplane
-Dwg_BACKGROUND_GroundPlane
 
 @end vtable
 @end indentedblock
@@ -10060,8 +10062,18 @@ RL
 @indentedblock
 @vtable @code
 
-@item rgb
+@item color_top
 BLx
+@item color_middle
+BLx
+@item color_bottom
+BLx
+@item horizon
+BD
+@item height
+BD
+@item rotation
+BD
 
 @end vtable
 @end indentedblock
@@ -10073,17 +10085,17 @@ BLx
 @vtable @code
 
 @item color_sky_zenith
-BL
+BLx
 @item color_sky_horizon
-BL
+BLx
 @item color_underground_horizon
-BL
+BLx
 @item color_underground_azimuth
-BL
+BLx
 @item color_near
-BL
+BLx
 @item color_far
-BL
+BLx
 
 @end vtable
 @end indentedblock
@@ -10096,7 +10108,7 @@ BL
 
 @item enable
 B
-@item image_name
+@item name
 T
 @item rotation
 BD
@@ -10114,7 +10126,7 @@ H
 @indentedblock
 @vtable @code
 
-@item image_filename
+@item filename
 T
 @item fit_to_screen
 B
@@ -10148,7 +10160,7 @@ H
 @indentedblock
 @vtable @code
 
-@item rgb
+@item color
 BLx
 
 @end vtable

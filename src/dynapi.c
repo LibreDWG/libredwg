@@ -5183,8 +5183,10 @@ static const Dwg_DYNAPI_field _dwg_ASSOCVERTEXACTIONPARAM_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BACKGROUND_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_BACKGROUND, parent),
     1,1,0, 0 },
-  { "type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BACKGROUND, type),
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BACKGROUND, class_version),
     0,0,0, 90 },
+  { "type",	"Dwg_BACKGROUND_type", sizeof (Dwg_BACKGROUND_type),  OFF (struct _dwg_object_BACKGROUND, type),
+    0,0,0, 0 },
   { "u.sky",	"Dwg_BACKGROUND_Sky", sizeof (Dwg_BACKGROUND_Sky),  OFF (struct _dwg_object_BACKGROUND, u.sky),
     0,0,0, 0 },
   { "u.image",	"Dwg_BACKGROUND_Image", sizeof (Dwg_BACKGROUND_Image),  OFF (struct _dwg_object_BACKGROUND, u.image),
@@ -5193,9 +5195,9 @@ static const Dwg_DYNAPI_field _dwg_BACKGROUND_fields[] = {
     0,0,0, 0 },
   { "u.ibl",	"Dwg_BACKGROUND_IBL", sizeof (Dwg_BACKGROUND_IBL),  OFF (struct _dwg_object_BACKGROUND, u.ibl),
     0,0,0, 0 },
-  { "u.gradient",	"Dwg_BACKGROUND_Gradient", sizeof (Dwg_BACKGROUND_Gradient),  OFF (struct _dwg_object_BACKGROUND, u.gradient),
+  { "u.ground_plane",	"Dwg_BACKGROUND_GroundPlane", sizeof (Dwg_BACKGROUND_GroundPlane),  OFF (struct _dwg_object_BACKGROUND, u.ground_plane),
     0,0,0, 0 },
-  { "u.groundplane",	"Dwg_BACKGROUND_GroundPlane", sizeof (Dwg_BACKGROUND_GroundPlane),  OFF (struct _dwg_object_BACKGROUND, u.groundplane),
+  { "u.gradient",	"Dwg_BACKGROUND_Gradient", sizeof (Dwg_BACKGROUND_Gradient),  OFF (struct _dwg_object_BACKGROUND, u.gradient),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -8612,23 +8614,33 @@ static const Dwg_DYNAPI_field _dwg_AcDs_SegmentIndex_fields[] = {
 };
 /* from typedef struct _dwg_BACKGROUND_Gradient: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_BACKGROUND_Gradient_fields[] = {
-  { "rgb",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_Gradient, rgb),
+  { "color_top",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_Gradient, color_top),
+    0,0,0, 0 },
+  { "color_middle",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_Gradient, color_middle),
+    0,0,0, 0 },
+  { "color_bottom",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_Gradient, color_bottom),
+    0,0,0, 0 },
+  { "horizon",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BACKGROUND_Gradient, horizon),
+    0,0,0, 0 },
+  { "height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BACKGROUND_Gradient, height),
+    0,0,0, 0 },
+  { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BACKGROUND_Gradient, rotation),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_BACKGROUND_GroundPlane: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_BACKGROUND_GroundPlane_fields[] = {
-  { "color_sky_zenith",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_sky_zenith),
+  { "color_sky_zenith",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_sky_zenith),
     0,0,0, 0 },
-  { "color_sky_horizon",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_sky_horizon),
+  { "color_sky_horizon",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_sky_horizon),
     0,0,0, 0 },
-  { "color_underground_horizon",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_underground_horizon),
+  { "color_underground_horizon",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_underground_horizon),
     0,0,0, 0 },
-  { "color_underground_azimuth",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_underground_azimuth),
+  { "color_underground_azimuth",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_underground_azimuth),
     0,0,0, 0 },
-  { "color_near",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_near),
+  { "color_near",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_near),
     0,0,0, 0 },
-  { "color_far",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_far),
+  { "color_far",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_GroundPlane, color_far),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -8636,7 +8648,7 @@ static const Dwg_DYNAPI_field _dwg_BACKGROUND_GroundPlane_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BACKGROUND_IBL_fields[] = {
   { "enable",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_BACKGROUND_IBL, enable),
     0,0,0, 0 },
-  { "image_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BACKGROUND_IBL, image_name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BACKGROUND_IBL, name),
     1,1,1, 0 },
   { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BACKGROUND_IBL, rotation),
     0,0,0, 0 },
@@ -8648,7 +8660,7 @@ static const Dwg_DYNAPI_field _dwg_BACKGROUND_IBL_fields[] = {
 };
 /* from typedef struct _dwg_BACKGROUND_Image: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_BACKGROUND_Image_fields[] = {
-  { "image_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BACKGROUND_Image, image_filename),
+  { "filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BACKGROUND_Image, filename),
     1,1,1, 0 },
   { "fit_to_screen",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_BACKGROUND_Image, fit_to_screen),
     0,0,0, 0 },
@@ -8670,7 +8682,7 @@ static const Dwg_DYNAPI_field _dwg_BACKGROUND_Sky_fields[] = {
 };
 /* from typedef struct _dwg_BACKGROUND_Solid: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_BACKGROUND_Solid_fields[] = {
-  { "rgb",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_Solid, rgb),
+  { "color",	"BLx", sizeof (BITCODE_BLx),  OFF (struct _dwg_BACKGROUND_Solid, color),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

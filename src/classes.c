@@ -491,6 +491,8 @@ object_alias (char *restrict name)
     strcpy (name, "TEXTOBJECTCONTEXTDATA");
   else if (strEQc (name, "EXACXREFPANELOBJECT"))
     strcpy (name, "XREFPANELOBJECT");
+  else if (strstr (name, "_BACKGROUND"))
+    strcpy (name, "BACKGROUND");
   // strip ACAD_ prefix
   else if (memBEGINc (name, "ACAD_") && is_dwg_object (&name[5]))
     memmove (name, &name[5], len - 4);
