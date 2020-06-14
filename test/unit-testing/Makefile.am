@@ -62,6 +62,7 @@ testobjects = \
 	assocplanesurfaceactionbody \
 	attdef \
 	attrib \
+	background \
 	block \
 	block_control \
 	block_header \
@@ -206,7 +207,6 @@ testobjects += \
 	assocsweptsurfaceactionbody \
 	assocvertexactionparam \
 	atext \
-	background \
 	blkrefobjectcontextdata \
 	blockgriplocationcomponent \
 	blockvisibilitygrip \

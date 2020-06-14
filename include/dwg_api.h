@@ -581,6 +581,7 @@ typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY       dwg_obj_assocaligneddimactionbody;
 typedef struct _dwg_object_ASSOCDEPENDENCY                 dwg_obj_assocdependency;
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY     dwg_obj_assocplanesurfaceactionbody;
+typedef struct _dwg_object_BACKGROUND               	   dwg_obj_background;
 typedef struct _dwg_object_DBCOLOR                         dwg_obj_dbcolor;
 typedef struct _dwg_object_DETAILVIEWSTYLE                 dwg_obj_detailviewstyle;
 typedef struct _dwg_object_DIMASSOC                        dwg_obj_dimassoc;
@@ -644,7 +645,6 @@ typedef struct _dwg_object_DATATABLE                       dwg_obj_datatable;
 typedef struct _dwg_object_EVALUATION_GRAPH                dwg_obj_evaluation_graph;
 typedef struct _dwg_object_GEOMAPIMAGE                     dwg_obj_geomapimage;
 typedef struct _dwg_object_LAYOUTPRINTCONFIG               dwg_obj_layoutprintconfig;
-typedef struct _dwg_object_BACKGROUND               	   dwg_obj_background;
 typedef struct _dwg_object_FCFOBJECTCONTEXTDATA            dwg_obj_fcfobjectcontextdata;
 typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA         dwg_obj_leaderobjectcontextdata;
 typedef struct _dwg_object_CURVEPATH                       dwg_obj_curvepath;
@@ -824,6 +824,7 @@ DWG_GETALL_OBJECT_DECL (XRECORD)
 DWG_GETALL_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCPLANESURFACEACTIONBODY)
+DWG_GETALL_OBJECT_DECL (BACKGROUND)
 DWG_GETALL_OBJECT_DECL (DBCOLOR)
 DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE)
 DWG_GETALL_OBJECT_DECL (DIMASSOC)
@@ -885,7 +886,6 @@ DWG_GETALL_OBJECT_DECL (DATATABLE)
 DWG_GETALL_OBJECT_DECL (EVALUATION_GRAPH)
 DWG_GETALL_OBJECT_DECL (GEOMAPIMAGE)
 DWG_GETALL_OBJECT_DECL (LAYOUTPRINTCONFIG)
-DWG_GETALL_OBJECT_DECL (BACKGROUND)
 DWG_GETALL_OBJECT_DECL (FCFOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
@@ -1036,6 +1036,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (XRECORD)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPLANESURFACEACTIONBODY)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (BACKGROUND)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (CELLSTYLEMAP)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DBCOLOR)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE)
@@ -1117,7 +1118,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (EVALUATION_GRAPH)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (FCFOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (GEOMAPIMAGE)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUTPRINTCONFIG)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (BACKGROUND)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LEADEROBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
@@ -1355,6 +1355,7 @@ dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
 dwg_get_OBJECT_DECL (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assocdependency, ASSOCDEPENDENCY);
 dwg_get_OBJECT_DECL (obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY);
+dwg_get_OBJECT_DECL (obj_background, BACKGROUND);
 dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
 dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE)
 dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
@@ -1401,7 +1402,6 @@ dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
 dwg_get_OBJECT_DECL (obj_evaluation_graph, EVALUATION_GRAPH);
 dwg_get_OBJECT_DECL (obj_geomapimage, GEOMAPIMAGE);
 dwg_get_OBJECT_DECL (obj_layoutprintconfig, LAYOUTPRINTCONFIG);
-dwg_get_OBJECT_DECL (obj_background, BACKGROUND);
 dwg_get_OBJECT_DECL (obj_fcfobjectcontextdata, FCFOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);

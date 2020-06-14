@@ -1,4 +1,4 @@
-//DEBUGGING
+// unstable (coverage for some subtypes)
 #define DWG_TYPE DWG_TYPE_BACKGROUND
 #include "common.c"
 
@@ -22,10 +22,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BACKGROUND, type, RC);
   switch (type)
     {
-    case 1:
+    case Dwg_BACKGROUND_type_Sky:
       CHK_SUBCLASS_H (_obj->u.sky, BACKGROUND_Sky, sunid);
       break;
-    case 2:
+    case Dwg_BACKGROUND_type_Image:
       CHK_SUBCLASS_UTF8TEXT (_obj->u.image, BACKGROUND_Image, filename);
       CHK_SUBCLASS_TYPE (_obj->u.image, BACKGROUND_Image, fit_to_screen, B);
       CHK_SUBCLASS_TYPE (_obj->u.image, BACKGROUND_Image, maintain_aspect_ratio, B);
@@ -33,17 +33,17 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_2RD (_obj->u.image, BACKGROUND_Image, offset);
       CHK_SUBCLASS_2RD (_obj->u.image, BACKGROUND_Image, scale);
       break;
-    case 3:
+    case Dwg_BACKGROUND_type_Solid:
       CHK_SUBCLASS_TYPE (_obj->u.solid, BACKGROUND_Solid, color, BLx);
       break;
-    case 4:
+    case Dwg_BACKGROUND_type_IBL:
       CHK_SUBCLASS_TYPE (_obj->u.ibl, BACKGROUND_IBL, enable, B);
       CHK_SUBCLASS_UTF8TEXT (_obj->u.ibl, BACKGROUND_IBL, name);
       CHK_SUBCLASS_TYPE (_obj->u.ibl, BACKGROUND_IBL, rotation, BD); // in degree, not radian
       CHK_SUBCLASS_TYPE (_obj->u.ibl, BACKGROUND_IBL, display_image, B);
       CHK_SUBCLASS_H (_obj->u.ibl, BACKGROUND_IBL, secondary_background);
       break;
-    case 5:
+    case Dwg_BACKGROUND_type_GroundPlane:
       CHK_SUBCLASS_TYPE (_obj->u.ground_plane, BACKGROUND_GroundPlane, color_sky_zenith, BLx);
       CHK_SUBCLASS_TYPE (_obj->u.ground_plane, BACKGROUND_GroundPlane, color_sky_horizon, BLx);
       CHK_SUBCLASS_TYPE (_obj->u.ground_plane, BACKGROUND_GroundPlane, color_underground_horizon, BLx);
@@ -51,7 +51,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (_obj->u.ground_plane, BACKGROUND_GroundPlane, color_near, BLx);
       CHK_SUBCLASS_TYPE (_obj->u.ground_plane, BACKGROUND_GroundPlane, color_far, BLx);
       break;
-    case 6:
+    case Dwg_BACKGROUND_type_Gradient:
       CHK_SUBCLASS_TYPE (_obj->u.gradient, BACKGROUND_Gradient, color_top, BLx);
       CHK_SUBCLASS_TYPE (_obj->u.gradient, BACKGROUND_Gradient, color_middle, BLx);
       CHK_SUBCLASS_TYPE (_obj->u.gradient, BACKGROUND_Gradient, color_bottom, BLx);
