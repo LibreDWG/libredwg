@@ -433,11 +433,14 @@ $DXF{$_}->{'class_version'} = 280 for qw(ATTRIB ATTDEF); #r2010 only
 $DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
 #$DXF{$_}->{'has_vertex'} = 66 for qw (POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
 $DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);
-my @solids = qw(3DSOLID REGSION BODY
-                EXTRUDEDSURFACE LOFTEDSURFACE REVOLVEDSURFACE SWEPTSURFACE PLANESURFACE);
+my @solids = qw(3DSOLID REGION BODY
+                EXTRUDEDSURFACE LOFTEDSURFACE NURBSURFACE PLANESURFACE REVOLVEDSURFACE SWEPTSURFACE
+                ACSH_BREP_CLASS);
 $DXF{$_}->{'version'} = 70 for @solids;
 $DXF{$_}->{'encr_sat_data'} = 1 for @solids;
 $DXF{$_}->{'history_id'} = 350 for @solids;
+$DXF{$_}->{'has_revision_guid'} = 290 for @solids;
+$DXF{$_}->{'revision_guid'} = 2 for @solids;
 my @annotscale = qw (TEXTOBJECTCONTEXTDATA MTEXTOBJECTCONTEXTDATA ALDIMOBJECTCONTEXTDATA
                      MTEXTATTRIBUTEOBJECTCONTEXTDATA MLEADEROBJECTCONTEXTDATA LEADEROBJECTCONTEXTDATA
                      BLKREFOBJECTCONTEXTDATA);
