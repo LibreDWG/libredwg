@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ACSH_BOOLEAN_CLASS
 #include "common.c"
 
@@ -6,8 +6,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  ACDBEVALEXPR_fields;
-  Dwg_ACSH_HistoryNode history_node;
+  //Dwg_EvalExpr evalexpr;
+  //Dwg_ACSH_HistoryNode history_node;
   BITCODE_BD* trans;
   // AcDbShBoolean
   BITCODE_BL major;      /*!< DXF 90 */

@@ -93,7 +93,6 @@ for (sort $c->struct_names) {
     $structs{$n}++;
     push @entity_names, $n;
   } elsif (/_dwg_object_([A-Z0-9_]+)/) {
-    next if $1 eq 'BACKGROUND';
     $structs{$1}++;
     push @object_names, $1;
   } elsif (/^_dwg_header_variables/) {

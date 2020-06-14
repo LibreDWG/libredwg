@@ -488,7 +488,6 @@ dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     case DWG_TYPE_UNUSED:
     case DWG_TYPE_ACDSRECORD:
     case DWG_TYPE_ACDSSCHEMA:
-    case DWG_TYPE_BACKGROUND:
     case DWG_TYPE_VISIBILITYGRIPENTITY:
     case DWG_TYPE_VISIBILITYPARAMETERENTITY:
     case DWG_TYPE_NPOCOLLECTION:

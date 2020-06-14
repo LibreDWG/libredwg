@@ -1332,35 +1332,35 @@ api_common_object (dwg_object *obj)
 }
 
 #define CHK_EVALEXPR(type)                                           \
-  CHK_ENTITY_TYPE (_obj, type, parentid, BLd);                       \
-  CHK_ENTITY_TYPE (_obj, type, ee_major, BL);                        \
-  CHK_ENTITY_TYPE (_obj, type, ee_minor, BL);                        \
-  CHK_ENTITY_TYPE (_obj, type, nodeid, BL);                          \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, major, BL);           \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, minor, BL);           \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, parentid, BLd);       \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, nodeid, BL);          \
   /* variant_type */                                                 \
-  CHK_ENTITY_TYPE (_obj, type, eval_type, BSd);                      \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_type, BSd);     \
   /* variant_value's */                                              \
-  switch (eval_type)                                                 \
+  switch (_obj->evalexpr.value_type)                                 \
     {                                                                \
     case 40:                                                         \
-      CHK_ENTITY_TYPE (_obj, type, ee_bd40, BD);                     \
+      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.num40, BD); \
       break;                                                         \
     case 10:                                                         \
-      CHK_ENTITY_2RD (_obj, type, ee_2dpt);                          \
+      CHK_SUBCLASS_2RD (_obj->evalexpr, EvalExpr, value.pt2d);       \
       break;                                                         \
     case 11:                                                         \
-      CHK_ENTITY_3RD (_obj, type, ee_3dpt);                          \
+      CHK_SUBCLASS_3RD (_obj->evalexpr, EvalExpr, value.pt3d);       \
       break;                                                         \
     case 1:                                                          \
-      CHK_ENTITY_UTF8TEXT (_obj, type, ee_text);                     \
+      CHK_SUBCLASS_UTF8TEXT (_obj->evalexpr, EvalExpr, value.text1); \
       break;                                                         \
     case 90:                                                         \
-      CHK_ENTITY_TYPE (_obj, type, ee_bl90, BL);                     \
+      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.long90, BL);\
       break;                                                         \
     case 91:                                                         \
-      CHK_ENTITY_H (_obj, type, ee_h91);                             \
+      CHK_SUBCLASS_H (_obj->evalexpr, EvalExpr, value.handle91);     \
       break;                                                         \
     case 70:                                                         \
-      CHK_ENTITY_TYPE (_obj, type, ee_bs70, BS);                     \
+      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.short70, BS);\
       break;                                                         \
     case -9999:                                                      \
     default:                                                         \

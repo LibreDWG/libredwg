@@ -5,8 +5,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  ACDBEVALEXPR_fields;
-  Dwg_ACSH_HistoryNode history_node;
+  //Dwg_EvalExpr evalexpr;
+  //Dwg_ACSH_HistoryNode history_node;
   BITCODE_BD *trans;
   BITCODE_BL major;
   BITCODE_BL minor;

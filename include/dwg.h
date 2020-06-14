@@ -498,8 +498,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLESTYLE,
   DWG_TYPE_TEXTOBJECTCONTEXTDATA,
   DWG_TYPE_TVDEVICEPROPERTIES,
-  DWG_TYPE_UNDERLAY, /* not separate DGN,DWF,PDF types */
-  DWG_TYPE_UNDERLAYDEFINITION, /* not separate DGN,DWF,PDF types */
+  DWG_TYPE_UNDERLAY, 		/* not separate DGN,DWF,PDF types */
+  DWG_TYPE_UNDERLAYDEFINITION,	/* not separate DGN,DWF,PDF types */
   DWG_TYPE_VISIBILITYGRIPENTITY,
   DWG_TYPE_VISIBILITYPARAMETERENTITY,
   DWG_TYPE_VISUALSTYLE,
@@ -5837,36 +5837,70 @@ typedef struct _dwg_object_TVDEVICEPROPERTIES
   BITCODE_BD bd2;
 } Dwg_Object_TVDEVICEPROPERTIES;
 
-// Unhandled, ACAD_BACKGROUND
-// one of IBLBACKGROUND, SKY..., IMAGE..., SOLID..., GRADIENT..., GROUNDPLANE...
-typedef struct _dwg_object_BACKGROUND
+typedef struct _dwg_BACKGROUND_Sky
 {
-  struct _dwg_object_object *parent;
-  BITCODE_BL type;     		/*!< DXF 90 */
-  // Sky 1:
+  // type 1
   BITCODE_H sunid;		/*!< DXF 340 */
-  // Solid 1:
+} Dwg_BACKGROUND_Sky;
+
+typedef struct _dwg_BACKGROUND_Solid
+{
+  // type 1
   BITCODE_BLx rgb;		/*!< DXF 90 */
-  // Image 1:
+} Dwg_BACKGROUND_Solid;
+
+typedef struct _dwg_BACKGROUND_Image
+{
+  // type 1
   BITCODE_T image_filename;	/*!< DXF 300 */
   BITCODE_B fit_to_screen;	/*!< DXF 290 */
   BITCODE_B maintain_aspect_ratio;	/*!< DXF 291 */
   BITCODE_B use_tiling;		/*!< DXF 292 */
   BITCODE_2BD offset;		/*!< DXF 140,141 */
   BITCODE_2BD scale;		/*!< DXF 142,143 */
-  // IBL 2:
+} Dwg_BACKGROUND_Image;
+
+typedef struct _dwg_BACKGROUND_IBL
+{
+  // type 2:
   BITCODE_B enable;             /*!< DXF 290 */
-  BITCODE_T ibl_image_name;     /*!< DXF 1 */
+  BITCODE_T image_name;     	/*!< DXF 1 */
   BITCODE_BD rotation;          /*!< DXF 40, normalized, in degrees */
   BITCODE_B display_image;      /*!< DXF 290 */
   BITCODE_H secondary_background;/*!< DXF 340 */
-  // GroundPlane 1:
+} Dwg_BACKGROUND_IBL;
+
+typedef struct _dwg_BACKGROUND_Gradient
+{
+  // type 1
+  BITCODE_BLx rgb;		/*!< DXF 90 */
+} Dwg_BACKGROUND_Gradient;
+
+typedef struct _dwg_BACKGROUND_GroundPlane
+{
+  // type 1
   BITCODE_BL color_sky_zenith;		/*!< DXF 90 */
   BITCODE_BL color_sky_horizon;		/*!< DXF 91 */
   BITCODE_BL color_underground_horizon;	/*!< DXF 92 */
   BITCODE_BL color_underground_azimuth;	/*!< DXF 93 */
-  BITCODE_BL color_groundplane_near;	/*!< DXF 94 */
-  BITCODE_BL color_groundplane_far;	/*!< DXF 95 */
+  BITCODE_BL color_near;		/*!< DXF 94 groundplane color */
+  BITCODE_BL color_far;			/*!< DXF 95 groundplane color */
+} Dwg_BACKGROUND_GroundPlane;
+
+// Debugging, ACAD_BACKGROUND
+// one of IBLBACKGROUND, SKY..., IMAGE..., SOLID..., GRADIENT..., GROUNDPLANE...
+typedef struct _dwg_object_BACKGROUND
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL type;     		/*!< DXF 90 */
+  union {
+    Dwg_BACKGROUND_Sky sky;			// 1
+    Dwg_BACKGROUND_Image image;			// 2
+    Dwg_BACKGROUND_Solid solid;			// 3
+    Dwg_BACKGROUND_IBL ibl;			// 4
+    Dwg_BACKGROUND_Gradient gradient; 		// 5
+    Dwg_BACKGROUND_GroundPlane groundplane;	// 6
+  } u;
 } Dwg_Object_BACKGROUND;
 
 /**
@@ -6319,7 +6353,7 @@ typedef struct _dwg_object_BLOCKVISIBILITYGRIP
 {
   struct _dwg_object_object *parent;
   Dwg_EvalExpr evalexpr;
-  ACDBBLOCKELEMENT_fields;
+  ACDBBLOCKELEMENT_fields; // FIXME: make it a struct
   // AcDbBlockGrip
   BITCODE_BL bg_bl1;
   BITCODE_BL bg_bl2;
@@ -6336,8 +6370,8 @@ typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT
   struct _dwg_object_object *parent;
   Dwg_EvalExpr evalexpr;
   // AcDbBlockGripExpr
-  //BITCODE_BL grip_type;
-  BITCODE_T gripexpr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
+  BITCODE_BL grip_type;
+  BITCODE_T grip_expr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
 } Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT;
 
 /**

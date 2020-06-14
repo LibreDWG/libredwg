@@ -7246,7 +7246,7 @@ DWG_OBJECT_END
 #define AcDbEvalExpr_fields                                                   \
   SUBCLASS (AcDbEvalExpr)                                                     \
   DXF { FIELD_BL (evalexpr.nodeid, 90); }                                     \
-  FIELD_BLd (parentid, 0);                                                    \
+  FIELD_BLd (evalexpr.parentid, 0);                                           \
   FIELD_BL (evalexpr.major, 98);                                              \
   FIELD_BL (evalexpr.minor, 99);                                              \
   if (IF_IS_DXF && FIELD_VALUE (evalexpr.value_type) == -9999)                \
@@ -7258,7 +7258,7 @@ DWG_OBJECT_END
       DXF { VALUE_TFF ("", 1); }                                              \
       FIELD_BSd (evalexpr.value_type, 70);                                    \
       /* TODO not a union yet */                                              \
-      switch (_obj->evalexpr.type)                                            \
+      switch (_obj->evalexpr.value_type)                                      \
         {                                                                     \
         case 40:                                                              \
           FIELD_BD (evalexpr.value.num40, 40);                                \
@@ -8951,11 +8951,8 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   END_REPEAT (states)
 DWG_OBJECT_END
 
-//DWG_SUBCLASS (BLOCKVISIBILITYGRIP, AcDbEvalExpr);
-
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
   DECODE_UNKNOWN_BITS;
-  //CALL_SUBCLASS (_obj, BLOCKVISIBILITYGRIP, AcDbEvalExpr);
   AcDbEvalExpr_fields;
   SUBCLASS (AcDbBlockElement)
   FIELD_T (be_t, 0);
@@ -8973,15 +8970,61 @@ DWG_OBJECT (BLOCKVISIBILITYGRIP)
   SUBCLASS (AcDbBlockVisibilityGrip)
 DWG_OBJECT_END
 
-//DWG_SUBCLASS (BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
-
 DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   DECODE_UNKNOWN_BITS
-  //CALL_SUBCLASS (_obj, BLOCKGRIPLOCATIONCOMPONENT, AcDbEvalExpr);
   AcDbEvalExpr_fields;
   SUBCLASS (AcDbBlockGripExpr)
-  //FIELD_BL (eval_type, 91); //??
-  FIELD_T (evalexpr, 300);
+  FIELD_BL (grip_type, 91); //??
+  FIELD_T (grip_expr, 300);
+DWG_OBJECT_END
+
+DWG_OBJECT (BACKGROUND)
+  DECODE_UNKNOWN_BITS
+  // FIXME how subytped?
+  FIELD_BL (type, 90);
+  switch (FIELD_VALUE (type))
+  {
+  case 1:
+    SUBCLASS (AcDbSkyBackground);
+    FIELD_HANDLE (u.sky.sunid, 5, 340);
+    break;
+  case 2:
+    SUBCLASS (AcDbImageBackground)
+    FIELD_T (u.image.image_filename, 300);
+    FIELD_B (u.image.fit_to_screen, 290);
+    FIELD_B (u.image.maintain_aspect_ratio, 291);
+    FIELD_B (u.image.use_tiling, 292);
+    FIELD_2BD_1 (u.image.offset, 140);
+    FIELD_2BD_1 (u.image.scale, 142);
+    break;
+  case 3:
+    SUBCLASS (AcDbSolidBackground)
+    FIELD_BLx (u.solid.rgb, 90);
+    break;
+  case 4:
+    SUBCLASS (AcDbIBLBackground)
+    FIELD_B (u.ibl.enable, 290);
+    FIELD_T (u.ibl.image_name, 1);
+    FIELD_BD (u.ibl.rotation, 40);
+    FIELD_B (u.ibl.display_image, 290);
+    FIELD_HANDLE (u.ibl.secondary_background, 5, 340);
+    break;
+  case 5:
+    SUBCLASS (AcDbGroundPlaneBackground)
+    FIELD_BL (u.groundplane.color_sky_zenith, 90);
+    FIELD_BL (u.groundplane.color_sky_horizon, 91);
+    FIELD_BL (u.groundplane.color_underground_horizon, 92);
+    FIELD_BL (u.groundplane.color_underground_azimuth, 93);
+    FIELD_BL (u.groundplane.color_near, 94);
+    FIELD_BL (u.groundplane.color_far, 95);
+    break;
+  case 6:
+    SUBCLASS (AcDbGradientBackground)
+    // fallthrough
+  default:
+    LOG_ERROR ("BACKGROUND.type %d nyi", _obj->type)
+    break;
+  }
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */
@@ -8996,50 +9039,6 @@ DWG_OBJECT_END
   ATTBLOCKREF ATTDYNBLOCKREF BLOCKREF DYNBLOCKREF XREF
   CENTERMARK CENTERLINE
 */
-
-DWG_OBJECT (BACKGROUND)
-  DECODE_UNKNOWN_BITS
-  //FIXME how subytped?
-  FIELD_BL (type, 90);
-  switch (_obj->type)
-  {
-  case 1:
-    SUBCLASS (AcDbSkyBackground);
-    FIELD_HANDLE (sunid, 5, 340);
-    break;
-  case 1:
-    SUBCLASS (AcDbImageBackground)
-    FIELD_T (image_filename, 300);
-    FIELD_B (fit_to_screen, 290);
-    FIELD_B (maintain_aspect_ratio, 291);
-    FIELD_B (use_tiling, 292);
-    FIELD_2BD_1 (offset, 140);
-    FIELD_2BD_1 (scale, 142);
-    break;
-  case 1:
-    SUBCLASS (AcDbSolidBackground)
-    FIELD_BLx (rgb, 90);
-  case 2:
-    SUBCLASS (AcDbIBLBackground)
-    FIELD_B (enable, 290);
-    FIELD_T (ibl_image_name, 1);
-    FIELD_BD (rotation, 40);
-    FIELD_B (display_image, 290);
-    FIELD_HANDLE (secondary_background, 5, 340);
-    break;
-  case 2:
-    SUBCLASS (AcDbGroundPlaneBackground)
-    FIELD_BL (color_sky_zenith, 90);
-    FIELD_BL (color_sky_horizon, 91);
-    FIELD_BL (color_underground_horizon, 92);
-    FIELD_BL (color_underground_azimuth, 93);
-    FIELD_BL (color_groundplane_near, 94);
-    FIELD_BL (color_groundplane_far, 95);
-    break;
-  default:
-    break;
-  }
-DWG_OBJECT_END
 
 // EXACXREFPANELOBJECT
 DWG_OBJECT (XREFPANELOBJECT)

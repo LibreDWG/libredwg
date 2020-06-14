@@ -5700,6 +5700,33 @@ H
 @end vtable
 @end indentedblock
 
+@strong{BACKGROUND} @anchor{BACKGROUND}
+@cindex object, BACKGROUND
+@vindex BACKGROUND
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item type
+BL,	DXF 90
+@item u.sky
+Dwg_BACKGROUND_Sky
+@item u.image
+Dwg_BACKGROUND_Image
+@item u.solid
+Dwg_BACKGROUND_Solid
+@item u.ibl
+Dwg_BACKGROUND_IBL
+@item u.gradient
+Dwg_BACKGROUND_Gradient
+@item u.groundplane
+Dwg_BACKGROUND_GroundPlane
+
+@end vtable
+@end indentedblock
+
 @strong{BLKREFOBJECTCONTEXTDATA} @anchor{BLKREFOBJECTCONTEXTDATA}
 @cindex object, BLKREFOBJECTCONTEXTDATA
 @vindex BLKREFOBJECTCONTEXTDATA
@@ -5737,9 +5764,11 @@ BD,	DXF 50
 @item parent
 struct _dwg_object_object*
 @item evalexpr
+Dwg_EvalExpr
+@item grip_type
+BL,	DXF 91
+@item grip_expr
 T,	DXF 300
-@item gripexpr
-T
 
 @end vtable
 @end indentedblock
@@ -10021,6 +10050,106 @@ RC
 RLL
 @item size
 RL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BACKGROUND_Gradient} @anchor{Dwg_BACKGROUND_Gradient}
+@vindex Dwg_BACKGROUND_Gradient
+
+@indentedblock
+@vtable @code
+
+@item rgb
+BLx
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BACKGROUND_GroundPlane} @anchor{Dwg_BACKGROUND_GroundPlane}
+@vindex Dwg_BACKGROUND_GroundPlane
+
+@indentedblock
+@vtable @code
+
+@item color_sky_zenith
+BL
+@item color_sky_horizon
+BL
+@item color_underground_horizon
+BL
+@item color_underground_azimuth
+BL
+@item color_near
+BL
+@item color_far
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BACKGROUND_IBL} @anchor{Dwg_BACKGROUND_IBL}
+@vindex Dwg_BACKGROUND_IBL
+
+@indentedblock
+@vtable @code
+
+@item enable
+B
+@item image_name
+T
+@item rotation
+BD
+@item display_image
+B
+@item secondary_background
+H
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BACKGROUND_Image} @anchor{Dwg_BACKGROUND_Image}
+@vindex Dwg_BACKGROUND_Image
+
+@indentedblock
+@vtable @code
+
+@item image_filename
+T
+@item fit_to_screen
+B
+@item maintain_aspect_ratio
+B
+@item use_tiling
+B
+@item offset
+2BD
+@item scale
+2BD
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BACKGROUND_Sky} @anchor{Dwg_BACKGROUND_Sky}
+@vindex Dwg_BACKGROUND_Sky
+
+@indentedblock
+@vtable @code
+
+@item sunid
+H
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BACKGROUND_Solid} @anchor{Dwg_BACKGROUND_Solid}
+@vindex Dwg_BACKGROUND_Solid
+
+@indentedblock
+@vtable @code
+
+@item rgb
+BLx
 
 @end vtable
 @end indentedblock

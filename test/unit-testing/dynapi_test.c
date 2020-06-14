@@ -30510,6 +30510,126 @@ static int test_ASSOCVERTEXACTIONPARAM (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_BACKGROUND (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BACKGROUND *restrict background = obj->tio.object->tio.BACKGROUND;
+  failed = 0;
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "parent", &parent, NULL)
+        && !memcmp (&parent, &background->parent, sizeof (background->parent)))
+        pass ();
+    else
+        fail ("BACKGROUND.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL type;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "type", &type, NULL)
+        && type == background->type)
+      pass ();
+    else
+      fail ("BACKGROUND.type [BL] %u != %u", background->type, type);
+    type++;
+    if (dwg_dynapi_entity_set_value (background, "BACKGROUND", "type", &type, 0)
+        && type == background->type)
+      pass ();
+    else
+      fail ("BACKGROUND.type [BL] set+1 %u != %u", background->type, type);
+    background->type--;
+  }
+  {
+    Dwg_BACKGROUND_Gradient u_gradient;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.gradient", &u_gradient, NULL)
+        && !memcmp (&u_gradient, &background->u_gradient, sizeof (background->u_gradient)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.gradient [Dwg_BACKGROUND_Gradient]");
+  }
+  {
+    Dwg_BACKGROUND_GroundPlane u_groundplane;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.groundplane", &u_groundplane, NULL)
+        && !memcmp (&u_groundplane, &background->u_groundplane, sizeof (background->u_groundplane)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.groundplane [Dwg_BACKGROUND_GroundPlane]");
+  }
+  {
+    Dwg_BACKGROUND_IBL u_ibl;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ibl", &u_ibl, NULL)
+        && !memcmp (&u_ibl, &background->u_ibl, sizeof (background->u_ibl)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.ibl [Dwg_BACKGROUND_IBL]");
+  }
+  {
+    BITCODE_T u_ibl_image_name;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ibl.image_name", &u_ibl_image_name, NULL)
+        && u_ibl_image_name
+           ? strEQ ((char *)u_ibl_image_name, (char *)background->u.ibl.image_name)
+           : !background->u.ibl.image_name)
+      pass ();
+    else
+      fail ("BACKGROUND.u.ibl.image_name [T] '%s' <> '%s'", u_ibl_image_name, background->u.ibl.image_name);
+  }
+  {
+    Dwg_BACKGROUND_Image u_image;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image", &u_image, NULL)
+        && !memcmp (&u_image, &background->u_image, sizeof (background->u_image)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.image [Dwg_BACKGROUND_Image]");
+  }
+  {
+    BITCODE_T u_image_image_filename;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.image_filename", &u_image_image_filename, NULL)
+        && u_image_image_filename
+           ? strEQ ((char *)u_image_image_filename, (char *)background->u.image.image_filename)
+           : !background->u.image.image_filename)
+      pass ();
+    else
+      fail ("BACKGROUND.u.image.image_filename [T] '%s' <> '%s'", u_image_image_filename, background->u.image.image_filename);
+  }
+  {
+    BITCODE_2BD u_image_offset;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.offset", &u_image_offset, NULL)
+        && !memcmp (&u_image_offset, &background->u_image_offset, sizeof (background->u_image_offset)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.image.offset [2BD_1]");
+  }
+  {
+    BITCODE_2BD u_image_scale;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.scale", &u_image_scale, NULL)
+        && !memcmp (&u_image_scale, &background->u_image_scale, sizeof (background->u_image_scale)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.image.scale [2BD_1]");
+  }
+  {
+    Dwg_BACKGROUND_Sky u_sky;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.sky", &u_sky, NULL)
+        && !memcmp (&u_sky, &background->u_sky, sizeof (background->u_sky)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.sky [Dwg_BACKGROUND_Sky]");
+  }
+  {
+    Dwg_BACKGROUND_Solid u_solid;
+    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.solid", &u_solid, NULL)
+        && !memcmp (&u_solid, &background->u_solid, sizeof (background->u_solid)))
+        pass ();
+    else
+        fail ("BACKGROUND.u.solid [Dwg_BACKGROUND_Solid]");
+  }
+  if (failed && (is_class_unstable ("BACKGROUND") || is_class_debugging ("BACKGROUND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BACKGROUND", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
 {
   int error = 0;
@@ -30622,14 +30742,12 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
   Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *restrict blockgriplocationcomponent = obj->tio.object->tio.BLOCKGRIPLOCATIONCOMPONENT;
   failed = 0;
   {
-    BITCODE_T evalexpr;
+    Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "evalexpr", &evalexpr, NULL)
-        && evalexpr
-           ? strEQ ((char *)evalexpr, (char *)blockgriplocationcomponent->evalexpr)
-           : !blockgriplocationcomponent->evalexpr)
-      pass ();
+        && !memcmp (&evalexpr, &blockgriplocationcomponent->evalexpr, sizeof (blockgriplocationcomponent->evalexpr)))
+        pass ();
     else
-      fail ("BLOCKGRIPLOCATIONCOMPONENT.evalexpr [T] '%s' <> '%s'", evalexpr, blockgriplocationcomponent->evalexpr);
+        fail ("BLOCKGRIPLOCATIONCOMPONENT.evalexpr [Dwg_EvalExpr]");
   }
   {
     BITCODE_T evalexpr_value_text1;
@@ -30642,14 +30760,29 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
       fail ("BLOCKGRIPLOCATIONCOMPONENT.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockgriplocationcomponent->evalexpr.value.text1);
   }
   {
-    BITCODE_T gripexpr;
-    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "gripexpr", &gripexpr, NULL)
-        && gripexpr
-           ? strEQ ((char *)gripexpr, (char *)blockgriplocationcomponent->gripexpr)
-           : !blockgriplocationcomponent->gripexpr)
+    BITCODE_T grip_expr;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "grip_expr", &grip_expr, NULL)
+        && grip_expr
+           ? strEQ ((char *)grip_expr, (char *)blockgriplocationcomponent->grip_expr)
+           : !blockgriplocationcomponent->grip_expr)
       pass ();
     else
-      fail ("BLOCKGRIPLOCATIONCOMPONENT.gripexpr [T] '%s' <> '%s'", gripexpr, blockgriplocationcomponent->gripexpr);
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.grip_expr [T] '%s' <> '%s'", grip_expr, blockgriplocationcomponent->grip_expr);
+  }
+  {
+    BITCODE_BL grip_type;
+    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "grip_type", &grip_type, NULL)
+        && grip_type == blockgriplocationcomponent->grip_type)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.grip_type [BL] %u != %u", blockgriplocationcomponent->grip_type, grip_type);
+    grip_type++;
+    if (dwg_dynapi_entity_set_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "grip_type", &grip_type, 0)
+        && grip_type == blockgriplocationcomponent->grip_type)
+      pass ();
+    else
+      fail ("BLOCKGRIPLOCATIONCOMPONENT.grip_type [BL] set+1 %u != %u", blockgriplocationcomponent->grip_type, grip_type);
+    blockgriplocationcomponent->grip_type--;
   }
   {
     struct _dwg_object_object* parent;
@@ -48283,6 +48416,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCSWEPTSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
     error += test_ASSOCVERTEXACTIONPARAM(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
+    error += test_BACKGROUND(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
@@ -48683,6 +48818,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCSWEPTSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
     error += test_ASSOCVERTEXACTIONPARAM (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
+    error += test_BACKGROUND (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
@@ -49749,6 +49886,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ASSOCVERTEXACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_BACKGROUND);
+  size2 = dwg_dynapi_fields_size ("BACKGROUND");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_BACKGROUND): %d != "
+               "dwg_dynapi_fields_size (\"BACKGROUND\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_BLKREFOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("BLKREFOBJECTCONTEXTDATA");
   if (size1 != size2)
@@ -50747,6 +50892,54 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_AcDs_SegmentIndex): %d != "
                "dwg_dynapi_fields_size (\"AcDs_SegmentIndex\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BACKGROUND_Gradient);
+  size2 = dwg_dynapi_fields_size ("BACKGROUND_Gradient");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Gradient): %d != "
+               "dwg_dynapi_fields_size (\"BACKGROUND_Gradient\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BACKGROUND_GroundPlane);
+  size2 = dwg_dynapi_fields_size ("BACKGROUND_GroundPlane");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_GroundPlane): %d != "
+               "dwg_dynapi_fields_size (\"BACKGROUND_GroundPlane\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BACKGROUND_IBL);
+  size2 = dwg_dynapi_fields_size ("BACKGROUND_IBL");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_IBL): %d != "
+               "dwg_dynapi_fields_size (\"BACKGROUND_IBL\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BACKGROUND_Image);
+  size2 = dwg_dynapi_fields_size ("BACKGROUND_Image");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Image): %d != "
+               "dwg_dynapi_fields_size (\"BACKGROUND_Image\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BACKGROUND_Sky);
+  size2 = dwg_dynapi_fields_size ("BACKGROUND_Sky");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Sky): %d != "
+               "dwg_dynapi_fields_size (\"BACKGROUND_Sky\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BACKGROUND_Solid);
+  size2 = dwg_dynapi_fields_size ("BACKGROUND_Solid");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Solid): %d != "
+               "dwg_dynapi_fields_size (\"BACKGROUND_Solid\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_BLOCKVISIBILITYPARAMETER_state);
