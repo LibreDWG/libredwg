@@ -7243,53 +7243,52 @@ DWG_OBJECT (LAYERFILTER)
 DWG_OBJECT_END
 
 // abstract subclass. requires evalexpr
-#define AcDbEvalExpr_fields                     \
-  SUBCLASS (AcDbEvalExpr)                       \
-  DXF { FIELD_BL (nodeid, 90); }                \
-  FIELD_BLd (parentid, 0);                      \
-  FIELD_BL (ee_major, 98);                      \
-  FIELD_BL (ee_minor, 99);                      \
-  if (IF_IS_DXF && FIELD_VALUE (eval_type) == -9999) \
-    {                                           \
-      ; /* 70 -9999 not in DXF */               \
-    }                                           \
-  else                                          \
-    {                                           \
-      DXF { VALUE_TFF ("", 1); }                \
-      FIELD_BSd (eval_type, 70);                \
-      /* TODO not a union yet */                \
-      switch (_obj->eval_type)                  \
-        {                                       \
-        case 40:                                \
-          FIELD_BD (ee_bd40, 40);             \
-          break;                                \
-        case 10:                                \
-          FIELD_2RD (ee_2dpt, 10);            \
-          break;                                \
-        case 11:                                \
-          FIELD_2RD (ee_3dpt, 11);            \
-          break;                                \
-        case 1:                                 \
-          FIELD_T (ee_text, 1);               \
-          break;                                \
-        case 90:                                \
-          FIELD_BL (ee_bl90, 90);             \
-          break;                                \
-        case 91:                                \
-          FIELD_HANDLE (ee_h91, 5, 91);       \
-          break;                                \
-        case 70:                                \
-          FIELD_BS (ee_bs70, 70);               \
-          break;                                \
-        case -9999:                             \
-        default:                                \
-          break;                                \
-        }                                       \
-    }                                           \
-  FIELD_BL (nodeid, 0)
+#define AcDbEvalExpr_fields                                                   \
+  SUBCLASS (AcDbEvalExpr)                                                     \
+  DXF { FIELD_BL (evalexpr.nodeid, 90); }                                     \
+  FIELD_BLd (parentid, 0);                                                    \
+  FIELD_BL (evalexpr.major, 98);                                              \
+  FIELD_BL (evalexpr.minor, 99);                                              \
+  if (IF_IS_DXF && FIELD_VALUE (evalexpr.value_type) == -9999)                \
+    {                                                                         \
+      ; /* 70 -9999 not in DXF */                                             \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      DXF { VALUE_TFF ("", 1); }                                              \
+      FIELD_BSd (evalexpr.value_type, 70);                                    \
+      /* TODO not a union yet */                                              \
+      switch (_obj->evalexpr.type)                                            \
+        {                                                                     \
+        case 40:                                                              \
+          FIELD_BD (evalexpr.value.num40, 40);                                \
+          break;                                                              \
+        case 10:                                                              \
+          FIELD_2RD (evalexpr.value.pt2d, 10);                                \
+          break;                                                              \
+        case 11:                                                              \
+          FIELD_2RD (evalexpr.value.pt3d, 11);                                \
+          break;                                                              \
+        case 1:                                                               \
+          FIELD_T (evalexpr.value.text1, 1);                                  \
+          break;                                                              \
+        case 90:                                                              \
+          FIELD_BL (evalexpr.value.long90, 90);                               \
+          break;                                                              \
+        case 91:                                                              \
+          FIELD_HANDLE (evalexpr.value.handle91, 5, 91);                      \
+          break;                                                              \
+        case 70:                                                              \
+          FIELD_BS (evalexpr.value.short70, 70);                              \
+          break;                                                              \
+        case -9999:                                                           \
+        default:                                                              \
+          break;                                                              \
+        }                                                                     \
+    }                                                                         \
+  FIELD_BL (evalexpr.nodeid, 0)
 
 #define AcDbShHistoryNode_fields                                              \
-    AcDbEvalExpr_fields;                                                      \
     SUBCLASS (AcDbShHistoryNode)                                              \
     FIELD_BL (history_node.major, 90);                                        \
     FIELD_BL (history_node.minor, 91);                                        \
@@ -7302,6 +7301,7 @@ DWG_OBJECT_END
 // same as Wedge
 DWG_OBJECT (ACSH_BOX_CLASS)
   //DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBox)
@@ -7316,6 +7316,7 @@ DWG_OBJECT_END
 // Stable
 DWG_OBJECT (ACSH_WEDGE_CLASS)
   //DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShWedge)
@@ -7329,7 +7330,7 @@ DWG_OBJECT_END
 
 // Stable
 DWG_OBJECT (ACSH_SPHERE_CLASS)
-  //DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSpere)
@@ -7341,7 +7342,7 @@ DWG_OBJECT_END
 
 // Stable
 DWG_OBJECT (ACSH_CYLINDER_CLASS)
-  //DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShCylinder)
@@ -7356,7 +7357,7 @@ DWG_OBJECT_END
 
 // Unstable
 DWG_OBJECT (ACSH_CONE_CLASS)
-  DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShCone)
@@ -7371,7 +7372,7 @@ DWG_OBJECT_END
 
 
 DWG_OBJECT (ACSH_PYRAMID_CLASS)
-  DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShPyramid)
@@ -7386,6 +7387,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_FILLET_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShFillet)
@@ -7405,6 +7407,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_CHAMFER_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShChamfer)
@@ -7421,6 +7424,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_TORUS_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShTorus)
@@ -7433,6 +7437,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BREP_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBrep)
@@ -7444,6 +7449,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BOOLEAN_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBoolean)
@@ -8115,6 +8121,7 @@ DWG_OBJECT_END
 // dbSweepOptions.h dbsurf.h
 DWG_OBJECT (ACSH_SWEEP_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
@@ -8161,6 +8168,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
@@ -8205,6 +8213,8 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_HISTORY_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
+  AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShHistory)
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
@@ -8212,12 +8222,12 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   FIELD_BL (h_nodeid, 92);
   FIELD_B (b280, 280);
   FIELD_B (b281, 281);
-  AcDbShHistoryNode_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_LOFT_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShLoft)
@@ -8246,6 +8256,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_REVOLVE_CLASS)
   DECODE_UNKNOWN_BITS
+  AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields;
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShRevolve)
