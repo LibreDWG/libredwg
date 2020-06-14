@@ -7458,7 +7458,8 @@ new_object (char *restrict name, char *restrict dxfname,
                   dwg_dynapi_entity_value (_obj, obj->name, fname, &color,
                                            NULL);
                   color.method = 0xc2;
-                  color.rgb = (0xc2 << 0x18) | (pair->value.l & 0x00ffffff);
+                  color.rgb = pair->value.l & 0x00ffffff;
+                  color.rgb |= 0xc2000000;
                   LOG_TRACE ("%s.%s.rgb = %08X [CMC %d]\n", name, fname,
                              pair->value.u, pair->code);
                   dwg_dynapi_entity_set_value (_obj, obj->name, fname, &color,
