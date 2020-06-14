@@ -6154,4 +6154,29 @@ void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj)
            _obj->revision_bytes[6], _obj->revision_bytes[7]);
 }
 
+// set internal type from BACKGROUND.dxfname
+void decode_BACKGROUND_type (const Dwg_Object *obj)
+{
+  Dwg_Object_BACKGROUND *_obj = obj->tio.object->tio.BACKGROUND;
+  const char *dxfname = obj->dxfname;
+
+  loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
+  if (strEQc (dxfname, "SKYLIGHT_BACKGROUND"))
+    _obj->type = Dwg_BACKGROUND_type_Sky;
+  else if (strEQc (dxfname, "SOLID_BACKGROUND"))
+    _obj->type = Dwg_BACKGROUND_type_Solid;
+  else if (strEQc (dxfname, "IMAGE_BACKGROUND")) //?
+    _obj->type = Dwg_BACKGROUND_type_Image;
+  else if (strEQc (dxfname, "IBL_BACKGROUND")) //?
+    _obj->type = Dwg_BACKGROUND_type_IBL;
+  else if (strEQc (dxfname, "GROUND_PLANE_BACKGROUND"))
+    _obj->type = Dwg_BACKGROUND_type_GroundPlane;
+  else if (strEQc (dxfname, "GRADIENT_BACKGROUND")) //?
+    _obj->type = Dwg_BACKGROUND_type_Gradient;
+  else
+    LOG_ERROR ("Unknown BACKGROUND %s", dxfname);
+  LOG_TRACE("BACKGROUND.type => %d\n", _obj->type);
+}
+
+
 #undef IS_DECODER

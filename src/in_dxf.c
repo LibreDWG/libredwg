@@ -6575,26 +6575,6 @@ new_object (char *restrict name, char *restrict dxfname,
     }
   ctrl = &dwg->object[ctrl_id];
 
-  // some objects have various subtypes under one name: TODO UNDERLAY, ...
-  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
-    {
-      Dwg_Object_BACKGROUND *_o = obj->tio.object->tio.BACKGROUND;
-      if (strEQc (dxfname, "SKYLIGHT_BACKGROUND"))
-        _o->type = Dwg_BACKGROUND_type_Sky;
-      else if (strEQc (dxfname, "SOLID_BACKGROUND"))
-        _o->type = Dwg_BACKGROUND_type_Solid;
-      else if (strEQc (dxfname, "IMAGE_BACKGROUND")) //?
-        _o->type = Dwg_BACKGROUND_type_Image;
-      else if (strEQc (dxfname, "IBL_BACKGROUND")) //?
-        _o->type = Dwg_BACKGROUND_type_IBL;
-      else if (strEQc (dxfname, "GROUND_PLANE_BACKGROUND"))
-        _o->type = Dwg_BACKGROUND_type_GroundPlane;
-      else if (strEQc (dxfname, "GRADIENT_BACKGROUND")) //?
-        _o->type = Dwg_BACKGROUND_type_Gradient;
-      else
-        LOG_ERROR ("Unknown BACKGROUND %s", dxfname);
-      LOG_TRACE("BACKGROUND.type => %d\n", _o->type);
-    }
   {
     BITCODE_B is_xref_ref = 1;
     // set defaults not in dxf:
@@ -6690,6 +6670,10 @@ new_object (char *restrict name, char *restrict dxfname,
           _o->style = style;
         }
     }
+  // Some objects have various subtypes under one name.
+  // TODO UNDERLAY, UNDERLAYDEF, OBJECTCONTEXTDATA, ...
+  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
+    decode_BACKGROUND_type (obj);
 
   // read table fields until next 0 table or 0 ENDTAB
   while (pair != NULL && pair->code != 0)

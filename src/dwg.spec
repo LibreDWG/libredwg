@@ -8716,23 +8716,8 @@ DWG_OBJECT_END
 DWG_OBJECT (BACKGROUND)
   DECODE_UNKNOWN_BITS
   FIELD_BL (class_version, 90); // 1 or 2
-  // subytped by dxfname
-  DECODER {
-    const char *dxfname = obj->dxfname;
-    if (strEQc (dxfname, "SKYLIGHT_BACKGROUND"))
-      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Sky;
-    else if (strEQc (dxfname, "SOLID_BACKGROUND"))
-      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Solid;
-    else if (strEQc (dxfname, "IMAGE_BACKGROUND")) //?
-      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Image;
-    else if (strEQc (dxfname, "IBL_BACKGROUND")) //?
-      FIELD_VALUE (type) = Dwg_BACKGROUND_type_IBL;
-    else if (strEQc (dxfname, "GROUND_PLANE_BACKGROUND"))
-      FIELD_VALUE (type) = Dwg_BACKGROUND_type_GroundPlane;
-    else if (strEQc (dxfname, "GRADIENT_BACKGROUND")) //?
-      FIELD_VALUE (type) = Dwg_BACKGROUND_type_Gradient;
-    else
-      LOG_ERROR ("Unknown BACKGROUND %s", dxfname)
+  DECODER { // subytped by dxfname
+    decode_BACKGROUND_type (obj);
   }
   switch (FIELD_VALUE (type))
   {
