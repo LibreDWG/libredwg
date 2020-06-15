@@ -5339,7 +5339,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                  dat->size);
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
 #if 1
-      obj->size = dat->size;
+      obj->size = dat->size - 4;
 #else
       *dat = abs_dat;
       return error;
@@ -5803,6 +5803,11 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     num_bytes++;
 
   obj->unknown_bits = bit_read_bits (dat, num_bits);
+  if (!obj->unknown_bits)
+    {
+      bit_set_position (dat, pos);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   // [num_bits (commonsize, hdlpos, strsize) num_bytes TF]
   LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) %d TF]: ", num_bits,
              obj->common_size, obj->bitsize - obj->common_size,

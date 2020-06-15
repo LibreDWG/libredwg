@@ -132,6 +132,15 @@ bit_reset_chain (Bit_Chain *dat)
       }
 #endif
 
+#define CHK_OVERFLOW_PLUS(plus, func, retval)                                 \
+    if (dat->byte + (plus) > dat->size)                                       \
+      {                                                                       \
+        loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
+        LOG_ERROR ("%s buffer overflow at %lu + %d >= %lu", func, dat->byte,  \
+                   (int)(plus), dat->size)                                    \
+        return retval;                                                        \
+      }
+
 /** Read 1 bit.
  */
 BITCODE_B
@@ -1084,6 +1093,7 @@ bit_read_DD (Bit_Chain *dat, double default_value)
       // dbl: 7654 3210
       // first 2 bits eq (6-7), the rest not (0-5)
       uchar_result = (unsigned char *)&default_value;
+      CHK_OVERFLOW_PLUS (6, __FUNCTION__, bit_nan ())
       uchar_result[4] = bit_read_RC (dat);
       uchar_result[5] = bit_read_RC (dat);
       uchar_result[0] = bit_read_RC (dat);
@@ -1097,6 +1107,7 @@ bit_read_DD (Bit_Chain *dat, double default_value)
     {
       // first 4bits eq, only last 4
       uchar_result = (unsigned char *)&default_value;
+      CHK_OVERFLOW_PLUS (4, __FUNCTION__, bit_nan ())
       uchar_result[0] = bit_read_RC (dat);
       uchar_result[1] = bit_read_RC (dat);
       uchar_result[2] = bit_read_RC (dat);
@@ -1401,7 +1412,7 @@ void
 bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
                 unsigned int length)
 {
-  if (dat->byte + length > dat->size)
+  if (dat->byte + length >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %lu, size %lu", __FUNCTION__,
@@ -1506,14 +1517,9 @@ bit_read_TV (Bit_Chain *restrict dat)
   unsigned int length;
   unsigned char *chain;
 
+  CHK_OVERFLOW_PLUS (1,__FUNCTION__,NULL)
   length = bit_read_BS (dat);
-  if (dat->byte + length > dat->size)
-    {
-      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
-                 dat->byte, length)
-      return NULL;
-    }
+  CHK_OVERFLOW_PLUS (length,__FUNCTION__,NULL)
   chain = (unsigned char *)malloc (length + 1);
   if (!chain)
     {
@@ -1815,14 +1821,9 @@ bit_read_TU (Bit_Chain *restrict dat)
   unsigned int length;
   BITCODE_TU chain;
 
+  CHK_OVERFLOW_PLUS (1,__FUNCTION__,NULL)
   length = bit_read_BS (dat);
-  if (dat->byte + (length * 2) > dat->size)
-    {
-      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
-                 dat->byte, length)
-      return NULL;
-    }
+  CHK_OVERFLOW_PLUS (length * 2,__FUNCTION__,NULL)
   chain = (BITCODE_TU)malloc ((length + 1) * 2);
   if (!chain)
     {
@@ -1846,14 +1847,9 @@ bit_read_T16 (Bit_Chain *restrict dat)
   BITCODE_RS i, length;
   BITCODE_TV chain;
 
+  CHK_OVERFLOW(__FUNCTION__,NULL)
   length = bit_read_RS (dat);
-  if (dat->byte + length > dat->size)
-    {
-      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
-                 dat->byte, length)
-      return NULL;
-    }
+  CHK_OVERFLOW_PLUS (length,__FUNCTION__,NULL)
   chain = (BITCODE_TV)malloc (length + 1);
   if (!chain)
     {
@@ -1875,14 +1871,9 @@ bit_read_TU16 (Bit_Chain *restrict dat)
   BITCODE_RS i, length;
   BITCODE_TU chain;
 
+  CHK_OVERFLOW_PLUS (2,__FUNCTION__,NULL)
   length = bit_read_RS (dat);
-  if (dat->byte + (length * 2) > dat->size)
-    {
-      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at %lu, length %u", __FUNCTION__,
-                 dat->byte, length)
-      return NULL;
-    }
+  CHK_OVERFLOW_PLUS (length * 2,__FUNCTION__,NULL)
   chain = (BITCODE_TU)malloc ((length + 1) * 2);
   if (!chain)
     {
@@ -1908,7 +1899,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
     {
       BITCODE_TU wstr;
       BITCODE_RL len = size / 2;
-      if (dat->byte + size > dat->size)
+      if (dat->byte + size >= dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
@@ -1930,7 +1921,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
   else
     {
       BITCODE_T32 str;
-      if (dat->byte + size > dat->size)
+      if (dat->byte + size >= dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
@@ -1964,7 +1955,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
       BITCODE_TU wstr;
       BITCODE_RL rl1, len = size / 4;
       unsigned long pos = bit_position (dat);
-      if (dat->byte + size > dat->size)
+      if (dat->byte + size >= dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
@@ -2003,7 +1994,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
   else
     {
       BITCODE_T32 str;
-      if (dat->byte + size > dat->size)
+      if (dat->byte + size >= dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
@@ -2526,8 +2517,12 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
   if (dat->from_version >= R_2004) // truecolor
     {
       color->rgb = bit_read_BL (dat);
+      if (dat->byte >= dat->size)
+        return;
       color->method = color->rgb >> 0x18;
       color->flag = bit_read_RC (dat);
+      if (dat->byte >= dat->size)
+        return;
       if (color->flag < 4)
         {
           color->name      = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
