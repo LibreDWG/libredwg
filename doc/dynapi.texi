@@ -810,8 +810,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1
@@ -1738,8 +1738,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1
@@ -2313,8 +2313,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1
@@ -2767,8 +2767,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1
@@ -2902,8 +2902,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1
@@ -3239,8 +3239,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1
@@ -3536,8 +3536,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1
@@ -4414,8 +4414,8 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[38]
-RC,	DXF 2
+@item revision_guid[39]
+RC
 @item revision_major
 BL
 @item revision_minor1

@@ -1767,7 +1767,7 @@ typedef struct _dwg_3DSOLID_material
   struct _dwg_entity_3DSOLID* extra_acis_data;                          \
   BITCODE_BL num_materials;                                             \
   Dwg_3DSOLID_material *materials;                                      \
-  BITCODE_RC revision_guid[38];                                         \
+  BITCODE_RC revision_guid[39];                                         \
   BITCODE_BL revision_major;                                            \
   BITCODE_BS revision_minor1;                                           \
   BITCODE_BS revision_minor2;                                           \

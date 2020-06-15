@@ -5755,12 +5755,12 @@ static int test__3DSOLID (const Dwg_Object *obj)
         fail ("3DSOLID.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &_3dsolid->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("3DSOLID.revision_guid[38] [RC]");
+        fail ("3DSOLID.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;
@@ -10648,12 +10648,12 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
         fail ("EXTRUDEDSURFACE.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &extrudedsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("EXTRUDEDSURFACE.revision_guid[38] [RC]");
+        fail ("EXTRUDEDSURFACE.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;
@@ -13782,12 +13782,12 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
         fail ("LOFTEDSURFACE.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &loftedsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("LOFTEDSURFACE.revision_guid[38] [RC]");
+        fail ("LOFTEDSURFACE.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;
@@ -16049,12 +16049,12 @@ static int test_NURBSURFACE (const Dwg_Object *obj)
         fail ("NURBSURFACE.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (nurbsurface, "NURBSURFACE", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &nurbsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("NURBSURFACE.revision_guid[38] [RC]");
+        fail ("NURBSURFACE.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;
@@ -16728,12 +16728,12 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         fail ("PLANESURFACE.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &planesurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("PLANESURFACE.revision_guid[38] [RC]");
+        fail ("PLANESURFACE.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;
@@ -18180,12 +18180,12 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         fail ("REVOLVEDSURFACE.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &revolvedsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("REVOLVEDSURFACE.revision_guid[38] [RC]");
+        fail ("REVOLVEDSURFACE.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;
@@ -19755,12 +19755,12 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         fail ("SWEPTSURFACE.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &sweptsurface->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("SWEPTSURFACE.revision_guid[38] [RC]");
+        fail ("SWEPTSURFACE.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;
@@ -23912,12 +23912,12 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
         fail ("ACSH_BREP_CLASS.revision_bytes[9] [RC]");
   }
   {
-    BITCODE_RC revision_guid[38];
-    if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "revision_guid[38]", &revision_guid, NULL)
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "revision_guid[39]", &revision_guid, NULL)
         && !memcmp (&revision_guid, &acsh_brep_class->revision_guid, sizeof (BITCODE_RC)))
         pass ();
     else
-        fail ("ACSH_BREP_CLASS.revision_guid[38] [RC]");
+        fail ("ACSH_BREP_CLASS.revision_guid[39] [RC]");
   }
   {
     BITCODE_BL revision_major;

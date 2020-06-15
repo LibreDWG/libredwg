@@ -7202,7 +7202,7 @@ new_object (char *restrict name, char *restrict dxfname,
               // "{00000100-0100-00CA-D300-80010A7B10C3}"
               strncpy (revision_guid, pair->value.s, 38);
               revision_guid[38] = '\0';
-              if (!dwg_dynapi_entity_set_value (_obj, obj->name, "revision_guid[38]", revision_guid, 0))
+              if (!dwg_dynapi_entity_set_value (_obj, obj->name, "revision_guid[39]", revision_guid, 0))
                 break;
               if (revision_guid[0] != '{' ||  /* 8 */
                   revision_guid[9] != '-' ||  /* 4 */

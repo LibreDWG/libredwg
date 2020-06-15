@@ -2047,7 +2047,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
     SINCE (R_2013) {                                                                               \
       FIELD_B (has_revision_guid, 290);                                                            \
       DXF {                                                                                        \
-        FIELD_TFF (revision_guid, 37, 2);                                                          \
+        FIELD_TFF (revision_guid, 40, 2);                                                          \
       }                                                                                            \
       else {                                                                                       \
         FIELD_BL (revision_major, 0);                                                              \
