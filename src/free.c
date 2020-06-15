@@ -991,8 +991,8 @@ dwg_free (Dwg_Data *dwg)
               if (dwg->header.from_version >= R_2007)
                 FREE_IF (dwg->dwg_class[i].dxfname_u);
             }
-          FREE_IF (dwg->dwg_class);
         }
+      FREE_IF (dwg->dwg_class);
       if (dwg->object_ref)
         {
           LOG_HANDLE ("free %d global refs\n", dwg->num_object_refs)
@@ -1002,11 +1002,11 @@ dwg_free (Dwg_Data *dwg)
               FREE_IF (dwg->object_ref[i]);
             }
         }
-      FREE_IF (dwg->acis_sab_hdl);
       FREE_IF (dwg->object_ref);
       FREE_IF (dwg->object);
       if (dwg->object_map)
         hash_free (dwg->object_map);
+      FREE_IF (dwg->acis_sab_hdl);
       dwg->num_objects = dwg->num_classes = dwg->num_object_refs = 0;
 #undef FREE_IF
     }
