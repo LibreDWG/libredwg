@@ -7988,6 +7988,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                  pair->value.d, j + 40);
                       dxf_free_pair (pair);
                       pair = dxf_read_pair (dat);
+                      if (!pair || pair->code == 0)
+                        return pair;
                       if (pair->code == 62)
                         goto hn_color;
                       if (pair->code != j + 41)
