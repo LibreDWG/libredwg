@@ -1055,7 +1055,8 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         {
           LOG_ERROR ("2 CLASSES must be followed by 0 CLASS")
-          pair = dxf_read_pair (dat);
+          DXF_RETURN_EOF (DWG_ERR_INVALIDDWG);
+          return DWG_ERR_INVALIDDWG;
         }
       klass->number = 500 + i;
       while (pair != NULL && pair->code != 0)
