@@ -8400,9 +8400,11 @@ DWG_OBJECT_END
   FIELD_HANDLE (scale, 2, 340)
 
 // DXF: 2 293 10 294 140 298 291 70 292 71 280 295 296 297
+//  #ifdef IS_DXF
+//    FIELD_HANDLE_NAME (block, 2, BLOCK_HEADER);
 #define AcDbDimensionObjectContextData_fields           \
   SUBCLASS (AcDbDimensionObjectContextData);            \
-  DXF { FIELD_HANDLE (dimension.block, 2, BLOCK); }     \
+  DXF { FIELD_HANDLE (dimension.block, 5, 2); }         \
   DXF { FIELD_B (dimension.b293, 293); }                \
   FIELD_2RD (dimension.def_pt, 10); /* text location */ \
   DXF { VALUE_RD (0.0, 30); }                           \
@@ -8425,7 +8427,16 @@ DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   AcDbAnnotScaleObjectContextData_fields;
   AcDbDimensionObjectContextData_fields;
   SUBCLASS (AcDbAlignedDimensionObjectContextData)
-  FIELD_3BD (_11pt, 11);
+  FIELD_3BD (dimline_pt, 11);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ANGDIMOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  AcDbDimensionObjectContextData_fields;
+  SUBCLASS (AcDbAngularDimensionObjectContextData)
+  FIELD_3BD (arc_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

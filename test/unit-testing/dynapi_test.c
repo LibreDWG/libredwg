@@ -26412,14 +26412,6 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
   Dwg_Object_ALDIMOBJECTCONTEXTDATA *restrict aldimobjectcontextdata = obj->tio.object->tio.ALDIMOBJECTCONTEXTDATA;
   failed = 0;
   {
-    BITCODE_3BD _11pt;
-    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "_11pt", &_11pt, NULL)
-        && !memcmp (&_11pt, &aldimobjectcontextdata->_11pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("ALDIMOBJECTCONTEXTDATA._11pt [3BD]");
-  }
-  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
         && class_version == aldimobjectcontextdata->class_version)
@@ -26441,6 +26433,14 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
         pass ();
     else
         fail ("ALDIMOBJECTCONTEXTDATA.dimension [Dwg_OCD_Dimension]");
+  }
+  {
+    BITCODE_3BD dimline_pt;
+    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "dimline_pt", &dimline_pt, NULL)
+        && !memcmp (&dimline_pt, &aldimobjectcontextdata->dimline_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("ALDIMOBJECTCONTEXTDATA.dimline_pt [3BD]");
   }
   {
     BITCODE_B in_dwg;
@@ -26491,6 +26491,96 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ALDIMOBJECTCONTEXTDATA") || is_class_debugging ("ALDIMOBJECTCONTEXTDATA")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ALDIMOBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ANGDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ANGDIMOBJECTCONTEXTDATA *restrict angdimobjectcontextdata = obj->tio.object->tio.ANGDIMOBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_3BD arc_pt;
+    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "arc_pt", &arc_pt, NULL)
+        && !memcmp (&arc_pt, &angdimobjectcontextdata->arc_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("ANGDIMOBJECTCONTEXTDATA.arc_pt [3BD]");
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == angdimobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("ANGDIMOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", angdimobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == angdimobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("ANGDIMOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", angdimobjectcontextdata->class_version, class_version);
+    angdimobjectcontextdata->class_version--;
+  }
+  {
+    Dwg_OCD_Dimension dimension;
+    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "dimension", &dimension, NULL)
+        && !memcmp (&dimension, &angdimobjectcontextdata->dimension, sizeof (Dwg_OCD_Dimension)))
+        pass ();
+    else
+        fail ("ANGDIMOBJECTCONTEXTDATA.dimension [Dwg_OCD_Dimension]");
+  }
+  {
+    BITCODE_B in_dwg;
+    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
+        && in_dwg == angdimobjectcontextdata->in_dwg)
+      pass ();
+    else
+      fail ("ANGDIMOBJECTCONTEXTDATA.in_dwg [B] " FORMAT_B " != " FORMAT_B "", angdimobjectcontextdata->in_dwg, in_dwg);
+    in_dwg++;
+    if (dwg_dynapi_entity_set_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "in_dwg", &in_dwg, 0)
+        && in_dwg == angdimobjectcontextdata->in_dwg)
+      pass ();
+    else
+      fail ("ANGDIMOBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", angdimobjectcontextdata->in_dwg, in_dwg);
+    angdimobjectcontextdata->in_dwg--;
+  }
+  {
+    BITCODE_B is_default;
+    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "is_default", &is_default, NULL)
+        && is_default == angdimobjectcontextdata->is_default)
+      pass ();
+    else
+      fail ("ANGDIMOBJECTCONTEXTDATA.is_default [B] " FORMAT_B " != " FORMAT_B "", angdimobjectcontextdata->is_default, is_default);
+    is_default++;
+    if (dwg_dynapi_entity_set_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "is_default", &is_default, 0)
+        && is_default == angdimobjectcontextdata->is_default)
+      pass ();
+    else
+      fail ("ANGDIMOBJECTCONTEXTDATA.is_default [B] set+1 " FORMAT_B " != " FORMAT_B "", angdimobjectcontextdata->is_default, is_default);
+    angdimobjectcontextdata->is_default--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &angdimobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ANGDIMOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &angdimobjectcontextdata->scale, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ANGDIMOBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("ANGDIMOBJECTCONTEXTDATA") || is_class_debugging ("ANGDIMOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ANGDIMOBJECTCONTEXTDATA", failed);
       failed = 0;
     }
   return failed;
@@ -48300,6 +48390,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_WEDGE_CLASS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
     error += test_ALDIMOBJECTCONTEXTDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ANGDIMOBJECTCONTEXTDATA)
+    error += test_ANGDIMOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
     error += test_APPID(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID_CONTROL)
@@ -48704,6 +48796,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ACSH_WEDGE_CLASS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA)
     error += test_ALDIMOBJECTCONTEXTDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ANGDIMOBJECTCONTEXTDATA)
+    error += test_ANGDIMOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
     error += test_APPID (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID_CONTROL)
@@ -49676,6 +49770,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ALDIMOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"ALDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ANGDIMOBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("ANGDIMOBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ANGDIMOBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"ANGDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_APPID);

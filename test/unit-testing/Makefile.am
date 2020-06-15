@@ -194,6 +194,7 @@ testobjects += \
 	acsh_revolve_class \
 	acsh_sweep_class \
 	aldimobjectcontextdata \
+	angdimobjectcontextdata \
 	assoc2dconstraintgroup \
 	assocaction \
 	assocaligneddimactionbody \
@@ -236,6 +237,7 @@ testobjects += \
 	persubentmgr \
 	planesurface \
 	pointpath \
+	radimlgobjectcontextdata \
 	renderenvironment \
 	renderentry \
 	renderglobal \

@@ -4936,7 +4936,32 @@ B
 H,	DXF 340
 @item dimension
 Dwg_OCD_Dimension
-@item _11pt
+@item dimline_pt
+3BD,	DXF 11
+
+@end vtable
+@end indentedblock
+
+@strong{ANGDIMOBJECTCONTEXTDATA} @anchor{ANGDIMOBJECTCONTEXTDATA}
+@cindex object, ANGDIMOBJECTCONTEXTDATA
+@vindex ANGDIMOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item is_default
+B,	DXF 290
+@item in_dwg
+B
+@item scale
+H,	DXF 340
+@item dimension
+Dwg_OCD_Dimension
+@item arc_pt
 3BD,	DXF 11
 
 @end vtable

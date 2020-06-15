@@ -1,5 +1,5 @@
 // TODO DEBUGGING
-#define DWG_TYPE DWG_TYPE_ALDIMOBJECTCONTEXTDATA
+#define DWG_TYPE DWG_TYPE_ANGDIMOBJECTCONTEXTDATA
 #include "common.c"
 
 void
@@ -8,16 +8,16 @@ api_process (dwg_object *obj)
   int error, isnew;
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   Dwg_OCD_Dimension dimension;
-  BITCODE_3BD dimline_pt;
+  BITCODE_3BD arc_pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_aldimobjectcontextdata *_obj = dwg_object_to_ALDIMOBJECTCONTEXTDATA (obj);
+  dwg_obj_angdimobjectcontextdata *_obj = dwg_object_to_ANGDIMOBJECTCONTEXTDATA (obj);
 
-  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, class_version, BS);
-  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, is_default, B);
-  CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, in_dwg, B);
-  CHK_ENTITY_H (_obj, ALDIMOBJECTCONTEXTDATA, scale);
+  CHK_ENTITY_TYPE (_obj, ANGDIMOBJECTCONTEXTDATA, class_version, BS);
+  CHK_ENTITY_TYPE (_obj, ANGDIMOBJECTCONTEXTDATA, is_default, B);
+  CHK_ENTITY_TYPE (_obj, ANGDIMOBJECTCONTEXTDATA, in_dwg, B);
+  CHK_ENTITY_H (_obj, ANGDIMOBJECTCONTEXTDATA, scale);
 
   CHK_SUBCLASS_3RD (_obj, OCD_Dimension, def_pt);
   CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, b293, B);
@@ -34,6 +34,6 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, flip_arrow2, B);
   CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, flip_arrow1, B);
 
-  CHK_ENTITY_3RD (_obj, ALDIMOBJECTCONTEXTDATA, dimline_pt);
+  CHK_ENTITY_3RD (_obj, ANGDIMOBJECTCONTEXTDATA, arc_pt);
 #endif
 }

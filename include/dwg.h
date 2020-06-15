@@ -398,6 +398,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ACSH_TORUS_CLASS,
   DWG_TYPE_ACSH_WEDGE_CLASS,
   DWG_TYPE_ALDIMOBJECTCONTEXTDATA,
+  DWG_TYPE_ANGDIMOBJECTCONTEXTDATA,
   DWG_TYPE_ARC_DIMENSION,
   DWG_TYPE_ASSOC2DCONSTRAINTGROUP,
   DWG_TYPE_ASSOCACTION,
@@ -6042,8 +6043,20 @@ typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   Dwg_OCD_Dimension dimension;
   // AcDbAlignedDimensionObjectContextData
-  BITCODE_3BD _11pt;    /*!< DXF 11-31 */
+  BITCODE_3BD dimline_pt;	/*!< DXF 11-31 */
 } Dwg_Object_ALDIMOBJECTCONTEXTDATA;
+
+/**
+ * for ANGDIM (AngularDimension)
+ * R2010+
+ */
+typedef struct _dwg_object_ANGDIMOBJECTCONTEXTDATA
+{
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
+  Dwg_OCD_Dimension dimension;
+  // AcDbAngularDimensionObjectContextData
+  BITCODE_3BD arc_pt;	/*!< DXF 11-31 */
+} Dwg_Object_ANGDIMOBJECTCONTEXTDATA;
 
 /**
  * for RADIMLG (Large Radial Dimension)
@@ -6054,7 +6067,7 @@ typedef struct _dwg_object_RADIMLGOBJECTCONTEXTDATA
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   Dwg_OCD_Dimension dimension;
   // AcDbRadialDimensionLargeObjectContextData
-  BITCODE_3BD ovr_center;    /*!< DXF 12-32 */
+  BITCODE_3BD ovr_center;   /*!< DXF 12-32 */
   BITCODE_3BD jog_point;    /*!< DXF 13-33 */
 } Dwg_Object_RADIMLGOBJECTCONTEXTDATA;
 
@@ -6745,6 +6758,7 @@ typedef struct _dwg_object_object
     Dwg_Object_NAVISWORKSMODELDEF *NAVISWORKSMODELDEF;
     //Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
     Dwg_Object_ALDIMOBJECTCONTEXTDATA *ALDIMOBJECTCONTEXTDATA;
+    Dwg_Object_ANGDIMOBJECTCONTEXTDATA *ANGDIMOBJECTCONTEXTDATA;
     Dwg_Object_RADIMLGOBJECTCONTEXTDATA *RADIMLGOBJECTCONTEXTDATA;
     Dwg_Object_BLKREFOBJECTCONTEXTDATA *BLKREFOBJECTCONTEXTDATA;
     Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
@@ -7916,6 +7930,7 @@ EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_ALDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
+EXPORT int dwg_setup_ANGDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_RADIMLGOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_BLKREFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
