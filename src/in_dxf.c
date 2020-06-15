@@ -4034,6 +4034,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           if (mode == TABLEFORMAT)
             {
               grid++;
+              if (grid < 0 || grid >= (int)o->num_borders)
+                return NULL;
               o->borders[grid].index_mask = pair->value.u;
               LOG_TRACE ("%s.%s.borders[%d].index_mask = " FORMAT_BLx " [BLx %d]\n",
                          obj->name, key, grid, pair->value.u, pair->code);
