@@ -472,6 +472,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_POINTCLOUD,
   DWG_TYPE_POINTPATH,
+  DWG_TYPE_RADIMLGOBJECTCONTEXTDATA,
   DWG_TYPE_RAPIDRTRENDERENVIRONMENT,
   DWG_TYPE_RAPIDRTRENDERSETTINGS,
   DWG_TYPE_RASTERVARIABLES,
@@ -1354,31 +1355,31 @@ typedef struct _dwg_entity_LINE
  * 64: if set, ordinate is type X, else ordinate is type Y.
  * 128: non-default dimension text location
  */
-#define DIMENSION_COMMON \
-    struct _dwg_object_entity *parent; \
-    BITCODE_RC class_version; /* R2010+ */ \
-    BITCODE_T blockname; \
-    BITCODE_BE extrusion; \
-    BITCODE_3BD def_pt; \
-    BITCODE_2RD text_midpt; \
-    BITCODE_BD elevation; \
-    BITCODE_RC flag; /* calculated, DXF only 70 */ \
-    BITCODE_RC flag1; /* as in the DWG */ \
-    BITCODE_T user_text; \
-    BITCODE_BD text_rotation; \
-    BITCODE_BD horiz_dir; \
-    BITCODE_3BD ins_scale; \
-    BITCODE_BD ins_rotation; \
-    BITCODE_BS attachment; \
-    BITCODE_BS lspace_style; \
-    BITCODE_BD lspace_factor; \
-    BITCODE_BD act_measurement; \
-    BITCODE_B unknown; \
-    BITCODE_B flip_arrow1; \
-    BITCODE_B flip_arrow2; \
-    BITCODE_2RD clone_ins_pt; \
-    BITCODE_H dimstyle; \
-    BITCODE_H block
+#define DIMENSION_COMMON                         \
+  struct _dwg_object_entity *parent;             \
+  BITCODE_RC class_version; /* R2010+ */         \
+  BITCODE_T blockname;                           \
+  BITCODE_BE extrusion;                          \
+  BITCODE_3BD def_pt;                            \
+  BITCODE_2RD text_midpt;                        \
+  BITCODE_BD elevation;                          \
+  BITCODE_RC flag; /* calculated, DXF only 70 */ \
+  BITCODE_RC flag1; /* as in the DWG */          \
+  BITCODE_T user_text;                           \
+  BITCODE_BD text_rotation;                      \
+  BITCODE_BD horiz_dir;                          \
+  BITCODE_3BD ins_scale;                         \
+  BITCODE_BD ins_rotation;                       \
+  BITCODE_BS attachment;                         \
+  BITCODE_BS lspace_style;                       \
+  BITCODE_BD lspace_factor;                      \
+  BITCODE_BD act_measurement;                    \
+  BITCODE_B unknown;                             \
+  BITCODE_B flip_arrow1;                         \
+  BITCODE_B flip_arrow2;                         \
+  BITCODE_2RD clone_ins_pt;                      \
+  BITCODE_H dimstyle;                            \
+  BITCODE_H block
 
 typedef struct _dwg_DIMENSION_common
 {
@@ -2894,9 +2895,9 @@ typedef union _dwg_MLEADER_Content
 typedef struct _dwg_MLEADER_AnnotContext
 {
   // AcDbObjectContextData:
-  // BITCODE_BS class_version;  /*!< r2010+ DXF 70 */
-  // BITCODE_B has_xdic_file;   /*!< r2010+ default true */
-  // BITCODE_B is_default;      /*!< r2010+ DXF 290 */
+  // BITCODE_BS class_version;  /*!< r2010+ DXF 70 4 */
+  // BITCODE_B is_default;      /*!< r2010+ */
+  // BITCODE_B in_dwg;          /*!< r2010+ DXF 290 1 */
   // AcDbAnnotScaleObjectContextData:
   // BITCODE_H scale;           /*!< DXF 340 hard ptr to AcDbScale */
 
@@ -5934,6 +5935,7 @@ typedef struct _dwg_object_BACKGROUND
   BITCODE_BS class_version; /*!< r2010+ =4 */                                 \
   BITCODE_B is_default;     /* no dxf */                                      \
   BITCODE_B in_dwg          /* 290, always 1 */
+
 #define ANNOTSCALEOBJECTCONTEXTDATA_fields                                    \
   OBJECTCONTEXTDATA_fields;                                                   \
   BITCODE_H scale	/*!< DXF 340 */
@@ -6012,6 +6014,25 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
   BITCODE_BD bd46;
 } Dwg_Object_MTEXTOBJECTCONTEXTDATA;
 
+// subclass AcDbDimensionObjectContextData
+typedef struct _dwg_OCD_Dimension
+{
+  BITCODE_B b293;		/*!< DXF 293 */
+  BITCODE_2RD def_pt;  		/*!< DXF 10-30 */
+  BITCODE_B is_def_textloc;	/*<! DXF 294 if def_pt is default */
+  BITCODE_BD text_rotation;	/*!< DXF 140 */
+  BITCODE_H block;		/*!< DXF 2 */
+  BITCODE_B dimtofl;		/*!< DXF 298 */
+  BITCODE_B dimosxd;		/*!< DXF 291 */
+  BITCODE_B dimatfit;		/*!< DXF 70  */
+  BITCODE_B dimtix;		/*!< DXF 292 */
+  BITCODE_B dimtmove;		/*!< DXF 71  */
+  BITCODE_RC override_code;	/*!< DXF 280 */
+  BITCODE_B has_arrow2;		/*!< DXF 295 */
+  BITCODE_B flip_arrow2;	/*!< DXF 296 */
+  BITCODE_B flip_arrow1;	/*!< DXF 297 */
+} Dwg_OCD_Dimension;
+
 /**
  * for ALDIM (AlignedDimension)
  * R2010+
@@ -6019,24 +6040,23 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
 typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
-  // AcDbDimensionObjectContextData
-  BITCODE_T name;	/*!< DXF 2 */
-  BITCODE_2RD def_pt; 	/*!< DXF 10-20 */
-  BITCODE_B b293;	/*<! DXF 293 */ // 0
-  BITCODE_B b294;	/*!< DXF 294 */ // 1
-  BITCODE_BD bd140;	/*!< DXF 140 */ // 0.0
-  BITCODE_B b298;	/*!< DXF 298 */ // 0
-  BITCODE_B b291;	/*!< DXF 291 */ // 0
-  BITCODE_BS flag;	/*!< DXF 70 */ // 0
-  BITCODE_B b292;	/*!< DXF 292 */ // 0
-  BITCODE_BS bs71;	/*!< DXF 71 */ // 0
-  BITCODE_B b280;	/*!< DXF 280 */ // 0
-  BITCODE_B b295;	/*!< DXF 295 */ // 0
-  BITCODE_B b296;	/*!< DXF 296 */ // 0
-  BITCODE_B b297;	/*!< DXF 297 */ // 0
+  Dwg_OCD_Dimension dimension;
   // AcDbAlignedDimensionObjectContextData
   BITCODE_3BD _11pt;    /*!< DXF 11-31 */
 } Dwg_Object_ALDIMOBJECTCONTEXTDATA;
+
+/**
+ * for RADIMLG (Large Radial Dimension)
+ * R2010+
+ */
+typedef struct _dwg_object_RADIMLGOBJECTCONTEXTDATA
+{
+  ANNOTSCALEOBJECTCONTEXTDATA_fields;
+  Dwg_OCD_Dimension dimension;
+  // AcDbRadialDimensionLargeObjectContextData
+  BITCODE_3BD ovr_center;    /*!< DXF 12-32 */
+  BITCODE_3BD jog_point;    /*!< DXF 13-33 */
+} Dwg_Object_RADIMLGOBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA
 {
@@ -6725,6 +6745,7 @@ typedef struct _dwg_object_object
     Dwg_Object_NAVISWORKSMODELDEF *NAVISWORKSMODELDEF;
     //Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
     Dwg_Object_ALDIMOBJECTCONTEXTDATA *ALDIMOBJECTCONTEXTDATA;
+    Dwg_Object_RADIMLGOBJECTCONTEXTDATA *RADIMLGOBJECTCONTEXTDATA;
     Dwg_Object_BLKREFOBJECTCONTEXTDATA *BLKREFOBJECTCONTEXTDATA;
     Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
     Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
@@ -7895,6 +7916,7 @@ EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_ALDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
+EXPORT int dwg_setup_RADIMLGOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_BLKREFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);

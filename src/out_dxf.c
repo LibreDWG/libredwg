@@ -135,6 +135,8 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
     {                                                                         \
       if (dxf == 6)                                                           \
         FIELD_HANDLE_NAME (nam, dxf, LTYPE)                                   \
+      else if (dxf == 2)                                                      \
+        FIELD_HANDLE_NAME (nam, dxf, BLOCK_HEADER)                            \
       else if (dxf == 3)                                                      \
         FIELD_HANDLE_NAME (nam, dxf, DIMSTYLE)                                \
       else if (dxf == 7)                                                      \
@@ -142,7 +144,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       else if (dxf == 8)                                                      \
         FIELD_HANDLE_NAME (nam, dxf, LAYER)                                   \
       else if (dat->version >= R_13)                                          \
-        fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                               \
+        fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                              \
                  _obj->nam->obj ? _obj->nam->absolute_ref : 0);               \
     }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \

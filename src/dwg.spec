@@ -2101,28 +2101,20 @@ DWG_ENTITY (BODY)
   ACTION_3DSOLID;
 DWG_ENTITY_END
 
-/*(40)*/
+/*(40) r13+ only */
 DWG_ENTITY (RAY)
-
-  //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbRay)
   FIELD_3BD (point, 10);
   FIELD_3BD (vector, 11);
-
   COMMON_ENTITY_HANDLE_DATA;
-
 DWG_ENTITY_END
 
-/*(41)*/
+/*(41) r13+ only*/
 DWG_ENTITY (XLINE)
-
-  //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbXline)
   FIELD_3BD (point, 10);
   FIELD_3BD (vector, 11);
-
   COMMON_ENTITY_HANDLE_DATA;
-
 DWG_ENTITY_END
 
 /*(42)*/
@@ -8400,38 +8392,50 @@ DWG_OBJECT_END
   SUBCLASS (AcDbObjectContextData);                                     \
   FIELD_BS (class_version, 70);                                         \
   FIELD_B (is_default, 290);                                            \
-  if (1 /* filerType */) {                                              \
-    FIELD_B (in_dwg, 0);                                                \
-  }
+  FIELD_B (in_dwg, 0)
+
 #define AcDbAnnotScaleObjectContextData_fields                          \
   AcDbObjectContextData_fields;                                         \
   SUBCLASS (AcDbAnnotScaleObjectContextData);                           \
   FIELD_HANDLE (scale, 2, 340)
 
+// DXF: 2 293 10 294 140 298 291 70 292 71 280 295 296 297
+#define AcDbDimensionObjectContextData_fields           \
+  SUBCLASS (AcDbDimensionObjectContextData);            \
+  DXF { FIELD_HANDLE (dimension.block, 2, BLOCK); }     \
+  DXF { FIELD_B (dimension.b293, 293); }                \
+  FIELD_2RD (dimension.def_pt, 10); /* text location */ \
+  DXF { VALUE_RD (0.0, 30); }                           \
+  FIELD_B (dimension.is_def_textloc, 294); /* 1 */      \
+  FIELD_BD (dimension.text_rotation, 140);              \
+  FIELD_HANDLE (dimension.block, 5, 0);                 \
+  FIELD_B (dimension.b293, 0);                          \
+  FIELD_B (dimension.dimtofl, 298);                     \
+  FIELD_B (dimension.dimosxd, 291);                     \
+  FIELD_B (dimension.dimatfit, 70);                     \
+  FIELD_B (dimension.dimtix, 292);                      \
+  FIELD_B (dimension.dimtmove, 71);                     \
+  FIELD_RC (dimension.override_code, 280);              \
+  FIELD_B (dimension.has_arrow2, 295);                  \
+  FIELD_B (dimension.flip_arrow2, 296);                 \
+  FIELD_B (dimension.flip_arrow1, 297)
+
 DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbDimensionObjectContextData)
-  FIELD_T (name, 2);
-  FIELD_2RD (def_pt, 10);
-  DXF { VALUE_RD (0.0, 30); }
-  //HOLE([140,159],11000000000000000000) len = 20
-  FIELD_B (b293, 293); // 0
-  FIELD_B (b294, 294); // 1
-  FIELD_BD (bd140, 140); // 0.0
-  FIELD_B (b298, 298); // 0
-  FIELD_B (b291, 291); // 0
-  FIELD_BS (flag, 70); // 0
-  FIELD_B (b292, 292); // 0
-  FIELD_BS (bs71, 71); // 0
-  FIELD_B (b280, 280); // 0
-  FIELD_B (b295, 295); // 0
-  FIELD_B (b296, 296); // 0
-  FIELD_B (b297, 297); // 0
-
+  AcDbDimensionObjectContextData_fields;
   SUBCLASS (AcDbAlignedDimensionObjectContextData)
   FIELD_3BD (_11pt, 11);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
+DWG_OBJECT (RADIMLGOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  AcDbDimensionObjectContextData_fields;
+  SUBCLASS (AcDbRadialDimensionLargeObjectContextData)
+  FIELD_3BD (ovr_center, 12);
+  FIELD_3BD (jog_point, 13);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

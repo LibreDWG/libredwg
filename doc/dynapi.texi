@@ -4934,34 +4934,8 @@ B,	DXF 290
 B
 @item scale
 H,	DXF 340
-@item name
-T,	DXF 2
-@item def_pt
-2RD,	DXF 10
-@item b293
-B,	DXF 293
-@item b294
-B,	DXF 294
-@item bd140
-BD,	DXF 140
-@item b298
-B,	DXF 298
-@item b291
-B,	DXF 291
-@item flag
-BS,	DXF 70
-@item b292
-B,	DXF 292
-@item bs71
-BS,	DXF 71
-@item b280
-B,	DXF 280
-@item b295
-B,	DXF 295
-@item b296
-B,	DXF 296
-@item b297
-B,	DXF 297
+@item dimension
+Dwg_OCD_Dimension
 @item _11pt
 3BD,	DXF 11
 
@@ -7894,6 +7868,33 @@ TF,	DXF 310
 BL
 @item objids
 H*,	DXF 340
+
+@end vtable
+@end indentedblock
+
+@strong{RADIMLGOBJECTCONTEXTDATA} @anchor{RADIMLGOBJECTCONTEXTDATA}
+@cindex object, RADIMLGOBJECTCONTEXTDATA
+@vindex RADIMLGOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item is_default
+B,	DXF 290
+@item in_dwg
+B
+@item scale
+H,	DXF 340
+@item dimension
+Dwg_OCD_Dimension
+@item ovr_center
+3BD,	DXF 12
+@item jog_point
+3BD,	DXF 13
 
 @end vtable
 @end indentedblock
@@ -11326,6 +11327,44 @@ struct _dwg_entity_MLINE*
 RC
 @item lines
 Dwg_MLINE_line*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_OCD_Dimension} @anchor{Dwg_OCD_Dimension}
+@vindex Dwg_OCD_Dimension
+
+@indentedblock
+@vtable @code
+
+@item b293
+B,	DXF 293
+@item def_pt
+2RD,	DXF 10
+@item is_def_textloc
+B,	DXF 294
+@item text_rotation
+BD,	DXF 140
+@item block
+H,	DXF 2
+@item dimtofl
+B,	DXF 298
+@item dimosxd
+B,	DXF 291
+@item dimatfit
+B,	DXF 70
+@item dimtix
+B,	DXF 292
+@item dimtmove
+B,	DXF 71
+@item override_code
+RC,	DXF 280
+@item has_arrow2
+B,	DXF 295
+@item flip_arrow2
+B,	DXF 296
+@item flip_arrow1
+B,	DXF 297
 
 @end vtable
 @end indentedblock
