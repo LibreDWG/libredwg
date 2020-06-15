@@ -1246,7 +1246,7 @@ DWG_ENTITY (DIMENSION_DIAMETER)
   SUBCLASS (AcDbDiametricDimension)
   FIELD_3BD (first_arc_pt, 15);
   DECODER_OR_ENCODER {
-    FIELD_3BD (def_pt, 10);
+    FIELD_3BD (def_pt, 10); // = far_chord_pt
   }
   FIELD_BD (leader_len, 40);
 
@@ -8437,6 +8437,35 @@ DWG_OBJECT (ANGDIMOBJECTCONTEXTDATA)
   AcDbDimensionObjectContextData_fields;
   SUBCLASS (AcDbAngularDimensionObjectContextData)
   FIELD_3BD (arc_pt, 11);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (DMDIMOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  AcDbDimensionObjectContextData_fields;
+  SUBCLASS (AcDbDiametricDimensionObjectContextData)
+  FIELD_3BD (first_arc_pt, 11);
+  FIELD_3BD (def_pt, 12);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ORDDIMOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  AcDbDimensionObjectContextData_fields;
+  SUBCLASS (AcDbOrdinateDimensionObjectContextData)
+  FIELD_3BD (feature_location_pt, 11); // = origin
+  FIELD_3BD (leader_endpt, 12);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (RADIMOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  AcDbDimensionObjectContextData_fields;
+  SUBCLASS (AcDbRadialDimensionObjectContextData)
+  FIELD_3BD (first_arc_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

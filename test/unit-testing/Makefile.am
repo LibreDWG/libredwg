@@ -217,6 +217,7 @@ testobjects += \
 	curvepath \
 	datalink \
 	datatable \
+	dmdimobjectcontextdata \
 	evaluation_graph \
 	extrudedsurface \
 	fcfobjectcontextdata \
@@ -234,9 +235,11 @@ testobjects += \
 	navisworksmodeldef \
 	nurbsurface \
 	objectcontextdata \
+	orddimobjectcontextdata \
 	persubentmgr \
 	planesurface \
 	pointpath \
+	radimobjectcontextdata \
 	radimlgobjectcontextdata \
 	renderenvironment \
 	renderentry \

@@ -6506,6 +6506,33 @@ H*,	DXF 340
 @end vtable
 @end indentedblock
 
+@strong{DMDIMOBJECTCONTEXTDATA} @anchor{DMDIMOBJECTCONTEXTDATA}
+@cindex object, DMDIMOBJECTCONTEXTDATA
+@vindex DMDIMOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item is_default
+B,	DXF 290
+@item in_dwg
+B
+@item scale
+H,	DXF 340
+@item dimension
+Dwg_OCD_Dimension
+@item first_arc_pt
+3BD,	DXF 11
+@item def_pt
+3BD,	DXF 12
+
+@end vtable
+@end indentedblock
+
 @strong{DUMMY} @anchor{DUMMY}
 @cindex object, DUMMY
 @vindex DUMMY
@@ -7736,6 +7763,33 @@ struct _dwg_object_object*
 @end vtable
 @end indentedblock
 
+@strong{ORDDIMOBJECTCONTEXTDATA} @anchor{ORDDIMOBJECTCONTEXTDATA}
+@cindex object, ORDDIMOBJECTCONTEXTDATA
+@vindex ORDDIMOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item is_default
+B,	DXF 290
+@item in_dwg
+B
+@item scale
+H,	DXF 340
+@item dimension
+Dwg_OCD_Dimension
+@item feature_location_pt
+3BD,	DXF 11
+@item leader_endpt
+3BD,	DXF 12
+
+@end vtable
+@end indentedblock
+
 @strong{PERSUBENTMGR} @anchor{PERSUBENTMGR}
 @cindex object, PERSUBENTMGR
 @vindex PERSUBENTMGR
@@ -7920,6 +7974,31 @@ Dwg_OCD_Dimension
 3BD,	DXF 12
 @item jog_point
 3BD,	DXF 13
+
+@end vtable
+@end indentedblock
+
+@strong{RADIMOBJECTCONTEXTDATA} @anchor{RADIMOBJECTCONTEXTDATA}
+@cindex object, RADIMOBJECTCONTEXTDATA
+@vindex RADIMOBJECTCONTEXTDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item is_default
+B,	DXF 290
+@item in_dwg
+B
+@item scale
+H,	DXF 340
+@item dimension
+Dwg_OCD_Dimension
+@item first_arc_pt
+3BD,	DXF 11
 
 @end vtable
 @end indentedblock
