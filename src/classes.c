@@ -485,30 +485,19 @@ object_alias (char *restrict name)
     strcpy (name, "PERSUBENTMGR");
   else if (strEQc (name, "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION"))
     strcpy (name, "DYNAMICBLOCKPURGEPREVENTER");
-  else if (strEQc (name, "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ALDIMOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "ANGDIMOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "DMDIMOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "RADIMLGOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "BLKREFOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_LEADEROBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "LEADEROBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "MLEADEROBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "MTEXTATTRIBUTEOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "MTEXTOBJECTCONTEXTDATA");
-  else if (strEQc (name, "ACDB_TEXTOBJECTCONTEXTDATA_CLASS"))
-    strcpy (name, "TEXTOBJECTCONTEXTDATA");
   else if (strEQc (name, "EXACXREFPANELOBJECT"))
     strcpy (name, "XREFPANELOBJECT");
   else if (strstr (name, "_BACKGROUND"))
     strcpy (name, "BACKGROUND");
+  // ACDB_*OBJECTCONTEXTDATA_CLASS => *OBJECTCONTEXTDATA
+  else if (memBEGINc (name, "ACAD_") && len > 28 && strEQc (&name[len-6], "_CLASS"))
+    {
+      name[len-6] = '\0';
+      if (is_dwg_object (&name[5]))
+        memmove (name, &name[5], len - 4);
+      else
+        name[len-6] = '_';
+    }
   // strip ACAD_ prefix
   else if (memBEGINc (name, "ACAD_") && is_dwg_object (&name[5]))
     memmove (name, &name[5], len - 4);
