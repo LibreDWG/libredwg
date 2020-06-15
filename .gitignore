@@ -28,6 +28,7 @@ gcov.log
 # will be a submodule
 /bindings/gambas/
 /compat_reports/
+/doc/acis/
 /doc/LibreDWG.t2p/
 /doc/latex/
 /doc/manual/
@@ -44,6 +45,7 @@ gcov.log
 # test-data symlinks
 /test-data
 /td
+/to
 
 # globs, in specific dirs
 /00*.patch
