@@ -75,7 +75,7 @@ const char version_codes[DWG_VERSIONS][7] = {
   "AC1004", // R_9  DWG Release 9                0x0b
   "AC1006", // R_10 DWG Release 10               0x0d
   "AC1009", // R_11 DWG Release 11/12 (LT R1/R2) 0x10
-  "AC1012", // R_13 and LT95, beware of R13C3    0x13
+  "AC1012", // R_13 and LT95, beware of R13c3    0x13
   "AC1013", // R_13c3                            0x14
   "AC1014", // R_14                              0x15
   "AC1015", // R_2000 (r15)                      0x17

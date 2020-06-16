@@ -316,7 +316,10 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
     }
 
   /* Fail on DWG */
-  if (!memcmp (dat.chain, "AC10", 4))
+  if (!memcmp (dat.chain, "AC10", 4) ||
+      !memcmp (dat.chain, "AC1.", 4) ||
+      !memcmp (dat.chain, "AC2.10", 4) ||
+      !memcmp (dat.chain, "MC0.0", 4))
     {
       LOG_ERROR ("This is a DWG, not a DXF file: %s\n", filename)
       free (dat.chain);
@@ -324,7 +327,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
       dat.size = 0;
       return DWG_ERR_INVALIDDWG;
     }
-  /* See if ascii or binary */
+  /* See if binary or ascii */
   if (!memcmp (dat.chain, "AutoCAD Binary DXF",
                sizeof ("AutoCAD Binary DXF") - 1))
     error = dwg_read_dxfb (&dat, dwg);
