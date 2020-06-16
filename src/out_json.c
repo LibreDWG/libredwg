@@ -979,7 +979,7 @@ json_eed (Bit_Chain *restrict dat,
                 VALUE_TEXT (data->u.eed_0.string);
               }
               LATER_VERSIONS {
-                VALUE_TEXT_TU (data->u.eed_0.string);
+                VALUE_TEXT_TU (data->u.eed_0_r2007.string);
               }
               break;
             case 2: VALUE_RC (data->u.eed_2.byte, 0); break;
