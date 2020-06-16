@@ -21,6 +21,8 @@
 #include <string.h>
 #include <assert.h>
 
+#define IS_PRINT
+#define IS_DXF
 #include "common.h"
 #include "bits.h"
 //#include "myalloca.h"
@@ -56,8 +58,6 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
  */
 
 #define ACTION dxfb
-#define IS_PRINT
-#define IS_DXF
 
 #define FIELD(nam, type)
 #define FIELDG(nam, type, dxf)                                                \

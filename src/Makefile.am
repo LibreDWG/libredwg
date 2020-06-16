@@ -82,6 +82,7 @@ EXTRA_HEADERS = \
 	objects.inc \
 	spec.h \
 	common.h \
+	importer.h \
 	classes.h \
 	bits.h \
 	myalloca.h \

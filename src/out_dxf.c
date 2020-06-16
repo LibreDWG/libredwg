@@ -30,6 +30,8 @@ TODO:
 #include <assert.h>
 //#include <math.h>
 
+#define IS_PRINT
+#define IS_DXF
 #include "common.h"
 #include "bits.h"
 #include "myalloca.h"
@@ -68,8 +70,6 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
  */
 
 #define ACTION dxf
-#define IS_PRINT
-#define IS_DXF
 
 #define FIELD(nam, type) VALUE (_obj->nam, type, 0)
 #define FIELDG(nam, type, dxf) VALUE (_obj->nam, type, dxf)

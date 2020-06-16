@@ -29,6 +29,7 @@
 #include <math.h>
 #include <assert.h>
 
+#define IS_PRINT
 #include "common.h"
 #include "bits.h"
 #include "myalloca.h"
@@ -72,7 +73,6 @@ static unsigned int cur_ver = 0;
  */
 
 #define ACTION geojson
-#define IS_PRINT
 
 #define PREFIX                                                                \
   for (int _i = 0; _i < dat->bit; _i++)                                       \

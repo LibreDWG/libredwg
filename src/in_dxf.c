@@ -34,7 +34,9 @@
 #  include AX_STRCASECMP_HEADER
 #endif
 
+#define IS_INDXF
 #include "common.h"
+#include "importer.h"
 #include "bits.h"
 #include "dwg.h"
 #include "out_dxf.h"
@@ -417,7 +419,6 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
 #define ACTION indxf
 //#define IS_ENCODER
 //#define IS_DXF
-#define IS_INDXF
 
 /* Store all handle fieldnames and string values into this flexarray.
    We need strdup'd copies, the dxf input will be freed.

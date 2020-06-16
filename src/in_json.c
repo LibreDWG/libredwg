@@ -23,7 +23,10 @@
 #include <math.h>
 #include <errno.h>
 
+#define IS_ENCODER
+#define IS_JSON
 #include "common.h"
+#include "importer.h"
 #include "bits.h"
 #include "dwg.h"
 #include "hash.h"
@@ -77,8 +80,6 @@ static Bit_Chain *g_dat;
  */
 
 #define ACTION injson
-#define IS_ENCODER
-#define IS_JSON
 
 /******************************************************************/
 #define _FIELD_FLOAT(nam, type)                                               \
@@ -1453,7 +1454,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
                 rbuf->value.str.size = len;
                 // here the xdata_size gets re-calculated from size
-                PRE (R_2007) // target version
+                PRE (R_2007) // from version
                 {
                   rbuf->value.str.u.data = s;
                   rbuf->value.str.codepage = dwg->header.codepage;

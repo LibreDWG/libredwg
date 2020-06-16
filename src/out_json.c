@@ -24,6 +24,7 @@
 #  include <ctype.h>
 #endif
 
+#define IS_JSON
 #include "common.h"
 #include "bits.h"
 #include "myalloca.h"
@@ -57,7 +58,6 @@ static char *_path_field (const char *path);
  */
 
 #define ACTION json
-#define IS_JSON
 
 #define ISFIRST (dat->opts & DWG_OPTS_JSONFIRST)
 #define SETFIRST dat->opts |= DWG_OPTS_JSONFIRST
