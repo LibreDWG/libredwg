@@ -1230,22 +1230,23 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         else
           {
             /* code [RC] + length [RS] + 2*len [TU] */
-            size = 1 + 2 + (len * 2);
-            eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 2);
-            if (!eed[i].data)
-              {
-                LOG_ERROR ("Out of memory");
-                dwg_free_eed (obj);
-                return;
-              }
-            eed[i].data->code = code;
-            eed[i].data->u.eed_0_r2007.length = len;
-            //eed[i].data->u.eed_0.codepage = obj->parent->header.codepage; /* UTF-8 */
             if (len && len < 32767)
               {
                 BITCODE_TU tu = bit_utf8_to_TU (pair->value.s);
-                LOG_TRACE ("wstring: \"%s\" [TU %d]\n", pair->value.s, size - 1);
-                memcpy (eed[i].data->u.eed_0_r2007.string, tu, 2 * (len + 1));
+                len = bit_wcs2len (tu);
+                size = 2 + 2 + (len * 2); // now with padding
+                eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 2);
+                if (!eed[i].data)
+                  {
+                    LOG_ERROR ("Out of memory");
+                    dwg_free_eed (obj);
+                    return;
+                  }
+                eed[i].data->code = code;
+                eed[i].data->u.eed_0_r2007.length = len;
+                LOG_TRACE ("wstring: \"%s\" [TU %d]\n", pair->value.s, len);
+                if (len)
+                  memcpy (eed[i].data->u.eed_0_r2007.string, tu, 2 * (len + 1));
                 free (tu);
               }
           }

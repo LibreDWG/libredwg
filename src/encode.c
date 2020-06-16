@@ -3996,13 +3996,13 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           last_size = i;
         }
       // and if not already written by the previous raw (this has size=0)
-      else if (!did_raw)
+      else if (!did_raw && eed->data)
         {
           new_size += dwg_encode_eed_data (&dat1, eed->data, i);
           LOG_POS;
         }
     }
-  if (new_size && last_handle) // flush remainding rest
+  if (new_size && last_handle) // flush remaining rest
     {
       bit_write_BS (dat, new_size);
       LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
