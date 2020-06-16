@@ -1465,7 +1465,7 @@ bit_read_bits (Bit_Chain *dat, unsigned long bits)
 {
   unsigned bytes = bits / 8;
   int rest = bits % 8;
-  BITCODE_RC *restrict chain = calloc (bytes + (rest ? 2 : 1), 1);
+  BITCODE_RC *restrict chain = (BITCODE_RC *)calloc (bytes + (rest ? 2 : 1), 1);
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -1578,7 +1578,7 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
           if (write + 1 >= size) // TODO should not happen
             {
               size += 2;
-              str = realloc (str, size);
+              str = (char*)realloc (str, size);
             }
           str[write++] = c & 0xFF;
         }

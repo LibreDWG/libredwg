@@ -1740,7 +1740,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
 EXPORT Dwg_Object_Ref *
 dwg_add_handleref_free (const BITCODE_RC code, const unsigned long absref)
 {
-  Dwg_Object_Ref *ref = calloc (1, sizeof (Dwg_Object_Ref));
+  Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
   dwg_add_handle (&ref->handleref, code, absref, NULL);
   return ref;
 }

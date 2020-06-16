@@ -173,7 +173,7 @@ BITCODE_RC dxf_find_lweight (const int lw);
         field = (char*)bit_utf8_to_TU (string);                               \
       else                                                                    \
         {                                                                     \
-          field = malloc (strlen (string) + 1);                               \
+          field = (char*)malloc (strlen (string) + 1);                        \
           strcpy (field, string);                                             \
         }                                                                     \
     }

@@ -743,24 +743,28 @@ json_vector (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   if (strEQc (type, "BL"))
     {
       size = sizeof (BITCODE_BL);
-      a_bl = arr = len ? calloc (len, size) : NULL;
+      a_bl = len ? (BITCODE_BL*)calloc (len, size) : NULL;
+      arr = a_bl;
     }
   else if (strEQc (type, "RLL"))
     {
       size = sizeof (BITCODE_RLL);
-      a_rll = arr = len ? calloc (len, size) : NULL;
+      a_rll = len ? (BITCODE_RLL*)calloc (len, size) : NULL;
+      arr = a_rll;
     }
   else if (strEQc (type, "BD"))
     {
       is_float = 1;
       size = sizeof (BITCODE_BD);
-      a_bd = arr = len ? calloc (len, size) : NULL;
+      a_bd = len ? (BITCODE_BD*)calloc (len, size) : NULL;
+      arr = a_bd;
     }
   else if (strEQc (type, "TV"))
     {
       is_str = 1;
       size = sizeof (BITCODE_TV);
-      a_tv = arr = len ? calloc (len, size) : NULL;
+      a_tv = len ? (BITCODE_TV*)calloc (len, size) : NULL;
+      arr = a_tv;
     }
   else
     {
@@ -862,10 +866,11 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (strEQc (key, "version"))
         {
           Dwg_Version_Type v;
+          int vi; // C++ quirks
           version[0] = '\0';
           json_fixed_key (version, dat, tokens);
-          // set version's
-          for (v = 0; v <= R_AFTER; v++)
+          // set version's (with C++ quirks)
+          for (v = R_INVALID; v <= R_AFTER; vi = (int)v, vi++, v = (Dwg_Version_Type)vi)
             {
               if (strEQ (version, version_codes[v]))
                 {
@@ -1215,7 +1220,7 @@ eed_need_size (Bit_Chain *restrict dat, Dwg_Eed *restrict eed, const unsigned in
         ;
       size = eed[isize].size;
       LOG_TRACE (" extend eed[%u].size to %d (+%d)\n", isize, size, diff)
-      eed[i].data = realloc (eed[i].data, size + diff);
+      eed[i].data = (Dwg_Eed_Data*)realloc (eed[i].data, size + diff);
       eed[isize].size += diff;
       *havep = size + diff - need;
       return true;
@@ -1579,7 +1584,7 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   int len = 0;
   int alloc = t->end - t->start;
   int size = t->size;
-  char *s = calloc (alloc, 1);
+  char *s = (char*)calloc (alloc, 1);
   Dwg_Entity__3DSOLID *_obj = obj->tio.entity->tio._3DSOLID;
   BITCODE_BS acis_version;
 
@@ -1601,7 +1606,7 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   LOG_WARN ("Internal surprise, acis_data overshoot %d > %d", len, alloc);
                   alloc += 60;
-                  s = realloc (s, alloc);
+                  s = (char*)realloc (s, alloc);
                 }
               strncat (s, (char*)&dat->chain[t->start], l);
               strcat (s, "\n");
@@ -1612,7 +1617,7 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (len > alloc)
                 {
                   alloc = len;
-                  s = realloc (s, alloc);
+                  s = (char*)realloc (s, alloc);
                 }
               if (i == 0) // first line is plain, second is binary
                 strncat (s, (char*)&dat->chain[t->start], l);
@@ -1646,7 +1651,7 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       BITCODE_BL num_blocks = 1;
       BITCODE_BL sab_size = len;
-      BITCODE_BL *block_size = calloc (2, sizeof (BITCODE_BL));
+      BITCODE_BL *block_size = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
       block_size[0] = len;
       block_size[1] = 0;
       LOG_TRACE ("block_size[0]: %d [BL]\n", block_size[0]);
@@ -2137,8 +2142,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else if (t->type == JSMN_ARRAY && strEQc (key, "encr_sat_data") && strEQc (f->type, "char **"))
             {
               BITCODE_BL num_blocks = t->size;
-              BITCODE_BL *block_size = calloc (num_blocks + 1, sizeof (BITCODE_BL));
-              char **data = calloc (num_blocks + 1, sizeof (char*));
+              BITCODE_BL *block_size = (BITCODE_BL*)calloc (num_blocks + 1, sizeof (BITCODE_BL));
+              char **data = (char**)calloc (num_blocks + 1, sizeof (char*));
               tokens->index++;
               LOG_TRACE ("num_blocks: " FORMAT_BL " [BL]\n", num_blocks);
               for (BITCODE_BL k = 0; k < num_blocks; k++)
@@ -2353,7 +2358,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   else // not found
     {  // maybe it's an embedded subclass. look for the dot(s)
       int found = 0;
-      char *rest = strchr (key, '.');
+      char *rest = strchr ((char*)key, '.');
       while (rest)
         {
           // Currently we have 3 known static arrays, and a few embedded
@@ -2992,8 +2997,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   Dwg_Object_DICTIONARY *o = obj->tio.object->tio.DICTIONARY;
                   o->numitems = t->size;
-                  o->texts = o->numitems ? calloc (o->numitems, sizeof (BITCODE_T)) : NULL;
-                  o->itemhandles = o->numitems ? calloc (o->numitems, sizeof (BITCODE_H)) : NULL;
+                  o->texts = o->numitems ? (BITCODE_T*)calloc (o->numitems, sizeof (BITCODE_T)) : NULL;
+                  o->itemhandles = o->numitems ? (BITCODE_H*)calloc (o->numitems, sizeof (BITCODE_H)) : NULL;
                   tokens->index++;
                   for (int k = 0; k < (int)o->numitems; k++)
                     {
@@ -3800,7 +3805,7 @@ json_AcDs_SegmentIndex (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  o->segidx = calloc (size, sizeof (Dwg_AcDs_SegmentIndex));
+  o->segidx = (Dwg_AcDs_SegmentIndex*)calloc (size, sizeof (Dwg_AcDs_SegmentIndex));
   o->num_segidx = size;
   for (int j = 0; j < size; j++)
     {
@@ -3860,7 +3865,7 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  o->segments = calloc (size, sizeof (Dwg_AcDs_Segment));
+  o->segments = (Dwg_AcDs_Segment*)calloc (size, sizeof (Dwg_AcDs_Segment));
   //o->num_segidx = size;
   for (int j = 0; j < size; j++)
     {

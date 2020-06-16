@@ -1050,7 +1050,7 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
 #  endif
   {
     dwg_point_2d *point;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1090,7 +1090,7 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     dwg_point_2d dummy;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1127,7 +1127,7 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     dwg_point_3d *point;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1167,7 +1167,7 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     dwg_point_3d dummy;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1202,7 +1202,7 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     char *str;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1237,7 +1237,7 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname, int
 #  endif
   {
     char *str;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1270,7 +1270,7 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     char *dummy;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1304,7 +1304,7 @@ dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     char *dummy;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1337,7 +1337,7 @@ dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     BITCODE_BD num;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1370,7 +1370,7 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     BITCODE_BD dummy;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1402,7 +1402,7 @@ dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     BITCODE_BS num;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1435,7 +1435,7 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     BITCODE_BS dummy;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1468,7 +1468,7 @@ dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     BITCODE_BL num;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
@@ -1502,7 +1502,7 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     BITCODE_BL dummy;
-    Dwg_DYNAPI_field field;
+    Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
         (const dwg_obj_generic *)_obj, &error);
