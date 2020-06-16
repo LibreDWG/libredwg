@@ -6504,10 +6504,11 @@ typedef struct _dwg_entity_eed_data
       char string[1];      /* inlined */
     } eed_0;
     struct { /* R2007+ 0 (1000) string */
+      BITCODE_RC _padding;
       BITCODE_RS length;
       DWGCHAR string[1]; /* inlined */
     } eed_0_r2007;
-    struct { /* 1 (1001) invalid */
+    struct { /* 1 (1001) handle, not in data */
       char invalid[1]; // set the eed[0].handle to the used APPID instead
     } eed_1;
     struct { /* 2 (1002) { or } */

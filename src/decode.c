@@ -3756,7 +3756,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           return DWG_ERR_INVALIDEED;
         /* code:1 + len:2 NUL? */
         for (j = 0; j < MIN (lens, (size - 3) / 2); j++)
-          data->u.eed_0_r2007.string[j] = bit_read_RS_LE (dat);
+          data->u.eed_0_r2007.string[j] = bit_read_RS (dat);
           // data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
 #ifdef _WIN32
         LOG_TRACE ("wstring: len=%d [RS] \"" FORMAT_TU "\" [TU]\n",
