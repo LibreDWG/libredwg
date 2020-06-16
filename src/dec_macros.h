@@ -700,7 +700,7 @@
   }
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
-    bit_read_CMC (dat, str_dat, &_obj->color);                                \
+    error |= bit_read_CMC (dat, str_dat, &_obj->color);                       \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]", _obj->color.index, dxf);      \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
     LOG_TRACE ("\n");                                                         \
@@ -727,7 +727,7 @@
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
-    bit_read_CMC (dat, str_dat, &_obj->o.color);                              \
+    error |= bit_read_CMC (dat, str_dat, &_obj->o.color);                     \
     LOG_TRACE (#o "." #color ".index: %d [CMC.BS %d]", _obj->o.color.index,   \
                dxf);                                                          \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit);                             \
