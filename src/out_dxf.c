@@ -1301,10 +1301,10 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
   int j;
   for (j = 0; j < (int)blocksize; j++)
     {
-      if (acis_data[j] <= 32)
+      if ((char)acis_data[j] <= 32)
         encr_sat_data[i++] = acis_data[j];
       else
-        encr_sat_data[i++] = acis_data[j] - 159;
+        encr_sat_data[i++] = 159 - acis_data[j];
     }
   *acis_data_idx = i;
   return encr_sat_data;
@@ -1706,13 +1706,15 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 
   //if (c != 17) // last line didn't end with #, but End-of-ACIS-data or End-of-ASM-data
   //  i = new_encr_sat_data_line (_obj, &dest, i);
-  num_blocks = _obj->num_blocks = i; // i.e. 2
+  num_blocks = _obj->num_blocks = 1;
   bit_write_TF (&dest, (BITCODE_TF)"\n", 1);
   _obj->encr_sat_data[i] = calloc (dest.byte, 1); // shrink it
   memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
   _obj->block_size[i] = dest.byte;
   bit_chain_free (&dest);
   LOG_TRACE ("\n");
+  _obj->acis_empty = 0;
+  _obj->version = 1; // conversion complete
 
   if (i + 2 >= num_blocks)
     _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
@@ -1728,7 +1730,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   int error = 0;
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_B (acis_empty, 0);
+  FIELD_B (acis_empty, 290);
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);

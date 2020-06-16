@@ -440,8 +440,8 @@ my @solids = qw(3DSOLID REGION BODY
 $DXF{$_}->{'version'} = 70 for @solids;
 $DXF{$_}->{'encr_sat_data'} = 1 for @solids;
 $DXF{$_}->{'history_id'} = 350 for @solids;
-$DXF{$_}->{'has_revision_guid'} = 290 for @solids;
-$DXF{$_}->{'revision_guid[38]'} = 2 for @solids;
+$DXF{$_}->{'acis_empty'} = 290 for @solids;
+$DXF{$_}->{'revision_guid[39]'} = 2 for @solids;
 my @annotscale = qw (TEXTOBJECTCONTEXTDATA MTEXTOBJECTCONTEXTDATA ALDIMOBJECTCONTEXTDATA
                      MTEXTATTRIBUTEOBJECTCONTEXTDATA MLEADEROBJECTCONTEXTDATA LEADEROBJECTCONTEXTDATA
                      BLKREFOBJECTCONTEXTDATA);

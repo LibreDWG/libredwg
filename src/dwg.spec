@@ -1738,7 +1738,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
   int acis_data_idx;
   int error = 0;
 
-  FIELD_B (acis_empty, 0);
+  FIELD_B (acis_empty, 290);
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);
@@ -1876,7 +1876,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
   int acis_data_idx = 0;
   int error = 0;
 
-  FIELD_B (acis_empty, 0);
+  FIELD_B (acis_empty, 290);
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);
@@ -2026,11 +2026,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
         }                                                                                          \
       }                                                                                            \
                                                                                                    \
-    FIELD_B (acis_empty_bit, 0);                                                                   \
-    if (!FIELD_VALUE (acis_empty_bit))                                                             \
-      {                                                                                            \
-        /* TODO: Implement parsing of ACIS data at the end  */                                     \
-      }                                                                                            \
+    FIELD_B (acis_empty_bit, 0); /* ?? */                                                          \
     if (FIELD_VALUE (version) > 1) {                                                               \
       SINCE (R_2007) {                                                                             \
         FIELD_BL (num_materials, 0);                                                               \
@@ -2045,9 +2041,9 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
       }                                                                                            \
     }                                                                                              \
     SINCE (R_2013) {                                                                               \
-      FIELD_B (has_revision_guid, 290);                                                            \
+      FIELD_B (has_revision_guid, 0);                                                              \
       DXF {                                                                                        \
-        FIELD_TFF (revision_guid, 40, 2);                                                          \
+        FIELD_TFF (revision_guid, 38, 2);                                                          \
       }                                                                                            \
       else {                                                                                       \
         FIELD_BL (revision_major, 0);                                                              \
