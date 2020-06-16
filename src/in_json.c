@@ -1303,22 +1303,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                     case 0:
                       {
-                        // in work: wstring case, needed for dxfwrite
-                        SINCE (R_2007)
-                          {
-                            BITCODE_TU s = json_wstring (dat, tokens);
-                            int len = bit_wcs2len (s);
-                            if (eed_need_size (dat, obj->eed, i, (len * 2) + 1 + 2, &have))
-                              data = obj->eed[i].data;
-                            data->u.eed_0_r2007.length = len;
-                            memcpy (&data->u.eed_0_r2007.string, s, (len + 1) * 2);
-                            have += 2; // ignore the ending NUL
-                            LOG_TRACE ("eed[%u].data.value \"%.*s\"\n", i,
-                                       t->end - t->start,
-                                       &dat->chain[t->start]);
-                            free (s);
-                          }
-                        else
+                        PRE (R_2007)
                           {
                             char *s = json_string (dat, tokens);
                             int len = strlen (s);
@@ -1337,6 +1322,21 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                 size = len + 3;
                                 obj->eed[isize].size -= (oldsize - size);
                               }
+                          }
+                        // wstring case, needed for dxfwrite
+                        LATER_VERSIONS
+                          {
+                            BITCODE_TU s = json_wstring (dat, tokens);
+                            int len = bit_wcs2len (s);
+                            if (eed_need_size (dat, obj->eed, i, (len * 2) + 1 + 2, &have))
+                              data = obj->eed[i].data;
+                            data->u.eed_0_r2007.length = len;
+                            memcpy (&data->u.eed_0_r2007.string, s, (len + 1) * 2);
+                            have += 2; // ignore the ending NUL
+                            LOG_TRACE ("eed[%u].data.value \"%.*s\"\n", i,
+                                       t->end - t->start,
+                                       &dat->chain[t->start]);
+                            free (s);
                           }
                       }
                       break;
