@@ -4377,6 +4377,13 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     SINCE (R_2010)
       LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+    if (obj->bitsize > obj->size * 8)
+      {
+        obj->bitsize = obj->size * 8;
+        has_wrong_bitsize = 1;
+        error |= DWG_ERR_VALUEOUTOFBOUNDS;
+        LOG_HANDLE (" (fixed)");
+      }
     // restrict the hdl_dat stream
     error |= obj_handle_stream (dat, obj, hdl_dat);
     // and set the string stream (restricted to size)
@@ -5332,7 +5339,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   /* Until here dat is absolute. now restrict it */
   bit_reset_chain (dat);
-  if (obj->size > dat->size)
+  if (obj->size > dat->size || dat->chain + dat->size > abs_dat.chain + abs_dat.size)
     {
       LOG_TRACE ("\n");
       LOG_WARN ("Invalid object size %u > %ld. Would overflow", obj->size,
