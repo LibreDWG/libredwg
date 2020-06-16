@@ -295,20 +295,25 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dat.opts = dwg->opts;
 
   size = fread (dat.chain, sizeof (char), dat.size, fp);
+  fclose (fp);
   if (size != dat.size)
     {
       LOG_ERROR ("Could not read the entire file (%lu out of %lu): %s\n",
                  (long unsigned int)size, dat.size, filename)
-      fclose (fp);
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
       return DWG_ERR_IOERROR;
     }
-  fclose (fp);
   // properly end the buffer for strtol()/... readers
   dat.chain[size] = '\n';
   dat.chain[size + 1] = '\0';
+  if (size < 256)
+    {
+      LOG_ERROR ("File %s too small, %lu byte.\n", filename,
+                 (long unsigned int)size)
+      return DWG_ERR_IOERROR;
+    }
 
   /* Fail on DWG */
   if (!memcmp (dat.chain, "AC10", 4))
