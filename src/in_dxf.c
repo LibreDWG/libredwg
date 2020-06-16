@@ -1156,7 +1156,7 @@ static void
 add_eed (Dwg_Object *restrict obj, const char *restrict name,
          Dxf_Pair *restrict pair)
 {
-  int code, size, j;
+  int code, size = 0, j;
   int i, prev = 0;
   Dwg_Eed *eed;
   Dwg_Data *dwg = obj->parent;
@@ -1335,7 +1335,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 14:
     case 15:
       /* code [RC] + 3*RD */
-      size = 1 + 3 * 8;
+      size = 1 + (3 * 8);
       eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
       if (!eed[i].data)
         {
