@@ -1311,7 +1311,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                               data = obj->eed[i].data;
                             data->u.eed_0.length = len;
                             data->u.eed_0.codepage = dwg->header.codepage;
-                            memcpy (&data->u.eed_0.string, s, len + 1);
+                            if (len)
+                              memcpy (&data->u.eed_0.string, s, len + 1);
                             LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
                             have++; // ignore the ending NUL
                             free (s);
@@ -1323,7 +1324,6 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                 obj->eed[isize].size -= (oldsize - size);
                               }
                           }
-                        // wstring case, needed for dxfwrite
                         LATER_VERSIONS
                           {
                             BITCODE_TU s = json_wstring (dat, tokens);
@@ -1331,7 +1331,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             if (eed_need_size (dat, obj->eed, i, (len * 2) + 1 + 2, &have))
                               data = obj->eed[i].data;
                             data->u.eed_0_r2007.length = len;
-                            memcpy (&data->u.eed_0_r2007.string, s, (len + 1) * 2);
+                            if (len)
+                              memcpy (&data->u.eed_0_r2007.string, s, (len + 1) * 2);
                             have += 2; // ignore the ending NUL
                             LOG_TRACE ("eed[%u].data.value \"%.*s\"\n", i,
                                        t->end - t->start,
