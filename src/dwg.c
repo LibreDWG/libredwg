@@ -1922,7 +1922,7 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
   return ref;
 }
 
-// return the matching _CONTROL table, or NULL
+// return the matching _CONTROL table, DICTIONARY entry, or NULL
 EXPORT BITCODE_H
 dwg_ctrl_table (Dwg_Data *restrict dwg, const char *restrict table)
 {

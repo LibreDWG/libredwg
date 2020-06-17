@@ -4039,17 +4039,17 @@ DWG_OBJECT (PLOTSETTINGS)
   UNTIL (R_2000) {
     ENCODER {
       if (_obj->plotview && !_obj->plotview_name)
-        _obj->plotview_name = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotview);
+        _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
     }
     FIELD_T (plotview_name, 6);
     DECODER {
-      _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "PLOTVIEW");
+      _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
     }
   }
   LATER_VERSIONS {
     DECODER {
       if (!_obj->plotview && _obj->plotview_name)
-        _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "PLOTVIEW");
+        _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
     }
     DXF {
       FIELD_T (plotview_name, 6);
@@ -4058,7 +4058,7 @@ DWG_OBJECT (PLOTSETTINGS)
     }
     DECODER {
       if (!_obj->plotview_name)
-        _obj->plotview_name = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotview);
+        _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
     }
   }
   FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
@@ -4108,20 +4108,20 @@ DWG_OBJECT (LAYOUT)
   UNTIL (R_2000) {
     ENCODER {
       if (_obj->plotsettings.plotview && !_obj->plotsettings.plotview_name)
-        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "PLOTVIEW",
+        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "VIEW",
                                              _obj->plotsettings.plotview);
     }
     FIELD_T (plotsettings.plotview_name, 6);
     DECODER {
       _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
-                                      _obj->plotsettings.plotview_name, "PLOTVIEW");
+                                      _obj->plotsettings.plotview_name, "VIEW");
     }
   }
   LATER_VERSIONS {
     DECODER {
       if (!_obj->plotsettings.plotview && _obj->plotsettings.plotview_name)
         _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
-                 _obj->plotsettings.plotview_name, "PLOTVIEW");
+                 _obj->plotsettings.plotview_name, "VIEW");
     }
     DXF {
       FIELD_T (plotsettings.plotview_name, 6);
@@ -4130,7 +4130,7 @@ DWG_OBJECT (LAYOUT)
     }
     DECODER {
       if (!_obj->plotsettings.plotview_name)
-        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "PLOTVIEW",
+        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "VIEW",
                                               _obj->plotsettings.plotview);
     }
   }

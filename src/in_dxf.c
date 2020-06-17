@@ -6235,7 +6235,7 @@ dxf_postprocess_LAYOUT (Dwg_Object *restrict obj)
   if (dwg->header.version < R_2004)
     {
       _obj->plotsettings.plotview = dwg_find_tablehandle (
-        dwg, _obj->plotsettings.plotview_name, "PLOTVIEW");
+        dwg, _obj->plotsettings.plotview_name, "PLOTSETTINGS");
       /*
       if (!_obj->plotsettings.plotview)
         _obj->plotsettings.plotview = dwg_add_handleref (dwg, 0, 0, NULL);
@@ -6243,7 +6243,7 @@ dxf_postprocess_LAYOUT (Dwg_Object *restrict obj)
     }
   else
     _obj->plotsettings.plotview_name
-        = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotsettings.plotview);
+        = dwg_handle_name (dwg, "PLOTSETTINGS", _obj->plotsettings.plotview);
 }
 
 static void
@@ -6255,14 +6255,14 @@ dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
   if (dwg->header.version < R_2004)
     {
       _obj->plotview
-        = dwg_find_tablehandle (dwg, _obj->plotview_name, "PLOTVIEW");
+        = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
       /*
       if (!_obj->plotview)
         _obj->plotview = dwg_add_handleref (dwg, 0, 0, NULL);
       */
     }
   else
-    _obj->plotview_name = dwg_handle_name (dwg, "PLOTVIEW", _obj->plotview);
+    _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
 }
 
 // seperate model_space and model_space into its own fields, out of entries[]

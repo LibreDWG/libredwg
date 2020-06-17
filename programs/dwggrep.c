@@ -675,7 +675,7 @@ match_LAYOUT (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_OBJECT (LAYOUT, plotsettings.printer_cfg_file, 1);
   MATCH_OBJECT (LAYOUT, plotsettings.paper_size, 2);
   MATCH_OBJECT (LAYOUT, plotsettings.canonical_media_name, 4);
-  MATCH_TABLE (LAYOUT, plotsettings.plotview, PLOTVIEW, 6);
+  MATCH_TABLE (LAYOUT, plotsettings.plotview, VIEW, 6);
   MATCH_OBJECT (LAYOUT, plotsettings.plotview_name, 6);
   MATCH_OBJECT (LAYOUT, plotsettings.stylesheet, 7);
 
@@ -933,7 +933,7 @@ match_PLOTSETTINGS (const char *restrict filename,
   MATCH_OBJECT (PLOTSETTINGS, paper_size, 2);
   MATCH_OBJECT (PLOTSETTINGS, canonical_media_name, 4);
   MATCH_OBJECT (PLOTSETTINGS, plotview_name, 6);
-  MATCH_TABLE (PLOTSETTINGS, PLOTVIEW, plotview, 6);
+  MATCH_TABLE (PLOTSETTINGS, VIEW, plotview, 6);
   MATCH_OBJECT (PLOTSETTINGS, stylesheet, 7);
   MATCH_TABLE (PLOTSETTINGS, VISUALSTYLE, shadeplot, 333);
   return found;
