@@ -9511,7 +9511,7 @@ BS,	DXF 70
 
 @item parent
 struct _dwg_object_object*
-@item cloning_flags
+@item cloning
 BS,	DXF 280
 @item xdata_size
 BL

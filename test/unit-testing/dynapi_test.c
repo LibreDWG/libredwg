@@ -48394,19 +48394,19 @@ static int test_XRECORD (const Dwg_Object *obj)
   Dwg_Object_XRECORD *restrict xrecord = obj->tio.object->tio.XRECORD;
   failed = 0;
   {
-    BITCODE_BS cloning_flags;
-    if (dwg_dynapi_entity_value (xrecord, "XRECORD", "cloning_flags", &cloning_flags, NULL)
-        && cloning_flags == xrecord->cloning_flags)
+    BITCODE_BS cloning;
+    if (dwg_dynapi_entity_value (xrecord, "XRECORD", "cloning", &cloning, NULL)
+        && cloning == xrecord->cloning)
       pass ();
     else
-      fail ("XRECORD.cloning_flags [BS] %hu != %hu", xrecord->cloning_flags, cloning_flags);
-    cloning_flags++;
-    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "cloning_flags", &cloning_flags, 0)
-        && cloning_flags == xrecord->cloning_flags)
+      fail ("XRECORD.cloning [BS] %hu != %hu", xrecord->cloning, cloning);
+    cloning++;
+    if (dwg_dynapi_entity_set_value (xrecord, "XRECORD", "cloning", &cloning, 0)
+        && cloning == xrecord->cloning)
       pass ();
     else
-      fail ("XRECORD.cloning_flags [BS] set+1 %hu != %hu", xrecord->cloning_flags, cloning_flags);
-    xrecord->cloning_flags--;
+      fail ("XRECORD.cloning [BS] set+1 %hu != %hu", xrecord->cloning, cloning);
+    xrecord->cloning--;
   }
   {
     BITCODE_BL num_objid_handles;

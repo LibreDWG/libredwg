@@ -11845,7 +11845,7 @@ dwg_obj_xrecord_get_cloning_flags (const dwg_obj_xrecord *restrict xrecord,
   if (xrecord)
     {
       *error = 0;
-      return xrecord->cloning_flags;
+      return xrecord->cloning;
     }
   else
     {
@@ -11863,7 +11863,7 @@ dwg_obj_xrecord_set_cloning_flags (dwg_obj_xrecord *restrict xrecord,
   if (xrecord)
     {
       *error = 0;
-      xrecord->cloning_flags = cloning_flags;
+      xrecord->cloning = cloning_flags;
     }
   else
     {

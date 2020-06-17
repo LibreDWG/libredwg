@@ -2762,7 +2762,10 @@ typedef struct _dwg_object_XRECORD
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BS cloning_flags;
+  BITCODE_BS cloning; /* DXF 280, as with DICTIONARY.
+                         DuplicateRecordCloning mergeStyle:
+                         1: erase allowed,
+                         0x80: cloning allowed */
   BITCODE_BL xdata_size;
   BITCODE_BL num_xdata; /* computed */
   Dwg_Resbuf* xdata;

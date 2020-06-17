@@ -5763,7 +5763,7 @@ DWG_OBJECT (XRECORD)
   DXF {
     SUBCLASS (AcDbXrecord)
     SINCE (R_2000) {
-      FIELD_BS0 (cloning_flags, 280);
+      FIELD_BS0 (cloning, 280);
     }
   }
   ENCODER {
@@ -5784,7 +5784,7 @@ DWG_OBJECT (XRECORD)
   }
 #ifndef IS_DXF
   SINCE (R_2000) {
-    FIELD_BS (cloning_flags, 280);
+    FIELD_BS (cloning, 280);
   }
 #endif
 

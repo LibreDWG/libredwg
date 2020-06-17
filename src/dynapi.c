@@ -8218,7 +8218,7 @@ static const Dwg_DYNAPI_field _dwg_WIPEOUTVARIABLES_fields[] = {
 static const Dwg_DYNAPI_field _dwg_XRECORD_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_XRECORD, parent),
     1,1,0, 0 },
-  { "cloning_flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_XRECORD, cloning_flags),
+  { "cloning",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_XRECORD, cloning),
     0,0,0, 280 },
   { "xdata_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_XRECORD, xdata_size),
     0,0,0, 0 },
