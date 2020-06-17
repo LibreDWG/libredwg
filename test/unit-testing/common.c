@@ -20,6 +20,7 @@ static unsigned int loglevel;
 #include "tests_common.h"
 
 dwg_data g_dwg;
+const char *stability;
 int g_counter;
 #define MAX_COUNTER 6
 int g_countmax = MAX_COUNTER;
@@ -90,6 +91,17 @@ main (int argc, char *argv[])
     loglevel = atoi (probe);
   //#endif
 
+#ifdef DWG_TYPE
+  if (is_type_stable (DWG_TYPE))
+    stability = "stable";
+  else if (is_type_unstable (DWG_TYPE))
+    stability = "unstable";
+  else if (is_type_debugging (DWG_TYPE))
+    stability = "debugging";
+  else if (is_type_unhandled (DWG_TYPE))
+    stability = "unhandled";
+#endif
+
   if (argc > i)
     {
       // don't warn/error on no coverage. for unit_testing_all.sh
@@ -133,7 +145,8 @@ main (int argc, char *argv[])
           if (!stat (dir, &attrib) &&
               S_ISDIR (attrib.st_mode))
 #ifndef HAVE_SCANDIR
-            fprintf (stderr, "dir argument not supported yet on this platform (missing scandir)\n");
+            fprintf (stderr, "dir argument not supported yet on this platform "
+                             "(missing scandir)\n");
 #else
             return test_subdirs (dir, cov);
 #endif
@@ -248,7 +261,8 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2004/Visualstyle.dwg", cov);
               error += test_code (prefix, "2018/Visualstyle.dwg", cov);
-              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
+              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",
+                                  cov);
             }
           if (DWG_TYPE == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
             {
@@ -256,15 +270,17 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2004/Leader.dwg", cov);
               error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA ||
-              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+          if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA
+              || DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
             {
-              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
+              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",
+                                  cov);
             }
           if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
             {
               error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
-              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
+              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",
+                                  cov);
             }
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
             {
@@ -398,10 +414,10 @@ test_code (const char *dir, const char *filename, int cov)
   path[255] = '\0';
   
 #ifdef DWG_TYPE
-  // only process if no coverage yet, or when we are crossing the unicode boundary.
-  if (strstr (path, "2018") ||
-      strstr (path, "2007") ||
-      (!numpassed () && !numfailed ()))
+  // only process if no coverage yet, or when we are crossing the unicode
+  // boundary.
+  if (strstr (path, "2018") || strstr (path, "2007")
+      || (!numpassed () && !numfailed ()))
     {
       if (cov)
         printf ("Testing with %s:\n", path);
@@ -509,11 +525,12 @@ output_test (dwg_data *dwg)
   obj = &dwg->object[0];
   while ((obj = dwg_next_object (obj)))
     {
-      LOG_INFO ("  %s [%d]\n", obj->name, obj->index);
+      LOG_TRACE ("  %s [%d]\n", obj->name, obj->index);
       // printf ("%s [%d]\n", obj->name, obj->index);
       if (obj->fixedtype == DWG_TYPE)
         {
           g_counter++;
+          LOG_INFO ("  %s [%d] (%s)\n", obj->name, obj->index, stability);
           output_process (obj);
         }
     }
@@ -522,10 +539,11 @@ output_test (dwg_data *dwg)
     {
       /* and now also all subtypes and entities in blocks */
       unsigned int j;
-      unsigned int num_hdr_objs = dwg_obj_block_control_get_num_entries(_ctrl, &error);
+      unsigned int num_hdr_objs
+          = dwg_obj_block_control_get_num_entries (_ctrl, &error);
       if (error || !num_hdr_objs)
         return;
-      hdr_refs = dwg_obj_block_control_get_block_headers(_ctrl, &error);
+      hdr_refs = dwg_obj_block_control_get_block_headers (_ctrl, &error);
       if (error)
         return;
       for (j = 0; j < num_hdr_objs; j++)
@@ -579,15 +597,18 @@ void
 print_api (dwg_object *obj)
 {
 #ifdef DWG_TYPE
-  printf ("Unit-testing type %d %s [%d]:\n", DWG_TYPE, obj->name, g_counter);
+  printf ("Unit-testing type %d %s [%d] (%s):\n", DWG_TYPE, obj->name, g_counter,
+          stability);
 #else
   printf ("Test dwg_api and dynapi [%d]:\n", g_counter);
 #endif
   api_process (obj);
 
-  if (obj->supertype == DWG_SUPERTYPE_ENTITY && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT)
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY &&
+      obj->fixedtype != DWG_TYPE_UNKNOWN_ENT)
     api_common_entity (obj);
-  else if (obj->supertype == DWG_SUPERTYPE_OBJECT && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
+  else if (obj->supertype == DWG_SUPERTYPE_OBJECT &&
+           obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
     api_common_object (obj);
   if (g_counter <= g_countmax)
     printf ("\n");
