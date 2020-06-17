@@ -2531,6 +2531,73 @@ H,	DXF 340
 @end vtable
 @end indentedblock
 
+@strong{MPOLYGON} @anchor{MPOLYGON}
+@cindex entity, MPOLYGON
+@vindex MPOLYGON
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item is_gradient_fill
+BL
+@item reserved
+BL
+@item gradient_angle
+BD
+@item gradient_shift
+BD
+@item single_color_gradient
+BL
+@item gradient_tint
+BD
+@item num_colors
+BL
+@item colors
+Dwg_HATCH_Color*
+@item gradient_name
+T
+@item elevation
+BD,	DXF 30
+@item extrusion
+BE,	DXF 210
+@item name
+T,	DXF 2
+@item is_solid_fill
+B,	DXF 70
+@item is_associative
+B,	DXF 71
+@item num_paths
+BL,	DXF 91
+@item paths
+Dwg_HATCH_Path*
+@item style
+BS,	DXF 75
+@item pattern_type
+BS
+@item angle
+BD,	DXF 52
+@item scale_spacing
+BD,	DXF 41
+@item double_flag
+B,	DXF 77
+@item num_deflines
+BS,	DXF 78
+@item deflines
+Dwg_HATCH_DefLine*
+@item color
+CMC,	DXF 62
+@item x_dir
+2RD,	DXF 11
+@item num_boundary_handles
+BL,	DXF 99
+@item boundary_handles
+H*
+
+@end vtable
+@end indentedblock
+
 @strong{MTEXT} @anchor{MTEXT}
 @cindex entity, MTEXT
 @vindex MTEXT

@@ -45,6 +45,7 @@ api_process (dwg_object *obj)
   BITCODE_H arc_handle;		/*!< DXF 330 */
   
   Dwg_Version_Type version = obj->parent->header.version;
+#ifdef DEBUG_CLASSES
   dwg_ent_atext *atext = dwg_object_to_ATEXT (obj);
 
   CHK_ENTITY_UTF8TEXT (atext, ATEXT, text_value);
@@ -81,4 +82,5 @@ api_process (dwg_object *obj)
   
   CHK_ENTITY_TYPE (atext, ATEXT, alignment, BS);
   CHK_ENTITY_UTF8TEXT (atext, ATEXT, style);
+#endif
 }

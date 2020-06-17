@@ -269,6 +269,7 @@
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
   DEBUGGING_CLASS     (ACTION, ATEXT)             // ent expresstools
   DEBUGGING_CLASS     (ACTION, RTEXT)             // ent expresstools
+  DEBUGGING_CLASS     (ACTION, MPOLYGON)          // hatch-like ent
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
                                                      dxfname COORDINATION_MODEL? */
   DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"

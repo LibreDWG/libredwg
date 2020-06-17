@@ -460,6 +460,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_MLEADEROBJECTCONTEXTDATA,
   DWG_TYPE_MLEADERSTYLE,
   DWG_TYPE_MOTIONPATH,
+  DWG_TYPE_MPOLYGON,
   DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,
   DWG_TYPE_MTEXTOBJECTCONTEXTDATA,
   DWG_TYPE_MULTILEADER,
@@ -2733,6 +2734,7 @@ typedef struct _dwg_entity_HATCH
   BITCODE_BL num_colors;
   Dwg_HATCH_Color* colors;
   BITCODE_T gradient_name; /* 1: SPHERICAL, 2: HEMISPHERICAL, 3: CURVED, 4: LINEAR, 5: CYLINDER */
+
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
   BITCODE_TV name;
@@ -2754,6 +2756,43 @@ typedef struct _dwg_entity_HATCH
   BITCODE_BL num_boundary_handles;
   BITCODE_H* boundary_handles;
 } Dwg_Entity_HATCH;
+
+// derived from Hatch
+typedef struct _dwg_entity_MPOLYGON
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_BL is_gradient_fill;
+  BITCODE_BL reserved;
+  BITCODE_BD gradient_angle;
+  BITCODE_BD gradient_shift;
+  BITCODE_BL single_color_gradient;
+  BITCODE_BD gradient_tint;
+  BITCODE_BL num_colors;
+  Dwg_HATCH_Color* colors;
+  BITCODE_T gradient_name; /* 1: SPHERICAL, 2: HEMISPHERICAL, 3: CURVED, 4: LINEAR, 5: CYLINDER */
+
+  BITCODE_BD elevation;
+  BITCODE_BE extrusion;
+  BITCODE_TV name;
+  BITCODE_B is_solid_fill;
+  BITCODE_B is_associative;
+  BITCODE_BL num_paths;
+  Dwg_HATCH_Path* paths; // also named loop
+  BITCODE_BS style;
+  BITCODE_BS pattern_type;
+  BITCODE_BD angle;
+  BITCODE_BD scale_spacing;
+  BITCODE_B double_flag;
+  BITCODE_BS num_deflines;
+  Dwg_HATCH_DefLine * deflines;
+
+  BITCODE_CMC color;  /* DXF 62 */
+  BITCODE_2RD x_dir;  /* DXF 11 (ocs) */
+  BITCODE_BL num_boundary_handles; /* DXF 99 */
+  BITCODE_H* boundary_handles;
+
+} Dwg_Entity_MPOLYGON;
 
 /**
  XRECORD (79 + varies) object
@@ -6636,6 +6675,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MESH *MESH;
     Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
     Dwg_Entity_RTEXT *RTEXT;
+    Dwg_Entity_MPOLYGON *MPOLYGON;
 
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
@@ -8014,6 +8054,7 @@ EXPORT int dwg_setup_RENDERENTRY (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERGLOBAL (Dwg_Object *obj);
 EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
 EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
+EXPORT int dwg_setup_MPOLYGON (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);

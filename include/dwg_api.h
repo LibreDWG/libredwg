@@ -509,6 +509,7 @@ typedef struct _dwg_entity_WIPEOUT                dwg_ent_wipeout;
 typedef struct _dwg_entity_ARC_DIMENSION          dwg_ent_arc_dimension;
 typedef struct _dwg_entity_ATEXT                  dwg_ent_atext;
 typedef struct _dwg_entity_RTEXT                  dwg_ent_rtext;
+typedef struct _dwg_entity_MPOLYGON               dwg_ent_mpolygon;
 typedef struct _dwg_entity_NURBSURFACE            dwg_ent_nurbsurface;
 typedef struct _dwg_entity_PLANESURFACE           dwg_ent_planesurface;
 typedef struct _dwg_entity_EXTRUDEDSURFACE        dwg_ent_extrudedsurface;
@@ -757,6 +758,7 @@ DWG_GETALL_ENTITY_DECL (WIPEOUT)
 // DEBUG_CLASSES
 DWG_GETALL_ENTITY_DECL (ATEXT)
 DWG_GETALL_ENTITY_DECL (RTEXT)
+DWG_GETALL_ENTITY_DECL (MPOLYGON)
 DWG_GETALL_ENTITY_DECL (EXTRUDEDSURFACE)
 DWG_GETALL_ENTITY_DECL (GEOPOSITIONMARKER)
 DWG_GETALL_ENTITY_DECL (LOFTEDSURFACE)
@@ -922,7 +924,6 @@ DWG_GETALL_OBJECT_DECL (CSACDOCUMENTOPTIONS)
 // DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT)
 // DWG_GETALL_OBJECT_DECL (NPOCOLLECTION)
 // DWG_GETALL_OBJECT_DECL (POINTCLOUD)
-// DWG_GETALL_OBJECT_DECL (RTEXT)
 // DWG_GETALL_OBJECT_DECL (XREFPANELOBJECT)
 #endif
 
@@ -997,6 +998,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT)
 // DEBUG_CLASSES
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ATEXT)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (RTEXT)
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MPOLYGON)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (EXTRUDEDSURFACE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (GEOPOSITIONMARKER)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LOFTEDSURFACE)
@@ -1294,6 +1296,7 @@ dwg_get_OBJECT_DECL (ent_mesh, MESH);
 #ifdef DEBUG_CLASSES
 dwg_get_OBJECT_DECL (ent_atext, ATEXT)
 dwg_get_OBJECT_DECL (ent_rtext, RTEXT)
+dwg_get_OBJECT_DECL (ent_mpolygon, MPOLYGON)
 dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
 dwg_get_OBJECT_DECL (ent_geopositionmarker, GEOPOSITIONMARKER);
 dwg_get_OBJECT_DECL (ent_loftedsurface, LOFTEDSURFACE);

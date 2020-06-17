@@ -3922,6 +3922,214 @@ DWG_ENTITY (HATCH)
 
 DWG_OBJECT_END
 
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
+
+// Hatched closed polygon
+// debugging
+DWG_ENTITY (MPOLYGON)
+
+  SUBCLASS (AcDbMPolygon)
+
+  FIELD_BS (style, 75); // 0=normal (odd parity); 1=outer; 2=whole //??
+#if !defined (IS_DXF) && !defined (IS_INDXF)
+  SINCE (R_2004)
+    {
+      error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,(Dwg_Entity_HATCH *)_obj);
+    }
+#endif
+
+  DXF {
+    BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
+    pt.z = FIELD_VALUE (elevation);
+    KEY (elevation); VALUE_3BD (pt, 10);
+  } else {
+    FIELD_BD (elevation, 30);
+  }
+  ENCODER { normalize_BE (FIELD_VALUE (extrusion)); }
+  FIELD_3BD (extrusion, 210);
+  DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
+  FIELD_T (name, 2);
+
+  //??
+  FIELD_BS (is_solid_fill, 70); //default: 1, pattern_fill: 0
+  FIELD_B (is_associative, 71);
+
+  FIELD_BL (num_paths, 91);
+  VALUEOUTOFBOUNDS (num_paths, 10000)
+  REPEAT (num_paths, paths, Dwg_HATCH_Path)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (paths[rcount1], flag, 92);
+      if (!(FIELD_VALUE (paths[rcount1].flag) & 2))
+        {
+          SUB_FIELD_BL (paths[rcount1], num_segs_or_paths, 93);
+          if (FIELD_VALUE (paths[rcount1].num_segs_or_paths > 10000))
+            {
+              LOG_ERROR ("Invalid HATCH.num_segs_or_paths " FORMAT_BL,
+                        _obj->paths[rcount1].num_segs_or_paths);
+              _obj->paths[rcount1].num_segs_or_paths = 0;
+              JSON_END_REPEAT (paths);
+              return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
+#define segs paths[rcount1].segs
+          REPEAT2 (paths[rcount1].num_segs_or_paths, segs, Dwg_HATCH_PathSeg)
+          REPEAT_BLOCK
+              SUB_FIELD_RC (segs[rcount2],curve_type, 72); // 1-4
+              switch (FIELD_VALUE (segs[rcount2].curve_type))
+                {
+                    case 1: /* LINE */
+                      SUB_FIELD_2RD (segs[rcount2],first_endpoint, 10);
+                      SUB_FIELD_2RD (segs[rcount2],second_endpoint, 11);
+                      break;
+                    case 2: /* CIRCULAR ARC */
+                      SUB_FIELD_2RD (segs[rcount2], center, 10);
+                      SUB_FIELD_BD (segs[rcount2], radius, 40);
+                      SUB_FIELD_BD (segs[rcount2], start_angle, 50);
+                      SUB_FIELD_BD (segs[rcount2], end_angle, 51);
+                      SUB_FIELD_B (segs[rcount2], is_ccw, 73);
+                      break;
+                    case 3: /* ELLIPTICAL ARC */
+                      SUB_FIELD_2RD (segs[rcount2], center, 10);
+                      SUB_FIELD_2RD (segs[rcount2], endpoint, 11);
+                      SUB_FIELD_BD (segs[rcount2], minor_major_ratio, 40);
+                      SUB_FIELD_BD (segs[rcount2], start_angle, 50);
+                      SUB_FIELD_BD (segs[rcount2], end_angle, 51);
+                      SUB_FIELD_B (segs[rcount2], is_ccw, 73);
+                      break;
+                    case 4: /* SPLINE */
+                      SUB_FIELD_BL (segs[rcount2], degree, 94);
+                      SUB_FIELD_B (segs[rcount2], is_rational, 73);
+                      SUB_FIELD_B (segs[rcount2], is_periodic, 74);
+                      SUB_FIELD_BL (segs[rcount2], num_knots, 95);
+                      SUB_FIELD_BL (segs[rcount2], num_control_points, 96);
+                      if (FIELD_VALUE (segs[rcount2].num_knots > 10000))
+                        {
+                          LOG_ERROR ("Invalid HATCH.paths.segs.num_knots " FORMAT_BL,
+                                    _obj->segs[rcount2].num_knots);
+                          _obj->segs[rcount2].num_knots = 0;
+                          JSON_END_REPEAT (segs);
+                          JSON_END_REPEAT (paths);
+                          return DWG_ERR_VALUEOUTOFBOUNDS;
+                        }
+                      FIELD_VECTOR (segs[rcount2].knots, BD,
+                                    segs[rcount2].num_knots, 40);
+                      if (FIELD_VALUE (segs[rcount2].num_control_points > 10000))
+                        {
+                          LOG_ERROR ("Invalid HATCH.paths.segs.num_control_points " FORMAT_BL,
+                                    _obj->segs[rcount2].num_control_points);
+                          _obj->segs[rcount2].num_control_points = 0;
+                          JSON_END_REPEAT (segs);
+                          JSON_END_REPEAT (paths);
+                          return DWG_ERR_VALUEOUTOFBOUNDS;
+                        }
+#define control_points segs[rcount2].control_points
+                      REPEAT3 (segs[rcount2].num_control_points, control_points, Dwg_HATCH_ControlPoint)
+                      REPEAT_BLOCK
+                          SUB_FIELD_2RD (control_points[rcount3], point, 10);
+                          if (FIELD_VALUE (segs[rcount2].is_rational))
+                            SUB_FIELD_BD (control_points[rcount3], weight, 40)
+                      END_REPEAT_BLOCK
+                      SET_PARENT (control_points,
+                                 &_obj->segs[rcount2])
+                      END_REPEAT (control_points);
+#undef control_points
+                      SINCE (R_2013) // r2014 really
+                        {
+#define seg segs[rcount2]
+                          SUB_FIELD_BL (seg, num_fitpts, 97);
+                          FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
+#undef seg
+                        }
+                      break;
+                    default:
+                      LOG_ERROR ("Invalid HATCH.curve_type %d\n",
+                                FIELD_VALUE (segs[rcount2].curve_type));
+                      DEBUG_HERE_OBJ
+                      _obj->segs[rcount2].curve_type = 0;
+                      JSON_END_REPEAT (segs);
+                      JSON_END_REPEAT (paths);
+                      return DWG_ERR_VALUEOUTOFBOUNDS;
+                }
+          END_REPEAT_BLOCK
+          SET_PARENT (segs, &_obj->paths[rcount1])
+          END_REPEAT (segs);
+#undef segs
+        }
+      else
+        { /* POLYLINE PATH */
+          SUB_FIELD_B (paths[rcount1],bulges_present, 72);
+          SUB_FIELD_B (paths[rcount1],closed, 73);
+          SUB_FIELD_BL (paths[rcount1],num_segs_or_paths, 93);
+#define polyline_paths paths[rcount1].polyline_paths
+          REPEAT2 (paths[rcount1].num_segs_or_paths, polyline_paths, Dwg_HATCH_PolylinePath)
+          REPEAT_BLOCK
+              SUB_FIELD_2RD (polyline_paths[rcount2],point, 10);
+              if (FIELD_VALUE (paths[rcount1].bulges_present))
+                {
+                  SUB_FIELD_BD (polyline_paths[rcount2],bulge, 42);
+                }
+          END_REPEAT_BLOCK
+          SET_PARENT (polyline_paths, &_obj->paths[rcount1])
+          END_REPEAT (polyline_paths);
+#undef polyline_paths
+        }
+      SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
+#if defined (IS_DXF) && !defined (IS_ENCODER)
+      DXF {
+        if (_obj->boundary_handles && rcount1 < _obj->num_boundary_handles) {
+          FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
+        } else {
+          LOG_WARN ("HATCH.num_path < num_boundary_handles or empty boundary_handles")
+          VALUE_HANDLE ((BITCODE_H)NULL, boundary_handles, 0, 330)
+        }
+      }
+#endif
+  END_REPEAT_BLOCK
+  SET_PARENT (paths, (Dwg_Entity_HATCH*)_obj)
+  END_REPEAT (paths);
+#ifdef IS_DXF
+  SINCE (R_2004)
+    {
+      error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,(Dwg_Entity_HATCH *)_obj);
+    }
+#endif
+
+  DXF {
+    FIELD_CMC (color, 62);
+    FIELD_2RD (x_dir, 11);
+    FIELD_BL (num_boundary_handles, 99);
+  }
+
+  SINCE (R_2013) {
+    //FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
+    FIELD_BL (is_solid_fill, 0);
+    FIELD_BD (angle, 52);
+    FIELD_BD (scale_spacing, 41); //default 1.0
+    FIELD_B (double_flag, 77);
+    FIELD_BL (num_deflines, 78);
+    REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)
+    REPEAT_BLOCK
+        SUB_FIELD_BD (deflines[rcount1], angle, 53);
+        SUB_FIELD_2BD_1 (deflines[rcount1], pt0, 43);
+        SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
+        SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
+        FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
+    END_REPEAT_BLOCK
+    SET_PARENT (deflines, (Dwg_Entity_HATCH*)_obj)
+    END_REPEAT (deflines);
+  }
+
+  // not DXF
+  FIELD_CMC (color, 0);
+  FIELD_2RD (x_dir, 0);
+  FIELD_BL (num_boundary_handles, 0);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 0); /* DXF: inlined above */
+
+DWG_OBJECT_END
+
+#endif
+
 //pg.139
 DWG_OBJECT (IDBUFFER)
 

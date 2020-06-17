@@ -229,6 +229,7 @@ testobjects += \
 	loftedsurface \
 	mleaderobjectcontextdata \
 	motionpath \
+	mpolygon \
 	mtextattributeobjectcontextdata \
 	mtextobjectcontextdata \
 	navisworksmodel \

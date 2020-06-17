@@ -15,6 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_H style;
 
   Dwg_Version_Type version = obj->parent->header.version;
+#ifdef DEBUG_CLASSES
   dwg_ent_rtext *rtext = dwg_object_to_RTEXT (obj);
 
   CHK_ENTITY_UTF8TEXT (rtext, RTEXT, text_value);  
@@ -25,4 +26,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (rtext, RTEXT, height, BD);  
   CHK_ENTITY_TYPE (rtext, RTEXT, flags, BS);
   CHK_ENTITY_H (rtext, RTEXT, style);
+#endif
 }

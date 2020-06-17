@@ -14743,6 +14743,381 @@ static int test_MLINE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_MPOLYGON (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_MPOLYGON *restrict mpolygon = obj->tio.entity->tio.MPOLYGON;
+  failed = 0;
+  {
+    BITCODE_BD angle;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "angle", &angle, NULL)
+        && angle == mpolygon->angle)
+      pass ();
+    else
+      fail ("MPOLYGON.angle [BD] %g != %g", mpolygon->angle, angle);
+    angle++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "angle", &angle, 0)
+        && angle == mpolygon->angle)
+      pass ();
+    else
+      fail ("MPOLYGON.angle [BD] set+1 %g != %g", mpolygon->angle, angle);
+    mpolygon->angle--;
+  }
+  {
+    BITCODE_H* boundary_handles;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_boundary_handles", &count, NULL)
+        && dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "boundary_handles", &boundary_handles, NULL)
+        && boundary_handles == mpolygon->boundary_handles)
+      pass ();
+    else
+      fail ("MPOLYGON.boundary_handles [H*] * %u num_boundary_handles", count);
+  }
+  {
+    BITCODE_CMC color;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "color", &color, NULL)
+        && !memcmp (&color, &mpolygon->color, sizeof (BITCODE_CMC)))
+        pass ();
+    else
+        fail ("MPOLYGON.color [CMC]");
+  }
+  {
+    Dwg_HATCH_Color* colors;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_colors", &count, NULL)
+        && dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "colors", &colors, NULL)
+        && colors == mpolygon->colors)
+      pass ();
+    else
+      fail ("MPOLYGON.colors [Dwg_HATCH_Color*] * %u num_colors", count);
+  }
+  {
+    Dwg_HATCH_DefLine* deflines;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_deflines", &count, NULL)
+        && dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "deflines", &deflines, NULL)
+        && deflines == mpolygon->deflines)
+      pass ();
+    else
+      fail ("MPOLYGON.deflines [Dwg_HATCH_DefLine*] * %u num_deflines", count);
+  }
+  {
+    BITCODE_B double_flag;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "double_flag", &double_flag, NULL)
+        && double_flag == mpolygon->double_flag)
+      pass ();
+    else
+      fail ("MPOLYGON.double_flag [B] " FORMAT_B " != " FORMAT_B "", mpolygon->double_flag, double_flag);
+    double_flag++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "double_flag", &double_flag, 0)
+        && double_flag == mpolygon->double_flag)
+      pass ();
+    else
+      fail ("MPOLYGON.double_flag [B] set+1 " FORMAT_B " != " FORMAT_B "", mpolygon->double_flag, double_flag);
+    mpolygon->double_flag--;
+  }
+  {
+    BITCODE_BD elevation;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "elevation", &elevation, NULL)
+        && elevation == mpolygon->elevation)
+      pass ();
+    else
+      fail ("MPOLYGON.elevation [BD] %g != %g", mpolygon->elevation, elevation);
+    elevation++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "elevation", &elevation, 0)
+        && elevation == mpolygon->elevation)
+      pass ();
+    else
+      fail ("MPOLYGON.elevation [BD] set+1 %g != %g", mpolygon->elevation, elevation);
+    mpolygon->elevation--;
+  }
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &mpolygon->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("MPOLYGON.extrusion [BE]");
+  }
+  {
+    BITCODE_BD gradient_angle;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "gradient_angle", &gradient_angle, NULL)
+        && gradient_angle == mpolygon->gradient_angle)
+      pass ();
+    else
+      fail ("MPOLYGON.gradient_angle [BD] %g != %g", mpolygon->gradient_angle, gradient_angle);
+    gradient_angle++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "gradient_angle", &gradient_angle, 0)
+        && gradient_angle == mpolygon->gradient_angle)
+      pass ();
+    else
+      fail ("MPOLYGON.gradient_angle [BD] set+1 %g != %g", mpolygon->gradient_angle, gradient_angle);
+    mpolygon->gradient_angle--;
+  }
+  {
+    BITCODE_T gradient_name;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "gradient_name", &gradient_name, NULL)
+        && gradient_name
+           ? strEQ ((char *)gradient_name, (char *)mpolygon->gradient_name)
+           : !mpolygon->gradient_name)
+      pass ();
+    else
+      fail ("MPOLYGON.gradient_name [T] '%s' <> '%s'", gradient_name, mpolygon->gradient_name);
+  }
+  {
+    BITCODE_BD gradient_shift;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "gradient_shift", &gradient_shift, NULL)
+        && gradient_shift == mpolygon->gradient_shift)
+      pass ();
+    else
+      fail ("MPOLYGON.gradient_shift [BD] %g != %g", mpolygon->gradient_shift, gradient_shift);
+    gradient_shift++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "gradient_shift", &gradient_shift, 0)
+        && gradient_shift == mpolygon->gradient_shift)
+      pass ();
+    else
+      fail ("MPOLYGON.gradient_shift [BD] set+1 %g != %g", mpolygon->gradient_shift, gradient_shift);
+    mpolygon->gradient_shift--;
+  }
+  {
+    BITCODE_BD gradient_tint;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "gradient_tint", &gradient_tint, NULL)
+        && gradient_tint == mpolygon->gradient_tint)
+      pass ();
+    else
+      fail ("MPOLYGON.gradient_tint [BD] %g != %g", mpolygon->gradient_tint, gradient_tint);
+    gradient_tint++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "gradient_tint", &gradient_tint, 0)
+        && gradient_tint == mpolygon->gradient_tint)
+      pass ();
+    else
+      fail ("MPOLYGON.gradient_tint [BD] set+1 %g != %g", mpolygon->gradient_tint, gradient_tint);
+    mpolygon->gradient_tint--;
+  }
+  {
+    BITCODE_B is_associative;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "is_associative", &is_associative, NULL)
+        && is_associative == mpolygon->is_associative)
+      pass ();
+    else
+      fail ("MPOLYGON.is_associative [B] " FORMAT_B " != " FORMAT_B "", mpolygon->is_associative, is_associative);
+    is_associative++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "is_associative", &is_associative, 0)
+        && is_associative == mpolygon->is_associative)
+      pass ();
+    else
+      fail ("MPOLYGON.is_associative [B] set+1 " FORMAT_B " != " FORMAT_B "", mpolygon->is_associative, is_associative);
+    mpolygon->is_associative--;
+  }
+  {
+    BITCODE_BL is_gradient_fill;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "is_gradient_fill", &is_gradient_fill, NULL)
+        && is_gradient_fill == mpolygon->is_gradient_fill)
+      pass ();
+    else
+      fail ("MPOLYGON.is_gradient_fill [BL] %u != %u", mpolygon->is_gradient_fill, is_gradient_fill);
+    is_gradient_fill++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "is_gradient_fill", &is_gradient_fill, 0)
+        && is_gradient_fill == mpolygon->is_gradient_fill)
+      pass ();
+    else
+      fail ("MPOLYGON.is_gradient_fill [BL] set+1 %u != %u", mpolygon->is_gradient_fill, is_gradient_fill);
+    mpolygon->is_gradient_fill--;
+  }
+  {
+    BITCODE_B is_solid_fill;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "is_solid_fill", &is_solid_fill, NULL)
+        && is_solid_fill == mpolygon->is_solid_fill)
+      pass ();
+    else
+      fail ("MPOLYGON.is_solid_fill [B] " FORMAT_B " != " FORMAT_B "", mpolygon->is_solid_fill, is_solid_fill);
+    is_solid_fill++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "is_solid_fill", &is_solid_fill, 0)
+        && is_solid_fill == mpolygon->is_solid_fill)
+      pass ();
+    else
+      fail ("MPOLYGON.is_solid_fill [B] set+1 " FORMAT_B " != " FORMAT_B "", mpolygon->is_solid_fill, is_solid_fill);
+    mpolygon->is_solid_fill--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)mpolygon->name)
+           : !mpolygon->name)
+      pass ();
+    else
+      fail ("MPOLYGON.name [T] '%s' <> '%s'", name, mpolygon->name);
+  }
+  {
+    BITCODE_BL num_boundary_handles;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_boundary_handles", &num_boundary_handles, NULL)
+        && num_boundary_handles == mpolygon->num_boundary_handles)
+      pass ();
+    else
+      fail ("MPOLYGON.num_boundary_handles [BL] %u != %u", mpolygon->num_boundary_handles, num_boundary_handles);
+    num_boundary_handles++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "num_boundary_handles", &num_boundary_handles, 0)
+        && num_boundary_handles == mpolygon->num_boundary_handles)
+      pass ();
+    else
+      fail ("MPOLYGON.num_boundary_handles [BL] set+1 %u != %u", mpolygon->num_boundary_handles, num_boundary_handles);
+    mpolygon->num_boundary_handles--;
+  }
+  {
+    BITCODE_BL num_colors;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_colors", &num_colors, NULL)
+        && num_colors == mpolygon->num_colors)
+      pass ();
+    else
+      fail ("MPOLYGON.num_colors [BL] %u != %u", mpolygon->num_colors, num_colors);
+    num_colors++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "num_colors", &num_colors, 0)
+        && num_colors == mpolygon->num_colors)
+      pass ();
+    else
+      fail ("MPOLYGON.num_colors [BL] set+1 %u != %u", mpolygon->num_colors, num_colors);
+    mpolygon->num_colors--;
+  }
+  {
+    BITCODE_BS num_deflines;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_deflines", &num_deflines, NULL)
+        && num_deflines == mpolygon->num_deflines)
+      pass ();
+    else
+      fail ("MPOLYGON.num_deflines [BS] %hu != %hu", mpolygon->num_deflines, num_deflines);
+    num_deflines++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "num_deflines", &num_deflines, 0)
+        && num_deflines == mpolygon->num_deflines)
+      pass ();
+    else
+      fail ("MPOLYGON.num_deflines [BS] set+1 %hu != %hu", mpolygon->num_deflines, num_deflines);
+    mpolygon->num_deflines--;
+  }
+  {
+    BITCODE_BL num_paths;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_paths", &num_paths, NULL)
+        && num_paths == mpolygon->num_paths)
+      pass ();
+    else
+      fail ("MPOLYGON.num_paths [BL] %u != %u", mpolygon->num_paths, num_paths);
+    num_paths++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "num_paths", &num_paths, 0)
+        && num_paths == mpolygon->num_paths)
+      pass ();
+    else
+      fail ("MPOLYGON.num_paths [BL] set+1 %u != %u", mpolygon->num_paths, num_paths);
+    mpolygon->num_paths--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "parent", &parent, NULL)
+        && !memcmp (&parent, &mpolygon->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("MPOLYGON.parent [struct _dwg_object_entity*]");
+  }
+  {
+    Dwg_HATCH_Path* paths;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_paths", &count, NULL)
+        && dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "paths", &paths, NULL)
+        && paths == mpolygon->paths)
+      pass ();
+    else
+      fail ("MPOLYGON.paths [Dwg_HATCH_Path*] * %u num_paths", count);
+  }
+  {
+    BITCODE_BS pattern_type;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "pattern_type", &pattern_type, NULL)
+        && pattern_type == mpolygon->pattern_type)
+      pass ();
+    else
+      fail ("MPOLYGON.pattern_type [BS] %hu != %hu", mpolygon->pattern_type, pattern_type);
+    pattern_type++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "pattern_type", &pattern_type, 0)
+        && pattern_type == mpolygon->pattern_type)
+      pass ();
+    else
+      fail ("MPOLYGON.pattern_type [BS] set+1 %hu != %hu", mpolygon->pattern_type, pattern_type);
+    mpolygon->pattern_type--;
+  }
+  {
+    BITCODE_BL reserved;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "reserved", &reserved, NULL)
+        && reserved == mpolygon->reserved)
+      pass ();
+    else
+      fail ("MPOLYGON.reserved [BL] %u != %u", mpolygon->reserved, reserved);
+    reserved++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "reserved", &reserved, 0)
+        && reserved == mpolygon->reserved)
+      pass ();
+    else
+      fail ("MPOLYGON.reserved [BL] set+1 %u != %u", mpolygon->reserved, reserved);
+    mpolygon->reserved--;
+  }
+  {
+    BITCODE_BD scale_spacing;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "scale_spacing", &scale_spacing, NULL)
+        && scale_spacing == mpolygon->scale_spacing)
+      pass ();
+    else
+      fail ("MPOLYGON.scale_spacing [BD] %g != %g", mpolygon->scale_spacing, scale_spacing);
+    scale_spacing++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "scale_spacing", &scale_spacing, 0)
+        && scale_spacing == mpolygon->scale_spacing)
+      pass ();
+    else
+      fail ("MPOLYGON.scale_spacing [BD] set+1 %g != %g", mpolygon->scale_spacing, scale_spacing);
+    mpolygon->scale_spacing--;
+  }
+  {
+    BITCODE_BL single_color_gradient;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "single_color_gradient", &single_color_gradient, NULL)
+        && single_color_gradient == mpolygon->single_color_gradient)
+      pass ();
+    else
+      fail ("MPOLYGON.single_color_gradient [BL] %u != %u", mpolygon->single_color_gradient, single_color_gradient);
+    single_color_gradient++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "single_color_gradient", &single_color_gradient, 0)
+        && single_color_gradient == mpolygon->single_color_gradient)
+      pass ();
+    else
+      fail ("MPOLYGON.single_color_gradient [BL] set+1 %u != %u", mpolygon->single_color_gradient, single_color_gradient);
+    mpolygon->single_color_gradient--;
+  }
+  {
+    BITCODE_BS style;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "style", &style, NULL)
+        && style == mpolygon->style)
+      pass ();
+    else
+      fail ("MPOLYGON.style [BS] %hu != %hu", mpolygon->style, style);
+    style++;
+    if (dwg_dynapi_entity_set_value (mpolygon, "MPOLYGON", "style", &style, 0)
+        && style == mpolygon->style)
+      pass ();
+    else
+      fail ("MPOLYGON.style [BS] set+1 %hu != %hu", mpolygon->style, style);
+    mpolygon->style--;
+  }
+  {
+    BITCODE_2RD x_dir;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "x_dir", &x_dir, NULL)
+        && !memcmp (&x_dir, &mpolygon->x_dir, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("MPOLYGON.x_dir [2RD]");
+  }
+  if (failed && (is_class_unstable ("MPOLYGON") || is_class_debugging ("MPOLYGON")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "MPOLYGON", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_MTEXT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -48564,6 +48939,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MINSERT(obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINE)
     error += test_MLINE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_MPOLYGON)
+    error += test_MPOLYGON(obj);
   else  if (obj->fixedtype == DWG_TYPE_MTEXT)
     error += test_MTEXT(obj);
   else  if (obj->fixedtype == DWG_TYPE_MULTILEADER)
@@ -48976,6 +49353,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MINSERT (obj);
   else  if (obj->fixedtype == DWG_TYPE_MLINE)
     error += test_MLINE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_MPOLYGON)
+    error += test_MPOLYGON (obj);
   else  if (obj->fixedtype == DWG_TYPE_MTEXT)
     error += test_MTEXT (obj);
   else  if (obj->fixedtype == DWG_TYPE_MULTILEADER)
@@ -49602,6 +49981,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_MLINE): %d != "
                "dwg_dynapi_fields_size (\"MLINE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_MPOLYGON);
+  size2 = dwg_dynapi_fields_size ("MPOLYGON");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_MPOLYGON): %d != "
+               "dwg_dynapi_fields_size (\"MPOLYGON\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_MTEXT);
