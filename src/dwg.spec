@@ -2937,11 +2937,14 @@ DWG_OBJECT (VIEW)
     SINCE (R_10) {
       FIELD_3RD (view_target, 12);
       FIELD_3RD (VIEWDIR, 0);
-      FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
-      FIELD_RD (lens_length, 42);
+      FIELD_CAST (VIEWMODE, RS, 4BITS, 0);
+      FIELD_RD (lens_length, 42); // defaults to 50.0
       FIELD_RD (front_clip_z, 43);
       FIELD_RD (back_clip_z, 44);
       FIELD_RD (twist_angle, 50);
+      DXF {
+        FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
+      }
     }
   }
   LATER_VERSIONS
