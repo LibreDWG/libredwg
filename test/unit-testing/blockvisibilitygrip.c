@@ -6,7 +6,7 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  ACDBEVALEXPR_fields;
+  Dwg_EvalExpr evalexpr;
   BITCODE_T be_t;
   BITCODE_BL be_bl1;
   BITCODE_BL be_bl2;

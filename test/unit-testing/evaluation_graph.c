@@ -12,10 +12,10 @@ api_process (dwg_object *obj)
   BITCODE_BL nodeid;
   BITCODE_BL edge_flags;
   BITCODE_BL num_evalexpr;
-  BITCODE_BL node_edge1;
-  BITCODE_BL node_edge2;
-  BITCODE_BL node_edge3;
-  BITCODE_BL node_edge4;
+  BITCODE_BLd node_edge1;
+  BITCODE_BLd node_edge2;
+  BITCODE_BLd node_edge3;
+  BITCODE_BLd node_edge4;
   BITCODE_H  *evalexpr;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;

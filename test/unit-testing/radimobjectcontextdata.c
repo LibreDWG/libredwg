@@ -19,20 +19,20 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, RADIMOBJECTCONTEXTDATA, in_dwg, B);
   CHK_ENTITY_H (_obj, RADIMOBJECTCONTEXTDATA, scale);
 
-  CHK_SUBCLASS_3RD (_obj, OCD_Dimension, def_pt);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, b293, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, is_def_textloc, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, text_rotation, BD);
-  CHK_SUBCLASS_H (_obj, OCD_Dimension, block);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, dimtofl, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, dimosxd, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, dimatfit, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, dimtix, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, dimtmove, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, override_code, RC);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, has_arrow2, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, flip_arrow2, B);
-  CHK_SUBCLASS_TYPE (_obj, OCD_Dimension, flip_arrow1, B);
+  CHK_SUBCLASS_2RD (_obj->dimension, OCD_Dimension, def_pt);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, b293, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, is_def_textloc, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, text_rotation, BD);
+  CHK_SUBCLASS_H (_obj->dimension, OCD_Dimension, block);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimtofl, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimosxd, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimatfit, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimtix, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimtmove, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, override_code, RC);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, has_arrow2, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, flip_arrow2, B);
+  CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, flip_arrow1, B);
 
   CHK_ENTITY_3RD (_obj, RADIMOBJECTCONTEXTDATA, first_arc_pt);
 #endif
