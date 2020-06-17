@@ -4054,9 +4054,9 @@ typedef struct _dwg_object_RASTERVARIABLES
   struct _dwg_object_object *parent;
 
   BITCODE_BL class_version;
-  BITCODE_BS display_frame;
-  BITCODE_BS display_quality;
-  BITCODE_BS units;
+  BITCODE_BS image_frame;
+  BITCODE_BS image_quality;
+  BITCODE_BS units; // DXF 72, i.e. user_scale
 } Dwg_Object_RASTERVARIABLES;
 
 /**

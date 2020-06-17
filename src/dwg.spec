@@ -5007,17 +5007,14 @@ DWG_OBJECT_END
 
 //pg.220, 20.4.91
 DWG_OBJECT (RASTERVARIABLES)
-
   SUBCLASS (AcDbRasterVariables)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE (class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
-  FIELD_BS (display_frame, 70);
-  FIELD_BS (display_quality, 71);
+  FIELD_BS (image_frame, 70);
+  FIELD_BS (image_quality, 71);
   FIELD_BS (units, 72);
-
   START_OBJECT_HANDLE_STREAM;
-
 DWG_OBJECT_END
 
 // 20.4.93 page 221

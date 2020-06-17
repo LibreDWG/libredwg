@@ -41702,34 +41702,34 @@ static int test_RASTERVARIABLES (const Dwg_Object *obj)
     rastervariables->class_version--;
   }
   {
-    BITCODE_BS display_frame;
-    if (dwg_dynapi_entity_value (rastervariables, "RASTERVARIABLES", "display_frame", &display_frame, NULL)
-        && display_frame == rastervariables->display_frame)
+    BITCODE_BS image_frame;
+    if (dwg_dynapi_entity_value (rastervariables, "RASTERVARIABLES", "image_frame", &image_frame, NULL)
+        && image_frame == rastervariables->image_frame)
       pass ();
     else
-      fail ("RASTERVARIABLES.display_frame [BS] %hu != %hu", rastervariables->display_frame, display_frame);
-    display_frame++;
-    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "display_frame", &display_frame, 0)
-        && display_frame == rastervariables->display_frame)
+      fail ("RASTERVARIABLES.image_frame [BS] %hu != %hu", rastervariables->image_frame, image_frame);
+    image_frame++;
+    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "image_frame", &image_frame, 0)
+        && image_frame == rastervariables->image_frame)
       pass ();
     else
-      fail ("RASTERVARIABLES.display_frame [BS] set+1 %hu != %hu", rastervariables->display_frame, display_frame);
-    rastervariables->display_frame--;
+      fail ("RASTERVARIABLES.image_frame [BS] set+1 %hu != %hu", rastervariables->image_frame, image_frame);
+    rastervariables->image_frame--;
   }
   {
-    BITCODE_BS display_quality;
-    if (dwg_dynapi_entity_value (rastervariables, "RASTERVARIABLES", "display_quality", &display_quality, NULL)
-        && display_quality == rastervariables->display_quality)
+    BITCODE_BS image_quality;
+    if (dwg_dynapi_entity_value (rastervariables, "RASTERVARIABLES", "image_quality", &image_quality, NULL)
+        && image_quality == rastervariables->image_quality)
       pass ();
     else
-      fail ("RASTERVARIABLES.display_quality [BS] %hu != %hu", rastervariables->display_quality, display_quality);
-    display_quality++;
-    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "display_quality", &display_quality, 0)
-        && display_quality == rastervariables->display_quality)
+      fail ("RASTERVARIABLES.image_quality [BS] %hu != %hu", rastervariables->image_quality, image_quality);
+    image_quality++;
+    if (dwg_dynapi_entity_set_value (rastervariables, "RASTERVARIABLES", "image_quality", &image_quality, 0)
+        && image_quality == rastervariables->image_quality)
       pass ();
     else
-      fail ("RASTERVARIABLES.display_quality [BS] set+1 %hu != %hu", rastervariables->display_quality, display_quality);
-    rastervariables->display_quality--;
+      fail ("RASTERVARIABLES.image_quality [BS] set+1 %hu != %hu", rastervariables->image_quality, image_quality);
+    rastervariables->image_quality--;
   }
   {
     struct _dwg_object_object* parent;

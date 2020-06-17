@@ -8130,9 +8130,9 @@ BD,	DXF 40
 struct _dwg_object_object*
 @item class_version
 BL,	DXF 90
-@item display_frame
+@item image_frame
 BS,	DXF 70
-@item display_quality
+@item image_quality
 BS,	DXF 71
 @item units
 BS,	DXF 72
