@@ -177,6 +177,7 @@
   STABLE_CLASS    (ACTION, WIPEOUT)   /* ent */
 
   /* Objects */
+  STABLE_CLASS    (ACTION, ACSH_BOOLEAN_CLASS)
   STABLE_CLASS    (ACTION, ACSH_BOX_CLASS)
   STABLE_CLASS    (ACTION, ACSH_CYLINDER_CLASS)
   STABLE_CLASS    (ACTION, ACSH_FILLET_CLASS)
@@ -221,7 +222,6 @@
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
-  UNSTABLE_CLASS     (ACTION, ACSH_BOOLEAN_CLASS)
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)
   UNSTABLE_CLASS     (ACTION, ACSH_CHAMFER_CLASS)
   UNSTABLE_CLASS     (ACTION, ACSH_CONE_CLASS)

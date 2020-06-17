@@ -24,7 +24,6 @@
 
 static const Dwg_Object_Type _classes_unstable[] =
   {
-   DWG_TYPE_ACSH_BOOLEAN_CLASS,
    DWG_TYPE_ACSH_BREP_CLASS,
    DWG_TYPE_ACSH_CHAMFER_CLASS,
    DWG_TYPE_ACSH_CONE_CLASS,

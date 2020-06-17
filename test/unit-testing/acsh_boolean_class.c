@@ -1,4 +1,3 @@
-// unstable
 #define DWG_TYPE DWG_TYPE_ACSH_BOOLEAN_CLASS
 #include "common.c"
 
