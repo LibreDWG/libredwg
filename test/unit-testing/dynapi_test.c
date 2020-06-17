@@ -30631,6 +30631,295 @@ static int test_ASSOCSWEPTSURFACEACTIONBODY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCVARIABLE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCVARIABLE *restrict assocvariable = obj->tio.object->tio.ASSOCVARIABLE;
+  failed = 0;
+  {
+    BITCODE_BL action_index;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "action_index", &action_index, NULL)
+        && action_index == assocvariable->action_index)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.action_index [BL] %u != %u", assocvariable->action_index, action_index);
+    action_index++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "action_index", &action_index, 0)
+        && action_index == assocvariable->action_index)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.action_index [BL] set+1 %u != %u", assocvariable->action_index, action_index);
+    assocvariable->action_index--;
+  }
+  {
+    BITCODE_H actionbody;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "actionbody", &actionbody, NULL)
+        && !memcmp (&actionbody, &assocvariable->actionbody, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCVARIABLE.actionbody [H]");
+  }
+  {
+    BITCODE_BS av_class_version;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "av_class_version", &av_class_version, NULL)
+        && av_class_version == assocvariable->av_class_version)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.av_class_version [BS] %hu != %hu", assocvariable->av_class_version, av_class_version);
+    av_class_version++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "av_class_version", &av_class_version, 0)
+        && av_class_version == assocvariable->av_class_version)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.av_class_version [BS] set+1 %hu != %hu", assocvariable->av_class_version, av_class_version);
+    assocvariable->av_class_version--;
+  }
+  {
+    BITCODE_B b290;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "b290", &b290, NULL)
+        && b290 == assocvariable->b290)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.b290 [B] " FORMAT_B " != " FORMAT_B "", assocvariable->b290, b290);
+    b290++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "b290", &b290, 0)
+        && b290 == assocvariable->b290)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.b290 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocvariable->b290, b290);
+    assocvariable->b290--;
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "class_version", &class_version, NULL)
+        && class_version == assocvariable->class_version)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.class_version [BS] %hu != %hu", assocvariable->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "class_version", &class_version, 0)
+        && class_version == assocvariable->class_version)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.class_version [BS] set+1 %hu != %hu", assocvariable->class_version, class_version);
+    assocvariable->class_version--;
+  }
+  {
+    Dwg_ASSOCACTION_Deps* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "deps", &deps, NULL)
+        && deps == assocvariable->deps)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.deps [Dwg_ASSOCACTION_Deps*] * %u num_deps", count);
+  }
+  {
+    BITCODE_T desc;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "desc", &desc, NULL)
+        && desc
+           ? strEQ ((char *)desc, (char *)assocvariable->desc)
+           : !assocvariable->desc)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.desc [T] '%s' <> '%s'", desc, assocvariable->desc);
+  }
+  {
+    BITCODE_T evaluator;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "evaluator", &evaluator, NULL)
+        && evaluator
+           ? strEQ ((char *)evaluator, (char *)assocvariable->evaluator)
+           : !assocvariable->evaluator)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.evaluator [T] '%s' <> '%s'", evaluator, assocvariable->evaluator);
+  }
+  {
+    BITCODE_BL geometry_status;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "geometry_status", &geometry_status, NULL)
+        && geometry_status == assocvariable->geometry_status)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.geometry_status [BL] %u != %u", assocvariable->geometry_status, geometry_status);
+    geometry_status++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "geometry_status", &geometry_status, 0)
+        && geometry_status == assocvariable->geometry_status)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.geometry_status [BL] set+1 %u != %u", assocvariable->geometry_status, geometry_status);
+    assocvariable->geometry_status--;
+  }
+  {
+    BITCODE_B has_t78;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "has_t78", &has_t78, NULL)
+        && has_t78 == assocvariable->has_t78)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.has_t78 [B] " FORMAT_B " != " FORMAT_B "", assocvariable->has_t78, has_t78);
+    has_t78++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "has_t78", &has_t78, 0)
+        && has_t78 == assocvariable->has_t78)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.has_t78 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocvariable->has_t78, has_t78);
+    assocvariable->has_t78--;
+  }
+  {
+    BITCODE_BL max_assoc_dep_index;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "max_assoc_dep_index", &max_assoc_dep_index, NULL)
+        && max_assoc_dep_index == assocvariable->max_assoc_dep_index)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.max_assoc_dep_index [BL] %u != %u", assocvariable->max_assoc_dep_index, max_assoc_dep_index);
+    max_assoc_dep_index++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "max_assoc_dep_index", &max_assoc_dep_index, 0)
+        && max_assoc_dep_index == assocvariable->max_assoc_dep_index)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.max_assoc_dep_index [BL] set+1 %u != %u", assocvariable->max_assoc_dep_index, max_assoc_dep_index);
+    assocvariable->max_assoc_dep_index--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)assocvariable->name)
+           : !assocvariable->name)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.name [T] '%s' <> '%s'", name, assocvariable->name);
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_deps", &num_deps, NULL)
+        && num_deps == assocvariable->num_deps)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.num_deps [BL] %u != %u", assocvariable->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "num_deps", &num_deps, 0)
+        && num_deps == assocvariable->num_deps)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.num_deps [BL] set+1 %u != %u", assocvariable->num_deps, num_deps);
+    assocvariable->num_deps--;
+  }
+  {
+    BITCODE_BL num_owned_params;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_owned_params", &num_owned_params, NULL)
+        && num_owned_params == assocvariable->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.num_owned_params [BL] %u != %u", assocvariable->num_owned_params, num_owned_params);
+    num_owned_params++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "num_owned_params", &num_owned_params, 0)
+        && num_owned_params == assocvariable->num_owned_params)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.num_owned_params [BL] set+1 %u != %u", assocvariable->num_owned_params, num_owned_params);
+    assocvariable->num_owned_params--;
+  }
+  {
+    BITCODE_BL num_owned_value_param_names;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
+        && num_owned_value_param_names == assocvariable->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.num_owned_value_param_names [BL] %u != %u", assocvariable->num_owned_value_param_names, num_owned_value_param_names);
+    num_owned_value_param_names++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "num_owned_value_param_names", &num_owned_value_param_names, 0)
+        && num_owned_value_param_names == assocvariable->num_owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.num_owned_value_param_names [BL] set+1 %u != %u", assocvariable->num_owned_value_param_names, num_owned_value_param_names);
+    assocvariable->num_owned_value_param_names--;
+  }
+  {
+    BITCODE_H* owned_params;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_owned_params", &count, NULL)
+        && dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "owned_params", &owned_params, NULL)
+        && owned_params == assocvariable->owned_params)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.owned_params [H*] * %u num_owned_params", count);
+  }
+  {
+    BITCODE_H* owned_value_param_names;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_owned_value_param_names", &count, NULL)
+        && dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "owned_value_param_names", &owned_value_param_names, NULL)
+        && owned_value_param_names == assocvariable->owned_value_param_names)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
+  }
+  {
+    BITCODE_H owningnetwork;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "owningnetwork", &owningnetwork, NULL)
+        && !memcmp (&owningnetwork, &assocvariable->owningnetwork, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCVARIABLE.owningnetwork [H]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocvariable->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCVARIABLE.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T t58;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "t58", &t58, NULL)
+        && t58
+           ? strEQ ((char *)t58, (char *)assocvariable->t58)
+           : !assocvariable->t58)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.t58 [T] '%s' <> '%s'", t58, assocvariable->t58);
+  }
+  {
+    BITCODE_T t78;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "t78", &t78, NULL)
+        && t78
+           ? strEQ ((char *)t78, (char *)assocvariable->t78)
+           : !assocvariable->t78)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.t78 [T] '%s' <> '%s'", t78, assocvariable->t78);
+  }
+  {
+    Dwg_EvalVariant value;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "value", &value, NULL)
+        && !memcmp (&value, &assocvariable->value, sizeof (Dwg_EvalVariant)))
+        pass ();
+    else
+        fail ("ASSOCVARIABLE.value [Dwg_EvalVariant]");
+  }
+  {
+    BITCODE_BSd value_type;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "value_type", &value_type, NULL)
+        && value_type == assocvariable->value_type)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.value_type [BSd] " FORMAT_BSd " != " FORMAT_BSd "", assocvariable->value_type, value_type);
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "value_type", &value_type, 0)
+        && value_type == assocvariable->value_type)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.value_type [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "", assocvariable->value_type, value_type);
+    assocvariable->value_type--;
+  }
+  if (failed && (is_class_unstable ("ASSOCVARIABLE") || is_class_debugging ("ASSOCVARIABLE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCVARIABLE", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCVERTEXACTIONPARAM (const Dwg_Object *obj)
 {
   int error = 0;
@@ -49085,6 +49374,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
+    error += test_ASSOCVARIABLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
     error += test_ASSOCVERTEXACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
@@ -49499,6 +49790,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
+    error += test_ASSOCVARIABLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
     error += test_ASSOCVERTEXACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
@@ -50583,6 +50876,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCSWEPTSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCVARIABLE);
+  size2 = dwg_dynapi_fields_size ("ASSOCVARIABLE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCVARIABLE): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCVARIABLE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCVERTEXACTIONPARAM);
@@ -52239,6 +52540,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_UCS_orthopts): %d != "
                "dwg_dynapi_fields_size (\"UCS_orthopts\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (union _dwg_EvalVariant);
+  size2 = dwg_dynapi_fields_size ("EvalVariant");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(union _dwg_EvalVariant): %d != "
+               "dwg_dynapi_fields_size (\"EvalVariant\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (union _dwg_MLEADER_Content);

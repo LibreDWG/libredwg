@@ -7479,6 +7479,31 @@ DWG_OBJECT_END
     }                                                                         \
   FIELD_BL (evalexpr.nodeid, 0)
 
+// abstract subclass. as field value
+#define AcDbEvalVariant_fields                                          \
+  FIELD_BSd (value_type, 70);                                           \
+  switch (_obj->value_type)                                             \
+    {                                                                   \
+    case 1:                                                             \
+      SUB_FIELD_BD (value,bd, 40);                                      \
+      break;                                                            \
+    case 2:                                                             \
+      SUB_FIELD_BL (value,bl, 90);                                      \
+      break;                                                            \
+    case 3:                                                             \
+      SUB_FIELD_BS (value,bs, 70);                                      \
+      break;                                                            \
+    case 5:                                                             \
+      SUB_FIELD_T (value,text, 1);                                      \
+      break;                                                            \
+    case 11:                                                            \
+      SUB_FIELD_HANDLE (value,handle, 5, 91);                           \
+      break;                                                            \
+    /* more: 9 id, 12 pt3d, 14 pt2d */                                  \
+    default:                                                            \
+      break;                                                            \
+    }
+
 #define AcDbShHistoryNode_fields                                              \
     SUBCLASS (AcDbShHistoryNode)                                              \
     FIELD_BL (history_node.major, 90);                                        \
@@ -9283,6 +9308,59 @@ DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   SUBCLASS (AcDbBlockGripExpr)
   FIELD_BL (grip_type, 91); //??
   FIELD_T (grip_expr, 300);
+DWG_OBJECT_END
+
+#define AcConstraintGroupNode_fields                             \
+  PRE (R_2013) {                                                 \
+    DXF { VALUE_HANDLE (obj->tio.object->ownerhandle, 4, 330); } \
+  }                                                              \
+  FIELD_BL (nodeid, 90);                                         \
+  PRE (R_2013) {                                                 \
+    FIELD_RC (rc70, 70);                                         \
+  }                                                              \
+  FIELD_BL (num_connections, 90);                                \
+  FIELD_VECTOR (connections, BLd, num_connections, 90);          \
+  SINCE (R_2013) {                                               \
+    FIELD_RC (rc70, 70);                                         \
+  }
+
+#define AcGeomConstraint_fields                \
+  AcConstraintGroupNode_fields;                \
+  SUBCLASS (AcGeomConstraint);                 \
+  FIELD_BL (ownerid, 90);                      \
+  FIELD_B (is_implied, 290);                   \
+  FIELD_B (is_active, 290)
+
+#define AcConstraintGeometry_fields            \
+  AcConstraintGroupNode_fields;                \
+  SUBCLASS (AcConstraintGeometry);             \
+  FIELD_HANDLE (geom_dep, 4, 330);             \
+  FIELD_BL (nodeid, 90)
+
+#define AcExplicitConstraint_fields             \
+  AcGeomConstraint_fields;                      \
+  SUBCLASS (AcExplicitConstraint)               \
+  FIELD_HANDLE (value_dep, 3, 340);             \
+  FIELD_HANDLE (dim_dep, 3, 340)
+
+#define AcAngleConstraint_fields                \
+    AcExplicitConstraint_fields;                \
+    SUBCLASS (AcAngleConstraint);               \
+    FIELD_RC (sector_type, 280)
+
+DWG_OBJECT (ASSOCVARIABLE)
+  DECODE_UNKNOWN_BITS
+  ASSOCACTION_fields;
+  SUBCLASS (AcDbAssocVariable)
+  FIELD_BL (av_class_version, 90); /* 2 */
+  FIELD_T (name, 1);
+  FIELD_T (t58, 1);
+  FIELD_T (evaluator, 1);
+  FIELD_T (desc, 1);
+  AcDbEvalVariant_fields;
+  FIELD_B (has_t78, 290);
+  FIELD_T (t78, 1);
+  FIELD_B (b290, 290);
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */

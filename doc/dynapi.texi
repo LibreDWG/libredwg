@@ -5733,6 +5733,63 @@ BL,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{ASSOCVARIABLE} @anchor{ASSOCVARIABLE}
+@cindex object, ASSOCVARIABLE
+@vindex ASSOCVARIABLE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item av_class_version
+BS,	DXF 90
+@item class_version
+BS,	DXF 90
+@item geometry_status
+BL,	DXF 90
+@item owningnetwork
+H,	DXF 330
+@item actionbody
+H,	DXF 360
+@item action_index
+BL,	DXF 90
+@item max_assoc_dep_index
+BL,	DXF 90
+@item num_deps
+BL,	DXF 90
+@item deps
+Dwg_ASSOCACTION_Deps*
+@item num_owned_params
+BL,	DXF 90
+@item owned_params
+H*,	DXF 360
+@item num_owned_value_param_names
+BL,	DXF 90
+@item owned_value_param_names
+H*,	DXF 360
+@item name
+T,	DXF 1
+@item t58
+T,	DXF 1
+@item evaluator
+T,	DXF 1
+@item desc
+T,	DXF 1
+@item value_type
+BSd,	DXF 70
+@item value
+Dwg_EvalVariant
+@item has_t78
+B,	DXF 290
+@item t78
+T,	DXF 1
+@item b290
+B,	DXF 290
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCVERTEXACTIONPARAM} @anchor{ASSOCVERTEXACTIONPARAM}
 @cindex object, ASSOCVERTEXACTIONPARAM
 @vindex ASSOCVERTEXACTIONPARAM
@@ -12206,6 +12263,26 @@ struct _dwg_object_UCS*
 BS,	DXF 71
 @item pt
 3BD,	DXF 13
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_EvalVariant} @anchor{Dwg_EvalVariant}
+@vindex Dwg_EvalVariant
+
+@indentedblock
+@vtable @code
+
+@item bd
+BD
+@item bl
+BL
+@item bs
+BS
+@item text
+TV
+@item handle
+H
 
 @end vtable
 @end indentedblock

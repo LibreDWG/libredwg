@@ -206,6 +206,7 @@ testobjects += \
 	assocperssubentmanager \
 	assocrevolvedsurfaceactionbody \
 	assocsweptsurfaceactionbody \
+	assocvariable \
 	assocvertexactionparam \
 	atext \
 	blkrefobjectcontextdata \

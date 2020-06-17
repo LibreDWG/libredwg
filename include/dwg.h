@@ -413,6 +413,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCPLANESURFACEACTIONBODY,
   DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY,
   DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCVARIABLE,
   DWG_TYPE_ASSOCVERTEXACTIONPARAM,
   DWG_TYPE_ATEXT,
   DWG_TYPE_BACKGROUND,
@@ -5133,6 +5134,31 @@ typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
   BITCODE_T t2; // AcConstrainedImplicitPoint
 } Dwg_Object_ASSOC2DCONSTRAINTGROUP;
 
+typedef union _dwg_EvalVariant
+{
+  BITCODE_BD bd;
+  BITCODE_BL bl;
+  BITCODE_BS bs;
+  BITCODE_T text;
+  BITCODE_H handle;
+} Dwg_EvalVariant;
+
+typedef struct _dwg_object_ASSOCVARIABLE
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS av_class_version;
+  ASSOCACTION_fields;
+  BITCODE_T name;
+  BITCODE_T t58;
+  BITCODE_T evaluator;
+  BITCODE_T desc;
+  BITCODE_BSd value_type;
+  Dwg_EvalVariant value;
+  BITCODE_B has_t78;
+  BITCODE_T t78;
+  BITCODE_B b290;
+} Dwg_Object_ASSOCVARIABLE;
+
 /* or maybe the nodes are laid out like this */
 typedef struct _dwg_EVAL_Node
 {
@@ -6805,6 +6831,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCPLANESURFACEACTIONBODY *ASSOCPLANESURFACEACTIONBODY;
     Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *ASSOCREVOLVEDSURFACEACTIONBODY;
     Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *ASSOCSWEPTSURFACEACTIONBODY;
+    Dwg_Object_ASSOCVARIABLE *ASSOCVARIABLE;
     Dwg_Object_BACKGROUND *BACKGROUND;
     Dwg_Object_BLOCKVISIBILITYPARAMETER *BLOCKVISIBILITYPARAMETER;
     Dwg_Object_BLOCKVISIBILITYGRIP *BLOCKVISIBILITYGRIP;
@@ -8038,6 +8065,7 @@ EXPORT int dwg_setup_ASSOCSWEPTSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCVARIABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_EVALUATION_GRAPH (Dwg_Object *obj);

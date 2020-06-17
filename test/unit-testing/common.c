@@ -341,6 +341,13 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2007/ATMOS-DC22S.dwg", cov);
               error += test_code (prefix, "2013/JW.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE)
+            {
+              error += test_code (
+                  prefix,
+                  "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
+                  cov);
+            }
         }
 #ifdef DWG_TYPE
       if (cov && !numpassed () && !numfailed ())
