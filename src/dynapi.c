@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1413 "gen-dynapi.pl"
+#line 1414 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -7600,7 +7600,7 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_fields[] = {
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_TABLESTYLE, class_version),
     0,0,0, 0 },
   { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_TABLESTYLE, name),
-    1,1,1, 300 },
+    1,1,1, 3 },
   { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_TABLESTYLE, flags),
     0,0,0, 71 },
   { "flow_direction",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_TABLESTYLE, flow_direction),
@@ -10803,7 +10803,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 1497 "gen-dynapi.pl"
+#line 1498 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

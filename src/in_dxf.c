@@ -7880,7 +7880,6 @@ new_object (char *restrict name, char *restrict dxfname,
               Dwg_CellStyle *o = NULL;
               Dwg_TABLESTYLE_CellStyle *tbl_sty = NULL;
               char key[80];
-              // TODO, counters for the others
               if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
                 {
                   Dwg_Object_CELLSTYLEMAP *_o = obj->tio.object->tio.CELLSTYLEMAP;
@@ -7892,6 +7891,13 @@ new_object (char *restrict name, char *restrict dxfname,
                   tbl_sty = &_o->cells[cur_cell];
                   sprintf (key, "cells[%d]", cur_cell);
                   o = &tbl_sty->cellstyle;
+                }
+              else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
+                {
+                  // TODO ovr
+                  Dwg_Object_TABLESTYLE *_o = obj->tio.object->tio.TABLESTYLE;
+                  tbl_sty = &_o->sty;
+                  o = &_o->sty.cellstyle;
                 }
               if (o)
                 pair = add_CellStyle (obj, o, &key[0], dat, pair);

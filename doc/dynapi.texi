@@ -8755,7 +8755,7 @@ struct _dwg_object_object*
 @item class_version
 BS
 @item name
-T,	DXF 300
+T,	DXF 3
 @item flags
 BS,	DXF 71
 @item flow_direction

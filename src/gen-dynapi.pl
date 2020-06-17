@@ -422,6 +422,7 @@ $DXF{'SORTENTSTABLE'}->{'ents'} = 331;
 $DXF{'SORTENTSTABLE'}->{'sort_ents'} = 5;
 $DXF{'PLOTSETTINGS'}->{'shadeplot'} = 333;
 $DXF{'OCD_Dimension'}->{'block'} = 2;
+$DXF{'TABLESTYLE'}->{'name'} = 3; # not 300
 $DXF{'TABLE_Cell'}->{'cell_flag_override'} = 177;
 $DXF{'ACSH_HistoryNode'}->{'trans'} = 40; # but inc by 1 for 16
 # $DXF{'DIMENSION_ORDINATE'}->{'def_pt'} = 10;
@@ -1409,7 +1410,7 @@ close $fh;
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1413 "gen-dynapi.pl"
+#line 1414 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1493,7 +1494,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1497 "gen-dynapi.pl"
+#line 1498 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
