@@ -4988,6 +4988,26 @@ typedef struct _dwg_ASSOCACTION_Deps
   BITCODE_BL num_owned_value_param_names;        /* 90 */   \
   BITCODE_H *owned_value_param_names             /* ? */
 
+// AcDbAssocDependency
+typedef struct _dwg_object_ASSOCDEPENDENCY
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS class_version;			/*<! DXF 90 */
+  BITCODE_BL status;				/*<! DXF 90 */
+  BITCODE_B is_read_dep;			/*<! DXF 290 */
+  BITCODE_B is_write_dep;			/*<! DXF 290 */
+  BITCODE_B is_attached_to_object;		/*<! DXF 290 */
+  BITCODE_B is_delegating_to_owning_action;	/*<! DXF 290 */
+  BITCODE_BLd order;				/*<! DXF 90 */
+  BITCODE_H dep_on;				/*<! DXF 330 */
+  BITCODE_B has_name;				/*<! DXF 290 */
+  BITCODE_T name;				/*<! DXF 1 */
+  BITCODE_BLd depbodyid;			/*<! DXF 90 */
+  BITCODE_H  readdep; 				/*<! DXF 330 */
+  BITCODE_H  dep_body;  			/*<! DXF 360 */
+  BITCODE_H  node; 				/*<! DXF 330 */
+} Dwg_Object_ASSOCDEPENDENCY;
+
 typedef struct _dwg_object_ASSOCACTION
 {
   struct _dwg_object_object *parent;
@@ -4997,27 +5017,8 @@ typedef struct _dwg_object_ASSOCACTION
   //BITCODE_BL status;
   //BITCODE_H  actionbody;
   //BITCODE_H  callback;
-  //BITCODE_H  owningnetwork;
+  //BITCODE_H  owning_network;
 } Dwg_Object_ASSOCACTION;
-
-typedef struct _dwg_object_ASSOCDEPENDENCY
-{
-  struct _dwg_object_object *parent;
-  BITCODE_BL class_version; // 90
-  BITCODE_BL status; // 90
-  BITCODE_B isread_dep; // 290
-  BITCODE_B iswrite_dep; // 290
-  BITCODE_B isobjectstate_dep; // 290
-  BITCODE_B unknown_b4; // 290
-  BITCODE_BL order; // 90 -2147483648
-  BITCODE_B unknown_b5; // 290
-  BITCODE_BL depbodyid; // 90
-
-  BITCODE_H  owner; // 330
-  BITCODE_H  readdep; // 330
-  BITCODE_H  writedep; // 360
-  BITCODE_H  node; // 330
-} Dwg_Object_ASSOCDEPENDENCY;
 
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
 {
@@ -6455,20 +6456,7 @@ typedef struct _dwg_object_ACMESTATEMGR
 typedef struct _dwg_object_ASSOCGEOMDEPENDENCY
 {
   struct _dwg_object_object *parent;
-  // AcDbAssocDependency
-  BITCODE_BS class_version;			/*<! DXF 90 */
-  BITCODE_BS dependent_on_object_status;	/*<! DXF 90 */
-  BITCODE_B has_cached_value;			/*<! DXF 290 */
-  BITCODE_B is_actionevaluation_in_progress;  	/*<! DXF 290 */
-  BITCODE_B is_attached_to_object;		/*<! DXF 290 */
-  BITCODE_B is_delegating_to_owning_action;	/*<! DXF 290 */
-  BITCODE_BS bs90_2;	/*<! DXF 90 */
-  BITCODE_H h330_1;	/*<! DXF 330 */
-  BITCODE_B b290_5;	/*<! DXF 290 */
-  BITCODE_H h330_2;	/*<! DXF 330 */
-  BITCODE_H h330_3;	/*<! DXF 330 */
-  BITCODE_H h360;	/*<! DXF 360 */
-  BITCODE_BS bs90_3;	/*<! DXF 90 */
+  Dwg_Object_ASSOCDEPENDENCY assocdep;
   // AcDbAssocGeomDependency
   BITCODE_BS bs90_4;	/*<! DXF 90 */
   BITCODE_B b290_6;	/*<! DXF 290 */

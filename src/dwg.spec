@@ -6582,30 +6582,52 @@ DWG_OBJECT_END
    Coverage might be missing for some cases, or field names may change.
  */
 
+#define AcDbAssocDependency_fields                         \
+  SUBCLASS (AcDbAssocDependency);                          \
+  FIELD_BS (assocdep.class_version, 90); /* 2 */           \
+  VALUEOUTOFBOUNDS (assocdep.class_version, 3);            \
+  FIELD_BL (assocdep.status, 90);                          \
+  FIELD_B (assocdep.is_read_dep, 290);                     \
+  FIELD_B (assocdep.is_write_dep, 290);                    \
+  FIELD_B (assocdep.is_attached_to_object, 290);           \
+  FIELD_B (assocdep.is_delegating_to_owning_action, 290);  \
+  FIELD_BLd (assocdep.order, 90); /* -1 or 0 */            \
+  FIELD_HANDLE (assocdep.dep_on, 3, 330);                  \
+  FIELD_B (assocdep.has_name, 290);                        \
+  if (FIELD_VALUE (assocdep.has_name)) {                   \
+    FIELD_B (assocdep.name, 1);                            \
+  }                                                        \
+  FIELD_HANDLE (assocdep.readdep, 4, 330);                 \
+  FIELD_HANDLE (assocdep.node, 3, 330);                    \
+  FIELD_HANDLE (assocdep.dep_body, 4, 360);                \
+  FIELD_BLd (assocdep.depbodyid, 90)
+
 // (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
 // field names may change.
 // See AcDbAssocDependency.h
 DWG_OBJECT (ASSOCDEPENDENCY)
-
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocDependency)
-  FIELD_BL (class_version, 90); //2
-  VALUEOUTOFBOUNDS (class_version, 3)
-  FIELD_BL (status, 90); //1 or depbody
-  FIELD_B  (isread_dep, 290); //0
-  FIELD_B  (iswrite_dep, 290); //1
-  FIELD_B  (isobjectstate_dep, 290); //1
-  FIELD_B  (unknown_b4, 290); //1
-  FIELD_BL (order, 90); //-2147483648 (-1) or 0
-  FIELD_B  (unknown_b5, 290); //0
-  FIELD_BL (depbodyid, 90); //1
-
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (writedep, 4, 360);
+  SUBCLASS (AcDbAssocDependency);
+  FIELD_BS (class_version, 90);
+  VALUEOUTOFBOUNDS (class_version, 3);
+  FIELD_BL (status, 90);
+  FIELD_B (is_read_dep, 290);
+  FIELD_B (is_write_dep, 290);
+  FIELD_B (is_attached_to_object, 290);
+  FIELD_B (is_delegating_to_owning_action, 290);
+  FIELD_BLd (order, 90); /* -1 or 0 */
+  FIELD_HANDLE (dep_on, 3, 330);
+  FIELD_B (has_name, 290);
+  if (FIELD_VALUE (has_name)) {
+    FIELD_T (name, 1);
+  }
   FIELD_HANDLE (readdep, 4, 330);
   FIELD_HANDLE (node, 3, 330);
-DWG_OBJECT_END
+  FIELD_HANDLE (dep_body, 4, 360);
+  FIELD_BLd (depbodyid, 90);
+  START_OBJECT_HANDLE_STREAM;
+  DWG_OBJECT_END
 
 #define AcDbAssocActionParam_fields \
   SUBCLASS (AcDbAssocActionParam)   \
@@ -9064,27 +9086,13 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   //90 2 DependentOnObjectStatus (ok, NotInitializedYet, InvalidObjectId)
   //90 -10000
   //330 -> CIRCLE
-  SUBCLASS (AcDbAssocDependency)
-  FIELD_BS (class_version, 90);
-  FIELD_BS (dependent_on_object_status, 90);
-  FIELD_B (has_cached_value, 290);
-  FIELD_B (is_actionevaluation_in_progress, 290);
-  FIELD_B (is_attached_to_object, 290);
-  FIELD_B (is_delegating_to_owning_action, 290);
-  FIELD_BS (bs90_2, 90);
-  FIELD_B (b290_5, 290);
-  FIELD_BS (bs90_3, 90);
+  AcDbAssocDependency_fields;
   SUBCLASS (AcDbAssocGeomDependency)
   FIELD_BS (bs90_4, 90);
   FIELD_B (b290_6, 290);
   FIELD_T (t, 1);
   FIELD_B (dependent_on_compound_object, 290);
-
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (h330_1, 4, 330);
-  FIELD_HANDLE (h330_2, 4, 330);
-  FIELD_HANDLE (h330_3, 4, 330);
-  FIELD_HANDLE (h360, 3, 360);
 DWG_OBJECT_END
 
 // AutoCAD Mechanical

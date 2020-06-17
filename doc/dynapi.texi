@@ -5257,28 +5257,30 @@ H,	DXF 330
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL,	DXF 90
+BS,	DXF 90
 @item status
 BL,	DXF 90
-@item isread_dep
+@item is_read_dep
 B,	DXF 290
-@item iswrite_dep
+@item is_write_dep
 B,	DXF 290
-@item isobjectstate_dep
+@item is_attached_to_object
 B,	DXF 290
-@item unknown_b4
+@item is_delegating_to_owning_action
 B,	DXF 290
 @item order
-BL,	DXF 90
-@item unknown_b5
+BLd,	DXF 90
+@item dep_on
+H,	DXF 330
+@item has_name
 B,	DXF 290
+@item name
+T,	DXF 1
 @item depbodyid
-BL,	DXF 90
-@item owner
-H
+BLd,	DXF 90
 @item readdep
 H,	DXF 330
-@item writedep
+@item dep_body
 H,	DXF 360
 @item node
 H,	DXF 330
@@ -5340,32 +5342,8 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item class_version
-BS,	DXF 90
-@item dependent_on_object_status
-BS,	DXF 90
-@item has_cached_value
-B,	DXF 290
-@item is_actionevaluation_in_progress
-B,	DXF 290
-@item is_attached_to_object
-B,	DXF 290
-@item is_delegating_to_owning_action
-B,	DXF 290
-@item bs90_2
-BS,	DXF 90
-@item h330_1
-H,	DXF 330
-@item b290_5
-B,	DXF 290
-@item h330_2
-H,	DXF 330
-@item h330_3
-H,	DXF 330
-@item h360
-H,	DXF 360
-@item bs90_3
-BS,	DXF 90
+@item assocdep
+Dwg_Object_ASSOCDEPENDENCY
 @item bs90_4
 BS,	DXF 90
 @item b290_6
