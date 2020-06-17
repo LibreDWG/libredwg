@@ -1261,11 +1261,11 @@ api_common_entity (dwg_object *obj)
                 if (g_counter > g_countmax)                                   \
                   pass ();                                                    \
                 else                                                          \
-                  ok (#name "." #field "[%d]:\t " FORMAT_##type, i,           \
+                  ok (#name "." #field "[%d]:\t " FORMAT_##type, _i,          \
                       value[_i]);                                             \
               }                                                               \
             else                                                              \
-              fail (#name "." #field "[%d]:\t " FORMAT_##type, i,             \
+              fail (#name "." #field "[%d]:\t " FORMAT_##type, _i,            \
                     value[_i]);                                               \
           }                                                                   \
       }                                                                       \
