@@ -8068,13 +8068,12 @@ EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_SUNSTUDY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
-//EXPORT int dwg_setup_XREFPANELOBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKGRIPLOCATIONCOMPONENT (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKVISIBILITYGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKVISIBILITYPARAMETER (Dwg_Object *obj);
 //EXPORT int dwg_setup_VISIBILITYGRIPENTITY (Dwg_Object *obj);
 //EXPORT int dwg_setup_VISIBILITYPARAMETERENTITY (Dwg_Object *obj);
-
+//EXPORT int dwg_setup_XREFPANELOBJECT (Dwg_Object *obj);
 
 #endif /* DEBUG_CLASSES */
 
