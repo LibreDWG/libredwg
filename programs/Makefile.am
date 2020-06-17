@@ -86,9 +86,7 @@ TESTS = alive.test
 if !DISABLE_DXF
 TESTS += dxf.test
 if HAVE_JQ
-if !ENABLE_DEBUG
 TESTS += json.test
-endif
 endif
 if HAVE_JING
 TESTS += svg.test
