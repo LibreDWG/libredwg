@@ -4146,7 +4146,6 @@ DWG_OBJECT_END
 //pg.204 20.4.80
 DWG_ENTITY (IMAGE)
 
-  //SUBCLASS (AcDbImage)
   SUBCLASS (AcDbRasterImage)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE (class_version) > 10)
@@ -4155,13 +4154,15 @@ DWG_ENTITY (IMAGE)
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
   FIELD_2RD (size, 13);
+  FIELD_HANDLE (imagedef, 5, 340); // hard pointer
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280);
   FIELD_RC (brightness, 281);
   FIELD_RC (contrast, 282);
   FIELD_RC (fade, 283);
+  FIELD_HANDLE (imagedefreactor, 3, 360); // hard owner
   SINCE (R_2010) {
-    FIELD_B (clip_mode, 290); // 0 outside, 1 inside
+    FIELD_B (clip_mode, 0);
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE (clip_boundary_type) == 1)
@@ -4170,15 +4171,14 @@ DWG_ENTITY (IMAGE)
     FIELD_BL (num_clip_verts, 91);
   FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 14);
 
+  DXF { SINCE (R_2010) {
+    FIELD_B (clip_mode, 290);
+  }}
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (imagedef, 5, 340); // hard pointer
-  FIELD_HANDLE (imagedefreactor, 3, 360); // hard owner
-
 DWG_ENTITY_END
 
 //pg.142 test-data/*/Leader_*.dwg
 DWG_OBJECT (IMAGEDEF)
-
   SUBCLASS (AcDbRasterImageDef)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE (class_version) > 10)
@@ -4188,23 +4188,18 @@ DWG_OBJECT (IMAGEDEF)
   FIELD_B (is_loaded, 280);
   FIELD_RC (resunits, 281);
   FIELD_2RD (pixel_size, 11);
-
   START_OBJECT_HANDLE_STREAM;
-  //DEBUG_POS_OBJ
-  //FIELD_HANDLE (xrefctrl, 0, 0); ///libdxfrw bug?
-
 DWG_OBJECT_END
 
 //PG.143
 DWG_OBJECT (IMAGEDEF_REACTOR)
-
   SUBCLASS (AcDbRasterImageDefReactor)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE (class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
   START_OBJECT_HANDLE_STREAM;
-
+  DXF { VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330); }
 DWG_OBJECT_END
 
 //pg.144

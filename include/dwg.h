@@ -3964,14 +3964,14 @@ typedef struct _dwg_entity_IMAGE
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
   BITCODE_3BD vvec;
-  BITCODE_2RD size; /*!< DXF 13/23; width, height in pixel */
+  BITCODE_2RD size; 	/*!< DXF 13/23; width, height in pixel */
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;
   BITCODE_RC contrast;
   BITCODE_RC fade;
-  BITCODE_B clip_mode;
-  BITCODE_BS clip_boundary_type;
+  BITCODE_B clip_mode;           // 0 outside, 1 inside (inverted)
+  BITCODE_BS clip_boundary_type; // 1 rect, 2 polygon
   BITCODE_BL num_clip_verts;
   BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;
@@ -3990,7 +3990,7 @@ typedef struct _dwg_object_IMAGEDEF
   BITCODE_TV file_path;
   BITCODE_B is_loaded;
   BITCODE_RC resunits;
-  BITCODE_2RD pixel_size;
+  BITCODE_2RD pixel_size;  // resolution MM/pixel
   //BITCODE_H xrefctrl;    /*!< r2010+ */
 } Dwg_Object_IMAGEDEF;
 
