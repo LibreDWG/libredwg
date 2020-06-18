@@ -1254,10 +1254,15 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].size += size;
       }
       break;
-    // 1001 is the APPID handle, not part of size nor data
+    // 1001 is the name of the APPID handle, not part of size nor data
     case 1:
       obj->tio.object->num_eed--;
       prev = i;
+      if (!pair->value.s || !*pair->value.s) {
+          LOG_ERROR ("Invalid empty DXF code 1001");
+          dwg_free_eed (obj);
+          return;
+        }
       if (strEQc (pair->value.s, "ACAD"))
         {
           dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
