@@ -6667,12 +6667,8 @@ DWG_OBJECT (ASSOCPLANESURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocPlaneSurfaceActionBody)
-  FIELD_BL (psab_status, 90);
-
+  FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
-  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
-  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
@@ -7751,12 +7747,8 @@ DWG_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocExtrudedSurfaceActionBody)
-  FIELD_BL (esab_status, 90);
-
+  FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
-  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
-  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
 DWG_OBJECT_END
 
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
@@ -7764,12 +7756,8 @@ DWG_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocLoftedSurfaceActionBody)
-  FIELD_BL (lsab_status, 90);
-
+  FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
-  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
-  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
 DWG_OBJECT_END
 
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
@@ -7777,12 +7765,8 @@ DWG_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocRevolvedSurfaceActionBody)
-  FIELD_BL (rsab_status, 90);
-
+  FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
-  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
-  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
 DWG_OBJECT_END
 
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
@@ -7790,12 +7774,8 @@ DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocSweptSurfaceActionBody)
-  FIELD_BL (ssab_status, 90);
-
+  FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (writedeps, num_deps, 0, 360);
-  HANDLE_VECTOR (readdeps, num_deps, 0, 360);
-  FIELD_VECTOR_T (descriptions, T, num_deps, 1);
 DWG_OBJECT_END
 
 // DEBUGGING

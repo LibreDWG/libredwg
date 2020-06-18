@@ -5306,15 +5306,15 @@ BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
-H*,	DXF 360
+H*
 @item pab_l4
 BL,	DXF 90
 @item pab_l5
 BL,	DXF 90
 @item readdeps
-H*,	DXF 360
+H*
 @item descriptions
-TV*,	DXF 1
+TV*
 @item sab_status
 BL,	DXF 90
 @item sab_b1
@@ -5327,7 +5327,7 @@ B,	DXF 290
 BS,	DXF 70
 @item pbsab_status
 BL,	DXF 90
-@item esab_status
+@item class_version
 BL,	DXF 90
 
 @end vtable
@@ -5374,15 +5374,15 @@ BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
-H*,	DXF 360
+H*
 @item pab_l4
 BL,	DXF 90
 @item pab_l5
 BL,	DXF 90
 @item readdeps
-H*,	DXF 360
+H*
 @item descriptions
-TV*,	DXF 1
+TV*
 @item sab_status
 BL,	DXF 90
 @item sab_b1
@@ -5395,7 +5395,7 @@ B,	DXF 290
 BS,	DXF 70
 @item pbsab_status
 BL,	DXF 90
-@item lsab_status
+@item class_version
 BL,	DXF 90
 
 @end vtable
@@ -5594,15 +5594,15 @@ BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
-H*,	DXF 360
+H*
 @item pab_l4
 BL,	DXF 90
 @item pab_l5
 BL,	DXF 90
 @item readdeps
-H*,	DXF 360
+H*
 @item descriptions
-TV*,	DXF 1
+TV*
 @item sab_status
 BL,	DXF 90
 @item sab_b1
@@ -5615,7 +5615,7 @@ B,	DXF 290
 BS,	DXF 70
 @item pbsab_status
 BL,	DXF 90
-@item psab_status
+@item class_version
 BL,	DXF 90
 
 @end vtable
@@ -5639,15 +5639,15 @@ BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
-H*,	DXF 360
+H*
 @item pab_l4
 BL,	DXF 90
 @item pab_l5
 BL,	DXF 90
 @item readdeps
-H*,	DXF 360
+H*
 @item descriptions
-TV*,	DXF 1
+TV*
 @item sab_status
 BL,	DXF 90
 @item sab_b1
@@ -5660,7 +5660,7 @@ B,	DXF 290
 BS,	DXF 70
 @item pbsab_status
 BL,	DXF 90
-@item rsab_status
+@item class_version
 BL,	DXF 90
 
 @end vtable
@@ -5684,15 +5684,15 @@ BL,	DXF 90
 @item num_deps
 BL,	DXF 90
 @item writedeps
-H*,	DXF 360
+H*
 @item pab_l4
 BL,	DXF 90
 @item pab_l5
 BL,	DXF 90
 @item readdeps
-H*,	DXF 360
+H*
 @item descriptions
-TV*,	DXF 1
+TV*
 @item sab_status
 BL,	DXF 90
 @item sab_b1
@@ -5705,7 +5705,7 @@ B,	DXF 290
 BS,	DXF 70
 @item pbsab_status
 BL,	DXF 90
-@item ssab_status
+@item class_version
 BL,	DXF 90
 
 @end vtable

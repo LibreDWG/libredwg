@@ -5285,7 +5285,7 @@ typedef struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY
   struct _dwg_object_object *parent;
   ASSOCPATHBASEDSURFACEACTIONBODY_fields
   // AcDbAssocExtrudedSurfaceActionBody
-  BITCODE_BL esab_status;       /*!< DXF 90  */
+  BITCODE_BL class_version;       /*!< DXF 90  */
 } Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY;
 
 typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
@@ -5293,8 +5293,7 @@ typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY
   struct _dwg_object_object *parent;
   ASSOCPATHBASEDSURFACEACTIONBODY_fields
   // AcDbAssocPlaneSurfaceActionBody
-  BITCODE_BL psab_status;       /*!< DXF 90  */
-
+  BITCODE_BL class_version;       /*!< DXF 90  */
 } Dwg_Object_ASSOCPLANESURFACEACTIONBODY;
 
 typedef struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY
@@ -5302,7 +5301,7 @@ typedef struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY
   struct _dwg_object_object *parent;
   ASSOCPATHBASEDSURFACEACTIONBODY_fields
   // AcDbAssocLoftedSurfaceActionBody
-  BITCODE_BL lsab_status;       /*!< DXF 90  */
+  BITCODE_BL class_version;       /*!< DXF 90  */
 } Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY;
 
 typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY
@@ -5310,7 +5309,7 @@ typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY
   struct _dwg_object_object *parent;
   ASSOCPATHBASEDSURFACEACTIONBODY_fields
   // AcDbAssocRevolvedSurfaceActionBody
-  BITCODE_BL rsab_status;       /*!< DXF 90  */
+  BITCODE_BL class_version;       /*!< DXF 90  */
 } Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY;
 
 typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY
@@ -5318,7 +5317,7 @@ typedef struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY
   struct _dwg_object_object *parent;
   ASSOCPATHBASEDSURFACEACTIONBODY_fields
   // AcDbAssocSweptSurfaceActionBody
-  BITCODE_BL ssab_status;       /*!< DXF 90  */
+  BITCODE_BL class_version;       /*!< DXF 90  */
 } Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY;
 
 /* A node in the EVALUATION_GRAPH */
