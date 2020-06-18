@@ -6637,26 +6637,32 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   }                                 \
   FIELD_T (name, 1)
 
-#define AcDbAssocParamBasedActionBody_fields \
-  SUBCLASS (AcDbAssocActionBody) \
-  FIELD_BL (aab_version, 90); \
-  SUBCLASS (AcDbAssocParamBasedActionBody) \
-  FIELD_BL (pab_status, 90); \
-  FIELD_BL (pab_l2, 90); \
-  FIELD_BL (num_deps, 90); \
-  FIELD_BL (pab_l4, 90); \
-  FIELD_BL (pab_l5, 90)
+#define AcDbAssocActionBody_fields  \
+  SUBCLASS (AcDbAssocActionBody)    \
+  FIELD_BL (aab_version, 90)
+
+#define AcDbAssocParamBasedActionBody_fields      \
+  UNTIL (R_2010) {                                \
+    SUBCLASS (AcDbAssocParamBasedActionBody)      \
+    FIELD_BL (pab_status, 90);                    \
+    FIELD_BL (pab_l2, 90);                        \
+    FIELD_BL (num_deps, 90);                      \
+    HANDLE_VECTOR (deps, num_deps, 5, 330);       \
+    FIELD_BL (pab_l4, 90);                        \
+    FIELD_BL (pab_l5, 90);                        \
+  }
 
 #define AcDbAssocPathBasedSurfaceActionBody_fields \
-  AcDbAssocParamBasedActionBody_fields; \
-  SUBCLASS (AcDbAssocSurfaceActionBody)	\
-  FIELD_BL (sab_status, 90); \
-  FIELD_B (sab_b1, 290); \
-  FIELD_BL (sab_l2, 90); \
-  FIELD_B (sab_b2, 290); \
-  FIELD_BS (sab_s1, 70); \
-  SUBCLASS (AcDbAssocPathBasedSurfaceActionBody) \
-  FIELD_BL (pbsab_status, 90)
+    AcDbAssocActionBody_fields;                    \
+    AcDbAssocParamBasedActionBody_fields;          \
+    SUBCLASS (AcDbAssocSurfaceActionBody)          \
+    FIELD_BL (sab_status, 90);                     \
+    FIELD_B (sab_b1, 290);                         \
+    FIELD_BL (sab_l2, 90);                         \
+    FIELD_B (sab_b2, 290);                         \
+    FIELD_BS (sab_s1, 70);                         \
+    SUBCLASS (AcDbAssocPathBasedSurfaceActionBody);\
+    FIELD_BL (pbsab_status, 90)
 
 // (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
@@ -7080,37 +7086,43 @@ DWG_ENTITY (HELIX)
 
 DWG_ENTITY_END
 
+#define AcDbAssocAnnotationActionBody_fields \
+  AcDbAssocActionBody_fields;                \
+  SINCE (R_2013) {                           \
+    FIELD_BS (aaab_version, 90);             \
+    FIELD_HANDLE (assoc_dep, 5, 330);        \
+  }                                          \
+  UNTIL (R_2010) {                           \
+  if (FIELD_VALUE (actionbody))              \
+    {                                        \
+      AcDbAssocParamBasedActionBody_fields;  \
+    }                                        \
+  }
+
 // unstable
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
-
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocActionBody)
-  FIELD_BL (aab_version, 90);
-  SUBCLASS (AcDbAssocParamBasedActionBody)
-  FIELD_BL (pab_status, 90);
-  FIELD_BL (pab_l2, 90);
-  FIELD_BL (pab_l3, 90);
-  //FIELD_HANDLE (writedep, 0, 360);
-  FIELD_BL (pab_l4, 90);
-  FIELD_BL (pab_l5, 90);
-  //FIELD_BL (pab_l6, 90);
+  AcDbAssocActionBody_fields;
+  AcDbAssocParamBasedActionBody_fields;
   SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY)
-  FIELD_BL (dcm_status, 90); //has d_node or r_node
-
+  FIELD_BS (class_version, 90);
+  //or status, 90 //has d_node or r_node?
   //TODO: DXF has a different order
   START_OBJECT_HANDLE_STREAM;
-  VERSION (R_2013) {
-    FIELD_HANDLE (readdep, 4, 330);
-    FIELD_HANDLE (writedep, 3, 360);
-    FIELD_HANDLE (r_node, 4, 330);
-    FIELD_HANDLE (d_node, 4, 330);
-  } else {
-    FIELD_HANDLE (writedep, 3, 360);
-    FIELD_HANDLE (readdep, 4, 330);
-    FIELD_HANDLE (d_node, 3, 330);
-    FIELD_HANDLE (r_node, 4, 330);
-  }
+  FIELD_HANDLE (r_node, 4, 330);
+  FIELD_HANDLE (d_node, 4, 330);
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocAnnotationActionBody_fields;
+  SUBCLASS (Assoc3PointAngularDimActionBody)
+  FIELD_BS (class_version, 90);
+  FIELD_HANDLE (h1, 4, 330);
+  FIELD_HANDLE (h2, 4, 330);
+  FIELD_HANDLE (assoc_dep, 5, 330);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // undocumented fields, unstable, but looks stable.
@@ -7775,6 +7787,21 @@ DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocSweptSurfaceActionBody)
   FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocBlendSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  FIELD_B (b1, 290);
+  FIELD_B (b2, 291);
+  FIELD_B (b3, 292);
+  FIELD_BS (bs1, 72);
+  FIELD_B (b4, 293);
+  FIELD_B (b5, 294);
+  FIELD_BS (bs2, 73);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
