@@ -7809,8 +7809,8 @@ DWG_OBJECT (EVALUATION_GRAPH)
   FIELD_BL (nodeid, 91);           // 0
   if (FIELD_VALUE (has_graph))
     {
-      FIELD_BL (edge_flags, 93);   // 32
-      FIELD_BL (num_evalexpr, 95); // 1
+      FIELD_BL (edge_flags, 93);   // 32 which to set?
+      FIELD_BL (num_evalexpr, 95); // 1  how many to set?
       // maybe REPEAT num_evalexpr: edge1-4, evalexpr
       FIELD_BLd (node_edge1, 92);   // -1
       FIELD_BLd (node_edge2, 92);   // -1
@@ -7824,7 +7824,6 @@ DWG_OBJECT (EVALUATION_GRAPH)
 DWG_OBJECT_END
 
 #undef ASSOCACTION_fields
-/* dof: 2 remaining degree of freedom */
 #define ASSOCACTION_fields                                 \
   SUBCLASS (AcDbAssocAction)                               \
   /* until r2010: 1, 2013+: 2 */                           \

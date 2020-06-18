@@ -4771,6 +4771,10 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 {
   Dwg_Object_ASSOCACTION *o = obj->tio.object->tio.ASSOCACTION;
   Dwg_Data *dwg = obj->parent;
+  BITCODE_BL num;
+  BITCODE_H *hv;
+  Dwg_ASSOCACTION_Deps *deps;
+  unsigned class_version;
 
 #define EXPECT_INT_DXF(field, dxf, type)                                      \
   if (pair == NULL || pair->code != dxf)                                      \
@@ -4800,19 +4804,73 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }                                                                         \
   dxf_free_pair (pair)
 
-  EXPECT_INT_DXF ("solution_status", 90, BL);
+  if (pair == NULL || pair->code != 90)
+    return pair;
+  class_version = pair->value.u;
+  EXPECT_INT_DXF ("class_version", 90, BS);
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("geometry_status", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("readdep", 5, 330, H); // or vector?
+  EXPECT_H_DXF ("owningnetwork", 5, 330, H); // or vector?
   pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("writedep", 5, 360, H);
+  EXPECT_H_DXF ("actionbody", 4, 360, H);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("constraint_status", 90, BL);
+  EXPECT_INT_DXF ("action_index", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("dof", 90, BL);
+  EXPECT_INT_DXF ("max_assoc_dep_index", 90, BL);
+
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("is_body_a_proxy", 90, B);
+  num = pair->value.u;
+  EXPECT_INT_DXF ("num_deps", 90, BL);
+  deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  for (unsigned i=0; i<num; i++)
+    {
+      BITCODE_H hdl;
+      int is_soft, code;
+      pair = dxf_read_pair (dat);
+      deps[i].is_soft = pair->code == 360;
+      code = deps[i].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+      deps[i].dep = dwg_add_handleref (dwg, code, pair->value.u, obj);
+      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "deps",
+                 ARGS_REF (deps[i].dep), pair->code);
+      dxf_free_pair (pair);
+    }
+  dwg_dynapi_entity_set_value (o, obj->name, "deps", &deps, 1);
+
+  if (class_version > 1)
+    {
+      pair = dxf_read_pair (dat);
+      num = pair->value.u;
+      EXPECT_INT_DXF ("num_owned_params", 90, BL);
+      hv = xcalloc (num, sizeof (BITCODE_H));
+      for (unsigned i=0; i<num; i++)
+        {
+          BITCODE_H hdl;
+          pair = dxf_read_pair (dat);
+          hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+          LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_params",
+                     ARGS_REF (hdl), pair->code);
+          hv[i] = hdl;
+          dxf_free_pair (pair);
+        }
+      dwg_dynapi_entity_set_value (o, obj->name, "owned_params", &hv, 1);
+
+      pair = dxf_read_pair (dat);
+      num = pair->value.u;
+      EXPECT_INT_DXF ("num_owned_params", 90, BL);
+      hv = xcalloc (num, sizeof (BITCODE_H));
+      for (unsigned i=0; i<num; i++)
+        {
+          BITCODE_H hdl;
+          pair = dxf_read_pair (dat);
+          hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_value_param_names",
+                     ARGS_REF (hdl), pair->code);
+          hv[i] = hdl;
+          dxf_free_pair (pair);
+        }
+      dwg_dynapi_entity_set_value (o, obj->name, "owned_value_param_names", &hv, 1);
+    }
 
   return NULL;
 }
