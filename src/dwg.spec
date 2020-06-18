@@ -6668,12 +6668,13 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   START_OBJECT_HANDLE_STREAM;
   DWG_OBJECT_END
 
-#define AcDbAssocActionParam_fields \
-  SUBCLASS (AcDbAssocActionParam)   \
-  FIELD_BL (is_r2013, 90);          \
-  if (_obj->is_r2013) {             \
-    VALUE_BL (0, 90);               \
-  }                                 \
+#define AcDbAssocActionParam_fields       \
+  SUBCLASS (AcDbAssocActionParam)         \
+  SINCE (R_2013) { _obj->is_r2013 = 1; }  \
+  FIELD_BS (is_r2013, 90);                \
+  SINCE (R_2013) {                        \
+    FIELD_BL (aap_version, 90);           \
+  }                                       \
   FIELD_T (name, 1)
 
 #define AcDbAssocActionBody_fields  \
@@ -6717,14 +6718,78 @@ DWG_OBJECT (ASSOCDEPENDENCY)
 
 // (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
-// field names may change.
 // See AcDbAssocActionBody.h
-// summary: 78/98=79.59%
 DWG_OBJECT (ASSOCPLANESURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocPlaneSurfaceActionBody)
   FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocExtrudedSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocLoftedSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocRevolvedSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocSweptSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+DWG_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocBlendSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  FIELD_B (b1, 290);
+  FIELD_B (b2, 291);
+  FIELD_B (b3, 292);
+  FIELD_BS (bs1, 72);
+  FIELD_B (b4, 293);
+  FIELD_B (b5, 294);
+  FIELD_BS (bs2, 73);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCPATCHSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocPatchSurfaceActionBody)
+  DXF { FIELD_BL (class_version, 90); }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -7148,32 +7213,6 @@ DWG_ENTITY_END
       AcDbAssocParamBasedActionBody_fields (pab); \
     }                                        \
   }
-
-// unstable
-// See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
-DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocActionBody_fields;
-  AcDbAssocParamBasedActionBody_fields (pab);
-  SUBCLASS (AcDbAssocAlignedDimActionBody)
-  FIELD_BS (class_version, 90);
-  //or status, 90 //has d_node or r_node?
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (r_node, 4, 330);
-  FIELD_HANDLE (d_node, 4, 330);
-DWG_OBJECT_END
-
-DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocActionBody_fields;
-  AcDbAssocParamBasedActionBody_fields (pab);
-  SUBCLASS (Assoc3PointAngularDimActionBody)
-  FIELD_BS (class_version, 90);
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (h1, 4, 330);
-  FIELD_HANDLE (h2, 4, 330);
-  FIELD_HANDLE (assoc_dep, 5, 330);
-DWG_OBJECT_END
 
 // undocumented fields, unstable, but looks stable.
 // types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
@@ -7739,6 +7778,32 @@ DWG_OBJECT_END
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
+// unstable
+// See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
+DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionBody_fields;
+  AcDbAssocParamBasedActionBody_fields (pab);
+  SUBCLASS (AcDbAssocAlignedDimActionBody)
+  FIELD_BS (class_version, 90);
+  //or status, 90 //has d_node or r_node?
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (r_node, 4, 330);
+  FIELD_HANDLE (d_node, 4, 330);
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionBody_fields;
+  AcDbAssocParamBasedActionBody_fields (pab);
+  SUBCLASS (Assoc3PointAngularDimActionBody)
+  FIELD_BS (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (h1, 4, 330);
+  FIELD_HANDLE (h2, 4, 330);
+  FIELD_HANDLE (assoc_dep, 5, 330);
+DWG_OBJECT_END
+
 DWG_OBJECT (OBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbObjectContextData)
@@ -7775,68 +7840,6 @@ DWG_OBJECT (CONTEXTDATAMANAGER)
   SET_PARENT_OBJ (submgrs)
   END_REPEAT (submgrs)
 
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// (varies) DEBUGGING
-// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
-DWG_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocExtrudedSurfaceActionBody)
-  FIELD_BL (class_version, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
-DWG_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocLoftedSurfaceActionBody)
-  FIELD_BL (class_version, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
-DWG_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocRevolvedSurfaceActionBody)
-  FIELD_BL (class_version, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
-DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocSweptSurfaceActionBody)
-  FIELD_BL (class_version, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocBlendSurfaceActionBody)
-  FIELD_BL (class_version, 90);
-  FIELD_B (b1, 290);
-  FIELD_B (b2, 291);
-  FIELD_B (b3, 292);
-  FIELD_BS (bs1, 72);
-  FIELD_B (b4, 293);
-  FIELD_B (b5, 294);
-  FIELD_BS (bs2, 73);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// (varies) DEBUGGING
-// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
-DWG_OBJECT (ASSOCPATCHSURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocPatchSurfaceActionBody)
-  DXF { FIELD_BL (class_version, 90); }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -7883,7 +7886,7 @@ DWG_OBJECT_END
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT (ASSOCNETWORK)
   DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields(action);
+  ASSOCACTION_fields;
 
   SUBCLASS (AcDbAssocNetwork)
   FIELD_BL (unknown_n1, 90);
@@ -8231,13 +8234,6 @@ DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   bit_advance_position (dat, 168-130);
   DEBUG_POS_OBJ
   HANDLE_VECTOR (actions, num_actions, 4, 330);
-DWG_OBJECT_END
-
-//??
-DWG_OBJECT (ASSOCVERTEXACTIONPARAM)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocActionParam_fields;
-  DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
 // (varies)
@@ -9097,6 +9093,7 @@ DWG_OBJECT (LAYOUTPRINTCONFIG)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+#undef AcDbAssocPersSubentId_fields
 #define AcDbAssocPersSubentId_fields \
   SUBCLASS (AcDbAssocPersSubentId) \
   FIELD_T (t, 1); \
@@ -9412,37 +9409,99 @@ DWG_OBJECT_END
     SUB_FIELD_HANDLE (pap,h330_3, 3, 330);                \
   }
 
-#define ASSOCEDGEACTIONPARAM_fields(eap)                  \
-  AcDbAssocActionParam_fields;                            \
-  SUBCLASS (AcDbAssocSingleDependencyActionParam);        \
-  SUB_FIELD_BL (eap,asdap_class_version, 90);             \
-  SUB_FIELD_HANDLE (eap, dep, 4, 330);                    \
-  SUBCLASS (AcDbAssocEdgeActionParam);                    \
-  SUB_FIELD_BL (eap,class_version, 90);                   \
-  SUB_FIELD_HANDLE (eap,param, 3, 330);                   \
-  SUB_FIELD_B (eap,has_action, 290);                      \
-  SUB_FIELD_BL (eap,action_type, 90);                     \
-  switch (_obj->eap.action_type)                          \
-    {                                                     \
-    case 11:                                              \
-      CALL_SUBCURVE (eap.subent, ARC);                    \
-      break;                                              \
-    case 17:                                              \
-      CALL_SUBCURVE (eap.subent, ELLIPSE);                \
-      break;                                              \
-    case 19:                                              \
-      CALL_SUBCURVE (eap.subent, LINE);                   \
-      break;                                              \
-    case 23:                                              \
-      CALL_SUBCURVE (eap.subent, LINESEG3D);              \
-      break;                                              \
-    case 42:                                              \
-      CALL_SUBCURVE (eap.subent, NURB3D);                 \
-      break;                                              \
-    case 27:                                              \
-      CALL_SUBCURVE (eap.subent, CURVE3D);                \
-      break;                                              \
+DWG_OBJECT (ASSOCPATHACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);
+  FIELD_BL (asdap_class_version, 90);
+  FIELD_HANDLE (dep, 4, 330);
+  SUBCLASS (AcDbAssocPathActionParam);
+  FIELD_BL (status, 90);
+  FIELD_BS (class_version, 90);
+  FIELD_BS (bs1, 90);
+  FIELD_BL (num_params, 90);
+  HANDLE_VECTOR (params, num_params, 4, 360);
+  if (FIELD_VALUE (has_child_param))
+    {
+      FIELD_BS (bs2, 90);
+      FIELD_BL (bl1, 90);
+      FIELD_HANDLE (child_param, 3, 330);
     }
+  if (FIELD_VALUE (bl1))
+    {
+      FIELD_HANDLE (h330_2, 3, 330);
+      FIELD_BL (bl2, 90);
+      FIELD_HANDLE (h330_3, 3, 330);
+    }
+DWG_OBJECT_END
+
+#define ASSOCEDGEACTIONPARAM_fields(eap)                                      \
+    AcDbAssocActionParam_fields;                                              \
+    SUBCLASS (AcDbAssocSingleDependencyActionParam);                          \
+    SUB_FIELD_BL (eap, asdap_class_version, 90);                              \
+    SUB_FIELD_HANDLE (eap, dep, 4, 330);                                      \
+    SUBCLASS (AcDbAssocEdgeActionParam);                                      \
+    SUB_FIELD_BL (eap, class_version, 90);                                    \
+    SUB_FIELD_HANDLE (eap, param, 3, 330);                                    \
+    SUB_FIELD_B (eap, has_action, 290);                                       \
+    SUB_FIELD_BL (eap, action_type, 90);                                      \
+    switch (_obj->eap.action_type)                                            \
+      {                                                                       \
+      case 11:                                                                \
+        CALL_SUBCURVE (eap.subent, ARC);                                      \
+        break;                                                                \
+      case 17:                                                                \
+        CALL_SUBCURVE (eap.subent, ELLIPSE);                                  \
+        break;                                                                \
+      case 19:                                                                \
+        CALL_SUBCURVE (eap.subent, LINE);                                     \
+        break;                                                                \
+      case 23:                                                                \
+        CALL_SUBCURVE (eap.subent, LINESEG3D);                                \
+        break;                                                                \
+      case 42:                                                                \
+        CALL_SUBCURVE (eap.subent, NURB3D);                                   \
+        break;                                                                \
+      case 27:                                                                \
+        CALL_SUBCURVE (eap.subent, CURVE3D);                                  \
+        break;                                                                \
+      }
+
+DWG_OBJECT (ASSOCEDGEACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);
+  FIELD_BL (asdap_class_version, 90);
+  FIELD_HANDLE (dep, 4, 330);
+  SUBCLASS (AcDbAssocEdgeActionParam);
+  FIELD_BL (class_version, 90);
+  FIELD_HANDLE (param, 3, 330);
+  FIELD_B (has_action, 290);
+  FIELD_BL (action_type, 90);
+  switch (_obj->action_type)
+    {
+    case 11:
+      CALL_SUBCURVE (subent, ARC);
+      break;
+    case 17:
+      CALL_SUBCURVE (subent, ELLIPSE);
+      break;
+    case 19:
+      CALL_SUBCURVE (subent, LINE);
+      break;
+    case 23:
+      CALL_SUBCURVE (subent, LINESEG3D);
+      break;
+    case 42:
+      CALL_SUBCURVE (subent, NURB3D);
+      break;
+    case 27:
+      CALL_SUBCURVE (subent, CURVE3D);
+      break;
+    default:
+      LOG_ERROR ("Unknown ASSOCEDGEACTIONPARAM.action_type %d", _obj->action_type);
+    }
+DWG_OBJECT_END
 
 #define ASSOCFACEACTIONPARAM_fields(fap)                  \
   AcDbAssocActionParam_fields;                            \
@@ -9452,6 +9511,28 @@ DWG_OBJECT_END
   SUBCLASS (AcDbAssocFaceActionParam);                    \
   SUB_FIELD_BL (fap,class_version, 90);                   \
   SUB_FIELD_BL (fap,status, 90)
+
+DWG_OBJECT (ASSOCFACEACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);
+  FIELD_BL (asdap_class_version, 90);
+  FIELD_HANDLE (dep, 4, 330);
+  SUBCLASS (AcDbAssocFaceActionParam);
+  FIELD_BL (class_version, 90);
+  FIELD_BL (index, 90);
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCVERTEXACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);
+  FIELD_BL (asdap_class_version, 90);
+  FIELD_HANDLE (dep, 4, 330);
+  SUBCLASS (AcDbAssocVertexActionParam);
+  FIELD_BL (class_version, 90);
+  FIELD_3BD (pt, 10);
+DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/

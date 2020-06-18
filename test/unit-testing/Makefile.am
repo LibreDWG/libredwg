@@ -59,7 +59,13 @@ testobjects = \
 	arc \
 	arc_dimension \
 	assocdependency \
+	assocblendsurfaceactionbody \
+	assocextrudedsurfaceactionbody \
+	assocloftedsurfaceactionbody \
+	assocpatchsurfaceactionbody \
 	assocplanesurfaceactionbody \
+	assocrevolvedsurfaceactionbody \
+	assocsweptsurfaceactionbody \
 	attdef \
 	attrib \
 	background \
@@ -197,16 +203,16 @@ testobjects += \
 	angdimobjectcontextdata \
 	assoc2dconstraintgroup \
 	assocaction \
+	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
-	assocextrudedsurfaceactionbody \
 	assocgeomdependency \
-	assocloftedsurfaceactionbody \
 	assocnetwork \
-	assocosnappointrefactionparam \
 	assocperssubentmanager \
-	assocrevolvedsurfaceactionbody \
-	assocsweptsurfaceactionbody \
 	assocvariable \
+	assocosnappointrefactionparam \
+	assocedgeactionparam \
+	assocfaceactionparam \
+	assocpathactionparam \
 	assocvertexactionparam \
 	atext \
 	blkrefobjectcontextdata \

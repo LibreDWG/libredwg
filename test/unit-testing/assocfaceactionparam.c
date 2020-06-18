@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
   BITCODE_H dep;
   /* AcDbAssocFaceActionParam */
   BITCODE_BL class_version;
-  BITCODE_3BD pt;
+  BITCODE_BL index;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -26,6 +26,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCVERTEXACTIONPARAM, asdap_class_version, BL);
   CHK_ENTITY_H    (_obj, ASSOCVERTEXACTIONPARAM, dep);
   CHK_ENTITY_TYPE (_obj, ASSOCVERTEXACTIONPARAM, class_version, BL);
-  CHK_ENTITY_3RD  (_obj, ASSOCVERTEXACTIONPARAM, pt);
+  CHK_ENTITY_TYPE (_obj, ASSOCVERTEXACTIONPARAM, index, BL);
 #endif
 }
