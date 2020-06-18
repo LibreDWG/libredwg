@@ -6582,6 +6582,45 @@ DWG_OBJECT_END
    Coverage might be missing for some cases, or field names may change.
  */
 
+// abstract subclass. as field value
+#define AcDbEvalVariant_fields(value)                                   \
+  SUB_FIELD_BSd (value,type, 70);                                       \
+  switch (FIELD_VALUE (value.type))                                     \
+    {                                                                   \
+    case 1:                                                             \
+      SUB_FIELD_BD (value,u.bd, 40);                                    \
+      break;                                                            \
+    case 2:                                                             \
+      SUB_FIELD_BL (value,u.bl, 90);                                    \
+      break;                                                            \
+    case 3:                                                             \
+      SUB_FIELD_BS (value,u.bs, 70);                                    \
+      break;                                                            \
+    case 5:                                                             \
+      SUB_FIELD_T (value,u.text, 1);                                    \
+      break;                                                            \
+    case 11:                                                            \
+      SUB_FIELD_HANDLE (value,u.handle, 5, 91);                         \
+      break;                                                            \
+    /* more: 9 id, 12 pt3d, 14 pt2d */                                  \
+    default:                                                            \
+      break;                                                            \
+    }
+
+#define AcDbValueParam_fields(valprefix)                                \
+  FIELD_BL (valprefix.class_version, 90);                               \
+  FIELD_T (valprefix.name, 1);                                          \
+  FIELD_BL (valprefix.unit_type, 90);                                   \
+  FIELD_BL (valprefix.num_inputvars, 90);                               \
+  REPEAT (valprefix.num_inputvars, valprefix.inputvars, Dwg_VALUEPARAM_vars)    \
+  REPEAT_BLOCK                                                          \
+    AcDbEvalVariant_fields (valprefix.inputvars[rcount1].value);        \
+    FIELD_HANDLE (valprefix.inputvars[rcount1].handle, 4, 330);         \
+  END_REPEAT_BLOCK                                                      \
+  SET_PARENT_OBJ (valprefix.inputvars)                                  \
+  END_REPEAT (valprefix.inputvars)                                      \
+  FIELD_HANDLE (valprefix.controlled_objdep, 4, 330)
+    
 #define AcDbAssocDependency_fields                         \
   SUBCLASS (AcDbAssocDependency);                          \
   FIELD_BS (assocdep.class_version, 90); /* 2 */           \
@@ -6595,7 +6634,7 @@ DWG_OBJECT_END
   FIELD_HANDLE (assocdep.dep_on, 3, 330);                  \
   FIELD_B (assocdep.has_name, 290);                        \
   if (FIELD_VALUE (assocdep.has_name)) {                   \
-    FIELD_B (assocdep.name, 1);                            \
+    FIELD_T (assocdep.name, 1);                            \
   }                                                        \
   FIELD_HANDLE (assocdep.readdep, 4, 330);                 \
   FIELD_HANDLE (assocdep.node, 3, 330);                    \
@@ -6641,28 +6680,40 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   SUBCLASS (AcDbAssocActionBody)    \
   FIELD_BL (aab_version, 90)
 
-#define AcDbAssocParamBasedActionBody_fields      \
-  UNTIL (R_2010) {                                \
-    SUBCLASS (AcDbAssocParamBasedActionBody)      \
-    FIELD_BL (pab_status, 90);                    \
-    FIELD_BL (pab_l2, 90);                        \
-    FIELD_BL (num_deps, 90);                      \
-    HANDLE_VECTOR (deps, num_deps, 5, 330);       \
-    FIELD_BL (pab_l4, 90);                        \
-    FIELD_BL (pab_l5, 90);                        \
+// embedded struct, not inlined
+// abstract dwg_action_klass_VALUEPARAM_private must exist
+#define AcDbAssocParamBasedActionBody_fields(pab)           \
+  PRE (R_2013) {                                            \
+    SUBCLASS (AcDbAssocActionBody);                         \
+    SUB_FIELD_BL (pab,aab_version, 90);                     \
+    SUBCLASS (AcDbAssocParamBasedActionBody);               \
+    SUB_FIELD_BL (pab,status, 90);                          \
+    SUB_FIELD_BL (pab,l2, 90);                              \
+    SUB_FIELD_BL (pab,num_deps, 90);                        \
+    SUB_HANDLE_VECTOR (pab,deps, num_deps, 4, 360);         \
+    SUB_FIELD_BL (pab,l4, 90);                              \
+    SUB_FIELD_BL (pab,num_values, 90);                      \
+    if (!FIELD_VALUE (pab.num_values)) {                    \
+      SUB_FIELD_BL (pab,l5, 90);                            \
+      SUB_FIELD_HANDLE (pab,assoc_dep, 5, 330);             \
+    }                                                       \
+    for (rcount1 = 0; rcount1 < _obj->pab.num_values; rcount1++)  \
+      {                                                     \
+        AcDbValueParam_fields (pab.values[rcount1])         \
+      }                                                     \
   }
 
-#define AcDbAssocPathBasedSurfaceActionBody_fields \
-    AcDbAssocActionBody_fields;                    \
-    AcDbAssocParamBasedActionBody_fields;          \
-    SUBCLASS (AcDbAssocSurfaceActionBody)          \
-    FIELD_BL (sab_status, 90);                     \
-    FIELD_B (sab_b1, 290);                         \
-    FIELD_BL (sab_l2, 90);                         \
-    FIELD_B (sab_b2, 290);                         \
-    FIELD_BS (sab_s1, 70);                         \
-    SUBCLASS (AcDbAssocPathBasedSurfaceActionBody);\
-    FIELD_BL (pbsab_status, 90)
+#define AcDbAssocPathBasedSurfaceActionBody_fields          \
+  AcDbAssocParamBasedActionBody_fields (pab);               \
+  SUBCLASS (AcDbAssocSurfaceActionBody)                     \
+  FIELD_BL (sab_status, 90);                                \
+  FIELD_HANDLE (sab_h330, 5, 330);                          \
+  FIELD_B (sab_b1, 290);                                    \
+  FIELD_BL (sab_l2, 90);                                    \
+  FIELD_B (sab_b2, 290);                                    \
+  FIELD_BS (sab_s1, 70);                                    \
+  SUBCLASS (AcDbAssocPathBasedSurfaceActionBody)            \
+  FIELD_BL (pbsab_status, 90)
 
 // (varies) UNSTABLE
 // works ok on all Surface_20* but this coverage seems limited.
@@ -7087,7 +7138,6 @@ DWG_ENTITY (HELIX)
 DWG_ENTITY_END
 
 #define AcDbAssocAnnotationActionBody_fields \
-  AcDbAssocActionBody_fields;                \
   SINCE (R_2013) {                           \
     FIELD_BS (aaab_version, 90);             \
     FIELD_HANDLE (assoc_dep, 5, 330);        \
@@ -7095,7 +7145,7 @@ DWG_ENTITY_END
   UNTIL (R_2010) {                           \
   if (FIELD_VALUE (actionbody))              \
     {                                        \
-      AcDbAssocParamBasedActionBody_fields;  \
+      AcDbAssocParamBasedActionBody_fields (pab); \
     }                                        \
   }
 
@@ -7104,11 +7154,10 @@ DWG_ENTITY_END
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocActionBody_fields;
-  AcDbAssocParamBasedActionBody_fields;
-  SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY)
+  AcDbAssocParamBasedActionBody_fields (pab);
+  SUBCLASS (AcDbAssocAlignedDimActionBody)
   FIELD_BS (class_version, 90);
   //or status, 90 //has d_node or r_node?
-  //TODO: DXF has a different order
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (r_node, 4, 330);
   FIELD_HANDLE (d_node, 4, 330);
@@ -7116,13 +7165,14 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
-  AcDbAssocAnnotationActionBody_fields;
+  AcDbAssocActionBody_fields;
+  AcDbAssocParamBasedActionBody_fields (pab);
   SUBCLASS (Assoc3PointAngularDimActionBody)
   FIELD_BS (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (h1, 4, 330);
   FIELD_HANDLE (h2, 4, 330);
   FIELD_HANDLE (assoc_dep, 5, 330);
-  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // undocumented fields, unstable, but looks stable.
@@ -7509,46 +7559,21 @@ DWG_OBJECT_END
     }                                                                         \
   FIELD_BL (evalexpr.nodeid, 0)
 
-// abstract subclass. as field value
-#define AcDbEvalVariant_fields                                          \
-  FIELD_BSd (value_type, 70);                                           \
-  switch (_obj->value_type)                                             \
-    {                                                                   \
-    case 1:                                                             \
-      SUB_FIELD_BD (value,bd, 40);                                      \
-      break;                                                            \
-    case 2:                                                             \
-      SUB_FIELD_BL (value,bl, 90);                                      \
-      break;                                                            \
-    case 3:                                                             \
-      SUB_FIELD_BS (value,bs, 70);                                      \
-      break;                                                            \
-    case 5:                                                             \
-      SUB_FIELD_T (value,text, 1);                                      \
-      break;                                                            \
-    case 11:                                                            \
-      SUB_FIELD_HANDLE (value,handle, 5, 91);                           \
-      break;                                                            \
-    /* more: 9 id, 12 pt3d, 14 pt2d */                                  \
-    default:                                                            \
-      break;                                                            \
-    }
-
-#define AcDbShHistoryNode_fields                                              \
-    SUBCLASS (AcDbShHistoryNode)                                              \
-    FIELD_BL (history_node.major, 90);                                        \
-    FIELD_BL (history_node.minor, 91);                                        \
-    FIELD_VECTOR_N1 (history_node.trans, BD, 16, 40);                         \
-    FIELD_CMC (history_node.color, 62);                                       \
-    FIELD_BL (history_node.step_id, 92);                                      \
-    FIELD_HANDLE (history_node.material, 5, 347)
+#define AcDbShHistoryNode_fields(history_node)                          \
+  SUBCLASS (AcDbShHistoryNode);                                         \
+  FIELD_BL (history_node.major, 90);                                    \
+  FIELD_BL (history_node.minor, 91);                                    \
+  FIELD_VECTOR_N1 (history_node.trans, BD, 16, 40);                     \
+  FIELD_CMC (history_node.color, 62);                                   \
+  FIELD_BL (history_node.step_id, 92);                                  \
+  FIELD_HANDLE (history_node.material, 5, 347)
 
 // Stable
 // same as Wedge
 DWG_OBJECT (ACSH_BOX_CLASS)
   //DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBox)
   FIELD_BL (major, 90); //33
@@ -7563,7 +7588,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_WEDGE_CLASS)
   //DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShWedge)
   FIELD_BL (major, 90); //33
@@ -7577,7 +7602,7 @@ DWG_OBJECT_END
 // Stable
 DWG_OBJECT (ACSH_SPHERE_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSpere)
   FIELD_BL (major, 90); //33
@@ -7589,7 +7614,7 @@ DWG_OBJECT_END
 // Stable
 DWG_OBJECT (ACSH_CYLINDER_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShCylinder)
   FIELD_BL (major, 90);
@@ -7604,7 +7629,7 @@ DWG_OBJECT_END
 // Unstable
 DWG_OBJECT (ACSH_CONE_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShCone)
   FIELD_BL (major, 90);
@@ -7619,7 +7644,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_PYRAMID_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShPyramid)
   FIELD_BL (major, 90); //33
@@ -7634,7 +7659,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_FILLET_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShFillet)
   FIELD_BL (major, 90); //33
@@ -7654,7 +7679,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_CHAMFER_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShChamfer)
   FIELD_BL (major, 90); //33
@@ -7671,7 +7696,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_TORUS_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShTorus)
   FIELD_BL (major, 90); //33
@@ -7684,7 +7709,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_BREP_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBrep)
   FIELD_BL (major, 90); // also in DWG?
@@ -7695,7 +7720,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BOOLEAN_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBoolean)
   FIELD_BL (major, 90);
@@ -7805,6 +7830,16 @@ DWG_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// (varies) DEBUGGING
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCPATCHSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocPatchSurfaceActionBody)
+  DXF { FIELD_BL (class_version, 90); }
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 // DEBUGGING
 DWG_OBJECT (EVALUATION_GRAPH)
 
@@ -7848,7 +7883,7 @@ DWG_OBJECT_END
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT (ASSOCNETWORK)
   DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields;
+  ASSOCACTION_fields(action);
 
   SUBCLASS (AcDbAssocNetwork)
   FIELD_BL (unknown_n1, 90);
@@ -8179,19 +8214,7 @@ DWG_OBJECT_END
 // DEBUGGING
 DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocActionParam)
-  FIELD_B  (unknown1, 0); //
-  FIELD_RC (unknown, 0); //01010101
-  FIELD_T (name, 1); //@9-10
-  DEBUG_HERE_OBJ
-  FIELD_B  (unknown1, 0); //
-  DEBUG_HERE_OBJ
-  FIELD_B  (unknown1, 0); //
-  DEBUG_HERE_OBJ
-  FIELD_BS (status, 90); //0
-  FIELD_B  (unknown1, 0); //
-  DEBUG_HERE_OBJ
-  //DEBUG_HERE_OBJ
+  AcDbAssocActionParam_fields;
   SUBCLASS (AcDbAssocCompoundActionParam)
   FIELD_BD (unknown3, 40); //-1 32-97
   FIELD_BS (flags, 90); //0 read/write deps
@@ -8213,17 +8236,7 @@ DWG_OBJECT_END
 //??
 DWG_OBJECT (ASSOCVERTEXACTIONPARAM)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocActionParam)
-  FIELD_B  (unknown1, 0); //
-  FIELD_RC (unknown, 0); //01010101
-  FIELD_T (name, 1); //@9-10
-  DEBUG_HERE_OBJ
-  FIELD_B  (unknown1, 0); //
-  DEBUG_HERE_OBJ
-  FIELD_B  (unknown1, 0); //
-  DEBUG_HERE_OBJ
-  FIELD_BS (status, 90); //0
-  FIELD_B  (unknown1, 0); //
+  AcDbAssocActionParam_fields;
   DEBUG_HERE_OBJ
 DWG_OBJECT_END
 
@@ -8365,7 +8378,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_SWEEP_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
   FIELD_BL (major, 90); //33
@@ -8412,7 +8425,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
   FIELD_BL (major, 90); //33
@@ -8458,7 +8471,7 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   DECODE_UNKNOWN_BITS
 #ifndef IS_DXF
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
 #endif
   SUBCLASS (AcDbShHistory)
   FIELD_BL (major, 90);
@@ -8469,7 +8482,7 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   FIELD_B (b281, 281);
 #ifdef IS_DXF
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
 #endif
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8477,7 +8490,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_LOFT_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShLoft)
   FIELD_BL (major, 90);
@@ -8506,7 +8519,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_REVOLVE_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields;
+  AcDbShHistoryNode_fields(history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShRevolve)
   FIELD_BL (major, 90); //33
@@ -9084,6 +9097,11 @@ DWG_OBJECT (LAYOUTPRINTCONFIG)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+#define AcDbAssocPersSubentId_fields \
+  SUBCLASS (AcDbAssocPersSubentId) \
+  FIELD_T (t, 1); \
+  FIELD_B (dependent_on_compound_object, 290)
+
 // see unknown 34/117=29.1%
 // possible: [......29    7 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx9 99   7  9........5...9 99 9.9 9.........5...9    9..9 99    9....]
 // 90 -10000 at offset 16/117
@@ -9094,10 +9112,9 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   //330 -> CIRCLE
   AcDbAssocDependency_fields;
   SUBCLASS (AcDbAssocGeomDependency)
-  FIELD_BS (bs90_4, 90);
-  FIELD_B (b290_6, 290);
-  FIELD_T (t, 1);
-  FIELD_B (dependent_on_compound_object, 290);
+  FIELD_BS (class_version, 90); // always 0
+  FIELD_B (enabled, 290);       // always 1
+  AcDbAssocPersSubentId_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9371,11 +9388,70 @@ DWG_OBJECT (ASSOCVARIABLE)
   FIELD_T (t58, 1);
   FIELD_T (evaluator, 1);
   FIELD_T (desc, 1);
-  AcDbEvalVariant_fields;
+  AcDbEvalVariant_fields(value);
   FIELD_B (has_t78, 290);
   FIELD_T (t78, 1);
   FIELD_B (b290, 290);
 DWG_OBJECT_END
+
+#define ASSOCPATHACTIONPARAM_fields(pap)                  \
+  SUBCLASS (AcDbAssocPathActionParam);                    \
+  SUB_FIELD_BL (pap,status, 90);                          \
+  SUB_FIELD_BS (pap,class_version, 90);                   \
+  SUB_FIELD_BS (pap,bs1, 90);                             \
+  SUB_FIELD_BL (pap,num_params, 90);                      \
+  SUB_HANDLE_VECTOR (pap, params, num_params, 4, 360);    \
+  if (FIELD_VALUE (pap.has_child_param)) {                \
+    SUB_FIELD_BS (pap,bs2, 90);                           \
+    SUB_FIELD_BL (pap,bl1, 90);                           \
+    SUB_FIELD_HANDLE (pap,child_param, 3, 330);           \
+    }                                                     \
+  if (FIELD_VALUE (pap.bl1)) {                            \
+    SUB_FIELD_HANDLE (pap,h330_2, 3, 330);                \
+    SUB_FIELD_BL (pap,bl2, 90);                           \
+    SUB_FIELD_HANDLE (pap,h330_3, 3, 330);                \
+  }
+
+#define ASSOCEDGEACTIONPARAM_fields(eap)                  \
+  AcDbAssocActionParam_fields;                            \
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);        \
+  SUB_FIELD_BL (eap,asdap_class_version, 90);             \
+  SUB_FIELD_HANDLE (eap, dep, 4, 330);                    \
+  SUBCLASS (AcDbAssocEdgeActionParam);                    \
+  SUB_FIELD_BL (eap,class_version, 90);                   \
+  SUB_FIELD_HANDLE (eap,param, 3, 330);                   \
+  SUB_FIELD_B (eap,has_action, 290);                      \
+  SUB_FIELD_BL (eap,action_type, 90);                     \
+  switch (_obj->eap.action_type)                          \
+    {                                                     \
+    case 11:                                              \
+      CALL_SUBCURVE (eap.subent, ARC);                    \
+      break;                                              \
+    case 17:                                              \
+      CALL_SUBCURVE (eap.subent, ELLIPSE);                \
+      break;                                              \
+    case 19:                                              \
+      CALL_SUBCURVE (eap.subent, LINE);                   \
+      break;                                              \
+    case 23:                                              \
+      CALL_SUBCURVE (eap.subent, LINESEG3D);              \
+      break;                                              \
+    case 42:                                              \
+      CALL_SUBCURVE (eap.subent, NURB3D);                 \
+      break;                                              \
+    case 27:                                              \
+      CALL_SUBCURVE (eap.subent, CURVE3D);                \
+      break;                                              \
+    }
+
+#define ASSOCFACEACTIONPARAM_fields(fap)                  \
+  AcDbAssocActionParam_fields;                            \
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);        \
+  SUB_FIELD_BL (fap,asdap_class_version, 90);             \
+  SUB_FIELD_HANDLE (fap, dep, 4, 330);                    \
+  SUBCLASS (AcDbAssocFaceActionParam);                    \
+  SUB_FIELD_BL (fap,class_version, 90);                   \
+  SUB_FIELD_BL (fap,status, 90)
 
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
