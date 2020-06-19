@@ -213,6 +213,7 @@ testobjects += \
 	assocosnappointrefactionparam \
 	assocasmbodyactionparam \
 	assocedgeactionparam \
+	assoccompoundactionparam \
 	assocfaceactionparam \
 	assocpathactionparam \
 	assocvertexactionparam \

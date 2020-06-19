@@ -7,18 +7,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   ASSOCACTIONPARAM_fields;
-  /* AssocCompoundActionParam */
-  BITCODE_BS class_version;
-  BITCODE_BS bs1;
-  BITCODE_BL num_params;
-  BITCODE_H *params;
-  BITCODE_B has_child_param;
-  BITCODE_BS child_bs2;
-  BITCODE_BL child_bl1;
-  BITCODE_H child_param;
-  BITCODE_H h330_2;
-  BITCODE_BL bl2;
-  BITCODE_H h330_3;
+  ASSOCCOMPOUNDACTIONPARAM_fields;
   
   BITCODE_BS status;
   BITCODE_RC osnap_mode;
@@ -37,10 +26,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, num_params, BL);
   CHK_ENTITY_HV   (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, params, num_params);
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, has_child_param, B);
-  CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, child_bs2, BS);
-  CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, child_bl1, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, child_status, BS);
+  CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, child_id, BL);
   CHK_ENTITY_H    (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, child_param);
-  CHK_ENTITY_H    (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, h330_1);
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, bl2, BL);
   CHK_ENTITY_H    (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, h330_3);
 

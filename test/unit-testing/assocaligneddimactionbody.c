@@ -8,6 +8,7 @@ api_process (dwg_object *obj)
   int error, isnew;
   ASSOCANNOTATIONACTIONBODY_fields;
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+  BITCODE_H *deps;
   BITCODE_BS class_version;
   BITCODE_H  d_node;
   BITCODE_H  r_node;

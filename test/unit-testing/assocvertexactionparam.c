@@ -6,7 +6,6 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BS class_version;
   ASSOCACTIONPARAM_fields;
   /* AcDbAssocSingleDependencyActionParam */ 
   BITCODE_BL asdap_class_version; // 0

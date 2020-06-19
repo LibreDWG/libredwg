@@ -5404,6 +5404,47 @@ BS,	DXF 73
 @end vtable
 @end indentedblock
 
+@strong{ASSOCCOMPOUNDACTIONPARAM} @anchor{ASSOCCOMPOUNDACTIONPARAM}
+@cindex object, ASSOCCOMPOUNDACTIONPARAM
+@vindex ASSOCCOMPOUNDACTIONPARAM
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS,	DXF 90
+@item aap_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item class_version
+BS,	DXF 90
+@item bs1
+BS,	DXF 90
+@item num_params
+BL,	DXF 90
+@item params
+H*,	DXF 360
+@item has_child_param
+B
+@item child_status
+BS,	DXF 90
+@item child_id
+BL,	DXF 90
+@item child_param
+H,	DXF 330
+@item h330_2
+H,	DXF 330
+@item bl2
+BL,	DXF 90
+@item h330_3
+H,	DXF 330
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCDEPENDENCY} @anchor{ASSOCDEPENDENCY}
 @cindex object, ASSOCDEPENDENCY
 @vindex ASSOCDEPENDENCY
@@ -5717,9 +5758,9 @@ BL,	DXF 90
 H*,	DXF 360
 @item has_child_param
 B
-@item child_bs2
+@item child_status
 BS,	DXF 90
-@item child_bl1
+@item child_id
 BL,	DXF 90
 @item child_param
 H,	DXF 330
@@ -5801,9 +5842,9 @@ BL,	DXF 90
 H*,	DXF 360
 @item has_child_param
 B
-@item child_bs2
+@item child_status
 BS,	DXF 90
-@item child_bl1
+@item child_id
 BL,	DXF 90
 @item child_param
 H,	DXF 330

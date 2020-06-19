@@ -9388,16 +9388,23 @@ DWG_OBJECT_END
   HANDLE_VECTOR (params, num_params, 4, 360); \
   if (FIELD_VALUE (has_child_param)) /* FIXME */ \
     { \
-      FIELD_BS (child_bs2, 90); \
-      FIELD_BL (child_bl1, 90); \
+      FIELD_BS (child_status, 90); \
+      FIELD_BL (child_id, 90); \
       FIELD_HANDLE (child_param, 3, 330); \
     } \
-  if (FIELD_VALUE (child_bl1)) \
+  if (FIELD_VALUE (child_id)) \
     { \
       FIELD_HANDLE (h330_2, 3, 330); \
       FIELD_BL (bl2, 90); \
       FIELD_HANDLE (h330_3, 3, 330); \
     }
+
+// DEBUGGING
+DWG_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  AcDbAssocCompoundActionParam_fields;
+DWG_OBJECT_END
 
 // DEBUGGING
 DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
@@ -9419,11 +9426,11 @@ DWG_OBJECT_END
   SUB_FIELD_BL (pap,num_params, 90);                      \
   SUB_HANDLE_VECTOR (pap, params, num_params, 4, 360);    \
   if (FIELD_VALUE (pap.has_child_param)) {                \
-    SUB_FIELD_BS (pap,child_bs2, 90);                     \
-    SUB_FIELD_BL (pap,child_bl1, 90);                     \
+    SUB_FIELD_BS (pap,child_status, 90);                  \
+    SUB_FIELD_BL (pap,child_id, 90);                      \
     SUB_FIELD_HANDLE (pap,child_param, 3, 330);           \
     }                                                     \
-  if (FIELD_VALUE (pap.child_bl1)) {                      \
+  if (FIELD_VALUE (pap.child_id)) {                       \
     SUB_FIELD_HANDLE (pap,h330_2, 3, 330);                \
     SUB_FIELD_BL (pap,bl2, 90);                           \
     SUB_FIELD_HANDLE (pap,h330_3, 3, 330);                \

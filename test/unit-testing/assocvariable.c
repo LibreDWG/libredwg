@@ -65,7 +65,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_H (_obj->value, EvalVariant, u.handle);
       break;
     default:
-      fail ("Unknown VALUEPARAM.vars[%d].value.type %u", j, _obj->value.type);
+      fail ("Unknown ASSOCVARIABLE.value.type %u", _obj->value.type);
     }
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, has_t78, B);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, t78);

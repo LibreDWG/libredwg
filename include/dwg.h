@@ -406,8 +406,9 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCACTION,
   //DWG_TYPE_ASSOCACTIONPARAM,
   DWG_TYPE_ASSOCDEPENDENCY,
-  DWG_TYPE_ASSOCASMBODYACTIONPARAM,
   DWG_TYPE_ASSOCGEOMDEPENDENCY,
+  DWG_TYPE_ASSOCASMBODYACTIONPARAM,
+  DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM,
   DWG_TYPE_ASSOCEDGEACTIONPARAM,
   DWG_TYPE_ASSOCFACEACTIONPARAM,
   DWG_TYPE_ASSOCPATHACTIONPARAM,
@@ -5101,19 +5102,6 @@ typedef struct _dwg_object_ASSOCNETWORK
 #define ASSOCACTIONBODY_fields         \
   BITCODE_BL aab_version /* DXF 90. r2013+: 2, earlier 1 */
 
-#define ASSOCCOMPOUNDACTIONPARAM_fields \
-  BITCODE_BS class_version; \
-  BITCODE_BS bs1; \
-  BITCODE_BL num_params; \
-  BITCODE_H *params; \
-  BITCODE_B has_child_param; \
-  BITCODE_BS child_bs2; \
-  BITCODE_BL child_bl1; \
-  BITCODE_H child_param; \
-  BITCODE_H h330_2; \
-  BITCODE_BL bl2; \
-  BITCODE_H h330_3
-
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {
   struct _dwg_object_object *parent;
@@ -5270,6 +5258,19 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 #define ASSOCPARAMBASEDACTIONBODY_fields        \
   Dwg_ASSOCPARAMBASEDACTIONBODY pab
 
+#define ASSOCCOMPOUNDACTIONPARAM_fields \
+  BITCODE_BS class_version; \
+  BITCODE_BS bs1; \
+  BITCODE_BL num_params; \
+  BITCODE_H *params; \
+  BITCODE_B has_child_param; \
+  BITCODE_BS child_status; \
+  BITCODE_BL child_id; \
+  BITCODE_H child_param; \
+  BITCODE_H h330_2; \
+  BITCODE_BL bl2; \
+  BITCODE_H h330_3
+
 /**
  Object ASSOCOSNAPPOINTREFACTIONPARAM (varies)
  Action parameter that owns other AcDbAssocActionParameters,
@@ -5296,6 +5297,13 @@ typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM
   BITCODE_BL class_version;
   _3DSOLID_FIELDS;
 } Dwg_Object_ASSOCASMBODYACTIONPARAM;
+
+typedef struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM
+{
+  struct _dwg_object_object *parent;
+  ASSOCACTIONPARAM_fields;
+  ASSOCCOMPOUNDACTIONPARAM_fields;
+} Dwg_Object_ASSOCCOMPOUNDACTIONPARAM;
 
 typedef struct _dwg_object_ASSOCEDGEACTIONPARAM
 {
@@ -6981,6 +6989,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCNETWORK *ASSOCNETWORK;
     Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM *ASSOCOSNAPPOINTREFACTIONPARAM;
     Dwg_Object_ASSOCASMBODYACTIONPARAM *ASSOCASMBODYACTIONPARAM;
+    Dwg_Object_ASSOCCOMPOUNDACTIONPARAM *ASSOCCOMPOUNDACTIONPARAM;
     Dwg_Object_ASSOCEDGEACTIONPARAM *ASSOCEDGEACTIONPARAM;
     Dwg_Object_ASSOCFACEACTIONPARAM *ASSOCFACEACTIONPARAM;
     Dwg_Object_ASSOCPATHACTIONPARAM *ASSOCPATHACTIONPARAM;
@@ -8233,6 +8242,7 @@ EXPORT int dwg_setup_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCASMBODYACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCEDGEACTIONPARAM (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCCOMPOUNDACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCFACEACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPATHACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
