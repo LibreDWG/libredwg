@@ -1424,6 +1424,56 @@ api_common_object (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL); \
   CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, material)
 
+#define CHK_ASSOCPARAMBASEDACTIONBODY(TYPE)                                   \
+  CHK_SUBCLASS_TYPE (_obj->pab, TYPE, aab_version, BL);                       \
+  CHK_SUBCLASS_TYPE (_obj->pab, TYPE, status, BL);                            \
+  CHK_SUBCLASS_TYPE (_obj->pab, TYPE, l2, BL);                                \
+  CHK_SUBCLASS_TYPE (_obj->pab, TYPE, num_deps, BL);                          \
+  CHK_SUBCLASS_HV (_obj->pab, TYPE, deps, _obj->pab.num_deps);                \
+  CHK_SUBCLASS_TYPE (_obj->pab, TYPE, l4, BL);                                \
+  CHK_SUBCLASS_TYPE (_obj->pab, TYPE, l5, BL);                                \
+  CHK_SUBCLASS_H (_obj->pab, TYPE, assoc_dep);                                \
+  CHK_SUBCLASS_TYPE (_obj->pab, TYPE, num_values, BL);                        \
+  for (unsigned i = 0; i < _obj->pab.num_values; i++)                         \
+    {                                                                         \
+      CHK_SUBCLASS_TYPE (_obj->pab.values[i], VALUEPARAM, class_version, BL); \
+      CHK_SUBCLASS_UTF8TEXT (_obj->pab.values[i], VALUEPARAM, name);          \
+      CHK_SUBCLASS_TYPE (_obj->pab.values[i], VALUEPARAM, unit_type, BL);     \
+      CHK_SUBCLASS_TYPE (_obj->pab.values[i], VALUEPARAM, num_vars, BL);      \
+      CHK_SUBCLASS_H (_obj->pab.values[i], VALUEPARAM, controlled_objdep);    \
+      for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)             \
+        {                                                                     \
+          switch (_obj->pab.values[i].vars[j].value.type)                     \
+            {                                                                 \
+            case 1:                                                           \
+              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+                                 EvalVariant, u.bd, BD);                      \
+              break;                                                          \
+            case 2:                                                           \
+              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+                                 EvalVariant, u.bl, BL);                      \
+              break;                                                          \
+            case 3:                                                           \
+              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+                                 EvalVariant, u.bs, BS);                      \
+              break;                                                          \
+            case 5:                                                           \
+              CHK_SUBCLASS_UTF8TEXT (_obj->pab.values[i].vars[j].value,       \
+                                     EvalVariant, u.text);                    \
+              break;                                                          \
+            case 11:                                                          \
+              CHK_SUBCLASS_H (_obj->pab.values[i].vars[j].value, EvalVariant, \
+                              u.handle);                                      \
+              break;                                                          \
+            default:                                                          \
+              fail ("Unknown VALUEPARAM.vars[%d].value.type %u", j,           \
+                    _obj->pab.values[i].vars[j].value.type);                  \
+            }                                                                 \
+          CHK_SUBCLASS_H (_obj->pab.values[i], VALUEPARAM,                    \
+                          controlled_objdep);                                 \
+        }                                                                     \
+    }
+
 // allow old deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
 GCC46_DIAG_IGNORE (-Wdeprecated-declarations)
