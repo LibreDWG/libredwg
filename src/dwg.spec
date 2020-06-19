@@ -7793,7 +7793,7 @@ DWG_OBJECT_END
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
-  AcDbAssocActionBody_fields;
+  AcDbAssocAnnotationActionBody_fields;
   AcDbAssocParamBasedActionBody_fields (pab);
   SUBCLASS (AcDbAssocAlignedDimActionBody)
   FIELD_BS (class_version, 90);
@@ -7805,7 +7805,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
-  AcDbAssocActionBody_fields;
+  AcDbAssocAnnotationActionBody_fields;
   AcDbAssocParamBasedActionBody_fields (pab);
   SUBCLASS (Assoc3PointAngularDimActionBody)
   FIELD_BS (class_version, 90);

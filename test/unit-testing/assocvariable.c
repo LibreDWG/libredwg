@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_T t58;
   BITCODE_T evaluator;
   BITCODE_T desc;
-  BITCODE_BSd value_type;
+  //BITCODE_BSd value_type;
   Dwg_EvalVariant value;
   BITCODE_B has_t78;
   BITCODE_T t78;
@@ -32,7 +32,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_deps, BL);
-  //Dwg_ASSOCACTION_Deps *deps;
+  for (unsigned i=0; i < num_deps; i++)
+    {
+      CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_soft, B);
+      CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);
+    }
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCVARIABLE, owned_params, num_owned_params);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_owned_value_param_names, BL);
@@ -42,8 +46,27 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, t58);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, evaluator);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, desc);
-  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, value_type, BSd);
-  // TODO switch value_type
+  CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, type, BSd);
+  switch (_obj->value.type)
+    {
+    case 1:
+      CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, u.bd, BD);
+      break;
+    case 2:
+      CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, u.bl, BL);
+      break;
+    case 3:
+      CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, u.bs, BS);
+      break;
+    case 5:
+      CHK_SUBCLASS_UTF8TEXT (_obj->value, EvalVariant, u.text);
+      break;
+    case 11:
+      CHK_SUBCLASS_H (_obj->value, EvalVariant, u.handle);
+      break;
+    default:
+      fail ("Unknown VALUEPARAM.vars[%d].value.type %u", j, _obj->value.type);
+    }
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, has_t78, B);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, t78);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, b290, B);
