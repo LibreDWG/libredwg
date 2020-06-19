@@ -6604,6 +6604,7 @@ DWG_OBJECT_END
       break;                                                            \
     /* more: 9 id, 12 pt3d, 14 pt2d */                                  \
     default:                                                            \
+      LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.type) \
       break;                                                            \
     }
 
@@ -6612,10 +6613,10 @@ DWG_OBJECT_END
   FIELD_T (valprefix.name, 1);                                          \
   FIELD_BL (valprefix.unit_type, 90);                                   \
   FIELD_BL (valprefix.num_vars, 90);                                    \
-  REPEAT (valprefix.num_vars, valprefix.vars, Dwg_VALUEPARAM_vars)      \
+  REPEAT2 (valprefix.num_vars, valprefix.vars, Dwg_VALUEPARAM_vars)     \
   REPEAT_BLOCK                                                          \
-    AcDbEvalVariant_fields (valprefix.vars[rcount1].value);             \
-    FIELD_HANDLE (valprefix.vars[rcount1].handle, 4, 330);              \
+    AcDbEvalVariant_fields (valprefix.vars[rcount2].value);             \
+    FIELD_HANDLE (valprefix.vars[rcount2].handle, 4, 330);              \
   END_REPEAT_BLOCK                                                      \
   END_REPEAT (valprefix.vars)                                           \
   FIELD_HANDLE (valprefix.controlled_objdep, 4, 330)
@@ -6697,10 +6698,11 @@ DWG_OBJECT (ASSOCDEPENDENCY)
       SUB_FIELD_BL (pab,l5, 90);                            \
       SUB_FIELD_HANDLE (pab,assoc_dep, 5, 330);             \
     }                                                       \
-    for (rcount1 = 0; rcount1 < _obj->pab.num_values; rcount1++)  \
-      {                                                     \
+    REPEAT (pab.num_values, pab.values, Dwg_VALUEPARAM)     \
+    REPEAT_BLOCK                                            \
         AcDbValueParam_fields (pab.values[rcount1])         \
-      }                                                     \
+    END_REPEAT_BLOCK                                        \
+    END_REPEAT (pab.values)                                 \
   }
 
 #define AcDbAssocPathBasedSurfaceActionBody_fields          \
@@ -7794,7 +7796,6 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocAnnotationActionBody_fields;
-  AcDbAssocParamBasedActionBody_fields (pab);
   SUBCLASS (AcDbAssocAlignedDimActionBody)
   FIELD_BS (class_version, 90);
   //or status, 90 //has d_node or r_node?
@@ -7806,7 +7807,6 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocAnnotationActionBody_fields;
-  AcDbAssocParamBasedActionBody_fields (pab);
   SUBCLASS (Assoc3PointAngularDimActionBody)
   FIELD_BS (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
