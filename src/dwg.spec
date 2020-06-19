@@ -6611,13 +6611,13 @@ DWG_OBJECT_END
   FIELD_BL (valprefix.class_version, 90);                               \
   FIELD_T (valprefix.name, 1);                                          \
   FIELD_BL (valprefix.unit_type, 90);                                   \
-  FIELD_BL (valprefix.num_inputvars, 90);                               \
-  REPEAT (valprefix.num_inputvars, valprefix.inputvars, Dwg_VALUEPARAM_vars)    \
+  FIELD_BL (valprefix.num_vars, 90);                                    \
+  REPEAT (valprefix.num_vars, valprefix.vars, Dwg_VALUEPARAM_vars)      \
   REPEAT_BLOCK                                                          \
-    AcDbEvalVariant_fields (valprefix.inputvars[rcount1].value);        \
-    FIELD_HANDLE (valprefix.inputvars[rcount1].handle, 4, 330);         \
+    AcDbEvalVariant_fields (valprefix.vars[rcount1].value);             \
+    FIELD_HANDLE (valprefix.vars[rcount1].handle, 4, 330);              \
   END_REPEAT_BLOCK                                                      \
-  END_REPEAT (valprefix.inputvars)                                      \
+  END_REPEAT (valprefix.vars)                                           \
   FIELD_HANDLE (valprefix.controlled_objdep, 4, 330)
     
 #define AcDbAssocDependency_fields                         \
@@ -6789,6 +6789,18 @@ DWG_OBJECT (ASSOCPATCHSURFACEACTIONBODY)
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocPatchSurfaceActionBody)
   DXF { FIELD_BL (class_version, 90); }
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+DWG_OBJECT (ASSOCFILLETSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocFilletSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  FIELD_BS (status, 70);
+  FIELD_2RD (pt1, 10);
+  FIELD_2RD (pt2, 10);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9524,6 +9536,49 @@ DWG_OBJECT (ASSOCVERTEXACTIONPARAM)
   FIELD_BL (class_version, 90);
   FIELD_3BD (pt, 10);
 DWG_OBJECT_END
+
+#define AcDbAssocArrayActionBody_fields                     \
+  AcDbAssocParamBasedActionBody_fields (pab);               \
+  SUBCLASS (AcDbAssocArrayActionBody);                      \
+  FIELD_BL (aaab_version, 90);                              \
+  FIELD_T (aaab_paramblock, 1);                             \
+  FIELD_VECTOR_N (aaab_transmatrix, BD, 16, 40)
+
+#define AssocArrayItem_fields(item)                              \
+  SUB_FIELD_BL (item, class_version, 90);                        \
+  SUB_FIELD_BL (item, itemloc[0], 90);                           \
+  SUB_FIELD_BL (item, itemloc[1], 90);                           \
+  SUB_FIELD_BL (item, itemloc[2], 90);                           \
+  SUB_FIELD_BLx (item, flags, 90);                               \
+  if (FIELD_VALUE(is_default_transmatrix))                       \
+    {                                                            \
+      /* TODO x_dir is computed from transmatrix */              \
+      SUB_FIELD_3BD (item, x_dir, 11);                           \
+    }                                                            \
+  else                                                           \
+    {                                                            \
+      SUB_FIELD_VECTOR_N (item, transmatrix, BD, 16, 40);        \
+    }                                                            \
+  if (FIELD_VALUE (item.flags) & 2)                              \
+    {                                                            \
+      SUB_FIELD_VECTOR_N (item, rel_transform, BD, 16, 40);      \
+    }                                                            \
+  if (FIELD_VALUE (item.has_h1))                                 \
+    SUB_FIELD_HANDLE (item, h1, 4, 330);                         \
+  if (FIELD_VALUE (item.flags) & 0x10)                           \
+    SUB_FIELD_HANDLE (item, h2, 4, 330)
+
+// unused
+#define AssocArrayParameters_fields                              \
+  FIELD_BL (aap_version, 90);                                    \
+  FIELD_BL (num_items, 90);                                      \
+  DXF { VALUE_TFF ("AcDbAssocArrayItem", 1); }                   \
+  REPEAT (num_items, items, Dwg_ASSOCARRAYITEM)                  \
+  REPEAT_BLOCK                                                   \
+      AssocArrayItem_fields (items[rcount1]);                    \
+  END_REPEAT_BLOCK                                               \
+  /* SET_PARENT (items, what); */                                \
+  END_REPEAT (items)
 
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/

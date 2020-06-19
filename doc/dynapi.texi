@@ -5182,36 +5182,14 @@ T,	DXF 1
 
 @item parent
 struct _dwg_object_object*
-@item pab.parent
-struct _dwg_object_object*
-@item pab.aab_version
-BL
-@item pab.status
-BL
-@item pab.l2
-BL
-@item pab.num_deps
-BL
-@item pab.deps
-H*
-@item pab.l4
-BL
-@item pab.num_values
-BL
-@item pab.l5
-BL
-@item pab.assoc_dep
-H
-@item pab.values
-struct _dwg_VALUEPARAM*
-@item pab
-struct _dwg_ASSOCPARAMBASEDACTIONBODY
 @item aaab_version
 BS
 @item assoc_dep
 H,	DXF 330
 @item actionbody
 H,	DXF 360
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
 BS,	DXF 90
 @item h1
@@ -5270,6 +5248,12 @@ H*,	DXF 360
 
 @item parent
 struct _dwg_object_object*
+@item aaab_version
+BS
+@item assoc_dep
+H
+@item actionbody
+H,	DXF 360
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
@@ -5467,6 +5451,49 @@ H,	DXF 330
 BL,	DXF 90
 @item index
 BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCFILLETSURFACEACTIONBODY} @anchor{ASSOCFILLETSURFACEACTIONBODY}
+@cindex object, ASSOCFILLETSURFACEACTIONBODY
+@vindex ASSOCFILLETSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS
+@item aap_version
+BL
+@item name
+TV
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item sab_status
+BL,	DXF 90
+@item sab_b1
+B,	DXF 290
+@item sab_l2
+BL,	DXF 90
+@item sab_b2
+B,	DXF 290
+@item sab_s1
+BS,	DXF 70
+@item sab_h330
+H,	DXF 330
+@item pbsab_status
+BL,	DXF 90
+@item class_version
+BL,	DXF 90
+@item status
+BS,	DXF 70
+@item pt1
+2RD,	DXF 10
+@item pt2
+2RD,	DXF 10
 
 @end vtable
 @end indentedblock
@@ -10005,6 +10032,32 @@ H
 @end vtable
 @end indentedblock
 
+@strong{Dwg_ASSOCARRAYITEM} @anchor{Dwg_ASSOCARRAYITEM}
+@vindex Dwg_ASSOCARRAYITEM
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item itemloc[3]
+BL
+@item flags
+BL
+@item transmatrix[16]
+BD
+@item rel_transform[16]
+BD
+@item h1
+H
+@item h2
+H
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_ASSOCPARAMBASEDACTIONBODY} @anchor{Dwg_ASSOCPARAMBASEDACTIONBODY}
 @vindex Dwg_ASSOCPARAMBASEDACTIONBODY
 
@@ -10025,12 +10078,12 @@ BL,	DXF 90
 H*
 @item l4
 BL
-@item num_values
-BL
 @item l5
 BL
 @item assoc_dep
 H
+@item num_values
+BL
 @item values
 struct _dwg_VALUEPARAM*
 
@@ -12507,9 +12560,9 @@ BL
 T
 @item unit_type
 BL
-@item num_inputvars
+@item num_vars
 BL
-@item inputvars
+@item vars
 Dwg_VALUEPARAM_vars*
 @item controlled_objdep
 H

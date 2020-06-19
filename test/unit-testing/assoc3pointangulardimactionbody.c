@@ -6,8 +6,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
+  Dwg_ASSOCPARAMBASEDACTIONBODY pab;
   ASSOCANNOTATIONACTIONBODY_fields;
-  struct _dwg_ASSOCPARAMBASEDACTIONBODY pab;
   BITCODE_BS class_version;       /*!< DXF 90  */
   BITCODE_H h1;		/*!< DXF 330  */
   BITCODE_H h2;		/*!< DXF 330  */
@@ -54,7 +54,7 @@ api_process (dwg_object *obj)
         }
     }
 
-  //CHK_ENTITY_TYPE (_obj, ASSOC3POINTANGULARDIMACTIONBODY, dcm_status, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOC3POINTANGULARDIMACTIONBODY, class_version, BS);
   CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, h1);
   CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, h2);
   CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, h3);

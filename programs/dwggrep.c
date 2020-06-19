@@ -1013,17 +1013,17 @@ match_ASSOCVERTEXACTIONPARAM (const char *restrict filename,
 }
 
 // TODO match on its subclasses which holds the text:
-//  VALUEPARAM, ASSOCVARIABLE, EvalVariant
+//  ASSOCVARIABLE, EvalVariant
 
 #define MATCH_AcDbAssocParamBasedActionBody(_type)                            \
   for (unsigned i = 0; i < _obj->pab.num_values; i++)                         \
   {                                                                           \
     MATCH_OBJECT (_type, pab.values[i].name, 1);                              \
-    for (unsigned j = 0; j < _obj->pab.values[i].num_inputvars; j++)          \
+    for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)               \
       {                                                                       \
-        if (_obj->pab.values[i].inputvars[j].value.type == 5)                 \
+        if (_obj->pab.values[i].vars[j].value.type == 5)                      \
           {                                                                   \
-            MATCH_OBJECT (_type, pab.values[i].inputvars[j].value.u.text, 1); \
+            MATCH_OBJECT (_type, pab.values[i].vars[j].value.u.text, 1);      \
           }                                                                   \
       }                                                                       \
   }
