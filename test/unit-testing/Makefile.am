@@ -58,7 +58,9 @@ testobjects = \
 	appid_control \
 	arc \
 	arc_dimension \
+	assocaction \
 	assocdependency \
+	assocgeomdependency \
 	assocblendsurfaceactionbody \
 	assocextrudedsurfaceactionbody \
 	assocfilletsurfaceactionbody \
@@ -203,10 +205,8 @@ testobjects += \
 	aldimobjectcontextdata \
 	angdimobjectcontextdata \
 	assoc2dconstraintgroup \
-	assocaction \
 	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
-	assocgeomdependency \
 	assocnetwork \
 	assocperssubentmanager \
 	assocvariable \

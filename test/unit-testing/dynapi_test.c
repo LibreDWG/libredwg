@@ -29837,6 +29837,16 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
     assocgeomdependency->class_version--;
   }
   {
+    BITCODE_T classname;
+    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "classname", &classname, NULL)
+        && classname
+           ? strEQ ((char *)classname, (char *)assocgeomdependency->classname)
+           : !assocgeomdependency->classname)
+      pass ();
+    else
+      fail ("ASSOCGEOMDEPENDENCY.classname [T] '%s' <> '%s'", classname, assocgeomdependency->classname);
+  }
+  {
     BITCODE_B dependent_on_compound_object;
     if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "dependent_on_compound_object", &dependent_on_compound_object, NULL)
         && dependent_on_compound_object == assocgeomdependency->dependent_on_compound_object)
@@ -29873,16 +29883,6 @@ static int test_ASSOCGEOMDEPENDENCY (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCGEOMDEPENDENCY.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_T t;
-    if (dwg_dynapi_entity_value (assocgeomdependency, "ASSOCGEOMDEPENDENCY", "t", &t, NULL)
-        && t
-           ? strEQ ((char *)t, (char *)assocgeomdependency->t)
-           : !assocgeomdependency->t)
-      pass ();
-    else
-      fail ("ASSOCGEOMDEPENDENCY.t [T] '%s' <> '%s'", t, assocgeomdependency->t);
   }
   if (failed && (is_class_unstable ("ASSOCGEOMDEPENDENCY") || is_class_debugging ("ASSOCGEOMDEPENDENCY")))
     {

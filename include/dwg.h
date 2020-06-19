@@ -5057,16 +5057,25 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
   BITCODE_H  node; 				/*<! DXF 330 */
 } Dwg_Object_ASSOCDEPENDENCY;
 
+#define ASSOCPERSSUBENTID_fields                \
+  BITCODE_T classname; /* DXF  1 */             \
+  BITCODE_B dependent_on_compound_object /* DXF 290 */
+
+// stable
+typedef struct _dwg_object_ASSOCGEOMDEPENDENCY
+{
+  struct _dwg_object_object *parent;
+  Dwg_Object_ASSOCDEPENDENCY assocdep;
+  // AcDbAssocGeomDependency
+  BITCODE_BS class_version;	/*<! DXF 90 0 */
+  BITCODE_B enabled;		/*<! DXF 290 1 */
+  ASSOCPERSSUBENTID_fields;
+} Dwg_Object_ASSOCGEOMDEPENDENCY;
+
 typedef struct _dwg_object_ASSOCACTION
 {
   struct _dwg_object_object *parent;
   ASSOCACTION_fields;
-  //BITCODE_B is_actionevaluation_in_progress; // 90
-  //Dwg_ACTIONBODY body;
-  //BITCODE_BL status;
-  //BITCODE_H  actionbody;
-  //BITCODE_H  callback;
-  //BITCODE_H  owning_network;
 } Dwg_Object_ASSOCACTION;
 
 /**
@@ -6625,21 +6634,6 @@ typedef struct _dwg_object_ACMESTATEMGR
   //?
 } Dwg_Object_ACMESTATEMGR;
 
-// ??
-#define AcDbAssocPersSubentId_fields            \
-  BITCODE_T t; /* DXF  1 */                     \
-  BITCODE_B dependent_on_compound_object /* DXF 290 */
-
-typedef struct _dwg_object_ASSOCGEOMDEPENDENCY
-{
-  struct _dwg_object_object *parent;
-  Dwg_Object_ASSOCDEPENDENCY assocdep;
-  // AcDbAssocGeomDependency
-  BITCODE_BS class_version;	/*<! DXF 90 0 */
-  BITCODE_B enabled;		/*<! DXF 290 1 */
-  AcDbAssocPersSubentId_fields;
-} Dwg_Object_ASSOCGEOMDEPENDENCY;
-
 typedef struct _dwg_object_CSACDOCUMENTOPTIONS
 {
   struct _dwg_object_object *parent;
@@ -8168,7 +8162,9 @@ EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCDEPENDENCY (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCBLENDSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCEXTRUDEDSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCFILLETSURFACEACTIONBODY (Dwg_Object *obj);
@@ -8214,7 +8210,7 @@ EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOC3POINTANGULARDIMACTIONBODY (Dwg_Object *obj);
-EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCNETWORK (Dwg_Object *obj);
 //EXPORT int dwg_setup_ACDSRECORD (Dwg_Object *obj);
 //EXPORT int dwg_setup_ACDSSCHEMA (Dwg_Object *obj);
@@ -8222,6 +8218,7 @@ EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
 EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
 EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
 EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
+EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_ALDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
@@ -8237,8 +8234,6 @@ EXPORT int dwg_setup_MLEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_MTEXTATTRIBUTEOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_MTEXTOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_TEXTOBJECTCONTEXTDATA (Dwg_Object *obj);
-EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
-EXPORT int dwg_setup_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPERSSUBENTMANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCOSNAPPOINTREFACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCASMBODYACTIONPARAM (Dwg_Object *obj);
@@ -8268,7 +8263,6 @@ EXPORT int dwg_setup_MPOLYGON (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTPATH (Dwg_Object *obj);
 //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
 EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
-EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);

@@ -5641,7 +5641,7 @@ Dwg_Object_ASSOCDEPENDENCY
 BS,	DXF 90
 @item enabled
 B,	DXF 290
-@item t
+@item classname
 T,	DXF 1
 @item dependent_on_compound_object
 B,	DXF 290

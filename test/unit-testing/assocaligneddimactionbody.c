@@ -1,4 +1,4 @@
-// TODO debugging
+// crashes
 #define DWG_TYPE DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY
 #include "common.c"
 
@@ -14,7 +14,6 @@ api_process (dwg_object *obj)
   BITCODE_H  r_node;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_assocaligneddimactionbody *_obj = dwg_object_to_ASSOCALIGNEDDIMACTIONBODY (obj);
 
   // ASSOCANNOTATIONACTIONBODY
@@ -32,5 +31,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCALIGNEDDIMACTIONBODY, class_version, BS);
   CHK_ENTITY_H    (_obj, ASSOCALIGNEDDIMACTIONBODY, d_node);
   CHK_ENTITY_H    (_obj, ASSOCALIGNEDDIMACTIONBODY, r_node);
-#endif
 }

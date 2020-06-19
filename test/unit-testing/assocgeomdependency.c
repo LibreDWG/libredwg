@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// stable, just indxf missing
 #define DWG_TYPE DWG_TYPE_ASSOCGEOMDEPENDENCY
 #include "common.c"
 
@@ -10,10 +10,9 @@ api_process (dwg_object *obj)
   // AcDbAssocGeomDependency
   BITCODE_BS class_version;	/*<! DXF 90 0 */
   BITCODE_B enabled;		/*<! DXF 290 1 */
-  AcDbAssocPersSubentId_fields;
+  ASSOCPERSSUBENTID_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_assocgeomdependency *_obj = dwg_object_to_ASSOCGEOMDEPENDENCY (obj);
 
   CHK_SUBCLASS_TYPE (_obj->assocdep, ASSOCDEPENDENCY, class_version, BS);
@@ -34,7 +33,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, enabled, B);
   // AcDbAssocPersSubentId
-  CHK_ENTITY_UTF8TEXT (_obj, ASSOCGEOMDEPENDENCY, t);
+  CHK_ENTITY_UTF8TEXT (_obj, ASSOCGEOMDEPENDENCY, classname);
   CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, dependent_on_compound_object, B);
-#endif
 }

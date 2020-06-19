@@ -579,7 +579,10 @@ typedef struct _dwg_object_VBA_PROJECT            dwg_obj_vba_project;
 typedef struct _dwg_object_WIPEOUTVARIABLES       dwg_obj_wipeoutvariables;
 typedef struct _dwg_object_XRECORD                dwg_obj_xrecord;
 // unstable:
+typedef struct _dwg_object_ASSOCACTION                     dwg_obj_assocaction;
 typedef struct _dwg_object_ASSOCDEPENDENCY                 dwg_obj_assocdependency;
+typedef struct _dwg_object_ASSOCGEOMDEPENDENCY             dwg_obj_assocgeomdependency;
+typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY       dwg_obj_assocaligneddimactionbody;
 typedef struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY     dwg_obj_assocblendsurfaceactionbody;
 typedef struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY  dwg_obj_assocextrudedsurfaceactionbody;
 typedef struct _dwg_object_ASSOCFILLETSURFACEACTIONBODY    dwg_obj_assocfilletsurfaceactionbody;
@@ -636,8 +639,6 @@ typedef struct _dwg_object_ORDDIMOBJECTCONTEXTDATA         dwg_obj_orddimobjectc
 typedef struct _dwg_object_RADIMOBJECTCONTEXTDATA          dwg_obj_radimobjectcontextdata;
 typedef struct _dwg_object_RADIMLGOBJECTCONTEXTDATA        dwg_obj_radimlgobjectcontextdata;
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP          dwg_obj_assoc2dconstraintgroup;
-typedef struct _dwg_object_ASSOCACTION                     dwg_obj_assocaction;
-typedef struct _dwg_object_ASSOCGEOMDEPENDENCY             dwg_obj_assocgeomdependency;
 typedef struct _dwg_object_ASSOCNETWORK                    dwg_obj_assocnetwork;
 typedef struct _dwg_object_ASSOCVARIABLE                   dwg_obj_assocvariable;
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER          dwg_obj_assocperssubentmanager;
@@ -649,7 +650,6 @@ typedef struct _dwg_object_ASSOCFACEACTIONPARAM            dwg_obj_assocfaceacti
 typedef struct _dwg_object_ASSOCPATHACTIONPARAM            dwg_obj_assocpathactionparam;
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM          dwg_obj_assocvertexactionparam;
 typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM   dwg_obj_assocosnappointrefactionparam;
-typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY       dwg_obj_assocaligneddimactionbody;
 typedef struct _dwg_object_ASSOC3POINTANGULARDIMACTIONBODY dwg_obj_assoc3pointangulardimactionbody;
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA         dwg_obj_blkrefobjectcontextdata;
 typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT      dwg_obj_blockgriplocationcomponent;
@@ -848,7 +848,9 @@ DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_CONE_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS)
 DWG_GETALL_OBJECT_DECL (ACSH_TORUS_CLASS)
+DWG_GETALL_OBJECT_DECL (ASSOCACTION)
 DWG_GETALL_OBJECT_DECL (ASSOCDEPENDENCY)
+DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCBLENDSURFACEACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCEXTRUDEDSURFACEACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCFILLETSURFACEACTIONBODY)
@@ -893,12 +895,10 @@ DWG_GETALL_OBJECT_DECL (ORDDIMOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (RADIMOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (RADIMLGOBJECTCONTEXTDATA)
 DWG_GETALL_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP)
-DWG_GETALL_OBJECT_DECL (ASSOCACTION)
 DWG_GETALL_OBJECT_DECL (ASSOCNETWORK)
 DWG_GETALL_OBJECT_DECL (ASSOCVARIABLE)
-DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
-DWG_GETALL_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOC3POINTANGULARDIMACTIONBODY)
+DWG_GETALL_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (ASSOCASMBODYACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (ASSOCCOMPOUNDACTIONPARAM)
@@ -1066,7 +1066,10 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (XRECORD)
 
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCDEPENDENCY)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCBLENDSURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCEXTRUDEDSURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCFILLETSURFACEACTIONBODY)
@@ -1141,11 +1144,8 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ORDDIMOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RADIMOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RADIMLGOBJECTCONTEXTDATA)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCNETWORK)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVARIABLE)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC3POINTANGULARDIMACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCASMBODYACTIONPARAM)
@@ -1403,7 +1403,9 @@ dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_cone_class, ACSH_CONE_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
+dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
 dwg_get_OBJECT_DECL (obj_assocdependency, ASSOCDEPENDENCY);
+dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
 dwg_get_OBJECT_DECL (obj_assocblendsurfaceactionbody, ASSOCBLENDSURFACEACTIONBODY)
 dwg_get_OBJECT_DECL (obj_assocextrudedsurfaceactionbody, ASSOCEXTRUDEDSURFACEACTIONBODY)
 dwg_get_OBJECT_DECL (obj_assocfilletsurfaceactionbody, ASSOCFILLETSURFACEACTIONBODY)
@@ -1448,12 +1450,10 @@ dwg_get_OBJECT_DECL (obj_orddimobjectcontextdata, ORDDIMOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_radimobjectcontextdata, RADIMOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_radimlgobjectcontextdata, RADIMLGOBJECTCONTEXTDATA);
 dwg_get_OBJECT_DECL (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP);
-dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
 dwg_get_OBJECT_DECL (obj_assocnetwork, ASSOCNETWORK);
 dwg_get_OBJECT_DECL (obj_assocvariable, ASSOCVARIABLE);
-dwg_get_OBJECT_DECL (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assoc3pointangulardimactionbody, ASSOC3POINTANGULARDIMACTIONBODY);
-dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
+dwg_get_OBJECT_DECL (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
 dwg_get_OBJECT_DECL (obj_assocasmbodyactionparam, ASSOCASMBODYACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_assoccompoundactionparam, ASSOCCOMPOUNDACTIONPARAM)

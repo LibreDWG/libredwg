@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_BL action_index;
   BITCODE_BL max_assoc_dep_index;
   BITCODE_BL num_deps;
-  Dwg_ASSOCACTION_Deps *deps;
+  //Dwg_ASSOCACTION_Deps *deps;
   BITCODE_BL num_owned_params;
   BITCODE_H *owned_params;
   BITCODE_BL num_owned_value_param_names;
@@ -56,7 +56,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_deps, BL);
-  //Dwg_ASSOCACTION_Deps *deps;
+  for (unsigned i=0; i < num_deps; i++)
+    {
+      CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_soft, B);
+      CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);
+    }
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, owned_params, num_owned_params);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_owned_value_param_names, BL);

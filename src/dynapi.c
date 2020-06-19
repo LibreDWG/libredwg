@@ -5131,7 +5131,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCGEOMDEPENDENCY_fields[] = {
     0,0,0, 90 },
   { "enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, enabled),
     0,0,0, 290 },
-  { "t",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, t),
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, classname),
     1,1,1, 1 },
   { "dependent_on_compound_object",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, dependent_on_compound_object),
     0,0,0, 290 },

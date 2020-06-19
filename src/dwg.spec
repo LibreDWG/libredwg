@@ -3053,8 +3053,8 @@ DWG_OBJECT (UCS)
   {
     FIELD_BD0 (ucs_elevation, 146);
     FIELD_BS (UCSORTHOVIEW, 79);
-    FIELD_HANDLE0 (base_ucs, DWG_HDL_HARDPTR, 346);
-    FIELD_HANDLE (named_ucs, DWG_HDL_HARDPTR, 0);
+    FIELD_HANDLE0 (base_ucs, 5, 346);
+    FIELD_HANDLE (named_ucs, 5, 0);
 
     FIELD_BS (num_orthopts, 0);
     REPEAT (num_orthopts, orthopts, Dwg_UCS_orthopts)
@@ -7795,6 +7795,54 @@ DWG_OBJECT (ACSH_BOOLEAN_CLASS)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// (varies) unstable
+// call as dwg_##action_ASSOCACTION_private
+DWG_OBJECT (ASSOCACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbAssocAction)
+  /* until r2010: 1, 2013+: 2 */
+  FIELD_BS (class_version, 90);
+  FIELD_BL (geometry_status, 90); /* 0 */
+  FIELD_HANDLE (owningnetwork, 5, 330);
+  FIELD_HANDLE (actionbody, 4, 360);
+  FIELD_BL (action_index, 90);
+  FIELD_BL (max_assoc_dep_index, 90);
+  FIELD_BL (num_deps, 90);
+  REPEAT (num_deps, deps, Dwg_ASSOCACTION_Deps)
+  REPEAT_BLOCK
+  {
+    int dxf = _obj->deps[rcount1].is_soft ? 360 : 330;
+    int code = _obj->deps[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+    SUB_FIELD_B (deps[rcount1], is_soft, 0);
+    SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);
+  }
+  END_REPEAT_BLOCK
+  END_REPEAT (deps);
+  if (FIELD_VALUE (class_version) > 1)
+  {
+    VALUE_BS (0, 90);
+    FIELD_BL (num_owned_params, 90);
+    HANDLE_VECTOR (owned_params, num_owned_params, 4, 360);
+    VALUE_BS (0, 90);
+    FIELD_BL (num_owned_value_param_names, 90); // TODO which hdl_code?
+    HANDLE_VECTOR (owned_value_param_names, num_owned_value_param_names, 5, 360);
+  }
+DWG_OBJECT_END
+
+#define AcDbAssocPersSubentId_fields            \
+  SUBCLASS (AcDbAssocPersSubentId)              \
+  FIELD_T (classname, 1);                       \
+  FIELD_B (dependent_on_compound_object, 290)
+
+DWG_OBJECT (ASSOCGEOMDEPENDENCY)
+  AcDbAssocDependency_fields;
+  SUBCLASS (AcDbAssocGeomDependency)
+  FIELD_BS (class_version, 90); // always 0
+  FIELD_B (enabled, 290);       // always 1
+  AcDbAssocPersSubentId_fields;
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -7803,7 +7851,7 @@ DWG_OBJECT_END
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
-// unstable
+// crashes
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
@@ -8202,40 +8250,6 @@ DWG_ENTITY (PLANESURFACE)
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
-
-// (varies) DEBUGGING
-// call as dwg_##action_ASSOCACTION_private
-DWG_OBJECT (ASSOCACTION)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocAction)
-  /* until r2010: 1, 2013+: 2 */
-  FIELD_BS (class_version, 90);
-  FIELD_BL (geometry_status, 90); /* 0 */
-  FIELD_HANDLE (owningnetwork, 5, 330);
-  FIELD_HANDLE (actionbody, 4, 360);
-  FIELD_BL (action_index, 90);
-  FIELD_BL (max_assoc_dep_index, 90);
-  FIELD_BL (num_deps, 90);
-  REPEAT (num_deps, deps, Dwg_ASSOCACTION_Deps)
-  REPEAT_BLOCK
-  {
-    int dxf = _obj->deps[rcount1].is_soft ? 360 : 330;
-    int code = _obj->deps[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
-    SUB_FIELD_B (deps[rcount1], is_soft, 0);
-    SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);
-  }
-  END_REPEAT_BLOCK
-  END_REPEAT (deps);
-  if (FIELD_VALUE (class_version) > 1)
-  {
-    VALUE_BS (0, 90);
-    FIELD_BL (num_owned_params, 90);
-    HANDLE_VECTOR (owned_params, num_owned_params, DWG_HDL_SOFTPTR, 360);
-    VALUE_BS (0, 90);
-    FIELD_BL (num_owned_value_param_names, 90); // TODO which hdl_code?
-    HANDLE_VECTOR (owned_value_param_names, num_owned_value_param_names, 5, 360);
-  }
-DWG_OBJECT_END
 
 // (varies)
 // works ok on all example_20* but this coverage seems limited
@@ -9091,28 +9105,6 @@ DWG_OBJECT (LAYOUTPRINTCONFIG)
   FIELD_BS (class_version, 0);
   DEBUG_HERE_OBJ
   FIELD_BS (flag, 93);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-#undef AcDbAssocPersSubentId_fields
-#define AcDbAssocPersSubentId_fields \
-  SUBCLASS (AcDbAssocPersSubentId) \
-  FIELD_T (t, 1); \
-  FIELD_B (dependent_on_compound_object, 290)
-
-// see unknown 34/117=29.1%
-// possible: [......29    7 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx9 99   7  9........5...9 99 9.9 9.........5...9    9..9 99    9....]
-// 90 -10000 at offset 16/117
-DWG_OBJECT (ASSOCGEOMDEPENDENCY)
-  DECODE_UNKNOWN_BITS
-  //90 2 DependentOnObjectStatus (ok, NotInitializedYet, InvalidObjectId)
-  //90 -10000
-  //330 -> CIRCLE
-  AcDbAssocDependency_fields;
-  SUBCLASS (AcDbAssocGeomDependency)
-  FIELD_BS (class_version, 90); // always 0
-  FIELD_B (enabled, 290);       // always 1
-  AcDbAssocPersSubentId_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
