@@ -146,9 +146,9 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "ASSOCALIGNEDDIMACTIONBODY" "\0\0\0\0\0\0",	/* 26 */
   "ASSOCBLENDSURFACEACTIONBODY" "\0\0\0\0",	/* 27 */
   "ASSOCDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
-  "ASSOCEDGECTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
+  "ASSOCEDGEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
   "ASSOCEXTRUDEDSURFACEACTIONBODY" "\0",	/* 30 */
-  "ASSOCFACECTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "ASSOCFACEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
   "ASSOCGEOMDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
   "ASSOCLOFTEDSURFACEACTIONBODY" "\0\0\0",	/* 33 */
   "ASSOCNETWORK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
@@ -160,7 +160,7 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "ASSOCREVOLVEDSURFACEACTIONBODY" "\0",	/* 40 */
   "ASSOCSWEPTSURFACEACTIONBODY" "\0\0\0\0",	/* 41 */
   "ASSOCVARIABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
-  "ASSOCVERTEXCTIONPARAM" "\0\0\0\0\0\0\0\0\0\0",	/* 43 */
+  "ASSOCVERTEXACTIONPARAM" "\0\0\0\0\0\0\0\0\0",	/* 43 */
   "BACKGROUND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
   "BLKREFOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0",	/* 45 */
   "BLOCKGRIPLOCATIONCOMPONENT" "\0\0\0\0\0",	/* 46 */
@@ -4908,29 +4908,29 @@ static const Dwg_DYNAPI_field _dwg_ASSOCDEPENDENCY_fields[] = {
     1,0,0, 330 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_ASSOCEDGECTIONPARAM: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_ASSOCEDGECTIONPARAM_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, parent),
+/* from typedef struct _dwg_object_ASSOCEDGEACTIONPARAM: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCEDGEACTIONPARAM_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, parent),
     1,1,0, 0 },
-  { "is_r2013",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, is_r2013),
-    0,0,0, 0 },
-  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, aap_version),
-    0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, name),
-    1,1,1, 0 },
-  { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, asdap_class_version),
-    0,0,0, 0 },
-  { "dep",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, dep),
-    1,0,0, 0 },
-  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, class_version),
+  { "is_r2013",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, is_r2013),
     0,0,0, 90 },
-  { "param",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, param),
-    1,0,0, 0 },
-  { "has_action",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, has_action),
-    0,0,0, 0 },
-  { "action_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, action_type),
-    0,0,0, 0 },
-  { "subent",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCEDGECTIONPARAM, subent),
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, aap_version),
+    0,0,0, 90 },
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, name),
+    1,1,1, 1 },
+  { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, asdap_class_version),
+    0,0,0, 90 },
+  { "dep",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, dep),
+    1,0,0, 330 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, class_version),
+    0,0,0, 90 },
+  { "param",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, param),
+    1,0,0, 330 },
+  { "has_action",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, has_action),
+    0,0,0, 290 },
+  { "action_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, action_type),
+    0,0,0, 90 },
+  { "subent",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, subent),
     1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -4964,24 +4964,24 @@ static const Dwg_DYNAPI_field _dwg_ASSOCEXTRUDEDSURFACEACTIONBODY_fields[] = {
     0,0,0, 90 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_ASSOCFACECTIONPARAM: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_ASSOCFACECTIONPARAM_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, parent),
+/* from typedef struct _dwg_object_ASSOCFACEACTIONPARAM: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCFACEACTIONPARAM_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, parent),
     1,1,0, 0 },
-  { "is_r2013",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, is_r2013),
-    0,0,0, 0 },
-  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, aap_version),
-    0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, name),
-    1,1,1, 0 },
-  { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, asdap_class_version),
-    0,0,0, 0 },
-  { "dep",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, dep),
-    1,0,0, 0 },
-  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, class_version),
+  { "is_r2013",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, is_r2013),
     0,0,0, 90 },
-  { "index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACECTIONPARAM, index),
-    0,0,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, aap_version),
+    0,0,0, 90 },
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, name),
+    1,1,1, 1 },
+  { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, asdap_class_version),
+    0,0,0, 90 },
+  { "dep",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, dep),
+    1,0,0, 330 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, class_version),
+    0,0,0, 90 },
+  { "index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, index),
+    0,0,0, 90 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_ASSOCGEOMDEPENDENCY: (sorted by offset) */
@@ -5080,14 +5080,34 @@ static const Dwg_DYNAPI_field _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, name),
     1,1,1, 1 },
-  { "unknown3",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, unknown3),
-    0,0,0, 40 },
-  { "num_actions",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, num_actions),
+  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, class_version),
     0,0,0, 90 },
-  { "actions",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, actions),
-    1,1,0, 330 },
-  { "writedep",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, writedep),
-    1,0,0, 360 },
+  { "bs1",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, bs1),
+    0,0,0, 90 },
+  { "num_params",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, num_params),
+    0,0,0, 90 },
+  { "params",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, params),
+    1,1,0, 360 },
+  { "has_child_param",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, has_child_param),
+    0,0,0, 0 },
+  { "child_bs2",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, child_bs2),
+    0,0,0, 90 },
+  { "child_bl1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, child_bl1),
+    0,0,0, 90 },
+  { "child_param",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, child_param),
+    1,0,0, 330 },
+  { "h330_2",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, h330_2),
+    1,0,0, 330 },
+  { "bl2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, bl2),
+    0,0,0, 90 },
+  { "h330_3",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, h330_3),
+    1,0,0, 330 },
+  { "status",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, status),
+    0,0,0, 90 },
+  { "osnap_mode",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, osnap_mode),
+    0,0,0, 90 },
+  { "param",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, param),
+    0,0,0, 40 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_ASSOCPATCHSURFACEACTIONBODY: (sorted by offset) */
@@ -5124,8 +5144,12 @@ static const Dwg_DYNAPI_field _dwg_ASSOCPATCHSURFACEACTIONBODY_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ASSOCPATHACTIONPARAM_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, parent),
     1,1,0, 0 },
-  { "status",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, status),
+  { "is_r2013",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, is_r2013),
     0,0,0, 90 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, aap_version),
+    0,0,0, 90 },
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, name),
+    1,1,1, 1 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, class_version),
     0,0,0, 90 },
   { "bs1",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, bs1),
@@ -5134,11 +5158,11 @@ static const Dwg_DYNAPI_field _dwg_ASSOCPATHACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "params",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, params),
     1,1,0, 360 },
-  { "has_bl1",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, has_bl1),
+  { "has_child_param",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, has_child_param),
     0,0,0, 0 },
-  { "bs2",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, bs2),
+  { "child_bs2",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, child_bs2),
     0,0,0, 90 },
-  { "bl1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, bl1),
+  { "child_bl1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, child_bl1),
     0,0,0, 90 },
   { "child_param",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, child_param),
     1,0,0, 330 },
@@ -5148,6 +5172,8 @@ static const Dwg_DYNAPI_field _dwg_ASSOCPATHACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "h330_3",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, h330_3),
     1,0,0, 330 },
+  { "status",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, status),
+    0,0,0, 90 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER: (sorted by offset) */
@@ -5378,24 +5404,24 @@ static const Dwg_DYNAPI_field _dwg_ASSOCVARIABLE_fields[] = {
     0,0,0, 290 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_ASSOCVERTEXCTIONPARAM: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_ASSOCVERTEXCTIONPARAM_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, parent),
+/* from typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCVERTEXACTIONPARAM_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, parent),
     1,1,0, 0 },
-  { "is_r2013",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, is_r2013),
-    0,0,0, 0 },
-  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, aap_version),
-    0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, name),
-    1,1,1, 0 },
-  { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, asdap_class_version),
-    0,0,0, 0 },
-  { "dep",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, dep),
-    1,0,0, 0 },
-  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, class_version),
+  { "is_r2013",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, is_r2013),
     0,0,0, 90 },
-  { "pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_ASSOCVERTEXCTIONPARAM, pt),
-    1,0,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, aap_version),
+    0,0,0, 90 },
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, name),
+    1,1,1, 1 },
+  { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, asdap_class_version),
+    0,0,0, 90 },
+  { "dep",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, dep),
+    1,0,0, 330 },
+  { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, class_version),
+    0,0,0, 90 },
+  { "pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, pt),
+    1,0,0, 10 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BACKGROUND: (sorted by offset) */
@@ -10497,8 +10523,6 @@ static const Dwg_DYNAPI_field _dwg_VALUEPARAM_fields[] = {
 };
 /* from typedef struct _dwg_VALUEPARAM_vars: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_VALUEPARAM_vars_fields[] = {
-  { "parent",	"struct _dwg_VALUEPARAM*", sizeof (void *),  OFF (struct _dwg_VALUEPARAM_vars, parent),
-    1,1,0, 0 },
   { "value",	"Dwg_EvalVariant", sizeof (Dwg_EvalVariant),  OFF (struct _dwg_VALUEPARAM_vars, value),
     0,0,0, 0 },
   { "handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_VALUEPARAM_vars, handle),
@@ -10735,9 +10759,9 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "ASSOCALIGNEDDIMACTIONBODY", DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY /*(539)*/, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY) },	/* 32 */
   { "ASSOCBLENDSURFACEACTIONBODY", DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY /*(540)*/, _dwg_ASSOCBLENDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY) },	/* 33 */
   { "ASSOCDEPENDENCY", DWG_TYPE_ASSOCDEPENDENCY /*(541)*/, _dwg_ASSOCDEPENDENCY_fields, sizeof (struct _dwg_object_ASSOCDEPENDENCY) },	/* 34 */
-  { "ASSOCEDGEACTIONPARAM", DWG_TYPE_ASSOCEDGEACTIONPARAM /*(542)*/, NULL, 0 },	/* 35 */
+  { "ASSOCEDGEACTIONPARAM", DWG_TYPE_ASSOCEDGEACTIONPARAM /*(542)*/, _dwg_ASSOCEDGEACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCEDGEACTIONPARAM) },	/* 35 */
   { "ASSOCEXTRUDEDSURFACEACTIONBODY", DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY /*(543)*/, _dwg_ASSOCEXTRUDEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY) },	/* 36 */
-  { "ASSOCFACEACTIONPARAM", DWG_TYPE_ASSOCFACEACTIONPARAM /*(544)*/, NULL, 0 },	/* 37 */
+  { "ASSOCFACEACTIONPARAM", DWG_TYPE_ASSOCFACEACTIONPARAM /*(544)*/, _dwg_ASSOCFACEACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCFACEACTIONPARAM) },	/* 37 */
   { "ASSOCGEOMDEPENDENCY", DWG_TYPE_ASSOCGEOMDEPENDENCY /*(546)*/, _dwg_ASSOCGEOMDEPENDENCY_fields, sizeof (struct _dwg_object_ASSOCGEOMDEPENDENCY) },	/* 38 */
   { "ASSOCLOFTEDSURFACEACTIONBODY", DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY /*(547)*/, _dwg_ASSOCLOFTEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY) },	/* 39 */
   { "ASSOCNETWORK", DWG_TYPE_ASSOCNETWORK /*(548)*/, _dwg_ASSOCNETWORK_fields, sizeof (struct _dwg_object_ASSOCNETWORK) },	/* 40 */
@@ -10749,7 +10773,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "ASSOCREVOLVEDSURFACEACTIONBODY", DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY /*(553)*/, _dwg_ASSOCREVOLVEDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY) },	/* 46 */
   { "ASSOCSWEPTSURFACEACTIONBODY", DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY /*(554)*/, _dwg_ASSOCSWEPTSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY) },	/* 47 */
   { "ASSOCVARIABLE", DWG_TYPE_ASSOCVARIABLE /*(555)*/, _dwg_ASSOCVARIABLE_fields, sizeof (struct _dwg_object_ASSOCVARIABLE) },	/* 48 */
-  { "ASSOCVERTEXACTIONPARAM", DWG_TYPE_ASSOCVERTEXACTIONPARAM /*(556)*/, NULL, 0 },	/* 49 */
+  { "ASSOCVERTEXACTIONPARAM", DWG_TYPE_ASSOCVERTEXACTIONPARAM /*(556)*/, _dwg_ASSOCVERTEXACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCVERTEXACTIONPARAM) },	/* 49 */
   { "ATEXT", DWG_TYPE_ATEXT /*(557)*/, _dwg_ATEXT_fields, sizeof (struct _dwg_entity_ATEXT) },	/* 50 */
   { "ATTDEF", DWG_TYPE_ATTDEF /*(3)*/, _dwg_ATTDEF_fields, sizeof (struct _dwg_entity_ATTDEF) },	/* 51 */
   { "ATTRIB", DWG_TYPE_ATTRIB /*(2)*/, _dwg_ATTRIB_fields, sizeof (struct _dwg_entity_ATTRIB) },	/* 52 */

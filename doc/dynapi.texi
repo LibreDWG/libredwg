@@ -5374,9 +5374,9 @@ H,	DXF 330
 @end vtable
 @end indentedblock
 
-@strong{ASSOCEDGECTIONPARAM} @anchor{ASSOCEDGECTIONPARAM}
-@cindex object, ASSOCEDGECTIONPARAM
-@vindex ASSOCEDGECTIONPARAM
+@strong{ASSOCEDGEACTIONPARAM} @anchor{ASSOCEDGEACTIONPARAM}
+@cindex object, ASSOCEDGEACTIONPARAM
+@vindex ASSOCEDGEACTIONPARAM
 
 @indentedblock
 @vtable @code
@@ -5384,23 +5384,23 @@ H,	DXF 330
 @item parent
 struct _dwg_object_object*
 @item is_r2013
-BS
+BS,	DXF 90
 @item aap_version
-BL
+BL,	DXF 90
 @item name
-TV
+T,	DXF 1
 @item asdap_class_version
-BL
+BL,	DXF 90
 @item dep
-H
+H,	DXF 330
 @item class_version
 BL,	DXF 90
 @item param
-H
+H,	DXF 330
 @item has_action
-B
+B,	DXF 290
 @item action_type
-BL
+BL,	DXF 90
 @item subent
 H
 
@@ -5444,9 +5444,9 @@ BL,	DXF 90
 @end vtable
 @end indentedblock
 
-@strong{ASSOCFACECTIONPARAM} @anchor{ASSOCFACECTIONPARAM}
-@cindex object, ASSOCFACECTIONPARAM
-@vindex ASSOCFACECTIONPARAM
+@strong{ASSOCFACEACTIONPARAM} @anchor{ASSOCFACEACTIONPARAM}
+@cindex object, ASSOCFACEACTIONPARAM
+@vindex ASSOCFACEACTIONPARAM
 
 @indentedblock
 @vtable @code
@@ -5454,19 +5454,19 @@ BL,	DXF 90
 @item parent
 struct _dwg_object_object*
 @item is_r2013
-BS
+BS,	DXF 90
 @item aap_version
-BL
+BL,	DXF 90
 @item name
-TV
+T,	DXF 1
 @item asdap_class_version
-BL
+BL,	DXF 90
 @item dep
-H
+H,	DXF 330
 @item class_version
 BL,	DXF 90
 @item index
-BL
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -5593,14 +5593,34 @@ BS,	DXF 90
 BL,	DXF 90
 @item name
 T,	DXF 1
-@item unknown3
-BD,	DXF 40
-@item num_actions
+@item class_version
 BS,	DXF 90
-@item actions
-H*,	DXF 330
-@item writedep
-H,	DXF 360
+@item bs1
+BS,	DXF 90
+@item num_params
+BL,	DXF 90
+@item params
+H*,	DXF 360
+@item has_child_param
+B
+@item child_bs2
+BS,	DXF 90
+@item child_bl1
+BL,	DXF 90
+@item child_param
+H,	DXF 330
+@item h330_2
+H,	DXF 330
+@item bl2
+BL,	DXF 90
+@item h330_3
+H,	DXF 330
+@item status
+BS,	DXF 90
+@item osnap_mode
+RC,	DXF 90
+@item param
+BD,	DXF 40
 
 @end vtable
 @end indentedblock
@@ -5651,8 +5671,12 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item status
+@item is_r2013
+BS,	DXF 90
+@item aap_version
 BL,	DXF 90
+@item name
+T,	DXF 1
 @item class_version
 BS,	DXF 90
 @item bs1
@@ -5661,11 +5685,11 @@ BS,	DXF 90
 BL,	DXF 90
 @item params
 H*,	DXF 360
-@item has_bl1
+@item has_child_param
 B
-@item bs2
+@item child_bs2
 BS,	DXF 90
-@item bl1
+@item child_bl1
 BL,	DXF 90
 @item child_param
 H,	DXF 330
@@ -5675,6 +5699,8 @@ H,	DXF 330
 BL,	DXF 90
 @item h330_3
 H,	DXF 330
+@item status
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -5942,9 +5968,9 @@ B,	DXF 290
 @end vtable
 @end indentedblock
 
-@strong{ASSOCVERTEXCTIONPARAM} @anchor{ASSOCVERTEXCTIONPARAM}
-@cindex object, ASSOCVERTEXCTIONPARAM
-@vindex ASSOCVERTEXCTIONPARAM
+@strong{ASSOCVERTEXACTIONPARAM} @anchor{ASSOCVERTEXACTIONPARAM}
+@cindex object, ASSOCVERTEXACTIONPARAM
+@vindex ASSOCVERTEXACTIONPARAM
 
 @indentedblock
 @vtable @code
@@ -5952,19 +5978,19 @@ B,	DXF 290
 @item parent
 struct _dwg_object_object*
 @item is_r2013
-BS
+BS,	DXF 90
 @item aap_version
-BL
+BL,	DXF 90
 @item name
-TV
+T,	DXF 1
 @item asdap_class_version
-BL
+BL,	DXF 90
 @item dep
-H
+H,	DXF 330
 @item class_version
 BL,	DXF 90
 @item pt
-3BD
+3BD,	DXF 10
 
 @end vtable
 @end indentedblock
@@ -12497,8 +12523,6 @@ H
 @indentedblock
 @vtable @code
 
-@item parent
-struct _dwg_VALUEPARAM*
 @item value
 Dwg_EvalVariant
 @item handle

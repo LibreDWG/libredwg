@@ -4982,7 +4982,7 @@ typedef struct _dwg_EvalVariant
 
 typedef struct _dwg_VALUEPARAM_vars
 {
-  struct _dwg_VALUEPARAM *parent;
+  //struct _dwg_VALUEPARAM *parent;
   Dwg_EvalVariant value;
   BITCODE_H handle;
 } Dwg_VALUEPARAM_vars;
@@ -5104,21 +5104,18 @@ typedef struct _dwg_object_ASSOCNETWORK
 #define ASSOCACTIONBODY_fields         \
   BITCODE_BL aab_version /* DXF 90. r2013+: 2, earlier 1 */
 
-/**
- Object ASSOCOSNAPPOINTREFACTIONPARAM (varies) UNKNOWN FIELDS
- Action parameter that owns other AcDbAssocActionParameters,
- allowing the representation of hierarchical structures of action parameters.
- */
-typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
-{
-  struct _dwg_object_object *parent;
-  ASSOCACTIONPARAM_fields;
-  // AcDbAssocCompoundActionParam
-  BITCODE_BD unknown3; // 40 -1.0
-  BITCODE_BS num_actions; // 90 1
-  BITCODE_H *actions;  // 330
-  BITCODE_H writedep;  // 360
-} Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
+#define ASSOCCOMPOUNDACTIONPARAM_fields \
+  BITCODE_BS class_version; \
+  BITCODE_BS bs1; \
+  BITCODE_BL num_params; \
+  BITCODE_H *params; \
+  BITCODE_B has_child_param; \
+  BITCODE_BS child_bs2; \
+  BITCODE_BL child_bl1; \
+  BITCODE_H child_param; \
+  BITCODE_H h330_2; \
+  BITCODE_BL bl2; \
+  BITCODE_H h330_3
 
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {
@@ -5276,7 +5273,22 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 #define ASSOCPARAMBASEDACTIONBODY_fields        \
   Dwg_ASSOCPARAMBASEDACTIONBODY pab
 
-typedef struct _dwg_object_ASSOCEDGECTIONPARAM
+/**
+ Object ASSOCOSNAPPOINTREFACTIONPARAM (varies)
+ Action parameter that owns other AcDbAssocActionParameters,
+ allowing the representation of hierarchical structures of action parameters.
+ */
+typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
+{
+  struct _dwg_object_object *parent;
+  ASSOCACTIONPARAM_fields;
+  ASSOCCOMPOUNDACTIONPARAM_fields;
+  BITCODE_BS status;
+  BITCODE_RC osnap_mode;
+  BITCODE_BD param; // 40 -1.0
+} Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM;
+
+typedef struct _dwg_object_ASSOCEDGEACTIONPARAM
 {
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;
@@ -5291,7 +5303,7 @@ typedef struct _dwg_object_ASSOCEDGECTIONPARAM
   BITCODE_H subent;
 } Dwg_Object_ASSOCEDGEACTIONPARAM;
 
-typedef struct _dwg_object_ASSOCFACECTIONPARAM
+typedef struct _dwg_object_ASSOCFACEACTIONPARAM
 {
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;  
@@ -5306,23 +5318,13 @@ typedef struct _dwg_object_ASSOCFACECTIONPARAM
 typedef struct _dwg_object_ASSOCPATHACTIONPARAM
 {
   struct _dwg_object_object *parent;
+  ASSOCACTIONPARAM_fields;
+  ASSOCCOMPOUNDACTIONPARAM_fields;
   /* AcDbAssocPathActionParam */
   BITCODE_BL status;	/*!< DXF 90 */
-  /* AssocCompoundActionParam */
-  BITCODE_BS class_version;
-  BITCODE_BS bs1;
-  BITCODE_BL num_params;
-  BITCODE_H *params;
-  BITCODE_B has_bl1;
-  BITCODE_BS bs2;
-  BITCODE_BL bl1;
-  BITCODE_H child_param;
-  BITCODE_H h330_2;
-  BITCODE_BL bl2;
-  BITCODE_H h330_3;
 } Dwg_Object_ASSOCPATHACTIONPARAM;
 
-typedef struct _dwg_object_ASSOCVERTEXCTIONPARAM
+typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM
 {
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;  
@@ -5337,7 +5339,7 @@ typedef struct _dwg_object_ASSOCVERTEXCTIONPARAM
 #define ASSOCPATHBASEDSURFACEACTIONBODY_fields \
   ASSOCACTIONPARAM_fields;                     \
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;           \
-  /* AcDbAssocSurfaceActionBody */             \
+  /* AcDbAssocSurfaceActionBody struct? */     \
   BITCODE_BL sab_status;/*!< DXF 90 */         \
   BITCODE_B sab_b1;     /*!< DXF 290 */        \
   BITCODE_BL sab_l2;    /*!< DXF 90 */         \

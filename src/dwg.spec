@@ -6617,7 +6617,6 @@ DWG_OBJECT_END
     AcDbEvalVariant_fields (valprefix.inputvars[rcount1].value);        \
     FIELD_HANDLE (valprefix.inputvars[rcount1].handle, 4, 330);         \
   END_REPEAT_BLOCK                                                      \
-  SET_PARENT_OBJ (valprefix.inputvars)                                  \
   END_REPEAT (valprefix.inputvars)                                      \
   FIELD_HANDLE (valprefix.controlled_objdep, 4, 330)
     
@@ -8214,28 +8213,6 @@ DWG_OBJECT (ASSOCACTION)
   }
 DWG_OBJECT_END
 
-// DEBUGGING
-DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocActionParam_fields;
-  SUBCLASS (AcDbAssocCompoundActionParam)
-  FIELD_BD (unknown3, 40); //-1 32-97
-  FIELD_BS (flags, 90); //0 read/write deps
-  //...
-  DEBUG_HERE_OBJ
-  FIELD_BS (num_actions, 90); //1
-  VALUEOUTOFBOUNDS (num_actions, 1000)
-  DEBUG_HERE_OBJ
-
-  bit_advance_position (dat, 122-118);
-  START_OBJECT_HANDLE_STREAM;
-  DEBUG_POS_OBJ
-  FIELD_HANDLE (writedep, ANYCODE, 360); //122-129
-  bit_advance_position (dat, 168-130);
-  DEBUG_POS_OBJ
-  HANDLE_VECTOR (actions, num_actions, 4, 330);
-DWG_OBJECT_END
-
 // (varies)
 // works ok on all example_20* but this coverage seems limited
 // The static variant
@@ -9391,7 +9368,38 @@ DWG_OBJECT (ASSOCVARIABLE)
   FIELD_B (b290, 290);
 DWG_OBJECT_END
 
-#define ASSOCPATHACTIONPARAM_fields(pap)                  \
+#define AcDbAssocCompoundActionParam_fields \
+  SUBCLASS (AcDbAssocCompoundActionParam); \
+  FIELD_BS (class_version, 90); \
+  FIELD_BS (bs1, 90); \
+  FIELD_BL (num_params, 90); \
+  HANDLE_VECTOR (params, num_params, 4, 360); \
+  if (FIELD_VALUE (has_child_param)) /* FIXME */ \
+    { \
+      FIELD_BS (child_bs2, 90); \
+      FIELD_BL (child_bl1, 90); \
+      FIELD_HANDLE (child_param, 3, 330); \
+    } \
+  if (FIELD_VALUE (child_bl1)) \
+    { \
+      FIELD_HANDLE (h330_2, 3, 330); \
+      FIELD_BL (bl2, 90); \
+      FIELD_HANDLE (h330_3, 3, 330); \
+    }
+
+// DEBUGGING
+DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  AcDbAssocCompoundActionParam_fields;
+  SUBCLASS (AcDbAssocPathActionParam);
+  FIELD_BS (status, 90);
+  FIELD_RC (osnap_mode, 90);
+  FIELD_BD (param, 40);
+DWG_OBJECT_END
+
+// unused
+#define AcDbAssocPathActionParam_fields(pap)              \
   SUBCLASS (AcDbAssocPathActionParam);                    \
   SUB_FIELD_BL (pap,status, 90);                          \
   SUB_FIELD_BS (pap,class_version, 90);                   \
@@ -9399,11 +9407,11 @@ DWG_OBJECT_END
   SUB_FIELD_BL (pap,num_params, 90);                      \
   SUB_HANDLE_VECTOR (pap, params, num_params, 4, 360);    \
   if (FIELD_VALUE (pap.has_child_param)) {                \
-    SUB_FIELD_BS (pap,bs2, 90);                           \
-    SUB_FIELD_BL (pap,bl1, 90);                           \
+    SUB_FIELD_BS (pap,child_bs2, 90);                     \
+    SUB_FIELD_BL (pap,child_bl1, 90);                     \
     SUB_FIELD_HANDLE (pap,child_param, 3, 330);           \
     }                                                     \
-  if (FIELD_VALUE (pap.bl1)) {                            \
+  if (FIELD_VALUE (pap.child_bl1)) {                      \
     SUB_FIELD_HANDLE (pap,h330_2, 3, 330);                \
     SUB_FIELD_BL (pap,bl2, 90);                           \
     SUB_FIELD_HANDLE (pap,h330_3, 3, 330);                \
@@ -9412,30 +9420,12 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCPATHACTIONPARAM)
   DECODE_UNKNOWN_BITS
   AcDbAssocActionParam_fields;
-  SUBCLASS (AcDbAssocSingleDependencyActionParam);
-  FIELD_BL (asdap_class_version, 90);
-  FIELD_HANDLE (dep, 4, 330);
+  AcDbAssocCompoundActionParam_fields;
   SUBCLASS (AcDbAssocPathActionParam);
   FIELD_BL (status, 90);
-  FIELD_BS (class_version, 90);
-  FIELD_BS (bs1, 90);
-  FIELD_BL (num_params, 90);
-  HANDLE_VECTOR (params, num_params, 4, 360);
-  if (FIELD_VALUE (has_child_param))
-    {
-      FIELD_BS (bs2, 90);
-      FIELD_BL (bl1, 90);
-      FIELD_HANDLE (child_param, 3, 330);
-    }
-  if (FIELD_VALUE (bl1))
-    {
-      FIELD_HANDLE (h330_2, 3, 330);
-      FIELD_BL (bl2, 90);
-      FIELD_HANDLE (h330_3, 3, 330);
-    }
 DWG_OBJECT_END
 
-#define ASSOCEDGEACTIONPARAM_fields(eap)                                      \
+#define AcDbAssocEdgeActionParam_fields(eap)                                  \
     AcDbAssocActionParam_fields;                                              \
     SUBCLASS (AcDbAssocSingleDependencyActionParam);                          \
     SUB_FIELD_BL (eap, asdap_class_version, 90);                              \
@@ -9503,7 +9493,8 @@ DWG_OBJECT (ASSOCEDGEACTIONPARAM)
     }
 DWG_OBJECT_END
 
-#define ASSOCFACEACTIONPARAM_fields(fap)                  \
+// unused
+#define AssocFaceActionParam_fields(fap)                  \
   AcDbAssocActionParam_fields;                            \
   SUBCLASS (AcDbAssocSingleDependencyActionParam);        \
   SUB_FIELD_BL (fap,asdap_class_version, 90);             \
