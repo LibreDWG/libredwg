@@ -9537,6 +9537,17 @@ DWG_OBJECT (ASSOCVERTEXACTIONPARAM)
   FIELD_3BD (pt, 10);
 DWG_OBJECT_END
 
+DWG_OBJECT (ASSOCASMBODYACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);
+  FIELD_BL (asdap_class_version, 90);
+  FIELD_HANDLE (dep, 4, 330);
+  SUBCLASS (AcDbAssocAsmbodyActionParam);
+  FIELD_BL (class_version, 90);
+  ACTION_3DSOLID
+DWG_OBJECT_END
+
 #define AcDbAssocArrayActionBody_fields                     \
   AcDbAssocParamBasedActionBody_fields (pab);               \
   SUBCLASS (AcDbAssocArrayActionBody);                      \

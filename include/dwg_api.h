@@ -642,13 +642,14 @@ typedef struct _dwg_object_ASSOCNETWORK                    dwg_obj_assocnetwork;
 typedef struct _dwg_object_ASSOCVARIABLE                   dwg_obj_assocvariable;
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER          dwg_obj_assocperssubentmanager;
 typedef struct _dwg_object_PERSUBENTMGR                    dwg_obj_persubentmgr;
+typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM         dwg_obj_assocasmbodyactionparam;
 typedef struct _dwg_object_ASSOCEDGEACTIONPARAM            dwg_obj_assocedgeactionparam;
 typedef struct _dwg_object_ASSOCFACEACTIONPARAM            dwg_obj_assocfaceactionparam;
 typedef struct _dwg_object_ASSOCPATHACTIONPARAM            dwg_obj_assocpathactionparam;
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM          dwg_obj_assocvertexactionparam;
+typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM   dwg_obj_assocosnappointrefactionparam;
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY       dwg_obj_assocaligneddimactionbody;
 typedef struct _dwg_object_ASSOC3POINTANGULARDIMACTIONBODY dwg_obj_assoc3pointangulardimactionbody;
-typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM   dwg_obj_assocosnappointrefactionparam;
 typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA         dwg_obj_blkrefobjectcontextdata;
 typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT      dwg_obj_blockgriplocationcomponent;
 typedef struct _dwg_object_BLOCKVISIBILITYGRIP             dwg_obj_blockvisibilitygrip;
@@ -898,6 +899,7 @@ DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 DWG_GETALL_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOC3POINTANGULARDIMACTIONBODY)
 DWG_GETALL_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
+DWG_GETALL_OBJECT_DECL (ASSOCASMBODYACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (ASSOCEDGEACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (ASSOCFACEACTIONPARAM)
 DWG_GETALL_OBJECT_DECL (ASSOCPATHACTIONPARAM)
@@ -1144,6 +1146,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC3POINTANGULARDIMACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCOSNAPPOINTREFACTIONPARAM)
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCASMBODYACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCEDGEACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCFACEACTIONPARAM)
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPATHACTIONPARAM)
@@ -1447,8 +1450,9 @@ dwg_get_OBJECT_DECL (obj_assocnetwork, ASSOCNETWORK);
 dwg_get_OBJECT_DECL (obj_assocvariable, ASSOCVARIABLE);
 dwg_get_OBJECT_DECL (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assoc3pointangulardimactionbody, ASSOC3POINTANGULARDIMACTIONBODY);
-dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
 dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
+dwg_get_OBJECT_DECL (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM);
+dwg_get_OBJECT_DECL (obj_assocasmbodyactionparam, ASSOCASMBODYACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_assocedgeactionparam, ASSOCEDGEACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_assocfaceactionparam, ASSOCFACEACTIONPARAM)
 dwg_get_OBJECT_DECL (obj_assocpathactionparam, ASSOCPATHACTIONPARAM)

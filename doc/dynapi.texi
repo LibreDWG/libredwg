@@ -5183,7 +5183,7 @@ T,	DXF 1
 @item parent
 struct _dwg_object_object*
 @item aaab_version
-BS
+BS,	DXF 90
 @item assoc_dep
 H,	DXF 330
 @item actionbody
@@ -5249,9 +5249,9 @@ H*,	DXF 360
 @item parent
 struct _dwg_object_object*
 @item aaab_version
-BS
+BS,	DXF 90
 @item assoc_dep
-H
+H,	DXF 330
 @item actionbody
 H,	DXF 360
 @item pab
@@ -5262,6 +5262,93 @@ BL,	DXF 90
 H,	DXF 330
 @item r_node
 H,	DXF 330
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCASMBODYACTIONPARAM} @anchor{ASSOCASMBODYACTIONPARAM}
+@cindex object, ASSOCASMBODYACTIONPARAM
+@vindex ASSOCASMBODYACTIONPARAM
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS,	DXF 90
+@item aap_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item asdap_class_version
+BL,	DXF 90
+@item dep
+H,	DXF 330
+@item class_version
+BL,	DXF 90
+@item acis_empty
+B
+@item unknown
+B
+@item version
+BS
+@item num_blocks
+BL
+@item block_size
+BL*
+@item encr_sat_data
+char **
+@item sab_size
+BL
+@item acis_data
+RC*
+@item wireframe_data_present
+B
+@item point_present
+B
+@item point
+3BD
+@item isolines
+BL
+@item isoline_present
+B
+@item num_wires
+BL
+@item wires
+Dwg_3DSOLID_wire*
+@item num_silhouettes
+BL
+@item silhouettes
+Dwg_3DSOLID_silhouette*
+@item _dxf_sab_converted
+B
+@item acis_empty2
+B
+@item extra_acis_data
+struct _dwg_entity_3DSOLID*
+@item num_materials
+BL
+@item materials
+Dwg_3DSOLID_material*
+@item revision_guid[39]
+RC
+@item revision_major
+BL
+@item revision_minor1
+BS
+@item revision_minor2
+BS
+@item revision_bytes[9]
+RC
+@item end_marker
+BL
+@item history_id
+H
+@item has_revision_guid
+B
+@item acis_empty_bit
+B
 
 @end vtable
 @end indentedblock

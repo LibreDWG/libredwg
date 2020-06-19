@@ -211,6 +211,7 @@ testobjects += \
 	assocperssubentmanager \
 	assocvariable \
 	assocosnappointrefactionparam \
+	assocasmbodyactionparam \
 	assocedgeactionparam \
 	assocfaceactionparam \
 	assocpathactionparam \

@@ -27965,6 +27965,501 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCASMBODYACTIONPARAM (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCASMBODYACTIONPARAM *restrict assocasmbodyactionparam = obj->tio.object->tio.ASSOCASMBODYACTIONPARAM;
+  failed = 0;
+  {
+    BITCODE_B _dxf_sab_converted;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "_dxf_sab_converted", &_dxf_sab_converted, NULL)
+        && _dxf_sab_converted == assocasmbodyactionparam->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM._dxf_sab_converted [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->_dxf_sab_converted, _dxf_sab_converted);
+    _dxf_sab_converted++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "_dxf_sab_converted", &_dxf_sab_converted, 0)
+        && _dxf_sab_converted == assocasmbodyactionparam->_dxf_sab_converted)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM._dxf_sab_converted [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->_dxf_sab_converted, _dxf_sab_converted);
+    assocasmbodyactionparam->_dxf_sab_converted--;
+  }
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "aap_version", &aap_version, NULL)
+        && aap_version == assocasmbodyactionparam->aap_version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.aap_version [BL] %u != %u", assocasmbodyactionparam->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "aap_version", &aap_version, 0)
+        && aap_version == assocasmbodyactionparam->aap_version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.aap_version [BL] set+1 %u != %u", assocasmbodyactionparam->aap_version, aap_version);
+    assocasmbodyactionparam->aap_version--;
+  }
+  {
+    BITCODE_RC* acis_data;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "acis_data", &acis_data, NULL)
+        && acis_data
+           ? strEQ ((char *)acis_data, (char *)assocasmbodyactionparam->acis_data)
+           : !assocasmbodyactionparam->acis_data)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.acis_data [RC*] '%s' <> '%s'", acis_data, assocasmbodyactionparam->acis_data);
+  }
+  {
+    BITCODE_B acis_empty;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "acis_empty", &acis_empty, NULL)
+        && acis_empty == assocasmbodyactionparam->acis_empty)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.acis_empty [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->acis_empty, acis_empty);
+    acis_empty++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "acis_empty", &acis_empty, 0)
+        && acis_empty == assocasmbodyactionparam->acis_empty)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.acis_empty [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->acis_empty, acis_empty);
+    assocasmbodyactionparam->acis_empty--;
+  }
+  {
+    BITCODE_B acis_empty2;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "acis_empty2", &acis_empty2, NULL)
+        && acis_empty2 == assocasmbodyactionparam->acis_empty2)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.acis_empty2 [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->acis_empty2, acis_empty2);
+    acis_empty2++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "acis_empty2", &acis_empty2, 0)
+        && acis_empty2 == assocasmbodyactionparam->acis_empty2)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.acis_empty2 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->acis_empty2, acis_empty2);
+    assocasmbodyactionparam->acis_empty2--;
+  }
+  {
+    BITCODE_B acis_empty_bit;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "acis_empty_bit", &acis_empty_bit, NULL)
+        && acis_empty_bit == assocasmbodyactionparam->acis_empty_bit)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.acis_empty_bit [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->acis_empty_bit, acis_empty_bit);
+    acis_empty_bit++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "acis_empty_bit", &acis_empty_bit, 0)
+        && acis_empty_bit == assocasmbodyactionparam->acis_empty_bit)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.acis_empty_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->acis_empty_bit, acis_empty_bit);
+    assocasmbodyactionparam->acis_empty_bit--;
+  }
+  {
+    BITCODE_BL asdap_class_version;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "asdap_class_version", &asdap_class_version, NULL)
+        && asdap_class_version == assocasmbodyactionparam->asdap_class_version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.asdap_class_version [BL] %u != %u", assocasmbodyactionparam->asdap_class_version, asdap_class_version);
+    asdap_class_version++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "asdap_class_version", &asdap_class_version, 0)
+        && asdap_class_version == assocasmbodyactionparam->asdap_class_version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.asdap_class_version [BL] set+1 %u != %u", assocasmbodyactionparam->asdap_class_version, asdap_class_version);
+    assocasmbodyactionparam->asdap_class_version--;
+  }
+  {
+    BITCODE_BL* block_size;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "block_size", &block_size, NULL)
+        && !memcmp (&block_size, &assocasmbodyactionparam->block_size, sizeof (BITCODE_BL*)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.block_size [BL*]");
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "class_version", &class_version, NULL)
+        && class_version == assocasmbodyactionparam->class_version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.class_version [BL] %u != %u", assocasmbodyactionparam->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "class_version", &class_version, 0)
+        && class_version == assocasmbodyactionparam->class_version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.class_version [BL] set+1 %u != %u", assocasmbodyactionparam->class_version, class_version);
+    assocasmbodyactionparam->class_version--;
+  }
+  {
+    BITCODE_H dep;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "dep", &dep, NULL)
+        && !memcmp (&dep, &assocasmbodyactionparam->dep, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.dep [H]");
+  }
+  {
+    char ** encr_sat_data;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "encr_sat_data", &encr_sat_data, NULL)
+        && !memcmp (&encr_sat_data, &assocasmbodyactionparam->encr_sat_data, sizeof (assocasmbodyactionparam->encr_sat_data)))
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.encr_sat_data [char **]");
+  }
+  {
+    BITCODE_BL end_marker;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "end_marker", &end_marker, NULL)
+        && end_marker == assocasmbodyactionparam->end_marker)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.end_marker [BL] %u != %u", assocasmbodyactionparam->end_marker, end_marker);
+    end_marker++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "end_marker", &end_marker, 0)
+        && end_marker == assocasmbodyactionparam->end_marker)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.end_marker [BL] set+1 %u != %u", assocasmbodyactionparam->end_marker, end_marker);
+    assocasmbodyactionparam->end_marker--;
+  }
+  {
+    struct _dwg_entity_3DSOLID* extra_acis_data;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "extra_acis_data", &extra_acis_data, NULL)
+        && !memcmp (&extra_acis_data, &assocasmbodyactionparam->extra_acis_data, sizeof (struct _dwg_entity_3DSOLID*)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.extra_acis_data [struct _dwg_entity_3DSOLID*]");
+  }
+  {
+    BITCODE_B has_revision_guid;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "has_revision_guid", &has_revision_guid, NULL)
+        && has_revision_guid == assocasmbodyactionparam->has_revision_guid)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.has_revision_guid [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->has_revision_guid, has_revision_guid);
+    has_revision_guid++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "has_revision_guid", &has_revision_guid, 0)
+        && has_revision_guid == assocasmbodyactionparam->has_revision_guid)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.has_revision_guid [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->has_revision_guid, has_revision_guid);
+    assocasmbodyactionparam->has_revision_guid--;
+  }
+  {
+    BITCODE_H history_id;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "history_id", &history_id, NULL)
+        && !memcmp (&history_id, &assocasmbodyactionparam->history_id, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.history_id [H]");
+  }
+  {
+    BITCODE_BS is_r2013;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "is_r2013", &is_r2013, NULL)
+        && is_r2013 == assocasmbodyactionparam->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.is_r2013 [BS] %hu != %hu", assocasmbodyactionparam->is_r2013, is_r2013);
+    is_r2013++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "is_r2013", &is_r2013, 0)
+        && is_r2013 == assocasmbodyactionparam->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.is_r2013 [BS] set+1 %hu != %hu", assocasmbodyactionparam->is_r2013, is_r2013);
+    assocasmbodyactionparam->is_r2013--;
+  }
+  {
+    BITCODE_B isoline_present;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "isoline_present", &isoline_present, NULL)
+        && isoline_present == assocasmbodyactionparam->isoline_present)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.isoline_present [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->isoline_present, isoline_present);
+    isoline_present++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "isoline_present", &isoline_present, 0)
+        && isoline_present == assocasmbodyactionparam->isoline_present)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.isoline_present [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->isoline_present, isoline_present);
+    assocasmbodyactionparam->isoline_present--;
+  }
+  {
+    BITCODE_BL isolines;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "isolines", &isolines, NULL)
+        && isolines == assocasmbodyactionparam->isolines)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.isolines [BL] %u != %u", assocasmbodyactionparam->isolines, isolines);
+    isolines++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "isolines", &isolines, 0)
+        && isolines == assocasmbodyactionparam->isolines)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.isolines [BL] set+1 %u != %u", assocasmbodyactionparam->isolines, isolines);
+    assocasmbodyactionparam->isolines--;
+  }
+  {
+    Dwg_3DSOLID_material* materials;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_materials", &count, NULL)
+        && dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "materials", &materials, NULL)
+        && materials == assocasmbodyactionparam->materials)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)assocasmbodyactionparam->name)
+           : !assocasmbodyactionparam->name)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.name [T] '%s' <> '%s'", name, assocasmbodyactionparam->name);
+  }
+  {
+    BITCODE_BL num_blocks;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_blocks", &num_blocks, NULL)
+        && num_blocks == assocasmbodyactionparam->num_blocks)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_blocks [BL] %u != %u", assocasmbodyactionparam->num_blocks, num_blocks);
+    num_blocks++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_blocks", &num_blocks, 0)
+        && num_blocks == assocasmbodyactionparam->num_blocks)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_blocks [BL] set+1 %u != %u", assocasmbodyactionparam->num_blocks, num_blocks);
+    assocasmbodyactionparam->num_blocks--;
+  }
+  {
+    BITCODE_BL num_materials;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_materials", &num_materials, NULL)
+        && num_materials == assocasmbodyactionparam->num_materials)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_materials [BL] %u != %u", assocasmbodyactionparam->num_materials, num_materials);
+    num_materials++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_materials", &num_materials, 0)
+        && num_materials == assocasmbodyactionparam->num_materials)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_materials [BL] set+1 %u != %u", assocasmbodyactionparam->num_materials, num_materials);
+    assocasmbodyactionparam->num_materials--;
+  }
+  {
+    BITCODE_BL num_silhouettes;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_silhouettes", &num_silhouettes, NULL)
+        && num_silhouettes == assocasmbodyactionparam->num_silhouettes)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_silhouettes [BL] %u != %u", assocasmbodyactionparam->num_silhouettes, num_silhouettes);
+    num_silhouettes++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_silhouettes", &num_silhouettes, 0)
+        && num_silhouettes == assocasmbodyactionparam->num_silhouettes)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_silhouettes [BL] set+1 %u != %u", assocasmbodyactionparam->num_silhouettes, num_silhouettes);
+    assocasmbodyactionparam->num_silhouettes--;
+  }
+  {
+    BITCODE_BL num_wires;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_wires", &num_wires, NULL)
+        && num_wires == assocasmbodyactionparam->num_wires)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_wires [BL] %u != %u", assocasmbodyactionparam->num_wires, num_wires);
+    num_wires++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_wires", &num_wires, 0)
+        && num_wires == assocasmbodyactionparam->num_wires)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.num_wires [BL] set+1 %u != %u", assocasmbodyactionparam->num_wires, num_wires);
+    assocasmbodyactionparam->num_wires--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocasmbodyactionparam->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_3BD point;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "point", &point, NULL)
+        && !memcmp (&point, &assocasmbodyactionparam->point, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.point [3BD]");
+  }
+  {
+    BITCODE_B point_present;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "point_present", &point_present, NULL)
+        && point_present == assocasmbodyactionparam->point_present)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.point_present [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->point_present, point_present);
+    point_present++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "point_present", &point_present, 0)
+        && point_present == assocasmbodyactionparam->point_present)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.point_present [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->point_present, point_present);
+    assocasmbodyactionparam->point_present--;
+  }
+  {
+    BITCODE_RC revision_bytes[9];
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_bytes[9]", &revision_bytes, NULL)
+        && !memcmp (&revision_bytes, &assocasmbodyactionparam->revision_bytes, sizeof (BITCODE_RC)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.revision_bytes[9] [RC]");
+  }
+  {
+    BITCODE_RC revision_guid[39];
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_guid[39]", &revision_guid, NULL)
+        && !memcmp (&revision_guid, &assocasmbodyactionparam->revision_guid, sizeof (BITCODE_RC)))
+        pass ();
+    else
+        fail ("ASSOCASMBODYACTIONPARAM.revision_guid[39] [RC]");
+  }
+  {
+    BITCODE_BL revision_major;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_major", &revision_major, NULL)
+        && revision_major == assocasmbodyactionparam->revision_major)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.revision_major [BL] %u != %u", assocasmbodyactionparam->revision_major, revision_major);
+    revision_major++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_major", &revision_major, 0)
+        && revision_major == assocasmbodyactionparam->revision_major)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.revision_major [BL] set+1 %u != %u", assocasmbodyactionparam->revision_major, revision_major);
+    assocasmbodyactionparam->revision_major--;
+  }
+  {
+    BITCODE_BS revision_minor1;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_minor1", &revision_minor1, NULL)
+        && revision_minor1 == assocasmbodyactionparam->revision_minor1)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.revision_minor1 [BS] %hu != %hu", assocasmbodyactionparam->revision_minor1, revision_minor1);
+    revision_minor1++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_minor1", &revision_minor1, 0)
+        && revision_minor1 == assocasmbodyactionparam->revision_minor1)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.revision_minor1 [BS] set+1 %hu != %hu", assocasmbodyactionparam->revision_minor1, revision_minor1);
+    assocasmbodyactionparam->revision_minor1--;
+  }
+  {
+    BITCODE_BS revision_minor2;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_minor2", &revision_minor2, NULL)
+        && revision_minor2 == assocasmbodyactionparam->revision_minor2)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.revision_minor2 [BS] %hu != %hu", assocasmbodyactionparam->revision_minor2, revision_minor2);
+    revision_minor2++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "revision_minor2", &revision_minor2, 0)
+        && revision_minor2 == assocasmbodyactionparam->revision_minor2)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.revision_minor2 [BS] set+1 %hu != %hu", assocasmbodyactionparam->revision_minor2, revision_minor2);
+    assocasmbodyactionparam->revision_minor2--;
+  }
+  {
+    BITCODE_BL sab_size;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "sab_size", &sab_size, NULL)
+        && sab_size == assocasmbodyactionparam->sab_size)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.sab_size [BL] %u != %u", assocasmbodyactionparam->sab_size, sab_size);
+    sab_size++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "sab_size", &sab_size, 0)
+        && sab_size == assocasmbodyactionparam->sab_size)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.sab_size [BL] set+1 %u != %u", assocasmbodyactionparam->sab_size, sab_size);
+    assocasmbodyactionparam->sab_size--;
+  }
+  {
+    Dwg_3DSOLID_silhouette* silhouettes;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_silhouettes", &count, NULL)
+        && dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "silhouettes", &silhouettes, NULL)
+        && silhouettes == assocasmbodyactionparam->silhouettes)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.silhouettes [Dwg_3DSOLID_silhouette*] * %u num_silhouettes", count);
+  }
+  {
+    BITCODE_B unknown;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "unknown", &unknown, NULL)
+        && unknown == assocasmbodyactionparam->unknown)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.unknown [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->unknown, unknown);
+    unknown++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "unknown", &unknown, 0)
+        && unknown == assocasmbodyactionparam->unknown)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->unknown, unknown);
+    assocasmbodyactionparam->unknown--;
+  }
+  {
+    BITCODE_BS version;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "version", &version, NULL)
+        && version == assocasmbodyactionparam->version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.version [BS] %hu != %hu", assocasmbodyactionparam->version, version);
+    version++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "version", &version, 0)
+        && version == assocasmbodyactionparam->version)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.version [BS] set+1 %hu != %hu", assocasmbodyactionparam->version, version);
+    assocasmbodyactionparam->version--;
+  }
+  {
+    BITCODE_B wireframe_data_present;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "wireframe_data_present", &wireframe_data_present, NULL)
+        && wireframe_data_present == assocasmbodyactionparam->wireframe_data_present)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.wireframe_data_present [B] " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->wireframe_data_present, wireframe_data_present);
+    wireframe_data_present++;
+    if (dwg_dynapi_entity_set_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "wireframe_data_present", &wireframe_data_present, 0)
+        && wireframe_data_present == assocasmbodyactionparam->wireframe_data_present)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.wireframe_data_present [B] set+1 " FORMAT_B " != " FORMAT_B "", assocasmbodyactionparam->wireframe_data_present, wireframe_data_present);
+    assocasmbodyactionparam->wireframe_data_present--;
+  }
+  {
+    Dwg_3DSOLID_wire* wires;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "num_wires", &count, NULL)
+        && dwg_dynapi_entity_value (assocasmbodyactionparam, "ASSOCASMBODYACTIONPARAM", "wires", &wires, NULL)
+        && wires == assocasmbodyactionparam->wires)
+      pass ();
+    else
+      fail ("ASSOCASMBODYACTIONPARAM.wires [Dwg_3DSOLID_wire*] * %u num_wires", count);
+  }
+  if (failed && (is_class_unstable ("ASSOCASMBODYACTIONPARAM") || is_class_debugging ("ASSOCASMBODYACTIONPARAM")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCASMBODYACTIONPARAM", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCBLENDSURFACEACTIONBODY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -50113,6 +50608,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCACTION(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY)
     error += test_ASSOCALIGNEDDIMACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCASMBODYACTIONPARAM)
+    error += test_ASSOCASMBODYACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY)
     error += test_ASSOCBLENDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCDEPENDENCY)
@@ -50543,6 +51040,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCACTION (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY)
     error += test_ASSOCALIGNEDDIMACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCASMBODYACTIONPARAM)
+    error += test_ASSOCASMBODYACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY)
     error += test_ASSOCBLENDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCDEPENDENCY)
@@ -51589,6 +52088,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCALIGNEDDIMACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCASMBODYACTIONPARAM);
+  size2 = dwg_dynapi_fields_size ("ASSOCASMBODYACTIONPARAM");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCASMBODYACTIONPARAM): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCASMBODYACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY);
