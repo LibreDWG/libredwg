@@ -6090,10 +6090,10 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj,
           LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", obj->name, "evalexpr", "minor",
                      pair->value.u, pair->code);
         }
-      else if (pair->code == 70 && !ee->value_type)
+      else if (pair->code == 70 && !ee->value_code)
         {
-          ee->value_type = pair->value.i;
-          LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value_type",
+          ee->value_code = pair->value.i;
+          LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value_code",
                      pair->value.i, pair->code);
         }
       else if (pair->code == 40)
@@ -6132,7 +6132,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj,
           LOG_TRACE ("%s.%s.%s = %s [T %d]\n", obj->name, "evalexpr", "value.text1",
                      pair->value.s, pair->code);
         }
-      else if (pair->code == 70 && ee->value_type)
+      else if (pair->code == 70 && ee->value_code)
         {
           ee->value.short70 = pair->value.i;
           LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value.short70",

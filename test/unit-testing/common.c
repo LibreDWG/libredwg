@@ -252,6 +252,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_ASSOCACTION)
             {
               error += test_code (prefix, "2004/Surface.dwg", cov);
+              error += test_code (prefix, "2018/Surface.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCNETWORK)
             {
@@ -1368,10 +1369,10 @@ api_common_object (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, minor, BL);           \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, parentid, BLd);       \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, nodeid, BL);          \
-  /* variant_type */                                                 \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_type, BSd);     \
+  /* variant_DXF type */                                             \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_code, BSd);     \
   /* variant_value's */                                              \
-  switch (_obj->evalexpr.value_type)                                 \
+  switch (_obj->evalexpr.value_code)                                 \
     {                                                                \
     case 40:                                                         \
       CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.num40, BD); \
@@ -1447,31 +1448,43 @@ api_common_object (dwg_object *obj)
       CHK_SUBCLASS_H (_obj->pab.values[i], VALUEPARAM, controlled_objdep);    \
       for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)             \
         {                                                                     \
-          switch (_obj->pab.values[i].vars[j].value.type)                     \
+          unsigned dxf = _obj->pab.values[i].vars[j].value.code;              \
+          CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value, EvalVariant,  \
+                             code, BSd);                                      \
+          switch (get_base_value_type (dxf))                                  \
             {                                                                 \
-            case 1:                                                           \
+            case VT_REAL:                                                     \
               CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
                                  EvalVariant, u.bd, BD);                      \
               break;                                                          \
-            case 2:                                                           \
+            case VT_INT32:                                                    \
               CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
                                  EvalVariant, u.bl, BL);                      \
               break;                                                          \
-            case 3:                                                           \
+            case VT_INT16:                                                    \
               CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
                                  EvalVariant, u.bs, BS);                      \
               break;                                                          \
-            case 5:                                                           \
+            case VT_INT8:                                                     \
+              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+                                 EvalVariant, u.rc, RC);                      \
+              break;                                                          \
+            case VT_STRING:                                                   \
               CHK_SUBCLASS_UTF8TEXT (_obj->pab.values[i].vars[j].value,       \
                                      EvalVariant, u.text);                    \
               break;                                                          \
-            case 11:                                                          \
+            case VT_HANDLE:                                                   \
               CHK_SUBCLASS_H (_obj->pab.values[i].vars[j].value, EvalVariant, \
                               u.handle);                                      \
               break;                                                          \
+            case VT_BINARY:                                                   \
+            case VT_OBJECTID:                                                 \
+            case VT_POINT3D:                                                  \
+            case VT_INVALID:                                                  \
+            case VT_INT64:                                                    \
+            case VT_BOOL:                                                     \
             default:                                                          \
-              fail ("Unknown VALUEPARAM.vars[%d].value.type %u", j,           \
-                    _obj->pab.values[i].vars[j].value.type);                  \
+              fail ("Unknown VALUEPARAM.vars[%d].value.code %u", j, dxf);     \
             }                                                                 \
           CHK_SUBCLASS_H (_obj->pab.values[i], VALUEPARAM,                    \
                           controlled_objdep);                                 \

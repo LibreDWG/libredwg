@@ -9446,7 +9446,7 @@ static const Dwg_DYNAPI_field _dwg_EvalExpr_fields[] = {
     0,0,0, 0 },
   { "nodeid",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_EvalExpr, nodeid),
     0,0,0, 0 },
-  { "value_type",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_EvalExpr, value_type),
+  { "value_code",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_EvalExpr, value_code),
     0,0,0, 0 },
   { "value.num40",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_EvalExpr, value.num40),
     0,0,0, 0 },
@@ -9466,13 +9466,15 @@ static const Dwg_DYNAPI_field _dwg_EvalExpr_fields[] = {
 };
 /* from typedef struct _dwg_EvalVariant: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_EvalVariant_fields[] = {
-  { "type",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_EvalVariant, type),
+  { "code",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_EvalVariant, code),
     0,0,0, 0 },
   { "u.bd",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_EvalVariant, u.bd),
     0,0,0, 0 },
   { "u.bl",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_EvalVariant, u.bl),
     0,0,0, 0 },
   { "u.bs",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_EvalVariant, u.bs),
+    0,0,0, 0 },
+  { "u.rc",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_EvalVariant, u.rc),
     0,0,0, 0 },
   { "u.text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_EvalVariant, u.text),
     1,1,1, 0 },

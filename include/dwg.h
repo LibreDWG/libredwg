@@ -4977,11 +4977,12 @@ typedef struct _dwg_ACTIONBODY
 
 typedef struct _dwg_EvalVariant
 {
-  BITCODE_BSd type;
+  BITCODE_BS code; /* the DXF code */
   union {
     BITCODE_BD bd;
     BITCODE_BL bl;
     BITCODE_BS bs;
+    BITCODE_RC rc;
     BITCODE_T text;
     BITCODE_H handle;
   } u;
@@ -5499,7 +5500,7 @@ typedef struct _dwg_EvalExpr
   BITCODE_BL major;
   BITCODE_BL minor;
   BITCODE_BL nodeid;
-  BITCODE_BSd value_type;
+  BITCODE_BSd value_code; // compare to EvalVariant
   union
   {
     BITCODE_BD  num40;

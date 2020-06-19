@@ -11110,7 +11110,7 @@ BL
 BL
 @item nodeid
 BL
-@item value_type
+@item value_code
 BSd
 @item value.num40
 BD
@@ -11136,14 +11136,16 @@ BS
 @indentedblock
 @vtable @code
 
-@item type
-BSd
+@item code
+BS
 @item u.bd
 BD
 @item u.bl
 BL
 @item u.bs
 BS
+@item u.rc
+RC
 @item u.text
 TV
 @item u.handle

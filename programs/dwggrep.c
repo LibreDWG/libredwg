@@ -1021,9 +1021,10 @@ match_ASSOCVERTEXACTIONPARAM (const char *restrict filename,
     MATCH_OBJECT (_type, pab.values[i].name, 1);                              \
     for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)               \
       {                                                                       \
-        if (_obj->pab.values[i].vars[j].value.type == 5)                      \
+        int _dxf = _obj->pab.values[i].vars[j].value.code;                    \
+        if (get_base_value_type (_dxf) == VT_STRING)                          \
           {                                                                   \
-            MATCH_OBJECT (_type, pab.values[i].vars[j].value.u.text, 1);      \
+            MATCH_OBJECT (_type, pab.values[i].vars[j].value.u.text, _dxf);   \
           }                                                                   \
       }                                                                       \
   }

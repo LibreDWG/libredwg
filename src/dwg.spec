@@ -6584,29 +6584,41 @@ DWG_OBJECT_END
 
 // abstract subclass. as field value
 #define AcDbEvalVariant_fields(value)                                   \
-  SUB_FIELD_BSd (value,type, 70);                                       \
-  switch (FIELD_VALUE (value.type))                                     \
+  {                                                                     \
+    int dxf;                                                            \
+    SUB_FIELD_BSd (value,code, 70);                                     \
+    dxf = FIELD_VALUE (value.code);                                     \
+    switch (get_base_value_type (dxf))                                  \
     {                                                                   \
-    case 1:                                                             \
-      SUB_FIELD_BD (value,u.bd, 40);                                    \
+    case VT_REAL:                                                       \
+      SUB_FIELD_BD (value,u.bd, dxf);                                   \
       break;                                                            \
-    case 2:                                                             \
-      SUB_FIELD_BL (value,u.bl, 90);                                    \
+    case VT_INT32:                                                      \
+      SUB_FIELD_BL (value,u.bl, dxf);                                   \
       break;                                                            \
-    case 3:                                                             \
-      SUB_FIELD_BS (value,u.bs, 70);                                    \
+    case VT_INT16:                                                      \
+      SUB_FIELD_BS (value,u.bs, dxf);                                   \
       break;                                                            \
-    case 5:                                                             \
-      SUB_FIELD_T (value,u.text, 1);                                    \
+    case VT_INT8:                                                       \
+      SUB_FIELD_RC (value,u.rc, dxf);                                   \
       break;                                                            \
-    case 11:                                                            \
-      SUB_FIELD_HANDLE (value,u.handle, 5, 91);                         \
+    case VT_STRING:                                                     \
+      SUB_FIELD_T (value,u.text, dxf);                                  \
       break;                                                            \
-    /* more: 9 id, 12 pt3d, 14 pt2d */                                  \
+    case VT_HANDLE:                                                     \
+      SUB_FIELD_HANDLE (value,u.handle, 5, dxf);                        \
+      break;                                                            \
+    case VT_BINARY:                                                     \
+    case VT_OBJECTID:                                                   \
+    case VT_POINT3D:                                                    \
+    case VT_INVALID:                                                    \
+    case VT_INT64:                                                      \
+    case VT_BOOL:                                                       \
     default:                                                            \
-      LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.type) \
+      LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.code) \
       break;                                                            \
-    }
+    }                                                                   \
+  }
 
 #define AcDbValueParam_fields(valprefix)                                \
   FIELD_BL (valprefix.class_version, 90);                               \
@@ -7572,16 +7584,16 @@ DWG_OBJECT_END
   FIELD_BLd (evalexpr.parentid, 0);                                           \
   FIELD_BL (evalexpr.major, 98);                                              \
   FIELD_BL (evalexpr.minor, 99);                                              \
-  if (IF_IS_DXF && FIELD_VALUE (evalexpr.value_type) == -9999)                \
+  if (IF_IS_DXF && FIELD_VALUE (evalexpr.value_code) == -9999)                \
     {                                                                         \
       ; /* 70 -9999 not in DXF */                                             \
     }                                                                         \
   else                                                                        \
     {                                                                         \
       DXF { VALUE_TFF ("", 1); }                                              \
-      FIELD_BSd (evalexpr.value_type, 70);                                    \
+      FIELD_BSd (evalexpr.value_code, 70);                                    \
       /* TODO not a union yet */                                              \
-      switch (_obj->evalexpr.value_type)                                      \
+      switch (_obj->evalexpr.value_code)                                      \
         {                                                                     \
         case 40:                                                              \
           FIELD_BD (evalexpr.value.num40, 40);                                \
