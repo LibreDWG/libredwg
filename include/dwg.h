@@ -5111,35 +5111,28 @@ typedef struct _dwg_object_ASSOCNETWORK
 #define ASSOCACTIONBODY_fields         \
   BITCODE_BL aab_version /* DXF 90. r2013+: 2, earlier 1 */
 
+typedef struct _dwg_CONSTRAINTGROUPNODE
+{
+  struct _dwg_object_ASSOC2DCONSTRAINTGROUP *parent;
+  BITCODE_BL nodeid;
+  BITCODE_RC status;
+  BITCODE_BL num_connections;
+  BITCODE_BL *connections;
+} Dwg_CONSTRAINTGROUPNODE;
+
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {
   struct _dwg_object_object *parent;
   ASSOCACTION_fields;
 
-  BITCODE_BL version; //90 1
-  BITCODE_B  b1; //70 0
-  BITCODE_3BD workplane[3]; //3x10 workplane
+  BITCODE_BL version; // 90 1
+  BITCODE_B  b1;      // 70 0
+  BITCODE_3BD workplane[3]; // 3x10 workplane
   BITCODE_H h1; // 360
   BITCODE_BL num_actions;// 90
   BITCODE_H* actions;    // 360
-  BITCODE_BL l7; //90 9
-
-  BITCODE_BL l8; //90 9
-  BITCODE_T t1; // AcConstrainedCircle
-  BITCODE_H h2; // 330
-  BITCODE_BL cl1; //90 1
-  BITCODE_RC cs1; //70 1
-  BITCODE_BL cl2; //90 1
-  BITCODE_BL cl3; //90 3
-  BITCODE_H h3; // 330
-  BITCODE_BL cl4; //90 0
-  BITCODE_3BD c1; //10 @134
-  BITCODE_3BD c2; //10
-  BITCODE_3BD c3; //10
-  BITCODE_BD w1; //40
-  BITCODE_BD w2; //40
-  BITCODE_BD w3; //40
-  BITCODE_T t2; // AcConstrainedImplicitPoint
+  BITCODE_BL num_nodes;  // 90 9
+  Dwg_CONSTRAINTGROUPNODE *nodes;
 } Dwg_Object_ASSOC2DCONSTRAINTGROUP;
 
 typedef struct _dwg_object_ASSOCVARIABLE

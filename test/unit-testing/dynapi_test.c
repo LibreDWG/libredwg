@@ -27205,90 +27205,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->b1--;
   }
   {
-    BITCODE_3BD c1;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "c1", &c1, NULL)
-        && !memcmp (&c1, &assoc2dconstraintgroup->c1, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("ASSOC2DCONSTRAINTGROUP.c1 [3BD]");
-  }
-  {
-    BITCODE_3BD c2;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "c2", &c2, NULL)
-        && !memcmp (&c2, &assoc2dconstraintgroup->c2, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("ASSOC2DCONSTRAINTGROUP.c2 [3BD]");
-  }
-  {
-    BITCODE_3BD c3;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "c3", &c3, NULL)
-        && !memcmp (&c3, &assoc2dconstraintgroup->c3, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("ASSOC2DCONSTRAINTGROUP.c3 [3BD]");
-  }
-  {
-    BITCODE_BL cl1;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl1", &cl1, NULL)
-        && cl1 == assoc2dconstraintgroup->cl1)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl1 [BL] %u != %u", assoc2dconstraintgroup->cl1, cl1);
-    cl1++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl1", &cl1, 0)
-        && cl1 == assoc2dconstraintgroup->cl1)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl1 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl1, cl1);
-    assoc2dconstraintgroup->cl1--;
-  }
-  {
-    BITCODE_BL cl2;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl2", &cl2, NULL)
-        && cl2 == assoc2dconstraintgroup->cl2)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl2 [BL] %u != %u", assoc2dconstraintgroup->cl2, cl2);
-    cl2++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl2", &cl2, 0)
-        && cl2 == assoc2dconstraintgroup->cl2)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl2 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl2, cl2);
-    assoc2dconstraintgroup->cl2--;
-  }
-  {
-    BITCODE_BL cl3;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl3", &cl3, NULL)
-        && cl3 == assoc2dconstraintgroup->cl3)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl3 [BL] %u != %u", assoc2dconstraintgroup->cl3, cl3);
-    cl3++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl3", &cl3, 0)
-        && cl3 == assoc2dconstraintgroup->cl3)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl3 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl3, cl3);
-    assoc2dconstraintgroup->cl3--;
-  }
-  {
-    BITCODE_BL cl4;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl4", &cl4, NULL)
-        && cl4 == assoc2dconstraintgroup->cl4)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl4 [BL] %u != %u", assoc2dconstraintgroup->cl4, cl4);
-    cl4++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cl4", &cl4, 0)
-        && cl4 == assoc2dconstraintgroup->cl4)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cl4 [BL] set+1 %u != %u", assoc2dconstraintgroup->cl4, cl4);
-    assoc2dconstraintgroup->cl4--;
-  }
-  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "class_version", &class_version, NULL)
         && class_version == assoc2dconstraintgroup->class_version)
@@ -27302,21 +27218,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.class_version [BS] set+1 %hu != %hu", assoc2dconstraintgroup->class_version, class_version);
     assoc2dconstraintgroup->class_version--;
-  }
-  {
-    BITCODE_RC cs1;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cs1", &cs1, NULL)
-        && cs1 == assoc2dconstraintgroup->cs1)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cs1 [RC] %u != %u", assoc2dconstraintgroup->cs1, cs1);
-    cs1++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "cs1", &cs1, 0)
-        && cs1 == assoc2dconstraintgroup->cs1)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.cs1 [RC] set+1 %u != %u", assoc2dconstraintgroup->cs1, cs1);
-    assoc2dconstraintgroup->cs1--;
   }
   {
     Dwg_ASSOCACTION_Deps* deps;
@@ -27352,52 +27253,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         fail ("ASSOC2DCONSTRAINTGROUP.h1 [H]");
   }
   {
-    BITCODE_H h2;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h2", &h2, NULL)
-        && !memcmp (&h2, &assoc2dconstraintgroup->h2, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOC2DCONSTRAINTGROUP.h2 [H]");
-  }
-  {
-    BITCODE_H h3;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "h3", &h3, NULL)
-        && !memcmp (&h3, &assoc2dconstraintgroup->h3, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOC2DCONSTRAINTGROUP.h3 [H]");
-  }
-  {
-    BITCODE_BL l7;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l7", &l7, NULL)
-        && l7 == assoc2dconstraintgroup->l7)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l7 [BL] %u != %u", assoc2dconstraintgroup->l7, l7);
-    l7++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l7", &l7, 0)
-        && l7 == assoc2dconstraintgroup->l7)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l7 [BL] set+1 %u != %u", assoc2dconstraintgroup->l7, l7);
-    assoc2dconstraintgroup->l7--;
-  }
-  {
-    BITCODE_BL l8;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l8", &l8, NULL)
-        && l8 == assoc2dconstraintgroup->l8)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l8 [BL] %u != %u", assoc2dconstraintgroup->l8, l8);
-    l8++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l8", &l8, 0)
-        && l8 == assoc2dconstraintgroup->l8)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l8 [BL] set+1 %u != %u", assoc2dconstraintgroup->l8, l8);
-    assoc2dconstraintgroup->l8--;
-  }
-  {
     BITCODE_BL max_assoc_dep_index;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "max_assoc_dep_index", &max_assoc_dep_index, NULL)
         && max_assoc_dep_index == assoc2dconstraintgroup->max_assoc_dep_index)
@@ -27411,6 +27266,16 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.max_assoc_dep_index [BL] set+1 %u != %u", assoc2dconstraintgroup->max_assoc_dep_index, max_assoc_dep_index);
     assoc2dconstraintgroup->max_assoc_dep_index--;
+  }
+  {
+    Dwg_CONSTRAINTGROUPNODE* nodes;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_nodes", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "nodes", &nodes, NULL)
+        && nodes == assoc2dconstraintgroup->nodes)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.nodes [Dwg_CONSTRAINTGROUPNODE*] * %u num_nodes", count);
   }
   {
     BITCODE_BL num_actions;
@@ -27441,6 +27306,21 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.num_deps [BL] set+1 %u != %u", assoc2dconstraintgroup->num_deps, num_deps);
     assoc2dconstraintgroup->num_deps--;
+  }
+  {
+    BITCODE_BL num_nodes;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_nodes", &num_nodes, NULL)
+        && num_nodes == assoc2dconstraintgroup->num_nodes)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_nodes [BL] %u != %u", assoc2dconstraintgroup->num_nodes, num_nodes);
+    num_nodes++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_nodes", &num_nodes, 0)
+        && num_nodes == assoc2dconstraintgroup->num_nodes)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_nodes [BL] set+1 %u != %u", assoc2dconstraintgroup->num_nodes, num_nodes);
+    assoc2dconstraintgroup->num_nodes--;
   }
   {
     BITCODE_BL num_owned_params;
@@ -27509,26 +27389,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         fail ("ASSOC2DCONSTRAINTGROUP.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_T t1;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "t1", &t1, NULL)
-        && t1
-           ? strEQ ((char *)t1, (char *)assoc2dconstraintgroup->t1)
-           : !assoc2dconstraintgroup->t1)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.t1 [T] '%s' <> '%s'", t1, assoc2dconstraintgroup->t1);
-  }
-  {
-    BITCODE_T t2;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "t2", &t2, NULL)
-        && t2
-           ? strEQ ((char *)t2, (char *)assoc2dconstraintgroup->t2)
-           : !assoc2dconstraintgroup->t2)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.t2 [T] '%s' <> '%s'", t2, assoc2dconstraintgroup->t2);
-  }
-  {
     BITCODE_BL version;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "version", &version, NULL)
         && version == assoc2dconstraintgroup->version)
@@ -27542,51 +27402,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.version [BL] set+1 %u != %u", assoc2dconstraintgroup->version, version);
     assoc2dconstraintgroup->version--;
-  }
-  {
-    BITCODE_BD w1;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w1", &w1, NULL)
-        && w1 == assoc2dconstraintgroup->w1)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.w1 [BD] %g != %g", assoc2dconstraintgroup->w1, w1);
-    w1++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w1", &w1, 0)
-        && w1 == assoc2dconstraintgroup->w1)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.w1 [BD] set+1 %g != %g", assoc2dconstraintgroup->w1, w1);
-    assoc2dconstraintgroup->w1--;
-  }
-  {
-    BITCODE_BD w2;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w2", &w2, NULL)
-        && w2 == assoc2dconstraintgroup->w2)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.w2 [BD] %g != %g", assoc2dconstraintgroup->w2, w2);
-    w2++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w2", &w2, 0)
-        && w2 == assoc2dconstraintgroup->w2)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.w2 [BD] set+1 %g != %g", assoc2dconstraintgroup->w2, w2);
-    assoc2dconstraintgroup->w2--;
-  }
-  {
-    BITCODE_BD w3;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w3", &w3, NULL)
-        && w3 == assoc2dconstraintgroup->w3)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.w3 [BD] %g != %g", assoc2dconstraintgroup->w3, w3);
-    w3++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "w3", &w3, 0)
-        && w3 == assoc2dconstraintgroup->w3)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.w3 [BD] set+1 %g != %g", assoc2dconstraintgroup->w3, w3);
-    assoc2dconstraintgroup->w3--;
   }
   {
     BITCODE_3BD workplane[3];
@@ -53441,6 +53256,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_BLOCKVISIBILITYPARAMETER_state): %d != "
                "dwg_dynapi_fields_size (\"BLOCKVISIBILITYPARAMETER_state\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_CONSTRAINTGROUPNODE);
+  size2 = dwg_dynapi_fields_size ("CONSTRAINTGROUPNODE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_CONSTRAINTGROUPNODE): %d != "
+               "dwg_dynapi_fields_size (\"CONSTRAINTGROUPNODE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_CONTEXTDATA_dict);

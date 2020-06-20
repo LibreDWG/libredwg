@@ -6810,7 +6810,7 @@ DWG_OBJECT (ASSOCTRIMSURFACEACTIONBODY)
   FIELD_BL (class_version, 90);
   FIELD_B (b1, 290);
   FIELD_B (b2, 290);
-  FIELD_BS (distance, 40);
+  FIELD_BD (distance, 40);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8388,48 +8388,6 @@ DWG_OBJECT (ASSOCPERSSUBENTMANAGER)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// Class AcDbAssoc2dConstraintGroup
-// see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
-DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
-  DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields;
-  FIELD_BL (version, 90); //2
-  FIELD_B (b1, 70);  //0
-  FIELD_3BD (workplane[0], 10); // 0,0,0
-  FIELD_3BD (workplane[1], 10); // 1,0,0
-  FIELD_3BD (workplane[2], 10); // 0,1,0
-  //FIELD_BL (network_action_index, 90);
-  FIELD_HANDLE (h1, 4, 360);
-  FIELD_BL (num_actions, 90); //2
-  VALUEOUTOFBOUNDS (num_actions, 100)
-  HANDLE_VECTOR (actions, num_actions, 4, 360);
-
-  FIELD_BL (l7, 90); //9
-  UNTIL (R_2010) {
-    FIELD_BL (l8, 90); //9
-  } LATER_VERSIONS {
-    FIELD_T (t1, 1);
-    //DXF { FIELD_TFF ("AcConstrainedCircle", 1); }
-    FIELD_HANDLE (h2, 0, 330);
-    FIELD_BL (cl1, 90); //1
-    FIELD_RC (cs1, 70); //1
-    FIELD_BL (cl2, 90); //1
-    FIELD_BL (cl3, 90); //3
-    FIELD_HANDLE (h3, 0, 330);
-    FIELD_BL (cl4, 90); //0
-    FIELD_3BD (c1, 10); // @133
-    FIELD_3BD (c2, 10);
-    FIELD_3BD (c3, 10);
-    FIELD_BD (w1, 40); // @279
-    FIELD_BD (w2, 40);
-    FIELD_BD (w3, 40);
-    FIELD_T (t2, 1);
-    //DXF { FIELD_TFF ("AcConstrainedImplicitPoint", 1); }
-    // ...
-    }
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 #define AcDbShSubentMaterial_fields                                           \
     SUBCLASS (AcDbShSubentMaterial)                                           \
     FIELD_BL (material.major, 90);                                            \
@@ -9396,43 +9354,68 @@ DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   FIELD_T (grip_expr, 300);
 DWG_OBJECT_END
 
-#define AcConstraintGroupNode_fields                             \
+#define AcConstraintGroupNode_fields(node)                       \
   PRE (R_2013) {                                                 \
-    DXF { VALUE_HANDLE (obj->tio.object->ownerhandle, 4, 330); } \
+    DXF { VALUE_HANDLE (obj->tio.object->ownerhandle, xx, 4, 330); } \
   }                                                              \
-  FIELD_BL (nodeid, 90);                                         \
+  SUB_FIELD_BLd (node,nodeid, 90);                               \
   PRE (R_2013) {                                                 \
-    FIELD_RC (rc70, 70);                                         \
+    SUB_FIELD_RC (node,status, 70);                              \
   }                                                              \
-  FIELD_BL (num_connections, 90);                                \
-  FIELD_VECTOR (connections, BLd, num_connections, 90);          \
+  SUB_FIELD_BL (node,num_connections, 90);                       \
+  FIELD_VECTOR (node.connections, BL, node.num_connections, 90); \
   SINCE (R_2013) {                                               \
-    FIELD_RC (rc70, 70);                                         \
+    SUB_FIELD_RC (node,status, 70);                              \
   }
 
-#define AcGeomConstraint_fields                \
-  AcConstraintGroupNode_fields;                \
+#define AcGeomConstraint_fields(node)          \
+  AcConstraintGroupNode_fields (node);         \
   SUBCLASS (AcGeomConstraint);                 \
   FIELD_BL (ownerid, 90);                      \
   FIELD_B (is_implied, 290);                   \
   FIELD_B (is_active, 290)
 
-#define AcConstraintGeometry_fields            \
-  AcConstraintGroupNode_fields;                \
+#define AcConstraintGeometry_fields(node)      \
+  AcConstraintGroupNode_fields (node);         \
   SUBCLASS (AcConstraintGeometry);             \
   FIELD_HANDLE (geom_dep, 4, 330);             \
   FIELD_BL (nodeid, 90)
 
-#define AcExplicitConstraint_fields             \
-  AcGeomConstraint_fields;                      \
+#define AcExplicitConstraint_fields(node)       \
+  AcGeomConstraint_fields (node);               \
   SUBCLASS (AcExplicitConstraint)               \
   FIELD_HANDLE (value_dep, 3, 340);             \
   FIELD_HANDLE (dim_dep, 3, 340)
 
-#define AcAngleConstraint_fields                \
-    AcExplicitConstraint_fields;                \
+#define AcAngleConstraint_fields(node)          \
+    AcExplicitConstraint_fields (node);         \
     SUBCLASS (AcAngleConstraint);               \
     FIELD_RC (sector_type, 280)
+
+// Class AcDbAssoc2dConstraintGroup
+// see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
+DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
+  DECODE_UNKNOWN_BITS
+  ASSOCACTION_fields;
+  FIELD_BL (version, 90);       // 2
+  FIELD_B (b1, 70);             // 0
+  FIELD_3BD (workplane[0], 10); // 0,0,0
+  FIELD_3BD (workplane[1], 10); // 1,0,0
+  FIELD_3BD (workplane[2], 10); // 0,1,0
+  FIELD_HANDLE (h1, 4, 360);
+  FIELD_BL (num_actions, 90); // 2
+  VALUEOUTOFBOUNDS (num_actions, 100)
+  HANDLE_VECTOR (actions, num_actions, 4, 360);
+
+  FIELD_BL (num_nodes, 90); // 9
+  REPEAT (num_nodes, nodes, Dwg_CONSTRAINTGROUPNODE)
+  REPEAT_BLOCK
+      AcConstraintGroupNode_fields (nodes[rcount1]);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (nodes);
+  END_REPEAT (nodes)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCVARIABLE)
   DECODE_UNKNOWN_BITS

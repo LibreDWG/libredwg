@@ -5135,40 +5135,10 @@ H,	DXF 360
 BL,	DXF 90
 @item actions
 H*,	DXF 360
-@item l7
+@item num_nodes
 BL,	DXF 90
-@item l8
-BL,	DXF 90
-@item t1
-T,	DXF 1
-@item h2
-H,	DXF 330
-@item cl1
-BL,	DXF 90
-@item cs1
-RC,	DXF 70
-@item cl2
-BL,	DXF 90
-@item cl3
-BL,	DXF 90
-@item h3
-H,	DXF 330
-@item cl4
-BL,	DXF 90
-@item c1
-3BD,	DXF 10
-@item c2
-3BD,	DXF 10
-@item c3
-3BD,	DXF 10
-@item w1
-BD,	DXF 40
-@item w2
-BD,	DXF 40
-@item w3
-BD,	DXF 40
-@item t2
-T,	DXF 1
+@item nodes
+Dwg_CONSTRAINTGROUPNODE*
 
 @end vtable
 @end indentedblock
@@ -10862,6 +10832,26 @@ H
 BL
 @item bl2
 BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_CONSTRAINTGROUPNODE} @anchor{Dwg_CONSTRAINTGROUPNODE}
+@vindex Dwg_CONSTRAINTGROUPNODE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ASSOC2DCONSTRAINTGROUP*
+@item nodeid
+BL
+@item status
+RC
+@item num_connections
+BL
+@item connections
+BL*
 
 @end vtable
 @end indentedblock
