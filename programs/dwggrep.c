@@ -1053,6 +1053,17 @@ match_ASSOCALIGNEDDIMACTIONBODY (const char *restrict filename,
 }
 
 static int
+match_ASSOCPATCHSURFACEACTIONBODY (const char *restrict filename,
+                                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCPATCHSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCPATCHSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCPATCHSURFACEACTIONBODY)
+  return found;
+}
+static int
 match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
                                    const Dwg_Object *restrict obj)
 {
@@ -1060,7 +1071,6 @@ match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCPLANESURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCPLANESURFACEACTIONBODY;
-  MATCH_OBJECT (ASSOCPLANESURFACEACTIONBODY, name, 1);
   MATCH_AcDbAssocParamBasedActionBody (ASSOCPLANESURFACEACTIONBODY)
   return found;
 }
@@ -1072,8 +1082,18 @@ match_ASSOCEXTRUDEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCEXTRUDEDSURFACEACTIONBODY;
-  MATCH_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY, name, 1);
   MATCH_AcDbAssocParamBasedActionBody (ASSOCEXTRUDEDSURFACEACTIONBODY)
+  return found;
+}
+static int
+match_ASSOCFILLETSURFACEACTIONBODY (const char *restrict filename,
+                                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCFILLETSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCFILLETSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCFILLETSURFACEACTIONBODY)
   return found;
 }
 static int
@@ -1084,7 +1104,6 @@ match_ASSOCLOFTEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCLOFTEDSURFACEACTIONBODY;
-  MATCH_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY, name, 1);
   MATCH_AcDbAssocParamBasedActionBody (ASSOCLOFTEDSURFACEACTIONBODY)
   return found;
 }
@@ -1096,7 +1115,6 @@ match_ASSOCREVOLVEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCREVOLVEDSURFACEACTIONBODY;
-  MATCH_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY, name, 1);
   MATCH_AcDbAssocParamBasedActionBody (ASSOCREVOLVEDSURFACEACTIONBODY)
   return found;
 }
@@ -1108,7 +1126,6 @@ match_ASSOCSWEPTSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCSWEPTSURFACEACTIONBODY;
-  MATCH_OBJECT (ASSOCSWEPTSURFACEACTIONBODY, name, 1);
   MATCH_AcDbAssocParamBasedActionBody (ASSOCSWEPTSURFACEACTIONBODY)
   return found;
 }
@@ -1197,8 +1214,10 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (ASSOCFACEACTIONPARAM)
       ELSEMATCH (ASSOCPATHACTIONPARAM)
       ELSEMATCH (ASSOCVERTEXACTIONPARAM)
+      ELSEMATCH (ASSOCPATCHSURFACEACTIONBODY)
       ELSEMATCH (ASSOCPLANESURFACEACTIONBODY)
       ELSEMATCH (ASSOCEXTRUDEDSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCFILLETSURFACEACTIONBODY)
       ELSEMATCH (ASSOCLOFTEDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCREVOLVEDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCSWEPTSURFACEACTIONBODY)

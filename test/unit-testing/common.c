@@ -1430,14 +1430,13 @@ api_common_object (dwg_object *obj)
   CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, material)
 
 #define CHK_ASSOCPARAMBASEDACTIONBODY(TYPE)                                   \
-  CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, aab_version, BL);  \
-  CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, status, BL);       \
-  CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, l2, BL);           \
+  CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, version, BL);      \
+  CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, minor, BL);        \
   CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, num_deps, BL);     \
   CHK_SUBCLASS_HV (_obj->pab, ASSOCPARAMBASEDACTIONBODY, deps, _obj->pab.num_deps); \
   CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, l4, BL);           \
   CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, l5, BL);           \
-  CHK_SUBCLASS_H (_obj->pab, ASSOCPARAMBASEDACTIONBODY, assoc_dep);           \
+  CHK_SUBCLASS_H (_obj->pab, ASSOCPARAMBASEDACTIONBODY, assocdep);            \
   CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, num_values, BL);   \
   for (unsigned i = 0; i < _obj->pab.num_values; i++)                         \
     {                                                                         \

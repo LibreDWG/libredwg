@@ -6697,18 +6697,16 @@ DWG_OBJECT (ASSOCDEPENDENCY)
 // abstract dwg_action_klass_VALUEPARAM_private must exist
 #define AcDbAssocParamBasedActionBody_fields(pab)           \
   PRE (R_2013) {                                            \
-    SUBCLASS (AcDbAssocActionBody);                         \
-    SUB_FIELD_BL (pab,aab_version, 90);                     \
     SUBCLASS (AcDbAssocParamBasedActionBody);               \
-    SUB_FIELD_BL (pab,status, 90);                          \
-    SUB_FIELD_BL (pab,l2, 90);                              \
+    SUB_FIELD_BL (pab,version, 90);                         \
+    SUB_FIELD_BL (pab,minor, 90);                           \
     SUB_FIELD_BL (pab,num_deps, 90);                        \
     SUB_HANDLE_VECTOR (pab,deps, num_deps, 4, 360);         \
     SUB_FIELD_BL (pab,l4, 90);                              \
     SUB_FIELD_BL (pab,num_values, 90);                      \
     if (!FIELD_VALUE (pab.num_values)) {                    \
       SUB_FIELD_BL (pab,l5, 90);                            \
-      SUB_FIELD_HANDLE (pab,assoc_dep, 5, 330);             \
+      SUB_FIELD_HANDLE (pab,assocdep, 5, 330);              \
     }                                                       \
     REPEAT (pab.num_values, pab.values, Dwg_VALUEPARAM)     \
     REPEAT_BLOCK                                            \
@@ -6717,15 +6715,20 @@ DWG_OBJECT (ASSOCDEPENDENCY)
     END_REPEAT (pab.values)                                 \
   }
 
-#define AcDbAssocPathBasedSurfaceActionBody_fields          \
-  AcDbAssocParamBasedActionBody_fields (pab);               \
+#define AcDbAssocSurfaceActionBody_fields(sab)              \
   SUBCLASS (AcDbAssocSurfaceActionBody)                     \
-  FIELD_BL (sab_status, 90);                                \
-  FIELD_HANDLE (sab_h330, 5, 330);                          \
-  FIELD_B (sab_b1, 290);                                    \
-  FIELD_BL (sab_l2, 90);                                    \
-  FIELD_B (sab_b2, 290);                                    \
-  FIELD_BS (sab_s1, 70);                                    \
+  SUB_FIELD_BL (sab,version, 90);                           \
+  SUB_FIELD_HANDLE (sab,assocdep, 5, 330);                  \
+  SUB_FIELD_B  (sab,is_semi_assoc, 290);                    \
+  SUB_FIELD_BL (sab,l2, 90);                                \
+  SUB_FIELD_B  (sab,is_semi_ovr, 290);                      \
+  SUB_FIELD_BS (sab,grip_status, 70)
+
+#define AcDbAssocPathBasedSurfaceActionBody_fields          \
+  SUBCLASS (AcDbAssocActionBody);                           \
+  FIELD_BL (aab_version, 90);                               \
+  AcDbAssocParamBasedActionBody_fields (pab);               \
+  AcDbAssocSurfaceActionBody_fields (sab);                  \
   SUBCLASS (AcDbAssocPathBasedSurfaceActionBody)            \
   FIELD_BL (pbsab_status, 90)
 

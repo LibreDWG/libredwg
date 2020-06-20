@@ -4995,19 +4995,17 @@ typedef struct _dwg_VALUEPARAM_vars
   BITCODE_H handle;
 } Dwg_VALUEPARAM_vars;
 
+/* AcDbAssocParamBasedActionBody */
 typedef struct _dwg_ASSOCPARAMBASEDACTIONBODY
 {
   struct _dwg_object_object *parent;
-  /* AcDbAssocActionBody */
-  BITCODE_BL aab_version; /* 90 until 2010: 1, 2013+: 2 */
-  /* AcDbAssocParamBasedActionBody */
-  BITCODE_BL status;     /* 90 0 */
-  BITCODE_BL l2;         /* 90 0 */
+  BITCODE_BL version;    /* 90 0 */
+  BITCODE_BL minor;      /* 90 0 */
   BITCODE_BL num_deps;   /* 90 1 */
   BITCODE_H *deps;       /* 360 */
   BITCODE_BL l4;         /* 90: 0 */
   BITCODE_BL l5;         /* 90 */
-  BITCODE_H  assoc_dep;  /* 330 */
+  BITCODE_H  assocdep;   /* 330 */
   BITCODE_BL num_values; /* 90 */
   struct _dwg_VALUEPARAM *values;
 } Dwg_ASSOCPARAMBASEDACTIONBODY;
@@ -5363,16 +5361,22 @@ typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM
   BITCODE_3BD pt;
 } Dwg_Object_ASSOCVERTEXACTIONPARAM;
 
+/* AcDbAssocSurfaceActionBody */
+typedef struct _dwg_ASSOCSURFACEACTIONBODY
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL version;		/*!< DXF 90 */
+  BITCODE_B  is_semi_assoc;	/*!< DXF 290 */
+  BITCODE_BL l2;		/*!< DXF 90 */
+  BITCODE_B  is_semi_ovr;	/*!< DXF 290 is_semi_associativity_satisfied_override */
+  BITCODE_BS grip_status;	/*!< DXF 70 */
+  BITCODE_H  assocdep;		/* ASSOCDEPENDENCY */
+} Dwg_ASSOCSURFACEACTIONBODY;
+
 #define ASSOCPATHBASEDSURFACEACTIONBODY_fields \
-  ASSOCACTIONPARAM_fields;                     \
+  ASSOCACTIONBODY_fields;                      \
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;           \
-  /* AcDbAssocSurfaceActionBody struct? */     \
-  BITCODE_BL sab_status;/*!< DXF 90 */         \
-  BITCODE_B sab_b1;     /*!< DXF 290 */        \
-  BITCODE_BL sab_l2;    /*!< DXF 90 */         \
-  BITCODE_B sab_b2;     /*!< DXF 290 */        \
-  BITCODE_BS sab_s1;    /*!< DXF 70 */         \
-  BITCODE_H sab_h330;   /*!< DXF 330 */        \
+  Dwg_ASSOCSURFACEACTIONBODY sab;              \
   /* AcDbAssocPathBasedSurfaceActionBody */    \
   BITCODE_BL pbsab_status /*!< DXF 90 */
 

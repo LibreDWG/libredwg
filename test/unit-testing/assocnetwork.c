@@ -14,7 +14,6 @@ api_process (dwg_object *obj)
   BITCODE_BL action_index;
   BITCODE_BL max_assoc_dep_index;
   BITCODE_BL num_deps;
-  //Dwg_ASSOCACTION_Deps *deps;
   BITCODE_BL num_owned_params;
   BITCODE_H *owned_params;
   BITCODE_BL num_owned_value_param_names;

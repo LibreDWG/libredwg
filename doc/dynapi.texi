@@ -5362,26 +5362,12 @@ B
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -5528,26 +5514,12 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -5592,26 +5564,12 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -5658,26 +5616,12 @@ B,	DXF 290
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -5789,26 +5733,12 @@ BD,	DXF 40
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -5966,26 +5896,12 @@ B,	DXF 290
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -6003,26 +5919,12 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -6040,26 +5942,12 @@ BL,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
-@item sab_status
-BL,	DXF 90
-@item sab_b1
-B,	DXF 290
-@item sab_l2
-BL,	DXF 90
-@item sab_b2
-B,	DXF 290
-@item sab_s1
-BS,	DXF 70
-@item sab_h330
-H,	DXF 330
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
 @item pbsab_status
 BL,	DXF 90
 @item class_version
@@ -10194,11 +10082,9 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item aab_version
+@item version
 BL
-@item status
-BL
-@item l2
+@item minor
 BL
 @item num_deps
 BL,	DXF 90
@@ -10208,12 +10094,36 @@ H*
 BL
 @item l5
 BL
-@item assoc_dep
+@item assocdep
 H
 @item num_values
 BL
 @item values
 struct _dwg_VALUEPARAM*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_ASSOCSURFACEACTIONBODY} @anchor{Dwg_ASSOCSURFACEACTIONBODY}
+@vindex Dwg_ASSOCSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item version
+BL
+@item is_semi_assoc
+B
+@item l2
+BL
+@item is_semi_ovr
+B
+@item grip_status
+BS
+@item assocdep
+H
 
 @end vtable
 @end indentedblock
