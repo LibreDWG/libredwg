@@ -5123,7 +5123,7 @@ H*,	DXF 360
 BL,	DXF 90
 @item owned_value_param_names
 H*,	DXF 360
-@item l5
+@item version
 BL,	DXF 90
 @item b1
 B,	DXF 70
@@ -5727,6 +5727,31 @@ BS,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{ASSOCOFFSETSURFACEACTIONBODY} @anchor{ASSOCOFFSETSURFACEACTIONBODY}
+@cindex object, ASSOCOFFSETSURFACEACTIONBODY
+@vindex ASSOCOFFSETSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_version
+BL,	DXF 90
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
+@item pbsab_status
+BL,	DXF 90
+@item class_version
+BL,	DXF 90
+@item b1
+B,	DXF 290
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCORDINATEDIMACTIONBODY} @anchor{ASSOCORDINATEDIMACTIONBODY}
 @cindex object, ASSOCORDINATEDIMACTIONBODY
 @vindex ASSOCORDINATEDIMACTIONBODY
@@ -6056,6 +6081,35 @@ Dwg_ASSOCSURFACEACTIONBODY
 BL,	DXF 90
 @item class_version
 BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCTRIMSURFACEACTIONBODY} @anchor{ASSOCTRIMSURFACEACTIONBODY}
+@cindex object, ASSOCTRIMSURFACEACTIONBODY
+@vindex ASSOCTRIMSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_version
+BL,	DXF 90
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
+@item pbsab_status
+BL,	DXF 90
+@item class_version
+BL,	DXF 90
+@item b1
+B,	DXF 290
+@item b2
+B,	DXF 290
+@item distance
+BD,	DXF 40
 
 @end vtable
 @end indentedblock

@@ -67,10 +67,12 @@ testobjects = \
 	assocfilletsurfaceactionbody \
 	assocloftedsurfaceactionbody \
 	assocnetworksurfaceactionbody \
+	assocoffsetsurfaceactionbody \
 	assocpatchsurfaceactionbody \
 	assocplanesurfaceactionbody \
 	assocrevolvedsurfaceactionbody \
 	assocsweptsurfaceactionbody \
+	assoctrimsurfaceactionbody \
 	attdef \
 	attrib \
 	background \

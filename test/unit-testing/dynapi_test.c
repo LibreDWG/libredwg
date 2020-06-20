@@ -27368,21 +27368,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         fail ("ASSOC2DCONSTRAINTGROUP.h3 [H]");
   }
   {
-    BITCODE_BL l5;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l5", &l5, NULL)
-        && l5 == assoc2dconstraintgroup->l5)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l5 [BL] %u != %u", assoc2dconstraintgroup->l5, l5);
-    l5++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l5", &l5, 0)
-        && l5 == assoc2dconstraintgroup->l5)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.l5 [BL] set+1 %u != %u", assoc2dconstraintgroup->l5, l5);
-    assoc2dconstraintgroup->l5--;
-  }
-  {
     BITCODE_BL l7;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "l7", &l7, NULL)
         && l7 == assoc2dconstraintgroup->l7)
@@ -27542,6 +27527,21 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOC2DCONSTRAINTGROUP.t2 [T] '%s' <> '%s'", t2, assoc2dconstraintgroup->t2);
+  }
+  {
+    BITCODE_BL version;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "version", &version, NULL)
+        && version == assoc2dconstraintgroup->version)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.version [BL] %u != %u", assoc2dconstraintgroup->version, version);
+    version++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "version", &version, 0)
+        && version == assoc2dconstraintgroup->version)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.version [BL] set+1 %u != %u", assoc2dconstraintgroup->version, version);
+    assoc2dconstraintgroup->version--;
   }
   {
     BITCODE_BD w1;
@@ -30106,6 +30106,103 @@ static int test_ASSOCOBJECTACTIONPARAM (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCOFFSETSURFACEACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCOFFSETSURFACEACTIONBODY *restrict assocoffsetsurfaceactionbody = obj->tio.object->tio.ASSOCOFFSETSURFACEACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocoffsetsurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.aab_version [BL] %u != %u", assocoffsetsurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocoffsetsurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocoffsetsurfaceactionbody->aab_version, aab_version);
+    assocoffsetsurfaceactionbody->aab_version--;
+  }
+  {
+    BITCODE_B b1;
+    if (dwg_dynapi_entity_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "b1", &b1, NULL)
+        && b1 == assocoffsetsurfaceactionbody->b1)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.b1 [B] " FORMAT_B " != " FORMAT_B "", assocoffsetsurfaceactionbody->b1, b1);
+    b1++;
+    if (dwg_dynapi_entity_set_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "b1", &b1, 0)
+        && b1 == assocoffsetsurfaceactionbody->b1)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.b1 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocoffsetsurfaceactionbody->b1, b1);
+    assocoffsetsurfaceactionbody->b1--;
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assocoffsetsurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.class_version [BL] %u != %u", assocoffsetsurfaceactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assocoffsetsurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.class_version [BL] set+1 %u != %u", assocoffsetsurfaceactionbody->class_version, class_version);
+    assocoffsetsurfaceactionbody->class_version--;
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocoffsetsurfaceactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCOFFSETSURFACEACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocoffsetsurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCOFFSETSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL pbsab_status;
+    if (dwg_dynapi_entity_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "pbsab_status", &pbsab_status, NULL)
+        && pbsab_status == assocoffsetsurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.pbsab_status [BL] %u != %u", assocoffsetsurfaceactionbody->pbsab_status, pbsab_status);
+    pbsab_status++;
+    if (dwg_dynapi_entity_set_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "pbsab_status", &pbsab_status, 0)
+        && pbsab_status == assocoffsetsurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCOFFSETSURFACEACTIONBODY.pbsab_status [BL] set+1 %u != %u", assocoffsetsurfaceactionbody->pbsab_status, pbsab_status);
+    assocoffsetsurfaceactionbody->pbsab_status--;
+  }
+  {
+    Dwg_ASSOCSURFACEACTIONBODY sab;
+    if (dwg_dynapi_entity_value (assocoffsetsurfaceactionbody, "ASSOCOFFSETSURFACEACTIONBODY", "sab", &sab, NULL)
+        && !memcmp (&sab, &assocoffsetsurfaceactionbody->sab, sizeof (Dwg_ASSOCSURFACEACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCOFFSETSURFACEACTIONBODY.sab [Dwg_ASSOCSURFACEACTIONBODY]");
+  }
+  if (failed && (is_class_unstable ("ASSOCOFFSETSURFACEACTIONBODY") || is_class_debugging ("ASSOCOFFSETSURFACEACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCOFFSETSURFACEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCORDINATEDIMACTIONBODY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -31713,6 +31810,133 @@ static int test_ASSOCSWEPTSURFACEACTIONBODY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ASSOCSWEPTSURFACEACTIONBODY") || is_class_debugging ("ASSOCSWEPTSURFACEACTIONBODY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCSWEPTSURFACEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCTRIMSURFACEACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCTRIMSURFACEACTIONBODY *restrict assoctrimsurfaceactionbody = obj->tio.object->tio.ASSOCTRIMSURFACEACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assoctrimsurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.aab_version [BL] %u != %u", assoctrimsurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assoctrimsurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assoctrimsurfaceactionbody->aab_version, aab_version);
+    assoctrimsurfaceactionbody->aab_version--;
+  }
+  {
+    BITCODE_B b1;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "b1", &b1, NULL)
+        && b1 == assoctrimsurfaceactionbody->b1)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.b1 [B] " FORMAT_B " != " FORMAT_B "", assoctrimsurfaceactionbody->b1, b1);
+    b1++;
+    if (dwg_dynapi_entity_set_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "b1", &b1, 0)
+        && b1 == assoctrimsurfaceactionbody->b1)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.b1 [B] set+1 " FORMAT_B " != " FORMAT_B "", assoctrimsurfaceactionbody->b1, b1);
+    assoctrimsurfaceactionbody->b1--;
+  }
+  {
+    BITCODE_B b2;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "b2", &b2, NULL)
+        && b2 == assoctrimsurfaceactionbody->b2)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.b2 [B] " FORMAT_B " != " FORMAT_B "", assoctrimsurfaceactionbody->b2, b2);
+    b2++;
+    if (dwg_dynapi_entity_set_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "b2", &b2, 0)
+        && b2 == assoctrimsurfaceactionbody->b2)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.b2 [B] set+1 " FORMAT_B " != " FORMAT_B "", assoctrimsurfaceactionbody->b2, b2);
+    assoctrimsurfaceactionbody->b2--;
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assoctrimsurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.class_version [BL] %u != %u", assoctrimsurfaceactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assoctrimsurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.class_version [BL] set+1 %u != %u", assoctrimsurfaceactionbody->class_version, class_version);
+    assoctrimsurfaceactionbody->class_version--;
+  }
+  {
+    BITCODE_BD distance;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "distance", &distance, NULL)
+        && distance == assoctrimsurfaceactionbody->distance)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.distance [BD] %g != %g", assoctrimsurfaceactionbody->distance, distance);
+    distance++;
+    if (dwg_dynapi_entity_set_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "distance", &distance, 0)
+        && distance == assoctrimsurfaceactionbody->distance)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.distance [BD] set+1 %g != %g", assoctrimsurfaceactionbody->distance, distance);
+    assoctrimsurfaceactionbody->distance--;
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assoctrimsurfaceactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCTRIMSURFACEACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assoctrimsurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCTRIMSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL pbsab_status;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "pbsab_status", &pbsab_status, NULL)
+        && pbsab_status == assoctrimsurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.pbsab_status [BL] %u != %u", assoctrimsurfaceactionbody->pbsab_status, pbsab_status);
+    pbsab_status++;
+    if (dwg_dynapi_entity_set_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "pbsab_status", &pbsab_status, 0)
+        && pbsab_status == assoctrimsurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCTRIMSURFACEACTIONBODY.pbsab_status [BL] set+1 %u != %u", assoctrimsurfaceactionbody->pbsab_status, pbsab_status);
+    assoctrimsurfaceactionbody->pbsab_status--;
+  }
+  {
+    Dwg_ASSOCSURFACEACTIONBODY sab;
+    if (dwg_dynapi_entity_value (assoctrimsurfaceactionbody, "ASSOCTRIMSURFACEACTIONBODY", "sab", &sab, NULL)
+        && !memcmp (&sab, &assoctrimsurfaceactionbody->sab, sizeof (Dwg_ASSOCSURFACEACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCTRIMSURFACEACTIONBODY.sab [Dwg_ASSOCSURFACEACTIONBODY]");
+  }
+  if (failed && (is_class_unstable ("ASSOCTRIMSURFACEACTIONBODY") || is_class_debugging ("ASSOCTRIMSURFACEACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCTRIMSURFACEACTIONBODY", failed);
       failed = 0;
     }
   return failed;
@@ -50407,6 +50631,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCNETWORKSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOBJECTACTIONPARAM)
     error += test_ASSOCOBJECTACTIONPARAM(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY)
+    error += test_ASSOCOFFSETSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCORDINATEDIMACTIONBODY)
     error += test_ASSOCORDINATEDIMACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
@@ -50425,6 +50651,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCROTATEDDIMACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY)
+    error += test_ASSOCTRIMSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
     error += test_ASSOCVARIABLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
@@ -50849,6 +51077,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCNETWORKSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOBJECTACTIONPARAM)
     error += test_ASSOCOBJECTACTIONPARAM (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY)
+    error += test_ASSOCOFFSETSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCORDINATEDIMACTIONBODY)
     error += test_ASSOCORDINATEDIMACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
@@ -50867,6 +51097,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCROTATEDDIMACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY)
+    error += test_ASSOCTRIMSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
     error += test_ASSOCVARIABLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
@@ -51987,6 +52219,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ASSOCOBJECTACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_ASSOCOFFSETSURFACEACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCOFFSETSURFACEACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCOFFSETSURFACEACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCOFFSETSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_ASSOCORDINATEDIMACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCORDINATEDIMACTIONBODY");
   if (size1 != size2)
@@ -52057,6 +52297,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCSWEPTSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCTRIMSURFACEACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCTRIMSURFACEACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCTRIMSURFACEACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCTRIMSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCVARIABLE);

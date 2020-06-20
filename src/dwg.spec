@@ -6773,6 +6773,16 @@ DWG_OBJECT (ASSOCNETWORKSURFACEACTIONBODY)
 DWG_OBJECT_END
 
 // (varies) UNSTABLE
+DWG_OBJECT (ASSOCOFFSETSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocOffsetSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  FIELD_B (b1, 290);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
 DWG_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
@@ -6789,6 +6799,18 @@ DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocSweptSurfaceActionBody)
   FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+DWG_OBJECT (ASSOCTRIMSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocTrimSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  FIELD_B (b1, 290);
+  FIELD_B (b2, 290);
+  FIELD_BS (distance, 40);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8371,38 +8393,40 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   DECODE_UNKNOWN_BITS
   ASSOCACTION_fields;
-
-  SUBCLASS (AcDbAssocNetwork)
-  FIELD_BL (l5, 90); //2
+  FIELD_BL (version, 90); //2
   FIELD_B (b1, 70);  //0
   FIELD_3BD (workplane[0], 10); // 0,0,0
   FIELD_3BD (workplane[1], 10); // 1,0,0
   FIELD_3BD (workplane[2], 10); // 0,1,0
-  FIELD_HANDLE (h1, 0, 360);
+  //FIELD_BL (network_action_index, 90);
+  FIELD_HANDLE (h1, 4, 360);
   FIELD_BL (num_actions, 90); //2
-  HANDLE_VECTOR (actions, num_actions, 0, 360);
+  VALUEOUTOFBOUNDS (num_actions, 100)
+  HANDLE_VECTOR (actions, num_actions, 4, 360);
+
   FIELD_BL (l7, 90); //9
-  FIELD_BL (l8, 90); //9
-
-  FIELD_T (t1, 1);
-  //DXF { FIELD_TFF ("AcConstrainedCircle", 1); }
-  FIELD_HANDLE (h2, 0, 330);
-  FIELD_BL (cl1, 90); //1
-  FIELD_RC (cs1, 70); //1
-  FIELD_BL (cl2, 90); //1
-  FIELD_BL (cl3, 90); //3
-  FIELD_HANDLE (h3, 0, 330);
-  FIELD_BL (cl4, 90); //0
-  FIELD_3BD (c1, 10); // @133
-  FIELD_3BD (c2, 10);
-  FIELD_3BD (c3, 10);
-  FIELD_BD (w1, 40); // @279
-  FIELD_BD (w2, 40);
-  FIELD_BD (w3, 40);
-
-  FIELD_T (t2, 1);
-  //DXF { FIELD_TFF ("AcConstrainedImplicitPoint", 1); }
-  // ...
+  UNTIL (R_2010) {
+    FIELD_BL (l8, 90); //9
+  } LATER_VERSIONS {
+    FIELD_T (t1, 1);
+    //DXF { FIELD_TFF ("AcConstrainedCircle", 1); }
+    FIELD_HANDLE (h2, 0, 330);
+    FIELD_BL (cl1, 90); //1
+    FIELD_RC (cs1, 70); //1
+    FIELD_BL (cl2, 90); //1
+    FIELD_BL (cl3, 90); //3
+    FIELD_HANDLE (h3, 0, 330);
+    FIELD_BL (cl4, 90); //0
+    FIELD_3BD (c1, 10); // @133
+    FIELD_3BD (c2, 10);
+    FIELD_3BD (c3, 10);
+    FIELD_BD (w1, 40); // @279
+    FIELD_BD (w2, 40);
+    FIELD_BD (w3, 40);
+    FIELD_T (t2, 1);
+    //DXF { FIELD_TFF ("AcConstrainedImplicitPoint", 1); }
+    // ...
+    }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
