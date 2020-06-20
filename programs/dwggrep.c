@@ -1097,6 +1097,17 @@ match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
   return found;
 }
 static int
+match_ASSOCEXTENDSURFACEACTIONBODY (const char *restrict filename,
+                                      const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCEXTENDSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCEXTENDSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCEXTENDSURFACEACTIONBODY)
+  return found;
+}
+static int
 match_ASSOCEXTRUDEDSURFACEACTIONBODY (const char *restrict filename,
                                       const Dwg_Object *restrict obj)
 {
@@ -1271,6 +1282,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (ASSOCVERTEXACTIONPARAM)
       ELSEMATCH (ASSOCPATCHSURFACEACTIONBODY)
       ELSEMATCH (ASSOCPLANESURFACEACTIONBODY)
+      ELSEMATCH (ASSOCEXTENDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCEXTRUDEDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCFILLETSURFACEACTIONBODY)
       ELSEMATCH (ASSOCLOFTEDSURFACEACTIONBODY)

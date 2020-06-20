@@ -63,6 +63,7 @@ testobjects = \
 	assocdependency \
 	assocgeomdependency \
 	assocblendsurfaceactionbody \
+	assocextendsurfaceactionbody \
 	assocextrudedsurfaceactionbody \
 	assocfilletsurfaceactionbody \
 	assocloftedsurfaceactionbody \

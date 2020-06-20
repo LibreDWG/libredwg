@@ -28372,19 +28372,19 @@ static int test_ASSOCBLENDSURFACEACTIONBODY (const Dwg_Object *obj)
     assocblendsurfaceactionbody->b5--;
   }
   {
-    BITCODE_BS bs1;
-    if (dwg_dynapi_entity_value (assocblendsurfaceactionbody, "ASSOCBLENDSURFACEACTIONBODY", "bs1", &bs1, NULL)
-        && bs1 == assocblendsurfaceactionbody->bs1)
+    BITCODE_BS blend_options;
+    if (dwg_dynapi_entity_value (assocblendsurfaceactionbody, "ASSOCBLENDSURFACEACTIONBODY", "blend_options", &blend_options, NULL)
+        && blend_options == assocblendsurfaceactionbody->blend_options)
       pass ();
     else
-      fail ("ASSOCBLENDSURFACEACTIONBODY.bs1 [BS] %hu != %hu", assocblendsurfaceactionbody->bs1, bs1);
-    bs1++;
-    if (dwg_dynapi_entity_set_value (assocblendsurfaceactionbody, "ASSOCBLENDSURFACEACTIONBODY", "bs1", &bs1, 0)
-        && bs1 == assocblendsurfaceactionbody->bs1)
+      fail ("ASSOCBLENDSURFACEACTIONBODY.blend_options [BS] %hu != %hu", assocblendsurfaceactionbody->blend_options, blend_options);
+    blend_options++;
+    if (dwg_dynapi_entity_set_value (assocblendsurfaceactionbody, "ASSOCBLENDSURFACEACTIONBODY", "blend_options", &blend_options, 0)
+        && blend_options == assocblendsurfaceactionbody->blend_options)
       pass ();
     else
-      fail ("ASSOCBLENDSURFACEACTIONBODY.bs1 [BS] set+1 %hu != %hu", assocblendsurfaceactionbody->bs1, bs1);
-    assocblendsurfaceactionbody->bs1--;
+      fail ("ASSOCBLENDSURFACEACTIONBODY.blend_options [BS] set+1 %hu != %hu", assocblendsurfaceactionbody->blend_options, blend_options);
+    assocblendsurfaceactionbody->blend_options--;
   }
   {
     BITCODE_BS bs2;
@@ -28999,6 +28999,103 @@ static int test_ASSOCEDGEACTIONPARAM (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ASSOCEDGEACTIONPARAM") || is_class_debugging ("ASSOCEDGEACTIONPARAM")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCEDGEACTIONPARAM", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCEXTENDSURFACEACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCEXTENDSURFACEACTIONBODY *restrict assocextendsurfaceactionbody = obj->tio.object->tio.ASSOCEXTENDSURFACEACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocextendsurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.aab_version [BL] %u != %u", assocextendsurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocextendsurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocextendsurfaceactionbody->aab_version, aab_version);
+    assocextendsurfaceactionbody->aab_version--;
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assocextendsurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.class_version [BL] %u != %u", assocextendsurfaceactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assocextendsurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.class_version [BL] set+1 %u != %u", assocextendsurfaceactionbody->class_version, class_version);
+    assocextendsurfaceactionbody->class_version--;
+  }
+  {
+    BITCODE_RC option;
+    if (dwg_dynapi_entity_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "option", &option, NULL)
+        && option == assocextendsurfaceactionbody->option)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.option [RC] %u != %u", assocextendsurfaceactionbody->option, option);
+    option++;
+    if (dwg_dynapi_entity_set_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "option", &option, 0)
+        && option == assocextendsurfaceactionbody->option)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.option [RC] set+1 %u != %u", assocextendsurfaceactionbody->option, option);
+    assocextendsurfaceactionbody->option--;
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocextendsurfaceactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCEXTENDSURFACEACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocextendsurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCEXTENDSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL pbsab_status;
+    if (dwg_dynapi_entity_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "pbsab_status", &pbsab_status, NULL)
+        && pbsab_status == assocextendsurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.pbsab_status [BL] %u != %u", assocextendsurfaceactionbody->pbsab_status, pbsab_status);
+    pbsab_status++;
+    if (dwg_dynapi_entity_set_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "pbsab_status", &pbsab_status, 0)
+        && pbsab_status == assocextendsurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCEXTENDSURFACEACTIONBODY.pbsab_status [BL] set+1 %u != %u", assocextendsurfaceactionbody->pbsab_status, pbsab_status);
+    assocextendsurfaceactionbody->pbsab_status--;
+  }
+  {
+    Dwg_ASSOCSURFACEACTIONBODY sab;
+    if (dwg_dynapi_entity_value (assocextendsurfaceactionbody, "ASSOCEXTENDSURFACEACTIONBODY", "sab", &sab, NULL)
+        && !memcmp (&sab, &assocextendsurfaceactionbody->sab, sizeof (Dwg_ASSOCSURFACEACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCEXTENDSURFACEACTIONBODY.sab [Dwg_ASSOCSURFACEACTIONBODY]");
+  }
+  if (failed && (is_class_unstable ("ASSOCEXTENDSURFACEACTIONBODY") || is_class_debugging ("ASSOCEXTENDSURFACEACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCEXTENDSURFACEACTIONBODY", failed);
       failed = 0;
     }
   return failed;
@@ -50430,6 +50527,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCDEPENDENCY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCEDGEACTIONPARAM)
     error += test_ASSOCEDGEACTIONPARAM(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCEXTENDSURFACEACTIONBODY)
+    error += test_ASSOCEXTENDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY)
     error += test_ASSOCEXTRUDEDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCFACEACTIONPARAM)
@@ -50876,6 +50975,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCDEPENDENCY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCEDGEACTIONPARAM)
     error += test_ASSOCEDGEACTIONPARAM (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCEXTENDSURFACEACTIONBODY)
+    error += test_ASSOCEXTENDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY)
     error += test_ASSOCEXTRUDEDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCFACEACTIONPARAM)
@@ -51968,6 +52069,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCEDGEACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCEDGEACTIONPARAM\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCEXTENDSURFACEACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCEXTENDSURFACEACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCEXTENDSURFACEACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCEXTENDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY);

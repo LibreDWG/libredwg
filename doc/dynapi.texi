@@ -5352,7 +5352,7 @@ B,	DXF 292
 B,	DXF 293
 @item b5
 B,	DXF 294
-@item bs1
+@item blend_options
 BS,	DXF 72
 @item bs2
 BS,	DXF 73
@@ -5471,6 +5471,31 @@ B,	DXF 290
 BL,	DXF 90
 @item subent
 H
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCEXTENDSURFACEACTIONBODY} @anchor{ASSOCEXTENDSURFACEACTIONBODY}
+@cindex object, ASSOCEXTENDSURFACEACTIONBODY
+@vindex ASSOCEXTENDSURFACEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_version
+BL,	DXF 90
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
+@item pbsab_status
+BL,	DXF 90
+@item class_version
+BL,	DXF 90
+@item option
+RC,	DXF 280
 
 @end vtable
 @end indentedblock
