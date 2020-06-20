@@ -1451,7 +1451,7 @@ api_common_object (dwg_object *obj)
           unsigned dxf = _obj->pab.values[i].vars[j].value.code;              \
           CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value, EvalVariant,  \
                              code, BSd);                                      \
-          switch (get_base_value_type (dxf))                                  \
+          switch (dwg_resbuf_value_type (dxf))                                  \
             {                                                                 \
             case VT_REAL:                                                     \
               CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \

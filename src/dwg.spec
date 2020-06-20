@@ -6588,7 +6588,7 @@ DWG_OBJECT_END
     int dxf;                                                            \
     SUB_FIELD_BSd (value,code, 70);                                     \
     dxf = FIELD_VALUE (value.code);                                     \
-    switch (get_base_value_type (dxf))                                  \
+    switch (dwg_resbuf_value_type (dxf))                                  \
     {                                                                   \
     case VT_REAL:                                                       \
       SUB_FIELD_BD (value,u.bd, dxf);                                   \

@@ -7822,6 +7822,22 @@ typedef struct _dwg_struct
 #define DWG_OPTS_INJSON   0x80
 #define DWG_OPTS_IN       (DWG_OPTS_INDXF | DWG_OPTS_INJSON)
 
+typedef enum RESBUF_VALUE_TYPE
+{
+  VT_INVALID = 0,
+  VT_STRING = 1,
+  VT_POINT3D = 2,
+  VT_REAL = 3,
+  VT_INT16 = 4,
+  VT_INT32 = 5,
+  VT_INT8 = 6,
+  VT_BINARY = 7,
+  VT_HANDLE = 8,
+  VT_OBJECTID = 9,
+  VT_BOOL = 10,
+  VT_INT64 = 11, // BLL
+} Dwg_Resbuf_Value_Type;
+
 /*--------------------------------------------------
  * Exported Functions
  */
@@ -7974,6 +7990,8 @@ EXPORT int dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
 EXPORT Dwg_Section_Type dwg_section_type (const char *restrict name);
 EXPORT Dwg_Section_Type dwg_section_wtype (const DWGCHAR *restrict wname);
 EXPORT const char *dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id);
+
+EXPORT enum RESBUF_VALUE_TYPE dwg_resbuf_value_type (short gc);
 
 /** Free the whole DWG. all tables, sections, objects, ...
 */

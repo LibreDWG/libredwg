@@ -47,7 +47,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, evaluator);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, desc);
   CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, code, BS);
-  switch (get_base_value_type (_obj->value.code))
+  switch (dwg_resbuf_value_type (_obj->value.code))
     {
     case VT_REAL:
       CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, u.bd, BD);
@@ -69,6 +69,7 @@ api_process (dwg_object *obj)
     case VT_POINT3D:
     case VT_INVALID:
     case VT_INT64:
+    case VT_INT8:
     case VT_BOOL:
     default:
       fail ("Unknown ASSOCVARIABLE.value.code %u", _obj->value.code);

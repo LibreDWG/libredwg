@@ -315,7 +315,7 @@ dxf_read_pair (Bit_Chain *dat)
   pair->code = (short)dxf_read_rs (dat);
   if (dat->size - dat->byte < 4) // at least EOF\n
     goto err;
-  pair->type = get_base_value_type (pair->code);
+  pair->type = dwg_resbuf_value_type (pair->code);
   switch (pair->type)
     {
     case VT_STRING:
@@ -5296,7 +5296,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   xdata_size += 2; // RS
   rbuf->type = pair->code;
-  switch (get_base_value_type (rbuf->type))
+  switch (dwg_resbuf_value_type (rbuf->type))
     {
     case VT_STRING:
       if (!pair->value.s)
@@ -5364,7 +5364,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         pair = dxf_read_pair (dat);
         if (!pair)
           return NULL;
-        if (get_base_value_type (pair->code) == VT_POINT3D)
+        if (dwg_resbuf_value_type (pair->code) == VT_POINT3D)
           {
             rbuf->value.pt[2] = pair->value.d;
             LOG_TRACE ("xdata[%d]: (%f,%f,%f) [%d]\n", num_xdata,
