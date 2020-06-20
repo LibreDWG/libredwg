@@ -7846,6 +7846,45 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+#undef ASSOCACTION_fields
+#define ASSOCACTION_fields                                 \
+  SUBCLASS (AcDbAssocAction)                               \
+  /* until r2010: 1, 2013+: 2 */                           \
+  FIELD_BS (class_version, 90);                            \
+  /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained, \
+     3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,       \
+     6 RejectedByClient */                                 \
+  FIELD_BL (geometry_status, 90); /* 0 */                  \
+  FIELD_HANDLE (owningnetwork, 5, 330);                    \
+  FIELD_HANDLE (actionbody, 5, 360);                       \
+  FIELD_BL (action_index, 90); /* 1 */                     \
+  FIELD_BL (max_assoc_dep_index, 90)
+
+// subclass of AcDbAssocAction
+// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
+DWG_OBJECT (ASSOCNETWORK)
+  DECODE_UNKNOWN_BITS
+  ASSOCACTION_fields;
+  SUBCLASS (AcDbAssocNetwork)
+  FIELD_BS (network_version, 90);
+  FIELD_BL (network_action_index, 90);
+  FIELD_BL (num_actions, 90);
+  VALUEOUTOFBOUNDS (num_actions, 100)
+  REPEAT (num_actions, actions, Dwg_ASSOCACTION_Deps)
+  REPEAT_BLOCK
+  {
+    int dxf = _obj->actions[rcount1].is_soft ? 360 : 330;
+    int code = _obj->actions[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+    SUB_FIELD_B (actions[rcount1], is_soft, 0);
+    SUB_FIELD_HANDLE (actions[rcount1], dep, code, dxf);
+  }
+  END_REPEAT_BLOCK
+  END_REPEAT (actions);
+  FIELD_BL (num_owned_actions, 90);
+  HANDLE_VECTOR (owned_actions, num_owned_actions, 4, 360);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -7940,45 +7979,6 @@ DWG_OBJECT (EVALUATION_GRAPH)
 
   START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);
-DWG_OBJECT_END
-
-#undef ASSOCACTION_fields
-#define ASSOCACTION_fields                                 \
-  SUBCLASS (AcDbAssocAction)                               \
-  /* until r2010: 1, 2013+: 2 */                           \
-  FIELD_BS (class_version, 90);                            \
-  /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained, \
-     3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,       \
-     6 RejectedByClient */                                 \
-  FIELD_BL (geometry_status, 90); /* 0 */                  \
-  FIELD_HANDLE (owningnetwork, 5, 330);                    \
-  FIELD_HANDLE (actionbody, 5, 360);                       \
-  FIELD_BL (action_index, 90); /* 1 */                     \
-  FIELD_BL (max_assoc_dep_index, 90)
-
-// subclass of AcDbAssocAction DEBUGGING
-// Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
-DWG_OBJECT (ASSOCNETWORK)
-  DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields;
-  SUBCLASS (AcDbAssocNetwork)
-  FIELD_BS (network_version, 90);
-  FIELD_BL (network_action_index, 90);
-  FIELD_BL (num_actions, 90);
-  VALUEOUTOFBOUNDS (num_actions, 100)
-  REPEAT (num_actions, actions, Dwg_ASSOCACTION_Deps)
-  REPEAT_BLOCK
-  {
-    int dxf = _obj->actions[rcount1].is_soft ? 360 : 330;
-    int code = _obj->actions[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
-    SUB_FIELD_B (actions[rcount1], is_soft, 0);
-    SUB_FIELD_HANDLE (actions[rcount1], dep, code, dxf);
-  }
-  END_REPEAT_BLOCK
-  END_REPEAT (actions);
-  FIELD_BL (num_owned_actions, 90);
-  HANDLE_VECTOR (owned_actions, num_owned_actions, 4, 360);
-  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // (varies) DEBUGGING

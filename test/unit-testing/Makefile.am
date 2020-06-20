@@ -59,6 +59,7 @@ testobjects = \
 	arc \
 	arc_dimension \
 	assocaction \
+	assocnetwork \
 	assocdependency \
 	assocgeomdependency \
 	assocblendsurfaceactionbody \
@@ -207,7 +208,6 @@ testobjects += \
 	assoc2dconstraintgroup \
 	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
-	assocnetwork \
 	assocperssubentmanager \
 	assocvariable \
 	assocosnappointrefactionparam \

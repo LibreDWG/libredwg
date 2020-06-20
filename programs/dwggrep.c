@@ -938,17 +938,6 @@ match_PLOTSETTINGS (const char *restrict filename,
   MATCH_TABLE (PLOTSETTINGS, VISUALSTYLE, shadeplot, 333);
   return found;
 }
-
-static int
-match_ASSOCACTION (const char *restrict filename,
-                   const Dwg_Object *restrict obj)
-{
-  char *text;
-  int found = 0;
-  //MATCH_OBJECT (ASSOCACTION, body.evaluatorid, 0);
-  //MATCH_OBJECT (ASSOCACTION, body.expression, 0);
-  return found;
-}
 static int
 match_DIMASSOC (const char *restrict filename,
                    const Dwg_Object *restrict obj)
@@ -1208,7 +1197,6 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (DBCOLOR)
       ELSEMATCH (MATERIAL)
       ELSEMATCH (DIMASSOC)
-      ELSEMATCH (ASSOCACTION)
       ELSEMATCH (ASSOCOSNAPPOINTREFACTIONPARAM)
       ELSEMATCH (ASSOCEDGEACTIONPARAM)
       ELSEMATCH (ASSOCFACEACTIONPARAM)

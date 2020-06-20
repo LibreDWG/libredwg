@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ASSOCNETWORK
 #include "common.c"
 
@@ -27,7 +26,6 @@ api_process (dwg_object *obj)
   BITCODE_H *owned_actions;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_assocnetwork *_obj = dwg_object_to_ASSOCNETWORK (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, class_version, BS);
@@ -58,5 +56,4 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_params, num_owned_params);
-#endif
 }

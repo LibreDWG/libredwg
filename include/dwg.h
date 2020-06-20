@@ -5077,7 +5077,7 @@ typedef struct _dwg_object_ASSOCACTION
 } Dwg_Object_ASSOCACTION;
 
 /**
- Object ASSOCNETWORK (varies) UNKNOWN FIELDS
+ Object ASSOCNETWORK (varies)
  subclass of AcDbAssocAction
  Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
  extdict: ACAD_ASSOCNETWORK
@@ -5086,10 +5086,10 @@ typedef struct _dwg_object_ASSOCNETWORK
 {
   struct _dwg_object_object *parent;
   ASSOCACTION_fields;
-  BITCODE_BS network_version; // DXF 90, always 0
-  BITCODE_BL network_action_index;    // 90
-  BITCODE_BL num_actions;     // 90
-  Dwg_ASSOCACTION_Deps *actions; // 330 or 360
+  BITCODE_BS network_version;       // DXF 90, always 0
+  BITCODE_BL network_action_index;  // 90
+  BITCODE_BL num_actions;           // 90
+  Dwg_ASSOCACTION_Deps *actions;    // 330 or 360
   BITCODE_BL num_owned_actions;
   BITCODE_H *owned_actions;
 } Dwg_Object_ASSOCNETWORK;
@@ -8180,6 +8180,7 @@ EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCNETWORK (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCGEOMDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCBLENDSURFACEACTIONBODY (Dwg_Object *obj);
@@ -8228,7 +8229,6 @@ EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOC2DCONSTRAINTGROUP (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOC3POINTANGULARDIMACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
-EXPORT int dwg_setup_ASSOCNETWORK (Dwg_Object *obj);
 //EXPORT int dwg_setup_ACDSRECORD (Dwg_Object *obj);
 //EXPORT int dwg_setup_ACDSSCHEMA (Dwg_Object *obj);
 EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
