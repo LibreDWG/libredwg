@@ -209,6 +209,8 @@ testobjects += \
 	assoc2dconstraintgroup \
 	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
+	assocordinatedimactionbody \
+	assocrotateddimactionbody \
 	assocperssubentmanager \
 	assocvariable \
 	assocosnappointrefactionparam \

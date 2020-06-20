@@ -5192,12 +5192,12 @@ H,	DXF 360
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
 BS,	DXF 90
-@item h1
+@item r_node
 H,	DXF 330
-@item h2
+@item d_node
 H,	DXF 330
-@item h3
-H
+@item assocdep
+H,	DXF 330
 
 @end vtable
 @end indentedblock
@@ -5258,9 +5258,9 @@ H,	DXF 360
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
 BL,	DXF 90
-@item d_node
-H,	DXF 330
 @item r_node
+H,	DXF 330
+@item d_node
 H,	DXF 330
 
 @end vtable
@@ -5727,6 +5727,33 @@ BS,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{ASSOCORDINATEDIMACTIONBODY} @anchor{ASSOCORDINATEDIMACTIONBODY}
+@cindex object, ASSOCORDINATEDIMACTIONBODY
+@vindex ASSOCORDINATEDIMACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aaab_version
+BS,	DXF 90
+@item assoc_dep
+H,	DXF 330
+@item actionbody
+H,	DXF 360
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item class_version
+BL,	DXF 90
+@item r_node
+H,	DXF 330
+@item d_node
+H,	DXF 330
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCOSNAPPOINTREFACTIONPARAM} @anchor{ASSOCOSNAPPOINTREFACTIONPARAM}
 @cindex object, ASSOCOSNAPPOINTREFACTIONPARAM
 @vindex ASSOCOSNAPPOINTREFACTIONPARAM
@@ -5979,6 +6006,33 @@ Dwg_ASSOCSURFACEACTIONBODY
 BL,	DXF 90
 @item class_version
 BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCROTATEDDIMACTIONBODY} @anchor{ASSOCROTATEDDIMACTIONBODY}
+@cindex object, ASSOCROTATEDDIMACTIONBODY
+@vindex ASSOCROTATEDDIMACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aaab_version
+BS,	DXF 90
+@item assoc_dep
+H,	DXF 330
+@item actionbody
+H,	DXF 360
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item class_version
+BS,	DXF 90
+@item r_node
+H,	DXF 330
+@item d_node
+H,	DXF 330
 
 @end vtable
 @end indentedblock

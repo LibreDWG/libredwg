@@ -27641,6 +27641,14 @@ static int test_ASSOC3POINTANGULARDIMACTIONBODY (const Dwg_Object *obj)
         fail ("ASSOC3POINTANGULARDIMACTIONBODY.assoc_dep [H]");
   }
   {
+    BITCODE_H assocdep;
+    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "assocdep", &assocdep, NULL)
+        && !memcmp (&assocdep, &assoc3pointangulardimactionbody->assocdep, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOC3POINTANGULARDIMACTIONBODY.assocdep [H]");
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "class_version", &class_version, NULL)
         && class_version == assoc3pointangulardimactionbody->class_version)
@@ -27656,28 +27664,12 @@ static int test_ASSOC3POINTANGULARDIMACTIONBODY (const Dwg_Object *obj)
     assoc3pointangulardimactionbody->class_version--;
   }
   {
-    BITCODE_H h1;
-    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "h1", &h1, NULL)
-        && !memcmp (&h1, &assoc3pointangulardimactionbody->h1, sizeof (BITCODE_H)))
+    BITCODE_H d_node;
+    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "d_node", &d_node, NULL)
+        && !memcmp (&d_node, &assoc3pointangulardimactionbody->d_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOC3POINTANGULARDIMACTIONBODY.h1 [H]");
-  }
-  {
-    BITCODE_H h2;
-    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "h2", &h2, NULL)
-        && !memcmp (&h2, &assoc3pointangulardimactionbody->h2, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOC3POINTANGULARDIMACTIONBODY.h2 [H]");
-  }
-  {
-    BITCODE_H h3;
-    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "h3", &h3, NULL)
-        && !memcmp (&h3, &assoc3pointangulardimactionbody->h3, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOC3POINTANGULARDIMACTIONBODY.h3 [H]");
+        fail ("ASSOC3POINTANGULARDIMACTIONBODY.d_node [H]");
   }
   {
     Dwg_ASSOCPARAMBASEDACTIONBODY pab;
@@ -27694,6 +27686,14 @@ static int test_ASSOC3POINTANGULARDIMACTIONBODY (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOC3POINTANGULARDIMACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H r_node;
+    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "r_node", &r_node, NULL)
+        && !memcmp (&r_node, &assoc3pointangulardimactionbody->r_node, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOC3POINTANGULARDIMACTIONBODY.r_node [H]");
   }
   if (failed && (is_class_unstable ("ASSOC3POINTANGULARDIMACTIONBODY") || is_class_debugging ("ASSOC3POINTANGULARDIMACTIONBODY")))
     {
@@ -30106,6 +30106,97 @@ static int test_ASSOCOBJECTACTIONPARAM (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCORDINATEDIMACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCORDINATEDIMACTIONBODY *restrict assocordinatedimactionbody = obj->tio.object->tio.ASSOCORDINATEDIMACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BS aaab_version;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "aaab_version", &aaab_version, NULL)
+        && aaab_version == assocordinatedimactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCORDINATEDIMACTIONBODY.aaab_version [BS] %hu != %hu", assocordinatedimactionbody->aaab_version, aaab_version);
+    aaab_version++;
+    if (dwg_dynapi_entity_set_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "aaab_version", &aaab_version, 0)
+        && aaab_version == assocordinatedimactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCORDINATEDIMACTIONBODY.aaab_version [BS] set+1 %hu != %hu", assocordinatedimactionbody->aaab_version, aaab_version);
+    assocordinatedimactionbody->aaab_version--;
+  }
+  {
+    BITCODE_H actionbody;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "actionbody", &actionbody, NULL)
+        && !memcmp (&actionbody, &assocordinatedimactionbody->actionbody, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCORDINATEDIMACTIONBODY.actionbody [H]");
+  }
+  {
+    BITCODE_H assoc_dep;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "assoc_dep", &assoc_dep, NULL)
+        && !memcmp (&assoc_dep, &assocordinatedimactionbody->assoc_dep, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCORDINATEDIMACTIONBODY.assoc_dep [H]");
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assocordinatedimactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCORDINATEDIMACTIONBODY.class_version [BL] %u != %u", assocordinatedimactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assocordinatedimactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCORDINATEDIMACTIONBODY.class_version [BL] set+1 %u != %u", assocordinatedimactionbody->class_version, class_version);
+    assocordinatedimactionbody->class_version--;
+  }
+  {
+    BITCODE_H d_node;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "d_node", &d_node, NULL)
+        && !memcmp (&d_node, &assocordinatedimactionbody->d_node, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCORDINATEDIMACTIONBODY.d_node [H]");
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocordinatedimactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCORDINATEDIMACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocordinatedimactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCORDINATEDIMACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H r_node;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "r_node", &r_node, NULL)
+        && !memcmp (&r_node, &assocordinatedimactionbody->r_node, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCORDINATEDIMACTIONBODY.r_node [H]");
+  }
+  if (failed && (is_class_unstable ("ASSOCORDINATEDIMACTIONBODY") || is_class_debugging ("ASSOCORDINATEDIMACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCORDINATEDIMACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
 {
   int error = 0;
@@ -31449,6 +31540,97 @@ static int test_ASSOCREVOLVEDSURFACEACTIONBODY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ASSOCREVOLVEDSURFACEACTIONBODY") || is_class_debugging ("ASSOCREVOLVEDSURFACEACTIONBODY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCREVOLVEDSURFACEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCROTATEDDIMACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCROTATEDDIMACTIONBODY *restrict assocrotateddimactionbody = obj->tio.object->tio.ASSOCROTATEDDIMACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BS aaab_version;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "aaab_version", &aaab_version, NULL)
+        && aaab_version == assocrotateddimactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCROTATEDDIMACTIONBODY.aaab_version [BS] %hu != %hu", assocrotateddimactionbody->aaab_version, aaab_version);
+    aaab_version++;
+    if (dwg_dynapi_entity_set_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "aaab_version", &aaab_version, 0)
+        && aaab_version == assocrotateddimactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCROTATEDDIMACTIONBODY.aaab_version [BS] set+1 %hu != %hu", assocrotateddimactionbody->aaab_version, aaab_version);
+    assocrotateddimactionbody->aaab_version--;
+  }
+  {
+    BITCODE_H actionbody;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "actionbody", &actionbody, NULL)
+        && !memcmp (&actionbody, &assocrotateddimactionbody->actionbody, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCROTATEDDIMACTIONBODY.actionbody [H]");
+  }
+  {
+    BITCODE_H assoc_dep;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "assoc_dep", &assoc_dep, NULL)
+        && !memcmp (&assoc_dep, &assocrotateddimactionbody->assoc_dep, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCROTATEDDIMACTIONBODY.assoc_dep [H]");
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assocrotateddimactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCROTATEDDIMACTIONBODY.class_version [BS] %hu != %hu", assocrotateddimactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assocrotateddimactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCROTATEDDIMACTIONBODY.class_version [BS] set+1 %hu != %hu", assocrotateddimactionbody->class_version, class_version);
+    assocrotateddimactionbody->class_version--;
+  }
+  {
+    BITCODE_H d_node;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "d_node", &d_node, NULL)
+        && !memcmp (&d_node, &assocrotateddimactionbody->d_node, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCROTATEDDIMACTIONBODY.d_node [H]");
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocrotateddimactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCROTATEDDIMACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocrotateddimactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCROTATEDDIMACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H r_node;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "r_node", &r_node, NULL)
+        && !memcmp (&r_node, &assocrotateddimactionbody->r_node, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCROTATEDDIMACTIONBODY.r_node [H]");
+  }
+  if (failed && (is_class_unstable ("ASSOCROTATEDDIMACTIONBODY") || is_class_debugging ("ASSOCROTATEDDIMACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCROTATEDDIMACTIONBODY", failed);
       failed = 0;
     }
   return failed;
@@ -50225,6 +50407,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCNETWORKSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOBJECTACTIONPARAM)
     error += test_ASSOCOBJECTACTIONPARAM(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCORDINATEDIMACTIONBODY)
+    error += test_ASSOCORDINATEDIMACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
     error += test_ASSOCOSNAPPOINTREFACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY)
@@ -50237,6 +50421,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCPLANESURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCROTATEDDIMACTIONBODY)
+    error += test_ASSOCROTATEDDIMACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
@@ -50663,6 +50849,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCNETWORKSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOBJECTACTIONPARAM)
     error += test_ASSOCOBJECTACTIONPARAM (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCORDINATEDIMACTIONBODY)
+    error += test_ASSOCORDINATEDIMACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
     error += test_ASSOCOSNAPPOINTREFACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY)
@@ -50675,6 +50863,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCPLANESURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCROTATEDDIMACTIONBODY)
+    error += test_ASSOCROTATEDDIMACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY)
     error += test_ASSOCSWEPTSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
@@ -51797,6 +51987,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ASSOCOBJECTACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_ASSOCORDINATEDIMACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCORDINATEDIMACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCORDINATEDIMACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCORDINATEDIMACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCOSNAPPOINTREFACTIONPARAM");
   if (size1 != size2)
@@ -51843,6 +52041,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCREVOLVEDSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCROTATEDDIMACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCROTATEDDIMACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCROTATEDDIMACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCROTATEDDIMACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY);

@@ -1051,6 +1051,30 @@ match_ASSOCALIGNEDDIMACTIONBODY (const char *restrict filename,
 }
 
 static int
+match_ASSOCORDINATEDIMACTIONBODY (const char *restrict filename,
+                                 const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCORDINATEDIMACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCORDINATEDIMACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCORDINATEDIMACTIONBODY)
+  return found;
+}
+
+static int
+match_ASSOCROTATEDDIMACTIONBODY (const char *restrict filename,
+                                 const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCROTATEDDIMACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCROTATEDDIMACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCROTATEDDIMACTIONBODY)
+  return found;
+}
+
+static int
 match_ASSOCPATCHSURFACEACTIONBODY (const char *restrict filename,
                                    const Dwg_Object *restrict obj)
 {
@@ -1233,6 +1257,8 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (ASSOCSWEPTSURFACEACTIONBODY)
       ELSEMATCH (ASSOC3POINTANGULARDIMACTIONBODY)
       ELSEMATCH (ASSOCALIGNEDDIMACTIONBODY)
+      ELSEMATCH (ASSOCORDINATEDIMACTIONBODY)
+      ELSEMATCH (ASSOCROTATEDDIMACTIONBODY)
       ELSEMATCH (NAVISWORKSMODELDEF)
     }
   return found;
