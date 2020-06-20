@@ -66,6 +66,7 @@ testobjects = \
 	assocextrudedsurfaceactionbody \
 	assocfilletsurfaceactionbody \
 	assocloftedsurfaceactionbody \
+	assocnetworksurfaceactionbody \
 	assocpatchsurfaceactionbody \
 	assocplanesurfaceactionbody \
 	assocrevolvedsurfaceactionbody \

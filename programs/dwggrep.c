@@ -1097,6 +1097,17 @@ match_ASSOCLOFTEDSURFACEACTIONBODY (const char *restrict filename,
   return found;
 }
 static int
+match_ASSOCNETWORKSURFACEACTIONBODY (const char *restrict filename,
+                                    const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCNETWORKSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCNETWORKSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCNETWORKSURFACEACTIONBODY)
+  return found;
+}
+static int
 match_ASSOCREVOLVEDSURFACEACTIONBODY (const char *restrict filename,
                                       const Dwg_Object *restrict obj)
 {
@@ -1207,6 +1218,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (ASSOCEXTRUDEDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCFILLETSURFACEACTIONBODY)
       ELSEMATCH (ASSOCLOFTEDSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCNETWORKSURFACEACTIONBODY)
       ELSEMATCH (ASSOCREVOLVEDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCSWEPTSURFACEACTIONBODY)
       ELSEMATCH (ASSOC3POINTANGULARDIMACTIONBODY)

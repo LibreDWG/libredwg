@@ -29925,6 +29925,88 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCNETWORKSURFACEACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCNETWORKSURFACEACTIONBODY *restrict assocnetworksurfaceactionbody = obj->tio.object->tio.ASSOCNETWORKSURFACEACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocnetworksurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCNETWORKSURFACEACTIONBODY.aab_version [BL] %u != %u", assocnetworksurfaceactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocnetworksurfaceactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCNETWORKSURFACEACTIONBODY.aab_version [BL] set+1 %u != %u", assocnetworksurfaceactionbody->aab_version, aab_version);
+    assocnetworksurfaceactionbody->aab_version--;
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assocnetworksurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCNETWORKSURFACEACTIONBODY.class_version [BL] %u != %u", assocnetworksurfaceactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assocnetworksurfaceactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCNETWORKSURFACEACTIONBODY.class_version [BL] set+1 %u != %u", assocnetworksurfaceactionbody->class_version, class_version);
+    assocnetworksurfaceactionbody->class_version--;
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocnetworksurfaceactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCNETWORKSURFACEACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocnetworksurfaceactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCNETWORKSURFACEACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL pbsab_status;
+    if (dwg_dynapi_entity_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "pbsab_status", &pbsab_status, NULL)
+        && pbsab_status == assocnetworksurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCNETWORKSURFACEACTIONBODY.pbsab_status [BL] %u != %u", assocnetworksurfaceactionbody->pbsab_status, pbsab_status);
+    pbsab_status++;
+    if (dwg_dynapi_entity_set_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "pbsab_status", &pbsab_status, 0)
+        && pbsab_status == assocnetworksurfaceactionbody->pbsab_status)
+      pass ();
+    else
+      fail ("ASSOCNETWORKSURFACEACTIONBODY.pbsab_status [BL] set+1 %u != %u", assocnetworksurfaceactionbody->pbsab_status, pbsab_status);
+    assocnetworksurfaceactionbody->pbsab_status--;
+  }
+  {
+    Dwg_ASSOCSURFACEACTIONBODY sab;
+    if (dwg_dynapi_entity_value (assocnetworksurfaceactionbody, "ASSOCNETWORKSURFACEACTIONBODY", "sab", &sab, NULL)
+        && !memcmp (&sab, &assocnetworksurfaceactionbody->sab, sizeof (Dwg_ASSOCSURFACEACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCNETWORKSURFACEACTIONBODY.sab [Dwg_ASSOCSURFACEACTIONBODY]");
+  }
+  if (failed && (is_class_unstable ("ASSOCNETWORKSURFACEACTIONBODY") || is_class_debugging ("ASSOCNETWORKSURFACEACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCNETWORKSURFACEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
 {
   int error = 0;
@@ -50040,6 +50122,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCLOFTEDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK)
     error += test_ASSOCNETWORK(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY)
+    error += test_ASSOCNETWORKSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
     error += test_ASSOCOSNAPPOINTREFACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY)
@@ -50474,6 +50558,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCLOFTEDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK)
     error += test_ASSOCNETWORK (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY)
+    error += test_ASSOCNETWORKSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
     error += test_ASSOCOSNAPPOINTREFACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY)
@@ -51590,6 +51676,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCNETWORK): %d != "
                "dwg_dynapi_fields_size (\"ASSOCNETWORK\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCNETWORKSURFACEACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCNETWORKSURFACEACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCNETWORKSURFACEACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCNETWORKSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM);
