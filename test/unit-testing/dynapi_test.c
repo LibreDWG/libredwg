@@ -30007,6 +30007,105 @@ static int test_ASSOCNETWORKSURFACEACTIONBODY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCOBJECTACTIONPARAM (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCOBJECTACTIONPARAM *restrict assocobjectactionparam = obj->tio.object->tio.ASSOCOBJECTACTIONPARAM;
+  failed = 0;
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "aap_version", &aap_version, NULL)
+        && aap_version == assocobjectactionparam->aap_version)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.aap_version [BL] %u != %u", assocobjectactionparam->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "aap_version", &aap_version, 0)
+        && aap_version == assocobjectactionparam->aap_version)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.aap_version [BL] set+1 %u != %u", assocobjectactionparam->aap_version, aap_version);
+    assocobjectactionparam->aap_version--;
+  }
+  {
+    BITCODE_BL asdap_class_version;
+    if (dwg_dynapi_entity_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "asdap_class_version", &asdap_class_version, NULL)
+        && asdap_class_version == assocobjectactionparam->asdap_class_version)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.asdap_class_version [BL] %u != %u", assocobjectactionparam->asdap_class_version, asdap_class_version);
+    asdap_class_version++;
+    if (dwg_dynapi_entity_set_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "asdap_class_version", &asdap_class_version, 0)
+        && asdap_class_version == assocobjectactionparam->asdap_class_version)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.asdap_class_version [BL] set+1 %u != %u", assocobjectactionparam->asdap_class_version, asdap_class_version);
+    assocobjectactionparam->asdap_class_version--;
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "class_version", &class_version, NULL)
+        && class_version == assocobjectactionparam->class_version)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.class_version [BS] %hu != %hu", assocobjectactionparam->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "class_version", &class_version, 0)
+        && class_version == assocobjectactionparam->class_version)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.class_version [BS] set+1 %hu != %hu", assocobjectactionparam->class_version, class_version);
+    assocobjectactionparam->class_version--;
+  }
+  {
+    BITCODE_H dep;
+    if (dwg_dynapi_entity_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "dep", &dep, NULL)
+        && !memcmp (&dep, &assocobjectactionparam->dep, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCOBJECTACTIONPARAM.dep [H]");
+  }
+  {
+    BITCODE_BS is_r2013;
+    if (dwg_dynapi_entity_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "is_r2013", &is_r2013, NULL)
+        && is_r2013 == assocobjectactionparam->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.is_r2013 [BS] %hu != %hu", assocobjectactionparam->is_r2013, is_r2013);
+    is_r2013++;
+    if (dwg_dynapi_entity_set_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "is_r2013", &is_r2013, 0)
+        && is_r2013 == assocobjectactionparam->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.is_r2013 [BS] set+1 %hu != %hu", assocobjectactionparam->is_r2013, is_r2013);
+    assocobjectactionparam->is_r2013--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)assocobjectactionparam->name)
+           : !assocobjectactionparam->name)
+      pass ();
+    else
+      fail ("ASSOCOBJECTACTIONPARAM.name [T] '%s' <> '%s'", name, assocobjectactionparam->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocobjectactionparam, "ASSOCOBJECTACTIONPARAM", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocobjectactionparam->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCOBJECTACTIONPARAM.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCOBJECTACTIONPARAM") || is_class_debugging ("ASSOCOBJECTACTIONPARAM")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCOBJECTACTIONPARAM", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
 {
   int error = 0;
@@ -30528,19 +30627,19 @@ static int test_ASSOCPATHACTIONPARAM (const Dwg_Object *obj)
         fail ("ASSOCPATHACTIONPARAM.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BL status;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "status", &status, NULL)
-        && status == assocpathactionparam->status)
+    BITCODE_BL version;
+    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "version", &version, NULL)
+        && version == assocpathactionparam->version)
       pass ();
     else
-      fail ("ASSOCPATHACTIONPARAM.status [BL] %u != %u", assocpathactionparam->status, status);
-    status++;
-    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "status", &status, 0)
-        && status == assocpathactionparam->status)
+      fail ("ASSOCPATHACTIONPARAM.version [BL] %u != %u", assocpathactionparam->version, version);
+    version++;
+    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "version", &version, 0)
+        && version == assocpathactionparam->version)
       pass ();
     else
-      fail ("ASSOCPATHACTIONPARAM.status [BL] set+1 %u != %u", assocpathactionparam->status, status);
-    assocpathactionparam->status--;
+      fail ("ASSOCPATHACTIONPARAM.version [BL] set+1 %u != %u", assocpathactionparam->version, version);
+    assocpathactionparam->version--;
   }
   if (failed && (is_class_unstable ("ASSOCPATHACTIONPARAM") || is_class_debugging ("ASSOCPATHACTIONPARAM")))
     {
@@ -50124,6 +50223,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCNETWORK(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY)
     error += test_ASSOCNETWORKSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCOBJECTACTIONPARAM)
+    error += test_ASSOCOBJECTACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
     error += test_ASSOCOSNAPPOINTREFACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY)
@@ -50560,6 +50661,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCNETWORK (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY)
     error += test_ASSOCNETWORKSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCOBJECTACTIONPARAM)
+    error += test_ASSOCOBJECTACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM)
     error += test_ASSOCOSNAPPOINTREFACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY)
@@ -51684,6 +51787,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCNETWORKSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCNETWORKSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCOBJECTACTIONPARAM);
+  size2 = dwg_dynapi_fields_size ("ASSOCOBJECTACTIONPARAM");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCOBJECTACTIONPARAM): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCOBJECTACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM);

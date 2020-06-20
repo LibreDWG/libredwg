@@ -411,6 +411,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM,
   DWG_TYPE_ASSOCEDGEACTIONPARAM,
   DWG_TYPE_ASSOCFACEACTIONPARAM,
+  DWG_TYPE_ASSOCOBJECTACTIONPARAM,
   DWG_TYPE_ASSOCPATHACTIONPARAM,
   DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM,
   DWG_TYPE_ASSOCVERTEXACTIONPARAM,
@@ -5309,11 +5310,22 @@ typedef struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM
   ASSOCCOMPOUNDACTIONPARAM_fields;
 } Dwg_Object_ASSOCCOMPOUNDACTIONPARAM;
 
+typedef struct _dwg_object_ASSOCOBJECTACTIONPARAM
+{
+  struct _dwg_object_object *parent;
+  ASSOCACTIONPARAM_fields;
+  /* AcDbAssocSingleDependencyActionParam */
+  BITCODE_BL asdap_class_version; // 0
+  BITCODE_H  dep;
+  /* AcDbAssocObjectActionParam */
+  BITCODE_BS class_version; /* DXF 90: 0 */
+} Dwg_Object_ASSOCOBJECTACTIONPARAM;
+
 typedef struct _dwg_object_ASSOCEDGEACTIONPARAM
 {
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;
-  /* AcDbAssocSingleDependencyActionParam */ 
+  /* AcDbAssocSingleDependencyActionParam */
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H  dep;
   /* AcDbAssocEdgeActionParam */
@@ -5328,7 +5340,7 @@ typedef struct _dwg_object_ASSOCFACEACTIONPARAM
 {
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;  
-  /* AcDbAssocSingleDependencyActionParam */ 
+  /* AcDbAssocSingleDependencyActionParam */
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H dep;
   /* AcDbAssocFaceActionParam */
@@ -5342,14 +5354,14 @@ typedef struct _dwg_object_ASSOCPATHACTIONPARAM
   ASSOCACTIONPARAM_fields;
   ASSOCCOMPOUNDACTIONPARAM_fields;
   /* AcDbAssocPathActionParam */
-  BITCODE_BL status;	/*!< DXF 90 */
+  BITCODE_BL version;	/*!< DXF 90 */
 } Dwg_Object_ASSOCPATHACTIONPARAM;
 
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM
 {
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;  
-  /* AcDbAssocSingleDependencyActionParam */ 
+  /* AcDbAssocSingleDependencyActionParam */
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H dep;
   /* AcDbAssocFaceActionParam */
@@ -6995,6 +7007,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCCOMPOUNDACTIONPARAM *ASSOCCOMPOUNDACTIONPARAM;
     Dwg_Object_ASSOCEDGEACTIONPARAM *ASSOCEDGEACTIONPARAM;
     Dwg_Object_ASSOCFACEACTIONPARAM *ASSOCFACEACTIONPARAM;
+    Dwg_Object_ASSOCOBJECTACTIONPARAM *ASSOCOBJECTACTIONPARAM;
     Dwg_Object_ASSOCPATHACTIONPARAM *ASSOCPATHACTIONPARAM;
     Dwg_Object_ASSOCVERTEXACTIONPARAM *ASSOCVERTEXACTIONPARAM;
     Dwg_Object_ASSOCPERSSUBENTMANAGER *ASSOCPERSSUBENTMANAGER;
@@ -8268,6 +8281,7 @@ EXPORT int dwg_setup_ASSOCASMBODYACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCEDGEACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCCOMPOUNDACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCFACEACTIONPARAM (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCOBJECTACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPATHACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVARIABLE (Dwg_Object *obj);

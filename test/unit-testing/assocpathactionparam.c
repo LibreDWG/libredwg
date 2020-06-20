@@ -20,7 +20,7 @@ api_process (dwg_object *obj)
   BITCODE_BL bl2;
   BITCODE_H h330_3;
   /* AcDbAssocPathActionParam */
-  BITCODE_BL status;	/*!< DXF 90 */
+  BITCODE_BL version;	/*!< DXF 90 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -42,6 +42,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCPATHACTIONPARAM, bl2, BL);
   CHK_ENTITY_H    (_obj, ASSOCPATHACTIONPARAM, h330_3);
 
-  CHK_ENTITY_TYPE (_obj, ASSOCPATHACTIONPARAM, status, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCPATHACTIONPARAM, version, BL);
 #endif
 }

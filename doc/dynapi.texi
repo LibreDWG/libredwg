@@ -5702,6 +5702,31 @@ BL,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{ASSOCOBJECTACTIONPARAM} @anchor{ASSOCOBJECTACTIONPARAM}
+@cindex object, ASSOCOBJECTACTIONPARAM
+@vindex ASSOCOBJECTACTIONPARAM
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS,	DXF 90
+@item aap_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item asdap_class_version
+BL,	DXF 90
+@item dep
+H,	DXF 330
+@item class_version
+BS,	DXF 90
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCOSNAPPOINTREFACTIONPARAM} @anchor{ASSOCOSNAPPOINTREFACTIONPARAM}
 @cindex object, ASSOCOSNAPPOINTREFACTIONPARAM
 @vindex ASSOCOSNAPPOINTREFACTIONPARAM
@@ -5809,7 +5834,7 @@ H,	DXF 330
 BL,	DXF 90
 @item h330_3
 H,	DXF 330
-@item status
+@item version
 BL,	DXF 90
 
 @end vtable

@@ -216,6 +216,7 @@ testobjects += \
 	assocedgeactionparam \
 	assoccompoundactionparam \
 	assocfaceactionparam \
+	assocobjectactionparam \
 	assocpathactionparam \
 	assocvertexactionparam \
 	atext \

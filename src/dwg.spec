@@ -9461,45 +9461,23 @@ DWG_OBJECT_END
     SUB_FIELD_HANDLE (pap,h330_3, 3, 330);                \
   }
 
+DWG_OBJECT (ASSOCOBJECTACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  SUBCLASS (AcDbAssocSingleDependencyActionParam);
+  FIELD_BL (asdap_class_version, 90);
+  FIELD_HANDLE (dep, 4, 330);
+  SUBCLASS (AcDbAssocObjectActionParam);
+  FIELD_BS (class_version, 90);
+DWG_OBJECT_END
+
 DWG_OBJECT (ASSOCPATHACTIONPARAM)
   DECODE_UNKNOWN_BITS
   AcDbAssocActionParam_fields;
   AcDbAssocCompoundActionParam_fields;
   SUBCLASS (AcDbAssocPathActionParam);
-  FIELD_BL (status, 90);
+  FIELD_BL (version, 90);
 DWG_OBJECT_END
-
-#define AcDbAssocEdgeActionParam_fields(eap)                                  \
-    AcDbAssocActionParam_fields;                                              \
-    SUBCLASS (AcDbAssocSingleDependencyActionParam);                          \
-    SUB_FIELD_BL (eap, asdap_class_version, 90);                              \
-    SUB_FIELD_HANDLE (eap, dep, 4, 330);                                      \
-    SUBCLASS (AcDbAssocEdgeActionParam);                                      \
-    SUB_FIELD_BL (eap, class_version, 90);                                    \
-    SUB_FIELD_HANDLE (eap, param, 3, 330);                                    \
-    SUB_FIELD_B (eap, has_action, 290);                                       \
-    SUB_FIELD_BL (eap, action_type, 90);                                      \
-    switch (_obj->eap.action_type)                                            \
-      {                                                                       \
-      case 11:                                                                \
-        CALL_SUBCURVE (eap.subent, ARC);                                      \
-        break;                                                                \
-      case 17:                                                                \
-        CALL_SUBCURVE (eap.subent, ELLIPSE);                                  \
-        break;                                                                \
-      case 19:                                                                \
-        CALL_SUBCURVE (eap.subent, LINE);                                     \
-        break;                                                                \
-      case 23:                                                                \
-        CALL_SUBCURVE (eap.subent, LINESEG3D);                                \
-        break;                                                                \
-      case 42:                                                                \
-        CALL_SUBCURVE (eap.subent, NURB3D);                                   \
-        break;                                                                \
-      case 27:                                                                \
-        CALL_SUBCURVE (eap.subent, CURVE3D);                                  \
-        break;                                                                \
-      }
 
 DWG_OBJECT (ASSOCEDGEACTIONPARAM)
   DECODE_UNKNOWN_BITS
