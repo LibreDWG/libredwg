@@ -5663,16 +5663,18 @@ H*,	DXF 360
 BL,	DXF 90
 @item owned_value_param_names
 H*,	DXF 360
-@item unknown_assoc
-BL
-@item unknown_n1
-BL,	DXF 90
-@item unknown_n2
+@item network_version
+BS,	DXF 90
+@item network_action_index
 BL,	DXF 90
 @item num_actions
 BL,	DXF 90
 @item actions
-H*,	DXF 330
+Dwg_ASSOCACTION_Deps*
+@item num_owned_actions
+BL,	DXF 90
+@item owned_actions
+H*,	DXF 360
 
 @end vtable
 @end indentedblock

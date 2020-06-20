@@ -29703,14 +29703,14 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         fail ("ASSOCNETWORK.actionbody [H]");
   }
   {
-    BITCODE_H* actions;
+    Dwg_ASSOCACTION_Deps* actions;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_actions", &count, NULL)
         && dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "actions", &actions, NULL)
         && actions == assocnetwork->actions)
       pass ();
     else
-      fail ("ASSOCNETWORK.actions [H*] * %u num_actions", count);
+      fail ("ASSOCNETWORK.actions [Dwg_ASSOCACTION_Deps*] * %u num_actions", count);
   }
   {
     BITCODE_BS class_version;
@@ -29768,6 +29768,36 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     assocnetwork->max_assoc_dep_index--;
   }
   {
+    BITCODE_BL network_action_index;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "network_action_index", &network_action_index, NULL)
+        && network_action_index == assocnetwork->network_action_index)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.network_action_index [BL] %u != %u", assocnetwork->network_action_index, network_action_index);
+    network_action_index++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "network_action_index", &network_action_index, 0)
+        && network_action_index == assocnetwork->network_action_index)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.network_action_index [BL] set+1 %u != %u", assocnetwork->network_action_index, network_action_index);
+    assocnetwork->network_action_index--;
+  }
+  {
+    BITCODE_BS network_version;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "network_version", &network_version, NULL)
+        && network_version == assocnetwork->network_version)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.network_version [BS] %hu != %hu", assocnetwork->network_version, network_version);
+    network_version++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "network_version", &network_version, 0)
+        && network_version == assocnetwork->network_version)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.network_version [BS] set+1 %hu != %hu", assocnetwork->network_version, network_version);
+    assocnetwork->network_version--;
+  }
+  {
     BITCODE_BL num_actions;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_actions", &num_actions, NULL)
         && num_actions == assocnetwork->num_actions)
@@ -29798,6 +29828,21 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     assocnetwork->num_deps--;
   }
   {
+    BITCODE_BL num_owned_actions;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_actions", &num_owned_actions, NULL)
+        && num_owned_actions == assocnetwork->num_owned_actions)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_owned_actions [BL] %u != %u", assocnetwork->num_owned_actions, num_owned_actions);
+    num_owned_actions++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_owned_actions", &num_owned_actions, 0)
+        && num_owned_actions == assocnetwork->num_owned_actions)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.num_owned_actions [BL] set+1 %u != %u", assocnetwork->num_owned_actions, num_owned_actions);
+    assocnetwork->num_owned_actions--;
+  }
+  {
     BITCODE_BL num_owned_params;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_params", &num_owned_params, NULL)
         && num_owned_params == assocnetwork->num_owned_params)
@@ -29826,6 +29871,16 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     else
       fail ("ASSOCNETWORK.num_owned_value_param_names [BL] set+1 %u != %u", assocnetwork->num_owned_value_param_names, num_owned_value_param_names);
     assocnetwork->num_owned_value_param_names--;
+  }
+  {
+    BITCODE_H* owned_actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_actions", &count, NULL)
+        && dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "owned_actions", &owned_actions, NULL)
+        && owned_actions == assocnetwork->owned_actions)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.owned_actions [H*] * %u num_owned_actions", count);
   }
   {
     BITCODE_H* owned_params;
@@ -29862,51 +29917,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCNETWORK.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_BL unknown_assoc;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "unknown_assoc", &unknown_assoc, NULL)
-        && unknown_assoc == assocnetwork->unknown_assoc)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.unknown_assoc [BL] %u != %u", assocnetwork->unknown_assoc, unknown_assoc);
-    unknown_assoc++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_assoc", &unknown_assoc, 0)
-        && unknown_assoc == assocnetwork->unknown_assoc)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.unknown_assoc [BL] set+1 %u != %u", assocnetwork->unknown_assoc, unknown_assoc);
-    assocnetwork->unknown_assoc--;
-  }
-  {
-    BITCODE_BL unknown_n1;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "unknown_n1", &unknown_n1, NULL)
-        && unknown_n1 == assocnetwork->unknown_n1)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.unknown_n1 [BL] %u != %u", assocnetwork->unknown_n1, unknown_n1);
-    unknown_n1++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_n1", &unknown_n1, 0)
-        && unknown_n1 == assocnetwork->unknown_n1)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.unknown_n1 [BL] set+1 %u != %u", assocnetwork->unknown_n1, unknown_n1);
-    assocnetwork->unknown_n1--;
-  }
-  {
-    BITCODE_BL unknown_n2;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "unknown_n2", &unknown_n2, NULL)
-        && unknown_n2 == assocnetwork->unknown_n2)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.unknown_n2 [BL] %u != %u", assocnetwork->unknown_n2, unknown_n2);
-    unknown_n2++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "unknown_n2", &unknown_n2, 0)
-        && unknown_n2 == assocnetwork->unknown_n2)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.unknown_n2 [BL] set+1 %u != %u", assocnetwork->unknown_n2, unknown_n2);
-    assocnetwork->unknown_n2--;
   }
   if (failed && (is_class_unstable ("ASSOCNETWORK") || is_class_debugging ("ASSOCNETWORK")))
     {

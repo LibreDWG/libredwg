@@ -7961,15 +7961,24 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCNETWORK)
   DECODE_UNKNOWN_BITS
   ASSOCACTION_fields;
-
   SUBCLASS (AcDbAssocNetwork)
-  FIELD_BL (unknown_n1, 90);
-  FIELD_BL (unknown_n2, 90);
+  FIELD_BS (network_version, 90);
+  FIELD_BL (network_action_index, 90);
   FIELD_BL (num_actions, 90);
   VALUEOUTOFBOUNDS (num_actions, 100)
-
+  REPEAT (num_actions, actions, Dwg_ASSOCACTION_Deps)
+  REPEAT_BLOCK
+  {
+    int dxf = _obj->actions[rcount1].is_soft ? 360 : 330;
+    int code = _obj->actions[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+    SUB_FIELD_B (actions[rcount1], is_soft, 0);
+    SUB_FIELD_HANDLE (actions[rcount1], dep, code, dxf);
+  }
+  END_REPEAT_BLOCK
+  END_REPEAT (actions);
+  FIELD_BL (num_owned_actions, 90);
+  HANDLE_VECTOR (owned_actions, num_owned_actions, 4, 360);
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (actions, num_actions, 5, 330);
 DWG_OBJECT_END
 
 // (varies) DEBUGGING

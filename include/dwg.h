@@ -5080,23 +5080,18 @@ typedef struct _dwg_object_ASSOCACTION
  Object ASSOCNETWORK (varies) UNKNOWN FIELDS
  subclass of AcDbAssocAction
  Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
+ extdict: ACAD_ASSOCNETWORK
  */
 typedef struct _dwg_object_ASSOCNETWORK
 {
   struct _dwg_object_object *parent;
   ASSOCACTION_fields;
-  //BITCODE_H assocaction;
-  //or inlined:
-  //90:2 90:0 330:0 360:0 7x90:0
-  //BITCODE_BL num_deps; // 90
-
-  BITCODE_BL unknown_assoc; // 90
-  //90, 90, [90, 330], 90
-  BITCODE_BL unknown_n1; // 90 0
-  BITCODE_BL unknown_n2; // 90 1
-  BITCODE_BL num_actions;// 90 1
-  BITCODE_H* actions;    // 360
-  //BITCODE_BL unknown_n3; // 90 0
+  BITCODE_BS network_version; // DXF 90, always 0
+  BITCODE_BL network_action_index;    // 90
+  BITCODE_BL num_actions;     // 90
+  Dwg_ASSOCACTION_Deps *actions; // 330 or 360
+  BITCODE_BL num_owned_actions;
+  BITCODE_H *owned_actions;
 } Dwg_Object_ASSOCNETWORK;
 
 /*  BITCODE_BS status;90: 0 uptodate, 1 changed_directly, 2 changed_transitive,
