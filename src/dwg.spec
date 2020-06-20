@@ -7934,13 +7934,29 @@ DWG_OBJECT_END
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
+DWG_OBJECT (ASSOCMLEADERACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocAnnotationActionBody_fields;
+  SUBCLASS (AcDbAssocMLeaderActionBody)
+  FIELD_BL (class_version, 90);
+  FIELD_BL (num_actions, 90);
+  VALUEOUTOFBOUNDS (num_actions, 100)
+  REPEAT (num_actions, actions, Dwg_ASSOCACTIONBODY_action)
+  REPEAT_BLOCK
+    SUB_FIELD_BL (actions[rcount1], depid, 0);
+    SUB_FIELD_HANDLE (actions[rcount1], dep, 5, 330); //hardptr
+  END_REPEAT_BLOCK
+  END_REPEAT (actions);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 // crashes
 // See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocAnnotationActionBody_fields;
   SUBCLASS (AcDbAssocAlignedDimActionBody)
-  FIELD_BS (class_version, 90);
+  FIELD_BL (class_version, 90);
   //or status, 90 //has d_node or r_node?
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (r_node, 4, 330);

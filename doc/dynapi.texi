@@ -5625,6 +5625,33 @@ BL,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{ASSOCMLEADERACTIONBODY} @anchor{ASSOCMLEADERACTIONBODY}
+@cindex object, ASSOCMLEADERACTIONBODY
+@vindex ASSOCMLEADERACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aaab_version
+BS,	DXF 90
+@item assoc_dep
+H,	DXF 330
+@item actionbody
+H,	DXF 360
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item class_version
+BL,	DXF 90
+@item num_actions
+BL,	DXF 90
+@item actions
+Dwg_ASSOCACTIONBODY_action*
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCNETWORK} @anchor{ASSOCNETWORK}
 @cindex object, ASSOCNETWORK
 @vindex ASSOCNETWORK
@@ -10181,6 +10208,22 @@ T
 T
 @item value
 BL
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_ASSOCACTIONBODY_action} @anchor{Dwg_ASSOCACTIONBODY_action}
+@vindex Dwg_ASSOCACTIONBODY_action
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ASSOCMLEADERACTIONBODY*
+@item depid
+BL
+@item dep
+H,	DXF 330
 
 @end vtable
 @end indentedblock

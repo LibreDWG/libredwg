@@ -1028,6 +1028,17 @@ match_ASSOCVERTEXACTIONPARAM (const char *restrict filename,
   }
 
 static int
+match_ASSOCMLEADERACTIONBODY (const char *restrict filename,
+                                       const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCMLEADERACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCMLEADERACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCMLEADERACTIONBODY)
+  return found;
+}
+static int
 match_ASSOC3POINTANGULARDIMACTIONBODY (const char *restrict filename,
                                        const Dwg_Object *restrict obj)
 {
@@ -1291,6 +1302,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (ASSOCREVOLVEDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCSWEPTSURFACEACTIONBODY)
       ELSEMATCH (ASSOCTRIMSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCMLEADERACTIONBODY)
       ELSEMATCH (ASSOC3POINTANGULARDIMACTIONBODY)
       ELSEMATCH (ASSOCALIGNEDDIMACTIONBODY)
       ELSEMATCH (ASSOCORDINATEDIMACTIONBODY)

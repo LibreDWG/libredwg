@@ -210,6 +210,7 @@ testobjects += \
 	aldimobjectcontextdata \
 	angdimobjectcontextdata \
 	assoc2dconstraintgroup \
+	assocmleaderactionbody \
 	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
 	assocordinatedimactionbody \

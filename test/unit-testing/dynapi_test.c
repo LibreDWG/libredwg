@@ -29585,6 +29585,106 @@ static int test_ASSOCLOFTEDSURFACEACTIONBODY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCMLEADERACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCMLEADERACTIONBODY *restrict assocmleaderactionbody = obj->tio.object->tio.ASSOCMLEADERACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BS aaab_version;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "aaab_version", &aaab_version, NULL)
+        && aaab_version == assocmleaderactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.aaab_version [BS] %hu != %hu", assocmleaderactionbody->aaab_version, aaab_version);
+    aaab_version++;
+    if (dwg_dynapi_entity_set_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "aaab_version", &aaab_version, 0)
+        && aaab_version == assocmleaderactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.aaab_version [BS] set+1 %hu != %hu", assocmleaderactionbody->aaab_version, aaab_version);
+    assocmleaderactionbody->aaab_version--;
+  }
+  {
+    BITCODE_H actionbody;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "actionbody", &actionbody, NULL)
+        && !memcmp (&actionbody, &assocmleaderactionbody->actionbody, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCMLEADERACTIONBODY.actionbody [H]");
+  }
+  {
+    Dwg_ASSOCACTIONBODY_action* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "actions", &actions, NULL)
+        && actions == assocmleaderactionbody->actions)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.actions [Dwg_ASSOCACTIONBODY_action*] * %u num_actions", count);
+  }
+  {
+    BITCODE_H assoc_dep;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "assoc_dep", &assoc_dep, NULL)
+        && !memcmp (&assoc_dep, &assocmleaderactionbody->assoc_dep, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCMLEADERACTIONBODY.assoc_dep [H]");
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assocmleaderactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.class_version [BL] %u != %u", assocmleaderactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assocmleaderactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.class_version [BL] set+1 %u != %u", assocmleaderactionbody->class_version, class_version);
+    assocmleaderactionbody->class_version--;
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "num_actions", &num_actions, NULL)
+        && num_actions == assocmleaderactionbody->num_actions)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.num_actions [BL] %u != %u", assocmleaderactionbody->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "num_actions", &num_actions, 0)
+        && num_actions == assocmleaderactionbody->num_actions)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.num_actions [BL] set+1 %u != %u", assocmleaderactionbody->num_actions, num_actions);
+    assocmleaderactionbody->num_actions--;
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocmleaderactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCMLEADERACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocmleaderactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCMLEADERACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCMLEADERACTIONBODY") || is_class_debugging ("ASSOCMLEADERACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCMLEADERACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCNETWORK (const Dwg_Object *obj)
 {
   int error = 0;
@@ -50539,6 +50639,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCGEOMDEPENDENCY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY)
     error += test_ASSOCLOFTEDSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCMLEADERACTIONBODY)
+    error += test_ASSOCMLEADERACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK)
     error += test_ASSOCNETWORK(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY)
@@ -50987,6 +51089,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCGEOMDEPENDENCY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY)
     error += test_ASSOCLOFTEDSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCMLEADERACTIONBODY)
+    error += test_ASSOCMLEADERACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORK)
     error += test_ASSOCNETWORK (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY)
@@ -52119,6 +52223,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ASSOCLOFTEDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_ASSOCMLEADERACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCMLEADERACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCMLEADERACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCMLEADERACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_ASSOCNETWORK);
   size2 = dwg_dynapi_fields_size ("ASSOCNETWORK");
   if (size1 != size2)
@@ -53101,6 +53213,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_ACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_ASSOCACTIONBODY_action);
+  size2 = dwg_dynapi_fields_size ("ASSOCACTIONBODY_action");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_ASSOCACTIONBODY_action): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCACTIONBODY_action\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_ASSOCACTION_Deps);
