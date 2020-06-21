@@ -965,6 +965,15 @@ match_ASSOCOSNAPPOINTREFACTIONPARAM (const char *restrict filename,
   return found;
 }
 static int
+match_ASSOCACTIONPARAM (const char *restrict filename,
+                        const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (ASSOCACTIONPARAM, name, 1);
+  return found;
+}
+static int
 match_ASSOCEDGEACTIONPARAM (const char *restrict filename,
                         const Dwg_Object *restrict obj)
 {
@@ -1286,6 +1295,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (MATERIAL)
       ELSEMATCH (DIMASSOC)
       ELSEMATCH (ASSOCOSNAPPOINTREFACTIONPARAM)
+      ELSEMATCH (ASSOCACTIONPARAM)
       ELSEMATCH (ASSOCEDGEACTIONPARAM)
       ELSEMATCH (ASSOCFACEACTIONPARAM)
       ELSEMATCH (ASSOCOBJECTACTIONPARAM)

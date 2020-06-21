@@ -5209,6 +5209,25 @@ H*,	DXF 360
 @end vtable
 @end indentedblock
 
+@strong{ASSOCACTIONPARAM} @anchor{ASSOCACTIONPARAM}
+@cindex object, ASSOCACTIONPARAM
+@vindex ASSOCACTIONPARAM
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS,	DXF 90
+@item aap_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCALIGNEDDIMACTIONBODY} @anchor{ASSOCALIGNEDDIMACTIONBODY}
 @cindex object, ASSOCALIGNEDDIMACTIONBODY
 @vindex ASSOCALIGNEDDIMACTIONBODY
@@ -5232,6 +5251,66 @@ BL,	DXF 90
 H,	DXF 330
 @item d_node
 H,	DXF 330
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCARRAYACTIONBODY} @anchor{ASSOCARRAYACTIONBODY}
+@cindex object, ASSOCARRAYACTIONBODY
+@vindex ASSOCARRAYACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS
+@item aap_version
+BL
+@item name
+TV
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item aaab_version
+BL,	DXF 90
+@item aaab_paramblock
+T,	DXF 1
+@item aaab_transmatrix
+BD*,	DXF 40
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCARRAYMODIFYACTIONBODY} @anchor{ASSOCARRAYMODIFYACTIONBODY}
+@cindex object, ASSOCARRAYMODIFYACTIONBODY
+@vindex ASSOCARRAYMODIFYACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS
+@item aap_version
+BL
+@item name
+TV
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item aaab_version
+BL,	DXF 90
+@item aaab_paramblock
+T,	DXF 1
+@item aaab_transmatrix
+BD*,	DXF 40
+@item status
+BS,	DXF 70
+@item num_items
+BL,	DXF 90
+@item items
+Dwg_ARRAYITEMLOCATOR*
 
 @end vtable
 @end indentedblock
@@ -6151,6 +6230,21 @@ B,	DXF 290
 B,	DXF 290
 @item distance
 BD,	DXF 40
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCVALUEDEPENDENCY} @anchor{ASSOCVALUEDEPENDENCY}
+@cindex object, ASSOCVALUEDEPENDENCY
+@vindex ASSOCVALUEDEPENDENCY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item assocdep
+Dwg_Object_ASSOCDEPENDENCY
 
 @end vtable
 @end indentedblock
@@ -10231,6 +10325,24 @@ BL
 @end vtable
 @end indentedblock
 
+@strong{Dwg_ARRAYITEMLOCATOR} @anchor{Dwg_ARRAYITEMLOCATOR}
+@vindex Dwg_ARRAYITEMLOCATOR
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY*
+@item itemloc1
+BL,	DXF 90
+@item itemloc2
+BL,	DXF 90
+@item itemloc3
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_ASSOCACTIONBODY_action} @anchor{Dwg_ASSOCACTIONBODY_action}
 @vindex Dwg_ASSOCACTIONBODY_action
 
@@ -10277,10 +10389,10 @@ BL,	DXF 90
 BL
 @item flags
 BL
-@item transmatrix[16]
-BD
-@item rel_transform[16]
-BD
+@item transmatrix
+BD*
+@item rel_transform
+BD*
 @item h1
 H
 @item h2

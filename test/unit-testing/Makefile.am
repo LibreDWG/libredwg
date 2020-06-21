@@ -62,6 +62,7 @@ testobjects = \
 	assocnetwork \
 	assocdependency \
 	assocgeomdependency \
+	assocvaluedependency \
 	assocblendsurfaceactionbody \
 	assocextendsurfaceactionbody \
 	assocextrudedsurfaceactionbody \
@@ -210,6 +211,8 @@ testobjects += \
 	angdimobjectcontextdata \
 	assoc2dconstraintgroup \
 	assocmleaderactionbody \
+	assocarrayactionbody \
+	assocarraymodifyactionbody \
 	assocrestoreentitystateactionbody \
 	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
@@ -218,6 +221,7 @@ testobjects += \
 	assocsweptsurfaceactionbody \
 	assocperssubentmanager \
 	assocvariable \
+	assocactionparam \
 	assocosnappointrefactionparam \
 	assocasmbodyactionparam \
 	assocedgeactionparam \

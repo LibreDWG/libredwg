@@ -203,6 +203,25 @@
         }                                                                     \
     }
 #endif
+#ifndef SUB_FIELD_VECTOR_N
+#  define SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)                         \
+  if (size > 0 && _obj->o.nam != NULL)                                        \
+    {                                                                         \
+      BITCODE_BL _size = (BITCODE_BL)size;                                    \
+      for (vcount = 0; vcount < _size; vcount++)                              \
+        {                                                                     \
+          SUB_FIELD (o, nam[vcount], type, dxf);                              \
+        }                                                                     \
+    }
+#endif
+#ifndef FIELD_VECTOR_INL
+#  define FIELD_VECTOR_INL(o, nam, type, size, dxf)                           \
+  FIELD_VECTOR_N(o, nam, type, size, dxf)
+#endif
+#ifndef SUB_FIELD_VECTOR_INL
+#  define SUB_FIELD_VECTOR_INL(o, nam, type, size, dxf)                       \
+  SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)
+#endif
 
 #ifndef SUB_FIELD_VECTOR_TYPESIZE
 #  define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)              \

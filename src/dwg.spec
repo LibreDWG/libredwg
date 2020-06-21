@@ -6678,7 +6678,7 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   FIELD_HANDLE (dep_body, 4, 360);
   FIELD_BLd (depbodyid, 90);
   START_OBJECT_HANDLE_STREAM;
-  DWG_OBJECT_END
+DWG_OBJECT_END
 
 #define AcDbAssocActionParam_fields       \
   SUBCLASS (AcDbAssocActionParam)         \
@@ -7867,6 +7867,12 @@ DWG_OBJECT_END
   FIELD_T (classname, 1);                       \
   FIELD_B (dependent_on_compound_object, 290)
 
+DWG_OBJECT (ASSOCVALUEDEPENDENCY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocDependency_fields;
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   AcDbAssocDependency_fields;
   SUBCLASS (AcDbAssocGeomDependency)
@@ -7876,8 +7882,7 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-#undef ASSOCACTION_fields
-#define ASSOCACTION_fields                                 \
+#define AcDbAssocAction_fields                             \
   SUBCLASS (AcDbAssocAction)                               \
   /* until r2010: 1, 2013+: 2 */                           \
   FIELD_BS (class_version, 90);                            \
@@ -7894,7 +7899,7 @@ DWG_OBJECT_END
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT (ASSOCNETWORK)
   DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields;
+  AcDbAssocAction_fields;
   SUBCLASS (AcDbAssocNetwork)
   FIELD_BS (network_version, 90);
   FIELD_BL (network_action_index, 90);
@@ -9425,11 +9430,18 @@ DWG_OBJECT_END
     SUBCLASS (AcAngleConstraint);               \
     FIELD_RC (sector_type, 280)
 
+#define AcDistanceConstraint_fields(node)       \
+    AcExplicitConstraint_fields (node);         \
+    SUBCLASS (AcDistanceConstraint);            \
+    FIELD_RC (dir_type, 280)                    \
+    if (FIELD_VALUE (dir_type))                 \
+      FIELD_3BD (distance, 10)
+
 // Class AcDbAssoc2dConstraintGroup
 // see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
 DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields;
+  AcDbAssocAction_fields;
   FIELD_BL (version, 90);       // 2
   FIELD_B (b1, 70);             // 0
   FIELD_3BD (workplane[0], 10); // 0,0,0
@@ -9452,7 +9464,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCVARIABLE)
   DECODE_UNKNOWN_BITS
-  ASSOCACTION_fields;
+  AcDbAssocAction_fields;
   SUBCLASS (AcDbAssocVariable)
   FIELD_BL (av_class_version, 90); /* 2 */
   FIELD_T (name, 1);
@@ -9463,6 +9475,11 @@ DWG_OBJECT (ASSOCVARIABLE)
   FIELD_B (has_t78, 290);
   FIELD_T (t78, 1);
   FIELD_B (b290, 290);
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
 DWG_OBJECT_END
 
 #define AcDbAssocCompoundActionParam_fields \
@@ -9660,6 +9677,31 @@ DWG_OBJECT_END
   END_REPEAT_BLOCK                                               \
   /* SET_PARENT (items, what); */                                \
   END_REPEAT (items)
+
+// subclass only
+#define AcDbAssocAsmBasedEntityPersSubentId_fields
+
+DWG_OBJECT (ASSOCARRAYACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocArrayActionBody_fields;
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocArrayActionBody_fields;
+  SUBCLASS (AcDbAssocArrayModifyActionBody)
+  FIELD_BS (status, 70);
+  FIELD_BL (num_items, 90);
+  REPEAT (num_items, items, Dwg_ARRAYITEMLOCATOR)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (items[rcount1], itemloc1, 90);
+      SUB_FIELD_BL (items[rcount1], itemloc2, 90);
+      SUB_FIELD_BL (items[rcount1], itemloc3, 90);
+      //SUB_FIELD_VECTOR_INN (items[rcount1], itemloc, BL, 3, 90);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (items);
+  END_REPEAT (items)
+DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/

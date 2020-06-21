@@ -1426,7 +1426,7 @@ api_common_object (dwg_object *obj)
         }                                                               \
     }                                                                   \
   CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);       \
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL); \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL);\
   CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, material)
 
 #define CHK_ASSOCPARAMBASEDACTIONBODY(TYPE)                                   \

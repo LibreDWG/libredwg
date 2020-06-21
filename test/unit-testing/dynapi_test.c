@@ -27689,6 +27689,67 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCACTIONPARAM (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCACTIONPARAM *restrict assocactionparam = obj->tio.object->tio.ASSOCACTIONPARAM;
+  failed = 0;
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocactionparam, "ASSOCACTIONPARAM", "aap_version", &aap_version, NULL)
+        && aap_version == assocactionparam->aap_version)
+      pass ();
+    else
+      fail ("ASSOCACTIONPARAM.aap_version [BL] %u != %u", assocactionparam->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocactionparam, "ASSOCACTIONPARAM", "aap_version", &aap_version, 0)
+        && aap_version == assocactionparam->aap_version)
+      pass ();
+    else
+      fail ("ASSOCACTIONPARAM.aap_version [BL] set+1 %u != %u", assocactionparam->aap_version, aap_version);
+    assocactionparam->aap_version--;
+  }
+  {
+    BITCODE_BS is_r2013;
+    if (dwg_dynapi_entity_value (assocactionparam, "ASSOCACTIONPARAM", "is_r2013", &is_r2013, NULL)
+        && is_r2013 == assocactionparam->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCACTIONPARAM.is_r2013 [BS] %hu != %hu", assocactionparam->is_r2013, is_r2013);
+    is_r2013++;
+    if (dwg_dynapi_entity_set_value (assocactionparam, "ASSOCACTIONPARAM", "is_r2013", &is_r2013, 0)
+        && is_r2013 == assocactionparam->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCACTIONPARAM.is_r2013 [BS] set+1 %hu != %hu", assocactionparam->is_r2013, is_r2013);
+    assocactionparam->is_r2013--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (assocactionparam, "ASSOCACTIONPARAM", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)assocactionparam->name)
+           : !assocactionparam->name)
+      pass ();
+    else
+      fail ("ASSOCACTIONPARAM.name [T] '%s' <> '%s'", name, assocactionparam->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocactionparam, "ASSOCACTIONPARAM", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocactionparam->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCACTIONPARAM.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCACTIONPARAM") || is_class_debugging ("ASSOCACTIONPARAM")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCACTIONPARAM", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -27776,6 +27837,250 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ASSOCALIGNEDDIMACTIONBODY") || is_class_debugging ("ASSOCALIGNEDDIMACTIONBODY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCALIGNEDDIMACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCARRAYACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCARRAYACTIONBODY *restrict assocarrayactionbody = obj->tio.object->tio.ASSOCARRAYACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_T aaab_paramblock;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "aaab_paramblock", &aaab_paramblock, NULL)
+        && aaab_paramblock
+           ? strEQ ((char *)aaab_paramblock, (char *)assocarrayactionbody->aaab_paramblock)
+           : !assocarrayactionbody->aaab_paramblock)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.aaab_paramblock [T] '%s' <> '%s'", aaab_paramblock, assocarrayactionbody->aaab_paramblock);
+  }
+  {
+    BITCODE_BD* aaab_transmatrix;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "aaab_transmatrix", &aaab_transmatrix, NULL)
+        && !memcmp (&aaab_transmatrix, &assocarrayactionbody->aaab_transmatrix, sizeof (BITCODE_BD*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYACTIONBODY.aaab_transmatrix [BD*]");
+  }
+  {
+    BITCODE_BL aaab_version;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "aaab_version", &aaab_version, NULL)
+        && aaab_version == assocarrayactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.aaab_version [BL] %u != %u", assocarrayactionbody->aaab_version, aaab_version);
+    aaab_version++;
+    if (dwg_dynapi_entity_set_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "aaab_version", &aaab_version, 0)
+        && aaab_version == assocarrayactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.aaab_version [BL] set+1 %u != %u", assocarrayactionbody->aaab_version, aaab_version);
+    assocarrayactionbody->aaab_version--;
+  }
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "aap_version", &aap_version, NULL)
+        && aap_version == assocarrayactionbody->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.aap_version [BL] %u != %u", assocarrayactionbody->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "aap_version", &aap_version, 0)
+        && aap_version == assocarrayactionbody->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.aap_version [BL] set+1 %u != %u", assocarrayactionbody->aap_version, aap_version);
+    assocarrayactionbody->aap_version--;
+  }
+  {
+    BITCODE_BS is_r2013;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "is_r2013", &is_r2013, NULL)
+        && is_r2013 == assocarrayactionbody->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.is_r2013 [BS] %hu != %hu", assocarrayactionbody->is_r2013, is_r2013);
+    is_r2013++;
+    if (dwg_dynapi_entity_set_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "is_r2013", &is_r2013, 0)
+        && is_r2013 == assocarrayactionbody->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.is_r2013 [BS] set+1 %hu != %hu", assocarrayactionbody->is_r2013, is_r2013);
+    assocarrayactionbody->is_r2013--;
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)assocarrayactionbody->name)
+           : !assocarrayactionbody->name)
+      pass ();
+    else
+      fail ("ASSOCARRAYACTIONBODY.name [TV] '%s' <> '%s'", name, assocarrayactionbody->name);
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocarrayactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCARRAYACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocarrayactionbody, "ASSOCARRAYACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocarrayactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCARRAYACTIONBODY") || is_class_debugging ("ASSOCARRAYACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCARRAYACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCARRAYMODIFYACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCARRAYMODIFYACTIONBODY *restrict assocarraymodifyactionbody = obj->tio.object->tio.ASSOCARRAYMODIFYACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_T aaab_paramblock;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "aaab_paramblock", &aaab_paramblock, NULL)
+        && aaab_paramblock
+           ? strEQ ((char *)aaab_paramblock, (char *)assocarraymodifyactionbody->aaab_paramblock)
+           : !assocarraymodifyactionbody->aaab_paramblock)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.aaab_paramblock [T] '%s' <> '%s'", aaab_paramblock, assocarraymodifyactionbody->aaab_paramblock);
+  }
+  {
+    BITCODE_BD* aaab_transmatrix;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "aaab_transmatrix", &aaab_transmatrix, NULL)
+        && !memcmp (&aaab_transmatrix, &assocarraymodifyactionbody->aaab_transmatrix, sizeof (BITCODE_BD*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYMODIFYACTIONBODY.aaab_transmatrix [BD*]");
+  }
+  {
+    BITCODE_BL aaab_version;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "aaab_version", &aaab_version, NULL)
+        && aaab_version == assocarraymodifyactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.aaab_version [BL] %u != %u", assocarraymodifyactionbody->aaab_version, aaab_version);
+    aaab_version++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "aaab_version", &aaab_version, 0)
+        && aaab_version == assocarraymodifyactionbody->aaab_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.aaab_version [BL] set+1 %u != %u", assocarraymodifyactionbody->aaab_version, aaab_version);
+    assocarraymodifyactionbody->aaab_version--;
+  }
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "aap_version", &aap_version, NULL)
+        && aap_version == assocarraymodifyactionbody->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.aap_version [BL] %u != %u", assocarraymodifyactionbody->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "aap_version", &aap_version, 0)
+        && aap_version == assocarraymodifyactionbody->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.aap_version [BL] set+1 %u != %u", assocarraymodifyactionbody->aap_version, aap_version);
+    assocarraymodifyactionbody->aap_version--;
+  }
+  {
+    BITCODE_BS is_r2013;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "is_r2013", &is_r2013, NULL)
+        && is_r2013 == assocarraymodifyactionbody->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.is_r2013 [BS] %hu != %hu", assocarraymodifyactionbody->is_r2013, is_r2013);
+    is_r2013++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "is_r2013", &is_r2013, 0)
+        && is_r2013 == assocarraymodifyactionbody->is_r2013)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.is_r2013 [BS] set+1 %hu != %hu", assocarraymodifyactionbody->is_r2013, is_r2013);
+    assocarraymodifyactionbody->is_r2013--;
+  }
+  {
+    Dwg_ARRAYITEMLOCATOR* items;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "num_items", &count, NULL)
+        && dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "items", &items, NULL)
+        && items == assocarraymodifyactionbody->items)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.items [Dwg_ARRAYITEMLOCATOR*] * %u num_items", count);
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)assocarraymodifyactionbody->name)
+           : !assocarraymodifyactionbody->name)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.name [TV] '%s' <> '%s'", name, assocarraymodifyactionbody->name);
+  }
+  {
+    BITCODE_BL num_items;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "num_items", &num_items, NULL)
+        && num_items == assocarraymodifyactionbody->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.num_items [BL] %u != %u", assocarraymodifyactionbody->num_items, num_items);
+    num_items++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "num_items", &num_items, 0)
+        && num_items == assocarraymodifyactionbody->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.num_items [BL] set+1 %u != %u", assocarraymodifyactionbody->num_items, num_items);
+    assocarraymodifyactionbody->num_items--;
+  }
+  {
+    Dwg_ASSOCPARAMBASEDACTIONBODY pab;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "pab", &pab, NULL)
+        && !memcmp (&pab, &assocarraymodifyactionbody->pab, sizeof (Dwg_ASSOCPARAMBASEDACTIONBODY)))
+        pass ();
+    else
+        fail ("ASSOCARRAYMODIFYACTIONBODY.pab [Dwg_ASSOCPARAMBASEDACTIONBODY]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocarraymodifyactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYMODIFYACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BS status;
+    if (dwg_dynapi_entity_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "status", &status, NULL)
+        && status == assocarraymodifyactionbody->status)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.status [BS] %hu != %hu", assocarraymodifyactionbody->status, status);
+    status++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyactionbody, "ASSOCARRAYMODIFYACTIONBODY", "status", &status, 0)
+        && status == assocarraymodifyactionbody->status)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYACTIONBODY.status [BS] set+1 %hu != %hu", assocarraymodifyactionbody->status, status);
+    assocarraymodifyactionbody->status--;
+  }
+  if (failed && (is_class_unstable ("ASSOCARRAYMODIFYACTIONBODY") || is_class_debugging ("ASSOCARRAYMODIFYACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCARRAYMODIFYACTIONBODY", failed);
       failed = 0;
     }
   return failed;
@@ -32008,6 +32313,45 @@ static int test_ASSOCTRIMSURFACEACTIONBODY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ASSOCTRIMSURFACEACTIONBODY") || is_class_debugging ("ASSOCTRIMSURFACEACTIONBODY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ASSOCTRIMSURFACEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCVALUEDEPENDENCY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCVALUEDEPENDENCY *restrict assocvaluedependency = obj->tio.object->tio.ASSOCVALUEDEPENDENCY;
+  failed = 0;
+  {
+    Dwg_Object_ASSOCDEPENDENCY assocdep;
+    if (dwg_dynapi_entity_value (assocvaluedependency, "ASSOCVALUEDEPENDENCY", "assocdep", &assocdep, NULL)
+        && !memcmp (&assocdep, &assocvaluedependency->assocdep, sizeof (Dwg_Object_ASSOCDEPENDENCY)))
+        pass ();
+    else
+        fail ("ASSOCVALUEDEPENDENCY.assocdep [Dwg_Object_ASSOCDEPENDENCY]");
+  }
+  {
+    BITCODE_T assocdep_name;
+    if (dwg_dynapi_entity_value (assocvaluedependency, "ASSOCVALUEDEPENDENCY", "assocdep.name", &assocdep_name, NULL)
+        && assocdep_name
+           ? strEQ ((char *)assocdep_name, (char *)assocvaluedependency->assocdep.name)
+           : !assocvaluedependency->assocdep.name)
+      pass ();
+    else
+      fail ("ASSOCVALUEDEPENDENCY.assocdep.name [T] '%s' <> '%s'", assocdep_name, assocvaluedependency->assocdep.name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocvaluedependency, "ASSOCVALUEDEPENDENCY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocvaluedependency->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCVALUEDEPENDENCY.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCVALUEDEPENDENCY") || is_class_debugging ("ASSOCVALUEDEPENDENCY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCVALUEDEPENDENCY", failed);
       failed = 0;
     }
   return failed;
@@ -50674,8 +51018,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOC3POINTANGULARDIMACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCACTION)
     error += test_ASSOCACTION(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCACTIONPARAM)
+    error += test_ASSOCACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY)
     error += test_ASSOCALIGNEDDIMACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYACTIONBODY)
+    error += test_ASSOCARRAYACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY)
+    error += test_ASSOCARRAYMODIFYACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCASMBODYACTIONPARAM)
     error += test_ASSOCASMBODYACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY)
@@ -50730,6 +51080,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCSWEPTSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY)
     error += test_ASSOCTRIMSURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCVALUEDEPENDENCY)
+    error += test_ASSOCVALUEDEPENDENCY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
     error += test_ASSOCVARIABLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
@@ -51126,8 +51478,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOC3POINTANGULARDIMACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCACTION)
     error += test_ASSOCACTION (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCACTIONPARAM)
+    error += test_ASSOCACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY)
     error += test_ASSOCALIGNEDDIMACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYACTIONBODY)
+    error += test_ASSOCARRAYACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY)
+    error += test_ASSOCARRAYMODIFYACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCASMBODYACTIONPARAM)
     error += test_ASSOCASMBODYACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY)
@@ -51182,6 +51540,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCSWEPTSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY)
     error += test_ASSOCTRIMSURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCVALUEDEPENDENCY)
+    error += test_ASSOCVALUEDEPENDENCY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE)
     error += test_ASSOCVARIABLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
@@ -52190,12 +52550,36 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ASSOCACTION\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_ASSOCACTIONPARAM);
+  size2 = dwg_dynapi_fields_size ("ASSOCACTIONPARAM");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCACTIONPARAM): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCACTIONPARAM\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCALIGNEDDIMACTIONBODY");
   if (size1 != size2)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCALIGNEDDIMACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCARRAYACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCARRAYACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCARRAYACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCARRAYMODIFYACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCARRAYMODIFYACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCASMBODYACTIONPARAM);
@@ -52412,6 +52796,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCTRIMSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCTRIMSURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCVALUEDEPENDENCY);
+  size2 = dwg_dynapi_fields_size ("ASSOCVALUEDEPENDENCY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCVALUEDEPENDENCY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCVALUEDEPENDENCY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCVARIABLE);
@@ -53284,6 +53676,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_ACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_ARRAYITEMLOCATOR);
+  size2 = dwg_dynapi_fields_size ("ARRAYITEMLOCATOR");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_ARRAYITEMLOCATOR): %d != "
+               "dwg_dynapi_fields_size (\"ARRAYITEMLOCATOR\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_ASSOCACTIONBODY_action);
