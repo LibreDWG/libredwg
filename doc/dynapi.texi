@@ -6034,6 +6034,25 @@ BL,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{ASSOCRESTOREENTITYSTATEACTIONBODY} @anchor{ASSOCRESTOREENTITYSTATEACTIONBODY}
+@cindex object, ASSOCRESTOREENTITYSTATEACTIONBODY
+@vindex ASSOCRESTOREENTITYSTATEACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_version
+BL,	DXF 90
+@item class_version
+BL,	DXF 90
+@item entity
+H,	DXF 330
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCREVOLVEDSURFACEACTIONBODY} @anchor{ASSOCREVOLVEDSURFACEACTIONBODY}
 @cindex object, ASSOCREVOLVEDSURFACEACTIONBODY
 @vindex ASSOCREVOLVEDSURFACEACTIONBODY

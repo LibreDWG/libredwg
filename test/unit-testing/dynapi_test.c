@@ -31571,6 +31571,65 @@ static int test_ASSOCPLANESURFACEACTIONBODY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCRESTOREENTITYSTATEACTIONBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCRESTOREENTITYSTATEACTIONBODY *restrict assocrestoreentitystateactionbody = obj->tio.object->tio.ASSOCRESTOREENTITYSTATEACTIONBODY;
+  failed = 0;
+  {
+    BITCODE_BL aab_version;
+    if (dwg_dynapi_entity_value (assocrestoreentitystateactionbody, "ASSOCRESTOREENTITYSTATEACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocrestoreentitystateactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCRESTOREENTITYSTATEACTIONBODY.aab_version [BL] %u != %u", assocrestoreentitystateactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocrestoreentitystateactionbody, "ASSOCRESTOREENTITYSTATEACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocrestoreentitystateactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCRESTOREENTITYSTATEACTIONBODY.aab_version [BL] set+1 %u != %u", assocrestoreentitystateactionbody->aab_version, aab_version);
+    assocrestoreentitystateactionbody->aab_version--;
+  }
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (assocrestoreentitystateactionbody, "ASSOCRESTOREENTITYSTATEACTIONBODY", "class_version", &class_version, NULL)
+        && class_version == assocrestoreentitystateactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCRESTOREENTITYSTATEACTIONBODY.class_version [BL] %u != %u", assocrestoreentitystateactionbody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (assocrestoreentitystateactionbody, "ASSOCRESTOREENTITYSTATEACTIONBODY", "class_version", &class_version, 0)
+        && class_version == assocrestoreentitystateactionbody->class_version)
+      pass ();
+    else
+      fail ("ASSOCRESTOREENTITYSTATEACTIONBODY.class_version [BL] set+1 %u != %u", assocrestoreentitystateactionbody->class_version, class_version);
+    assocrestoreentitystateactionbody->class_version--;
+  }
+  {
+    BITCODE_H entity;
+    if (dwg_dynapi_entity_value (assocrestoreentitystateactionbody, "ASSOCRESTOREENTITYSTATEACTIONBODY", "entity", &entity, NULL)
+        && !memcmp (&entity, &assocrestoreentitystateactionbody->entity, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ASSOCRESTOREENTITYSTATEACTIONBODY.entity [H]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocrestoreentitystateactionbody, "ASSOCRESTOREENTITYSTATEACTIONBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocrestoreentitystateactionbody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCRESTOREENTITYSTATEACTIONBODY.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCRESTOREENTITYSTATEACTIONBODY") || is_class_debugging ("ASSOCRESTOREENTITYSTATEACTIONBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCRESTOREENTITYSTATEACTIONBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCREVOLVEDSURFACEACTIONBODY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -50661,6 +50720,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCPERSSUBENTMANAGER(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY)
     error += test_ASSOCPLANESURFACEACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCRESTOREENTITYSTATEACTIONBODY)
+    error += test_ASSOCRESTOREENTITYSTATEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCROTATEDDIMACTIONBODY)
@@ -51111,6 +51172,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCPERSSUBENTMANAGER (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY)
     error += test_ASSOCPLANESURFACEACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCRESTOREENTITYSTATEACTIONBODY)
+    error += test_ASSOCRESTOREENTITYSTATEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY)
     error += test_ASSOCREVOLVEDSURFACEACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCROTATEDDIMACTIONBODY)
@@ -52309,6 +52372,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCPLANESURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCPLANESURFACEACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCRESTOREENTITYSTATEACTIONBODY);
+  size2 = dwg_dynapi_fields_size ("ASSOCRESTOREENTITYSTATEACTIONBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCRESTOREENTITYSTATEACTIONBODY): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCRESTOREENTITYSTATEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY);

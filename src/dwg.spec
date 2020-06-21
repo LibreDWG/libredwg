@@ -6694,7 +6694,6 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   FIELD_BL (aab_version, 90)
 
 // embedded struct, not inlined
-// abstract dwg_action_klass_VALUEPARAM_private must exist
 #define AcDbAssocParamBasedActionBody_fields(pab)           \
   PRE (R_2013) {                                            \
     SUBCLASS (AcDbAssocParamBasedActionBody);               \
@@ -6798,16 +6797,6 @@ DWG_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocRevolvedSurfaceActionBody)
-  FIELD_BL (class_version, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// (varies) UNSTABLE
-// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
-DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
-  DECODE_UNKNOWN_BITS
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocSweptSurfaceActionBody)
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -7934,6 +7923,24 @@ DWG_OBJECT_END
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
+// (varies) fails the unit-test
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocSweptSurfaceActionBody)
+  FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionBody_fields;
+  SUBCLASS (AcDbAssocRestoreEntityStateActionBody)
+  FIELD_BL (class_version, 90);
+  FIELD_HANDLE (entity, 5, 330); // hardptr
+DWG_OBJECT_END
+
 DWG_OBJECT (ASSOCMLEADERACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocAnnotationActionBody_fields;
@@ -7944,7 +7951,7 @@ DWG_OBJECT (ASSOCMLEADERACTIONBODY)
   REPEAT (num_actions, actions, Dwg_ASSOCACTIONBODY_action)
   REPEAT_BLOCK
     SUB_FIELD_BL (actions[rcount1], depid, 0);
-    SUB_FIELD_HANDLE (actions[rcount1], dep, 5, 330); //hardptr
+    SUB_FIELD_HANDLE (actions[rcount1], dep, 5, 330); // hardptr
   END_REPEAT_BLOCK
   END_REPEAT (actions);
   START_OBJECT_HANDLE_STREAM;

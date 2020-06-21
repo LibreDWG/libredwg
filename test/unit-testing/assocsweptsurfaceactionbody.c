@@ -1,4 +1,4 @@
-// TODO unstable
+// TODO crashes with 2018/Surface
 #define DWG_TYPE DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY
 #include "common.c"
 

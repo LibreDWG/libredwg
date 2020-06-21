@@ -72,7 +72,6 @@ testobjects = \
 	assocpatchsurfaceactionbody \
 	assocplanesurfaceactionbody \
 	assocrevolvedsurfaceactionbody \
-	assocsweptsurfaceactionbody \
 	assoctrimsurfaceactionbody \
 	attdef \
 	attrib \
@@ -211,10 +210,12 @@ testobjects += \
 	angdimobjectcontextdata \
 	assoc2dconstraintgroup \
 	assocmleaderactionbody \
+	assocrestoreentitystateactionbody \
 	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
 	assocordinatedimactionbody \
 	assocrotateddimactionbody \
+	assocsweptsurfaceactionbody \
 	assocperssubentmanager \
 	assocvariable \
 	assocosnappointrefactionparam \
