@@ -938,17 +938,6 @@ match_PLOTSETTINGS (const char *restrict filename,
   MATCH_TABLE (PLOTSETTINGS, VISUALSTYLE, shadeplot, 333);
   return found;
 }
-
-static int
-match_ASSOCACTION (const char *restrict filename,
-                   const Dwg_Object *restrict obj)
-{
-  char *text;
-  int found = 0;
-  //MATCH_OBJECT (ASSOCACTION, body.evaluatorid, 0);
-  //MATCH_OBJECT (ASSOCACTION, body.expression, 0);
-  return found;
-}
 static int
 match_DIMASSOC (const char *restrict filename,
                    const Dwg_Object *restrict obj)
@@ -965,6 +954,7 @@ match_DIMASSOC (const char *restrict filename,
     }
   return found;
 }
+
 static int
 match_ASSOCOSNAPPOINTREFACTIONPARAM (const char *restrict filename,
                                      const Dwg_Object *restrict obj)
@@ -975,6 +965,147 @@ match_ASSOCOSNAPPOINTREFACTIONPARAM (const char *restrict filename,
   return found;
 }
 static int
+match_ASSOCACTIONPARAM (const char *restrict filename,
+                        const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (ASSOCACTIONPARAM, name, 1);
+  return found;
+}
+static int
+match_ASSOCEDGEACTIONPARAM (const char *restrict filename,
+                        const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (ASSOCEDGEACTIONPARAM, name, 1);
+  return found;
+}
+static int
+match_ASSOCFACEACTIONPARAM (const char *restrict filename,
+                        const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (ASSOCFACEACTIONPARAM, name, 1);
+  return found;
+}
+static int
+match_ASSOCOBJECTACTIONPARAM (const char *restrict filename,
+                        const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (ASSOCOBJECTACTIONPARAM, name, 1);
+  return found;
+}
+static int
+match_ASSOCPATHACTIONPARAM (const char *restrict filename,
+                        const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (ASSOCPATHACTIONPARAM, name, 1);
+  return found;
+}
+static int
+match_ASSOCVERTEXACTIONPARAM (const char *restrict filename,
+                        const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (ASSOCVERTEXACTIONPARAM, name, 1);
+  return found;
+}
+
+// TODO match on its subclasses which holds the text:
+//  ASSOCVARIABLE, EvalVariant
+
+#define MATCH_AcDbAssocParamBasedActionBody(_type)                            \
+  for (unsigned i = 0; i < _obj->pab.num_values; i++)                         \
+  {                                                                           \
+    MATCH_OBJECT (_type, pab.values[i].name, 1);                              \
+    for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)               \
+      {                                                                       \
+        int _dxf = _obj->pab.values[i].vars[j].value.code;                    \
+        if (dwg_resbuf_value_type (_dxf) == VT_STRING)                          \
+          {                                                                   \
+            MATCH_OBJECT (_type, pab.values[i].vars[j].value.u.text, _dxf);   \
+          }                                                                   \
+      }                                                                       \
+  }
+
+static int
+match_ASSOCMLEADERACTIONBODY (const char *restrict filename,
+                                       const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCMLEADERACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCMLEADERACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCMLEADERACTIONBODY)
+  return found;
+}
+static int
+match_ASSOC3POINTANGULARDIMACTIONBODY (const char *restrict filename,
+                                       const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOC3POINTANGULARDIMACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOC3POINTANGULARDIMACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOC3POINTANGULARDIMACTIONBODY)
+  return found;
+}
+static int
+match_ASSOCALIGNEDDIMACTIONBODY (const char *restrict filename,
+                                 const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCALIGNEDDIMACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCALIGNEDDIMACTIONBODY)
+  return found;
+}
+
+static int
+match_ASSOCORDINATEDIMACTIONBODY (const char *restrict filename,
+                                 const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCORDINATEDIMACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCORDINATEDIMACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCORDINATEDIMACTIONBODY)
+  return found;
+}
+
+static int
+match_ASSOCROTATEDDIMACTIONBODY (const char *restrict filename,
+                                 const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCROTATEDDIMACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCROTATEDDIMACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCROTATEDDIMACTIONBODY)
+  return found;
+}
+
+static int
+match_ASSOCPATCHSURFACEACTIONBODY (const char *restrict filename,
+                                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCPATCHSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCPATCHSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCPATCHSURFACEACTIONBODY)
+  return found;
+}
+static int
 match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
                                    const Dwg_Object *restrict obj)
 {
@@ -982,10 +1113,18 @@ match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCPLANESURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCPLANESURFACEACTIONBODY;
-  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
-    {
-      MATCH_OBJECT (ASSOCPLANESURFACEACTIONBODY, descriptions[i], 1);
-    }
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCPLANESURFACEACTIONBODY)
+  return found;
+}
+static int
+match_ASSOCEXTENDSURFACEACTIONBODY (const char *restrict filename,
+                                      const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCEXTENDSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCEXTENDSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCEXTENDSURFACEACTIONBODY)
   return found;
 }
 static int
@@ -996,10 +1135,18 @@ match_ASSOCEXTRUDEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCEXTRUDEDSURFACEACTIONBODY;
-  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
-    {
-      MATCH_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY, descriptions[i], 1);
-    }
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCEXTRUDEDSURFACEACTIONBODY)
+  return found;
+}
+static int
+match_ASSOCFILLETSURFACEACTIONBODY (const char *restrict filename,
+                                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCFILLETSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCFILLETSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCFILLETSURFACEACTIONBODY)
   return found;
 }
 static int
@@ -1010,10 +1157,29 @@ match_ASSOCLOFTEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCLOFTEDSURFACEACTIONBODY;
-  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
-    {
-      MATCH_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY, descriptions[i], 1);
-    }
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCLOFTEDSURFACEACTIONBODY)
+  return found;
+}
+static int
+match_ASSOCNETWORKSURFACEACTIONBODY (const char *restrict filename,
+                                    const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCNETWORKSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCNETWORKSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCNETWORKSURFACEACTIONBODY)
+  return found;
+}
+static int
+match_ASSOCOFFSETSURFACEACTIONBODY (const char *restrict filename,
+                                    const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCOFFSETSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCOFFSETSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCOFFSETSURFACEACTIONBODY)
   return found;
 }
 static int
@@ -1024,10 +1190,7 @@ match_ASSOCREVOLVEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCREVOLVEDSURFACEACTIONBODY;
-  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
-    {
-      MATCH_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY, descriptions[i], 1);
-    }
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCREVOLVEDSURFACEACTIONBODY)
   return found;
 }
 static int
@@ -1038,10 +1201,28 @@ match_ASSOCSWEPTSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCSWEPTSURFACEACTIONBODY;
-  for (BITCODE_BL i = 0; i < _obj->num_deps; i++)
-    {
-      MATCH_OBJECT (ASSOCSWEPTSURFACEACTIONBODY, descriptions[i], 1);
-    }
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCSWEPTSURFACEACTIONBODY)
+  return found;
+}
+static int
+match_ASSOCTRIMSURFACEACTIONBODY (const char *restrict filename,
+                                   const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  const Dwg_Object_ASSOCTRIMSURFACEACTIONBODY *_obj
+      = obj->tio.object->tio.ASSOCTRIMSURFACEACTIONBODY;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCTRIMSURFACEACTIONBODY)
+  return found;
+}
+
+static int
+match_BLOCKPARAMDEPENDENCYBODY (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (BLOCKPARAMDEPENDENCYBODY, name, 1);
   return found;
 }
 static int
@@ -1122,13 +1303,30 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (DBCOLOR)
       ELSEMATCH (MATERIAL)
       ELSEMATCH (DIMASSOC)
-      ELSEMATCH (ASSOCACTION)
       ELSEMATCH (ASSOCOSNAPPOINTREFACTIONPARAM)
+      ELSEMATCH (ASSOCACTIONPARAM)
+      ELSEMATCH (ASSOCEDGEACTIONPARAM)
+      ELSEMATCH (ASSOCFACEACTIONPARAM)
+      ELSEMATCH (ASSOCOBJECTACTIONPARAM)
+      ELSEMATCH (ASSOCPATHACTIONPARAM)
+      ELSEMATCH (ASSOCVERTEXACTIONPARAM)
+      ELSEMATCH (ASSOCPATCHSURFACEACTIONBODY)
       ELSEMATCH (ASSOCPLANESURFACEACTIONBODY)
+      ELSEMATCH (ASSOCEXTENDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCEXTRUDEDSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCFILLETSURFACEACTIONBODY)
       ELSEMATCH (ASSOCLOFTEDSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCNETWORKSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCOFFSETSURFACEACTIONBODY)
       ELSEMATCH (ASSOCREVOLVEDSURFACEACTIONBODY)
       ELSEMATCH (ASSOCSWEPTSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCTRIMSURFACEACTIONBODY)
+      ELSEMATCH (ASSOCMLEADERACTIONBODY)
+      ELSEMATCH (ASSOC3POINTANGULARDIMACTIONBODY)
+      ELSEMATCH (ASSOCALIGNEDDIMACTIONBODY)
+      ELSEMATCH (ASSOCORDINATEDIMACTIONBODY)
+      ELSEMATCH (ASSOCROTATEDDIMACTIONBODY)
+      ELSEMATCH (BLOCKPARAMDEPENDENCYBODY)
       ELSEMATCH (NAVISWORKSMODELDEF)
     }
   return found;

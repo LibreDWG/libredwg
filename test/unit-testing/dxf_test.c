@@ -59,7 +59,7 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                const char *restrict key, int index)
 {
   Dwg_DYNAPI_field field;
-  enum RES_BUF_VALUE_TYPE vtype;
+  enum RESBUF_VALUE_TYPE vtype;
   Dwg_Version_Type dwg_version = dwg->header.version;
 
   if (!ptr)
@@ -94,7 +94,7 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
         }
       return;
     }
-  vtype = get_base_value_type (f->code);
+  vtype = dwg_resbuf_value_type (f->code);
   if (vtype == VT_REAL && fp->size >= 16)
     goto VT_POINT3D;
   if (vtype == VT_INT8 && fp->size == 1 && strEQc (fp->type, "B"))
@@ -402,7 +402,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
     {
       Dwg_DYNAPI_field field;
       const Dwg_DYNAPI_field *fp, *fp1;
-      enum RES_BUF_VALUE_TYPE vtype;
+      enum RESBUF_VALUE_TYPE vtype;
       if (!f->name || !*f->name)
         continue;
       // support subclass, as in in_json
@@ -504,7 +504,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
             }
           continue;
         }
-      vtype = get_base_value_type (f->code);
+      vtype = dwg_resbuf_value_type (f->code);
       if (vtype == VT_REAL && fp->size >= 16)
         goto VT_POINT3D;
       if (vtype == VT_INT8 && fp->size == 1 && strEQc (fp->type, "B"))

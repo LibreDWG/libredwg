@@ -58,8 +58,22 @@ testobjects = \
 	appid_control \
 	arc \
 	arc_dimension \
+	assocaction \
+	assocnetwork \
 	assocdependency \
+	assocgeomdependency \
+	assocvaluedependency \
+	assocblendsurfaceactionbody \
+	assocextendsurfaceactionbody \
+	assocextrudedsurfaceactionbody \
+	assocfilletsurfaceactionbody \
+	assocloftedsurfaceactionbody \
+	assocnetworksurfaceactionbody \
+	assocoffsetsurfaceactionbody \
+	assocpatchsurfaceactionbody \
 	assocplanesurfaceactionbody \
+	assocrevolvedsurfaceactionbody \
+	assoctrimsurfaceactionbody \
 	attdef \
 	attrib \
 	background \
@@ -196,21 +210,30 @@ testobjects += \
 	aldimobjectcontextdata \
 	angdimobjectcontextdata \
 	assoc2dconstraintgroup \
-	assocaction \
+	assocmleaderactionbody \
+	assocarrayactionbody \
+	assocarraymodifyactionbody \
+	assocrestoreentitystateactionbody \
+	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
-	assocextrudedsurfaceactionbody \
-	assocgeomdependency \
-	assocloftedsurfaceactionbody \
-	assocnetwork \
-	assocosnappointrefactionparam \
-	assocperssubentmanager \
-	assocrevolvedsurfaceactionbody \
+	assocordinatedimactionbody \
+	assocrotateddimactionbody \
 	assocsweptsurfaceactionbody \
+	assocperssubentmanager \
 	assocvariable \
+	assocactionparam \
+	assocosnappointrefactionparam \
+	assocasmbodyactionparam \
+	assocedgeactionparam \
+	assoccompoundactionparam \
+	assocfaceactionparam \
+	assocobjectactionparam \
+	assocpathactionparam \
 	assocvertexactionparam \
 	atext \
 	blkrefobjectcontextdata \
 	blockgriplocationcomponent \
+	blockparamdependencybody \
 	blockvisibilitygrip \
 	blockvisibilityparameter \
 	contextdatamanager \

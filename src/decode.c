@@ -4745,7 +4745,7 @@ dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf)
   while (rbuf)
     {
       Dwg_Resbuf *next = rbuf->nextrb;
-      short type = get_base_value_type (rbuf->type);
+      short type = dwg_resbuf_value_type (rbuf->type);
       if (type == VT_STRING || type == VT_BINARY)
         free (rbuf->value.str.u.data);
       free (rbuf);
@@ -4787,7 +4787,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
 
   while (dat->byte < end_address)
     {
-      enum RES_BUF_VALUE_TYPE vtype;
+      enum RESBUF_VALUE_TYPE vtype;
       rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
       if (!rbuf)
         {
@@ -4812,7 +4812,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           dat->byte = end_address;
           break;
         }
-      vtype = get_base_value_type (rbuf->type);
+      vtype = dwg_resbuf_value_type (rbuf->type);
       switch (vtype)
         {
         case VT_STRING:

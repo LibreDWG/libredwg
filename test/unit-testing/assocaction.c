@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ASSOCACTION
 #include "common.c"
 
@@ -21,7 +21,6 @@ api_process (dwg_object *obj)
   //Dwg_ACTIONBODY body;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_assocaction *_obj = dwg_object_to_ASSOCACTION (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, class_version, BS);
@@ -32,7 +31,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_deps, BL);
-  //Dwg_ASSOCACTION_Deps *deps;
+  for (unsigned i=0; i < num_deps; i++)
+    {
+      CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_soft, B);
+      CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);
+    }
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCACTION, owned_params, num_owned_params);
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_value_param_names, BL);
@@ -45,5 +48,4 @@ api_process (dwg_object *obj)
   //CHK_ENTITY_H (_obj, ASSOCACTION, actionbody);
   //CHK_ENTITY_H (_obj, ASSOCACTION, callback);
   //CHK_ENTITY_H (_obj, ASSOCACTION, owningnetwork);
-#endif
 }

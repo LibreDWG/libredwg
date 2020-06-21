@@ -46,7 +46,7 @@ typedef struct _dxf_objs
 typedef struct _dxf_pair
 {
   short code;
-  enum RES_BUF_VALUE_TYPE type;
+  enum RESBUF_VALUE_TYPE type;
   union // must be big enough for setting BD
   {
     unsigned int u;

@@ -1017,11 +1017,11 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
   ARRAY;
   for (BITCODE_BL i = 0; i < obj->num_xdata; i++)
     {
-      enum RES_BUF_VALUE_TYPE type;
+      enum RESBUF_VALUE_TYPE type;
       FIRSTPREFIX ARRAY;
       FIRSTPREFIX VALUE_RS (rbuf->type, 0);
       FIRSTPREFIX
-      type = get_base_value_type (rbuf->type);
+      type = dwg_resbuf_value_type (rbuf->type);
       switch (type)
         {
         case VT_STRING:

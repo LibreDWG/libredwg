@@ -203,6 +203,25 @@
         }                                                                     \
     }
 #endif
+#ifndef SUB_FIELD_VECTOR_N
+#  define SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)                         \
+  if (size > 0 && _obj->o.nam != NULL)                                        \
+    {                                                                         \
+      BITCODE_BL _size = (BITCODE_BL)size;                                    \
+      for (vcount = 0; vcount < _size; vcount++)                              \
+        {                                                                     \
+          SUB_FIELD (o, nam[vcount], type, dxf);                              \
+        }                                                                     \
+    }
+#endif
+#ifndef FIELD_VECTOR_INL
+#  define FIELD_VECTOR_INL(o, nam, type, size, dxf)                           \
+  FIELD_VECTOR_N(o, nam, type, size, dxf)
+#endif
+#ifndef SUB_FIELD_VECTOR_INL
+#  define SUB_FIELD_VECTOR_INL(o, nam, type, size, dxf)                       \
+  SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)
+#endif
 
 #ifndef SUB_FIELD_VECTOR_TYPESIZE
 #  define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)              \
@@ -520,7 +539,7 @@
 // unchecked with constant times
 #ifndef REPEAT
 #  define REPEAT_CN(times, name, type)                                        \
-    if (_obj->name)                                                           \
+    if (_obj->name != NULL)                                                   \
       for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 // checked with constant times
 #  define REPEAT_N(times, name, type)                                         \
@@ -530,7 +549,7 @@
                    (long)times);                                              \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    if (_obj->name)                                                           \
+    if (_obj->name != NULL)                                                   \
       for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 
 // checked with var. times
@@ -541,13 +560,13 @@
                    (long)_obj->times);                                        \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    if (_obj->times && _obj->name)                                            \
+    if (_obj->times > 0 && _obj->name != NULL)                                \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times;            \
            rcount##idx++)
 // unchecked with var. times
 #  ifndef _REPEAT_C
 #    define _REPEAT_C(times, name, type, idx)                                 \
-      if (_obj->times && _obj->name)                                          \
+      if (_obj->times > 0 && _obj->name != NULL)                              \
         for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times;          \
              rcount##idx++)
 #  endif
@@ -563,14 +582,14 @@
 // unchecked with constant times
 #ifndef _REPEAT_CN
 #  define _REPEAT_CN(times, name, type, idx)                                  \
-    if (_obj->name)                                                           \
+    if (_obj->name != NULL)                                                   \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #endif
 // not allocating versions:
 // unchecked
 #ifndef _REPEAT_CNF
 #  define _REPEAT_CNF(times, name, type, idx)                                 \
-    if (_obj->name)                                                           \
+    if (_obj->name != NULL)                                                   \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #endif
 #ifndef _REPEAT_NF
@@ -582,7 +601,7 @@
                    (long)times);                                              \
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
-    if (_obj->name)                                                           \
+    if (_obj->name != NULL)                                                   \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 #endif
 
@@ -615,3 +634,4 @@
 // TODO: dispatch on the type
 #define CALL_SUBENT(hdl, dxf)
 //error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)
+#define CALL_SUBCURVE(hdl, curvetype)

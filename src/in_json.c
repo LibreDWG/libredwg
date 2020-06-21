@@ -1442,7 +1442,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (t->type == JSMN_ARRAY && t->size == 2) // of [ type, value ]
         {
           Dwg_Resbuf *old = rbuf;
-          enum RES_BUF_VALUE_TYPE vtype;
+          enum RESBUF_VALUE_TYPE vtype;
 
           tokens->index++;
           JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -1450,7 +1450,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           LOG_INSANE ("xdata[%u]: type %d\n", i, rbuf->type);
           size += 2;
-          vtype = get_base_value_type (rbuf->type);
+          vtype = dwg_resbuf_value_type (rbuf->type);
           switch (vtype)
             {
             case VT_STRING:

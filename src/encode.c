@@ -4282,7 +4282,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                   unsigned xdata_size)
 {
   Dwg_Resbuf *rbuf = _obj->xdata;
-  enum RES_BUF_VALUE_TYPE type;
+  enum RESBUF_VALUE_TYPE type;
   int error = 0;
   int i;
   unsigned j = 0;
@@ -4299,7 +4299,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
       bit_write_RS (dat, rbuf->type);
       LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS] @%lu.%u\n", j,
                   rbuf->type, dat->byte - obj->address, dat->bit)
-      type = get_base_value_type (rbuf->type);
+      type = dwg_resbuf_value_type (rbuf->type);
       switch (type)
         {
         case VT_STRING:

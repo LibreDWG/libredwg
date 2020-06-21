@@ -1059,7 +1059,7 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       int dxftype = rbuf->type;
 
       fmt = dxf_format (rbuf->type);
-      type = get_base_value_type (rbuf->type);
+      type = dwg_resbuf_value_type (rbuf->type);
       dxftype = (rbuf->type > 1000 || obj->fixedtype == DWG_TYPE_XRECORD)
                     ? rbuf->type
                     : rbuf->type + 1000;

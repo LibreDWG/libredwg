@@ -315,7 +315,7 @@ dxf_read_pair (Bit_Chain *dat)
   pair->code = (short)dxf_read_rs (dat);
   if (dat->size - dat->byte < 4) // at least EOF\n
     goto err;
-  pair->type = get_base_value_type (pair->code);
+  pair->type = dwg_resbuf_value_type (pair->code);
   switch (pair->type)
     {
     case VT_STRING:
@@ -1254,10 +1254,15 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].size += size;
       }
       break;
-    // 1001 is the APPID handle, not part of size nor data
+    // 1001 is the name of the APPID handle, not part of size nor data
     case 1:
       obj->tio.object->num_eed--;
       prev = i;
+      if (!pair->value.s || !*pair->value.s) {
+          LOG_ERROR ("Invalid empty DXF code 1001");
+          dwg_free_eed (obj);
+          return;
+        }
       if (strEQc (pair->value.s, "ACAD"))
         {
           dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
@@ -4766,6 +4771,10 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 {
   Dwg_Object_ASSOCACTION *o = obj->tio.object->tio.ASSOCACTION;
   Dwg_Data *dwg = obj->parent;
+  BITCODE_BL num;
+  BITCODE_H *hv;
+  Dwg_ASSOCACTION_Deps *deps;
+  unsigned class_version;
 
 #define EXPECT_INT_DXF(field, dxf, type)                                      \
   if (pair == NULL || pair->code != dxf)                                      \
@@ -4795,19 +4804,73 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }                                                                         \
   dxf_free_pair (pair)
 
-  EXPECT_INT_DXF ("solution_status", 90, BL);
+  if (pair == NULL || pair->code != 90)
+    return pair;
+  class_version = pair->value.u;
+  EXPECT_INT_DXF ("class_version", 90, BS);
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("geometry_status", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("readdep", 5, 330, H); // or vector?
+  EXPECT_H_DXF ("owningnetwork", 5, 330, H); // or vector?
   pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("writedep", 5, 360, H);
+  EXPECT_H_DXF ("actionbody", 4, 360, H);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("constraint_status", 90, BL);
+  EXPECT_INT_DXF ("action_index", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("dof", 90, BL);
+  EXPECT_INT_DXF ("max_assoc_dep_index", 90, BL);
+
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("is_body_a_proxy", 90, B);
+  num = pair->value.u;
+  EXPECT_INT_DXF ("num_deps", 90, BL);
+  deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  for (unsigned i=0; i<num; i++)
+    {
+      BITCODE_H hdl;
+      int is_soft, code;
+      pair = dxf_read_pair (dat);
+      deps[i].is_soft = pair->code == 360;
+      code = deps[i].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+      deps[i].dep = dwg_add_handleref (dwg, code, pair->value.u, obj);
+      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "deps",
+                 ARGS_REF (deps[i].dep), pair->code);
+      dxf_free_pair (pair);
+    }
+  dwg_dynapi_entity_set_value (o, obj->name, "deps", &deps, 1);
+
+  if (class_version > 1)
+    {
+      pair = dxf_read_pair (dat);
+      num = pair->value.u;
+      EXPECT_INT_DXF ("num_owned_params", 90, BL);
+      hv = xcalloc (num, sizeof (BITCODE_H));
+      for (unsigned i=0; i<num; i++)
+        {
+          BITCODE_H hdl;
+          pair = dxf_read_pair (dat);
+          hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+          LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_params",
+                     ARGS_REF (hdl), pair->code);
+          hv[i] = hdl;
+          dxf_free_pair (pair);
+        }
+      dwg_dynapi_entity_set_value (o, obj->name, "owned_params", &hv, 1);
+
+      pair = dxf_read_pair (dat);
+      num = pair->value.u;
+      EXPECT_INT_DXF ("num_owned_params", 90, BL);
+      hv = xcalloc (num, sizeof (BITCODE_H));
+      for (unsigned i=0; i<num; i++)
+        {
+          BITCODE_H hdl;
+          pair = dxf_read_pair (dat);
+          hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_value_param_names",
+                     ARGS_REF (hdl), pair->code);
+          hv[i] = hdl;
+          dxf_free_pair (pair);
+        }
+      dwg_dynapi_entity_set_value (o, obj->name, "owned_value_param_names", &hv, 1);
+    }
 
   return NULL;
 }
@@ -5233,7 +5296,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   xdata_size += 2; // RS
   rbuf->type = pair->code;
-  switch (get_base_value_type (rbuf->type))
+  switch (dwg_resbuf_value_type (rbuf->type))
     {
     case VT_STRING:
       if (!pair->value.s)
@@ -5301,7 +5364,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         pair = dxf_read_pair (dat);
         if (!pair)
           return NULL;
-        if (get_base_value_type (pair->code) == VT_POINT3D)
+        if (dwg_resbuf_value_type (pair->code) == VT_POINT3D)
           {
             rbuf->value.pt[2] = pair->value.d;
             LOG_TRACE ("xdata[%d]: (%f,%f,%f) [%d]\n", num_xdata,
@@ -6027,10 +6090,10 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj,
           LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", obj->name, "evalexpr", "minor",
                      pair->value.u, pair->code);
         }
-      else if (pair->code == 70 && !ee->value_type)
+      else if (pair->code == 70 && !ee->value_code)
         {
-          ee->value_type = pair->value.i;
-          LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value_type",
+          ee->value_code = pair->value.i;
+          LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value_code",
                      pair->value.i, pair->code);
         }
       else if (pair->code == 40)
@@ -6069,7 +6132,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj,
           LOG_TRACE ("%s.%s.%s = %s [T %d]\n", obj->name, "evalexpr", "value.text1",
                      pair->value.s, pair->code);
         }
-      else if (pair->code == 70 && ee->value_type)
+      else if (pair->code == 70 && ee->value_code)
         {
           ee->value.short70 = pair->value.i;
           LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, "evalexpr", "value.short70",
