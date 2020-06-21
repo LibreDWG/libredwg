@@ -1217,6 +1217,15 @@ match_ASSOCTRIMSURFACEACTIONBODY (const char *restrict filename,
 }
 
 static int
+match_BLOCKPARAMDEPENDENCYBODY (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (BLOCKPARAMDEPENDENCYBODY, name, 1);
+  return found;
+}
+static int
 match_NAVISWORKSMODELDEF (const char *restrict filename,
                           const Dwg_Object *restrict obj)
 {
@@ -1317,6 +1326,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (ASSOCALIGNEDDIMACTIONBODY)
       ELSEMATCH (ASSOCORDINATEDIMACTIONBODY)
       ELSEMATCH (ASSOCROTATEDDIMACTIONBODY)
+      ELSEMATCH (BLOCKPARAMDEPENDENCYBODY)
       ELSEMATCH (NAVISWORKSMODELDEF)
     }
   return found;

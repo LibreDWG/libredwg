@@ -9703,6 +9703,17 @@ DWG_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
   END_REPEAT (items)
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKPARAMDEPENDENCYBODY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbAssocDependencyBody)
+  FIELD_BS (adb_version, 90); // always 1
+  SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
+  FIELD_BS (dimbase_version, 90); // always 1
+  FIELD_T (name, 1);
+  SUBCLASS (AcDbBlockParameterDependencyBody)
+  FIELD_BS (class_version, 90); // 0
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
 

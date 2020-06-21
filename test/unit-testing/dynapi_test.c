@@ -33035,6 +33035,82 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_BLOCKPARAMDEPENDENCYBODY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BLOCKPARAMDEPENDENCYBODY *restrict blockparamdependencybody = obj->tio.object->tio.BLOCKPARAMDEPENDENCYBODY;
+  failed = 0;
+  {
+    BITCODE_BS adb_version;
+    if (dwg_dynapi_entity_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "adb_version", &adb_version, NULL)
+        && adb_version == blockparamdependencybody->adb_version)
+      pass ();
+    else
+      fail ("BLOCKPARAMDEPENDENCYBODY.adb_version [BS] %hu != %hu", blockparamdependencybody->adb_version, adb_version);
+    adb_version++;
+    if (dwg_dynapi_entity_set_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "adb_version", &adb_version, 0)
+        && adb_version == blockparamdependencybody->adb_version)
+      pass ();
+    else
+      fail ("BLOCKPARAMDEPENDENCYBODY.adb_version [BS] set+1 %hu != %hu", blockparamdependencybody->adb_version, adb_version);
+    blockparamdependencybody->adb_version--;
+  }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "class_version", &class_version, NULL)
+        && class_version == blockparamdependencybody->class_version)
+      pass ();
+    else
+      fail ("BLOCKPARAMDEPENDENCYBODY.class_version [BS] %hu != %hu", blockparamdependencybody->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "class_version", &class_version, 0)
+        && class_version == blockparamdependencybody->class_version)
+      pass ();
+    else
+      fail ("BLOCKPARAMDEPENDENCYBODY.class_version [BS] set+1 %hu != %hu", blockparamdependencybody->class_version, class_version);
+    blockparamdependencybody->class_version--;
+  }
+  {
+    BITCODE_BS dimbase_version;
+    if (dwg_dynapi_entity_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "dimbase_version", &dimbase_version, NULL)
+        && dimbase_version == blockparamdependencybody->dimbase_version)
+      pass ();
+    else
+      fail ("BLOCKPARAMDEPENDENCYBODY.dimbase_version [BS] %hu != %hu", blockparamdependencybody->dimbase_version, dimbase_version);
+    dimbase_version++;
+    if (dwg_dynapi_entity_set_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "dimbase_version", &dimbase_version, 0)
+        && dimbase_version == blockparamdependencybody->dimbase_version)
+      pass ();
+    else
+      fail ("BLOCKPARAMDEPENDENCYBODY.dimbase_version [BS] set+1 %hu != %hu", blockparamdependencybody->dimbase_version, dimbase_version);
+    blockparamdependencybody->dimbase_version--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockparamdependencybody->name)
+           : !blockparamdependencybody->name)
+      pass ();
+    else
+      fail ("BLOCKPARAMDEPENDENCYBODY.name [T] '%s' <> '%s'", name, blockparamdependencybody->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (blockparamdependencybody, "BLOCKPARAMDEPENDENCYBODY", "parent", &parent, NULL)
+        && !memcmp (&parent, &blockparamdependencybody->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("BLOCKPARAMDEPENDENCYBODY.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("BLOCKPARAMDEPENDENCYBODY") || is_class_debugging ("BLOCKPARAMDEPENDENCYBODY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BLOCKPARAMDEPENDENCYBODY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
 {
   int error = 0;
@@ -51092,6 +51168,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLKREFOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
     error += test_BLOCKGRIPLOCATIONCOMPONENT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKPARAMDEPENDENCYBODY)
+    error += test_BLOCKPARAMDEPENDENCYBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYGRIP)
     error += test_BLOCKVISIBILITYGRIP(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
@@ -51552,6 +51630,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLKREFOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
     error += test_BLOCKGRIPLOCATIONCOMPONENT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BLOCKPARAMDEPENDENCYBODY)
+    error += test_BLOCKPARAMDEPENDENCYBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYGRIP)
     error += test_BLOCKVISIBILITYGRIP (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
@@ -52844,6 +52924,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT): %d != "
                "dwg_dynapi_fields_size (\"BLOCKGRIPLOCATIONCOMPONENT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_BLOCKPARAMDEPENDENCYBODY);
+  size2 = dwg_dynapi_fields_size ("BLOCKPARAMDEPENDENCYBODY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPARAMDEPENDENCYBODY): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKPARAMDEPENDENCYBODY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_BLOCKVISIBILITYGRIP);

@@ -233,6 +233,7 @@ testobjects += \
 	atext \
 	blkrefobjectcontextdata \
 	blockgriplocationcomponent \
+	blockparamdependencybody \
 	blockvisibilitygrip \
 	blockvisibilityparameter \
 	contextdatamanager \

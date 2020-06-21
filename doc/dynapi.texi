@@ -6406,6 +6406,27 @@ T,	DXF 300
 @end vtable
 @end indentedblock
 
+@strong{BLOCKPARAMDEPENDENCYBODY} @anchor{BLOCKPARAMDEPENDENCYBODY}
+@cindex object, BLOCKPARAMDEPENDENCYBODY
+@vindex BLOCKPARAMDEPENDENCYBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item adb_version
+BS,	DXF 90
+@item dimbase_version
+BS,	DXF 90
+@item name
+T,	DXF 1
+@item class_version
+BS,	DXF 90
+
+@end vtable
+@end indentedblock
+
 @strong{BLOCKVISIBILITYGRIP} @anchor{BLOCKVISIBILITYGRIP}
 @cindex object, BLOCKVISIBILITYGRIP
 @vindex BLOCKVISIBILITYGRIP
