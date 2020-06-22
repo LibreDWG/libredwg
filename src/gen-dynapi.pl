@@ -1786,8 +1786,7 @@ mv_if_not_same ("$api_h.tmp", $api_h);
 my $done = 0;
 my $ifile = "$topdir/bindings/dwg.i";
 open $in, "<", $ifile or die "$ifile: $!";
-open my $out, ">", "$ifile.tmp" or die "$ifile.tmp: $!";
-my $done = 0;
+open $out, ">", "$ifile.tmp" or die "$ifile.tmp: $!";
 while (<$in>) {
   if (m/^\/\* Start auto-generated/) {
     print $out $_;
