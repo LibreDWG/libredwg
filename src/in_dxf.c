@@ -4823,6 +4823,11 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   num = pair->value.u;
   EXPECT_INT_DXF ("num_deps", 90, BL);
   deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  if (!deps)
+    {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
   for (unsigned i=0; i<num; i++)
     {
       BITCODE_H hdl;
