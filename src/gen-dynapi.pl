@@ -1407,6 +1407,49 @@ close $in;
 chmod 0444, $fh;
 close $fh;
 
+# find DEBUGGING classes
+my $classesinc = "$srcdir/classes.inc";
+my (%STABLE, %UNSTABLE, %DEBUGGING, %UNHANDLED);
+open $in, "<", $classesinc or die "$classesinc: $!";
+while (<$in>) {
+  if (/^\s*STABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
+      $STABLE{$1}++;
+  }
+  elsif (/^\s*UNSTABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+)[,\)]/) {
+      $UNSTABLE{$1}++;
+  }
+  elsif (/^\s*DEBUGGING_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+)[,\)]/) {
+      $DEBUGGING{$1}++;
+  }
+  elsif (/^\s*UNHANDLED_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+)[,\)]/) {
+      $UNHANDLED{$1}++;
+  }
+}
+close $in;
+ 
+my $ifile = "$topdir/bindings/dwg.i";
+# chmod 0644, $ifile if -e $ifile;
+open $in, "<", $ifile or die "$ifile: $!";
+open my $out, ">", "$ifile.tmp" or die "$ifile.tmp: $!";
+ my $done = 0;
+while (<$in>) {
+  if (m/^\/\* From here on auto-generated/) {
+    for my $name (@entity_names) {
+      print $out "EXPORT Dwg_Entity_$name** dwg_getall_$name (Dwg_Object_Ref* hdr);\n";
+    }
+    print $out "\n";
+    for my $name (@object_names) {
+      print $out "EXPORT Dwg_Object_$name** dwg_getall_$name (Dwg_Object_Ref* hdr);\n";
+    }
+    close $out;
+    $done++;
+  }
+  if (!$done) {
+    print $out $_;
+  }
+}
+mv_if_not_same ("$ifile.tmp", $ifile);
+ 
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
