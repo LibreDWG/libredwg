@@ -4803,6 +4803,20 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  ARGS_REF (hdl), pair->code);                                 \
     }                                                                         \
   dxf_free_pair (pair)
+#define EXPECT_T_DXF(field, dxf)                                              \
+  if (pair == NULL || pair->code != dxf)                                      \
+    {                                                                         \
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
+                 pair ? pair->code : -1, dxf, field);                         \
+      return pair;                                                            \
+    }                                                                         \
+  if (pair->value.s)                                                          \
+    {                                                                         \
+      dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value.s, 1);   \
+      LOG_TRACE ("%s.%s = %s [H %d]\n", obj->name, field,                     \
+                 pair->value.s, pair->code);                                  \
+    }                                                                         \
+  dxf_free_pair (pair)
 
   if (pair == NULL || pair->code != 90)
     return pair;
@@ -4889,18 +4903,29 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   EXPECT_INT_DXF ("class_version", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_bl1", 90, BL);
+  EXPECT_INT_DXF ("unknown_0", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_bl2", 90, BL);
+  EXPECT_INT_DXF ("unknown_2", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_bl3", 90, BL);
+  EXPECT_INT_DXF ("numassocsteps", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_bl4", 90, BL);
+  EXPECT_INT_DXF ("numassocsubents", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_bl5", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_bl6", 90, BL);
-
+  EXPECT_INT_DXF ("num_steps", 90, BL);
+  if (o->num_steps)
+    {
+      o->steps = xcalloc (o->num_steps, sizeof (BITCODE_BL));
+      if (!o->steps)
+        return NULL;
+      for (unsigned i = 0; i < o->num_steps; i++)
+        {
+          pair = dxf_read_pair (dat);
+          o->steps[i] = pair->value.u;
+          LOG_TRACE ("%s.steps[%d] = %u [BL %d]\n", obj->name, i, pair->value.u,
+                     pair->code);
+          dxf_free_pair (pair);
+        }
+    }
   return NULL;
 }
 
@@ -4915,29 +4940,32 @@ add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("status", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("isread_dep", 290, B);
+  EXPECT_INT_DXF ("is_read_dep", 290, B);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("iswrite_dep", 290, B);
+  EXPECT_INT_DXF ("is_write_dep", 290, B);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("isobjectstate_dep", 290, B);
+  EXPECT_INT_DXF ("is_attached_to_object", 290, B);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_b4", 290, B);
+  EXPECT_INT_DXF ("is_delegating_to_owning_action", 290, B);
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("order", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("readdep", 5, 330, H); //?
+  EXPECT_H_DXF ("dep_on", 3, 330, H);
   pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_b5", 290, B);
+  EXPECT_INT_DXF ("has_name", 290, B);
+  if (o->has_name)
+    {
+      pair = dxf_read_pair (dat);
+      EXPECT_T_DXF ("name", 1);
+    }
+  pair = dxf_read_pair (dat);
+  EXPECT_H_DXF ("readdep", 4, 330, H);
+  pair = dxf_read_pair (dat);
+  EXPECT_H_DXF ("node", 3, 330, H);
+  pair = dxf_read_pair (dat);
+  EXPECT_H_DXF ("dep_body", 4, 360, H);
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("depbodyid", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("readdep", 5, 330, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("node", 5, 330, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("writedep", 5, 360, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("depbodyid", 90, BL); //?
 
   return NULL;
 }
