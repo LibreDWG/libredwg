@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   BITCODE_BS vertind[4];
   dwg_point_3d pt;
 
-  dwg_ent_vertex_pface_face *ent = dwg_object_to_VERTEX_PFACE_FACE (obj);
+  dwg_ent_vert_pface_face *ent = dwg_object_to_VERTEX_PFACE_FACE (obj);
 
   if (!dwg_dynapi_entity_value (ent, "VERTEX_PFACE_FACE", "vertind[4]",
                                 &vertind, NULL))

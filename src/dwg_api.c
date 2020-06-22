@@ -43,7 +43,300 @@
 static Dwg_Version_Type dwg_version = R_INVALID;
 static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
 
+/**
+ * Return an object fieldvalue
+ */
+#ifndef HAVE_NONNULL
+#  define dwg_get_OBJECT(name, OBJECT)                                        \
+    EXPORT bool dwg_get_##OBJECT (const dwg_##name *restrict name,            \
+                                  const char *restrict fieldname,             \
+                                  void *restrict out)                         \
+    {                                                                         \
+      if (name && fieldname && out)                                           \
+        return dwg_dynapi_entity_value ((void *)name, #OBJECT, fieldname,     \
+                                        out, NULL);                           \
+      else                                                                    \
+        return false;                                                         \
+    }                                                                         \
+    EXPORT bool dwg_set_##OBJECT (const dwg_##name *restrict name,            \
+                                  const char *restrict fieldname,             \
+                                  void *restrict value)                       \
+    {                                                                         \
+      if (name && fieldname && value)                                         \
+        return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname, \
+                                            value, 0);                        \
+      else                                                                    \
+        return false;                                                         \
+    }
+#else
+#  define dwg_get_OBJECT(name, OBJECT)                                        \
+    EXPORT bool dwg_get_##OBJECT (const dwg_##name *restrict name,            \
+                                  const char *restrict fieldname,             \
+                                  void *restrict out)                         \
+    {                                                                         \
+      return dwg_dynapi_entity_value ((void *)name, #OBJECT, fieldname, out,  \
+                                      NULL);                                  \
+    }                                                                         \
+    EXPORT bool dwg_set_##OBJECT (const dwg_##name *restrict name,            \
+                                  const char *restrict fieldname,             \
+                                  void *restrict value)                       \
+    {                                                                         \
+      return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname,   \
+                                          value, 0);                          \
+    }
+#endif
+
 #ifndef __AFL_COMPILER
+
+// clang-format: off
+dwg_get_OBJECT (ent_text, TEXT)
+dwg_get_OBJECT (ent_attrib, ATTRIB)
+dwg_get_OBJECT (ent_attdef, ATTDEF)
+dwg_get_OBJECT (ent_block, BLOCK)
+dwg_get_OBJECT (ent_endblk, ENDBLK)
+dwg_get_OBJECT (ent_seqend, SEQEND)
+dwg_get_OBJECT (ent_insert, INSERT)
+dwg_get_OBJECT (ent_minsert, MINSERT)
+dwg_get_OBJECT (ent_vertex_2d, VERTEX_2D)
+dwg_get_OBJECT (ent_vertex_3d, VERTEX_3D)
+dwg_get_OBJECT (ent_vertex_3d, VERTEX_MESH)
+dwg_get_OBJECT (ent_vertex_3d, VERTEX_PFACE)
+dwg_get_OBJECT (ent_vert_pface_face, VERTEX_PFACE_FACE)
+dwg_get_OBJECT (ent_polyline_2d, POLYLINE_2D)
+dwg_get_OBJECT (ent_polyline_3d, POLYLINE_3D)
+dwg_get_OBJECT (ent_arc, ARC)
+
+#endif
+
+dwg_get_OBJECT (ent_circle, CIRCLE)
+dwg_get_OBJECT (ent_line, LINE)
+
+#ifndef __AFL_COMPILER
+
+dwg_get_OBJECT (ent_dim_ordinate, DIMENSION_ORDINATE)
+dwg_get_OBJECT (ent_dim_linear, DIMENSION_LINEAR)
+dwg_get_OBJECT (ent_dim_aligned, DIMENSION_ALIGNED)
+dwg_get_OBJECT (ent_dim_ang3pt, DIMENSION_ANG3PT)
+dwg_get_OBJECT (ent_dim_ang2ln, DIMENSION_ANG2LN)
+dwg_get_OBJECT (ent_dim_radius, DIMENSION_RADIUS)
+dwg_get_OBJECT (ent_dim_diameter, DIMENSION_DIAMETER)
+dwg_get_OBJECT (ent_point, POINT)
+dwg_get_OBJECT (ent_polyline_pface, POLYLINE_PFACE)
+dwg_get_OBJECT (ent_polyline_mesh, POLYLINE_MESH)
+dwg_get_OBJECT (ent_solid, SOLID)
+dwg_get_OBJECT (ent_trace, TRACE)
+dwg_get_OBJECT (ent_shape, SHAPE)
+dwg_get_OBJECT (ent_viewport, VIEWPORT)
+dwg_get_OBJECT (ent_ellipse, ELLIPSE)
+dwg_get_OBJECT (ent_spline, SPLINE)
+dwg_get_OBJECT (ent_3dsolid, 3DSOLID)
+dwg_get_OBJECT (ent_region, REGION)
+dwg_get_OBJECT (ent_body, BODY)
+dwg_get_OBJECT (ent_ray, RAY)
+dwg_get_OBJECT (ent_xline, XLINE)
+dwg_get_OBJECT (ent_oleframe, OLEFRAME)
+dwg_get_OBJECT (ent_mtext, MTEXT)
+dwg_get_OBJECT (ent_leader, LEADER)
+dwg_get_OBJECT (ent_tolerance, TOLERANCE)
+dwg_get_OBJECT (ent_mline, MLINE)
+dwg_get_OBJECT (ent_unknown, UNKNOWN_ENT)
+  
+/* Start auto-generated content */
+/* untyped > 500 */
+dwg_get_OBJECT (ent_camera, CAMERA)
+dwg_get_OBJECT (ent_hatch, HATCH)
+dwg_get_OBJECT (ent_image, IMAGE)
+dwg_get_OBJECT (ent_light, LIGHT)
+dwg_get_OBJECT (ent_lwpline, LWPOLYLINE)
+dwg_get_OBJECT (ent_mesh, MESH)
+dwg_get_OBJECT (ent_mleader, MULTILEADER)
+dwg_get_OBJECT (ent_ole2frame, OLE2FRAME)
+dwg_get_OBJECT (ent_sectionobject, SECTIONOBJECT)
+dwg_get_OBJECT (ent_underlay, UNDERLAY)
+dwg_get_OBJECT (ent_wipeout, WIPEOUT)
+/* unstable */
+dwg_get_OBJECT (ent_arc_dimension, ARC_DIMENSION)
+dwg_get_OBJECT (ent_helix, HELIX)
+#ifdef DEBUG_CLASSES
+  dwg_get_OBJECT (ent_atext, ATEXT)
+  dwg_get_OBJECT (ent_extrudedsurface, EXTRUDEDSURFACE)
+  dwg_get_OBJECT (ent_geopositionmarker, GEOPOSITIONMARKER)
+  dwg_get_OBJECT (ent_loftedsurface, LOFTEDSURFACE)
+  dwg_get_OBJECT (ent_mpolygon, MPOLYGON)
+  dwg_get_OBJECT (ent_navisworksmodel, NAVISWORKSMODEL)
+  dwg_get_OBJECT (ent_nurbsurface, NURBSURFACE)
+  dwg_get_OBJECT (ent_planesurface, PLANESURFACE)
+  dwg_get_OBJECT (ent_revolvedsurface, REVOLVEDSURFACE)
+  dwg_get_OBJECT (ent_rtext, RTEXT)
+  dwg_get_OBJECT (ent_sweptsurface, SWEPTSURFACE)
+  dwg_get_OBJECT (ent_table, TABLE)
+#endif
+
+dwg_get_OBJECT (obj_appid, APPID)
+dwg_get_OBJECT (obj_appid_control, APPID_CONTROL)
+dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL)
+dwg_get_OBJECT (obj_block_header, BLOCK_HEADER)
+dwg_get_OBJECT (obj_dictionary, DICTIONARY)
+dwg_get_OBJECT (obj_dimstyle, DIMSTYLE)
+dwg_get_OBJECT (obj_dimstyle_control, DIMSTYLE_CONTROL)
+dwg_get_OBJECT (obj_dummy, DUMMY)
+dwg_get_OBJECT (obj_layer, LAYER)
+dwg_get_OBJECT (obj_layer_control, LAYER_CONTROL)
+dwg_get_OBJECT (obj_long_transaction, LONG_TRANSACTION)
+dwg_get_OBJECT (obj_ltype, LTYPE)
+dwg_get_OBJECT (obj_ltype_control, LTYPE_CONTROL)
+dwg_get_OBJECT (obj_mlinestyle, MLINESTYLE)
+dwg_get_OBJECT (obj_style, STYLE)
+dwg_get_OBJECT (obj_style_control, STYLE_CONTROL)
+dwg_get_OBJECT (obj_ucs, UCS)
+dwg_get_OBJECT (obj_ucs_control, UCS_CONTROL)
+dwg_get_OBJECT (obj_unknown_obj, UNKNOWN_OBJ)
+dwg_get_OBJECT (obj_view, VIEW)
+dwg_get_OBJECT (obj_view_control, VIEW_CONTROL)
+dwg_get_OBJECT (obj_vport, VPORT)
+dwg_get_OBJECT (obj_vport_control, VPORT_CONTROL)
+dwg_get_OBJECT (obj_vport_entity_control, VPORT_ENTITY_CONTROL)
+dwg_get_OBJECT (obj_vport_entity_header, VPORT_ENTITY_HEADER)
+/* untyped > 500 */
+dwg_get_OBJECT (obj_acsh_boolean_class, ACSH_BOOLEAN_CLASS)
+dwg_get_OBJECT (obj_acsh_box_class, ACSH_BOX_CLASS)
+dwg_get_OBJECT (obj_acsh_cylinder_class, ACSH_CYLINDER_CLASS)
+dwg_get_OBJECT (obj_acsh_fillet_class, ACSH_FILLET_CLASS)
+dwg_get_OBJECT (obj_acsh_sphere_class, ACSH_SPHERE_CLASS)
+dwg_get_OBJECT (obj_acsh_wedge_class, ACSH_WEDGE_CLASS)
+dwg_get_OBJECT (obj_cellstylemap, CELLSTYLEMAP)
+dwg_get_OBJECT (obj_dictionaryvar, DICTIONARYVAR)
+dwg_get_OBJECT (obj_dictionarywdflt, DICTIONARYWDFLT)
+dwg_get_OBJECT (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
+dwg_get_OBJECT (obj_field, FIELD)
+dwg_get_OBJECT (obj_fieldlist, FIELDLIST)
+dwg_get_OBJECT (obj_geodata, GEODATA)
+dwg_get_OBJECT (obj_group, GROUP)
+dwg_get_OBJECT (obj_idbuffer, IDBUFFER)
+dwg_get_OBJECT (obj_imagedef, IMAGEDEF)
+dwg_get_OBJECT (obj_imagedef_reactor, IMAGEDEF_REACTOR)
+dwg_get_OBJECT (obj_layerfilter, LAYERFILTER)
+dwg_get_OBJECT (obj_layer_index, LAYER_INDEX)
+dwg_get_OBJECT (obj_layout, LAYOUT)
+dwg_get_OBJECT (obj_mleaderstyle, MLEADERSTYLE)
+dwg_get_OBJECT (obj_placeholder, PLACEHOLDER)
+dwg_get_OBJECT (obj_plotsettings, PLOTSETTINGS)
+dwg_get_OBJECT (obj_rastervariables, RASTERVARIABLES)
+dwg_get_OBJECT (obj_scale, SCALE)
+dwg_get_OBJECT (obj_section_manager, SECTION_MANAGER)
+dwg_get_OBJECT (obj_sortentstable, SORTENTSTABLE)
+dwg_get_OBJECT (obj_spatial_filter, SPATIAL_FILTER)
+dwg_get_OBJECT (obj_tablegeometry, TABLEGEOMETRY)
+dwg_get_OBJECT (obj_underlaydefinition, UNDERLAYDEFINITION)
+dwg_get_OBJECT (obj_vba_project, VBA_PROJECT)
+dwg_get_OBJECT (obj_visualstyle, VISUALSTYLE)
+dwg_get_OBJECT (obj_wipeoutvariables, WIPEOUTVARIABLES)
+dwg_get_OBJECT (obj_xrecord, XRECORD)
+/* unstable */
+dwg_get_OBJECT (obj_acsh_brep_class, ACSH_BREP_CLASS)
+dwg_get_OBJECT (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS)
+dwg_get_OBJECT (obj_acsh_cone_class, ACSH_CONE_CLASS)
+dwg_get_OBJECT (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS)
+dwg_get_OBJECT (obj_acsh_torus_class, ACSH_TORUS_CLASS)
+dwg_get_OBJECT (obj_assocaction, ASSOCACTION)
+dwg_get_OBJECT (obj_assocblendsurfaceactionbody, ASSOCBLENDSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocdependency, ASSOCDEPENDENCY)
+dwg_get_OBJECT (obj_assocextendsurfaceactionbody, ASSOCEXTENDSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocextrudedsurfaceactionbody, ASSOCEXTRUDEDSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocfilletsurfaceactionbody, ASSOCFILLETSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
+dwg_get_OBJECT (obj_assocloftedsurfaceactionbody, ASSOCLOFTEDSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocnetwork, ASSOCNETWORK)
+dwg_get_OBJECT (obj_assocnetworksurfaceactionbody, ASSOCNETWORKSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocoffsetsurfaceactionbody, ASSOCOFFSETSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocpatchsurfaceactionbody, ASSOCPATCHSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocrevolvedsurfaceactionbody, ASSOCREVOLVEDSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assoctrimsurfaceactionbody, ASSOCTRIMSURFACEACTIONBODY)
+dwg_get_OBJECT (obj_assocvaluedependency, ASSOCVALUEDEPENDENCY)
+dwg_get_OBJECT (obj_background, BACKGROUND)
+dwg_get_OBJECT (obj_dbcolor, DBCOLOR)
+dwg_get_OBJECT (obj_detailviewstyle, DETAILVIEWSTYLE)
+dwg_get_OBJECT (obj_dimassoc, DIMASSOC)
+dwg_get_OBJECT (obj_lightlist, LIGHTLIST)
+dwg_get_OBJECT (obj_material, MATERIAL)
+dwg_get_OBJECT (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
+dwg_get_OBJECT (obj_object_ptr, OBJECT_PTR)
+dwg_get_OBJECT (obj_proxy_object, PROXY_OBJECT)
+dwg_get_OBJECT (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
+dwg_get_OBJECT (obj_rendersettings, RENDERSETTINGS)
+dwg_get_OBJECT (obj_sectionviewstyle, SECTIONVIEWSTYLE)
+dwg_get_OBJECT (obj_section_settings, SECTION_SETTINGS)
+dwg_get_OBJECT (obj_spatial_index, SPATIAL_INDEX)
+dwg_get_OBJECT (obj_sun, SUN)
+dwg_get_OBJECT (obj_tablestyle, TABLESTYLE)
+#ifdef DEBUG_CLASSES
+  dwg_get_OBJECT (obj_acmecommandhistory, ACMECOMMANDHISTORY)
+  dwg_get_OBJECT (obj_acmescope, ACMESCOPE)
+  dwg_get_OBJECT (obj_acmestatemgr, ACMESTATEMGR)
+  dwg_get_OBJECT (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS)
+  dwg_get_OBJECT (obj_acsh_history_class, ACSH_HISTORY_CLASS)
+  dwg_get_OBJECT (obj_acsh_loft_class, ACSH_LOFT_CLASS)
+  dwg_get_OBJECT (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS)
+  dwg_get_OBJECT (obj_acsh_sweep_class, ACSH_SWEEP_CLASS)
+  dwg_get_OBJECT (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_angdimobjectcontextdata, ANGDIMOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP)
+  dwg_get_OBJECT (obj_assoc3pointangulardimactionbody, ASSOC3POINTANGULARDIMACTIONBODY)
+  dwg_get_OBJECT (obj_assocactionparam, ASSOCACTIONPARAM)
+  dwg_get_OBJECT (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY)
+  dwg_get_OBJECT (obj_assocarrayactionbody, ASSOCARRAYACTIONBODY)
+  dwg_get_OBJECT (obj_assocarraymodifyactionbody, ASSOCARRAYMODIFYACTIONBODY)
+  dwg_get_OBJECT (obj_assocasmbodyactionparam, ASSOCASMBODYACTIONPARAM)
+  dwg_get_OBJECT (obj_assoccompoundactionparam, ASSOCCOMPOUNDACTIONPARAM)
+  dwg_get_OBJECT (obj_assocedgeactionparam, ASSOCEDGEACTIONPARAM)
+  dwg_get_OBJECT (obj_assocfaceactionparam, ASSOCFACEACTIONPARAM)
+  dwg_get_OBJECT (obj_assocmleaderactionbody, ASSOCMLEADERACTIONBODY)
+  dwg_get_OBJECT (obj_assocobjectactionparam, ASSOCOBJECTACTIONPARAM)
+  dwg_get_OBJECT (obj_assocordinatedimactionbody, ASSOCORDINATEDIMACTIONBODY)
+  dwg_get_OBJECT (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
+  dwg_get_OBJECT (obj_assocpathactionparam, ASSOCPATHACTIONPARAM)
+  dwg_get_OBJECT (obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER)
+  dwg_get_OBJECT (obj_assocrestoreentitystateactionbody, ASSOCRESTOREENTITYSTATEACTIONBODY)
+  dwg_get_OBJECT (obj_assocrotateddimactionbody, ASSOCROTATEDDIMACTIONBODY)
+  dwg_get_OBJECT (obj_assocsweptsurfaceactionbody, ASSOCSWEPTSURFACEACTIONBODY)
+  dwg_get_OBJECT (obj_assocvariable, ASSOCVARIABLE)
+  dwg_get_OBJECT (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
+  dwg_get_OBJECT (obj_blkrefobjectcontextdata, BLKREFOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_blockgriplocationcomponent, BLOCKGRIPLOCATIONCOMPONENT)
+  dwg_get_OBJECT (obj_blockparamdependencybody, BLOCKPARAMDEPENDENCYBODY)
+  dwg_get_OBJECT (obj_blockvisibilitygrip, BLOCKVISIBILITYGRIP)
+  dwg_get_OBJECT (obj_blockvisibilityparameter, BLOCKVISIBILITYPARAMETER)
+  dwg_get_OBJECT (obj_contextdatamanager, CONTEXTDATAMANAGER)
+  dwg_get_OBJECT (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)
+  dwg_get_OBJECT (obj_curvepath, CURVEPATH)
+  dwg_get_OBJECT (obj_datalink, DATALINK)
+  dwg_get_OBJECT (obj_datatable, DATATABLE)
+  dwg_get_OBJECT (obj_dmdimobjectcontextdata, DMDIMOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_evaluation_graph, EVALUATION_GRAPH)
+  dwg_get_OBJECT (obj_fcfobjectcontextdata, FCFOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_geomapimage, GEOMAPIMAGE)
+  dwg_get_OBJECT (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
+  dwg_get_OBJECT (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_motionpath, MOTIONPATH)
+  dwg_get_OBJECT (obj_mtextattributeobjectcontextdata, MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_navisworksmodeldef, NAVISWORKSMODELDEF)
+  dwg_get_OBJECT (obj_objectcontextdata, OBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_orddimobjectcontextdata, ORDDIMOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_persubentmgr, PERSUBENTMGR)
+  dwg_get_OBJECT (obj_pointpath, POINTPATH)
+  dwg_get_OBJECT (obj_radimlgobjectcontextdata, RADIMLGOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_radimobjectcontextdata, RADIMOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_renderentry, RENDERENTRY)
+  dwg_get_OBJECT (obj_renderenvironment, RENDERENVIRONMENT)
+  dwg_get_OBJECT (obj_renderglobal, RENDERGLOBAL)
+  dwg_get_OBJECT (obj_sunstudy, SUNSTUDY)
+  dwg_get_OBJECT (obj_tablecontent, TABLECONTENT)
+  dwg_get_OBJECT (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA)
+  dwg_get_OBJECT (obj_tvdeviceproperties, TVDEVICEPROPERTIES)
+#endif
 
 /********************************************************************
  * Functions to return NULL-terminated array of all owned entities  *
@@ -59,7 +352,6 @@ static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
  * and returns a malloced NULL-terminated array.
  */
 //< \fn Dwg_Entity_TEXT* dwg_getall_TEXT (Dwg_Object_Ref *hdr)
-/* Start auto-generated content */
 DWG_GETALL_ENTITY (_3DFACE)
 DWG_GETALL_ENTITY (_3DSOLID)
 DWG_GETALL_ENTITY (ARC)
@@ -243,71 +535,71 @@ DWG_GETALL_OBJECT (SPATIAL_INDEX)
 DWG_GETALL_OBJECT (SUN)
 DWG_GETALL_OBJECT (TABLESTYLE)
 #ifdef DEBUG_CLASSES
-DWG_GETALL_OBJECT (ACMECOMMANDHISTORY)
-DWG_GETALL_OBJECT (ACMESCOPE)
-DWG_GETALL_OBJECT (ACMESTATEMGR)
-DWG_GETALL_OBJECT (ACSH_EXTRUSION_CLASS)
-DWG_GETALL_OBJECT (ACSH_HISTORY_CLASS)
-DWG_GETALL_OBJECT (ACSH_LOFT_CLASS)
-DWG_GETALL_OBJECT (ACSH_REVOLVE_CLASS)
-DWG_GETALL_OBJECT (ACSH_SWEEP_CLASS)
-DWG_GETALL_OBJECT (ALDIMOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (ANGDIMOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (ASSOC2DCONSTRAINTGROUP)
-DWG_GETALL_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCARRAYACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCASMBODYACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCEDGEACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCFACEACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCMLEADERACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCOBJECTACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCORDINATEDIMACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCPATHACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCPERSSUBENTMANAGER)
-DWG_GETALL_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCROTATEDDIMACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCVARIABLE)
-DWG_GETALL_OBJECT (ASSOCVERTEXACTIONPARAM)
-DWG_GETALL_OBJECT (BLKREFOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
-DWG_GETALL_OBJECT (BLOCKPARAMDEPENDENCYBODY)
-DWG_GETALL_OBJECT (BLOCKVISIBILITYGRIP)
-DWG_GETALL_OBJECT (BLOCKVISIBILITYPARAMETER)
-DWG_GETALL_OBJECT (CONTEXTDATAMANAGER)
-DWG_GETALL_OBJECT (CSACDOCUMENTOPTIONS)
-DWG_GETALL_OBJECT (CURVEPATH)
-DWG_GETALL_OBJECT (DATALINK)
-DWG_GETALL_OBJECT (DATATABLE)
-DWG_GETALL_OBJECT (DMDIMOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (EVALUATION_GRAPH)
-DWG_GETALL_OBJECT (FCFOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (GEOMAPIMAGE)
-DWG_GETALL_OBJECT (LAYOUTPRINTCONFIG)
-DWG_GETALL_OBJECT (LEADEROBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (MLEADEROBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (MOTIONPATH)
-DWG_GETALL_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (MTEXTOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (NAVISWORKSMODELDEF)
-DWG_GETALL_OBJECT (OBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (ORDDIMOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (PERSUBENTMGR)
-DWG_GETALL_OBJECT (POINTPATH)
-DWG_GETALL_OBJECT (RADIMLGOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (RADIMOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (RENDERENTRY)
-DWG_GETALL_OBJECT (RENDERENVIRONMENT)
-DWG_GETALL_OBJECT (RENDERGLOBAL)
-DWG_GETALL_OBJECT (SUNSTUDY)
-DWG_GETALL_OBJECT (TABLECONTENT)
-DWG_GETALL_OBJECT (TEXTOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (TVDEVICEPROPERTIES)
+  DWG_GETALL_OBJECT (ACMECOMMANDHISTORY)
+  DWG_GETALL_OBJECT (ACMESCOPE)
+  DWG_GETALL_OBJECT (ACMESTATEMGR)
+  DWG_GETALL_OBJECT (ACSH_EXTRUSION_CLASS)
+  DWG_GETALL_OBJECT (ACSH_HISTORY_CLASS)
+  DWG_GETALL_OBJECT (ACSH_LOFT_CLASS)
+  DWG_GETALL_OBJECT (ACSH_REVOLVE_CLASS)
+  DWG_GETALL_OBJECT (ACSH_SWEEP_CLASS)
+  DWG_GETALL_OBJECT (ALDIMOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (ANGDIMOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (ASSOC2DCONSTRAINTGROUP)
+  DWG_GETALL_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCARRAYACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCASMBODYACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCEDGEACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCFACEACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCMLEADERACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCOBJECTACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCORDINATEDIMACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCPATHACTIONPARAM)
+  DWG_GETALL_OBJECT (ASSOCPERSSUBENTMANAGER)
+  DWG_GETALL_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCROTATEDDIMACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
+  DWG_GETALL_OBJECT (ASSOCVARIABLE)
+  DWG_GETALL_OBJECT (ASSOCVERTEXACTIONPARAM)
+  DWG_GETALL_OBJECT (BLKREFOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
+  DWG_GETALL_OBJECT (BLOCKPARAMDEPENDENCYBODY)
+  DWG_GETALL_OBJECT (BLOCKVISIBILITYGRIP)
+  DWG_GETALL_OBJECT (BLOCKVISIBILITYPARAMETER)
+  DWG_GETALL_OBJECT (CONTEXTDATAMANAGER)
+  DWG_GETALL_OBJECT (CSACDOCUMENTOPTIONS)
+  DWG_GETALL_OBJECT (CURVEPATH)
+  DWG_GETALL_OBJECT (DATALINK)
+  DWG_GETALL_OBJECT (DATATABLE)
+  DWG_GETALL_OBJECT (DMDIMOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (EVALUATION_GRAPH)
+  DWG_GETALL_OBJECT (FCFOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (GEOMAPIMAGE)
+  DWG_GETALL_OBJECT (LAYOUTPRINTCONFIG)
+  DWG_GETALL_OBJECT (LEADEROBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (MLEADEROBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (MOTIONPATH)
+  DWG_GETALL_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (MTEXTOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (NAVISWORKSMODELDEF)
+  DWG_GETALL_OBJECT (OBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (ORDDIMOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (PERSUBENTMGR)
+  DWG_GETALL_OBJECT (POINTPATH)
+  DWG_GETALL_OBJECT (RADIMLGOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (RADIMOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (RENDERENTRY)
+  DWG_GETALL_OBJECT (RENDERENVIRONMENT)
+  DWG_GETALL_OBJECT (RENDERGLOBAL)
+  DWG_GETALL_OBJECT (SUNSTUDY)
+  DWG_GETALL_OBJECT (TABLECONTENT)
+  DWG_GETALL_OBJECT (TEXTOBJECTCONTEXTDATA)
+  DWG_GETALL_OBJECT (TVDEVICEPROPERTIES)
 #endif
 
 /*******************************************************************
@@ -321,6 +613,8 @@ DWG_GETALL_OBJECT (TVDEVICEPROPERTIES)
  * cast a Dwg_Object to Entity
  */
 /* fixed <500 */
+CAST_DWG_OBJECT_TO_ENTITY (_3DFACE)
+CAST_DWG_OBJECT_TO_ENTITY (_3DSOLID)
 CAST_DWG_OBJECT_TO_ENTITY (ARC)
 CAST_DWG_OBJECT_TO_ENTITY (ATTDEF)
 CAST_DWG_OBJECT_TO_ENTITY (ATTRIB)
@@ -382,18 +676,18 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (WIPEOUT)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ARC_DIMENSION)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (HELIX)
 #ifdef DEBUG_CLASSES
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ATEXT)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (EXTRUDEDSURFACE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (GEOPOSITIONMARKER)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LOFTEDSURFACE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MPOLYGON)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NAVISWORKSMODEL)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NURBSURFACE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (PLANESURFACE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (RTEXT)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (TABLE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ATEXT)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (EXTRUDEDSURFACE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (GEOPOSITIONMARKER)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LOFTEDSURFACE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MPOLYGON)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NAVISWORKSMODEL)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NURBSURFACE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (PLANESURFACE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (RTEXT)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (TABLE)
 #endif
 
 /*******************************************************************
@@ -503,77 +797,75 @@ CAST_DWG_OBJECT_TO_OBJECT (SPATIAL_INDEX)
 CAST_DWG_OBJECT_TO_OBJECT (SUN)
 CAST_DWG_OBJECT_TO_OBJECT (TABLESTYLE)
 #ifdef DEBUG_CLASSES
-CAST_DWG_OBJECT_TO_OBJECT (ACMECOMMANDHISTORY)
-CAST_DWG_OBJECT_TO_OBJECT (ACMESCOPE)
-CAST_DWG_OBJECT_TO_OBJECT (ACMESTATEMGR)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_EXTRUSION_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_HISTORY_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_LOFT_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_REVOLVE_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_SWEEP_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ALDIMOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (ANGDIMOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOC2DCONSTRAINTGROUP)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCASMBODYACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCEDGEACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCFACEACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCMLEADERACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCOBJECTACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCORDINATEDIMACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCPATHACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCPERSSUBENTMANAGER)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCROTATEDDIMACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCVARIABLE)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCVERTEXACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (BLKREFOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKPARAMDEPENDENCYBODY)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (CONTEXTDATAMANAGER)
-CAST_DWG_OBJECT_TO_OBJECT (CSACDOCUMENTOPTIONS)
-CAST_DWG_OBJECT_TO_OBJECT (CURVEPATH)
-CAST_DWG_OBJECT_TO_OBJECT (DATALINK)
-CAST_DWG_OBJECT_TO_OBJECT (DATATABLE)
-CAST_DWG_OBJECT_TO_OBJECT (DMDIMOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (EVALUATION_GRAPH)
-CAST_DWG_OBJECT_TO_OBJECT (FCFOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (GEOMAPIMAGE)
-CAST_DWG_OBJECT_TO_OBJECT (LAYOUTPRINTCONFIG)
-CAST_DWG_OBJECT_TO_OBJECT (LEADEROBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (MLEADEROBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (MOTIONPATH)
-CAST_DWG_OBJECT_TO_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (MTEXTOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (NAVISWORKSMODELDEF)
-CAST_DWG_OBJECT_TO_OBJECT (OBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (ORDDIMOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (PERSUBENTMGR)
-CAST_DWG_OBJECT_TO_OBJECT (POINTPATH)
-CAST_DWG_OBJECT_TO_OBJECT (RADIMLGOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (RADIMOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (RENDERENTRY)
-CAST_DWG_OBJECT_TO_OBJECT (RENDERENVIRONMENT)
-CAST_DWG_OBJECT_TO_OBJECT (RENDERGLOBAL)
-CAST_DWG_OBJECT_TO_OBJECT (SUNSTUDY)
-CAST_DWG_OBJECT_TO_OBJECT (TABLECONTENT)
-CAST_DWG_OBJECT_TO_OBJECT (TEXTOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (TVDEVICEPROPERTIES)
+  CAST_DWG_OBJECT_TO_OBJECT (ACMECOMMANDHISTORY)
+  CAST_DWG_OBJECT_TO_OBJECT (ACMESCOPE)
+  CAST_DWG_OBJECT_TO_OBJECT (ACMESTATEMGR)
+  CAST_DWG_OBJECT_TO_OBJECT (ACSH_EXTRUSION_CLASS)
+  CAST_DWG_OBJECT_TO_OBJECT (ACSH_HISTORY_CLASS)
+  CAST_DWG_OBJECT_TO_OBJECT (ACSH_LOFT_CLASS)
+  CAST_DWG_OBJECT_TO_OBJECT (ACSH_REVOLVE_CLASS)
+  CAST_DWG_OBJECT_TO_OBJECT (ACSH_SWEEP_CLASS)
+  CAST_DWG_OBJECT_TO_OBJECT (ALDIMOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (ANGDIMOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOC2DCONSTRAINTGROUP)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCASMBODYACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCEDGEACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCFACEACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCMLEADERACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCOBJECTACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCORDINATEDIMACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCPATHACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCPERSSUBENTMANAGER)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCROTATEDDIMACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCVARIABLE)
+  CAST_DWG_OBJECT_TO_OBJECT (ASSOCVERTEXACTIONPARAM)
+  CAST_DWG_OBJECT_TO_OBJECT (BLKREFOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
+  CAST_DWG_OBJECT_TO_OBJECT (BLOCKPARAMDEPENDENCYBODY)
+  CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYGRIP)
+  CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYPARAMETER)
+  CAST_DWG_OBJECT_TO_OBJECT (CONTEXTDATAMANAGER)
+  CAST_DWG_OBJECT_TO_OBJECT (CSACDOCUMENTOPTIONS)
+  CAST_DWG_OBJECT_TO_OBJECT (CURVEPATH)
+  CAST_DWG_OBJECT_TO_OBJECT (DATALINK)
+  CAST_DWG_OBJECT_TO_OBJECT (DATATABLE)
+  CAST_DWG_OBJECT_TO_OBJECT (DMDIMOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (EVALUATION_GRAPH)
+  CAST_DWG_OBJECT_TO_OBJECT (FCFOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (GEOMAPIMAGE)
+  CAST_DWG_OBJECT_TO_OBJECT (LAYOUTPRINTCONFIG)
+  CAST_DWG_OBJECT_TO_OBJECT (LEADEROBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (MLEADEROBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (MOTIONPATH)
+  CAST_DWG_OBJECT_TO_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (MTEXTOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (NAVISWORKSMODELDEF)
+  CAST_DWG_OBJECT_TO_OBJECT (OBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (ORDDIMOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (PERSUBENTMGR)
+  CAST_DWG_OBJECT_TO_OBJECT (POINTPATH)
+  CAST_DWG_OBJECT_TO_OBJECT (RADIMLGOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (RADIMOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (RENDERENTRY)
+  CAST_DWG_OBJECT_TO_OBJECT (RENDERENVIRONMENT)
+  CAST_DWG_OBJECT_TO_OBJECT (RENDERGLOBAL)
+  CAST_DWG_OBJECT_TO_OBJECT (SUNSTUDY)
+  CAST_DWG_OBJECT_TO_OBJECT (TABLECONTENT)
+  CAST_DWG_OBJECT_TO_OBJECT (TEXTOBJECTCONTEXTDATA)
+  CAST_DWG_OBJECT_TO_OBJECT (TVDEVICEPROPERTIES)
 #endif
+// clang-format: on
 /* End auto-generated content */
 
-CAST_DWG_OBJECT_TO_ENTITY (_3DFACE)
-CAST_DWG_OBJECT_TO_ENTITY (_3DSOLID)
-  
 /*******************************************************************
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
  ********************************************************************/
@@ -616,8 +908,6 @@ dwg_object_to_DIMENSION (dwg_object *obj)
     }
   return (dwg_ent_dim *)ret_obj;
 }
-
-#endif /* __AFL_COMPILER */
 
 /********************************************************************
  *                    DYNAPI FUNCTIONS                              *
@@ -797,309 +1087,6 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
     return false;
 #endif
 }
-
-/**
- * Return an object fieldvalue
- */
-#ifndef HAVE_NONNULL
-#  define dwg_get_OBJECT(name, OBJECT)                                        \
-    EXPORT bool dwg_get_##OBJECT (const dwg_##name *restrict name,            \
-                                  const char *restrict fieldname,             \
-                                  void *restrict out)                         \
-    {                                                                         \
-      if (name && fieldname && out)                                           \
-        return dwg_dynapi_entity_value ((void *)name, #OBJECT, fieldname,     \
-                                        out, NULL);                           \
-      else                                                                    \
-        return false;                                                         \
-    }                                                                         \
-    EXPORT bool dwg_set_##OBJECT (const dwg_##name *restrict name,            \
-                                  const char *restrict fieldname,             \
-                                  void *restrict value)                       \
-    {                                                                         \
-      if (name && fieldname && value)                                         \
-        return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname, \
-                                            value, 0);                        \
-      else                                                                    \
-        return false;                                                         \
-    }
-#else
-#  define dwg_get_OBJECT(name, OBJECT)                                        \
-    EXPORT bool dwg_get_##OBJECT (const dwg_##name *restrict name,            \
-                                  const char *restrict fieldname,             \
-                                  void *restrict out)                         \
-    {                                                                         \
-      return dwg_dynapi_entity_value ((void *)name, #OBJECT, fieldname, out,  \
-                                      NULL);                                  \
-    }                                                                         \
-    EXPORT bool dwg_set_##OBJECT (const dwg_##name *restrict name,            \
-                                  const char *restrict fieldname,             \
-                                  void *restrict value)                       \
-    {                                                                         \
-      return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname,   \
-                                          value, 0);                          \
-    }
-#endif
-
-#ifndef __AFL_COMPILER
-  // clang-format: off
-  dwg_get_OBJECT (ent_text, TEXT)
-  dwg_get_OBJECT (ent_attrib, ATTRIB)
-  dwg_get_OBJECT (ent_attdef, ATTDEF)
-  dwg_get_OBJECT (ent_block, BLOCK)
-  dwg_get_OBJECT (ent_endblk, ENDBLK)
-  dwg_get_OBJECT (ent_seqend, SEQEND)
-  dwg_get_OBJECT (ent_insert, INSERT)
-  dwg_get_OBJECT (ent_minsert, MINSERT)
-  dwg_get_OBJECT (ent_vertex_2d, VERTEX_2D)
-  dwg_get_OBJECT (ent_vertex_3d, VERTEX_3D)
-  dwg_get_OBJECT (ent_vertex_mesh, VERTEX_MESH)
-  dwg_get_OBJECT (ent_vertex_pface, VERTEX_PFACE)
-  dwg_get_OBJECT (ent_vertex_pface_face, VERTEX_PFACE_FACE)
-  dwg_get_OBJECT (ent_polyline_2d, POLYLINE_2D)
-  dwg_get_OBJECT (ent_polyline_3d, POLYLINE_3D)
-  dwg_get_OBJECT (ent_arc, ARC)
-#endif
-
-  dwg_get_OBJECT (ent_circle, CIRCLE)
-  dwg_get_OBJECT (ent_line, LINE)
-
-#ifndef __AFL_COMPILER
-  dwg_get_OBJECT (ent_dim_ordinate, DIMENSION_ORDINATE)
-  dwg_get_OBJECT (ent_dim_linear, DIMENSION_LINEAR)
-  dwg_get_OBJECT (ent_dim_aligned, DIMENSION_ALIGNED)
-  dwg_get_OBJECT (ent_dim_ang3pt, DIMENSION_ANG3PT)
-  dwg_get_OBJECT (ent_dim_ang2ln, DIMENSION_ANG2LN)
-  dwg_get_OBJECT (ent_dim_radius, DIMENSION_RADIUS)
-  dwg_get_OBJECT (ent_dim_diameter, DIMENSION_DIAMETER)
-  dwg_get_OBJECT (ent_point, POINT)
-  dwg_get_OBJECT (ent_polyline_pface, POLYLINE_PFACE)
-  dwg_get_OBJECT (ent_polyline_mesh, POLYLINE_MESH)
-  dwg_get_OBJECT (ent_solid, SOLID)
-  dwg_get_OBJECT (ent_trace, TRACE)
-  dwg_get_OBJECT (ent_shape, SHAPE)
-  dwg_get_OBJECT (ent_viewport, VIEWPORT)
-  dwg_get_OBJECT (ent_ellipse, ELLIPSE)
-  dwg_get_OBJECT (ent_spline, SPLINE)
-  dwg_get_OBJECT (ent_region, REGION)
-  dwg_get_OBJECT (ent_body, BODY)
-  dwg_get_OBJECT (ent_ray, RAY)
-  dwg_get_OBJECT (ent_xline, XLINE)
-  dwg_get_OBJECT (ent_oleframe, OLEFRAME)
-  dwg_get_OBJECT (ent_mtext, MTEXT)
-  dwg_get_OBJECT (ent_leader, LEADER)
-  dwg_get_OBJECT (ent_tolerance, TOLERANCE)
-  dwg_get_OBJECT (ent_mline, MLINE)
-  dwg_get_OBJECT (ent_ole2frame, OLE2FRAME)
-  dwg_get_OBJECT (ent_lwpline, LWPOLYLINE)
-  dwg_get_OBJECT (ent_proxy, PROXY_ENTITY)
-  dwg_get_OBJECT (ent_hatch, HATCH)
-  dwg_get_OBJECT (ent_unknown, UNKNOWN_ENT)
-  dwg_get_OBJECT (ent_image, IMAGE)
-  dwg_get_OBJECT (ent_arc_dimension, ARC_DIMENSION)
-  dwg_get_OBJECT (ent_camera, CAMERA)
-  dwg_get_OBJECT (ent_helix, HELIX)
-  dwg_get_OBJECT (ent_light, LIGHT)
-  dwg_get_OBJECT (ent_mesh, MESH)
-  dwg_get_OBJECT (ent_mleader, MULTILEADER)
-  dwg_get_OBJECT (ent_sectionobject, SECTIONOBJECT)
-  dwg_get_OBJECT (ent_underlay, UNDERLAY)
-  dwg_get_OBJECT (ent_wipeout, WIPEOUT)
-
-#  ifdef DEBUG_CLASSES
-  dwg_get_OBJECT (ent_atext, ATEXT)
-  dwg_get_OBJECT (ent_rtext, RTEXT)
-  dwg_get_OBJECT (ent_mpolygon, MPOLYGON)
-  dwg_get_OBJECT (ent_nurbsurface, NURBSURFACE)
-  dwg_get_OBJECT (ent_planesurface, PLANESURFACE)
-  dwg_get_OBJECT (ent_extrudedsurface, EXTRUDEDSURFACE)
-  dwg_get_OBJECT (ent_loftedsurface, LOFTEDSURFACE)
-  dwg_get_OBJECT (ent_revolvedsurface, REVOLVEDSURFACE)
-  dwg_get_OBJECT (ent_sweptsurface, SWEPTSURFACE)
-  dwg_get_OBJECT (ent_geopositionmarker, GEOPOSITIONMARKER)
-  dwg_get_OBJECT (ent_table, TABLE)
-  dwg_get_OBJECT (ent_navisworksmodel, NAVISWORKSMODEL)
-#  endif
-
-  dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL)
-  dwg_get_OBJECT (obj_block_header, BLOCK_HEADER)
-  dwg_get_OBJECT (obj_layer_control, LAYER_CONTROL)
-  dwg_get_OBJECT (obj_layer, LAYER)
-  dwg_get_OBJECT (obj_style_control, STYLE_CONTROL)
-  dwg_get_OBJECT (obj_style, STYLE)
-  dwg_get_OBJECT (obj_ltype_control, LTYPE_CONTROL)
-  dwg_get_OBJECT (obj_ltype, LTYPE)
-  dwg_get_OBJECT (obj_view_control, VIEW_CONTROL)
-  dwg_get_OBJECT (obj_view, VIEW)
-  dwg_get_OBJECT (obj_ucs_control, UCS_CONTROL)
-  dwg_get_OBJECT (obj_ucs, UCS)
-  dwg_get_OBJECT (obj_vport_control, VPORT_CONTROL)
-  dwg_get_OBJECT (obj_vport, VPORT)
-  dwg_get_OBJECT (obj_appid_control, APPID_CONTROL)
-  dwg_get_OBJECT (obj_appid, APPID)
-  dwg_get_OBJECT (obj_dimstyle_control, DIMSTYLE_CONTROL)
-  dwg_get_OBJECT (obj_dimstyle, DIMSTYLE)
-  dwg_get_OBJECT (obj_vport_entity_control, VPORT_ENTITY_CONTROL)
-  dwg_get_OBJECT (obj_vport_entity_header, VPORT_ENTITY_HEADER)
-  dwg_get_OBJECT (obj_dictionary, DICTIONARY)
-  dwg_get_OBJECT (obj_mlinestyle, MLINESTYLE)
-  dwg_get_OBJECT (obj_unknown, UNKNOWN_OBJ)
-
-  // stable:
-  dwg_get_OBJECT (obj_acsh_boolean_class, ACSH_BOOLEAN_CLASS)
-  dwg_get_OBJECT (obj_acsh_box_class, ACSH_BOX_CLASS)
-  dwg_get_OBJECT (obj_acsh_cylinder_class, ACSH_CYLINDER_CLASS);
-  dwg_get_OBJECT (obj_acsh_fillet_class, ACSH_FILLET_CLASS);
-  dwg_get_OBJECT (obj_acsh_sphere_class, ACSH_SPHERE_CLASS);
-  dwg_get_OBJECT (obj_acsh_wedge_class, ACSH_WEDGE_CLASS);
-  dwg_get_OBJECT (obj_cellstylemap, CELLSTYLEMAP)
-  dwg_get_OBJECT (obj_dictionaryvar, DICTIONARYVAR)
-  dwg_get_OBJECT (obj_dictionarywdflt, DICTIONARYWDFLT)
-  dwg_get_OBJECT (obj_dummy, DUMMY)
-  dwg_get_OBJECT (obj_field, FIELD)
-  dwg_get_OBJECT (obj_fieldlist, FIELDLIST)
-  dwg_get_OBJECT (obj_geodata, GEODATA)
-  dwg_get_OBJECT (obj_group, GROUP)
-  dwg_get_OBJECT (obj_idbuffer, IDBUFFER)
-  dwg_get_OBJECT (obj_imagedef, IMAGEDEF)
-  dwg_get_OBJECT (obj_imagedef_reactor, REACTOR)
-  dwg_get_OBJECT (obj_layer_index, LAYER_INDEX)
-  dwg_get_OBJECT (obj_layerfilter, LAYERFILTER)
-  dwg_get_OBJECT (obj_layout, LAYOUT)
-  dwg_get_OBJECT (obj_plotsettings, PLOTSETTINGS)
-  dwg_get_OBJECT (obj_mleaderstyle, MLEADERSTYLE)
-  dwg_get_OBJECT (obj_placeholder, PLACEHOLDER)
-  dwg_get_OBJECT (obj_rastervariables, RASTERVARIABLES)
-  dwg_get_OBJECT (obj_scale, SCALE)
-  dwg_get_OBJECT (obj_section_manager, SECTION_MANAGER)
-  dwg_get_OBJECT (obj_sortentstable, SORTENTSTABLE)
-  dwg_get_OBJECT (obj_spatial_filter, SPATIAL_FILTER)
-  dwg_get_OBJECT (obj_spatial_index, SPATIAL_INDEX)
-  dwg_get_OBJECT (obj_vba_project, VBA_PROJECT)
-  dwg_get_OBJECT (obj_wipeoutvariables, WIPEOUTVARIABLES)
-  dwg_get_OBJECT (obj_xrecord, XRECORD)
-
-  // unstable:
-  dwg_get_OBJECT (obj_acsh_brep_class, ACSH_BREP_CLASS)
-  dwg_get_OBJECT (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
-  dwg_get_OBJECT (obj_acsh_cone_class, ACSH_CONE_CLASS);
-  dwg_get_OBJECT (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
-  dwg_get_OBJECT (obj_acsh_torus_class, ACSH_TORUS_CLASS);
-  dwg_get_OBJECT (obj_assocaction, ASSOCACTION)
-  dwg_get_OBJECT (obj_assocnetwork, ASSOCNETWORK)
-  dwg_get_OBJECT (obj_assocdependency, ASSOCDEPENDENCY)
-  dwg_get_OBJECT (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
-  dwg_get_OBJECT (obj_assocvaluedependency, ASSOCVALUEDEPENDENCY)
-  dwg_get_OBJECT (obj_assocblendsurfaceactionbody, ASSOCBLENDSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocextendsurfaceactionbody, ASSOCEXTENDSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocextrudedsurfaceactionbody, ASSOCEXTRUDEDSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocfilletsurfaceactionbody, ASSOCFILLETSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocloftedsurfaceactionbody, ASSOCLOFTEDSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocnetworksurfaceactionbody, ASSOCNETWORKSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocoffsetsurfaceactionbody, ASSOCOFFSETSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocpatchsurfaceactionbody, ASSOCPATCHSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocrevolvedsurfaceactionbody, ASSOCREVOLVEDSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assocsweptsurfaceactionbody, ASSOCSWEPTSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_assoctrimsurfaceactionbody, ASSOCTRIMSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_background, BACKGROUND)
-  dwg_get_OBJECT (obj_dbcolor, DBCOLOR)
-  dwg_get_OBJECT (obj_detailviewstyle, DETAILVIEWSTYLE)
-  dwg_get_OBJECT (obj_dimassoc, DIMASSOC)
-  dwg_get_OBJECT (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
-  dwg_get_OBJECT (obj_lightlist, LIGHTLIST)
-  dwg_get_OBJECT (obj_long_transaction, LONG_TRANSACTION)
-  dwg_get_OBJECT (obj_material, MATERIAL)
-  dwg_get_OBJECT (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
-  dwg_get_OBJECT (obj_object_ptr, OBJECT_PTR)
-  dwg_get_OBJECT (obj_proxy, PROXY_OBJECT)
-  dwg_get_OBJECT (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
-  dwg_get_OBJECT (obj_rendersettings, RENDERSETTINGS)
-  dwg_get_OBJECT (obj_section_settings, SECTION_SETTINGS)
-  dwg_get_OBJECT (obj_sectionviewstyle, SECTIONVIEWSTYLE)
-  dwg_get_OBJECT (obj_sun, SUN)
-  dwg_get_OBJECT (obj_tablegeometry, TABLEGEOMETRY)
-  dwg_get_OBJECT (obj_tablestyle, TABLESTYLE)
-  dwg_get_OBJECT (obj_underlaydefinition, UNDERLAYDEFINITION)
-  dwg_get_OBJECT (obj_visualstyle, VISUALSTYLE)
-
-#  ifdef DEBUG_CLASSES
-  dwg_get_OBJECT (obj_tablecontent, TABLECONTENT)
-  dwg_get_OBJECT (obj_sunstudy, SUNSTUDY)
-  dwg_get_OBJECT (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS)
-  dwg_get_OBJECT (obj_acsh_history_class, ACSH_HISTORY_CLASS)
-  dwg_get_OBJECT (obj_acsh_loft_class, ACSH_LOFT_CLASS);
-  dwg_get_OBJECT (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS);
-  dwg_get_OBJECT (obj_acsh_sweep_class, ACSH_SWEEP_CLASS)
-  dwg_get_OBJECT (obj_contextdatamanager, CONTEXTDATAMANAGER);
-  dwg_get_OBJECT (obj_objectcontextdata, OBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_angdimobjectcontextdata, ANGDIMOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_dmdimobjectcontextdata, DMDIMOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_orddimobjectcontextdata, ORDDIMOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_radimobjectcontextdata, RADIMOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_radimlgobjectcontextdata, RADIMLGOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_blkrefobjectcontextdata, BLKREFOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_blockgriplocationcomponent, BLOCKGRIPLOCATIONCOMPONENT);
-  dwg_get_OBJECT (obj_blockparamdependencybody, BLOCKPARAMDEPENDENCYBODY);
-  dwg_get_OBJECT (obj_blockvisibilitygrip, BLOCKVISIBILITYGRIP);
-  dwg_get_OBJECT (obj_blockvisibilityparameter, BLOCKVISIBILITYPARAMETER);
-  dwg_get_OBJECT (obj_fcfobjectcontextdata, FCFOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_mtextattributeobjectcontextdata, MTEXTATRIBUTEOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA);
-  dwg_get_OBJECT (obj_assocvariable, ASSOCVARIABLE)
-  dwg_get_OBJECT (obj_assocrestoreentitystateactionbody, ASSOCRESTOREENTITYSTATEACTIONBODY)
-  dwg_get_OBJECT (obj_assocarrayactionbody, ASSOCARRAYACTIONBODY)
-  dwg_get_OBJECT (obj_assocarraymodifyactionbody, ASSOCARRAYMODIFYACTIONBODY)
-  dwg_get_OBJECT (obj_assocmleaderactionbody, ASSOCMLEADERACTIONBODY)
-  dwg_get_OBJECT (obj_assoc3pointangulardimactionbody, ASSOC3POINTANGULARDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocordinatedimactionbody, ASSOCORDINATEDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocrotateddimactionbody, ASSOCROTATEDDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER)
-  dwg_get_OBJECT (obj_assocactionparam, ASSOCACTIONPARAM)
-  dwg_get_OBJECT (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
-  dwg_get_OBJECT (obj_assocasmbodyactionparam, ASSOCASMBODYACTIONPARAM)
-  dwg_get_OBJECT (obj_assoccompoundactionparam, ASSOCCOMPOUNDACTIONPARAM)
-  dwg_get_OBJECT (obj_assocedgeactionparam, ASSOCEDGEACTIONPARAM)
-  dwg_get_OBJECT (obj_assocfaceactionparam, ASSOCFACEACTIONPARAM)
-  dwg_get_OBJECT (obj_assocobjectactionparam, ASSOCOBJECTACTIONPARAM)
-  dwg_get_OBJECT (obj_assocpathactionparam, ASSOCPATHACTIONPARAM)
-  dwg_get_OBJECT (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-  dwg_get_OBJECT (obj_persubentmgr, PERSUBENTMGR)
-  dwg_get_OBJECT (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP)
-  dwg_get_OBJECT (obj_evaluation_graph, EVALUATION_GRAPH)
-  dwg_get_OBJECT (obj_navisworksmodeldef, NAVISWORKSMODELDEF)
-  dwg_get_OBJECT (obj_geomapimage, GEOMAPIMAGE)
-  dwg_get_OBJECT (obj_curvepath, CURVEPATH)
-  dwg_get_OBJECT (obj_motionpath, MOTIONPATH)
-  dwg_get_OBJECT (obj_pointpath, POINTPATH)
-  dwg_get_OBJECT (obj_renderenvironment, RENDERENVIRONMENT)
-  dwg_get_OBJECT (obj_renderentry, RENDERENTRY)
-  dwg_get_OBJECT (obj_renderglobal, RENDERGLOBAL)
-  dwg_get_OBJECT (obj_tvdeviceproperties, TVDEVICEPROPERTIES)
-  dwg_get_OBJECT (obj_datalink, DATALINK)
-  dwg_get_OBJECT (obj_datatable, DATATABLE)
-  dwg_get_OBJECT (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
-  // clang-format: on
-
-  // unhandled:
-  dwg_get_OBJECT (obj_acmecommandhistory, ACMECOMMANDHISTORY)
-  dwg_get_OBJECT (obj_acmescope, ACMESCOPE)
-  dwg_get_OBJECT (obj_acmestatemgr, ACMESTATEMGR)
-  dwg_get_OBJECT (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)
-  // dwg_get_OBJECT (obj_acdsrecord, ACDSRECORD)
-  // dwg_get_OBJECT (obj_acdsschema, ACDSSCHEMA)
-  // dwg_get_OBJECT (obj_npocollection, NPOCOLLECTION)
-  // dwg_get_OBJECT (obj_pointcloud, POINTCLOUD)
-  // dwg_get_OBJECT (obj_visibilitygripentity, VISIBILITYGRIPENTITY)
-  // dwg_get_OBJECT (obj_visibilityparameterentity, VISIBILITYPARAMETERENTITY)
-  // dwg_get_OBJECT (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)
-  // dwg_get_OBJECT (obj_xrefpanelobject, XREFPANELOBJECT)
-# endif
 
 /********************************************************************
  *                FUNCTIONS TYPE SPECIFIC                            *
