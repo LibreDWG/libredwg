@@ -7670,7 +7670,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_BOX_CLASS)
   //DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBox)
   FIELD_BL (major, 90); //33
@@ -7685,7 +7685,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_WEDGE_CLASS)
   //DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShWedge)
   FIELD_BL (major, 90); //33
@@ -7699,7 +7699,7 @@ DWG_OBJECT_END
 // Stable
 DWG_OBJECT (ACSH_SPHERE_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSpere)
   FIELD_BL (major, 90); //33
@@ -7711,7 +7711,7 @@ DWG_OBJECT_END
 // Stable
 DWG_OBJECT (ACSH_CYLINDER_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShCylinder)
   FIELD_BL (major, 90);
@@ -7726,7 +7726,7 @@ DWG_OBJECT_END
 // Unstable
 DWG_OBJECT (ACSH_CONE_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShCone)
   FIELD_BL (major, 90);
@@ -7741,7 +7741,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_PYRAMID_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShPyramid)
   FIELD_BL (major, 90); //33
@@ -7756,7 +7756,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_FILLET_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShFillet)
   FIELD_BL (major, 90); //33
@@ -7776,7 +7776,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_CHAMFER_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShChamfer)
   FIELD_BL (major, 90); //33
@@ -7793,7 +7793,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_TORUS_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShTorus)
   FIELD_BL (major, 90); //33
@@ -7806,7 +7806,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_BREP_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBrep)
   FIELD_BL (major, 90); // also in DWG?
@@ -7817,7 +7817,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BOOLEAN_CLASS)
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBoolean)
   FIELD_BL (major, 90);
@@ -8450,7 +8450,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_SWEEP_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
   FIELD_BL (major, 90); //33
@@ -8497,7 +8497,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShSweepBase)
   FIELD_BL (major, 90); //33
@@ -8543,7 +8543,7 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   DECODE_UNKNOWN_BITS
 #ifndef IS_DXF
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
 #endif
   SUBCLASS (AcDbShHistory)
   FIELD_BL (major, 90);
@@ -8554,7 +8554,7 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   FIELD_B (b281, 281);
 #ifdef IS_DXF
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
 #endif
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8562,7 +8562,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_LOFT_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShLoft)
   FIELD_BL (major, 90);
@@ -8591,7 +8591,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_REVOLVE_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields(history_node);
+  AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShRevolve)
   FIELD_BL (major, 90); //33
