@@ -738,15 +738,18 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   sec_dat->chain = NULL;
   if (section == NULL)
     {
-      if (sec_type < SECTION_REVHISTORY)
+      if (sec_type < SECTION_REVHISTORY
+          && sec_type != SECTION_TEMPLATE
+          && sec_type != SECTION_OBJFREESPACE)
         {
-          LOG_ERROR ("Failed to find section %d", (int)sec_type)
+          LOG_WARN ("Failed to find section_info[%u]", (int)sec_type)
+          return DWG_ERR_SECTIONNOTFOUND;
         }
       else
         {
-          LOG_TRACE ("Found no section with type %d\n", sec_type)
+          LOG_TRACE ("Found no section_info[%u]\n", (int)sec_type)
+          return DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      return DWG_ERR_SECTIONNOTFOUND;
     }
 
   max_decomp_size = section->data_size;
