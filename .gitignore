@@ -131,6 +131,7 @@ gcov.log
 /test-dxf1.sh
 /unknown-*.log
 /unknown.lst
+/bindings/dwg.i.bak
 /bindings/perl/LibreDWG.pm
 /bindings/perl/Makefile.PL
 /bindings/perl/Makefile.old

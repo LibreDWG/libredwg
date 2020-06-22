@@ -58,7 +58,7 @@ static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
  * Extracts all entities of this type from a block header (mspace or pspace),
  * and returns a malloced NULL-terminated array.
  */
-//< \fn Dwg_Entity_TEXT* dwg_getall_TEXT(Dwg_Object_Ref *hdr)
+//< \fn Dwg_Entity_TEXT* dwg_getall_TEXT (Dwg_Object_Ref *hdr)
 DWG_GETALL_ENTITY (TEXT)
 DWG_GETALL_ENTITY (ATTRIB)
 DWG_GETALL_ENTITY (ATTDEF)

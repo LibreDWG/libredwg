@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1414 "gen-dynapi.pl"
+#line 1525 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -11053,8 +11053,8 @@ struct _name_subclass_fields {
 
 /* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
 static const struct _name_type_fields dwg_name_types[] = {
-  { "3DFACE", DWG_TYPE__3DFACE /*(28)*/, _dwg_3DFACE_fields, sizeof (struct _dwg_entity_3DFACE) },	/* 0 */
-  { "3DSOLID", DWG_TYPE__3DSOLID /*(38)*/, _dwg_3DSOLID_fields, sizeof (struct _dwg_entity_3DSOLID) },	/* 1 */
+  { "3DFACE", DWG_TYPE_3DFACE /*(28)*/, _dwg_3DFACE_fields, sizeof (struct _dwg_entity_3DFACE) },	/* 0 */
+  { "3DSOLID", DWG_TYPE_3DSOLID /*(38)*/, _dwg_3DSOLID_fields, sizeof (struct _dwg_entity_3DSOLID) },	/* 1 */
   { "ACDSRECORD", DWG_TYPE_ACDSRECORD /*(512)*/, NULL, 0 },	/* 2 */
   { "ACDSSCHEMA", DWG_TYPE_ACDSSCHEMA /*(513)*/, NULL, 0 },	/* 3 */
   { "ACMECOMMANDHISTORY", DWG_TYPE_ACMECOMMANDHISTORY /*(514)*/, _dwg_ACMECOMMANDHISTORY_fields, sizeof (struct _dwg_object_ACMECOMMANDHISTORY) },	/* 4 */
@@ -11305,9 +11305,9 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 /* Fields for all the subclasses, sorted for bsearch */
 static const struct _name_subclass_fields dwg_list_subclasses[] = {
-  { "3DSOLID_material", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_material_fields, sizeof (Dwg_3DSOLID_material) },	/* 0 */
-  { "3DSOLID_silhouette", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (Dwg_3DSOLID_silhouette) },	/* 1 */
-  { "3DSOLID_wire", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_wire_fields, sizeof (Dwg_3DSOLID_wire) },	/* 2 */
+  { "3DSOLID_material", (int)DWG_TYPE_3DSOLID, NULL, _dwg_3DSOLID_material_fields, sizeof (Dwg_3DSOLID_material) },	/* 0 */
+  { "3DSOLID_silhouette", (int)DWG_TYPE_3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (Dwg_3DSOLID_silhouette) },	/* 1 */
+  { "3DSOLID_wire", (int)DWG_TYPE_3DSOLID, NULL, _dwg_3DSOLID_wire_fields, sizeof (Dwg_3DSOLID_wire) },	/* 2 */
   { "ACSH_HistoryNode", 0, NULL, _dwg_ACSH_HistoryNode_fields, sizeof (Dwg_ACSH_HistoryNode) },	/* 3 */
   { "ACSH_SubentColor", 0, NULL, _dwg_ACSH_SubentColor_fields, sizeof (Dwg_ACSH_SubentColor) },	/* 4 */
   { "ACSH_SubentMaterial", 0, NULL, _dwg_ACSH_SubentMaterial_fields, sizeof (Dwg_ACSH_SubentMaterial) },	/* 5 */
@@ -11424,7 +11424,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 1498 "gen-dynapi.pl"
+#line 1609 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

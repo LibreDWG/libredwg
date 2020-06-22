@@ -1407,6 +1407,18 @@ close $in;
 chmod 0444, $fh;
 close $fh;
 
+sub mv_if_not_same {
+  my ($tmp, $orig) = @_;
+  if (`cmp "$tmp" "$orig"`) {
+    system("mv", "-f", $orig, "$orig.bak");
+    system("mv", "-f", $tmp, $orig);
+    warn "new $orig\n";
+  } else {
+    unlink $tmp;
+    warn "keep $orig\n";
+  }
+}
+ 
 # find DEBUGGING classes
 my $classesinc = "$srcdir/classes.inc";
 my (%STABLE, %UNSTABLE, %DEBUGGING, %UNHANDLED);
@@ -1415,45 +1427,101 @@ while (<$in>) {
   if (/^\s*STABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
       $STABLE{$1}++;
   }
-  elsif (/^\s*UNSTABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+)[,\)]/) {
+  elsif (/^\s*UNSTABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
       $UNSTABLE{$1}++;
   }
-  elsif (/^\s*DEBUGGING_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+)[,\)]/) {
+  elsif (/^\s*DEBUGGING_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
       $DEBUGGING{$1}++;
   }
-  elsif (/^\s*UNHANDLED_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+)[,\)]/) {
+  elsif (/^\s*UNHANDLED_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
       $UNHANDLED{$1}++;
   }
 }
 close $in;
+# many stable/fixed names are not in classes.inc
+for (@entity_names) {
+  if (!$STABLE{$_} && !$UNSTABLE{$_} && !$DEBUGGING{$_} && !$UNHANDLED{$_}) {
+    $STABLE{$_}++;
+  }
+}
+for (@object_names) {
+  if (!$STABLE{$_} && !$UNSTABLE{$_} && !$DEBUGGING{$_} && !$UNHANDLED{$_}) {
+    $STABLE{$_}++;
+  }
+}
+
+sub out_classes {
+  my ($fh, $names, $STABLE, $tmpl) = @_;
+  for my $name (@$names) {
+      if ($STABLE->{$name}) {
+        my $s = $tmpl;
+        $s =~ s/\$name/$name/g;
+        print $fh $s;
+      }
+    }
+}
  
+# generate API's lists per stabilty
 my $ifile = "$topdir/bindings/dwg.i";
-# chmod 0644, $ifile if -e $ifile;
 open $in, "<", $ifile or die "$ifile: $!";
 open my $out, ">", "$ifile.tmp" or die "$ifile.tmp: $!";
- my $done = 0;
+my $done = 0;
 while (<$in>) {
-  if (m/^\/\* From here on auto-generated/) {
-    for my $name (@entity_names) {
-      print $out "EXPORT Dwg_Entity_$name** dwg_getall_$name (Dwg_Object_Ref* hdr);\n";
-    }
+  if (m/^\/\* Start auto-generated/) {
+    print $out $_;
+    print $out "/* dwg_getall_ API */\n";
+    my $tmpl = "EXPORT Dwg_Entity_\$name** dwg_getall_\$name (Dwg_Object_Ref* hdr);\n";
+    out_classes ($out, \@entity_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
     print $out "\n";
-    for my $name (@object_names) {
-      print $out "EXPORT Dwg_Object_$name** dwg_getall_$name (Dwg_Object_Ref* hdr);\n";
-    }
+
+    $tmpl = "EXPORT Dwg_Object_\$name** dwg_getall_\$name (Dwg_Data* dwg);\n";
+    out_classes ($out, \@object_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+
+    print $out "\n/* dwg_object_to_ API */\n";
+    $tmpl = "EXPORT Dwg_Entity_\$name* dwg_object_to_\$name (Dwg_Object* obj);\n";
+    out_classes ($out, \@entity_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+
+    $tmpl = "EXPORT Dwg_Object_\$name* dwg_object_to_\$name (Dwg_Object* obj);\n";
+    out_classes ($out, \@object_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+    print $out "/* End auto-generated content */\n";
     close $out;
     $done++;
+    last;
   }
   if (!$done) {
     print $out $_;
   }
 }
 mv_if_not_same ("$ifile.tmp", $ifile);
- 
+
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1414 "gen-dynapi.pl"
+#line 1525 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1537,7 +1605,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1498 "gen-dynapi.pl"
+#line 1609 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
