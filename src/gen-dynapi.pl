@@ -1457,6 +1457,7 @@ for (keys %STABLE) {
 
 sub out_classes {
   my ($fh, $names, $STABILITY, $tmpl) = @_;
+  my $lname;
   for my $name (@$names) {
       if ($STABILITY->{$name}) {
         my $s = $tmpl;
@@ -1464,6 +1465,14 @@ sub out_classes {
           $name =~ s/^3/_3/;
         }
         $s =~ s/\$name/$name/g;
+        if ($s =~ /\$lname/) {
+          $lname = lc $name;
+          $s =~ s/\$lname/$lname/g;
+          # skip typedefs of
+          if ($lname =~ /^(xline|vertex_mesh|vertex_pface|region|body)$/) {
+            next;
+          }
+        }
         print $fh $s;
       }
     }
@@ -1568,6 +1577,140 @@ EOF
   }
 }
 mv_if_not_same ("$api_c.tmp", $api_c);
+
+my $api_h = "$topdir/include/dwg_api.h";
+open $in, "<", $api_h or die "$api_h: $!";
+open $out, ">", "$api_h.tmp" or die "$api_h.tmp: $!";
+$gen = 0;
+while (<$in>) {
+  if (m/^\/\* Start auto-generated/) {
+    print $out $_;
+
+    my $tmpl = "typedef struct _dwg_entity_\$name\t\tdwg_ent_\$lname;\n";
+    out_classes ($out, \@entity_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "/* debugging */\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+
+    $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
+    out_classes ($out, \@object_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "/* debugging */\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+
+    print $out <<'EOF';
+
+/********************************************************************
+ * Functions to return NULL-terminated array of all owned entities  *
+ ********************************************************************/
+
+/// extract all owned entities from a block header (mspace or pspace)
+EOF
+
+    $tmpl = "DWG_GETALL_ENTITY_DECL (\$name)\n";
+    out_classes ($out, \@entity_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "/* debugging */\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+
+    print $out <<'EOF';
+
+/********************************************************************
+ *     Functions to return NULL-terminated array of all objects     *
+ ********************************************************************/
+
+/**
+ * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
+ * Extracts all objects of this type from a dwg, and returns a malloced
+ * NULL-terminated array.
+ */
+
+EOF
+
+    $tmpl = "DWG_GETALL_OBJECT_DECL (\$name)\n";
+    out_classes ($out, \@object_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+
+    print $out <<'EOF';
+
+/*******************************************************************
+ *     Functions created from macro to cast dwg_object to entity     *
+ *                 Usage :- dwg_object_to_ENTITY(),                  *
+ *                where ENTITY can be LINE or CIRCLE                 *
+ ********************************************************************/
+
+/**
+ * \fn Dwg_Entity_ENTITY *dwg_object_to_ENTITY(Dwg_Object *obj)
+ * cast a Dwg_Object to Entity
+ */
+/* fixed <500 */
+EOF
+
+    $tmpl = "CAST_DWG_OBJECT_TO_ENTITY_DECL (\$name)\n";
+    out_classes ($out, \@entity_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    $tmpl = "CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (\$name)\n";
+    out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+
+    print $out <<'EOF';
+
+/*******************************************************************
+ *     Functions created from macro to cast dwg object to object     *
+ *                 Usage :- dwg_object_to_OBJECT(),                  *
+ *            where OBJECT can be LAYER or BLOCK_HEADER              *
+ ********************************************************************/
+/**
+ * \fn Dwg_Object_OBJECT *dwg_object_to_OBJECT(Dwg_Object *obj)
+ * cast a Dwg_Object to Object
+ */
+EOF
+
+    $tmpl = "CAST_DWG_OBJECT_TO_OBJECT_DECL (\$name)\n";
+    out_classes ($out, \@object_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+    print $out "/* End auto-generated content */\n";
+    $gen = 1;
+  }
+  if (!$gen) {
+    print $out $_;
+  }
+  if (m/^\/\* End auto-generated/) {
+    $gen = 0;
+  }
+}
+mv_if_not_same ("$api_h.tmp", $api_h);
  
 my $done = 0;
 my $ifile = "$topdir/bindings/dwg.i";

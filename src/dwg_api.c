@@ -571,6 +571,9 @@ CAST_DWG_OBJECT_TO_OBJECT (TVDEVICEPROPERTIES)
 #endif
 /* End auto-generated content */
 
+CAST_DWG_OBJECT_TO_ENTITY (_3DFACE)
+CAST_DWG_OBJECT_TO_ENTITY (_3DSOLID)
+  
 /*******************************************************************
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
  ********************************************************************/
