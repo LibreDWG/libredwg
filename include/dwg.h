@@ -2601,9 +2601,9 @@ typedef struct _dwg_LWPOLYLINE_width
   BITCODE_BD end;   /* 41 */
 } Dwg_LWPOLYLINE_width;
 
-typedef struct _dwg_entity_PROXY_LWPOLYLINE
+typedef struct _dwg_PROXY_LWPOLYLINE
 {
-  struct _dwg_object_entity *parent;
+  struct _dwg_entity_PROXY_ENTITY *parent;
 
   BITCODE_RL size; /* from flags to *widths */
   BITCODE_BS flags;
@@ -2620,7 +2620,7 @@ typedef struct _dwg_entity_PROXY_LWPOLYLINE
   BITCODE_RC unknown_1;
   BITCODE_RC unknown_2;
   BITCODE_RC unknown_3;
-} Dwg_Entity_PROXY_LWPOLYLINE;
+} Dwg_PROXY_LWPOLYLINE;
 
 /**
  PROXY_ENTITY (498, 0x1f2) object
@@ -7016,7 +7016,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
-    Dwg_Entity_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
     Dwg_Entity_NURBSURFACE *NURBSURFACE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;

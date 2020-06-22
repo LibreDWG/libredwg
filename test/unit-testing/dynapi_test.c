@@ -52220,16 +52220,6 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"PROXY_ENTITY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (Dwg_Entity_PROXY_LWPOLYLINE);
-  size2 = dwg_dynapi_fields_size ("PROXY_LWPOLYLINE");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(Dwg_Entity_PROXY_LWPOLYLINE): %d != "
-               "dwg_dynapi_fields_size (\"PROXY_LWPOLYLINE\"): %d\n", size1, size2);
-      error++;
-    }
-  if (size1 != size2) // TODO
-    error--;
   size1 = sizeof (Dwg_Entity_RAY);
   size2 = dwg_dynapi_fields_size ("RAY");
   if (size1 != size2)
@@ -54436,6 +54426,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_OCD_Dimension): %d != "
                "dwg_dynapi_fields_size (\"OCD_Dimension\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_PROXY_LWPOLYLINE);
+  size2 = dwg_dynapi_fields_size ("PROXY_LWPOLYLINE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_PROXY_LWPOLYLINE): %d != "
+               "dwg_dynapi_fields_size (\"PROXY_LWPOLYLINE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_R2004_Header);

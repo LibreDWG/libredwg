@@ -177,8 +177,8 @@ dwg_object_to_DIMENSION(Dwg_Object *obj);
 
 /* Start auto-generated content */
 /* dwg_getall_ API */
-EXPORT Dwg_Entity_3DFACE** dwg_getall_3DFACE (Dwg_Object_Ref* hdr);
-EXPORT Dwg_Entity_3DSOLID** dwg_getall_3DSOLID (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity__3DFACE** dwg_getall__3DFACE (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity__3DSOLID** dwg_getall__3DSOLID (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ARC** dwg_getall_ARC (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ATTDEF** dwg_getall_ATTDEF (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ATTRIB** dwg_getall_ATTRIB (Dwg_Object_Ref* hdr);
@@ -215,7 +215,6 @@ EXPORT Dwg_Entity_POLYLINE_3D** dwg_getall_POLYLINE_3D (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POLYLINE_MESH** dwg_getall_POLYLINE_MESH (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POLYLINE_PFACE** dwg_getall_POLYLINE_PFACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_PROXY_ENTITY** dwg_getall_PROXY_ENTITY (Dwg_Object_Ref* hdr);
-EXPORT Dwg_Entity_PROXY_LWPOLYLINE** dwg_getall_PROXY_LWPOLYLINE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_RAY** dwg_getall_RAY (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_REGION** dwg_getall_REGION (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_SECTIONOBJECT** dwg_getall_SECTIONOBJECT (Dwg_Object_Ref* hdr);
@@ -420,8 +419,6 @@ EXPORT Dwg_Object_TVDEVICEPROPERTIES** dwg_getall_TVDEVICEPROPERTIES (Dwg_Data* 
 #endif
 
 /* dwg_object_to_ API */
-EXPORT Dwg_Entity_3DFACE* dwg_object_to_3DFACE (Dwg_Object* obj);
-EXPORT Dwg_Entity_3DSOLID* dwg_object_to_3DSOLID (Dwg_Object* obj);
 EXPORT Dwg_Entity_ARC* dwg_object_to_ARC (Dwg_Object* obj);
 EXPORT Dwg_Entity_ATTDEF* dwg_object_to_ATTDEF (Dwg_Object* obj);
 EXPORT Dwg_Entity_ATTRIB* dwg_object_to_ATTRIB (Dwg_Object* obj);
@@ -458,7 +455,6 @@ EXPORT Dwg_Entity_POLYLINE_3D* dwg_object_to_POLYLINE_3D (Dwg_Object* obj);
 EXPORT Dwg_Entity_POLYLINE_MESH* dwg_object_to_POLYLINE_MESH (Dwg_Object* obj);
 EXPORT Dwg_Entity_POLYLINE_PFACE* dwg_object_to_POLYLINE_PFACE (Dwg_Object* obj);
 EXPORT Dwg_Entity_PROXY_ENTITY* dwg_object_to_PROXY_ENTITY (Dwg_Object* obj);
-EXPORT Dwg_Entity_PROXY_LWPOLYLINE* dwg_object_to_PROXY_LWPOLYLINE (Dwg_Object* obj);
 EXPORT Dwg_Entity_RAY* dwg_object_to_RAY (Dwg_Object* obj);
 EXPORT Dwg_Entity_REGION* dwg_object_to_REGION (Dwg_Object* obj);
 EXPORT Dwg_Entity_SECTIONOBJECT* dwg_object_to_SECTIONOBJECT (Dwg_Object* obj);

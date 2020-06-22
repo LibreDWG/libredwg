@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1525 "gen-dynapi.pl"
+#line 1528 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -88,31 +88,30 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "POLYLINE_MESH" "\0\0\0\0\0",	/* 45 */
   "POLYLINE_PFACE" "\0\0\0\0",	/* 46 */
   "PROXY_ENTITY" "\0\0\0\0\0\0",	/* 47 */
-  "PROXY_LWPOLYLINE" "\0\0",	/* 48 */
-  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "REVOLVEDSURFACE" "\0\0\0",	/* 51 */
-  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "SECTIONOBJECT" "\0\0\0\0\0",	/* 53 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 58 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 64 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 67 */
-  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 68 */
-  "VERTEX_PFACE_FACE" "\0",	/* 69 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "REVOLVEDSURFACE" "\0\0\0",	/* 50 */
+  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "SECTIONOBJECT" "\0\0\0\0\0",	/* 52 */
+  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0",	/* 57 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0",	/* 62 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0",	/* 63 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "VERTEX_MESH" "\0\0\0\0\0\0\0",	/* 66 */
+  "VERTEX_PFACE" "\0\0\0\0\0\0",	/* 67 */
+  "VERTEX_PFACE_FACE" "\0",	/* 68 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
@@ -3118,42 +3117,6 @@ static const Dwg_DYNAPI_field _dwg_PROXY_ENTITY_fields[] = {
     0,0,0, 0 },
   { "objids",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_entity_PROXY_ENTITY, objids),
     1,1,0, 340 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_entity_PROXY_LWPOLYLINE: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_PROXY_LWPOLYLINE_fields[] = {
-  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, parent),
-    1,1,0, 0 },
-  { "size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, size),
-    0,0,0, 0 },
-  { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, flags),
-    0,0,0, 0 },
-  { "const_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, const_width),
-    0,0,0, 43 },
-  { "elevation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, elevation),
-    0,0,0, 38 },
-  { "thickness",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, thickness),
-    0,0,0, 39 },
-  { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, extrusion),
-    0,0,0, 210 },
-  { "num_points",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, num_points),
-    0,0,0, 90 },
-  { "points",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, points),
-    1,1,0, 0 },
-  { "num_bulges",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, num_bulges),
-    0,0,0, 0 },
-  { "bulges",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, bulges),
-    1,1,0, 0 },
-  { "num_widths",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, num_widths),
-    0,0,0, 0 },
-  { "widths",	"Dwg_LWPOLYLINE_width*", sizeof (Dwg_LWPOLYLINE_width*),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, widths),
-    1,1,0, 0 },
-  { "unknown_1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, unknown_1),
-    0,0,0, 0 },
-  { "unknown_2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, unknown_2),
-    0,0,0, 0 },
-  { "unknown_3",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_PROXY_LWPOLYLINE, unknown_3),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_RAY: (sorted by offset) */
@@ -10294,6 +10257,42 @@ static const Dwg_DYNAPI_field _dwg_OCD_Dimension_fields[] = {
     0,0,0, 297 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_PROXY_LWPOLYLINE: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_PROXY_LWPOLYLINE_fields[] = {
+  { "parent",	"struct _dwg_entity_PROXY_ENTITY*", sizeof (void *),  OFF (struct _dwg_PROXY_LWPOLYLINE, parent),
+    1,1,0, 0 },
+  { "size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_PROXY_LWPOLYLINE, size),
+    0,0,0, 0 },
+  { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_PROXY_LWPOLYLINE, flags),
+    0,0,0, 0 },
+  { "const_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_PROXY_LWPOLYLINE, const_width),
+    0,0,0, 0 },
+  { "elevation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_PROXY_LWPOLYLINE, elevation),
+    0,0,0, 0 },
+  { "thickness",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_PROXY_LWPOLYLINE, thickness),
+    0,0,0, 0 },
+  { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_PROXY_LWPOLYLINE, extrusion),
+    0,0,0, 0 },
+  { "num_points",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_PROXY_LWPOLYLINE, num_points),
+    0,0,0, 0 },
+  { "points",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_PROXY_LWPOLYLINE, points),
+    1,1,0, 0 },
+  { "num_bulges",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_PROXY_LWPOLYLINE, num_bulges),
+    0,0,0, 0 },
+  { "bulges",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_PROXY_LWPOLYLINE, bulges),
+    1,1,0, 0 },
+  { "num_widths",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_PROXY_LWPOLYLINE, num_widths),
+    0,0,0, 0 },
+  { "widths",	"Dwg_LWPOLYLINE_width*", sizeof (Dwg_LWPOLYLINE_width*),  OFF (struct _dwg_PROXY_LWPOLYLINE, widths),
+    1,1,0, 0 },
+  { "unknown_1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_PROXY_LWPOLYLINE, unknown_1),
+    0,0,0, 0 },
+  { "unknown_2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_PROXY_LWPOLYLINE, unknown_2),
+    0,0,0, 0 },
+  { "unknown_3",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_PROXY_LWPOLYLINE, unknown_3),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_R2004_Header: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_R2004_Header_fields[] = {
   { "file_ID_string[12]",	"RC", 12 * sizeof (BITCODE_RC),  OFF (struct _dwg_R2004_Header, file_ID_string),
@@ -11053,8 +11052,8 @@ struct _name_subclass_fields {
 
 /* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
 static const struct _name_type_fields dwg_name_types[] = {
-  { "3DFACE", DWG_TYPE_3DFACE /*(28)*/, _dwg_3DFACE_fields, sizeof (struct _dwg_entity_3DFACE) },	/* 0 */
-  { "3DSOLID", DWG_TYPE_3DSOLID /*(38)*/, _dwg_3DSOLID_fields, sizeof (struct _dwg_entity_3DSOLID) },	/* 1 */
+  { "3DFACE", DWG_TYPE__3DFACE /*(28)*/, _dwg_3DFACE_fields, sizeof (struct _dwg_entity_3DFACE) },	/* 0 */
+  { "3DSOLID", DWG_TYPE__3DSOLID /*(38)*/, _dwg_3DSOLID_fields, sizeof (struct _dwg_entity_3DSOLID) },	/* 1 */
   { "ACDSRECORD", DWG_TYPE_ACDSRECORD /*(512)*/, NULL, 0 },	/* 2 */
   { "ACDSSCHEMA", DWG_TYPE_ACDSSCHEMA /*(513)*/, NULL, 0 },	/* 3 */
   { "ACMECOMMANDHISTORY", DWG_TYPE_ACMECOMMANDHISTORY /*(514)*/, _dwg_ACMECOMMANDHISTORY_fields, sizeof (struct _dwg_object_ACMECOMMANDHISTORY) },	/* 4 */
@@ -11305,9 +11304,9 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 /* Fields for all the subclasses, sorted for bsearch */
 static const struct _name_subclass_fields dwg_list_subclasses[] = {
-  { "3DSOLID_material", (int)DWG_TYPE_3DSOLID, NULL, _dwg_3DSOLID_material_fields, sizeof (Dwg_3DSOLID_material) },	/* 0 */
-  { "3DSOLID_silhouette", (int)DWG_TYPE_3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (Dwg_3DSOLID_silhouette) },	/* 1 */
-  { "3DSOLID_wire", (int)DWG_TYPE_3DSOLID, NULL, _dwg_3DSOLID_wire_fields, sizeof (Dwg_3DSOLID_wire) },	/* 2 */
+  { "3DSOLID_material", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_material_fields, sizeof (Dwg_3DSOLID_material) },	/* 0 */
+  { "3DSOLID_silhouette", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (Dwg_3DSOLID_silhouette) },	/* 1 */
+  { "3DSOLID_wire", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_wire_fields, sizeof (Dwg_3DSOLID_wire) },	/* 2 */
   { "ACSH_HistoryNode", 0, NULL, _dwg_ACSH_HistoryNode_fields, sizeof (Dwg_ACSH_HistoryNode) },	/* 3 */
   { "ACSH_SubentColor", 0, NULL, _dwg_ACSH_SubentColor_fields, sizeof (Dwg_ACSH_SubentColor) },	/* 4 */
   { "ACSH_SubentMaterial", 0, NULL, _dwg_ACSH_SubentMaterial_fields, sizeof (Dwg_ACSH_SubentMaterial) },	/* 5 */
@@ -11397,34 +11396,35 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 89 */
   { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 90 */
   { "OCD_Dimension", 0, "AcDbDimensionObjectContextData", _dwg_OCD_Dimension_fields, sizeof (Dwg_OCD_Dimension) },	/* 91 */
-  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 92 */
-  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 93 */
-  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 94 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 95 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 96 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 97 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 98 */
-  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 99 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 100 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 101 */
-  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 102 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 103 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 104 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 105 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 106 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 107 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 108 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 109 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 110 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 111 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 112 */
-  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 113 */
-  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 114 */
-  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 115 */
+  { "PROXY_LWPOLYLINE", 0, NULL, _dwg_PROXY_LWPOLYLINE_fields, sizeof (Dwg_PROXY_LWPOLYLINE) },	/* 92 */
+  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 93 */
+  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 94 */
+  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 95 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 96 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 97 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 98 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 99 */
+  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 100 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 101 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 102 */
+  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 103 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 104 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 105 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 106 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 107 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 108 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 109 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 110 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 111 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 112 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 113 */
+  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 114 */
+  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 115 */
+  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 116 */
 
 };
 
-#line 1609 "gen-dynapi.pl"
+#line 1612 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

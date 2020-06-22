@@ -4535,7 +4535,7 @@ DWG_ENTITY_END
 
 //pg.276
 #if 0 /* no proxy subtypes yet. seems to be the same as LWPOLYLINE */
-DWG_ENTITY (PROXY_LWPOLYLINE)
+DWG_SUBENT (PROXY_LWPOLYLINE)
 
   DECODE_UNKNOWN_BITS
   FIELD_RL (size);

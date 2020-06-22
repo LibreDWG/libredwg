@@ -353,6 +353,7 @@
 
   // unimplemented, passed through. coverage exists mostly, but documentation not.
   // DXF output skipped
+  UNHANDLED_CLASS     (ACTION, PROXY_LWPOLYLINE) /* ent */
   UNHANDLED_CLASS     (ACTION, ACDSRECORD)
   UNHANDLED_CLASS     (ACTION, ACDSSCHEMA)
   UNHANDLED_CLASS     (ACTION, NPOCOLLECTION)

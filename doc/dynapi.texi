@@ -3189,49 +3189,6 @@ H*,	DXF 340
 @end vtable
 @end indentedblock
 
-@strong{PROXY_LWPOLYLINE} @anchor{PROXY_LWPOLYLINE}
-@cindex entity, PROXY_LWPOLYLINE
-@vindex PROXY_LWPOLYLINE
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item size
-RL
-@item flags
-BS
-@item const_width
-BD,	DXF 43
-@item elevation
-BD,	DXF 38
-@item thickness
-BD,	DXF 39
-@item extrusion
-BE,	DXF 210
-@item num_points
-BL,	DXF 90
-@item points
-2RD*
-@item num_bulges
-BL
-@item bulges
-BD*
-@item num_widths
-BL
-@item widths
-Dwg_LWPOLYLINE_width*
-@item unknown_1
-RC
-@item unknown_2
-RC
-@item unknown_3
-RC
-
-@end vtable
-@end indentedblock
-
 @strong{RAY} @anchor{RAY}
 @cindex entity, RAY
 @vindex RAY
@@ -12280,6 +12237,48 @@ B,	DXF 295
 B,	DXF 296
 @item flip_arrow1
 B,	DXF 297
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_PROXY_LWPOLYLINE} @anchor{Dwg_PROXY_LWPOLYLINE}
+@vindex Dwg_PROXY_LWPOLYLINE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_entity_PROXY_ENTITY*
+@item size
+RL
+@item flags
+BS
+@item const_width
+BD
+@item elevation
+BD
+@item thickness
+BD
+@item extrusion
+BE
+@item num_points
+BL
+@item points
+2RD*
+@item num_bulges
+BL
+@item bulges
+BD*
+@item num_widths
+BL
+@item widths
+Dwg_LWPOLYLINE_width*
+@item unknown_1
+RC
+@item unknown_2
+RC
+@item unknown_3
+RC
 
 @end vtable
 @end indentedblock
