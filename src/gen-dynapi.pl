@@ -1421,7 +1421,7 @@ sub mv_if_not_same {
  
 # find DEBUGGING classes
 my $classesinc = "$srcdir/classes.inc";
-my (%STABLE, %UNSTABLE, %DEBUGGING, %UNHANDLED);
+ my (%STABLE, %UNSTABLE, %DEBUGGING, %UNHANDLED, %FIXED, %STABLEVAR);
 open $in, "<", $classesinc or die "$classesinc: $!";
 while (<$in>) {
   if (/^\s*STABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
@@ -1441,19 +1441,24 @@ close $in;
 # many stable/fixed names are not in classes.inc
 for (@entity_names) {
   if (!$STABLE{$_} && !$UNSTABLE{$_} && !$DEBUGGING{$_} && !$UNHANDLED{$_}) {
+    $FIXED{$_}++;
     $STABLE{$_}++;
   }
 }
 for (@object_names) {
   if (!$STABLE{$_} && !$UNSTABLE{$_} && !$DEBUGGING{$_} && !$UNHANDLED{$_}) {
+    $FIXED{$_}++;
     $STABLE{$_}++;
   }
 }
+for (keys %STABLE) {
+  $STABLEVAR{$_}++ unless $FIXED{$_};
+}
 
 sub out_classes {
-  my ($fh, $names, $STABLE, $tmpl) = @_;
+  my ($fh, $names, $STABILITY, $tmpl) = @_;
   for my $name (@$names) {
-      if ($STABLE->{$name}) {
+      if ($STABILITY->{$name}) {
         my $s = $tmpl;
         if ($name =~ /^3/) {
           $name =~ s/^3/_3/;
@@ -1465,6 +1470,106 @@ sub out_classes {
 }
  
 # generate API's lists per stabilty
+my $api_c = "$srcdir/dwg_api.c";
+open $in, "<", $api_c or die "$api_c: $!";
+open my $out, ">", "$api_c.tmp" or die "$api_c.tmp: $!";
+my $gen = 0;
+while (<$in>) {
+  if (m/^\/\* Start auto-generated/) {
+    print $out $_;
+
+    my $tmpl = "DWG_GETALL_ENTITY (\$name)\n";
+    out_classes ($out, \@entity_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "/* debugging */\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+
+    print $out <<'EOF';
+
+/********************************************************************
+ *     Functions to return NULL-terminated array of all objects     *
+ ********************************************************************/
+
+/**
+ * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
+ * Extracts all objects of this type from a dwg, and returns a malloced
+ * NULL-terminated array.
+ */
+
+EOF
+
+    my $tmpl = "DWG_GETALL_OBJECT (\$name)\n";
+    out_classes ($out, \@object_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+
+    print $out <<'EOF';
+
+/*******************************************************************
+ *     Functions created from macro to cast dwg_object to entity     *
+ *                 Usage :- dwg_object_to_ENTITY(),                  *
+ *                where ENTITY can be LINE or CIRCLE                 *
+ ********************************************************************/
+
+/**
+ * \fn Dwg_Entity_ENTITY *dwg_object_to_ENTITY(Dwg_Object *obj)
+ * cast a Dwg_Object to Entity
+ */
+/* fixed <500 */
+EOF
+
+    $tmpl = "CAST_DWG_OBJECT_TO_ENTITY (\$name)\n";
+    out_classes ($out, \@entity_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    $tmpl = "CAST_DWG_OBJECT_TO_ENTITY_BYNAME (\$name)\n";
+    out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+
+    print $out <<'EOF';
+
+/*******************************************************************
+ *     Functions created from macro to cast dwg object to object     *
+ *                 Usage :- dwg_object_to_OBJECT(),                  *
+ *            where OBJECT can be LAYER or BLOCK_HEADER              *
+ ********************************************************************/
+/**
+ * \fn Dwg_Object_OBJECT *dwg_object_to_OBJECT(Dwg_Object *obj)
+ * cast a Dwg_Object to Object
+ */
+EOF
+
+    $tmpl = "CAST_DWG_OBJECT_TO_OBJECT (\$name)\n";
+    out_classes ($out, \@object_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#endif\n";
+    print $out "/* End auto-generated content */\n";
+    $gen = 1;
+  }
+  if (!$gen) {
+    print $out $_;
+  }
+  if (m/^\/\* End auto-generated/) {
+    $gen = 0;
+  }
+}
+mv_if_not_same ("$api_c.tmp", $api_c);
+ 
+my $done = 0;
 my $ifile = "$topdir/bindings/dwg.i";
 open $in, "<", $ifile or die "$ifile: $!";
 open my $out, ">", "$ifile.tmp" or die "$ifile.tmp: $!";
@@ -1524,7 +1629,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1528 "gen-dynapi.pl"
+#line 1633 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1608,7 +1713,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 1612 "gen-dynapi.pl"
+#line 1717 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

@@ -524,9 +524,25 @@ typedef struct _dwg_entity_UNKNOWN_ENT            dwg_ent_unknown;
 
 ///////////////////////////////////////////////////////////////////////////
 
+typedef struct _dwg_object                        dwg_object;
+typedef struct _dwg_object_ref                    dwg_object_ref;
+typedef struct _dwg_handle                        dwg_handle;
+typedef struct _dwg_object_entity                 dwg_obj_ent;
+typedef struct _dwg_object_object                 dwg_obj_obj;
+typedef struct _dwg_class                         dwg_class;
+typedef struct _dwg_struct                        dwg_data;
+typedef struct _dwg_entity_eed_data               dwg_entity_eed_data;
+typedef struct _dwg_entity_eed                    dwg_entity_eed;
+
 typedef struct _dwg_object_STYLE_CONTROL          dwg_tbl_generic;
 typedef struct _dwg_object_UNKNOWN_OBJ            dwg_obj_generic;
 typedef struct _dwg_object_UNKNOWN_OBJ            dwg_obj_unknown;
+
+///////////////////////////////////////////////////////////////////////////
+
+/********************************************************************/
+/* Start auto-generated lists */
+
 typedef struct _dwg_object_LAYER_CONTROL          dwg_obj_layer_control;
 typedef struct _dwg_object_LAYER                  dwg_obj_layer;
 typedef struct _dwg_object_BLOCK_HEADER           dwg_obj_block_header;
@@ -700,18 +716,6 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA           dwg_obj_textobjectcon
 //typedef struct _dwg_object_XREFPANELOBJECT             dwg_obj_xrefpanelobject;
 //typedef struct _dwg_object_VISIBILITYGRIPENTITY        dwg_obj_visibilitygripentity;
 //typedef struct _dwg_object_VISIBILITYPARAMETERENTITY   dwg_obj_visibilityparameterentity;
-
-typedef struct _dwg_object                        dwg_object;
-typedef struct _dwg_object_ref                    dwg_object_ref;
-typedef struct _dwg_handle                        dwg_handle;
-typedef struct _dwg_object_entity                 dwg_obj_ent;
-typedef struct _dwg_object_object                 dwg_obj_obj;
-typedef struct _dwg_class                         dwg_class;
-typedef struct _dwg_struct                        dwg_data;
-typedef struct _dwg_entity_eed_data               dwg_entity_eed_data;
-typedef struct _dwg_entity_eed                    dwg_entity_eed;
-
-///////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
  * Functions to return NULL-terminated array of all owned entities  *
@@ -1241,7 +1245,9 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (CSACDOCUMENTOPTIONS)
 // CAST_DWG_OBJECT_TO_OBJECT_DECL (XREFPANELOBJECT)
 #endif
 
-
+/* End auto-generated lists */
+/********************************************************************/
+  
 /// initialize the DWG version, needed for r2007+ unicode strings
 /// and pre-R13 field variants. unneeded for r13-r2004
 EXPORT void dwg_api_init_version (Dwg_Data *dwg);

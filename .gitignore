@@ -213,3 +213,5 @@ gcov.log
 /src/compile_commands.json
 /src/config.h
 /src/stamp-h1
+/src/dwg_api.c.bak
+/include/dwg_api.h.bak
