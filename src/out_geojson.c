@@ -785,14 +785,14 @@ static int
 geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
-
+  int success;
   SECTION (features);
   for (i = 0; i < dwg->num_objects; i++)
     {
       int is_last = i == dwg->num_objects - 1;
       Dwg_Object *obj = &dwg->object[i];
-      int success = dwg_geojson_object (dat, obj, is_last);
-      if (is_last && !success) // did not write any: end with dummy
+      success = dwg_geojson_object (dat, obj, is_last);
+      if (is_last && !success) // needed for the LASTFEATURE comma. end with dummy
         {
           HASH
           PAIR_S (type, "Feature");
