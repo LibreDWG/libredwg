@@ -8323,7 +8323,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                     j = 0; // restart
                                 }
                             }
-                          else
+                          else if (j > size)
                             LOG_ERROR ("%s.%s overflow %d > %ld", name, num_f->name, j, size)
                         }
                       else if (f->dxf == pair->code)
