@@ -703,9 +703,9 @@ The current first level objects are all the section names, like
 @uref{http://geojson.org/geojson-spec.html}.  See @code{dwgread} with
 the @code{--fmt GeoJSON} option.
 
-We don't yet normalize the orientation of Polygon's counterclockwise yet,
-so we write all closed polygons as LineString still.
-So it passes all RFC7946 linters, the new GeoJSON format.
+We write in the RFC7946 format, the new GeoJSON format since 2016,
+which means smaller, less precision, and normalized polygons with
+proper right-hande rule orientation.
 
 We write all coordinates as [x, y], not [y, x]. z-coordinates are
 optional, and only written if not 0.0.
@@ -717,7 +717,7 @@ No 3D entities, HATCH by definition.
 ELLIPSE, ARC, CIRCLE would need segmention into lines.
 MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)
 
-Due to implementaion quirks with ending commas in JSON, we mostly
+Due to implementation quirks with ending commas in JSON, we mostly
 add an empty dummy feature at the very end, with null properties and
 null geometry.
 

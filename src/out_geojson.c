@@ -70,8 +70,10 @@ static unsigned int cur_ver = 0;
            },
          "geometry":
            { "type": "LineString",
-             "coordinates": [ [ 370.858611653430728, 730.630303522043732, 0.0
- ], [ 450.039756420260289, 619.219273076899071, 0.0 ] ]
+             "coordinates": [
+               [ 370.858611, 730.630303 ],
+               [ 450.039756, 619.219273 ]
+             ]
            }
        },
      ], ...
@@ -363,6 +365,38 @@ static unsigned int cur_ver = 0;
             klass->proxyflag, klass->is_zombie ? "is_zombie" : "",          \
             obj->address + obj->size)
 
+// ensure counter-clockwise orientation of a closed polygon. 2d only.
+static int
+normalize_polygon_orient (BITCODE_BL numpts, dwg_point_2d **const pts_p)
+{
+  double sum = 0.0;
+  dwg_point_2d *pts = *pts_p;
+  // check orientation
+  for (unsigned i = 0; i < numpts - 1; i++)
+    {
+      sum += (pts[i+1].x - pts[i].x) * (pts[i+1].y + pts[i].y);
+    }
+  if (sum > 0.0) // if clockwise
+    {
+      // reverse and return a copy
+      unsigned last = numpts - 1;
+      dwg_point_2d *new = malloc (numpts * sizeof (BITCODE_2RD));
+      //fprintf (stderr, "%u pts, sum %f: reverse orient\n", numpts, sum);
+      for (unsigned i = 0; i < numpts; i++)
+        {
+          new[i].x = pts[last-i].x;
+          new[i].y = pts[last-i].y;
+        }
+      *pts_p = new;
+      return 1;
+    }
+  else
+    {
+      //fprintf (stderr, "%u pts, sum %f: keep orient\n", numpts, sum);
+      return 0;
+    }
+}
+
 // common properties
 static void
 dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
@@ -501,30 +535,36 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int i
 {
   BITCODE_BL j, last_j;
   Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
-  bool is_polygon = false;
+  dwg_point_2d *pts = (dwg_point_2d*)_obj->points;
 
-  last_j = _obj->num_points - 1;
   FEATURE (AcDbEntity : AcDbLwPolyline, obj);
   // if closed and num_points > 3 use a Polygon
   if (_obj->flag & 512 && _obj->num_points > 3)
-    is_polygon = true;
-  is_polygon = false; // no RFC7946 normalize orientation yet
-  if (is_polygon)
-    GEOMETRY (Polygon)
-  else
-    GEOMETRY (LineString)
-  KEY (coordinates);
-  if (is_polygon)
-    ARRAY;
-  ARRAY;
-  for (j = 0; j < last_j; j++)
     {
-      FIELD_2DPOINT (points[j]);
+      int changed = normalize_polygon_orient (_obj->num_points, &pts); // RFC7946
+      GEOMETRY (Polygon)
+      KEY (coordinates);
+      ARRAY;
+      ARRAY;
+      for (j = 0; j < _obj->num_points; j++)
+        VALUE_2DPOINT (pts[j].x, pts[j].y)
+      LASTVALUE_2DPOINT (pts[0].x, pts[0].y);
+      LASTENDARRAY;
+      LASTENDARRAY;
+      if (changed)
+        free (pts);
     }
-  LASTFIELD_2DPOINT (points[last_j]);
-  LASTENDARRAY;
-  if (is_polygon)
-    LASTENDARRAY;
+  else
+    {
+      GEOMETRY (LineString)
+      KEY (coordinates);
+      ARRAY;
+      last_j = _obj->num_points - 1;
+      for (j = 0; j < last_j; j++)
+        VALUE_2DPOINT (pts[j].x, pts[j].y);
+      LASTVALUE_2DPOINT (pts[last_j].x, pts[last_j].y);
+      LASTENDARRAY;
+    }
   ENDGEOMETRY;
   ENDFEATURE;
   return 1;
@@ -578,13 +618,9 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       GEOMETRY (Point);
       KEY (coordinates);
       if (fabs (_obj->position.z) > 0.000001)
-        {
-          VALUE_3DPOINT (_obj->position.x, _obj->position.y, _obj->position.z);
-        }
+        VALUE_3DPOINT (_obj->position.x, _obj->position.y, _obj->position.z)
       else
-        {
-          VALUE_2DPOINT (_obj->position.x, _obj->position.y);
-        }
+        VALUE_2DPOINT (_obj->position.x, _obj->position.y);
       ENDGEOMETRY;
       ENDFEATURE;
       return 1;
@@ -620,38 +656,47 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         int error;
         BITCODE_BL j, numpts;
         bool is_polygon = false;
-        dwg_point_2d *pts;
+        int changed = 0;
+        dwg_point_2d *pts, *orig;
         Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+
         // if closed and num_points > 3 use a Polygon
-        numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
-        if (_obj->flag & 512 && numpts > 3)
-          is_polygon = true;
-        is_polygon = false; // no RFC7946 normalize orientation yet
         FEATURE (AcDbEntity : AcDbPolyline, obj);
-        if (is_polygon)
-          GEOMETRY (Polygon)
-        else
-          GEOMETRY (LineString)
-        KEY (coordinates);
-        if (is_polygon)
-          ARRAY;
-        ARRAY;
+        numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
         pts = dwg_object_polyline_2d_get_points (obj, &error);
-        for (j = 0; j < numpts; j++)
+        if (_obj->flag & 512 && numpts > 3)
           {
-            if (j == numpts - 1)
-              {
-                LASTVALUE_2DPOINT (pts[j].x, pts[j].y);
-              }
-            else
-              {
-                VALUE_2DPOINT (pts[j].x, pts[j].y);
-              }
+            orig = pts; // pts is already a new copy
+            changed = normalize_polygon_orient (numpts, &pts); // RFC7946
+            if (changed)
+              free (orig);
+            GEOMETRY (Polygon)
+            KEY (coordinates);
+            ARRAY;
+            ARRAY;
+            for (j = 0; j < numpts; j++)
+              VALUE_2DPOINT (pts[j].x, pts[j].y)
+            LASTVALUE_2DPOINT (pts[0].x, pts[0].y);
+            LASTENDARRAY;
+            LASTENDARRAY;
+            if (changed)
+              free (pts);
           }
-        free (pts);
-        LASTENDARRAY;
-        if (is_polygon)
-          LASTENDARRAY;
+        else
+          {
+            GEOMETRY (LineString)
+            KEY (coordinates);
+            ARRAY;
+            for (j = 0; j < numpts; j++)
+              {
+                if (j == numpts - 1)
+                  LASTVALUE_2DPOINT (pts[j].x, pts[j].y)
+                else
+                  VALUE_2DPOINT (pts[j].x, pts[j].y);
+              }
+            free (pts);
+            LASTENDARRAY;
+          }
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
