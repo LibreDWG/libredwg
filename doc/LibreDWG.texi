@@ -699,16 +699,27 @@ The current first level objects are all the section names, like
 
 @cindex GeoJSON
 
-Work is ongoing to write to the GeoJSON format as specified at
+@code{dwgread} supports writing to the GeoJSON format as specified at
 @uref{http://geojson.org/geojson-spec.html}.  See @code{dwgread} with
 the @code{--fmt GeoJSON} option.
 
-This is about 70% finished. User-feedback needed.
+We don't yet normalize the orientation of Polygon's counterclockwise yet,
+so we write all closed polygons as LineString still.
+So it passes all RFC7946 linters, the new GeoJSON format.
+
+We write all coordinates as [x, y], not [y, x]. z-coordinates are
+optional, and only written if not 0.0.
+Colors are written as RGB hex string values for all r2004+ DWG's, and
+for earlier formats the palette index as integer, if not 256 (ByLayer).
 
 Missing entities:
 No 3D entities, HATCH by definition.
-ELLIPSE, ARC, CIRCLE: needs segmention into lines
+ELLIPSE, ARC, CIRCLE would need segmention into lines.
 MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)
+
+Due to implementaion quirks with ending commas in JSON, we mostly
+add an empty dummy feature at the very end, with null properties and
+null geometry.
 
 @node Errors
 @chapter Errors

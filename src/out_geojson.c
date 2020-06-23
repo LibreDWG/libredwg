@@ -19,8 +19,7 @@
  *       NOCOMMA:
  *         We really have to add the comma before, not after, and special case
  *         the first field, not the last to omit the comma.
- *       pass the linters
- *       GeoJSON 2008 or newer RFC7946? https://tools.ietf.org/html/rfc7946#appendix-B
+ *       GeoJSON 2008 or newer RFC7946 https://tools.ietf.org/html/rfc7946#appendix-B
  *       For the new format we need to follow the right-hand rule for orientation
  *       (counterclockwise polygons).
  */
