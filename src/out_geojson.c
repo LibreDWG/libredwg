@@ -480,11 +480,20 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int i
 {
   BITCODE_BL j, last_j;
   Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
+  bool is_polygon = false;
+
   last_j = _obj->num_points - 1;
-  // TODO: if closed and num_points > 3 use a Polygon
   FEATURE (AcDbEntity : AcDbLwPolyline, obj);
-  GEOMETRY (LineString);
+  // if closed and num_points > 3 use a Polygon
+  if (_obj->flag & 512 && _obj->num_points > 3)
+    is_polygon = true;
+  if (is_polygon)
+    GEOMETRY (Polygon)
+  else
+    GEOMETRY (LineString)
   KEY (coordinates);
+  if (is_polygon)
+    ARRAY;
   ARRAY;
   for (j = 0; j < last_j; j++)
     {
@@ -492,6 +501,8 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int i
     }
   LASTFIELD_2DPOINT (points[last_j]);
   LASTENDARRAY;
+  if (is_polygon)
+    LASTENDARRAY;
   ENDGEOMETRY;
   ENDFEATURE;
   return 1;

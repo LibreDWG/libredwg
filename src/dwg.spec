@@ -4410,7 +4410,7 @@ DWG_ENTITY (LWPOLYLINE)
   SUBCLASS (AcDbPolyline)
 #ifdef IS_DXF
   FIELD_BL (num_points, 90);
-  //1 closed, 128 plinegen
+  // 1 closed, 128 plinegen
   VALUE_BS ((FIELD_VALUE (flag) & 128) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
 #else
   FIELD_BS (flag, 70); // 512 closed, 128 plinegen, 4 constwidth, 8 elevation, 2 thickness
