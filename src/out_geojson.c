@@ -290,9 +290,19 @@ static unsigned int cur_ver = 0;
     fprintf (dat->fh, " ]\n");                                                \
   }
 #define FIELD_3DPOINT(name)                                                   \
-  VALUE_3DPOINT (_obj->name.x, _obj->name.y, _obj->name.z)
+  {                                                                           \
+    if (_obj->name.z != 0.0)                                                  \
+      VALUE_3DPOINT (_obj->name.x, _obj->name.y, _obj->name.z)                \
+    else                                                                      \
+      FIELD_2DPOINT(name)                                                     \
+  }
 #define LASTFIELD_3DPOINT(name)                                               \
-  LASTVALUE_3DPOINT (_obj->name.x, _obj->name.y, _obj->name.z)
+  {                                                                           \
+    if (_obj->name.z != 0.0)                                                  \
+      LASTVALUE_3DPOINT (_obj->name.x, _obj->name.y, _obj->name.z)            \
+    else                                                                      \
+      LASTFIELD_2DPOINT (name)                                                \
+  }
 
 #define FIELD_CMC(name, dxf1, dxf2)
 #define FIELD_TIMEBLL(name, dxf)
@@ -540,7 +550,8 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
       WARN_UNSTABLE_CLASS;
       FEATURE (AcDbObject : AcDbGeoData, obj);
-      // which fields?
+      // which fields? transformation for the world-coordinates?
+      // crs links of type proj4, ogcwkt, esriwkt or such?
       ENDFEATURE;
       return 0;
     }
