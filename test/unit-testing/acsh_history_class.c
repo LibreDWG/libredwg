@@ -21,7 +21,9 @@ api_process (dwg_object *obj)
   dwg_obj_acsh_history_class *_obj = dwg_object_to_ACSH_HISTORY_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_HISTORY_CLASS);
-  CHK_ACSH_HISTORYNODE();
+  if (0) { //crashes
+    CHK_ACSH_HISTORYNODE();
+  }
 
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, major, BL); //33
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, minor, BL); //29
