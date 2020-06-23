@@ -387,11 +387,11 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       if (dat->version >= R_2004)
         {
           sprintf (tmp, "%06X", obj->tio.entity->color.rgb & 0xffffff);
-          PAIR_S (color, tmp);
+          PAIR_S (Color, tmp);
         }
       else if (obj->tio.entity->color.index != 256)
         {
-          PAIR_D (color, obj->tio.entity->color.index);
+          PAIR_D (Color, obj->tio.entity->color.index);
         }
 
       name = dwg_ent_get_ltype_name (obj->tio.entity, &error);
@@ -598,12 +598,22 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
       {
         int error;
         BITCODE_BL j, numpts;
+        bool is_polygon = false;
         dwg_point_2d *pts;
-        FEATURE (AcDbEntity : AcDbPolyline, obj);
-        GEOMETRY (MultiLineString);
-        KEY (coordinates);
-        ARRAY;
+        Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+        // if closed and num_points > 3 use a Polygon
         numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
+        if (_obj->flag & 512 && numpts > 3)
+          is_polygon = true;
+        FEATURE (AcDbEntity : AcDbPolyline, obj);
+        if (is_polygon)
+          GEOMETRY (Polygon)
+        else
+          GEOMETRY (LineString)
+        KEY (coordinates);
+        if (is_polygon)
+          ARRAY;
+        ARRAY;
         pts = dwg_object_polyline_2d_get_points (obj, &error);
         for (j = 0; j < numpts; j++)
           {
@@ -618,6 +628,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
           }
         free (pts);
         LASTENDARRAY;
+        if (is_polygon)
+          LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
@@ -628,7 +640,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         BITCODE_BL j, numpts;
         dwg_point_3d *pts;
         FEATURE (AcDbEntity : AcDbPolyline, obj);
-        GEOMETRY (MultiLineString);
+        GEOMETRY (LineString);
         KEY (coordinates);
         ARRAY;
         numpts = dwg_object_polyline_3d_get_numpoints (obj, &error);
@@ -693,6 +705,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         return 1;
       }
     case DWG_TYPE__3DFACE:
+      // really a Polygon
       // dwg_geojson__3DFACE(dat, obj);
       LOG_TRACE ("3DFACE not yet supported")
       break;
@@ -725,7 +738,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
       break;
     case DWG_TYPE__3DSOLID:
       // dwg_geojson__3DSOLID(dat, obj);
-      break; /* Check the type of the object */
+      break;
     case DWG_TYPE_REGION:
       // dwg_geojson_REGION(dat, obj);
       break;
