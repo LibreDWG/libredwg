@@ -59,7 +59,7 @@ New features:
     objects.
   * 3DSOLID got now material properties and revisionguid fields.
   * Many parts of the API are now auto-generated/updated: dwg.i, dwg_api.c, dwg_api.h
-  * Added geojsonhint linter support.
+  * Added geojsonhint or gjv linter support.
   * new API functions:
     dwg_ctrl_table, dwg_handle_name, dwg_find_dicthandle_objname, dwg_variable_dict,
     dwg_next_entity, get_next_owned_block_entity, dwg_section_name,

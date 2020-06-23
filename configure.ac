@@ -577,7 +577,14 @@ AM_CONDITIONAL([HAVE_SHELLCHECK], [test -n "$SHELLCHECK"])
 AC_CHECK_PROGS([RPMLINT], [rpmlint])
 AM_CONDITIONAL([HAVE_RPMLINT], [test -n "$RPMLINT"])
 AC_CHECK_PROGS([GEOJSONHINT], [geojsonhint])
-AM_CONDITIONAL([HAVE_GEOJSONHINT], [test -n "$GEOJSONHINT"])
+if [ test -z "$GEOJSONHINT" ]; then
+  dnl fallback to npm i -g geojson-validation
+  AC_CHECK_PROGS([GJV], [gjv])
+  GEOJSONLINT="$GJV"
+else
+  GEOJSONLINT="$GEOJSONHINT"
+fi
+AC_SUBST([GEOJSONLINT])
 
 dnl SVG validation
 AC_CHECK_PROGS([JING], [jing])
