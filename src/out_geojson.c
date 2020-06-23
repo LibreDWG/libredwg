@@ -815,15 +815,13 @@ geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       int is_last = i == dwg->num_objects - 1;
       Dwg_Object *obj = &dwg->object[i];
       success = dwg_geojson_object (dat, obj, is_last);
-      if (is_last && !success) // needed for the LASTFEATURE comma. end with dummy
+      if (is_last && !success) // needed for the LASTFEATURE comma. end with an empty dummy
         {
           HASH
           PAIR_S (type, "Feature");
-          KEY (properties);
-          SAMEHASH;
-          LASTPAIR_S (SubClasses, "Dummy");
-          LASTENDHASH
-          LASTENDHASH
+          PAIR_NULL (properties);
+          LASTPAIR_NULL (geometry);
+          LASTENDHASH;
         }
     }
   ENDSEC (); // because afterwards is always the final geocoding object
