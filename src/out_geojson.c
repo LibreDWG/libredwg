@@ -17,8 +17,9 @@
 /* TODO: Arc, Circle, Ellipsis, Bulge (Curve) tessellation.
  *       ocs/ucs transforms, explode of inserts?
  *       NOCOMMA:
- *       We really have to add the comma before, not after, and special case
- *       the first field, not the last to omit the comma.
+ *         We really have to add the comma before, not after, and special case
+ *         the first field, not the last to omit the comma.
+ *       pass the linters
  */
 
 #include "config.h"
@@ -43,6 +44,11 @@
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
+
+/* https://tools.ietf.org/html/rfc7946#section-11.2 */
+// The default %f is good enough
+//#undef FORMAT_RD
+//#define FORMAT_RD %.6f
 
 /*--------------------------------------------------------------------------------
  * See http://geojson.org/geojson-spec.html
@@ -263,8 +269,11 @@ static unsigned int cur_ver = 0;
     VALUE_RD (px);                                                            \
     fprintf (dat->fh, ", ");                                                  \
     VALUE_RD (py);                                                            \
-    fprintf (dat->fh, ", ");                                                  \
-    VALUE_RD (pz);                                                            \
+    if (pz != 0.0)                                                            \
+      {                                                                       \
+        fprintf (dat->fh, ", ");                                              \
+        VALUE_RD (pz);                                                        \
+      }                                                                       \
     fprintf (dat->fh, " ],\n");                                               \
   }
 #define LASTVALUE_3DPOINT(px, py, pz)                                         \
@@ -273,8 +282,11 @@ static unsigned int cur_ver = 0;
     VALUE_RD (px);                                                            \
     fprintf (dat->fh, ", ");                                                  \
     VALUE_RD (py);                                                            \
-    fprintf (dat->fh, ", ");                                                  \
-    VALUE_RD (pz);                                                            \
+    if (pz != 0.0)                                                            \
+      {                                                                       \
+        fprintf (dat->fh, ", ");                                              \
+        VALUE_RD (pz);                                                        \
+      }                                                                       \
     fprintf (dat->fh, " ]\n");                                                \
   }
 #define FIELD_3DPOINT(name)                                                   \
@@ -349,6 +361,8 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   char tmp[64];
 
   PAIR_S (type, "Feature");
+  sprintf (tmp, "%lX", obj->handle.value);
+  PAIR_S (id, tmp);
   KEY (properties);
   SAMEHASH;
   PAIR_S (SubClasses, subclass);
@@ -375,7 +389,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           sprintf (tmp, "%06X", obj->tio.entity->color.rgb & 0xffffff);
           PAIR_S (color, tmp);
         }
-      else
+      else if (obj->tio.entity->color.index != 256)
         {
           PAIR_D (color, obj->tio.entity->color.index);
         }
@@ -389,7 +403,6 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
     }
 
-  sprintf (tmp, "%lX", obj->handle.value);
   // if has notes and opt. an mtext frame_text
   if (obj->type == DWG_TYPE_GEOPOSITIONMARKER)
     {
@@ -448,6 +461,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
     }
   // PAIR_NULL(ExtendedEntity);
+  sprintf (tmp, "%lX", obj->handle.value);
   LASTPAIR_S (EntityHandle, tmp);
   ENDHASH;
 }
