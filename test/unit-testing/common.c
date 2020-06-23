@@ -8,6 +8,9 @@
 #include <unistd.h>
 #include <math.h>
 #include <sys/stat.h>
+#ifdef __APPLE__
+#  define _DARWIN_C_SOURCE /* for DT_DIR */
+#endif
 #include <dirent.h>
 #include "../../src/common.h"
 #include "../../src/classes.h"
