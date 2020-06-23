@@ -20,6 +20,9 @@
  *         We really have to add the comma before, not after, and special case
  *         the first field, not the last to omit the comma.
  *       pass the linters
+ *       GeoJSON 2008 or newer RFC7946? https://tools.ietf.org/html/rfc7946#appendix-B
+ *       For the new format we need to follow the right-hand rule for orientation
+ *       (counterclockwise polygons).
  */
 
 #include "config.h"
@@ -497,6 +500,7 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int i
   // if closed and num_points > 3 use a Polygon
   if (_obj->flag & 512 && _obj->num_points > 3)
     is_polygon = true;
+  is_polygon = false; // no RFC7946 normalize orientation yet
   if (is_polygon)
     GEOMETRY (Polygon)
   else
@@ -593,9 +597,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         // TODO: explode insert into a GeometryCollection
         GEOMETRY (Point);
         KEY (coordinates);
-        ARRAY;
         LASTFIELD_3DPOINT (ins_pt);
-        LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
@@ -616,6 +618,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
         if (_obj->flag & 512 && numpts > 3)
           is_polygon = true;
+        is_polygon = false; // no RFC7946 normalize orientation yet
         FEATURE (AcDbEntity : AcDbPolyline, obj);
         if (is_polygon)
           GEOMETRY (Polygon)
@@ -771,9 +774,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         FEATURE (AcDbEntity : AcDbText, obj);
         GEOMETRY (Point);
         KEY (coordinates);
-        ARRAY;
         LASTFIELD_2DPOINT (insertion_pt);
-        LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
@@ -785,9 +786,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         FEATURE (AcDbEntity : AcDbMText, obj);
         GEOMETRY (Point);
         KEY (coordinates);
-        ARRAY;
         LASTFIELD_3DPOINT (insertion_pt);
-        LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
