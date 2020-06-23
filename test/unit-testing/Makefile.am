@@ -213,6 +213,8 @@ testobjects += \
 	assocmleaderactionbody \
 	assocarrayactionbody \
 	assocarraymodifyactionbody \
+	assocedgechamferactionbody \
+	assocedgefilletactionbody \
 	assocrestoreentitystateactionbody \
 	assoc3pointangulardimactionbody \
 	assocaligneddimactionbody \
@@ -229,6 +231,7 @@ testobjects += \
 	assocfaceactionparam \
 	assocobjectactionparam \
 	assocpathactionparam \
+	assocpointrefactionparam \
 	assocvertexactionparam \
 	assocarraymodifyparameters \
 	assocarraypathparameters \
@@ -237,6 +240,7 @@ testobjects += \
 	atext \
 	blkrefobjectcontextdata \
 	blockgriplocationcomponent \
+	assocdimdependencybody \
 	blockparamdependencybody \
 	blockvisibilitygrip \
 	blockvisibilityparameter \

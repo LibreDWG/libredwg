@@ -5586,6 +5586,27 @@ H,	DXF 330
 @end vtable
 @end indentedblock
 
+@strong{ASSOCDIMDEPENDENCYBODY} @anchor{ASSOCDIMDEPENDENCYBODY}
+@cindex object, ASSOCDIMDEPENDENCYBODY
+@vindex ASSOCDIMDEPENDENCYBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item adb_version
+BS,	DXF 90
+@item dimbase_version
+BS,	DXF 90
+@item name
+T,	DXF 1
+@item class_version
+BS,	DXF 90
+
+@end vtable
+@end indentedblock
+
 @strong{ASSOCEDGEACTIONPARAM} @anchor{ASSOCEDGEACTIONPARAM}
 @cindex object, ASSOCEDGEACTIONPARAM
 @vindex ASSOCEDGEACTIONPARAM
@@ -5615,6 +5636,48 @@ B,	DXF 290
 BL,	DXF 90
 @item subent
 H
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCEDGECHAMFERACTIONBODY} @anchor{ASSOCEDGECHAMFERACTIONBODY}
+@cindex object, ASSOCEDGECHAMFERACTIONBODY
+@vindex ASSOCEDGECHAMFERACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_version
+BL,	DXF 90
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
+@item pbsab_status
+BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCEDGEFILLETACTIONBODY} @anchor{ASSOCEDGEFILLETACTIONBODY}
+@cindex object, ASSOCEDGEFILLETACTIONBODY
+@vindex ASSOCEDGEFILLETACTIONBODY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aab_version
+BL,	DXF 90
+@item pab
+Dwg_ASSOCPARAMBASEDACTIONBODY
+@item sab
+Dwg_ASSOCSURFACEACTIONBODY
+@item pbsab_status
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -6174,6 +6237,47 @@ Dwg_ASSOCSURFACEACTIONBODY
 BL,	DXF 90
 @item class_version
 BL,	DXF 90
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCPOINTREFACTIONPARAM} @anchor{ASSOCPOINTREFACTIONPARAM}
+@cindex object, ASSOCPOINTREFACTIONPARAM
+@vindex ASSOCPOINTREFACTIONPARAM
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item is_r2013
+BS,	DXF 90
+@item aap_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item class_version
+BS,	DXF 90
+@item bs1
+BS,	DXF 90
+@item num_params
+BL,	DXF 90
+@item params
+H*,	DXF 360
+@item has_child_param
+B
+@item child_status
+BS,	DXF 90
+@item child_id
+BL,	DXF 90
+@item child_param
+H,	DXF 330
+@item h330_2
+H,	DXF 330
+@item bl2
+BL,	DXF 90
+@item h330_3
+H,	DXF 330
 
 @end vtable
 @end indentedblock

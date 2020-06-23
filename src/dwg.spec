@@ -7868,9 +7868,39 @@ DWG_OBJECT (ASSOCACTION)
   }
 DWG_OBJECT_END
 
+#define AdDbAssocIndexPersSubentId_fields \
+  DXF { FIELD_T (classname, 1) }       \
+  else {                               \
+    PRE (R_2013) {                     \
+      FIELD_T (classname, 0);          \
+    } LATER_VERSIONS {                 \
+      FIELD_B (has_classname, 0);      \
+      FIELD_BL (bl1, 0);               \
+    }                                  \
+  }                                    \
+  FIELD_BS (class_version, 90);        \
+  FIELD_BL (subent_type, 90);          \
+  FIELD_BL (subent_index, 90);         \
+  FIELD_B (dependent_on_compound_object, 290)
+
 #define AcDbAssocPersSubentId_fields            \
   SUBCLASS (AcDbAssocPersSubentId)              \
   FIELD_T (classname, 1);                       \
+  FIELD_B (dependent_on_compound_object, 290)
+
+#define AcDbAssocEdgePersSubentId_fields \
+  DXF { FIELD_T (classname, 1) }         \
+  else {                                 \
+    PRE (R_2013) {                       \
+      FIELD_T (classname, 0);            \
+    } LATER_VERSIONS {                   \
+      FIELD_B (has_classname, 0);        \
+      FIELD_BL (bl1, 0);                 \
+    }                                    \
+  }                                      \
+  FIELD_BS (class_version, 90);          \
+  FIELD_BL (index1, 90);                 \
+  FIELD_BL (index2, 90);                 \
   FIELD_B (dependent_on_compound_object, 290)
 
 DWG_OBJECT (ASSOCVALUEDEPENDENCY)
@@ -7941,6 +7971,20 @@ DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
   AcDbAssocPathBasedSurfaceActionBody_fields;
   SUBCLASS (AcDbAssocSweptSurfaceActionBody)
   FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCEDGECHAMFERACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocEdgeChamferActionBody)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCEDGEFILLETACTIONBODY)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocEdgeFilletActionBody)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9525,6 +9569,13 @@ DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   FIELD_BD (param, 40);
 DWG_OBJECT_END
 
+DWG_OBJECT (ASSOCPOINTREFACTIONPARAM)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocActionParam_fields;
+  AcDbAssocCompoundActionParam_fields;
+  SUBCLASS (AcDbAssocPointRefActionParam);
+DWG_OBJECT_END
+
 // unused
 #define AcDbAssocPathActionParam_fields(pap)              \
   SUBCLASS (AcDbAssocPathActionParam);                    \
@@ -9716,7 +9767,7 @@ DWG_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
   SUBCLASS (AcDbAssocArrayRectangularParameters)
 DWG_OBJECT_END
 
-// subclass only
+// subclasses only
 #define AcDbAssocAsmBasedEntityPersSubentId_fields
 
 DWG_OBJECT (ASSOCARRAYACTIONBODY)
@@ -9739,6 +9790,17 @@ DWG_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (items);
   END_REPEAT (items)
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCDIMDEPENDENCYBODY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbAssocDependencyBody)
+  FIELD_BS (adb_version, 90); // always 1
+  SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
+  FIELD_BS (dimbase_version, 90); // always 1
+  FIELD_T (name, 1);
+  SUBCLASS (AdDbAssocDimDependencyBody)
+  FIELD_BS (class_version, 90); // 1
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPARAMDEPENDENCYBODY)
