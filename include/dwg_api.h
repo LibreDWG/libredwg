@@ -677,6 +677,10 @@ typedef struct _dwg_object_ASSOCACTIONPARAM		dwg_obj_assocactionparam;
 typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY		dwg_obj_assocaligneddimactionbody;
 typedef struct _dwg_object_ASSOCARRAYACTIONBODY		dwg_obj_assocarrayactionbody;
 typedef struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY		dwg_obj_assocarraymodifyactionbody;
+typedef struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS		dwg_obj_assocarraymodifyparameters;
+typedef struct _dwg_object_ASSOCARRAYPATHPARAMETERS		dwg_obj_assocarraypathparameters;
+typedef struct _dwg_object_ASSOCARRAYPOLARPARAMETERS		dwg_obj_assocarraypolarparameters;
+typedef struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS		dwg_obj_assocarrayrectangularparameters;
 typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM		dwg_obj_assocasmbodyactionparam;
 typedef struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM		dwg_obj_assoccompoundactionparam;
 typedef struct _dwg_object_ASSOCEDGEACTIONPARAM		dwg_obj_assocedgeactionparam;
@@ -726,6 +730,10 @@ typedef struct _dwg_object_SUNSTUDY		dwg_obj_sunstudy;
 typedef struct _dwg_object_TABLECONTENT		dwg_obj_tablecontent;
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA		dwg_obj_textobjectcontextdata;
 typedef struct _dwg_object_TVDEVICEPROPERTIES		dwg_obj_tvdeviceproperties;
+//typedef struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS		dwg_obj_assocarraymodifyparameters;
+//typedef struct _dwg_object_ASSOCARRAYPATHPARAMETERS		dwg_obj_assocarraypathparameters;
+//typedef struct _dwg_object_ASSOCARRAYPOLARPARAMETERS		dwg_obj_assocarraypolarparameters;
+//typedef struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS		dwg_obj_assocarrayrectangularparameters;
 
 
 dwg_get_OBJECT_DECL (ent__3dface, _3DFACE);
@@ -915,6 +923,10 @@ dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   dwg_get_OBJECT_DECL (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY);
   dwg_get_OBJECT_DECL (obj_assocarrayactionbody, ASSOCARRAYACTIONBODY);
   dwg_get_OBJECT_DECL (obj_assocarraymodifyactionbody, ASSOCARRAYMODIFYACTIONBODY);
+  dwg_get_OBJECT_DECL (obj_assocarraymodifyparameters, ASSOCARRAYMODIFYPARAMETERS);
+  dwg_get_OBJECT_DECL (obj_assocarraypathparameters, ASSOCARRAYPATHPARAMETERS);
+  dwg_get_OBJECT_DECL (obj_assocarraypolarparameters, ASSOCARRAYPOLARPARAMETERS);
+  dwg_get_OBJECT_DECL (obj_assocarrayrectangularparameters, ASSOCARRAYRECTANGULARPARAMETERS);
   dwg_get_OBJECT_DECL (obj_assocasmbodyactionparam, ASSOCASMBODYACTIONPARAM);
   dwg_get_OBJECT_DECL (obj_assoccompoundactionparam, ASSOCCOMPOUNDACTIONPARAM);
   dwg_get_OBJECT_DECL (obj_assocedgeactionparam, ASSOCEDGEACTIONPARAM);
@@ -964,6 +976,10 @@ dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
   dwg_get_OBJECT_DECL (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_tvdeviceproperties, TVDEVICEPROPERTIES);
+  //dwg_get_OBJECT_DECL (obj_assocarraymodifyparameters, ASSOCARRAYMODIFYPARAMETERS);
+  //dwg_get_OBJECT_DECL (obj_assocarraypathparameters, ASSOCARRAYPATHPARAMETERS);
+  //dwg_get_OBJECT_DECL (obj_assocarraypolarparameters, ASSOCARRAYPOLARPARAMETERS);
+  //dwg_get_OBJECT_DECL (obj_assocarrayrectangularparameters, ASSOCARRAYRECTANGULARPARAMETERS);
 #endif
 
 /********************************************************************
@@ -1172,6 +1188,10 @@ DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   DWG_GETALL_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYACTIONBODY);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYMODIFYACTIONBODY);
+  DWG_GETALL_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
+  DWG_GETALL_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
+  DWG_GETALL_OBJECT_DECL (ASSOCARRAYPOLARPARAMETERS);
+  DWG_GETALL_OBJECT_DECL (ASSOCARRAYRECTANGULARPARAMETERS);
   DWG_GETALL_OBJECT_DECL (ASSOCASMBODYACTIONPARAM);
   DWG_GETALL_OBJECT_DECL (ASSOCCOMPOUNDACTIONPARAM);
   DWG_GETALL_OBJECT_DECL (ASSOCEDGEACTIONPARAM);
@@ -1221,6 +1241,10 @@ DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   DWG_GETALL_OBJECT_DECL (TABLECONTENT);
   DWG_GETALL_OBJECT_DECL (TEXTOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES);
+  //DWG_GETALL_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
+  //DWG_GETALL_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
+  //DWG_GETALL_OBJECT_DECL (ASSOCARRAYPOLARPARAMETERS);
+  //DWG_GETALL_OBJECT_DECL (ASSOCARRAYRECTANGULARPARAMETERS);
 #endif
 
 /*******************************************************************
@@ -1435,6 +1459,10 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCALIGNEDDIMACTIONBODY);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYACTIONBODY);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYMODIFYACTIONBODY);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYPOLARPARAMETERS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYRECTANGULARPARAMETERS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCASMBODYACTIONPARAM);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCCOMPOUNDACTIONPARAM);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCEDGEACTIONPARAM);
@@ -1484,6 +1512,10 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TEXTOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYPOLARPARAMETERS);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYRECTANGULARPARAMETERS);
 #endif
 /* End auto-generated content */
 

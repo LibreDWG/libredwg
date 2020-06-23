@@ -9648,15 +9648,16 @@ DWG_OBJECT_END
   FIELD_T (aaab_paramblock, 1);                             \
   FIELD_VECTOR_N (aaab_transmatrix, BD, 16, 40)
 
-#define AssocArrayItem_fields(item)                              \
+#define AcDbAssocArrayItem_fields(item)                          \
   SUB_FIELD_BL (item, class_version, 90);                        \
   SUB_FIELD_BL (item, itemloc[0], 90);                           \
   SUB_FIELD_BL (item, itemloc[1], 90);                           \
   SUB_FIELD_BL (item, itemloc[2], 90);                           \
   SUB_FIELD_BLx (item, flags, 90);                               \
-  if (FIELD_VALUE(is_default_transmatrix))                       \
+  /* TODO compare against default transmatrix */                 \
+  if (FIELD_VALUE(item.is_default_transmatrix))                  \
     {                                                            \
-      /* TODO x_dir is computed from transmatrix */              \
+      /* TODO x_dir computed from transmatrix */                 \
       SUB_FIELD_3BD (item, x_dir, 11);                           \
     }                                                            \
   else                                                           \
@@ -9672,17 +9673,48 @@ DWG_OBJECT_END
   if (FIELD_VALUE (item.flags) & 0x10)                           \
     SUB_FIELD_HANDLE (item, h2, 4, 330)
 
-// unused
-#define AssocArrayParameters_fields                              \
+#define AcDbAssocArrayParameters_fields                          \
   FIELD_BL (aap_version, 90);                                    \
   FIELD_BL (num_items, 90);                                      \
-  DXF { VALUE_TFF ("AcDbAssocArrayItem", 1); }                   \
+  /* _obj->classname = "AcDbAssocArrayItem"; */                  \
+  FIELD_T (classname, 1);                                        \
   REPEAT (num_items, items, Dwg_ASSOCARRAYITEM)                  \
   REPEAT_BLOCK                                                   \
-      AssocArrayItem_fields (items[rcount1]);                    \
+      AcDbAssocArrayItem_fields (items[rcount1]);                \
   END_REPEAT_BLOCK                                               \
   /* SET_PARENT (items, what); */                                \
   END_REPEAT (items)
+
+#define AcDbAssocArrayCommonParameters_fields                    \
+  SUBCLASS (AcDbAssocArrayCommonParameters)                      \
+  AcDbAssocArrayParameters_fields;                               \
+  FIELD_BL (numitems, 0);                                        \
+  FIELD_BL (numrows, 0);                                         \
+  FIELD_BL (numlevels, 0)
+
+DWG_OBJECT (ASSOCARRAYMODIFYPARAMETERS)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocArrayCommonParameters_fields;
+  SUBCLASS (AcDbAssocArrayModifyParameters)
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCARRAYPATHPARAMETERS)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocArrayCommonParameters_fields;
+  SUBCLASS (AcDbAssocArrayPathParameters)
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCARRAYPOLARPARAMETERS)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocArrayCommonParameters_fields;
+  SUBCLASS (AcDbAssocArrayPolarParameters)
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
+  DECODE_UNKNOWN_BITS
+  AcDbAssocArrayCommonParameters_fields;
+  SUBCLASS (AcDbAssocArrayRectangularParameters)
+DWG_OBJECT_END
 
 // subclass only
 #define AcDbAssocAsmBasedEntityPersSubentId_fields

@@ -146,137 +146,141 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "ASSOCALIGNEDDIMACTIONBODY" "\0\0\0\0\0\0\0\0",	/* 27 */
   "ASSOCARRAYACTIONBODY" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
   "ASSOCARRAYMODIFYACTIONBODY" "\0\0\0\0\0\0\0",	/* 29 */
-  "ASSOCASMBODYACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "ASSOCBLENDSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 31 */
-  "ASSOCCOMPOUNDACTIONPARAM" "\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "ASSOCDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "ASSOCEDGEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
-  "ASSOCEXTENDSURFACEACTIONBODY" "\0\0\0\0\0",	/* 35 */
-  "ASSOCEXTRUDEDSURFACEACTIONBODY" "\0\0\0",	/* 36 */
-  "ASSOCFACEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "ASSOCFILLETSURFACEACTIONBODY" "\0\0\0\0\0",	/* 38 */
-  "ASSOCGEOMDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
-  "ASSOCLOFTEDSURFACEACTIONBODY" "\0\0\0\0\0",	/* 40 */
-  "ASSOCMLEADERACTIONBODY" "\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
-  "ASSOCNETWORK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
-  "ASSOCNETWORKSURFACEACTIONBODY" "\0\0\0\0",	/* 43 */
-  "ASSOCOBJECTACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
-  "ASSOCOFFSETSURFACEACTIONBODY" "\0\0\0\0\0",	/* 45 */
-  "ASSOCORDINATEDIMACTIONBODY" "\0\0\0\0\0\0\0",	/* 46 */
-  "ASSOCOSNAPPOINTREFACTIONPARAM" "\0\0\0\0",	/* 47 */
-  "ASSOCPATCHSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 48 */
-  "ASSOCPATHACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "ASSOCPERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "ASSOCPLANESURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 51 */
-  "ASSOCRESTOREENTITYSTATEACTIONBODY" "",	/* 52 */
-  "ASSOCREVOLVEDSURFACEACTIONBODY" "\0\0\0",	/* 53 */
-  "ASSOCROTATEDDIMACTIONBODY" "\0\0\0\0\0\0\0\0",	/* 54 */
-  "ASSOCSWEPTSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 55 */
-  "ASSOCTRIMSURFACEACTIONBODY" "\0\0\0\0\0\0\0",	/* 56 */
-  "ASSOCVALUEDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "ASSOCVARIABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "ASSOCVERTEXACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "BACKGROUND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "BLKREFOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "BLOCKGRIPLOCATIONCOMPONENT" "\0\0\0\0\0\0\0",	/* 62 */
-  "BLOCKPARAMDEPENDENCYBODY" "\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "BLOCKVISIBILITYGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "BLOCKVISIBILITYPARAMETER" "\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "BLOCK_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "BLOCK_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "CELLSTYLEMAP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "CONTEXTDATAMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "CSACDOCUMENTOPTIONS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "CURVEPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "DATALINK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "DATATABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "DBCOLOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
-  "DETAILVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
-  "DICTIONARY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "DICTIONARYVAR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
-  "DICTIONARYWDFLT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
-  "DIMASSOC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
-  "DIMSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
-  "DIMSTYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
-  "DMDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 82 */
-  "DUMMY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 83 */
-  "DYNAMICBLOCKPURGEPREVENTER" "\0\0\0\0\0\0\0",	/* 84 */
-  "EVALUATION_GRAPH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 85 */
-  "FCFOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 86 */
-  "FIELD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 87 */
-  "FIELDLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 88 */
-  "GEODATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 89 */
-  "GEOMAPIMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 90 */
-  "GROUP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 91 */
-  "IDBUFFER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 92 */
-  "IMAGEDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 93 */
-  "IMAGEDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 94 */
-  "LAYER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 95 */
-  "LAYERFILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 96 */
-  "LAYER_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 97 */
-  "LAYER_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 98 */
-  "LAYOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 99 */
-  "LAYOUTPRINTCONFIG" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 100 */
-  "LEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 101 */
-  "LIGHTLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 102 */
-  "LONG_TRANSACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 103 */
-  "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 104 */
-  "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 105 */
-  "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 106 */
-  "MENTALRAYRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0",	/* 107 */
-  "MLEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0",	/* 108 */
-  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 109 */
-  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 110 */
-  "MOTIONPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 111 */
-  "MTEXTATTRIBUTEOBJECTCONTEXTDATA" "\0\0",	/* 112 */
-  "MTEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 113 */
-  "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 114 */
-  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 115 */
-  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 116 */
-  "ORDDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 117 */
-  "PERSUBENTMGR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 118 */
-  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 119 */
-  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 120 */
-  "POINTPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 121 */
-  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 122 */
-  "RADIMLGOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0",	/* 123 */
-  "RADIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 124 */
-  "RAPIDRTRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 125 */
-  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 126 */
-  "RENDERENTRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 127 */
-  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 128 */
-  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 129 */
-  "RENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 130 */
-  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 131 */
-  "SECTIONVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 132 */
-  "SECTION_MANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 133 */
-  "SECTION_SETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 134 */
-  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 135 */
-  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 136 */
-  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 137 */
-  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 138 */
-  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 139 */
-  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 140 */
-  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 141 */
-  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 142 */
-  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 143 */
-  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 144 */
-  "TEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 145 */
-  "TVDEVICEPROPERTIES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 146 */
-  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 147 */
-  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 148 */
-  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 149 */
-  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 150 */
-  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 151 */
-  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 152 */
-  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 153 */
-  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 154 */
-  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 155 */
-  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 156 */
-  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 157 */
-  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 158 */
-  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 159 */
-  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 160 */
+  "ASSOCARRAYMODIFYPARAMETERS" "\0\0\0\0\0\0\0",	/* 30 */
+  "ASSOCARRAYPATHPARAMETERS" "\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "ASSOCARRAYPOLARPARAMETERS" "\0\0\0\0\0\0\0\0",	/* 32 */
+  "ASSOCARRAYRECTANGULARPARAMETERS" "\0\0",	/* 33 */
+  "ASSOCASMBODYACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0",	/* 34 */
+  "ASSOCBLENDSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 35 */
+  "ASSOCCOMPOUNDACTIONPARAM" "\0\0\0\0\0\0\0\0\0",	/* 36 */
+  "ASSOCDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
+  "ASSOCEDGEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
+  "ASSOCEXTENDSURFACEACTIONBODY" "\0\0\0\0\0",	/* 39 */
+  "ASSOCEXTRUDEDSURFACEACTIONBODY" "\0\0\0",	/* 40 */
+  "ASSOCFACEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
+  "ASSOCFILLETSURFACEACTIONBODY" "\0\0\0\0\0",	/* 42 */
+  "ASSOCGEOMDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
+  "ASSOCLOFTEDSURFACEACTIONBODY" "\0\0\0\0\0",	/* 44 */
+  "ASSOCMLEADERACTIONBODY" "\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
+  "ASSOCNETWORK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
+  "ASSOCNETWORKSURFACEACTIONBODY" "\0\0\0\0",	/* 47 */
+  "ASSOCOBJECTACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "ASSOCOFFSETSURFACEACTIONBODY" "\0\0\0\0\0",	/* 49 */
+  "ASSOCORDINATEDIMACTIONBODY" "\0\0\0\0\0\0\0",	/* 50 */
+  "ASSOCOSNAPPOINTREFACTIONPARAM" "\0\0\0\0",	/* 51 */
+  "ASSOCPATCHSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 52 */
+  "ASSOCPATHACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "ASSOCPERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "ASSOCPLANESURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 55 */
+  "ASSOCRESTOREENTITYSTATEACTIONBODY" "",	/* 56 */
+  "ASSOCREVOLVEDSURFACEACTIONBODY" "\0\0\0",	/* 57 */
+  "ASSOCROTATEDDIMACTIONBODY" "\0\0\0\0\0\0\0\0",	/* 58 */
+  "ASSOCSWEPTSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 59 */
+  "ASSOCTRIMSURFACEACTIONBODY" "\0\0\0\0\0\0\0",	/* 60 */
+  "ASSOCVALUEDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "ASSOCVARIABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
+  "ASSOCVERTEXACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
+  "BACKGROUND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "BLKREFOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "BLOCKGRIPLOCATIONCOMPONENT" "\0\0\0\0\0\0\0",	/* 66 */
+  "BLOCKPARAMDEPENDENCYBODY" "\0\0\0\0\0\0\0\0\0",	/* 67 */
+  "BLOCKVISIBILITYGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
+  "BLOCKVISIBILITYPARAMETER" "\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "BLOCK_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "BLOCK_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
+  "CELLSTYLEMAP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "CONTEXTDATAMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
+  "CSACDOCUMENTOPTIONS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
+  "CURVEPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
+  "DATALINK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
+  "DATATABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
+  "DBCOLOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
+  "DETAILVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
+  "DICTIONARY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
+  "DICTIONARYVAR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
+  "DICTIONARYWDFLT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 82 */
+  "DIMASSOC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 83 */
+  "DIMSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 84 */
+  "DIMSTYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 85 */
+  "DMDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 86 */
+  "DUMMY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 87 */
+  "DYNAMICBLOCKPURGEPREVENTER" "\0\0\0\0\0\0\0",	/* 88 */
+  "EVALUATION_GRAPH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 89 */
+  "FCFOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 90 */
+  "FIELD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 91 */
+  "FIELDLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 92 */
+  "GEODATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 93 */
+  "GEOMAPIMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 94 */
+  "GROUP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 95 */
+  "IDBUFFER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 96 */
+  "IMAGEDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 97 */
+  "IMAGEDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 98 */
+  "LAYER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 99 */
+  "LAYERFILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 100 */
+  "LAYER_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 101 */
+  "LAYER_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 102 */
+  "LAYOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 103 */
+  "LAYOUTPRINTCONFIG" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 104 */
+  "LEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 105 */
+  "LIGHTLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 106 */
+  "LONG_TRANSACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 107 */
+  "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 108 */
+  "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 109 */
+  "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 110 */
+  "MENTALRAYRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0",	/* 111 */
+  "MLEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0",	/* 112 */
+  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 113 */
+  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 114 */
+  "MOTIONPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 115 */
+  "MTEXTATTRIBUTEOBJECTCONTEXTDATA" "\0\0",	/* 116 */
+  "MTEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 117 */
+  "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 118 */
+  "OBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 119 */
+  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 120 */
+  "ORDDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 121 */
+  "PERSUBENTMGR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 122 */
+  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 123 */
+  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 124 */
+  "POINTPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 125 */
+  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 126 */
+  "RADIMLGOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0",	/* 127 */
+  "RADIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 128 */
+  "RAPIDRTRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 129 */
+  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 130 */
+  "RENDERENTRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 131 */
+  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 132 */
+  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 133 */
+  "RENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 134 */
+  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 135 */
+  "SECTIONVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 136 */
+  "SECTION_MANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 137 */
+  "SECTION_SETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 138 */
+  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 139 */
+  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 140 */
+  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 141 */
+  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 142 */
+  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 143 */
+  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 144 */
+  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 145 */
+  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 146 */
+  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 147 */
+  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 148 */
+  "TEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 149 */
+  "TVDEVICEPROPERTIES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 150 */
+  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 151 */
+  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 152 */
+  "UNDERLAYDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 153 */
+  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 154 */
+  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 155 */
+  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 156 */
+  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 157 */
+  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 158 */
+  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 159 */
+  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 160 */
+  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 161 */
+  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 162 */
+  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 163 */
+  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 164 */
 
 };
 
@@ -4822,6 +4826,86 @@ static const Dwg_DYNAPI_field _dwg_ASSOCARRAYMODIFYACTIONBODY_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYMODIFYPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_object_ASSOCARRAYPATHPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYPATHPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_object_ASSOCARRAYPOLARPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYPOLARPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYRECTANGULARPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_ASSOCASMBODYACTIONPARAM_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCASMBODYACTIONPARAM, parent),
@@ -8865,10 +8949,16 @@ static const Dwg_DYNAPI_field _dwg_ASSOCARRAYITEM_fields[] = {
     0,0,0, 0 },
   { "flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ASSOCARRAYITEM, flags),
     0,0,0, 0 },
+  { "is_default_transmatrix",	"int", sizeof (int),  OFF (struct _dwg_ASSOCARRAYITEM, is_default_transmatrix),
+    0,0,0, 0 },
+  { "x_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_ASSOCARRAYITEM, x_dir),
+    1,0,0, 0 },
   { "transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_ASSOCARRAYITEM, transmatrix),
     1,1,0, 0 },
   { "rel_transform",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_ASSOCARRAYITEM, rel_transform),
     1,1,0, 0 },
+  { "has_h1",	"int", sizeof (int),  OFF (struct _dwg_ASSOCARRAYITEM, has_h1),
+    0,0,0, 0 },
   { "h1",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_ASSOCARRAYITEM, h1),
     1,0,0, 0 },
   { "h2",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_ASSOCARRAYITEM, h2),
@@ -11088,10 +11178,10 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "ASSOCALIGNEDDIMACTIONBODY", DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY /*(539)*/, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY) },	/* 33 */
   { "ASSOCARRAYACTIONBODY", DWG_TYPE_ASSOCARRAYACTIONBODY /*(559)*/, _dwg_ASSOCARRAYACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCARRAYACTIONBODY) },	/* 34 */
   { "ASSOCARRAYMODIFYACTIONBODY", DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY /*(560)*/, _dwg_ASSOCARRAYMODIFYACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY) },	/* 35 */
-  { "ASSOCARRAYMODIFYPARAMETERS", DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS /*(555)*/, NULL, 0 },	/* 36 */
-  { "ASSOCARRAYPATHPARAMETERS", DWG_TYPE_ASSOCARRAYPATHPARAMETERS /*(556)*/, NULL, 0 },	/* 37 */
-  { "ASSOCARRAYPOLARPARAMETERS", DWG_TYPE_ASSOCARRAYPOLARPARAMETERS /*(557)*/, NULL, 0 },	/* 38 */
-  { "ASSOCARRAYRECTANGULARPARAMETERS", DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS /*(558)*/, NULL, 0 },	/* 39 */
+  { "ASSOCARRAYMODIFYPARAMETERS", DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS /*(555)*/, _dwg_ASSOCARRAYMODIFYPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS) },	/* 36 */
+  { "ASSOCARRAYPATHPARAMETERS", DWG_TYPE_ASSOCARRAYPATHPARAMETERS /*(556)*/, _dwg_ASSOCARRAYPATHPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYPATHPARAMETERS) },	/* 37 */
+  { "ASSOCARRAYPOLARPARAMETERS", DWG_TYPE_ASSOCARRAYPOLARPARAMETERS /*(557)*/, _dwg_ASSOCARRAYPOLARPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS) },	/* 38 */
+  { "ASSOCARRAYRECTANGULARPARAMETERS", DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS /*(558)*/, _dwg_ASSOCARRAYRECTANGULARPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS) },	/* 39 */
   { "ASSOCASMBODYACTIONPARAM", DWG_TYPE_ASSOCASMBODYACTIONPARAM /*(547)*/, _dwg_ASSOCASMBODYACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCASMBODYACTIONPARAM) },	/* 40 */
   { "ASSOCBLENDSURFACEACTIONBODY", DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY /*(562)*/, _dwg_ASSOCBLENDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY) },	/* 41 */
   { "ASSOCCOMPOUNDACTIONPARAM", DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM /*(548)*/, _dwg_ASSOCCOMPOUNDACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM) },	/* 42 */

@@ -230,6 +230,10 @@ testobjects += \
 	assocobjectactionparam \
 	assocpathactionparam \
 	assocvertexactionparam \
+	assocarraymodifyparameters \
+	assocarraypathparameters \
+	assocarraypolarparameters \
+	assocarrayrectangularparameters \
 	atext \
 	blkrefobjectcontextdata \
 	blockgriplocationcomponent \

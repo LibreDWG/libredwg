@@ -5412,6 +5412,59 @@ typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM
   BITCODE_3BD pt;
 } Dwg_Object_ASSOCVERTEXACTIONPARAM;
 
+typedef struct _dwg_ASSOCARRAYITEM
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; // 0
+  BITCODE_BL itemloc[3];
+  BITCODE_BL flags; /* 2: has_relative_transform
+                       16: has_h2
+                     */
+  int is_default_transmatrix; /* computed */
+  BITCODE_3BD x_dir;         /* DXF 11 */
+  BITCODE_BD *transmatrix;   /* 16x BD 40 */
+  BITCODE_BD *rel_transform; /* 16x BD 40 */
+  int has_h1; /* computed */
+  BITCODE_H h1;
+  BITCODE_H h2;
+} Dwg_ASSOCARRAYITEM;
+
+#define ASSOCARRAYPARAMETERS_fields                           \
+  BITCODE_BL aap_version;                                     \
+  BITCODE_BL num_items;                                       \
+  BITCODE_T classname;                                        \
+  Dwg_ASSOCARRAYITEM *items
+
+#define ASSOCARRAYCOMMONPARAMETERS_fields                     \
+  ASSOCARRAYPARAMETERS_fields;                                \
+  BITCODE_BL numitems;                                        \
+  BITCODE_BL numrows;                                         \
+  BITCODE_BL numlevels
+
+typedef struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS
+{
+  struct _dwg_object_object *parent;
+  ASSOCARRAYCOMMONPARAMETERS_fields;
+} Dwg_Object_ASSOCARRAYMODIFYPARAMETERS;
+
+typedef struct _dwg_object_ASSOCARRAYPATHPARAMETERS
+{
+  struct _dwg_object_object *parent;
+  ASSOCARRAYCOMMONPARAMETERS_fields;
+} Dwg_Object_ASSOCARRAYPATHPARAMETERS;
+
+typedef struct _dwg_object_ASSOCARRAYPOLARPARAMETERS
+{
+  struct _dwg_object_object *parent;
+  ASSOCARRAYCOMMONPARAMETERS_fields;
+} Dwg_Object_ASSOCARRAYPOLARPARAMETERS;
+
+typedef struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS
+{
+  struct _dwg_object_object *parent;
+  ASSOCARRAYCOMMONPARAMETERS_fields;
+} Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS;
+
 typedef struct _dwg_object_ASSOCRESTOREENTITYSTATEACTIONBODY
 {
   struct _dwg_object_object *parent;
@@ -5623,20 +5676,6 @@ typedef struct _dwg_object_BLOCKPARAMDEPENDENCYBODY
   BITCODE_BS class_version;   // 90 0
 } Dwg_Object_BLOCKPARAMDEPENDENCYBODY;
 
-typedef struct _dwg_ASSOCARRAYITEM
-{
-  struct _dwg_object_object *parent;
-  BITCODE_BL class_version; // 0
-  BITCODE_BL itemloc[3];
-  BITCODE_BL flags; /* 2: has_relative_transform
-                       16: has_h2
-                     */
-  BITCODE_BD *transmatrix;   /* 16x BD */
-  BITCODE_BD *rel_transform; /* 16x BD */
-  BITCODE_H h1;
-  BITCODE_H h2;
-} Dwg_ASSOCARRAYITEM;
-
 typedef struct _dwg_ARRAYITEMLOCATOR
 {
   struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY *parent;
@@ -5652,11 +5691,6 @@ typedef struct _dwg_ARRAYITEMLOCATOR
   BITCODE_BL aaab_version;                     \
   BITCODE_T aaab_paramblock;                   \
   BITCODE_BD *aaab_transmatrix
-
-#define ASSOCARRAYPARAMATERS_fields            \
-  BITCODE_BL aap_version;                      \
-  BITCODE_BL num_items;                        \
-  Dwg_ASSOCARRAYITEM *items;
 
 typedef struct _dwg_object_ASSOCARRAYACTIONBODY
 {
@@ -7166,6 +7200,10 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCPATHACTIONPARAM *ASSOCPATHACTIONPARAM;
     Dwg_Object_ASSOCVERTEXACTIONPARAM *ASSOCVERTEXACTIONPARAM;
     Dwg_Object_ASSOCPERSSUBENTMANAGER *ASSOCPERSSUBENTMANAGER;
+    Dwg_Object_ASSOCARRAYMODIFYPARAMETERS *ASSOCARRAYMODIFYPARAMETERS;
+    Dwg_Object_ASSOCARRAYPATHPARAMETERS *ASSOCARRAYPATHPARAMETERS;
+    Dwg_Object_ASSOCARRAYPOLARPARAMETERS *ASSOCARRAYPOLARPARAMETERS;
+    Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS *ASSOCARRAYRECTANGULARPARAMETERS;
     Dwg_Object_ASSOCARRAYACTIONBODY *ASSOCARRAYACTIONBODY;
     Dwg_Object_ASSOCARRAYMODIFYACTIONBODY *ASSOCARRAYMODIFYACTIONBODY;
     Dwg_Object_ASSOCRESTOREENTITYSTATEACTIONBODY *ASSOCRESTOREENTITYSTATEACTIONBODY;
@@ -8457,6 +8495,10 @@ EXPORT int dwg_setup_ASSOCFACEACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCOBJECTACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCPATHACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCARRAYMODIFYPARAMETERS (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCARRAYPATHPARAMETERS (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCARRAYPOLARPARAMETERS (Dwg_Object *obj);
+EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVARIABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);

@@ -28085,6 +28085,470 @@ static int test_ASSOCARRAYMODIFYACTIONBODY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ASSOCARRAYMODIFYPARAMETERS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCARRAYMODIFYPARAMETERS *restrict assocarraymodifyparameters = obj->tio.object->tio.ASSOCARRAYMODIFYPARAMETERS;
+  failed = 0;
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "aap_version", &aap_version, NULL)
+        && aap_version == assocarraymodifyparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.aap_version [BL] %u != %u", assocarraymodifyparameters->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "aap_version", &aap_version, 0)
+        && aap_version == assocarraymodifyparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.aap_version [BL] set+1 %u != %u", assocarraymodifyparameters->aap_version, aap_version);
+    assocarraymodifyparameters->aap_version--;
+  }
+  {
+    BITCODE_T classname;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "classname", &classname, NULL)
+        && classname
+           ? strEQ ((char *)classname, (char *)assocarraymodifyparameters->classname)
+           : !assocarraymodifyparameters->classname)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarraymodifyparameters->classname);
+  }
+  {
+    Dwg_ASSOCARRAYITEM* items;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "num_items", &count, NULL)
+        && dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "items", &items, NULL)
+        && items == assocarraymodifyparameters->items)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
+  }
+  {
+    BITCODE_BL num_items;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "num_items", &num_items, NULL)
+        && num_items == assocarraymodifyparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.num_items [BL] %u != %u", assocarraymodifyparameters->num_items, num_items);
+    num_items++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "num_items", &num_items, 0)
+        && num_items == assocarraymodifyparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.num_items [BL] set+1 %u != %u", assocarraymodifyparameters->num_items, num_items);
+    assocarraymodifyparameters->num_items--;
+  }
+  {
+    BITCODE_BL numitems;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numitems", &numitems, NULL)
+        && numitems == assocarraymodifyparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.numitems [BL] %u != %u", assocarraymodifyparameters->numitems, numitems);
+    numitems++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numitems", &numitems, 0)
+        && numitems == assocarraymodifyparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.numitems [BL] set+1 %u != %u", assocarraymodifyparameters->numitems, numitems);
+    assocarraymodifyparameters->numitems--;
+  }
+  {
+    BITCODE_BL numlevels;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numlevels", &numlevels, NULL)
+        && numlevels == assocarraymodifyparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.numlevels [BL] %u != %u", assocarraymodifyparameters->numlevels, numlevels);
+    numlevels++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numlevels", &numlevels, 0)
+        && numlevels == assocarraymodifyparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.numlevels [BL] set+1 %u != %u", assocarraymodifyparameters->numlevels, numlevels);
+    assocarraymodifyparameters->numlevels--;
+  }
+  {
+    BITCODE_BL numrows;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numrows", &numrows, NULL)
+        && numrows == assocarraymodifyparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.numrows [BL] %u != %u", assocarraymodifyparameters->numrows, numrows);
+    numrows++;
+    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numrows", &numrows, 0)
+        && numrows == assocarraymodifyparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYMODIFYPARAMETERS.numrows [BL] set+1 %u != %u", assocarraymodifyparameters->numrows, numrows);
+    assocarraymodifyparameters->numrows--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocarraymodifyparameters->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYMODIFYPARAMETERS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCARRAYMODIFYPARAMETERS") || is_class_debugging ("ASSOCARRAYMODIFYPARAMETERS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCARRAYMODIFYPARAMETERS", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCARRAYPATHPARAMETERS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCARRAYPATHPARAMETERS *restrict assocarraypathparameters = obj->tio.object->tio.ASSOCARRAYPATHPARAMETERS;
+  failed = 0;
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "aap_version", &aap_version, NULL)
+        && aap_version == assocarraypathparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.aap_version [BL] %u != %u", assocarraypathparameters->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "aap_version", &aap_version, 0)
+        && aap_version == assocarraypathparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.aap_version [BL] set+1 %u != %u", assocarraypathparameters->aap_version, aap_version);
+    assocarraypathparameters->aap_version--;
+  }
+  {
+    BITCODE_T classname;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "classname", &classname, NULL)
+        && classname
+           ? strEQ ((char *)classname, (char *)assocarraypathparameters->classname)
+           : !assocarraypathparameters->classname)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarraypathparameters->classname);
+  }
+  {
+    Dwg_ASSOCARRAYITEM* items;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "num_items", &count, NULL)
+        && dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "items", &items, NULL)
+        && items == assocarraypathparameters->items)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
+  }
+  {
+    BITCODE_BL num_items;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "num_items", &num_items, NULL)
+        && num_items == assocarraypathparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.num_items [BL] %u != %u", assocarraypathparameters->num_items, num_items);
+    num_items++;
+    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "num_items", &num_items, 0)
+        && num_items == assocarraypathparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.num_items [BL] set+1 %u != %u", assocarraypathparameters->num_items, num_items);
+    assocarraypathparameters->num_items--;
+  }
+  {
+    BITCODE_BL numitems;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numitems", &numitems, NULL)
+        && numitems == assocarraypathparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.numitems [BL] %u != %u", assocarraypathparameters->numitems, numitems);
+    numitems++;
+    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numitems", &numitems, 0)
+        && numitems == assocarraypathparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.numitems [BL] set+1 %u != %u", assocarraypathparameters->numitems, numitems);
+    assocarraypathparameters->numitems--;
+  }
+  {
+    BITCODE_BL numlevels;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numlevels", &numlevels, NULL)
+        && numlevels == assocarraypathparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.numlevels [BL] %u != %u", assocarraypathparameters->numlevels, numlevels);
+    numlevels++;
+    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numlevels", &numlevels, 0)
+        && numlevels == assocarraypathparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.numlevels [BL] set+1 %u != %u", assocarraypathparameters->numlevels, numlevels);
+    assocarraypathparameters->numlevels--;
+  }
+  {
+    BITCODE_BL numrows;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numrows", &numrows, NULL)
+        && numrows == assocarraypathparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.numrows [BL] %u != %u", assocarraypathparameters->numrows, numrows);
+    numrows++;
+    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numrows", &numrows, 0)
+        && numrows == assocarraypathparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYPATHPARAMETERS.numrows [BL] set+1 %u != %u", assocarraypathparameters->numrows, numrows);
+    assocarraypathparameters->numrows--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocarraypathparameters->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYPATHPARAMETERS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCARRAYPATHPARAMETERS") || is_class_debugging ("ASSOCARRAYPATHPARAMETERS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCARRAYPATHPARAMETERS", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCARRAYPOLARPARAMETERS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCARRAYPOLARPARAMETERS *restrict assocarraypolarparameters = obj->tio.object->tio.ASSOCARRAYPOLARPARAMETERS;
+  failed = 0;
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "aap_version", &aap_version, NULL)
+        && aap_version == assocarraypolarparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.aap_version [BL] %u != %u", assocarraypolarparameters->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "aap_version", &aap_version, 0)
+        && aap_version == assocarraypolarparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.aap_version [BL] set+1 %u != %u", assocarraypolarparameters->aap_version, aap_version);
+    assocarraypolarparameters->aap_version--;
+  }
+  {
+    BITCODE_T classname;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "classname", &classname, NULL)
+        && classname
+           ? strEQ ((char *)classname, (char *)assocarraypolarparameters->classname)
+           : !assocarraypolarparameters->classname)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarraypolarparameters->classname);
+  }
+  {
+    Dwg_ASSOCARRAYITEM* items;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "num_items", &count, NULL)
+        && dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "items", &items, NULL)
+        && items == assocarraypolarparameters->items)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
+  }
+  {
+    BITCODE_BL num_items;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "num_items", &num_items, NULL)
+        && num_items == assocarraypolarparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.num_items [BL] %u != %u", assocarraypolarparameters->num_items, num_items);
+    num_items++;
+    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "num_items", &num_items, 0)
+        && num_items == assocarraypolarparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.num_items [BL] set+1 %u != %u", assocarraypolarparameters->num_items, num_items);
+    assocarraypolarparameters->num_items--;
+  }
+  {
+    BITCODE_BL numitems;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numitems", &numitems, NULL)
+        && numitems == assocarraypolarparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.numitems [BL] %u != %u", assocarraypolarparameters->numitems, numitems);
+    numitems++;
+    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numitems", &numitems, 0)
+        && numitems == assocarraypolarparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.numitems [BL] set+1 %u != %u", assocarraypolarparameters->numitems, numitems);
+    assocarraypolarparameters->numitems--;
+  }
+  {
+    BITCODE_BL numlevels;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numlevels", &numlevels, NULL)
+        && numlevels == assocarraypolarparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.numlevels [BL] %u != %u", assocarraypolarparameters->numlevels, numlevels);
+    numlevels++;
+    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numlevels", &numlevels, 0)
+        && numlevels == assocarraypolarparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.numlevels [BL] set+1 %u != %u", assocarraypolarparameters->numlevels, numlevels);
+    assocarraypolarparameters->numlevels--;
+  }
+  {
+    BITCODE_BL numrows;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numrows", &numrows, NULL)
+        && numrows == assocarraypolarparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.numrows [BL] %u != %u", assocarraypolarparameters->numrows, numrows);
+    numrows++;
+    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numrows", &numrows, 0)
+        && numrows == assocarraypolarparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYPOLARPARAMETERS.numrows [BL] set+1 %u != %u", assocarraypolarparameters->numrows, numrows);
+    assocarraypolarparameters->numrows--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocarraypolarparameters->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYPOLARPARAMETERS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCARRAYPOLARPARAMETERS") || is_class_debugging ("ASSOCARRAYPOLARPARAMETERS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCARRAYPOLARPARAMETERS", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_ASSOCARRAYRECTANGULARPARAMETERS (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS *restrict assocarrayrectangularparameters = obj->tio.object->tio.ASSOCARRAYRECTANGULARPARAMETERS;
+  failed = 0;
+  {
+    BITCODE_BL aap_version;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "aap_version", &aap_version, NULL)
+        && aap_version == assocarrayrectangularparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.aap_version [BL] %u != %u", assocarrayrectangularparameters->aap_version, aap_version);
+    aap_version++;
+    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "aap_version", &aap_version, 0)
+        && aap_version == assocarrayrectangularparameters->aap_version)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.aap_version [BL] set+1 %u != %u", assocarrayrectangularparameters->aap_version, aap_version);
+    assocarrayrectangularparameters->aap_version--;
+  }
+  {
+    BITCODE_T classname;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "classname", &classname, NULL)
+        && classname
+           ? strEQ ((char *)classname, (char *)assocarrayrectangularparameters->classname)
+           : !assocarrayrectangularparameters->classname)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarrayrectangularparameters->classname);
+  }
+  {
+    Dwg_ASSOCARRAYITEM* items;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "num_items", &count, NULL)
+        && dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "items", &items, NULL)
+        && items == assocarrayrectangularparameters->items)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
+  }
+  {
+    BITCODE_BL num_items;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "num_items", &num_items, NULL)
+        && num_items == assocarrayrectangularparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.num_items [BL] %u != %u", assocarrayrectangularparameters->num_items, num_items);
+    num_items++;
+    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "num_items", &num_items, 0)
+        && num_items == assocarrayrectangularparameters->num_items)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.num_items [BL] set+1 %u != %u", assocarrayrectangularparameters->num_items, num_items);
+    assocarrayrectangularparameters->num_items--;
+  }
+  {
+    BITCODE_BL numitems;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numitems", &numitems, NULL)
+        && numitems == assocarrayrectangularparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numitems [BL] %u != %u", assocarrayrectangularparameters->numitems, numitems);
+    numitems++;
+    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numitems", &numitems, 0)
+        && numitems == assocarrayrectangularparameters->numitems)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numitems [BL] set+1 %u != %u", assocarrayrectangularparameters->numitems, numitems);
+    assocarrayrectangularparameters->numitems--;
+  }
+  {
+    BITCODE_BL numlevels;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numlevels", &numlevels, NULL)
+        && numlevels == assocarrayrectangularparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numlevels [BL] %u != %u", assocarrayrectangularparameters->numlevels, numlevels);
+    numlevels++;
+    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numlevels", &numlevels, 0)
+        && numlevels == assocarrayrectangularparameters->numlevels)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numlevels [BL] set+1 %u != %u", assocarrayrectangularparameters->numlevels, numlevels);
+    assocarrayrectangularparameters->numlevels--;
+  }
+  {
+    BITCODE_BL numrows;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numrows", &numrows, NULL)
+        && numrows == assocarrayrectangularparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numrows [BL] %u != %u", assocarrayrectangularparameters->numrows, numrows);
+    numrows++;
+    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numrows", &numrows, 0)
+        && numrows == assocarrayrectangularparameters->numrows)
+      pass ();
+    else
+      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numrows [BL] set+1 %u != %u", assocarrayrectangularparameters->numrows, numrows);
+    assocarrayrectangularparameters->numrows--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "parent", &parent, NULL)
+        && !memcmp (&parent, &assocarrayrectangularparameters->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ASSOCARRAYRECTANGULARPARAMETERS.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("ASSOCARRAYRECTANGULARPARAMETERS") || is_class_debugging ("ASSOCARRAYRECTANGULARPARAMETERS")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ASSOCARRAYRECTANGULARPARAMETERS", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ASSOCASMBODYACTIONPARAM (const Dwg_Object *obj)
 {
   int error = 0;
@@ -51102,6 +51566,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCARRAYACTIONBODY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY)
     error += test_ASSOCARRAYMODIFYACTIONBODY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS)
+    error += test_ASSOCARRAYMODIFYPARAMETERS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYPATHPARAMETERS)
+    error += test_ASSOCARRAYPATHPARAMETERS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYPOLARPARAMETERS)
+    error += test_ASSOCARRAYPOLARPARAMETERS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS)
+    error += test_ASSOCARRAYRECTANGULARPARAMETERS(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCASMBODYACTIONPARAM)
     error += test_ASSOCASMBODYACTIONPARAM(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY)
@@ -51564,6 +52036,14 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCARRAYACTIONBODY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY)
     error += test_ASSOCARRAYMODIFYACTIONBODY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS)
+    error += test_ASSOCARRAYMODIFYPARAMETERS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYPATHPARAMETERS)
+    error += test_ASSOCARRAYPATHPARAMETERS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYPOLARPARAMETERS)
+    error += test_ASSOCARRAYPOLARPARAMETERS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS)
+    error += test_ASSOCARRAYRECTANGULARPARAMETERS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCASMBODYACTIONPARAM)
     error += test_ASSOCASMBODYACTIONPARAM (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY)
@@ -52650,6 +53130,38 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCARRAYMODIFYACTIONBODY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS);
+  size2 = dwg_dynapi_fields_size ("ASSOCARRAYMODIFYPARAMETERS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCARRAYMODIFYPARAMETERS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCARRAYPATHPARAMETERS);
+  size2 = dwg_dynapi_fields_size ("ASSOCARRAYPATHPARAMETERS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYPATHPARAMETERS): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCARRAYPATHPARAMETERS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS);
+  size2 = dwg_dynapi_fields_size ("ASSOCARRAYPOLARPARAMETERS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYPOLARPARAMETERS): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCARRAYPOLARPARAMETERS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS);
+  size2 = dwg_dynapi_fields_size ("ASSOCARRAYRECTANGULARPARAMETERS");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS): %d != "
+               "dwg_dynapi_fields_size (\"ASSOCARRAYRECTANGULARPARAMETERS\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_ASSOCASMBODYACTIONPARAM);
