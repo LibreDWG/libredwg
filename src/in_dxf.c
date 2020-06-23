@@ -4236,6 +4236,21 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   BITCODE_H hdl;
   int i = -1, j = -1;
 
+#define CHK_ROWSTYLES                                           \
+  if (!(i >= 0 && i < 3) || !o->num_rowstyles || !o->rowstyles) \
+    return NULL;                                                \
+  assert (i >= 0 && i < 3);                                     \
+  assert (o->num_rowstyles);                                    \
+  assert (o->rowstyles)
+
+#define CHK_BORDERS                                             \
+  if (!(j >= 0 && j <= 6) || !o->rowstyles[i].num_borders ||    \
+      !o->rowstyles[i].borders)                                 \
+    return NULL;                                                \
+  assert (j >= 0 && j < 6);                                     \
+  assert (o->rowstyles[i].num_borders);                         \
+  assert (o->rowstyles[i].borders)
+
   while (pair != NULL && pair->code != 0)
     {
       switch (pair->code)
@@ -4244,67 +4259,60 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 7:
           i++;
-          assert (i >= 0 && i < 3);
+          CHK_ROWSTYLES;
           hdl = find_tablehandle (dwg, pair);
+          if (!hdl)
+            return NULL;
           assert (hdl);
-          assert (o->num_rowstyles);
           o->rowstyles[i].text_style = hdl;
           LOG_TRACE ("%s.rowstyles[%d].text_style = " FORMAT_REF " [H %d]\n",
                        obj->name, i, ARGS_REF(hdl), pair->code);
           break;
         case 140:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].text_height = pair->value.d;
           LOG_TRACE ("%s.rowstyles[%d].text_height = %f [BD %d]\n",
                        obj->name, i, pair->value.d, pair->code);
           break;
         case 170:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].text_alignment = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].text_alignment = " FORMAT_BS " [BS %d]\n",
                      obj->name, i, o->rowstyles[i].text_alignment, pair->code);
           break;
         case 62:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].text_color.index = pair->value.i;
           //TODO rgb with 420
           LOG_TRACE ("%s.rowstyles[%d].text_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 63:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].fill_color.index = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].fill_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 283:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].has_bgcolor = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].has_bgcolor = %d [B %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 90:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].data_type = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].data_type = %d [BL %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 91:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].unit_type = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].unit_type = %d [BL %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 1:
-          assert (i >= 0 && i < 3);
-          assert (o->num_rowstyles);
+          CHK_ROWSTYLES;
           o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s);
           LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
                      obj->name, i, pair->value.s, pair->code);
@@ -4315,10 +4323,11 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 277:
         case 278:
         case 279:
+          CHK_ROWSTYLES;
           j = pair->code - 274;
-          assert (i >= 0 && i < 3);
+          if (!(j >= 0 && j <= 6))
+            return NULL;
           assert (j >= 0 && j <= 6);
-          assert (o->num_rowstyles);
           if (!o->rowstyles[i].borders)
             {
               o->rowstyles[i].borders = (Dwg_TABLESTYLE_border*)xcalloc (6, sizeof (Dwg_TABLESTYLE_border));
@@ -4329,6 +4338,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               o->rowstyles[i].num_borders = 6;
             }
+          CHK_BORDERS;
           assert (o->rowstyles[i].num_borders);
           o->rowstyles[i].borders[j].linewt = dxf_find_lweight (pair->value.i);
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].linewt = %d [BSd %d]\n",
@@ -4340,10 +4350,9 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 287:
         case 288:
         case 289:
+          CHK_ROWSTYLES;
           j = pair->code - 284;
-          assert (i >= 0 && i < 3);
-          assert (j >= 0 && j <= 6);
-          assert (o->num_rowstyles);
+          CHK_BORDERS;
           o->rowstyles[i].borders[j].visible = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].visible = %d [B %d]\n",
                      obj->name, i, j, pair->value.i, pair->code);
@@ -4354,10 +4363,10 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 67:
         case 68:
         case 69:
+          CHK_ROWSTYLES;
           j = pair->code - 64;
-          assert (i >= 0 && i < 3);
+          CHK_BORDERS;
           assert (j >= 0 && j <= 6);
-          assert (o->num_rowstyles);
           o->rowstyles[i].borders[j].color.index = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].color.index = %d [CMC %d]\n",
                      obj->name, i, j, pair->value.i, pair->code);

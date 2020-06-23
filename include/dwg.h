@@ -1299,13 +1299,13 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
   BITCODE_BS vertind[4];
 } Dwg_Entity_VERTEX_PFACE_FACE;
 
-#define COMMON_ENTITY_POLYLINE \
-  struct _dwg_object_entity *parent; \
-  BITCODE_B has_vertex; \
-  BITCODE_BL num_owned; \
-  BITCODE_H first_vertex; \
-  BITCODE_H last_vertex; \
-  BITCODE_H* vertex; \
+#define COMMON_ENTITY_POLYLINE                                                \
+  struct _dwg_object_entity *parent;                                          \
+  BITCODE_B has_vertex;                                                       \
+  BITCODE_BL num_owned;                                                       \
+  BITCODE_H first_vertex;                                                     \
+  BITCODE_H last_vertex;                                                      \
+  BITCODE_H *vertex;                                                          \
   BITCODE_H seqend
 
 /**
