@@ -709,8 +709,8 @@ So it passes all RFC7946 linters, the new GeoJSON format.
 
 We write all coordinates as [x, y], not [y, x]. z-coordinates are
 optional, and only written if not 0.0.
-Colors are written as RGB hex string values for all r2004+ DWG's, and
-for earlier formats the palette index as integer, if not 256 (ByLayer).
+Colors are either written as palette index as integer if not 256 (ByLayer),
+or as TrueColor RGB hex string values for all r2004+ DWG's.
 
 Missing entities:
 No 3D entities, HATCH by definition.

@@ -396,13 +396,22 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
 
       // See #95: index as int or rgb as hexstring
-      if (dat->version >= R_2004)
+      if (dat->version >= R_2004
+          && (obj->tio.entity->color.method == 0xc3     // Truecolor
+              || obj->tio.entity->color.method == 0xc2) // Entity
+          && obj->tio.entity->color.index == 256)
         {
-          sprintf (tmp, "%06X", obj->tio.entity->color.rgb & 0xffffff);
+          sprintf (tmp, "#%06X", obj->tio.entity->color.rgb & 0xffffff);
           PAIR_S (Color, tmp);
         }
-      else if (obj->tio.entity->color.index != 256)
+      else if ((obj->tio.entity->color.index != 256)
+               || (dat->version >= R_2004
+                   && obj->tio.entity->color.method != 0xc0 // ByLayer
+                   && obj->tio.entity->color.method != 0xc1 // ByBlock
+                   && obj->tio.entity->color.method != 0xc8 // none
+                   ))
         {
+          // no names for the first palette entries yet.
           PAIR_D (Color, obj->tio.entity->color.index);
         }
 
