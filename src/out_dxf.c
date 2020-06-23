@@ -391,6 +391,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
+#define VALUE_RLd(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
 #define VALUE_MC(value, dxf) VALUE (value, MC, dxf)
 #define VALUE_MS(value, dxf) VALUE (value, MS, dxf)
@@ -886,7 +887,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
     {
       if (dxf >= 90)
         {
-          VALUE_RL (color->rgb & 0x00ffffff, dxf);
+          VALUE_RLd (color->rgb, dxf);
           return;
         }
       VALUE_RS (color->index, dxf);

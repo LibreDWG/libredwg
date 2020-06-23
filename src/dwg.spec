@@ -6055,6 +6055,78 @@ DWG_OBJECT (VBA_PROJECT)
   }
 DWG_OBJECT_END
 
+#define MLEADER_CONTEXT_DATA_fields                                                \
+  FIELD_BD (ctx.scale_factor, 40);                                                 \
+  FIELD_3BD (ctx.content_base, 10);                                                \
+  FIELD_BD (ctx.text_height, 41);                                                  \
+  FIELD_BD (ctx.arrow_size, 140);                                                  \
+  FIELD_BD (ctx.landing_gap, 145);                                                 \
+  FIELD_BS (ctx.text_left, 174);                                                   \
+  FIELD_BS (ctx.text_right, 175);                                                  \
+  FIELD_BS (ctx.text_angletype, 176);                                              \
+  FIELD_BS (ctx.text_alignment, 177);                                              \
+  FIELD_B (ctx.has_content_txt, 290);                                              \
+  if (FIELD_VALUE (ctx.has_content_txt))                                           \
+    {                                                                              \
+      DECODER { FIELD_VALUE (ctx.content.txt.type) = 2; }                          \
+      FIELD_T (ctx.content.txt.default_text, 304);                                 \
+      FIELD_3BD (ctx.content.txt.normal, 11);                                      \
+      FIELD_HANDLE (ctx.content.txt.style, 5, 340);                                \
+      FIELD_3BD (ctx.content.txt.location, 12);                                    \
+      FIELD_3BD (ctx.content.txt.direction, 13);                                   \
+      FIELD_BD (ctx.content.txt.rotation, 42);                                     \
+      FIELD_BD (ctx.content.txt.width, 43);                                        \
+      FIELD_BD (ctx.content.txt.height, 44);                                       \
+      FIELD_BD (ctx.content.txt.line_spacing_factor, 45);                          \
+      FIELD_BS (ctx.content.txt.line_spacing_style, 170);                          \
+      FIELD_CMC (ctx.content.txt.color, 90);                                       \
+      FIELD_BS (ctx.content.txt.alignment, 171);                                   \
+      FIELD_BS (ctx.content.txt.flow, 172);                                        \
+      FIELD_CMC (ctx.content.txt.bg_color, 91);                                    \
+      FIELD_BD (ctx.content.txt.bg_scale, 141);                                    \
+      FIELD_BL (ctx.content.txt.bg_transparency, 92);                              \
+      FIELD_B (ctx.content.txt.is_bg_fill, 291);                                   \
+      FIELD_B (ctx.content.txt.is_bg_mask_fill, 292);                              \
+      FIELD_BS (ctx.content.txt.col_type, 173);                                    \
+      FIELD_B (ctx.content.txt.is_height_auto, 293);                               \
+      FIELD_BD (ctx.content.txt.col_width, 142);                                   \
+      FIELD_BD (ctx.content.txt.col_gutter, 143);                                  \
+      FIELD_B (ctx.content.txt.is_col_flow_reversed, 294);                         \
+      FIELD_BL (ctx.content.txt.num_col_sizes, 0);                                 \
+      /*VALUEOUTOFBOUNDS (ctx.content.txt.num_col_sizes, 5000)*/                   \
+      FIELD_VECTOR (ctx.content.txt.col_sizes, BD, ctx.content.txt.num_col_sizes, 144); \
+      FIELD_B (ctx.content.txt.word_break, 295);                                   \
+      FIELD_B (ctx.content.txt.unknown, 0);                                        \
+    }                                                                              \
+  else /* a union. either txt or blk */                                            \
+    {                                                                              \
+      FIELD_B (ctx.has_content_blk, 296);                                          \
+      if (FIELD_VALUE (ctx.has_content_blk))                                       \
+        {                                                                          \
+          DECODER { FIELD_VALUE (ctx.content.txt.type) = 1; }                      \
+          FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);                      \
+          FIELD_3BD (ctx.content.blk.normal, 14);                                  \
+          FIELD_3BD (ctx.content.blk.location, 15);                                \
+          FIELD_3BD (ctx.content.blk.scale, 16);                                   \
+          FIELD_BD (ctx.content.blk.rotation, 46);                                 \
+          FIELD_CMC (ctx.content.blk.color, 93);                                   \
+          FIELD_VECTOR_N (ctx.content.blk.transform, BD, 16, 47);                  \
+        }                                                                          \
+    }                                                                              \
+                                                                                   \
+  FIELD_3BD (ctx.base, 110);                                                       \
+  FIELD_3BD (ctx.base_dir, 111);  /* dxf only 2d? */                               \
+  FIELD_3BD (ctx.base_vert, 112); /* dxf only 2d */                                \
+  FIELD_B (ctx.is_normal_reversed, 297);                                           \
+  SINCE (R_2010)                                                                   \
+    {                                                                              \
+      FIELD_BS (ctx.text_top, 273);                                                \
+      FIELD_BS (ctx.text_bottom, 272);                                             \
+    }                                                                              \
+  DXF_OR_PRINT { VALUE_TFF ("}", 301); } /* end CONTEXT_DATA */                    \
+  /* END MLEADER_AnnotContext */
+
+
 /* pg. 157, 20.4.48 (varies)
    AcDbMLeader
  */
@@ -6067,6 +6139,9 @@ DWG_ENTITY (MULTILEADER)
     VALUEOUTOFBOUNDS (class_version, 10)
   }
   DXF_OR_PRINT { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
+#ifdef IS_DXF
+  MLEADER_CONTEXT_DATA_fields;
+#endif
   FIELD_BL (ctx.num_leaders, 0);
   VALUEOUTOFBOUNDS (ctx.num_leaders, 5000) // MAX_LEADER_NUMBER
   DXF_OR_PRINT { VALUE_TFF ("LEADER{", 302); }
@@ -6131,78 +6206,9 @@ DWG_ENTITY (MULTILEADER)
   SET_PARENT_OBJ (ctx.leaders)
   END_REPEAT (ctx.leaders)
   DXF_OR_PRINT { VALUE_TFF ("}", 303); }
-
-  FIELD_BD (ctx.scale_factor, 40);
-  FIELD_3BD (ctx.content_base, 10);
-  FIELD_BD (ctx.text_height, 41);
-  FIELD_BD (ctx.arrow_size, 140);
-  FIELD_BD (ctx.landing_gap, 145);
-  FIELD_BS (ctx.text_left, 174);
-  FIELD_BS (ctx.text_right, 175);
-  FIELD_BS (ctx.text_angletype, 176);
-  FIELD_BS (ctx.text_alignment, 177);
-
-  FIELD_B (ctx.has_content_txt, 290);
-  if (FIELD_VALUE (ctx.has_content_txt))
-    {
-      DECODER { FIELD_VALUE (ctx.content.txt.type) = 2; }
-      FIELD_T (ctx.content.txt.default_text, 304);
-      FIELD_3BD (ctx.content.txt.normal, 11);
-      FIELD_HANDLE (ctx.content.txt.style, 5, 340);
-      FIELD_3BD (ctx.content.txt.location, 12);
-      FIELD_3BD (ctx.content.txt.direction, 13);
-      FIELD_BD (ctx.content.txt.rotation, 42);
-      FIELD_BD (ctx.content.txt.width, 43);
-      FIELD_BD (ctx.content.txt.height, 44);
-      FIELD_BD (ctx.content.txt.line_spacing_factor, 45);
-      FIELD_BS (ctx.content.txt.line_spacing_style, 170);
-      FIELD_CMC (ctx.content.txt.color, 90); // CMTC?
-      FIELD_BS (ctx.content.txt.alignment, 171);
-      FIELD_BS (ctx.content.txt.flow, 172);
-      FIELD_CMC (ctx.content.txt.bg_color, 91); // CMTC?
-      FIELD_BD (ctx.content.txt.bg_scale, 141);
-      FIELD_BL (ctx.content.txt.bg_transparency, 92);
-      FIELD_B (ctx.content.txt.is_bg_fill, 291);
-      FIELD_B (ctx.content.txt.is_bg_mask_fill, 292);
-      FIELD_BS (ctx.content.txt.col_type, 173);
-      FIELD_B (ctx.content.txt.is_height_auto, 293);
-      FIELD_BD (ctx.content.txt.col_width, 142);
-      FIELD_BD (ctx.content.txt.col_gutter, 143);
-      FIELD_B (ctx.content.txt.is_col_flow_reversed, 294);
-      FIELD_BL (ctx.content.txt.num_col_sizes, 0);
-      //VALUEOUTOFBOUNDS (ctx.content.txt.num_col_sizes, 5000)
-      FIELD_VECTOR (ctx.content.txt.col_sizes, BD, ctx.content.txt.num_col_sizes, 144);
-      FIELD_B (ctx.content.txt.word_break, 295);
-      FIELD_B (ctx.content.txt.unknown, 0);
-    }
-  else // a union. either txt or blk
-    {
-      FIELD_B (ctx.has_content_blk, 296);
-      if (FIELD_VALUE (ctx.has_content_blk))
-        {
-          DECODER { FIELD_VALUE (ctx.content.txt.type) = 1; }
-          FIELD_HANDLE (ctx.content.blk.block_table, 4, 341);
-          FIELD_3BD (ctx.content.blk.normal, 14);
-          FIELD_3BD (ctx.content.blk.location, 15);
-          FIELD_3BD (ctx.content.blk.scale, 16);
-          FIELD_BD (ctx.content.blk.rotation, 46);
-          FIELD_CMC (ctx.content.blk.color, 93); // CMTC?
-          FIELD_VECTOR_N (ctx.content.blk.transform, BD, 16, 47);
-        }
-    }
-
-  FIELD_3BD (ctx.base, 110);
-  FIELD_3BD (ctx.base_dir, 111);  // dxf only 2d?
-  FIELD_3BD (ctx.base_vert, 112); // dxf only 2d
-  FIELD_B (ctx.is_normal_reversed, 297);
-
-  SINCE (R_2010)
-    {
-      FIELD_BS (ctx.text_top, 273);
-      FIELD_BS (ctx.text_bottom, 272);
-    }
-  DXF_OR_PRINT { VALUE_TFF ("}", 301); } //end CONTEXT_DATA
-  // END MLEADER_AnnotContext
+#ifndef IS_DXF
+  MLEADER_CONTEXT_DATA_fields;
+#endif
 
   FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_BLx (flags, 90); // override flags
