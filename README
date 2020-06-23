@@ -62,6 +62,8 @@ Optionally:
   LaTeXML used to have a broken svg11-basic.rng. If so
   the zip from http://yupotan.sppd.ne.jp/relax-ng/svg11/ is correct.
   Needs to be installed into /usr/local/share/relaxng/svg11/
+- mapbox/geojsonhint as geosjon linter
+  npm install -g @mapbox/geojsonhint
 - valgrind to find leaks and memory bugs
 - timeout to help tests with large or hanging DWG's
 - GNU parallel to speed up special tests

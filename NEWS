@@ -23,7 +23,8 @@ New features:
     MENTALRAYRENDERSETTINGS, RAPIDRTRENDERSETTINGS, RENDERSETTINGS, SPATIAL_INDEX,
     TABLESTYLE, SECTION_SETTINGS, DETAILVIEWSTYLE, SECTIONVIEWSTYLE, SUN.
     Fixed PROXY_OBJECT, PROXY_ENTITY.
-    Note: Unstable objects are not preserved via DXF conversion.
+    Note: Unstable objects are not preserved via DXF conversion, just the external import
+    is supported.
 
     Debugging classes added (needs --with-debug option):
     NURBSURFACE, ATEXT, RTEXT, NAVISWORKSMODEL, ACSH_SWEEP_CLASS,
@@ -46,7 +47,7 @@ New features:
     ACDBCURVEPATH, MOTIONPATH, POINTPATH, ACDBPOINTPATH,
     TVDEVICEPROPERTIES) BLOCKVISIBILITYGRIP
     BLOCKVISIBILITYPARAMETER, BLOCKGRIPLOCATIONCOMPONENT.
-  * Added support to write r2004+ format DWG's (which includes also r2010,
+  * Started support to write r2004+ format DWG's (which includes also r2010,
     r2013, r2018, but not r2007), but this does not work fully yet.
   * Added new Dwg_Version types: R_1_3 for AC1.3, R_2_4 for AC1001, and
     AC1013 for R_13c3.
@@ -57,6 +58,8 @@ New features:
   * DXF and JSON importers now create PLACEHOLDER objects for unsupported
     objects.
   * 3DSOLID got now material properties and revisionguid fields.
+  * Many parts of the API are now auto-generated/updated: dwg.i, dwg_api.c, dwg_api.h
+  * Added geojsonhint linter support.
   * new API functions:
     dwg_ctrl_table, dwg_handle_name, dwg_find_dicthandle_objname, dwg_variable_dict,
     dwg_next_entity, get_next_owned_block_entity, dwg_section_name,

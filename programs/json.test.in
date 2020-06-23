@@ -22,6 +22,7 @@ DATA="$DATA example_2013 example_2018 example_r14"
 #TODO="r11/ACEL10"
 SED=@SED@
 JQ=@JQ@
+GEOJSONHINT=@GEOJSONHINT@
 [ -z "$SED" ] && echo "$SED"
 
 for d in $DATA; do
@@ -82,6 +83,10 @@ for dwg in $DATA; do
        @JSON_SED_NAN@ "$geojson" && \
        $JQ . "$geojson" >>"$json.log" 2>&1
     then
+        if [ -n $GEOJSONHINT ]; then
+            $GEOJSONHINT "$geojson" ||
+                i=$((i+1))
+        fi
         rm "./$json.log" "./$geojson"
     else
         cat "$json.log"
