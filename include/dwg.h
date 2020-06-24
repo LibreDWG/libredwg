@@ -6506,26 +6506,21 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
-  BITCODE_BS flag;      	/*<! DXF 70 */
-  BITCODE_3BD insertion_pt; 	/*!< DXF 11-31 */
-  BITCODE_3BD x_axis_dir; 	/*!< DXF 10-30 */
+  BITCODE_BL flag;      	/*<! DXF 70 */
+  BITCODE_3BD insertion_pt; 	/*!< DXF 10 */
+  BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
   BITCODE_BD text_height;	/*!< DXF 40 */
   BITCODE_BD rect_width;	/*!< DXF 41 */
   BITCODE_BD rect_height;	/*!< DXF 46 */
   BITCODE_BD extents_height;	/*!< DXF 42 */
   BITCODE_BD extents_width;	/*!< DXF 43 */
-  BITCODE_BS attachment;	/*<! DXF 71 */
-  BITCODE_BS drawing_dir;  /*!< DXF 72.
-                            1 = Left to right, 3 = Top to bottom,
-                            5 = By style (the flow direction is inherited
-                            from the associated text style) */
-  BITCODE_BS linespace_style; /*!< DXF 73. r2000+ */
-  BITCODE_BD linespace_factor;/*!< DXF 44. r2000+. Mtext line spacing factor (optional):
-                               Percentage of default (3-on-5) line spacing to
-                               be applied. Valid values range from 0.25 to 4.00 */
-  BITCODE_BD bd45;
-  BITCODE_BS bs74;
-  BITCODE_BD bd46;
+  BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic */
+  BITCODE_BD column_width;      /*!< DXF 44 */
+  BITCODE_BD gutter;            /*!< DXF 45 */
+  BITCODE_B auto_height;        /*!< DXF 73 */
+  BITCODE_B flow_reversed;      /*!< DXF 74 */
+  BITCODE_BL num_column_heights;/*!< DXF 72 or numfragments */
+  BITCODE_BD *column_heights;   /*!< DXF 46 if dynamic and not auto_height */
 } Dwg_Object_MTEXTOBJECTCONTEXTDATA;
 
 // subclass AcDbDimensionObjectContextData

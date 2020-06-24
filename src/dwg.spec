@@ -8962,22 +8962,32 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbMTextObjectContextData)
-  FIELD_BS (flag, 70); // 6
-  FIELD_3RD (insertion_pt, 11);
-  FIELD_3RD (x_axis_dir, 10);
-  FIELD_BD (text_height, 40);
-  FIELD_BD (rect_width, 41);
+  FIELD_BL (flag, 70); // 6
+  // From MTEXT Embedded object
+  DXF {
+    FIELD_3BD (insertion_pt, 10); // ODA bug
+    FIELD_3BD (x_axis_dir, 11);
+  } else {
+    FIELD_3BD (x_axis_dir, 11);
+    FIELD_3BD (insertion_pt, 10);
+  }
+  FIELD_BD (rect_width, 40);
+  FIELD_BD (rect_height, 41);
   FIELD_BD (extents_width, 42);
   FIELD_BD (extents_height, 43);
-  FIELD_BS (attachment, 71); // or column_type?
-  if (FIELD_VALUE (attachment))
+
+  FIELD_BL (column_type, 71);
+  if (FIELD_VALUE (column_type))
     {
-      FIELD_BS (drawing_dir, 72);
-      FIELD_BS (linespace_style, 73);
-      FIELD_BD (linespace_factor, 44);
-      FIELD_BD (bd45, 45);
-      FIELD_BS (bs74, 74);
-      FIELD_BD (rect_height, 46);
+      FIELD_BL (num_column_heights, 72);
+      FIELD_BD (column_width, 44);
+      FIELD_BD (gutter, 45);
+      FIELD_B (auto_height, 73);
+      FIELD_B (flow_reversed, 74);
+      if (!FIELD_VALUE (auto_height) && FIELD_VALUE (column_type) == 2)
+        {
+          FIELD_VECTOR (column_heights, BD, num_column_heights, 46);
+        }
     }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

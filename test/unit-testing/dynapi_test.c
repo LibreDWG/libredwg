@@ -42951,64 +42951,19 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   Dwg_Object_MTEXTOBJECTCONTEXTDATA *restrict mtextobjectcontextdata = obj->tio.object->tio.MTEXTOBJECTCONTEXTDATA;
   failed = 0;
   {
-    BITCODE_BS attachment;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "attachment", &attachment, NULL)
-        && attachment == mtextobjectcontextdata->attachment)
+    BITCODE_B auto_height;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "auto_height", &auto_height, NULL)
+        && auto_height == mtextobjectcontextdata->auto_height)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.attachment [BS] %hu != %hu", mtextobjectcontextdata->attachment, attachment);
-    attachment++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "attachment", &attachment, 0)
-        && attachment == mtextobjectcontextdata->attachment)
+      fail ("MTEXTOBJECTCONTEXTDATA.auto_height [B] " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->auto_height, auto_height);
+    auto_height++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "auto_height", &auto_height, 0)
+        && auto_height == mtextobjectcontextdata->auto_height)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.attachment [BS] set+1 %hu != %hu", mtextobjectcontextdata->attachment, attachment);
-    mtextobjectcontextdata->attachment--;
-  }
-  {
-    BITCODE_BD bd45;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd45", &bd45, NULL)
-        && bd45 == mtextobjectcontextdata->bd45)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.bd45 [BD] %g != %g", mtextobjectcontextdata->bd45, bd45);
-    bd45++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd45", &bd45, 0)
-        && bd45 == mtextobjectcontextdata->bd45)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.bd45 [BD] set+1 %g != %g", mtextobjectcontextdata->bd45, bd45);
-    mtextobjectcontextdata->bd45--;
-  }
-  {
-    BITCODE_BD bd46;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd46", &bd46, NULL)
-        && bd46 == mtextobjectcontextdata->bd46)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.bd46 [BD] %g != %g", mtextobjectcontextdata->bd46, bd46);
-    bd46++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bd46", &bd46, 0)
-        && bd46 == mtextobjectcontextdata->bd46)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.bd46 [BD] set+1 %g != %g", mtextobjectcontextdata->bd46, bd46);
-    mtextobjectcontextdata->bd46--;
-  }
-  {
-    BITCODE_BS bs74;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bs74", &bs74, NULL)
-        && bs74 == mtextobjectcontextdata->bs74)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.bs74 [BS] %hu != %hu", mtextobjectcontextdata->bs74, bs74);
-    bs74++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "bs74", &bs74, 0)
-        && bs74 == mtextobjectcontextdata->bs74)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.bs74 [BS] set+1 %hu != %hu", mtextobjectcontextdata->bs74, bs74);
-    mtextobjectcontextdata->bs74--;
+      fail ("MTEXTOBJECTCONTEXTDATA.auto_height [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->auto_height, auto_height);
+    mtextobjectcontextdata->auto_height--;
   }
   {
     BITCODE_BS class_version;
@@ -43026,19 +42981,44 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextobjectcontextdata->class_version--;
   }
   {
-    BITCODE_BS drawing_dir;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "drawing_dir", &drawing_dir, NULL)
-        && drawing_dir == mtextobjectcontextdata->drawing_dir)
+    BITCODE_BD* column_heights;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "num_column_heights", &count, NULL)
+        && dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "column_heights", &column_heights, NULL)
+        && column_heights == mtextobjectcontextdata->column_heights)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.drawing_dir [BS] %hu != %hu", mtextobjectcontextdata->drawing_dir, drawing_dir);
-    drawing_dir++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "drawing_dir", &drawing_dir, 0)
-        && drawing_dir == mtextobjectcontextdata->drawing_dir)
+      fail ("MTEXTOBJECTCONTEXTDATA.column_heights [BD*] * %u num_column_heights", count);
+  }
+  {
+    BITCODE_BL column_type;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "column_type", &column_type, NULL)
+        && column_type == mtextobjectcontextdata->column_type)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.drawing_dir [BS] set+1 %hu != %hu", mtextobjectcontextdata->drawing_dir, drawing_dir);
-    mtextobjectcontextdata->drawing_dir--;
+      fail ("MTEXTOBJECTCONTEXTDATA.column_type [BL] %u != %u", mtextobjectcontextdata->column_type, column_type);
+    column_type++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "column_type", &column_type, 0)
+        && column_type == mtextobjectcontextdata->column_type)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.column_type [BL] set+1 %u != %u", mtextobjectcontextdata->column_type, column_type);
+    mtextobjectcontextdata->column_type--;
+  }
+  {
+    BITCODE_BD column_width;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "column_width", &column_width, NULL)
+        && column_width == mtextobjectcontextdata->column_width)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.column_width [BD] %g != %g", mtextobjectcontextdata->column_width, column_width);
+    column_width++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "column_width", &column_width, 0)
+        && column_width == mtextobjectcontextdata->column_width)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.column_width [BD] set+1 %g != %g", mtextobjectcontextdata->column_width, column_width);
+    mtextobjectcontextdata->column_width--;
   }
   {
     BITCODE_BD extents_height;
@@ -43071,19 +43051,49 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextobjectcontextdata->extents_width--;
   }
   {
-    BITCODE_BS flag;
+    BITCODE_BL flag;
     if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flag", &flag, NULL)
         && flag == mtextobjectcontextdata->flag)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.flag [BS] %hu != %hu", mtextobjectcontextdata->flag, flag);
+      fail ("MTEXTOBJECTCONTEXTDATA.flag [BL] %u != %u", mtextobjectcontextdata->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flag", &flag, 0)
         && flag == mtextobjectcontextdata->flag)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.flag [BS] set+1 %hu != %hu", mtextobjectcontextdata->flag, flag);
+      fail ("MTEXTOBJECTCONTEXTDATA.flag [BL] set+1 %u != %u", mtextobjectcontextdata->flag, flag);
     mtextobjectcontextdata->flag--;
+  }
+  {
+    BITCODE_B flow_reversed;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flow_reversed", &flow_reversed, NULL)
+        && flow_reversed == mtextobjectcontextdata->flow_reversed)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.flow_reversed [B] " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->flow_reversed, flow_reversed);
+    flow_reversed++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flow_reversed", &flow_reversed, 0)
+        && flow_reversed == mtextobjectcontextdata->flow_reversed)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.flow_reversed [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->flow_reversed, flow_reversed);
+    mtextobjectcontextdata->flow_reversed--;
+  }
+  {
+    BITCODE_BD gutter;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "gutter", &gutter, NULL)
+        && gutter == mtextobjectcontextdata->gutter)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.gutter [BD] %g != %g", mtextobjectcontextdata->gutter, gutter);
+    gutter++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "gutter", &gutter, 0)
+        && gutter == mtextobjectcontextdata->gutter)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.gutter [BD] set+1 %g != %g", mtextobjectcontextdata->gutter, gutter);
+    mtextobjectcontextdata->gutter--;
   }
   {
     BITCODE_B in_dwg;
@@ -43124,34 +43134,19 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextobjectcontextdata->is_default--;
   }
   {
-    BITCODE_BD linespace_factor;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_factor", &linespace_factor, NULL)
-        && linespace_factor == mtextobjectcontextdata->linespace_factor)
+    BITCODE_BL num_column_heights;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "num_column_heights", &num_column_heights, NULL)
+        && num_column_heights == mtextobjectcontextdata->num_column_heights)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.linespace_factor [BD] %g != %g", mtextobjectcontextdata->linespace_factor, linespace_factor);
-    linespace_factor++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_factor", &linespace_factor, 0)
-        && linespace_factor == mtextobjectcontextdata->linespace_factor)
+      fail ("MTEXTOBJECTCONTEXTDATA.num_column_heights [BL] %u != %u", mtextobjectcontextdata->num_column_heights, num_column_heights);
+    num_column_heights++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "num_column_heights", &num_column_heights, 0)
+        && num_column_heights == mtextobjectcontextdata->num_column_heights)
       pass ();
     else
-      fail ("MTEXTOBJECTCONTEXTDATA.linespace_factor [BD] set+1 %g != %g", mtextobjectcontextdata->linespace_factor, linespace_factor);
-    mtextobjectcontextdata->linespace_factor--;
-  }
-  {
-    BITCODE_BS linespace_style;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_style", &linespace_style, NULL)
-        && linespace_style == mtextobjectcontextdata->linespace_style)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.linespace_style [BS] %hu != %hu", mtextobjectcontextdata->linespace_style, linespace_style);
-    linespace_style++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "linespace_style", &linespace_style, 0)
-        && linespace_style == mtextobjectcontextdata->linespace_style)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.linespace_style [BS] set+1 %hu != %hu", mtextobjectcontextdata->linespace_style, linespace_style);
-    mtextobjectcontextdata->linespace_style--;
+      fail ("MTEXTOBJECTCONTEXTDATA.num_column_heights [BL] set+1 %u != %u", mtextobjectcontextdata->num_column_heights, num_column_heights);
+    mtextobjectcontextdata->num_column_heights--;
   }
   {
     struct _dwg_object_object* parent;

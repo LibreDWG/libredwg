@@ -8513,35 +8513,35 @@ B
 @item scale
 H,	DXF 340
 @item flag
-BS,	DXF 70
+BL,	DXF 70
 @item insertion_pt
-3BD,	DXF 11
-@item x_axis_dir
 3BD,	DXF 10
+@item x_axis_dir
+3BD,	DXF 11
 @item text_height
-BD,	DXF 40
+BD
 @item rect_width
-BD,	DXF 41
+BD,	DXF 40
 @item rect_height
-BD,	DXF 46
+BD,	DXF 41
 @item extents_height
 BD,	DXF 43
 @item extents_width
 BD,	DXF 42
-@item attachment
-BS,	DXF 71
-@item drawing_dir
-BS,	DXF 72
-@item linespace_style
-BS,	DXF 73
-@item linespace_factor
+@item column_type
+BL,	DXF 71
+@item column_width
 BD,	DXF 44
-@item bd45
+@item gutter
 BD,	DXF 45
-@item bs74
-BS,	DXF 74
-@item bd46
-BD
+@item auto_height
+B,	DXF 73
+@item flow_reversed
+B,	DXF 74
+@item num_column_heights
+BL,	DXF 72
+@item column_heights
+BD*,	DXF 46
 
 @end vtable
 @end indentedblock
