@@ -4118,8 +4118,10 @@ RC,	DXF 282
 BL
 @item clip_verts
 2RD*,	DXF 11
-@item underlay_layer
-H
+@item num_clip_inverts
+BL,	DXF 170
+@item clip_inverts
+2RD*,	DXF 12
 @item definition_id
 H,	DXF 340
 

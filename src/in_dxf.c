@@ -8219,7 +8219,7 @@ new_object (char *restrict name, char *restrict dxfname,
                         {
                           BITCODE_BL num_clip_verts = 0;
                           BITCODE_2RD *clip_verts;
-                          // 11 has no num_clip_verts: realloc
+                          // 11 has no num_clip_verts: realloc. clip_inverts has.
                           if (pair->code == 14 || pair->code == 24)
                             {
                               dwg_dynapi_entity_value (_obj, obj->name,

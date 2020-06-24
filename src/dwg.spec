@@ -6425,23 +6425,23 @@ DWG_OBJECT_END
 // R2000+ picture. undocumented (varies)
 DWG_ENTITY (WIPEOUT)
 
-  //SUBCLASS (AcDbImage)
-  //SUBCLASS (AcDbRasterImage)
   SUBCLASS (AcDbWipeout)
+  // this must be an exact copy of AcDbRasterImage
   FIELD_BL (class_version, 90);
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_3DPOINT (pt0, 10);
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
   FIELD_2RD (size, 13);
+  FIELD_HANDLE (imagedef, 5, 340);
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280);
   FIELD_RC (brightness, 281);
   FIELD_RC (contrast, 282);
   FIELD_RC (fade, 283);
-
+  FIELD_HANDLE (imagedefreactor, 3, 360);
   SINCE (R_2010) {
-    FIELD_B (clip_mode, 290);
+    FIELD_B (clip_mode, 0);
   }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE (clip_boundary_type) == 1)
@@ -6450,10 +6450,10 @@ DWG_ENTITY (WIPEOUT)
     FIELD_BL (num_clip_verts, 91);
   VALUEOUTOFBOUNDS (num_clip_verts, 5000)
   FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 14);
-
+  DXF { SINCE (R_2010) { // is_inverted
+    FIELD_B (clip_mode, 290);
+  } }
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (imagedef, 5, 340);
-  FIELD_HANDLE (imagedefreactor, 3, 360);
 
 DWG_ENTITY_END
 
@@ -6472,25 +6472,32 @@ DWG_OBJECT_END
 
 // (varies)
 // in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
-// looks perfect, but no DWF, DGN coverage yet
+// In C++ as UNDERLAYREFERENCE. A bit better than WIPEOUT.
+// no DWF, DGN coverage yet
 DWG_ENTITY (UNDERLAY)
   //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbUnderlayReference)
-  FIELD_3BD (extrusion, 210);
-  FIELD_3DPOINT (insertion_pt, 10);
-  FIELD_BD (angle, 50);
-  FIELD_3BD_1 (scale, 41);
-  FIELD_RC (flag, 280);
-  FIELD_RCd (contrast, 281); // 20-100. def: 100
-  FIELD_RCd (fade, 282);  // 0-80
-
-  FIELD_BL (num_clip_verts, 0);
-  VALUEOUTOFBOUNDS (num_clip_verts, 5000)
-  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
-
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (underlay_layer, 5, 0);
   FIELD_HANDLE (definition_id, 5, 340);
+  FIELD_3BD (extrusion, 0);
+  FIELD_3DPOINT (insertion_pt, 10);
+  FIELD_BD0 (angle, 0);
+  FIELD_3BD_1 (scale, 41); // not in DXF if 1.0
+  DXF {
+    FIELD_BD0 (angle, 50);
+    FIELD_3BD (extrusion, 210);
+  }
+  FIELD_RC0 (flag, 280);
+  FIELD_RCd (contrast, 281); // 20-100. def: 100. DXF optional
+  FIELD_RCd (fade, 282);     // 0-80. DXF opt
+  FIELD_BL (num_clip_verts, 0);
+  //VALUEOUTOFBOUNDS (num_clip_verts, 5000)
+  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
+  if (FIELD_VALUE (flag) & 16)
+    {
+      FIELD_BS (num_clip_inverts, 170);
+      FIELD_2RD_VECTOR (clip_inverts, num_clip_inverts, 12);
+    }
+  COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1

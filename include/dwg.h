@@ -3849,8 +3849,9 @@ typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_DWFDEFINITION;
 
 /**
  Entity UNDERLAY, the reference (varies)
- As IMAGE but snappable.
- in DXF as{PDF,DGN,DWF}UNDERLAY
+ As IMAGE or WIPEOUT but snappable, and with holes.
+ In DXF as {PDF,DGN,DWF}UNDERLAY
+ In C++ as UnderlayReference
  */
 typedef struct _dwg_entity_UNDERLAY
 {
@@ -3864,13 +3865,15 @@ typedef struct _dwg_entity_UNDERLAY
                             8 is_adjusted_for_background, 16 is_clip_inverted,
                             ? is_frame_visible, ? is_frame_plottable */
   BITCODE_RC contrast; /*!< DXF 281 20-100, def: 100 */
-  BITCODE_RC fade;     /*!< DXF 282 0-80, def: 0*/
+  BITCODE_RC fade;     /*!< DXF 282 0-80, def: 0 */
   BITCODE_BL num_clip_verts;
-  BITCODE_2RD *clip_verts; /*!< DXF 11: if 2 rectangle, > polygon */
-
-  BITCODE_H underlay_layer;
-  BITCODE_H definition_id; /*!< DXF 340 */
-
+  BITCODE_2RD *clip_verts;     /*!< DXF 11: if 2 rectangle, > polygon */
+  /* Note that neither Wipeout nor RasterImage has these inverted clips, allowing one hole.
+     They just have an clip_mode flag for is_inverted.
+     GeoJSON/GIS has multiple polygons, allowing multiple nested holes. */
+  BITCODE_BL num_clip_inverts; /*!< DXF 170 */
+  BITCODE_2RD *clip_inverts;   /*!< DXF 12  */
+  BITCODE_H definition_id;     /*!< DXF 340 */
 } Dwg_Entity_UNDERLAY;
 
 typedef struct _dwg_entity_UNDERLAY Dwg_Entity_PDFUNDERLAY;
@@ -4017,7 +4020,7 @@ typedef struct _dwg_object_IDBUFFER
 typedef struct _dwg_entity_IMAGE
 {
   struct _dwg_object_entity *parent;
-
+  // also used in WIPEOUT
   BITCODE_BL class_version;
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
@@ -4208,8 +4211,8 @@ typedef struct _dwg_entity_WIPEOUT
   BITCODE_RC brightness;
   BITCODE_RC contrast;
   BITCODE_RC fade;
-  BITCODE_B clip_mode;
-  BITCODE_BS clip_boundary_type;
+  BITCODE_B clip_mode;           // 0 outside, 1 inside (inverted)
+  BITCODE_BS clip_boundary_type; // 1 rect, 2 polygon
   BITCODE_BL num_clip_verts;
   BITCODE_2RD* clip_verts;
   BITCODE_H imagedef;

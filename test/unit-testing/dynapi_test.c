@@ -22887,6 +22887,16 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     underlay->angle--;
   }
   {
+    BITCODE_2RD* clip_inverts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_inverts", &count, NULL)
+        && dwg_dynapi_entity_value (underlay, "UNDERLAY", "clip_inverts", &clip_inverts, NULL)
+        && clip_inverts == underlay->clip_inverts)
+      pass ();
+    else
+      fail ("UNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
+  }
+  {
     BITCODE_2RD* clip_verts;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_verts", &count, NULL)
@@ -22966,6 +22976,21 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         fail ("UNDERLAY.insertion_pt [3BD]");
   }
   {
+    BITCODE_BL num_clip_inverts;
+    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
+        && num_clip_inverts == underlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("UNDERLAY.num_clip_inverts [BL] %u != %u", underlay->num_clip_inverts, num_clip_inverts);
+    num_clip_inverts++;
+    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
+        && num_clip_inverts == underlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("UNDERLAY.num_clip_inverts [BL] set+1 %u != %u", underlay->num_clip_inverts, num_clip_inverts);
+    underlay->num_clip_inverts--;
+  }
+  {
     BITCODE_BL num_clip_verts;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
         && num_clip_verts == underlay->num_clip_verts)
@@ -22995,14 +23020,6 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         pass ();
     else
         fail ("UNDERLAY.scale [3BD_1]");
-  }
-  {
-    BITCODE_H underlay_layer;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "underlay_layer", &underlay_layer, NULL)
-        && !memcmp (&underlay_layer, &underlay->underlay_layer, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("UNDERLAY.underlay_layer [H]");
   }
   if (failed && (is_class_unstable ("UNDERLAY") || is_class_debugging ("UNDERLAY")))
     {
