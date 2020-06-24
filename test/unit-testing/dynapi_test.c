@@ -42806,6 +42806,14 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
   Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *restrict mtextattributeobjectcontextdata = obj->tio.object->tio.MTEXTATTRIBUTEOBJECTCONTEXTDATA;
   failed = 0;
   {
+    BITCODE_2RD alignment_pt;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "alignment_pt", &alignment_pt, NULL)
+        && !memcmp (&alignment_pt, &mtextattributeobjectcontextdata->alignment_pt, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.alignment_pt [2RD]");
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
         && class_version == mtextattributeobjectcontextdata->class_version)
@@ -42821,6 +42829,46 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextattributeobjectcontextdata->class_version--;
   }
   {
+    struct _dwg_object* context;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "num_context", &count, NULL)
+        && dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "context", &context, NULL)
+        && context == mtextattributeobjectcontextdata->context)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.context [struct _dwg_object*] * %u num_context", count);
+  }
+  {
+    BITCODE_B enable_context;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "enable_context", &enable_context, NULL)
+        && enable_context == mtextattributeobjectcontextdata->enable_context)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.enable_context [B] " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->enable_context, enable_context);
+    enable_context++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "enable_context", &enable_context, 0)
+        && enable_context == mtextattributeobjectcontextdata->enable_context)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.enable_context [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->enable_context, enable_context);
+    mtextattributeobjectcontextdata->enable_context--;
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "flag", &flag, NULL)
+        && flag == mtextattributeobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.flag [BS] %hu != %hu", mtextattributeobjectcontextdata->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "flag", &flag, 0)
+        && flag == mtextattributeobjectcontextdata->flag)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.flag [BS] set+1 %hu != %hu", mtextattributeobjectcontextdata->flag, flag);
+    mtextattributeobjectcontextdata->flag--;
+  }
+  {
     BITCODE_B in_dwg;
     if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "in_dwg", &in_dwg, NULL)
         && in_dwg == mtextattributeobjectcontextdata->in_dwg)
@@ -42834,6 +42882,14 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.in_dwg [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->in_dwg, in_dwg);
     mtextattributeobjectcontextdata->in_dwg--;
+  }
+  {
+    BITCODE_2RD insertion_pt;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
+        && !memcmp (&insertion_pt, &mtextattributeobjectcontextdata->insertion_pt, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.insertion_pt [2RD]");
   }
   {
     BITCODE_B is_default;
@@ -42857,6 +42913,21 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
         pass ();
     else
         fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD rotation;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "rotation", &rotation, NULL)
+        && rotation == mtextattributeobjectcontextdata->rotation)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.rotation [BD] %g != %g", mtextattributeobjectcontextdata->rotation, rotation);
+    rotation++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "rotation", &rotation, 0)
+        && rotation == mtextattributeobjectcontextdata->rotation)
+      pass ();
+    else
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.rotation [BD] set+1 %g != %g", mtextattributeobjectcontextdata->rotation, rotation);
+    mtextattributeobjectcontextdata->rotation--;
   }
   {
     BITCODE_H scale;

@@ -6625,7 +6625,14 @@ typedef struct _dwg_object_RADIMLGOBJECTCONTEXTDATA
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
-  // ??
+  // TEXT
+  BITCODE_BS flag;	/*<! DXF 70 */ // 0
+  BITCODE_BD rotation;	/*!< DXF 50 */ // 0.0 or 90.0
+  BITCODE_2RD insertion_pt; 	/*!< DXF 10-20 */
+  BITCODE_2RD alignment_pt; 	/*!< DXF 11-21 */
+  // MTEXTATTR
+  BITCODE_B enable_context;
+  struct _dwg_object *context;
 } Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA

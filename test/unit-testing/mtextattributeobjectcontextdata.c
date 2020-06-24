@@ -10,6 +10,13 @@ api_process (dwg_object *obj)
   BITCODE_B is_default;
   BITCODE_B in_dwg;
   BITCODE_H scale;
+  BITCODE_BS flag;
+  BITCODE_BD rotation;
+  BITCODE_2RD insertion_pt;
+  BITCODE_2RD alignment_pt;
+  // MTEXTATTR
+  BITCODE_B enable_context;
+  struct _dwg_object *context;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -19,20 +26,20 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, is_default, B);
   CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, in_dwg, B);
   CHK_ENTITY_H (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, scale);
-#if 0
-  CHK_ENTITY_3RD (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, insertion_pt);
-  CHK_ENTITY_3RD (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, x_axis_dir);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, text_height, BD);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, rect_width, BD);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, extents_height, BD);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, extents_width, BD);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, attachment, BS);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, drawing_dir, BS);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, linespace_style, BS);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, linespace_factor, BD);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, bd45, BD);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, bs74, BS);
-  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, bd46, BD);
-#endif
+
+  CHK_ENTITY_2RD (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, insertion_pt);
+  CHK_ENTITY_2RD (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, alignment_pt);
+  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, rotation, BD);
+  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, flag, BS);
+
+  CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, enable_context, B);
+  if (!dwg_dynapi_entity_value (_obj, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "mtext", &context, NULL))
+    fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.context");
+  else if (context)
+    {
+      if (context->fixedtype != DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+        fail ("Wrong MTEXTATTRIBUTEOBJECTCONTEXTDATA.context.fixedtype %s %d != MTEXTOBJECTCONTEXTDATA",
+              dwg_type_name (context->fixedtype), context->fixedtype);
+    }
 #endif
 }

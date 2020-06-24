@@ -8479,6 +8479,18 @@ B,	DXF 290
 B
 @item scale
 H,	DXF 340
+@item flag
+BS,	DXF 70
+@item rotation
+BD,	DXF 50
+@item insertion_pt
+2RD,	DXF 10
+@item alignment_pt
+2RD,	DXF 11
+@item enable_context
+B,	DXF 290
+@item context
+struct _dwg_object*
 
 @end vtable
 @end indentedblock

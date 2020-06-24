@@ -7370,6 +7370,18 @@ static const Dwg_DYNAPI_field _dwg_MTEXTATTRIBUTEOBJECTCONTEXTDATA_fields[] = {
     0,0,0, 0 },
   { "scale",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, scale),
     1,0,0, 340 },
+  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, flag),
+    0,0,0, 70 },
+  { "rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, rotation),
+    0,0,0, 50 },
+  { "insertion_pt",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, insertion_pt),
+    1,0,0, 10 },
+  { "alignment_pt",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, alignment_pt),
+    1,0,0, 11 },
+  { "enable_context",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, enable_context),
+    0,0,0, 290 },
+  { "context",	"struct _dwg_object*", sizeof (void *),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, context),
+    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA: (sorted by offset) */

@@ -8938,8 +8938,23 @@ DWG_OBJECT_END
 DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbTextObjectContextData)
+  FIELD_BS (flag, 70); // 0
+  FIELD_BD (rotation, 50); // 0.0 or 90.0
+  FIELD_2RD (insertion_pt, 10);
+  FIELD_2RD (alignment_pt, 11);
   SUBCLASS (AcDbMTextAttributeObjectContextData)
-  // ?? ...
+  FIELD_B (enable_context, 290);
+  if (FIELD_VALUE (enable_context))
+    {
+      DECODER {
+        dwg_add_object (dwg);
+        _obj->context = &dwg->object[dwg->num_objects - 1];
+        dwg_setup_SCALE (_obj->context);
+      }
+      DXF { VALUE_TFF ( "Embedded Object", 101 ); }
+      CALL_ENTITY (SCALE, _obj->context);
+    }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
