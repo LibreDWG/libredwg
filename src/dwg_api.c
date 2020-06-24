@@ -10158,7 +10158,7 @@ void
 dwg_ent_mtext_set_attachment (dwg_ent_mtext *restrict mtext,
                               const BITCODE_BS attachment, int *restrict error)
 {
-  if (mtext)
+  if (mtext && attachment < 10)
     {
       *error = 0;
       mtext->attachment = attachment;
@@ -10166,11 +10166,11 @@ dwg_ent_mtext_set_attachment (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 
-/** Returns the _dwg_entity_MTEXT::drawing_dir flag, DXF 72.
+/** Returns the _dwg_entity_MTEXT::flow_dir flag, DXF 72.
  */
 BITCODE_BS
 dwg_ent_mtext_get_drawing_dir (const dwg_ent_mtext *restrict mtext,
@@ -10179,7 +10179,7 @@ dwg_ent_mtext_get_drawing_dir (const dwg_ent_mtext *restrict mtext,
   if (mtext)
     {
       *error = 0;
-      return mtext->drawing_dir;
+      return mtext->flow_dir;
     }
   else
     {
@@ -10189,21 +10189,21 @@ dwg_ent_mtext_get_drawing_dir (const dwg_ent_mtext *restrict mtext,
     }
 }
 
-/** Sets the _dwg_entity_MTEXT::drawing_dir flag, DXF 72.
+/** Sets the _dwg_entity_MTEXT::flow_dir flag, DXF 72.
  */
 void
 dwg_ent_mtext_set_drawing_dir (dwg_ent_mtext *restrict mtext,
                                const BITCODE_BS dir, int *restrict error)
 {
-  if (mtext)
+  if (mtext && dir < 6)
     {
       *error = 0;
-      mtext->drawing_dir = dir;
+      mtext->flow_dir = dir;
     }
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 

@@ -15301,21 +15301,6 @@ static int test_MTEXT (const Dwg_Object *obj)
     mtext->default_flag--;
   }
   {
-    BITCODE_BS drawing_dir;
-    if (dwg_dynapi_entity_value (mtext, "MTEXT", "drawing_dir", &drawing_dir, NULL)
-        && drawing_dir == mtext->drawing_dir)
-      pass ();
-    else
-      fail ("MTEXT.drawing_dir [BS] %hu != %hu", mtext->drawing_dir, drawing_dir);
-    drawing_dir++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "drawing_dir", &drawing_dir, 0)
-        && drawing_dir == mtext->drawing_dir)
-      pass ();
-    else
-      fail ("MTEXT.drawing_dir [BS] set+1 %hu != %hu", mtext->drawing_dir, drawing_dir);
-    mtext->drawing_dir--;
-  }
-  {
     BITCODE_BD extents_height;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "extents_height", &extents_height, NULL)
         && extents_height == mtext->extents_height)
@@ -15352,6 +15337,21 @@ static int test_MTEXT (const Dwg_Object *obj)
         pass ();
     else
         fail ("MTEXT.extrusion [BE]");
+  }
+  {
+    BITCODE_BS flow_dir;
+    if (dwg_dynapi_entity_value (mtext, "MTEXT", "flow_dir", &flow_dir, NULL)
+        && flow_dir == mtext->flow_dir)
+      pass ();
+    else
+      fail ("MTEXT.flow_dir [BS] %hu != %hu", mtext->flow_dir, flow_dir);
+    flow_dir++;
+    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "flow_dir", &flow_dir, 0)
+        && flow_dir == mtext->flow_dir)
+      pass ();
+    else
+      fail ("MTEXT.flow_dir [BS] set+1 %hu != %hu", mtext->flow_dir, flow_dir);
+    mtext->flow_dir--;
   }
   {
     BITCODE_B flow_reversed;

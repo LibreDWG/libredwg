@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   BITCODE_BD extents_height;
   BITCODE_BD extents_width;
   BITCODE_BS attachment;
-  BITCODE_BS drawing_dir;
+  BITCODE_BS flow_dir;
   BITCODE_BS linespace_style;
   BITCODE_BD linespace_factor;
   BITCODE_BD bd45;
@@ -39,7 +39,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_height, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_width, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, attachment, BS);
-  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, drawing_dir, BS);
+  CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, flow_dir, BS);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, linespace_style, BS);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, linespace_factor, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, bd45, BD);

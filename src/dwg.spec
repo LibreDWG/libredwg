@@ -2314,7 +2314,7 @@ DWG_ENTITY (MTEXT)
 
   FIELD_BD (text_height, 40);
   FIELD_BS (attachment, 71);
-  FIELD_BS (drawing_dir, 72);
+  FIELD_BS (flow_dir, 72);
   FIELD_BD (extents_height, 42);
   FIELD_BD (extents_width, 43); // nan's!
   FIELD_T (text, 1); // or 3 if >250

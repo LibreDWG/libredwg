@@ -2621,7 +2621,7 @@ BD,	DXF 41
 BD,	DXF 40
 @item attachment
 BS,	DXF 71
-@item drawing_dir
+@item flow_dir
 BS,	DXF 72
 @item extents_height
 BD,	DXF 43

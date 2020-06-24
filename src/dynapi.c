@@ -2645,7 +2645,7 @@ static const Dwg_DYNAPI_field _dwg_MTEXT_fields[] = {
     0,0,0, 40 },
   { "attachment",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_MTEXT, attachment),
     0,0,0, 71 },
-  { "drawing_dir",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_MTEXT, drawing_dir),
+  { "flow_dir",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_MTEXT, flow_dir),
     0,0,0, 72 },
   { "extents_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_MTEXT, extents_height),
     0,0,0, 43 },

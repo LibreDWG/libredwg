@@ -1910,8 +1910,8 @@ typedef struct _dwg_entity_MTEXT
   struct _dwg_object_entity *parent;
 
   BITCODE_3BD insertion_pt;/*!< DXF 10 */
-  BITCODE_BE extrusion;   /*!< DXF 210 */
-  BITCODE_3BD x_axis_dir;  /*!< DXF 1 */
+  BITCODE_BE extrusion;    /*!< DXF 210 */
+  BITCODE_3BD x_axis_dir;  /*!< DXF 11, defines the rotation */
   BITCODE_BD rect_height;  /*!< no DXF */
   BITCODE_BD rect_width;   /*!< DXF 41 */
   BITCODE_BD text_height;  /*!< DXF 40 */
@@ -1921,10 +1921,10 @@ typedef struct _dwg_entity_MTEXT
                              center, 6 = Middle right, 7 = Bottom
                              left, 8 = Bottom center, 9 = Bottom
                              right */
-  BITCODE_BS drawing_dir;  /*!< DXF 72.
-                            1 = Left to right, 3 = Top to bottom,
-                            5 = By style (the flow direction is inherited
-                            from the associated text style) */
+  BITCODE_BS flow_dir;     /*!< DXF 72.
+                              1 = Left to right, 3 = Top to bottom,
+                              5 = By style (the flow direction is inherited
+                              from the associated text style) */
   BITCODE_BD extents_height; /*!< DXF 42 */
   BITCODE_BD extents_width;  /*!< DXF 43 */
   BITCODE_TV text;           /*!< DXF 1 */
