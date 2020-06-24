@@ -67,14 +67,22 @@ const char version_codes[DWG_VERSIONS][7] = {
   "AC1.2",  /* DWG Release 1.2 (as AutoCAD) */
   "AC1.3",  /* DWG Release 1.3 */
   "AC1.40", /* DWG Release 1.4 */
+  "AC402b", /* 1.402b */
   "AC1.50", /* DWG Release 2.0 */
-  "AC2.10", /* DWG Release 2.10                  dwg_version: */
+  "AC2.10", /* DWG Release 2.10*/
+  "AC2.21", /* DWG Release 2.21 */
+  "AC2.22", /* DWG Release 2.22                  dwg_version: */
   "AC1001", // DWG Release 2.4 (?)               8
   "AC1002", // DWG Release 2.5                   9
   "AC1003", // DWG Release 2.6                   10
   "AC1004", // R_9  DWG Release 9                0x0b
+  "AC1005", // R_9  DWG Release 9c1              0x0c
   "AC1006", // R_10 DWG Release 10               0x0d
+  "AC1007", // R_10 DWG Release 10c1             0x0e
+  "AC1008", // R_10 DWG Release 10c2             0x0f
   "AC1009", // R_11 DWG Release 11/12 (LT R1/R2) 0x10
+  "AC1010", // R_11 DWG Release 12 (LT R1/R2)    0x11
+  "AC1011", // R_11 DWG Release 12c1             0x12
   "AC1012", // R_13 and LT95, beware of R13c3    0x13
   "AC1013", // R_13c3                            0x14
   "AC1014", // R_14                              0x15
@@ -84,6 +92,7 @@ const char version_codes[DWG_VERSIONS][7] = {
   "AC1024", // R_2010                            0x1d
   "AC1027", // R_2013                            0x1f
   "AC1032", // R_2018                            0x21
+  "AC1035", // R_2021                            0x24 ??
   "------"  // R_AFTER
 };
 

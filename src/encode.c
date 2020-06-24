@@ -1847,17 +1847,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             _obj->dwg_version = 0x21;
             _obj->is_maint = 0x4;
             break;
+          case R_2021:
+            _obj->dwg_version = 0x24;
+            //_obj->is_maint = 0x4;
+            break;
           case R_INVALID:
           case R_AFTER:
           case R_1_1:
           case R_1_2:
           case R_1_3:
           case R_1_4:
+          case R_1_402b:
           case R_2_0:
           case R_2_1:
+          case R_2_21:
+          case R_2_22:
           case R_2_4:
           case R_2_5:
           case R_2_6:
+          case R_9c1:
+          case R_10c1:
+          case R_10c2:
+          case R_12:
+          case R_12c1:
           default:
             break;
           }

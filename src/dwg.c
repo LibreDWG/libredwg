@@ -2686,10 +2686,16 @@ dwg_version_type (const Dwg_Version_Type version)
       return "r1.3";
     case R_1_4:
       return "r1.4";
+    case R_1_402b:
+      return "r1.402b";
     case R_2_0:
       return "r2.0";
     case R_2_1:
       return "r2.1";
+    case R_2_21:
+      return "r2.21";
+    case R_2_22:
+      return "r2.22";
     case R_2_4:
       return "r2.4";
     case R_2_5:
@@ -2698,10 +2704,20 @@ dwg_version_type (const Dwg_Version_Type version)
       return "r2.6";
     case R_9:
       return "r9";
+    case R_9c1:
+      return "r9c1";
     case R_10:
       return "r10";
+    case R_10c1:
+      return "r10c1";
+    case R_10c2:
+      return "r10c2";
     case R_11:
       return "r11";
+    case R_12:
+      return "r12";
+    case R_12c1:
+      return "r12c1";
     case R_13:
       return "r13";
     case R_13c3:
@@ -2720,6 +2736,8 @@ dwg_version_type (const Dwg_Version_Type version)
       return "r2013";
     case R_2018:
       return "r2018";
+    case R_2021:
+      return "r2021";
     case R_AFTER:
       return "invalid after";
     default:
