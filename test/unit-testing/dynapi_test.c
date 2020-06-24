@@ -15125,21 +15125,6 @@ static int test_MTEXT (const Dwg_Object *obj)
   Dwg_Entity_MTEXT *restrict mtext = obj->tio.entity->tio.MTEXT;
   failed = 0;
   {
-    BITCODE_B annotative;
-    if (dwg_dynapi_entity_value (mtext, "MTEXT", "annotative", &annotative, NULL)
-        && annotative == mtext->annotative)
-      pass ();
-    else
-      fail ("MTEXT.annotative [B] " FORMAT_B " != " FORMAT_B "", mtext->annotative, annotative);
-    annotative++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "annotative", &annotative, 0)
-        && annotative == mtext->annotative)
-      pass ();
-    else
-      fail ("MTEXT.annotative [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->annotative, annotative);
-    mtext->annotative--;
-  }
-  {
     BITCODE_H appid;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "appid", &appid, NULL)
         && !memcmp (&appid, &mtext->appid, sizeof (BITCODE_H)))
@@ -15384,12 +15369,42 @@ static int test_MTEXT (const Dwg_Object *obj)
     mtext->gutter--;
   }
   {
+    BITCODE_BL ignore_attachment;
+    if (dwg_dynapi_entity_value (mtext, "MTEXT", "ignore_attachment", &ignore_attachment, NULL)
+        && ignore_attachment == mtext->ignore_attachment)
+      pass ();
+    else
+      fail ("MTEXT.ignore_attachment [BL] %u != %u", mtext->ignore_attachment, ignore_attachment);
+    ignore_attachment++;
+    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "ignore_attachment", &ignore_attachment, 0)
+        && ignore_attachment == mtext->ignore_attachment)
+      pass ();
+    else
+      fail ("MTEXT.ignore_attachment [BL] set+1 %u != %u", mtext->ignore_attachment, ignore_attachment);
+    mtext->ignore_attachment--;
+  }
+  {
     BITCODE_3BD insertion_pt;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "insertion_pt", &insertion_pt, NULL)
         && !memcmp (&insertion_pt, &mtext->insertion_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
         fail ("MTEXT.insertion_pt [3BD]");
+  }
+  {
+    BITCODE_B is_annotative;
+    if (dwg_dynapi_entity_value (mtext, "MTEXT", "is_annotative", &is_annotative, NULL)
+        && is_annotative == mtext->is_annotative)
+      pass ();
+    else
+      fail ("MTEXT.is_annotative [B] " FORMAT_B " != " FORMAT_B "", mtext->is_annotative, is_annotative);
+    is_annotative++;
+    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "is_annotative", &is_annotative, 0)
+        && is_annotative == mtext->is_annotative)
+      pass ();
+    else
+      fail ("MTEXT.is_annotative [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->is_annotative, is_annotative);
+    mtext->is_annotative--;
   }
   {
     BITCODE_BD linespace_factor;
@@ -15435,6 +15450,21 @@ static int test_MTEXT (const Dwg_Object *obj)
     else
       fail ("MTEXT.num_column_heights [BL] set+1 %u != %u", mtext->num_column_heights, num_column_heights);
     mtext->num_column_heights--;
+  }
+  {
+    BITCODE_BL numfragments;
+    if (dwg_dynapi_entity_value (mtext, "MTEXT", "numfragments", &numfragments, NULL)
+        && numfragments == mtext->numfragments)
+      pass ();
+    else
+      fail ("MTEXT.numfragments [BL] %u != %u", mtext->numfragments, numfragments);
+    numfragments++;
+    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "numfragments", &numfragments, 0)
+        && numfragments == mtext->numfragments)
+      pass ();
+    else
+      fail ("MTEXT.numfragments [BL] set+1 %u != %u", mtext->numfragments, numfragments);
+    mtext->numfragments--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -15508,19 +15538,19 @@ static int test_MTEXT (const Dwg_Object *obj)
     mtext->text_height--;
   }
   {
-    BITCODE_B unknown_bit;
-    if (dwg_dynapi_entity_value (mtext, "MTEXT", "unknown_bit", &unknown_bit, NULL)
-        && unknown_bit == mtext->unknown_bit)
+    BITCODE_B unknown_b0;
+    if (dwg_dynapi_entity_value (mtext, "MTEXT", "unknown_b0", &unknown_b0, NULL)
+        && unknown_b0 == mtext->unknown_b0)
       pass ();
     else
-      fail ("MTEXT.unknown_bit [B] " FORMAT_B " != " FORMAT_B "", mtext->unknown_bit, unknown_bit);
-    unknown_bit++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "unknown_bit", &unknown_bit, 0)
-        && unknown_bit == mtext->unknown_bit)
+      fail ("MTEXT.unknown_b0 [B] " FORMAT_B " != " FORMAT_B "", mtext->unknown_b0, unknown_b0);
+    unknown_b0++;
+    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "unknown_b0", &unknown_b0, 0)
+        && unknown_b0 == mtext->unknown_b0)
       pass ();
     else
-      fail ("MTEXT.unknown_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->unknown_bit, unknown_bit);
-    mtext->unknown_bit--;
+      fail ("MTEXT.unknown_b0 [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->unknown_b0, unknown_b0);
+    mtext->unknown_b0--;
   }
   {
     BITCODE_3BD x_axis_dir;

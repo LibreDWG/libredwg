@@ -2307,34 +2307,38 @@ DWG_ENTITY (MTEXT)
   FIELD_3BD (extrusion, 210);
   FIELD_3BD (x_axis_dir, 11);
 
-  FIELD_BD (rect_width, 41);
-  SINCE (R_2007) {
-    FIELD_BD (rect_height, 46);
+  DXF {
+    FIELD_BD (text_height, 40);
+    FIELD_BD (rect_width, 41);
+    SINCE (R_2007) {
+      FIELD_BD (rect_height, 46);
+    }
+  } else {
+    FIELD_BD (rect_width, 41);
+    SINCE (R_2007) {
+      FIELD_BD (rect_height, 46);
+    }
+    FIELD_BD (text_height, 40);
   }
-
-  FIELD_BD (text_height, 40);
   FIELD_BS (attachment, 71);
   FIELD_BS (flow_dir, 72);
   FIELD_BD (extents_height, 42);
-  FIELD_BD (extents_width, 43); // nan's!
-  FIELD_T (text, 1); // or 3 if >250
-  /* doc error:
-  UNTIL (R_2007) {
-    FIELD_HANDLE (style, 5, 0);
-  }
-  */
+  FIELD_BD (extents_width, 43);
+  // FIXME DXF break
+  FIELD_T (text, 1); // or 3 if len >250
+  /* in DXF only if non-default style */
+  FIELD_HANDLE (style, 5, 0);
 
   SINCE (R_2000)
     {
       FIELD_BS (linespace_style, 73);
       FIELD_BD (linespace_factor, 44);
-      FIELD_B (unknown_bit, 0); //annotative?
+      FIELD_B (unknown_b0, 0);
     }
-
   SINCE (R_2004)
     {
-      FIELD_BL (bg_fill_flag, 90);
-      if (FIELD_VALUE (bg_fill_flag) & (dat->version <= R_2018 ? 1 : 0x10))
+      FIELD_BL0 (bg_fill_flag, 90);
+      if (FIELD_VALUE (bg_fill_flag) & (dat->version <= R_2018 ? 1 : 16))
         {
           FIELD_BL (bg_fill_scale, 45); // def: 1.5
           FIELD_CMC (bg_fill_color, 63);
@@ -2343,41 +2347,53 @@ DWG_ENTITY (MTEXT)
     }
   SINCE (R_2018)
   {
-    FIELD_B (annotative, 0);
-    FIELD_BS (class_version, 0); // def: 0
-    VALUEOUTOFBOUNDS (class_version, 10)
-    FIELD_B (default_flag, 0);   // def: 1
-    // redundant fields
-    FIELD_BL (attachment, 71);
-    FIELD_3BD (x_axis_dir, 11);
-    FIELD_3BD (insertion_pt, 10);
-    FIELD_BD (rect_width, 41);
-    FIELD_BD (rect_height, 0);
-    FIELD_BD (extents_width, 42);
-    FIELD_BD (extents_height, 43);
-    // end redundant fields
-
-    DECODE_UNKNOWN_BITS
-    FIELD_BL (column_type, 75);
-    if (FIELD_VALUE (column_type)) //DEBUGGING
+    FIELD_B (is_annotative, 0);
+    if (FIELD_VALUE (is_annotative))
       {
-        FIELD_BL (num_column_heights, 76);
-        FIELD_BD (column_width, 48);
-        FIELD_BD (gutter, 49);
-        FIELD_B (auto_height, 79);
-        FIELD_B (flow_reversed, 74);
-        if (!FIELD_VALUE (auto_height) && FIELD_VALUE (column_type) == 2)
+        DXF { VALUE_TFF ( "Embedded Object", 101 ); }
+        FIELD_BS (class_version, 0); // 1-4
+        VALUEOUTOFBOUNDS (class_version, 10)
+        FIELD_B (default_flag, 70);   // def: 1
+        FIELD_HANDLE (appid, 5, 0);
+        // redundant fields
+        FIELD_BL (ignore_attachment, 0); // not in DXF. prev as BS
+        DXF {
+          FIELD_3BD (insertion_pt, 10);
+          FIELD_3BD (x_axis_dir, 11);
+        } else {
+          FIELD_3BD (x_axis_dir, 11);
+          FIELD_3BD (insertion_pt, 10);
+        }
+        FIELD_BD (rect_width, 40);
+        FIELD_BD (rect_height, 41);
+        FIELD_BD (extents_width, 42);
+        FIELD_BD (extents_height, 43);
+        // end redundant fields
+
+        FIELD_BL (column_type, 71);
+        if (FIELD_VALUE (column_type))
           {
-            FIELD_VECTOR (column_heights, BD, num_column_heights, 50);
+            if (FIELD_VALUE (column_type) == 1)
+              {
+                FIELD_VALUE (num_column_heights) = 0;
+                FIELD_BL (numfragments, 72);
+              }
+            else
+              {
+                FIELD_BL (num_column_heights, 72);
+              }
+            FIELD_BD (column_width, 44);
+            FIELD_BD (gutter, 45);
+            FIELD_B (auto_height, 73);
+            FIELD_B (flow_reversed, 74);
+            if (!FIELD_VALUE (auto_height) && FIELD_VALUE (column_type) == 2)
+              {
+                FIELD_VECTOR (column_heights, BD, num_column_heights, 46);
+              }
           }
       }
   }
-
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (style, 5, 0);
-  SINCE (R_2018)
-    FIELD_HANDLE (appid, 5, 0);
-
 DWG_ENTITY_END
 
 /* (45) unstable */

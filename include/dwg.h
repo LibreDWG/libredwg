@@ -1914,7 +1914,7 @@ typedef struct _dwg_entity_MTEXT
   BITCODE_3BD x_axis_dir;  /*!< DXF 11, defines the rotation */
   BITCODE_BD rect_height;  /*!< no DXF */
   BITCODE_BD rect_width;   /*!< DXF 41 */
-  BITCODE_BD text_height;  /*!< DXF 40 */
+  BITCODE_BD text_height;  /*!< DXF 40 >= 0.0 */
   BITCODE_BS attachment;   /*!< DXF 71.
                              1 = Top left, 2 = Top center, 3 = Top
                              right, 4 = Middle left, 5 = Middle
@@ -1933,26 +1933,29 @@ typedef struct _dwg_entity_MTEXT
   BITCODE_BD linespace_factor;/*!< DXF 44. r2000+. Mtext line spacing factor (optional):
                                Percentage of default (3-on-5) line spacing to
                                be applied. Valid values range from 0.25 to 4.00 */
-  BITCODE_B unknown_bit;
+  BITCODE_B unknown_b0;      // always 0
   BITCODE_BL bg_fill_flag;   /*!< DXF 90. r2004+
                                0 = Background fill off,
                                1 = Use background fill color,
-                               2 = Use drawing window color as background fill color. */
+                               2 = Use drawing window color as background fill color.
+                              16 = textframe (r2018+) */
   BITCODE_BL bg_fill_scale;  /*!< DXF 45. r2004+
                                margin around the text. */
   BITCODE_CMC bg_fill_color; /*!< DXF 63. r2004+. on bg_fill_flag==1 */
   BITCODE_BL bg_fill_trans;  /*!< DXF 441. r2004+. unused */
-  BITCODE_B annotative;      /*!< r2018+: */
-  BITCODE_BS class_version;
-  BITCODE_B default_flag;
+  BITCODE_B is_annotative;       /*!< r2018+: */
+  BITCODE_BS class_version;      /*!< always 0 */
+  BITCODE_B default_flag;        /*!< DXF 70 */
   BITCODE_H appid;
-  BITCODE_BL column_type;    /*!< DXF 75 */
-  BITCODE_BD column_width;   /*!< DXF 48 */
-  BITCODE_BD gutter;         /*!< DXF 49 */
-  BITCODE_B auto_height;     /*!< DXF 79 */
-  BITCODE_B flow_reversed;   /*!< DXF 74 */
-  BITCODE_BL num_column_heights;/*!< DXF 76 */
-  BITCODE_BD *column_heights;/*!< DXF 50 */
+  BITCODE_BL ignore_attachment;  /*!< redundant copy, not BS */
+  BITCODE_BL column_type;        /*!< DXF 71 0: none, 1: static, 2: dynamic */
+  BITCODE_BL numfragments;       /*!< DXF 72 if static */
+  BITCODE_BD column_width;       /*!< DXF 44 */
+  BITCODE_BD gutter;             /*!< DXF 45 */
+  BITCODE_B auto_height;         /*!< DXF 73 */
+  BITCODE_B flow_reversed;       /*!< DXF 74 */
+  BITCODE_BL num_column_heights; /*!< DXF 72 if dynamic and not auto_height */
+  BITCODE_BD *column_heights;    /*!< DXF 46 */
 } Dwg_Entity_MTEXT;
 
 /**

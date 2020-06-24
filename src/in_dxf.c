@@ -6630,6 +6630,7 @@ new_object (char *restrict name, char *restrict dxfname,
   int in_xdict = 0;
   int in_reactors = 0;
   int in_blkrefs = 0;
+  int in_embedobj = 0;
   int is_entity = is_dwg_entity (name) || strEQc (name, "DIMENSION");
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
@@ -7138,6 +7139,11 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
             }
           break;
+        case 101:
+          if (pair->value.s && strEQc (pair->value.s, "Embedded Object"))
+            in_embedobj = 1;
+          else
+            goto start_loop; /* failure */
         case 102:
           if (pair->value.s && strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
             in_xdict = 1;

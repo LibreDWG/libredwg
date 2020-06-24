@@ -2614,9 +2614,9 @@ BE,	DXF 210
 @item x_axis_dir
 3BD,	DXF 11
 @item rect_height
-BD,	DXF 46
-@item rect_width
 BD,	DXF 41
+@item rect_width
+BD,	DXF 40
 @item text_height
 BD,	DXF 40
 @item attachment
@@ -2635,7 +2635,7 @@ H,	DXF 7
 BS,	DXF 73
 @item linespace_factor
 BD,	DXF 44
-@item unknown_bit
+@item unknown_b0
 B
 @item bg_fill_flag
 BL,	DXF 90
@@ -2645,28 +2645,32 @@ BL,	DXF 45
 CMC,	DXF 63
 @item bg_fill_trans
 BL,	DXF 441
-@item annotative
+@item is_annotative
 B
 @item class_version
 BS
 @item default_flag
-B
+B,	DXF 70
 @item appid
 H
+@item ignore_attachment
+BL
 @item column_type
-BL,	DXF 75
+BL,	DXF 71
+@item numfragments
+BL,	DXF 72
 @item column_width
-BD,	DXF 48
+BD,	DXF 44
 @item gutter
-BD,	DXF 49
+BD,	DXF 45
 @item auto_height
-B,	DXF 79
+B,	DXF 73
 @item flow_reversed
 B,	DXF 74
 @item num_column_heights
-BL,	DXF 76
+BL,	DXF 72
 @item column_heights
-BD*,	DXF 50
+BD*,	DXF 46
 
 @end vtable
 @end indentedblock

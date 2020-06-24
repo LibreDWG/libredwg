@@ -8,13 +8,22 @@ api_process (dwg_object *obj)
   double rect_height, rect_width, text_height, extents_height, extents_width,
       linespace_factor;
   BITCODE_BS attachment, flow_dir, linespace_style, class_version;
-  BITCODE_B unknown_bit, annotative, default_flag;
+  BITCODE_B unknown_b0, is_annotative, default_flag;
   BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans, column_type;
   BITCODE_CMC bg_fill_color;
   char *text;
   dwg_point_3d insertion_pt, extrusion, x_axis_dir;
   BITCODE_H appid, style;
+  BITCODE_BL ignore_attachment;
+  BITCODE_BL numfragments;
+  BITCODE_BD column_width;
+  BITCODE_BD gutter;
+  BITCODE_B auto_height;
+  BITCODE_B flow_reversed;
+  BITCODE_BL i, num_column_heights;
+  BITCODE_BD *column_heights;
 
+  Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT (obj);
 
   CHK_ENTITY_UTF8TEXT_W_OLD (mtext, MTEXT, text);
@@ -35,21 +44,45 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_style, BS);
       CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_factor, BD);
-      CHK_ENTITY_TYPE (mtext, MTEXT, unknown_bit, B);
+      CHK_ENTITY_TYPE (mtext, MTEXT, unknown_b0, B);
     }
   SINCE (R_2004)
     {
       CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_flag, BL);
+      CHK_ENTITY_MAX  (mtext, MTEXT, bg_fill_flag, BL, 31);
       CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_scale, BL);
-      CHK_ENTITY_CMC (mtext, MTEXT, bg_fill_color);
+      CHK_ENTITY_CMC  (mtext, MTEXT, bg_fill_color);
       CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_trans, BL);
     }
   SINCE (R_2018)
     {
-      CHK_ENTITY_TYPE (mtext, MTEXT, annotative, B);
+      CHK_ENTITY_TYPE (mtext, MTEXT, is_annotative, B);
       CHK_ENTITY_TYPE (mtext, MTEXT, class_version, BS);
+      CHK_ENTITY_MAX  (mtext, MTEXT, class_version, BS, 10);
       CHK_ENTITY_TYPE (mtext, MTEXT, default_flag, B);
       CHK_ENTITY_H (mtext, MTEXT, appid);
       CHK_ENTITY_TYPE (mtext, MTEXT, column_type, BL);
+      CHK_ENTITY_MAX  (mtext, MTEXT, column_type, BL, 2);
+      CHK_ENTITY_TYPE (mtext, MTEXT, ignore_attachment, BL);
+      if ((BITCODE_BL)attachment != ignore_attachment)
+        fprintf (stderr, "attachment " FORMAT_BS " != ignore_attachment " FORMAT_BL "\n",
+                 attachment, ignore_attachment);
+      CHK_ENTITY_TYPE (mtext, MTEXT, numfragments, BL); // only for column_type == 1
+      if (column_type == 1)
+        {
+          if (num_column_heights)
+            fail ("num_column_heights with column_type == 1");
+        }
+      else
+        {
+          if (numfragments)
+            fail ("numfragments with column_type != 1");
+        }
+      CHK_ENTITY_TYPE (mtext, MTEXT, num_column_heights, BL); //else
+      CHK_ENTITY_TYPE (mtext, MTEXT, column_width, BD);
+      CHK_ENTITY_TYPE (mtext, MTEXT, gutter, BD);
+      CHK_ENTITY_TYPE (mtext, MTEXT, auto_height, B);
+      CHK_ENTITY_TYPE (mtext, MTEXT, flow_reversed, B);
+      CHK_ENTITY_VECTOR_TYPE (mtext, MTEXT, column_heights, num_column_heights, BD);
     }
 }
