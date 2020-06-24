@@ -8377,30 +8377,25 @@ DWG_ENTITY (SWEPTSURFACE)
   FIELD_BINARY (pathdata, FIELD_VALUE (pathdata_size), 310);
   // here and at ExtrudedSurface
   SweepOptions_fields;
-
   COMMON_ENTITY_HANDLE_DATA;
-
 DWG_ENTITY_END
 
-// missing coverage
 DWG_ENTITY (NURBSURFACE)
-
   DECODE_UNKNOWN_BITS
   ACTION_3DSOLID;
-  FIELD_BS (modeler_format_version, 70); //def 1
-  //FIELD_BL (bindata_size, 90);
-  //FIELD_TF (bindata, FIELD_VALUE (bindata_size), 1); // in DXF as encrypted ASCII
-
   SUBCLASS (AcDbSurface)
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  //SUBCLASS (AcDbNurbSurface)
-  //FIELD_BL (class_version, 90);
-  //if (FIELD_VALUE (class_version) > 10)
-  //  return DWG_ERR_VALUEOUTOFBOUNDS;
-
+  SUBCLASS (AcDbNurbSurface)
+  SINCE (R_2013) {
+    FIELD_BS (short170, 170);
+    FIELD_B (cv_hull_display, 290);
+    FIELD_3BD (uvec1, 10);
+    FIELD_3BD (vvec1, 11);
+    FIELD_3BD (uvec2, 12);
+    FIELD_3BD (vvec2, 13);
+  }
   COMMON_ENTITY_HANDLE_DATA;
-
 DWG_ENTITY_END
 
 

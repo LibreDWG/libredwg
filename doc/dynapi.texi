@@ -2858,14 +2858,22 @@ H,	DXF 350
 B
 @item acis_empty_bit
 B
-@item modeler_format_version
-BS,	DXF 70
 @item u_isolines
 BS,	DXF 71
 @item v_isolines
 BS,	DXF 72
-@item class_version
-BL
+@item short170
+BS,	DXF 170
+@item cv_hull_display
+B,	DXF 290
+@item uvec1
+3BD,	DXF 10
+@item vvec1
+3BD,	DXF 11
+@item uvec2
+3BD,	DXF 12
+@item vvec2
+3BD,	DXF 13
 
 @end vtable
 @end indentedblock

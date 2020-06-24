@@ -4743,17 +4743,21 @@ typedef struct _dwg_entity_LOFTEDSURFACE
 
 /**
  Entity NURBSURFACE (varies)
- no coverage yet
 */
 typedef struct _dwg_entity_NURBSURFACE
 {
   struct _dwg_object_entity *parent;
   _3DSOLID_FIELDS;
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
-  BITCODE_BS u_isolines;         /*!< DXF 71 */
-  BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version; /*!< DXF 90 */
-  // ...
+  // AcDbSurface
+  BITCODE_BS u_isolines;	/*!< DXF 71 */
+  BITCODE_BS v_isolines;	/*!< DXF 72 */
+  // AcDbNurbSurface
+  BITCODE_BS short170;   	/* DXF 170 */
+  BITCODE_B cv_hull_display;	/* DXF 290 */
+  BITCODE_3BD uvec1;		/* DXF 10 */
+  BITCODE_3BD vvec1;		/* DXF 11 */
+  BITCODE_3BD uvec2;		/* DXF 12 */
+  BITCODE_3BD vvec2;		/* DXF 13 */
 } Dwg_Entity_NURBSURFACE;
 
 /**
