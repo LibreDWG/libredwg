@@ -8684,33 +8684,27 @@ DWG_OBJECT_END
 
 // called COORDINATION_MODEL in the DXF docs
 DWG_ENTITY (NAVISWORKSMODEL)
-
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbNavisworksModel)
   DEBUG_HERE_OBJ
   FIELD_HANDLE (defhandle, 2, 340);
   FIELD_VECTOR_N (transmatrix, BD, 16, 40);
   FIELD_BD (unitfactor, 40);
-
   COMMON_ENTITY_HANDLE_DATA;
-
 DWG_ENTITY_END
 
-// (varies) TODO
-// no coverage. Stored in ACAD_BIM_DEFINITIONS dictionary
+// (varies)
+// Stored in ACAD_BIM_DEFINITIONS dictionary
 DWG_OBJECT (NAVISWORKSMODELDEF)
-
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbNavisworksModelDef)
-  DEBUG_HERE_OBJ
+  FIELD_BS (flags, 70);
   FIELD_T (path, 1);
   FIELD_B (status, 290);
   FIELD_3BD (min_extent, 10);
   FIELD_3BD (max_extent, 11);
-  FIELD_B (host_drawing_visibility, 290);
-
+  FIELD_B (host_drawing_visibility, 290); // DWG_model_item_visible
   START_OBJECT_HANDLE_STREAM;
-
 DWG_OBJECT_END
 
 // officially documented, dbRender.h

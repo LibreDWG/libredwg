@@ -6,6 +6,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BITCODE_T path;
+  BITCODE_BS flags;
   BITCODE_B status;
   BITCODE_3BD min_extent;
   BITCODE_3BD max_extent;
@@ -15,6 +16,7 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_navisworksmodeldef *_obj = dwg_object_to_NAVISWORKSMODELDEF (obj);
 
+  CHK_ENTITY_TYPE (_obj, NAVISWORKSMODELDEF, flags, BS);
   CHK_ENTITY_UTF8TEXT (_obj, NAVISWORKSMODELDEF, path);
   CHK_ENTITY_TYPE (_obj, NAVISWORKSMODELDEF, status, B);
   CHK_ENTITY_3RD (_obj, NAVISWORKSMODELDEF, min_extent);

@@ -6125,6 +6125,7 @@ typedef struct _dwg_object_NAVISWORKSMODELDEF
   struct _dwg_object_object *parent;
 
   // AcDbNavisworksModelDef
+  BITCODE_BS flags;     /*!< DXF 70 */
   BITCODE_T path;       /*!< DXF 1 */
   BITCODE_B status;     /*!< DXF 290 */
   BITCODE_3BD min_extent; /*!< DXF 10 */
