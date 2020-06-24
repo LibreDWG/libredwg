@@ -16099,12 +16099,27 @@ static int test_NAVISWORKSMODEL (const Dwg_Object *obj)
   Dwg_Entity_NAVISWORKSMODEL *restrict navisworksmodel = obj->tio.entity->tio.NAVISWORKSMODEL;
   failed = 0;
   {
-    BITCODE_H defhandle;
-    if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "defhandle", &defhandle, NULL)
-        && !memcmp (&defhandle, &navisworksmodel->defhandle, sizeof (BITCODE_H)))
+    BITCODE_H definition;
+    if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "definition", &definition, NULL)
+        && !memcmp (&definition, &navisworksmodel->definition, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("NAVISWORKSMODEL.defhandle [H]");
+        fail ("NAVISWORKSMODEL.definition [H]");
+  }
+  {
+    BITCODE_BS flags;
+    if (dwg_dynapi_entity_value (navisworksmodel, "NAVISWORKSMODEL", "flags", &flags, NULL)
+        && flags == navisworksmodel->flags)
+      pass ();
+    else
+      fail ("NAVISWORKSMODEL.flags [BS] %hu != %hu", navisworksmodel->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (navisworksmodel, "NAVISWORKSMODEL", "flags", &flags, 0)
+        && flags == navisworksmodel->flags)
+      pass ();
+    else
+      fail ("NAVISWORKSMODEL.flags [BS] set+1 %hu != %hu", navisworksmodel->flags, flags);
+    navisworksmodel->flags--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -43230,6 +43245,21 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_NAVISWORKSMODELDEF *restrict navisworksmodeldef = obj->tio.object->tio.NAVISWORKSMODELDEF;
   failed = 0;
+  {
+    BITCODE_BS flags;
+    if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "flags", &flags, NULL)
+        && flags == navisworksmodeldef->flags)
+      pass ();
+    else
+      fail ("NAVISWORKSMODELDEF.flags [BS] %hu != %hu", navisworksmodeldef->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "flags", &flags, 0)
+        && flags == navisworksmodeldef->flags)
+      pass ();
+    else
+      fail ("NAVISWORKSMODELDEF.flags [BS] set+1 %hu != %hu", navisworksmodeldef->flags, flags);
+    navisworksmodeldef->flags--;
+  }
   {
     BITCODE_B host_drawing_visibility;
     if (dwg_dynapi_entity_value (navisworksmodeldef, "NAVISWORKSMODELDEF", "host_drawing_visibility", &host_drawing_visibility, NULL)

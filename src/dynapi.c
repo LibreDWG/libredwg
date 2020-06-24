@@ -2785,7 +2785,9 @@ static const Dwg_DYNAPI_field _dwg_MULTILEADER_fields[] = {
 static const Dwg_DYNAPI_field _dwg_NAVISWORKSMODEL_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_NAVISWORKSMODEL, parent),
     1,1,0, 0 },
-  { "defhandle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_NAVISWORKSMODEL, defhandle),
+  { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_NAVISWORKSMODEL, flags),
+    0,0,0, 70 },
+  { "definition",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_NAVISWORKSMODEL, definition),
     1,0,0, 340 },
   { "transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_entity_NAVISWORKSMODEL, transmatrix),
     1,1,0, 40 },
@@ -7432,6 +7434,8 @@ static const Dwg_DYNAPI_field _dwg_MTEXTOBJECTCONTEXTDATA_fields[] = {
 static const Dwg_DYNAPI_field _dwg_NAVISWORKSMODELDEF_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_NAVISWORKSMODELDEF, parent),
     1,1,0, 0 },
+  { "flags",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_NAVISWORKSMODELDEF, flags),
+    0,0,0, 70 },
   { "path",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_NAVISWORKSMODELDEF, path),
     1,1,1, 1 },
   { "status",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_NAVISWORKSMODELDEF, status),

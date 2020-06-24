@@ -2775,7 +2775,9 @@ B,	DXF 295
 
 @item parent
 struct _dwg_object_entity*
-@item defhandle
+@item flags
+BS,	DXF 70
+@item definition
 H,	DXF 340
 @item transmatrix
 BD*,	DXF 40
@@ -8555,6 +8557,8 @@ BD*,	DXF 46
 
 @item parent
 struct _dwg_object_object*
+@item flags
+BS,	DXF 70
 @item path
 T,	DXF 1
 @item status

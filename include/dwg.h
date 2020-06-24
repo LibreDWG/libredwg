@@ -6112,18 +6112,16 @@ typedef struct _dwg_object_ACSH_REVOLVE_CLASS
 typedef struct _dwg_entity_NAVISWORKSMODEL
 {
   struct _dwg_object_entity *parent;
-
   // AcDbNavisworksModel
-  BITCODE_H defhandle;		/*!< DXF 340 */
+  BITCODE_BS flags;		/*!< DXF 70 */
+  BITCODE_H definition;		/*!< DXF 340 */
   BITCODE_BD *transmatrix;	/*!< DXF 40 */
   BITCODE_BD unitfactor;	/*!< DXF 40 */
-
 } Dwg_Entity_NAVISWORKSMODEL;
 
 typedef struct _dwg_object_NAVISWORKSMODELDEF
 {
   struct _dwg_object_object *parent;
-
   // AcDbNavisworksModelDef
   BITCODE_BS flags;     /*!< DXF 70 */
   BITCODE_T path;       /*!< DXF 1 */
@@ -6131,7 +6129,6 @@ typedef struct _dwg_object_NAVISWORKSMODELDEF
   BITCODE_3BD min_extent; /*!< DXF 10 */
   BITCODE_3BD max_extent; /*!< DXF 11 */
   BITCODE_B host_drawing_visibility; /*!< DXF 290 */
-
 } Dwg_Object_NAVISWORKSMODELDEF;
 
 #define RENDERSETTINGS_fields                                                 \
