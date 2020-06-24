@@ -798,13 +798,16 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   SUBCLASS (AcDbFaceRecord)
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
-    VALUE_3BD (pt, 10);
+    UNTIL (R_9) {
+      VALUE_2RD (pt, 10)
+    }
+    LATER_VERSIONS {
+      VALUE_3BD (pt, 10)
+    }
     VALUE_RC ((BITCODE_RC)128, 70);
     FIELD_BS (vertind[0], 71);
-    if (FIELD_VALUE (vertind[1]))
-      FIELD_BS (vertind[1], 72);
-    if (FIELD_VALUE (vertind[2]))
-      FIELD_BS (vertind[2], 73);
+    FIELD_BS (vertind[1], 72);
+    FIELD_BS (vertind[2], 73);
     if (FIELD_VALUE (vertind[3]))
       FIELD_BS (vertind[3], 74);
   } else {
@@ -816,9 +819,7 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
     FIELD_BS (vertind[3], 74);
   }
   //TODO R13 has color_rs and ltype_rs for all vertices, not in DXF
-
   COMMON_ENTITY_HANDLE_DATA;
-
 DWG_ENTITY_END
 
 /*(15)*/

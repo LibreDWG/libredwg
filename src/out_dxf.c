@@ -395,6 +395,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
 #define VALUE_MC(value, dxf) VALUE (value, MC, dxf)
 #define VALUE_MS(value, dxf) VALUE (value, MS, dxf)
+#define VALUE_2RD(pt, dxf)                                                    \
+  {                                                                           \
+    VALUE_RD (pt.x, dxf);                                                     \
+    VALUE_RD (pt.y, dxf + 10);                                                \
+  }
 #define VALUE_3BD(pt, dxf)                                                    \
   {                                                                           \
     VALUE_RD (pt.x, dxf);                                                     \

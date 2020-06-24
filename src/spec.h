@@ -116,6 +116,15 @@
 #ifndef VALUE_3BD
 #  define VALUE_3BD(value, dxf)
 #endif
+#ifndef VALUE_2RD
+#  define VALUE_2RD(value, dxf)
+#endif
+#ifndef VALUE_2BD
+#  define VALUE_2BD(value, dxf) VALUE_2RD(value, dxf)
+#endif
+#ifndef VALUE_3RD
+#  define VALUE_3RD(value, dxf) VALUE_3BD (value, dxf)
+#endif
 #ifndef VALUE_BS
 #  define VALUE_BS(value, dxf)
 #endif
