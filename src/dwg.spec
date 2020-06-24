@@ -1284,13 +1284,12 @@ DWG_ENTITY (_3DFACE)
       FIELD_3BD (corner2, 11);
       FIELD_3BD (corner3, 12);
       FIELD_3BD (corner4, 13);
-      FIELD_BS (invis_flags, 70);
+      FIELD_BS0 (invis_flags, 70);
     }
 
   SINCE (R_2000)
     {
       FIELD_B (has_no_flags, 0);
-
       DXF_OR_PRINT
         {
           JSON { FIELD_B (z_is_zero, 0); }
@@ -1306,7 +1305,6 @@ DWG_ENTITY (_3DFACE)
           else
             FIELD_RD (corner1.z, 30);
         }
-
       ENCODER
         {
           FIELD_VALUE (z_is_zero) = (FIELD_VALUE (corner1.z) == 0);
@@ -1316,10 +1314,10 @@ DWG_ENTITY (_3DFACE)
           if (!FIELD_VALUE (z_is_zero))
             FIELD_RD (corner1.z, 30);
         }
-
       FIELD_3DD (corner2, corner1, 11);
       FIELD_3DD (corner3, corner2, 12);
       FIELD_3DD (corner4, corner3, 13);
+      FIELD_BS0 (invis_flags, 70);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -2457,7 +2455,7 @@ DWG_ENTITY (TOLERANCE)
   DXF { FIELD_HANDLE (dimstyle, 5, 3); }
   VERSIONS (R_13, R_14)
     {
-      FIELD_BS (unknown_short, 0); //spec-typo? Spec says S instead of BS.
+      FIELD_BS (unknown_short, 0); //ODA typo: Spec says S instead of BS.
       FIELD_BD (height, 0);
       FIELD_BD (dimgap, 0);
     }
