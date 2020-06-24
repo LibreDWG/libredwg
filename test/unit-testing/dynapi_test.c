@@ -10916,6 +10916,21 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
   Dwg_Entity_GEOPOSITIONMARKER *restrict geopositionmarker = obj->tio.entity->tio.GEOPOSITIONMARKER;
   failed = 0;
   {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "class_version", &class_version, NULL)
+        && class_version == geopositionmarker->class_version)
+      pass ();
+    else
+      fail ("GEOPOSITIONMARKER.class_version [BS] %hu != %hu", geopositionmarker->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "class_version", &class_version, 0)
+        && class_version == geopositionmarker->class_version)
+      pass ();
+    else
+      fail ("GEOPOSITIONMARKER.class_version [BS] set+1 %hu != %hu", geopositionmarker->class_version, class_version);
+    geopositionmarker->class_version--;
+  }
+  {
     BITCODE_B enable_frame_text;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "enable_frame_text", &enable_frame_text, NULL)
         && enable_frame_text == geopositionmarker->enable_frame_text)
@@ -11025,21 +11040,6 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.text_alignment [RC] set+1 %u != %u", geopositionmarker->text_alignment, text_alignment);
     geopositionmarker->text_alignment--;
-  }
-  {
-    BITCODE_BS type;
-    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "type", &type, NULL)
-        && type == geopositionmarker->type)
-      pass ();
-    else
-      fail ("GEOPOSITIONMARKER.type [BS] %hu != %hu", geopositionmarker->type, type);
-    type++;
-    if (dwg_dynapi_entity_set_value (geopositionmarker, "GEOPOSITIONMARKER", "type", &type, 0)
-        && type == geopositionmarker->type)
-      pass ();
-    else
-      fail ("GEOPOSITIONMARKER.type [BS] set+1 %hu != %hu", geopositionmarker->type, type);
-    geopositionmarker->type--;
   }
   if (failed && (is_class_unstable ("GEOPOSITIONMARKER") || is_class_debugging ("GEOPOSITIONMARKER")))
     {

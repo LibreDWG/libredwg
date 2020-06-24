@@ -1823,7 +1823,7 @@ BD*,	DXF 40
 
 @item parent
 struct _dwg_object_entity*
-@item type
+@item class_version
 BS,	DXF 90
 @item position
 3BD,	DXF 10

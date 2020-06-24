@@ -1945,7 +1945,7 @@ static const Dwg_DYNAPI_field _dwg_EXTRUDEDSURFACE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_GEOPOSITIONMARKER_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, parent),
     1,1,0, 0 },
-  { "type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, type),
+  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, class_version),
     0,0,0, 90 },
   { "position",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, position),
     1,0,0, 10 },

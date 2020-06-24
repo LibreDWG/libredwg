@@ -8195,13 +8195,13 @@ DWG_ENTITY (GEOPOSITIONMARKER)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbGeoPositionMarker)
-  FIELD_BL (type, 90); // 0
+  FIELD_BL (class_version, 90); // 0
   FIELD_3BD (position, 10);
   FIELD_BD (radius, 40);
   FIELD_T (notes, 1);
   FIELD_BD (landing_gap, 40);
   FIELD_B (mtext_visible, 290);
-  FIELD_RCd (text_alignment, 280); // 0 left, 1 center, 2 right
+  FIELD_RCd (text_alignment, 280);
   FIELD_B (enable_frame_text, 290);
   if (FIELD_VALUE (enable_frame_text))
     {
@@ -8210,6 +8210,7 @@ DWG_ENTITY (GEOPOSITIONMARKER)
         _obj->mtext = &dwg->object[dwg->num_objects - 1];
         dwg_setup_MTEXT (_obj->mtext);
       }
+      DXF { VALUE_TFF ( "Embedded Object", 101 ); }
       CALL_ENTITY (MTEXT, _obj->mtext);
     }
   COMMON_ENTITY_HANDLE_DATA;

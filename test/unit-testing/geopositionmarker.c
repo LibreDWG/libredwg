@@ -6,7 +6,7 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BS type;
+  BITCODE_BS class_version;
   BITCODE_3BD position;
   BITCODE_BD radius;
   BITCODE_BD landing_gap;
@@ -15,15 +15,12 @@ api_process (dwg_object *obj)
   BITCODE_B mtext_visible;
   BITCODE_B enable_frame_text;
   Dwg_Object *mtext;
-  //BITCODE_T text;
-  //BITCODE_H mtext_handle;
-  //BITCODE_H text_style;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
   dwg_ent_geopositionmarker *_obj = dwg_object_to_GEOPOSITIONMARKER (obj);
 
-  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, type, BS);
+  CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, class_version, BS);
   CHK_ENTITY_3RD (_obj, GEOPOSITIONMARKER, position);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, radius, BD);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, landing_gap, BD);
@@ -40,8 +37,5 @@ api_process (dwg_object *obj)
       if (mtext->fixedtype != DWG_TYPE_MTEXT)
         fail ("Wrong MTEXT.mtext.fixedtype %d", mtext->fixedtype);
     }
-  //CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, text);
-  //CHK_ENTITY_H (_obj, GEOPOSITIONMARKER, mtext_handle);
-  //CHK_ENTITY_H (_obj, GEOPOSITIONMARKER, text_style);
 #endif
 }

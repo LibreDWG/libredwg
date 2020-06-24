@@ -833,7 +833,7 @@ api_common_entity (dwg_object *obj)
   if (isnew)                                                                  \
     free (field)
 
-#define CHK_ENTITY_TYPE(ent, name, field, type)                               \
+#define CHK_ENTITY_TYPE(ent, name, field, typ)                                \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
     fail (#name "." #field);                                                  \
   else                                                                        \
@@ -843,10 +843,10 @@ api_common_entity (dwg_object *obj)
           if (g_counter > g_countmax)                                         \
             pass ();                                                          \
           else                                                                \
-            ok (#name "." #field ":\t" FORMAT_##type, field);                 \
+            ok (#name "." #field ":\t" FORMAT_##typ, field);                  \
         }                                                                     \
       else                                                                    \
-        fail (#name "." #field ":\t" FORMAT_##type " [" #type "]", field);    \
+        fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]", field);      \
     }
 
 #define CHK_ENTITY_CMC(ent, name, field)                                      \

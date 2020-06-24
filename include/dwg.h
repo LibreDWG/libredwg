@@ -4551,11 +4551,11 @@ typedef struct _dwg_entity_CAMERA
 typedef struct _dwg_entity_GEOPOSITIONMARKER
 {
   struct _dwg_object_entity *parent;
-  BITCODE_BS type;        /*!< DXF 90 point, lat_lon, mylocation */
-  BITCODE_3BD position;   /*!< DXF 10 */
-  BITCODE_BD radius;      /*!< DXF 40 */
-  BITCODE_BD landing_gap; /*!< DXF 40 */
-  BITCODE_T notes;         /*!< DXF 1 */
+  BITCODE_BS class_version; /*!< DXF 90 point, lat_lon, mylocation */
+  BITCODE_3BD position;     /*!< DXF 10 */
+  BITCODE_BD radius;        /*!< DXF 40 */
+  BITCODE_BD landing_gap;   /*!< DXF 40 */
+  BITCODE_T notes;          /*!< DXF 1 */
   BITCODE_RC text_alignment;   /*!< DXF 70  0 left, 1 center, 2 right */
   BITCODE_B mtext_visible;     /*!< DXF 290 */
   BITCODE_B enable_frame_text; /*!< DXF 290 */

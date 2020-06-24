@@ -272,7 +272,7 @@
   // examples/unknown with all the unknown blobs of these.
   // PROXY_ENTITY has a fixed type
   // DXF output skipped, but some INDXF are done.
-  DEBUGGING_CLASS     (ACTION, GEOPOSITIONMARKER) /* ent, yet unsorted. no coverage */
+  DEBUGGING_CLASS_DXF (ACTION, GEOPOSITIONMARKER, POSITIONMARKER) /* ent, yet unsorted. no coverage */
   DEBUGGING_CLASS     (ACTION, NURBSURFACE)       /* ent */
   DEBUGGING_CLASS     (ACTION, PLANESURFACE)      /* ent */
   DEBUGGING_CLASS     (ACTION, EXTRUDEDSURFACE)   /* ent */

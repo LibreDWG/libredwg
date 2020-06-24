@@ -583,6 +583,8 @@ entity_alias (char *restrict name)
     strcpy (name, "PLANESURFACE");
   else if (strEQc (name, "COORDINATION_MODEL")) //??
     strcpy (name, "NAVISWORKSMODEL");
+  else if (strEQc (name, "POSITIONMARKER"))
+    strcpy (name, "GEOPOSITIONMARKER");
   // if (strEQc (name, "BLOCK"))
   //  strcpy (name, "BLOCK_HEADER");
   // else if (strEQc (name, "VERTEX_MESH") || strEQc (name, "VERTEX_PFACE"))
