@@ -2071,6 +2071,73 @@ H
 @end vtable
 @end indentedblock
 
+@strong{LARGE_RADIAL_DIMENSION} @anchor{LARGE_RADIAL_DIMENSION}
+@cindex entity, LARGE_RADIAL_DIMENSION
+@vindex LARGE_RADIAL_DIMENSION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item class_version
+RC,	DXF 280
+@item blockname
+TV,	DXF 2
+@item extrusion
+BE,	DXF 210
+@item def_pt
+3BD,	DXF 10
+@item text_midpt
+2RD,	DXF 11
+@item elevation
+BD,	DXF 31
+@item flag
+RC,	DXF 70
+@item flag1
+RC
+@item user_text
+TV,	DXF 1
+@item text_rotation
+BD,	DXF 53
+@item horiz_dir
+BD,	DXF 51
+@item ins_scale
+3BD
+@item ins_rotation
+BD,	DXF 54
+@item attachment
+BS,	DXF 71
+@item lspace_style
+BS,	DXF 72
+@item lspace_factor
+BD,	DXF 41
+@item act_measurement
+BD,	DXF 42
+@item unknown
+B,	DXF 73
+@item flip_arrow1
+B,	DXF 74
+@item flip_arrow2
+B,	DXF 75
+@item clone_ins_pt
+2RD,	DXF 12
+@item dimstyle
+H,	DXF 3
+@item block
+H
+@item first_arc_pt
+3BD,	DXF 15
+@item leader_len
+BD,	DXF 40
+@item ovr_center
+3BD,	DXF 12
+@item jog_point
+3BD,	DXF 13
+
+@end vtable
+@end indentedblock
+
 @strong{LEADER} @anchor{LEADER}
 @cindex entity, LEADER
 @vindex LEADER

@@ -236,6 +236,7 @@ EXPORT Dwg_Entity_XLINE** dwg_getall_XLINE (Dwg_Object_Ref* hdr);
 /* unstable */
 EXPORT Dwg_Entity_ARC_DIMENSION** dwg_getall_ARC_DIMENSION (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_HELIX** dwg_getall_HELIX (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION** dwg_getall_LARGE_RADIAL_DIMENSION (Dwg_Object_Ref* hdr);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ATEXT** dwg_getall_ATEXT (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_EXTRUDEDSURFACE** dwg_getall_EXTRUDEDSURFACE (Dwg_Object_Ref* hdr);
@@ -484,6 +485,7 @@ EXPORT Dwg_Entity_XLINE* dwg_object_to_XLINE (Dwg_Object* obj);
 /* unstable */
 EXPORT Dwg_Entity_ARC_DIMENSION* dwg_object_to_ARC_DIMENSION (Dwg_Object* obj);
 EXPORT Dwg_Entity_HELIX* dwg_object_to_HELIX (Dwg_Object* obj);
+EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION* dwg_object_to_LARGE_RADIAL_DIMENSION (Dwg_Object* obj);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ATEXT* dwg_object_to_ATEXT (Dwg_Object* obj);
   EXPORT Dwg_Entity_EXTRUDEDSURFACE* dwg_object_to_EXTRUDEDSURFACE (Dwg_Object* obj);

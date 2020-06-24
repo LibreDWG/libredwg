@@ -112,6 +112,7 @@ testobjects = \
 	imagedef \
 	imagedef_reactor \
 	insert \
+	large_radial_dimension \
 	layer \
 	layer_control \
 	layer_index \

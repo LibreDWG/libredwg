@@ -12244,6 +12244,352 @@ static int test_INSERT (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_LARGE_RADIAL_DIMENSION *restrict large_radial_dimension = obj->tio.entity->tio.LARGE_RADIAL_DIMENSION;
+  failed = 0;
+  {
+    BITCODE_BD act_measurement;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "act_measurement", &act_measurement, NULL)
+        && act_measurement == large_radial_dimension->act_measurement)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.act_measurement [BD] %g != %g", large_radial_dimension->act_measurement, act_measurement);
+    act_measurement++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "act_measurement", &act_measurement, 0)
+        && act_measurement == large_radial_dimension->act_measurement)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.act_measurement [BD] set+1 %g != %g", large_radial_dimension->act_measurement, act_measurement);
+    large_radial_dimension->act_measurement--;
+  }
+  {
+    BITCODE_BS attachment;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "attachment", &attachment, NULL)
+        && attachment == large_radial_dimension->attachment)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.attachment [BS] %hu != %hu", large_radial_dimension->attachment, attachment);
+    attachment++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "attachment", &attachment, 0)
+        && attachment == large_radial_dimension->attachment)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.attachment [BS] set+1 %hu != %hu", large_radial_dimension->attachment, attachment);
+    large_radial_dimension->attachment--;
+  }
+  {
+    BITCODE_H block;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "block", &block, NULL)
+        && !memcmp (&block, &large_radial_dimension->block, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.block [H]");
+  }
+  {
+    BITCODE_TV blockname;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "blockname", &blockname, NULL)
+        && blockname
+           ? strEQ ((char *)blockname, (char *)large_radial_dimension->blockname)
+           : !large_radial_dimension->blockname)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.blockname [TV] '%s' <> '%s'", blockname, large_radial_dimension->blockname);
+  }
+  {
+    BITCODE_RC class_version;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "class_version", &class_version, NULL)
+        && class_version == large_radial_dimension->class_version)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.class_version [RC] %u != %u", large_radial_dimension->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "class_version", &class_version, 0)
+        && class_version == large_radial_dimension->class_version)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.class_version [RC] set+1 %u != %u", large_radial_dimension->class_version, class_version);
+    large_radial_dimension->class_version--;
+  }
+  {
+    BITCODE_2RD clone_ins_pt;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "clone_ins_pt", &clone_ins_pt, NULL)
+        && !memcmp (&clone_ins_pt, &large_radial_dimension->clone_ins_pt, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.clone_ins_pt [2RD]");
+  }
+  {
+    BITCODE_3BD def_pt;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "def_pt", &def_pt, NULL)
+        && !memcmp (&def_pt, &large_radial_dimension->def_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.def_pt [3BD]");
+  }
+  {
+    BITCODE_H dimstyle;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "dimstyle", &dimstyle, NULL)
+        && !memcmp (&dimstyle, &large_radial_dimension->dimstyle, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.dimstyle [H]");
+  }
+  {
+    BITCODE_BD elevation;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "elevation", &elevation, NULL)
+        && elevation == large_radial_dimension->elevation)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.elevation [BD] %g != %g", large_radial_dimension->elevation, elevation);
+    elevation++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "elevation", &elevation, 0)
+        && elevation == large_radial_dimension->elevation)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.elevation [BD] set+1 %g != %g", large_radial_dimension->elevation, elevation);
+    large_radial_dimension->elevation--;
+  }
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &large_radial_dimension->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.extrusion [BE]");
+  }
+  {
+    BITCODE_3BD first_arc_pt;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "first_arc_pt", &first_arc_pt, NULL)
+        && !memcmp (&first_arc_pt, &large_radial_dimension->first_arc_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.first_arc_pt [3BD]");
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flag", &flag, NULL)
+        && flag == large_radial_dimension->flag)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flag [RC] %u != %u", large_radial_dimension->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flag", &flag, 0)
+        && flag == large_radial_dimension->flag)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flag [RC] set+1 %u != %u", large_radial_dimension->flag, flag);
+    large_radial_dimension->flag--;
+  }
+  {
+    BITCODE_RC flag1;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flag1", &flag1, NULL)
+        && flag1 == large_radial_dimension->flag1)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flag1 [RC] %u != %u", large_radial_dimension->flag1, flag1);
+    flag1++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flag1", &flag1, 0)
+        && flag1 == large_radial_dimension->flag1)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flag1 [RC] set+1 %u != %u", large_radial_dimension->flag1, flag1);
+    large_radial_dimension->flag1--;
+  }
+  {
+    BITCODE_B flip_arrow1;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flip_arrow1", &flip_arrow1, NULL)
+        && flip_arrow1 == large_radial_dimension->flip_arrow1)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flip_arrow1 [B] " FORMAT_B " != " FORMAT_B "", large_radial_dimension->flip_arrow1, flip_arrow1);
+    flip_arrow1++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flip_arrow1", &flip_arrow1, 0)
+        && flip_arrow1 == large_radial_dimension->flip_arrow1)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flip_arrow1 [B] set+1 " FORMAT_B " != " FORMAT_B "", large_radial_dimension->flip_arrow1, flip_arrow1);
+    large_radial_dimension->flip_arrow1--;
+  }
+  {
+    BITCODE_B flip_arrow2;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flip_arrow2", &flip_arrow2, NULL)
+        && flip_arrow2 == large_radial_dimension->flip_arrow2)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flip_arrow2 [B] " FORMAT_B " != " FORMAT_B "", large_radial_dimension->flip_arrow2, flip_arrow2);
+    flip_arrow2++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "flip_arrow2", &flip_arrow2, 0)
+        && flip_arrow2 == large_radial_dimension->flip_arrow2)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.flip_arrow2 [B] set+1 " FORMAT_B " != " FORMAT_B "", large_radial_dimension->flip_arrow2, flip_arrow2);
+    large_radial_dimension->flip_arrow2--;
+  }
+  {
+    BITCODE_BD horiz_dir;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "horiz_dir", &horiz_dir, NULL)
+        && horiz_dir == large_radial_dimension->horiz_dir)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.horiz_dir [BD] %g != %g", large_radial_dimension->horiz_dir, horiz_dir);
+    horiz_dir++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "horiz_dir", &horiz_dir, 0)
+        && horiz_dir == large_radial_dimension->horiz_dir)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.horiz_dir [BD] set+1 %g != %g", large_radial_dimension->horiz_dir, horiz_dir);
+    large_radial_dimension->horiz_dir--;
+  }
+  {
+    BITCODE_BD ins_rotation;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "ins_rotation", &ins_rotation, NULL)
+        && ins_rotation == large_radial_dimension->ins_rotation)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.ins_rotation [BD] %g != %g", large_radial_dimension->ins_rotation, ins_rotation);
+    ins_rotation++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "ins_rotation", &ins_rotation, 0)
+        && ins_rotation == large_radial_dimension->ins_rotation)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.ins_rotation [BD] set+1 %g != %g", large_radial_dimension->ins_rotation, ins_rotation);
+    large_radial_dimension->ins_rotation--;
+  }
+  {
+    BITCODE_3BD ins_scale;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "ins_scale", &ins_scale, NULL)
+        && !memcmp (&ins_scale, &large_radial_dimension->ins_scale, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.ins_scale [3BD]");
+  }
+  {
+    BITCODE_3BD jog_point;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "jog_point", &jog_point, NULL)
+        && !memcmp (&jog_point, &large_radial_dimension->jog_point, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.jog_point [3BD]");
+  }
+  {
+    BITCODE_BD leader_len;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "leader_len", &leader_len, NULL)
+        && leader_len == large_radial_dimension->leader_len)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.leader_len [BD] %g != %g", large_radial_dimension->leader_len, leader_len);
+    leader_len++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "leader_len", &leader_len, 0)
+        && leader_len == large_radial_dimension->leader_len)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.leader_len [BD] set+1 %g != %g", large_radial_dimension->leader_len, leader_len);
+    large_radial_dimension->leader_len--;
+  }
+  {
+    BITCODE_BD lspace_factor;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "lspace_factor", &lspace_factor, NULL)
+        && lspace_factor == large_radial_dimension->lspace_factor)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.lspace_factor [BD] %g != %g", large_radial_dimension->lspace_factor, lspace_factor);
+    lspace_factor++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "lspace_factor", &lspace_factor, 0)
+        && lspace_factor == large_radial_dimension->lspace_factor)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.lspace_factor [BD] set+1 %g != %g", large_radial_dimension->lspace_factor, lspace_factor);
+    large_radial_dimension->lspace_factor--;
+  }
+  {
+    BITCODE_BS lspace_style;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "lspace_style", &lspace_style, NULL)
+        && lspace_style == large_radial_dimension->lspace_style)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.lspace_style [BS] %hu != %hu", large_radial_dimension->lspace_style, lspace_style);
+    lspace_style++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "lspace_style", &lspace_style, 0)
+        && lspace_style == large_radial_dimension->lspace_style)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.lspace_style [BS] set+1 %hu != %hu", large_radial_dimension->lspace_style, lspace_style);
+    large_radial_dimension->lspace_style--;
+  }
+  {
+    BITCODE_3BD ovr_center;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "ovr_center", &ovr_center, NULL)
+        && !memcmp (&ovr_center, &large_radial_dimension->ovr_center, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.ovr_center [3BD]");
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "parent", &parent, NULL)
+        && !memcmp (&parent, &large_radial_dimension->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_2RD text_midpt;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "text_midpt", &text_midpt, NULL)
+        && !memcmp (&text_midpt, &large_radial_dimension->text_midpt, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.text_midpt [2RD]");
+  }
+  {
+    BITCODE_BD text_rotation;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "text_rotation", &text_rotation, NULL)
+        && text_rotation == large_radial_dimension->text_rotation)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.text_rotation [BD] %g != %g", large_radial_dimension->text_rotation, text_rotation);
+    text_rotation++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "text_rotation", &text_rotation, 0)
+        && text_rotation == large_radial_dimension->text_rotation)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.text_rotation [BD] set+1 %g != %g", large_radial_dimension->text_rotation, text_rotation);
+    large_radial_dimension->text_rotation--;
+  }
+  {
+    BITCODE_B unknown;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "unknown", &unknown, NULL)
+        && unknown == large_radial_dimension->unknown)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.unknown [B] " FORMAT_B " != " FORMAT_B "", large_radial_dimension->unknown, unknown);
+    unknown++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "unknown", &unknown, 0)
+        && unknown == large_radial_dimension->unknown)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.unknown [B] set+1 " FORMAT_B " != " FORMAT_B "", large_radial_dimension->unknown, unknown);
+    large_radial_dimension->unknown--;
+  }
+  {
+    BITCODE_TV user_text;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "user_text", &user_text, NULL)
+        && user_text
+           ? strEQ ((char *)user_text, (char *)large_radial_dimension->user_text)
+           : !large_radial_dimension->user_text)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.user_text [TV] '%s' <> '%s'", user_text, large_radial_dimension->user_text);
+  }
+  if (failed && (is_class_unstable ("LARGE_RADIAL_DIMENSION") || is_class_debugging ("LARGE_RADIAL_DIMENSION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LARGE_RADIAL_DIMENSION", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_LEADER (const Dwg_Object *obj)
 {
   int error = 0;
@@ -51984,6 +52330,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGE(obj);
   else  if (obj->fixedtype == DWG_TYPE_INSERT)
     error += test_INSERT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LARGE_RADIAL_DIMENSION)
+    error += test_LARGE_RADIAL_DIMENSION(obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADER)
     error += test_LEADER(obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHT)
@@ -52462,6 +52810,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGE (obj);
   else  if (obj->fixedtype == DWG_TYPE_INSERT)
     error += test_INSERT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LARGE_RADIAL_DIMENSION)
+    error += test_LARGE_RADIAL_DIMENSION (obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADER)
     error += test_LEADER (obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHT)
@@ -53106,6 +53456,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_INSERT): %d != "
                "dwg_dynapi_fields_size (\"INSERT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_LARGE_RADIAL_DIMENSION);
+  size2 = dwg_dynapi_fields_size ("LARGE_RADIAL_DIMENSION");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_LARGE_RADIAL_DIMENSION): %d != "
+               "dwg_dynapi_fields_size (\"LARGE_RADIAL_DIMENSION\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_LEADER);

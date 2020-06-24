@@ -479,6 +479,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_IMAGE,
   DWG_TYPE_IMAGEDEF,
   DWG_TYPE_IMAGEDEF_REACTOR,
+  DWG_TYPE_LARGE_RADIAL_DIMENSION,
   DWG_TYPE_LAYER_INDEX,
   DWG_TYPE_LAYERFILTER,
   DWG_TYPE_LAYOUTPRINTCONFIG,
@@ -1516,6 +1517,18 @@ typedef struct _dwg_entity_ARC_DIMENSION
   BITCODE_3BD leader1_pt;	/* DXF 16 */
   BITCODE_3BD leader2_pt;	/* DXF 17 */
 } Dwg_Entity_ARC_DIMENSION;
+
+/**
+ arc dimension - LARGE_RADIAL_DIMENSION (varies) entity
+ */
+typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION
+{
+  DIMENSION_COMMON;
+  BITCODE_3BD first_arc_pt; /*!< DXF 15 */
+  BITCODE_BD leader_len;    /*!< DXF 40 */
+  BITCODE_3BD ovr_center;   /*!< DXF 12-32 */
+  BITCODE_3BD jog_point;    /*!< DXF 13-33 */
+} Dwg_Entity_LARGE_RADIAL_DIMENSION;
 
 /**
  Struct for:  POINT (27)
@@ -7119,6 +7132,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_UNDERLAY *UNDERLAY;
     Dwg_Entity_WIPEOUT *WIPEOUT;
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
+    Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     Dwg_Entity_MESH *MESH;
     Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
     Dwg_Entity_RTEXT *RTEXT;
@@ -8488,6 +8502,7 @@ EXPORT int dwg_setup_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
+EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYERFILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHT (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
