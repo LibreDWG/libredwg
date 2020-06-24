@@ -4242,6 +4242,12 @@ DWG_OBJECT (IMAGEDEF_REACTOR)
   DXF { VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330); }
 DWG_OBJECT_END
 
+// AutoCAD 2000
+DWG_OBJECT (INDEX)
+  SUBCLASS (AcDbIndex)
+  FIELD_TIMEBLL (last_updated, 40);
+DWG_OBJECT_END
+
 //pg.144
 DWG_OBJECT (LAYER_INDEX)
   SUBCLASS (AcDbIndex)

@@ -39773,6 +39773,35 @@ static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_INDEX (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_INDEX *restrict index = obj->tio.object->tio.INDEX;
+  failed = 0;
+  {
+    BITCODE_TIMEBLL last_updated;
+    if (dwg_dynapi_entity_value (index, "INDEX", "last_updated", &last_updated, NULL)
+        && !memcmp (&last_updated, &index->last_updated, sizeof (BITCODE_TIMEBLL)))
+        pass ();
+    else
+        fail ("INDEX.last_updated [TIMEBLL]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (index, "INDEX", "parent", &parent, NULL)
+        && !memcmp (&parent, &index->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("INDEX.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("INDEX") || is_class_debugging ("INDEX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "INDEX", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_LAYER (const Dwg_Object *obj)
 {
   int error = 0;
@@ -52628,6 +52657,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGEDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_IMAGEDEF_REACTOR)
     error += test_IMAGEDEF_REACTOR(obj);
+  else  if (obj->fixedtype == DWG_TYPE_INDEX)
+    error += test_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
     error += test_LAYER(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYERFILTER)
@@ -53108,6 +53139,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGEDEF (obj);
   else  if (obj->fixedtype == DWG_TYPE_IMAGEDEF_REACTOR)
     error += test_IMAGEDEF_REACTOR (obj);
+  else  if (obj->fixedtype == DWG_TYPE_INDEX)
+    error += test_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
     error += test_LAYER (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYERFILTER)
@@ -54656,6 +54689,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_IMAGEDEF_REACTOR): %d != "
                "dwg_dynapi_fields_size (\"IMAGEDEF_REACTOR\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_INDEX);
+  size2 = dwg_dynapi_fields_size ("INDEX");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_INDEX): %d != "
+               "dwg_dynapi_fields_size (\"INDEX\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_LAYER);

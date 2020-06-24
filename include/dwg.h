@@ -486,6 +486,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_HELIX,
   DWG_TYPE_IDBUFFER,
   DWG_TYPE_IMAGE,
+  DWG_TYPE_INDEX,
   DWG_TYPE_IMAGEDEF,
   DWG_TYPE_IMAGEDEF_REACTOR,
   DWG_TYPE_LARGE_RADIAL_DIMENSION,
@@ -4062,6 +4063,16 @@ typedef struct _dwg_object_IMAGEDEF_REACTOR
 } Dwg_Object_IMAGEDEF_REACTOR;
 
 /**
+ Class INDEX (varies)
+ Registered as "AutoCAD 2000", but not seen in the wild.
+ */
+typedef struct _dwg_object_INDEX
+{
+  struct _dwg_object_object *parent;
+  BITCODE_TIMEBLL last_updated;
+} Dwg_Object_INDEX;
+
+/**
  Class LAYER_INDEX (varies)
  */
 typedef struct _dwg_LAYER_entry
@@ -7331,6 +7342,7 @@ typedef struct _dwg_object_object
     Dwg_Object_GEOMAPIMAGE *GEOMAPIMAGE;
     Dwg_Object_GROUP *GROUP;
     Dwg_Object_IDBUFFER *IDBUFFER;
+    Dwg_Object_INDEX *INDEX;
     Dwg_Object_IMAGEDEF *IMAGEDEF;
     Dwg_Object_IMAGEDEF_REACTOR *IMAGEDEF_REACTOR;
     Dwg_Object_LAYER_INDEX *LAYER_INDEX;
@@ -8465,6 +8477,7 @@ EXPORT int dwg_setup_FIELD (Dwg_Object *obj);
 EXPORT int dwg_setup_FIELDLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_IDBUFFER (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGE (Dwg_Object *obj);
+EXPORT int dwg_setup_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGEDEF (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGEDEF_REACTOR (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYER_INDEX (Dwg_Object *obj);

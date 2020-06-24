@@ -7828,6 +7828,21 @@ BL,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{INDEX} @anchor{INDEX}
+@cindex object, INDEX
+@vindex INDEX
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item last_updated
+TIMEBLL,	DXF 40
+
+@end vtable
+@end indentedblock
+
 @strong{LAYER} @anchor{LAYER}
 @cindex object, LAYER
 @vindex LAYER
