@@ -832,6 +832,19 @@ B
 @end vtable
 @end indentedblock
 
+@strong{ALIGNMENTPARAMETERENTITY} @anchor{ALIGNMENTPARAMETERENTITY}
+@cindex entity, ALIGNMENTPARAMETERENTITY
+@vindex ALIGNMENTPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{ARC} @anchor{ARC}
 @cindex entity, ARC
 @vindex ARC
@@ -1133,6 +1146,19 @@ RC
 H
 @item annotative_short
 BS
+
+@end vtable
+@end indentedblock
+
+@strong{BASEPOINTPARAMETERENTITY} @anchor{BASEPOINTPARAMETERENTITY}
+@cindex entity, BASEPOINTPARAMETERENTITY
+@vindex BASEPOINTPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
 
 @end vtable
 @end indentedblock
@@ -1814,6 +1840,19 @@ BD*,	DXF 40
 @end vtable
 @end indentedblock
 
+@strong{FLIPPARAMETERENTITY} @anchor{FLIPPARAMETERENTITY}
+@cindex entity, FLIPPARAMETERENTITY
+@vindex FLIPPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{GEOPOSITIONMARKER} @anchor{GEOPOSITIONMARKER}
 @cindex entity, GEOPOSITIONMARKER
 @vindex GEOPOSITIONMARKER
@@ -2323,6 +2362,19 @@ RC
 BT,	DXF 39
 @item extrusion
 BE,	DXF 210
+
+@end vtable
+@end indentedblock
+
+@strong{LINEARPARAMETERENTITY} @anchor{LINEARPARAMETERENTITY}
+@cindex entity, LINEARPARAMETERENTITY
+@vindex LINEARPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
 
 @end vtable
 @end indentedblock
@@ -3105,6 +3157,19 @@ BD,	DXF 50
 @end vtable
 @end indentedblock
 
+@strong{POINTPARAMETERENTITY} @anchor{POINTPARAMETERENTITY}
+@cindex entity, POINTPARAMETERENTITY
+@vindex POINTPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{POLYLINE_2D} @anchor{POLYLINE_2D}
 @cindex entity, POLYLINE_2D
 @vindex POLYLINE_2D
@@ -3394,6 +3459,19 @@ BD,	DXF 46
 B,	DXF 290
 @item close_to_axis
 B,	DXF 291
+
+@end vtable
+@end indentedblock
+
+@strong{ROTATIONPARAMETERENTITY} @anchor{ROTATIONPARAMETERENTITY}
+@cindex entity, ROTATIONPARAMETERENTITY
+@vindex ROTATIONPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
 
 @end vtable
 @end indentedblock
@@ -4322,12 +4400,6 @@ H,	DXF 361
 
 @item parent
 struct _dwg_object_entity*
-@item evalexpr
-Dwg_EvalExpr
-@item grip_type
-BL
-@item grip_expr
-T
 
 @end vtable
 @end indentedblock
@@ -4393,6 +4465,19 @@ H,	DXF 360
 @strong{XLINE} @anchor{XLINE}
 @cindex entity, XLINE
 @vindex XLINE
+
+@strong{XYPARAMETERENTITY} @anchor{XYPARAMETERENTITY}
+@cindex entity, XYPARAMETERENTITY
+@vindex XYPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
 
 
 @node OBJECTS
@@ -6671,6 +6756,300 @@ BD,	DXF 50
 @end vtable
 @end indentedblock
 
+@strong{BLOCKALIGNEDCONSTRAINTPARAMETER} @anchor{BLOCKALIGNEDCONSTRAINTPARAMETER}
+@cindex object, BLOCKALIGNEDCONSTRAINTPARAMETER
+@vindex BLOCKALIGNEDCONSTRAINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item dependency
+H,	DXF 330
+@item t305
+T,	DXF 305
+@item description
+T,	DXF 306
+@item value
+BD,	DXF 140
+@item value_set
+Dwg_BLOCKPARAMVALUESET
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKALIGNMENTGRIP} @anchor{BLOCKALIGNMENTGRIP}
+@cindex object, BLOCKALIGNMENTGRIP
+@vindex BLOCKALIGNMENTGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+@item orientation
+3BD_1,	DXF 140
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKALIGNMENTPARAMETER} @anchor{BLOCKALIGNMENTPARAMETER}
+@cindex object, BLOCKALIGNMENTPARAMETER
+@vindex BLOCKALIGNMENTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item align_perpendicular
+B,	DXF 280
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKANGULARCONSTRAINTPARAMETER} @anchor{BLOCKANGULARCONSTRAINTPARAMETER}
+@cindex object, BLOCKANGULARCONSTRAINTPARAMETER
+@vindex BLOCKANGULARCONSTRAINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item dependency
+H,	DXF 330
+@item origin
+3BD,	DXF 1011
+@item end_pt
+3BD,	DXF 1012
+@item expr_name
+T,	DXF 305
+@item param_name
+T,	DXF 306
+@item angle
+BD,	DXF 140
+@item b280
+B,	DXF 280
+@item value_set
+Dwg_BLOCKPARAMVALUESET
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKARRAYACTION} @anchor{BLOCKARRAYACTION}
+@cindex object, BLOCKARRAYACTION
+@vindex BLOCKARRAYACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKBASEPOINTPARAMETER} @anchor{BLOCKBASEPOINTPARAMETER}
+@cindex object, BLOCKBASEPOINTPARAMETER
+@vindex BLOCKBASEPOINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKDIAMETRICCONSTRAINTPARAMETER} @anchor{BLOCKDIAMETRICCONSTRAINTPARAMETER}
+@cindex object, BLOCKDIAMETRICCONSTRAINTPARAMETER
+@vindex BLOCKDIAMETRICCONSTRAINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item dependency
+H,	DXF 330
+@item expr_name
+T,	DXF 305
+@item param_name
+T,	DXF 306
+@item diameter
+BD,	DXF 140
+@item value_set
+Dwg_BLOCKPARAMVALUESET
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKFLIPACTION} @anchor{BLOCKFLIPACTION}
+@cindex object, BLOCKFLIPACTION
+@vindex BLOCKFLIPACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKFLIPGRIP} @anchor{BLOCKFLIPGRIP}
+@cindex object, BLOCKFLIPGRIP
+@vindex BLOCKFLIPGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKFLIPPARAMETER} @anchor{BLOCKFLIPPARAMETER}
+@cindex object, BLOCKFLIPPARAMETER
+@vindex BLOCKFLIPPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
 @strong{BLOCKGRIPLOCATIONCOMPONENT} @anchor{BLOCKGRIPLOCATIONCOMPONENT}
 @cindex object, BLOCKGRIPLOCATIONCOMPONENT
 @vindex BLOCKGRIPLOCATIONCOMPONENT
@@ -6686,6 +7065,204 @@ Dwg_EvalExpr
 BL,	DXF 91
 @item grip_expr
 T,	DXF 300
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKHORIZONTALCONSTRAINTPARAMETER} @anchor{BLOCKHORIZONTALCONSTRAINTPARAMETER}
+@cindex object, BLOCKHORIZONTALCONSTRAINTPARAMETER
+@vindex BLOCKHORIZONTALCONSTRAINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item dependency
+H,	DXF 330
+@item t305
+T,	DXF 305
+@item description
+T,	DXF 306
+@item value
+BD,	DXF 140
+@item value_set
+Dwg_BLOCKPARAMVALUESET
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKLINEARCONSTRAINTPARAMETER} @anchor{BLOCKLINEARCONSTRAINTPARAMETER}
+@cindex object, BLOCKLINEARCONSTRAINTPARAMETER
+@vindex BLOCKLINEARCONSTRAINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item dependency
+H,	DXF 330
+@item t305
+T,	DXF 305
+@item description
+T,	DXF 306
+@item value
+BD,	DXF 140
+@item value_set
+Dwg_BLOCKPARAMVALUESET
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKLINEARGRIP} @anchor{BLOCKLINEARGRIP}
+@cindex object, BLOCKLINEARGRIP
+@vindex BLOCKLINEARGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+@item orientation
+3BD_1,	DXF 140
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKLINEARPARAMETER} @anchor{BLOCKLINEARPARAMETER}
+@cindex object, BLOCKLINEARPARAMETER
+@vindex BLOCKLINEARPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKLOOKUPACTION} @anchor{BLOCKLOOKUPACTION}
+@cindex object, BLOCKLOOKUPACTION
+@vindex BLOCKLOOKUPACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKLOOKUPGRIP} @anchor{BLOCKLOOKUPGRIP}
+@cindex object, BLOCKLOOKUPGRIP
+@vindex BLOCKLOOKUPGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKLOOKUPPARAMETER} @anchor{BLOCKLOOKUPPARAMETER}
+@cindex object, BLOCKLOOKUPPARAMETER
+@vindex BLOCKLOOKUPPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKMOVEACTION} @anchor{BLOCKMOVEACTION}
+@cindex object, BLOCKMOVEACTION
+@vindex BLOCKMOVEACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
 
 @end vtable
 @end indentedblock
@@ -6711,6 +7288,329 @@ BS,	DXF 90
 @end vtable
 @end indentedblock
 
+@strong{BLOCKPOINTPARAMETER} @anchor{BLOCKPOINTPARAMETER}
+@cindex object, BLOCKPOINTPARAMETER
+@vindex BLOCKPOINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item propnum
+BL,	DXF 93
+@item prop_num1
+BL,	DXF 91
+@item prop_text1
+T,	DXF 301
+@item prop_num2
+BL,	DXF 92
+@item prop_text2
+T,	DXF 302
+@item position_name
+T,	DXF 303
+@item position_desc
+T,	DXF 304
+@item def_label_pt
+3BD,	DXF 1011
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKPOLARGRIP} @anchor{BLOCKPOLARGRIP}
+@cindex object, BLOCKPOLARGRIP
+@vindex BLOCKPOLARGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKPOLARPARAMETER} @anchor{BLOCKPOLARPARAMETER}
+@cindex object, BLOCKPOLARPARAMETER
+@vindex BLOCKPOLARPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKPOLARSTRETCHACTION} @anchor{BLOCKPOLARSTRETCHACTION}
+@cindex object, BLOCKPOLARSTRETCHACTION
+@vindex BLOCKPOLARSTRETCHACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKPROPERTIESTABLE} @anchor{BLOCKPROPERTIESTABLE}
+@cindex object, BLOCKPROPERTIESTABLE
+@vindex BLOCKPROPERTIESTABLE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKPROPERTIESTABLEGRIP} @anchor{BLOCKPROPERTIESTABLEGRIP}
+@cindex object, BLOCKPROPERTIESTABLEGRIP
+@vindex BLOCKPROPERTIESTABLEGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKRADIALCONSTRAINTPARAMETER} @anchor{BLOCKRADIALCONSTRAINTPARAMETER}
+@cindex object, BLOCKRADIALCONSTRAINTPARAMETER
+@vindex BLOCKRADIALCONSTRAINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item dependency
+H,	DXF 330
+@item value_set
+Dwg_BLOCKPARAMVALUESET
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKREPRESENTATION} @anchor{BLOCKREPRESENTATION}
+@cindex object, BLOCKREPRESENTATION
+@vindex BLOCKREPRESENTATION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKROTATEACTION} @anchor{BLOCKROTATEACTION}
+@cindex object, BLOCKROTATEACTION
+@vindex BLOCKROTATEACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKROTATIONGRIP} @anchor{BLOCKROTATIONGRIP}
+@cindex object, BLOCKROTATIONGRIP
+@vindex BLOCKROTATIONGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKROTATIONPARAMETER} @anchor{BLOCKROTATIONPARAMETER}
+@cindex object, BLOCKROTATIONPARAMETER
+@vindex BLOCKROTATIONPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKSCALEACTION} @anchor{BLOCKSCALEACTION}
+@cindex object, BLOCKSCALEACTION
+@vindex BLOCKSCALEACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKSTRETCHACTION} @anchor{BLOCKSTRETCHACTION}
+@cindex object, BLOCKSTRETCHACTION
+@vindex BLOCKSTRETCHACTION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKUSERPARAMETER} @anchor{BLOCKUSERPARAMETER}
+@cindex object, BLOCKUSERPARAMETER
+@vindex BLOCKUSERPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKVERTICALCONSTRAINTPARAMETER} @anchor{BLOCKVERTICALCONSTRAINTPARAMETER}
+@cindex object, BLOCKVERTICALCONSTRAINTPARAMETER
+@vindex BLOCKVERTICALCONSTRAINTPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item dependency
+H,	DXF 330
+@item t305
+T,	DXF 305
+@item description
+T,	DXF 306
+@item value
+BD,	DXF 140
+@item value_set
+Dwg_BLOCKPARAMVALUESET
+
+@end vtable
+@end indentedblock
+
 @strong{BLOCKVISIBILITYGRIP} @anchor{BLOCKVISIBILITYGRIP}
 @cindex object, BLOCKVISIBILITYGRIP
 @vindex BLOCKVISIBILITYGRIP
@@ -6722,14 +7622,14 @@ BS,	DXF 90
 struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
-@item be_t
-T
-@item be_bl1
-BL
-@item be_bl2
-BL
-@item be_bl3
-BL
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
 @item bg_bl1
 BL
 @item bg_bl2
@@ -6765,6 +7665,42 @@ T
 BL
 @item states
 Dwg_BLOCKVISIBILITYPARAMETER_state*
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKXYGRIP} @anchor{BLOCKXYGRIP}
+@cindex object, BLOCKXYGRIP
+@vindex BLOCKXYGRIP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item bg_bl1
+BL
+@item bg_bl2
+BL
+@item bg_pt
+3BD
+@item bg_insert_cycling
+B
+@item bg_insert_cycling_weight
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{BLOCKXYPARAMETER} @anchor{BLOCKXYPARAMETER}
+@cindex object, BLOCKXYPARAMETER
+@vindex BLOCKXYPARAMETER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
 
 @end vtable
 @end indentedblock
@@ -7473,6 +8409,19 @@ Dwg_OCD_Dimension
 @strong{DUMMY} @anchor{DUMMY}
 @cindex object, DUMMY
 @vindex DUMMY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+
+@end vtable
+@end indentedblock
+
+@strong{DYNAMICBLOCKPROXYNODE} @anchor{DYNAMICBLOCKPROXYNODE}
+@cindex object, DYNAMICBLOCKPROXYNODE
+@vindex DYNAMICBLOCKPROXYNODE
 
 @indentedblock
 @vtable @code

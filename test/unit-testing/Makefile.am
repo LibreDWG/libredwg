@@ -288,7 +288,51 @@ testobjects += \
 	textobjectcontextdata \
 	tvdeviceproperties \
 	visibilityparameterentity \
-	visibilitygripentity
+	visibilitygripentity \
+	alignmentparameterentity \
+	basepointparameterentity \
+	blockalignedconstraintparameter \
+	blockalignmentgrip \
+	blockalignmentparameter \
+	blockangularconstraintparameter \
+	blockarrayaction \
+	blockbasepointparameter \
+	blockdiametricconstraintparameter \
+	blockflipaction \
+	blockflipgrip \
+	blockflipparameter \
+	blockhorizontalconstraintparameter \
+	blocklinearconstraintparameter \
+	blocklineargrip \
+	blocklinearparameter \
+	blocklookupaction \
+	blocklookupgrip \
+	blocklookupparameter \
+	blockmoveaction \
+	blockpointparameter \
+	blockpolargrip \
+	blockpolarparameter \
+	blockpolarstretchaction \
+	blockpropertiestable \
+	blockpropertiestablegrip \
+	blockradialconstraintparameter \
+	blockrepresentation \
+	blockrotateaction \
+	blockrotationgrip \
+	blockrotationparameter \
+	blockscaleaction \
+	blockstretchaction \
+	blockuserparameter \
+	blockverticalconstraintparameter \
+	blockxygrip \
+	blockxyparameter \
+	dynamicblockproxynode \
+	flipparameterentity \
+	linearparameterentity \
+	pointparameterentity \
+	rotationparameterentity \
+	xyparameterentity
+
 endif
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"

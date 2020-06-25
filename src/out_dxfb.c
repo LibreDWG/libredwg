@@ -162,12 +162,12 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     if (dat->version < R_14)                                                  \
       {                                                                       \
-        uint8_t icode = (uint8_t)code;                                        \
+        uint8_t icode = (uint8_t)((code) & 0xff);                             \
         fwrite (&icode, 1, 1, dat->fh);                                       \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        uint16_t icode = (uint16_t)code;                                      \
+        uint16_t icode = (uint16_t)(code);                                    \
         fwrite (&icode, 2, 1, dat->fh);                                       \
       }                                                                       \
   }

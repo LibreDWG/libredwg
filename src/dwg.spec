@@ -9507,31 +9507,133 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   END_REPEAT (states)
 DWG_OBJECT_END
 
+#define AcDbBlockElement_fields                 \
+  AcDbEvalExpr_fields;                          \
+  SUBCLASS (AcDbBlockElement);                  \
+  FIELD_T (name, 300);                          \
+  DECODER {                                     \
+    FIELD_BL (be_major, 98);                    \
+    FIELD_BL (be_minor, 99);                    \
+  } else {                                      \
+    PRE (R_2007) {                              \
+      VALUE_BL (25, 98);                        \
+      VALUE_BL (104, 99);                       \
+    } LATER_VERSIONS {                          \
+      VALUE_BL (27, 98);                        \
+      VALUE_BL (1, 99);                         \
+    }                                           \
+  }                                             \
+  FIELD_BL (eed1071, 1071)
+
+#define AcDbBlockGrip_fields                    \
+  SUBCLASS (AcDbBlockGrip)                      \
+  FIELD_BL (bg_bl1, 0);                         \
+  FIELD_BL (bg_bl2, 0);                         \
+  FIELD_3BD (bg_pt, 0);                         \
+  FIELD_B (bg_insert_cycling, 0);               \
+  FIELD_BL (bg_insert_cycling_weight, 0);       \
+  /* FIELD_3BD (bg_location, 0; */              \
+  /* FIELD_3BD (bg_display_location, 0); */
+
+#define AcDbBlockParameter_fields               \
+  AcDbBlockElement_fields;                      \
+  SUBCLASS (AcDbBlockParameter);                \
+  FIELD_B (show_properties, 280);               \
+  FIELD_B (chain_actions, 281)
+
+#define AcDbBlockAction_fields                  \
+  AcDbBlockElement_fields;                      \
+  SUBCLASS (AcDbBlockAction)                    \
+  FIELD_3BD (ba_pt, 0);                         \
+  FIELD_BL (num_actions, 70);                   \
+  FIELD_VECTOR (actions, BL, num_actions, 91);  \
+  FIELD_BL (num_deps, 71);                      \
+  HANDLE_VECTOR (deps, BL, num_deps, 330);      \
+  DXF { FIELD_3BD (ba_pt, 1010); }
+
+#define AcDbBlockGripExpr_fields                \
+  SUBCLASS (AcDbBlockGripExpr);                 \
+  FIELD_BL (grip_type, 91); /* ?? */            \
+  FIELD_T (grip_expr, 300)
+
+#define AcDbBlockParamValueSet_fields(var,i_code,d_code,s_code,t_code)  \
+  DXF  { SUB_FIELD_T (var,desc, t_code); }              \
+  JSON { SUB_FIELD_T (var,desc, t_code); }              \
+  SUB_FIELD_BL (var,flags, i_code)                      \
+  SUB_FIELD_BD (var,minimum, d_code)                    \
+  SUB_FIELD_BD (var,maximum, d_code+1)                  \
+  SUB_FIELD_BD (var,increment, d_code+2)                \
+  SUB_FIELD_BS (var,num_valuelist, s_code)              \
+  SUB_FIELD_VECTOR (var,valuelist, num_valuelist, BD, d_code+3)
+
+#define AcDbBlock1PtParameter_fields              \
+  AcDbBlockParameter_fields;                      \
+  SUBCLASS (AcDbBlock1PtParameter);               \
+  FIELD_3BD (def_basept, 1010);                   \
+  DXF { FIELD_BL (propnum, 93); }                 \
+  FIELD_BL (prop_num1, 91);                       \
+  FIELD_T (prop_text1, 301);                      \
+  FIELD_BL (prop_num2, 92);                       \
+  FIELD_T (prop_text2, 302);                      \
+  FIELD_BL (propnum, 0)
+
+#define AcDbBlock2PtParameter_fields              \
+  AcDbBlockParameter_fields;                      \
+  SUBCLASS (AcDbBlock2PtParameter);               \
+  FIELD_3BD (def_basept, 1010);                   \
+  FIELD_3BD (def_endpt, 1011);                    \
+  FIELD_BL (num_infos, 170);                      \
+  REPEAT (num_infos, infos, Dwg_BLOCKPARAMETER_info) \
+  REPEAT_BLOCK                                                            \
+      SUB_FIELD_BL (infos[rcount1],num_props, 90);                        \
+      REPEAT2 (infos[rcount1].num_props, infos[rcount1].props, Dwg_BLOCKPARAMETER_propinfo) \
+      REPEAT_BLOCK                                                             \
+        SUB_FIELD_BL (infos[rcount1].props[rcount2], propnum, 92 + rcount1);   \
+        SUB_FIELD_T (infos[rcount1].props[rcount2], proptext, 301 + rcount1);  \
+     END_REPEAT_BLOCK                                                          \
+     SET_PARENT (infos[rcount1].props, _obj->infos);                           \
+     END_REPEAT (infos)                                                        \
+  END_REPEAT_BLOCK                                                             \
+  END_REPEAT (infos)                                                           \
+  FIELD_VECTOR (bl_infos, BL, num_infos, 91);                                  \
+  FIELD_BS (parameter_base_location, 177)
+
+#define AcDbBlockActionWithBasePt_fields          \
+  AcDbBlockAction_fields;                         \
+  SUBCLASS (AcDbBlockActionWithBasePt)            \
+  FIELD_3BD (pt, 0);                              \
+  FIELD_BL (c92, 92);                             \
+  FIELD_T (t301, 301);                            \
+  FIELD_BL (c93, 93);                             \
+  FIELD_T (t302, 302);                            \
+  DXF { FIELD_3BD (pt, 1011); }                   \
+  FIELD_B (b280, 280);                            \
+  FIELD_3BD (base_pt, 1012)
+
+#define AcDbBlockConstraintParameter_fields                \
+  AcDbBlock2PtParameter_fields;                            \
+  SUBCLASS (AcDbBlockConstraintParameter);                 \
+  FIELD_HANDLE (dependency, 5, 330)
+
+#define AcDbBlockLinearConstraintParameter_fields     \
+  AcDbBlockConstraintParameter_fields;                \
+  SUBCLASS (AcDbBlockLinearConstraintParameter)       \
+  FIELD_T (t305, 305);                                \
+  FIELD_T (description, 306);                         \
+  FIELD_BD (value, 140);                              \
+  AcDbBlockParamValueSet_fields (value_set,96,128,175,307)
+
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
   DECODE_UNKNOWN_BITS;
-  AcDbEvalExpr_fields;
-  SUBCLASS (AcDbBlockElement)
-  FIELD_T (be_t, 0);
-  FIELD_BL (be_bl1, 0);
-  FIELD_BL (be_bl2, 0);
-  FIELD_BL (be_bl3, 0);
-  SUBCLASS (AcDbBlockGrip)
-  FIELD_BL (bg_bl1, 0);
-  FIELD_BL (bg_bl2, 0);
-  FIELD_3BD (bg_pt, 0);
-  FIELD_B (bg_insert_cycling, 0);
-  FIELD_BL (bg_insert_cycling_weight, 0);
-  //FIELD_3BD (bg_location, 0); //?
-  //FIELD_3BD (bg_display_location, 0); // ?
+  AcDbBlockElement_fields;
+  AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockVisibilityGrip)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  SUBCLASS (AcDbBlockGripExpr)
-  FIELD_BL (grip_type, 91); //??
-  FIELD_T (grip_expr, 300);
+  AcDbBlockGripExpr_fields;
 DWG_OBJECT_END
 
 #define AcConstraintGroupNode_fields(node)                       \
@@ -9906,6 +10008,247 @@ DWG_OBJECT (BLOCKPARAMDEPENDENCYBODY)
   FIELD_BS (class_version, 90); // 0
 DWG_OBJECT_END
 
+DWG_ENTITY (ALIGNMENTPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockAlignmentParameterEntity)
+DWG_ENTITY_END
+
+DWG_ENTITY (BASEPOINTPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockBasepointParameterEntity)
+DWG_ENTITY_END
+
+DWG_ENTITY (FLIPPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockFlipParameterEntity)
+DWG_ENTITY_END
+
+DWG_ENTITY (LINEARPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockLinearParameterEntity)
+DWG_ENTITY_END
+
+DWG_ENTITY (POINTPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockPointParameterEntity)
+DWG_ENTITY_END
+
+DWG_ENTITY (ROTATIONPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockRotationParameterEntity)
+DWG_ENTITY_END
+
+DWG_OBJECT (BLOCKALIGNMENTGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockAlignmentGrip)
+  FIELD_3BD_1 (orientation, 140);
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlock2PtParameter_fields;
+  SUBCLASS (AcDbBlockAlignmentParameter)
+  FIELD_B (align_perpendicular, 280)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKARRAYACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockArrayAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKBASEPOINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockBasepointParameter)
+
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockConstraintParameter_fields;
+  SUBCLASS (AcDbBlockAngularConstraintParameter)
+  FIELD_3BD (origin, 0);
+  FIELD_3BD (end_pt, 0);
+  FIELD_T (expr_name, 305); // A copy of the EvalExpr.name
+  FIELD_T (param_name, 306);
+  DXF {
+    FIELD_3BD (origin, 1011);
+    FIELD_3BD (end_pt, 1012);
+  }
+  FIELD_BD (angle, 140);
+  FIELD_B (b280, 280);
+  // 0x60,0x8d,0xaf,0x133
+  AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKDIAMETRICCONSTRAINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockConstraintParameter_fields;
+  SUBCLASS (AcDbBlockDiametricConstraintParameter)
+  FIELD_T (expr_name, 305); // A copy of the EvalExpr.name
+  FIELD_T (param_name, 306);
+  FIELD_BD (diameter, 140); /* -1.0 */
+  AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockConstraintParameter_fields;
+  SUBCLASS (AcDbBlockRadialConstraintParameter)
+  // ??
+  AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKFLIPACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockFlipAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKFLIPGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockFlipGrip)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKFLIPPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockFlipParameter)
+
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKALIGNEDCONSTRAINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockLinearConstraintParameter_fields;
+  SUBCLASS (AcDbBlockAlignedConstraintParameter)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockLinearConstraintParameter_fields;
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKHORIZONTALCONSTRAINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockLinearConstraintParameter_fields;
+  SUBCLASS (AcDbBlockHorizontalConstraintParameter)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKVERTICALCONSTRAINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockLinearConstraintParameter_fields;
+  SUBCLASS (AcDbBlockVerticalConstraintParameter)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKLINEARGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockLinearGrip)
+  FIELD_3BD_1 (orientation, 140);
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKLINEARPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockLinearParameter)
+
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKLOOKUPACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockLookupAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKLOOKUPGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockLookupGrip)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKLOOKUPPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockLookupParameter)
+
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKMOVEACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockMoveAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKPOINTPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlock1PtParameter_fields;
+  SUBCLASS (AcDbBlockPointParameter)
+  FIELD_T (position_name, 303);
+  FIELD_T (position_desc, 304);
+  FIELD_3BD (def_label_pt, 1011);
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKPOLARGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockPolarGrip)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKPOLARPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockPolarParameter)
+
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKPOLARSTRETCHACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockPolarStretchAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKPROPERTIESTABLE)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockPropertiesTable)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKPROPERTIESTABLEGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockPropertiesTableGrip)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKREPRESENTATION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockRepresentationData)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKROTATEACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockRotateAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKROTATIONGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockRotationGrip)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKROTATIONPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockRotationParameter)
+
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKSCALEACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockScaleAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKSTRETCHACTION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockStretchAction)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKUSERPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockUserParameter)
+
+DWG_OBJECT_END
+
 DWG_ENTITY (VISIBILITYPARAMETERENTITY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbBlockVisibilityParameterEntity)
@@ -9915,6 +10258,28 @@ DWG_ENTITY (VISIBILITYGRIPENTITY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbBlockVisibilityGripEntity)
 DWG_ENTITY_END
+
+DWG_OBJECT (BLOCKXYGRIP)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockXYParameter)
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKXYPARAMETER)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockXYParameter)
+
+DWG_OBJECT_END
+
+DWG_ENTITY (XYPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockXYParameterEntity)
+DWG_ENTITY_END
+
+DWG_OBJECT (DYNAMICBLOCKPROXYNODE)
+  DECODE_UNKNOWN_BITS
+  //SUBCLASS (AcDbDynamicBlockProxyMode)
+DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
