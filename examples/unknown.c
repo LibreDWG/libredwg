@@ -578,7 +578,7 @@ bits_format (struct _unknown_field *g, const int version,
 // check how many of the given fields (code=value pairs) exist in the DXF
 #if 0
 static int
-num_dxf(const struct _unknown_field *g, const struct _unknown_dxf *dxf) {
+num_dxf (const struct _unknown_field *g, const struct _unknown_dxf *dxf) {
   int num_dxf = 0;
   struct _unknown_field *f = (struct _unknown_field *)dxf->fields;
   while (f->value) {
@@ -1146,6 +1146,7 @@ main (int argc, char *argv[])
                         {
                           free (dat.chain);
                           dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                          g[j].bytes = dat.chain;
                           dat.size = unknown_dxf[i].num_bits / 8;
                           bit_set_position (&dat, g[j].pos[0]);
                           d = bit_read_BD (&dat);
@@ -1172,6 +1173,7 @@ main (int argc, char *argv[])
                             {
                               free (dat.chain);
                               dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                              g[j].bytes = dat.chain;
                               dat.size = unknown_dxf[i].num_bits / 8;
                               bit_set_position (&dat, g[j].pos[0]);
                               d = bit_read_BD (&dat);
@@ -1510,7 +1512,10 @@ main (int argc, char *argv[])
                 &g[j])) { offset = g[j].pos[0]+1; goto SEARCH;
                 }
                 */
-              free (g[j].bytes);
+              if (0) {
+                free (g[j].bytes);
+                g[j].bytes = NULL;
+              }
             }
           fprintf (pi, "  ],\n"
                        "  Data = [S,Fields,Class,Dxf,Version,Offsets],\n"
