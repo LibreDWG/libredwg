@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* PLANESURFACE 50A in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_PLANESURFACE_1363[] = {
+static struct _unknown_field unknown_dxf_PLANESURFACE_760[] = {
   //{ 5, "50A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "50D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },

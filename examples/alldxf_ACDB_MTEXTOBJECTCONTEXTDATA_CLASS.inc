@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5E9EFB in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_601[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_299[] = {
   //{ 5, "5E9EFB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5E9EFA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -35,7 +35,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_601[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5E9F00 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_602[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_300[] = {
   //{ 5, "5E9F00", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5E9EFF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -67,7 +67,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_602[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5E9F05 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_603[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_301[] = {
   //{ 5, "5E9F05", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5E9F04", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -99,7 +99,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_603[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F135D in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_604[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_302[] = {
   //{ 5, "5F135D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F135C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -131,7 +131,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_604[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F32D5 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_605[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_303[] = {
   //{ 5, "5F32D5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F32D4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -163,7 +163,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_605[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F3D77 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_606[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_304[] = {
   //{ 5, "5F3D77", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F3D76", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -195,7 +195,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_606[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F3D7C in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_607[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_305[] = {
   //{ 5, "5F3D7C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F3D7B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -227,7 +227,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_607[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F3D81 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_608[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_306[] = {
   //{ 5, "5F3D81", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F3D80", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -259,7 +259,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_608[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F680E in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_609[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_307[] = {
   //{ 5, "5F680E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F680C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -291,7 +291,7 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_609[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5E9EFB in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_610[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_308[] = {
   //{ 5, "5E9EFB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5E9EFA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -322,72 +322,8 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_610[]
     { 46, "17.60978982077179", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5E9F00 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_611[] = {
-  //{ 5, "5E9F00", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5E9EFF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5E9EFF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 11, "7546.913683517749", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "12361.11386532771", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 40, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
-    { 42, "1.146870736698499", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "0.0975869713506139", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
-    { 44, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "0.9375", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "17.60978982077179", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5E9F05 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_612[] = {
-  //{ 5, "5E9F05", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5E9F04", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5E9F04", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 11, "7811.588357724744", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "12468.37572127749", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 40, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
-    { 42, "1.146870736698499", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "0.0975869713506139", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
-    { 44, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "0.9375", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "17.60978982077179", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F135D in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_613[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_309[] = {
   //{ 5, "5F135D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F135C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -418,136 +354,8 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_613[]
     { 46, "33.05805273999453", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F32D5 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_614[] = {
-  //{ 5, "5F32D5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F32D4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F32D4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "138", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 11, "1547.036963306999", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "13595.94911046429", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 40, "137.8208818986168", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
-    { 42, "126.0900409276944", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "12.41746248294679", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
-    { 44, "137.8208818986168", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "60.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "33.05805273999453", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F3D77 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_615[] = {
-  //{ 5, "5F3D77", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D76", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D76", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 11, "15727.63167234493", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "12468.13239975538", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 40, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
-    { 42, "1.146870736698499", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "0.0975869713506139", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
-    { 44, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "0.9375", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "17.60978982077179", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F3D7C in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_616[] = {
-  //{ 5, "5F3D7C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D7B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D7B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 11, "15964.63982098002", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "12361.11386532771", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 40, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
-    { 42, "1.146870736698499", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "0.0975869713506139", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
-    { 44, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "0.9375", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "17.60978982077179", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F3D81 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_617[] = {
-  //{ 5, "5F3D81", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D80", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D80", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "B7", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 11, "16229.31449518702", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "12468.37572127749", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 40, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
-    { 42, "1.146870736698499", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "0.0975869713506139", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
-    { 44, "39.26097209629552", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "0.9375", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "17.60978982077179", NULL, 0, BITS_UNKNOWN, "rect_height", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F680E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_618[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_310[] = {
   //{ 5, "5F680E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F680C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -578,296 +386,188 @@ static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_618[]
     { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 1227 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_619[] = {
-  //{ 5, "1227", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5F6813 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_311[] = {
+  //{ 5, "5F6813", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1226", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 330, "5F680C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
     { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1226", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 330, "5F680C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
+    { 340, "13B", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
     { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
     { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
     { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677893337", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-3.535714285714286", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 11, "3385.462359655692", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
+    { 21, "13009.49689834684", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
+    { 40, "45.88598860964703", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
     { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "1.714285714285714", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
+    { 42, "26.39222373806276", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
+    { 43, "4.5", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
     { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
+    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
+    { 44, "45.88598860964703", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
+    { 45, "30.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
     { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
     { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
     { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 122C in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_620[] = {
-  //{ 5, "122C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5FF146 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_312[] = {
+  //{ 5, "5FF146", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "122B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 330, "5FF145", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
     { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "122B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 330, "5FF145", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
     { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
+    { 340, "138", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
     { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
     { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
     { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677893337", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-10.60714285714293", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 11, "3338.467298019217", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
+    { 21, "13232.79765041103", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
+    { 40, "122.3626362923921", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
     { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "11.61904761904761", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
+    { 42, "91.98090040927693", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
+    { 43, "12.2537517053206", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
     { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
+    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
+    { 44, "122.3626362923921", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
+    { 45, "80.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
     { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
     { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
     { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 1231 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_621[] = {
-  //{ 5, "1231", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 60142D in test/test-data/2018/ACI_20160321_A_30_east.dxf */
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_313[] = {
+  //{ 5, "60142D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1230", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 330, "60142B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
     { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1230", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 330, "60142B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677893337", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-3.535714285714286", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "0.4761904761904763", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
+    { 340, "13B", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
+    { 10, "0.0000000000000001", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
+    { 20, "1.0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 11, "7327.618664678055", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
+    { 21, "12616.30364805041", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 40, "48.14960258211067", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
+    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
+    { 42, "34.91336971350614", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
+    { 43, "3.104365620736698", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
     { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
+    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
+    { 44, "48.14960258211067", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
+    { 45, "30.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
     { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
     { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
+    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 1236 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_622[] = {
-  //{ 5, "1236", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 1274 in test/test-data/2013/gh55-ltype.dxf */
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_314[] = {
+  //{ 5, "1274", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1235", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 330, "1273", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
     { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1235", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677893337", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-10.60714285714293", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "1.714285714285714", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 123B in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_623[] = {
-  //{ 5, "123B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677893337", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-3.535714285714286", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "1.333333333333333", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 1240 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_624[] = {
-  //{ 5, "1240", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677893337", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-3.555514285714285", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "1.333333333333333", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 1245 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_625[] = {
-  //{ 5, "1245", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1244", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1244", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677893337", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-10.60714285714293", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "11.61904761904761", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 124E in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_626[] = {
-  //{ 5, "124E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "124D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "124D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
-    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "4", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
-    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "2.799968677895266", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "-3.613584103546365", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "39.5", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "30.38095238095239", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
-    { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
-    { 44, "39.5", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
-    { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
-    { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
-    { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 124F9 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_627[] = {
-  //{ 5, "124F9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "124F8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "124F8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 330, "1273", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
     { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
-    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 2, {-1,-1,-1,-1,-1} },
+    { 70, "5", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
     { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 11, "122.945680493135", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
-    { 21, "124.7320770837424", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 40, "12.36697329643175", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
-    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 5, {-1,-1,-1,-1,-1} },
-    { 42, "1.327217470888864", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
-    { 43, "5.574313377733233", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
+    { 20, "0.0000000000000002", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 11, "6.318745481428445", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
+    { 21, "-3.077844191476803", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 40, "42.90614639313403", NULL, 0, BITS_UNKNOWN, "text_height", 1, {-1,-1,-1,-1,-1} },
+    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 3, {-1,-1,-1,-1,-1} },
+    { 42, "9.16153846153846", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
+    { 43, "2.013846153846154", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
+    { 71, "0", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 157E in test/test-data/2013/gh55-ltype.dxf */
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_315[] = {
+  //{ 5, "157E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "157D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "157D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "5", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
+    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
+    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 7, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 7, {-1,-1,-1,-1,-1} },
+    { 11, "0.0", NULL, 0, BITS_UNKNOWN, "insertion_pt", 7, {-1,-1,-1,-1,-1} },
+    { 21, "0.0", NULL, 0, BITS_UNKNOWN, "", 7, {-1,-1,-1,-1,-1} },
+    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 7, {-1,-1,-1,-1,-1} },
+    { 40, "11.68863664015881", NULL, 0, BITS_UNKNOWN, "text_height", 2, {-1,-1,-1,-1,-1} },
+    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 7, {-1,-1,-1,-1,-1} },
+    { 42, "6.476190476190474", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
+    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
     { 71, "2", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 2, {-1,-1,-1,-1,-1} },
-    { 44, "12.36697329643175", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
+    { 72, "1", NULL, 0, BITS_UNKNOWN, "drawing_dir", 1, {-1,-1,-1,-1,-1} },
+    { 44, "11.68863664015881", NULL, 0, BITS_UNKNOWN, "linespace_factor", 2, {-1,-1,-1,-1,-1} },
     { 45, "10.0", NULL, 0, BITS_UNKNOWN, "bd45", 1, {-1,-1,-1,-1,-1} },
     { 73, "0", NULL, 0, BITS_UNKNOWN, "linespace_style", 2, {-1,-1,-1,-1,-1} },
     { 74, "0", NULL, 0, BITS_UNKNOWN, "bs74", 2, {-1,-1,-1,-1,-1} },
-    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 5, {-1,-1,-1,-1,-1} },
+    { 46, "0.0", NULL, 0, BITS_UNKNOWN, "rect_height", 7, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 1842 in test/test-data/2013/gh55-ltype.dxf */
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_316[] = {
+  //{ 5, "1842", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1841", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1841", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "10D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 70, "5", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
+    { 10, "1.0", NULL, 0, BITS_UNKNOWN, "x_axis_dir", 1, {-1,-1,-1,-1,-1} },
+    { 20, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 11, "729.1136625451523", NULL, 0, BITS_UNKNOWN, "insertion_pt", 1, {-1,-1,-1,-1,-1} },
+    { 21, "94.79803263931117", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 31, "0.0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
+    { 40, "66.4654815", NULL, 0, BITS_UNKNOWN, "text_height", 1, {-1,-1,-1,-1,-1} },
+    { 41, "0.0", NULL, 0, BITS_UNKNOWN, "rect_width", 4, {-1,-1,-1,-1,-1} },
+    { 42, "5.333333333333331", NULL, 0, BITS_UNKNOWN, "extents_width", 1, {-1,-1,-1,-1,-1} },
+    { 43, "2.0", NULL, 0, BITS_UNKNOWN, "extents_height", 1, {-1,-1,-1,-1,-1} },
+    { 71, "0", NULL, 0, BITS_UNKNOWN, "attachment", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MTEXTOBJECTCONTEXTDATA_CLASS 5A0 in test/test-data/2004/Publish.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_628[] = {
+static struct _unknown_field unknown_dxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS_317[] = {
   //{ 5, "5A0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "59F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

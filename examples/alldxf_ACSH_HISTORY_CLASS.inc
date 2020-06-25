@@ -3,20 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_HISTORY_CLASS 2E4 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_792[] = {
-  //{ 5, "2E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "2E1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "2E3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 2E4 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_793[] = {
+static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_372[] = {
   //{ 5, "2E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -29,7 +16,7 @@ static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_793[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_HISTORY_CLASS 2E4 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_794[] = {
+static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_373[] = {
   //{ 5, "2E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -42,7 +29,7 @@ static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_794[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_HISTORY_CLASS 2097 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_795[] = {
+static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_374[] = {
   //{ 5, "2097", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2094", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -55,7 +42,7 @@ static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_795[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_HISTORY_CLASS 20AD in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_796[] = {
+static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_375[] = {
   //{ 5, "20AD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "20AC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -65,135 +52,5 @@ static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_796[] = {
     { 92, "0", NULL, 0, BITS_UNKNOWN, "shhn_b92", 3, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 281, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 20C2 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_797[] = {
-  //{ 5, "20C2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "20C1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "20C3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "shhn_b92", 3, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 216A in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_798[] = {
-  //{ 5, "216A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "2167", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "2169", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 216C in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_799[] = {
-  //{ 5, "216C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "216B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "216D", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 2172 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_800[] = {
-  //{ 5, "2172", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "216F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "2171", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 2176 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_801[] = {
-  //{ 5, "2176", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "2173", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "2175", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 21D5 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_802[] = {
-  //{ 5, "21D5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "21D2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "21D4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 21D7 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_803[] = {
-  //{ 5, "21D7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "21D6", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "21D8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "shhn_b92", 3, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 22C9 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_804[] = {
-  //{ 5, "22C9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "22C6", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "22C8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 22CE in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_805[] = {
-  //{ 5, "22CE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "22CB", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "22CD", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACSH_HISTORY_CLASS 3108 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_HISTORY_CLASS_806[] = {
-  //{ 5, "3108", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3105", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbShHistory", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "33", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 91, "29", NULL, 0, BITS_UNKNOWN, "shhn_bl91", 1, {-1,-1,-1,-1,-1} },
-    { 360, "3107", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "shhn_b92", 1, {-1,-1,-1,-1,-1} },
-    { 280, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 281, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };

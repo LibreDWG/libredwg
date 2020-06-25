@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* CSACDOCUMENTOPTIONS 366 in test/test-data/2000/2.dxf */
-static struct _unknown_field unknown_dxf_CSACDOCUMENTOPTIONS_817[] = {
+static struct _unknown_field unknown_dxf_CSACDOCUMENTOPTIONS_394[] = {
   //{ 5, "366", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "365", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

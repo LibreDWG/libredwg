@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCNETWORK 3E0 in test/test-data/2000/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_456[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_225[] = {
   //{ 5, "3E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3DF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -26,7 +26,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_456[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 3E0 in test/test-data/2004/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_457[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_226[] = {
   //{ 5, "3E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3DF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -49,30 +49,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_457[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 3E0 in test/test-data/2007/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_458[] = {
-  //{ 5, "3E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3DF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3DF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "class_version", 4, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "geometry_status", 5, {-1,-1,-1,-1,-1} },
-    { 330, "3E2", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "0", NULL, 0, BITS_UNKNOWN, "actionbody", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "action_index", 4, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "max_assoc_dep_index", 5, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "num_deps", 5, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocNetwork", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "num_owned_params", 4, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 360, "3E3", NULL, 0, BITS_UNKNOWN, "dep", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "num_owned_value_params", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCNETWORK 3E0 in test/test-data/2010/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_459[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_227[] = {
   //{ 5, "3E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3DF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -95,7 +72,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_459[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 3E0 in test/test-data/2013/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_460[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_228[] = {
   //{ 5, "3E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3DF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -122,7 +99,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_460[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 38E in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_461[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_229[] = {
   //{ 5, "38E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "38D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -146,7 +123,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_461[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 38E in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_462[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_230[] = {
   //{ 5, "38E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "38D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -170,7 +147,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_462[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 38E in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_463[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_231[] = {
   //{ 5, "38E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "38D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -191,61 +168,10 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_463[] = {
     { 360, "391", NULL, 0, BITS_UNKNOWN, "dep", 2, {-1,-1,-1,-1,-1} },
     { 90, "1", NULL, 0, BITS_UNKNOWN, "num_owned_value_params", 6, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCNETWORK 38E in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_464[] = {
-  //{ 5, "38E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "38D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "38D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "class_version", 6, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "geometry_status", 6, {-1,-1,-1,-1,-1} },
-    { 330, "390", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "0", NULL, 0, BITS_UNKNOWN, "actionbody", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "action_index", 6, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "max_assoc_dep_index", 3, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "num_deps", 3, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocNetwork", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "num_owned_params", 6, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
-    { 360, "391", NULL, 0, BITS_UNKNOWN, "dep", 2, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "num_owned_value_params", 6, {-1,-1,-1,-1,-1} },
-    { 330, "391", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCNETWORK 38E in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_465[] = {
-  //{ 5, "38E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "38D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "38D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "geometry_status", 9, {-1,-1,-1,-1,-1} },
-    { 330, "390", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "0", NULL, 0, BITS_UNKNOWN, "actionbody", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "action_index", 3, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "max_assoc_dep_index", 9, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "num_deps", 9, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "num_owned_params", 9, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "num_owned_value_params", 9, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocNetwork", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_n1", 9, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "unknown_n2", 3, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "num_actions", 3, {-1,-1,-1,-1,-1} },
-    { 360, "391", NULL, 0, BITS_UNKNOWN, "dep", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 2DC in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_466[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_232[] = {
   //{ 5, "2DC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -277,7 +203,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_466[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCNETWORK 2DC in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_467[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCNETWORK_233[] = {
   //{ 5, "2DC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

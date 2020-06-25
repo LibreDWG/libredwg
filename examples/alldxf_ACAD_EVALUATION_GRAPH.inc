@@ -31,7 +31,7 @@ static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_1[] = {
     { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACAD_EVALUATION_GRAPH 2E3 in test/test-data/example_2010.dxf */
+/* ACAD_EVALUATION_GRAPH 2E3 in test/test-data/example_2013.dxf */
 static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_2[] = {
   //{ 5, "2E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
@@ -48,25 +48,8 @@ static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_2[] = {
     { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACAD_EVALUATION_GRAPH 2E3 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_3[] = {
-  //{ 5, "2E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "2E4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "2E2", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* ACAD_EVALUATION_GRAPH 15B4 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_4[] = {
+static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_3[] = {
   //{ 5, "15B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "15B3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -202,7 +185,7 @@ static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_4[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_EVALUATION_GRAPH 1A3E9 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_5[] = {
+static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_4[] = {
   //{ 5, "1A3E9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1A3E8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -338,7 +321,7 @@ static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_5[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_EVALUATION_GRAPH 1BA26 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_6[] = {
+static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_5[] = {
   //{ 5, "1BA26", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1BA25", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -350,7 +333,7 @@ static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_6[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_EVALUATION_GRAPH 1D02 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_7[] = {
+static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_6[] = {
   //{ 5, "1D02", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D01", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -423,305 +406,12 @@ static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_7[] = {
     { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* ACAD_EVALUATION_GRAPH 4D92 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_8[] = {
-  //{ 5, "4D92", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4D91", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4D91", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "4", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "4", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 12, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 4, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 11, {-1,-1,-1,-1,-1} },
-    { 360, "4D93", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge1", 12, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge2", 12, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "node_edge3", 11, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "node_edge4", 8, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "nodeid", 11, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 4, {-1,-1,-1,-1,-1} },
-    { 95, "2", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 8, {-1,-1,-1,-1,-1} },
-    { 360, "4D94", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 19, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge3", 12, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge4", 12, {-1,-1,-1,-1,-1} },
-    { 91, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 95, "3", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 360, "4D95", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 91, "3", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 95, "4", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 360, "4D96", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 93, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 94, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 93, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 94, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 91, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 93, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 94, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 91, "3", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 5A74 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_9[] = {
-  //{ 5, "5A74", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5A73", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5A73", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "46", NULL, 0, BITS_UNKNOWN, "has_graph", 2, {-1,-1,-1,-1,-1} },
-    { 97, "46", NULL, 0, BITS_UNKNOWN, "unknown1", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 12, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 4, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 11, {-1,-1,-1,-1,-1} },
-    { 360, "5A75", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge1", 12, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge2", 12, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "node_edge3", 11, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "node_edge4", 8, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "nodeid", 11, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 4, {-1,-1,-1,-1,-1} },
-    { 95, "2", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 8, {-1,-1,-1,-1,-1} },
-    { 360, "5A76", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 19, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge3", 12, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "node_edge4", 12, {-1,-1,-1,-1,-1} },
-    { 91, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 95, "3", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 360, "5A77", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 91, "3", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
-    { 95, "4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 360, "5A78", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 93, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 94, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 93, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 94, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 91, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "2", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 93, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 94, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 91, "3", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* ACAD_EVALUATION_GRAPH 2096 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_10[] = {
+static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_7[] = {
   //{ 5, "2096", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2097", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 2, {-1,-1,-1,-1,-1} },
     { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 20AE in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_11[] = {
-  //{ 5, "20AE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "20AD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 2, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 2169 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_12[] = {
-  //{ 5, "2169", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "216A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "2168", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 216D in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_13[] = {
-  //{ 5, "216D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "216C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "216E", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 2171 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_14[] = {
-  //{ 5, "2171", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "2172", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "2170", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 2175 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_15[] = {
-  //{ 5, "2175", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "2176", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "2174", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 21D4 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_16[] = {
-  //{ 5, "21D4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "21D5", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "21D3", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 22C8 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_17[] = {
-  //{ 5, "22C8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "22C9", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "22C7", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 22CD in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_18[] = {
-  //{ 5, "22CD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "22CE", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "22CC", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACAD_EVALUATION_GRAPH 3107 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACAD_EVALUATION_GRAPH_19[] = {
-  //{ 5, "3107", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3108", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbEvalGraph", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 96, "1", NULL, 0, BITS_UNKNOWN, "has_graph", 3, {-1,-1,-1,-1,-1} },
-    { 97, "1", NULL, 0, BITS_UNKNOWN, "unknown1", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "nodeid", 1, {-1,-1,-1,-1,-1} },
-    { 93, "32", NULL, 0, BITS_UNKNOWN, "edge_flags", 1, {-1,-1,-1,-1,-1} },
-    { 95, "1", NULL, 0, BITS_UNKNOWN, "num_evalexpr", 3, {-1,-1,-1,-1,-1} },
-    { 360, "3106", NULL, 0, BITS_UNKNOWN, "evalexpr", 1, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge1", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge2", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge3", 4, {-1,-1,-1,-1,-1} },
-    { 92, "-1", NULL, 0, BITS_UNKNOWN, "node_edge4", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };

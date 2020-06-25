@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCVERTEXACTIONPARAM 394 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_486[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_263[] = {
   //{ 5, "394", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "393", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -20,7 +20,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_486[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVERTEXACTIONPARAM 394 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_487[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_264[] = {
   //{ 5, "394", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "393", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -37,24 +37,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_487[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVERTEXACTIONPARAM 394 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_488[] = {
-  //{ 5, "394", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "393", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 1, "", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocSingleDependencyActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 330, "396", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocVertexActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-    { 10, "-54.05474532926735", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 20, "11789.64909083308", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCVERTEXACTIONPARAM 394 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_489[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_265[] = {
   //{ 5, "394", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "393", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -71,7 +54,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_489[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVERTEXACTIONPARAM 394 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_490[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVERTEXACTIONPARAM_266[] = {
   //{ 5, "394", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "393", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

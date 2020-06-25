@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ARC_DIMENSION 399 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_812[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_379[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -66,7 +66,7 @@ static struct _unknown_field unknown_dxf_ARC_DIMENSION_812[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ARC_DIMENSION 399 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_813[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_380[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -129,7 +129,7 @@ static struct _unknown_field unknown_dxf_ARC_DIMENSION_813[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ARC_DIMENSION 399 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_814[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_381[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -195,7 +195,7 @@ static struct _unknown_field unknown_dxf_ARC_DIMENSION_814[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ARC_DIMENSION 399 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_815[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_382[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -262,7 +262,7 @@ static struct _unknown_field unknown_dxf_ARC_DIMENSION_815[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ARC_DIMENSION 399 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ARC_DIMENSION_816[] = {
+static struct _unknown_field unknown_dxf_ARC_DIMENSION_383[] = {
   //{ 5, "399", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "3A8", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },

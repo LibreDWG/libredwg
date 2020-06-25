@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_MLEADEROBJECTCONTEXTDATA_CLASS 5CE688 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_575[] = {
+static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_281[] = {
   //{ 5, "5CE688", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5CE687", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -91,7 +91,7 @@ static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_575
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MLEADEROBJECTCONTEXTDATA_CLASS 5CE688 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_576[] = {
+static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_282[] = {
   //{ 5, "5CE688", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5CE687", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -179,7 +179,7 @@ static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_576
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MLEADEROBJECTCONTEXTDATA_CLASS 27B in test/test-data/2000/MLeader.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_577[] = {
+static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_283[] = {
   //{ 5, "27B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "27A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -294,7 +294,7 @@ static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_577
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MLEADEROBJECTCONTEXTDATA_CLASS 27B in test/test-data/2004/MLeader.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_578[] = {
+static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_284[] = {
   //{ 5, "27B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "27A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -409,7 +409,7 @@ static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_578
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_MLEADEROBJECTCONTEXTDATA_CLASS 27B in test/test-data/2010/MLeader.dxf */
-static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_579[] = {
+static struct _unknown_field unknown_dxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS_285[] = {
   //{ 5, "27B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "27A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

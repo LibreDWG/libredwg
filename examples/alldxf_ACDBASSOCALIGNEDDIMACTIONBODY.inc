@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_410[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_188[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -24,7 +24,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_410[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_411[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_189[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -45,28 +45,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_411[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_412[] = {
-  //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "aab_version", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocParamBasedActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "pab_status", 6, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "pab_l2", 6, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "num_deps", 2, {-1,-1,-1,-1,-1} },
-    { 360, "393", NULL, 0, BITS_UNKNOWN, "writedep", 2, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "pab_l4", 6, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "pab_l5", 6, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "dcm_status", 6, {-1,-1,-1,-1,-1} },
-    { 330, "397", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 100, "ACDBASSOCALIGNEDDIMACTIONBODY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
-    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "393", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_413[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_190[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -87,7 +66,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_413[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_414[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_191[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

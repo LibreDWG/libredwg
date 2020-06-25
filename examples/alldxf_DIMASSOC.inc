@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* DIMASSOC 145DB in test/test-data/2007/400306222-Main_board_line.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_833[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_406[] = {
   //{ 5, "145DB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "145D1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -37,7 +37,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_833[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 13416 in test/test-data/2007/400306224-X_E_Motor_Line.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_834[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_407[] = {
   //{ 5, "13416", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1340C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -71,7 +71,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_834[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5CDB30 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_835[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_408[] = {
   //{ 5, "5CDB30", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5CDB2F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -102,7 +102,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_835[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5CDB8B in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_836[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_409[] = {
   //{ 5, "5CDB8B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5CDB8A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -126,7 +126,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_836[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5CDB8E in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_837[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_410[] = {
   //{ 5, "5CDB8E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5CDB8D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -150,7 +150,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_837[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5D053B in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_838[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_411[] = {
   //{ 5, "5D053B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D0531", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -174,7 +174,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_838[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5D0667 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_839[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_412[] = {
   //{ 5, "5D0667", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D065D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -205,7 +205,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_839[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5D067F in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_840[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_413[] = {
   //{ 5, "5D067F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D0675", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -239,7 +239,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_840[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5D06B2 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_841[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_414[] = {
   //{ 5, "5D06B2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D06A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -263,7 +263,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_841[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5D06CE in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_842[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_415[] = {
   //{ 5, "5D06CE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D06C4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -307,7 +307,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_842[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5EE8E2 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_843[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_416[] = {
   //{ 5, "5EE8E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE8D2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -341,7 +341,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_843[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5EE92F in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_844[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_417[] = {
   //{ 5, "5EE92F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE91B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -372,7 +372,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_844[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5EE942 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_845[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_418[] = {
   //{ 5, "5EE942", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE931", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -396,7 +396,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_845[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5EE955 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_846[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_419[] = {
   //{ 5, "5EE955", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE944", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -420,7 +420,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_846[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5F3D25 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_847[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_420[] = {
   //{ 5, "5F3D25", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F3D24", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -454,7 +454,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_847[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5F3D60 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_848[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_421[] = {
   //{ 5, "5F3D60", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F3D5F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -478,7 +478,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_848[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5FE787 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_849[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_422[] = {
   //{ 5, "5FE787", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FE777", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -512,7 +512,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_849[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5FEFA2 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_850[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_423[] = {
   //{ 5, "5FEFA2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FEF92", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -546,7 +546,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_850[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5FEFB4 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_851[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_424[] = {
   //{ 5, "5FEFB4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FEFA4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -580,7 +580,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_851[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5FEFC6 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_852[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_425[] = {
   //{ 5, "5FEFC6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FEFB6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -604,7 +604,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_852[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5FFFE1 in test/test-data/2010/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_853[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_426[] = {
   //{ 5, "5FFFE1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FFFD1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -638,7 +638,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_853[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5CDB30 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_854[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_427[] = {
   //{ 5, "5CDB30", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5CDB2F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -669,7 +669,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_854[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5CDB8B in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_855[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_428[] = {
   //{ 5, "5CDB8B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5CDB8A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -692,32 +692,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_855[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 5CDB8E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_856[] = {
-  //{ 5, "5CDB8E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5CDB8D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5CDB8D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5CDB8C", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5CD31E", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 5D053B in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_857[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_429[] = {
   //{ 5, "5D053B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D0531", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -741,7 +717,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_857[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 5D0667 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_858[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_430[] = {
   //{ 5, "5D0667", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D065D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -771,66 +747,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_858[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 5D067F in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_859[] = {
-  //{ 5, "5D067F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5D0675", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5D0675", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5D0668", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "5CFDFC", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "5CFDFB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5D06B2 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_860[] = {
-  //{ 5, "5D06B2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5D06A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5D06A8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5D069B", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5CFDFA", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 5D06CE in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_861[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_431[] = {
   //{ 5, "5D06CE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D06C4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -873,121 +791,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_861[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 5EE8E2 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_862[] = {
-  //{ 5, "5EE8E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE8D2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE8D2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE8D1", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D009C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D009C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5EE92F in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_863[] = {
-  //{ 5, "5EE92F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE91B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE91B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE91A", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 5, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 5, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D009B", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 5, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "0", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 5, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "26655.47454481967", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 1, {-1,-1,-1,-1,-1} },
-    { 20, "23871.53971531167", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5EE942 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_864[] = {
-  //{ 5, "5EE942", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE931", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE931", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE930", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D01D6", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5EE955 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_865[] = {
-  //{ 5, "5EE955", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE944", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE944", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5EE943", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D009E", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 5F3D25 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_866[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_432[] = {
   //{ 5, "5F3D25", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F3D24", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1020,192 +825,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_866[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 5F3D60 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_867[] = {
-  //{ 5, "5F3D60", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D5F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D5F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5F3D5E", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5F3CC4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 2, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 2, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5FE787 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_868[] = {
-  //{ 5, "5FE787", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FE777", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FE777", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FE776", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D5CFD", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D5CFC", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5FEFA2 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_869[] = {
-  //{ 5, "5FEFA2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEF92", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEF92", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEF91", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "5D6BDF", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "5D6BDE", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5FEFB4 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_870[] = {
-  //{ 5, "5FEFB4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEFA4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEFA4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEFA3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "5D6BDE", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "5D6BDD", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5FEFC6 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_871[] = {
-  //{ 5, "5FEFC6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEFB6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEFB6", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FEFB5", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D6BD6", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 5FFFE1 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_872[] = {
-  //{ 5, "5FFFE1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FFFD1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FFFD1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "5FFFD0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D5565", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "5D5CFD", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 167E5D in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_873[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_433[] = {
   //{ 5, "167E5D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "167E53", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1249,7 +870,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_873[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 16F6A2 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_874[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_434[] = {
   //{ 5, "16F6A2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "16F698", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1273,7 +894,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_874[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 16F6D5 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_875[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_435[] = {
   //{ 5, "16F6D5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "16F6CB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1317,7 +938,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_875[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 171248 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_876[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_436[] = {
   //{ 5, "171248", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "17123E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1351,7 +972,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_876[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 17EFD7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_877[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_437[] = {
   //{ 5, "17EFD7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "17EFCD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1375,7 +996,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_877[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1C25BF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_878[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_438[] = {
   //{ 5, "1C25BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1C25BE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1409,7 +1030,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_878[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1DCD56 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_879[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_439[] = {
   //{ 5, "1DCD56", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1DCD4B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1459,7 +1080,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_879[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1DCE2B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_880[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_440[] = {
   //{ 5, "1DCE2B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1DCE21", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1486,7 +1107,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_880[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1DCE43 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_881[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_441[] = {
   //{ 5, "1DCE43", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1DCE39", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1510,7 +1131,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_881[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1DCFC0 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_882[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_442[] = {
   //{ 5, "1DCFC0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1DCFB5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1547,7 +1168,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_882[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1DCFE3 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_883[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_443[] = {
   //{ 5, "1DCFE3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1DCFD9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1591,7 +1212,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_883[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1DD02B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_884[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_444[] = {
   //{ 5, "1DD02B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1DD021", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1618,7 +1239,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_884[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1DD0AC in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_885[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_445[] = {
   //{ 5, "1DD0AC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1DD0A2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1642,7 +1263,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_885[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1E48D9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_886[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_446[] = {
   //{ 5, "1E48D9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1E48D8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1676,7 +1297,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_886[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1E48DC in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_887[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_447[] = {
   //{ 5, "1E48DC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1E48DB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1710,7 +1331,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_887[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1E48DF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_888[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_448[] = {
   //{ 5, "1E48DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1E48DE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1734,7 +1355,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_888[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1E48E2 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_889[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_449[] = {
   //{ 5, "1E48E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1E48E1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1784,7 +1405,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_889[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1E48E5 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_890[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_450[] = {
   //{ 5, "1E48E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1E48E4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1828,7 +1449,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_890[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D57 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_891[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_451[] = {
   //{ 5, "207D57", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D56", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1872,7 +1493,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_891[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D5A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_892[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_452[] = {
   //{ 5, "207D5A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D59", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1896,7 +1517,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_892[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D60 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_893[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_453[] = {
   //{ 5, "207D60", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D5F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1930,7 +1551,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_893[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D70 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_894[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_454[] = {
   //{ 5, "207D70", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D6F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1954,7 +1575,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_894[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D73 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_895[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_455[] = {
   //{ 5, "207D73", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D72", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1978,7 +1599,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_895[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D7C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_896[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_456[] = {
   //{ 5, "207D7C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D7B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2012,7 +1633,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_896[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D7F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_897[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_457[] = {
   //{ 5, "207D7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D7E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2036,7 +1657,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_897[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207D82 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_898[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_458[] = {
   //{ 5, "207D82", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207D81", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2060,7 +1681,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_898[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207E16 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_899[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_459[] = {
   //{ 5, "207E16", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207E15", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2094,7 +1715,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_899[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207E1D in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_900[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_460[] = {
   //{ 5, "207E1D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207E1C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2118,7 +1739,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_900[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207E20 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_901[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_461[] = {
   //{ 5, "207E20", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207E1F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2142,7 +1763,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_901[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207E92 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_902[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_462[] = {
   //{ 5, "207E92", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207E91", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2186,7 +1807,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_902[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 207E95 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_903[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_463[] = {
   //{ 5, "207E95", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "207E94", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2210,7 +1831,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_903[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2277AC in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_904[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_464[] = {
   //{ 5, "2277AC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2277A0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2244,7 +1865,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_904[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 231F12 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_905[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_465[] = {
   //{ 5, "231F12", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "231F06", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2278,7 +1899,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_905[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 237D69 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_906[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_466[] = {
   //{ 5, "237D69", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "237D5D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2302,7 +1923,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_906[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 249D7A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_907[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_467[] = {
   //{ 5, "249D7A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "249D70", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2336,7 +1957,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_907[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 249EAF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_908[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_468[] = {
   //{ 5, "249EAF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "249EA5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2360,7 +1981,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_908[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 249EF9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_909[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_469[] = {
   //{ 5, "249EF9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "249EED", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2387,7 +2008,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_909[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 249F25 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_910[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_470[] = {
   //{ 5, "249F25", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "249F1B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2411,7 +2032,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_910[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 249F65 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_911[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_471[] = {
   //{ 5, "249F65", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "249F5B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2435,7 +2056,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_911[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 249F88 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_912[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_472[] = {
   //{ 5, "249F88", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "249F7D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2459,7 +2080,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_912[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A0B9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_913[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_473[] = {
   //{ 5, "24A0B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A0AF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2493,7 +2114,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_913[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A0D1 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_914[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_474[] = {
   //{ 5, "24A0D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A0C7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2517,7 +2138,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_914[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A20A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_915[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_475[] = {
   //{ 5, "24A20A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A1FE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2561,7 +2182,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_915[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A7B6 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_916[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_476[] = {
   //{ 5, "24A7B6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A7AA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2585,7 +2206,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_916[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A7DD in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_917[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_477[] = {
   //{ 5, "24A7DD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A7D1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2629,7 +2250,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_917[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A804 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_918[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_478[] = {
   //{ 5, "24A804", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A7F8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2673,7 +2294,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_918[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A82B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_919[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_479[] = {
   //{ 5, "24A82B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A81F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2717,7 +2338,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_919[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A852 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_920[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_480[] = {
   //{ 5, "24A852", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A846", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2761,7 +2382,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_920[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A879 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_921[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_481[] = {
   //{ 5, "24A879", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A86D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2805,7 +2426,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_921[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A8A0 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_922[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_482[] = {
   //{ 5, "24A8A0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A894", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2849,7 +2470,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_922[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A8C7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_923[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_483[] = {
   //{ 5, "24A8C7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A8BB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2893,7 +2514,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_923[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24A8EE in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_924[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_484[] = {
   //{ 5, "24A8EE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24A8E2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2937,7 +2558,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_924[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24C840 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_925[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_485[] = {
   //{ 5, "24C840", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24C836", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2971,7 +2592,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_925[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24C861 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_926[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_486[] = {
   //{ 5, "24C861", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24C857", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2995,7 +2616,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_926[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 24C882 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_927[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_487[] = {
   //{ 5, "24C882", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "24C878", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3029,7 +2650,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_927[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 27B80B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_928[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_488[] = {
   //{ 5, "27B80B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "27B7FF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3053,7 +2674,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_928[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 27B847 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_929[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_489[] = {
   //{ 5, "27B847", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "27B83C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3077,7 +2698,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_929[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 27BE9C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_930[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_490[] = {
   //{ 5, "27BE9C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "27BE90", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3121,7 +2742,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_930[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 283A4B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_931[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_491[] = {
   //{ 5, "283A4B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "283A3F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3145,7 +2766,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_931[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 29133A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_932[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_492[] = {
   //{ 5, "29133A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "291330", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3169,7 +2790,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_932[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 291360 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_933[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_493[] = {
   //{ 5, "291360", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "291356", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3193,7 +2814,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_933[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 29138B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_934[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_494[] = {
   //{ 5, "29138B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "291381", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3227,7 +2848,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_934[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2913BB in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_935[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_495[] = {
   //{ 5, "2913BB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2913B1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3251,7 +2872,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_935[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2915B4 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_936[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_496[] = {
   //{ 5, "2915B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2915A9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3285,7 +2906,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_936[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2915D7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_937[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_497[] = {
   //{ 5, "2915D7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2915CD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3319,7 +2940,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_937[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 291616 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_938[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_498[] = {
   //{ 5, "291616", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29160C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3353,7 +2974,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_938[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 298989 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_939[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_499[] = {
   //{ 5, "298989", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "29897F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3387,7 +3008,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_939[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2989AF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_940[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_500[] = {
   //{ 5, "2989AF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2989A3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3411,7 +3032,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_940[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2AA5AB in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_941[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_501[] = {
   //{ 5, "2AA5AB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2AA5A1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3435,7 +3056,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_941[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2AA5CD in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_942[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_502[] = {
   //{ 5, "2AA5CD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2AA5C3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3469,7 +3090,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_942[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2CB0E1 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_943[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_503[] = {
   //{ 5, "2CB0E1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2CB0E0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3503,7 +3124,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_943[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D5681 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_944[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_504[] = {
   //{ 5, "2D5681", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D5680", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3527,7 +3148,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_944[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D568B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_945[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_505[] = {
   //{ 5, "2D568B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D568A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3551,7 +3172,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_945[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D568F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_946[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_506[] = {
   //{ 5, "2D568F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D568E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3575,7 +3196,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_946[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D5699 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_947[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_507[] = {
   //{ 5, "2D5699", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D5698", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3599,7 +3220,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_947[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D56C7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_948[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_508[] = {
   //{ 5, "2D56C7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D56C6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3623,7 +3244,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_948[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D56D0 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_949[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_509[] = {
   //{ 5, "2D56D0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D56CF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3647,7 +3268,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_949[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D56F0 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_950[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_510[] = {
   //{ 5, "2D56F0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D56EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3681,7 +3302,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_950[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 2D56F7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_951[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_511[] = {
   //{ 5, "2D56F7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2D56F6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3705,7 +3326,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_951[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 389787 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_952[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_512[] = {
   //{ 5, "389787", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "38977C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3739,7 +3360,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_952[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3898D1 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_953[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_513[] = {
   //{ 5, "3898D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3898C7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3773,7 +3394,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_953[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3898F3 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_954[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_514[] = {
   //{ 5, "3898F3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3898E9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3797,7 +3418,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_954[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 38991D in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_955[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_515[] = {
   //{ 5, "38991D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "389913", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3821,7 +3442,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_955[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 38C07F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_956[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_516[] = {
   //{ 5, "38C07F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "38C074", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3845,7 +3466,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_956[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39B007 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_957[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_517[] = {
   //{ 5, "39B007", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39AFFD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3881,7 +3502,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_957[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39B035 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_958[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_518[] = {
   //{ 5, "39B035", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39B02B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3905,7 +3526,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_958[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39BA32 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_959[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_519[] = {
   //{ 5, "39BA32", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39BA28", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3949,7 +3570,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_959[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39BA4B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_960[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_520[] = {
   //{ 5, "39BA4B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39BA41", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3983,7 +3604,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_960[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39EA9E in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_961[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_521[] = {
   //{ 5, "39EA9E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39EA92", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4017,7 +3638,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_961[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39EAD1 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_962[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_522[] = {
   //{ 5, "39EAD1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39EAC5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4041,7 +3662,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_962[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39EB50 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_963[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_523[] = {
   //{ 5, "39EB50", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39EB45", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4075,7 +3696,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_963[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 39F5E7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_964[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_524[] = {
   //{ 5, "39F5E7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "39F5DB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4099,7 +3720,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_964[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3A7582 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_965[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_525[] = {
   //{ 5, "3A7582", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3A7578", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4136,7 +3757,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_965[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3A75B1 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_966[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_526[] = {
   //{ 5, "3A75B1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3A75A6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4160,7 +3781,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_966[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3A8F80 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_967[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_527[] = {
   //{ 5, "3A8F80", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3A8F76", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4184,7 +3805,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_967[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3ED673 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_968[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_528[] = {
   //{ 5, "3ED673", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3ED672", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4208,7 +3829,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_968[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3ED68D in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_969[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_529[] = {
   //{ 5, "3ED68D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3ED68C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4232,7 +3853,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_969[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F6C66 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_970[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_530[] = {
   //{ 5, "3F6C66", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F6C5C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4266,7 +3887,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_970[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F6C7F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_971[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_531[] = {
   //{ 5, "3F6C7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F6C75", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4290,7 +3911,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_971[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F6CE9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_972[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_532[] = {
   //{ 5, "3F6CE9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F6CDF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4334,7 +3955,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_972[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F6D29 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_973[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_533[] = {
   //{ 5, "3F6D29", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F6D1F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4361,7 +3982,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_973[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F6D64 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_974[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_534[] = {
   //{ 5, "3F6D64", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F6D58", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4395,7 +4016,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_974[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F6D9A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_975[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_535[] = {
   //{ 5, "3F6D9A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F6D8F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4422,7 +4043,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_975[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F71CB in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_976[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_536[] = {
   //{ 5, "3F71CB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F71C0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4456,7 +4077,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_976[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F71E6 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_977[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_537[] = {
   //{ 5, "3F71E6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F71DB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4490,7 +4111,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_977[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F71FF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_978[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_538[] = {
   //{ 5, "3F71FF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F71F5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4514,7 +4135,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_978[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F721A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_979[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_539[] = {
   //{ 5, "3F721A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F720F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4538,7 +4159,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_979[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F730E in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_980[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_540[] = {
   //{ 5, "3F730E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F7302", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4582,7 +4203,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_980[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F79C0 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_981[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_541[] = {
   //{ 5, "3F79C0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F79B6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4626,7 +4247,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_981[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3F7C92 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_982[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_542[] = {
   //{ 5, "3F7C92", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3F7C87", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4650,7 +4271,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_982[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FBD5B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_983[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_543[] = {
   //{ 5, "3FBD5B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FBD5A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4684,7 +4305,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_983[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FBD5F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_984[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_544[] = {
   //{ 5, "3FBD5F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FBD5E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4708,7 +4329,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_984[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FBD63 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_985[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_545[] = {
   //{ 5, "3FBD63", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FBD62", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4732,7 +4353,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_985[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FBDB8 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_986[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_546[] = {
   //{ 5, "3FBDB8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FBDB7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4756,7 +4377,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_986[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FBDC2 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_987[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_547[] = {
   //{ 5, "3FBDC2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FBDC1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4790,7 +4411,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_987[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FBDC9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_988[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_548[] = {
   //{ 5, "3FBDC9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FBDC8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4814,7 +4435,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_988[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FBDF3 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_989[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_549[] = {
   //{ 5, "3FBDF3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FBDF2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4848,7 +4469,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_989[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FDBCC in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_990[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_550[] = {
   //{ 5, "3FDBCC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FDBC1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4882,7 +4503,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_990[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FDBE5 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_991[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_551[] = {
   //{ 5, "3FDBE5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FDBDB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4916,7 +4537,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_991[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FDC1B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_992[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_552[] = {
   //{ 5, "3FDC1B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FDC11", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4960,7 +4581,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_992[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FDC36 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_993[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_553[] = {
   //{ 5, "3FDC36", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FDC2B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4991,7 +4612,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_993[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FDF8A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_994[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_554[] = {
   //{ 5, "3FDF8A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FDF89", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5015,7 +4636,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_994[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FDF8E in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_995[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_555[] = {
   //{ 5, "3FDF8E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FDF8D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5049,7 +4670,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_995[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FF0E0 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_996[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_556[] = {
   //{ 5, "3FF0E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FF0DF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5083,7 +4704,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_996[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3FF0E5 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_997[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_557[] = {
   //{ 5, "3FF0E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3FF0E4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5107,7 +4728,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_997[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 406E3C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_998[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_558[] = {
   //{ 5, "406E3C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "406E32", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5141,7 +4762,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_998[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 406E60 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_999[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_559[] = {
   //{ 5, "406E60", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "406E55", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5175,7 +4796,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_999[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 406E79 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1000[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_560[] = {
   //{ 5, "406E79", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "406E6F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5199,7 +4820,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1000[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 406E94 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1001[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_561[] = {
   //{ 5, "406E94", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "406E89", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5223,7 +4844,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1001[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 406EC1 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1002[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_562[] = {
   //{ 5, "406EC1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "406EB7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5247,7 +4868,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1002[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 406FD0 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1003[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_563[] = {
   //{ 5, "406FD0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "406FC5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5281,7 +4902,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1003[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 40726F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1004[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_564[] = {
   //{ 5, "40726F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "407265", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5315,7 +4936,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1004[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A2A3 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1005[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_565[] = {
   //{ 5, "41A2A3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A297", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5356,7 +4977,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1005[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A448 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1006[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_566[] = {
   //{ 5, "41A448", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A43D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5390,7 +5011,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1006[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A481 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1007[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_567[] = {
   //{ 5, "41A481", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A476", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5424,7 +5045,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1007[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A49C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1008[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_568[] = {
   //{ 5, "41A49C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A491", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5448,7 +5069,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1008[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A4B7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1009[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_569[] = {
   //{ 5, "41A4B7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A4AC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5472,7 +5093,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1009[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A4D2 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1010[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_570[] = {
   //{ 5, "41A4D2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A4C7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5506,7 +5127,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1010[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A53C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1011[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_571[] = {
   //{ 5, "41A53C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A531", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5550,7 +5171,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1011[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A581 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1012[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_572[] = {
   //{ 5, "41A581", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A576", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5594,7 +5215,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1012[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41A5B9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1013[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_573[] = {
   //{ 5, "41A5B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41A5AE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5621,7 +5242,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1013[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41B2D9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1014[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_574[] = {
   //{ 5, "41B2D9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41B2CE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5645,7 +5266,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1014[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41B34D in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1015[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_575[] = {
   //{ 5, "41B34D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41B342", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5669,7 +5290,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1015[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41B368 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1016[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_576[] = {
   //{ 5, "41B368", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41B35D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5693,7 +5314,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1016[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41B41F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1017[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_577[] = {
   //{ 5, "41B41F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41B413", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5717,7 +5338,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1017[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BBDD in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1018[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_578[] = {
   //{ 5, "41BBDD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BBD2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5741,7 +5362,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1018[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BBF8 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1019[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_579[] = {
   //{ 5, "41BBF8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BBED", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5765,7 +5386,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1019[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BCC7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1020[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_580[] = {
   //{ 5, "41BCC7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BCBC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5789,7 +5410,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1020[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BCEC in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1021[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_581[] = {
   //{ 5, "41BCEC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BCE1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5823,7 +5444,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1021[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BD07 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1022[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_582[] = {
   //{ 5, "41BD07", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BCFC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5847,7 +5468,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1022[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BD22 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1023[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_583[] = {
   //{ 5, "41BD22", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BD17", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5881,7 +5502,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1023[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BD3D in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1024[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_584[] = {
   //{ 5, "41BD3D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BD32", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5915,7 +5536,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1024[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BD58 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1025[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_585[] = {
   //{ 5, "41BD58", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BD4D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5939,7 +5560,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1025[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BDA8 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1026[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_586[] = {
   //{ 5, "41BDA8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BD9D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -5976,7 +5597,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1026[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BDD9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1027[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_587[] = {
   //{ 5, "41BDD9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BDCE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6000,7 +5621,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1027[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BE2A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1028[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_588[] = {
   //{ 5, "41BE2A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BE1F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6024,7 +5645,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1028[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BE61 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1029[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_589[] = {
   //{ 5, "41BE61", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BE57", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6048,7 +5669,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1029[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BE7A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1030[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_590[] = {
   //{ 5, "41BE7A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BE70", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6082,7 +5703,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1030[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41BEB7 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1031[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_591[] = {
   //{ 5, "41BEB7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41BEAD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6113,7 +5734,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1031[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 41F1DE in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1032[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_592[] = {
   //{ 5, "41F1DE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "41F1D4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6137,7 +5758,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1032[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 420F4B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1033[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_593[] = {
   //{ 5, "420F4B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "420F4A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6161,7 +5782,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1033[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 420F4F in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1034[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_594[] = {
   //{ 5, "420F4F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "420F4E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6195,7 +5816,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1034[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 420F61 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1035[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_595[] = {
   //{ 5, "420F61", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "420F60", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6219,7 +5840,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1035[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 420F86 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1036[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_596[] = {
   //{ 5, "420F86", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "420F85", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6243,7 +5864,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1036[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4216ED in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1037[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_597[] = {
   //{ 5, "4216ED", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4216E3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6287,7 +5908,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1037[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4217AB in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1038[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_598[] = {
   //{ 5, "4217AB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4217A0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6311,7 +5932,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1038[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 421806 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1039[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_599[] = {
   //{ 5, "421806", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4217FB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6338,7 +5959,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1039[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 42182C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1040[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_600[] = {
   //{ 5, "42182C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "421821", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6382,7 +6003,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1040[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 421850 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1041[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_601[] = {
   //{ 5, "421850", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "421845", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6406,7 +6027,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1041[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4218BE in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1042[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_602[] = {
   //{ 5, "4218BE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4218B3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6440,7 +6061,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1042[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 421963 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1043[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_603[] = {
   //{ 5, "421963", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "421958", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6490,7 +6111,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1043[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 421987 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1044[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_604[] = {
   //{ 5, "421987", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "42197C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6527,7 +6148,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1044[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 421F61 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1045[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_605[] = {
   //{ 5, "421F61", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "421F56", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6551,7 +6172,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1045[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 421FEF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1046[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_606[] = {
   //{ 5, "421FEF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "421FE5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6585,7 +6206,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1046[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 422C74 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1047[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_607[] = {
   //{ 5, "422C74", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "422C69", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6609,7 +6230,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1047[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4327FA in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1048[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_608[] = {
   //{ 5, "4327FA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4327F9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6633,7 +6254,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1048[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4327FE in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1049[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_609[] = {
   //{ 5, "4327FE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4327FD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6657,7 +6278,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1049[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 43281C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1050[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_610[] = {
   //{ 5, "43281C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "43281B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6691,7 +6312,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1050[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4345D9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1051[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_611[] = {
   //{ 5, "4345D9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4345CF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6735,7 +6356,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1051[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 438280 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1052[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_612[] = {
   //{ 5, "438280", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "438276", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6759,7 +6380,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1052[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4382A4 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1053[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_613[] = {
   //{ 5, "4382A4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "438299", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6783,7 +6404,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1053[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 43894B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1054[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_614[] = {
   //{ 5, "43894B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "438941", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6807,7 +6428,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1054[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 43A0B8 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1055[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_615[] = {
   //{ 5, "43A0B8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "43A0AE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6831,7 +6452,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1055[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 43A0D5 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1056[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_616[] = {
   //{ 5, "43A0D5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "43A0C9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6855,7 +6476,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1056[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 43AB13 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1057[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_617[] = {
   //{ 5, "43AB13", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "43AB08", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6889,7 +6510,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1057[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 43AB5B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1058[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_618[] = {
   //{ 5, "43AB5B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "43AB50", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6923,7 +6544,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1058[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 43ABCC in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1059[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_619[] = {
   //{ 5, "43ABCC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "43ABC0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6947,7 +6568,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1059[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 442705 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1060[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_620[] = {
   //{ 5, "442705", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "442704", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -6981,7 +6602,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1060[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 44270C in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1061[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_621[] = {
   //{ 5, "44270C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "44270B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7005,7 +6626,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1061[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 442713 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1062[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_622[] = {
   //{ 5, "442713", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "442712", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7029,7 +6650,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1062[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 442717 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1063[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_623[] = {
   //{ 5, "442717", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "442716", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7053,7 +6674,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1063[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 442A82 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1064[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_624[] = {
   //{ 5, "442A82", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "442A81", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7077,7 +6698,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1064[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 442A86 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1065[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_625[] = {
   //{ 5, "442A86", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "442A85", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7101,7 +6722,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1065[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4559DF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1066[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_626[] = {
   //{ 5, "4559DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4559D5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7125,7 +6746,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1066[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 48F0F2 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1067[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_627[] = {
   //{ 5, "48F0F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "48F0F1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7152,7 +6773,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1067[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 48F0F6 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1068[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_628[] = {
   //{ 5, "48F0F6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "48F0F5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7176,7 +6797,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1068[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 48F0FA in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1069[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_629[] = {
   //{ 5, "48F0FA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "48F0F9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7200,7 +6821,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1069[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 48F0FF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1070[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_630[] = {
   //{ 5, "48F0FF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "48F0FE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7224,7 +6845,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1070[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4939EB in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1071[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_631[] = {
   //{ 5, "4939EB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4939E1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7258,7 +6879,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1071[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 493AE5 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1072[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_632[] = {
   //{ 5, "493AE5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "493ADA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7282,7 +6903,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1072[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 493B16 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1073[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_633[] = {
   //{ 5, "493B16", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "493B0B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7306,7 +6927,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1073[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 493B43 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1074[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_634[] = {
   //{ 5, "493B43", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "493B39", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7330,7 +6951,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1074[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 493E18 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1075[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_635[] = {
   //{ 5, "493E18", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "493E0E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7354,7 +6975,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1075[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 493E31 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1076[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_636[] = {
   //{ 5, "493E31", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "493E27", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7378,7 +6999,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1076[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 49CEE4 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1077[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_637[] = {
   //{ 5, "49CEE4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "49CEE3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7402,7 +7023,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1077[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 49CF66 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1078[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_638[] = {
   //{ 5, "49CF66", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "49CF65", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7446,7 +7067,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1078[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B5C17 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1079[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_639[] = {
   //{ 5, "4B5C17", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B5C16", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7480,7 +7101,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1079[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B5C35 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1080[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_640[] = {
   //{ 5, "4B5C35", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B5C34", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7504,7 +7125,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1080[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B5C39 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1081[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_641[] = {
   //{ 5, "4B5C39", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B5C38", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7538,7 +7159,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1081[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B5D68 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1082[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_642[] = {
   //{ 5, "4B5D68", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B5D67", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7572,7 +7193,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1082[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B615E in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1083[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_643[] = {
   //{ 5, "4B615E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B615D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7606,7 +7227,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1083[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B842B in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1084[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_644[] = {
   //{ 5, "4B842B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B842A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7640,7 +7261,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1084[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B8581 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1085[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_645[] = {
   //{ 5, "4B8581", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B8580", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7667,7 +7288,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1085[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B8585 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1086[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_646[] = {
   //{ 5, "4B8585", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B8584", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7691,7 +7312,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1086[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B8731 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1087[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_647[] = {
   //{ 5, "4B8731", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B8730", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7735,7 +7356,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1087[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B8E99 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1088[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_648[] = {
   //{ 5, "4B8E99", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B8E98", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7759,7 +7380,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1088[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4B9141 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1089[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_649[] = {
   //{ 5, "4B9141", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B9135", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7803,7 +7424,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1089[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4BD055 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1090[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_650[] = {
   //{ 5, "4BD055", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4BD049", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7847,7 +7468,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1090[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C48BF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1091[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_651[] = {
   //{ 5, "4C48BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C48BE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7881,7 +7502,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1091[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C48E9 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1092[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_652[] = {
   //{ 5, "4C48E9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C48E8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7905,7 +7526,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1092[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C648E in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1093[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_653[] = {
   //{ 5, "4C648E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C648D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7945,7 +7566,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1093[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C64CF in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1094[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_654[] = {
   //{ 5, "4C64CF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C64CE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7969,7 +7590,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1094[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C64D3 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1095[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_655[] = {
   //{ 5, "4C64D3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C64D2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -7993,7 +7614,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1095[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C6516 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1096[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_656[] = {
   //{ 5, "4C6516", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C6515", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8027,7 +7648,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1096[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C651A in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1097[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_657[] = {
   //{ 5, "4C651A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C6519", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8051,7 +7672,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1097[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C6530 in test/test-big/2004/double_free_example.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1098[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_658[] = {
   //{ 5, "4C6530", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C652F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8075,7 +7696,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1098[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3B4 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1099[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_659[] = {
   //{ 5, "3B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8119,7 +7740,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1099[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 42F in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1100[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_660[] = {
   //{ 5, "42F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "429", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8144,7 +7765,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1100[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 452 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1101[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_661[] = {
   //{ 5, "452", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "448", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8198,7 +7819,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1101[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 466 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1102[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_662[] = {
   //{ 5, "466", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "45E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8222,7 +7843,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1102[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 47E in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1103[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_663[] = {
   //{ 5, "47E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "474", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8256,7 +7877,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1103[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 496 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1104[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_664[] = {
   //{ 5, "496", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "48C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8290,7 +7911,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1104[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4AE in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1105[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_665[] = {
   //{ 5, "4AE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4A4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8324,7 +7945,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1105[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C6 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1106[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_666[] = {
   //{ 5, "4C6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4BC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8358,7 +7979,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1106[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3B4 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1107[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_667[] = {
   //{ 5, "3B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8402,7 +8023,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1107[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 42F in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1108[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_668[] = {
   //{ 5, "42F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "429", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8427,7 +8048,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1108[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 452 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1109[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_669[] = {
   //{ 5, "452", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "448", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8481,7 +8102,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1109[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 466 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1110[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_670[] = {
   //{ 5, "466", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "45E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8505,7 +8126,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1110[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 47E in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1111[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_671[] = {
   //{ 5, "47E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "474", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8539,7 +8160,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1111[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 496 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1112[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_672[] = {
   //{ 5, "496", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "48C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8573,7 +8194,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1112[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4AE in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1113[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_673[] = {
   //{ 5, "4AE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4A4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8607,7 +8228,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1113[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C6 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1114[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_674[] = {
   //{ 5, "4C6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4BC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8641,7 +8262,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1114[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3B4 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1115[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_675[] = {
   //{ 5, "3B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8685,7 +8306,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1115[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 42F in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1116[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_676[] = {
   //{ 5, "42F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "429", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8710,7 +8331,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1116[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 452 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1117[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_677[] = {
   //{ 5, "452", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "448", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8764,7 +8385,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1117[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 466 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1118[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_678[] = {
   //{ 5, "466", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "45E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8788,7 +8409,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1118[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 47E in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1119[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_679[] = {
   //{ 5, "47E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "474", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8822,7 +8443,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1119[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 496 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1120[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_680[] = {
   //{ 5, "496", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "48C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8856,7 +8477,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1120[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4AE in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1121[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_681[] = {
   //{ 5, "4AE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4A4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -8890,290 +8511,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1121[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 4C6 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1122[] = {
-  //{ 5, "4C6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4BC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4BC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4AF", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 3B4 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1123[] = {
-  //{ 5, "3B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3A8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "399", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "7", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 8, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 8, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "398", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 8, {-1,-1,-1,-1,-1} },
-    { 40, "4.131293495034893", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 8, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "398", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 8, {-1,-1,-1,-1,-1} },
-    { 40, "7.448450234144667", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 8, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "398", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 8, {-1,-1,-1,-1,-1} },
-    { 40, "4.131293495034893", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 7, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 8, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 42F in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1124[] = {
-  //{ 5, "42F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "429", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "429", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "420", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "41A", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 331, "41E", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 2, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 2, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 452 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1125[] = {
-  //{ 5, "452", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "448", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "448", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "43B", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "15", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 4, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 4, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 4, {-1,-1,-1,-1,-1} },
-    { 91, "5", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "490.6216519543077", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 2, {-1,-1,-1,-1,-1} },
-    { 20, "4118.24274338716", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 2, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 4, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 4, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 4, {-1,-1,-1,-1,-1} },
-    { 91, "5", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "-276.8548009664508", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 1, {-1,-1,-1,-1,-1} },
-    { 20, "4701.847034571434", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 4, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 4, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 4, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "172.7442546208081", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 1, {-1,-1,-1,-1,-1} },
-    { 20, "3207.985617767696", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 4, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 4, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 4, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "490.6216519543077", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 2, {-1,-1,-1,-1,-1} },
-    { 20, "4118.24274338716", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 2, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 466 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1126[] = {
-  //{ 5, "466", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "45E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "45E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "453", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 3, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 3, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 47E in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1127[] = {
-  //{ 5, "47E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "474", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "474", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "467", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 3, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "3", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 496 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1128[] = {
-  //{ 5, "496", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "48C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "48C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "47F", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "3", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 4AE in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1129[] = {
-  //{ 5, "4AE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4A4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4A4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "497", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 4C6 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1130[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_682[] = {
   //{ 5, "4C6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4BC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9207,7 +8545,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1130[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 3B4 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1131[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_683[] = {
   //{ 5, "3B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "3A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9250,33 +8588,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1131[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 8, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 42F in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1132[] = {
-  //{ 5, "42F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "429", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "429", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "420", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "41A", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 331, "41E", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 2, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 2, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 452 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1133[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_684[] = {
   //{ 5, "452", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "448", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9330,7 +8643,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1133[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 466 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1134[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_685[] = {
   //{ 5, "466", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "45E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9354,7 +8667,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1134[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 47E in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1135[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_686[] = {
   //{ 5, "47E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "474", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9387,110 +8700,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1135[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 496 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1136[] = {
-  //{ 5, "496", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "48C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "48C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "47F", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "3", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 4AE in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1137[] = {
-  //{ 5, "4AE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4A4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4A4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "497", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 4C6 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1138[] = {
-  //{ 5, "4C6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4BC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4BC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4AF", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "419", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 30AAD in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1139[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_687[] = {
   //{ 5, "30AAD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "30AAC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9523,332 +8734,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1139[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 35DA2 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1140[] = {
-  //{ 5, "35DA2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "11", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "34884", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.9973083903146054", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 332, "32D08", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsectobj", 1, {-1,-1,-1,-1,-1} },
-    { 74, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsect_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 92, "18", NULL, 0, BITS_UNKNOWN, "intsect_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "32D07", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 35DA5 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1141[] = {
-  //{ 5, "35DA5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA3", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "32D02", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "11", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "3488C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0021979298084268", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 332, "32D08", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsectobj", 1, {-1,-1,-1,-1,-1} },
-    { 74, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsect_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 92, "10", NULL, 0, BITS_UNKNOWN, "intsect_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 35DA8 in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1142[] = {
-  //{ 5, "35DA8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA7", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA6", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "11", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "3446C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.6799999746123482", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 332, "31782", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsectobj", 1, {-1,-1,-1,-1,-1} },
-    { 74, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsect_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "intsect_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "32D23", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 35DAB in test/test-data/2013/flipped.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1143[] = {
-  //{ 5, "35DAB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DAA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DAA", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "35DA9", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 5, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 5, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "3489A", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 5, {-1,-1,-1,-1,-1} },
-    { 40, "0.0023532651791512", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "0", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 5, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "1115172.545186974", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 1, {-1,-1,-1,-1,-1} },
-    { 20, "256107.39347763", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 1044C in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1144[] = {
-  //{ 5, "1044C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1043C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1043C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1043B", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 5, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 5, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "103DE", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 5, {-1,-1,-1,-1,-1} },
-    { 40, "0.4999999999999528", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 2, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "0", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 5, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "9597.764406857296", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 1, {-1,-1,-1,-1,-1} },
-    { 20, "14823.06558282625", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 104CA in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1145[] = {
-  //{ 5, "104CA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "104BA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "104BA", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "104B9", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 5, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 5, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "103E0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 5, {-1,-1,-1,-1,-1} },
-    { 40, "0.4999999999999308", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 2, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "0", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 5, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "19730.26440685677", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 1, {-1,-1,-1,-1,-1} },
-    { 20, "14784.90988824526", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 1, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 5, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 10500 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1146[] = {
-  //{ 5, "10500", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "104F0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "104F0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "104EF", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "102F7", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 10524 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1147[] = {
-  //{ 5, "10524", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10514", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10514", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10513", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "2", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "103E9", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.5", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 3, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 1055A in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1148[] = {
-  //{ 5, "1055A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1054A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1054A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10549", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "102DF", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 1057E in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1149[] = {
-  //{ 5, "1057E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1056E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1056E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1056D", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "2", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "103E8", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.5", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 3, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 105E1 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1150[] = {
-  //{ 5, "105E1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "105D1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "105D1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "105D0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "2", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "103E1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.5", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 3, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 109BE in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1151[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_688[] = {
   //{ 5, "109BE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "109AE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -9881,104 +8768,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1151[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 10CC6 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1152[] = {
-  //{ 5, "10CC6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10CB6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10CB6", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10CB5", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "10CB4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 10CD8 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1153[] = {
-  //{ 5, "10CD8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10CC8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10CC8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10CC7", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "10CB4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 10F71 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1154[] = {
-  //{ 5, "10F71", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10F61", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10F61", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10F60", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "10F1D", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 10F83 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1155[] = {
-  //{ 5, "10F83", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10F73", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10F73", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "10F72", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "10F1D", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 1159F in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1156[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_689[] = {
   //{ 5, "1159F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1158F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10003,7 +8794,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1156[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 117FD in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1157[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_690[] = {
   //{ 5, "117FD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "117ED", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10048,54 +8839,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1157[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 1180F in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1158[] = {
-  //{ 5, "1180F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "117FF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "117FF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "117FE", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11794", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "1CB9", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.5034430354187921", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11794", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 11857 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1159[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_691[] = {
   //{ 5, "11857", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "11847", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10141,54 +8886,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1159[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 11869 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1160[] = {
-  //{ 5, "11869", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11859", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11859", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11858", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11795", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "1FAC", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.7379203381309792", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11795", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 1195E in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1161[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_692[] = {
   //{ 5, "1195E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1194E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10236,7 +8935,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1161[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1197C in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1162[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_693[] = {
   //{ 5, "1197C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1196C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10272,7 +8971,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1162[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 119B4 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1163[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_694[] = {
   //{ 5, "119B4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "119A2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10308,7 +9007,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1163[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 119C6 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1164[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_695[] = {
   //{ 5, "119C6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "119B6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10356,7 +9055,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1164[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 119F3 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1165[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_696[] = {
   //{ 5, "119F3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "119E3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10401,90 +9100,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1165[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 11A05 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1166[] = {
-  //{ 5, "11A05", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "119F5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "119F5", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "119F4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "118D4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "DD2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11A17 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1167[] = {
-  //{ 5, "11A17", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A07", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A07", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A06", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "10354", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "1F51", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.7544786729865212", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 7, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "10354", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 11A29 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1168[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_697[] = {
   //{ 5, "11A29", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "11A19", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10522,102 +9139,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1168[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 11A3B in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1169[] = {
-  //{ 5, "11A3B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A2B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A2B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A2A", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "118E8", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "D92", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0511750921491601", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "118E8", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11A84 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1170[] = {
-  //{ 5, "11A84", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A74", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A74", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A73", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 3, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "4432", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 11, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "E07", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0656005374874345", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "4432", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 11, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 11A96 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1171[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_698[] = {
   //{ 5, "11A96", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "11A86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -10664,424 +9187,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1171[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 11AA8 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1172[] = {
-  //{ 5, "11AA8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A98", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A98", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11A97", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "10351", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "1F90", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.6348334980964346", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 7, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "10351", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11ABA in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1173[] = {
-  //{ 5, "11ABA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11AAA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11AAA", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11AA9", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "10351", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "20D9", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.4259100819273998", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 7, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "10351", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11C82 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1174[] = {
-  //{ 5, "11C82", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11C72", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11C72", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11C71", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11C15", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "C75", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11CA6 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1175[] = {
-  //{ 5, "11CA6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11C96", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11C96", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11C95", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11BCE", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "1C76", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11CB8 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1176[] = {
-  //{ 5, "11CB8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CA8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CA8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CA7", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11BCE", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "2", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "D16", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.5", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 6, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11CEE in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1177[] = {
-  //{ 5, "11CEE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CDE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CDE", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CDD", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "10CB0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "C59", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.8030680198027205", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "10CB0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11D00 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1178[] = {
-  //{ 5, "11D00", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CF0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CF0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11CEF", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "101CA", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 331, "1592", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 4, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 4, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 4, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 4, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11DAF in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1179[] = {
-  //{ 5, "11DAF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11D9F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11D9F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11D9E", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11D9D", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "18FA", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.6483889159729288", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11D9D", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11E19 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1180[] = {
-  //{ 5, "11E19", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11E09", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11E09", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11E08", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11DE1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "2", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "FB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "2196", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.5", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11E2B in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1181[] = {
-  //{ 5, "11E2B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11E1B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11E1B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11E1A", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11DE1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "11", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11DE1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.4315312629430689", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 332, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsectobj", 1, {-1,-1,-1,-1,-1} },
-    { 74, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.intsect_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 92, "0", NULL, 0, BITS_UNKNOWN, "intsect_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 302, "FB", NULL, 0, BITS_UNKNOWN, "intsectxrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 302, "F25", NULL, 0, BITS_UNKNOWN, "intsectxrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11F31 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1182[] = {
-  //{ 5, "11F31", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F21", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F21", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F20", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11F0D", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 11F4C in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1183[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_699[] = {
   //{ 5, "11F4C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "11F3C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11127,7 +9234,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1183[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 11F83 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1184[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_700[] = {
   //{ 5, "11F83", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "11F73", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11162,442 +9269,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1184[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 11F95 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1185[] = {
-  //{ 5, "11F95", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F85", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F85", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F84", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11F1C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8785", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.2500000000000112", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11F1C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11FAA in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1186[] = {
-  //{ 5, "11FAA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F97", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F97", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11F96", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11F1C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "885F", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11FD7 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1187[] = {
-  //{ 5, "11FD7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FC7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FC7", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FC6", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11F18", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "872A", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.1124999999998818", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11F18", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11FE9 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1188[] = {
-  //{ 5, "11FE9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FD9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FD9", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FD8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11F14", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8731", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 11FFB in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1189[] = {
-  //{ 5, "11FFB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FEB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FEB", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FEA", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11F1F", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8759", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.2899255268821835", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 7, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11F1F", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 2, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 7, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 7, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 1200D in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1190[] = {
-  //{ 5, "1200D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FFD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FFD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "11FFC", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11F1F", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "2", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8A3E", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.5", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 5, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 1205C in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1191[] = {
-  //{ 5, "1205C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1204C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1204C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1204B", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "1201B", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 1206E in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1192[] = {
-  //{ 5, "1206E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1205E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1205E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1205D", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "1201B", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "84B8", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 6, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 6, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 6, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 120AD in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1193[] = {
-  //{ 5, "120AD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1209D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1209D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1209C", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12025", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8987", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.9137237758382351", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12025", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 120BF in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1194[] = {
-  //{ 5, "120BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120AF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120AF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120AE", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "12026", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8976", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 120D1 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1195[] = {
-  //{ 5, "120D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120C1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120C1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120C0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12026", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "85D4", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.4888567425614096", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12026", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 120F5 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1196[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_701[] = {
   //{ 5, "120F5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "120E5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11643,54 +9316,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1196[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 12107 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1197[] = {
-  //{ 5, "12107", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120F7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120F7", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "120F6", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12021", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8AEA", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.4732020172492823", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12021", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 1216E in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1198[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_702[] = {
   //{ 5, "1216E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1215E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11737,192 +9364,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1198[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 121E9 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1199[] = {
-  //{ 5, "121E9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "121D9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "121D9", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "121D8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "121A1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "9092", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.8106389183714627", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "121A1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 121FB in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1200[] = {
-  //{ 5, "121FB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "121EB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "121EB", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "121EA", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "121A1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8AAB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.3800356700315619", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "121A1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 12243 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1201[] = {
-  //{ 5, "12243", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12233", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12233", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12232", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12181", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8660", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.8247570108349279", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12181", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 12297 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1202[] = {
-  //{ 5, "12297", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12287", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12287", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12286", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12260", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8660", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.1236456341619118", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12260", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 122AC in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1203[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_703[] = {
   //{ 5, "122AC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "12299", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -11958,348 +9401,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1203[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 1234C in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1204[] = {
-  //{ 5, "1234C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1233C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1233C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "1233B", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 6, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "1230E", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 5, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 2, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 6, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8D3B", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 5, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 5, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 6, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 12381 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1205[] = {
-  //{ 5, "12381", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12371", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12371", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12370", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12315", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "89EF", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.1112128074042629", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12315", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 12393 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1206[] = {
-  //{ 5, "12393", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12383", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12383", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12382", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12315", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8C28", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.5650236701430095", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12315", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 123A5 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1207[] = {
-  //{ 5, "123A5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12395", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12395", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "12394", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 4, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 4, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "12313", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 4, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 3, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 4, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 123D3 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1208[] = {
-  //{ 5, "123D3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123C3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123C3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123C2", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 3, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D2D2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 11, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "847D", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.0290887241613842", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D2D2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 11, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 123E5 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1209[] = {
-  //{ 5, "123E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123D5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123D5", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123D4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 3, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D2D2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 11, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "84AB", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.393037355165593", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "3", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 3, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D2D2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 11, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 11, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 11, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 11, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 123F7 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1210[] = {
-  //{ 5, "123F7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123E7", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123E7", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123E6", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12312", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "8D55", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.933225330695858", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12312", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 12409 in test/test-data/2013/gh55-ltype.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1211[] = {
-  //{ 5, "12409", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123F9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123F9", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "123F8", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "3", NULL, 0, BITS_UNKNOWN, "associativity", 1, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 7, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12312", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "8", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 1, {-1,-1,-1,-1,-1} },
-    { 331, "11700", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 301, "D17C", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 301, "85CC", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.xrefobj", 1, {-1,-1,-1,-1,-1} },
-    { 40, "0.5225487037147348", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 9, {-1,-1,-1,-1,-1} },
-    { 75, "1", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 1, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 3, {-1,-1,-1,-1,-1} },
-    { 72, "13", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "12312", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 2, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 3, {-1,-1,-1,-1,-1} },
-    { 91, "0", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 7, {-1,-1,-1,-1,-1} },
-    { 40, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 9, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 9, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 9, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 2, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 7, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 180D in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1212[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_704[] = {
   //{ 5, "180D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "180C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12330,7 +9433,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1212[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1810 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1213[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_705[] = {
   //{ 5, "1810", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "180F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12357,7 +9460,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1213[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1813 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1214[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_706[] = {
   //{ 5, "1813", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1812", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12415,7 +9518,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1214[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1817 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1215[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_707[] = {
   //{ 5, "1817", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1816", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12439,7 +9542,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1215[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 181A in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1216[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_708[] = {
   //{ 5, "181A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1819", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12473,7 +9576,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1216[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 181D in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1217[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_709[] = {
   //{ 5, "181D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "181C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12510,7 +9613,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1217[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1820 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1218[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_710[] = {
   //{ 5, "1820", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "181F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12544,7 +9647,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1218[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1823 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1219[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_711[] = {
   //{ 5, "1823", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1822", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12575,7 +9678,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1219[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1826 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1220[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_712[] = {
   //{ 5, "1826", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1825", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12609,7 +9712,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1220[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 182B in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1221[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_713[] = {
   //{ 5, "182B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "182A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12643,7 +9746,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1221[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 182E in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1222[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_714[] = {
   //{ 5, "182E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "182D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12680,7 +9783,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1222[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 183B in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1223[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_715[] = {
   //{ 5, "183B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "183A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12714,7 +9817,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1223[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1840 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1224[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_716[] = {
   //{ 5, "1840", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "183F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12748,7 +9851,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1224[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1849 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1225[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_717[] = {
   //{ 5, "1849", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1848", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12806,7 +9909,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1225[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 184C in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1226[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_718[] = {
   //{ 5, "184C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "184B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12830,7 +9933,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1226[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 184F in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1227[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_719[] = {
   //{ 5, "184F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "184E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12864,7 +9967,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1227[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1853 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1228[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_720[] = {
   //{ 5, "1853", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1852", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12898,7 +10001,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1228[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1856 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1229[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_721[] = {
   //{ 5, "1856", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1855", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12932,7 +10035,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1229[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D00 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1230[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_722[] = {
   //{ 5, "1D00", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1CFF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12959,7 +10062,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1230[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D03 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1231[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_723[] = {
   //{ 5, "1D03", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D02", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -12996,7 +10099,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1231[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D06 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1232[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_724[] = {
   //{ 5, "1D06", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D05", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13040,7 +10143,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1232[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D09 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1233[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_725[] = {
   //{ 5, "1D09", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D08", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13064,7 +10167,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1233[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D0C in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1234[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_726[] = {
   //{ 5, "1D0C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D0B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13098,7 +10201,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1234[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D10 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1235[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_727[] = {
   //{ 5, "1D10", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D0F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13132,7 +10235,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1235[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D13 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1236[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_728[] = {
   //{ 5, "1D13", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D12", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13169,7 +10272,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1236[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D16 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1237[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_729[] = {
   //{ 5, "1D16", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D15", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13203,7 +10306,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1237[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D19 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1238[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_730[] = {
   //{ 5, "1D19", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D18", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13240,7 +10343,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1238[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D22 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1239[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_731[] = {
   //{ 5, "1D22", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D21", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13271,7 +10374,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1239[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D25 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1240[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_732[] = {
   //{ 5, "1D25", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D24", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13298,7 +10401,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1240[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D28 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1241[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_733[] = {
   //{ 5, "1D28", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D27", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13356,7 +10459,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1241[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D2C in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1242[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_734[] = {
   //{ 5, "1D2C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D2B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13390,7 +10493,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1242[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D2F in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1243[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_735[] = {
   //{ 5, "1D2F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D2E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13424,7 +10527,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1243[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D34 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1244[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_736[] = {
   //{ 5, "1D34", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D33", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13458,7 +10561,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1244[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D37 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1245[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_737[] = {
   //{ 5, "1D37", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D36", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13495,7 +10598,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1245[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D43 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1246[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_738[] = {
   //{ 5, "1D43", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D42", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13529,7 +10632,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1246[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D48 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1247[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_739[] = {
   //{ 5, "1D48", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D47", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13563,7 +10666,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1247[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D53 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1248[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_740[] = {
   //{ 5, "1D53", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D52", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13621,7 +10724,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1248[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D56 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1249[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_741[] = {
   //{ 5, "1D56", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D55", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13645,7 +10748,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1249[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D59 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1250[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_742[] = {
   //{ 5, "1D59", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D58", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13679,7 +10782,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1250[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D5D in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1251[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_743[] = {
   //{ 5, "1D5D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D5C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13713,7 +10816,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1251[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1D60 in test/test-data/2000/plan.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1252[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_744[] = {
   //{ 5, "1D60", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1D5F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13737,7 +10840,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1252[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 32B in test/test-data/2004/Publish.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1253[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_745[] = {
   //{ 5, "32B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "32A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13761,7 +10864,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1253[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 662 in test/test-data/2004/Publish.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1254[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_746[] = {
   //{ 5, "662", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "65A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13785,7 +10888,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1254[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1CA1 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1255[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_747[] = {
   //{ 5, "1CA1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1CA0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13819,7 +10922,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1255[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 1CA6 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1256[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_748[] = {
   //{ 5, "1CA6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1CA5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13842,56 +10945,8 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1256[] = {
     { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
-/* DIMASSOC 3F33 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1257[] = {
-  //{ 5, "3F33", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3F28", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3F28", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "3F1A", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 3, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 3, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 3, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "1", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 3, {-1,-1,-1,-1,-1} },
-    { 331, "68A", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 1, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 3, {-1,-1,-1,-1,-1} },
-    { 40, "1.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 2, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 2, {-1,-1,-1,-1,-1} },
-    { 30, "2.000000000000000E+50", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 1, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* DIMASSOC 4BF0 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1258[] = {
-  //{ 5, "4BF0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4BE5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
-    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4BE5", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbDimAssoc", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 330, "4BD7", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "associativity", 2, {-1,-1,-1,-1,-1} },
-    { 70, "0", NULL, 8, BITS_RC, "trans_space_flag", 3, {-1,-1,-1,-1,-1} },
-    { 71, "0", NULL, 0, BITS_UNKNOWN, "rotated_type", 3, {-1,-1,-1,-1,-1} },
-    { 1, "AcDbOsnapPointRef", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.classname", 1, {-1,-1,-1,-1,-1} },
-    { 72, "2", NULL, 8, BITS_RC, "DIMASSOC_Ref.osnap_type", 2, {-1,-1,-1,-1,-1} },
-    { 331, "4A22", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.mainobjs", 1, {-1,-1,-1,-1,-1} },
-    { 73, "2", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_subent_type", 2, {-1,-1,-1,-1,-1} },
-    { 91, "1", NULL, 0, BITS_UNKNOWN, "DIMASSOC_Ref.main_gsmarker", 2, {-1,-1,-1,-1,-1} },
-    { 40, "0.5", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_dist", 1, {-1,-1,-1,-1,-1} },
-    { 10, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.x", 3, {-1,-1,-1,-1,-1} },
-    { 20, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.y", 3, {-1,-1,-1,-1,-1} },
-    { 30, "0.0", NULL, 0, BITS_BD, "DIMASSOC_Ref.osnap_pt.z", 3, {-1,-1,-1,-1,-1} },
-    { 75, "0", NULL, 1, BITS_B, "DIMASSOC_Ref.has_lastpt_ref", 3, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
 /* DIMASSOC 1FB in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1259[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_749[] = {
   //{ 5, "1FB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -13915,7 +10970,7 @@ static struct _unknown_field unknown_dxf_DIMASSOC_1259[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* DIMASSOC 20D in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_DIMASSOC_1260[] = {
+static struct _unknown_field unknown_dxf_DIMASSOC_750[] = {
   //{ 5, "20D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "206", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

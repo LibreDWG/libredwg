@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCACTION 391 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_396[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_175[] = {
   //{ 5, "391", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "38E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -19,7 +19,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_396[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 391 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_397[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_176[] = {
   //{ 5, "391", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "38E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -35,23 +35,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_397[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 391 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_398[] = {
-  //{ 5, "391", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
-    { 330, "38E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
-    { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "class_version", 3, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "geometry_status", 3, {-1,-1,-1,-1,-1} },
-    { 330, "38E", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-    { 360, "392", NULL, 0, BITS_UNKNOWN, "actionbody", 1, {-1,-1,-1,-1,-1} },
-    { 90, "1", NULL, 0, BITS_UNKNOWN, "action_index", 3, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "max_assoc_dep_index", 2, {-1,-1,-1,-1,-1} },
-    { 90, "2", NULL, 0, BITS_UNKNOWN, "num_deps", 2, {-1,-1,-1,-1,-1} },
-    { 360, "396", NULL, 0, BITS_UNKNOWN, "dep", 1, {-1,-1,-1,-1,-1} },
-    { 360, "397", NULL, 0, BITS_UNKNOWN, "owned_params", 1, {-1,-1,-1,-1,-1} },
-    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
-};
-/* ACDBASSOCACTION 391 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_399[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_177[] = {
   //{ 5, "391", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "38E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -67,7 +51,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_399[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 391 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_400[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_178[] = {
   //{ 5, "391", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "38E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -88,7 +72,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_400[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 2DF in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_401[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_179[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -106,7 +90,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_401[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 34E in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_402[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_180[] = {
   //{ 5, "34E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -125,7 +109,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_402[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 367 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_403[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_181[] = {
   //{ 5, "367", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -143,7 +127,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_403[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 412 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_404[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_182[] = {
   //{ 5, "412", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -162,7 +146,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_404[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 50B in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_405[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_183[] = {
   //{ 5, "50B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -180,7 +164,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_405[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 2DF in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_406[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_184[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -217,7 +201,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_406[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 34E in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_407[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_185[] = {
   //{ 5, "34E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -261,7 +245,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_407[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 367 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_408[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_186[] = {
   //{ 5, "367", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -292,7 +276,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCACTION_408[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCACTION 412 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCACTION_409[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCACTION_187[] = {
   //{ 5, "412", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* EXTRUDEDSURFACE 2D8 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_EXTRUDEDSURFACE_1261[] = {
+static struct _unknown_field unknown_dxf_EXTRUDEDSURFACE_751[] = {
   //{ 5, "2D8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -155,7 +155,7 @@ static struct _unknown_field unknown_dxf_EXTRUDEDSURFACE_1261[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* EXTRUDEDSURFACE 2D8 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_EXTRUDEDSURFACE_1262[] = {
+static struct _unknown_field unknown_dxf_EXTRUDEDSURFACE_752[] = {
   //{ 5, "2D8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
