@@ -71,6 +71,8 @@ typedef struct _bit_chain
   FILE *fh;
 } Bit_Chain;
 
+#define EMPTY_CHAIN(size) { NULL, size, 0L, 0, 0, 0, 0, NULL }
+
 /* Functions for raw data manipulations.
  */
 void bit_advance_position (Bit_Chain *dat, long advance);

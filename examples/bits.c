@@ -179,7 +179,7 @@ main (int argc, char *argv[])
   int hex = 0;
   int i;
   int pos;
-  Bit_Chain dat = { NULL, 0, 0, 0, 0, NULL, 0, 0 };
+  Bit_Chain dat = EMPTY_CHAIN (0);
 
   if (argc < 2)
     {
