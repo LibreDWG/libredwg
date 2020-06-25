@@ -4223,11 +4223,19 @@ DWG_OBJECT (IMAGEDEF)
   FIELD_BL (class_version, 90);
   if (FIELD_VALUE (class_version) > 10)
     return DWG_ERR_VALUEOUTOFBOUNDS;
-  FIELD_2RD (image_size, 10);
-  FIELD_T (file_path, 1);
-  FIELD_B (is_loaded, 280);
-  FIELD_RC (resunits, 281);
-  FIELD_2RD (pixel_size, 11);
+  DXF {
+    FIELD_T (file_path, 1);
+    FIELD_2RD (image_size, 10);
+    FIELD_2RD (pixel_size, 11);
+    FIELD_B (is_loaded, 280);
+    FIELD_RC (resunits, 281);
+  } else {
+    FIELD_2RD (image_size, 10);
+    FIELD_T (file_path, 1);
+    FIELD_B (is_loaded, 280);
+    FIELD_RC (resunits, 281);
+    FIELD_2RD (pixel_size, 11);
+  }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
