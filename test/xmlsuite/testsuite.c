@@ -212,14 +212,14 @@ add_helix (xmlNodePtr rootnode, const Dwg_Object *obj)
   dtostring = doubletochar (helix->turn_height);
   newXMLProp ("TurnHeight", dtostring);
 
-  dtostring = doubletochar (helix->num_turns);
+  dtostring = doubletochar (helix->turns);
   newXMLProp ("Turns", dtostring);
 
   dtostring = doubletochar (0);
   newXMLProp ("Twist", dtostring);
 
   dtostring = doubletochar (helix->constraint_type);
-  newXMLProp ("Constrain", dtostring); // typo!
+  newXMLProp ("Constrain", dtostring); // typo?
 
   dtostring = doubletochar (0);
   newXMLProp ("TurnSlope", dtostring);

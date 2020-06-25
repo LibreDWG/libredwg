@@ -7,6 +7,7 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BL i;
+  // AcDbSpline
   BITCODE_BS flag;
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
   BITCODE_BS degree;
@@ -27,16 +28,17 @@ api_process (dwg_object *obj)
   BITCODE_BD* knots;
   BITCODE_BL num_ctrl_pts;
   Dwg_SPLINE_control_point* ctrl_pts;
-  BITCODE_BS major_version;
-  BITCODE_BS maint_version;
+  // AcDbHelix
+  BITCODE_BL major_version;
+  BITCODE_BL maint_version;
   BITCODE_3BD axis_base_pt;
   BITCODE_3BD start_pt;
   BITCODE_3BD axis_vector;
   BITCODE_BD radius;
-  BITCODE_BD num_turns;
+  BITCODE_BD turns;
   BITCODE_BD turn_height;
   BITCODE_B handedness;
-  BITCODE_BS constraint_type; //280: 0=turn_height, 1=turns, 2=height
+  BITCODE_RC constraint_type;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_helix *helix = dwg_object_to_HELIX (obj);
@@ -113,15 +115,16 @@ api_process (dwg_object *obj)
         }
     }
 
-  CHK_ENTITY_TYPE (helix, HELIX, major_version, BS);
-  CHK_ENTITY_TYPE (helix, HELIX, maint_version, BS);
+  // AcDbHelix
+  CHK_ENTITY_TYPE (helix, HELIX, major_version, BL);
+  CHK_ENTITY_TYPE (helix, HELIX, maint_version, BL);
   CHK_ENTITY_3RD (helix, HELIX, axis_base_pt);
   CHK_ENTITY_3RD (helix, HELIX, start_pt);
   CHK_ENTITY_3RD (helix, HELIX, axis_vector);
   CHK_ENTITY_TYPE (helix, HELIX, radius, BD);
-  CHK_ENTITY_TYPE (helix, HELIX, num_turns, BD);
+  CHK_ENTITY_TYPE (helix, HELIX, turns, BD);
   CHK_ENTITY_TYPE (helix, HELIX, turn_height, BD);
   CHK_ENTITY_TYPE (helix, HELIX, handedness, B);
-  CHK_ENTITY_TYPE (helix, HELIX, constraint_type, BS);
-  CHK_ENTITY_MAX (helix, HELIX, constraint_type, BS, 2);
+  CHK_ENTITY_TYPE (helix, HELIX, constraint_type, RC);
+  CHK_ENTITY_MAX (helix, HELIX, constraint_type, RC, 2);
 }

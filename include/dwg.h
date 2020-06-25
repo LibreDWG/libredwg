@@ -4642,6 +4642,7 @@ typedef struct _dwg_entity_HELIX
 {
   struct _dwg_object_entity *parent;
 
+  // AcDbSpline
   BITCODE_BS flag; /* computed */
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
   BITCODE_BS degree;
@@ -4662,17 +4663,17 @@ typedef struct _dwg_entity_HELIX
   BITCODE_BD* knots;
   BITCODE_BL num_ctrl_pts;
   Dwg_SPLINE_control_point* ctrl_pts;
-
-  BITCODE_BS major_version; //90
-  BITCODE_BS maint_version; //91
-  BITCODE_3BD axis_base_pt; //10
-  BITCODE_3BD start_pt;     //11
-  BITCODE_3BD axis_vector;  //12
-  BITCODE_BD radius;        //40
-  BITCODE_BD num_turns;     //41
-  BITCODE_BD turn_height;   //42
-  BITCODE_B handedness;     //290
-  BITCODE_BS constraint_type; //280: 0=turn_height, 1=turns, 2=height
+  // AcDbHelix
+  BITCODE_BL major_version; /*!< DXF 90: 27 */
+  BITCODE_BL maint_version; /*!< DXF 91: 1 */
+  BITCODE_3BD axis_base_pt; /*!< DXF 10 */
+  BITCODE_3BD start_pt;     /*!< DXF 11 */
+  BITCODE_3BD axis_vector;  /*!< DXF 12 */
+  BITCODE_BD radius;        /*!< DXF 40 */
+  BITCODE_BD turns;         /*!< DXF 41 */
+  BITCODE_BD turn_height;   /*!< DXF 42 */
+  BITCODE_B handedness;       /*!< DXF 290: 0: left, 1: right (twist) */
+  BITCODE_RC constraint_type; /*!< DXF 280: 0: turn_height, 1: turns, 2: height */
 
 } Dwg_Entity_HELIX;
 

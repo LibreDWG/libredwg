@@ -11508,18 +11508,18 @@ static int test_HELIX (const Dwg_Object *obj)
     helix->closed_b--;
   }
   {
-    BITCODE_BS constraint_type;
+    BITCODE_RC constraint_type;
     if (dwg_dynapi_entity_value (helix, "HELIX", "constraint_type", &constraint_type, NULL)
         && constraint_type == helix->constraint_type)
       pass ();
     else
-      fail ("HELIX.constraint_type [BS] %hu != %hu", helix->constraint_type, constraint_type);
+      fail ("HELIX.constraint_type [RC] %u != %u", helix->constraint_type, constraint_type);
     constraint_type++;
     if (dwg_dynapi_entity_set_value (helix, "HELIX", "constraint_type", &constraint_type, 0)
         && constraint_type == helix->constraint_type)
       pass ();
     else
-      fail ("HELIX.constraint_type [BS] set+1 %hu != %hu", helix->constraint_type, constraint_type);
+      fail ("HELIX.constraint_type [RC] set+1 %u != %u", helix->constraint_type, constraint_type);
     helix->constraint_type--;
   }
   {
@@ -11666,33 +11666,33 @@ static int test_HELIX (const Dwg_Object *obj)
       fail ("HELIX.knots [BD*] * %u num_knots", count);
   }
   {
-    BITCODE_BS maint_version;
+    BITCODE_BL maint_version;
     if (dwg_dynapi_entity_value (helix, "HELIX", "maint_version", &maint_version, NULL)
         && maint_version == helix->maint_version)
       pass ();
     else
-      fail ("HELIX.maint_version [BS] %hu != %hu", helix->maint_version, maint_version);
+      fail ("HELIX.maint_version [BL] %u != %u", helix->maint_version, maint_version);
     maint_version++;
     if (dwg_dynapi_entity_set_value (helix, "HELIX", "maint_version", &maint_version, 0)
         && maint_version == helix->maint_version)
       pass ();
     else
-      fail ("HELIX.maint_version [BS] set+1 %hu != %hu", helix->maint_version, maint_version);
+      fail ("HELIX.maint_version [BL] set+1 %u != %u", helix->maint_version, maint_version);
     helix->maint_version--;
   }
   {
-    BITCODE_BS major_version;
+    BITCODE_BL major_version;
     if (dwg_dynapi_entity_value (helix, "HELIX", "major_version", &major_version, NULL)
         && major_version == helix->major_version)
       pass ();
     else
-      fail ("HELIX.major_version [BS] %hu != %hu", helix->major_version, major_version);
+      fail ("HELIX.major_version [BL] %u != %u", helix->major_version, major_version);
     major_version++;
     if (dwg_dynapi_entity_set_value (helix, "HELIX", "major_version", &major_version, 0)
         && major_version == helix->major_version)
       pass ();
     else
-      fail ("HELIX.major_version [BS] set+1 %hu != %hu", helix->major_version, major_version);
+      fail ("HELIX.major_version [BL] set+1 %u != %u", helix->major_version, major_version);
     helix->major_version--;
   }
   {
@@ -11739,21 +11739,6 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.num_knots [BL] set+1 %u != %u", helix->num_knots, num_knots);
     helix->num_knots--;
-  }
-  {
-    BITCODE_BD num_turns;
-    if (dwg_dynapi_entity_value (helix, "HELIX", "num_turns", &num_turns, NULL)
-        && num_turns == helix->num_turns)
-      pass ();
-    else
-      fail ("HELIX.num_turns [BD] %g != %g", helix->num_turns, num_turns);
-    num_turns++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "num_turns", &num_turns, 0)
-        && num_turns == helix->num_turns)
-      pass ();
-    else
-      fail ("HELIX.num_turns [BD] set+1 %g != %g", helix->num_turns, num_turns);
-    helix->num_turns--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -11860,6 +11845,21 @@ static int test_HELIX (const Dwg_Object *obj)
     else
       fail ("HELIX.turn_height [BD] set+1 %g != %g", helix->turn_height, turn_height);
     helix->turn_height--;
+  }
+  {
+    BITCODE_BD turns;
+    if (dwg_dynapi_entity_value (helix, "HELIX", "turns", &turns, NULL)
+        && turns == helix->turns)
+      pass ();
+    else
+      fail ("HELIX.turns [BD] %g != %g", helix->turns, turns);
+    turns++;
+    if (dwg_dynapi_entity_set_value (helix, "HELIX", "turns", &turns, 0)
+        && turns == helix->turns)
+      pass ();
+    else
+      fail ("HELIX.turns [BD] set+1 %g != %g", helix->turns, turns);
+    helix->turns--;
   }
   {
     BITCODE_B weighted;

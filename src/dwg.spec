@@ -7248,6 +7248,12 @@ DWG_ENTITY (HELIX)
   UNTIL (R_2013) {
     if (FIELD_VALUE (scenario) != 1 && FIELD_VALUE (scenario) != 2)
       LOG_ERROR ("unknown scenario %d", FIELD_VALUE (scenario));
+    DECODER {
+      if (FIELD_VALUE (scenario) == 1)
+        FIELD_VALUE (splineflags1) = 8;
+      else if (FIELD_VALUE (scenario) == 2)
+        FIELD_VALUE (splineflags1) = 9;
+    }
   }
   SINCE (R_2013) {
     FIELD_BL (splineflags1, 0);
@@ -7258,46 +7264,34 @@ DWG_ENTITY (HELIX)
       FIELD_VALUE (scenario) = 1;
   }
 
-  DXF {
-    // extrusion on planar
-    VALUE_RD (0.0, 210); VALUE_RD (0.0, 220); VALUE_RD (1.0, 230);
-    FIELD_BL (flag, 70);
-  }
+  // extrusion on planar
+  DXF { VALUE_RD (0.0, 210); VALUE_RD (0.0, 220); VALUE_RD (1.0, 230);
+        FIELD_BL (flag, 70);
+      }
   FIELD_BL (degree, 71);
 
-  if (FIELD_VALUE (scenario) & 2) // bezier spline
-    {
-      FIELD_VALUE (flag) = 8 + 32 + //planar, not rational
+  if (FIELD_VALUE (scenario) & 1) { // spline
+    FIELD_B (rational, 0); // flag bit 2
+    FIELD_B (closed_b, 0); // flag bit 0
+    FIELD_B (periodic, 0); // flag bit 1
+    FIELD_BD (knot_tol, 42); // def: 0.0000001
+    FIELD_BD (ctrl_tol, 43); // def: 0.0000001
+    FIELD_BL (num_knots, 72);
+    FIELD_BL (num_ctrl_pts, 73);
+    FIELD_B (weighted, 0);
+
+    DECODER {
+      // not 32
+      FIELD_VALUE (flag) = 8 +          /* planar */
+        FIELD_VALUE (closed_b) +        /* 1 */
+        (FIELD_VALUE (periodic) << 1) + /* 2 */
+        (FIELD_VALUE (rational) << 2) + /* 4 */
+        (FIELD_VALUE (weighted) << 4);  /* 16 */
         // ignore method fit points and closed bits
-        ((FIELD_VALUE (splineflags1) & ~5) << 7);
-      FIELD_BD (fit_tol, 44); // def: 0.0000001
-      FIELD_3BD (beg_tan_vec, 12);
-      FIELD_3BD (end_tan_vec, 13);
-      FIELD_BL (num_fit_pts, 74);
-      VALUEOUTOFBOUNDS (num_fit_pts, 5000)
+        /*((FIELD_VALUE (splineflags1) & ~5) << 7)*/
+      LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
     }
-  if (FIELD_VALUE (scenario) & 1) // spline
-    {
-      FIELD_B (rational, 0); // flag bit 2
-      FIELD_B (closed_b, 0); // flag bit 0
-      FIELD_B (periodic, 0); // flag bit 1
-      FIELD_BD (knot_tol, 42); // def: 0.0000001
-      FIELD_BD (ctrl_tol, 43); // def: 0.0000001
-      FIELD_BL (num_knots, 72);
-      VALUEOUTOFBOUNDS (num_knots, 10000)
-      FIELD_BL (num_ctrl_pts, 73);
-      VALUEOUTOFBOUNDS (num_ctrl_pts, 10000)
-      FIELD_B (weighted, 0);
-
-      FIELD_VALUE (flag) = 8 + //planar
-        FIELD_VALUE (closed_b) +
-        (FIELD_VALUE (periodic) << 1) +
-        (FIELD_VALUE (rational) << 2) +
-        (FIELD_VALUE (weighted) << 3);
-    }
-
-  if (FIELD_VALUE (scenario) & 1) {
-    FIELD_VECTOR (knots, BD, num_knots, 40)
+    FIELD_VECTOR (knots, BD, num_knots, 40);
     REPEAT (num_ctrl_pts, ctrl_pts, Dwg_SPLINE_control_point)
     REPEAT_BLOCK
         SUB_FIELD_3BD_inl (ctrl_pts[rcount1], xyz, 10);
@@ -7309,21 +7303,32 @@ DWG_ENTITY (HELIX)
     SET_PARENT (ctrl_pts, (Dwg_Entity_SPLINE*)_obj);
     END_REPEAT (ctrl_pts);
   }
-  if (FIELD_VALUE (scenario) & 2) {
-    FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11)
+  else { // bezier spline, scenario 2
+    DECODER {
+      // flag 32 in DXF
+      FIELD_VALUE (flag) = 8 + 32 + // planar, not rational
+        // ignore method fit points and closed bits
+        ((FIELD_VALUE (splineflags1) & ~5) << 7);
+      LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
+    }
+    FIELD_BD (fit_tol, 44); // def: 0.0000001
+    FIELD_3BD (beg_tan_vec, 12);
+    FIELD_3BD (end_tan_vec, 13);
+    FIELD_BL (num_fit_pts, 74);
+    FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11);
   }
 
   SUBCLASS (AcDbHelix)
-  FIELD_BS (major_version, 90);
-  FIELD_BS (maint_version, 91);
+  FIELD_BL (major_version, 90);
+  FIELD_BL (maint_version, 91);
   FIELD_3BD (axis_base_pt, 10);
-  FIELD_3BD_1 (start_pt, 11);
-  FIELD_3BD_1 (axis_vector, 12);
+  FIELD_3BD (start_pt, 11);
+  FIELD_3BD (axis_vector, 12);
   FIELD_BD (radius, 40);
-  FIELD_BD (num_turns, 41);
-  FIELD_BD (turn_height, 43);
-  FIELD_B (handedness, 290); //0 left, 1 right (twist)
-  FIELD_BS (constraint_type, 280); //0 constrain turn height, 1 turns, 2 height
+  FIELD_BD (turns, 41);
+  FIELD_BD (turn_height, 42);
+  FIELD_B (handedness, 290);
+  FIELD_RC (constraint_type, 280);
 
 DWG_ENTITY_END
 

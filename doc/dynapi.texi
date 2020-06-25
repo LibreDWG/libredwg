@@ -1966,9 +1966,9 @@ BL,	DXF 73
 @item ctrl_pts
 Dwg_SPLINE_control_point*
 @item major_version
-BS,	DXF 90
+BL,	DXF 90
 @item maint_version
-BS,	DXF 91
+BL,	DXF 91
 @item axis_base_pt
 3BD,	DXF 10
 @item start_pt
@@ -1977,14 +1977,14 @@ BS,	DXF 91
 3BD,	DXF 12
 @item radius
 BD,	DXF 40
-@item num_turns
+@item turns
 BD,	DXF 41
 @item turn_height
-BD,	DXF 43
+BD,	DXF 42
 @item handedness
 B,	DXF 290
 @item constraint_type
-BS,	DXF 280
+RC,	DXF 280
 
 @end vtable
 @end indentedblock
