@@ -9003,7 +9003,7 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbMTextObjectContextData)
-  FIELD_BL (flag, 70); // 6
+  FIELD_BL (flag, 70);
   // From MTEXT Embedded object
   DXF {
     FIELD_3BD (insertion_pt, 10); // ODA bug
@@ -9012,12 +9012,14 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
     FIELD_3BD (x_axis_dir, 11);
     FIELD_3BD (insertion_pt, 10);
   }
-  FIELD_BD (rect_height, 40);
-  FIELD_BD (rect_width, 41);
   DXF {
+    FIELD_BD (rect_height, 40);
+    FIELD_BD (rect_width, 41);
     FIELD_BD (extents_width, 42);
     FIELD_BD (extents_height, 43);
   } else {
+    FIELD_BD (rect_width, 41);
+    FIELD_BD (rect_height, 40);
     FIELD_BD (extents_height, 43);
     FIELD_BD (extents_width, 42);
   }

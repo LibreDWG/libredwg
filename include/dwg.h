@@ -6548,9 +6548,8 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
   BITCODE_BL flag;      	/*<! DXF 70 */
   BITCODE_3BD insertion_pt; 	/*!< DXF 10 */
   BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
-  BITCODE_BD text_height;	/*!< DXF 40 */
+  BITCODE_BD rect_height;	/*!< DXF 40 */
   BITCODE_BD rect_width;	/*!< DXF 41 */
-  BITCODE_BD rect_height;	/*!< DXF 46 */
   BITCODE_BD extents_width;	/*!< DXF 42 */
   BITCODE_BD extents_height;	/*!< DXF 43 */
   BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic. Note: BS in MTEXT! */
