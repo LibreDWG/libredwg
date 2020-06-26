@@ -9527,13 +9527,11 @@ DWG_OBJECT_END
 
 #define AcDbBlockGrip_fields                    \
   SUBCLASS (AcDbBlockGrip)                      \
-  FIELD_BL (bg_bl1, 0);                         \
-  FIELD_BL (bg_bl2, 0);                         \
-  FIELD_3BD (bg_pt, 0);                         \
-  FIELD_B (bg_insert_cycling, 0);               \
-  FIELD_BLd (bg_insert_cycling_weight, 0);      \
-  /* FIELD_3BD (bg_location, 0; */              \
-  /* FIELD_3BD (bg_display_location, 0); */
+  FIELD_BL (bg_version, 91);                    \
+  FIELD_BL (bg_bl92, 92);                       \
+  FIELD_3BD (bg_location, 1010);                \
+  FIELD_B (bg_insert_cycling, 280);             \
+  FIELD_BLd (bg_insert_cycling_weight, 93)
 
 #define AcDbBlockParameter_fields               \
   AcDbBlockElement_fields;                      \

@@ -6814,16 +6814,16 @@ Dwg_BLOCKPARAMVALUESET
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 @item orientation
 3BD_1,	DXF 140
 
@@ -7023,16 +7023,16 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 
 @end vtable
 @end indentedblock
@@ -7176,16 +7176,16 @@ Dwg_BLOCKPARAMVALUESET
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 @item orientation
 3BD_1,	DXF 140
 
@@ -7227,16 +7227,16 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 
 @end vtable
 @end indentedblock
@@ -7342,16 +7342,16 @@ T,	DXF 304
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 
 @end vtable
 @end indentedblock
@@ -7404,16 +7404,16 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 
 @end vtable
 @end indentedblock
@@ -7496,16 +7496,16 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 
 @end vtable
 @end indentedblock
@@ -7630,16 +7630,16 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 
 @end vtable
 @end indentedblock
@@ -7678,16 +7678,16 @@ Dwg_BLOCKVISIBILITYPARAMETER_state*
 
 @item parent
 struct _dwg_object_object*
-@item bg_bl1
-BL
-@item bg_bl2
-BL
-@item bg_pt
-3BD
+@item bg_version
+BL,	DXF 91
+@item bg_bl92
+BL,	DXF 92
+@item bg_location
+3BD,	DXF 1010
 @item bg_insert_cycling
-B
+B,	DXF 280
 @item bg_insert_cycling_weight
-BLd
+BLd,	DXF 93
 
 @end vtable
 @end indentedblock

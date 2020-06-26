@@ -7026,9 +7026,9 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   BITCODE_BL *deps;                             \
 
 #define BLOCKGRIP_fields                        \
-  BITCODE_BL bg_bl1;                            \
-  BITCODE_BL bg_bl2;                            \
-  BITCODE_3BD bg_pt;                            \
+  BITCODE_BL bg_version;                        \
+  BITCODE_BL bg_bl92;                           \
+  BITCODE_3BD bg_location;                      \
   BITCODE_B bg_insert_cycling;                  \
   BITCODE_BLd bg_insert_cycling_weight
 

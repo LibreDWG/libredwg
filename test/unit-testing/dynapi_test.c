@@ -34722,34 +34722,19 @@ static int test_BLOCKALIGNMENTGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKALIGNMENTGRIP *restrict blockalignmentgrip = obj->tio.object->tio.BLOCKALIGNMENTGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blockalignmentgrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blockalignmentgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKALIGNMENTGRIP.bg_bl1 [BL] %u != %u", blockalignmentgrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blockalignmentgrip->bg_bl1)
+      fail ("BLOCKALIGNMENTGRIP.bg_bl92 [BL] %u != %u", blockalignmentgrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blockalignmentgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKALIGNMENTGRIP.bg_bl1 [BL] set+1 %u != %u", blockalignmentgrip->bg_bl1, bg_bl1);
-    blockalignmentgrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blockalignmentgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKALIGNMENTGRIP.bg_bl2 [BL] %u != %u", blockalignmentgrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blockalignmentgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKALIGNMENTGRIP.bg_bl2 [BL] set+1 %u != %u", blockalignmentgrip->bg_bl2, bg_bl2);
-    blockalignmentgrip->bg_bl2--;
+      fail ("BLOCKALIGNMENTGRIP.bg_bl92 [BL] set+1 %u != %u", blockalignmentgrip->bg_bl92, bg_bl92);
+    blockalignmentgrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -34781,12 +34766,27 @@ static int test_BLOCKALIGNMENTGRIP (const Dwg_Object *obj)
     blockalignmentgrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockalignmentgrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blockalignmentgrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKALIGNMENTGRIP.bg_pt [3BD]");
+        fail ("BLOCKALIGNMENTGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blockalignmentgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.bg_version [BL] %u != %u", blockalignmentgrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blockalignmentgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.bg_version [BL] set+1 %u != %u", blockalignmentgrip->bg_version, bg_version);
+    blockalignmentgrip->bg_version--;
   }
   {
     BITCODE_3BD orientation;
@@ -35599,34 +35599,19 @@ static int test_BLOCKFLIPGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKFLIPGRIP *restrict blockflipgrip = obj->tio.object->tio.BLOCKFLIPGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blockflipgrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blockflipgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKFLIPGRIP.bg_bl1 [BL] %u != %u", blockflipgrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blockflipgrip->bg_bl1)
+      fail ("BLOCKFLIPGRIP.bg_bl92 [BL] %u != %u", blockflipgrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blockflipgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKFLIPGRIP.bg_bl1 [BL] set+1 %u != %u", blockflipgrip->bg_bl1, bg_bl1);
-    blockflipgrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blockflipgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKFLIPGRIP.bg_bl2 [BL] %u != %u", blockflipgrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blockflipgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKFLIPGRIP.bg_bl2 [BL] set+1 %u != %u", blockflipgrip->bg_bl2, bg_bl2);
-    blockflipgrip->bg_bl2--;
+      fail ("BLOCKFLIPGRIP.bg_bl92 [BL] set+1 %u != %u", blockflipgrip->bg_bl92, bg_bl92);
+    blockflipgrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -35658,12 +35643,27 @@ static int test_BLOCKFLIPGRIP (const Dwg_Object *obj)
     blockflipgrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockflipgrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blockflipgrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKFLIPGRIP.bg_pt [3BD]");
+        fail ("BLOCKFLIPGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blockflipgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.bg_version [BL] %u != %u", blockflipgrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blockflipgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.bg_version [BL] set+1 %u != %u", blockflipgrip->bg_version, bg_version);
+    blockflipgrip->bg_version--;
   }
   {
     struct _dwg_object_object* parent;
@@ -36254,34 +36254,19 @@ static int test_BLOCKLINEARGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKLINEARGRIP *restrict blocklineargrip = obj->tio.object->tio.BLOCKLINEARGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blocklineargrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blocklineargrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKLINEARGRIP.bg_bl1 [BL] %u != %u", blocklineargrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blocklineargrip->bg_bl1)
+      fail ("BLOCKLINEARGRIP.bg_bl92 [BL] %u != %u", blocklineargrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blocklineargrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKLINEARGRIP.bg_bl1 [BL] set+1 %u != %u", blocklineargrip->bg_bl1, bg_bl1);
-    blocklineargrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blocklineargrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKLINEARGRIP.bg_bl2 [BL] %u != %u", blocklineargrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blocklineargrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKLINEARGRIP.bg_bl2 [BL] set+1 %u != %u", blocklineargrip->bg_bl2, bg_bl2);
-    blocklineargrip->bg_bl2--;
+      fail ("BLOCKLINEARGRIP.bg_bl92 [BL] set+1 %u != %u", blocklineargrip->bg_bl92, bg_bl92);
+    blocklineargrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -36313,12 +36298,27 @@ static int test_BLOCKLINEARGRIP (const Dwg_Object *obj)
     blocklineargrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blocklineargrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blocklineargrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKLINEARGRIP.bg_pt [3BD]");
+        fail ("BLOCKLINEARGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blocklineargrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.bg_version [BL] %u != %u", blocklineargrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blocklineargrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.bg_version [BL] set+1 %u != %u", blocklineargrip->bg_version, bg_version);
+    blocklineargrip->bg_version--;
   }
   {
     BITCODE_3BD orientation;
@@ -36392,34 +36392,19 @@ static int test_BLOCKLOOKUPGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKLOOKUPGRIP *restrict blocklookupgrip = obj->tio.object->tio.BLOCKLOOKUPGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blocklookupgrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blocklookupgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKLOOKUPGRIP.bg_bl1 [BL] %u != %u", blocklookupgrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blocklookupgrip->bg_bl1)
+      fail ("BLOCKLOOKUPGRIP.bg_bl92 [BL] %u != %u", blocklookupgrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blocklookupgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKLOOKUPGRIP.bg_bl1 [BL] set+1 %u != %u", blocklookupgrip->bg_bl1, bg_bl1);
-    blocklookupgrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blocklookupgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKLOOKUPGRIP.bg_bl2 [BL] %u != %u", blocklookupgrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blocklookupgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKLOOKUPGRIP.bg_bl2 [BL] set+1 %u != %u", blocklookupgrip->bg_bl2, bg_bl2);
-    blocklookupgrip->bg_bl2--;
+      fail ("BLOCKLOOKUPGRIP.bg_bl92 [BL] set+1 %u != %u", blocklookupgrip->bg_bl92, bg_bl92);
+    blocklookupgrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -36451,12 +36436,27 @@ static int test_BLOCKLOOKUPGRIP (const Dwg_Object *obj)
     blocklookupgrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blocklookupgrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blocklookupgrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKLOOKUPGRIP.bg_pt [3BD]");
+        fail ("BLOCKLOOKUPGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blocklookupgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.bg_version [BL] %u != %u", blocklookupgrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blocklookupgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.bg_version [BL] set+1 %u != %u", blocklookupgrip->bg_version, bg_version);
+    blocklookupgrip->bg_version--;
   }
   {
     struct _dwg_object_object* parent;
@@ -36823,34 +36823,19 @@ static int test_BLOCKPOLARGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKPOLARGRIP *restrict blockpolargrip = obj->tio.object->tio.BLOCKPOLARGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blockpolargrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blockpolargrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKPOLARGRIP.bg_bl1 [BL] %u != %u", blockpolargrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blockpolargrip->bg_bl1)
+      fail ("BLOCKPOLARGRIP.bg_bl92 [BL] %u != %u", blockpolargrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blockpolargrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKPOLARGRIP.bg_bl1 [BL] set+1 %u != %u", blockpolargrip->bg_bl1, bg_bl1);
-    blockpolargrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blockpolargrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKPOLARGRIP.bg_bl2 [BL] %u != %u", blockpolargrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blockpolargrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKPOLARGRIP.bg_bl2 [BL] set+1 %u != %u", blockpolargrip->bg_bl2, bg_bl2);
-    blockpolargrip->bg_bl2--;
+      fail ("BLOCKPOLARGRIP.bg_bl92 [BL] set+1 %u != %u", blockpolargrip->bg_bl92, bg_bl92);
+    blockpolargrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -36882,12 +36867,27 @@ static int test_BLOCKPOLARGRIP (const Dwg_Object *obj)
     blockpolargrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockpolargrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blockpolargrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKPOLARGRIP.bg_pt [3BD]");
+        fail ("BLOCKPOLARGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blockpolargrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.bg_version [BL] %u != %u", blockpolargrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blockpolargrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.bg_version [BL] set+1 %u != %u", blockpolargrip->bg_version, bg_version);
+    blockpolargrip->bg_version--;
   }
   {
     struct _dwg_object_object* parent;
@@ -36974,34 +36974,19 @@ static int test_BLOCKPROPERTIESTABLEGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKPROPERTIESTABLEGRIP *restrict blockpropertiestablegrip = obj->tio.object->tio.BLOCKPROPERTIESTABLEGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blockpropertiestablegrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blockpropertiestablegrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKPROPERTIESTABLEGRIP.bg_bl1 [BL] %u != %u", blockpropertiestablegrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blockpropertiestablegrip->bg_bl1)
+      fail ("BLOCKPROPERTIESTABLEGRIP.bg_bl92 [BL] %u != %u", blockpropertiestablegrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blockpropertiestablegrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKPROPERTIESTABLEGRIP.bg_bl1 [BL] set+1 %u != %u", blockpropertiestablegrip->bg_bl1, bg_bl1);
-    blockpropertiestablegrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blockpropertiestablegrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKPROPERTIESTABLEGRIP.bg_bl2 [BL] %u != %u", blockpropertiestablegrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blockpropertiestablegrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKPROPERTIESTABLEGRIP.bg_bl2 [BL] set+1 %u != %u", blockpropertiestablegrip->bg_bl2, bg_bl2);
-    blockpropertiestablegrip->bg_bl2--;
+      fail ("BLOCKPROPERTIESTABLEGRIP.bg_bl92 [BL] set+1 %u != %u", blockpropertiestablegrip->bg_bl92, bg_bl92);
+    blockpropertiestablegrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -37033,12 +37018,27 @@ static int test_BLOCKPROPERTIESTABLEGRIP (const Dwg_Object *obj)
     blockpropertiestablegrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockpropertiestablegrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blockpropertiestablegrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKPROPERTIESTABLEGRIP.bg_pt [3BD]");
+        fail ("BLOCKPROPERTIESTABLEGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blockpropertiestablegrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.bg_version [BL] %u != %u", blockpropertiestablegrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blockpropertiestablegrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.bg_version [BL] set+1 %u != %u", blockpropertiestablegrip->bg_version, bg_version);
+    blockpropertiestablegrip->bg_version--;
   }
   {
     struct _dwg_object_object* parent;
@@ -37310,34 +37310,19 @@ static int test_BLOCKROTATIONGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKROTATIONGRIP *restrict blockrotationgrip = obj->tio.object->tio.BLOCKROTATIONGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blockrotationgrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blockrotationgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKROTATIONGRIP.bg_bl1 [BL] %u != %u", blockrotationgrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blockrotationgrip->bg_bl1)
+      fail ("BLOCKROTATIONGRIP.bg_bl92 [BL] %u != %u", blockrotationgrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blockrotationgrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKROTATIONGRIP.bg_bl1 [BL] set+1 %u != %u", blockrotationgrip->bg_bl1, bg_bl1);
-    blockrotationgrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blockrotationgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKROTATIONGRIP.bg_bl2 [BL] %u != %u", blockrotationgrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blockrotationgrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKROTATIONGRIP.bg_bl2 [BL] set+1 %u != %u", blockrotationgrip->bg_bl2, bg_bl2);
-    blockrotationgrip->bg_bl2--;
+      fail ("BLOCKROTATIONGRIP.bg_bl92 [BL] set+1 %u != %u", blockrotationgrip->bg_bl92, bg_bl92);
+    blockrotationgrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -37369,12 +37354,27 @@ static int test_BLOCKROTATIONGRIP (const Dwg_Object *obj)
     blockrotationgrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockrotationgrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blockrotationgrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKROTATIONGRIP.bg_pt [3BD]");
+        fail ("BLOCKROTATIONGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blockrotationgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.bg_version [BL] %u != %u", blockrotationgrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blockrotationgrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.bg_version [BL] set+1 %u != %u", blockrotationgrip->bg_version, bg_version);
+    blockrotationgrip->bg_version--;
   }
   {
     struct _dwg_object_object* parent;
@@ -37753,34 +37753,19 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
     blockvisibilitygrip->be_minor--;
   }
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blockvisibilitygrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blockvisibilitygrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKVISIBILITYGRIP.bg_bl1 [BL] %u != %u", blockvisibilitygrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blockvisibilitygrip->bg_bl1)
+      fail ("BLOCKVISIBILITYGRIP.bg_bl92 [BL] %u != %u", blockvisibilitygrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blockvisibilitygrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKVISIBILITYGRIP.bg_bl1 [BL] set+1 %u != %u", blockvisibilitygrip->bg_bl1, bg_bl1);
-    blockvisibilitygrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blockvisibilitygrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYGRIP.bg_bl2 [BL] %u != %u", blockvisibilitygrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blockvisibilitygrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYGRIP.bg_bl2 [BL] set+1 %u != %u", blockvisibilitygrip->bg_bl2, bg_bl2);
-    blockvisibilitygrip->bg_bl2--;
+      fail ("BLOCKVISIBILITYGRIP.bg_bl92 [BL] set+1 %u != %u", blockvisibilitygrip->bg_bl92, bg_bl92);
+    blockvisibilitygrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -37812,12 +37797,27 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
     blockvisibilitygrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockvisibilitygrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blockvisibilitygrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKVISIBILITYGRIP.bg_pt [3BD]");
+        fail ("BLOCKVISIBILITYGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blockvisibilitygrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_version [BL] %u != %u", blockvisibilitygrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blockvisibilitygrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYGRIP.bg_version [BL] set+1 %u != %u", blockvisibilitygrip->bg_version, bg_version);
+    blockvisibilitygrip->bg_version--;
   }
   {
     BITCODE_BL eed1071;
@@ -37980,34 +37980,19 @@ static int test_BLOCKXYGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKXYGRIP *restrict blockxygrip = obj->tio.object->tio.BLOCKXYGRIP;
   failed = 0;
   {
-    BITCODE_BL bg_bl1;
-    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_bl1", &bg_bl1, NULL)
-        && bg_bl1 == blockxygrip->bg_bl1)
+    BITCODE_BL bg_bl92;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_bl92", &bg_bl92, NULL)
+        && bg_bl92 == blockxygrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKXYGRIP.bg_bl1 [BL] %u != %u", blockxygrip->bg_bl1, bg_bl1);
-    bg_bl1++;
-    if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "bg_bl1", &bg_bl1, 0)
-        && bg_bl1 == blockxygrip->bg_bl1)
+      fail ("BLOCKXYGRIP.bg_bl92 [BL] %u != %u", blockxygrip->bg_bl92, bg_bl92);
+    bg_bl92++;
+    if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "bg_bl92", &bg_bl92, 0)
+        && bg_bl92 == blockxygrip->bg_bl92)
       pass ();
     else
-      fail ("BLOCKXYGRIP.bg_bl1 [BL] set+1 %u != %u", blockxygrip->bg_bl1, bg_bl1);
-    blockxygrip->bg_bl1--;
-  }
-  {
-    BITCODE_BL bg_bl2;
-    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_bl2", &bg_bl2, NULL)
-        && bg_bl2 == blockxygrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKXYGRIP.bg_bl2 [BL] %u != %u", blockxygrip->bg_bl2, bg_bl2);
-    bg_bl2++;
-    if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "bg_bl2", &bg_bl2, 0)
-        && bg_bl2 == blockxygrip->bg_bl2)
-      pass ();
-    else
-      fail ("BLOCKXYGRIP.bg_bl2 [BL] set+1 %u != %u", blockxygrip->bg_bl2, bg_bl2);
-    blockxygrip->bg_bl2--;
+      fail ("BLOCKXYGRIP.bg_bl92 [BL] set+1 %u != %u", blockxygrip->bg_bl92, bg_bl92);
+    blockxygrip->bg_bl92--;
   }
   {
     BITCODE_B bg_insert_cycling;
@@ -38039,12 +38024,27 @@ static int test_BLOCKXYGRIP (const Dwg_Object *obj)
     blockxygrip->bg_insert_cycling_weight--;
   }
   {
-    BITCODE_3BD bg_pt;
-    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_pt", &bg_pt, NULL)
-        && !memcmp (&bg_pt, &blockxygrip->bg_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD bg_location;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_location", &bg_location, NULL)
+        && !memcmp (&bg_location, &blockxygrip->bg_location, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLOCKXYGRIP.bg_pt [3BD]");
+        fail ("BLOCKXYGRIP.bg_location [3BD]");
+  }
+  {
+    BITCODE_BL bg_version;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_version", &bg_version, NULL)
+        && bg_version == blockxygrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.bg_version [BL] %u != %u", blockxygrip->bg_version, bg_version);
+    bg_version++;
+    if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "bg_version", &bg_version, 0)
+        && bg_version == blockxygrip->bg_version)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.bg_version [BL] set+1 %u != %u", blockxygrip->bg_version, bg_version);
+    blockxygrip->bg_version--;
   }
   {
     struct _dwg_object_object* parent;
