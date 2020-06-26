@@ -23814,6 +23814,81 @@ static int test_VIEWPORT (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_VISIBILITYGRIPENTITY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_VISIBILITYGRIPENTITY *restrict visibilitygripentity = obj->tio.entity->tio.VISIBILITYGRIPENTITY;
+  failed = 0;
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (visibilitygripentity, "VISIBILITYGRIPENTITY", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &visibilitygripentity->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("VISIBILITYGRIPENTITY.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T grip_expr;
+    if (dwg_dynapi_entity_value (visibilitygripentity, "VISIBILITYGRIPENTITY", "grip_expr", &grip_expr, NULL)
+        && grip_expr
+           ? strEQ ((char *)grip_expr, (char *)visibilitygripentity->grip_expr)
+           : !visibilitygripentity->grip_expr)
+      pass ();
+    else
+      fail ("VISIBILITYGRIPENTITY.grip_expr [T] '%s' <> '%s'", grip_expr, visibilitygripentity->grip_expr);
+  }
+  {
+    BITCODE_BL grip_type;
+    if (dwg_dynapi_entity_value (visibilitygripentity, "VISIBILITYGRIPENTITY", "grip_type", &grip_type, NULL)
+        && grip_type == visibilitygripentity->grip_type)
+      pass ();
+    else
+      fail ("VISIBILITYGRIPENTITY.grip_type [BL] %u != %u", visibilitygripentity->grip_type, grip_type);
+    grip_type++;
+    if (dwg_dynapi_entity_set_value (visibilitygripentity, "VISIBILITYGRIPENTITY", "grip_type", &grip_type, 0)
+        && grip_type == visibilitygripentity->grip_type)
+      pass ();
+    else
+      fail ("VISIBILITYGRIPENTITY.grip_type [BL] set+1 %u != %u", visibilitygripentity->grip_type, grip_type);
+    visibilitygripentity->grip_type--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (visibilitygripentity, "VISIBILITYGRIPENTITY", "parent", &parent, NULL)
+        && !memcmp (&parent, &visibilitygripentity->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("VISIBILITYGRIPENTITY.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("VISIBILITYGRIPENTITY") || is_class_debugging ("VISIBILITYGRIPENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VISIBILITYGRIPENTITY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_VISIBILITYPARAMETERENTITY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_VISIBILITYPARAMETERENTITY *restrict visibilityparameterentity = obj->tio.entity->tio.VISIBILITYPARAMETERENTITY;
+  failed = 0;
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (visibilityparameterentity, "VISIBILITYPARAMETERENTITY", "parent", &parent, NULL)
+        && !memcmp (&parent, &visibilityparameterentity->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("VISIBILITYPARAMETERENTITY.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("VISIBILITYPARAMETERENTITY") || is_class_debugging ("VISIBILITYPARAMETERENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VISIBILITYPARAMETERENTITY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_WIPEOUT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -52449,6 +52524,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VERTEX_PFACE_FACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEWPORT)
     error += test_VIEWPORT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_VISIBILITYGRIPENTITY)
+    error += test_VISIBILITYGRIPENTITY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_VISIBILITYPARAMETERENTITY)
+    error += test_VISIBILITYPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUT)
     error += test_WIPEOUT(obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
@@ -52931,6 +53010,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VERTEX_PFACE_FACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEWPORT)
     error += test_VIEWPORT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_VISIBILITYGRIPENTITY)
+    error += test_VISIBILITYGRIPENTITY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_VISIBILITYPARAMETERENTITY)
+    error += test_VISIBILITYPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUT)
     error += test_WIPEOUT (obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
@@ -53851,6 +53934,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_VIEWPORT): %d != "
                "dwg_dynapi_fields_size (\"VIEWPORT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_VISIBILITYGRIPENTITY);
+  size2 = dwg_dynapi_fields_size ("VISIBILITYGRIPENTITY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_VISIBILITYGRIPENTITY): %d != "
+               "dwg_dynapi_fields_size (\"VISIBILITYGRIPENTITY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_VISIBILITYPARAMETERENTITY);
+  size2 = dwg_dynapi_fields_size ("VISIBILITYPARAMETERENTITY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_VISIBILITYPARAMETERENTITY): %d != "
+               "dwg_dynapi_fields_size (\"VISIBILITYPARAMETERENTITY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_WIPEOUT);

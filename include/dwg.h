@@ -6991,8 +6991,23 @@ typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT
   Dwg_EvalExpr evalexpr;
   // AcDbBlockGripExpr
   BITCODE_BL grip_type;
-  BITCODE_T grip_expr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
+  BITCODE_T grip_expr;  // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
 } Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT;
+
+typedef struct _dwg_entity_VISIBILITYPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+} Dwg_Entity_VISIBILITYPARAMETERENTITY;
+
+typedef struct _dwg_entity_VISIBILITYGRIPENTITY
+{
+  struct _dwg_object_entity *parent;
+  //?
+  Dwg_EvalExpr evalexpr;
+  // AcDbBlockGripExpr
+  BITCODE_BL grip_type;
+  BITCODE_T grip_expr;
+} Dwg_Entity_VISIBILITYGRIPENTITY;
 
 /**
  -----------------------------------
@@ -7164,6 +7179,8 @@ typedef struct _dwg_object_entity
     Dwg_Entity_RTEXT *RTEXT;
     Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
     Dwg_Entity_TABLE *TABLE;
+    Dwg_Entity_VISIBILITYGRIPENTITY *VISIBILITYGRIPENTITY;
+    Dwg_Entity_VISIBILITYPARAMETERENTITY *VISIBILITYPARAMETERENTITY;
     /* End auto-generated entity-union */
   } tio;
 
@@ -8558,6 +8575,8 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
   EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
+  EXPORT int dwg_setup_VISIBILITYGRIPENTITY (Dwg_Object *obj);
+  EXPORT int dwg_setup_VISIBILITYPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);

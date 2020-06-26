@@ -250,6 +250,8 @@ EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION** dwg_getall_LARGE_RADIAL_DIMENSION (Dw
   EXPORT Dwg_Entity_RTEXT** dwg_getall_RTEXT (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_SWEPTSURFACE** dwg_getall_SWEPTSURFACE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_TABLE** dwg_getall_TABLE (Dwg_Object_Ref* hdr);
+  EXPORT Dwg_Entity_VISIBILITYGRIPENTITY** dwg_getall_VISIBILITYGRIPENTITY (Dwg_Object_Ref* hdr);
+  EXPORT Dwg_Entity_VISIBILITYPARAMETERENTITY** dwg_getall_VISIBILITYPARAMETERENTITY (Dwg_Object_Ref* hdr);
 #endif
 
 EXPORT Dwg_Object_ACSH_BOOLEAN_CLASS** dwg_getall_ACSH_BOOLEAN_CLASS (Dwg_Data* dwg);
@@ -500,6 +502,8 @@ EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION* dwg_object_to_LARGE_RADIAL_DIMENSION (
   EXPORT Dwg_Entity_RTEXT* dwg_object_to_RTEXT (Dwg_Object* obj);
   EXPORT Dwg_Entity_SWEPTSURFACE* dwg_object_to_SWEPTSURFACE (Dwg_Object* obj);
   EXPORT Dwg_Entity_TABLE* dwg_object_to_TABLE (Dwg_Object* obj);
+  EXPORT Dwg_Entity_VISIBILITYGRIPENTITY* dwg_object_to_VISIBILITYGRIPENTITY (Dwg_Object* obj);
+  EXPORT Dwg_Entity_VISIBILITYPARAMETERENTITY* dwg_object_to_VISIBILITYPARAMETERENTITY (Dwg_Object* obj);
 #endif
 EXPORT Dwg_Object_ACSH_BOOLEAN_CLASS* dwg_object_to_ACSH_BOOLEAN_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_BOX_CLASS* dwg_object_to_ACSH_BOX_CLASS (Dwg_Object* obj);

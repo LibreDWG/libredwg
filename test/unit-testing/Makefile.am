@@ -286,7 +286,9 @@ testobjects += \
 	table \
 	tablecontent \
 	textobjectcontextdata \
-	tvdeviceproperties
+	tvdeviceproperties \
+	visibilityparameterentity \
+	visibilitygripentity
 endif
 
 # NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"

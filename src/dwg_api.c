@@ -171,6 +171,8 @@ dwg_get_OBJECT (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION)
   dwg_get_OBJECT (ent_rtext, RTEXT)
   dwg_get_OBJECT (ent_sweptsurface, SWEPTSURFACE)
   dwg_get_OBJECT (ent_table, TABLE)
+  dwg_get_OBJECT (ent_visibilitygripentity, VISIBILITYGRIPENTITY)
+  dwg_get_OBJECT (ent_visibilityparameterentity, VISIBILITYPARAMETERENTITY)
 #endif
 
 dwg_get_OBJECT (obj_appid, APPID)
@@ -437,6 +439,8 @@ DWG_GETALL_ENTITY (REVOLVEDSURFACE)
 DWG_GETALL_ENTITY (RTEXT)
 DWG_GETALL_ENTITY (SWEPTSURFACE)
 DWG_GETALL_ENTITY (TABLE)
+DWG_GETALL_ENTITY (VISIBILITYGRIPENTITY)
+DWG_GETALL_ENTITY (VISIBILITYPARAMETERENTITY)
 
 /********************************************************************
  *     Functions to return NULL-terminated array of all objects     *
@@ -709,6 +713,8 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LARGE_RADIAL_DIMENSION)
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME (RTEXT)
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME (TABLE)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (VISIBILITYGRIPENTITY)
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (VISIBILITYPARAMETERENTITY)
 #endif
 
 /*******************************************************************

@@ -35,84 +35,86 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
 
-#define MAXLEN_ENTITIES 23
+#define MAXLEN_ENTITIES 26
 #define MAXLEN_OBJECTS 34
 
 /* sorted for bsearch. from typedef struct _dwg_entity_*: */
 static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
-  "3DFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
-  "3DSOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
-  "ARC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 2 */
-  "ARC_DIMENSION" "\0\0\0\0\0\0\0\0\0",	/* 3 */
-  "ATEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
-  "ATTDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
-  "ATTRIB" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
-  "BLOCK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
-  "BODY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 8 */
-  "CAMERA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 9 */
-  "CIRCLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 10 */
-  "DIMENSION_ALIGNED" "\0\0\0\0\0",	/* 11 */
-  "DIMENSION_ANG2LN" "\0\0\0\0\0\0",	/* 12 */
-  "DIMENSION_ANG3PT" "\0\0\0\0\0\0",	/* 13 */
-  "DIMENSION_DIAMETER" "\0\0\0\0",	/* 14 */
-  "DIMENSION_LINEAR" "\0\0\0\0\0\0",	/* 15 */
-  "DIMENSION_ORDINATE" "\0\0\0\0",	/* 16 */
-  "DIMENSION_RADIUS" "\0\0\0\0\0\0",	/* 17 */
-  "ELLIPSE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
-  "ENDBLK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 19 */
-  "EXTRUDEDSURFACE" "\0\0\0\0\0\0\0",	/* 20 */
-  "GEOPOSITIONMARKER" "\0\0\0\0\0",	/* 21 */
-  "HATCH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
-  "HELIX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
-  "IMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
-  "INSERT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
-  "LARGE_RADIAL_DIMENSION" "",	/* 26 */
-  "LEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
-  "LIGHT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
-  "LINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
-  "LOFTEDSURFACE" "\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "LWPOLYLINE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
-  "MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "MINSERT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "MLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
-  "MPOLYGON" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
-  "MTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
-  "MULTILEADER" "\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "NAVISWORKSMODEL" "\0\0\0\0\0\0\0",	/* 38 */
-  "NURBSURFACE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
-  "OLE2FRAME" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
-  "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
-  "PLANESURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 42 */
-  "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
-  "POLYLINE_2D" "\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
-  "POLYLINE_3D" "\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
-  "POLYLINE_MESH" "\0\0\0\0\0\0\0\0\0",	/* 46 */
-  "POLYLINE_PFACE" "\0\0\0\0\0\0\0\0",	/* 47 */
-  "PROXY_ENTITY" "\0\0\0\0\0\0\0\0\0\0",	/* 48 */
-  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "REVOLVEDSURFACE" "\0\0\0\0\0\0\0",	/* 51 */
-  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "SECTIONOBJECT" "\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "VERTEX_MESH" "\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "VERTEX_PFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "VERTEX_PFACE_FACE" "\0\0\0\0\0",	/* 69 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "3DFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
+  "3DSOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
+  "ARC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 2 */
+  "ARC_DIMENSION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 3 */
+  "ATEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
+  "ATTDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
+  "ATTRIB" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
+  "BLOCK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
+  "BODY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 8 */
+  "CAMERA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 9 */
+  "CIRCLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 10 */
+  "DIMENSION_ALIGNED" "\0\0\0\0\0\0\0\0",	/* 11 */
+  "DIMENSION_ANG2LN" "\0\0\0\0\0\0\0\0\0",	/* 12 */
+  "DIMENSION_ANG3PT" "\0\0\0\0\0\0\0\0\0",	/* 13 */
+  "DIMENSION_DIAMETER" "\0\0\0\0\0\0\0",	/* 14 */
+  "DIMENSION_LINEAR" "\0\0\0\0\0\0\0\0\0",	/* 15 */
+  "DIMENSION_ORDINATE" "\0\0\0\0\0\0\0",	/* 16 */
+  "DIMENSION_RADIUS" "\0\0\0\0\0\0\0\0\0",	/* 17 */
+  "ELLIPSE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
+  "ENDBLK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 19 */
+  "EXTRUDEDSURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 20 */
+  "GEOPOSITIONMARKER" "\0\0\0\0\0\0\0\0",	/* 21 */
+  "HATCH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
+  "HELIX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
+  "IMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
+  "INSERT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 25 */
+  "LARGE_RADIAL_DIMENSION" "\0\0\0",	/* 26 */
+  "LEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
+  "LIGHT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
+  "LINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
+  "LOFTEDSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
+  "LWPOLYLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 31 */
+  "MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
+  "MINSERT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
+  "MLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
+  "MPOLYGON" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
+  "MTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
+  "MULTILEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
+  "NAVISWORKSMODEL" "\0\0\0\0\0\0\0\0\0\0",	/* 38 */
+  "NURBSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
+  "OLE2FRAME" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
+  "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
+  "PLANESURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
+  "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
+  "POLYLINE_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 44 */
+  "POLYLINE_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
+  "POLYLINE_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
+  "POLYLINE_PFACE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
+  "PROXY_ENTITY" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
+  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
+  "REVOLVEDSURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "SECTIONOBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
+  "VERTEX_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
+  "VERTEX_PFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
+  "VERTEX_PFACE_FACE" "\0\0\0\0\0\0\0\0",	/* 69 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "VISIBILITYGRIPENTITY" "\0\0\0\0\0",	/* 71 */
+  "VISIBILITYPARAMETERENTITY" "",	/* 72 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
@@ -4099,6 +4101,24 @@ static const Dwg_DYNAPI_field _dwg_VIEWPORT_fields[] = {
     1,0,0, 333 },
   { "sun",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_VIEWPORT, sun),
     1,0,0, 361 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_VISIBILITYGRIPENTITY: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_VISIBILITYGRIPENTITY_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VISIBILITYGRIPENTITY, parent),
+    1,1,0, 0 },
+  { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_entity_VISIBILITYGRIPENTITY, evalexpr),
+    0,0,0, 0 },
+  { "grip_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_VISIBILITYGRIPENTITY, grip_type),
+    0,0,0, 0 },
+  { "grip_expr",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_VISIBILITYGRIPENTITY, grip_expr),
+    1,1,1, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_VISIBILITYPARAMETERENTITY: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_VISIBILITYPARAMETERENTITY_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VISIBILITYPARAMETERENTITY, parent),
+    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_WIPEOUT: (sorted by offset) */
@@ -11561,8 +11581,8 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "VIEW", DWG_TYPE_VIEW /*(61)*/, _dwg_VIEW_fields, sizeof (struct _dwg_object_VIEW) },	/* 238 */
   { "VIEWPORT", DWG_TYPE_VIEWPORT /*(34)*/, _dwg_VIEWPORT_fields, sizeof (struct _dwg_entity_VIEWPORT) },	/* 239 */
   { "VIEW_CONTROL", DWG_TYPE_VIEW_CONTROL /*(60)*/, _dwg_VIEW_CONTROL_fields, sizeof (struct _dwg_object_VIEW_CONTROL) },	/* 240 */
-  { "VISIBILITYGRIPENTITY", DWG_TYPE_VISIBILITYGRIPENTITY /*(676)*/, NULL, 0 },	/* 241 */
-  { "VISIBILITYPARAMETERENTITY", DWG_TYPE_VISIBILITYPARAMETERENTITY /*(677)*/, NULL, 0 },	/* 242 */
+  { "VISIBILITYGRIPENTITY", DWG_TYPE_VISIBILITYGRIPENTITY /*(676)*/, _dwg_VISIBILITYGRIPENTITY_fields, sizeof (struct _dwg_entity_VISIBILITYGRIPENTITY) },	/* 241 */
+  { "VISIBILITYPARAMETERENTITY", DWG_TYPE_VISIBILITYPARAMETERENTITY /*(677)*/, _dwg_VISIBILITYPARAMETERENTITY_fields, sizeof (struct _dwg_entity_VISIBILITYPARAMETERENTITY) },	/* 242 */
   { "VISUALSTYLE", DWG_TYPE_VISUALSTYLE /*(678)*/, _dwg_VISUALSTYLE_fields, sizeof (struct _dwg_object_VISUALSTYLE) },	/* 243 */
   { "VPORT", DWG_TYPE_VPORT /*(65)*/, _dwg_VPORT_fields, sizeof (struct _dwg_object_VPORT) },	/* 244 */
   { "VPORT_CONTROL", DWG_TYPE_VPORT_CONTROL /*(64)*/, _dwg_VPORT_CONTROL_fields, sizeof (struct _dwg_object_VPORT_CONTROL) },	/* 245 */

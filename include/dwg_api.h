@@ -563,6 +563,8 @@ typedef struct _dwg_entity_REVOLVEDSURFACE		dwg_ent_revolvedsurface;
 typedef struct _dwg_entity_RTEXT		dwg_ent_rtext;
 typedef struct _dwg_entity_SWEPTSURFACE		dwg_ent_sweptsurface;
 typedef struct _dwg_entity_TABLE		dwg_ent_table;
+typedef struct _dwg_entity_VISIBILITYGRIPENTITY		dwg_ent_visibilitygripentity;
+typedef struct _dwg_entity_VISIBILITYPARAMETERENTITY		dwg_ent_visibilityparameterentity;
 typedef struct _dwg_object_APPID		dwg_obj_appid;
 typedef struct _dwg_object_APPID_CONTROL		dwg_obj_appid_control;
 typedef struct _dwg_object_BLOCK_CONTROL		dwg_obj_block_control;
@@ -809,6 +811,8 @@ dwg_get_OBJECT_DECL (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION);
   dwg_get_OBJECT_DECL (ent_rtext, RTEXT);
   dwg_get_OBJECT_DECL (ent_sweptsurface, SWEPTSURFACE);
   dwg_get_OBJECT_DECL (ent_table, TABLE);
+  dwg_get_OBJECT_DECL (ent_visibilitygripentity, VISIBILITYGRIPENTITY);
+  dwg_get_OBJECT_DECL (ent_visibilityparameterentity, VISIBILITYPARAMETERENTITY);
 #endif
 
 dwg_get_OBJECT_DECL (obj_appid, APPID);
@@ -1067,6 +1071,8 @@ DWG_GETALL_ENTITY_DECL (REVOLVEDSURFACE);
 DWG_GETALL_ENTITY_DECL (RTEXT);
 DWG_GETALL_ENTITY_DECL (SWEPTSURFACE);
 DWG_GETALL_ENTITY_DECL (TABLE);
+DWG_GETALL_ENTITY_DECL (VISIBILITYGRIPENTITY);
+DWG_GETALL_ENTITY_DECL (VISIBILITYPARAMETERENTITY);
 
 /********************************************************************
  *     Functions to return NULL-terminated array of all objects     *
@@ -1340,6 +1346,8 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LARGE_RADIAL_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (RTEXT);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SWEPTSURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (TABLE);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (VISIBILITYGRIPENTITY);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (VISIBILITYPARAMETERENTITY);
 #endif
 
 /*******************************************************************

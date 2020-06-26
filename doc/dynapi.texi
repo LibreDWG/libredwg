@@ -4313,6 +4313,38 @@ H,	DXF 361
 @end vtable
 @end indentedblock
 
+@strong{VISIBILITYGRIPENTITY} @anchor{VISIBILITYGRIPENTITY}
+@cindex entity, VISIBILITYGRIPENTITY
+@vindex VISIBILITYGRIPENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item evalexpr
+Dwg_EvalExpr
+@item grip_type
+BL
+@item grip_expr
+T
+
+@end vtable
+@end indentedblock
+
+@strong{VISIBILITYPARAMETERENTITY} @anchor{VISIBILITYPARAMETERENTITY}
+@cindex entity, VISIBILITYPARAMETERENTITY
+@vindex VISIBILITYPARAMETERENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{WIPEOUT} @anchor{WIPEOUT}
 @cindex entity, WIPEOUT
 @vindex WIPEOUT
