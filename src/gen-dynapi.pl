@@ -1793,7 +1793,37 @@ open $in, "<", $dwg_h or die "$dwg_h: $!";
 open $out, ">", "$dwg_h.tmp" or die "$dwg_h.tmp: $!";
 $gen = 0;
 while (<$in>) {
-  if (m/^\/\* Start auto-generated/) {
+  if (m/    \/\* Start auto-generated entity-union/) {
+    print $out $_;
+    $tmpl = "    Dwg_Entity_\$name *\$name;\n";
+    out_classes ($out, \@entity_names, \%FIXED, $tmpl);
+    print $out "    /* untyped > 500 */\n";
+    out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
+    print $out "    /* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    print $out "    /* debugging */\n";
+    #print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
+    #print $out "#endif\n";
+    print $out "    /* End auto-generated entity-union */\n";
+    $gen = 1;
+  }
+  elsif (m/    \/\* Start auto-generated object-union/) {
+    print $out $_;
+    $tmpl = "    Dwg_Object_\$name *\$name;\n";
+    out_classes ($out, \@object_names, \%FIXED, $tmpl);
+    print $out "    /* untyped > 500 */\n";
+    out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
+    print $out "    /* unstable */\n";
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "    /* debugging */\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    print $out "    /* End auto-generated object-union */\n";
+    $gen = 1;
+  }
+  elsif (m/^\/\* Start auto-generated content/) {
     print $out $_;
 
     $tmpl = "EXPORT int dwg_setup_\$name (Dwg_Object *obj);\n";
@@ -1818,7 +1848,7 @@ while (<$in>) {
   if (!$gen) {
     print $out $_;
   }
-  if (m/^\/\* End auto-generated/) {
+  if (m/^\s*\/\* End auto-generated/) {
     $gen = 0;
   }
 }
