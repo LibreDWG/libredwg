@@ -2321,8 +2321,8 @@ DWG_ENTITY (MTEXT)
   }
   FIELD_BS (attachment, 71);
   FIELD_BS (flow_dir, 72);
-  FIELD_BD (extents_height, 42);
-  FIELD_BD (extents_width, 43);
+  FIELD_BD (extents_height, 0); // not in DXF, only as Embedded Object below
+  FIELD_BD (extents_width, 0);
   // FIXME DXF break
   FIELD_T (text, 1); // or 3 if len >250
   /* in DXF only if non-default style */
@@ -2346,9 +2346,10 @@ DWG_ENTITY (MTEXT)
     }
   SINCE (R_2018)
   {
-    FIELD_B (is_annotative, 0);
-    if (FIELD_VALUE (is_annotative))
+    FIELD_B (is_not_annotative, 0);
+    if (FIELD_VALUE (is_not_annotative))
       {
+        // AnnotScaleObject
         DXF { VALUE_TFF ( "Embedded Object", 101 ); }
         FIELD_BS (class_version, 0); // 1-4
         VALUEOUTOFBOUNDS (class_version, 10)
@@ -2365,11 +2366,16 @@ DWG_ENTITY (MTEXT)
         }
         FIELD_BD (rect_width, 40);
         FIELD_BD (rect_height, 41);
-        FIELD_BD (extents_width, 42);
-        FIELD_BD (extents_height, 43);
+        DXF {
+          FIELD_BD (extents_width, 42);
+          FIELD_BD (extents_height, 43);
+        } else {
+          FIELD_BD (extents_height, 43);
+          FIELD_BD (extents_width, 42);
+        }
         // end redundant fields
 
-        FIELD_BL (column_type, 71);
+        FIELD_BS (column_type, 71);
         if (FIELD_VALUE (column_type))
           {
             if (FIELD_VALUE (column_type) == 1)
@@ -8971,10 +8977,15 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
     FIELD_3BD (x_axis_dir, 11);
     FIELD_3BD (insertion_pt, 10);
   }
-  FIELD_BD (rect_width, 40);
-  FIELD_BD (rect_height, 41);
-  FIELD_BD (extents_width, 42);
-  FIELD_BD (extents_height, 43);
+  FIELD_BD (rect_height, 40);
+  FIELD_BD (rect_width, 41);
+  DXF {
+    FIELD_BD (extents_width, 42);
+    FIELD_BD (extents_height, 43);
+  } else {
+    FIELD_BD (extents_height, 43);
+    FIELD_BD (extents_width, 42);
+  }
 
   FIELD_BL (column_type, 71);
   if (FIELD_VALUE (column_type))

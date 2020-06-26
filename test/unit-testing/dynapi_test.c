@@ -11482,7 +11482,7 @@ static int test_HELIX (const Dwg_Object *obj)
         && !memcmp (&axis_vector, &helix->axis_vector, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("HELIX.axis_vector [3BD_1]");
+        fail ("HELIX.axis_vector [3BD]");
   }
   {
     BITCODE_3BD beg_tan_vec;
@@ -11844,7 +11844,7 @@ static int test_HELIX (const Dwg_Object *obj)
         && !memcmp (&start_pt, &helix->start_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("HELIX.start_pt [3BD_1]");
+        fail ("HELIX.start_pt [3BD]");
   }
   {
     BITCODE_BD turn_height;
@@ -15241,18 +15241,18 @@ static int test_MTEXT (const Dwg_Object *obj)
       fail ("MTEXT.column_heights [BD*] * %u num_column_heights", count);
   }
   {
-    BITCODE_BL column_type;
+    BITCODE_BS column_type;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "column_type", &column_type, NULL)
         && column_type == mtext->column_type)
       pass ();
     else
-      fail ("MTEXT.column_type [BL] %u != %u", mtext->column_type, column_type);
+      fail ("MTEXT.column_type [BS] %hu != %hu", mtext->column_type, column_type);
     column_type++;
     if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "column_type", &column_type, 0)
         && column_type == mtext->column_type)
       pass ();
     else
-      fail ("MTEXT.column_type [BL] set+1 %u != %u", mtext->column_type, column_type);
+      fail ("MTEXT.column_type [BS] set+1 %hu != %hu", mtext->column_type, column_type);
     mtext->column_type--;
   }
   {
@@ -15392,19 +15392,19 @@ static int test_MTEXT (const Dwg_Object *obj)
         fail ("MTEXT.insertion_pt [3BD]");
   }
   {
-    BITCODE_B is_annotative;
-    if (dwg_dynapi_entity_value (mtext, "MTEXT", "is_annotative", &is_annotative, NULL)
-        && is_annotative == mtext->is_annotative)
+    BITCODE_B is_not_annotative;
+    if (dwg_dynapi_entity_value (mtext, "MTEXT", "is_not_annotative", &is_not_annotative, NULL)
+        && is_not_annotative == mtext->is_not_annotative)
       pass ();
     else
-      fail ("MTEXT.is_annotative [B] " FORMAT_B " != " FORMAT_B "", mtext->is_annotative, is_annotative);
-    is_annotative++;
-    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "is_annotative", &is_annotative, 0)
-        && is_annotative == mtext->is_annotative)
+      fail ("MTEXT.is_not_annotative [B] " FORMAT_B " != " FORMAT_B "", mtext->is_not_annotative, is_not_annotative);
+    is_not_annotative++;
+    if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "is_not_annotative", &is_not_annotative, 0)
+        && is_not_annotative == mtext->is_not_annotative)
       pass ();
     else
-      fail ("MTEXT.is_annotative [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->is_annotative, is_annotative);
-    mtext->is_annotative--;
+      fail ("MTEXT.is_not_annotative [B] set+1 " FORMAT_B " != " FORMAT_B "", mtext->is_not_annotative, is_not_annotative);
+    mtext->is_not_annotative--;
   }
   {
     BITCODE_BD linespace_factor;

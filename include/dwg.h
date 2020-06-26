@@ -1925,8 +1925,8 @@ typedef struct _dwg_entity_MTEXT
                               1 = Left to right, 3 = Top to bottom,
                               5 = By style (the flow direction is inherited
                               from the associated text style) */
-  BITCODE_BD extents_height; /*!< DXF 42 */
-  BITCODE_BD extents_width;  /*!< DXF 43 */
+  BITCODE_BD extents_width;  /*!< DXF 42 */
+  BITCODE_BD extents_height; /*!< DXF 43 the actual height */
   BITCODE_TV text;           /*!< DXF 1 */
   BITCODE_H style;           /*!< DXF 7 */
   BITCODE_BS linespace_style; /*!< DXF 73. r2000+ */
@@ -1943,12 +1943,12 @@ typedef struct _dwg_entity_MTEXT
                                margin around the text. */
   BITCODE_CMC bg_fill_color; /*!< DXF 63. r2004+. on bg_fill_flag==1 */
   BITCODE_BL bg_fill_trans;  /*!< DXF 441. r2004+. unused */
-  BITCODE_B is_annotative;       /*!< r2018+: */
+  BITCODE_B is_not_annotative;   /*!< r2018+: */
   BITCODE_BS class_version;      /*!< always 0 */
-  BITCODE_B default_flag;        /*!< DXF 70 */
+  BITCODE_B default_flag;        /*!< DXF 70. default true */
   BITCODE_H appid;
   BITCODE_BL ignore_attachment;  /*!< redundant copy, not BS */
-  BITCODE_BL column_type;        /*!< DXF 71 0: none, 1: static, 2: dynamic */
+  BITCODE_BS column_type;        /*!< DXF 71 0: none, 1: static, 2: dynamic. */
   BITCODE_BL numfragments;       /*!< DXF 72 if static */
   BITCODE_BD column_width;       /*!< DXF 44 */
   BITCODE_BD gutter;             /*!< DXF 45 */
@@ -6512,9 +6512,9 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
   BITCODE_BD text_height;	/*!< DXF 40 */
   BITCODE_BD rect_width;	/*!< DXF 41 */
   BITCODE_BD rect_height;	/*!< DXF 46 */
-  BITCODE_BD extents_height;	/*!< DXF 42 */
-  BITCODE_BD extents_width;	/*!< DXF 43 */
-  BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic */
+  BITCODE_BD extents_width;	/*!< DXF 42 */
+  BITCODE_BD extents_height;	/*!< DXF 43 */
+  BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic. Note: BS in MTEXT! */
   BITCODE_BD column_width;      /*!< DXF 44 */
   BITCODE_BD gutter;            /*!< DXF 45 */
   BITCODE_B auto_height;        /*!< DXF 73 */

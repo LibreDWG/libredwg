@@ -1972,9 +1972,9 @@ BS,	DXF 91
 @item axis_base_pt
 3BD,	DXF 10
 @item start_pt
-3BD_1,	DXF 11
+3BD,	DXF 11
 @item axis_vector
-3BD_1,	DXF 12
+3BD,	DXF 12
 @item radius
 BD,	DXF 40
 @item num_turns
@@ -2623,10 +2623,10 @@ BD,	DXF 40
 BS,	DXF 71
 @item flow_dir
 BS,	DXF 72
-@item extents_height
-BD,	DXF 43
 @item extents_width
 BD,	DXF 42
+@item extents_height
+BD,	DXF 43
 @item text
 T,	DXF 1
 @item style
@@ -2645,7 +2645,7 @@ BL,	DXF 45
 CMC,	DXF 63
 @item bg_fill_trans
 BL,	DXF 441
-@item is_annotative
+@item is_not_annotative
 B
 @item class_version
 BS
@@ -2656,7 +2656,7 @@ H
 @item ignore_attachment
 BL
 @item column_type
-BL,	DXF 71
+BS,	DXF 71
 @item numfragments
 BL,	DXF 72
 @item column_width
@@ -8521,13 +8521,13 @@ BL,	DXF 70
 @item text_height
 BD
 @item rect_width
-BD,	DXF 40
-@item rect_height
 BD,	DXF 41
-@item extents_height
-BD,	DXF 43
+@item rect_height
+BD,	DXF 40
 @item extents_width
 BD,	DXF 42
+@item extents_height
+BD,	DXF 43
 @item column_type
 BL,	DXF 71
 @item column_width

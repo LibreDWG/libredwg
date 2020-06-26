@@ -8,8 +8,8 @@ api_process (dwg_object *obj)
   double rect_height, rect_width, text_height, extents_height, extents_width,
       linespace_factor;
   BITCODE_BS attachment, flow_dir, linespace_style, class_version;
-  BITCODE_B unknown_b0, is_annotative, default_flag;
-  BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans, column_type;
+  BITCODE_B unknown_b0, is_not_annotative, default_flag;
+  BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans;
   BITCODE_CMC bg_fill_color;
   char *text;
   dwg_point_3d insertion_pt, extrusion, x_axis_dir;
@@ -20,6 +20,7 @@ api_process (dwg_object *obj)
   BITCODE_BD gutter;
   BITCODE_B auto_height;
   BITCODE_B flow_reversed;
+  BITCODE_BS column_type;
   BITCODE_BL i, num_column_heights;
   BITCODE_BD *column_heights;
 
@@ -56,13 +57,13 @@ api_process (dwg_object *obj)
     }
   SINCE (R_2018)
     {
-      CHK_ENTITY_TYPE (mtext, MTEXT, is_annotative, B);
+      CHK_ENTITY_TYPE (mtext, MTEXT, is_not_annotative, B);
       CHK_ENTITY_TYPE (mtext, MTEXT, class_version, BS);
       CHK_ENTITY_MAX  (mtext, MTEXT, class_version, BS, 10);
       CHK_ENTITY_TYPE (mtext, MTEXT, default_flag, B);
       CHK_ENTITY_H (mtext, MTEXT, appid);
-      CHK_ENTITY_TYPE (mtext, MTEXT, column_type, BL);
-      CHK_ENTITY_MAX  (mtext, MTEXT, column_type, BL, 2);
+      CHK_ENTITY_TYPE (mtext, MTEXT, column_type, BS);
+      CHK_ENTITY_MAX  (mtext, MTEXT, column_type, BS, 2);
       CHK_ENTITY_TYPE (mtext, MTEXT, ignore_attachment, BL);
       if ((BITCODE_BL)attachment != ignore_attachment)
         fprintf (stderr, "attachment " FORMAT_BS " != ignore_attachment " FORMAT_BL "\n",
