@@ -1624,6 +1624,8 @@ EOF
     $gen = 0;
   }
 }
+close $in;
+close $out;
 mv_if_not_same ("$api_c.tmp", $api_c);
 
 my $api_h = "$topdir/include/dwg_api.h";
@@ -1771,6 +1773,7 @@ EOF
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
+
     print $out "/* End auto-generated content */\n";
     $gen = 1;
   }
@@ -1781,8 +1784,48 @@ EOF
     $gen = 0;
   }
 }
+close $in;
+close $out;
 mv_if_not_same ("$api_h.tmp", $api_h);
  
+my $dwg_h = "$topdir/include/dwg.h";
+open $in, "<", $dwg_h or die "$dwg_h: $!";
+open $out, ">", "$dwg_h.tmp" or die "$dwg_h.tmp: $!";
+$gen = 0;
+while (<$in>) {
+  if (m/^\/\* Start auto-generated/) {
+    print $out $_;
+
+    $tmpl = "EXPORT int dwg_setup_\$name (Dwg_Object *obj);\n";
+    out_classes ($out, \@entity_names, \%FIXED, $tmpl);
+    out_classes ($out, \@object_names, \%FIXED, $tmpl);
+    print $out "/* untyped > 500 */\n";
+    out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
+    out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "#ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, "  ".$tmpl);
+    out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    print $out "#endif\n";
+
+    print $out "/* End auto-generated content */\n";
+    $gen = 1;
+  }
+  if (!$gen) {
+    print $out $_;
+  }
+  if (m/^\/\* End auto-generated/) {
+    $gen = 0;
+  }
+}
+close $in;
+close $out;
+mv_if_not_same ("$dwg_h.tmp", $dwg_h);
+
 my $done = 0;
 my $ifile = "$topdir/bindings/dwg.i";
 open $in, "<", $ifile or die "$ifile: $!";
@@ -1837,6 +1880,8 @@ while (<$in>) {
     print $out $_;
   }
 }
+close $in;
+close $out;
 mv_if_not_same ("$ifile.tmp", $ifile);
 
 # NOTE: in the 2 #line's below use __LINE__ + 1

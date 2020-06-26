@@ -141,7 +141,7 @@ dwg_get_OBJECT (ent_tolerance, TOLERANCE)
 dwg_get_OBJECT (ent_mline, MLINE)
 dwg_get_OBJECT (ent_unknown, UNKNOWN_ENT)
   
-/* Start auto-generated content */
+/* Start auto-generated content. Do not touch. */
 /* untyped > 500 */
 dwg_get_OBJECT (ent_camera, CAMERA)
 dwg_get_OBJECT (ent_hatch, HATCH)

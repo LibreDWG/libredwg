@@ -491,7 +491,7 @@ dwg_get_OBJECT_DECL (ent_3dsolid, 3DSOLID);
 dwg_get_OBJECT_DECL (ent_xline, XLINE);
 
 /********************************************************************/
-/* Start auto-generated content */
+/* Start auto-generated content. Do not touch. */
 typedef struct _dwg_entity__3DFACE		dwg_ent__3dface;
 typedef struct _dwg_entity__3DSOLID		dwg_ent__3dsolid;
 typedef struct _dwg_entity_ARC		dwg_ent_arc;

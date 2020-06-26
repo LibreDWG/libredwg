@@ -175,7 +175,7 @@ dwg_obj_generic_parent (const dwg_obj_generic *restrict obj,
 struct dwg_entity_DIMENSION_common *
 dwg_object_to_DIMENSION(Dwg_Object *obj);
 
-/* Start auto-generated content */
+/* Start auto-generated content. Do not touch. */
 /* dwg_getall_ API */
 EXPORT Dwg_Entity_ARC** dwg_getall_ARC (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ATTDEF** dwg_getall_ATTDEF (Dwg_Object_Ref* hdr);
