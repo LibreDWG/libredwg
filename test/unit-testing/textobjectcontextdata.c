@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BS class_version; /*!< r2010+ =3 */
   BITCODE_B is_default;
-  BITCODE_B in_dwg;
+  BITCODE_B has_xdic;
   BITCODE_H scale;
   BITCODE_BS flag;	/*<! DXF 70 */ // 0
   BITCODE_BD rotation;	/*!< DXF 50 */ // 0.0 or 90.0
@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, is_default, B);
-  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, in_dwg, B);
+  CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, has_xdic, B);
   CHK_ENTITY_H (_obj, TEXTOBJECTCONTEXTDATA, scale);
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, flag, BS);
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, rotation, BD);

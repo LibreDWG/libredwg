@@ -8126,15 +8126,17 @@ DWG_OBJECT (OBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbObjectContextData)
   SINCE (R_2010) {
-    IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE (class_version) = 3;
-    }
     FIELD_BS (class_version, 70);
     if (FIELD_VALUE (class_version) > 10)
       return DWG_ERR_VALUEOUTOFBOUNDS;
   }
-  FIELD_B (is_default, 0);
-  FIELD_B (in_dwg, 290);
+  else {
+    IF_ENCODE_FROM_EARLIER {
+      FIELD_VALUE (class_version) = 3;
+    }
+  }
+  FIELD_B (is_default, 290);
+  FIELD_B (has_xdic, 0);
 
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8835,7 +8837,7 @@ DWG_OBJECT_END
   SUBCLASS (AcDbObjectContextData);                                     \
   FIELD_BS (class_version, 70);                                         \
   FIELD_B (is_default, 290);                                            \
-  FIELD_B (in_dwg, 0)
+  FIELD_B (has_xdic, 0) /* always 1 */
 
 #define AcDbAnnotScaleObjectContextData_fields                          \
   AcDbObjectContextData_fields;                                         \

@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BS class_version; /*!< r2010+ =3 */
   BITCODE_B is_default;
-  BITCODE_B in_dwg;
+  BITCODE_B has_xdic;
   BITCODE_H scale; /* DXF 340 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, is_default, B);
-  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, in_dwg, B);
+  CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, has_xdic, B);
   CHK_ENTITY_H (_obj, MLEADEROBJECTCONTEXTDATA, scale);
 #endif
 }

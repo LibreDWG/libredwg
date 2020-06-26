@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BS class_version; /*!< r2010+ =3 */
   BITCODE_B is_default;
-  BITCODE_B in_dwg;
+  BITCODE_B has_xdic;
   BITCODE_H scale; /* DXF 340 */
 
   BITCODE_3BD location;   /*!< DXF 10-30 */
@@ -20,7 +20,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, FCFOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, FCFOBJECTCONTEXTDATA, is_default, B);
-  CHK_ENTITY_TYPE (_obj, FCFOBJECTCONTEXTDATA, in_dwg, B);
+  CHK_ENTITY_TYPE (_obj, FCFOBJECTCONTEXTDATA, has_xdic, B);
   CHK_ENTITY_H (_obj, FCFOBJECTCONTEXTDATA, scale);
   CHK_ENTITY_3RD (_obj, FCFOBJECTCONTEXTDATA, location);
   CHK_ENTITY_3RD (_obj, FCFOBJECTCONTEXTDATA, horiz_dir);

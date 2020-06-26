@@ -5037,7 +5037,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -5062,7 +5062,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -6625,7 +6625,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -7424,7 +7424,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -7516,7 +7516,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -8044,7 +8044,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -8391,7 +8391,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -8569,7 +8569,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -8602,7 +8602,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -8612,12 +8612,10 @@ BL,	DXF 70
 3BD,	DXF 10
 @item x_axis_dir
 3BD,	DXF 11
-@item text_height
-BD
-@item rect_width
-BD,	DXF 41
 @item rect_height
 BD,	DXF 40
+@item rect_width
+BD,	DXF 41
 @item extents_width
 BD,	DXF 42
 @item extents_height
@@ -8677,9 +8675,9 @@ struct _dwg_object_object*
 @item class_version
 BS,	DXF 70
 @item is_default
-B
-@item in_dwg
 B,	DXF 290
+@item has_xdic
+B
 
 @end vtable
 @end indentedblock
@@ -8710,7 +8708,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -8898,7 +8896,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -8925,7 +8923,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340
@@ -9672,7 +9670,7 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item is_default
 B,	DXF 290
-@item in_dwg
+@item has_xdic
 B
 @item scale
 H,	DXF 340

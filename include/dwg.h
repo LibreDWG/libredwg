@@ -3000,8 +3000,8 @@ typedef struct _dwg_MLEADER_AnnotContext
 {
   // AcDbObjectContextData:
   // BITCODE_BS class_version;  /*!< r2010+ DXF 70 4 */
-  // BITCODE_B is_default;      /*!< r2010+ */
-  // BITCODE_B in_dwg;          /*!< r2010+ DXF 290 1 */
+  // BITCODE_B is_default;      /*!< r2010+ DXF 290 1 */
+  // BITCODE_B has_xdic;        /*!< r2010+  */
   // AcDbAnnotScaleObjectContextData:
   // BITCODE_H scale;           /*!< DXF 340 hard ptr to AcDbScale */
 
@@ -6485,16 +6485,16 @@ typedef struct _dwg_object_BACKGROUND
  */
 #define OBJECTCONTEXTDATA_fields                                              \
   struct _dwg_object_object *parent;                                          \
-  BITCODE_BS class_version; /*!< r2010+ =4 */                                 \
-  BITCODE_B is_default;     /* no dxf */                                      \
-  BITCODE_B in_dwg          /* 290, always 1 */
+  BITCODE_BS class_version; /*!< r2010+ =4, before 3 */                       \
+  BITCODE_B is_default;     /* 290 */                                         \
+  BITCODE_B has_xdic        /* no dxf, always 1 */
 
 #define ANNOTSCALEOBJECTCONTEXTDATA_fields                                    \
   OBJECTCONTEXTDATA_fields;                                                   \
   BITCODE_H scale	/*!< DXF 340 */
 
 /**
- * R2010+
+ * R2010+ Not sure if needed as container for all child objects
  */
 typedef struct _dwg_object_OBJECTCONTEXTDATA
 {

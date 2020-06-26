@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, RADIMLGOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, RADIMLGOBJECTCONTEXTDATA, is_default, B);
-  CHK_ENTITY_TYPE (_obj, RADIMLGOBJECTCONTEXTDATA, in_dwg, B);
+  CHK_ENTITY_TYPE (_obj, RADIMLGOBJECTCONTEXTDATA, has_xdic, B);
   CHK_ENTITY_H (_obj, RADIMLGOBJECTCONTEXTDATA, scale);
 
   CHK_SUBCLASS_2RD  (_obj->dimension, OCD_Dimension, def_pt);

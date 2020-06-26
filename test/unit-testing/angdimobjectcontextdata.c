@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, ANGDIMOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ANGDIMOBJECTCONTEXTDATA, is_default, B);
-  CHK_ENTITY_TYPE (_obj, ANGDIMOBJECTCONTEXTDATA, in_dwg, B);
+  CHK_ENTITY_TYPE (_obj, ANGDIMOBJECTCONTEXTDATA, has_xdic, B);
   CHK_ENTITY_H (_obj, ANGDIMOBJECTCONTEXTDATA, scale);
 
   CHK_SUBCLASS_2RD (_obj->dimension, OCD_Dimension, def_pt);
