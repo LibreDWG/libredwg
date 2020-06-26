@@ -34767,18 +34767,17 @@ static int test_BLOCKALIGNMENTGRIP (const Dwg_Object *obj)
     blockalignmentgrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blockalignmentgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKALIGNMENTGRIP.bg_insert_cycling_weight [BL] %u != %u", blockalignmentgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKALIGNMENTGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockalignmentgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blockalignmentgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKALIGNMENTGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockalignmentgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKALIGNMENTGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockalignmentgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blockalignmentgrip->bg_insert_cycling_weight--;
   }
   {
@@ -35645,18 +35644,17 @@ static int test_BLOCKFLIPGRIP (const Dwg_Object *obj)
     blockflipgrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blockflipgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKFLIPGRIP.bg_insert_cycling_weight [BL] %u != %u", blockflipgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKFLIPGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockflipgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blockflipgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKFLIPGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockflipgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKFLIPGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockflipgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blockflipgrip->bg_insert_cycling_weight--;
   }
   {
@@ -36301,18 +36299,17 @@ static int test_BLOCKLINEARGRIP (const Dwg_Object *obj)
     blocklineargrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blocklineargrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKLINEARGRIP.bg_insert_cycling_weight [BL] %u != %u", blocklineargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKLINEARGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blocklineargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blocklineargrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKLINEARGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blocklineargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKLINEARGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blocklineargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blocklineargrip->bg_insert_cycling_weight--;
   }
   {
@@ -36440,18 +36437,17 @@ static int test_BLOCKLOOKUPGRIP (const Dwg_Object *obj)
     blocklookupgrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blocklookupgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKLOOKUPGRIP.bg_insert_cycling_weight [BL] %u != %u", blocklookupgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKLOOKUPGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blocklookupgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blocklookupgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKLOOKUPGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blocklookupgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKLOOKUPGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blocklookupgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blocklookupgrip->bg_insert_cycling_weight--;
   }
   {
@@ -36872,18 +36868,17 @@ static int test_BLOCKPOLARGRIP (const Dwg_Object *obj)
     blockpolargrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blockpolargrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKPOLARGRIP.bg_insert_cycling_weight [BL] %u != %u", blockpolargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKPOLARGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockpolargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blockpolargrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKPOLARGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockpolargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKPOLARGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockpolargrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blockpolargrip->bg_insert_cycling_weight--;
   }
   {
@@ -37024,18 +37019,17 @@ static int test_BLOCKPROPERTIESTABLEGRIP (const Dwg_Object *obj)
     blockpropertiestablegrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blockpropertiestablegrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKPROPERTIESTABLEGRIP.bg_insert_cycling_weight [BL] %u != %u", blockpropertiestablegrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKPROPERTIESTABLEGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockpropertiestablegrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blockpropertiestablegrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKPROPERTIESTABLEGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockpropertiestablegrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKPROPERTIESTABLEGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockpropertiestablegrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blockpropertiestablegrip->bg_insert_cycling_weight--;
   }
   {
@@ -37361,18 +37355,17 @@ static int test_BLOCKROTATIONGRIP (const Dwg_Object *obj)
     blockrotationgrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blockrotationgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKROTATIONGRIP.bg_insert_cycling_weight [BL] %u != %u", blockrotationgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKROTATIONGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockrotationgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blockrotationgrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKROTATIONGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockrotationgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKROTATIONGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockrotationgrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blockrotationgrip->bg_insert_cycling_weight--;
   }
   {
@@ -37805,18 +37798,17 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
     blockvisibilitygrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blockvisibilitygrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling_weight [BL] %u != %u", blockvisibilitygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blockvisibilitygrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockvisibilitygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKVISIBILITYGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockvisibilitygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blockvisibilitygrip->bg_insert_cycling_weight--;
   }
   {
@@ -38033,18 +38025,17 @@ static int test_BLOCKXYGRIP (const Dwg_Object *obj)
     blockxygrip->bg_insert_cycling--;
   }
   {
-    BITCODE_BL bg_insert_cycling_weight;
+    BITCODE_BLd bg_insert_cycling_weight;
     if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, NULL)
         && bg_insert_cycling_weight == blockxygrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKXYGRIP.bg_insert_cycling_weight [BL] %u != %u", blockxygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
-    bg_insert_cycling_weight++;
+      fail ("BLOCKXYGRIP.bg_insert_cycling_weight [BLd] " FORMAT_BLd " != " FORMAT_BLd "", blockxygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "bg_insert_cycling_weight", &bg_insert_cycling_weight, 0)
         && bg_insert_cycling_weight == blockxygrip->bg_insert_cycling_weight)
       pass ();
     else
-      fail ("BLOCKXYGRIP.bg_insert_cycling_weight [BL] set+1 %u != %u", blockxygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
+      fail ("BLOCKXYGRIP.bg_insert_cycling_weight [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", blockxygrip->bg_insert_cycling_weight, bg_insert_cycling_weight);
     blockxygrip->bg_insert_cycling_weight--;
   }
   {

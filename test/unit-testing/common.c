@@ -1368,10 +1368,9 @@ api_common_object (dwg_object *obj)
 }
 
 #define CHK_EVALEXPR(type)                                           \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, parentid, BLd);       \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, major, BL);           \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, minor, BL);           \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, parentid, BLd);       \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, nodeid, BL);          \
   /* variant_DXF type */                                             \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_code, BSd);     \
   /* variant_value's */                                              \
@@ -1401,7 +1400,8 @@ api_common_object (dwg_object *obj)
     case -9999:                                                      \
     default:                                                         \
       break;                                                         \
-    }
+    }                                                                \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, nodeid, BL)
 
 #define CHK_ACSH_HISTORYNODE()                                          \
   CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, major, BL);  \

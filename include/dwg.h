@@ -5852,7 +5852,6 @@ typedef struct _dwg_EvalExpr
   BITCODE_BLd parentid; /* -1 if none */
   BITCODE_BL major;
   BITCODE_BL minor;
-  BITCODE_BL nodeid;
   BITCODE_BSd value_code; // compare to EvalVariant
   union
   {
@@ -5864,6 +5863,7 @@ typedef struct _dwg_EvalExpr
     BITCODE_H   handle91;
     BITCODE_BS  short70;
   } value;
+  BITCODE_BL nodeid;
 } Dwg_EvalExpr;
 
 typedef struct _dwg_ACSH_SubentMaterial
@@ -7030,9 +7030,7 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   BITCODE_BL bg_bl2;                            \
   BITCODE_3BD bg_pt;                            \
   BITCODE_B bg_insert_cycling;                  \
-  BITCODE_BL bg_insert_cycling_weight
-  /* BITCODE_3BD bg_location; */                \
-  /* BITCODE_3BD bg_display_location; */
+  BITCODE_BLd bg_insert_cycling_weight
 
 typedef  struct dwg_BLOCKPARAMETER_propinfo {
   struct dwg_BLOCKPARAMETER_info *parent;

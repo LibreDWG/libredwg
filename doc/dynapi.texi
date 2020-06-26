@@ -6823,7 +6823,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 @item orientation
 3BD_1,	DXF 140
 
@@ -7032,7 +7032,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 
 @end vtable
 @end indentedblock
@@ -7185,7 +7185,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 @item orientation
 3BD_1,	DXF 140
 
@@ -7236,7 +7236,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 
 @end vtable
 @end indentedblock
@@ -7351,7 +7351,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 
 @end vtable
 @end indentedblock
@@ -7413,7 +7413,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 
 @end vtable
 @end indentedblock
@@ -7505,7 +7505,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 
 @end vtable
 @end indentedblock
@@ -7639,7 +7639,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 
 @end vtable
 @end indentedblock
@@ -7687,7 +7687,7 @@ BL
 @item bg_insert_cycling
 B
 @item bg_insert_cycling_weight
-BL
+BLd
 
 @end vtable
 @end indentedblock
@@ -12652,8 +12652,6 @@ BLd
 BL
 @item minor
 BL
-@item nodeid
-BL
 @item value_code
 BSd
 @item value.num40
@@ -12670,6 +12668,8 @@ BL
 H
 @item value.short70
 BS
+@item nodeid
+BL
 
 @end vtable
 @end indentedblock

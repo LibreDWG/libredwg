@@ -6065,7 +6065,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKALIGNMENTGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   { "orientation",	"3BD_1", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, orientation),
     1,0,0, 140 },
@@ -6225,7 +6225,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKFLIPGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKFLIPGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKFLIPGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKFLIPGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6343,7 +6343,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLINEARGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKLINEARGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLINEARGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKLINEARGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   { "orientation",	"3BD_1", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKLINEARGRIP, orientation),
     1,0,0, 140 },
@@ -6373,7 +6373,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLOOKUPGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKLOOKUPGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLOOKUPGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKLOOKUPGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6453,7 +6453,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPOLARGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKPOLARGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOLARGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKPOLARGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6487,7 +6487,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPROPERTIESTABLEGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6551,7 +6551,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKROTATIONGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKROTATIONGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKROTATIONGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKROTATIONGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6643,7 +6643,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -6677,7 +6677,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKXYGRIP_fields[] = {
     1,0,0, 0 },
   { "bg_insert_cycling",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKXYGRIP, bg_insert_cycling),
     0,0,0, 0 },
-  { "bg_insert_cycling_weight",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKXYGRIP, bg_insert_cycling_weight),
+  { "bg_insert_cycling_weight",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_BLOCKXYGRIP, bg_insert_cycling_weight),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -10556,8 +10556,6 @@ static const Dwg_DYNAPI_field _dwg_EvalExpr_fields[] = {
     0,0,0, 0 },
   { "minor",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_EvalExpr, minor),
     0,0,0, 0 },
-  { "nodeid",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_EvalExpr, nodeid),
-    0,0,0, 0 },
   { "value_code",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_EvalExpr, value_code),
     0,0,0, 0 },
   { "value.num40",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_EvalExpr, value.num40),
@@ -10573,6 +10571,8 @@ static const Dwg_DYNAPI_field _dwg_EvalExpr_fields[] = {
   { "value.handle91",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_EvalExpr, value.handle91),
     1,0,0, 0 },
   { "value.short70",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_EvalExpr, value.short70),
+    0,0,0, 0 },
+  { "nodeid",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_EvalExpr, nodeid),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

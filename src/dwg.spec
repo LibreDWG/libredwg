@@ -9531,7 +9531,7 @@ DWG_OBJECT_END
   FIELD_BL (bg_bl2, 0);                         \
   FIELD_3BD (bg_pt, 0);                         \
   FIELD_B (bg_insert_cycling, 0);               \
-  FIELD_BL (bg_insert_cycling_weight, 0);       \
+  FIELD_BLd (bg_insert_cycling_weight, 0);      \
   /* FIELD_3BD (bg_location, 0; */              \
   /* FIELD_3BD (bg_display_location, 0); */
 
