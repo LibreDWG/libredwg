@@ -9023,6 +9023,7 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   }
 
   FIELD_BL (column_type, 71);
+  VALUEOUTOFBOUNDS (column_type, 2)
   if (FIELD_VALUE (column_type))
     {
       FIELD_BL (num_column_heights, 72);
