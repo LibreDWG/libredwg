@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   dwg_obj_blocklookupaction *_obj = dwg_object_to_BLOCKLOOKUPACTION (obj);
 
   // AcDbBlockAction
-  CHK_ENTITY_3RD (_obj, BLOCKLOOKUPACTION, ba_pt);
+  CHK_ENTITY_3RD (_obj, BLOCKLOOKUPACTION, display_location);
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, num_actions, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKLOOKUPACTION, actions, num_actions, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, num_deps, BL);

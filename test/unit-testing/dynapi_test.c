@@ -35305,14 +35305,6 @@ static int test_BLOCKARRAYACTION (const Dwg_Object *obj)
       fail ("BLOCKARRAYACTION.actions [BL*] * %u num_actions", count);
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blockarrayaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKARRAYACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "be_major", &be_major, NULL)
         && be_major == blockarrayaction->be_major)
@@ -35398,6 +35390,14 @@ static int test_BLOCKARRAYACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKARRAYACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blockarrayaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKARRAYACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;
@@ -36033,14 +36033,6 @@ static int test_BLOCKFLIPACTION (const Dwg_Object *obj)
     blockflipaction->angle_offset--;
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blockflipaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKFLIPACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "be_major", &be_major, NULL)
         && be_major == blockflipaction->be_major)
@@ -36111,6 +36103,14 @@ static int test_BLOCKFLIPACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKFLIPACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blockflipaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKFLIPACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;
@@ -37231,14 +37231,6 @@ static int test_BLOCKLOOKUPACTION (const Dwg_Object *obj)
       fail ("BLOCKLOOKUPACTION.actions [BL*] * %u num_actions", count);
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blocklookupaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKLOOKUPACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "be_major", &be_major, NULL)
         && be_major == blocklookupaction->be_major)
@@ -37285,6 +37277,14 @@ static int test_BLOCKLOOKUPACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKLOOKUPACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blocklookupaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKLOOKUPACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;
@@ -37560,14 +37560,6 @@ static int test_BLOCKMOVEACTION (const Dwg_Object *obj)
     blockmoveaction->angle_offset--;
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blockmoveaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKMOVEACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "be_major", &be_major, NULL)
         && be_major == blockmoveaction->be_major)
@@ -37622,6 +37614,14 @@ static int test_BLOCKMOVEACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKMOVEACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blockmoveaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKMOVEACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;
@@ -38138,14 +38138,6 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
       fail ("BLOCKPOLARSTRETCHACTION.actions [BL*] * %u num_actions", count);
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blockpolarstretchaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKPOLARSTRETCHACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "be_major", &be_major, NULL)
         && be_major == blockpolarstretchaction->be_major)
@@ -38242,6 +38234,14 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKPOLARSTRETCHACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blockpolarstretchaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;
@@ -38794,14 +38794,6 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
       fail ("BLOCKROTATEACTION.actions [BL*] * %u num_actions", count);
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blockrotateaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKROTATEACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "be_major", &be_major, NULL)
         && be_major == blockrotateaction->be_major)
@@ -38848,6 +38840,14 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKROTATEACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blockrotateaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;
@@ -39063,14 +39063,6 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
       fail ("BLOCKSCALEACTION.actions [BL*] * %u num_actions", count);
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blockscaleaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKSCALEACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "be_major", &be_major, NULL)
         && be_major == blockscaleaction->be_major)
@@ -39133,6 +39125,14 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKSCALEACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blockscaleaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;
@@ -39284,14 +39284,6 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
     blockstretchaction->angle_offset--;
   }
   {
-    BITCODE_3BD ba_pt;
-    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "ba_pt", &ba_pt, NULL)
-        && !memcmp (&ba_pt, &blockstretchaction->ba_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKSTRETCHACTION.ba_pt [3BD]");
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "be_major", &be_major, NULL)
         && be_major == blockstretchaction->be_major)
@@ -39356,6 +39348,14 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKSTRETCHACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_3BD display_location;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "display_location", &display_location, NULL)
+        && !memcmp (&display_location, &blockstretchaction->display_location, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKSTRETCHACTION.display_location [3BD]");
   }
   {
     BITCODE_BL eed1071;

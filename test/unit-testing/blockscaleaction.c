@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   dwg_obj_blockscaleaction *_obj = dwg_object_to_BLOCKSCALEACTION (obj);
 
   // AcDbBlockAction
-  CHK_ENTITY_3RD (_obj, BLOCKSCALEACTION, ba_pt);
+  CHK_ENTITY_3RD (_obj, BLOCKSCALEACTION, display_location);
   CHK_ENTITY_TYPE (_obj, BLOCKSCALEACTION, num_actions, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKSCALEACTION, actions, num_actions, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKSCALEACTION, num_deps, BL);

@@ -6945,7 +6945,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70
@@ -7084,7 +7084,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70
@@ -7362,7 +7362,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70
@@ -7435,7 +7435,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70
@@ -7580,7 +7580,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70
@@ -7737,7 +7737,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70
@@ -7808,7 +7808,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70
@@ -7847,7 +7847,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item ba_pt
+@item display_location
 3BD,	DXF 1010
 @item num_actions
 BL,	DXF 70

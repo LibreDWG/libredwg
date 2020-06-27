@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   dwg_obj_blockflipaction *_obj = dwg_object_to_BLOCKFLIPACTION (obj);
 
   // AcDbBlockAction
-  CHK_ENTITY_3RD (_obj, BLOCKFLIPACTION, ba_pt);
+  CHK_ENTITY_3RD (_obj, BLOCKFLIPACTION, display_location);
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPACTION, num_actions, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKFLIPACTION, actions, num_actions, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPACTION, num_deps, BL);

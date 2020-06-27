@@ -8057,12 +8057,12 @@ DWG_OBJECT_END
 #define AcDbBlockAction_fields                  \
   AcDbBlockElement_fields;                      \
   SUBCLASS (AcDbBlockAction)                    \
-  FIELD_3BD (ba_pt, 0);                         \
+  FIELD_3BD (display_location, 0);              \
   FIELD_BL (num_actions, 70);                   \
   FIELD_VECTOR (actions, BL, num_actions, 91);  \
   FIELD_BL (num_deps, 71);                      \
   HANDLE_VECTOR (deps, num_deps, 5, 330);       \
-  DXF { FIELD_3BD (ba_pt, 1010); }
+  DXF { FIELD_3BD (display_location, 1010); }
 
 #define AcDbBlockGripExpr_fields                \
   SUBCLASS (AcDbBlockGripExpr);                 \

@@ -22,7 +22,7 @@ api_process (dwg_object *obj)
   dwg_obj_blockstretchaction *_obj = dwg_object_to_BLOCKSTRETCHACTION (obj);
 
   // AcDbBlockAction
-  CHK_ENTITY_3RD (_obj, BLOCKSTRETCHACTION, ba_pt);
+  CHK_ENTITY_3RD (_obj, BLOCKSTRETCHACTION, display_location);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_actions, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKSTRETCHACTION, actions, num_actions, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_deps, BL);

@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
   dwg_obj_blockpolarstretchaction *_obj = dwg_object_to_BLOCKPOLARSTRETCHACTION (obj);
 
   // AcDbBlockAction
-  CHK_ENTITY_3RD (_obj, BLOCKPOLARSTRETCHACTION, ba_pt);
+  CHK_ENTITY_3RD (_obj, BLOCKPOLARSTRETCHACTION, display_location);
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARSTRETCHACTION, num_actions, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKPOLARSTRETCHACTION, actions, num_actions, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARSTRETCHACTION, num_deps, BL);

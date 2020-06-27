@@ -7020,7 +7020,7 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
 
 #define BLOCKACTION_fields                      \
   BLOCKELEMENT_fields;                          \
-  BITCODE_3BD ba_pt;                            \
+  BITCODE_3BD display_location;                 \
   BITCODE_BL num_actions;                       \
   BITCODE_BL *actions;                          \
   BITCODE_BL num_deps;                          \
