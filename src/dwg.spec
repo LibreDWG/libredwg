@@ -9116,13 +9116,14 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
   FIELD_B (enable_context, 290);
   if (FIELD_VALUE (enable_context))
     {
+      /*
       DECODER {
         dwg_add_object (dwg);
         _obj->context = &dwg->object[dwg->num_objects - 1];
         dwg_setup_SCALE (_obj->context);
-      }
+      } */
       DXF { VALUE_TFF ( "Embedded Object", 101 ); }
-      CALL_ENTITY (SCALE, _obj->context);
+      //CALL_ENTITY (SCALE, _obj->context);
     }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
