@@ -35295,12 +35295,273 @@ static int test_BLOCKARRAYACTION (const Dwg_Object *obj)
   Dwg_Object_BLOCKARRAYACTION *restrict blockarrayaction = obj->tio.object->tio.BLOCKARRAYACTION;
   failed = 0;
   {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "actions", &actions, NULL)
+        && actions == blockarrayaction->actions)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blockarrayaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKARRAYACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "be_major", &be_major, NULL)
+        && be_major == blockarrayaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.be_major [BL] %u != %u", blockarrayaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "be_major", &be_major, 0)
+        && be_major == blockarrayaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.be_major [BL] set+1 %u != %u", blockarrayaction->be_major, be_major);
+    blockarrayaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blockarrayaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.be_minor [BL] %u != %u", blockarrayaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "be_minor", &be_minor, 0)
+        && be_minor == blockarrayaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.be_minor [BL] set+1 %u != %u", blockarrayaction->be_minor, be_minor);
+    blockarrayaction->be_minor--;
+  }
+  {
+    BITCODE_BD column_offset;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "column_offset", &column_offset, NULL)
+        && column_offset == blockarrayaction->column_offset)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.column_offset [BD] %g != %g", blockarrayaction->column_offset, column_offset);
+    column_offset++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "column_offset", &column_offset, 0)
+        && column_offset == blockarrayaction->column_offset)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.column_offset [BD] set+1 %g != %g", blockarrayaction->column_offset, column_offset);
+    blockarrayaction->column_offset--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "deps", &deps, NULL)
+        && deps == blockarrayaction->deps)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blockarrayaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.eed1071 [BL] %u != %u", blockarrayaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blockarrayaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.eed1071 [BL] set+1 %u != %u", blockarrayaction->eed1071, eed1071);
+    blockarrayaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockarrayaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKARRAYACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockarrayaction->evalexpr.value.text1)
+           : !blockarrayaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockarrayaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_num1", &info_num1, NULL)
+        && info_num1 == blockarrayaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num1 [BL] %u != %u", blockarrayaction->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "info_num1", &info_num1, 0)
+        && info_num1 == blockarrayaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num1 [BL] set+1 %u != %u", blockarrayaction->info_num1, info_num1);
+    blockarrayaction->info_num1--;
+  }
+  {
+    BITCODE_BL info_num2;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_num2", &info_num2, NULL)
+        && info_num2 == blockarrayaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num2 [BL] %u != %u", blockarrayaction->info_num2, info_num2);
+    info_num2++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "info_num2", &info_num2, 0)
+        && info_num2 == blockarrayaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num2 [BL] set+1 %u != %u", blockarrayaction->info_num2, info_num2);
+    blockarrayaction->info_num2--;
+  }
+  {
+    BITCODE_BL info_num3;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_num3", &info_num3, NULL)
+        && info_num3 == blockarrayaction->info_num3)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num3 [BL] %u != %u", blockarrayaction->info_num3, info_num3);
+    info_num3++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "info_num3", &info_num3, 0)
+        && info_num3 == blockarrayaction->info_num3)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num3 [BL] set+1 %u != %u", blockarrayaction->info_num3, info_num3);
+    blockarrayaction->info_num3--;
+  }
+  {
+    BITCODE_BL info_num4;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_num4", &info_num4, NULL)
+        && info_num4 == blockarrayaction->info_num4)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num4 [BL] %u != %u", blockarrayaction->info_num4, info_num4);
+    info_num4++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "info_num4", &info_num4, 0)
+        && info_num4 == blockarrayaction->info_num4)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_num4 [BL] set+1 %u != %u", blockarrayaction->info_num4, info_num4);
+    blockarrayaction->info_num4--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blockarrayaction->info_text1)
+           : !blockarrayaction->info_text1)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_text1 [T] '%s' <> '%s'", info_text1, blockarrayaction->info_text1);
+  }
+  {
+    BITCODE_T info_text2;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_text2", &info_text2, NULL)
+        && info_text2
+           ? strEQ ((char *)info_text2, (char *)blockarrayaction->info_text2)
+           : !blockarrayaction->info_text2)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_text2 [T] '%s' <> '%s'", info_text2, blockarrayaction->info_text2);
+  }
+  {
+    BITCODE_T info_text3;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_text3", &info_text3, NULL)
+        && info_text3
+           ? strEQ ((char *)info_text3, (char *)blockarrayaction->info_text3)
+           : !blockarrayaction->info_text3)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_text3 [T] '%s' <> '%s'", info_text3, blockarrayaction->info_text3);
+  }
+  {
+    BITCODE_T info_text4;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "info_text4", &info_text4, NULL)
+        && info_text4
+           ? strEQ ((char *)info_text4, (char *)blockarrayaction->info_text4)
+           : !blockarrayaction->info_text4)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.info_text4 [T] '%s' <> '%s'", info_text4, blockarrayaction->info_text4);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockarrayaction->name)
+           : !blockarrayaction->name)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.name [T] '%s' <> '%s'", name, blockarrayaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blockarrayaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.num_actions [BL] %u != %u", blockarrayaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "num_actions", &num_actions, 0)
+        && num_actions == blockarrayaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.num_actions [BL] set+1 %u != %u", blockarrayaction->num_actions, num_actions);
+    blockarrayaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blockarrayaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.num_deps [BL] %u != %u", blockarrayaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "num_deps", &num_deps, 0)
+        && num_deps == blockarrayaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.num_deps [BL] set+1 %u != %u", blockarrayaction->num_deps, num_deps);
+    blockarrayaction->num_deps--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockarrayaction->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKARRAYACTION.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD row_offset;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "row_offset", &row_offset, NULL)
+        && row_offset == blockarrayaction->row_offset)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.row_offset [BD] %g != %g", blockarrayaction->row_offset, row_offset);
+    row_offset++;
+    if (dwg_dynapi_entity_set_value (blockarrayaction, "BLOCKARRAYACTION", "row_offset", &row_offset, 0)
+        && row_offset == blockarrayaction->row_offset)
+      pass ();
+    else
+      fail ("BLOCKARRAYACTION.row_offset [BD] set+1 %g != %g", blockarrayaction->row_offset, row_offset);
+    blockarrayaction->row_offset--;
   }
   if (failed && (is_class_unstable ("BLOCKARRAYACTION") || is_class_debugging ("BLOCKARRAYACTION")))
     {
@@ -35784,6 +36045,282 @@ static int test_BLOCKFLIPACTION (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_BLOCKFLIPACTION *restrict blockflipaction = obj->tio.object->tio.BLOCKFLIPACTION;
   failed = 0;
+  {
+    BITCODE_BD action_offset_x;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_x", &action_offset_x, NULL)
+        && action_offset_x == blockflipaction->action_offset_x)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.action_offset_x [BD] %g != %g", blockflipaction->action_offset_x, action_offset_x);
+    action_offset_x++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_x", &action_offset_x, 0)
+        && action_offset_x == blockflipaction->action_offset_x)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.action_offset_x [BD] set+1 %g != %g", blockflipaction->action_offset_x, action_offset_x);
+    blockflipaction->action_offset_x--;
+  }
+  {
+    BITCODE_BD action_offset_y;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_y", &action_offset_y, NULL)
+        && action_offset_y == blockflipaction->action_offset_y)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.action_offset_y [BD] %g != %g", blockflipaction->action_offset_y, action_offset_y);
+    action_offset_y++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_y", &action_offset_y, 0)
+        && action_offset_y == blockflipaction->action_offset_y)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.action_offset_y [BD] set+1 %g != %g", blockflipaction->action_offset_y, action_offset_y);
+    blockflipaction->action_offset_y--;
+  }
+  {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "actions", &actions, NULL)
+        && actions == blockflipaction->actions)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_BD angle_offset;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "angle_offset", &angle_offset, NULL)
+        && angle_offset == blockflipaction->angle_offset)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.angle_offset [BD] %g != %g", blockflipaction->angle_offset, angle_offset);
+    angle_offset++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "angle_offset", &angle_offset, 0)
+        && angle_offset == blockflipaction->angle_offset)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.angle_offset [BD] set+1 %g != %g", blockflipaction->angle_offset, angle_offset);
+    blockflipaction->angle_offset--;
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blockflipaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKFLIPACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "be_major", &be_major, NULL)
+        && be_major == blockflipaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.be_major [BL] %u != %u", blockflipaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "be_major", &be_major, 0)
+        && be_major == blockflipaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.be_major [BL] set+1 %u != %u", blockflipaction->be_major, be_major);
+    blockflipaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blockflipaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.be_minor [BL] %u != %u", blockflipaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "be_minor", &be_minor, 0)
+        && be_minor == blockflipaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.be_minor [BL] set+1 %u != %u", blockflipaction->be_minor, be_minor);
+    blockflipaction->be_minor--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "deps", &deps, NULL)
+        && deps == blockflipaction->deps)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blockflipaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.eed1071 [BL] %u != %u", blockflipaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blockflipaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.eed1071 [BL] set+1 %u != %u", blockflipaction->eed1071, eed1071);
+    blockflipaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockflipaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKFLIPACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockflipaction->evalexpr.value.text1)
+           : !blockflipaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockflipaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_num1", &info_num1, NULL)
+        && info_num1 == blockflipaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num1 [BL] %u != %u", blockflipaction->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "info_num1", &info_num1, 0)
+        && info_num1 == blockflipaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num1 [BL] set+1 %u != %u", blockflipaction->info_num1, info_num1);
+    blockflipaction->info_num1--;
+  }
+  {
+    BITCODE_BL info_num2;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_num2", &info_num2, NULL)
+        && info_num2 == blockflipaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num2 [BL] %u != %u", blockflipaction->info_num2, info_num2);
+    info_num2++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "info_num2", &info_num2, 0)
+        && info_num2 == blockflipaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num2 [BL] set+1 %u != %u", blockflipaction->info_num2, info_num2);
+    blockflipaction->info_num2--;
+  }
+  {
+    BITCODE_BL info_num3;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_num3", &info_num3, NULL)
+        && info_num3 == blockflipaction->info_num3)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num3 [BL] %u != %u", blockflipaction->info_num3, info_num3);
+    info_num3++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "info_num3", &info_num3, 0)
+        && info_num3 == blockflipaction->info_num3)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num3 [BL] set+1 %u != %u", blockflipaction->info_num3, info_num3);
+    blockflipaction->info_num3--;
+  }
+  {
+    BITCODE_BL info_num4;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_num4", &info_num4, NULL)
+        && info_num4 == blockflipaction->info_num4)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num4 [BL] %u != %u", blockflipaction->info_num4, info_num4);
+    info_num4++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "info_num4", &info_num4, 0)
+        && info_num4 == blockflipaction->info_num4)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_num4 [BL] set+1 %u != %u", blockflipaction->info_num4, info_num4);
+    blockflipaction->info_num4--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blockflipaction->info_text1)
+           : !blockflipaction->info_text1)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_text1 [T] '%s' <> '%s'", info_text1, blockflipaction->info_text1);
+  }
+  {
+    BITCODE_T info_text2;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_text2", &info_text2, NULL)
+        && info_text2
+           ? strEQ ((char *)info_text2, (char *)blockflipaction->info_text2)
+           : !blockflipaction->info_text2)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_text2 [T] '%s' <> '%s'", info_text2, blockflipaction->info_text2);
+  }
+  {
+    BITCODE_T info_text3;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_text3", &info_text3, NULL)
+        && info_text3
+           ? strEQ ((char *)info_text3, (char *)blockflipaction->info_text3)
+           : !blockflipaction->info_text3)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_text3 [T] '%s' <> '%s'", info_text3, blockflipaction->info_text3);
+  }
+  {
+    BITCODE_T info_text4;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "info_text4", &info_text4, NULL)
+        && info_text4
+           ? strEQ ((char *)info_text4, (char *)blockflipaction->info_text4)
+           : !blockflipaction->info_text4)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.info_text4 [T] '%s' <> '%s'", info_text4, blockflipaction->info_text4);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockflipaction->name)
+           : !blockflipaction->name)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.name [T] '%s' <> '%s'", name, blockflipaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blockflipaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.num_actions [BL] %u != %u", blockflipaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "num_actions", &num_actions, 0)
+        && num_actions == blockflipaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.num_actions [BL] set+1 %u != %u", blockflipaction->num_actions, num_actions);
+    blockflipaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blockflipaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.num_deps [BL] %u != %u", blockflipaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "num_deps", &num_deps, 0)
+        && num_deps == blockflipaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.num_deps [BL] set+1 %u != %u", blockflipaction->num_deps, num_deps);
+    blockflipaction->num_deps--;
+  }
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "parent", &parent, NULL)
@@ -36820,6 +37357,177 @@ static int test_BLOCKLOOKUPACTION (const Dwg_Object *obj)
   Dwg_Object_BLOCKLOOKUPACTION *restrict blocklookupaction = obj->tio.object->tio.BLOCKLOOKUPACTION;
   failed = 0;
   {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "actions", &actions, NULL)
+        && actions == blocklookupaction->actions)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blocklookupaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKLOOKUPACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "be_major", &be_major, NULL)
+        && be_major == blocklookupaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.be_major [BL] %u != %u", blocklookupaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blocklookupaction, "BLOCKLOOKUPACTION", "be_major", &be_major, 0)
+        && be_major == blocklookupaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.be_major [BL] set+1 %u != %u", blocklookupaction->be_major, be_major);
+    blocklookupaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blocklookupaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.be_minor [BL] %u != %u", blocklookupaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blocklookupaction, "BLOCKLOOKUPACTION", "be_minor", &be_minor, 0)
+        && be_minor == blocklookupaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.be_minor [BL] set+1 %u != %u", blocklookupaction->be_minor, be_minor);
+    blocklookupaction->be_minor--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "deps", &deps, NULL)
+        && deps == blocklookupaction->deps)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blocklookupaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.eed1071 [BL] %u != %u", blocklookupaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blocklookupaction, "BLOCKLOOKUPACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blocklookupaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.eed1071 [BL] set+1 %u != %u", blocklookupaction->eed1071, eed1071);
+    blocklookupaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blocklookupaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKLOOKUPACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklookupaction->evalexpr.value.text1)
+           : !blocklookupaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklookupaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "info_num1", &info_num1, NULL)
+        && info_num1 == blocklookupaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.info_num1 [BL] %u != %u", blocklookupaction->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blocklookupaction, "BLOCKLOOKUPACTION", "info_num1", &info_num1, 0)
+        && info_num1 == blocklookupaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.info_num1 [BL] set+1 %u != %u", blocklookupaction->info_num1, info_num1);
+    blocklookupaction->info_num1--;
+  }
+  {
+    BITCODE_BL info_num2;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "info_num2", &info_num2, NULL)
+        && info_num2 == blocklookupaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.info_num2 [BL] %u != %u", blocklookupaction->info_num2, info_num2);
+    info_num2++;
+    if (dwg_dynapi_entity_set_value (blocklookupaction, "BLOCKLOOKUPACTION", "info_num2", &info_num2, 0)
+        && info_num2 == blocklookupaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.info_num2 [BL] set+1 %u != %u", blocklookupaction->info_num2, info_num2);
+    blocklookupaction->info_num2--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blocklookupaction->info_text1)
+           : !blocklookupaction->info_text1)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.info_text1 [T] '%s' <> '%s'", info_text1, blocklookupaction->info_text1);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blocklookupaction->name)
+           : !blocklookupaction->name)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.name [T] '%s' <> '%s'", name, blocklookupaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blocklookupaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.num_actions [BL] %u != %u", blocklookupaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_actions", &num_actions, 0)
+        && num_actions == blocklookupaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.num_actions [BL] set+1 %u != %u", blocklookupaction->num_actions, num_actions);
+    blocklookupaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blocklookupaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.num_deps [BL] %u != %u", blocklookupaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_deps", &num_deps, 0)
+        && num_deps == blocklookupaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPACTION.num_deps [BL] set+1 %u != %u", blocklookupaction->num_deps, num_deps);
+    blocklookupaction->num_deps--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blocklookupaction->parent, sizeof (struct _dwg_object_object*)))
@@ -36949,6 +37657,232 @@ static int test_BLOCKMOVEACTION (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_BLOCKMOVEACTION *restrict blockmoveaction = obj->tio.object->tio.BLOCKMOVEACTION;
   failed = 0;
+  {
+    BITCODE_BD action_offset_x;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_x", &action_offset_x, NULL)
+        && action_offset_x == blockmoveaction->action_offset_x)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.action_offset_x [BD] %g != %g", blockmoveaction->action_offset_x, action_offset_x);
+    action_offset_x++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_x", &action_offset_x, 0)
+        && action_offset_x == blockmoveaction->action_offset_x)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.action_offset_x [BD] set+1 %g != %g", blockmoveaction->action_offset_x, action_offset_x);
+    blockmoveaction->action_offset_x--;
+  }
+  {
+    BITCODE_BD action_offset_y;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_y", &action_offset_y, NULL)
+        && action_offset_y == blockmoveaction->action_offset_y)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.action_offset_y [BD] %g != %g", blockmoveaction->action_offset_y, action_offset_y);
+    action_offset_y++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_y", &action_offset_y, 0)
+        && action_offset_y == blockmoveaction->action_offset_y)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.action_offset_y [BD] set+1 %g != %g", blockmoveaction->action_offset_y, action_offset_y);
+    blockmoveaction->action_offset_y--;
+  }
+  {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "actions", &actions, NULL)
+        && actions == blockmoveaction->actions)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_BD angle_offset;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "angle_offset", &angle_offset, NULL)
+        && angle_offset == blockmoveaction->angle_offset)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.angle_offset [BD] %g != %g", blockmoveaction->angle_offset, angle_offset);
+    angle_offset++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "angle_offset", &angle_offset, 0)
+        && angle_offset == blockmoveaction->angle_offset)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.angle_offset [BD] set+1 %g != %g", blockmoveaction->angle_offset, angle_offset);
+    blockmoveaction->angle_offset--;
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blockmoveaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKMOVEACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "be_major", &be_major, NULL)
+        && be_major == blockmoveaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.be_major [BL] %u != %u", blockmoveaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "be_major", &be_major, 0)
+        && be_major == blockmoveaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.be_major [BL] set+1 %u != %u", blockmoveaction->be_major, be_major);
+    blockmoveaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blockmoveaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.be_minor [BL] %u != %u", blockmoveaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "be_minor", &be_minor, 0)
+        && be_minor == blockmoveaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.be_minor [BL] set+1 %u != %u", blockmoveaction->be_minor, be_minor);
+    blockmoveaction->be_minor--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "deps", &deps, NULL)
+        && deps == blockmoveaction->deps)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blockmoveaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.eed1071 [BL] %u != %u", blockmoveaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blockmoveaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.eed1071 [BL] set+1 %u != %u", blockmoveaction->eed1071, eed1071);
+    blockmoveaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockmoveaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKMOVEACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockmoveaction->evalexpr.value.text1)
+           : !blockmoveaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockmoveaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "info_num1", &info_num1, NULL)
+        && info_num1 == blockmoveaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.info_num1 [BL] %u != %u", blockmoveaction->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "info_num1", &info_num1, 0)
+        && info_num1 == blockmoveaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.info_num1 [BL] set+1 %u != %u", blockmoveaction->info_num1, info_num1);
+    blockmoveaction->info_num1--;
+  }
+  {
+    BITCODE_BL info_num2;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "info_num2", &info_num2, NULL)
+        && info_num2 == blockmoveaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.info_num2 [BL] %u != %u", blockmoveaction->info_num2, info_num2);
+    info_num2++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "info_num2", &info_num2, 0)
+        && info_num2 == blockmoveaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.info_num2 [BL] set+1 %u != %u", blockmoveaction->info_num2, info_num2);
+    blockmoveaction->info_num2--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blockmoveaction->info_text1)
+           : !blockmoveaction->info_text1)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.info_text1 [T] '%s' <> '%s'", info_text1, blockmoveaction->info_text1);
+  }
+  {
+    BITCODE_T info_text2;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "info_text2", &info_text2, NULL)
+        && info_text2
+           ? strEQ ((char *)info_text2, (char *)blockmoveaction->info_text2)
+           : !blockmoveaction->info_text2)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.info_text2 [T] '%s' <> '%s'", info_text2, blockmoveaction->info_text2);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockmoveaction->name)
+           : !blockmoveaction->name)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.name [T] '%s' <> '%s'", name, blockmoveaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blockmoveaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.num_actions [BL] %u != %u", blockmoveaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "num_actions", &num_actions, 0)
+        && num_actions == blockmoveaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.num_actions [BL] set+1 %u != %u", blockmoveaction->num_actions, num_actions);
+    blockmoveaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blockmoveaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.num_deps [BL] %u != %u", blockmoveaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "num_deps", &num_deps, 0)
+        && num_deps == blockmoveaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.num_deps [BL] set+1 %u != %u", blockmoveaction->num_deps, num_deps);
+    blockmoveaction->num_deps--;
+  }
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "parent", &parent, NULL)
@@ -37381,6 +38315,137 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
   Dwg_Object_BLOCKPOLARSTRETCHACTION *restrict blockpolarstretchaction = obj->tio.object->tio.BLOCKPOLARSTRETCHACTION;
   failed = 0;
   {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "actions", &actions, NULL)
+        && actions == blockpolarstretchaction->actions)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blockpolarstretchaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "be_major", &be_major, NULL)
+        && be_major == blockpolarstretchaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.be_major [BL] %u != %u", blockpolarstretchaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "be_major", &be_major, 0)
+        && be_major == blockpolarstretchaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.be_major [BL] set+1 %u != %u", blockpolarstretchaction->be_major, be_major);
+    blockpolarstretchaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blockpolarstretchaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.be_minor [BL] %u != %u", blockpolarstretchaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "be_minor", &be_minor, 0)
+        && be_minor == blockpolarstretchaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.be_minor [BL] set+1 %u != %u", blockpolarstretchaction->be_minor, be_minor);
+    blockpolarstretchaction->be_minor--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "deps", &deps, NULL)
+        && deps == blockpolarstretchaction->deps)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blockpolarstretchaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.eed1071 [BL] %u != %u", blockpolarstretchaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blockpolarstretchaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.eed1071 [BL] set+1 %u != %u", blockpolarstretchaction->eed1071, eed1071);
+    blockpolarstretchaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockpolarstretchaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpolarstretchaction->evalexpr.value.text1)
+           : !blockpolarstretchaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpolarstretchaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockpolarstretchaction->name)
+           : !blockpolarstretchaction->name)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.name [T] '%s' <> '%s'", name, blockpolarstretchaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blockpolarstretchaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_actions [BL] %u != %u", blockpolarstretchaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_actions", &num_actions, 0)
+        && num_actions == blockpolarstretchaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_actions [BL] set+1 %u != %u", blockpolarstretchaction->num_actions, num_actions);
+    blockpolarstretchaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blockpolarstretchaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_deps [BL] %u != %u", blockpolarstretchaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_deps", &num_deps, 0)
+        && num_deps == blockpolarstretchaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_deps [BL] set+1 %u != %u", blockpolarstretchaction->num_deps, num_deps);
+    blockpolarstretchaction->num_deps--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockpolarstretchaction->parent, sizeof (struct _dwg_object_object*)))
@@ -37773,6 +38838,162 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
   Dwg_Object_BLOCKROTATEACTION *restrict blockrotateaction = obj->tio.object->tio.BLOCKROTATEACTION;
   failed = 0;
   {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "actions", &actions, NULL)
+        && actions == blockrotateaction->actions)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blockrotateaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "be_major", &be_major, NULL)
+        && be_major == blockrotateaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.be_major [BL] %u != %u", blockrotateaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockrotateaction, "BLOCKROTATEACTION", "be_major", &be_major, 0)
+        && be_major == blockrotateaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.be_major [BL] set+1 %u != %u", blockrotateaction->be_major, be_major);
+    blockrotateaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blockrotateaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.be_minor [BL] %u != %u", blockrotateaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockrotateaction, "BLOCKROTATEACTION", "be_minor", &be_minor, 0)
+        && be_minor == blockrotateaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.be_minor [BL] set+1 %u != %u", blockrotateaction->be_minor, be_minor);
+    blockrotateaction->be_minor--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "deps", &deps, NULL)
+        && deps == blockrotateaction->deps)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blockrotateaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.eed1071 [BL] %u != %u", blockrotateaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockrotateaction, "BLOCKROTATEACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blockrotateaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.eed1071 [BL] set+1 %u != %u", blockrotateaction->eed1071, eed1071);
+    blockrotateaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockrotateaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockrotateaction->evalexpr.value.text1)
+           : !blockrotateaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockrotateaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "info_num1", &info_num1, NULL)
+        && info_num1 == blockrotateaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.info_num1 [BL] %u != %u", blockrotateaction->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blockrotateaction, "BLOCKROTATEACTION", "info_num1", &info_num1, 0)
+        && info_num1 == blockrotateaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.info_num1 [BL] set+1 %u != %u", blockrotateaction->info_num1, info_num1);
+    blockrotateaction->info_num1--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blockrotateaction->info_text1)
+           : !blockrotateaction->info_text1)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.info_text1 [T] '%s' <> '%s'", info_text1, blockrotateaction->info_text1);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockrotateaction->name)
+           : !blockrotateaction->name)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.name [T] '%s' <> '%s'", name, blockrotateaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blockrotateaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.num_actions [BL] %u != %u", blockrotateaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blockrotateaction, "BLOCKROTATEACTION", "num_actions", &num_actions, 0)
+        && num_actions == blockrotateaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.num_actions [BL] set+1 %u != %u", blockrotateaction->num_actions, num_actions);
+    blockrotateaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blockrotateaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.num_deps [BL] %u != %u", blockrotateaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blockrotateaction, "BLOCKROTATEACTION", "num_deps", &num_deps, 0)
+        && num_deps == blockrotateaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.num_deps [BL] set+1 %u != %u", blockrotateaction->num_deps, num_deps);
+    blockrotateaction->num_deps--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockrotateaction->parent, sizeof (struct _dwg_object_object*)))
@@ -37903,6 +39124,212 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
   Dwg_Object_BLOCKSCALEACTION *restrict blockscaleaction = obj->tio.object->tio.BLOCKSCALEACTION;
   failed = 0;
   {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "actions", &actions, NULL)
+        && actions == blockscaleaction->actions)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blockscaleaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "be_major", &be_major, NULL)
+        && be_major == blockscaleaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.be_major [BL] %u != %u", blockscaleaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "be_major", &be_major, 0)
+        && be_major == blockscaleaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.be_major [BL] set+1 %u != %u", blockscaleaction->be_major, be_major);
+    blockscaleaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blockscaleaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.be_minor [BL] %u != %u", blockscaleaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "be_minor", &be_minor, 0)
+        && be_minor == blockscaleaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.be_minor [BL] set+1 %u != %u", blockscaleaction->be_minor, be_minor);
+    blockscaleaction->be_minor--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "deps", &deps, NULL)
+        && deps == blockscaleaction->deps)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blockscaleaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.eed1071 [BL] %u != %u", blockscaleaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blockscaleaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.eed1071 [BL] set+1 %u != %u", blockscaleaction->eed1071, eed1071);
+    blockscaleaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockscaleaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockscaleaction->evalexpr.value.text1)
+           : !blockscaleaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockscaleaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "info_num1", &info_num1, NULL)
+        && info_num1 == blockscaleaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_num1 [BL] %u != %u", blockscaleaction->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "info_num1", &info_num1, 0)
+        && info_num1 == blockscaleaction->info_num1)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_num1 [BL] set+1 %u != %u", blockscaleaction->info_num1, info_num1);
+    blockscaleaction->info_num1--;
+  }
+  {
+    BITCODE_BL info_num2;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "info_num2", &info_num2, NULL)
+        && info_num2 == blockscaleaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_num2 [BL] %u != %u", blockscaleaction->info_num2, info_num2);
+    info_num2++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "info_num2", &info_num2, 0)
+        && info_num2 == blockscaleaction->info_num2)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_num2 [BL] set+1 %u != %u", blockscaleaction->info_num2, info_num2);
+    blockscaleaction->info_num2--;
+  }
+  {
+    BITCODE_BL info_num3;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "info_num3", &info_num3, NULL)
+        && info_num3 == blockscaleaction->info_num3)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_num3 [BL] %u != %u", blockscaleaction->info_num3, info_num3);
+    info_num3++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "info_num3", &info_num3, 0)
+        && info_num3 == blockscaleaction->info_num3)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_num3 [BL] set+1 %u != %u", blockscaleaction->info_num3, info_num3);
+    blockscaleaction->info_num3--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blockscaleaction->info_text1)
+           : !blockscaleaction->info_text1)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_text1 [T] '%s' <> '%s'", info_text1, blockscaleaction->info_text1);
+  }
+  {
+    BITCODE_T info_text2;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "info_text2", &info_text2, NULL)
+        && info_text2
+           ? strEQ ((char *)info_text2, (char *)blockscaleaction->info_text2)
+           : !blockscaleaction->info_text2)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_text2 [T] '%s' <> '%s'", info_text2, blockscaleaction->info_text2);
+  }
+  {
+    BITCODE_T info_text3;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "info_text3", &info_text3, NULL)
+        && info_text3
+           ? strEQ ((char *)info_text3, (char *)blockscaleaction->info_text3)
+           : !blockscaleaction->info_text3)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.info_text3 [T] '%s' <> '%s'", info_text3, blockscaleaction->info_text3);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockscaleaction->name)
+           : !blockscaleaction->name)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.name [T] '%s' <> '%s'", name, blockscaleaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blockscaleaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.num_actions [BL] %u != %u", blockscaleaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "num_actions", &num_actions, 0)
+        && num_actions == blockscaleaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.num_actions [BL] set+1 %u != %u", blockscaleaction->num_actions, num_actions);
+    blockscaleaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blockscaleaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.num_deps [BL] %u != %u", blockscaleaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "num_deps", &num_deps, 0)
+        && num_deps == blockscaleaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.num_deps [BL] set+1 %u != %u", blockscaleaction->num_deps, num_deps);
+    blockscaleaction->num_deps--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockscaleaction->parent, sizeof (struct _dwg_object_object*)))
@@ -37923,6 +39350,137 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_BLOCKSTRETCHACTION *restrict blockstretchaction = obj->tio.object->tio.BLOCKSTRETCHACTION;
   failed = 0;
+  {
+    BITCODE_BL* actions;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_actions", &count, NULL)
+        && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "actions", &actions, NULL)
+        && actions == blockstretchaction->actions)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_3BD ba_pt;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "ba_pt", &ba_pt, NULL)
+        && !memcmp (&ba_pt, &blockstretchaction->ba_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKSTRETCHACTION.ba_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "be_major", &be_major, NULL)
+        && be_major == blockstretchaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.be_major [BL] %u != %u", blockstretchaction->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "be_major", &be_major, 0)
+        && be_major == blockstretchaction->be_major)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.be_major [BL] set+1 %u != %u", blockstretchaction->be_major, be_major);
+    blockstretchaction->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "be_minor", &be_minor, NULL)
+        && be_minor == blockstretchaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.be_minor [BL] %u != %u", blockstretchaction->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "be_minor", &be_minor, 0)
+        && be_minor == blockstretchaction->be_minor)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.be_minor [BL] set+1 %u != %u", blockstretchaction->be_minor, be_minor);
+    blockstretchaction->be_minor--;
+  }
+  {
+    BITCODE_H* deps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_deps", &count, NULL)
+        && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "deps", &deps, NULL)
+        && deps == blockstretchaction->deps)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.deps [H*] * %u num_deps", count);
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "eed1071", &eed1071, NULL)
+        && eed1071 == blockstretchaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.eed1071 [BL] %u != %u", blockstretchaction->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "eed1071", &eed1071, 0)
+        && eed1071 == blockstretchaction->eed1071)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.eed1071 [BL] set+1 %u != %u", blockstretchaction->eed1071, eed1071);
+    blockstretchaction->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockstretchaction->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKSTRETCHACTION.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockstretchaction->evalexpr.value.text1)
+           : !blockstretchaction->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockstretchaction->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockstretchaction->name)
+           : !blockstretchaction->name)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.name [T] '%s' <> '%s'", name, blockstretchaction->name);
+  }
+  {
+    BITCODE_BL num_actions;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_actions", &num_actions, NULL)
+        && num_actions == blockstretchaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_actions [BL] %u != %u", blockstretchaction->num_actions, num_actions);
+    num_actions++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_actions", &num_actions, 0)
+        && num_actions == blockstretchaction->num_actions)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_actions [BL] set+1 %u != %u", blockstretchaction->num_actions, num_actions);
+    blockstretchaction->num_actions--;
+  }
+  {
+    BITCODE_BL num_deps;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_deps", &num_deps, NULL)
+        && num_deps == blockstretchaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_deps [BL] %u != %u", blockstretchaction->num_deps, num_deps);
+    num_deps++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_deps", &num_deps, 0)
+        && num_deps == blockstretchaction->num_deps)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_deps [BL] set+1 %u != %u", blockstretchaction->num_deps, num_deps);
+    blockstretchaction->num_deps--;
+  }
   {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "parent", &parent, NULL)

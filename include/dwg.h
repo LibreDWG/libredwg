@@ -7019,11 +7019,18 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   BITCODE_B chain_actions    /* DXF 281 */
 
 #define BLOCKACTION_fields                      \
+  BLOCKELEMENT_fields;                          \
   BITCODE_3BD ba_pt;                            \
   BITCODE_BL num_actions;                       \
   BITCODE_BL *actions;                          \
   BITCODE_BL num_deps;                          \
-  BITCODE_BL *deps
+  BITCODE_H *deps
+
+// XY action params
+#define BLOCKACTION_doubles_fields              \
+  BITCODE_BD action_offset_x;                   \
+  BITCODE_BD action_offset_y;                   \
+  BITCODE_BD angle_offset
 
 #define BLOCKGRIP_fields                        \
   BITCODE_BL bg_version;                        \
@@ -7074,10 +7081,10 @@ typedef  struct dwg_BLOCKPARAMVALUESET {
 #define BLOCKACTIONWITHBASEPT_fields            \
   BLOCKACTION_fields;                           \
   BITCODE_3BD pt;                               \
-  BITCODE_BL c92;                               \
-  BITCODE_T t301;                               \
-  BITCODE_BL c93;                               \
-  BITCODE_T t302;                               \
+  BITCODE_BL info_num1;                         \
+  BITCODE_T info_text1;                         \
+  BITCODE_BL info_num2;                         \
+  BITCODE_T info_text2;                         \
   BITCODE_B b280;                               \
   BITCODE_3BD base_pt
 
@@ -7217,7 +7224,17 @@ typedef struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER
 typedef struct _dwg_object_BLOCKARRAYACTION
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCKACTION_fields;
+  BITCODE_BL info_num1;     /*!< DXF 92 */
+  BITCODE_T info_text1;     /*!< DXF 301 */
+  BITCODE_BL info_num2;     /*!< DXF 93 */
+  BITCODE_T info_text2;     /*!< DXF 302 */
+  BITCODE_BL info_num3;     /*!< DXF 94 */
+  BITCODE_T info_text3;     /*!< DXF 303 */
+  BITCODE_BL info_num4;     /*!< DXF 95 */
+  BITCODE_T info_text4;     /*!< DXF 304 */
+  BITCODE_BD column_offset; /*!< DXF 140 */
+  BITCODE_BD row_offset;    /*!< DXF 141 */
 } Dwg_Object_BLOCKARRAYACTION;
 
 typedef struct _dwg_object_BLOCKBASEPOINTPARAMETER
@@ -7231,7 +7248,16 @@ typedef struct _dwg_object_BLOCKBASEPOINTPARAMETER
 typedef struct _dwg_object_BLOCKFLIPACTION
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCKACTION_fields;
+  BITCODE_BL info_num1;     /*!< DXF 92 */
+  BITCODE_T info_text1;     /*!< DXF 301 */
+  BITCODE_BL info_num2;     /*!< DXF 93 */
+  BITCODE_T info_text2;     /*!< DXF 302 */
+  BITCODE_BL info_num3;     /*!< DXF 94 */
+  BITCODE_T info_text3;     /*!< DXF 303 */
+  BITCODE_BL info_num4;     /*!< DXF 95 */
+  BITCODE_T info_text4;     /*!< DXF 304 */
+  BLOCKACTION_doubles_fields;
 } Dwg_Object_BLOCKFLIPACTION;
 
 typedef struct _dwg_object_BLOCKFLIPGRIP
@@ -7294,6 +7320,10 @@ typedef struct _dwg_object_BLOCKLINEARPARAMETER
 typedef struct _dwg_object_BLOCKLOOKUPACTION
 {
   struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
+  BITCODE_BL info_num1;     /*!< DXF 92 */
+  BITCODE_BL info_num2;     /*!< DXF 93 */
+  BITCODE_T info_text1;     /*!< DXF 301 */
   // ??
 } Dwg_Object_BLOCKLOOKUPACTION;
 
@@ -7307,13 +7337,18 @@ typedef struct _dwg_object_BLOCKLOOKUPGRIP
 typedef struct _dwg_object_BLOCKLOOKUPPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  // ...
 } Dwg_Object_BLOCKLOOKUPPARAMETER;
 
 typedef struct _dwg_object_BLOCKMOVEACTION
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCKACTION_fields;
+  BITCODE_BL info_num1;     /*!< DXF 92 */
+  BITCODE_T info_text1;     /*!< DXF 301 */
+  BITCODE_BL info_num2;     /*!< DXF 93 */
+  BITCODE_T info_text2;     /*!< DXF 302 */
+  BLOCKACTION_doubles_fields;
 } Dwg_Object_BLOCKMOVEACTION;
 
 typedef struct _dwg_object_BLOCKPOINTPARAMETER
@@ -7341,6 +7376,7 @@ typedef struct _dwg_object_BLOCKPOLARPARAMETER
 typedef struct _dwg_object_BLOCKPOLARSTRETCHACTION
 {
   struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
   // ??
 } Dwg_Object_BLOCKPOLARSTRETCHACTION;
 
@@ -7366,7 +7402,9 @@ typedef struct _dwg_object_BLOCKREPRESENTATION
 typedef struct _dwg_object_BLOCKROTATEACTION
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCKACTION_fields;
+  BITCODE_BL info_num1;     /*!< DXF 94 */
+  BITCODE_T info_text1;     /*!< DXF 303 */
 } Dwg_Object_BLOCKROTATEACTION;
 
 typedef struct _dwg_object_BLOCKROTATIONGRIP
@@ -7385,12 +7423,19 @@ typedef struct _dwg_object_BLOCKROTATIONPARAMETER
 typedef struct _dwg_object_BLOCKSCALEACTION
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCKACTION_fields;
+  BITCODE_BL info_num1;     /*!< DXF 94 */
+  BITCODE_T info_text1;     /*!< DXF 303 */
+  BITCODE_BL info_num2;     /*!< DXF 95 */
+  BITCODE_T info_text2;     /*!< DXF 304 */
+  BITCODE_BL info_num3;     /*!< DXF 96 */
+  BITCODE_T info_text3;     /*!< DXF 305 */
 } Dwg_Object_BLOCKSCALEACTION;
 
 typedef struct _dwg_object_BLOCKSTRETCHACTION
 {
   struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
   // ??
 } Dwg_Object_BLOCKSTRETCHACTION;
 

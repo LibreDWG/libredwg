@@ -6935,6 +6935,46 @@ Dwg_BLOCKPARAMVALUESET
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
+@item info_num1
+BL,	DXF 92
+@item info_text1
+T,	DXF 301
+@item info_num2
+BL,	DXF 93
+@item info_text2
+T,	DXF 302
+@item info_num3
+BL,	DXF 94
+@item info_text3
+T,	DXF 303
+@item info_num4
+BL,	DXF 95
+@item info_text4
+T,	DXF 304
+@item column_offset
+BD,	DXF 140
+@item row_offset
+BD,	DXF 141
 
 @end vtable
 @end indentedblock
@@ -7042,6 +7082,48 @@ Dwg_BLOCKPARAMVALUESET
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
+@item info_num1
+BL,	DXF 92
+@item info_text1
+T,	DXF 301
+@item info_num2
+BL,	DXF 93
+@item info_text2
+T,	DXF 302
+@item info_num3
+BL,	DXF 94
+@item info_text3
+T,	DXF 303
+@item info_num4
+BL,	DXF 95
+@item info_text4
+T,	DXF 304
+@item action_offset_x
+BD
+@item action_offset_y
+BD
+@item angle_offset
+BD
 
 @end vtable
 @end indentedblock
@@ -7286,6 +7368,32 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
+@item info_num1
+BL,	DXF 92
+@item info_num2
+BL,	DXF 93
+@item info_text1
+T,	DXF 301
 
 @end vtable
 @end indentedblock
@@ -7335,6 +7443,40 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
+@item info_num1
+BL,	DXF 92
+@item info_text1
+T,	DXF 301
+@item info_num2
+BL,	DXF 93
+@item info_text2
+T,	DXF 302
+@item action_offset_x
+BD,	DXF 140
+@item action_offset_y
+BD,	DXF 141
+@item angle_offset
+BD
 
 @end vtable
 @end indentedblock
@@ -7450,6 +7592,26 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
 
 @end vtable
 @end indentedblock
@@ -7561,6 +7723,30 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
+@item info_num1
+BL,	DXF 94
+@item info_text1
+T,	DXF 303
 
 @end vtable
 @end indentedblock
@@ -7610,6 +7796,38 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
+@item info_num1
+BL,	DXF 94
+@item info_text1
+T,	DXF 303
+@item info_num2
+BL,	DXF 95
+@item info_text2
+T,	DXF 304
+@item info_num3
+BL,	DXF 96
+@item info_text3
+T,	DXF 305
 
 @end vtable
 @end indentedblock
@@ -7623,6 +7841,26 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item ba_pt
+3BD,	DXF 1010
+@item num_actions
+BL,	DXF 70
+@item actions
+BL*,	DXF 91
+@item num_deps
+BL,	DXF 71
+@item deps
+H*,	DXF 330
 
 @end vtable
 @end indentedblock

@@ -8061,7 +8061,7 @@ DWG_OBJECT_END
   FIELD_BL (num_actions, 70);                   \
   FIELD_VECTOR (actions, BL, num_actions, 91);  \
   FIELD_BL (num_deps, 71);                      \
-  HANDLE_VECTOR (deps, BL, num_deps, 330);      \
+  HANDLE_VECTOR (deps, num_deps, 5, 330);       \
   DXF { FIELD_3BD (ba_pt, 1010); }
 
 #define AcDbBlockGripExpr_fields                \
@@ -8115,14 +8115,20 @@ DWG_OBJECT_END
   AcDbBlockAction_fields;                         \
   SUBCLASS (AcDbBlockActionWithBasePt)            \
   FIELD_3BD (pt, 0);                              \
-  FIELD_BL (c92, 92);                             \
-  FIELD_T (t301, 301);                            \
-  FIELD_BL (c93, 93);                             \
-  FIELD_T (t302, 302);                            \
+  FIELD_BL (info_num1, 92);                       \
+  FIELD_T (info_text1, 301);                      \
+  FIELD_BL (info_num2, 93);                       \
+  FIELD_T (info_text2, 302);                      \
   DXF { FIELD_3BD (pt, 1011); }                   \
   FIELD_B (b280, 280);                            \
   FIELD_3BD (base_pt, 1012)
 
+#define AcDbBlockAction_doubles_fields            \
+  FIELD_BD (action_offset_x, 140);                \
+  FIELD_BD (action_offset_y, 141);                \
+  FIELD_BD (angle_offset, 0);                     \
+  DXF { VALUE_RC (1, 280); } /* Action XY type. 1? */
+  
 #define AcDbBlockConstraintParameter_fields                \
   AcDbBlock2PtParameter_fields;                            \
   SUBCLASS (AcDbBlockConstraintParameter);                 \
@@ -10052,7 +10058,18 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKARRAYACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockArrayAction)
+  FIELD_BL (info_num1, 92);
+  FIELD_T (info_text1, 301);
+  FIELD_BL (info_num2, 93);
+  FIELD_T (info_text2, 302);
+  FIELD_BL (info_num3, 94);
+  FIELD_T (info_text3, 303);
+  FIELD_BL (info_num4, 95);
+  FIELD_T (info_text4, 304);
+  FIELD_BD (column_offset, 140);
+  FIELD_BD (row_offset, 141);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKBASEPOINTPARAMETER)
@@ -10123,7 +10140,16 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockFlipAction)
+  FIELD_BL (info_num1, 92);
+  FIELD_T (info_text1, 301);
+  FIELD_BL (info_num2, 93);
+  FIELD_T (info_text2, 302);
+  FIELD_BL (info_num3, 94);
+  FIELD_T (info_text3, 303);
+  FIELD_BL (info_num4, 95);
+  FIELD_T (info_text4, 304);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPGRIP)
@@ -10182,7 +10208,12 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockLookupAction)
+  FIELD_BL (info_num1, 92);
+  FIELD_BL (info_num2, 93);
+  FIELD_T (info_text1, 301);
+  // ..
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPGRIP)
@@ -10199,7 +10230,13 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKMOVEACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockMoveAction)
+  FIELD_BL (info_num1, 92);
+  FIELD_T (info_text1, 301);
+  FIELD_BL (info_num2, 93);
+  FIELD_T (info_text2, 302);
+  AcDbBlockAction_doubles_fields;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOINTPARAMETER)
@@ -10225,6 +10262,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOLARSTRETCHACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockPolarStretchAction)
 DWG_OBJECT_END
 
@@ -10246,7 +10284,10 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATEACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockRotateAction)
+  FIELD_BL (info_num1, 94);
+  FIELD_T (info_text1, 303);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONGRIP)
@@ -10263,12 +10304,21 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSCALEACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockScaleAction)
+  FIELD_BL (info_num1, 94);
+  FIELD_T (info_text1, 303);
+  FIELD_BL (info_num2, 95);
+  FIELD_T (info_text2, 304);
+  FIELD_BL (info_num3, 96);
+  FIELD_T (info_text3, 305);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSTRETCHACTION)
   DECODE_UNKNOWN_BITS
+  AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockStretchAction)
+  // ...
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKUSERPARAMETER)

@@ -204,7 +204,7 @@ testobjects = \
 # NB: After you modify this list, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.
 if ENABLE_DEBUG
-testobjects += \
+testdebug = \
 	acmecommandhistory \
 	acmescope \
 	acmestatemgr \
@@ -335,6 +335,7 @@ testobjects += \
 	rotationparameterentity \
 	xyparameterentity
 
+testobjects += $(testdebug)
 endif
 
 check_minimal = \
@@ -350,7 +351,6 @@ check_PROGRAMS = \
 	$(testobjects)
 
 check-prep: $(check_PROGRAMS)
-check-minimal: $(check_minimal)
 list:
 	echo $(testobjects) dynapi_test
 
@@ -370,6 +370,11 @@ endif
 TESTS_ENVIRONMENT = \
   top_srcdir="$(top_srcdir)" \
   ASAN_OPTIONS="detect_leaks=0"
+
+check-minimal: $(check_minimal)
+	$(MAKE) check TESTS='$(check_minimal)"
+check-debug: $(testdebug)
+	$(MAKE) check TESTS="$(testdebug)"
 
 bits_test.cbmc: bits_test.c $(top_srcdir)/src/bits.c
 	cbmc -I. -I$(top_srcdir)/include -I/opt/local/include \
