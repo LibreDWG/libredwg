@@ -22,6 +22,7 @@
  * modified by Gian Maria Gentilini
  */
 
+#define DWG_SPEC
 #include "spec.h"
 #include "dwg_spec_shared.h"
 
