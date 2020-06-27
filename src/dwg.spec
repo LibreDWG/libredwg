@@ -10125,7 +10125,7 @@ DWG_ENTITY (GEOPOSITIONMARKER)
         dwg_setup_MTEXT (_obj->mtext);
       }
       DXF { VALUE_TFF ( "Embedded Object", 101 ); }
-      CALL_ENTITY (MTEXT, _obj->mtext);
+      CALL_SUBENT_TYPE (MTEXT, _obj->mtext);
     }
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
@@ -10691,13 +10691,14 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
         dwg_setup_SCALE (_obj->context);
       } */
       DXF { VALUE_TFF ( "Embedded Object", 101 ); }
-      //CALL_ENTITY (SCALE, _obj->context);
       SUBCLASS (AcDbScale);
       SUB_FIELD_BS (context,flag, 70); // always 0
       SUB_FIELD_T (context,name, 300);
       SUB_FIELD_BD (context,paper_units, 140);
       SUB_FIELD_BD (context,drawing_units, 141);
       SUB_FIELD_B (context,is_unit_scale, 290);
+      // if (_obj->context->fixedtype == DWG_TYPE_SCALE)
+      //  CALL_SUBENT_TYPE (SCALE, _obj->context);
     }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
