@@ -10056,18 +10056,18 @@ DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
   FIELD_B (align_perpendicular, 280)
 DWG_OBJECT_END
 
+#define BlockAction_ConnectionPt(conn_pt, dxf1, dxf2) \
+  FIELD_BL (conn_pt.code, dxf1);                      \
+  FIELD_T (conn_pt.name, dxf2)
+
 DWG_OBJECT (BLOCKARRAYACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockArrayAction)
-  FIELD_BL (info_num1, 92);
-  FIELD_T (info_text1, 301);
-  FIELD_BL (info_num2, 93);
-  FIELD_T (info_text2, 302);
-  FIELD_BL (info_num3, 94);
-  FIELD_T (info_text3, 303);
-  FIELD_BL (info_num4, 95);
-  FIELD_T (info_text4, 304);
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  BlockAction_ConnectionPt (conn_pt4, 95, 304);
   FIELD_BD (column_offset, 140);
   FIELD_BD (row_offset, 141);
 DWG_OBJECT_END
@@ -10142,14 +10142,10 @@ DWG_OBJECT (BLOCKFLIPACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockFlipAction)
-  FIELD_BL (info_num1, 92);
-  FIELD_T (info_text1, 301);
-  FIELD_BL (info_num2, 93);
-  FIELD_T (info_text2, 302);
-  FIELD_BL (info_num3, 94);
-  FIELD_T (info_text3, 303);
-  FIELD_BL (info_num4, 95);
-  FIELD_T (info_text4, 304);
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  BlockAction_ConnectionPt (conn_pt4, 95, 304);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPGRIP)
@@ -10210,9 +10206,8 @@ DWG_OBJECT (BLOCKLOOKUPACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockLookupAction)
-  FIELD_BL (info_num1, 92);
-  FIELD_BL (info_num2, 93);
-  FIELD_T (info_text1, 301);
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  FIELD_BL (info_code93, 93);
   // ..
 DWG_OBJECT_END
 
@@ -10232,10 +10227,8 @@ DWG_OBJECT (BLOCKMOVEACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockMoveAction)
-  FIELD_BL (info_num1, 92);
-  FIELD_T (info_text1, 301);
-  FIELD_BL (info_num2, 93);
-  FIELD_T (info_text2, 302);
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);
   AcDbBlockAction_doubles_fields;
 DWG_OBJECT_END
 
@@ -10286,8 +10279,7 @@ DWG_OBJECT (BLOCKROTATEACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockRotateAction)
-  FIELD_BL (info_num1, 94);
-  FIELD_T (info_text1, 303);
+  BlockAction_ConnectionPt (conn_pt1, 94, 303);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONGRIP)
@@ -10306,12 +10298,9 @@ DWG_OBJECT (BLOCKSCALEACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockScaleAction)
-  FIELD_BL (info_num1, 94);
-  FIELD_T (info_text1, 303);
-  FIELD_BL (info_num2, 95);
-  FIELD_T (info_text2, 304);
-  FIELD_BL (info_num3, 96);
-  FIELD_T (info_text3, 305);
+  BlockAction_ConnectionPt (conn_pt1, 94, 303);
+  BlockAction_ConnectionPt (conn_pt1, 95, 304);
+  BlockAction_ConnectionPt (conn_pt1, 96, 305);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSTRETCHACTION)

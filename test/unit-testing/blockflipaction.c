@@ -25,12 +25,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPACTION, num_deps, BL);
   CHK_ENTITY_HV (_obj, BLOCKFLIPACTION, deps, num_deps);
   // AcDbBlockFlipAction
-  CHK_ENTITY_TYPE (_obj, BLOCKFLIPACTION, info_num1, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKFLIPACTION, info_text1);
-  CHK_ENTITY_TYPE (_obj, BLOCKFLIPACTION, info_num2, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKFLIPACTION, info_text2);
-  CHK_ENTITY_TYPE (_obj, BLOCKFLIPACTION, info_num3, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKFLIPACTION, info_text3);
+  CHK_SUBCLASS_TYPE     (_obj->conn_pt1, BLOCKACTION_connectionpts, code, BL);
+  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt1, BLOCKACTION_connectionpts, name);
+  CHK_SUBCLASS_TYPE     (_obj->conn_pt2, BLOCKACTION_connectionpts, code, BL);
+  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt2, BLOCKACTION_connectionpts, name);
+  CHK_SUBCLASS_TYPE     (_obj->conn_pt3, BLOCKACTION_connectionpts, code, BL);
+  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt3, BLOCKACTION_connectionpts, name);
   // ..
 #endif
 }

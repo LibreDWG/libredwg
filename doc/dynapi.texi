@@ -6955,22 +6955,14 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item info_num1
-BL,	DXF 92
-@item info_text1
-T,	DXF 301
-@item info_num2
-BL,	DXF 93
-@item info_text2
-T,	DXF 302
-@item info_num3
-BL,	DXF 94
-@item info_text3
-T,	DXF 303
-@item info_num4
-BL,	DXF 95
-@item info_text4
-T,	DXF 304
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt2
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt3
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt4
+Dwg_BLOCKACTION_connectionpts
 @item column_offset
 BD,	DXF 140
 @item row_offset
@@ -7102,22 +7094,14 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item info_num1
-BL,	DXF 92
-@item info_text1
-T,	DXF 301
-@item info_num2
-BL,	DXF 93
-@item info_text2
-T,	DXF 302
-@item info_num3
-BL,	DXF 94
-@item info_text3
-T,	DXF 303
-@item info_num4
-BL,	DXF 95
-@item info_text4
-T,	DXF 304
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt2
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt3
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt4
+Dwg_BLOCKACTION_connectionpts
 @item action_offset_x
 BD
 @item action_offset_y
@@ -7388,12 +7372,10 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item info_num1
-BL,	DXF 92
-@item info_num2
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item info_code93
 BL,	DXF 93
-@item info_text1
-T,	DXF 301
 
 @end vtable
 @end indentedblock
@@ -7463,14 +7445,10 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item info_num1
-BL,	DXF 92
-@item info_text1
-T,	DXF 301
-@item info_num2
-BL,	DXF 93
-@item info_text2
-T,	DXF 302
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt2
+Dwg_BLOCKACTION_connectionpts
 @item action_offset_x
 BD,	DXF 140
 @item action_offset_y
@@ -7743,10 +7721,8 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item info_num1
-BL,	DXF 94
-@item info_text1
-T,	DXF 303
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
 
 @end vtable
 @end indentedblock
@@ -7816,18 +7792,12 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item info_num1
-BL,	DXF 94
-@item info_text1
-T,	DXF 303
-@item info_num2
-BL,	DXF 95
-@item info_text2
-T,	DXF 304
-@item info_num3
-BL,	DXF 96
-@item info_text3
-T,	DXF 305
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt2
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt3
+Dwg_BLOCKACTION_connectionpts
 
 @end vtable
 @end indentedblock
@@ -12616,6 +12586,20 @@ H
 
 @item color
 BLx
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BLOCKACTION_connectionpts} @anchor{Dwg_BLOCKACTION_connectionpts}
+@vindex Dwg_BLOCKACTION_connectionpts
+
+@indentedblock
+@vtable @code
+
+@item code
+BL
+@item name
+TV
 
 @end vtable
 @end indentedblock

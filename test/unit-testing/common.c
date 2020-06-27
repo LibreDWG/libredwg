@@ -372,6 +372,10 @@ main (int argc, char *argv[])
                   "blocks_and_tables_-_metric.dwg",
                   cov);
             }
+          if (DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION)
+            {
+              error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
+            }
         }
 #ifdef DWG_TYPE
       if (cov && !numpassed () && !numfailed ())
