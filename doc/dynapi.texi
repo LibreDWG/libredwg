@@ -6793,9 +6793,9 @@ BL*
 BS
 @item dependency
 H,	DXF 330
-@item t305
+@item expr_name
 T,	DXF 305
-@item description
+@item expr_description
 T,	DXF 306
 @item value
 BD,	DXF 140
@@ -6908,17 +6908,17 @@ BL*
 BS
 @item dependency
 H,	DXF 330
-@item origin
+@item center_pt
 3BD,	DXF 1011
 @item end_pt
 3BD,	DXF 1012
 @item expr_name
 T,	DXF 305
-@item param_name
+@item expr_description
 T,	DXF 306
 @item angle
 BD,	DXF 140
-@item b280
+@item orientation_on_both_grips
 B,	DXF 280
 @item value_set
 Dwg_BLOCKPARAMVALUESET
@@ -6991,10 +6991,12 @@ BS
 H,	DXF 330
 @item expr_name
 T,	DXF 305
-@item param_name
+@item expr_description
 T,	DXF 306
-@item diameter
+@item distance
 BD,	DXF 140
+@item orientation_on_both_grips
+B
 @item value_set
 Dwg_BLOCKPARAMVALUESET
 
@@ -7106,9 +7108,9 @@ BL*
 BS
 @item dependency
 H,	DXF 330
-@item t305
+@item expr_name
 T,	DXF 305
-@item description
+@item expr_description
 T,	DXF 306
 @item value
 BD,	DXF 140
@@ -7155,9 +7157,9 @@ BL*
 BS
 @item dependency
 H,	DXF 330
-@item t305
+@item expr_name
 T,	DXF 305
-@item description
+@item expr_description
 T,	DXF 306
 @item value
 BD,	DXF 140
@@ -7455,6 +7457,12 @@ BL*
 BS
 @item dependency
 H,	DXF 330
+@item expr_name
+T,	DXF 305
+@item expr_description
+T,	DXF 306
+@item distance
+BD,	DXF 140
 @item value_set
 Dwg_BLOCKPARAMVALUESET
 
@@ -7599,9 +7607,9 @@ BL*
 BS
 @item dependency
 H,	DXF 330
-@item t305
+@item expr_name
 T,	DXF 305
-@item description
+@item expr_description
 T,	DXF 306
 @item value
 BD,	DXF 140
@@ -7657,9 +7665,9 @@ struct _dwg_object_object*
 B
 @item b2
 B
-@item name
+@item expr_name
 T
-@item desc
+@item expr_description
 T
 @item num_states
 BL

@@ -9,7 +9,9 @@ api_process (dwg_object *obj)
   BLOCKCONSTRAINTPARAMETER_fields;
   BITCODE_BL i;
   Dwg_BLOCKPARAMETER_propinfo *props;
-  // ..
+  BITCODE_T expr_name;
+  BITCODE_T expr_description;
+  BITCODE_BD distance;
   BLOCKPARAMVALUESET_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -50,5 +52,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKRADIALCONSTRAINTPARAMETER, parameter_base_location, BS);
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKRADIALCONSTRAINTPARAMETER, dependency);
+  // AcDbBlockRadialConstraintParameter
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKRADIALCONSTRAINTPARAMETER, expr_name);
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKRADIALCONSTRAINTPARAMETER, expr_description);
+  CHK_ENTITY_TYPE (_obj, BLOCKRADIALCONSTRAINTPARAMETER, distance, BD);
+  // AcDbBlockParamValueSet
+  CHK_SUBCLASS_UTF8TEXT (_obj->value_set, "BLOCKPARAMVALUESET", desc);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", valuelist,
+                            _obj->value_set.num_valuelist, BD);
 #endif
 }

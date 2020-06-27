@@ -8131,8 +8131,8 @@ DWG_OBJECT_END
 #define AcDbBlockLinearConstraintParameter_fields     \
   AcDbBlockConstraintParameter_fields;                \
   SUBCLASS (AcDbBlockLinearConstraintParameter)       \
-  FIELD_T (t305, 305);                                \
-  FIELD_T (description, 306);                         \
+  FIELD_T (expr_name, 305);                           \
+  FIELD_T (expr_description, 306);                    \
   FIELD_BD (value, 140);                              \
   AcDbBlockParamValueSet_fields (value_set,96,128,175,307)
 
@@ -9619,8 +9619,8 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbBlockVisibilityParameter)
   FIELD_B (is_initialized, 0);
-  FIELD_T (name, 0);
-  FIELD_T (desc, 0);
+  FIELD_T (expr_name, 0);
+  FIELD_T (expr_description, 0);
   FIELD_B (b2, 0);
   FIELD_BL (num_states, 0);
   REPEAT (num_states, states, Dwg_BLOCKVISIBILITYPARAMETER_state)
@@ -10064,27 +10064,47 @@ DWG_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER)
   DECODE_UNKNOWN_BITS
   AcDbBlockConstraintParameter_fields;
   SUBCLASS (AcDbBlockAngularConstraintParameter)
-  FIELD_3BD (origin, 0);
+  FIELD_3BD (center_pt, 0);
   FIELD_3BD (end_pt, 0);
   FIELD_T (expr_name, 305); // A copy of the EvalExpr.name
-  FIELD_T (param_name, 306);
+  FIELD_T (expr_description, 306);
   DXF {
-    FIELD_3BD (origin, 1011);
+    FIELD_3BD (center_pt, 1011);
     FIELD_3BD (end_pt, 1012);
   }
-  FIELD_BD (angle, 140);
-  FIELD_B (b280, 280);
+  FIELD_BD (angle, 140); // offset is the result
+  FIELD_B (orientation_on_both_grips, 280);
   // 0x60,0x8d,0xaf,0x133
   AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
 DWG_OBJECT_END
+
+#if 0
+DWG_ENTITY (BLOCKANGULARCONSTRAINTPARAMETERENTITY)
+  DECODE_UNKNOWN_BITS
+  AcDbBlockConstraintParameter_fields;
+  SUBCLASS (AcDbBlockAngularConstraintParameterEntity)
+  FIELD_3BD (center_pt, 0);
+  FIELD_3BD (label_pt, 0);
+  FIELD_T (expr_name, 305); // A copy of the EvalExpr.name.
+  FIELD_T (expr_description, 306);
+  DXF {
+    FIELD_3BD (center_pt, 1011);
+    FIELD_3BD (label_pt, 1012);
+  }
+  FIELD_BD (angle, 140); // offset is the result
+  FIELD_B (orientation_on_both_grips, 280);
+  // 0x60,0x8d,0xaf,0x133
+  AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
+DWG_ENTITY_END
+#endif
 
 DWG_OBJECT (BLOCKDIAMETRICCONSTRAINTPARAMETER)
   DECODE_UNKNOWN_BITS
   AcDbBlockConstraintParameter_fields;
   SUBCLASS (AcDbBlockDiametricConstraintParameter)
-  FIELD_T (expr_name, 305); // A copy of the EvalExpr.name
-  FIELD_T (param_name, 306);
-  FIELD_BD (diameter, 140); /* -1.0 */
+  FIELD_T (expr_name, 305); // A copy of the EvalExpr.name. expr being distance
+  FIELD_T (expr_description, 306);
+  FIELD_BD (distance, 140); /* -1.0 */
   AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
 DWG_OBJECT_END
 
@@ -10092,7 +10112,9 @@ DWG_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
   DECODE_UNKNOWN_BITS
   AcDbBlockConstraintParameter_fields;
   SUBCLASS (AcDbBlockRadialConstraintParameter)
-  // ??
+  FIELD_T (expr_name, 305); // A copy of the EvalExpr.name. expr being distance
+  FIELD_T (expr_description, 306);
+  FIELD_BD (distance, 140);
   AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
 DWG_OBJECT_END
 
@@ -10125,7 +10147,6 @@ DWG_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKHORIZONTALCONSTRAINTPARAMETER)
-  DECODE_UNKNOWN_BITS
   AcDbBlockLinearConstraintParameter_fields;
   SUBCLASS (AcDbBlockHorizontalConstraintParameter)
 DWG_OBJECT_END

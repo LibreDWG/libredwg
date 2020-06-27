@@ -6,11 +6,9 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BLOCKCONSTRAINTPARAMETER_fields;
   BITCODE_BL i;
   Dwg_BLOCKPARAMETER_propinfo *props;
-  // ..
-  BLOCKPARAMVALUESET_fields;
+  BLOCKLINEARCONSTRAINTPARAMETER_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -48,5 +46,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, parameter_base_location, BS);
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, dependency);
+  // AcDbBlockLinearConstraintParameter
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, expr_name);
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, expr_description);
+  CHK_ENTITY_TYPE (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, value, BD);
+  // AcDbBlockParamValueSet
+  CHK_SUBCLASS_UTF8TEXT (_obj->value_set, "BLOCKPARAMVALUESET", desc);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", valuelist,
+                            _obj->value_set.num_valuelist, BD);
 #endif
 }

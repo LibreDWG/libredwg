@@ -8,12 +8,12 @@ api_process (dwg_object *obj)
   BLOCKCONSTRAINTPARAMETER_fields;
   BITCODE_BL i;
   Dwg_BLOCKPARAMETER_propinfo *props;
-  BITCODE_3BD origin;
+  BITCODE_3BD center_pt;
   BITCODE_3BD end_pt;
   BITCODE_T expr_name;
-  BITCODE_T param_name;
+  BITCODE_T expr_description;
   BITCODE_BD angle;
-  BITCODE_B b280;
+  BITCODE_B orientation_on_both_grips;
   BLOCKPARAMVALUESET_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -55,13 +55,20 @@ api_process (dwg_object *obj)
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKANGULARCONSTRAINTPARAMETER, dependency);
   // AcDbBlockAngularConstraintParameter
-  CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, origin);
+  CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, center_pt);
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, end_pt);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKANGULARCONSTRAINTPARAMETER, expr_name);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKANGULARCONSTRAINTPARAMETER, param_name);
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKANGULARCONSTRAINTPARAMETER, expr_description);
   CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, angle, BD);
-  CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, b280, B);
+  CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, orientation_on_both_grips, B);
   // AcDbBlockParamValueSet
-  // ..
+  CHK_SUBCLASS_UTF8TEXT (_obj->value_set, "BLOCKPARAMVALUESET", desc);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", valuelist,
+                            _obj->value_set.num_valuelist, BD);
 #endif
 }

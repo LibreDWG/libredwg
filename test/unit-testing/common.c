@@ -1278,31 +1278,31 @@ api_common_entity (dwg_object *obj)
     }
 #define CHK_SUBCLASS_VECTOR_TYPE(ptr, name, field, num, type)                 \
   {                                                                           \
-    BITCODE_##type *value = NULL;                                             \
+    BITCODE_##type *_value = NULL;                                            \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
-    else if (!value)                                                          \
+    else if (!_value)                                                          \
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
         for (unsigned _i = 0; _i < (num); _i++)                               \
           {                                                                   \
-            if (value[_i] == ptr.field[_i])                                   \
+            if (_value[_i] == ptr.field[_i])                                   \
               {                                                               \
                 if (g_counter > g_countmax)                                   \
                   pass ();                                                    \
                 else                                                          \
                   ok (#name "." #field "[%d]:\t " FORMAT_##type, _i,          \
-                      value[_i]);                                             \
+                      _value[_i]);                                             \
               }                                                               \
             else                                                              \
               fail (#name "." #field "[%d]:\t " FORMAT_##type, _i,            \
-                    value[_i]);                                               \
+                    _value[_i]);                                               \
           }                                                                   \
       }                                                                       \
   }

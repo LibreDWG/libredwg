@@ -34560,16 +34560,6 @@ static int test_BLOCKALIGNEDCONSTRAINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.dependency [H]");
   }
   {
-    BITCODE_T description;
-    if (dwg_dynapi_entity_value (blockalignedconstraintparameter, "BLOCKALIGNEDCONSTRAINTPARAMETER", "description", &description, NULL)
-        && description
-           ? strEQ ((char *)description, (char *)blockalignedconstraintparameter->description)
-           : !blockalignedconstraintparameter->description)
-      pass ();
-    else
-      fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.description [T] '%s' <> '%s'", description, blockalignedconstraintparameter->description);
-  }
-  {
     BITCODE_BL eed1071;
     if (dwg_dynapi_entity_value (blockalignedconstraintparameter, "BLOCKALIGNEDCONSTRAINTPARAMETER", "eed1071", &eed1071, NULL)
         && eed1071 == blockalignedconstraintparameter->eed1071)
@@ -34601,6 +34591,26 @@ static int test_BLOCKALIGNEDCONSTRAINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockalignedconstraintparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blockalignedconstraintparameter, "BLOCKALIGNEDCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blockalignedconstraintparameter->expr_description)
+           : !blockalignedconstraintparameter->expr_description)
+      pass ();
+    else
+      fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blockalignedconstraintparameter->expr_description);
+  }
+  {
+    BITCODE_T expr_name;
+    if (dwg_dynapi_entity_value (blockalignedconstraintparameter, "BLOCKALIGNEDCONSTRAINTPARAMETER", "expr_name", &expr_name, NULL)
+        && expr_name
+           ? strEQ ((char *)expr_name, (char *)blockalignedconstraintparameter->expr_name)
+           : !blockalignedconstraintparameter->expr_name)
+      pass ();
+    else
+      fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.expr_name [T] '%s' <> '%s'", expr_name, blockalignedconstraintparameter->expr_name);
   }
   {
     Dwg_BLOCKPARAMETER_info* infos;
@@ -34674,16 +34684,6 @@ static int test_BLOCKALIGNEDCONSTRAINTPARAMETER (const Dwg_Object *obj)
     else
       fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.show_properties [B] set+1 " FORMAT_B " != " FORMAT_B "", blockalignedconstraintparameter->show_properties, show_properties);
     blockalignedconstraintparameter->show_properties--;
-  }
-  {
-    BITCODE_T t305;
-    if (dwg_dynapi_entity_value (blockalignedconstraintparameter, "BLOCKALIGNEDCONSTRAINTPARAMETER", "t305", &t305, NULL)
-        && t305
-           ? strEQ ((char *)t305, (char *)blockalignedconstraintparameter->t305)
-           : !blockalignedconstraintparameter->t305)
-      pass ();
-    else
-      fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.t305 [T] '%s' <> '%s'", t305, blockalignedconstraintparameter->t305);
   }
   {
     BITCODE_BD value;
@@ -35038,21 +35038,6 @@ static int test_BLOCKANGULARCONSTRAINTPARAMETER (const Dwg_Object *obj)
     blockangularconstraintparameter->angle--;
   }
   {
-    BITCODE_B b280;
-    if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "b280", &b280, NULL)
-        && b280 == blockangularconstraintparameter->b280)
-      pass ();
-    else
-      fail ("BLOCKANGULARCONSTRAINTPARAMETER.b280 [B] " FORMAT_B " != " FORMAT_B "", blockangularconstraintparameter->b280, b280);
-    b280++;
-    if (dwg_dynapi_entity_set_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "b280", &b280, 0)
-        && b280 == blockangularconstraintparameter->b280)
-      pass ();
-    else
-      fail ("BLOCKANGULARCONSTRAINTPARAMETER.b280 [B] set+1 " FORMAT_B " != " FORMAT_B "", blockangularconstraintparameter->b280, b280);
-    blockangularconstraintparameter->b280--;
-  }
-  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "be_major", &be_major, NULL)
         && be_major == blockangularconstraintparameter->be_major)
@@ -35091,6 +35076,14 @@ static int test_BLOCKANGULARCONSTRAINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKANGULARCONSTRAINTPARAMETER.bl_infos [BL*] * %u num_bl_infos", count);
+  }
+  {
+    BITCODE_3BD center_pt;
+    if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "center_pt", &center_pt, NULL)
+        && !memcmp (&center_pt, &blockangularconstraintparameter->center_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKANGULARCONSTRAINTPARAMETER.center_pt [3BD]");
   }
   {
     BITCODE_B chain_actions;
@@ -35173,6 +35166,16 @@ static int test_BLOCKANGULARCONSTRAINTPARAMETER (const Dwg_Object *obj)
       fail ("BLOCKANGULARCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockangularconstraintparameter->evalexpr.value.text1);
   }
   {
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blockangularconstraintparameter->expr_description)
+           : !blockangularconstraintparameter->expr_description)
+      pass ();
+    else
+      fail ("BLOCKANGULARCONSTRAINTPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blockangularconstraintparameter->expr_description);
+  }
+  {
     BITCODE_T expr_name;
     if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "expr_name", &expr_name, NULL)
         && expr_name
@@ -35218,22 +35221,19 @@ static int test_BLOCKANGULARCONSTRAINTPARAMETER (const Dwg_Object *obj)
     blockangularconstraintparameter->num_infos--;
   }
   {
-    BITCODE_3BD origin;
-    if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "origin", &origin, NULL)
-        && !memcmp (&origin, &blockangularconstraintparameter->origin, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKANGULARCONSTRAINTPARAMETER.origin [3BD]");
-  }
-  {
-    BITCODE_T param_name;
-    if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "param_name", &param_name, NULL)
-        && param_name
-           ? strEQ ((char *)param_name, (char *)blockangularconstraintparameter->param_name)
-           : !blockangularconstraintparameter->param_name)
+    BITCODE_B orientation_on_both_grips;
+    if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "orientation_on_both_grips", &orientation_on_both_grips, NULL)
+        && orientation_on_both_grips == blockangularconstraintparameter->orientation_on_both_grips)
       pass ();
     else
-      fail ("BLOCKANGULARCONSTRAINTPARAMETER.param_name [T] '%s' <> '%s'", param_name, blockangularconstraintparameter->param_name);
+      fail ("BLOCKANGULARCONSTRAINTPARAMETER.orientation_on_both_grips [B] " FORMAT_B " != " FORMAT_B "", blockangularconstraintparameter->orientation_on_both_grips, orientation_on_both_grips);
+    orientation_on_both_grips++;
+    if (dwg_dynapi_entity_set_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "orientation_on_both_grips", &orientation_on_both_grips, 0)
+        && orientation_on_both_grips == blockangularconstraintparameter->orientation_on_both_grips)
+      pass ();
+    else
+      fail ("BLOCKANGULARCONSTRAINTPARAMETER.orientation_on_both_grips [B] set+1 " FORMAT_B " != " FORMAT_B "", blockangularconstraintparameter->orientation_on_both_grips, orientation_on_both_grips);
+    blockangularconstraintparameter->orientation_on_both_grips--;
   }
   {
     BITCODE_BS parameter_base_location;
@@ -35416,19 +35416,19 @@ static int test_BLOCKDIAMETRICCONSTRAINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.dependency [H]");
   }
   {
-    BITCODE_BD diameter;
-    if (dwg_dynapi_entity_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "diameter", &diameter, NULL)
-        && diameter == blockdiametricconstraintparameter->diameter)
+    BITCODE_BD distance;
+    if (dwg_dynapi_entity_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "distance", &distance, NULL)
+        && distance == blockdiametricconstraintparameter->distance)
       pass ();
     else
-      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.diameter [BD] %g != %g", blockdiametricconstraintparameter->diameter, diameter);
-    diameter++;
-    if (dwg_dynapi_entity_set_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "diameter", &diameter, 0)
-        && diameter == blockdiametricconstraintparameter->diameter)
+      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.distance [BD] %g != %g", blockdiametricconstraintparameter->distance, distance);
+    distance++;
+    if (dwg_dynapi_entity_set_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "distance", &distance, 0)
+        && distance == blockdiametricconstraintparameter->distance)
       pass ();
     else
-      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.diameter [BD] set+1 %g != %g", blockdiametricconstraintparameter->diameter, diameter);
-    blockdiametricconstraintparameter->diameter--;
+      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.distance [BD] set+1 %g != %g", blockdiametricconstraintparameter->distance, distance);
+    blockdiametricconstraintparameter->distance--;
   }
   {
     BITCODE_BL eed1071;
@@ -35462,6 +35462,16 @@ static int test_BLOCKDIAMETRICCONSTRAINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockdiametricconstraintparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blockdiametricconstraintparameter->expr_description)
+           : !blockdiametricconstraintparameter->expr_description)
+      pass ();
+    else
+      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blockdiametricconstraintparameter->expr_description);
   }
   {
     BITCODE_T expr_name;
@@ -35509,14 +35519,19 @@ static int test_BLOCKDIAMETRICCONSTRAINTPARAMETER (const Dwg_Object *obj)
     blockdiametricconstraintparameter->num_infos--;
   }
   {
-    BITCODE_T param_name;
-    if (dwg_dynapi_entity_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "param_name", &param_name, NULL)
-        && param_name
-           ? strEQ ((char *)param_name, (char *)blockdiametricconstraintparameter->param_name)
-           : !blockdiametricconstraintparameter->param_name)
+    BITCODE_B orientation_on_both_grips;
+    if (dwg_dynapi_entity_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "orientation_on_both_grips", &orientation_on_both_grips, NULL)
+        && orientation_on_both_grips == blockdiametricconstraintparameter->orientation_on_both_grips)
       pass ();
     else
-      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.param_name [T] '%s' <> '%s'", param_name, blockdiametricconstraintparameter->param_name);
+      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.orientation_on_both_grips [B] " FORMAT_B " != " FORMAT_B "", blockdiametricconstraintparameter->orientation_on_both_grips, orientation_on_both_grips);
+    orientation_on_both_grips++;
+    if (dwg_dynapi_entity_set_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "orientation_on_both_grips", &orientation_on_both_grips, 0)
+        && orientation_on_both_grips == blockdiametricconstraintparameter->orientation_on_both_grips)
+      pass ();
+    else
+      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.orientation_on_both_grips [B] set+1 " FORMAT_B " != " FORMAT_B "", blockdiametricconstraintparameter->orientation_on_both_grips, orientation_on_both_grips);
+    blockdiametricconstraintparameter->orientation_on_both_grips--;
   }
   {
     BITCODE_BS parameter_base_location;
@@ -35851,16 +35866,6 @@ static int test_BLOCKHORIZONTALCONSTRAINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.dependency [H]");
   }
   {
-    BITCODE_T description;
-    if (dwg_dynapi_entity_value (blockhorizontalconstraintparameter, "BLOCKHORIZONTALCONSTRAINTPARAMETER", "description", &description, NULL)
-        && description
-           ? strEQ ((char *)description, (char *)blockhorizontalconstraintparameter->description)
-           : !blockhorizontalconstraintparameter->description)
-      pass ();
-    else
-      fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.description [T] '%s' <> '%s'", description, blockhorizontalconstraintparameter->description);
-  }
-  {
     BITCODE_BL eed1071;
     if (dwg_dynapi_entity_value (blockhorizontalconstraintparameter, "BLOCKHORIZONTALCONSTRAINTPARAMETER", "eed1071", &eed1071, NULL)
         && eed1071 == blockhorizontalconstraintparameter->eed1071)
@@ -35892,6 +35897,26 @@ static int test_BLOCKHORIZONTALCONSTRAINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockhorizontalconstraintparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blockhorizontalconstraintparameter, "BLOCKHORIZONTALCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blockhorizontalconstraintparameter->expr_description)
+           : !blockhorizontalconstraintparameter->expr_description)
+      pass ();
+    else
+      fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blockhorizontalconstraintparameter->expr_description);
+  }
+  {
+    BITCODE_T expr_name;
+    if (dwg_dynapi_entity_value (blockhorizontalconstraintparameter, "BLOCKHORIZONTALCONSTRAINTPARAMETER", "expr_name", &expr_name, NULL)
+        && expr_name
+           ? strEQ ((char *)expr_name, (char *)blockhorizontalconstraintparameter->expr_name)
+           : !blockhorizontalconstraintparameter->expr_name)
+      pass ();
+    else
+      fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.expr_name [T] '%s' <> '%s'", expr_name, blockhorizontalconstraintparameter->expr_name);
   }
   {
     Dwg_BLOCKPARAMETER_info* infos;
@@ -35965,16 +35990,6 @@ static int test_BLOCKHORIZONTALCONSTRAINTPARAMETER (const Dwg_Object *obj)
     else
       fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.show_properties [B] set+1 " FORMAT_B " != " FORMAT_B "", blockhorizontalconstraintparameter->show_properties, show_properties);
     blockhorizontalconstraintparameter->show_properties--;
-  }
-  {
-    BITCODE_T t305;
-    if (dwg_dynapi_entity_value (blockhorizontalconstraintparameter, "BLOCKHORIZONTALCONSTRAINTPARAMETER", "t305", &t305, NULL)
-        && t305
-           ? strEQ ((char *)t305, (char *)blockhorizontalconstraintparameter->t305)
-           : !blockhorizontalconstraintparameter->t305)
-      pass ();
-    else
-      fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.t305 [T] '%s' <> '%s'", t305, blockhorizontalconstraintparameter->t305);
   }
   {
     BITCODE_BD value;
@@ -36092,16 +36107,6 @@ static int test_BLOCKLINEARCONSTRAINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKLINEARCONSTRAINTPARAMETER.dependency [H]");
   }
   {
-    BITCODE_T description;
-    if (dwg_dynapi_entity_value (blocklinearconstraintparameter, "BLOCKLINEARCONSTRAINTPARAMETER", "description", &description, NULL)
-        && description
-           ? strEQ ((char *)description, (char *)blocklinearconstraintparameter->description)
-           : !blocklinearconstraintparameter->description)
-      pass ();
-    else
-      fail ("BLOCKLINEARCONSTRAINTPARAMETER.description [T] '%s' <> '%s'", description, blocklinearconstraintparameter->description);
-  }
-  {
     BITCODE_BL eed1071;
     if (dwg_dynapi_entity_value (blocklinearconstraintparameter, "BLOCKLINEARCONSTRAINTPARAMETER", "eed1071", &eed1071, NULL)
         && eed1071 == blocklinearconstraintparameter->eed1071)
@@ -36133,6 +36138,26 @@ static int test_BLOCKLINEARCONSTRAINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKLINEARCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklinearconstraintparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blocklinearconstraintparameter, "BLOCKLINEARCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blocklinearconstraintparameter->expr_description)
+           : !blocklinearconstraintparameter->expr_description)
+      pass ();
+    else
+      fail ("BLOCKLINEARCONSTRAINTPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blocklinearconstraintparameter->expr_description);
+  }
+  {
+    BITCODE_T expr_name;
+    if (dwg_dynapi_entity_value (blocklinearconstraintparameter, "BLOCKLINEARCONSTRAINTPARAMETER", "expr_name", &expr_name, NULL)
+        && expr_name
+           ? strEQ ((char *)expr_name, (char *)blocklinearconstraintparameter->expr_name)
+           : !blocklinearconstraintparameter->expr_name)
+      pass ();
+    else
+      fail ("BLOCKLINEARCONSTRAINTPARAMETER.expr_name [T] '%s' <> '%s'", expr_name, blocklinearconstraintparameter->expr_name);
   }
   {
     Dwg_BLOCKPARAMETER_info* infos;
@@ -36206,16 +36231,6 @@ static int test_BLOCKLINEARCONSTRAINTPARAMETER (const Dwg_Object *obj)
     else
       fail ("BLOCKLINEARCONSTRAINTPARAMETER.show_properties [B] set+1 " FORMAT_B " != " FORMAT_B "", blocklinearconstraintparameter->show_properties, show_properties);
     blocklinearconstraintparameter->show_properties--;
-  }
-  {
-    BITCODE_T t305;
-    if (dwg_dynapi_entity_value (blocklinearconstraintparameter, "BLOCKLINEARCONSTRAINTPARAMETER", "t305", &t305, NULL)
-        && t305
-           ? strEQ ((char *)t305, (char *)blocklinearconstraintparameter->t305)
-           : !blocklinearconstraintparameter->t305)
-      pass ();
-    else
-      fail ("BLOCKLINEARCONSTRAINTPARAMETER.t305 [T] '%s' <> '%s'", t305, blocklinearconstraintparameter->t305);
   }
   {
     BITCODE_BD value;
@@ -37141,6 +37156,21 @@ static int test_BLOCKRADIALCONSTRAINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKRADIALCONSTRAINTPARAMETER.dependency [H]");
   }
   {
+    BITCODE_BD distance;
+    if (dwg_dynapi_entity_value (blockradialconstraintparameter, "BLOCKRADIALCONSTRAINTPARAMETER", "distance", &distance, NULL)
+        && distance == blockradialconstraintparameter->distance)
+      pass ();
+    else
+      fail ("BLOCKRADIALCONSTRAINTPARAMETER.distance [BD] %g != %g", blockradialconstraintparameter->distance, distance);
+    distance++;
+    if (dwg_dynapi_entity_set_value (blockradialconstraintparameter, "BLOCKRADIALCONSTRAINTPARAMETER", "distance", &distance, 0)
+        && distance == blockradialconstraintparameter->distance)
+      pass ();
+    else
+      fail ("BLOCKRADIALCONSTRAINTPARAMETER.distance [BD] set+1 %g != %g", blockradialconstraintparameter->distance, distance);
+    blockradialconstraintparameter->distance--;
+  }
+  {
     BITCODE_BL eed1071;
     if (dwg_dynapi_entity_value (blockradialconstraintparameter, "BLOCKRADIALCONSTRAINTPARAMETER", "eed1071", &eed1071, NULL)
         && eed1071 == blockradialconstraintparameter->eed1071)
@@ -37172,6 +37202,26 @@ static int test_BLOCKRADIALCONSTRAINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKRADIALCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockradialconstraintparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blockradialconstraintparameter, "BLOCKRADIALCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blockradialconstraintparameter->expr_description)
+           : !blockradialconstraintparameter->expr_description)
+      pass ();
+    else
+      fail ("BLOCKRADIALCONSTRAINTPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blockradialconstraintparameter->expr_description);
+  }
+  {
+    BITCODE_T expr_name;
+    if (dwg_dynapi_entity_value (blockradialconstraintparameter, "BLOCKRADIALCONSTRAINTPARAMETER", "expr_name", &expr_name, NULL)
+        && expr_name
+           ? strEQ ((char *)expr_name, (char *)blockradialconstraintparameter->expr_name)
+           : !blockradialconstraintparameter->expr_name)
+      pass ();
+    else
+      fail ("BLOCKRADIALCONSTRAINTPARAMETER.expr_name [T] '%s' <> '%s'", expr_name, blockradialconstraintparameter->expr_name);
   }
   {
     Dwg_BLOCKPARAMETER_info* infos;
@@ -37561,16 +37611,6 @@ static int test_BLOCKVERTICALCONSTRAINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKVERTICALCONSTRAINTPARAMETER.dependency [H]");
   }
   {
-    BITCODE_T description;
-    if (dwg_dynapi_entity_value (blockverticalconstraintparameter, "BLOCKVERTICALCONSTRAINTPARAMETER", "description", &description, NULL)
-        && description
-           ? strEQ ((char *)description, (char *)blockverticalconstraintparameter->description)
-           : !blockverticalconstraintparameter->description)
-      pass ();
-    else
-      fail ("BLOCKVERTICALCONSTRAINTPARAMETER.description [T] '%s' <> '%s'", description, blockverticalconstraintparameter->description);
-  }
-  {
     BITCODE_BL eed1071;
     if (dwg_dynapi_entity_value (blockverticalconstraintparameter, "BLOCKVERTICALCONSTRAINTPARAMETER", "eed1071", &eed1071, NULL)
         && eed1071 == blockverticalconstraintparameter->eed1071)
@@ -37602,6 +37642,26 @@ static int test_BLOCKVERTICALCONSTRAINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKVERTICALCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockverticalconstraintparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blockverticalconstraintparameter, "BLOCKVERTICALCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blockverticalconstraintparameter->expr_description)
+           : !blockverticalconstraintparameter->expr_description)
+      pass ();
+    else
+      fail ("BLOCKVERTICALCONSTRAINTPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blockverticalconstraintparameter->expr_description);
+  }
+  {
+    BITCODE_T expr_name;
+    if (dwg_dynapi_entity_value (blockverticalconstraintparameter, "BLOCKVERTICALCONSTRAINTPARAMETER", "expr_name", &expr_name, NULL)
+        && expr_name
+           ? strEQ ((char *)expr_name, (char *)blockverticalconstraintparameter->expr_name)
+           : !blockverticalconstraintparameter->expr_name)
+      pass ();
+    else
+      fail ("BLOCKVERTICALCONSTRAINTPARAMETER.expr_name [T] '%s' <> '%s'", expr_name, blockverticalconstraintparameter->expr_name);
   }
   {
     Dwg_BLOCKPARAMETER_info* infos;
@@ -37675,16 +37735,6 @@ static int test_BLOCKVERTICALCONSTRAINTPARAMETER (const Dwg_Object *obj)
     else
       fail ("BLOCKVERTICALCONSTRAINTPARAMETER.show_properties [B] set+1 " FORMAT_B " != " FORMAT_B "", blockverticalconstraintparameter->show_properties, show_properties);
     blockverticalconstraintparameter->show_properties--;
-  }
-  {
-    BITCODE_T t305;
-    if (dwg_dynapi_entity_value (blockverticalconstraintparameter, "BLOCKVERTICALCONSTRAINTPARAMETER", "t305", &t305, NULL)
-        && t305
-           ? strEQ ((char *)t305, (char *)blockverticalconstraintparameter->t305)
-           : !blockverticalconstraintparameter->t305)
-      pass ();
-    else
-      fail ("BLOCKVERTICALCONSTRAINTPARAMETER.t305 [T] '%s' <> '%s'", t305, blockverticalconstraintparameter->t305);
   }
   {
     BITCODE_BD value;
@@ -37899,14 +37949,24 @@ static int test_BLOCKVISIBILITYPARAMETER (const Dwg_Object *obj)
     blockvisibilityparameter->b2--;
   }
   {
-    BITCODE_T desc;
-    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "desc", &desc, NULL)
-        && desc
-           ? strEQ ((char *)desc, (char *)blockvisibilityparameter->desc)
-           : !blockvisibilityparameter->desc)
+    BITCODE_T expr_description;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "expr_description", &expr_description, NULL)
+        && expr_description
+           ? strEQ ((char *)expr_description, (char *)blockvisibilityparameter->expr_description)
+           : !blockvisibilityparameter->expr_description)
       pass ();
     else
-      fail ("BLOCKVISIBILITYPARAMETER.desc [T] '%s' <> '%s'", desc, blockvisibilityparameter->desc);
+      fail ("BLOCKVISIBILITYPARAMETER.expr_description [T] '%s' <> '%s'", expr_description, blockvisibilityparameter->expr_description);
+  }
+  {
+    BITCODE_T expr_name;
+    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "expr_name", &expr_name, NULL)
+        && expr_name
+           ? strEQ ((char *)expr_name, (char *)blockvisibilityparameter->expr_name)
+           : !blockvisibilityparameter->expr_name)
+      pass ();
+    else
+      fail ("BLOCKVISIBILITYPARAMETER.expr_name [T] '%s' <> '%s'", expr_name, blockvisibilityparameter->expr_name);
   }
   {
     BITCODE_B is_initialized;
@@ -37922,16 +37982,6 @@ static int test_BLOCKVISIBILITYPARAMETER (const Dwg_Object *obj)
     else
       fail ("BLOCKVISIBILITYPARAMETER.is_initialized [B] set+1 " FORMAT_B " != " FORMAT_B "", blockvisibilityparameter->is_initialized, is_initialized);
     blockvisibilityparameter->is_initialized--;
-  }
-  {
-    BITCODE_T name;
-    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "name", &name, NULL)
-        && name
-           ? strEQ ((char *)name, (char *)blockvisibilityparameter->name)
-           : !blockvisibilityparameter->name)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYPARAMETER.name [T] '%s' <> '%s'", name, blockvisibilityparameter->name);
   }
   {
     BITCODE_BL num_states;
