@@ -49,10 +49,14 @@
 #  ifndef ACTION
 #    error ACTION define missing: decode, encode, dxf, json, ...
 #  endif
+// call either the object, the common object or its subclass/subent
+// implementation
 #  define _DWG_FUNC_N(ACTION, name) dwg_##ACTION##_##name
 #  define DWG_FUNC_N(ACTION, name) _DWG_FUNC_N (ACTION, name)
-#  define _DWG_PRIVATE_N(ACTION, name) dwg_##ACTION##_##name##_private
-#  define DWG_PRIVATE_N(ACTION, name) _DWG_PRIVATE_N (ACTION, name)
+#  define _DWG_COMMON_N(ACTION, name) dwg_##ACTION##_##name##_common
+#  define DWG_COMMON_N(ACTION, name) _DWG_COMMON_N (ACTION, name)
+#  define _DWG_IMPL_N(ACTION, name) dwg_##ACTION##_##name##_impl
+#  define DWG_IMPL_N(ACTION, name) _DWG_IMPL_N (ACTION, name)
 
 #  define SET_PARENT(field, obj)
 #  define SET_PARENT_OBJ(field)
@@ -862,17 +866,17 @@
 #endif
 
 #define DWG_SUBCLASS_DECL(parenttype, subtype)                                \
-  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+  static int DWG_COMMON_N (ACTION, parenttype##_##subtype) (                  \
       Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
 
 #define DWG_ENT_SUBCLASS_DECL(parenttype, subtype)                            \
-  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+  static int DWG_COMMON_N (ACTION, parenttype##_##subtype) (                  \
       Dwg_Entity_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
 
 #define DWG_SUBCLASS(parenttype, subtype)                                     \
-  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+  static int DWG_COMMON_N (ACTION, parenttype##_##subtype) (                  \
       Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
   {                                                                           \
@@ -884,7 +888,7 @@
   }
 
 #define DWG_ENT_SUBCLASS(parenttype, subtype)                                 \
-  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+  static int DWG_COMMON_N (ACTION, parenttype##_##subtype) (                  \
       Dwg_Entity_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
   {                                                                           \
@@ -896,12 +900,32 @@
   }
 
 #define CALL_SUBCLASS(_xobj, parenttype, subtype)                             \
-  error |= DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                   \
+  error |= DWG_COMMON_N (ACTION, parenttype##_##subtype) (                    \
+// call the common and subclass
+#define CALL_COMMON(_xobj, parenttype, subtype)                               \
+  error |= DWG_COMMON_N (ACTION, parenttype##_##subtype) (                    \
       _xobj, dat, hdl_dat, str_dat, (Dwg_Object *)obj)
+// if the name is compile-time known
+#define CALL_ENTITY(name, xobj)                                               \
+  error |= DWG_IMPL_N (ACTION, name) (dat, hdl_dat, str_dat,                  \
+                                         (Dwg_Object *)xobj)
 // TODO: dispatch on the type
+// if the type is compile-time known, call the impl subclass directly
+#define CALL_SUBENT_TYPE(nam, xobj)                                           \
+  {                                                                           \
+    if ((Dwg_Object *)xobj->fixedtype == DWG_TYPE_##nam)                      \
+      error |= DWG_IMPL_N (ACTION, nam) (dat, hdl_dat, str_dat,               \
+                                         (Dwg_Object *)xobj);                 \
+  }
+// dispatch dynamically on the type
 #define CALL_SUBENT(hdl, dxf)
-// error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat,
-// (Dwg_Object *)xobj)
+{
+  Dwg_Object *o = dwg_ref_object (dwg, hdl);
+  if (o)
+    error |= DWG_IMPL_N (ACTION, nam) (dat, hdl_dat, str_dat, o);
+}
+
+// not yet
 #define CALL_SUBCURVE(hdl, curvetype)
 
 #ifndef UNKNOWN_UNTIL
