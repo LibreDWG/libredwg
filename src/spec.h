@@ -51,12 +51,14 @@
 #  endif
 // call either the object, the common object or its subclass/subent
 // implementation
-#  define _DWG_FUNC_N(ACTION, name) dwg_##ACTION##_##name
-#  define DWG_FUNC_N(ACTION, name) _DWG_FUNC_N (ACTION, name)
-#  define _DWG_COMMON_N(ACTION, name) dwg_##ACTION##_##name##_common
-#  define DWG_COMMON_N(ACTION, name) _DWG_COMMON_N (ACTION, name)
-#  define _DWG_IMPL_N(ACTION, name) dwg_##ACTION##_##name##_impl
-#  define DWG_IMPL_N(ACTION, name) _DWG_IMPL_N (ACTION, name)
+#  define _DWG_FUNC_N(ACTION, NAME) dwg_##ACTION##_##NAME
+#  define DWG_FUNC_N(ACTION, NAME) _DWG_FUNC_N (ACTION, NAME)
+#  define _DWG_COMMON_N(ACTION, NAME) dwg_##ACTION##_##NAME##_common
+#  define DWG_COMMON_N(ACTION, NAME) _DWG_COMMON_N (ACTION, NAME)
+#  define _DWG_IMPL_N(ACTION, NAME) dwg_##ACTION##_##NAME##_impl
+#  define DWG_IMPL_N(ACTION, NAME) _DWG_IMPL_N (ACTION, NAME)
+#  define _DWG_SUBENT_N(ACTION) dwg_##ACTION##_subent
+#  define DWG_SUBENT_N(ACTION) _DWG_SUBENT_N (ACTION)
 
 #  define SET_PARENT(field, obj)
 #  define SET_PARENT_OBJ(field)
@@ -866,9 +868,12 @@
 #endif
 
 #define DWG_SUBCLASS_DECL(parenttype, subtype)                                \
-  static int DWG_COMMON_N (ACTION, parenttype##_##subtype) (                  \
-      Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
-      Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
+  static int DWG_IMPL_N (ACTION, parenttype##_##subtype)                      \
+    (Bit_Chain *dat,                                                          \
+    Bit_Chain *hdl_dat,                                                       \
+    Bit_Chain *str_dat,                                                       \
+    Dwg_Object *restrict obj,                                                 \
+    Dwg_Object_##parenttype *restrict _obj,                                   \
 
 #define DWG_ENT_SUBCLASS_DECL(parenttype, subtype)                            \
   static int DWG_COMMON_N (ACTION, parenttype##_##subtype) (                  \
@@ -876,9 +881,12 @@
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
 
 #define DWG_SUBCLASS(parenttype, subtype)                                     \
-  static int DWG_COMMON_N (ACTION, parenttype##_##subtype) (                  \
-      Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
-      Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
+  static int DWG_IMPL_N (ACTION, parenttype##_##subtype)                      \
+    (Bit_Chain *dat,                                                          \
+     Bit_Chain *hdl_dat,                                                      \
+     Bit_Chain *str_dat,                                                      \
+     Dwg_Object *restrict obj,                                                \
+     Dwg_Object_##parenttype *restrict _obj)                                  \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Data *dwg = obj->parent;                                              \
@@ -924,9 +932,6 @@
   if (o)
     error |= DWG_IMPL_N (ACTION, nam) (dat, hdl_dat, str_dat, o);
 }
-
-// not yet
-#define CALL_SUBCURVE(hdl, curvetype)
 
 #ifndef UNKNOWN_UNTIL
 #  define UNKNOWN_UNTIL(pos)                                                  \

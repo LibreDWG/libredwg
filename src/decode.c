@@ -7304,11 +7304,12 @@ dwg_decode_subent (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 
 #undef DWG_ENTITY
 #undef DWG_OBJECT
-#define DISPATCH_TYPE(name)                                                   \
-  case DWG_TYPE_##name:                                                       \
-    return dwg_decode_##name##_impl (dat, hdl_dat, str_dat, obj);
-#define DWG_ENTITY(name) DISPATCH_TYPE (name)
-#define DWG_OBJECT(name) DISPATCH_TYPE (name)
+#define DISPATCH_TYPE(ENT, TOKEN)                                             \
+  case DWG_TYPE_##TOKEN:                                                      \
+    return dwg_decode_##TOKEN##_impl (dat, hdl_dat, str_dat,                  \
+                                      obj->tio.ENT->tio.TOKEN);
+#define DWG_ENTITY(name) DISPATCH_TYPE (entity, name)
+#define DWG_OBJECT(name) DISPATCH_TYPE (object, name)
 
   switch (obj->fixedtype)
     {
