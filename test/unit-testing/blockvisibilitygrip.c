@@ -10,7 +10,6 @@ api_process (dwg_object *obj)
   BLOCKGRIP_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockvisibilitygrip *_obj = dwg_object_to_BLOCKVISIBILITYGRIP (obj);
 
   CHK_EVALEXPR (BLOCKVISIBILITYGRIP);
@@ -26,5 +25,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling, B);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling_weight, BLd);
   // AcDbBlockVisibilityGrip
-#endif
 }

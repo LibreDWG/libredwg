@@ -80,6 +80,8 @@ testobjects = \
 	block \
 	block_control \
 	block_header \
+	blockgriplocationcomponent \
+	blockvisibilitygrip \
 	body \
 	camera \
 	cellstylemap \
@@ -241,10 +243,8 @@ testobjects += \
 	assocarrayrectangularparameters \
 	atext \
 	blkrefobjectcontextdata \
-	blockgriplocationcomponent \
 	assocdimdependencybody \
 	blockparamdependencybody \
-	blockvisibilitygrip \
 	blockvisibilityparameter \
 	contextdatamanager \
 	csacdocumentoptions \
