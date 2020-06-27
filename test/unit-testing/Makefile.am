@@ -201,6 +201,8 @@ testobjects = \
 	xline \
 	xrecord
 
+# NB: After you modify this list, do "make update-ignorance"
+#     and include this directory's .gitignore in the commit.
 if ENABLE_DEBUG
 testobjects += \
 	acmecommandhistory \
@@ -335,18 +337,20 @@ testobjects += \
 
 endif
 
-# NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
-#     and include this directory's .gitignore in the commit.
-check_PROGRAMS = \
+check_minimal = \
 	bits_test \
 	common_test \
 	decode_test \
 	hash_test \
 	dynapi_test \
-	dxf_test \
+	dxf_test
+
+check_PROGRAMS = \
+	$(check_minimal) \
 	$(testobjects)
 
 check-prep: $(check_PROGRAMS)
+check-minimal: $(check_minimal)
 list:
 	echo $(testobjects) dynapi_test
 
