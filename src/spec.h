@@ -1337,3 +1337,29 @@
 #  define PRER13_SECTION_HDR(name)
 #  define DWG_TABLE(token) DWG_OBJECT (token)
 #endif
+
+// call the class with its subclass. objects only
+#define CALL_SUBCLASS(ptr, parenttype, subtype)                         \
+  error |= DWG_IMPL_N (ACTION, parenttype##_##subtype) (dat,            \
+                  hdl_dat, str_dat, obj, ptr)
+
+#ifdef DWG_SPEC
+// if the type is compile-time known, call the impl subclass directly.
+// for objects and entities
+#  define CALL_SUBENT_TYPE(nam, ptr)                                          \
+    {                                                                         \
+      error |= DWG_IMPL_N (ACTION, nam) (dat, hdl_dat, str_dat, obj, ptr);    \
+    }
+// dispatch the handle dynamically on the type
+// for objects and entities
+#  define CALL_SUBENT(handle, dxf)
+{
+  Dwg_Object *o = dwg_ref_object (dwg, (handle));
+  if (o)
+    error |= DWG_SUBENT_N (ACTION) (dat, hdl_dat, str_dat, o);
+}
+// not yet
+// TODO need some special types (arc, circle, line, nurbs, ...) for each entity
+#  define CALL_SUBCURVE(hdl, curvetype)
+
+#endif
