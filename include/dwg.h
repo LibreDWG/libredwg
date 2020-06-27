@@ -7056,11 +7056,11 @@ typedef  struct dwg_BLOCKPARAMVALUESET {
 #define BLOCK1PTPARAMETER_fields                  \
   BLOCKPARAMETER_fields;                          \
   BITCODE_3BD def_basept;                         \
-  BITCODE_BL propnum;                             \
-  BITCODE_BL prop_num1;                           \
-  BITCODE_T prop_text1;                           \
-  BITCODE_BL prop_num2;                           \
-  BITCODE_T prop_text2
+  BITCODE_BL num_infos; /* 2 */                   \
+  BITCODE_BL info_num1;                           \
+  BITCODE_T info_text1;                           \
+  BITCODE_BL info_num2;                           \
+  BITCODE_T info_text2
 
 #define BLOCK2PTPARAMETER_fields                  \
   BLOCKPARAMETER_fields;                          \
@@ -7223,7 +7223,9 @@ typedef struct _dwg_object_BLOCKARRAYACTION
 typedef struct _dwg_object_BLOCKBASEPOINTPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_3BD pt;	/* DXF 1011 */
+  BITCODE_3BD base_pt;	/* DXF 1012 */
 } Dwg_Object_BLOCKBASEPOINTPARAMETER;
 
 typedef struct _dwg_object_BLOCKFLIPACTION

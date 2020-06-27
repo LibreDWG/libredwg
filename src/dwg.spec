@@ -8083,12 +8083,12 @@ DWG_OBJECT_END
   AcDbBlockParameter_fields;                      \
   SUBCLASS (AcDbBlock1PtParameter);               \
   FIELD_3BD (def_basept, 1010);                   \
-  DXF { FIELD_BL (propnum, 93); }                 \
-  FIELD_BL (prop_num1, 91);                       \
-  FIELD_T (prop_text1, 301);                      \
-  FIELD_BL (prop_num2, 92);                       \
-  FIELD_T (prop_text2, 302);                      \
-  FIELD_BL (propnum, 0)
+  DXF { FIELD_BL (num_infos, 93); }               \
+  FIELD_BL (info_num1, 91);                       \
+  FIELD_T (info_text1, 301);                      \
+  FIELD_BL (info_num2, 92);                       \
+  FIELD_T (info_text2, 302);                      \
+  FIELD_BL (num_infos, 0)
 
 #define AcDbBlock2PtParameter_fields              \
   AcDbBlockParameter_fields;                      \
@@ -10056,8 +10056,10 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKBASEPOINTPARAMETER)
   DECODE_UNKNOWN_BITS
+  AcDbBlock1PtParameter_fields;
   SUBCLASS (AcDbBlockBasepointParameter)
-
+  FIELD_3BD (pt, 1011);
+  FIELD_3BD (base_pt, 1012)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER)

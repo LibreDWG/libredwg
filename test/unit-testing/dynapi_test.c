@@ -35316,12 +35316,204 @@ static int test_BLOCKBASEPOINTPARAMETER (const Dwg_Object *obj)
   Dwg_Object_BLOCKBASEPOINTPARAMETER *restrict blockbasepointparameter = obj->tio.object->tio.BLOCKBASEPOINTPARAMETER;
   failed = 0;
   {
+    BITCODE_3BD base_pt;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "base_pt", &base_pt, NULL)
+        && !memcmp (&base_pt, &blockbasepointparameter->base_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKBASEPOINTPARAMETER.base_pt [3BD]");
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "be_major", &be_major, NULL)
+        && be_major == blockbasepointparameter->be_major)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.be_major [BL] %u != %u", blockbasepointparameter->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "be_major", &be_major, 0)
+        && be_major == blockbasepointparameter->be_major)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.be_major [BL] set+1 %u != %u", blockbasepointparameter->be_major, be_major);
+    blockbasepointparameter->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "be_minor", &be_minor, NULL)
+        && be_minor == blockbasepointparameter->be_minor)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.be_minor [BL] %u != %u", blockbasepointparameter->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "be_minor", &be_minor, 0)
+        && be_minor == blockbasepointparameter->be_minor)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.be_minor [BL] set+1 %u != %u", blockbasepointparameter->be_minor, be_minor);
+    blockbasepointparameter->be_minor--;
+  }
+  {
+    BITCODE_B chain_actions;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "chain_actions", &chain_actions, NULL)
+        && chain_actions == blockbasepointparameter->chain_actions)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.chain_actions [B] " FORMAT_B " != " FORMAT_B "", blockbasepointparameter->chain_actions, chain_actions);
+    chain_actions++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "chain_actions", &chain_actions, 0)
+        && chain_actions == blockbasepointparameter->chain_actions)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.chain_actions [B] set+1 " FORMAT_B " != " FORMAT_B "", blockbasepointparameter->chain_actions, chain_actions);
+    blockbasepointparameter->chain_actions--;
+  }
+  {
+    BITCODE_3BD def_basept;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "def_basept", &def_basept, NULL)
+        && !memcmp (&def_basept, &blockbasepointparameter->def_basept, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKBASEPOINTPARAMETER.def_basept [3BD]");
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "eed1071", &eed1071, NULL)
+        && eed1071 == blockbasepointparameter->eed1071)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.eed1071 [BL] %u != %u", blockbasepointparameter->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "eed1071", &eed1071, 0)
+        && eed1071 == blockbasepointparameter->eed1071)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.eed1071 [BL] set+1 %u != %u", blockbasepointparameter->eed1071, eed1071);
+    blockbasepointparameter->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockbasepointparameter->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKBASEPOINTPARAMETER.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockbasepointparameter->evalexpr.value.text1)
+           : !blockbasepointparameter->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockbasepointparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "info_num1", &info_num1, NULL)
+        && info_num1 == blockbasepointparameter->info_num1)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.info_num1 [BL] %u != %u", blockbasepointparameter->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "info_num1", &info_num1, 0)
+        && info_num1 == blockbasepointparameter->info_num1)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.info_num1 [BL] set+1 %u != %u", blockbasepointparameter->info_num1, info_num1);
+    blockbasepointparameter->info_num1--;
+  }
+  {
+    BITCODE_BL info_num2;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "info_num2", &info_num2, NULL)
+        && info_num2 == blockbasepointparameter->info_num2)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.info_num2 [BL] %u != %u", blockbasepointparameter->info_num2, info_num2);
+    info_num2++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "info_num2", &info_num2, 0)
+        && info_num2 == blockbasepointparameter->info_num2)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.info_num2 [BL] set+1 %u != %u", blockbasepointparameter->info_num2, info_num2);
+    blockbasepointparameter->info_num2--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blockbasepointparameter->info_text1)
+           : !blockbasepointparameter->info_text1)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.info_text1 [T] '%s' <> '%s'", info_text1, blockbasepointparameter->info_text1);
+  }
+  {
+    BITCODE_T info_text2;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "info_text2", &info_text2, NULL)
+        && info_text2
+           ? strEQ ((char *)info_text2, (char *)blockbasepointparameter->info_text2)
+           : !blockbasepointparameter->info_text2)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.info_text2 [T] '%s' <> '%s'", info_text2, blockbasepointparameter->info_text2);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockbasepointparameter->name)
+           : !blockbasepointparameter->name)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.name [T] '%s' <> '%s'", name, blockbasepointparameter->name);
+  }
+  {
+    BITCODE_BL num_infos;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "num_infos", &num_infos, NULL)
+        && num_infos == blockbasepointparameter->num_infos)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.num_infos [BL] %u != %u", blockbasepointparameter->num_infos, num_infos);
+    num_infos++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "num_infos", &num_infos, 0)
+        && num_infos == blockbasepointparameter->num_infos)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.num_infos [BL] set+1 %u != %u", blockbasepointparameter->num_infos, num_infos);
+    blockbasepointparameter->num_infos--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "parent", &parent, NULL)
         && !memcmp (&parent, &blockbasepointparameter->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKBASEPOINTPARAMETER.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_3BD pt;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "pt", &pt, NULL)
+        && !memcmp (&pt, &blockbasepointparameter->pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKBASEPOINTPARAMETER.pt [3BD]");
+  }
+  {
+    BITCODE_B show_properties;
+    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "show_properties", &show_properties, NULL)
+        && show_properties == blockbasepointparameter->show_properties)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.show_properties [B] " FORMAT_B " != " FORMAT_B "", blockbasepointparameter->show_properties, show_properties);
+    show_properties++;
+    if (dwg_dynapi_entity_set_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "show_properties", &show_properties, 0)
+        && show_properties == blockbasepointparameter->show_properties)
+      pass ();
+    else
+      fail ("BLOCKBASEPOINTPARAMETER.show_properties [B] set+1 " FORMAT_B " != " FORMAT_B "", blockbasepointparameter->show_properties, show_properties);
+    blockbasepointparameter->show_properties--;
   }
   if (failed && (is_class_unstable ("BLOCKBASEPOINTPARAMETER") || is_class_debugging ("BLOCKBASEPOINTPARAMETER")))
     {
@@ -36707,6 +36899,56 @@ static int test_BLOCKPOINTPARAMETER (const Dwg_Object *obj)
       fail ("BLOCKPOINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpointparameter->evalexpr.value.text1);
   }
   {
+    BITCODE_BL info_num1;
+    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "info_num1", &info_num1, NULL)
+        && info_num1 == blockpointparameter->info_num1)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.info_num1 [BL] %u != %u", blockpointparameter->info_num1, info_num1);
+    info_num1++;
+    if (dwg_dynapi_entity_set_value (blockpointparameter, "BLOCKPOINTPARAMETER", "info_num1", &info_num1, 0)
+        && info_num1 == blockpointparameter->info_num1)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.info_num1 [BL] set+1 %u != %u", blockpointparameter->info_num1, info_num1);
+    blockpointparameter->info_num1--;
+  }
+  {
+    BITCODE_BL info_num2;
+    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "info_num2", &info_num2, NULL)
+        && info_num2 == blockpointparameter->info_num2)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.info_num2 [BL] %u != %u", blockpointparameter->info_num2, info_num2);
+    info_num2++;
+    if (dwg_dynapi_entity_set_value (blockpointparameter, "BLOCKPOINTPARAMETER", "info_num2", &info_num2, 0)
+        && info_num2 == blockpointparameter->info_num2)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.info_num2 [BL] set+1 %u != %u", blockpointparameter->info_num2, info_num2);
+    blockpointparameter->info_num2--;
+  }
+  {
+    BITCODE_T info_text1;
+    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "info_text1", &info_text1, NULL)
+        && info_text1
+           ? strEQ ((char *)info_text1, (char *)blockpointparameter->info_text1)
+           : !blockpointparameter->info_text1)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.info_text1 [T] '%s' <> '%s'", info_text1, blockpointparameter->info_text1);
+  }
+  {
+    BITCODE_T info_text2;
+    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "info_text2", &info_text2, NULL)
+        && info_text2
+           ? strEQ ((char *)info_text2, (char *)blockpointparameter->info_text2)
+           : !blockpointparameter->info_text2)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.info_text2 [T] '%s' <> '%s'", info_text2, blockpointparameter->info_text2);
+  }
+  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "name", &name, NULL)
         && name
@@ -36715,6 +36957,21 @@ static int test_BLOCKPOINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKPOINTPARAMETER.name [T] '%s' <> '%s'", name, blockpointparameter->name);
+  }
+  {
+    BITCODE_BL num_infos;
+    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "num_infos", &num_infos, NULL)
+        && num_infos == blockpointparameter->num_infos)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.num_infos [BL] %u != %u", blockpointparameter->num_infos, num_infos);
+    num_infos++;
+    if (dwg_dynapi_entity_set_value (blockpointparameter, "BLOCKPOINTPARAMETER", "num_infos", &num_infos, 0)
+        && num_infos == blockpointparameter->num_infos)
+      pass ();
+    else
+      fail ("BLOCKPOINTPARAMETER.num_infos [BL] set+1 %u != %u", blockpointparameter->num_infos, num_infos);
+    blockpointparameter->num_infos--;
   }
   {
     struct _dwg_object_object* parent;
@@ -36743,71 +37000,6 @@ static int test_BLOCKPOINTPARAMETER (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKPOINTPARAMETER.position_name [T] '%s' <> '%s'", position_name, blockpointparameter->position_name);
-  }
-  {
-    BITCODE_BL prop_num1;
-    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "prop_num1", &prop_num1, NULL)
-        && prop_num1 == blockpointparameter->prop_num1)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.prop_num1 [BL] %u != %u", blockpointparameter->prop_num1, prop_num1);
-    prop_num1++;
-    if (dwg_dynapi_entity_set_value (blockpointparameter, "BLOCKPOINTPARAMETER", "prop_num1", &prop_num1, 0)
-        && prop_num1 == blockpointparameter->prop_num1)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.prop_num1 [BL] set+1 %u != %u", blockpointparameter->prop_num1, prop_num1);
-    blockpointparameter->prop_num1--;
-  }
-  {
-    BITCODE_BL prop_num2;
-    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "prop_num2", &prop_num2, NULL)
-        && prop_num2 == blockpointparameter->prop_num2)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.prop_num2 [BL] %u != %u", blockpointparameter->prop_num2, prop_num2);
-    prop_num2++;
-    if (dwg_dynapi_entity_set_value (blockpointparameter, "BLOCKPOINTPARAMETER", "prop_num2", &prop_num2, 0)
-        && prop_num2 == blockpointparameter->prop_num2)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.prop_num2 [BL] set+1 %u != %u", blockpointparameter->prop_num2, prop_num2);
-    blockpointparameter->prop_num2--;
-  }
-  {
-    BITCODE_T prop_text1;
-    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "prop_text1", &prop_text1, NULL)
-        && prop_text1
-           ? strEQ ((char *)prop_text1, (char *)blockpointparameter->prop_text1)
-           : !blockpointparameter->prop_text1)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.prop_text1 [T] '%s' <> '%s'", prop_text1, blockpointparameter->prop_text1);
-  }
-  {
-    BITCODE_T prop_text2;
-    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "prop_text2", &prop_text2, NULL)
-        && prop_text2
-           ? strEQ ((char *)prop_text2, (char *)blockpointparameter->prop_text2)
-           : !blockpointparameter->prop_text2)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.prop_text2 [T] '%s' <> '%s'", prop_text2, blockpointparameter->prop_text2);
-  }
-  {
-    BITCODE_BL propnum;
-    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "propnum", &propnum, NULL)
-        && propnum == blockpointparameter->propnum)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.propnum [BL] %u != %u", blockpointparameter->propnum, propnum);
-    propnum++;
-    if (dwg_dynapi_entity_set_value (blockpointparameter, "BLOCKPOINTPARAMETER", "propnum", &propnum, 0)
-        && propnum == blockpointparameter->propnum)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.propnum [BL] set+1 %u != %u", blockpointparameter->propnum, propnum);
-    blockpointparameter->propnum--;
   }
   {
     BITCODE_B show_properties;

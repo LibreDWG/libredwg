@@ -6948,6 +6948,36 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item num_infos
+BL,	DXF 93
+@item info_num1
+BL,	DXF 91
+@item info_text1
+T,	DXF 301
+@item info_num2
+BL,	DXF 92
+@item info_text2
+T,	DXF 302
+@item pt
+3BD,	DXF 1011
+@item base_pt
+3BD,	DXF 1012
 
 @end vtable
 @end indentedblock
@@ -7315,15 +7345,15 @@ B,	DXF 280
 B,	DXF 281
 @item def_basept
 3BD,	DXF 1010
-@item propnum
+@item num_infos
 BL,	DXF 93
-@item prop_num1
+@item info_num1
 BL,	DXF 91
-@item prop_text1
+@item info_text1
 T,	DXF 301
-@item prop_num2
+@item info_num2
 BL,	DXF 92
-@item prop_text2
+@item info_text2
 T,	DXF 302
 @item position_name
 T,	DXF 303
