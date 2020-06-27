@@ -1762,9 +1762,9 @@
   static int dwg_decode_##token##_common (Bit_Chain *dat, Bit_Chain *hdl_dat, \
                                           Bit_Chain *str_dat,                 \
                                           Dwg_Object *restrict obj);          \
-  static int dwg_decode_##token##_impl (Bit_Chain *dat, Bit_Chain *hdl_dat,   \
-                                        Bit_Chain *str_dat,                   \
-                                        Dwg_Object *restrict obj);            \
+  static int dwg_decode_##token##_impl (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj, Dwg_Entity_##token *restrict _obj);           \
                                                                               \
   /**Call dwg_setup_##token and write the fields from the bitstream dat to    \
    * the entity or object. */                                                 \
@@ -1780,23 +1780,22 @@
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \
           = dwg_decode_##token##_common (&obj_dat, &hdl_dat, &str_dat, obj);  \
-      error |= dwg_decode_##token##_impl (&obj_dat, &hdl_dat, &str_dat, obj); \
     }                                                                         \
     else                                                                      \
     {                                                                         \
       error = dwg_decode_##token##_common (dat, &hdl_dat, dat, obj);          \
-      error |= dwg_decode_##token##_impl (dat, &hdl_dat, dat, obj);           \
     }                                                                         \
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
+  GCC30_DIAG_IGNORE (-Wformat - nonliteral)                                   \
   static int dwg_decode_##token##_common (Bit_Chain *dat, Bit_Chain *hdl_dat, \
                                           Bit_Chain *str_dat,                 \
                                           Dwg_Object *restrict obj)           \
   {                                                                           \
     int error = 0;                                                            \
     Dwg_Object_Entity *_ent = obj->tio.entity;                                \
+    Dwg_Entity_##token *_obj = _ent->tio.token;                               \
     SINCE (R_13)                                                              \
     {                                                                         \
       error = dwg_decode_entity (dat, hdl_dat, str_dat, _ent);                \
@@ -1807,22 +1806,17 @@
     }                                                                         \
     if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)                   \
       return error;                                                           \
+    return dwg_decode_##token##_impl (&obj_dat, &hdl_dat, &str_dat, obj,      \
+                                      _obj);                                  \
   }                                                                           \
-  static int dwg_decode_##token##_impl (Bit_Chain *dat, Bit_Chain *hdl_dat,   \
-                                        Bit_Chain *str_dat,                   \
-                                        Dwg_Object *restrict obj)             \
+  static int dwg_decode_##token##_impl (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj, Dwg_Entity_##token *restrict _obj)            \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
-    Dwg_Entity_##token *ent, *_obj;                                           \
-    Dwg_Object_Entity *_ent = obj->tio.entity;                                \
     Dwg_Data *dwg = obj->parent;                                              \
-    LOG_INFO ("Decode entity " #token "\n")                                   \
-    ent = obj->tio.entity->tio.token;                                         \
-    _obj = ent;                                                               \
-    _ent->dwg = dwg;                                                          \
-    _ent->objid = obj->index; /* obj ptr itself might move */                 \
-    _obj->parent = obj->tio.entity;
+    LOG_INFO ("Decode entity " #token "\n")
 
 // Does size include the CRC?
 #define DWG_ENTITY_END                                                        \
@@ -1891,6 +1885,9 @@
   static int dwg_decode_##token##_common (                                    \
       Bit_Chain *obj_dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,             \
       Dwg_Object *restrict obj);                                              \
+  static int dwg_decode_##token##_impl (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj, Dwg_Object_##token *restrict _obj);           \
                                                                               \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
@@ -1902,33 +1899,36 @@
     SINCE (R_2007a)                                                           \
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
-      error                                                                   \
-          = dwg_decode_##token##_common (&obj_dat, &hdl_dat, &str_dat, obj);  \
+      error = dwg_decode_##token##_common (&obj_dat, &hdl_dat, &str_dat, obj);\
     }                                                                         \
-    else                                                                      \
-    {                                                                         \
-      error = dwg_decode_##token##_common (dat, &hdl_dat, dat, obj);          \
-    }                                                                         \
+    else { error = dwg_decode_##token##_common (dat, &hdl_dat, dat, obj); }   \
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
-  static int dwg_decode_##token##_common (Bit_Chain *dat, Bit_Chain *hdl_dat, \
-                                          Bit_Chain *str_dat,                 \
-                                          Dwg_Object *restrict obj)           \
+  static int dwg_decode_##token##_common (                                    \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
-    int error = 0;                                                            \
-    Dwg_Object_##token *_obj = NULL;                                          \
     Dwg_Data *dwg = obj->parent;                                              \
-    LOG_INFO ("Decode object " #token "\n")                                   \
+    Dwg_Object_##token *_obj = NULL;                                          \
     if (strNE (#token, "TABLECONTENT") || obj->fixedtype != DWG_TYPE_TABLE)   \
       {                                                                       \
         _obj = obj->tio.object->tio.token;                                    \
         error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);   \
         if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)               \
           return error;                                                       \
-      }
+        return dwg_decode_##token##_impl (&obj_dat, &hdl_dat, &str_dat, obj, _obj); \
+      }                                                                       \
+  }                                                                           \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
+  static int dwg_decode_##token##_impl (                                      \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj, Dwg_Object_##token *restrict _obj)            \
+  {                                                                           \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    int error = 0;                                                            \
+    Dwg_Data *dwg = obj->parent;                                              \
+    LOG_INFO ("Decode object " #token "\n")
 
 #define DWG_OBJECT_END DWG_ENTITY_END
 
