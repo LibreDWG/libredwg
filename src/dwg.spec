@@ -10133,8 +10133,15 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPPARAMETER)
   DECODE_UNKNOWN_BITS
+  AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockFlipParameter)
-
+  FIELD_T (flip_label, 305);
+  FIELD_T (flip_label_desc, 306);
+  FIELD_T (base_state_label, 307);
+  FIELD_T (flipped_state_label, 308);
+  FIELD_3BD (def_label_pt, 1012);
+  FIELD_BL (bl96, 96);
+  FIELD_T (tooltip, 309);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNEDCONSTRAINTPARAMETER)

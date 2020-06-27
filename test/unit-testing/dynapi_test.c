@@ -35894,12 +35894,254 @@ static int test_BLOCKFLIPPARAMETER (const Dwg_Object *obj)
   Dwg_Object_BLOCKFLIPPARAMETER *restrict blockflipparameter = obj->tio.object->tio.BLOCKFLIPPARAMETER;
   failed = 0;
   {
+    BITCODE_T base_state_label;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "base_state_label", &base_state_label, NULL)
+        && base_state_label
+           ? strEQ ((char *)base_state_label, (char *)blockflipparameter->base_state_label)
+           : !blockflipparameter->base_state_label)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.base_state_label [T] '%s' <> '%s'", base_state_label, blockflipparameter->base_state_label);
+  }
+  {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "be_major", &be_major, NULL)
+        && be_major == blockflipparameter->be_major)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.be_major [BL] %u != %u", blockflipparameter->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "be_major", &be_major, 0)
+        && be_major == blockflipparameter->be_major)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.be_major [BL] set+1 %u != %u", blockflipparameter->be_major, be_major);
+    blockflipparameter->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "be_minor", &be_minor, NULL)
+        && be_minor == blockflipparameter->be_minor)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.be_minor [BL] %u != %u", blockflipparameter->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "be_minor", &be_minor, 0)
+        && be_minor == blockflipparameter->be_minor)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.be_minor [BL] set+1 %u != %u", blockflipparameter->be_minor, be_minor);
+    blockflipparameter->be_minor--;
+  }
+  {
+    BITCODE_BL bl96;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "bl96", &bl96, NULL)
+        && bl96 == blockflipparameter->bl96)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.bl96 [BL] %u != %u", blockflipparameter->bl96, bl96);
+    bl96++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "bl96", &bl96, 0)
+        && bl96 == blockflipparameter->bl96)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.bl96 [BL] set+1 %u != %u", blockflipparameter->bl96, bl96);
+    blockflipparameter->bl96--;
+  }
+  {
+    BITCODE_BL* bl_infos;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "num_bl_infos", &count, NULL)
+        && dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "bl_infos", &bl_infos, NULL)
+        && bl_infos == blockflipparameter->bl_infos)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.bl_infos [BL*] * %u num_bl_infos", count);
+  }
+  {
+    BITCODE_B chain_actions;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "chain_actions", &chain_actions, NULL)
+        && chain_actions == blockflipparameter->chain_actions)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.chain_actions [B] " FORMAT_B " != " FORMAT_B "", blockflipparameter->chain_actions, chain_actions);
+    chain_actions++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "chain_actions", &chain_actions, 0)
+        && chain_actions == blockflipparameter->chain_actions)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.chain_actions [B] set+1 " FORMAT_B " != " FORMAT_B "", blockflipparameter->chain_actions, chain_actions);
+    blockflipparameter->chain_actions--;
+  }
+  {
+    BITCODE_3BD def_basept;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "def_basept", &def_basept, NULL)
+        && !memcmp (&def_basept, &blockflipparameter->def_basept, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKFLIPPARAMETER.def_basept [3BD]");
+  }
+  {
+    BITCODE_3BD def_endpt;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "def_endpt", &def_endpt, NULL)
+        && !memcmp (&def_endpt, &blockflipparameter->def_endpt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKFLIPPARAMETER.def_endpt [3BD]");
+  }
+  {
+    BITCODE_3BD def_label_pt;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "def_label_pt", &def_label_pt, NULL)
+        && !memcmp (&def_label_pt, &blockflipparameter->def_label_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKFLIPPARAMETER.def_label_pt [3BD]");
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "eed1071", &eed1071, NULL)
+        && eed1071 == blockflipparameter->eed1071)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.eed1071 [BL] %u != %u", blockflipparameter->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "eed1071", &eed1071, 0)
+        && eed1071 == blockflipparameter->eed1071)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.eed1071 [BL] set+1 %u != %u", blockflipparameter->eed1071, eed1071);
+    blockflipparameter->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockflipparameter->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKFLIPPARAMETER.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockflipparameter->evalexpr.value.text1)
+           : !blockflipparameter->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockflipparameter->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T flip_label;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "flip_label", &flip_label, NULL)
+        && flip_label
+           ? strEQ ((char *)flip_label, (char *)blockflipparameter->flip_label)
+           : !blockflipparameter->flip_label)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.flip_label [T] '%s' <> '%s'", flip_label, blockflipparameter->flip_label);
+  }
+  {
+    BITCODE_T flip_label_desc;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "flip_label_desc", &flip_label_desc, NULL)
+        && flip_label_desc
+           ? strEQ ((char *)flip_label_desc, (char *)blockflipparameter->flip_label_desc)
+           : !blockflipparameter->flip_label_desc)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.flip_label_desc [T] '%s' <> '%s'", flip_label_desc, blockflipparameter->flip_label_desc);
+  }
+  {
+    BITCODE_T flipped_state_label;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "flipped_state_label", &flipped_state_label, NULL)
+        && flipped_state_label
+           ? strEQ ((char *)flipped_state_label, (char *)blockflipparameter->flipped_state_label)
+           : !blockflipparameter->flipped_state_label)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.flipped_state_label [T] '%s' <> '%s'", flipped_state_label, blockflipparameter->flipped_state_label);
+  }
+  {
+    Dwg_BLOCKPARAMETER_info* infos;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "num_infos", &count, NULL)
+        && dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "infos", &infos, NULL)
+        && infos == blockflipparameter->infos)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.infos [Dwg_BLOCKPARAMETER_info*] * %u num_infos", count);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockflipparameter->name)
+           : !blockflipparameter->name)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.name [T] '%s' <> '%s'", name, blockflipparameter->name);
+  }
+  {
+    BITCODE_BL num_infos;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "num_infos", &num_infos, NULL)
+        && num_infos == blockflipparameter->num_infos)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.num_infos [BL] %u != %u", blockflipparameter->num_infos, num_infos);
+    num_infos++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "num_infos", &num_infos, 0)
+        && num_infos == blockflipparameter->num_infos)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.num_infos [BL] set+1 %u != %u", blockflipparameter->num_infos, num_infos);
+    blockflipparameter->num_infos--;
+  }
+  {
+    BITCODE_BS parameter_base_location;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "parameter_base_location", &parameter_base_location, NULL)
+        && parameter_base_location == blockflipparameter->parameter_base_location)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.parameter_base_location [BS] %hu != %hu", blockflipparameter->parameter_base_location, parameter_base_location);
+    parameter_base_location++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "parameter_base_location", &parameter_base_location, 0)
+        && parameter_base_location == blockflipparameter->parameter_base_location)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.parameter_base_location [BS] set+1 %hu != %hu", blockflipparameter->parameter_base_location, parameter_base_location);
+    blockflipparameter->parameter_base_location--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "parent", &parent, NULL)
         && !memcmp (&parent, &blockflipparameter->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKFLIPPARAMETER.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_B show_properties;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "show_properties", &show_properties, NULL)
+        && show_properties == blockflipparameter->show_properties)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.show_properties [B] " FORMAT_B " != " FORMAT_B "", blockflipparameter->show_properties, show_properties);
+    show_properties++;
+    if (dwg_dynapi_entity_set_value (blockflipparameter, "BLOCKFLIPPARAMETER", "show_properties", &show_properties, 0)
+        && show_properties == blockflipparameter->show_properties)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.show_properties [B] set+1 " FORMAT_B " != " FORMAT_B "", blockflipparameter->show_properties, show_properties);
+    blockflipparameter->show_properties--;
+  }
+  {
+    BITCODE_T tooltip;
+    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "tooltip", &tooltip, NULL)
+        && tooltip
+           ? strEQ ((char *)tooltip, (char *)blockflipparameter->tooltip)
+           : !blockflipparameter->tooltip)
+      pass ();
+    else
+      fail ("BLOCKFLIPPARAMETER.tooltip [T] '%s' <> '%s'", tooltip, blockflipparameter->tooltip);
   }
   if (failed && (is_class_unstable ("BLOCKFLIPPARAMETER") || is_class_debugging ("BLOCKFLIPPARAMETER")))
     {

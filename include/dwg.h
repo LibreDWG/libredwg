@@ -7244,7 +7244,14 @@ typedef struct _dwg_object_BLOCKFLIPGRIP
 typedef struct _dwg_object_BLOCKFLIPPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T flip_label;		/*!< DXF 305 */
+  BITCODE_T flip_label_desc;	/*!< DXF 306 */
+  BITCODE_T base_state_label;	/*!< DXF 307 */
+  BITCODE_T flipped_state_label;/*!< DXF 308 */
+  BITCODE_3BD def_label_pt;	/*!< DXF 1012 */
+  BITCODE_BL bl96;		/*!< DXF 96 */
+  BITCODE_T tooltip;		/*!< DXF 309 */
 } Dwg_Object_BLOCKFLIPPARAMETER;
 
 typedef struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER

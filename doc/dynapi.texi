@@ -7078,6 +7078,46 @@ BLd,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item num_infos
+BL,	DXF 170
+@item infos
+Dwg_BLOCKPARAMETER_info*
+@item bl_infos
+BL*
+@item parameter_base_location
+BS
+@item flip_label
+T,	DXF 305
+@item flip_label_desc
+T,	DXF 306
+@item base_state_label
+T,	DXF 307
+@item flipped_state_label
+T,	DXF 308
+@item def_label_pt
+3BD,	DXF 1012
+@item bl96
+BL,	DXF 96
+@item tooltip
+T,	DXF 309
 
 @end vtable
 @end indentedblock
