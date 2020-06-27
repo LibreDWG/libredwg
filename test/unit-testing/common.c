@@ -925,21 +925,32 @@ api_common_entity (dwg_object *obj)
       for (int _i = 0; _i < (int)(num); _i++)                                 \
         {                                                                     \
           BITCODE_H _hdl = field[_i];                                         \
-          char *_hdlname = dwg_dynapi_handle_name (obj->parent, _hdl);        \
+          char *_hdlname = _hdl ? dwg_dynapi_handle_name (obj->parent, _hdl) : NULL; \
           if (_hdl == ent->field[_i])                                         \
             {                                                                 \
               if (g_counter > g_countmax)                                     \
                 pass ();                                                      \
               else                                                            \
-                ok (#name "." #field "[%d]: %s " FORMAT_REF, _i,              \
-                    _hdlname ? _hdlname : "", ARGS_REF (_hdl));               \
+                  if (_hdl)                                                   \
+                    ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",    \
+                        ARGS_REF (_hdl));                                     \
+                  else                                                        \
+                    ok (#field "[%d]: NULL", _i);                             \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              fail (#name "." #field "[%d]: %s " FORMAT_REF, _i,              \
-                    _hdlname ? _hdlname : "", ARGS_REF (_hdl));               \
+              if (_hdl)                                                       \
+                fail (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",      \
+                      ARGS_REF (_hdl));                                       \
+              else                                                            \
+                {                                                             \
+                  if (g_counter > g_countmax)                                 \
+                    pass ();                                                  \
+                  else                                                        \
+                    ok (#field "[%d]: NULL", _i);                             \
+                }                                                             \
             }                                                                 \
-          if (_version >= R_2007)                                             \
+          if (_hdlname && _version >= R_2007)                                 \
             free (_hdlname);                                                  \
         }                                                                     \
     }
