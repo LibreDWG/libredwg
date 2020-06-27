@@ -349,11 +349,27 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2007/ATMOS-DC22S.dwg", cov);
               error += test_code (prefix, "2013/JW.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE)
+          if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
+              DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER)
             {
               error += test_code (
                   prefix,
                   "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
+                  cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP ||
+              DWG_TYPE == DWG_TYPE_EVALUATION_GRAPH ||
+              DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT ||
+              DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
+              DWG_TYPE == DWG_TYPE_ALDIMOBJECTCONTEXTDATA ||
+              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+            {
+              error += test_code (prefix, "2013/gh44-error.dwg", cov);
+              error += test_code (
+                  prefix,
+                  "../test-old/AC1021/from_knowledge.autodesk.com/"
+                  "blocks_and_tables_-_metric.dwg",
                   cov);
             }
         }
