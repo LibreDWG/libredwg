@@ -2805,8 +2805,7 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
             _obj->gentextures[rcount1].material = _obj;                       \
             SUB_FIELD_T (gentextures[rcount1], genprocname, 300);             \
             LOG_WARN ("recursive MATERIAL.gentextures");                      \
-            CALL_SUBCLASS (_obj->gentextures[rcount1].material, MATERIAL,     \
-                           Texture_diffusemap);                               \
+            MAT_TEXTURE (diffusemap, 0);                                     \
             SET_PARENT_OBJ (gentextures[rcount1]);                            \
           END_REPEAT_BLOCK                                                    \
           END_REPEAT (gentextures)                                            \
@@ -4067,7 +4066,7 @@ DWG_ENTITY (GEOPOSITIONMARKER)
   FIELD_B (enable_frame_text, 290);
   if (FIELD_VALUE (enable_frame_text)) {
     DXF { FIELD_VALUE (ins_pt) = FIELD_VALUE (position); }
-    CALL_SUBCLASS (_obj, GEOPOSITIONMARKER, AcDbMTextObjectEmbedded);
+    CALL_ENT_SUBCLASS (_obj, GEOPOSITIONMARKER, AcDbMTextObjectEmbedded);
   }
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END

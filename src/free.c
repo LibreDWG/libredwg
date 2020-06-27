@@ -693,8 +693,7 @@ free_TABLESTYLE_upconverted (Dwg_Object *restrict obj)
 static void
 free_TABLE_r2010 (Dwg_Object *restrict obj)
 {
-  Dwg_Entity_TABLE *_obj
-      = obj->tio.entity ? obj->tio.entity->tio.TABLE : NULL;
+  Dwg_Entity_TABLE *_obj = obj->tio.entity ? obj->tio.entity->tio.TABLE : NULL;
   if (!_obj)
     return;
   if (_obj->cells)
@@ -1060,8 +1059,7 @@ dwg_free_object (Dwg_Object *obj)
     }
   else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
     free_TABLESTYLE_upconverted (obj);
-  if (obj->fixedtype == DWG_TYPE_TABLE
-      && dwg->header.from_version >= R_2010b)
+  if (obj->fixedtype == DWG_TYPE_TABLE && dwg->header.from_version >= R_2010b)
     free_TABLE_r2010 (obj);
   switch (obj->type)
     {
@@ -1826,14 +1824,13 @@ dwg_free_subent (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 #undef DWG_OBJECT
 #define DISPATCH_TYPE(ENT, TOKEN)                                             \
   case DWG_TYPE_##TOKEN:                                                      \
-    return dwg_free_##TOKEN##_impl (dat, hdl_dat, str_dat,                    \
-                                    obj->tio.ENT->tio.TOKEN);
+    return dwg_free_##TOKEN (dat, obj);
 #define DWG_ENTITY(name) DISPATCH_TYPE (entity, name)
 #define DWG_OBJECT(name) DISPATCH_TYPE (object, name)
 
   switch (obj->fixedtype)
     {
-// clang-format off
+      // clang-format off
     #include "objects.inc"
     // clang-format on
     case DWG_TYPE_FREED:

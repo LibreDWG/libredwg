@@ -4982,7 +4982,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   _obj = _ent = obj->tio.entity;
 
-    // clang-format off
+  // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 
@@ -5920,8 +5920,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           // Inventor's AcIdBlockReference is an AcDbBlockReference: read it as
           // an INSERT (even when its class flags are unusable)
-          if (klass->dxfname
-              && !strcmp (klass->dxfname, "ACIDBLOCKREFERENCE"))
+          if (klass->dxfname && !strcmp (klass->dxfname, "ACIDBLOCKREFERENCE"))
             {
               obj->type = DWG_TYPE_INSERT;
               error |= dwg_decode_INSERT (dat, obj);
@@ -7732,25 +7731,16 @@ dwg_decode_subent (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 #undef DWG_OBJECT
 #define DISPATCH_TYPE(ENT, TOKEN)                                             \
   case DWG_TYPE_##TOKEN:                                                      \
-    return dwg_decode_##TOKEN##_impl (dat, hdl_dat, str_dat,                  \
-                                      obj->tio.ENT->tio.TOKEN);
+    return dwg_decode_##TOKEN (dat, obj);
 #define DWG_ENTITY(name) DISPATCH_TYPE (entity, name)
 #define DWG_OBJECT(name) DISPATCH_TYPE (object, name)
 
   switch (obj->fixedtype)
     {
-// clang-format off
+      // clang-format off
     #include "objects.inc"
     // clang-format on
-    case DWG_TYPE_FREED:
-      break; // already freed
     case DWG_TYPE_UNUSED:
-    case DWG_TYPE_ACDSRECORD:
-    case DWG_TYPE_ACDSSCHEMA:
-    case DWG_TYPE_NPOCOLLECTION:
-    case DWG_TYPE_POINTCLOUD:
-    case DWG_TYPE_RAPIDRTRENDERENVIRONMENT:
-    case DWG_TYPE_XREFPANELOBJECT:
     default:
       LOG_ERROR ("Unhandled subent %s, fixedtype %d in objects.inc",
                  dwg_type_name (obj->fixedtype), (int)obj->fixedtype);

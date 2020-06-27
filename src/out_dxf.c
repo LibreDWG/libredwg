@@ -143,8 +143,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
     if (dxf)                                                                  \
-      {                                                                       \
-        /* NULL payload -> empty chunk, not `size` zeros (GHSA-fxmw-mp89-7g88) */ \
+      { /* NULL payload -> empty chunk, not `size` zeros */                   \
         if (!value || !size)                                                  \
           {                                                                   \
             GROUP (dxf);                                                      \
@@ -3047,8 +3046,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           return DWG_ERR_INVALIDHANDLE;                                       \
         if (o->fixedtype == DWG_TYPE_VERTEX_##token)                          \
           error |= dwg_dxf_VERTEX_##token (dat, o);                           \
-        *i = *i + 1;                                                          \
-        /* Follow the entity links to the last vertex. */                   \
+        *i = *i + 1; /* Follow the entity links to the last vertex. */                   \
         for (BITCODE_BL n = 0; o != last_vertex && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \
@@ -3111,7 +3109,6 @@ decl_dxf_process_VERTEX (2D)
 decl_dxf_process_VERTEX (3D)
 decl_dxf_process_VERTEX (MESH)
 decl_dxf_process_VERTEX (PFACE)
-// clang-format on
 
 /* process if seqend before attribs */
 #  define decl_dxf_process_INSERT(token)                                      \
@@ -3139,8 +3136,9 @@ decl_dxf_process_VERTEX (PFACE)
         if (o->fixedtype == DWG_TYPE_ATTRIB)                                  \
           error |= dwg_dxf_ATTRIB (dat, o);                                   \
         *i = *i + 1;                                                          \
-        /* Follow the entity links to the last attrib. The SEQEND may lie  \
-           between the attribs. Without links the next object is next. */   \
+        /* Follow the entity links to the last attrib. The SEQEND             \
+           may lie between the attribs. Without links the next                \
+           object is next. */                                                 \
         for (BITCODE_BL n = 0; o != last_attrib && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \
@@ -3186,7 +3184,6 @@ decl_dxf_process_VERTEX (PFACE)
       return error;                                                           \
     }
 
-    // clang-format off
 decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
 decl_dxf_process_INSERT (ACIDBLOCKREFERENCE)
@@ -4317,11 +4314,12 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               || o->fixedtype == DWG_TYPE_ENDBLK)
             continue;
           // JUMP is not an entity but a "resume reading at this offset" marker
-          // of the R11 entity sections, and it carries no drawing data. DXF has
-          // no such record, and JUMP has no ownerhandle, so the branch below
-          // would emit it into mspace and break the POLYLINE-VERTEX-SEQEND
-          // sequence for conformant readers. decode.c already keeps JUMP out
-          // of the block header entity list for the same reason.
+          // of the R11 entity sections, and it carries no drawing data. DXF
+          // has no such record, and JUMP has no ownerhandle, so the branch
+          // below would emit it into mspace and break the
+          // POLYLINE-VERTEX-SEQEND sequence for conformant readers. decode.c
+          // already keeps JUMP out of the block header entity list for the
+          // same reason.
           if (o->fixedtype == DWG_TYPE_JUMP)
             continue;
           ohdl = o->tio.entity->ownerhandle;
@@ -4458,7 +4456,11 @@ dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 // The constant part of the ACDSDATA section, as AutoCAD writes it: the
 // versions and the 6 schemas, with the schema indices 0 AcDb_Thumbnail_Schema,
 // 1 AcDb3DSolid_ASM_Data and 4 built-in. Pairs of group code and value.
-static const struct { int code; const char *value; } acds_schema_dxf[] = {
+static const struct
+{
+  int code;
+  const char *value;
+} acds_schema_dxf[] = {
   { 70, "2" },
   { 71, "2" },
   { 0, "ACDSSCHEMA" },
@@ -4584,7 +4586,7 @@ dxf_acds_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       GROUP (2);
       fprintf (dat->fh, "%s\r\n",
                rec[i].schidx == ACDS_SCHEMA_THUMBNAIL ? "Thumbnail_Data"
-                                                       : "ASM_Data");
+                                                      : "ASM_Data");
       GROUP (280);
       fprintf (dat->fh, "15\r\n");
       GROUP (94);
@@ -4719,14 +4721,13 @@ dwg_dxf_subent (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 #  undef DWG_OBJECT
 #  define DISPATCH_TYPE(ENT, TOKEN)                                           \
   case DWG_TYPE_##TOKEN:                                                      \
-    return dwg_dxf_##TOKEN##_impl (dat, hdl_dat, str_dat,                     \
-                                   obj->tio.ENT->tio.TOKEN);
+    return dwg_dxf_##TOKEN (dat, obj);
 #  define DWG_ENTITY(name) DISPATCH_TYPE (entity, name)
 #  define DWG_OBJECT(name) DISPATCH_TYPE (object, name)
 
   switch (obj->fixedtype)
     {
-// clang-format off
+      // clang-format off
     #include "objects.inc"
     // clang-format on
     case DWG_TYPE_FREED:

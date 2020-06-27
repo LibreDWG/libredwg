@@ -2466,8 +2466,8 @@ dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               ;
             else
               {
-                /* Pass a copy of the loop index: dxfb_block_write() advances it
-                   past the sub-entities of the INSERTs and POLYLINEs it
+                /* Pass a copy of the loop index: dxfb_block_write() advances
+                   it past the sub-entities of the INSERTs and POLYLINEs it
                    writes, which is right for the ENTITIES walk but here
                    skips the BLOCK_HEADERs that follow, and their bodies
                    never reach the output (GH #1409). */
@@ -2547,7 +2547,11 @@ dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 // versions and the 6 schemas, with the schema indices 0 AcDb_Thumbnail_Schema,
 // 1 AcDb3DSolid_ASM_Data and 4 built-in. Pairs of group code and value.
 // same as in out_dxf.c
-static const struct { int code; const char *value; } acds_schema_dxf[] = {
+static const struct
+{
+  int code;
+  const char *value;
+} acds_schema_dxf[] = {
   { 70, "2" },
   { 71, "2" },
   { 0, "ACDSSCHEMA" },
@@ -2803,14 +2807,13 @@ dwg_dxfb_subent (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 #undef DWG_OBJECT
 #define DISPATCH_TYPE(ENT, TOKEN)                                             \
   case DWG_TYPE_##TOKEN:                                                      \
-    return dwg_dxfb_##TOKEN##_impl (dat, hdl_dat, str_dat,                    \
-                                    obj->tio.ENT->tio.TOKEN);
+    return dwg_dxfb_##TOKEN (dat, obj);
 #define DWG_ENTITY(name) DISPATCH_TYPE (entity, name)
 #define DWG_OBJECT(name) DISPATCH_TYPE (object, name)
 
   switch (obj->fixedtype)
     {
-// clang-format off
+      // clang-format off
     #include "objects.inc"
     // clang-format on
     case DWG_TYPE_FREED:
