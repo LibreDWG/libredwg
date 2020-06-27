@@ -38794,6 +38794,14 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
       fail ("BLOCKROTATEACTION.actions [BL*] * %u num_actions", count);
   }
   {
+    BITCODE_3BD base_pt;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "base_pt", &base_pt, NULL)
+        && !memcmp (&base_pt, &blockrotateaction->base_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.base_pt [3BD]");
+  }
+  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "be_major", &be_major, NULL)
         && be_major == blockrotateaction->be_major)
@@ -38830,6 +38838,37 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKROTATEACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt2;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "conn_pt2", &conn_pt2, NULL)
+        && !memcmp (&conn_pt2, &blockrotateaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt3;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "conn_pt3", &conn_pt3, NULL)
+        && !memcmp (&conn_pt3, &blockrotateaction->conn_pt3, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    BITCODE_B dependent;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "dependent", &dependent, NULL)
+        && dependent == blockrotateaction->dependent)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.dependent [B] " FORMAT_B " != " FORMAT_B "", blockrotateaction->dependent, dependent);
+    dependent++;
+    if (dwg_dynapi_entity_set_value (blockrotateaction, "BLOCKROTATEACTION", "dependent", &dependent, 0)
+        && dependent == blockrotateaction->dependent)
+      pass ();
+    else
+      fail ("BLOCKROTATEACTION.dependent [B] set+1 " FORMAT_B " != " FORMAT_B "", blockrotateaction->dependent, dependent);
+    blockrotateaction->dependent--;
   }
   {
     BITCODE_H* deps;
@@ -38923,12 +38962,28 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
     blockrotateaction->num_deps--;
   }
   {
+    BITCODE_3BD offset;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "offset", &offset, NULL)
+        && !memcmp (&offset, &blockrotateaction->offset, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.offset [3BD]");
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockrotateaction->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKROTATEACTION.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_3BD stretch_pt;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "stretch_pt", &stretch_pt, NULL)
+        && !memcmp (&stretch_pt, &blockrotateaction->stretch_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKROTATEACTION.stretch_pt [3BD]");
   }
   if (failed && (is_class_unstable ("BLOCKROTATEACTION") || is_class_debugging ("BLOCKROTATEACTION")))
     {
@@ -39063,6 +39118,14 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
       fail ("BLOCKSCALEACTION.actions [BL*] * %u num_actions", count);
   }
   {
+    BITCODE_3BD base_pt;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "base_pt", &base_pt, NULL)
+        && !memcmp (&base_pt, &blockscaleaction->base_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.base_pt [3BD]");
+  }
+  {
     BITCODE_BL be_major;
     if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "be_major", &be_major, NULL)
         && be_major == blockscaleaction->be_major)
@@ -39115,6 +39178,37 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKSCALEACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt4;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pt4", &conn_pt4, NULL)
+        && !memcmp (&conn_pt4, &blockscaleaction->conn_pt4, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.conn_pt4 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt5;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pt5", &conn_pt5, NULL)
+        && !memcmp (&conn_pt5, &blockscaleaction->conn_pt5, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.conn_pt5 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    BITCODE_B dependent;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "dependent", &dependent, NULL)
+        && dependent == blockscaleaction->dependent)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.dependent [B] " FORMAT_B " != " FORMAT_B "", blockscaleaction->dependent, dependent);
+    dependent++;
+    if (dwg_dynapi_entity_set_value (blockscaleaction, "BLOCKSCALEACTION", "dependent", &dependent, 0)
+        && dependent == blockscaleaction->dependent)
+      pass ();
+    else
+      fail ("BLOCKSCALEACTION.dependent [B] set+1 " FORMAT_B " != " FORMAT_B "", blockscaleaction->dependent, dependent);
+    blockscaleaction->dependent--;
   }
   {
     BITCODE_H* deps;
@@ -39208,12 +39302,28 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
     blockscaleaction->num_deps--;
   }
   {
+    BITCODE_3BD offset;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "offset", &offset, NULL)
+        && !memcmp (&offset, &blockscaleaction->offset, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.offset [3BD]");
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockscaleaction->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKSCALEACTION.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_3BD stretch_pt;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "stretch_pt", &stretch_pt, NULL)
+        && !memcmp (&stretch_pt, &blockscaleaction->stretch_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKSCALEACTION.stretch_pt [3BD]");
   }
   if (failed && (is_class_unstable ("BLOCKSCALEACTION") || is_class_debugging ("BLOCKSCALEACTION")))
     {

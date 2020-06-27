@@ -8111,17 +8111,20 @@ DWG_OBJECT_END
   FIELD_VECTOR (bl_infos, BL, num_infos, 91);                                  \
   FIELD_BS (parameter_base_location, 177)
 
+#define BlockAction_ConnectionPt(conn_pt, dxf1, dxf2) \
+  FIELD_BL (conn_pt.code, dxf1);                      \
+  FIELD_T (conn_pt.name, dxf2)
+
 #define AcDbBlockActionWithBasePt_fields          \
   AcDbBlockAction_fields;                         \
   SUBCLASS (AcDbBlockActionWithBasePt)            \
-  FIELD_3BD (pt, 0);                              \
-  FIELD_BL (info_num1, 92);                       \
-  FIELD_T (info_text1, 301);                      \
-  FIELD_BL (info_num2, 93);                       \
-  FIELD_T (info_text2, 302);                      \
-  DXF { FIELD_3BD (pt, 1011); }                   \
-  FIELD_B (b280, 280);                            \
-  FIELD_3BD (base_pt, 1012)
+  FIELD_3BD (offset, 0);                          \
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);   \
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);   \
+  DXF { FIELD_3BD (offset, 1011); }               \
+  FIELD_B (dependent, 280);                       \
+  FIELD_3BD (base_pt, 1012)                       \
+  FIELD_3BD (stretch_pt, 0)
 
 #define AcDbBlockAction_doubles_fields            \
   FIELD_BD (action_offset_x, 140);                \
@@ -10056,10 +10059,6 @@ DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
   FIELD_B (align_perpendicular, 280)
 DWG_OBJECT_END
 
-#define BlockAction_ConnectionPt(conn_pt, dxf1, dxf2) \
-  FIELD_BL (conn_pt.code, dxf1);                      \
-  FIELD_T (conn_pt.name, dxf2)
-
 DWG_OBJECT (BLOCKARRAYACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
@@ -10294,9 +10293,9 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATEACTION)
   DECODE_UNKNOWN_BITS
-  AcDbBlockAction_fields;
+  AcDbBlockActionWithBasePt_fields;
   SUBCLASS (AcDbBlockRotateAction)
-  BlockAction_ConnectionPt (conn_pt1, 94, 303);
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONGRIP)
@@ -10313,11 +10312,11 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSCALEACTION)
   DECODE_UNKNOWN_BITS
-  AcDbBlockAction_fields;
+  AcDbBlockActionWithBasePt_fields;
   SUBCLASS (AcDbBlockScaleAction)
-  BlockAction_ConnectionPt (conn_pt1, 94, 303);
-  BlockAction_ConnectionPt (conn_pt1, 95, 304);
-  BlockAction_ConnectionPt (conn_pt1, 96, 305);
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  BlockAction_ConnectionPt (conn_pt4, 95, 304);
+  BlockAction_ConnectionPt (conn_pt5, 96, 305);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSTRETCHACTION)
