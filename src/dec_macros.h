@@ -1867,6 +1867,7 @@
     Returns 0 or DWG_ERR_OUTOFMEM.
 */
 
+// clang-format off
 #define DWG_ENTITY(token)                                                     \
   EXPORT int dwg_setup_##token (Dwg_Object *obj)                              \
   {                                                                           \
@@ -1933,10 +1934,10 @@
                                           Dwg_Object *restrict obj);          \
   static int dwg_decode_##token##_impl (                                      \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
-      Dwg_Object *restrict obj, Dwg_Entity_##token *restrict _obj); \
+      Dwg_Object *restrict obj, Dwg_Entity_##token *restrict _obj);           \
                                                                               \
-      /**Call dwg_setup_##token and write the fields from the bitstream dat   \
-       * to the entity or object. */                                                 \
+  /** Call dwg_setup_##token and write the fields from the bitstream dat      \
+    * to the entity or object. */                                             \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
@@ -1945,8 +1946,7 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007a)                                                           \
-    {                                                                         \
-      /* Keep these separate: TCC aliases combined struct declarations. */     \
+    { /* Keep these separate: TCC aliases combined struct declarations. */    \
       Bit_Chain obj_dat = *dat;                                               \
       Bit_Chain str_dat = *dat;                                               \
       error                                                                   \
@@ -1977,8 +1977,7 @@
     }                                                                         \
     if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)                   \
       return error;                                                           \
-    return dwg_decode_##token##_impl (dat, &hdl_dat, &str_dat, obj,      \
-                                      _obj);                                  \
+    return dwg_decode_##token##_impl (dat, hdl_dat, str_dat, obj, _obj);      \
   }                                                                           \
   static int dwg_decode_##token##_impl (                                      \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
@@ -1987,6 +1986,7 @@
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
     Dwg_Data *dwg = obj->parent;                                              \
+    Dwg_Object_Entity *_ent = obj->tio.entity;                                \
     LOG_INFO ("Decode entity " #token "\n");
 
 // Does size include the CRC?
@@ -2057,8 +2057,9 @@
     return 0;                                                                 \
   }                                                                           \
   static int dwg_decode_##token##_common (                                    \
-      Bit_Chain *obj_dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,             \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj);                                              \
+                                                                              \
   static int dwg_decode_##token##_impl (                                      \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj, Dwg_Object_##token *restrict _obj);           \
@@ -2071,7 +2072,7 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007a)                                                           \
-    { /* TCC: keep separate */                                                 \
+    { /* Keep these separate: TCC aliases combined struct declarations. */    \
       Bit_Chain obj_dat = *dat;                                               \
       Bit_Chain str_dat = *dat;                                               \
       error = dwg_decode_##token##_common (&obj_dat, &hdl_dat, &str_dat, obj);\
@@ -2084,17 +2085,17 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    Dwg_Data *dwg = obj->parent;                                              \
     Dwg_Object_##token *_obj = NULL;                                          \
     int error = 0;                                                            \
+    _obj = obj->tio.object->tio.token;                                        \
     if (strNE (#token, "TABLECONTENT") || obj->fixedtype != DWG_TYPE_TABLE)   \
       {                                                                       \
-        _obj = obj->tio.object->tio.token;                                    \
         error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);   \
         if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)               \
           return error;                                                       \
-        return dwg_decode_##token##_impl (dat, &hdl_dat, &str_dat, obj, _obj); \
+        return dwg_decode_##token##_impl (dat, hdl_dat, str_dat, obj, _obj);  \
       }                                                                       \
+    return error;                                                             \
   }                                                                           \
   GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_impl (                                      \
@@ -2158,7 +2159,7 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007a)                                                           \
-    { /* TCC: keep separate */                                                 \
+    { /* Keep these separate: TCC aliases combined struct declarations. */    \
       Bit_Chain obj_dat = *dat;                                               \
       Bit_Chain str_dat = *dat;                                               \
       error                                                                   \
@@ -2185,5 +2186,7 @@
     error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);       \
     if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)                   \
       return error;
+
+// clang-format on
 
 #endif

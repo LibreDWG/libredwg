@@ -3417,7 +3417,6 @@ decl_dxf_process_VERTEX (2D)
 decl_dxf_process_VERTEX (3D)
 decl_dxf_process_VERTEX (MESH)
 decl_dxf_process_VERTEX (PFACE)
-// clang-format on
 
 /* process if seqend before attribs. A pre-R13 target uses the attribs list
    if there is one. Follow the entity links to the last attrib. The SEQEND may
@@ -3493,7 +3492,6 @@ decl_dxf_process_VERTEX (PFACE)
       return error;                                                           \
     }
 
-    // clang-format off
 decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
 decl_dxf_process_INSERT (ACIDBLOCKREFERENCE)
@@ -5045,14 +5043,13 @@ dwg_dxf_subent (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 #  undef DWG_OBJECT
 #  define DISPATCH_TYPE(ENT, TOKEN)                                           \
   case DWG_TYPE_##TOKEN:                                                      \
-    return dwg_dxf_##TOKEN##_impl (dat, hdl_dat, str_dat,                     \
-                                   obj->tio.ENT->tio.TOKEN);
+    return dwg_dxf_##TOKEN (dat, obj);
 #  define DWG_ENTITY(name) DISPATCH_TYPE (entity, name)
 #  define DWG_OBJECT(name) DISPATCH_TYPE (object, name)
 
   switch (obj->fixedtype)
     {
-// clang-format off
+      // clang-format off
     #include "objects.inc"
     // clang-format on
     case DWG_TYPE_FREED:
