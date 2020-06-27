@@ -7,12 +7,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BLOCKACTION_fields;
-  BITCODE_BL i, info_num1;
-  BITCODE_T info_text1;
-  BITCODE_BL info_num2;
-  BITCODE_T info_text2;
-  BITCODE_BL info_num3;
-  BITCODE_T info_text3;
+  BITCODE_BL i;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES

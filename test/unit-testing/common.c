@@ -350,7 +350,8 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2013/JW.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
-              DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER)
+              DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
               error += test_code (
                   prefix,

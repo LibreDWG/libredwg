@@ -10257,6 +10257,23 @@ DWG_OBJECT (BLOCKPOLARSTRETCHACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockPolarStretchAction)
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  BlockAction_ConnectionPt (conn_pt4, 95, 304);
+  BlockAction_ConnectionPt (conn_pt5, 96, 305);
+  BlockAction_ConnectionPt (conn_pt6, 97, 306);
+  FIELD_BL (num_pts, 72);
+  FIELD_2RD_VECTOR (pts, num_pts, 10);
+  FIELD_BL (num_hdls, 73);
+  // TODO one struct
+  HANDLE_VECTOR (hdls, num_hdls, 0, 331);
+  FIELD_VECTOR (shorts, BS, num_hdls, 74);
+
+  FIELD_BL (num_codes, 75);
+  // FIXME 3x BL?
+  FIELD_VECTOR (codes, BL, num_codes, 76);
+  // ...
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPROPERTIESTABLE)
@@ -10307,7 +10324,20 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockStretchAction)
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  FIELD_BL (num_pts, 72);
+  FIELD_2RD_VECTOR (pts, num_pts, 10);
+  FIELD_BL (num_hdls, 73);
+  // TODO one struct
+  HANDLE_VECTOR (hdls, num_hdls, 0, 331);
+  FIELD_VECTOR (shorts, BS, num_hdls, 74);
+
+  FIELD_BL (num_codes, 75);
+  // FIXME 3x BL?
+  FIELD_VECTOR (codes, BL, num_codes, 76);
   // ...
+  AcDbBlockAction_doubles_fields;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKUSERPARAMETER)

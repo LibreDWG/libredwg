@@ -7590,6 +7590,32 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt2
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt3
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt4
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt5
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt6
+Dwg_BLOCKACTION_connectionpts
+@item num_pts
+BL,	DXF 72
+@item pts
+2RD*,	DXF 10
+@item num_hdls
+BL,	DXF 73
+@item hdls
+H*,	DXF 331
+@item shorts
+BS*,	DXF 74
+@item num_codes
+BL,	DXF 75
+@item codes
+BL*,	DXF 76
 
 @end vtable
 @end indentedblock
@@ -7831,6 +7857,30 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt2
+Dwg_BLOCKACTION_connectionpts
+@item num_pts
+BL,	DXF 72
+@item pts
+2RD*,	DXF 10
+@item num_hdls
+BL,	DXF 73
+@item hdls
+H*,	DXF 331
+@item shorts
+BS*,	DXF 74
+@item num_codes
+BL,	DXF 75
+@item codes
+BL*,	DXF 76
+@item action_offset_x
+BD,	DXF 140
+@item action_offset_y
+BD,	DXF 141
+@item angle_offset
+BD
 
 @end vtable
 @end indentedblock

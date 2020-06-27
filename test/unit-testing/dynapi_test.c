@@ -38176,6 +38176,64 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
     blockpolarstretchaction->be_minor--;
   }
   {
+    BITCODE_BL* codes;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_codes", &count, NULL)
+        && dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "codes", &codes, NULL)
+        && codes == blockpolarstretchaction->codes)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.codes [BL*] * %u num_codes", count);
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt1;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt1", &conn_pt1, NULL)
+        && !memcmp (&conn_pt1, &blockpolarstretchaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt2;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt2", &conn_pt2, NULL)
+        && !memcmp (&conn_pt2, &blockpolarstretchaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt3;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt3", &conn_pt3, NULL)
+        && !memcmp (&conn_pt3, &blockpolarstretchaction->conn_pt3, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt4;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt4", &conn_pt4, NULL)
+        && !memcmp (&conn_pt4, &blockpolarstretchaction->conn_pt4, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.conn_pt4 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt5;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt5", &conn_pt5, NULL)
+        && !memcmp (&conn_pt5, &blockpolarstretchaction->conn_pt5, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.conn_pt5 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt6;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt6", &conn_pt6, NULL)
+        && !memcmp (&conn_pt6, &blockpolarstretchaction->conn_pt6, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKPOLARSTRETCHACTION.conn_pt6 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
     BITCODE_H* deps;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_deps", &count, NULL)
@@ -38219,6 +38277,16 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
       fail ("BLOCKPOLARSTRETCHACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpolarstretchaction->evalexpr.value.text1);
   }
   {
+    BITCODE_H* hdls;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_hdls", &count, NULL)
+        && dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "hdls", &hdls, NULL)
+        && hdls == blockpolarstretchaction->hdls)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.hdls [H*] * %u num_hdls", count);
+  }
+  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "name", &name, NULL)
         && name
@@ -38244,6 +38312,21 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
     blockpolarstretchaction->num_actions--;
   }
   {
+    BITCODE_BL num_codes;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_codes", &num_codes, NULL)
+        && num_codes == blockpolarstretchaction->num_codes)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_codes [BL] %u != %u", blockpolarstretchaction->num_codes, num_codes);
+    num_codes++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_codes", &num_codes, 0)
+        && num_codes == blockpolarstretchaction->num_codes)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_codes [BL] set+1 %u != %u", blockpolarstretchaction->num_codes, num_codes);
+    blockpolarstretchaction->num_codes--;
+  }
+  {
     BITCODE_BL num_deps;
     if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_deps", &num_deps, NULL)
         && num_deps == blockpolarstretchaction->num_deps)
@@ -38259,12 +38342,62 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
     blockpolarstretchaction->num_deps--;
   }
   {
+    BITCODE_BL num_hdls;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_hdls", &num_hdls, NULL)
+        && num_hdls == blockpolarstretchaction->num_hdls)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_hdls [BL] %u != %u", blockpolarstretchaction->num_hdls, num_hdls);
+    num_hdls++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_hdls", &num_hdls, 0)
+        && num_hdls == blockpolarstretchaction->num_hdls)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_hdls [BL] set+1 %u != %u", blockpolarstretchaction->num_hdls, num_hdls);
+    blockpolarstretchaction->num_hdls--;
+  }
+  {
+    BITCODE_BL num_pts;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_pts", &num_pts, NULL)
+        && num_pts == blockpolarstretchaction->num_pts)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_pts [BL] %u != %u", blockpolarstretchaction->num_pts, num_pts);
+    num_pts++;
+    if (dwg_dynapi_entity_set_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_pts", &num_pts, 0)
+        && num_pts == blockpolarstretchaction->num_pts)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.num_pts [BL] set+1 %u != %u", blockpolarstretchaction->num_pts, num_pts);
+    blockpolarstretchaction->num_pts--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockpolarstretchaction->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKPOLARSTRETCHACTION.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_2RD* pts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_pts", &count, NULL)
+        && dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "pts", &pts, NULL)
+        && pts == blockpolarstretchaction->pts)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.pts [2RD*] * %u num_pts", count);
+  }
+  {
+    BITCODE_BS* shorts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "num_shorts", &count, NULL)
+        && dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "shorts", &shorts, NULL)
+        && shorts == blockpolarstretchaction->shorts)
+      pass ();
+    else
+      fail ("BLOCKPOLARSTRETCHACTION.shorts [BS*] * %u num_shorts", count);
   }
   if (failed && (is_class_unstable ("BLOCKPOLARSTRETCHACTION") || is_class_debugging ("BLOCKPOLARSTRETCHACTION")))
     {
@@ -39096,6 +39229,36 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
   Dwg_Object_BLOCKSTRETCHACTION *restrict blockstretchaction = obj->tio.object->tio.BLOCKSTRETCHACTION;
   failed = 0;
   {
+    BITCODE_BD action_offset_x;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_x", &action_offset_x, NULL)
+        && action_offset_x == blockstretchaction->action_offset_x)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.action_offset_x [BD] %g != %g", blockstretchaction->action_offset_x, action_offset_x);
+    action_offset_x++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_x", &action_offset_x, 0)
+        && action_offset_x == blockstretchaction->action_offset_x)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.action_offset_x [BD] set+1 %g != %g", blockstretchaction->action_offset_x, action_offset_x);
+    blockstretchaction->action_offset_x--;
+  }
+  {
+    BITCODE_BD action_offset_y;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_y", &action_offset_y, NULL)
+        && action_offset_y == blockstretchaction->action_offset_y)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.action_offset_y [BD] %g != %g", blockstretchaction->action_offset_y, action_offset_y);
+    action_offset_y++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_y", &action_offset_y, 0)
+        && action_offset_y == blockstretchaction->action_offset_y)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.action_offset_y [BD] set+1 %g != %g", blockstretchaction->action_offset_y, action_offset_y);
+    blockstretchaction->action_offset_y--;
+  }
+  {
     BITCODE_BL* actions;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_actions", &count, NULL)
@@ -39104,6 +39267,21 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKSTRETCHACTION.actions [BL*] * %u num_actions", count);
+  }
+  {
+    BITCODE_BD angle_offset;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "angle_offset", &angle_offset, NULL)
+        && angle_offset == blockstretchaction->angle_offset)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.angle_offset [BD] %g != %g", blockstretchaction->angle_offset, angle_offset);
+    angle_offset++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "angle_offset", &angle_offset, 0)
+        && angle_offset == blockstretchaction->angle_offset)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.angle_offset [BD] set+1 %g != %g", blockstretchaction->angle_offset, angle_offset);
+    blockstretchaction->angle_offset--;
   }
   {
     BITCODE_3BD ba_pt;
@@ -39142,6 +39320,32 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
     else
       fail ("BLOCKSTRETCHACTION.be_minor [BL] set+1 %u != %u", blockstretchaction->be_minor, be_minor);
     blockstretchaction->be_minor--;
+  }
+  {
+    BITCODE_BL* codes;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_codes", &count, NULL)
+        && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "codes", &codes, NULL)
+        && codes == blockstretchaction->codes)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.codes [BL*] * %u num_codes", count);
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt1;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "conn_pt1", &conn_pt1, NULL)
+        && !memcmp (&conn_pt1, &blockstretchaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKSTRETCHACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
+  }
+  {
+    Dwg_BLOCKACTION_connectionpts conn_pt2;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "conn_pt2", &conn_pt2, NULL)
+        && !memcmp (&conn_pt2, &blockstretchaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
+        pass ();
+    else
+        fail ("BLOCKSTRETCHACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_H* deps;
@@ -39187,6 +39391,16 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
       fail ("BLOCKSTRETCHACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockstretchaction->evalexpr.value.text1);
   }
   {
+    BITCODE_H* hdls;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_hdls", &count, NULL)
+        && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "hdls", &hdls, NULL)
+        && hdls == blockstretchaction->hdls)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.hdls [H*] * %u num_hdls", count);
+  }
+  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "name", &name, NULL)
         && name
@@ -39212,6 +39426,21 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
     blockstretchaction->num_actions--;
   }
   {
+    BITCODE_BL num_codes;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_codes", &num_codes, NULL)
+        && num_codes == blockstretchaction->num_codes)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_codes [BL] %u != %u", blockstretchaction->num_codes, num_codes);
+    num_codes++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_codes", &num_codes, 0)
+        && num_codes == blockstretchaction->num_codes)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_codes [BL] set+1 %u != %u", blockstretchaction->num_codes, num_codes);
+    blockstretchaction->num_codes--;
+  }
+  {
     BITCODE_BL num_deps;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_deps", &num_deps, NULL)
         && num_deps == blockstretchaction->num_deps)
@@ -39227,12 +39456,62 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
     blockstretchaction->num_deps--;
   }
   {
+    BITCODE_BL num_hdls;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_hdls", &num_hdls, NULL)
+        && num_hdls == blockstretchaction->num_hdls)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_hdls [BL] %u != %u", blockstretchaction->num_hdls, num_hdls);
+    num_hdls++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_hdls", &num_hdls, 0)
+        && num_hdls == blockstretchaction->num_hdls)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_hdls [BL] set+1 %u != %u", blockstretchaction->num_hdls, num_hdls);
+    blockstretchaction->num_hdls--;
+  }
+  {
+    BITCODE_BL num_pts;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_pts", &num_pts, NULL)
+        && num_pts == blockstretchaction->num_pts)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_pts [BL] %u != %u", blockstretchaction->num_pts, num_pts);
+    num_pts++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_pts", &num_pts, 0)
+        && num_pts == blockstretchaction->num_pts)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.num_pts [BL] set+1 %u != %u", blockstretchaction->num_pts, num_pts);
+    blockstretchaction->num_pts--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockstretchaction->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKSTRETCHACTION.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_2RD* pts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_pts", &count, NULL)
+        && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "pts", &pts, NULL)
+        && pts == blockstretchaction->pts)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.pts [2RD*] * %u num_pts", count);
+  }
+  {
+    BITCODE_BS* shorts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_shorts", &count, NULL)
+        && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "shorts", &shorts, NULL)
+        && shorts == blockstretchaction->shorts)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.shorts [BS*] * %u num_shorts", count);
   }
   if (failed && (is_class_unstable ("BLOCKSTRETCHACTION") || is_class_debugging ("BLOCKSTRETCHACTION")))
     {
