@@ -385,7 +385,7 @@ DWG_ENTITY (ATTRIB)
 #endif
       FIELD_RC (mtext_type, 71); // 1=single line, 2=multi line attrib, 4=multi line attdef
       if (FIELD_VALUE (mtext_type) > 1)
-        CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
+        CALL_ENT_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
     }
 
   SINCE (R_13b1) {
@@ -613,7 +613,7 @@ DWG_ENTITY (ATTDEF)
 #endif
       FIELD_RC (mtext_type, 0); // 71
       if (FIELD_VALUE (mtext_type) > 1)
-        CALL_SUBCLASS (_obj, ATTDEF, AcDbMTextObjectEmbedded);
+        CALL_ENT_SUBCLASS (_obj, ATTDEF, AcDbMTextObjectEmbedded);
     }
   SINCE (R_13b1) {
     FIELD_T (tag, 0);
