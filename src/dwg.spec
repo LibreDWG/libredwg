@@ -8127,10 +8127,12 @@ DWG_OBJECT_END
   BlockParam_PropInfo (prop4, 174, 95, 304);      \
   FIELD_VECTOR_N (prop_states, BL, 4, 0);         \
   FIELD_BS (parameter_base_location, 177);        \
-  FIELD_3BD (upd_basept, 0);                      \
-  FIELD_3BD (basept, 0);                          \
-  FIELD_3BD (upd_endpt, 0);                      \
-  FIELD_3BD (endpt, 0)
+  if (0) {                                        \
+    FIELD_3BD (upd_basept, 0);                    \
+    FIELD_3BD (basept, 0);                        \
+    FIELD_3BD (upd_endpt, 0);                     \
+    FIELD_3BD (endpt, 0);                         \
+  }
 
 #define AcDbBlockActionWithBasePt_fields          \
   AcDbBlockAction_fields;                         \
@@ -8141,7 +8143,9 @@ DWG_OBJECT_END
   DXF { FIELD_3BD (offset, 1011); }               \
   FIELD_B (dependent, 280);                       \
   FIELD_3BD (base_pt, 1012)                       \
-  FIELD_3BD (stretch_pt, 0)
+  if (0) {                                        \
+    FIELD_3BD (stretch_pt, 0);                    \
+  }
 
 #define AcDbBlockAction_doubles_fields            \
   FIELD_BD (action_offset_x, 140);                \
@@ -10082,7 +10086,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
   DECODE_UNKNOWN_BITS
-  AcDbBlock2PtParameter_fields;
+  AcDbBlock2PtParameter_fields; //?
   SUBCLASS (AcDbBlockAlignmentParameter)
   FIELD_B (align_perpendicular, 280)
 DWG_OBJECT_END
@@ -10176,7 +10180,6 @@ DWG_OBJECT (BLOCKFLIPACTION)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPGRIP)
-  DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockFlipGrip)
   FIELD_BL (combined_state, 0);
@@ -10187,7 +10190,6 @@ DWG_OBJECT (BLOCKFLIPGRIP)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPPARAMETER)
-  DECODE_UNKNOWN_BITS
   AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockFlipParameter)
   FIELD_T (flip_label, 305);
@@ -10200,13 +10202,11 @@ DWG_OBJECT (BLOCKFLIPPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNEDCONSTRAINTPARAMETER)
-  DECODE_UNKNOWN_BITS
   AcDbBlockLinearConstraintParameter_fields;
   SUBCLASS (AcDbBlockAlignedConstraintParameter)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
-  DECODE_UNKNOWN_BITS
   AcDbBlockLinearConstraintParameter_fields;
 DWG_OBJECT_END
 
@@ -10216,47 +10216,69 @@ DWG_OBJECT (BLOCKHORIZONTALCONSTRAINTPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKVERTICALCONSTRAINTPARAMETER)
-  DECODE_UNKNOWN_BITS
   AcDbBlockLinearConstraintParameter_fields;
   SUBCLASS (AcDbBlockVerticalConstraintParameter)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARGRIP)
-  DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockLinearGrip)
   FIELD_3BD_1 (orientation, 140);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARPARAMETER)
-  DECODE_UNKNOWN_BITS
+  AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockLinearParameter)
-
+  FIELD_T (distance_name, 305);
+  FIELD_T (distance_desc, 306);
+  FIELD_BD (distance, 141);
+  AcDbBlockParamValueSet_fields (value_set,96,141,175,307);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockLookupAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  FIELD_BL (info_code93, 93);
-  // ..
+  ENCODER {
+    FIELD_VALUE (numelems) = _obj->numrows * _obj->numcols;
+  }
+  FIELD_BL (numrows, 92);
+  FIELD_BL (numcols, 93);
+  DECODER {
+    FIELD_VALUE (numelems) = _obj->numrows * _obj->numcols;
+  }
+  FIELD_VECTOR_T (exprs, T, numelems, 302)
+  DXF { VALUE_TFF ("", 301); }
+  REPEAT (numelems, lut, Dwg_BLOCKLOOKUPACTION_lut)
+  REPEAT_BLOCK
+    BlockAction_ConnectionPt (lut[rcount1].conn_pt1, 94, 303);
+    BlockAction_ConnectionPt (lut[rcount1].conn_pt2, 95, 303);
+    BlockAction_ConnectionPt (lut[rcount1].conn_pt3, 96, 303);
+    SUB_FIELD_B (lut[rcount1], b282, 282);
+    SUB_FIELD_B (lut[rcount1], b281, 281);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (lut);
+  END_REPEAT (lut)
+  FIELD_B (b280, 280);
+  DXF { FIELD_VECTOR_T (exprs, T, numelems, 302); }
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPGRIP)
-  DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockLookupGrip)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPPARAMETER)
-  DECODE_UNKNOWN_BITS
+  AcDbBlock1PtParameter_fields;
   SUBCLASS (AcDbBlockLookupParameter)
-
+  FIELD_BL (index, 0);
+  FIELD_T (lookup_name, 303);
+  FIELD_T (lookup_desc, 304);
+  DXF { FIELD_BL (index, 94); }
+  FIELD_T (unknown_t, 0);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKMOVEACTION)
-  DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockMoveAction)
   BlockAction_ConnectionPt (conn_pt1, 92, 301);
@@ -10265,7 +10287,6 @@ DWG_OBJECT (BLOCKMOVEACTION)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOINTPARAMETER)
-  DECODE_UNKNOWN_BITS
   AcDbBlock1PtParameter_fields;
   SUBCLASS (AcDbBlockPointParameter)
   FIELD_T (position_name, 303);
@@ -10274,15 +10295,22 @@ DWG_OBJECT (BLOCKPOINTPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOLARGRIP)
-  DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockPolarGrip)
 DWG_OBJECT_END
 
+// not enough coverage
 DWG_OBJECT (BLOCKPOLARPARAMETER)
-  DECODE_UNKNOWN_BITS
+  AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockPolarParameter)
-
+  FIELD_T (angle_name, 305);
+  FIELD_T (angle_desc, 306);
+  FIELD_T (distance_name, 305);
+  FIELD_T (distance_desc, 306);
+  FIELD_BD (offset, 140);
+  AcDbBlockParamValueSet_fields (angle_value_set,96,142,175,410);
+  AcDbBlockParamValueSet_fields (distance_value_set,97,146,176,309);
+  //FIELD_3BD (base_angle_pt, 0);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOLARSTRETCHACTION)
@@ -10338,9 +10366,15 @@ DWG_OBJECT (BLOCKROTATIONGRIP)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONPARAMETER)
-  DECODE_UNKNOWN_BITS
+  AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockRotationParameter)
-
+  FIELD_3BD (def_base_angle_pt, 0);
+  FIELD_T (angle_name, 305);
+  FIELD_T (angle_desc, 306);
+  DXF { FIELD_3BD (def_base_angle_pt, 1011); }
+  FIELD_BD (angle, 140);
+  AcDbBlockParamValueSet_fields (angle_value_set,96,141,175,307);
+  //FIELD_3BD (base_angle_pt, 0);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSCALEACTION)
@@ -10372,10 +10406,23 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   AcDbBlockAction_doubles_fields;
 DWG_OBJECT_END
 
+// not enough coverage
 DWG_OBJECT (BLOCKUSERPARAMETER)
   DECODE_UNKNOWN_BITS
+  AcDbBlock1PtParameter_fields;
   SUBCLASS (AcDbBlockUserParameter)
-
+  FIELD_BS (flag, 90);
+  FIELD_HANDLE (assocvariable, 5, 330);
+  FIELD_T (expr, 301);
+  //FIELD_T (name, 302);
+  //FIELD_T (desc, 303);
+  if (!FIELD_VALUE (value.code))
+    {
+      DXF { VALUE_TFF ("AcDbEvalVariant NULL = -9999", 309); }
+    }
+  else
+    AcDbEvalVariant_fields (value);
+  FIELD_BS (type, 170);
 DWG_OBJECT_END
 
 DWG_ENTITY (VISIBILITYPARAMETERENTITY)

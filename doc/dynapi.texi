@@ -7457,6 +7457,52 @@ BLd,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
+@item parameter_base_location
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
+@item distance_name
+T,	DXF 305
+@item distance_desc
+T,	DXF 306
+@item distance
+BD,	DXF 141
+@item value_set
+Dwg_BLOCKPARAMVALUESET
 
 @end vtable
 @end indentedblock
@@ -7490,10 +7536,18 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item info_code93
+@item numelems
+BL
+@item numrows
+BL,	DXF 92
+@item numcols
 BL,	DXF 93
+@item lut
+Dwg_BLOCKLOOKUPACTION_lut*
+@item exprs
+TV*,	DXF 302
+@item b280
+B,	DXF 280
 
 @end vtable
 @end indentedblock
@@ -7540,6 +7594,36 @@ BLd,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_pt
+3BD,	DXF 1010
+@item num_propinfos
+BL,	DXF 93
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item lookup_name
+T,	DXF 303
+@item lookup_desc
+T,	DXF 304
+@item index
+BL,	DXF 94
+@item unknown_t
+T
 
 @end vtable
 @end indentedblock
@@ -7691,6 +7775,58 @@ BLd,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
+@item parameter_base_location
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
+@item angle_name
+T,	DXF 305
+@item angle_desc
+T,	DXF 306
+@item distance_name
+T,	DXF 305
+@item distance_desc
+T,	DXF 306
+@item offset
+BD,	DXF 140
+@item angle_value_set
+Dwg_BLOCKPARAMVALUESET
+@item distance_value_set
+Dwg_BLOCKPARAMVALUESET
 
 @end vtable
 @end indentedblock
@@ -7963,6 +8099,54 @@ BLd,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
+@item parameter_base_location
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
+@item def_base_angle_pt
+3BD,	DXF 1011
+@item angle_name
+T,	DXF 305
+@item angle_desc
+T,	DXF 306
+@item angle
+BD,	DXF 140
+@item angle_value_set
+Dwg_BLOCKPARAMVALUESET
 
 @end vtable
 @end indentedblock
@@ -8084,6 +8268,38 @@ BD
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_pt
+3BD,	DXF 1010
+@item num_propinfos
+BL,	DXF 93
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item flag
+BS,	DXF 90
+@item assocvariable
+H,	DXF 330
+@item expr
+T,	DXF 301
+@item value
+Dwg_EvalVariant
+@item type
+BS,	DXF 170
 
 @end vtable
 @end indentedblock
@@ -12946,6 +13162,28 @@ BLx
 BL
 @item name
 TV
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BLOCKLOOKUPACTION_lut} @anchor{Dwg_BLOCKLOOKUPACTION_lut}
+@vindex Dwg_BLOCKLOOKUPACTION_lut
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_BLOCKLOOKUPACTION*
+@item conn_pt1
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt2
+Dwg_BLOCKACTION_connectionpts
+@item conn_pt3
+Dwg_BLOCKACTION_connectionpts
+@item b282
+B,	DXF 282
+@item b281
+B,	DXF 281
 
 @end vtable
 @end indentedblock

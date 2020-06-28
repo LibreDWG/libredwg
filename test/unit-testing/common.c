@@ -359,6 +359,9 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
               DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKFLIPPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
               error += test_code (
@@ -370,6 +373,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_EVALUATION_GRAPH ||
               DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT ||
               DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKPOINTPARAMETER ||
               DWG_TYPE == DWG_TYPE_ALDIMOBJECTCONTEXTDATA ||
               DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
             {
@@ -380,9 +384,19 @@ main (int argc, char *argv[])
                   "blocks_and_tables_-_metric.dwg",
                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION)
+          if (DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKLOOKUPPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKXYPARAMETER)
             {
               error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTPARAMETER)
+            {
+              error += test_code (prefix, "2013/flipped.dwg", cov);
+              error += test_code (
+                  prefix,
+                  "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
+                  cov);
             }
         }
 #ifdef DWG_TYPE

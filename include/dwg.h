@@ -7325,16 +7325,33 @@ typedef struct _dwg_object_BLOCKLINEARGRIP
 typedef struct _dwg_object_BLOCKLINEARPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T distance_name;	/*!< DXF 305 */
+  BITCODE_T distance_desc;	/*!< DXF 306 */
+  BITCODE_BD distance;		/*!< DXF 306 */
+  Dwg_BLOCKPARAMVALUESET value_set;
 } Dwg_Object_BLOCKLINEARPARAMETER;
+
+typedef struct _dwg_BLOCKLOOKUPACTION_lut
+{
+  struct _dwg_object_BLOCKLOOKUPACTION *parent;
+  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 94, 303 */
+  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 95, 304 */
+  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 962, 305 */
+  BITCODE_B b282;
+  BITCODE_B b281;
+} Dwg_BLOCKLOOKUPACTION_lut;
 
 typedef struct _dwg_object_BLOCKLOOKUPACTION
 {
   struct _dwg_object_object *parent;
   BLOCKACTION_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
-  BITCODE_BL info_code93;     /*!< DXF 93 */
-  // ??
+  BITCODE_BL numelems; /* computed */
+  BITCODE_BL numrows; /* DXF 92 */
+  BITCODE_BL numcols; /* DXF 93 */
+  Dwg_BLOCKLOOKUPACTION_lut *lut;
+  BITCODE_T *exprs;
+  BITCODE_B b280;
 } Dwg_Object_BLOCKLOOKUPACTION;
 
 typedef struct _dwg_object_BLOCKLOOKUPGRIP
@@ -7346,7 +7363,11 @@ typedef struct _dwg_object_BLOCKLOOKUPGRIP
 typedef struct _dwg_object_BLOCKLOOKUPPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ...
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_T lookup_name;	/*!< DXF 303 */
+  BITCODE_T lookup_desc;	/*!< DXF 304 */
+  BITCODE_BL index;		/*!< DXF 94 ?? */
+  BITCODE_T unknown_t;
 } Dwg_Object_BLOCKLOOKUPPARAMETER;
 
 typedef struct _dwg_object_BLOCKMOVEACTION
@@ -7376,7 +7397,15 @@ typedef struct _dwg_object_BLOCKPOLARGRIP
 typedef struct _dwg_object_BLOCKPOLARPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T  angle_name;	/*!< DXF 305 */
+  BITCODE_T  angle_desc;	/*!< DXF 306 */
+  BITCODE_T  distance_name;	/*!< DXF 305 */
+  BITCODE_T  distance_desc;	/*!< DXF 306 */
+  BITCODE_BD  offset;		/*!< DXF 140 */
+  Dwg_BLOCKPARAMVALUESET angle_value_set;
+  Dwg_BLOCKPARAMVALUESET distance_value_set;
+  //BITCODE_3BD base_angle_pt;
 } Dwg_Object_BLOCKPOLARPARAMETER;
 
 typedef struct _dwg_object_BLOCKPOLARSTRETCHACTION
@@ -7433,7 +7462,13 @@ typedef struct _dwg_object_BLOCKROTATIONGRIP
 typedef struct _dwg_object_BLOCKROTATIONPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_3BD def_base_angle_pt;
+  BITCODE_T angle_name;	/*!< DXF 305 */
+  BITCODE_T angle_desc;	/*!< DXF 306 */
+  BITCODE_BD angle;		/*!< DXF 306 */
+  Dwg_BLOCKPARAMVALUESET angle_value_set;
+  //BITCODE_3BD base_angle_pt;
 } Dwg_Object_BLOCKROTATIONPARAMETER;
 
 typedef struct _dwg_object_BLOCKSCALEACTION
@@ -7465,7 +7500,12 @@ typedef struct _dwg_object_BLOCKSTRETCHACTION
 typedef struct _dwg_object_BLOCKUSERPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_BS flag;		/*!< DXF 90 */
+  BITCODE_H assocvariable;	/*!< DXF 305 */
+  BITCODE_T expr;		/*!< DXF 301 */
+  Dwg_EvalVariant value;
+  BITCODE_BS type;		/*!< DXF 170 (already value.code)? */
 } Dwg_Object_BLOCKUSERPARAMETER;
 
 typedef struct _dwg_object_BLOCKXYGRIP

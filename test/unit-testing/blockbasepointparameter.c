@@ -25,9 +25,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKBASEPOINTPARAMETER, show_properties, B);
   CHK_ENTITY_TYPE (_obj, BLOCKBASEPOINTPARAMETER, chain_actions, B);
   // AcDbBlock1PtParameter
-  CHK_ENTITY_3RD (_obj, BLOCKVISIBILITYPARAMETER, def_pt);
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, num_propinfos, BL);
-  CHK_ENTITY_MAX (_obj, BLOCKVISIBILITYPARAMETER, num_propinfos, BL, 2);
+  CHK_ENTITY_3RD  (_obj, BLOCKBASEPOINTPARAMETER, def_pt);
+  CHK_ENTITY_TYPE (_obj, BLOCKBASEPOINTPARAMETER, num_propinfos, BL);
+  CHK_ENTITY_MAX  (_obj, BLOCKBASEPOINTPARAMETER, num_propinfos, BL, 2);
   BLOCKPARAMETER_PropInfo (prop1)
   BLOCKPARAMETER_PropInfo (prop2)
   // AcDbBlockBasepointParameter

@@ -8,7 +8,12 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BL i;
   BLOCKACTION_fields;
-  BITCODE_BL info_code93;
+  BITCODE_BL numelems; /* computed */
+  BITCODE_BL numrows; /* DXF 92 */
+  BITCODE_BL numcols; /* DXF 93 */
+  Dwg_BLOCKLOOKUPACTION_lut *lut;
+  BITCODE_T *exprs;
+  BITCODE_B b280;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -21,9 +26,19 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, num_deps, BL);
   CHK_ENTITY_HV (_obj, BLOCKLOOKUPACTION, deps, num_deps);
   // AcDbBlockLookupAction
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt1, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt1, BLOCKACTION_connectionpts, name);
-  CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, info_code93, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, numrows, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, numcols, BL);
+  for (i = 0; i < numrows * numcols; i++) {
+    CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pt1, BLOCKACTION_connectionpts, code, BL);
+    CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pt1, BLOCKACTION_connectionpts, name);
+    CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pt2, BLOCKACTION_connectionpts, code, BL);
+    CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pt2, BLOCKACTION_connectionpts, name);
+    CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pt3, BLOCKACTION_connectionpts, code, BL);
+    CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pt3, BLOCKACTION_connectionpts, name);
+    CHK_SUBCLASS_TYPE     (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b282, BL);
+    CHK_SUBCLASS_TYPE     (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b281, BL);
+  }
+  CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, b280, B);
   // ..
 #endif
 }
