@@ -10179,6 +10179,11 @@ DWG_OBJECT (BLOCKFLIPGRIP)
   DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockFlipGrip)
+  FIELD_BL (combined_state, 0);
+  FIELD_3BD_1 (orientation, 140);
+  DXF { FIELD_BL (combined_state, 140); }
+  FIELD_BS (upd_state, 0);
+  FIELD_BS (state, 0);
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPPARAMETER)

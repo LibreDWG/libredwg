@@ -7014,6 +7014,7 @@ typedef struct _dwg_object_CSACDOCUMENTOPTIONS
   BITCODE_BD angle_offset
 
 #define BLOCKGRIP_fields                        \
+  BLOCKELEMENT_fields;                          \
   BITCODE_BL bg_version;                        \
   BITCODE_BL bg_bl92;                           \
   BITCODE_3BD bg_location;                      \
@@ -7121,7 +7122,6 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
 typedef struct _dwg_object_BLOCKVISIBILITYGRIP
 {
   struct _dwg_object_object *parent;
-  BLOCKELEMENT_fields; // FIXME: make it a struct
   BLOCKGRIP_fields;
   // AcDbBlockVisibilityGrip
 } Dwg_Object_BLOCKVISIBILITYGRIP;
@@ -7272,7 +7272,10 @@ typedef struct _dwg_object_BLOCKFLIPGRIP
 {
   struct _dwg_object_object *parent;
   BLOCKGRIP_fields;
-  // ??
+  BITCODE_BL combined_state;
+  BITCODE_3BD orientation;
+  BITCODE_BS upd_state;
+  BITCODE_BS state;
 } Dwg_Object_BLOCKFLIPGRIP;
 
 typedef struct _dwg_object_BLOCKFLIPPARAMETER
@@ -7316,7 +7319,7 @@ typedef struct _dwg_object_BLOCKLINEARGRIP
 {
   struct _dwg_object_object *parent;
   BLOCKGRIP_fields;
-  BITCODE_3BD orientation;
+  BITCODE_3BD orientation; /* DXF 140,141,142 */
 } Dwg_Object_BLOCKLINEARGRIP;
 
 typedef struct _dwg_object_BLOCKLINEARPARAMETER
@@ -7338,7 +7341,6 @@ typedef struct _dwg_object_BLOCKLOOKUPGRIP
 {
   struct _dwg_object_object *parent;
   BLOCKGRIP_fields;
-  // ??
 } Dwg_Object_BLOCKLOOKUPGRIP;
 
 typedef struct _dwg_object_BLOCKLOOKUPPARAMETER
@@ -7369,7 +7371,6 @@ typedef struct _dwg_object_BLOCKPOLARGRIP
 {
   struct _dwg_object_object *parent;
   BLOCKGRIP_fields;
-  // ??
 } Dwg_Object_BLOCKPOLARGRIP;
 
 typedef struct _dwg_object_BLOCKPOLARPARAMETER
@@ -7408,7 +7409,6 @@ typedef struct _dwg_object_BLOCKPROPERTIESTABLEGRIP
 {
   struct _dwg_object_object *parent;
   BLOCKGRIP_fields;
-  // ??
 } Dwg_Object_BLOCKPROPERTIESTABLEGRIP;
 
 typedef struct _dwg_object_BLOCKREPRESENTATION
@@ -7428,7 +7428,6 @@ typedef struct _dwg_object_BLOCKROTATIONGRIP
 {
   struct _dwg_object_object *parent;
   BLOCKGRIP_fields;
-  // ??
 } Dwg_Object_BLOCKROTATIONGRIP;
 
 typedef struct _dwg_object_BLOCKROTATIONPARAMETER
@@ -7473,7 +7472,6 @@ typedef struct _dwg_object_BLOCKXYGRIP
 {
   struct _dwg_object_object *parent;
   BLOCKGRIP_fields;
-  // ??
 } Dwg_Object_BLOCKXYGRIP;
 
 typedef struct _dwg_object_BLOCKXYPARAMETER

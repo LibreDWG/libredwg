@@ -6,7 +6,6 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BLOCKELEMENT_fields;
   BLOCKGRIP_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -24,5 +23,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD  (_obj, BLOCKVISIBILITYGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling, B);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling_weight, BLd);
-  // AcDbBlockVisibilityGrip
 }

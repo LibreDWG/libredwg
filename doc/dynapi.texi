@@ -6826,6 +6826,16 @@ Dwg_BLOCKPARAMVALUESET
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7165,6 +7175,16 @@ BD
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7175,6 +7195,14 @@ BL,	DXF 92
 B,	DXF 280
 @item bg_insert_cycling_weight
 BLd,	DXF 93
+@item combined_state
+BL,	DXF 140
+@item orientation
+3BD_1,	DXF 140
+@item upd_state
+BS
+@item state
+BS
 
 @end vtable
 @end indentedblock
@@ -7394,6 +7422,16 @@ Dwg_BLOCKPARAMVALUESET
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7469,6 +7507,16 @@ BL,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7610,6 +7658,16 @@ T,	DXF 304
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7718,6 +7776,16 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7862,6 +7930,16 @@ Dwg_BLOCKACTION_connectionpts
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -8168,6 +8246,16 @@ BL
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+TV
+@item be_major
+BL
+@item be_minor
+BL
+@item eed1071
+BL
 @item bg_version
 BL,	DXF 91
 @item bg_bl92

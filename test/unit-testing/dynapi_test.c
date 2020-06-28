@@ -34761,6 +34761,36 @@ static int test_BLOCKALIGNMENTGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKALIGNMENTGRIP *restrict blockalignmentgrip = obj->tio.object->tio.BLOCKALIGNMENTGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "be_major", &be_major, NULL)
+        && be_major == blockalignmentgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.be_major [BL] %u != %u", blockalignmentgrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "be_major", &be_major, 0)
+        && be_major == blockalignmentgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.be_major [BL] set+1 %u != %u", blockalignmentgrip->be_major, be_major);
+    blockalignmentgrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blockalignmentgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.be_minor [BL] %u != %u", blockalignmentgrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blockalignmentgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.be_minor [BL] set+1 %u != %u", blockalignmentgrip->be_minor, be_minor);
+    blockalignmentgrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blockalignmentgrip->bg_bl92)
@@ -34826,6 +34856,39 @@ static int test_BLOCKALIGNMENTGRIP (const Dwg_Object *obj)
     else
       fail ("BLOCKALIGNMENTGRIP.bg_version [BL] set+1 %u != %u", blockalignmentgrip->bg_version, bg_version);
     blockalignmentgrip->bg_version--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blockalignmentgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.eed1071 [BL] %u != %u", blockalignmentgrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blockalignmentgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.eed1071 [BL] set+1 %u != %u", blockalignmentgrip->eed1071, eed1071);
+    blockalignmentgrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockalignmentgrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKALIGNMENTGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockalignmentgrip->name)
+           : !blockalignmentgrip->name)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.name [TV] '%s' <> '%s'", name, blockalignmentgrip->name);
   }
   {
     BITCODE_3BD orientation;
@@ -36329,6 +36392,36 @@ static int test_BLOCKFLIPGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKFLIPGRIP *restrict blockflipgrip = obj->tio.object->tio.BLOCKFLIPGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "be_major", &be_major, NULL)
+        && be_major == blockflipgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.be_major [BL] %u != %u", blockflipgrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "be_major", &be_major, 0)
+        && be_major == blockflipgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.be_major [BL] set+1 %u != %u", blockflipgrip->be_major, be_major);
+    blockflipgrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blockflipgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.be_minor [BL] %u != %u", blockflipgrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blockflipgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.be_minor [BL] set+1 %u != %u", blockflipgrip->be_minor, be_minor);
+    blockflipgrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blockflipgrip->bg_bl92)
@@ -36396,12 +36489,98 @@ static int test_BLOCKFLIPGRIP (const Dwg_Object *obj)
     blockflipgrip->bg_version--;
   }
   {
+    BITCODE_BL combined_state;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "combined_state", &combined_state, NULL)
+        && combined_state == blockflipgrip->combined_state)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.combined_state [BL] %u != %u", blockflipgrip->combined_state, combined_state);
+    combined_state++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "combined_state", &combined_state, 0)
+        && combined_state == blockflipgrip->combined_state)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.combined_state [BL] set+1 %u != %u", blockflipgrip->combined_state, combined_state);
+    blockflipgrip->combined_state--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blockflipgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.eed1071 [BL] %u != %u", blockflipgrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blockflipgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.eed1071 [BL] set+1 %u != %u", blockflipgrip->eed1071, eed1071);
+    blockflipgrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockflipgrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKFLIPGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockflipgrip->name)
+           : !blockflipgrip->name)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.name [TV] '%s' <> '%s'", name, blockflipgrip->name);
+  }
+  {
+    BITCODE_3BD orientation;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "orientation", &orientation, NULL)
+        && !memcmp (&orientation, &blockflipgrip->orientation, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("BLOCKFLIPGRIP.orientation [3BD_1]");
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "parent", &parent, NULL)
         && !memcmp (&parent, &blockflipgrip->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
         fail ("BLOCKFLIPGRIP.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BS state;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "state", &state, NULL)
+        && state == blockflipgrip->state)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.state [BS] %hu != %hu", blockflipgrip->state, state);
+    state++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "state", &state, 0)
+        && state == blockflipgrip->state)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.state [BS] set+1 %hu != %hu", blockflipgrip->state, state);
+    blockflipgrip->state--;
+  }
+  {
+    BITCODE_BS upd_state;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "upd_state", &upd_state, NULL)
+        && upd_state == blockflipgrip->upd_state)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.upd_state [BS] %hu != %hu", blockflipgrip->upd_state, upd_state);
+    upd_state++;
+    if (dwg_dynapi_entity_set_value (blockflipgrip, "BLOCKFLIPGRIP", "upd_state", &upd_state, 0)
+        && upd_state == blockflipgrip->upd_state)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.upd_state [BS] set+1 %hu != %hu", blockflipgrip->upd_state, upd_state);
+    blockflipgrip->upd_state--;
   }
   if (failed && (is_class_unstable ("BLOCKFLIPGRIP") || is_class_debugging ("BLOCKFLIPGRIP")))
     {
@@ -37343,6 +37522,36 @@ static int test_BLOCKLINEARGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKLINEARGRIP *restrict blocklineargrip = obj->tio.object->tio.BLOCKLINEARGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "be_major", &be_major, NULL)
+        && be_major == blocklineargrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.be_major [BL] %u != %u", blocklineargrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "be_major", &be_major, 0)
+        && be_major == blocklineargrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.be_major [BL] set+1 %u != %u", blocklineargrip->be_major, be_major);
+    blocklineargrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blocklineargrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.be_minor [BL] %u != %u", blocklineargrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blocklineargrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.be_minor [BL] set+1 %u != %u", blocklineargrip->be_minor, be_minor);
+    blocklineargrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blocklineargrip->bg_bl92)
@@ -37408,6 +37617,39 @@ static int test_BLOCKLINEARGRIP (const Dwg_Object *obj)
     else
       fail ("BLOCKLINEARGRIP.bg_version [BL] set+1 %u != %u", blocklineargrip->bg_version, bg_version);
     blocklineargrip->bg_version--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blocklineargrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.eed1071 [BL] %u != %u", blocklineargrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blocklineargrip, "BLOCKLINEARGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blocklineargrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.eed1071 [BL] set+1 %u != %u", blocklineargrip->eed1071, eed1071);
+    blocklineargrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blocklineargrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKLINEARGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blocklineargrip->name)
+           : !blocklineargrip->name)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.name [TV] '%s' <> '%s'", name, blocklineargrip->name);
   }
   {
     BITCODE_3BD orientation;
@@ -37635,6 +37877,36 @@ static int test_BLOCKLOOKUPGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKLOOKUPGRIP *restrict blocklookupgrip = obj->tio.object->tio.BLOCKLOOKUPGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "be_major", &be_major, NULL)
+        && be_major == blocklookupgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.be_major [BL] %u != %u", blocklookupgrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "be_major", &be_major, 0)
+        && be_major == blocklookupgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.be_major [BL] set+1 %u != %u", blocklookupgrip->be_major, be_major);
+    blocklookupgrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blocklookupgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.be_minor [BL] %u != %u", blocklookupgrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blocklookupgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.be_minor [BL] set+1 %u != %u", blocklookupgrip->be_minor, be_minor);
+    blocklookupgrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blocklookupgrip->bg_bl92)
@@ -37700,6 +37972,39 @@ static int test_BLOCKLOOKUPGRIP (const Dwg_Object *obj)
     else
       fail ("BLOCKLOOKUPGRIP.bg_version [BL] set+1 %u != %u", blocklookupgrip->bg_version, bg_version);
     blocklookupgrip->bg_version--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blocklookupgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.eed1071 [BL] %u != %u", blocklookupgrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blocklookupgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.eed1071 [BL] set+1 %u != %u", blocklookupgrip->eed1071, eed1071);
+    blocklookupgrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blocklookupgrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKLOOKUPGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blocklookupgrip->name)
+           : !blocklookupgrip->name)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.name [TV] '%s' <> '%s'", name, blocklookupgrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -38224,6 +38529,36 @@ static int test_BLOCKPOLARGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKPOLARGRIP *restrict blockpolargrip = obj->tio.object->tio.BLOCKPOLARGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "be_major", &be_major, NULL)
+        && be_major == blockpolargrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.be_major [BL] %u != %u", blockpolargrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "be_major", &be_major, 0)
+        && be_major == blockpolargrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.be_major [BL] set+1 %u != %u", blockpolargrip->be_major, be_major);
+    blockpolargrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blockpolargrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.be_minor [BL] %u != %u", blockpolargrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blockpolargrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.be_minor [BL] set+1 %u != %u", blockpolargrip->be_minor, be_minor);
+    blockpolargrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blockpolargrip->bg_bl92)
@@ -38289,6 +38624,39 @@ static int test_BLOCKPOLARGRIP (const Dwg_Object *obj)
     else
       fail ("BLOCKPOLARGRIP.bg_version [BL] set+1 %u != %u", blockpolargrip->bg_version, bg_version);
     blockpolargrip->bg_version--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blockpolargrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.eed1071 [BL] %u != %u", blockpolargrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockpolargrip, "BLOCKPOLARGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blockpolargrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.eed1071 [BL] set+1 %u != %u", blockpolargrip->eed1071, eed1071);
+    blockpolargrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockpolargrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKPOLARGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockpolargrip->name)
+           : !blockpolargrip->name)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.name [TV] '%s' <> '%s'", name, blockpolargrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -38639,6 +39007,36 @@ static int test_BLOCKPROPERTIESTABLEGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKPROPERTIESTABLEGRIP *restrict blockpropertiestablegrip = obj->tio.object->tio.BLOCKPROPERTIESTABLEGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "be_major", &be_major, NULL)
+        && be_major == blockpropertiestablegrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.be_major [BL] %u != %u", blockpropertiestablegrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "be_major", &be_major, 0)
+        && be_major == blockpropertiestablegrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.be_major [BL] set+1 %u != %u", blockpropertiestablegrip->be_major, be_major);
+    blockpropertiestablegrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blockpropertiestablegrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.be_minor [BL] %u != %u", blockpropertiestablegrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blockpropertiestablegrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.be_minor [BL] set+1 %u != %u", blockpropertiestablegrip->be_minor, be_minor);
+    blockpropertiestablegrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blockpropertiestablegrip->bg_bl92)
@@ -38704,6 +39102,39 @@ static int test_BLOCKPROPERTIESTABLEGRIP (const Dwg_Object *obj)
     else
       fail ("BLOCKPROPERTIESTABLEGRIP.bg_version [BL] set+1 %u != %u", blockpropertiestablegrip->bg_version, bg_version);
     blockpropertiestablegrip->bg_version--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blockpropertiestablegrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.eed1071 [BL] %u != %u", blockpropertiestablegrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blockpropertiestablegrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.eed1071 [BL] set+1 %u != %u", blockpropertiestablegrip->eed1071, eed1071);
+    blockpropertiestablegrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockpropertiestablegrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKPROPERTIESTABLEGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockpropertiestablegrip->name)
+           : !blockpropertiestablegrip->name)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.name [TV] '%s' <> '%s'", name, blockpropertiestablegrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -39243,6 +39674,36 @@ static int test_BLOCKROTATIONGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKROTATIONGRIP *restrict blockrotationgrip = obj->tio.object->tio.BLOCKROTATIONGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "be_major", &be_major, NULL)
+        && be_major == blockrotationgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.be_major [BL] %u != %u", blockrotationgrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "be_major", &be_major, 0)
+        && be_major == blockrotationgrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.be_major [BL] set+1 %u != %u", blockrotationgrip->be_major, be_major);
+    blockrotationgrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blockrotationgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.be_minor [BL] %u != %u", blockrotationgrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blockrotationgrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.be_minor [BL] set+1 %u != %u", blockrotationgrip->be_minor, be_minor);
+    blockrotationgrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blockrotationgrip->bg_bl92)
@@ -39308,6 +39769,39 @@ static int test_BLOCKROTATIONGRIP (const Dwg_Object *obj)
     else
       fail ("BLOCKROTATIONGRIP.bg_version [BL] set+1 %u != %u", blockrotationgrip->bg_version, bg_version);
     blockrotationgrip->bg_version--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blockrotationgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.eed1071 [BL] %u != %u", blockrotationgrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockrotationgrip, "BLOCKROTATIONGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blockrotationgrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.eed1071 [BL] set+1 %u != %u", blockrotationgrip->eed1071, eed1071);
+    blockrotationgrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockrotationgrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKROTATIONGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockrotationgrip->name)
+           : !blockrotationgrip->name)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.name [TV] '%s' <> '%s'", name, blockrotationgrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -40631,6 +41125,36 @@ static int test_BLOCKXYGRIP (const Dwg_Object *obj)
   Dwg_Object_BLOCKXYGRIP *restrict blockxygrip = obj->tio.object->tio.BLOCKXYGRIP;
   failed = 0;
   {
+    BITCODE_BL be_major;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "be_major", &be_major, NULL)
+        && be_major == blockxygrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.be_major [BL] %u != %u", blockxygrip->be_major, be_major);
+    be_major++;
+    if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "be_major", &be_major, 0)
+        && be_major == blockxygrip->be_major)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.be_major [BL] set+1 %u != %u", blockxygrip->be_major, be_major);
+    blockxygrip->be_major--;
+  }
+  {
+    BITCODE_BL be_minor;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "be_minor", &be_minor, NULL)
+        && be_minor == blockxygrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.be_minor [BL] %u != %u", blockxygrip->be_minor, be_minor);
+    be_minor++;
+    if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "be_minor", &be_minor, 0)
+        && be_minor == blockxygrip->be_minor)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.be_minor [BL] set+1 %u != %u", blockxygrip->be_minor, be_minor);
+    blockxygrip->be_minor--;
+  }
+  {
     BITCODE_BL bg_bl92;
     if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "bg_bl92", &bg_bl92, NULL)
         && bg_bl92 == blockxygrip->bg_bl92)
@@ -40696,6 +41220,39 @@ static int test_BLOCKXYGRIP (const Dwg_Object *obj)
     else
       fail ("BLOCKXYGRIP.bg_version [BL] set+1 %u != %u", blockxygrip->bg_version, bg_version);
     blockxygrip->bg_version--;
+  }
+  {
+    BITCODE_BL eed1071;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "eed1071", &eed1071, NULL)
+        && eed1071 == blockxygrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.eed1071 [BL] %u != %u", blockxygrip->eed1071, eed1071);
+    eed1071++;
+    if (dwg_dynapi_entity_set_value (blockxygrip, "BLOCKXYGRIP", "eed1071", &eed1071, 0)
+        && eed1071 == blockxygrip->eed1071)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.eed1071 [BL] set+1 %u != %u", blockxygrip->eed1071, eed1071);
+    blockxygrip->eed1071--;
+  }
+  {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &blockxygrip->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("BLOCKXYGRIP.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_TV name;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)blockxygrip->name)
+           : !blockxygrip->name)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.name [TV] '%s' <> '%s'", name, blockxygrip->name);
   }
   {
     struct _dwg_object_object* parent;

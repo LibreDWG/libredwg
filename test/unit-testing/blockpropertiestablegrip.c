@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// TODO coverage
 #define DWG_TYPE DWG_TYPE_BLOCKPROPERTIESTABLEGRIP
 #include "common.c"
 
@@ -12,5 +12,17 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_blockpropertiestablegrip *_obj = dwg_object_to_BLOCKPROPERTIESTABLEGRIP (obj);
 
+  CHK_EVALEXPR (BLOCKPROPERTIESTABLEGRIP);
+  // AcDbBlockElement
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKPROPERTIESTABLEGRIP, name);
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, be_major, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, be_minor, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, eed1071, BL);
+  // AcDbBlockGrip
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_version, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_bl92, BL);
+  CHK_ENTITY_3RD  (_obj, BLOCKPROPERTIESTABLEGRIP, bg_location);
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling, B);
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling_weight, BLd);
 #endif
 }
