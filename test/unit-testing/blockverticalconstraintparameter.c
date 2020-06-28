@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BITCODE_BL i;
-  Dwg_BLOCKPARAMETER_propinfo *props;
+  Dwg_BLOCKPARAMETER_PropInfo *props;
   BLOCKLINEARCONSTRAINTPARAMETER_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -26,24 +26,16 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, def_endpt);
-  CHK_ENTITY_TYPE (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, num_infos, BL);
-  if (!dwg_dynapi_entity_value (_obj, "BLOCKVERTICALCONSTRAINTPARAMETER", "infos", &infos, NULL))
-    fail ("BLOCKVERTICALCONSTRAINTPARAMETER.infos");
-  else
-    for (i = 0; i < num_infos; i++)
-      {
-        CHK_SUBCLASS_TYPE (_obj->infos[i], BLOCKPARAMETER_info, num_props, BL);
-        if (!dwg_dynapi_subclass_value (&_obj->infos[i], "BLOCKPARAMETER_info", "props", &props, NULL))
-          fail ("BLOCKPARAMETER_info.props");
-        else
-          for (unsigned j = 0; j < _obj->infos[i].num_props; j++)
-            {
-              CHK_SUBCLASS_TYPE (props[j], "BLOCKPARAMETER_propinfo", propnum, BL);
-              CHK_SUBCLASS_UTF8TEXT (props[j], "BLOCKPARAMETER_propinfo", proptext);
-            }
-      }
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, bl_infos, num_infos, BL);
+  BLOCKPARAMETER_PropInfo (prop1)
+  BLOCKPARAMETER_PropInfo (prop2)
+  BLOCKPARAMETER_PropInfo (prop3)
+  BLOCKPARAMETER_PropInfo (prop4)
+  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, prop_states, 4, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, parameter_base_location, BS);
+  CHK_ENTITY_3RD  (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, upd_basept);
+  CHK_ENTITY_3RD  (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, basept);
+  CHK_ENTITY_3RD  (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, upd_endpt);
+  CHK_ENTITY_3RD  (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, endpt);
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKVERTICALCONSTRAINTPARAMETER, dependency);
   // AcDbBlockLinearConstraintParameter

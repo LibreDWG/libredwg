@@ -7109,7 +7109,7 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   BITCODE_B is_initialized;	// DXF 281
   BITCODE_B unknown_bool; 	// DXF 91, history_compression, history_required or is_visible?
   BITCODE_T blockvisi_name;   	// DXF 301
-  BITCODE_T blockvisi_description;	// DXF 302
+  BITCODE_T blockvisi_desc;	// DXF 302
   BITCODE_BL num_blocks;	// DXF 93
   BITCODE_H *blocks;		// DXF 331
   BITCODE_BL num_states;	// DXF 92
@@ -7479,7 +7479,15 @@ typedef struct _dwg_object_BLOCKXYGRIP
 typedef struct _dwg_object_BLOCKXYPARAMETER
 {
   struct _dwg_object_object *parent;
-  // ??
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T x_label;		// DXF 305
+  BITCODE_T x_label_desc;	// DXF 306
+  BITCODE_T y_label;		// DXF 307
+  BITCODE_T y_label_desc;	// DXF 308
+  BITCODE_BD x_value;		// DXF 141
+  BITCODE_BD y_value;		// DXF 142
+  Dwg_BLOCKPARAMVALUESET x_value_set;
+  Dwg_BLOCKPARAMVALUESET y_value_set;
 } Dwg_Object_BLOCKXYPARAMETER;
 
 typedef struct _dwg_object_DYNAMICBLOCKPROXYNODE

@@ -1535,6 +1535,22 @@ api_common_object (dwg_object *obj)
     }                                                                         \
   }
 
+#define BLOCKPARAMETER_PropInfo(_prop)                                  \
+  {                                                                     \
+    Dwg_BLOCKPARAMETER_connection *connections;                         \
+    CHK_SUBCLASS_TYPE (_obj->_prop, BLOCKPARAMETER_PropInfo, num_connections, BL); \
+    if (!dwg_dynapi_subclass_value (&_obj->_prop, "BLOCKPARAMETER_PropInfo", \
+                                    "connections", &connections, NULL)) \
+      fail ("BLOCKPARAMETER." #_prop ".connections");                   \
+    else                                                                \
+      for (i = 0; i < _obj->_prop.num_connections; i++)                 \
+        {                                                               \
+          CHK_SUBCLASS_TYPE (_obj->_prop.connections[i], BLOCKPARAMETER_connection, code, BL); \
+          CHK_SUBCLASS_UTF8TEXT (_obj->_prop.connections[i], BLOCKPARAMETER_connection, name); \
+        }                                                               \
+  }
+
+
 // allow old deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
 GCC46_DIAG_IGNORE (-Wdeprecated-declarations)

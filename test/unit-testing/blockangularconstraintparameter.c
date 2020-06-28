@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error, isnew;
   BLOCKCONSTRAINTPARAMETER_fields;
   BITCODE_BL i;
-  Dwg_BLOCKPARAMETER_propinfo *props;
+  Dwg_BLOCKPARAMETER_PropInfo *props;
   BITCODE_3BD center_pt;
   BITCODE_3BD end_pt;
   BITCODE_T expr_name;
@@ -32,26 +32,16 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, def_endpt);
-  CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, num_infos, BL);
-  if (!dwg_dynapi_entity_value (_obj, "BLOCKANGULARCONSTRAINTPARAMETER", "infos",
-                                &infos, NULL))
-    fail ("BLOCKANGULARCONSTRAINTPARAMETER.infos");
-  else
-    for (i = 0; i < num_infos; i++)
-      {  
-        CHK_SUBCLASS_TYPE (_obj->infos[i], BLOCKPARAMETER_info, num_props, BL);
-        if (!dwg_dynapi_subclass_value (&_obj->infos[i], "BLOCKPARAMETER_info", "props",
-                                        &props, NULL))
-          fail ("BLOCKPARAMETER_info.props");
-        else
-          for (unsigned j = 0; j < _obj->infos[i].num_props; j++)
-            {
-              CHK_SUBCLASS_TYPE (props[j], "BLOCKPARAMETER_propinfo", propnum, BL);
-              CHK_SUBCLASS_UTF8TEXT (props[j], "BLOCKPARAMETER_propinfo", proptext);
-            }
-      }
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, bl_infos, num_infos, BL);
+  BLOCKPARAMETER_PropInfo (prop1)
+  BLOCKPARAMETER_PropInfo (prop2)
+  BLOCKPARAMETER_PropInfo (prop3)
+  BLOCKPARAMETER_PropInfo (prop4)
+  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, prop_states, 4, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, parameter_base_location, BS);
+  CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, upd_basept);
+  CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, basept);
+  CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, upd_endpt);
+  CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, endpt);
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKANGULARCONSTRAINTPARAMETER, dependency);
   // AcDbBlockAngularConstraintParameter

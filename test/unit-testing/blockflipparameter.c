@@ -7,7 +7,6 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BLOCK2PTPARAMETER_fields;
-  Dwg_BLOCKPARAMETER_propinfo *props;
   BITCODE_T flip_label;
   BITCODE_T flip_label_desc;
   BITCODE_T base_state_label;
@@ -32,26 +31,16 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKFLIPPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKFLIPPARAMETER, def_endpt);
-  CHK_ENTITY_TYPE (_obj, BLOCKFLIPPARAMETER, num_infos, BL);
-  if (!dwg_dynapi_entity_value (_obj, "BLOCKFLIPPARAMETER", "infos",
-                                &infos, NULL))
-    fail ("BLOCKFLIPPARAMETER.infos");
-  else
-    for (i = 0; i < num_infos; i++)
-      {
-        CHK_SUBCLASS_TYPE (_obj->infos[i], BLOCKPARAMETER_info, num_props, BL);
-        if (!dwg_dynapi_subclass_value (&_obj->infos[i], "BLOCKPARAMETER_info", "props",
-                                        &props, NULL))
-          fail ("BLOCKPARAMETER_info.props");
-        else
-          for (unsigned j = 0; j < _obj->infos[i].num_props; j++)
-            {
-              CHK_SUBCLASS_TYPE (props[j], "BLOCKPARAMETER_propinfo", propnum, BL);
-              CHK_SUBCLASS_UTF8TEXT (props[j], "BLOCKPARAMETER_propinfo", proptext);
-            }
-      }
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKFLIPPARAMETER, bl_infos, num_infos, BL);
+  BLOCKPARAMETER_PropInfo (prop1)
+  BLOCKPARAMETER_PropInfo (prop2)
+  BLOCKPARAMETER_PropInfo (prop3)
+  BLOCKPARAMETER_PropInfo (prop4)
+  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKFLIPPARAMETER, prop_states, 4, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPPARAMETER, parameter_base_location, BS);
+  CHK_ENTITY_3RD  (_obj, BLOCKFLIPPARAMETER, upd_basept);
+  CHK_ENTITY_3RD  (_obj, BLOCKFLIPPARAMETER, basept);
+  CHK_ENTITY_3RD  (_obj, BLOCKFLIPPARAMETER, upd_endpt);
+  CHK_ENTITY_3RD  (_obj, BLOCKFLIPPARAMETER, endpt);
 
   // AcDbBlockFlipParameter
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKFLIPPARAMETER, flip_label);

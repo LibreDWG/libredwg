@@ -8139,9 +8139,9 @@ Dwg_BLOCKPARAMETER_PropInfo
 B,	DXF 281
 @item unknown_bool
 B,	DXF 91
-@item visi_name
+@item blockvisi_name
 T,	DXF 301
-@item visi_description
+@item blockvisi_desc
 T,	DXF 302
 @item num_blocks
 BL,	DXF 93
@@ -8191,6 +8191,60 @@ BLd,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_basept
+3BD,	DXF 1010
+@item def_endpt
+3BD,	DXF 1011
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
+@item parameter_base_location
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
+@item x_label
+T,	DXF 305
+@item x_label_desc
+T,	DXF 306
+@item y_label
+T,	DXF 307
+@item y_label_desc
+T,	DXF 308
+@item x_value
+BD,	DXF 142
+@item y_value
+BD,	DXF 141
+@item x_value_set
+Dwg_BLOCKPARAMVALUESET
+@item y_value_set
+Dwg_BLOCKPARAMVALUESET
 
 @end vtable
 @end indentedblock
@@ -12832,13 +12886,13 @@ TV
 struct _dwg_object_BLOCKVISIBILITYPARAMETER*
 @item name
 T,	DXF 301
-@item num_h1
+@item num_blocks
 BL,	DXF 94
-@item h1
+@item blocks
 H*,	DXF 332
-@item num_h2
+@item num_params
 BL,	DXF 95
-@item h2
+@item params
 H*,	DXF 333
 
 @end vtable

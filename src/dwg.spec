@@ -10053,8 +10053,8 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   AcDbBlock1PtParameter_fields;
   SUBCLASS (AcDbBlockVisibilityParameter)
   FIELD_B (is_initialized, 281);
-  FIELD_T (visi_name, 301);
-  FIELD_T (visi_description, 302);
+  FIELD_T (blockvisi_name, 301);
+  FIELD_T (blockvisi_desc, 302);
   FIELD_B (unknown_bool, 91);
   FIELD_BL (num_blocks, 93);
   HANDLE_VECTOR (blocks, num_blocks, 5, 331);
@@ -10391,8 +10391,21 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKXYPARAMETER)
   DECODE_UNKNOWN_BITS
+  AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockXYParameter)
-
+  FIELD_T (x_label, 305);
+  FIELD_T (x_label_desc, 306);
+  FIELD_T (y_label, 307);
+  FIELD_T (y_label_desc, 308);
+  FIELD_BD (x_value, 142);
+  FIELD_BD (y_value, 141);
+  DXF {
+    AcDbBlockParamValueSet_fields (y_value_set,97,146,176,309);
+    AcDbBlockParamValueSet_fields (x_value_set,96,142,175,410);
+  } else {
+    AcDbBlockParamValueSet_fields (x_value_set,96,142,175,410);
+    AcDbBlockParamValueSet_fields (y_value_set,97,146,176,309);
+  }
 DWG_OBJECT_END
 
 DWG_ENTITY (XYPARAMETERENTITY)
