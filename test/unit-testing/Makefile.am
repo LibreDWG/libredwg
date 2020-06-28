@@ -372,7 +372,7 @@ TESTS_ENVIRONMENT = \
   ASAN_OPTIONS="detect_leaks=0"
 
 check-minimal: $(check_minimal)
-	$(MAKE) check TESTS='$(check_minimal)"
+	$(MAKE) check TESTS="$(check_minimal)"
 check-debug: $(testdebug)
 	$(MAKE) check TESTS="$(testdebug)"
 
