@@ -6033,14 +6033,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKALIGNEDCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, endpt),
+    1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
   { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, expr_name),
@@ -6093,14 +6105,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKALIGNMENTPARAMETER_fields[] = {
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, endpt),
+    1,0,0, 0 },
   { "align_perpendicular",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, align_perpendicular),
     0,0,0, 280 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
@@ -6127,14 +6151,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKANGULARCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, endpt),
+    1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
   { "center_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, center_pt),
@@ -6209,18 +6245,14 @@ static const Dwg_DYNAPI_field _dwg_BLOCKBASEPOINTPARAMETER_fields[] = {
     0,0,0, 280 },
   { "chain_actions",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, chain_actions),
     0,0,0, 281 },
-  { "def_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, def_basept),
+  { "def_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, def_pt),
     1,0,0, 1010 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, num_infos),
+  { "num_propinfos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, num_propinfos),
     0,0,0, 93 },
-  { "info_num1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, info_num1),
-    0,0,0, 91 },
-  { "info_text1",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, info_text1),
-    1,1,1, 301 },
-  { "info_num2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, info_num2),
-    0,0,0, 92 },
-  { "info_text2",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, info_text2),
-    1,1,1, 302 },
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, prop1),
+    0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, prop2),
+    0,0,0, 0 },
   { "pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, pt),
     1,0,0, 1011 },
   { "base_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, base_pt),
@@ -6249,14 +6281,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKDIAMETRICCONSTRAINTPARAMETER_fields[] = 
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, endpt),
+    1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
   { "expr_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, expr_name),
@@ -6349,14 +6393,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKFLIPPARAMETER_fields[] = {
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, endpt),
+    1,0,0, 0 },
   { "flip_label",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, flip_label),
     1,1,1, 305 },
   { "flip_label_desc",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, flip_label_desc),
@@ -6407,14 +6463,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKHORIZONTALCONSTRAINTPARAMETER_fields[] =
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, endpt),
+    1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
   { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, expr_name),
@@ -6449,14 +6517,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLINEARCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, endpt),
+    1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
   { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, expr_name),
@@ -6613,18 +6693,14 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPOINTPARAMETER_fields[] = {
     0,0,0, 280 },
   { "chain_actions",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, chain_actions),
     0,0,0, 281 },
-  { "def_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, def_basept),
+  { "def_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, def_pt),
     1,0,0, 1010 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, num_infos),
+  { "num_propinfos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, num_propinfos),
     0,0,0, 93 },
-  { "info_num1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, info_num1),
-    0,0,0, 91 },
-  { "info_text1",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, info_text1),
-    1,1,1, 301 },
-  { "info_num2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, info_num2),
-    0,0,0, 92 },
-  { "info_text2",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, info_text2),
-    1,1,1, 302 },
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, prop1),
+    0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, prop2),
+    0,0,0, 0 },
   { "position_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, position_name),
     1,1,1, 303 },
   { "position_desc",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, position_desc),
@@ -6751,14 +6827,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKRADIALCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, endpt),
+    1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
   { "expr_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, expr_name),
@@ -6961,14 +7049,26 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVERTICALCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 1010 },
   { "def_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, def_endpt),
     1,0,0, 1011 },
-  { "num_infos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, num_infos),
-    0,0,0, 170 },
-  { "infos",	"Dwg_BLOCKPARAMETER_info*", sizeof (Dwg_BLOCKPARAMETER_info*),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, infos),
-    1,1,0, 0 },
-  { "bl_infos",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, bl_infos),
-    1,1,0, 0 },
-  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, parameter_base_location),
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, prop1),
     0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, prop2),
+    0,0,0, 0 },
+  { "prop3",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, prop3),
+    0,0,0, 0 },
+  { "prop4",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, prop4),
+    0,0,0, 0 },
+  { "prop_states",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, prop_states),
+    1,1,0, 91 },
+  { "parameter_base_location",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, parameter_base_location),
+    0,0,0, 177 },
+  { "upd_basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, upd_basept),
+    1,0,0, 0 },
+  { "basept",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, basept),
+    1,0,0, 0 },
+  { "upd_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, upd_endpt),
+    1,0,0, 0 },
+  { "endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, endpt),
+    1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
   { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, expr_name),
@@ -7011,18 +7111,48 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYGRIP_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYPARAMETER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, parent),
     1,1,0, 0 },
+  { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, evalexpr),
+    0,0,0, 0 },
+  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, name),
+    1,1,1, 300 },
+  { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, be_major),
+    0,0,0, 98 },
+  { "be_minor",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, be_minor),
+    0,0,0, 99 },
+  { "eed1071",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, eed1071),
+    0,0,0, 1071 },
+  { "show_properties",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, show_properties),
+    0,0,0, 280 },
+  { "chain_actions",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, chain_actions),
+    0,0,0, 281 },
+  { "def_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, def_pt),
+    1,0,0, 1010 },
+  { "num_propinfos",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, num_propinfos),
+    0,0,0, 93 },
+  { "prop1",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, prop1),
+    0,0,0, 0 },
+  { "prop2",	"Dwg_BLOCKPARAMETER_PropInfo", sizeof (Dwg_BLOCKPARAMETER_PropInfo),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, prop2),
+    0,0,0, 0 },
   { "is_initialized",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, is_initialized),
-    0,0,0, 0 },
-  { "b2",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, b2),
-    0,0,0, 0 },
-  { "expr_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, expr_name),
-    1,1,1, 0 },
-  { "expr_description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, expr_description),
-    1,1,1, 0 },
+    0,0,0, 281 },
+  { "unknown_bool",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, unknown_bool),
+    0,0,0, 91 },
+  { "visi_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, visi_name),
+    1,1,1, 301 },
+  { "visi_description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, visi_description),
+    1,1,1, 302 },
+  { "num_blocks",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, num_blocks),
+    0,0,0, 93 },
+  { "blocks",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, blocks),
+    1,1,0, 331 },
   { "num_states",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, num_states),
-    0,0,0, 0 },
+    0,0,0, 92 },
   { "states",	"Dwg_BLOCKVISIBILITYPARAMETER_state*", sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state*),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, states),
     1,1,0, 0 },
+  { "cur_state_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, cur_state_name),
+    1,1,1, 0 },
+  { "cur_state",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, cur_state),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BLOCKXYGRIP: (sorted by offset) */
@@ -10658,16 +10788,28 @@ static const Dwg_DYNAPI_field _dwg_BLOCKACTION_connectionpts_fields[] = {
     1,1,1, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_BLOCKPARAMETER_connection: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_BLOCKPARAMETER_connection_fields[] = {
+  { "code",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKPARAMETER_connection, code),
+    0,0,0, 0 },
+  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_BLOCKPARAMETER_connection, name),
+    1,1,1, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_BLOCKVISIBILITYPARAMETER_state: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYPARAMETER_state_fields[] = {
   { "parent",	"struct _dwg_object_BLOCKVISIBILITYPARAMETER*", sizeof (void *),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, parent),
     1,1,0, 0 },
-  { "block",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, block),
-    1,0,0, 0 },
-  { "bl1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, bl1),
-    0,0,0, 0 },
-  { "bl2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, bl2),
-    0,0,0, 0 },
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, name),
+    1,1,1, 301 },
+  { "num_h1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, num_h1),
+    0,0,0, 94 },
+  { "h1",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, h1),
+    1,1,0, 332 },
+  { "num_h2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, num_h2),
+    0,0,0, 95 },
+  { "h2",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, h2),
+    1,1,0, 333 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_CONSTRAINTGROUPNODE: (sorted by offset) */
@@ -12742,82 +12884,83 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "BACKGROUND_Sky", (int)DWG_TYPE_BACKGROUND, NULL, _dwg_BACKGROUND_Sky_fields, sizeof (Dwg_BACKGROUND_Sky) },	/* 39 */
   { "BACKGROUND_Solid", (int)DWG_TYPE_BACKGROUND, NULL, _dwg_BACKGROUND_Solid_fields, sizeof (Dwg_BACKGROUND_Solid) },	/* 40 */
   { "BLOCKACTION_connectionpts", 0, NULL, _dwg_BLOCKACTION_connectionpts_fields, sizeof (Dwg_BLOCKACTION_connectionpts) },	/* 41 */
-  { "BLOCKVISIBILITYPARAMETER_state", (int)DWG_TYPE_BLOCKVISIBILITYPARAMETER, NULL, _dwg_BLOCKVISIBILITYPARAMETER_state_fields, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state) },	/* 42 */
-  { "CONSTRAINTGROUPNODE", 0, NULL, _dwg_CONSTRAINTGROUPNODE_fields, sizeof (Dwg_CONSTRAINTGROUPNODE) },	/* 43 */
-  { "CONTEXTDATA_dict", 0, NULL, _dwg_CONTEXTDATA_dict_fields, sizeof (Dwg_CONTEXTDATA_dict) },	/* 44 */
-  { "CONTEXTDATA_submgr", 0, NULL, _dwg_CONTEXTDATA_submgr_fields, sizeof (Dwg_CONTEXTDATA_submgr) },	/* 45 */
-  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 46 */
-  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (Dwg_CellStyle) },	/* 47 */
-  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (Dwg_ContentFormat) },	/* 48 */
-  { "DATALINK_customdata", (int)DWG_TYPE_DATALINK, NULL, _dwg_DATALINK_customdata_fields, sizeof (Dwg_DATALINK_customdata) },	/* 49 */
-  { "DATATABLE_column", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_column_fields, sizeof (Dwg_DATATABLE_column) },	/* 50 */
-  { "DATATABLE_row", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_row_fields, sizeof (Dwg_DATATABLE_row) },	/* 51 */
-  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (Dwg_DIMASSOC_Ref) },	/* 52 */
-  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (Dwg_DIMENSION_common) },	/* 53 */
-  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (Dwg_EVAL_Node) },	/* 54 */
-  { "EvalExpr", 0, NULL, _dwg_EvalExpr_fields, sizeof (Dwg_EvalExpr) },	/* 55 */
-  { "EvalVariant", 0, NULL, _dwg_EvalVariant_fields, sizeof (Dwg_EvalVariant) },	/* 56 */
-  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (Dwg_FIELD_ChildValue) },	/* 57 */
-  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (Dwg_FileDepList_Files) },	/* 58 */
-  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (Dwg_FormattedTableData) },	/* 59 */
-  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (Dwg_FormattedTableMerged) },	/* 60 */
-  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (Dwg_GEODATA_meshface) },	/* 61 */
-  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (Dwg_GEODATA_meshpt) },	/* 62 */
-  { "GridFormat", 0, NULL, _dwg_GridFormat_fields, sizeof (Dwg_GridFormat) },	/* 63 */
-  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (Dwg_HATCH_Color) },	/* 64 */
-  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (Dwg_HATCH_ControlPoint) },	/* 65 */
-  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (Dwg_HATCH_DefLine) },	/* 66 */
-  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (Dwg_HATCH_Path) },	/* 67 */
-  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (Dwg_HATCH_PathSeg) },	/* 68 */
-  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (Dwg_HATCH_PolylinePath) },	/* 69 */
-  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (Dwg_LAYER_entry) },	/* 70 */
-  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (Dwg_LEADER_ArrowHead) },	/* 71 */
-  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (Dwg_LEADER_BlockLabel) },	/* 72 */
-  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (Dwg_LEADER_Break) },	/* 73 */
-  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (Dwg_LEADER_Line) },	/* 74 */
-  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (Dwg_LEADER_Node) },	/* 75 */
-  { "LIGHTLIST_light", (int)DWG_TYPE_LIGHTLIST, NULL, _dwg_LIGHTLIST_light_fields, sizeof (Dwg_LIGHTLIST_light) },	/* 76 */
-  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (Dwg_LTYPE_dash) },	/* 77 */
-  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 78 */
-  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 79 */
-  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 80 */
-  { "MATERIAL_color", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_color_fields, sizeof (Dwg_MATERIAL_color) },	/* 81 */
-  { "MATERIAL_gentexture", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_gentexture_fields, sizeof (Dwg_MATERIAL_gentexture) },	/* 82 */
-  { "MATERIAL_mapper", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_mapper_fields, sizeof (Dwg_MATERIAL_mapper) },	/* 83 */
-  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 84 */
-  { "MLEADER_AnnotContext", 0, "AcDbMLeaderAnnotContext", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 85 */
-  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 86 */
-  { "MLEADER_Content_Block", 0, NULL, _dwg_MLEADER_Content_Block_fields, sizeof (Dwg_MLEADER_Content_Block) },	/* 87 */
-  { "MLEADER_Content_MText", 0, NULL, _dwg_MLEADER_Content_MText_fields, sizeof (Dwg_MLEADER_Content_MText) },	/* 88 */
-  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 89 */
-  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 90 */
-  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 91 */
-  { "OCD_Dimension", 0, "AcDbDimensionObjectContextData", _dwg_OCD_Dimension_fields, sizeof (Dwg_OCD_Dimension) },	/* 92 */
-  { "PROXY_LWPOLYLINE", 0, NULL, _dwg_PROXY_LWPOLYLINE_fields, sizeof (Dwg_PROXY_LWPOLYLINE) },	/* 93 */
-  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 94 */
-  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 95 */
-  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 96 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 97 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 98 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 99 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 100 */
-  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 101 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 102 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 103 */
-  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 104 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 105 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 106 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 107 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 108 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 109 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 110 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 111 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 112 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 113 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 114 */
-  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 115 */
-  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 116 */
-  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 117 */
+  { "BLOCKPARAMETER_connection", 0, NULL, _dwg_BLOCKPARAMETER_connection_fields, sizeof (Dwg_BLOCKPARAMETER_connection) },	/* 42 */
+  { "BLOCKVISIBILITYPARAMETER_state", (int)DWG_TYPE_BLOCKVISIBILITYPARAMETER, NULL, _dwg_BLOCKVISIBILITYPARAMETER_state_fields, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state) },	/* 43 */
+  { "CONSTRAINTGROUPNODE", 0, NULL, _dwg_CONSTRAINTGROUPNODE_fields, sizeof (Dwg_CONSTRAINTGROUPNODE) },	/* 44 */
+  { "CONTEXTDATA_dict", 0, NULL, _dwg_CONTEXTDATA_dict_fields, sizeof (Dwg_CONTEXTDATA_dict) },	/* 45 */
+  { "CONTEXTDATA_submgr", 0, NULL, _dwg_CONTEXTDATA_submgr_fields, sizeof (Dwg_CONTEXTDATA_submgr) },	/* 46 */
+  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 47 */
+  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (Dwg_CellStyle) },	/* 48 */
+  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (Dwg_ContentFormat) },	/* 49 */
+  { "DATALINK_customdata", (int)DWG_TYPE_DATALINK, NULL, _dwg_DATALINK_customdata_fields, sizeof (Dwg_DATALINK_customdata) },	/* 50 */
+  { "DATATABLE_column", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_column_fields, sizeof (Dwg_DATATABLE_column) },	/* 51 */
+  { "DATATABLE_row", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_row_fields, sizeof (Dwg_DATATABLE_row) },	/* 52 */
+  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (Dwg_DIMASSOC_Ref) },	/* 53 */
+  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (Dwg_DIMENSION_common) },	/* 54 */
+  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (Dwg_EVAL_Node) },	/* 55 */
+  { "EvalExpr", 0, NULL, _dwg_EvalExpr_fields, sizeof (Dwg_EvalExpr) },	/* 56 */
+  { "EvalVariant", 0, NULL, _dwg_EvalVariant_fields, sizeof (Dwg_EvalVariant) },	/* 57 */
+  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (Dwg_FIELD_ChildValue) },	/* 58 */
+  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (Dwg_FileDepList_Files) },	/* 59 */
+  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (Dwg_FormattedTableData) },	/* 60 */
+  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (Dwg_FormattedTableMerged) },	/* 61 */
+  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (Dwg_GEODATA_meshface) },	/* 62 */
+  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (Dwg_GEODATA_meshpt) },	/* 63 */
+  { "GridFormat", 0, NULL, _dwg_GridFormat_fields, sizeof (Dwg_GridFormat) },	/* 64 */
+  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (Dwg_HATCH_Color) },	/* 65 */
+  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (Dwg_HATCH_ControlPoint) },	/* 66 */
+  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (Dwg_HATCH_DefLine) },	/* 67 */
+  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (Dwg_HATCH_Path) },	/* 68 */
+  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (Dwg_HATCH_PathSeg) },	/* 69 */
+  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (Dwg_HATCH_PolylinePath) },	/* 70 */
+  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (Dwg_LAYER_entry) },	/* 71 */
+  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (Dwg_LEADER_ArrowHead) },	/* 72 */
+  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (Dwg_LEADER_BlockLabel) },	/* 73 */
+  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (Dwg_LEADER_Break) },	/* 74 */
+  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (Dwg_LEADER_Line) },	/* 75 */
+  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (Dwg_LEADER_Node) },	/* 76 */
+  { "LIGHTLIST_light", (int)DWG_TYPE_LIGHTLIST, NULL, _dwg_LIGHTLIST_light_fields, sizeof (Dwg_LIGHTLIST_light) },	/* 77 */
+  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (Dwg_LTYPE_dash) },	/* 78 */
+  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 79 */
+  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 80 */
+  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 81 */
+  { "MATERIAL_color", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_color_fields, sizeof (Dwg_MATERIAL_color) },	/* 82 */
+  { "MATERIAL_gentexture", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_gentexture_fields, sizeof (Dwg_MATERIAL_gentexture) },	/* 83 */
+  { "MATERIAL_mapper", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_mapper_fields, sizeof (Dwg_MATERIAL_mapper) },	/* 84 */
+  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 85 */
+  { "MLEADER_AnnotContext", 0, "AcDbMLeaderAnnotContext", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 86 */
+  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 87 */
+  { "MLEADER_Content_Block", 0, NULL, _dwg_MLEADER_Content_Block_fields, sizeof (Dwg_MLEADER_Content_Block) },	/* 88 */
+  { "MLEADER_Content_MText", 0, NULL, _dwg_MLEADER_Content_MText_fields, sizeof (Dwg_MLEADER_Content_MText) },	/* 89 */
+  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 90 */
+  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 91 */
+  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 92 */
+  { "OCD_Dimension", 0, "AcDbDimensionObjectContextData", _dwg_OCD_Dimension_fields, sizeof (Dwg_OCD_Dimension) },	/* 93 */
+  { "PROXY_LWPOLYLINE", 0, NULL, _dwg_PROXY_LWPOLYLINE_fields, sizeof (Dwg_PROXY_LWPOLYLINE) },	/* 94 */
+  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 95 */
+  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 96 */
+  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 97 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 98 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 99 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 100 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 101 */
+  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 102 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 103 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 104 */
+  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 105 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 106 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 107 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 108 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 109 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 110 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 111 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 112 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 113 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 114 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 115 */
+  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 116 */
+  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 117 */
+  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 118 */
 
 };
 

@@ -6987,25 +6987,6 @@ typedef struct _dwg_object_CSACDOCUMENTOPTIONS
 
 // dynamic blocks:
 
-typedef struct _dwg_BLOCKVISIBILITYPARAMETER_state
-{
-  struct _dwg_object_BLOCKVISIBILITYPARAMETER *parent;
-  BITCODE_H block;
-  BITCODE_BL bl1;
-  BITCODE_BL bl2;
-} Dwg_BLOCKVISIBILITYPARAMETER_state;
-
-typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
-{
-  struct _dwg_object_object *parent;
-  BITCODE_B is_initialized;
-  BITCODE_B b2;
-  BITCODE_T expr_name;
-  BITCODE_T expr_description;
-  BITCODE_BL num_states;
-  Dwg_BLOCKVISIBILITYPARAMETER_state *states;
-} Dwg_Object_BLOCKVISIBILITYPARAMETER;
-
 #define BLOCKELEMENT_fields                     \
   Dwg_EvalExpr evalexpr;                        \
   BITCODE_T name;                               \
@@ -7039,16 +7020,16 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   BITCODE_B bg_insert_cycling;                  \
   BITCODE_BLd bg_insert_cycling_weight
 
-typedef  struct dwg_BLOCKPARAMETER_propinfo {
-  struct dwg_BLOCKPARAMETER_info *parent;
-  BITCODE_BL propnum;
-  BITCODE_T proptext;
-} Dwg_BLOCKPARAMETER_propinfo;
+// same as BLOCKACTION_connectionpts
+typedef  struct _dwg_BLOCKPARAMETER_connection {
+  BITCODE_BL code;
+  BITCODE_T name;
+} Dwg_BLOCKPARAMETER_connection;
 
-typedef  struct dwg_BLOCKPARAMETER_info {
-  BITCODE_BL num_props;
-  Dwg_BLOCKPARAMETER_propinfo *props;
-} Dwg_BLOCKPARAMETER_info;
+typedef  struct dwg_BLOCKPARAMETER_PropInfo {
+  BITCODE_BL num_connections;
+  Dwg_BLOCKPARAMETER_connection *connections;
+} Dwg_BLOCKPARAMETER_PropInfo;
 
 typedef  struct dwg_BLOCKPARAMVALUESET {
   BITCODE_T desc;
@@ -7062,21 +7043,25 @@ typedef  struct dwg_BLOCKPARAMVALUESET {
 
 #define BLOCK1PTPARAMETER_fields                  \
   BLOCKPARAMETER_fields;                          \
-  BITCODE_3BD def_basept;                         \
-  BITCODE_BL num_infos; /* 2 */                   \
-  BITCODE_BL info_num1;                           \
-  BITCODE_T info_text1;                           \
-  BITCODE_BL info_num2;                           \
-  BITCODE_T info_text2
+  BITCODE_3BD def_pt;                             \
+  BITCODE_BL num_propinfos; /* 2 */               \
+  Dwg_BLOCKPARAMETER_PropInfo prop1;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop2
 
 #define BLOCK2PTPARAMETER_fields                  \
   BLOCKPARAMETER_fields;                          \
   BITCODE_3BD def_basept;                         \
   BITCODE_3BD def_endpt;                          \
-  BITCODE_BL num_infos; /* 4 */                   \
-  Dwg_BLOCKPARAMETER_info *infos;                 \
-  BITCODE_BL *bl_infos;                           \
-  BITCODE_BS parameter_base_location
+  Dwg_BLOCKPARAMETER_PropInfo prop1;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop2;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop3;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop4;              \
+  BITCODE_BL *prop_states;                        \
+  BITCODE_BS parameter_base_location;             \
+  BITCODE_3BD upd_basept;                         \
+  BITCODE_3BD basept;                             \
+  BITCODE_3BD upd_endpt;                          \
+  BITCODE_3BD endpt
 
 typedef  struct _dwg_BLOCKACTION_connectionpts
 {
@@ -7106,6 +7091,32 @@ typedef  struct _dwg_BLOCKACTION_connectionpts
   BITCODE_T expr_description;                    \
   BITCODE_BD value;                              \
   BLOCKPARAMVALUESET_fields
+
+typedef struct _dwg_BLOCKVISIBILITYPARAMETER_state
+{
+  struct _dwg_object_BLOCKVISIBILITYPARAMETER *parent;
+  BITCODE_T name;            /* DXF 301 */
+  BITCODE_BL num_blocks;     /* DXF 94 */
+  BITCODE_H *blocks;         /* DXF 332 */
+  BITCODE_BL num_params;     /* DXF 95 */
+  BITCODE_H *params;         /* DXF 333 BLOCKVISIBILITYPARAMETER objects */
+} Dwg_BLOCKVISIBILITYPARAMETER_state;
+
+typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_B is_initialized;	// DXF 281
+  BITCODE_B unknown_bool; 	// DXF 91, history_compression, history_required or is_visible?
+  BITCODE_T blockvisi_name;   	// DXF 301
+  BITCODE_T blockvisi_description;	// DXF 302
+  BITCODE_BL num_blocks;	// DXF 93
+  BITCODE_H *blocks;		// DXF 331
+  BITCODE_BL num_states;	// DXF 92
+  Dwg_BLOCKVISIBILITYPARAMETER_state *states;
+  BITCODE_T cur_state_name;
+  BITCODE_BL cur_state;
+} Dwg_Object_BLOCKVISIBILITYPARAMETER;
 
 typedef struct _dwg_object_BLOCKVISIBILITYGRIP
 {

@@ -6783,14 +6783,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item dependency
 H,	DXF 330
 @item expr_name
@@ -6857,14 +6869,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item align_perpendicular
 B,	DXF 280
 
@@ -6898,14 +6922,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item dependency
 H,	DXF 330
 @item center_pt
@@ -6994,18 +7030,14 @@ BL,	DXF 1071
 B,	DXF 280
 @item chain_actions
 B,	DXF 281
-@item def_basept
+@item def_pt
 3BD,	DXF 1010
-@item num_infos
+@item num_propinfos
 BL,	DXF 93
-@item info_num1
-BL,	DXF 91
-@item info_text1
-T,	DXF 301
-@item info_num2
-BL,	DXF 92
-@item info_text2
-T,	DXF 302
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
 @item pt
 3BD,	DXF 1011
 @item base_pt
@@ -7041,14 +7073,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item dependency
 H,	DXF 330
 @item expr_name
@@ -7162,14 +7206,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item flip_label
 T,	DXF 305
 @item flip_label_desc
@@ -7234,14 +7290,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item dependency
 H,	DXF 330
 @item expr_name
@@ -7283,14 +7351,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item dependency
 H,	DXF 330
 @item expr_name
@@ -7503,18 +7583,14 @@ BL,	DXF 1071
 B,	DXF 280
 @item chain_actions
 B,	DXF 281
-@item def_basept
+@item def_pt
 3BD,	DXF 1010
-@item num_infos
+@item num_propinfos
 BL,	DXF 93
-@item info_num1
-BL,	DXF 91
-@item info_text1
-T,	DXF 301
-@item info_num2
-BL,	DXF 92
-@item info_text2
-T,	DXF 302
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
 @item position_name
 T,	DXF 303
 @item position_desc
@@ -7683,14 +7759,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item dependency
 H,	DXF 330
 @item expr_name
@@ -7949,14 +8037,26 @@ B,	DXF 281
 3BD,	DXF 1010
 @item def_endpt
 3BD,	DXF 1011
-@item num_infos
-BL,	DXF 170
-@item infos
-Dwg_BLOCKPARAMETER_info*
-@item bl_infos
-BL*
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop3
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop4
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop_states
+BL*,	DXF 91
 @item parameter_base_location
-BS
+BS,	DXF 177
+@item upd_basept
+3BD
+@item basept
+3BD
+@item upd_endpt
+3BD
+@item endpt
+3BD
 @item dependency
 H,	DXF 330
 @item expr_name
@@ -8013,18 +8113,48 @@ BLd,	DXF 93
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
+@item name
+T,	DXF 300
+@item be_major
+BL,	DXF 98
+@item be_minor
+BL,	DXF 99
+@item eed1071
+BL,	DXF 1071
+@item show_properties
+B,	DXF 280
+@item chain_actions
+B,	DXF 281
+@item def_pt
+3BD,	DXF 1010
+@item num_propinfos
+BL,	DXF 93
+@item prop1
+Dwg_BLOCKPARAMETER_PropInfo
+@item prop2
+Dwg_BLOCKPARAMETER_PropInfo
 @item is_initialized
-B
-@item b2
-B
-@item expr_name
-T
-@item expr_description
-T
+B,	DXF 281
+@item unknown_bool
+B,	DXF 91
+@item visi_name
+T,	DXF 301
+@item visi_description
+T,	DXF 302
+@item num_blocks
+BL,	DXF 93
+@item blocks
+H*,	DXF 331
 @item num_states
-BL
+BL,	DXF 92
 @item states
 Dwg_BLOCKVISIBILITYPARAMETER_state*
+@item cur_state_name
+T
+@item cur_state
+BL
 
 @end vtable
 @end indentedblock
@@ -12678,6 +12808,20 @@ TV
 @end vtable
 @end indentedblock
 
+@strong{Dwg_BLOCKPARAMETER_connection} @anchor{Dwg_BLOCKPARAMETER_connection}
+@vindex Dwg_BLOCKPARAMETER_connection
+
+@indentedblock
+@vtable @code
+
+@item code
+BL
+@item name
+TV
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_BLOCKVISIBILITYPARAMETER_state} @anchor{Dwg_BLOCKVISIBILITYPARAMETER_state}
 @vindex Dwg_BLOCKVISIBILITYPARAMETER_state
 
@@ -12686,12 +12830,16 @@ TV
 
 @item parent
 struct _dwg_object_BLOCKVISIBILITYPARAMETER*
-@item block
-H
-@item bl1
-BL
-@item bl2
-BL
+@item name
+T,	DXF 301
+@item num_h1
+BL,	DXF 94
+@item h1
+H*,	DXF 332
+@item num_h2
+BL,	DXF 95
+@item h2
+H*,	DXF 333
 
 @end vtable
 @end indentedblock

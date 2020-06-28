@@ -8076,6 +8076,14 @@ DWG_OBJECT_END
   FIELD_BL (grip_type, 91); /* ?? */            \
   FIELD_T (grip_expr, 300)
 
+#define BlockParam_Connection(conn, dxf1, dxf2)    \
+  FIELD_BL (conn.code, dxf1);                      \
+  FIELD_T (conn.name, dxf2)
+
+#define BlockAction_ConnectionPt(conn_pt, dxf1, dxf2) \
+  FIELD_BL (conn_pt.code, dxf1);                      \
+  FIELD_T (conn_pt.name, dxf2)
+
 #define AcDbBlockParamValueSet_fields(var,i_code,d_code,s_code,t_code)  \
   DXF  { SUB_FIELD_T (var,desc, t_code); }              \
   JSON { SUB_FIELD_T (var,desc, t_code); }              \
@@ -8086,41 +8094,43 @@ DWG_OBJECT_END
   SUB_FIELD_BS (var,num_valuelist, s_code)              \
   SUB_FIELD_VECTOR (var,valuelist, num_valuelist, BD, d_code+3)
 
+#define BlockParam_PropInfo(_prop, num_code, d_code, t_code)         \
+  SUB_FIELD_BL (_prop, num_connections, num_code)                    \
+  REPEAT2 (_prop.num_connections, _prop.connections, Dwg_BLOCKPARAMETER_connection) \
+  REPEAT_BLOCK                                                       \
+      SUB_FIELD_BL (_prop.connections[rcount2], code, d_code);       \
+      SUB_FIELD_T (_prop.connections[rcount2], name, t_code);        \
+  END_REPEAT_BLOCK                                                   \
+  END_REPEAT (_prop.connections)
+
 #define AcDbBlock1PtParameter_fields              \
   AcDbBlockParameter_fields;                      \
   SUBCLASS (AcDbBlock1PtParameter);               \
-  FIELD_3BD (def_basept, 1010);                   \
-  DXF { FIELD_BL (num_infos, 93); }               \
-  FIELD_BL (info_num1, 91);                       \
-  FIELD_T (info_text1, 301);                      \
-  FIELD_BL (info_num2, 92);                       \
-  FIELD_T (info_text2, 302);                      \
-  FIELD_BL (num_infos, 0)
+  FIELD_3BD (def_pt, 1010);                       \
+  DXF { FIELD_BL (num_propinfos, 93); } /* 2 */   \
+  BlockParam_PropInfo (prop1, 170, 91, 301);      \
+  BlockParam_PropInfo (prop2, 171, 92, 302);      \
+  FIELD_BL (num_propinfos, 0)
 
 #define AcDbBlock2PtParameter_fields              \
   AcDbBlockParameter_fields;                      \
   SUBCLASS (AcDbBlock2PtParameter);               \
   FIELD_3BD (def_basept, 1010);                   \
   FIELD_3BD (def_endpt, 1011);                    \
-  FIELD_BL (num_infos, 170);                      \
-  REPEAT (num_infos, infos, Dwg_BLOCKPARAMETER_info) \
-  REPEAT_BLOCK                                                            \
-      SUB_FIELD_BL (infos[rcount1],num_props, 90);                        \
-      REPEAT2 (infos[rcount1].num_props, infos[rcount1].props, Dwg_BLOCKPARAMETER_propinfo) \
-      REPEAT_BLOCK                                                             \
-        SUB_FIELD_BL (infos[rcount1].props[rcount2], propnum, 92 + rcount1);   \
-        SUB_FIELD_T (infos[rcount1].props[rcount2], proptext, 301 + rcount1);  \
-     END_REPEAT_BLOCK                                                          \
-     SET_PARENT (infos[rcount1].props, _obj->infos);                           \
-     END_REPEAT (infos)                                                        \
-  END_REPEAT_BLOCK                                                             \
-  END_REPEAT (infos)                                                           \
-  FIELD_VECTOR (bl_infos, BL, num_infos, 91);                                  \
-  FIELD_BS (parameter_base_location, 177)
-
-#define BlockAction_ConnectionPt(conn_pt, dxf1, dxf2) \
-  FIELD_BL (conn_pt.code, dxf1);                      \
-  FIELD_T (conn_pt.name, dxf2)
+  DXF {                                           \
+    VALUE_BL (4, 170);                            \
+    FIELD_VECTOR_N (prop_states, BL, 4, 91);      \
+  }                                               \
+  BlockParam_PropInfo (prop1, 171, 92, 301);      \
+  BlockParam_PropInfo (prop2, 172, 93, 302);      \
+  BlockParam_PropInfo (prop3, 173, 94, 303);      \
+  BlockParam_PropInfo (prop4, 174, 95, 304);      \
+  FIELD_VECTOR_N (prop_states, BL, 4, 0);         \
+  FIELD_BS (parameter_base_location, 177);        \
+  FIELD_3BD (upd_basept, 0);                      \
+  FIELD_3BD (basept, 0);                          \
+  FIELD_3BD (upd_endpt, 0);                      \
+  FIELD_3BD (endpt, 0)
 
 #define AcDbBlockActionWithBasePt_fields          \
   AcDbBlockAction_fields;                         \
@@ -8151,6 +8161,7 @@ DWG_OBJECT_END
   FIELD_T (expr_description, 306);                    \
   FIELD_BD (value, 140);                              \
   AcDbBlockParamValueSet_fields (value_set,96,128,175,307)
+
 
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
   AcDbBlockElement_fields;
@@ -9631,24 +9642,6 @@ DWG_ENTITY (RTEXT)
   FIELD_HANDLE (style, 5, 0);
 DWG_ENTITY_END
 
-// related to dynblock, aka ACAD_ENHANCEDBLOCK
-DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbBlockVisibilityParameter)
-  FIELD_B (is_initialized, 0);
-  FIELD_T (expr_name, 0);
-  FIELD_T (expr_description, 0);
-  FIELD_B (b2, 0);
-  FIELD_BL (num_states, 0);
-  REPEAT (num_states, states, Dwg_BLOCKVISIBILITYPARAMETER_state)
-  REPEAT_BLOCK
-      SUB_FIELD_HANDLE (states[rcount1],block, DWG_HDL_HARDOWN, 330);
-      SUB_FIELD_BL (states[rcount1], bl1, 0);
-      SUB_FIELD_BL (states[rcount1], bl2, 0);
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ (states);
-  END_REPEAT (states)
-DWG_OBJECT_END
 
 #define AcConstraintGroupNode_fields(node)                       \
   PRE (R_2013) {                                                 \
@@ -10051,6 +10044,34 @@ DWG_ENTITY (ROTATIONPARAMETERENTITY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbBlockRotationParameterEntity)
 DWG_ENTITY_END
+
+// DYNBLOCKs:
+
+// ACAD_ENHANCEDBLOCK
+DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
+  DECODE_UNKNOWN_BITS
+  AcDbBlock1PtParameter_fields;
+  SUBCLASS (AcDbBlockVisibilityParameter)
+  FIELD_B (is_initialized, 281);
+  FIELD_T (visi_name, 301);
+  FIELD_T (visi_description, 302);
+  FIELD_B (unknown_bool, 91);
+  FIELD_BL (num_blocks, 93);
+  HANDLE_VECTOR (blocks, num_blocks, 5, 331);
+  FIELD_BL (num_states, 92);
+  REPEAT (num_states, states, Dwg_BLOCKVISIBILITYPARAMETER_state)
+  REPEAT_BLOCK
+      SUB_FIELD_T (states[rcount1], name, 301);
+      SUB_FIELD_BL (states[rcount1], num_blocks, 94);
+      SUB_HANDLE_VECTOR (states[rcount1], blocks, num_blocks, 5, 332);
+      SUB_FIELD_BL (states[rcount1], num_params, 95);
+      SUB_HANDLE_VECTOR (states[rcount1], params, num_params, 5, 333);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (states);
+  END_REPEAT (states)
+  FIELD_T (cur_state_name, 0);
+  FIELD_BL (cur_state, 0);
+DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNMENTGRIP)
   DECODE_UNKNOWN_BITS
