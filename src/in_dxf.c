@@ -8025,7 +8025,9 @@ new_object (char *restrict name, char *restrict dxfname,
                       dxf_free_pair (pair);
                       pair = dxf_read_pair (dat);
                     }
-                  if (tbl_sty && pair->code == 309 && strEQc (pair->value.s, "CELLSTYLE_END"))
+                  if (tbl_sty && pair &&
+                      pair->code == 309 &&
+                      strEQc (pair->value.s, "CELLSTYLE_END"))
                     goto next_pair;
                   else
                     goto search_field;
