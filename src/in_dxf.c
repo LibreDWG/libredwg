@@ -8676,7 +8676,7 @@ new_object (char *restrict name, char *restrict dxfname,
                       Dwg_Object_LAYOUT *_o = obj->tio.object->tio.LAYOUT;
                       int unique;
                       static double pt_x;
-                      static const Dwg_DYNAPI_field *pt_f;
+                      static const Dwg_DYNAPI_field *pt_f = NULL;
                       if (pair->code == 6 && *pair->value.s)
                         {
                           if (dwg->header.version < R_2004)
@@ -8744,8 +8744,9 @@ new_object (char *restrict name, char *restrict dxfname,
                               goto next_pair;
                             }
                         }
-                      else if (pair->code == 47 || pair->code == 49
-                               || pair->code == 141 || pair->code == 149)
+                      else if (pt_f &&
+                               (pair->code == 47 || pair->code == 49
+                                || pair->code == 141 || pair->code == 149))
                         {
                           BITCODE_2BD pt2;
                           pt2.x = pt_x;
