@@ -2990,18 +2990,29 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 20:
-              assert (j >= 0);
+#define CHK_points \
+  if (j < 0 || j >= (int)lline->num_points) \
+    return NULL; \
+  assert (j >= 0 && j < (int)lline->num_points)
+
+#define CHK_breaks \
+  if (k < 0 || k >= (int)lline->num_breaks) \
+    return NULL; \
+  assert (k >= 0 && k < (int)lline->num_breaks)
+
+              CHK_points;
               lline->points[j].y = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].points[%d].y = %f [BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 30:
-              assert (j >= 0);
+              CHK_points;
               lline->points[j].z = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].points[%d].z = %f [BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 11:
+              CHK_points;
               k++;
               lline->num_breaks = k + 1;
               lline->breaks = (Dwg_LEADER_Break *)realloc (
@@ -3013,35 +3024,35 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 21:
-              assert (k >= 0);
+              CHK_breaks;
               lline->breaks[k].start.y = pair->value.d;
               LOG_TRACE (
                   "%s.leaders[].lines[%d].breaks[%d].start.y = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 31:
-              assert (k >= 0);
+              CHK_breaks;
               lline->breaks[k].start.z = pair->value.d;
               LOG_TRACE (
                   "%s.leaders[].lines[%d].breaks[%d].start.z = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 12:
-              assert (k >= 0);
+              CHK_breaks;
               lline->breaks[k].end.x = pair->value.d;
               LOG_TRACE (
                   "%s.leaders[].lines[%d].breaks[%d].end.x = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 22:
-              assert (k >= 0);
+              CHK_breaks;
               lline->breaks[k].end.y = pair->value.d;
               LOG_TRACE (
                   "%s.leaders[].lines[%d].breaks[%d].end.y = %f [3BD %d]\n",
                   obj->name, i, k, pair->value.d, pair->code);
               break;
             case 32:
-              assert (k >= 0);
+              CHK_breaks;
               lline->breaks[k].end.z = pair->value.d;
               LOG_TRACE (
                   "%s.leaders[].lines[%d].breaks[%d].end.z = %f [3BD %d]\n",
@@ -3107,6 +3118,9 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   return pair;
 }
+
+#undef CHK_points
+#undef CHK_breaks
 
 static Dxf_Pair *
 add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -3216,7 +3230,12 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
-                  assert (j >= 0);
+#define CHK_breaks                              \
+  if (j < 0 || j >= (int)lnode->num_breaks)     \
+    return NULL;                                \
+  assert (j >= 0 && j < (int)lnode->num_breaks)
+
+                  CHK_breaks;
                   lnode->breaks[j].start.y = pair->value.d;
                   LOG_TRACE (
                       "%s.ctx.leaders[%d].breaks[%d].start.y = %f [3BD %d]\n",
@@ -3233,7 +3252,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
-                  assert (j >= 0);
+                  CHK_breaks;
                   lnode->breaks[j].start.z = pair->value.d;
                   LOG_TRACE (
                       "%s.ctx.leaders[%d].breaks[%d].start.z = %f [3BD %d]\n",
@@ -3241,19 +3260,19 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             case 12:
-              assert (j >= 0);
+              CHK_breaks;
               lnode->breaks[j].end.x = pair->value.d;
               LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.x = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 22:
-              assert (j >= 0);
+              CHK_breaks;
               lnode->breaks[j].end.y = pair->value.d;
               LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.y = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
               break;
             case 32:
-              assert (j >= 0);
+              CHK_breaks;
               lnode->breaks[j].end.z = pair->value.d;
               LOG_TRACE ("%s.ctx.leaders[%d].breaks[%d].end.z = %f [3BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
@@ -3273,6 +3292,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   return pair;
 }
+#undef CHK_breaks
 
 static Dxf_Pair *
 add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -3803,37 +3823,47 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat, Dxf_Pair *restri
           break;
         case 13:
           i++;
-          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+#define CHK_geomesh_pts                          \
+  if (i < 0 || i >= (int)o->num_geomesh_pts)     \
+    return NULL;                                 \
+  assert (i >= 0 && i < (int)o->num_geomesh_pts)
+
+          CHK_geomesh_pts;
           o->geomesh_pts[i].source_pt.x = pair->value.d;
           break;
         case 23:
-          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+          CHK_geomesh_pts;
           o->geomesh_pts[i].source_pt.y = pair->value.d;
           LOG_TRACE ("%s.geomesh_pts[%d] = (%f, %f) [2RD %d]\n",
                      obj->name, i, o->geomesh_pts[i].source_pt.x, pair->value.d, 13);
           break;
         case 14:
           i++;
-          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+          CHK_geomesh_pts;
           o->geomesh_pts[i].dest_pt.x = pair->value.d;
           break;
         case 24:
-          assert (i >= 0 && i < (int)o->num_geomesh_pts);
+          CHK_geomesh_pts;
           o->geomesh_pts[i].dest_pt.y = pair->value.d;
           LOG_TRACE ("%s.geomesh_pts[%d].dest_pt = (%f, %f) [2RD %d]\n",
                      obj->name, i, o->geomesh_pts[i].dest_pt.x, pair->value.d, 13);
           break;
         case 97:
           i++;
-          assert (i >= 0 && i < (int)o->num_geomesh_faces);
+#define CHK_geomesh_faces                           \
+  if (i < 0 || i >= (int)o->num_geomesh_faces)      \
+    return NULL;                                    \
+  assert (i >= 0 && i < (int)o->num_geomesh_faces)
+
+          CHK_geomesh_faces;
           o->geomesh_faces[i].face1 = pair->value.u;
           break;
         case 98:
-          assert (i >= 0 && i < (int)o->num_geomesh_faces);
+          CHK_geomesh_faces;
           o->geomesh_faces[i].face2 = pair->value.u;
           break;
         case 99:
-          assert (i >= 0 && i < (int)o->num_geomesh_faces);
+          CHK_geomesh_faces;
           o->geomesh_faces[i].face3 = pair->value.u;
           LOG_TRACE ("%s.geomesh_faces[%d] = (%u, %u, %u) [3*BL %d]\n",
                      obj->name, i, o->geomesh_faces[i].face1, o->geomesh_faces[i].face2,
@@ -3848,6 +3878,8 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat, Dxf_Pair *restri
     }
   return pair;
 }
+#undef CHK_geomesh_pts
+#undef CHK_geomesh_faces
 
 // returns with 0
 // subclass for multiple objects.
