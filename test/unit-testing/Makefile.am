@@ -80,6 +80,8 @@ testobjects = \
 	block \
 	block_control \
 	block_header \
+	blockgriplocationcomponent \
+	blockvisibilitygrip \
 	body \
 	camera \
 	cellstylemap \
@@ -199,8 +201,10 @@ testobjects = \
 	xline \
 	xrecord
 
+# NB: After you modify this list, do "make update-ignorance"
+#     and include this directory's .gitignore in the commit.
 if ENABLE_DEBUG
-testobjects += \
+testdebug = \
 	acmecommandhistory \
 	acmescope \
 	acmestatemgr \
@@ -241,10 +245,8 @@ testobjects += \
 	assocarrayrectangularparameters \
 	atext \
 	blkrefobjectcontextdata \
-	blockgriplocationcomponent \
 	assocdimdependencybody \
 	blockparamdependencybody \
-	blockvisibilitygrip \
 	blockvisibilityparameter \
 	contextdatamanager \
 	csacdocumentoptions \
@@ -288,18 +290,64 @@ testobjects += \
 	textobjectcontextdata \
 	tvdeviceproperties \
 	visibilityparameterentity \
-	visibilitygripentity
+	visibilitygripentity \
+	alignmentparameterentity \
+	basepointparameterentity \
+	blockalignedconstraintparameter \
+	blockalignmentgrip \
+	blockalignmentparameter \
+	blockangularconstraintparameter \
+	blockarrayaction \
+	blockbasepointparameter \
+	blockdiametricconstraintparameter \
+	blockflipaction \
+	blockflipgrip \
+	blockflipparameter \
+	blockhorizontalconstraintparameter \
+	blocklinearconstraintparameter \
+	blocklineargrip \
+	blocklinearparameter \
+	blocklookupaction \
+	blocklookupgrip \
+	blocklookupparameter \
+	blockmoveaction \
+	blockpointparameter \
+	blockpolargrip \
+	blockpolarparameter \
+	blockpolarstretchaction \
+	blockpropertiestable \
+	blockpropertiestablegrip \
+	blockradialconstraintparameter \
+	blockrepresentation \
+	blockrotateaction \
+	blockrotationgrip \
+	blockrotationparameter \
+	blockscaleaction \
+	blockstretchaction \
+	blockuserparameter \
+	blockverticalconstraintparameter \
+	blockxygrip \
+	blockxyparameter \
+	dynamicblockproxynode \
+	flipparameterentity \
+	linearparameterentity \
+	pointparameterentity \
+	rotationparameterentity \
+	xyparameterentity
+
+testobjects += $(testdebug)
 endif
 
-# NB: After you modify ‘check_PROGRAMS’, do "make update-ignorance"
-#     and include this directory's .gitignore in the commit.
-check_PROGRAMS = \
+check_minimal = \
 	bits_test \
 	common_test \
 	decode_test \
 	hash_test \
 	dynapi_test \
-	dxf_test \
+	dxf_test
+
+check_PROGRAMS = \
+	$(check_minimal) \
 	$(testobjects)
 
 check-prep: $(check_PROGRAMS)
@@ -322,6 +370,11 @@ endif
 TESTS_ENVIRONMENT = \
   top_srcdir="$(top_srcdir)" \
   ASAN_OPTIONS="detect_leaks=0"
+
+check-minimal: $(check_minimal)
+	$(MAKE) check TESTS='$(check_minimal)"
+check-debug: $(testdebug)
+	$(MAKE) check TESTS="$(testdebug)"
 
 bits_test.cbmc: bits_test.c $(top_srcdir)/src/bits.c
 	cbmc -I. -I$(top_srcdir)/include -I/opt/local/include \

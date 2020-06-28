@@ -407,64 +407,101 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ACSH_TORUS_CLASS,
   DWG_TYPE_ACSH_WEDGE_CLASS,
   DWG_TYPE_ALDIMOBJECTCONTEXTDATA,
+  DWG_TYPE_ALIGNMENTPARAMETERENTITY,
   DWG_TYPE_ANGDIMOBJECTCONTEXTDATA,
   DWG_TYPE_ARC_DIMENSION,
   DWG_TYPE_ASSOC2DCONSTRAINTGROUP,
-  DWG_TYPE_ASSOCMLEADERACTIONBODY,
   DWG_TYPE_ASSOC3POINTANGULARDIMACTIONBODY,
-  DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY,
-  DWG_TYPE_ASSOCORDINATEDIMACTIONBODY,
-  DWG_TYPE_ASSOCROTATEDDIMACTIONBODY,
   DWG_TYPE_ASSOCACTION,
-  DWG_TYPE_ASSOCDEPENDENCY,
-  DWG_TYPE_ASSOCGEOMDEPENDENCY,
-  DWG_TYPE_ASSOCVALUEDEPENDENCY,
   DWG_TYPE_ASSOCACTIONPARAM,
-  DWG_TYPE_ASSOCASMBODYACTIONPARAM,
-  DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM,
-  DWG_TYPE_ASSOCEDGEACTIONPARAM,
-  DWG_TYPE_ASSOCFACEACTIONPARAM,
-  DWG_TYPE_ASSOCOBJECTACTIONPARAM,
-  DWG_TYPE_ASSOCPATHACTIONPARAM,
-  DWG_TYPE_ASSOCPOINTREFACTIONPARAM,
-  DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM,
-  DWG_TYPE_ASSOCVERTEXACTIONPARAM,
+  DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY,
+  DWG_TYPE_ASSOCARRAYACTIONBODY,
+  DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY,
   DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS,
   DWG_TYPE_ASSOCARRAYPATHPARAMETERS,
   DWG_TYPE_ASSOCARRAYPOLARPARAMETERS,
   DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS,
-  DWG_TYPE_ASSOCARRAYACTIONBODY,
-  DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY,
-  DWG_TYPE_ASSOCRESTOREENTITYSTATEACTIONBODY,
+  DWG_TYPE_ASSOCASMBODYACTIONPARAM,
   DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM,
+  DWG_TYPE_ASSOCDEPENDENCY,
+  DWG_TYPE_ASSOCDIMDEPENDENCYBODY,
+  DWG_TYPE_ASSOCEDGEACTIONPARAM,
   DWG_TYPE_ASSOCEDGECHAMFERACTIONBODY,
   DWG_TYPE_ASSOCEDGEFILLETACTIONBODY,
   DWG_TYPE_ASSOCEXTENDSURFACEACTIONBODY,
   DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCFACEACTIONPARAM,
   DWG_TYPE_ASSOCFILLETSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCGEOMDEPENDENCY,
   DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCMLEADERACTIONBODY,
+  DWG_TYPE_ASSOCNETWORK,
   DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCOBJECTACTIONPARAM,
   DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCORDINATEDIMACTIONBODY,
+  DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM,
   DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCPATHACTIONPARAM,
+  DWG_TYPE_ASSOCPERSSUBENTMANAGER,
   DWG_TYPE_ASSOCPLANESURFACEACTIONBODY,
+  DWG_TYPE_ASSOCPOINTREFACTIONPARAM,
+  DWG_TYPE_ASSOCRESTOREENTITYSTATEACTIONBODY,
   DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY,
+  DWG_TYPE_ASSOCROTATEDDIMACTIONBODY,
   DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY,
   DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY,
-  DWG_TYPE_ASSOCNETWORK,
-  DWG_TYPE_ASSOCPERSSUBENTMANAGER,
+  DWG_TYPE_ASSOCVALUEDEPENDENCY,
   DWG_TYPE_ASSOCVARIABLE,
+  DWG_TYPE_ASSOCVERTEXACTIONPARAM,
   DWG_TYPE_ATEXT,
   DWG_TYPE_BACKGROUND,
+  DWG_TYPE_BASEPOINTPARAMETERENTITY,
   DWG_TYPE_BLKREFOBJECTCONTEXTDATA,
+  DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER,
+  DWG_TYPE_BLOCKALIGNMENTGRIP,
+  DWG_TYPE_BLOCKALIGNMENTPARAMETER,
+  DWG_TYPE_BLOCKANGULARCONSTRAINTPARAMETER,
+  DWG_TYPE_BLOCKARRAYACTION,
+  DWG_TYPE_BLOCKBASEPOINTPARAMETER,
+  DWG_TYPE_BLOCKDIAMETRICCONSTRAINTPARAMETER,
+  DWG_TYPE_BLOCKFLIPACTION,
+  DWG_TYPE_BLOCKFLIPGRIP,
+  DWG_TYPE_BLOCKFLIPPARAMETER,
   DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT,
-  DWG_TYPE_ASSOCDIMDEPENDENCYBODY,
+  DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER,
+  DWG_TYPE_BLOCKLINEARCONSTRAINTPARAMETER,
+  DWG_TYPE_BLOCKLINEARGRIP,
+  DWG_TYPE_BLOCKLINEARPARAMETER,
+  DWG_TYPE_BLOCKLOOKUPACTION,
+  DWG_TYPE_BLOCKLOOKUPGRIP,
+  DWG_TYPE_BLOCKLOOKUPPARAMETER,
+  DWG_TYPE_BLOCKMOVEACTION,
   DWG_TYPE_BLOCKPARAMDEPENDENCYBODY,
-  DWG_TYPE_BLOCKVISIBILITYPARAMETER,
+  DWG_TYPE_BLOCKPOINTPARAMETER,
+  DWG_TYPE_BLOCKPOLARGRIP,
+  DWG_TYPE_BLOCKPOLARPARAMETER,
+  DWG_TYPE_BLOCKPOLARSTRETCHACTION,
+  DWG_TYPE_BLOCKPROPERTIESTABLE,
+  DWG_TYPE_BLOCKPROPERTIESTABLEGRIP,
+  DWG_TYPE_BLOCKRADIALCONSTRAINTPARAMETER,
+  DWG_TYPE_BLOCKREPRESENTATION,
+  DWG_TYPE_BLOCKROTATEACTION,
+  DWG_TYPE_BLOCKROTATIONGRIP,
+  DWG_TYPE_BLOCKROTATIONPARAMETER,
+  DWG_TYPE_BLOCKSCALEACTION,
+  DWG_TYPE_BLOCKSTRETCHACTION,
+  DWG_TYPE_BLOCKUSERPARAMETER,
+  DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER,
   DWG_TYPE_BLOCKVISIBILITYGRIP,
+  DWG_TYPE_BLOCKVISIBILITYPARAMETER,
+  DWG_TYPE_BLOCKXYGRIP,
+  DWG_TYPE_BLOCKXYPARAMETER,
   DWG_TYPE_CAMERA,
   DWG_TYPE_CELLSTYLEMAP,
-  DWG_TYPE_CSACDOCUMENTOPTIONS,
   DWG_TYPE_CONTEXTDATAMANAGER,
+  DWG_TYPE_CSACDOCUMENTOPTIONS,
   DWG_TYPE_CURVEPATH,
   DWG_TYPE_DATALINK,
   DWG_TYPE_DATATABLE,
@@ -474,28 +511,31 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_DICTIONARYWDFLT,
   DWG_TYPE_DIMASSOC,
   DWG_TYPE_DMDIMOBJECTCONTEXTDATA,
+  DWG_TYPE_DYNAMICBLOCKPROXYNODE,
   DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER,
   DWG_TYPE_EVALUATION_GRAPH,
   DWG_TYPE_EXTRUDEDSURFACE,
   DWG_TYPE_FCFOBJECTCONTEXTDATA,
   DWG_TYPE_FIELD,
   DWG_TYPE_FIELDLIST,
+  DWG_TYPE_FLIPPARAMETERENTITY,
   DWG_TYPE_GEODATA,
   DWG_TYPE_GEOMAPIMAGE,
   DWG_TYPE_GEOPOSITIONMARKER,
   DWG_TYPE_HELIX,
   DWG_TYPE_IDBUFFER,
   DWG_TYPE_IMAGE,
-  DWG_TYPE_INDEX,
   DWG_TYPE_IMAGEDEF,
   DWG_TYPE_IMAGEDEF_REACTOR,
+  DWG_TYPE_INDEX,
   DWG_TYPE_LARGE_RADIAL_DIMENSION,
-  DWG_TYPE_LAYER_INDEX,
   DWG_TYPE_LAYERFILTER,
+  DWG_TYPE_LAYER_INDEX,
   DWG_TYPE_LAYOUTPRINTCONFIG,
   DWG_TYPE_LEADEROBJECTCONTEXTDATA,
   DWG_TYPE_LIGHT,
   DWG_TYPE_LIGHTLIST,
+  DWG_TYPE_LINEARPARAMETERENTITY,
   DWG_TYPE_LOFTEDSURFACE,
   DWG_TYPE_MATERIAL,
   DWG_TYPE_MENTALRAYRENDERSETTINGS,
@@ -511,24 +551,26 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NAVISWORKSMODELDEF,
   DWG_TYPE_NPOCOLLECTION,
   DWG_TYPE_NURBSURFACE,
-  DWG_TYPE_OBJECT_PTR,
   DWG_TYPE_OBJECTCONTEXTDATA,
+  DWG_TYPE_OBJECT_PTR,
   DWG_TYPE_ORDDIMOBJECTCONTEXTDATA,
   DWG_TYPE_PERSUBENTMGR,
   DWG_TYPE_PLANESURFACE,
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_POINTCLOUD,
+  DWG_TYPE_POINTPARAMETERENTITY,
   DWG_TYPE_POINTPATH,
-  DWG_TYPE_RADIMOBJECTCONTEXTDATA,
   DWG_TYPE_RADIMLGOBJECTCONTEXTDATA,
+  DWG_TYPE_RADIMOBJECTCONTEXTDATA,
   DWG_TYPE_RAPIDRTRENDERENVIRONMENT,
   DWG_TYPE_RAPIDRTRENDERSETTINGS,
   DWG_TYPE_RASTERVARIABLES,
-  DWG_TYPE_RENDERENVIRONMENT,
   DWG_TYPE_RENDERENTRY,
+  DWG_TYPE_RENDERENVIRONMENT,
   DWG_TYPE_RENDERGLOBAL,
   DWG_TYPE_RENDERSETTINGS,
   DWG_TYPE_REVOLVEDSURFACE,
+  DWG_TYPE_ROTATIONPARAMETERENTITY,
   DWG_TYPE_RTEXT,
   DWG_TYPE_SCALE,
   DWG_TYPE_SECTIONOBJECT,
@@ -555,6 +597,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_WIPEOUT,
   DWG_TYPE_WIPEOUTVARIABLES,
   DWG_TYPE_XREFPANELOBJECT,
+  DWG_TYPE_XYPARAMETERENTITY,
   // after 1.0 add new types here for binary compat
 
   DWG_TYPE_FREED       = 0xfffd,
@@ -5809,7 +5852,6 @@ typedef struct _dwg_EvalExpr
   BITCODE_BLd parentid; /* -1 if none */
   BITCODE_BL major;
   BITCODE_BL minor;
-  BITCODE_BL nodeid;
   BITCODE_BSd value_code; // compare to EvalVariant
   union
   {
@@ -5821,6 +5863,7 @@ typedef struct _dwg_EvalExpr
     BITCODE_H   handle91;
     BITCODE_BS  short70;
   } value;
+  BITCODE_BL nodeid;
 } Dwg_EvalExpr;
 
 typedef struct _dwg_ACSH_SubentMaterial
@@ -6944,44 +6987,142 @@ typedef struct _dwg_object_CSACDOCUMENTOPTIONS
 
 // dynamic blocks:
 
+#define BLOCKELEMENT_fields                     \
+  Dwg_EvalExpr evalexpr;                        \
+  BITCODE_T name;                               \
+  BITCODE_BL be_major;                          \
+  BITCODE_BL be_minor;                          \
+  BITCODE_BL eed1071
+
+#define BLOCKPARAMETER_fields               \
+  BLOCKELEMENT_fields;                      \
+  BITCODE_B show_properties; /* DXF 280 */  \
+  BITCODE_B chain_actions    /* DXF 281 */
+
+#define BLOCKACTION_fields                      \
+  BLOCKELEMENT_fields;                          \
+  BITCODE_3BD display_location;                 \
+  BITCODE_BL num_actions;                       \
+  BITCODE_BL *actions;                          \
+  BITCODE_BL num_deps;                          \
+  BITCODE_H *deps
+
+// XY action params
+#define BLOCKACTION_doubles_fields              \
+  BITCODE_BD action_offset_x;                   \
+  BITCODE_BD action_offset_y;                   \
+  BITCODE_BD angle_offset
+
+#define BLOCKGRIP_fields                        \
+  BLOCKELEMENT_fields;                          \
+  BITCODE_BL bg_version;                        \
+  BITCODE_BL bg_bl92;                           \
+  BITCODE_3BD bg_location;                      \
+  BITCODE_B bg_insert_cycling;                  \
+  BITCODE_BLd bg_insert_cycling_weight
+
+// same as BLOCKACTION_connectionpts
+typedef  struct _dwg_BLOCKPARAMETER_connection {
+  BITCODE_BL code;
+  BITCODE_T name;
+} Dwg_BLOCKPARAMETER_connection;
+
+typedef  struct dwg_BLOCKPARAMETER_PropInfo {
+  BITCODE_BL num_connections;
+  Dwg_BLOCKPARAMETER_connection *connections;
+} Dwg_BLOCKPARAMETER_PropInfo;
+
+typedef  struct dwg_BLOCKPARAMVALUESET {
+  BITCODE_T desc;
+  BITCODE_BL flags;
+  BITCODE_BD minimum;
+  BITCODE_BD maximum;
+  BITCODE_BD increment;
+  BITCODE_BS num_valuelist;
+  BITCODE_BD *valuelist;
+} Dwg_BLOCKPARAMVALUESET;
+
+#define BLOCK1PTPARAMETER_fields                  \
+  BLOCKPARAMETER_fields;                          \
+  BITCODE_3BD def_pt;                             \
+  BITCODE_BL num_propinfos; /* 2 */               \
+  Dwg_BLOCKPARAMETER_PropInfo prop1;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop2
+
+#define BLOCK2PTPARAMETER_fields                  \
+  BLOCKPARAMETER_fields;                          \
+  BITCODE_3BD def_basept;                         \
+  BITCODE_3BD def_endpt;                          \
+  Dwg_BLOCKPARAMETER_PropInfo prop1;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop2;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop3;              \
+  Dwg_BLOCKPARAMETER_PropInfo prop4;              \
+  BITCODE_BL *prop_states;                        \
+  BITCODE_BS parameter_base_location;             \
+  BITCODE_3BD upd_basept;                         \
+  BITCODE_3BD basept;                             \
+  BITCODE_3BD upd_endpt;                          \
+  BITCODE_3BD endpt
+
+typedef  struct _dwg_BLOCKACTION_connectionpts
+{
+  BITCODE_BL code;
+  BITCODE_T name;
+} Dwg_BLOCKACTION_connectionpts;
+
+#define BLOCKACTION_WITHBASEPT_fields           \
+  BLOCKACTION_fields;                           \
+  BITCODE_3BD offset;                           \
+  Dwg_BLOCKACTION_connectionpts conn_pt1;       \
+  Dwg_BLOCKACTION_connectionpts conn_pt2;       \
+  BITCODE_B dependent;                          \
+  BITCODE_3BD base_pt;                          \
+  BITCODE_3BD stretch_pt
+
+#define BLOCKPARAMVALUESET_fields               \
+  Dwg_BLOCKPARAMVALUESET value_set
+
+#define BLOCKCONSTRAINTPARAMETER_fields         \
+  BLOCK2PTPARAMETER_fields;                     \
+  BITCODE_H dependency
+
+#define BLOCKLINEARCONSTRAINTPARAMETER_fields    \
+  BLOCKCONSTRAINTPARAMETER_fields;               \
+  BITCODE_T expr_name;                           \
+  BITCODE_T expr_description;                    \
+  BITCODE_BD value;                              \
+  BLOCKPARAMVALUESET_fields
+
 typedef struct _dwg_BLOCKVISIBILITYPARAMETER_state
 {
   struct _dwg_object_BLOCKVISIBILITYPARAMETER *parent;
-  BITCODE_H block;
-  BITCODE_BL bl1;
-  BITCODE_BL bl2;
+  BITCODE_T name;            /* DXF 301 */
+  BITCODE_BL num_blocks;     /* DXF 94 */
+  BITCODE_H *blocks;         /* DXF 332 */
+  BITCODE_BL num_params;     /* DXF 95 */
+  BITCODE_H *params;         /* DXF 333 BLOCKVISIBILITYPARAMETER objects */
 } Dwg_BLOCKVISIBILITYPARAMETER_state;
 
 typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
 {
   struct _dwg_object_object *parent;
-  BITCODE_B is_initialized;
-  BITCODE_B b2;
-  BITCODE_T name;
-  BITCODE_T desc;
-  BITCODE_BL num_states;
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_B is_initialized;	// DXF 281
+  BITCODE_B unknown_bool; 	// DXF 91, history_compression, history_required or is_visible?
+  BITCODE_T blockvisi_name;   	// DXF 301
+  BITCODE_T blockvisi_desc;	// DXF 302
+  BITCODE_BL num_blocks;	// DXF 93
+  BITCODE_H *blocks;		// DXF 331
+  BITCODE_BL num_states;	// DXF 92
   Dwg_BLOCKVISIBILITYPARAMETER_state *states;
+  BITCODE_T cur_state_name;
+  BITCODE_BL cur_state;
 } Dwg_Object_BLOCKVISIBILITYPARAMETER;
-
-#define ACDBBLOCKELEMENT_fields \
-  BITCODE_T be_t;    \
-  BITCODE_BL be_bl1; \
-  BITCODE_BL be_bl2; \
-  BITCODE_BL be_bl3
 
 typedef struct _dwg_object_BLOCKVISIBILITYGRIP
 {
   struct _dwg_object_object *parent;
-  Dwg_EvalExpr evalexpr;
-  ACDBBLOCKELEMENT_fields; // FIXME: make it a struct
-  // AcDbBlockGrip
-  BITCODE_BL bg_bl1;
-  BITCODE_BL bg_bl2;
-  BITCODE_3BD bg_pt;
-  BITCODE_B bg_insert_cycling;
-  BITCODE_BL bg_insert_cycling_weight;
-  //BITCODE_3BD bg_location; //?
-  //BITCODE_3BD bg_display_location; // ?
+  BLOCKGRIP_fields;
   // AcDbBlockVisibilityGrip
 } Dwg_Object_BLOCKVISIBILITYGRIP;
 
@@ -6994,20 +7135,404 @@ typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT
   BITCODE_T grip_expr;  // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
 } Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT;
 
-typedef struct _dwg_entity_VISIBILITYPARAMETERENTITY
-{
-  struct _dwg_object_entity *parent;
-} Dwg_Entity_VISIBILITYPARAMETERENTITY;
-
 typedef struct _dwg_entity_VISIBILITYGRIPENTITY
 {
   struct _dwg_object_entity *parent;
-  //?
-  Dwg_EvalExpr evalexpr;
-  // AcDbBlockGripExpr
-  BITCODE_BL grip_type;
-  BITCODE_T grip_expr;
+  // ??
 } Dwg_Entity_VISIBILITYGRIPENTITY;
+
+typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_ALIGNMENTPARAMETERENTITY;
+
+typedef struct _dwg_entity_BASEPOINTPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_BASEPOINTPARAMETERENTITY;
+
+typedef struct _dwg_entity_FLIPPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_FLIPPARAMETERENTITY;
+
+typedef struct _dwg_entity_LINEARPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_LINEARPARAMETERENTITY;
+
+typedef struct _dwg_entity_POINTPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_POINTPARAMETERENTITY;
+
+typedef struct _dwg_entity_ROTATIONPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_ROTATIONPARAMETERENTITY;
+
+typedef struct _dwg_entity_VISIBILITYPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_VISIBILITYPARAMETERENTITY;
+
+typedef struct _dwg_entity_XYPARAMETERENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_XYPARAMETERENTITY;
+
+typedef struct _dwg_object_BLOCKALIGNMENTGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+  BITCODE_3BD orientation;
+} Dwg_Object_BLOCKALIGNMENTGRIP;
+
+typedef struct _dwg_object_BLOCKALIGNMENTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_B align_perpendicular;	/* DXF 280 */
+} Dwg_Object_BLOCKALIGNMENTPARAMETER;
+
+typedef struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCKCONSTRAINTPARAMETER_fields;
+  BITCODE_3BD center_pt;	/* DXF 1011 */
+  BITCODE_3BD end_pt;	/* DXF 1012 */
+  BITCODE_T expr_name;	/* DXF 305 */
+  BITCODE_T expr_description;	/* DXF 306 */
+  BITCODE_BD angle;	/* DXF 140, offset is the result */
+  BITCODE_B orientation_on_both_grips;	/* DXF 280 */
+  BLOCKPARAMVALUESET_fields;
+} Dwg_Object_BLOCKANGULARCONSTRAINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCKCONSTRAINTPARAMETER_fields;
+  BITCODE_T expr_name;  /* DXF 305, a copy of the EvalExpr name */
+  BITCODE_T expr_description; /* DXF 306 */
+  BITCODE_BD distance;  /* DXF 140 */
+  BITCODE_B orientation_on_both_grips;	/* DXF 280 */
+  BLOCKPARAMVALUESET_fields;
+} Dwg_Object_BLOCKDIAMETRICCONSTRAINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCKCONSTRAINTPARAMETER_fields;
+  BITCODE_T expr_name;  /* DXF 305, a copy of the EvalExpr name */
+  BITCODE_T expr_description; /* DXF 306 */
+  BITCODE_BD distance;  /* DXF 140 */
+  BLOCKPARAMVALUESET_fields;
+} Dwg_Object_BLOCKRADIALCONSTRAINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKARRAYACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
+  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
+  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
+  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
+  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
+  BITCODE_BD column_offset; /*!< DXF 140 */
+  BITCODE_BD row_offset;    /*!< DXF 141 */
+} Dwg_Object_BLOCKARRAYACTION;
+
+typedef struct _dwg_object_BLOCKBASEPOINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_3BD pt;	/* DXF 1011 */
+  BITCODE_3BD base_pt;	/* DXF 1012 */
+} Dwg_Object_BLOCKBASEPOINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKFLIPACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
+  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
+  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
+  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
+  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
+  BLOCKACTION_doubles_fields;
+} Dwg_Object_BLOCKFLIPACTION;
+
+typedef struct _dwg_object_BLOCKFLIPGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+  BITCODE_BL combined_state;
+  BITCODE_3BD orientation;
+  BITCODE_BS upd_state;
+  BITCODE_BS state;
+} Dwg_Object_BLOCKFLIPGRIP;
+
+typedef struct _dwg_object_BLOCKFLIPPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T flip_label;		/*!< DXF 305 */
+  BITCODE_T flip_label_desc;	/*!< DXF 306 */
+  BITCODE_T base_state_label;	/*!< DXF 307 */
+  BITCODE_T flipped_state_label;/*!< DXF 308 */
+  BITCODE_3BD def_label_pt;	/*!< DXF 1012 */
+  BITCODE_BL bl96;		/*!< DXF 96 */
+  BITCODE_T tooltip;		/*!< DXF 309 */
+} Dwg_Object_BLOCKFLIPPARAMETER;
+
+typedef struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCKLINEARCONSTRAINTPARAMETER_fields;
+} Dwg_Object_BLOCKALIGNEDCONSTRAINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCKLINEARCONSTRAINTPARAMETER_fields;
+} Dwg_Object_BLOCKLINEARCONSTRAINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCKLINEARCONSTRAINTPARAMETER_fields;
+} Dwg_Object_BLOCKHORIZONTALCONSTRAINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCKLINEARCONSTRAINTPARAMETER_fields;
+} Dwg_Object_BLOCKVERTICALCONSTRAINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKLINEARGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+  BITCODE_3BD orientation; /* DXF 140,141,142 */
+} Dwg_Object_BLOCKLINEARGRIP;
+
+typedef struct _dwg_object_BLOCKLINEARPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T distance_name;	/*!< DXF 305 */
+  BITCODE_T distance_desc;	/*!< DXF 306 */
+  BITCODE_BD distance;		/*!< DXF 306 */
+  Dwg_BLOCKPARAMVALUESET value_set;
+} Dwg_Object_BLOCKLINEARPARAMETER;
+
+typedef struct _dwg_BLOCKLOOKUPACTION_lut
+{
+  struct _dwg_object_BLOCKLOOKUPACTION *parent;
+  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 94, 303 */
+  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 95, 304 */
+  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 962, 305 */
+  BITCODE_B b282;
+  BITCODE_B b281;
+} Dwg_BLOCKLOOKUPACTION_lut;
+
+typedef struct _dwg_object_BLOCKLOOKUPACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
+  BITCODE_BL numelems; /* computed */
+  BITCODE_BL numrows; /* DXF 92 */
+  BITCODE_BL numcols; /* DXF 93 */
+  Dwg_BLOCKLOOKUPACTION_lut *lut;
+  BITCODE_T *exprs;
+  BITCODE_B b280;
+} Dwg_Object_BLOCKLOOKUPACTION;
+
+typedef struct _dwg_object_BLOCKLOOKUPGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+} Dwg_Object_BLOCKLOOKUPGRIP;
+
+typedef struct _dwg_object_BLOCKLOOKUPPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_T lookup_name;	/*!< DXF 303 */
+  BITCODE_T lookup_desc;	/*!< DXF 304 */
+  BITCODE_BL index;		/*!< DXF 94 ?? */
+  BITCODE_T unknown_t;
+} Dwg_Object_BLOCKLOOKUPPARAMETER;
+
+typedef struct _dwg_object_BLOCKMOVEACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
+  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
+  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
+  BLOCKACTION_doubles_fields;
+} Dwg_Object_BLOCKMOVEACTION;
+
+typedef struct _dwg_object_BLOCKPOINTPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_T position_name;  /* DXF 303 */
+  BITCODE_T position_desc;  /* DXF 304 */
+  BITCODE_3BD def_label_pt; /* DXF 1011 */
+} Dwg_Object_BLOCKPOINTPARAMETER;
+
+typedef struct _dwg_object_BLOCKPOLARGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+} Dwg_Object_BLOCKPOLARGRIP;
+
+typedef struct _dwg_object_BLOCKPOLARPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T  angle_name;	/*!< DXF 305 */
+  BITCODE_T  angle_desc;	/*!< DXF 306 */
+  BITCODE_T  distance_name;	/*!< DXF 305 */
+  BITCODE_T  distance_desc;	/*!< DXF 306 */
+  BITCODE_BD  offset;		/*!< DXF 140 */
+  Dwg_BLOCKPARAMVALUESET angle_value_set;
+  Dwg_BLOCKPARAMVALUESET distance_value_set;
+  //BITCODE_3BD base_angle_pt;
+} Dwg_Object_BLOCKPOLARPARAMETER;
+
+typedef struct _dwg_object_BLOCKPOLARSTRETCHACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
+  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
+  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
+  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
+  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
+  Dwg_BLOCKACTION_connectionpts conn_pt5; /*!< DXF 96, 305 */
+  Dwg_BLOCKACTION_connectionpts conn_pt6; /*!< DXF 97, 306 */
+  BITCODE_BL num_pts;   // 72
+  BITCODE_2RD *pts;     // 10
+  BITCODE_BL num_hdls;  // 72
+  BITCODE_H *hdls;      // 331
+  BITCODE_BS *shorts;   // 74
+  BITCODE_BL num_codes; // 75
+  BITCODE_BL *codes;    // 76
+  // ??
+} Dwg_Object_BLOCKPOLARSTRETCHACTION;
+
+typedef struct _dwg_object_BLOCKPROPERTIESTABLE
+{
+  struct _dwg_object_object *parent;
+  // ??
+} Dwg_Object_BLOCKPROPERTIESTABLE;
+
+typedef struct _dwg_object_BLOCKPROPERTIESTABLEGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+} Dwg_Object_BLOCKPROPERTIESTABLEGRIP;
+
+typedef struct _dwg_object_BLOCKREPRESENTATION
+{
+  struct _dwg_object_object *parent;
+  // ??
+} Dwg_Object_BLOCKREPRESENTATION;
+
+typedef struct _dwg_object_BLOCKROTATEACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_WITHBASEPT_fields;
+  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
+} Dwg_Object_BLOCKROTATEACTION;
+
+typedef struct _dwg_object_BLOCKROTATIONGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+} Dwg_Object_BLOCKROTATIONGRIP;
+
+typedef struct _dwg_object_BLOCKROTATIONPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_3BD def_base_angle_pt;
+  BITCODE_T angle_name;	/*!< DXF 305 */
+  BITCODE_T angle_desc;	/*!< DXF 306 */
+  BITCODE_BD angle;		/*!< DXF 306 */
+  Dwg_BLOCKPARAMVALUESET angle_value_set;
+  //BITCODE_3BD base_angle_pt;
+} Dwg_Object_BLOCKROTATIONPARAMETER;
+
+typedef struct _dwg_object_BLOCKSCALEACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_WITHBASEPT_fields;
+  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
+  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
+  Dwg_BLOCKACTION_connectionpts conn_pt5; /*!< DXF 96, 305 */
+} Dwg_Object_BLOCKSCALEACTION;
+
+typedef struct _dwg_object_BLOCKSTRETCHACTION
+{
+  struct _dwg_object_object *parent;
+  BLOCKACTION_fields;
+  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
+  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
+  BITCODE_BL num_pts;   // 72
+  BITCODE_2RD *pts;     // 10
+  BITCODE_BL num_hdls;  // 72
+  BITCODE_H *hdls;      // 331
+  BITCODE_BS *shorts;   // 74
+  BITCODE_BL num_codes; // 75
+  BITCODE_BL *codes;    // 76
+  // ??
+  BLOCKACTION_doubles_fields;
+} Dwg_Object_BLOCKSTRETCHACTION;
+
+typedef struct _dwg_object_BLOCKUSERPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK1PTPARAMETER_fields;
+  BITCODE_BS flag;		/*!< DXF 90 */
+  BITCODE_H assocvariable;	/*!< DXF 305 */
+  BITCODE_T expr;		/*!< DXF 301 */
+  Dwg_EvalVariant value;
+  BITCODE_BS type;		/*!< DXF 170 (already value.code)? */
+} Dwg_Object_BLOCKUSERPARAMETER;
+
+typedef struct _dwg_object_BLOCKXYGRIP
+{
+  struct _dwg_object_object *parent;
+  BLOCKGRIP_fields;
+} Dwg_Object_BLOCKXYGRIP;
+
+typedef struct _dwg_object_BLOCKXYPARAMETER
+{
+  struct _dwg_object_object *parent;
+  BLOCK2PTPARAMETER_fields;
+  BITCODE_T x_label;		// DXF 305
+  BITCODE_T x_label_desc;	// DXF 306
+  BITCODE_T y_label;		// DXF 307
+  BITCODE_T y_label_desc;	// DXF 308
+  BITCODE_BD x_value;		// DXF 141
+  BITCODE_BD y_value;		// DXF 142
+  Dwg_BLOCKPARAMVALUESET x_value_set;
+  Dwg_BLOCKPARAMVALUESET y_value_set;
+} Dwg_Object_BLOCKXYPARAMETER;
+
+typedef struct _dwg_object_DYNAMICBLOCKPROXYNODE
+{
+  struct _dwg_object_object *parent;
+  // ??
+} Dwg_Object_DYNAMICBLOCKPROXYNODE;
 
 /**
  -----------------------------------
@@ -7167,20 +7692,27 @@ typedef struct _dwg_object_entity
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     /* debugging */
+    Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
     Dwg_Entity_ATEXT *ATEXT;
+    Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
+    Dwg_Entity_FLIPPARAMETERENTITY *FLIPPARAMETERENTITY;
     Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
+    Dwg_Entity_LINEARPARAMETERENTITY *LINEARPARAMETERENTITY;
     Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
     Dwg_Entity_MPOLYGON *MPOLYGON;
     Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
     Dwg_Entity_NURBSURFACE *NURBSURFACE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
+    Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
     Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
+    Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
     Dwg_Entity_RTEXT *RTEXT;
     Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
     Dwg_Entity_TABLE *TABLE;
     Dwg_Entity_VISIBILITYGRIPENTITY *VISIBILITYGRIPENTITY;
     Dwg_Entity_VISIBILITYPARAMETERENTITY *VISIBILITYPARAMETERENTITY;
+    Dwg_Entity_XYPARAMETERENTITY *XYPARAMETERENTITY;
     /* End auto-generated entity-union */
   } tio;
 
@@ -7338,6 +7870,8 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCTRIMSURFACEACTIONBODY *ASSOCTRIMSURFACEACTIONBODY;
     Dwg_Object_ASSOCVALUEDEPENDENCY *ASSOCVALUEDEPENDENCY;
     Dwg_Object_BACKGROUND *BACKGROUND;
+    Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *BLOCKGRIPLOCATIONCOMPONENT;
+    Dwg_Object_BLOCKVISIBILITYGRIP *BLOCKVISIBILITYGRIP;
     Dwg_Object_DBCOLOR *DBCOLOR;
     Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DIMASSOC *DIMASSOC;
@@ -7394,16 +7928,50 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCVARIABLE *ASSOCVARIABLE;
     Dwg_Object_ASSOCVERTEXACTIONPARAM *ASSOCVERTEXACTIONPARAM;
     Dwg_Object_BLKREFOBJECTCONTEXTDATA *BLKREFOBJECTCONTEXTDATA;
-    Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *BLOCKGRIPLOCATIONCOMPONENT;
+    Dwg_Object_BLOCKALIGNEDCONSTRAINTPARAMETER *BLOCKALIGNEDCONSTRAINTPARAMETER;
+    Dwg_Object_BLOCKALIGNMENTGRIP *BLOCKALIGNMENTGRIP;
+    Dwg_Object_BLOCKALIGNMENTPARAMETER *BLOCKALIGNMENTPARAMETER;
+    Dwg_Object_BLOCKANGULARCONSTRAINTPARAMETER *BLOCKANGULARCONSTRAINTPARAMETER;
+    Dwg_Object_BLOCKARRAYACTION *BLOCKARRAYACTION;
+    Dwg_Object_BLOCKBASEPOINTPARAMETER *BLOCKBASEPOINTPARAMETER;
+    Dwg_Object_BLOCKDIAMETRICCONSTRAINTPARAMETER *BLOCKDIAMETRICCONSTRAINTPARAMETER;
+    Dwg_Object_BLOCKFLIPACTION *BLOCKFLIPACTION;
+    Dwg_Object_BLOCKFLIPGRIP *BLOCKFLIPGRIP;
+    Dwg_Object_BLOCKFLIPPARAMETER *BLOCKFLIPPARAMETER;
+    Dwg_Object_BLOCKHORIZONTALCONSTRAINTPARAMETER *BLOCKHORIZONTALCONSTRAINTPARAMETER;
+    Dwg_Object_BLOCKLINEARCONSTRAINTPARAMETER *BLOCKLINEARCONSTRAINTPARAMETER;
+    Dwg_Object_BLOCKLINEARGRIP *BLOCKLINEARGRIP;
+    Dwg_Object_BLOCKLINEARPARAMETER *BLOCKLINEARPARAMETER;
+    Dwg_Object_BLOCKLOOKUPACTION *BLOCKLOOKUPACTION;
+    Dwg_Object_BLOCKLOOKUPGRIP *BLOCKLOOKUPGRIP;
+    Dwg_Object_BLOCKLOOKUPPARAMETER *BLOCKLOOKUPPARAMETER;
+    Dwg_Object_BLOCKMOVEACTION *BLOCKMOVEACTION;
     Dwg_Object_BLOCKPARAMDEPENDENCYBODY *BLOCKPARAMDEPENDENCYBODY;
-    Dwg_Object_BLOCKVISIBILITYGRIP *BLOCKVISIBILITYGRIP;
+    Dwg_Object_BLOCKPOINTPARAMETER *BLOCKPOINTPARAMETER;
+    Dwg_Object_BLOCKPOLARGRIP *BLOCKPOLARGRIP;
+    Dwg_Object_BLOCKPOLARPARAMETER *BLOCKPOLARPARAMETER;
+    Dwg_Object_BLOCKPOLARSTRETCHACTION *BLOCKPOLARSTRETCHACTION;
+    Dwg_Object_BLOCKPROPERTIESTABLE *BLOCKPROPERTIESTABLE;
+    Dwg_Object_BLOCKPROPERTIESTABLEGRIP *BLOCKPROPERTIESTABLEGRIP;
+    Dwg_Object_BLOCKRADIALCONSTRAINTPARAMETER *BLOCKRADIALCONSTRAINTPARAMETER;
+    Dwg_Object_BLOCKREPRESENTATION *BLOCKREPRESENTATION;
+    Dwg_Object_BLOCKROTATEACTION *BLOCKROTATEACTION;
+    Dwg_Object_BLOCKROTATIONGRIP *BLOCKROTATIONGRIP;
+    Dwg_Object_BLOCKROTATIONPARAMETER *BLOCKROTATIONPARAMETER;
+    Dwg_Object_BLOCKSCALEACTION *BLOCKSCALEACTION;
+    Dwg_Object_BLOCKSTRETCHACTION *BLOCKSTRETCHACTION;
+    Dwg_Object_BLOCKUSERPARAMETER *BLOCKUSERPARAMETER;
+    Dwg_Object_BLOCKVERTICALCONSTRAINTPARAMETER *BLOCKVERTICALCONSTRAINTPARAMETER;
     Dwg_Object_BLOCKVISIBILITYPARAMETER *BLOCKVISIBILITYPARAMETER;
+    Dwg_Object_BLOCKXYGRIP *BLOCKXYGRIP;
+    Dwg_Object_BLOCKXYPARAMETER *BLOCKXYPARAMETER;
     Dwg_Object_CONTEXTDATAMANAGER *CONTEXTDATAMANAGER;
     Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CURVEPATH *CURVEPATH;
     Dwg_Object_DATALINK *DATALINK;
     Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DMDIMOBJECTCONTEXTDATA *DMDIMOBJECTCONTEXTDATA;
+    Dwg_Object_DYNAMICBLOCKPROXYNODE *DYNAMICBLOCKPROXYNODE;
     Dwg_Object_EVALUATION_GRAPH *EVALUATION_GRAPH;
     Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
     Dwg_Object_GEOMAPIMAGE *GEOMAPIMAGE;
@@ -8547,6 +9115,8 @@ EXPORT int dwg_setup_ASSOCREVOLVEDSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCTRIMSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVALUEDEPENDENCY (Dwg_Object *obj);
 EXPORT int dwg_setup_BACKGROUND (Dwg_Object *obj);
+EXPORT int dwg_setup_BLOCKGRIPLOCATIONCOMPONENT (Dwg_Object *obj);
+EXPORT int dwg_setup_BLOCKVISIBILITYGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
@@ -8563,20 +9133,27 @@ EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
+  EXPORT int dwg_setup_ALIGNMENTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
+  EXPORT int dwg_setup_BASEPOINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
+  EXPORT int dwg_setup_FLIPPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOPOSITIONMARKER (Dwg_Object *obj);
+  EXPORT int dwg_setup_LINEARPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_LOFTEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_MPOLYGON (Dwg_Object *obj);
   EXPORT int dwg_setup_NAVISWORKSMODEL (Dwg_Object *obj);
   EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
+  EXPORT int dwg_setup_ROTATIONPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
   EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYPARAMETERENTITY (Dwg_Object *obj);
+  EXPORT int dwg_setup_XYPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
@@ -8617,16 +9194,50 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCVARIABLE (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCVERTEXACTIONPARAM (Dwg_Object *obj);
   EXPORT int dwg_setup_BLKREFOBJECTCONTEXTDATA (Dwg_Object *obj);
-  EXPORT int dwg_setup_BLOCKGRIPLOCATIONCOMPONENT (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKALIGNEDCONSTRAINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKALIGNMENTGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKALIGNMENTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKANGULARCONSTRAINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKARRAYACTION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKBASEPOINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKDIAMETRICCONSTRAINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKFLIPACTION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKFLIPGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKFLIPPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKHORIZONTALCONSTRAINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKLINEARCONSTRAINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKLINEARGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKLINEARPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKLOOKUPACTION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKLOOKUPGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKLOOKUPPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKMOVEACTION (Dwg_Object *obj);
   EXPORT int dwg_setup_BLOCKPARAMDEPENDENCYBODY (Dwg_Object *obj);
-  EXPORT int dwg_setup_BLOCKVISIBILITYGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKPOINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKPOLARGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKPOLARPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKPOLARSTRETCHACTION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKPROPERTIESTABLE (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKPROPERTIESTABLEGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKRADIALCONSTRAINTPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKREPRESENTATION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKROTATEACTION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKROTATIONGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKROTATIONPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKSCALEACTION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKSTRETCHACTION (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKUSERPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKVERTICALCONSTRAINTPARAMETER (Dwg_Object *obj);
   EXPORT int dwg_setup_BLOCKVISIBILITYPARAMETER (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKXYGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BLOCKXYPARAMETER (Dwg_Object *obj);
   EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
   EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
   EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
   EXPORT int dwg_setup_DATALINK (Dwg_Object *obj);
   EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);
   EXPORT int dwg_setup_DMDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
+  EXPORT int dwg_setup_DYNAMICBLOCKPROXYNODE (Dwg_Object *obj);
   EXPORT int dwg_setup_EVALUATION_GRAPH (Dwg_Object *obj);
   EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);
