@@ -5,51 +5,92 @@ See the end for copying conditions.
 LibreDWG version 0.11 - planned 2020/06 - beta:
 
 New features:
-  * new programs dwgfilter, dxfwrite. dwgfilter allows custom jq queries.
-    dxfwrite allows version conversions, which dwgwrite does not yet supports.
+  * new programs dwgfilter, dxfwrite.
+    dwgfilter allows custom jq queries.
+    dxfwrite allows version conversions, which dwgwrite does not yet support.
   * Can now read all 2004+ section types: added AppInfo, FileDepList,
     Template, ObjFreeSpace;
     and as blob: RevHistory, Security, AppInfoHistory.
-    AcDsPrototype_1b datastore not fully yet, so we cannot yet read new ACIS r2013+
-    SAB blobs stored there.
+    AcDsPrototype_1b datastore not fully yet, so we cannot reliably yet read
+    new ACIS r2013+ SAB blobs stored there, but we extract them from the AcDs
+    blob by brute-force.
   * Added new string types: T and T16, TU16, T32 (for those sections)
   * Convert ACIS BinaryFile v2 SAB to old encrypted ACIS SAT v1 data, needed
     to convert pre-r2013 ACIS v2 entities to DXF.
   * Added support for many object/entity types:
-    Now stable: LIGHT, MESH, CELLSTYLEMAP, DYNAMICBLOCKPURGEPREVENTER, GEODATA,
-    LAYERFILTER, MULTILEADER, PLOTSETTINGS, SECTION_MANAGER, SECTIONOBJECT,
-    TABLEGEOMETRY, VBA_PROJECT, VISUALSTYLE.
-    New unstable: ARC_DIMENSION, ASSOCALIGNEDDIMACTIONBODY, LIGHTLIST, MATERIAL,
-    MENTALRAYRENDERSETTINGS, RAPIDRTRENDERSETTINGS, RENDERSETTINGS, SPATIAL_INDEX,
-    TABLESTYLE, SECTION_SETTINGS, DETAILVIEWSTYLE, SECTIONVIEWSTYLE, SUN.
+
+    Now stable:
+    ACSH_BOOLEAN_CLASS, ACSH_BOX_CLASS, ACSH_CYLINDER_CLASS, ACSH_FILLET_CLASS,
+    ACSH_SPHERE_CLASS, ACSH_WEDGE_CLASS, LIGHT, MESH, CELLSTYLEMAP,
+    DYNAMICBLOCKPURGEPREVENTER, INDEX, GEODATA, LAYERFILTER, MULTILEADER,
+    PLOTSETTINGS, SECTION_MANAGER, SECTIONOBJECT, TABLEGEOMETRY,
+    VBA_PROJECT, VISUALSTYLE.
+
+    New unstable: ACSH_BREP_CLASS ACSH_CHAMFER_CLASS ACSH_CONE_CLASS
+    ACSH_PYRAMID_CLASS ACSH_TORUS_CLASS ARC_DIMENSION ASSOCACTION
+    ASSOCBLENDSURFACEACTIONBODY ASSOCEXTENDSURFACEACTIONBODY
+    ASSOCEXTRUDEDSURFACEACTIONBODY ASSOCFILLETSURFACEACTIONBODY
+    ASSOCGEOMDEPENDENCY ASSOCLOFTEDSURFACEACTIONBODY ASSOCNETWORK
+    ASSOCNETWORKSURFACEACTIONBODY ASSOCOFFSETSURFACEACTIONBODY
+    ASSOCPATCHSURFACEACTIONBODY ASSOCREVOLVEDSURFACEACTIONBODY
+    ASSOCTRIMSURFACEACTIONBODY ASSOCVALUEDEPENDENCY BACKGROUND
+    BLOCKGRIPLOCATIONCOMPONENT BLOCKVISIBILITYGRIP DETAILVIEWSTYLE HELIX
+    LARGE_RADIAL_DIMENSION LIGHTLIST MATERIAL MENTALRAYRENDERSETTINGS
+    RAPIDRTRENDERSETTINGS RENDERSETTINGS SECTION_SETTINGS SECTIONVIEWSTYLE
+    SPATIAL_INDEX SUN TABLESTYLE.
+
     Fixed PROXY_OBJECT, PROXY_ENTITY.
+    Demoted to Unstable: SPATIAL_INDEX
+    Demoted to Debugging: PERSSUBENTMANAGER
+
     Note: Unstable objects are not preserved via DXF conversion, just the external import
     is supported.
 
+    Add most Constraint (ASSOC*) and DYNBLOCK objects (BLOCK*).
     Debugging classes added (needs --with-debug option):
-    NURBSURFACE, ATEXT, RTEXT, NAVISWORKSMODEL, ACSH_SWEEP_CLASS,
-    ACSH_BOX_CLASS, ACSH_BREP_CLASS, ACSH_WEDGE_CLASS, ACSH_EXTRUSION_CLASS,
-    ACSH_CHAMFER_CLASS, ACSH_FILLET_CLASS, ACSH_LOFT_CLASS,
-    ACSH_PYRAMID_CLASS, ACSH_SPHERE_CLASS, ACSH_REVOLVE_CLASS,
-    ACSH_TORUS_CLASS, ACSH_HISTORY_CLASS,
-    ASSOCEXTRUDEDSURFACEACTIONBODY, ASSOCLOFTEDSURFACEACTIONBODY,
-    ASSOCREVOLVEDSURFACEACTIONBODY, ASSOCSWEPTSURFACEACTIONBODY,
-    PERSUBENTMGR, DATALINK, DATATABLE, LAYOUTPRINTCONFIG,
-    CONTEXTDATAMANAGER, ALDIMOBJECTCONTEXTDATA,
-    BLKREFOBJECTCONTEXTDATA, FCFOBJECTCONTEXTDATA,
-    LEADEROBJECTCONTEXTDATA, MLEADEROBJECTCONTEXTDATA,
-    MTEXTATTRIBUTEOBJECTCONTEXTDATA, MTEXTOBJECTCONTEXTDATA,
-    TEXTOBJECTCONTEXTDATA, ACMECOMMANDHISTORY, ACMESCOPE,
-    ACMESTATEMGR, ASSOCGEOMDEPENDENCY, ACDBASSOCGEOMDEPENDENCY,
-    ASSOCOSNAPPOINTREFACTIONPARAM,
-    ACDBASSOCOSNAPPOINTREFACTIONPARAM, ASSOCVERTEXACTIONPARAM,
-    ACDBASSOCVERTEXACTIONPARAM, CSACDOCUMENTOPTIONS, CURVEPATH,
-    ACDBCURVEPATH, MOTIONPATH, POINTPATH, ACDBPOINTPATH,
-    TVDEVICEPROPERTIES) BLOCKVISIBILITYGRIP
-    BLOCKVISIBILITYPARAMETER, BLOCKGRIPLOCATIONCOMPONENT.
+
+    ACMECOMMANDHISTORY ACMESCOPE ACMESTATEMGR ACSH_EXTRUSION_CLASS
+    ACSH_HISTORY_CLASS ACSH_LOFT_CLASS ACSH_REVOLVE_CLASS ACSH_SWEEP_CLASS
+    ALDIMOBJECTCONTEXTDATA ALIGNMENTPARAMETERENTITY ANGDIMOBJECTCONTEXTDATA
+    ASSOC3POINTANGULARDIMACTIONBODY ASSOCACTIONPARAM ASSOCARRAYACTIONBODY
+    ASSOCARRAYMODIFYACTIONBODY ASSOCARRAYMODIFYPARAMETERS
+    ASSOCARRAYPATHPARAMETERS ASSOCARRAYPOLARPARAMETERS
+    ASSOCARRAYRECTANGULARPARAMETERS ASSOCASMBODYACTIONPARAM
+    ASSOCCOMPOUNDACTIONPARAM ASSOCDIMDEPENDENCYBODY ASSOCEDGEACTIONPARAM
+    ASSOCEDGECHAMFERACTIONBODY ASSOCEDGEFILLETACTIONBODY ASSOCFACEACTIONPARAM
+    ASSOCMLEADERACTIONBODY ASSOCOBJECTACTIONPARAM ASSOCORDINATEDIMACTIONBODY
+    ASSOCOSNAPPOINTREFACTIONPARAM ASSOCPATHACTIONPARAM ASSOCPOINTREFACTIONPARAM
+    ASSOCRESTOREENTITYSTATEACTIONBODY ASSOCROTATEDDIMACTIONBODY
+    ASSOCSWEPTSURFACEACTIONBODY ASSOCVARIABLE ASSOCVERTEXACTIONPARAM ATEXT
+    BASEPOINTPARAMETERENTITY BLKREFOBJECTCONTEXTDATA
+    BLOCKALIGNEDCONSTRAINTPARAMETER BLOCKALIGNMENTGRIP BLOCKALIGNMENTPARAMETER
+    BLOCKANGULARCONSTRAINTPARAMETER BLOCKARRAYACTION BLOCKBASEPOINTPARAMETER
+    BLOCKDIAMETRICCONSTRAINTPARAMETER BLOCKFLIPACTION BLOCKFLIPGRIP
+    BLOCKFLIPPARAMETER BLOCKHORIZONTALCONSTRAINTPARAMETER
+    BLOCKLINEARCONSTRAINTPARAMETER BLOCKLINEARGRIP BLOCKLINEARPARAMETER
+    BLOCKLOOKUPACTION BLOCKLOOKUPGRIP BLOCKLOOKUPPARAMETER BLOCKMOVEACTION
+    BLOCKPARAMDEPENDENCYBODY BLOCKPOINTPARAMETER BLOCKPOLARGRIP
+    BLOCKPOLARPARAMETER BLOCKPOLARSTRETCHACTION BLOCKPROPERTIESTABLE
+    BLOCKPROPERTIESTABLEGRIP BLOCKRADIALCONSTRAINTPARAMETER BLOCKREPRESENTATION
+    BLOCKROTATEACTION BLOCKROTATIONGRIP BLOCKROTATIONPARAMETER BLOCKSCALEACTION
+    BLOCKSTRETCHACTION BLOCKUSERPARAMETER BLOCKVERTICALCONSTRAINTPARAMETER
+    BLOCKVISIBILITYPARAMETER BLOCKXYGRIP BLOCKXYPARAMETER CONTEXTDATAMANAGER
+    CSACDOCUMENTOPTIONS CURVEPATH DATALINK DATATABLE DMDIMOBJECTCONTEXTDATA
+    DYNAMICBLOCKPROXYNODE EXTRUDEDSURFACE FCFOBJECTCONTEXTDATA
+    FLIPPARAMETERENTITY GEOPOSITIONMARKER LAYOUTPRINTCONFIG
+    LEADEROBJECTCONTEXTDATA LINEARPARAMETERENTITY LOFTEDSURFACE
+    MLEADEROBJECTCONTEXTDATA MOTIONPATH MPOLYGON MTEXTATTRIBUTEOBJECTCONTEXTDATA
+    MTEXTOBJECTCONTEXTDATA NAVISWORKSMODEL NURBSURFACE OBJECTCONTEXTDATA
+    ORDDIMOBJECTCONTEXTDATA PERSUBENTMGR PLANESURFACE POINTPARAMETERENTITY
+    POINTPATH RADIMLGOBJECTCONTEXTDATA RADIMOBJECTCONTEXTDATA RENDERENTRY
+    RENDERENVIRONMENT RENDERGLOBAL REVOLVEDSURFACE ROTATIONPARAMETERENTITY RTEXT
+    SUNSTUDY SWEPTSURFACE TABLE TABLECONTENT TEXTOBJECTCONTEXTDATA
+    TVDEVICEPROPERTIES VISIBILITYGRIPENTITY VISIBILITYPARAMETERENTITY
+    XYPARAMETERENTITY
+
   * Started support to write r2004+ format DWG's (which includes also r2010,
     r2013, r2018, but not r2007), but this does not work fully yet.
-  * Added new Dwg_Version types: R_1_3 for AC1.3, R_2_4 for AC1001, and
+  * Added all remaining Dwg_Version types: R_1_3 for AC1.3, R_2_4 for AC1001, and
     AC1013 for R_13c3.
   * The header can now be compiled wth C++ compilers, needed for some bindings.
     Re-arranged nested structs, names, malloc casts, reserved keywords like this,
@@ -58,8 +99,12 @@ New features:
   * DXF and JSON importers now create PLACEHOLDER objects for unsupported
     objects.
   * 3DSOLID got now material properties and revisionguid fields.
-  * Many parts of the API are now auto-generated/updated: dwg.i, dwg_api.c, dwg_api.h
-  * Added geojsonhint or gjv linter support.
+  * Many parts of the API are now auto-generated/updated: dwg.i, dwg_api.c, dwg_api.h,
+    unions and setup in dwg.h
+  * Added geojsonhint or gjv linter support. Fixed all violations (esp. point arrays,
+    and POLYLINE_2D). Add a Feature id (the handle)
+  * Added support for GeoJSON RFC7946, write closed polygons, re-order by the
+    right-hand rule..
   * new API functions:
     dwg_ctrl_table, dwg_handle_name, dwg_find_dicthandle_objname, dwg_variable_dict,
     dwg_next_entity, get_next_owned_block_entity, dwg_section_name,
@@ -127,7 +172,9 @@ API breaking changes:
       They were overwriting each other on version conversions.
     MLINESTYLE.desc => description, data_length => data_size.
     HATCH booleans got a is_ prefix.
-    XRECORD.num-databytes => xdata_size
+    MTEXT.annotative => is_annotative.
+    MTEXT.drawing_dir => flow_dir.
+    XRECORD.num_databytes => xdata_size
     MLEADERSTYLE text_frame => is_text_frame, is_new_format removed.
       changed => is_changed.
     DICTIONARYYWDFLT got a new format_flags and data_handle
@@ -137,6 +184,7 @@ API breaking changes:
     Type changes in stable objects:
     SPLINE.fit_pts are now ordinary BITCODE_3DPOINT*
     SPLINE.color is BL, scale is now 3BD
+  * Changed truecolor attributes in GeoJSON with a # prefix.
 
 Major bugfixes:
   * Fixed converting ASCII from and to Unicode strings, when converting across
@@ -147,9 +195,10 @@ Major bugfixes:
     support a CMTC truecolor-only type.
   * Fixed EED writes, by writing to seperate streams and merging them at the end,
     with proper size calculation.
+  * All remaining assertions are now protected. (GH #187)
 
 Minor bugfixes:
-  * Fixed uncompressed sections overflows, some fuzzed (#183), some
+  * Fixed uncompressed sections overflows, some fuzzed (GH #183), some
     with the new sections.
   * Normalize extrusion vectors.
   * Fix bit_write_BT, the thickness vector pre-R2000.
@@ -165,8 +214,12 @@ Other newsworthy changes:
   * Added src/classes.c defining the class stability (stable, unstable, debugging, unhandled).
   * Need now -lm, the system math library, in all cases.
   * Got a complete collection of old DWGs to cross-check against. Many new object types
-    could be stabilized because of this.
+    could be stabilized because of this. Many thanks to Michal Josef Špaček.
   * CMC color got 2 new fields: raw (EMC only), method (the first rgb byte).
+  * Many DXF re-ordering fixes.
+
+Notes: The new constraint and dynblock objects just miss a major refactor into seperate
+impl subclasses, and subent and curve support.
 
 LibreDWG version 0.10.1 - released 2020/01/13 - beta:
 
