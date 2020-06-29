@@ -21770,15 +21770,15 @@ dwg_obj_obj_to_object (const dwg_obj_obj *restrict obj, int *restrict error)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
+dwg_obj_generic_to_object (const dwg_obj_generic *restrict _obj,
                            int *restrict error)
 {
-  if (obj && obj->parent)
+  if (_obj && _obj->parent)
     {
-      dwg_data *dwg = obj->parent->dwg;
-      dwg_object *retval = &dwg->object[obj->parent->objid];
+      dwg_data *dwg = _obj->parent->dwg;
+      dwg_object *retval = &dwg->object[_obj->parent->objid];
       if (!dwg
-          || obj->parent->objid > dwg->num_objects
+          || _obj->parent->objid > dwg->num_objects
           || dwg->header.version > R_AFTER)
         {
           *error = 1;

@@ -3920,7 +3920,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
   Dwg_Data *dwg = obj->parent;
   BITCODE_H hdl;
   enum {
-        TABLEFORMAT, CONTENTFORMAT, CELLMARGIN, GRIDFORMAT, NONE
+        NONE, TABLEFORMAT, CONTENTFORMAT, CELLMARGIN, GRIDFORMAT, CELLSTYLE
   } mode;
   int i = -1, j = -1;
   int grid = -1;
@@ -3945,6 +3945,12 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           if (strEQc (pair->value.s, "GRIDFORMAT_BEGIN"))
             mode = GRIDFORMAT;
           else
+          if (strEQc (pair->value.s, "CELLSTYLE_BEGIN"))
+            {
+              dxf_free_pair (pair);
+              return dxf_read_pair (dat);
+            }
+          else
             goto unknown_default;
           break;
         case 300:
@@ -3962,6 +3968,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               if (!strEQc (pair->value.s, "CONTENTFORMAT"))
                 goto unknown_default;
             }
+          else if (mode == CELLSTYLE)
+            return pair;
           else
             goto unknown_default;
           break;
@@ -4007,10 +4015,10 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               LOG_TRACE ("%s.%s.borders[%d].border_overrides = " FORMAT_BLx " [BLx %d]\n",
                          obj->name, key, grid, pair->value.u, pair->code);
             }
+          else if (mode == CELLSTYLE)
+            return pair;
           else if (mode == NONE)
-            {
-              return pair;
-            }
+            return pair;
           else
             goto unknown_default;
           break;
@@ -4035,10 +4043,10 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               LOG_TRACE ("%s.%s.borders[%d].border_type = " FORMAT_BLx " [BLx %d]\n",
                          obj->name, key, grid, pair->value.u, pair->code);
             }
+          else if (mode == CELLSTYLE)
+            return pair;
           else if (mode == NONE)
-            {
-              return pair;
-            }
+            return pair;
           else
             goto unknown_default;
           break;
@@ -4146,7 +4154,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               o->borders[grid].color.rgb = pair->value.u;
               o->borders[grid].color.method = pair->value.u >> 0x18;
               o->borders[grid].color.index = dwg_find_color_index (pair->value.u);
-              LOG_TRACE ("%s.%s.o->borders[%d].color = %08x [CMTC %d]\n",
+              LOG_TRACE ("%s.%s.borders[%d].color = %08x [CMTC %d]\n",
                          obj->name, key, grid, pair->value.u, pair->code);
             }
           else
@@ -8221,7 +8229,7 @@ new_object (char *restrict name, char *restrict dxfname,
               const Dwg_DYNAPI_field *fields
                   = dwg_dynapi_entity_fields (obj->name);
               const Dwg_DYNAPI_field *prev_vstyle = NULL;
-              if (!pair)
+              if (!pair || pair->code == 0)
                 break;
               if (!fields)
                 {
