@@ -1213,7 +1213,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     {
     case 0:
       {
-        int len = strlen (pair->value.s);
+        int len = pair->value.s ? strlen (pair->value.s) : 0;
         if (dwg->header.version < R_2007)
           {
             /* code [RC] + len [RC] + cp [RS] + str[len] */
@@ -5625,21 +5625,23 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   while (pair != NULL && pair->code == 310)
     {
-      unsigned len = strlen (pair->value.s);
-      unsigned blen = len / 2;
       const char *pos = pair->value.s;
+      unsigned len = pos ? strlen (pos) : 0;
+      unsigned blen = len / 2;
       BITCODE_TF s;
 
-      _obj->preview = (BITCODE_TF)realloc (_obj->preview, written + blen);
-      s = &_obj->preview[written];
-      for (unsigned i = 0; i < blen; i++)
+      if (len)
         {
-          sscanf (pos, "%2hhX", &s[i]);
-          pos += 2;
+          _obj->preview = (BITCODE_TF)realloc (_obj->preview, written + blen);
+          s = &_obj->preview[written];
+          for (unsigned i = 0; i < blen; i++)
+            {
+              sscanf (pos, "%2hhX", &s[i]);
+              pos += 2;
+            }
+          written += blen;
+          LOG_TRACE ("BLOCK_HEADER.preview += %u (%u)\n", blen, written);
         }
-      written += blen;
-      LOG_TRACE ("BLOCK_HEADER.preview += %u (%u)\n", blen, written);
-
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
@@ -8004,7 +8006,7 @@ new_object (char *restrict name, char *restrict dxfname,
                       dxf_free_pair (pair);
                       pair = dxf_read_pair (dat);
                     }
-                  if (tbl_sty && pair->code == 91)
+                  if (tbl_sty && pair && pair->code == 91)
                     {
                       tbl_sty->type = pair->value.u;
                       LOG_TRACE ("%s.%s.type = " FORMAT_BL " [BL %d]\n",
@@ -8012,7 +8014,7 @@ new_object (char *restrict name, char *restrict dxfname,
                       dxf_free_pair (pair);
                       pair = dxf_read_pair (dat);
                     }
-                  if (tbl_sty && pair->code == 300)
+                  if (tbl_sty && pair && pair->code == 300)
                     {
                       if (dwg->header.version >= R_2007)
                         tbl_sty->name = (char *)bit_utf8_to_TU (pair->value.s);
