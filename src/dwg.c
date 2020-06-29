@@ -1383,7 +1383,11 @@ EXPORT int
 dwg_obj_is_3dsolid (const Dwg_Object *obj)
 {
   const Dwg_Object_Type type = obj->fixedtype;
-  return type == DWG_TYPE_ACSH_BREP_CLASS ||
+  return
+    (obj->supertype == DWG_SUPERTYPE_OBJECT
+     && (type == DWG_TYPE_ACSH_BREP_CLASS ||
+         type == DWG_TYPE_ASSOCASMBODYACTIONPARAM))
+     ||
     (obj->supertype == DWG_SUPERTYPE_ENTITY
      && (type == DWG_TYPE__3DSOLID ||
          type == DWG_TYPE_REGION ||

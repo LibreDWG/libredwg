@@ -7742,12 +7742,18 @@ new_object (char *restrict name, char *restrict dxfname,
                          written, _o->data_size);
             }
           else if (pair->code == 1
-                   && (strEQc (name, "_3DSOLID") || strEQc (name, "BODY")
-                       || strEQc (name, "REGION")
+                   && ((strEQc (name, "_3DSOLID") || strEQc (name, "BODY")
+                       || strEQc (name, "REGION"))
                        || strEQc (subclass, "AcDbModelerGeometry")))
             {
               j = 0;
               k = 0;
+              // check if the object is valid
+              if (!dwg_obj_is_3dsolid (obj))
+                {
+                  LOG_ERROR ("%s not a 3DSOLID", name);
+                  goto invalid_dxf;
+                }
               pair = add_3DSOLID_encr (obj, dat, pair);
               goto start_loop;
             }
