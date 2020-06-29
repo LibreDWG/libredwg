@@ -60460,7 +60460,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 46445 "dynapi_test.c"
+#line 60463 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -61616,7 +61616,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 47201 "dynapi_test.c"
+#line 61619 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
