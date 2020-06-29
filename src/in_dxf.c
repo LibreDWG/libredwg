@@ -1905,7 +1905,14 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   while (pair != NULL && pair->code == 1)
     {
-      int len = strlen (pair->value.s) + 1; // + the \n
+      int len;
+      if (!pair->value.s)
+        {
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+          continue;
+        }
+      len = strlen (pair->value.s) + 1; // + the \n
       if (!total)
         {
           total = len;
