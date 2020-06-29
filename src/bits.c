@@ -2516,15 +2516,12 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
   color->index = bit_read_BS (dat);
   if (dat->from_version >= R_2004) // truecolor
     {
-      if (dat->byte >= dat->size)
-        return DWG_ERR_VALUEOUTOFBOUNDS;
+      CHK_OVERFLOW_PLUS (1,__FUNCTION__,DWG_ERR_VALUEOUTOFBOUNDS)
       color->rgb = bit_read_BL (dat);
-      if (dat->byte >= dat->size)
-        return DWG_ERR_VALUEOUTOFBOUNDS;
+      CHK_OVERFLOW_PLUS (1,__FUNCTION__,DWG_ERR_VALUEOUTOFBOUNDS)
       color->method = color->rgb >> 0x18;
       color->flag = bit_read_RC (dat);
-      if (dat->byte >= dat->size)
-        return DWG_ERR_VALUEOUTOFBOUNDS;
+      CHK_OVERFLOW_PLUS (0,__FUNCTION__,DWG_ERR_VALUEOUTOFBOUNDS)
       if (color->flag < 4)
         {
           color->name      = (color->flag & 1) ? (char *)bit_read_T (str_dat) : NULL;
