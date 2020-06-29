@@ -1782,15 +1782,18 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 10)
         {
           j++; // we always start with 10 (I hope)
-          assert (_o->num_points > 0);
-          assert (j < (int)_o->num_points);
+#define CHK_points                                      \
+  if (j < 0 || j >= (int)_o->num_points || !_o->points) \
+    return NULL;                                        \
+  assert (_o->points);                                  \
+  assert (_o->num_points > 0);                          \
+  assert (j >= 0 && j < (int)_o->num_points)
+          CHK_points;
           _o->points[j].x = pair->value.d;
         }
       else if (pair->code == 20)
         {
-          assert (j >= 0);
-          assert (_o->num_points > 0);
-          assert (j < (int)_o->num_points);
+          CHK_points;
           LOG_TRACE ("LWPOLYLINE.points[%d] = (%f, %f) [2RD 10]\n", j,
                      _o->points[j].x, pair->value.d);
           _o->points[j].y = pair->value.d;
@@ -1807,6 +1810,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               _o->num_bulges = num_points;
             }
+          if (j < 0 || j >= (int)_o->num_bulges || !_o->bulges)
+            return NULL;
           assert (j >= 0);
           assert (_o->num_bulges > 0);
           assert (j < (int)_o->num_bulges);
@@ -1825,6 +1830,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               _o->num_vertexids = num_points;
             }
+          if (j < 0 || j >= (int)_o->num_vertexids || !_o->vertexids)
+            return NULL;
           assert (j >= 0);
           assert (_o->num_vertexids > 0);
           assert (j < (int)_o->num_vertexids);
@@ -1846,6 +1853,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               _o->flag |= 4;
               _o->num_widths = num_points;
             }
+          if (j < 0 || j >= (int)_o->num_widths || !_o->widths)
+            return NULL;
           assert (j >= 0);
           assert (_o->num_widths > 0);
           assert (j < (int)_o->num_widths);
@@ -1855,6 +1864,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 41 && (_o->flag & 4)) // not const_width
         {
+          if (j < 0 || j >= (int)_o->num_widths || !_o->widths)
+            return NULL;
           assert (j >= 0);
           assert (_o->num_widths > 0);
           assert (j < (int)_o->num_widths);
