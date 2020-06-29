@@ -5227,6 +5227,7 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
     {
       LOG_ERROR ("Invalid object type %d, only %u classes", obj->type,
                  dwg->num_classes);
+      dwg->num_objects--;
       return DWG_ERR_INVALIDTYPE;
     }
 
