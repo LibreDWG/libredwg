@@ -1201,6 +1201,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       prev = j;
   assert (prev >= 0 && prev <= i);
   code = pair->code - 1000; // 1000
+  if (code < 0 || code >= 1000)
+    {
+      LOG_ERROR ("Invalid DXF code %d", pair->code);
+      dwg_free_eed (obj);
+      return;
+    }
   assert (code >= 0 && code < 100);
   LOG_TRACE ("EED[%d] code: %d ", i, code);
   switch (code)
@@ -2237,6 +2243,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #define CHK_paths                                       \
   if (!o->paths || j < 0 || j >= (int)o->num_paths)     \
     return NULL;                                        \
+  assert (o->paths);                                    \
   assert (j >= 0);                                      \
   assert (j < (int)o->num_paths)
 
@@ -2310,8 +2317,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_paths;
 
 #define CHK_segs                                                        \
-  if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths)     \
+  if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths) \
     return NULL;                                                        \
+  assert (o->paths[j].segs);                                            \
   assert (k >= 0);                                                      \
   assert (k < (int)o->paths[j].num_segs_or_paths)
 
@@ -3824,7 +3832,7 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat, Dxf_Pair *restri
         case 13:
           i++;
 #define CHK_geomesh_pts                          \
-  if (i < 0 || i >= (int)o->num_geomesh_pts)     \
+  if (i < 0 || i >= (int)o->num_geomesh_pts || !o->geomesh_pts)  \
     return NULL;                                 \
   assert (i >= 0 && i < (int)o->num_geomesh_pts)
 
@@ -3851,8 +3859,9 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat, Dxf_Pair *restri
         case 97:
           i++;
 #define CHK_geomesh_faces                           \
-  if (i < 0 || i >= (int)o->num_geomesh_faces)      \
+  if (i < 0 || i >= (int)o->num_geomesh_faces || !o->geomesh_faces) \
     return NULL;                                    \
+  assert (o->geomesh_faces);                        \
   assert (i >= 0 && i < (int)o->num_geomesh_faces)
 
           CHK_geomesh_faces;
@@ -4277,14 +4286,14 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   BITCODE_H hdl;
   int i = -1, j = -1;
 
-#define CHK_ROWSTYLES                                           \
+#define CHK_rowstyles                                           \
   if (!(i >= 0 && i < 3) || !o->num_rowstyles || !o->rowstyles) \
     return NULL;                                                \
   assert (i >= 0 && i < 3);                                     \
   assert (o->num_rowstyles);                                    \
   assert (o->rowstyles)
 
-#define CHK_BORDERS                                             \
+#define CHK_borders                                             \
   if (!(j >= 0 && j <= 6) || !o->rowstyles[i].num_borders ||    \
       !o->rowstyles[i].borders)                                 \
     return NULL;                                                \
@@ -4300,7 +4309,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 7:
           i++;
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           hdl = find_tablehandle (dwg, pair);
           if (!hdl)
             return NULL;
@@ -4310,50 +4319,50 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                        obj->name, i, ARGS_REF(hdl), pair->code);
           break;
         case 140:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].text_height = pair->value.d;
           LOG_TRACE ("%s.rowstyles[%d].text_height = %f [BD %d]\n",
                        obj->name, i, pair->value.d, pair->code);
           break;
         case 170:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].text_alignment = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].text_alignment = " FORMAT_BS " [BS %d]\n",
                      obj->name, i, o->rowstyles[i].text_alignment, pair->code);
           break;
         case 62:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].text_color.index = pair->value.i;
           //TODO rgb with 420
           LOG_TRACE ("%s.rowstyles[%d].text_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 63:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].fill_color.index = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].fill_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 283:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].has_bgcolor = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].has_bgcolor = %d [B %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 90:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].data_type = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].data_type = %d [BL %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 91:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].unit_type = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].unit_type = %d [BL %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 1:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s);
           LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
                      obj->name, i, pair->value.s, pair->code);
@@ -4364,7 +4373,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 277:
         case 278:
         case 279:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           j = pair->code - 274;
           if (!(j >= 0 && j <= 6))
             return NULL;
@@ -4379,7 +4388,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               o->rowstyles[i].num_borders = 6;
             }
-          CHK_BORDERS;
+          CHK_borders;
           assert (o->rowstyles[i].num_borders);
           o->rowstyles[i].borders[j].linewt = dxf_find_lweight (pair->value.i);
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].linewt = %d [BSd %d]\n",
@@ -4391,9 +4400,9 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 287:
         case 288:
         case 289:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           j = pair->code - 284;
-          CHK_BORDERS;
+          CHK_borders;
           o->rowstyles[i].borders[j].visible = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].visible = %d [B %d]\n",
                      obj->name, i, j, pair->value.i, pair->code);
@@ -4404,9 +4413,9 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 67:
         case 68:
         case 69:
-          CHK_ROWSTYLES;
+          CHK_rowstyles;
           j = pair->code - 64;
-          CHK_BORDERS;
+          CHK_borders;
           assert (j >= 0 && j <= 6);
           o->rowstyles[i].borders[j].color.index = pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].color.index = %d [CMC %d]\n",
@@ -4452,38 +4461,41 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 93:
           i++; // the first
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
+#define CHK_cells                                        \
+   if (i < 0 || i >= (int)num_cells || !o->cells)        \
+    return NULL;                                         \
+  assert (i >= 0 && i < (int)num_cells);                 \
+  assert (o->cells)
+
+          CHK_cells;
           o->cells[i].geom_data_flag = pair->value.i;
           LOG_TRACE ("%s.cells[%d].geom_data_flag = " FORMAT_BL " [BL %d]\n",
                        obj->name, i, o->cells[i].geom_data_flag, pair->code);
           break;
         case 40:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
+          CHK_cells;
           o->cells[i].width_w_gap = pair->value.d;
           LOG_TRACE ("%s.cells[%d].width_w_gap = %f [BD %d]\n",
                        obj->name, i, pair->value.d, pair->code);
           break;
         case 41:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
+          CHK_cells;
           o->cells[i].height_w_gap = pair->value.d;
           LOG_TRACE ("%s.cells[%d].height_w_gap = %f [BD %d]\n",
                        obj->name, i, pair->value.d, pair->code);
           break;
         case 330:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
+          CHK_cells;
           hdl = find_tablehandle (dwg, pair);
+          if (!hdl)
+            return NULL;
           assert (hdl);
           o->cells[i].tablegeometry = hdl;
           LOG_TRACE ("%s.cells[%d].tablegeometry = " FORMAT_REF " [H %d]\n",
                        obj->name, i, ARGS_REF(hdl), pair->code);
           break;
         case 94:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
+          CHK_cells;
           o->cells[i].num_geometry = pair->value.i;
           LOG_TRACE ("%s.cells[%d].num_geometry = " FORMAT_BL " [BL %d]\n",
                        obj->name, i, o->cells[i].num_geometry, pair->code);
@@ -4497,27 +4509,28 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = -1;
           break;
         case 10:
+          CHK_cells;
           j++;
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+
+#define CHK_geometry                                     \
+   if (j < 0 || j >= (int)o->cells[i].num_geometry || !o->cells[i].geometry) \
+    return NULL;                                         \
+   assert (j >= 0 && j < (int)o->cells[i].num_geometry); \
+   assert (o->cells[i].geometry)
+
+          CHK_geometry;
           o->cells[i].geometry[j].dist_top_left.x = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].dist_top_left.x = %f [BD %d]\n",
                      obj->name, i, j, pair->value.d, pair->code);
           break;
         case 20:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].dist_top_left.y = pair->value.d;
           break;
         case 30:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].dist_top_left.z = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].dist_top_left = ( %f, %f, %f) "
                      "[3BD 10]\n",
@@ -4525,26 +4538,20 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      o->cells[i].geometry[j].dist_top_left.y, pair->value.d);
           break;
         case 11:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].dist_center.x = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].dist_center.x = %f [BD %d]\n",
                      obj->name, i, j, pair->value.d, pair->code);
           break;
         case 21:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].dist_center.y = pair->value.d;
           break;
         case 31:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].dist_center.z = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].dist_center = ( %f, %f, %f) "
                      "[3BD 10]\n",
@@ -4552,19 +4559,15 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      o->cells[i].geometry[j].dist_center.y, pair->value.d);
           break;
         case 43:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].content_width = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].content_width = %f [BD %d]\n",
                      obj->name, i, j, pair->value.d, pair->code);
           break;
         case 44:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].content_height = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].content_height = %f [BD %d]\n",
                      obj->name, i, j, pair->value.d, pair->code);
@@ -4579,19 +4582,15 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      obj->name, i, j, pair->value.d, pair->code);
           break;
         case 46:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].height = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].height = %f [BD %d]\n",
                      obj->name, i, j, pair->value.d, pair->code);
           break;
         case 95:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].unknown = pair->value.i;
           LOG_TRACE ("%s.cells[%d].geometry[%d].unknown = %d [BL %d]\n",
                      obj->name, i, j, pair->value.i, pair->code);
@@ -4605,6 +4604,9 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   return pair;
 }
+
+#undef CHK_cells
+#undef CHK_geometry
 
 // starts with 71 or 75
 static Dxf_Pair *
@@ -5909,15 +5911,15 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 11 && _o->num_verts)
     {
 
-#define CHK_verts                                                 \
-      if (!_o->verts || j < 0 || j >= _o->num_verts)              \
-        {                                                         \
-          LOG_ERROR ("MLINE.verts[%d] out of bounds", j);         \
-          return 2;                                               \
-        }                                                         \
-      assert (_o->verts);                                         \
-      assert (j >= 0);                                            \
-      assert (j < _o->num_verts)
+#define CHK_verts                                             \
+  if (!_o->verts || j < 0 || j >= _o->num_verts)              \
+    {                                                         \
+      LOG_ERROR ("MLINE.verts[%d] out of bounds", j);         \
+      return 2;                                               \
+    }                                                         \
+  assert (_o->verts);                                         \
+  assert (j >= 0);                                            \
+  assert (j < _o->num_verts)
 
       CHK_verts;
       _o->verts[j].parent = _o;
@@ -5980,12 +5982,17 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 74 && _o->num_lines)
     {
       CHK_verts;
-      if (k >= _o->num_lines || !_o->verts[j].lines)
-        {
-          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
-          return 2;
-        }
-      assert (k >= 0);
+
+#define CHK_lines                                                  \
+  if (k < 0 || k >= (int)_o->num_lines || !_o->verts[j].lines)     \
+    {                                                              \
+      LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k); \
+      return 2;                                                    \
+    }                                                              \
+  assert (_o->verts[j].lines);                                     \
+  assert (k >= 0 && k < (int)_o->num_lines)
+
+      CHK_lines;
       _o->verts[j].lines[k].parent = &_o->verts[j];
       _o->verts[j].lines[k].num_segparms = pair->value.i;
       _o->verts[j].lines[k].segparms
@@ -6002,16 +6009,13 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 41 && _o->num_lines)
     {
       CHK_verts;
-      if (k >= _o->num_lines || !_o->verts[j].lines)
-        {
-          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
-          return 2;
-        }
-      assert (k >= 0);
-      assert (k < _o->num_lines);
+      CHK_lines; 
+      if (l < 0 || l >= _o->verts[j].lines[k].num_segparms || !_o->verts[j].lines[k].segparms)
+        return 2;
       assert (l >= 0);
       assert (_o->verts[j].lines);
       assert (l < _o->verts[j].lines[k].num_segparms);
+
       _o->verts[j].lines[k].segparms[l] = pair->value.d;
       LOG_TRACE ("MLINE.v[%d].l[%d].segparms[%d] = %f [BD 41]\n", j, k, l,
                  pair->value.d);
@@ -6021,13 +6025,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 75 && _o->num_lines)
     {
       CHK_verts;
-      if (k >= _o->num_lines || !_o->verts[j].lines)
-        {
-          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
-          return 2;
-        }
-      assert (k >= 0);
-      assert (k < _o->num_lines);
+      CHK_lines;
       _o->verts[j].lines[k].num_areafillparms = pair->value.i;
       LOG_TRACE ("MLINE.v[%d].l[%d].num_areafillparms = %d [BS 75]\n", j, k,
                  pair->value.i);
@@ -6047,15 +6045,12 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   else if (pair->code == 42 && _o->num_lines)
     {
       CHK_verts;
-      if (k >= _o->num_lines || !_o->verts[j].lines)
-        {
-          LOG_ERROR ("MLINE.verts[%d].lines[%d] out of bounds", j, k);
-          return 2;
-        }
-      assert (k >= 0);
-      assert (k < _o->num_lines);
+      CHK_lines;
+      if (l < 0 || l >= _o->verts[j].lines[k].num_areafillparms || !_o->verts[j].lines[k].areafillparms)
+        return 2;
       assert (l >= 0);
       assert (l < _o->verts[j].lines[k].num_areafillparms);
+
       _o->verts[j].lines[k].areafillparms[l] = pair->value.d;
       LOG_TRACE ("MLINE.v[%d].l[%d].areafillparms[%d] = %f [BD 42]\n", j, k, l,
                  pair->value.d);
@@ -6082,6 +6077,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 #undef CHK_verts
+#undef CHK_lines
 
 static Dxf_Pair *
 add_AcDbEvalExpr (Dwg_Object *restrict obj,
@@ -7942,6 +7938,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       goto invalid_dxf;
                     }
                 }
+              if (j < 0 || j >= (int)o->num_column_heights || !o->column_heights)
+                goto invalid_dxf;
               assert (j < (int)o->num_column_heights);
               o->column_heights[j] = pair->value.d;
               LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 50]\n", j,
@@ -8133,9 +8131,12 @@ new_object (char *restrict name, char *restrict dxfname,
                       goto invalid_dxf;
                     }
                 }
+              if (j < 0 || j >= (int)o->num_points || !o->points)
+                goto invalid_dxf;
               assert (j >= 0);
               assert (j < (int)o->num_points);
               assert (o->points);
+
               if (pair->code == 10)
                 o->points[j].x = pair->value.d;
               else if (pair->code == 20)
@@ -8164,7 +8165,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     o->names, (o->num_names + 1) * sizeof (BITCODE_T));
               if (!o->names || j < 0 || j >= (int)o->num_names)
                 goto invalid_dxf;
-              assert (j >= 0 && j < (int)o->num_names);
+              assert (j >= 0 && j < (int)o->num_names && o->names);
               if (dwg->header.version >= R_2007)
                 o->names[j] = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
               else
@@ -8644,7 +8645,9 @@ new_object (char *restrict name, char *restrict dxfname,
                             goto invalid_dxf;
                           j = 0;
                         }
-                      assert (j >= 0 && j < 16);
+                      if (j < 0 || j >= 16 || !matrix)
+                        goto invalid_dxf;
+                      assert (j >= 0 && j < 16 && matrix);
                       matrix[j] = pair->value.d;
                       dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                    &matrix, 0);
