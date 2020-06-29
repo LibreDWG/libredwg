@@ -6168,6 +6168,11 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj,
           LOG_TRACE ("%s.%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "evalexpr", "value.handle91",
                      ARGS_REF (ee->value.handle91), pair->code);
         }
+      else
+        {
+          LOG_ERROR ("Invalid DXF code %d for %s", pair->code, "AcDbEvalExpr")
+          return pair;
+        }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
