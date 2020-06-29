@@ -7338,6 +7338,8 @@ new_object (char *restrict name, char *restrict dxfname,
               dwg_dynapi_entity_set_value (_obj, obj->name, "name",
                                            &pair->value, 1);
               LOG_TRACE ("%s.name = %s [T 2]\n", name, pair->value.s);
+              if (!pair->value.s)
+                break;
               if (strEQc (name, "BLOCK_RECORD"))
                 {
                   // seperate mspace and pspace into its own fields
