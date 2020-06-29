@@ -108,8 +108,17 @@ dwg_get_OBJECT (ent_arc, ARC)
 
 #endif
 
+/* Most API functions are now auto-generated, but excluded
+   from afl-fuzz, because there would be too many.
+   These are the exceptions, needed in dwgwrite, ... */
+
 dwg_get_OBJECT (ent_circle, CIRCLE)
 dwg_get_OBJECT (ent_line, LINE)
+
+#ifdef __AFL_COMPILER
+CAST_DWG_OBJECT_TO_ENTITY (VERTEX_2D)
+CAST_DWG_OBJECT_TO_ENTITY (VERTEX_3D)
+#endif
 
 #ifndef __AFL_COMPILER
 
