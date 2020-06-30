@@ -1130,6 +1130,19 @@
           FIELD_3DPOINT (name[vcount], dxf);                                  \
         }                                                                     \
     }
+#define SUB_FIELD_3BD_VECTOR(o,name, size, dxf)                               \
+  VECTOR_CHKCOUNT_LV (o.name, 3BD, _obj->o.size, dat)                         \
+  if (_obj->o.size > 0)                                                       \
+    {                                                                         \
+      _obj->o.name = (BITCODE_3BD *)calloc (_obj->o.size, sizeof (BITCODE_3BD));  \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          SUB_FIELD_3BD (o,name[vcount], dxf);                                \
+        }                                                                     \
+    }                                                                         \
+  else                                                                        \
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
 
 // shortest handle: 8 bit
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \

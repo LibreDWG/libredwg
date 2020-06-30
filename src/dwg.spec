@@ -10470,7 +10470,6 @@ DWG_OBJECT (DYNAMICBLOCKPROXYNODE)
   //SUBCLASS (AcDbDynamicBlockProxyMode)
 DWG_OBJECT_END
 
-// TODO POINTCLOUDEX
 DWG_ENTITY (POINTCLOUD)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbPointCloud)
@@ -10525,16 +10524,99 @@ DWG_ENTITY_END
 
 DWG_ENTITY (POINTCLOUDEX)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbPointCloudEx)
-  FIELD_BS (class_version, 70);
-  // ..
+  SUBCLASS (AcDbPointCloud)
+  FIELD_BS (class_version, 70); // 1
+  FIELD_3BD (extents_min, 10);
+  FIELD_3BD (extents_max, 11);
+  FIELD_3BD (ucs_origin, 12);
+  FIELD_3BD (ucs_x_dir, 210);
+  FIELD_3BD (ucs_y_dir, 211);
+  FIELD_3BD (ucs_z_dir, 212);
+
+  FIELD_B (is_locked, 290);
+  FIELD_HANDLE (pointclouddefex, 5, 330);
+  FIELD_HANDLE (reactor, 3, 360);
+  FIELD_T (name, 1)
+  FIELD_B (show_intensity, 291);
+
+  DXF {
+    FIELD_BS (stylization_type, 71);
+    FIELD_T (intensity_colorscheme, 1);
+    FIELD_T (cur_colorscheme, 1);
+    FIELD_T (classification_colorscheme, 1);
+    FIELD_BD (elevation_min, 40);
+    FIELD_BD (elevation_max, 41);
+    FIELD_BL (intensity_min, 90);
+    FIELD_BL (intensity_max, 91);
+    FIELD_BS (intensity_out_of_range_behavior, 71);
+    FIELD_BS (elevation_out_of_range_behavior, 72);
+    FIELD_B (elevation_apply_to_fixed_range, 292);
+    FIELD_B (intensity_as_gradient, 293);
+    FIELD_B (elevation_as_gradient, 294);
+    FIELD_B (show_cropping, 295);
+    FIELD_BL (num_croppings, 92);
+    if (!_obj->num_croppings)
+      {
+        FIELD_BL (unknown_bl0, 93);
+        FIELD_BL (unknown_bl1, 93);
+      }
+  }
+  else { // DWG
+    FIELD_B (show_cropping, 295);
+    FIELD_BL (num_croppings, 92);
+    if (!_obj->num_croppings)
+      {
+        FIELD_BL (unknown_bl0, 93);
+        FIELD_BL (unknown_bl1, 93);
+        FIELD_BS (stylization_type, 71);
+        FIELD_T (intensity_colorscheme, 1);
+        FIELD_T (cur_colorscheme, 1);
+        FIELD_T (classification_colorscheme, 1);
+        FIELD_BD (elevation_min, 40);
+        FIELD_BD (elevation_max, 41);
+        FIELD_BL (intensity_min, 90);
+        FIELD_BL (intensity_max, 91);
+        FIELD_BS (intensity_out_of_range_behavior, 71);
+        FIELD_BS (elevation_out_of_range_behavior, 72);
+        FIELD_B (elevation_apply_to_fixed_range, 292);
+        FIELD_B (intensity_as_gradient, 293);
+        FIELD_B (elevation_as_gradient, 294);
+      }
+  }
+  REPEAT (num_croppings, croppings, Dwg_POINTCLOUDEX_Croppings)
+  REPEAT_BLOCK
+      SUB_FIELD_BS (croppings[rcount1], type, 280);
+      SUB_FIELD_B (croppings[rcount1], is_inside, 290);
+      SUB_FIELD_B (croppings[rcount1], is_inverted, 290);
+      SUB_FIELD_3BD (croppings[rcount1], crop_plane, 13);
+      SUB_FIELD_3BD (croppings[rcount1], crop_x_dir, 213);
+      SUB_FIELD_3BD (croppings[rcount1], crop_y_dir, 213);
+      SUB_FIELD_BL (croppings[rcount1], num_pts, 93)
+      SUB_FIELD_3BD_VECTOR (croppings[rcount1], pts, num_pts, 13);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (croppings);
+  END_REPEAT (croppings)
 DWG_ENTITY_END
 
 DWG_OBJECT (POINTCLOUDDEF)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbPointCloudDef)
-  FIELD_BS (class_version, 70);
-  // ..
+  FIELD_BL (class_version, 90);
+  FIELD_T (source_filename, 1);
+  FIELD_B (is_loaded, 280);
+  DXF {
+    UNTIL (R_2010) {
+      VALUE_RL ((BITCODE_RL)(_obj->numpoints >> 32), 91);
+      VALUE_RL ((BITCODE_RL)(_obj->numpoints & 0xffffffff), 92);
+    } LATER_VERSIONS {
+      FIELD_RLL (numpoints, 160);
+    }
+  }
+  else {
+    FIELD_RLL (numpoints, 160);
+  }
+  FIELD_3BD (extents_min, 10);
+  FIELD_3BD (extents_max, 11);
 DWG_OBJECT_END
 
 DWG_OBJECT (POINTCLOUDDEFEX)
@@ -10551,15 +10633,13 @@ DWG_OBJECT_END
 DWG_OBJECT (POINTCLOUDDEF_REACTOR)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbPointCloudDefReactor)
-  FIELD_BS (class_version, 70);
-  // ..
+  FIELD_BL (class_version, 90);
 DWG_OBJECT_END
 
 DWG_OBJECT (POINTCLOUDDEF_REACTOR_EX)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbPointCloudDefReactorEx)
-  FIELD_BS (class_version, 70);
-  // ..
+  FIELD_BL (class_version, 90);
 DWG_OBJECT_END
 
 DWG_OBJECT (POINTCLOUDCOLORMAP)
@@ -10623,8 +10703,7 @@ DWG_OBJECT_END
 #if 0
 
 /* Missing DXF names:
-  ACDBPOINTCLOUDEX ARRAY
-  ATTBLOCKREF ATTDYNBLOCKREF BLOCKREF DYNBLOCKREF XREF
+  ARRAY ATTBLOCKREF ATTDYNBLOCKREF BLOCKREF DYNBLOCKREF XREF
   CENTERMARK CENTERLINE
 */
 

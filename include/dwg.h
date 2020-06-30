@@ -7560,6 +7560,19 @@ typedef struct _dwg_POINTCLOUD_Clippings
   BITCODE_BD z_max;
 } Dwg_POINTCLOUD_Clippings;
 
+typedef struct _dwg_POINTCLOUDEX_Croppings
+{
+  struct _dwg_entity_POINTCLOUDEX *parent;
+  BITCODE_BS type;
+  BITCODE_B is_inside;
+  BITCODE_B is_inverted;
+  BITCODE_3BD crop_plane;
+  BITCODE_3BD crop_x_dir;
+  BITCODE_3BD crop_y_dir;
+  BITCODE_BL num_pts;
+  BITCODE_3BD *pts;
+} Dwg_POINTCLOUDEX_Croppings;
+
 typedef struct _dwg_entity_POINTCLOUD
 {
   struct _dwg_object_entity *parent;
@@ -7590,8 +7603,37 @@ typedef struct _dwg_entity_POINTCLOUD
 typedef struct _dwg_entity_POINTCLOUDEX
 {
   struct _dwg_object_entity *parent;
-  BITCODE_BS class_version; 	// 1 or 2 r2013+, DXF 70
-  // ..
+  BITCODE_BS class_version; 	// 1, DXF 70
+  BITCODE_3BD extents_min;	/*!< DXF 10 */
+  BITCODE_3BD extents_max;	/*!< DXF 11 */
+  BITCODE_3BD ucs_origin;	/*!< DXF 13 */
+  BITCODE_3BD ucs_x_dir;	/*!< DXF 210 */
+  BITCODE_3BD ucs_y_dir;	/*!< DXF 211 */
+  BITCODE_3BD ucs_z_dir;	/*!< DXF 212 */
+  BITCODE_B is_locked;		/*!< DXF 290 */
+  BITCODE_H pointclouddefex;	/*!< DXF 330 */
+  BITCODE_H reactor;		/*!< DXF 360 */
+  BITCODE_T name; 		/* DXF 1 */
+  BITCODE_B show_intensity;	/*!< DXF 291 */
+
+  BITCODE_BS stylization_type;	/*!< DXF 71 */
+  BITCODE_T intensity_colorscheme;	/*!< ? DXF 1 */
+  BITCODE_T cur_colorscheme;	/*!< DXF 1 */
+  BITCODE_T classification_colorscheme;	/*!< ? DXF 1 */
+  BITCODE_BD elevation_min;	/* DXF 40 */
+  BITCODE_BD elevation_max;	/* DXF 41 */
+  BITCODE_BL intensity_min;	/* DXF 90 */
+  BITCODE_BL intensity_max;	/* DXF 91 */
+  BITCODE_BS intensity_out_of_range_behavior;	/* DXF 70 */
+  BITCODE_BS elevation_out_of_range_behavior;	/* DXF 71 */
+  BITCODE_B elevation_apply_to_fixed_range;	/* DXF 292 */
+  BITCODE_B intensity_as_gradient;	/* DXF 293 */
+  BITCODE_B elevation_as_gradient;	/* DXF 294 */
+  BITCODE_B show_cropping;	/*!< DXF 295 */
+  BITCODE_BL unknown_bl0;	/*!< ? DXF 93 */
+  BITCODE_BL unknown_bl1;	/*!< ? DXF 93 */
+  BITCODE_BL num_croppings;	/*!< DXF 92 */
+  Dwg_POINTCLOUDEX_Croppings *croppings;
 } Dwg_Entity_POINTCLOUDEX;
 
 typedef struct _dwg_object_POINTCLOUDDEF
@@ -7600,10 +7642,9 @@ typedef struct _dwg_object_POINTCLOUDDEF
   BITCODE_BL class_version; 	// 1 or 2 r2013+, DXF 90
   BITCODE_T source_filename; 	/* DXF 1 */
   BITCODE_B is_loaded;		/* DXF 280 */
-  BITCODE_RLL numpoints;	/*!< DXF 169 */
+  BITCODE_RLL numpoints;	/*!< DXF 91 (hi) + 92 (lo) / 160 */
   BITCODE_3BD extents_min;	/*!< DXF 10 */
   BITCODE_3BD extents_max;	/*!< DXF 11 */
-  // ..
 } Dwg_Object_POINTCLOUDDEF;
 
 typedef struct _dwg_object_POINTCLOUDDEFEX
@@ -7620,21 +7661,19 @@ typedef struct _dwg_object_POINTCLOUDDEFEX
 typedef struct _dwg_object_POINTCLOUDDEF_REACTOR
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL class_version; 	// 1 or 2 r2013+, DXF 90
-  // ..
+  BITCODE_BL class_version; // 1
 } Dwg_Object_POINTCLOUDDEF_REACTOR;
 
 typedef struct _dwg_object_POINTCLOUDDEF_REACTOR_EX
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL class_version; 	// 1 or 2 r2013+, DXF 90
-  // ..
+  BITCODE_BL class_version; // 1
 } Dwg_Object_POINTCLOUDDEF_REACTOR_EX;
 
 typedef struct _dwg_ColorRamp
 {
   struct _dwg_POINTCLOUDCOLORMAP_Ramp *parent;
-  // either
+  // FIXME either
   BITCODE_T colorscheme;	// DXF 1
   /// or
   BITCODE_BL unknown_bl;	// DXF 91

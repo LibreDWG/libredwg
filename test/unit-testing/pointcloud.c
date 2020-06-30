@@ -56,26 +56,35 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, POINTCLOUD, ucs_x_dir);
   CHK_ENTITY_3RD (_obj, POINTCLOUD, ucs_y_dir);
   CHK_ENTITY_3RD (_obj, POINTCLOUD, ucs_z_dir);
-  SINCE (R_2013) {
+  SINCE (R_2013)
+  {
     CHK_ENTITY_H (_obj, POINTCLOUD, pointclouddef);
     CHK_ENTITY_H (_obj, POINTCLOUD, reactor);
     CHK_ENTITY_TYPE (_obj, POINTCLOUD, show_intensity, B);
     CHK_ENTITY_TYPE (_obj, POINTCLOUD, intensity_scheme, BS);
-    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle, min_intensity, BD);
-    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle, max_intensity, BD);
-    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle, intensity_low_treshold, BD);
-    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle, intensity_high_treshold, BD);
+    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle,
+                       min_intensity, BD);
+    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle,
+                       max_intensity, BD);
+    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle,
+                       intensity_low_treshold, BD);
+    CHK_SUBCLASS_TYPE (intensity_style, POINTCLOUD_IntensityStyle,
+                       intensity_high_treshold, BD);
     CHK_ENTITY_TYPE (_obj, POINTCLOUD, show_clipping, B);
     CHK_ENTITY_TYPE (_obj, POINTCLOUD, num_clippings, BL);
-    if (!dwg_dynapi_entity_value (_obj, "POINTCLOUD", "clippings", &clippings, NULL))
+    if (!dwg_dynapi_entity_value (_obj, "POINTCLOUD", "clippings", &clippings,
+                                  NULL))
       fail ("POINTCLOUD.clippings");
     else
       for (i = 0; i < num_clippings; i++)
         {
-          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, is_inverted, B);
+          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, is_inverted,
+                             B);
           CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, type, BS);
-          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, num_vertices, BS);
-          CHK_SUBCLASS_2DPOINTS (clippings[i], POINTCLOUD_Clippings, vertices, clippings[i].num_vertices);
+          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, num_vertices,
+                             BS);
+          CHK_SUBCLASS_2DPOINTS (clippings[i], POINTCLOUD_Clippings, vertices,
+                                 clippings[i].num_vertices);
           CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, z_min, BD);
           CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, z_max, BD);
         }

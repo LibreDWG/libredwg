@@ -3223,6 +3223,64 @@ Dwg_POINTCLOUD_Clippings*
 struct _dwg_object_entity*
 @item class_version
 BS,	DXF 70
+@item extents_min
+3BD,	DXF 10
+@item extents_max
+3BD,	DXF 11
+@item ucs_origin
+3BD,	DXF 12
+@item ucs_x_dir
+3BD,	DXF 210
+@item ucs_y_dir
+3BD,	DXF 211
+@item ucs_z_dir
+3BD,	DXF 212
+@item is_locked
+B,	DXF 290
+@item pointclouddefex
+H,	DXF 330
+@item reactor
+H,	DXF 360
+@item name
+T,	DXF 1
+@item show_intensity
+B,	DXF 291
+@item stylization_type
+BS,	DXF 71
+@item intensity_colorscheme
+T,	DXF 1
+@item cur_colorscheme
+T,	DXF 1
+@item classification_colorscheme
+T,	DXF 1
+@item elevation_min
+BD,	DXF 40
+@item elevation_max
+BD,	DXF 41
+@item intensity_min
+BL,	DXF 90
+@item intensity_max
+BL,	DXF 91
+@item intensity_out_of_range_behavior
+BS,	DXF 71
+@item elevation_out_of_range_behavior
+BS,	DXF 72
+@item elevation_apply_to_fixed_range
+B,	DXF 292
+@item intensity_as_gradient
+B,	DXF 293
+@item elevation_as_gradient
+B,	DXF 294
+@item show_cropping
+B,	DXF 295
+@item unknown_bl0
+BL,	DXF 93
+@item unknown_bl1
+BL,	DXF 93
+@item num_croppings
+BL,	DXF 92
+@item croppings
+Dwg_POINTCLOUDEX_Croppings*
 
 @end vtable
 @end indentedblock
@@ -10773,17 +10831,17 @@ Dwg_POINTCLOUDCOLORMAP_Ramp*
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL,	DXF 70
+BL,	DXF 90
 @item source_filename
-T
+T,	DXF 1
 @item is_loaded
-B
+B,	DXF 280
 @item numpoints
-RLL
+RLL,	DXF 160
 @item extents_min
-3BD
+3BD,	DXF 10
 @item extents_max
-3BD
+3BD,	DXF 11
 
 @end vtable
 @end indentedblock
@@ -10823,7 +10881,7 @@ RLL,	DXF 160
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL,	DXF 70
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -10838,7 +10896,7 @@ BL,	DXF 70
 @item parent
 struct _dwg_object_object*
 @item class_version
-BL,	DXF 70
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -14663,6 +14721,34 @@ BS,	DXF 70
 BL,	DXF 90
 @item ramps
 Dwg_ColorRamp*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_POINTCLOUDEX_Croppings} @anchor{Dwg_POINTCLOUDEX_Croppings}
+@vindex Dwg_POINTCLOUDEX_Croppings
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_entity_POINTCLOUDEX*
+@item type
+BS,	DXF 280
+@item is_inside
+B,	DXF 290
+@item is_inverted
+B,	DXF 290
+@item crop_plane
+3BD,	DXF 13
+@item crop_x_dir
+3BD,	DXF 213
+@item crop_y_dir
+3BD,	DXF 213
+@item num_pts
+BL,	DXF 93
+@item pts
+3BD*
 
 @end vtable
 @end indentedblock

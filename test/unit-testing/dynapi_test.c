@@ -18150,12 +18150,366 @@ static int test_POINTCLOUDEX (const Dwg_Object *obj)
     pointcloudex->class_version--;
   }
   {
+    BITCODE_T classification_colorscheme;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "classification_colorscheme", &classification_colorscheme, NULL)
+        && classification_colorscheme
+           ? strEQ ((char *)classification_colorscheme, (char *)pointcloudex->classification_colorscheme)
+           : !pointcloudex->classification_colorscheme)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.classification_colorscheme [T] '%s' <> '%s'", classification_colorscheme, pointcloudex->classification_colorscheme);
+  }
+  {
+    Dwg_POINTCLOUDEX_Croppings* croppings;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "num_croppings", &count, NULL)
+        && dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "croppings", &croppings, NULL)
+        && croppings == pointcloudex->croppings)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.croppings [Dwg_POINTCLOUDEX_Croppings*] * %u num_croppings", count);
+  }
+  {
+    BITCODE_T cur_colorscheme;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "cur_colorscheme", &cur_colorscheme, NULL)
+        && cur_colorscheme
+           ? strEQ ((char *)cur_colorscheme, (char *)pointcloudex->cur_colorscheme)
+           : !pointcloudex->cur_colorscheme)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.cur_colorscheme [T] '%s' <> '%s'", cur_colorscheme, pointcloudex->cur_colorscheme);
+  }
+  {
+    BITCODE_B elevation_apply_to_fixed_range;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "elevation_apply_to_fixed_range", &elevation_apply_to_fixed_range, NULL)
+        && elevation_apply_to_fixed_range == pointcloudex->elevation_apply_to_fixed_range)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_apply_to_fixed_range [B] " FORMAT_B " != " FORMAT_B "", pointcloudex->elevation_apply_to_fixed_range, elevation_apply_to_fixed_range);
+    elevation_apply_to_fixed_range++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "elevation_apply_to_fixed_range", &elevation_apply_to_fixed_range, 0)
+        && elevation_apply_to_fixed_range == pointcloudex->elevation_apply_to_fixed_range)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_apply_to_fixed_range [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloudex->elevation_apply_to_fixed_range, elevation_apply_to_fixed_range);
+    pointcloudex->elevation_apply_to_fixed_range--;
+  }
+  {
+    BITCODE_B elevation_as_gradient;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "elevation_as_gradient", &elevation_as_gradient, NULL)
+        && elevation_as_gradient == pointcloudex->elevation_as_gradient)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_as_gradient [B] " FORMAT_B " != " FORMAT_B "", pointcloudex->elevation_as_gradient, elevation_as_gradient);
+    elevation_as_gradient++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "elevation_as_gradient", &elevation_as_gradient, 0)
+        && elevation_as_gradient == pointcloudex->elevation_as_gradient)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_as_gradient [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloudex->elevation_as_gradient, elevation_as_gradient);
+    pointcloudex->elevation_as_gradient--;
+  }
+  {
+    BITCODE_BD elevation_max;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "elevation_max", &elevation_max, NULL)
+        && elevation_max == pointcloudex->elevation_max)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_max [BD] %g != %g", pointcloudex->elevation_max, elevation_max);
+    elevation_max++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "elevation_max", &elevation_max, 0)
+        && elevation_max == pointcloudex->elevation_max)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_max [BD] set+1 %g != %g", pointcloudex->elevation_max, elevation_max);
+    pointcloudex->elevation_max--;
+  }
+  {
+    BITCODE_BD elevation_min;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "elevation_min", &elevation_min, NULL)
+        && elevation_min == pointcloudex->elevation_min)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_min [BD] %g != %g", pointcloudex->elevation_min, elevation_min);
+    elevation_min++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "elevation_min", &elevation_min, 0)
+        && elevation_min == pointcloudex->elevation_min)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_min [BD] set+1 %g != %g", pointcloudex->elevation_min, elevation_min);
+    pointcloudex->elevation_min--;
+  }
+  {
+    BITCODE_BS elevation_out_of_range_behavior;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "elevation_out_of_range_behavior", &elevation_out_of_range_behavior, NULL)
+        && elevation_out_of_range_behavior == pointcloudex->elevation_out_of_range_behavior)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_out_of_range_behavior [BS] %hu != %hu", pointcloudex->elevation_out_of_range_behavior, elevation_out_of_range_behavior);
+    elevation_out_of_range_behavior++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "elevation_out_of_range_behavior", &elevation_out_of_range_behavior, 0)
+        && elevation_out_of_range_behavior == pointcloudex->elevation_out_of_range_behavior)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.elevation_out_of_range_behavior [BS] set+1 %hu != %hu", pointcloudex->elevation_out_of_range_behavior, elevation_out_of_range_behavior);
+    pointcloudex->elevation_out_of_range_behavior--;
+  }
+  {
+    BITCODE_3BD extents_max;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "extents_max", &extents_max, NULL)
+        && !memcmp (&extents_max, &pointcloudex->extents_max, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.extents_max [3BD]");
+  }
+  {
+    BITCODE_3BD extents_min;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "extents_min", &extents_min, NULL)
+        && !memcmp (&extents_min, &pointcloudex->extents_min, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.extents_min [3BD]");
+  }
+  {
+    BITCODE_B intensity_as_gradient;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "intensity_as_gradient", &intensity_as_gradient, NULL)
+        && intensity_as_gradient == pointcloudex->intensity_as_gradient)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_as_gradient [B] " FORMAT_B " != " FORMAT_B "", pointcloudex->intensity_as_gradient, intensity_as_gradient);
+    intensity_as_gradient++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "intensity_as_gradient", &intensity_as_gradient, 0)
+        && intensity_as_gradient == pointcloudex->intensity_as_gradient)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_as_gradient [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloudex->intensity_as_gradient, intensity_as_gradient);
+    pointcloudex->intensity_as_gradient--;
+  }
+  {
+    BITCODE_T intensity_colorscheme;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "intensity_colorscheme", &intensity_colorscheme, NULL)
+        && intensity_colorscheme
+           ? strEQ ((char *)intensity_colorscheme, (char *)pointcloudex->intensity_colorscheme)
+           : !pointcloudex->intensity_colorscheme)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_colorscheme [T] '%s' <> '%s'", intensity_colorscheme, pointcloudex->intensity_colorscheme);
+  }
+  {
+    BITCODE_BL intensity_max;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "intensity_max", &intensity_max, NULL)
+        && intensity_max == pointcloudex->intensity_max)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_max [BL] %u != %u", pointcloudex->intensity_max, intensity_max);
+    intensity_max++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "intensity_max", &intensity_max, 0)
+        && intensity_max == pointcloudex->intensity_max)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_max [BL] set+1 %u != %u", pointcloudex->intensity_max, intensity_max);
+    pointcloudex->intensity_max--;
+  }
+  {
+    BITCODE_BL intensity_min;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "intensity_min", &intensity_min, NULL)
+        && intensity_min == pointcloudex->intensity_min)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_min [BL] %u != %u", pointcloudex->intensity_min, intensity_min);
+    intensity_min++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "intensity_min", &intensity_min, 0)
+        && intensity_min == pointcloudex->intensity_min)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_min [BL] set+1 %u != %u", pointcloudex->intensity_min, intensity_min);
+    pointcloudex->intensity_min--;
+  }
+  {
+    BITCODE_BS intensity_out_of_range_behavior;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "intensity_out_of_range_behavior", &intensity_out_of_range_behavior, NULL)
+        && intensity_out_of_range_behavior == pointcloudex->intensity_out_of_range_behavior)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_out_of_range_behavior [BS] %hu != %hu", pointcloudex->intensity_out_of_range_behavior, intensity_out_of_range_behavior);
+    intensity_out_of_range_behavior++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "intensity_out_of_range_behavior", &intensity_out_of_range_behavior, 0)
+        && intensity_out_of_range_behavior == pointcloudex->intensity_out_of_range_behavior)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.intensity_out_of_range_behavior [BS] set+1 %hu != %hu", pointcloudex->intensity_out_of_range_behavior, intensity_out_of_range_behavior);
+    pointcloudex->intensity_out_of_range_behavior--;
+  }
+  {
+    BITCODE_B is_locked;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "is_locked", &is_locked, NULL)
+        && is_locked == pointcloudex->is_locked)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.is_locked [B] " FORMAT_B " != " FORMAT_B "", pointcloudex->is_locked, is_locked);
+    is_locked++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "is_locked", &is_locked, 0)
+        && is_locked == pointcloudex->is_locked)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.is_locked [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloudex->is_locked, is_locked);
+    pointcloudex->is_locked--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)pointcloudex->name)
+           : !pointcloudex->name)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.name [T] '%s' <> '%s'", name, pointcloudex->name);
+  }
+  {
+    BITCODE_BL num_croppings;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "num_croppings", &num_croppings, NULL)
+        && num_croppings == pointcloudex->num_croppings)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.num_croppings [BL] %u != %u", pointcloudex->num_croppings, num_croppings);
+    num_croppings++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "num_croppings", &num_croppings, 0)
+        && num_croppings == pointcloudex->num_croppings)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.num_croppings [BL] set+1 %u != %u", pointcloudex->num_croppings, num_croppings);
+    pointcloudex->num_croppings--;
+  }
+  {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "parent", &parent, NULL)
         && !memcmp (&parent, &pointcloudex->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("POINTCLOUDEX.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_H pointclouddefex;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "pointclouddefex", &pointclouddefex, NULL)
+        && !memcmp (&pointclouddefex, &pointcloudex->pointclouddefex, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.pointclouddefex [H]");
+  }
+  {
+    BITCODE_H reactor;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "reactor", &reactor, NULL)
+        && !memcmp (&reactor, &pointcloudex->reactor, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.reactor [H]");
+  }
+  {
+    BITCODE_B show_cropping;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "show_cropping", &show_cropping, NULL)
+        && show_cropping == pointcloudex->show_cropping)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.show_cropping [B] " FORMAT_B " != " FORMAT_B "", pointcloudex->show_cropping, show_cropping);
+    show_cropping++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "show_cropping", &show_cropping, 0)
+        && show_cropping == pointcloudex->show_cropping)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.show_cropping [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloudex->show_cropping, show_cropping);
+    pointcloudex->show_cropping--;
+  }
+  {
+    BITCODE_B show_intensity;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "show_intensity", &show_intensity, NULL)
+        && show_intensity == pointcloudex->show_intensity)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.show_intensity [B] " FORMAT_B " != " FORMAT_B "", pointcloudex->show_intensity, show_intensity);
+    show_intensity++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "show_intensity", &show_intensity, 0)
+        && show_intensity == pointcloudex->show_intensity)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.show_intensity [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloudex->show_intensity, show_intensity);
+    pointcloudex->show_intensity--;
+  }
+  {
+    BITCODE_BS stylization_type;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "stylization_type", &stylization_type, NULL)
+        && stylization_type == pointcloudex->stylization_type)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.stylization_type [BS] %hu != %hu", pointcloudex->stylization_type, stylization_type);
+    stylization_type++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "stylization_type", &stylization_type, 0)
+        && stylization_type == pointcloudex->stylization_type)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.stylization_type [BS] set+1 %hu != %hu", pointcloudex->stylization_type, stylization_type);
+    pointcloudex->stylization_type--;
+  }
+  {
+    BITCODE_3BD ucs_origin;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "ucs_origin", &ucs_origin, NULL)
+        && !memcmp (&ucs_origin, &pointcloudex->ucs_origin, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.ucs_origin [3BD]");
+  }
+  {
+    BITCODE_3BD ucs_x_dir;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "ucs_x_dir", &ucs_x_dir, NULL)
+        && !memcmp (&ucs_x_dir, &pointcloudex->ucs_x_dir, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.ucs_x_dir [3BD]");
+  }
+  {
+    BITCODE_3BD ucs_y_dir;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "ucs_y_dir", &ucs_y_dir, NULL)
+        && !memcmp (&ucs_y_dir, &pointcloudex->ucs_y_dir, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.ucs_y_dir [3BD]");
+  }
+  {
+    BITCODE_3BD ucs_z_dir;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "ucs_z_dir", &ucs_z_dir, NULL)
+        && !memcmp (&ucs_z_dir, &pointcloudex->ucs_z_dir, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.ucs_z_dir [3BD]");
+  }
+  {
+    BITCODE_BL unknown_bl0;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "unknown_bl0", &unknown_bl0, NULL)
+        && unknown_bl0 == pointcloudex->unknown_bl0)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.unknown_bl0 [BL] %u != %u", pointcloudex->unknown_bl0, unknown_bl0);
+    unknown_bl0++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "unknown_bl0", &unknown_bl0, 0)
+        && unknown_bl0 == pointcloudex->unknown_bl0)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.unknown_bl0 [BL] set+1 %u != %u", pointcloudex->unknown_bl0, unknown_bl0);
+    pointcloudex->unknown_bl0--;
+  }
+  {
+    BITCODE_BL unknown_bl1;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "unknown_bl1", &unknown_bl1, NULL)
+        && unknown_bl1 == pointcloudex->unknown_bl1)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.unknown_bl1 [BL] %u != %u", pointcloudex->unknown_bl1, unknown_bl1);
+    unknown_bl1++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "unknown_bl1", &unknown_bl1, 0)
+        && unknown_bl1 == pointcloudex->unknown_bl1)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.unknown_bl1 [BL] set+1 %u != %u", pointcloudex->unknown_bl1, unknown_bl1);
+    pointcloudex->unknown_bl1--;
   }
   if (failed && (is_class_unstable ("POINTCLOUDEX") || is_class_debugging ("POINTCLOUDEX")))
     {
@@ -65426,6 +65780,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_POINTCLOUDCOLORMAP_Ramp): %d != "
                "dwg_dynapi_fields_size (\"POINTCLOUDCOLORMAP_Ramp\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_POINTCLOUDEX_Croppings);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDEX_Croppings");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_POINTCLOUDEX_Croppings): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDEX_Croppings\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_POINTCLOUD_Clippings);

@@ -276,6 +276,11 @@ testdebug = \
 	persubentmgr \
 	planesurface \
 	pointcloud \
+	pointcloudex \
+	pointclouddef \
+	pointclouddefex \
+	pointclouddef_reactor \
+	pointclouddef_reactor_ex \
 	pointcloudcolormap \
 	pointpath \
 	radimobjectcontextdata \
