@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_T *source_files;
   BITCODE_3BD extents_min;
   BITCODE_3BD extents_max;
-  BITCODE_RLL num_points;
+  BITCODE_RLL numpoints;
   BITCODE_T  ucs_name;
   BITCODE_3BD ucs_origin;
   BITCODE_3BD ucs_x_dir;
@@ -50,7 +50,7 @@ api_process (dwg_object *obj)
   // if !num_source_files
   CHK_ENTITY_3RD (_obj, POINTCLOUD, extents_min);
   CHK_ENTITY_3RD (_obj, POINTCLOUD, extents_max);
-  CHK_ENTITY_TYPE (_obj, POINTCLOUD, num_points, RLL);
+  CHK_ENTITY_TYPE (_obj, POINTCLOUD, numpoints, RLL);
   CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUD, ucs_name);
   CHK_ENTITY_3RD (_obj, POINTCLOUD, ucs_origin);
   CHK_ENTITY_3RD (_obj, POINTCLOUD, ucs_x_dir);

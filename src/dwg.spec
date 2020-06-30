@@ -10473,7 +10473,7 @@ DWG_OBJECT_END
 // TODO POINTCLOUDEX
 DWG_ENTITY (POINTCLOUD)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbPointCloudObj)
+  SUBCLASS (AcDbPointCloud)
   FIELD_BS (class_version, 70);
   FIELD_3BD (origin, 10);
   FIELD_T (saved_filename, 1)
@@ -10482,7 +10482,7 @@ DWG_ENTITY (POINTCLOUD)
     {
       FIELD_3BD (extents_min, 11);
       FIELD_3BD (extents_max, 12);
-      FIELD_BLL (num_points, 92);
+      FIELD_RLL (numpoints, 92);
       FIELD_T (ucs_name, 3);
       FIELD_3BD (ucs_origin, 13);
       FIELD_3BD (ucs_x_dir, 210);
@@ -10522,7 +10522,99 @@ DWG_ENTITY (POINTCLOUD)
     }
   FIELD_VECTOR_T (source_files, T, num_source_files, 2)
 DWG_ENTITY_END
-  
+
+DWG_ENTITY (POINTCLOUDEX)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPointCloudEx)
+  FIELD_BS (class_version, 70);
+  // ..
+DWG_ENTITY_END
+
+DWG_OBJECT (POINTCLOUDDEF)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPointCloudDef)
+  FIELD_BS (class_version, 70);
+  // ..
+DWG_OBJECT_END
+
+DWG_OBJECT (POINTCLOUDDEFEX)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPointCloudDefEx)
+  FIELD_BL (class_version, 90);
+  FIELD_T (source_filename, 1);
+  FIELD_B (is_loaded, 280);
+  FIELD_RLL (numpoints, 160);
+  FIELD_3BD (extents_min, 10);
+  FIELD_3BD (extents_max, 11);
+DWG_OBJECT_END
+
+DWG_OBJECT (POINTCLOUDDEF_REACTOR)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPointCloudDefReactor)
+  FIELD_BS (class_version, 70);
+  // ..
+DWG_OBJECT_END
+
+DWG_OBJECT (POINTCLOUDDEF_REACTOR_EX)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPointCloudDefReactorEx)
+  FIELD_BS (class_version, 70);
+  // ..
+DWG_OBJECT_END
+
+DWG_OBJECT (POINTCLOUDCOLORMAP)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPointCloudColorMap)
+  FIELD_BS (class_version, 70);
+  FIELD_T (def_intensity_colorscheme, 1);
+  FIELD_T (def_elevation_colorscheme, 1);
+  FIELD_T (def_classification_colorscheme, 1);
+
+  FIELD_BL (num_colorramps, 90);
+  REPEAT (num_colorramps, colorramps, Dwg_POINTCLOUDCOLORMAP_Ramp)
+  REPEAT_BLOCK
+    #define ramp colorramps[rcount1]
+    SUB_FIELD_BS (ramp, class_version, 70);
+    SUB_FIELD_BL (ramp, num_ramps, 90);
+    REPEAT2 (ramp.num_ramps, colorramps[rcount1].ramps, Dwg_ColorRamp)
+    REPEAT_BLOCK
+      if (1) {
+        SUB_FIELD_T (ramp.ramps[rcount2], colorscheme, 1);
+      } else {
+        SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
+        SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
+      }
+    END_REPEAT_BLOCK
+    SET_PARENT (ramp.ramps, _obj->colorramps);
+    END_REPEAT (ramp.ramps)
+    #undef ramp
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (colorramps);
+  END_REPEAT (colorramps)
+
+  FIELD_BL (num_classification_colorramps, 90);
+  REPEAT (num_classification_colorramps, classification_colorramps, Dwg_POINTCLOUDCOLORMAP_Ramp)
+  REPEAT_BLOCK
+    #define ramp classification_colorramps[rcount1]
+    SUB_FIELD_BS (ramp, class_version, 70);
+    SUB_FIELD_BL (ramp, num_ramps, 90);
+    REPEAT2 (ramp.num_ramps, colorramps[rcount1].ramps, Dwg_ColorRamp)
+    REPEAT_BLOCK
+      if (1) {
+        SUB_FIELD_T (ramp.ramps[rcount2], colorscheme, 1);
+      } else {
+        SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
+        SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
+      }
+    END_REPEAT_BLOCK
+    SET_PARENT (ramp.ramps, _obj->classification_colorramps);
+    END_REPEAT (ramp.ramps)
+    #undef ramp
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (classification_colorramps);
+  END_REPEAT (classification_colorramps)
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
 

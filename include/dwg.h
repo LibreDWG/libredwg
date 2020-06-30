@@ -558,6 +558,12 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_PLANESURFACE,
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_POINTCLOUD,
+  DWG_TYPE_POINTCLOUDEX,
+  DWG_TYPE_POINTCLOUDDEF,
+  DWG_TYPE_POINTCLOUDDEFEX,
+  DWG_TYPE_POINTCLOUDDEF_REACTOR,
+  DWG_TYPE_POINTCLOUDDEF_REACTOR_EX,
+  DWG_TYPE_POINTCLOUDCOLORMAP,
   DWG_TYPE_POINTPARAMETERENTITY,
   DWG_TYPE_POINTPATH,
   DWG_TYPE_RADIMLGOBJECTCONTEXTDATA,
@@ -7564,7 +7570,7 @@ typedef struct _dwg_entity_POINTCLOUD
   BITCODE_T *source_files;	/*!< DXF 2 */
   BITCODE_3BD extents_min;	/*!< DXF 11 */
   BITCODE_3BD extents_max;	/*!< DXF 12 */
-  BITCODE_RLL num_points;	/*!< DXF 92 */
+  BITCODE_RLL numpoints;	/*!< DXF 92 */
   BITCODE_T  ucs_name;		/*!< DXF 3 */
   BITCODE_3BD ucs_origin;	/*!< DXF 13 */
   BITCODE_3BD ucs_x_dir;	/*!< DXF 210 */
@@ -7580,6 +7586,81 @@ typedef struct _dwg_entity_POINTCLOUD
   BITCODE_BL num_clippings;	/*!< DXF ? */
   Dwg_POINTCLOUD_Clippings *clippings;
 } Dwg_Entity_POINTCLOUD;
+
+typedef struct _dwg_entity_POINTCLOUDEX
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS class_version; 	// 1 or 2 r2013+, DXF 70
+  // ..
+} Dwg_Entity_POINTCLOUDEX;
+
+typedef struct _dwg_object_POINTCLOUDDEF
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; 	// 1 or 2 r2013+, DXF 90
+  BITCODE_T source_filename; 	/* DXF 1 */
+  BITCODE_B is_loaded;		/* DXF 280 */
+  BITCODE_RLL numpoints;	/*!< DXF 169 */
+  BITCODE_3BD extents_min;	/*!< DXF 10 */
+  BITCODE_3BD extents_max;	/*!< DXF 11 */
+  // ..
+} Dwg_Object_POINTCLOUDDEF;
+
+typedef struct _dwg_object_POINTCLOUDDEFEX
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; 	// 1 or 2 r2013+, DXF 90
+  BITCODE_T source_filename; 	/* DXF 1 */
+  BITCODE_B is_loaded;		/* DXF 280 */
+  BITCODE_RLL numpoints;	/*!< DXF 169 */
+  BITCODE_3BD extents_min;	/*!< DXF 10 */
+  BITCODE_3BD extents_max;	/*!< DXF 11 */
+} Dwg_Object_POINTCLOUDDEFEX;
+
+typedef struct _dwg_object_POINTCLOUDDEF_REACTOR
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; 	// 1 or 2 r2013+, DXF 90
+  // ..
+} Dwg_Object_POINTCLOUDDEF_REACTOR;
+
+typedef struct _dwg_object_POINTCLOUDDEF_REACTOR_EX
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; 	// 1 or 2 r2013+, DXF 90
+  // ..
+} Dwg_Object_POINTCLOUDDEF_REACTOR_EX;
+
+typedef struct _dwg_ColorRamp
+{
+  struct _dwg_POINTCLOUDCOLORMAP_Ramp *parent;
+  // either
+  BITCODE_T colorscheme;	// DXF 1
+  /// or
+  BITCODE_BL unknown_bl;	// DXF 91
+  BITCODE_B unknown_b;		// DXF 290
+} Dwg_ColorRamp;
+
+typedef struct _dwg_POINTCLOUDCOLORMAP_Ramp
+{
+  struct _dwg_object_POINTCLOUDCOLORMAP *parent;
+  BITCODE_BS class_version;	// DXF 70: 1
+  BITCODE_BL num_ramps;		// DXF 90
+  Dwg_ColorRamp *ramps;
+} Dwg_POINTCLOUDCOLORMAP_Ramp;
+
+typedef struct _dwg_object_POINTCLOUDCOLORMAP
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BS class_version;
+  BITCODE_T def_intensity_colorscheme;	/*!< DXF 1 */
+  BITCODE_T def_elevation_colorscheme;	/*!< DXF 1 */
+  BITCODE_T def_classification_colorscheme;	/*!< DXF 1 */
+  BITCODE_BL num_colorramps;
+  Dwg_POINTCLOUDCOLORMAP_Ramp *colorramps;
+  BITCODE_BL num_classification_colorramps;
+  Dwg_POINTCLOUDCOLORMAP_Ramp *classification_colorramps;
+} Dwg_Object_POINTCLOUDCOLORMAP;
 
 /**
  -----------------------------------
@@ -7752,6 +7833,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_NURBSURFACE *NURBSURFACE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
+    Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
     Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
     Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
     Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
@@ -8033,6 +8115,11 @@ typedef struct _dwg_object_object
     Dwg_Object_OBJECTCONTEXTDATA *OBJECTCONTEXTDATA;
     Dwg_Object_ORDDIMOBJECTCONTEXTDATA *ORDDIMOBJECTCONTEXTDATA;
     Dwg_Object_PERSUBENTMGR *PERSUBENTMGR;
+    Dwg_Object_POINTCLOUDCOLORMAP *POINTCLOUDCOLORMAP;
+    Dwg_Object_POINTCLOUDDEF *POINTCLOUDDEF;
+    Dwg_Object_POINTCLOUDDEFEX *POINTCLOUDDEFEX;
+    Dwg_Object_POINTCLOUDDEF_REACTOR *POINTCLOUDDEF_REACTOR;
+    Dwg_Object_POINTCLOUDDEF_REACTOR_EX *POINTCLOUDDEF_REACTOR_EX;
     Dwg_Object_POINTPATH *POINTPATH;
     Dwg_Object_RADIMLGOBJECTCONTEXTDATA *RADIMLGOBJECTCONTEXTDATA;
     Dwg_Object_RADIMOBJECTCONTEXTDATA *RADIMOBJECTCONTEXTDATA;
@@ -9194,6 +9281,7 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTCLOUDEX (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_ROTATIONPARAMETERENTITY (Dwg_Object *obj);
@@ -9300,6 +9388,11 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_OBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_ORDDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTCLOUDCOLORMAP (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTCLOUDDEF (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTCLOUDDEFEX (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTCLOUDDEF_REACTOR (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTCLOUDDEF_REACTOR_EX (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTPATH (Dwg_Object *obj);
   EXPORT int dwg_setup_RADIMLGOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_RADIMOBJECTCONTEXTDATA (Dwg_Object *obj);

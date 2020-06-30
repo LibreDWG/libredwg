@@ -398,6 +398,10 @@ main (int argc, char *argv[])
                   "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
                   cov);
             }
+          if (DWG_TYPE == DWG_TYPE_POINTCLOUDCOLORMAP)
+            {
+              error += test_code (prefix, "2004/double_free_example.dwg", cov);
+            }
         }
 #ifdef DWG_TYPE
       if (cov && !numpassed () && !numfailed ())

@@ -17968,21 +17968,6 @@ static int test_POINTCLOUD (const Dwg_Object *obj)
     pointcloud->num_clippings--;
   }
   {
-    BITCODE_RLL num_points;
-    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_points", &num_points, NULL)
-        && num_points == pointcloud->num_points)
-      pass ();
-    else
-      fail ("POINTCLOUD.num_points [RLL] " FORMAT_RLL " != " FORMAT_RLL "", pointcloud->num_points, num_points);
-    num_points++;
-    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "num_points", &num_points, 0)
-        && num_points == pointcloud->num_points)
-      pass ();
-    else
-      fail ("POINTCLOUD.num_points [RLL] set+1 " FORMAT_RLL " != " FORMAT_RLL "", pointcloud->num_points, num_points);
-    pointcloud->num_points--;
-  }
-  {
     BITCODE_BL num_source_files;
     if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_source_files", &num_source_files, NULL)
         && num_source_files == pointcloud->num_source_files)
@@ -17996,6 +17981,21 @@ static int test_POINTCLOUD (const Dwg_Object *obj)
     else
       fail ("POINTCLOUD.num_source_files [BL] set+1 %u != %u", pointcloud->num_source_files, num_source_files);
     pointcloud->num_source_files--;
+  }
+  {
+    BITCODE_RLL numpoints;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "numpoints", &numpoints, NULL)
+        && numpoints == pointcloud->numpoints)
+      pass ();
+    else
+      fail ("POINTCLOUD.numpoints [RLL] " FORMAT_RLL " != " FORMAT_RLL "", pointcloud->numpoints, numpoints);
+    numpoints++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "numpoints", &numpoints, 0)
+        && numpoints == pointcloud->numpoints)
+      pass ();
+    else
+      fail ("POINTCLOUD.numpoints [RLL] set+1 " FORMAT_RLL " != " FORMAT_RLL "", pointcloud->numpoints, numpoints);
+    pointcloud->numpoints--;
   }
   {
     BITCODE_3BD origin;
@@ -18124,6 +18124,42 @@ static int test_POINTCLOUD (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("POINTCLOUD") || is_class_debugging ("POINTCLOUD")))
     {
       ok ("%s failed %d tests (TODO unstable)", "POINTCLOUD", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_POINTCLOUDEX (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_POINTCLOUDEX *restrict pointcloudex = obj->tio.entity->tio.POINTCLOUDEX;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "class_version", &class_version, NULL)
+        && class_version == pointcloudex->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.class_version [BS] %hu != %hu", pointcloudex->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointcloudex, "POINTCLOUDEX", "class_version", &class_version, 0)
+        && class_version == pointcloudex->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDEX.class_version [BS] set+1 %hu != %hu", pointcloudex->class_version, class_version);
+    pointcloudex->class_version--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (pointcloudex, "POINTCLOUDEX", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointcloudex->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("POINTCLOUDEX.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("POINTCLOUDEX") || is_class_debugging ("POINTCLOUDEX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTCLOUDEX", failed);
       failed = 0;
     }
   return failed;
@@ -52865,6 +52901,378 @@ static int test_PLOTSETTINGS (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_POINTCLOUDCOLORMAP (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_POINTCLOUDCOLORMAP *restrict pointcloudcolormap = obj->tio.object->tio.POINTCLOUDCOLORMAP;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "class_version", &class_version, NULL)
+        && class_version == pointcloudcolormap->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.class_version [BS] %hu != %hu", pointcloudcolormap->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "class_version", &class_version, 0)
+        && class_version == pointcloudcolormap->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.class_version [BS] set+1 %hu != %hu", pointcloudcolormap->class_version, class_version);
+    pointcloudcolormap->class_version--;
+  }
+  {
+    Dwg_POINTCLOUDCOLORMAP_Ramp* classification_colorramps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "num_classification_colorramps", &count, NULL)
+        && dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "classification_colorramps", &classification_colorramps, NULL)
+        && classification_colorramps == pointcloudcolormap->classification_colorramps)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.classification_colorramps [Dwg_POINTCLOUDCOLORMAP_Ramp*] * %u num_classification_colorramps", count);
+  }
+  {
+    Dwg_POINTCLOUDCOLORMAP_Ramp* colorramps;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "num_colorramps", &count, NULL)
+        && dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "colorramps", &colorramps, NULL)
+        && colorramps == pointcloudcolormap->colorramps)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.colorramps [Dwg_POINTCLOUDCOLORMAP_Ramp*] * %u num_colorramps", count);
+  }
+  {
+    BITCODE_T def_classification_colorscheme;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "def_classification_colorscheme", &def_classification_colorscheme, NULL)
+        && def_classification_colorscheme
+           ? strEQ ((char *)def_classification_colorscheme, (char *)pointcloudcolormap->def_classification_colorscheme)
+           : !pointcloudcolormap->def_classification_colorscheme)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.def_classification_colorscheme [T] '%s' <> '%s'", def_classification_colorscheme, pointcloudcolormap->def_classification_colorscheme);
+  }
+  {
+    BITCODE_T def_elevation_colorscheme;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "def_elevation_colorscheme", &def_elevation_colorscheme, NULL)
+        && def_elevation_colorscheme
+           ? strEQ ((char *)def_elevation_colorscheme, (char *)pointcloudcolormap->def_elevation_colorscheme)
+           : !pointcloudcolormap->def_elevation_colorscheme)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.def_elevation_colorscheme [T] '%s' <> '%s'", def_elevation_colorscheme, pointcloudcolormap->def_elevation_colorscheme);
+  }
+  {
+    BITCODE_T def_intensity_colorscheme;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "def_intensity_colorscheme", &def_intensity_colorscheme, NULL)
+        && def_intensity_colorscheme
+           ? strEQ ((char *)def_intensity_colorscheme, (char *)pointcloudcolormap->def_intensity_colorscheme)
+           : !pointcloudcolormap->def_intensity_colorscheme)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.def_intensity_colorscheme [T] '%s' <> '%s'", def_intensity_colorscheme, pointcloudcolormap->def_intensity_colorscheme);
+  }
+  {
+    BITCODE_BL num_classification_colorramps;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "num_classification_colorramps", &num_classification_colorramps, NULL)
+        && num_classification_colorramps == pointcloudcolormap->num_classification_colorramps)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.num_classification_colorramps [BL] %u != %u", pointcloudcolormap->num_classification_colorramps, num_classification_colorramps);
+    num_classification_colorramps++;
+    if (dwg_dynapi_entity_set_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "num_classification_colorramps", &num_classification_colorramps, 0)
+        && num_classification_colorramps == pointcloudcolormap->num_classification_colorramps)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.num_classification_colorramps [BL] set+1 %u != %u", pointcloudcolormap->num_classification_colorramps, num_classification_colorramps);
+    pointcloudcolormap->num_classification_colorramps--;
+  }
+  {
+    BITCODE_BL num_colorramps;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "num_colorramps", &num_colorramps, NULL)
+        && num_colorramps == pointcloudcolormap->num_colorramps)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.num_colorramps [BL] %u != %u", pointcloudcolormap->num_colorramps, num_colorramps);
+    num_colorramps++;
+    if (dwg_dynapi_entity_set_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "num_colorramps", &num_colorramps, 0)
+        && num_colorramps == pointcloudcolormap->num_colorramps)
+      pass ();
+    else
+      fail ("POINTCLOUDCOLORMAP.num_colorramps [BL] set+1 %u != %u", pointcloudcolormap->num_colorramps, num_colorramps);
+    pointcloudcolormap->num_colorramps--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (pointcloudcolormap, "POINTCLOUDCOLORMAP", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointcloudcolormap->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("POINTCLOUDCOLORMAP.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("POINTCLOUDCOLORMAP") || is_class_debugging ("POINTCLOUDCOLORMAP")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTCLOUDCOLORMAP", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_POINTCLOUDDEF (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_POINTCLOUDDEF *restrict pointclouddef = obj->tio.object->tio.POINTCLOUDDEF;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (pointclouddef, "POINTCLOUDDEF", "class_version", &class_version, NULL)
+        && class_version == pointclouddef->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF.class_version [BL] %u != %u", pointclouddef->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointclouddef, "POINTCLOUDDEF", "class_version", &class_version, 0)
+        && class_version == pointclouddef->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF.class_version [BL] set+1 %u != %u", pointclouddef->class_version, class_version);
+    pointclouddef->class_version--;
+  }
+  {
+    BITCODE_3BD extents_max;
+    if (dwg_dynapi_entity_value (pointclouddef, "POINTCLOUDDEF", "extents_max", &extents_max, NULL)
+        && !memcmp (&extents_max, &pointclouddef->extents_max, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEF.extents_max [3BD]");
+  }
+  {
+    BITCODE_3BD extents_min;
+    if (dwg_dynapi_entity_value (pointclouddef, "POINTCLOUDDEF", "extents_min", &extents_min, NULL)
+        && !memcmp (&extents_min, &pointclouddef->extents_min, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEF.extents_min [3BD]");
+  }
+  {
+    BITCODE_B is_loaded;
+    if (dwg_dynapi_entity_value (pointclouddef, "POINTCLOUDDEF", "is_loaded", &is_loaded, NULL)
+        && is_loaded == pointclouddef->is_loaded)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF.is_loaded [B] " FORMAT_B " != " FORMAT_B "", pointclouddef->is_loaded, is_loaded);
+    is_loaded++;
+    if (dwg_dynapi_entity_set_value (pointclouddef, "POINTCLOUDDEF", "is_loaded", &is_loaded, 0)
+        && is_loaded == pointclouddef->is_loaded)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF.is_loaded [B] set+1 " FORMAT_B " != " FORMAT_B "", pointclouddef->is_loaded, is_loaded);
+    pointclouddef->is_loaded--;
+  }
+  {
+    BITCODE_RLL numpoints;
+    if (dwg_dynapi_entity_value (pointclouddef, "POINTCLOUDDEF", "numpoints", &numpoints, NULL)
+        && numpoints == pointclouddef->numpoints)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF.numpoints [RLL] " FORMAT_RLL " != " FORMAT_RLL "", pointclouddef->numpoints, numpoints);
+    numpoints++;
+    if (dwg_dynapi_entity_set_value (pointclouddef, "POINTCLOUDDEF", "numpoints", &numpoints, 0)
+        && numpoints == pointclouddef->numpoints)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF.numpoints [RLL] set+1 " FORMAT_RLL " != " FORMAT_RLL "", pointclouddef->numpoints, numpoints);
+    pointclouddef->numpoints--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (pointclouddef, "POINTCLOUDDEF", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointclouddef->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEF.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T source_filename;
+    if (dwg_dynapi_entity_value (pointclouddef, "POINTCLOUDDEF", "source_filename", &source_filename, NULL)
+        && source_filename
+           ? strEQ ((char *)source_filename, (char *)pointclouddef->source_filename)
+           : !pointclouddef->source_filename)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF.source_filename [T] '%s' <> '%s'", source_filename, pointclouddef->source_filename);
+  }
+  if (failed && (is_class_unstable ("POINTCLOUDDEF") || is_class_debugging ("POINTCLOUDDEF")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTCLOUDDEF", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_POINTCLOUDDEFEX (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_POINTCLOUDDEFEX *restrict pointclouddefex = obj->tio.object->tio.POINTCLOUDDEFEX;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (pointclouddefex, "POINTCLOUDDEFEX", "class_version", &class_version, NULL)
+        && class_version == pointclouddefex->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEFEX.class_version [BL] %u != %u", pointclouddefex->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointclouddefex, "POINTCLOUDDEFEX", "class_version", &class_version, 0)
+        && class_version == pointclouddefex->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEFEX.class_version [BL] set+1 %u != %u", pointclouddefex->class_version, class_version);
+    pointclouddefex->class_version--;
+  }
+  {
+    BITCODE_3BD extents_max;
+    if (dwg_dynapi_entity_value (pointclouddefex, "POINTCLOUDDEFEX", "extents_max", &extents_max, NULL)
+        && !memcmp (&extents_max, &pointclouddefex->extents_max, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEFEX.extents_max [3BD]");
+  }
+  {
+    BITCODE_3BD extents_min;
+    if (dwg_dynapi_entity_value (pointclouddefex, "POINTCLOUDDEFEX", "extents_min", &extents_min, NULL)
+        && !memcmp (&extents_min, &pointclouddefex->extents_min, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEFEX.extents_min [3BD]");
+  }
+  {
+    BITCODE_B is_loaded;
+    if (dwg_dynapi_entity_value (pointclouddefex, "POINTCLOUDDEFEX", "is_loaded", &is_loaded, NULL)
+        && is_loaded == pointclouddefex->is_loaded)
+      pass ();
+    else
+      fail ("POINTCLOUDDEFEX.is_loaded [B] " FORMAT_B " != " FORMAT_B "", pointclouddefex->is_loaded, is_loaded);
+    is_loaded++;
+    if (dwg_dynapi_entity_set_value (pointclouddefex, "POINTCLOUDDEFEX", "is_loaded", &is_loaded, 0)
+        && is_loaded == pointclouddefex->is_loaded)
+      pass ();
+    else
+      fail ("POINTCLOUDDEFEX.is_loaded [B] set+1 " FORMAT_B " != " FORMAT_B "", pointclouddefex->is_loaded, is_loaded);
+    pointclouddefex->is_loaded--;
+  }
+  {
+    BITCODE_RLL numpoints;
+    if (dwg_dynapi_entity_value (pointclouddefex, "POINTCLOUDDEFEX", "numpoints", &numpoints, NULL)
+        && numpoints == pointclouddefex->numpoints)
+      pass ();
+    else
+      fail ("POINTCLOUDDEFEX.numpoints [RLL] " FORMAT_RLL " != " FORMAT_RLL "", pointclouddefex->numpoints, numpoints);
+    numpoints++;
+    if (dwg_dynapi_entity_set_value (pointclouddefex, "POINTCLOUDDEFEX", "numpoints", &numpoints, 0)
+        && numpoints == pointclouddefex->numpoints)
+      pass ();
+    else
+      fail ("POINTCLOUDDEFEX.numpoints [RLL] set+1 " FORMAT_RLL " != " FORMAT_RLL "", pointclouddefex->numpoints, numpoints);
+    pointclouddefex->numpoints--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (pointclouddefex, "POINTCLOUDDEFEX", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointclouddefex->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEFEX.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_T source_filename;
+    if (dwg_dynapi_entity_value (pointclouddefex, "POINTCLOUDDEFEX", "source_filename", &source_filename, NULL)
+        && source_filename
+           ? strEQ ((char *)source_filename, (char *)pointclouddefex->source_filename)
+           : !pointclouddefex->source_filename)
+      pass ();
+    else
+      fail ("POINTCLOUDDEFEX.source_filename [T] '%s' <> '%s'", source_filename, pointclouddefex->source_filename);
+  }
+  if (failed && (is_class_unstable ("POINTCLOUDDEFEX") || is_class_debugging ("POINTCLOUDDEFEX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTCLOUDDEFEX", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_POINTCLOUDDEF_REACTOR (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_POINTCLOUDDEF_REACTOR *restrict pointclouddef_reactor = obj->tio.object->tio.POINTCLOUDDEF_REACTOR;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (pointclouddef_reactor, "POINTCLOUDDEF_REACTOR", "class_version", &class_version, NULL)
+        && class_version == pointclouddef_reactor->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF_REACTOR.class_version [BL] %u != %u", pointclouddef_reactor->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointclouddef_reactor, "POINTCLOUDDEF_REACTOR", "class_version", &class_version, 0)
+        && class_version == pointclouddef_reactor->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF_REACTOR.class_version [BL] set+1 %u != %u", pointclouddef_reactor->class_version, class_version);
+    pointclouddef_reactor->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (pointclouddef_reactor, "POINTCLOUDDEF_REACTOR", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointclouddef_reactor->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEF_REACTOR.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("POINTCLOUDDEF_REACTOR") || is_class_debugging ("POINTCLOUDDEF_REACTOR")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTCLOUDDEF_REACTOR", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_POINTCLOUDDEF_REACTOR_EX (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_POINTCLOUDDEF_REACTOR_EX *restrict pointclouddef_reactor_ex = obj->tio.object->tio.POINTCLOUDDEF_REACTOR_EX;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (pointclouddef_reactor_ex, "POINTCLOUDDEF_REACTOR_EX", "class_version", &class_version, NULL)
+        && class_version == pointclouddef_reactor_ex->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF_REACTOR_EX.class_version [BL] %u != %u", pointclouddef_reactor_ex->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointclouddef_reactor_ex, "POINTCLOUDDEF_REACTOR_EX", "class_version", &class_version, 0)
+        && class_version == pointclouddef_reactor_ex->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUDDEF_REACTOR_EX.class_version [BL] set+1 %u != %u", pointclouddef_reactor_ex->class_version, class_version);
+    pointclouddef_reactor_ex->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (pointclouddef_reactor_ex, "POINTCLOUDDEF_REACTOR_EX", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointclouddef_reactor_ex->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("POINTCLOUDDEF_REACTOR_EX.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("POINTCLOUDDEF_REACTOR_EX") || is_class_debugging ("POINTCLOUDDEF_REACTOR_EX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTCLOUDDEF_REACTOR_EX", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_POINTPATH (const Dwg_Object *obj)
 {
   int error = 0;
@@ -60806,6 +61214,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_POINT(obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTCLOUD)
     error += test_POINTCLOUD(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDEX)
+    error += test_POINTCLOUDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPARAMETERENTITY)
     error += test_POINTPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
@@ -61204,6 +61614,16 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLACEHOLDER(obj);
   else  if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     error += test_PLOTSETTINGS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDCOLORMAP)
+    error += test_POINTCLOUDCOLORMAP(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEF)
+    error += test_POINTCLOUDDEF(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEFEX)
+    error += test_POINTCLOUDDEFEX(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEF_REACTOR)
+    error += test_POINTCLOUDDEF_REACTOR(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEF_REACTOR_EX)
+    error += test_POINTCLOUDDEF_REACTOR_EX(obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPATH)
     error += test_POINTPATH(obj);
   else  if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)
@@ -61380,6 +61800,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_POINT (obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTCLOUD)
     error += test_POINTCLOUD (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDEX)
+    error += test_POINTCLOUDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPARAMETERENTITY)
     error += test_POINTPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
@@ -61778,6 +62200,16 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLACEHOLDER (obj);
   else  if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     error += test_PLOTSETTINGS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDCOLORMAP)
+    error += test_POINTCLOUDCOLORMAP (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEF)
+    error += test_POINTCLOUDDEF (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEFEX)
+    error += test_POINTCLOUDDEFEX (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEF_REACTOR)
+    error += test_POINTCLOUDDEF_REACTOR (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUDDEF_REACTOR_EX)
+    error += test_POINTCLOUDDEF_REACTOR_EX (obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPATH)
     error += test_POINTPATH (obj);
   else  if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)
@@ -62258,6 +62690,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_POINTCLOUD): %d != "
                "dwg_dynapi_fields_size (\"POINTCLOUD\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_POINTCLOUDEX);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDEX");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_POINTCLOUDEX): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDEX\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_POINTPARAMETERENTITY);
@@ -63860,6 +64300,46 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"PLOTSETTINGS\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_object_POINTCLOUDCOLORMAP);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDCOLORMAP");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDCOLORMAP): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDCOLORMAP\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_POINTCLOUDDEF);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDDEF");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEF): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDDEF\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_POINTCLOUDDEFEX);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDDEFEX");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEFEX): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDDEFEX\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_POINTCLOUDDEF_REACTOR);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDDEF_REACTOR");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEF_REACTOR): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDDEF_REACTOR\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_POINTCLOUDDEF_REACTOR_EX);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDDEF_REACTOR_EX");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEF_REACTOR_EX): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDDEF_REACTOR_EX\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_object_POINTPATH);
   size2 = dwg_dynapi_fields_size ("POINTPATH");
   if (size1 != size2)
@@ -64580,6 +65060,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"CellStyle\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_ColorRamp);
+  size2 = dwg_dynapi_fields_size ("ColorRamp");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_ColorRamp): %d != "
+               "dwg_dynapi_fields_size (\"ColorRamp\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_ContentFormat);
   size2 = dwg_dynapi_fields_size ("ContentFormat");
   if (size1 != size2)
@@ -64930,6 +65418,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_OCD_Dimension): %d != "
                "dwg_dynapi_fields_size (\"OCD_Dimension\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_POINTCLOUDCOLORMAP_Ramp);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUDCOLORMAP_Ramp");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_POINTCLOUDCOLORMAP_Ramp): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUDCOLORMAP_Ramp\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_POINTCLOUD_Clippings);

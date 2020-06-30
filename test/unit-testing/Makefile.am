@@ -276,6 +276,7 @@ testdebug = \
 	persubentmgr \
 	planesurface \
 	pointcloud \
+	pointcloudcolormap \
 	pointpath \
 	radimobjectcontextdata \
 	radimlgobjectcontextdata \

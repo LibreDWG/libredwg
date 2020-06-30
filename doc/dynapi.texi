@@ -3180,7 +3180,7 @@ TV*,	DXF 2
 3BD,	DXF 11
 @item extents_max
 3BD,	DXF 12
-@item num_points
+@item numpoints
 RLL,	DXF 92
 @item ucs_name
 T,	DXF 3
@@ -3208,6 +3208,21 @@ B
 BL
 @item clippings
 Dwg_POINTCLOUD_Clippings*
+
+@end vtable
+@end indentedblock
+
+@strong{POINTCLOUDEX} @anchor{POINTCLOUDEX}
+@cindex entity, POINTCLOUDEX
+@vindex POINTCLOUDEX
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item class_version
+BS,	DXF 70
 
 @end vtable
 @end indentedblock
@@ -10719,6 +10734,115 @@ H,	DXF 333
 @end vtable
 @end indentedblock
 
+@strong{POINTCLOUDCOLORMAP} @anchor{POINTCLOUDCOLORMAP}
+@cindex object, POINTCLOUDCOLORMAP
+@vindex POINTCLOUDCOLORMAP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BS,	DXF 70
+@item def_intensity_colorscheme
+T,	DXF 1
+@item def_elevation_colorscheme
+T,	DXF 1
+@item def_classification_colorscheme
+T,	DXF 1
+@item num_colorramps
+BL,	DXF 90
+@item colorramps
+Dwg_POINTCLOUDCOLORMAP_Ramp*
+@item num_classification_colorramps
+BL,	DXF 90
+@item classification_colorramps
+Dwg_POINTCLOUDCOLORMAP_Ramp*
+
+@end vtable
+@end indentedblock
+
+@strong{POINTCLOUDDEF} @anchor{POINTCLOUDDEF}
+@cindex object, POINTCLOUDDEF
+@vindex POINTCLOUDDEF
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 70
+@item source_filename
+T
+@item is_loaded
+B
+@item numpoints
+RLL
+@item extents_min
+3BD
+@item extents_max
+3BD
+
+@end vtable
+@end indentedblock
+
+@strong{POINTCLOUDDEFEX} @anchor{POINTCLOUDDEFEX}
+@cindex object, POINTCLOUDDEFEX
+@vindex POINTCLOUDDEFEX
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 90
+@item source_filename
+T,	DXF 1
+@item is_loaded
+B,	DXF 280
+@item numpoints
+RLL,	DXF 160
+@item extents_min
+3BD,	DXF 10
+@item extents_max
+3BD,	DXF 11
+
+@end vtable
+@end indentedblock
+
+@strong{POINTCLOUDDEF_REACTOR} @anchor{POINTCLOUDDEF_REACTOR}
+@cindex object, POINTCLOUDDEF_REACTOR
+@vindex POINTCLOUDDEF_REACTOR
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 70
+
+@end vtable
+@end indentedblock
+
+@strong{POINTCLOUDDEF_REACTOR_EX} @anchor{POINTCLOUDDEF_REACTOR_EX}
+@cindex object, POINTCLOUDDEF_REACTOR_EX
+@vindex POINTCLOUDDEF_REACTOR_EX
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item class_version
+BL,	DXF 70
+
+@end vtable
+@end indentedblock
+
 @strong{POINTPATH} @anchor{POINTPATH}
 @cindex object, POINTPATH
 @vindex POINTPATH
@@ -13405,6 +13529,24 @@ struct _dwg_TableDataColumn*
 @end vtable
 @end indentedblock
 
+@strong{Dwg_ColorRamp} @anchor{Dwg_ColorRamp}
+@vindex Dwg_ColorRamp
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_POINTCLOUDCOLORMAP_Ramp*
+@item colorscheme
+T,	DXF 1
+@item unknown_bl
+BL,	DXF 91
+@item unknown_b
+B,	DXF 290
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_ContentFormat} @anchor{Dwg_ContentFormat}
 @vindex Dwg_ContentFormat
 
@@ -14503,6 +14645,24 @@ B,	DXF 295
 B,	DXF 296
 @item flip_arrow1
 B,	DXF 297
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_POINTCLOUDCOLORMAP_Ramp} @anchor{Dwg_POINTCLOUDCOLORMAP_Ramp}
+@vindex Dwg_POINTCLOUDCOLORMAP_Ramp
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_POINTCLOUDCOLORMAP*
+@item class_version
+BS,	DXF 70
+@item num_ramps
+BL,	DXF 90
+@item ramps
+Dwg_ColorRamp*
 
 @end vtable
 @end indentedblock
