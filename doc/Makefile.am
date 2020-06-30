@@ -40,16 +40,20 @@ refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h .
 refman-pdf: html/index.html
 	$(MAKE) -C latex
 
-CLEANFILES = Doxyfile footer LibreDWG.info LibreDWG.pdf
+CLEANFILES = Doxyfile footer LibreDWG.info LibreDWG.pdf LibreDWG.info-1 LibreDWG.info-2
 all-local: Doxyfile footer
 clean-local:
 	rm -rf $(builddir)/doc/refman
 	rm -rf $(builddir)/doc/manual
 	rm -f $(srcdir)/doc/LibreDWG.info
+	rm -f $(srcdir)/doc/LibreDWG.info-1
+	rm -f $(srcdir)/doc/LibreDWG.info-2
 else
 clean-local:
 	rm -rf $(builddir)/doc/manual
 	rm -f $(srcdir)/doc/LibreDWG.info
+	rm -f $(srcdir)/doc/LibreDWG.info-1
+	rm -f $(srcdir)/doc/LibreDWG.info-2
 endif
 
 DISTCLEANFILES = LibreDWG.ps LibreDWG.{aux,cp,cps,log,t2p,toc}
