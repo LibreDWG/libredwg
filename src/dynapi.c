@@ -88,40 +88,41 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
   "PLANESURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
   "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
-  "POINTPARAMETERENTITY" "\0\0\0\0\0",	/* 48 */
-  "POLYLINE_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "POLYLINE_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "POLYLINE_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "POLYLINE_PFACE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "PROXY_ENTITY" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
-  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "REVOLVEDSURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "ROTATIONPARAMETERENTITY" "\0\0",	/* 57 */
-  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "SECTIONOBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "VERTEX_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "VERTEX_PFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
-  "VERTEX_PFACE_FACE" "\0\0\0\0\0\0\0\0",	/* 75 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "VISIBILITYGRIPENTITY" "\0\0\0\0\0",	/* 77 */
-  "VISIBILITYPARAMETERENTITY" "",	/* 78 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
-  "XYPARAMETERENTITY" "\0\0\0\0\0\0\0\0",	/* 81 */
+  "POINTCLOUD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
+  "POINTPARAMETERENTITY" "\0\0\0\0\0",	/* 49 */
+  "POLYLINE_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
+  "POLYLINE_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
+  "POLYLINE_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
+  "POLYLINE_PFACE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 53 */
+  "PROXY_ENTITY" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
+  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
+  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
+  "REVOLVEDSURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 57 */
+  "ROTATIONPARAMETERENTITY" "\0\0",	/* 58 */
+  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
+  "SECTIONOBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
+  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 61 */
+  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 62 */
+  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
+  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
+  "SWEPTSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
+  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
+  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
+  "TOLERANCE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
+  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
+  "UNDERLAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
+  "UNKNOWN_ENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
+  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
+  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
+  "VERTEX_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
+  "VERTEX_PFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
+  "VERTEX_PFACE_FACE" "\0\0\0\0\0\0\0\0",	/* 76 */
+  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
+  "VISIBILITYGRIPENTITY" "\0\0\0\0\0",	/* 78 */
+  "VISIBILITYPARAMETERENTITY" "",	/* 79 */
+  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
+  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 81 */
+  "XYPARAMETERENTITY" "\0\0\0\0\0\0\0\0",	/* 82 */
 
 };
 /* sorted for bsearch. from typedef struct _dwg_object_*: */
@@ -3140,6 +3141,54 @@ static const Dwg_DYNAPI_field _dwg_POINT_fields[] = {
     0,0,0, 210 },
   { "x_ang",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_POINT, x_ang),
     0,0,0, 50 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_POINTCLOUD: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_POINTCLOUD_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POINTCLOUD, parent),
+    1,1,0, 0 },
+  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POINTCLOUD, class_version),
+    0,0,0, 70 },
+  { "origin",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, origin),
+    1,0,0, 10 },
+  { "saved_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_POINTCLOUD, saved_filename),
+    1,1,1, 1 },
+  { "num_source_files",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POINTCLOUD, num_source_files),
+    0,0,0, 90 },
+  { "source_files",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_entity_POINTCLOUD, source_files),
+    1,1,0, 2 },
+  { "extents_min",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, extents_min),
+    1,0,0, 11 },
+  { "extents_max",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, extents_max),
+    1,0,0, 12 },
+  { "num_points",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_entity_POINTCLOUD, num_points),
+    0,0,0, 92 },
+  { "ucs_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_POINTCLOUD, ucs_name),
+    1,1,1, 3 },
+  { "ucs_origin",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, ucs_origin),
+    1,0,0, 13 },
+  { "ucs_x_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, ucs_x_dir),
+    1,0,0, 210 },
+  { "ucs_y_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, ucs_y_dir),
+    1,0,0, 211 },
+  { "ucs_z_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, ucs_z_dir),
+    1,0,0, 212 },
+  { "pointclouddef",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POINTCLOUD, pointclouddef),
+    1,0,0, 330 },
+  { "reactor",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POINTCLOUD, reactor),
+    1,0,0, 360 },
+  { "show_intensity",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_POINTCLOUD, show_intensity),
+    0,0,0, 0 },
+  { "intensity_scheme",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POINTCLOUD, intensity_scheme),
+    0,0,0, 71 },
+  { "intensity_style",	"Dwg_POINTCLOUD_IntensityStyle", sizeof (Dwg_POINTCLOUD_IntensityStyle),  OFF (struct _dwg_entity_POINTCLOUD, intensity_style),
+    0,0,0, 0 },
+  { "show_clipping",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_POINTCLOUD, show_clipping),
+    0,0,0, 0 },
+  { "num_clippings",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POINTCLOUD, num_clippings),
+    0,0,0, 0 },
+  { "clippings",	"Dwg_POINTCLOUD_Clippings*", sizeof (Dwg_POINTCLOUD_Clippings*),  OFF (struct _dwg_entity_POINTCLOUD, clippings),
+    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_POINTPARAMETERENTITY: (sorted by offset) */
@@ -12120,6 +12169,38 @@ static const Dwg_DYNAPI_field _dwg_OCD_Dimension_fields[] = {
     0,0,0, 297 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_POINTCLOUD_Clippings: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_POINTCLOUD_Clippings_fields[] = {
+  { "parent",	"struct _dwg_entity_POINTCLOUD*", sizeof (void *),  OFF (struct _dwg_POINTCLOUD_Clippings, parent),
+    1,1,0, 0 },
+  { "is_inverted",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_POINTCLOUD_Clippings, is_inverted),
+    0,0,0, 0 },
+  { "type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_POINTCLOUD_Clippings, type),
+    0,0,0, 0 },
+  { "num_vertices",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_POINTCLOUD_Clippings, num_vertices),
+    0,0,0, 0 },
+  { "vertices",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_POINTCLOUD_Clippings, vertices),
+    1,1,0, 0 },
+  { "z_min",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_POINTCLOUD_Clippings, z_min),
+    0,0,0, 0 },
+  { "z_max",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_POINTCLOUD_Clippings, z_max),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_POINTCLOUD_IntensityStyle: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_POINTCLOUD_IntensityStyle_fields[] = {
+  { "parent",	"struct _dwg_entity_POINTCLOUD*", sizeof (void *),  OFF (struct _dwg_POINTCLOUD_IntensityStyle, parent),
+    1,1,0, 0 },
+  { "min_intensity",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_POINTCLOUD_IntensityStyle, min_intensity),
+    0,0,0, 0 },
+  { "max_intensity",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_POINTCLOUD_IntensityStyle, max_intensity),
+    0,0,0, 0 },
+  { "intensity_low_treshold",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_POINTCLOUD_IntensityStyle, intensity_low_treshold),
+    0,0,0, 0 },
+  { "intensity_high_treshold",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_POINTCLOUD_IntensityStyle, intensity_high_treshold),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_PROXY_LWPOLYLINE: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_PROXY_LWPOLYLINE_fields[] = {
   { "parent",	"struct _dwg_entity_PROXY_ENTITY*", sizeof (void *),  OFF (struct _dwg_PROXY_LWPOLYLINE, parent),
@@ -13133,7 +13214,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "PLANESURFACE", DWG_TYPE_PLANESURFACE /*(682)*/, _dwg_PLANESURFACE_fields, sizeof (struct _dwg_entity_PLANESURFACE) },	/* 215 */
   { "PLOTSETTINGS", DWG_TYPE_PLOTSETTINGS /*(683)*/, _dwg_PLOTSETTINGS_fields, sizeof (struct _dwg_object_PLOTSETTINGS) },	/* 216 */
   { "POINT", DWG_TYPE_POINT /*(27)*/, _dwg_POINT_fields, sizeof (struct _dwg_entity_POINT) },	/* 217 */
-  { "POINTCLOUD", DWG_TYPE_POINTCLOUD /*(684)*/, NULL, 0 },	/* 218 */
+  { "POINTCLOUD", DWG_TYPE_POINTCLOUD /*(684)*/, _dwg_POINTCLOUD_fields, sizeof (struct _dwg_entity_POINTCLOUD) },	/* 218 */
   { "POINTPARAMETERENTITY", DWG_TYPE_POINTPARAMETERENTITY /*(685)*/, _dwg_POINTPARAMETERENTITY_fields, sizeof (struct _dwg_entity_POINTPARAMETERENTITY) },	/* 219 */
   { "POINTPATH", DWG_TYPE_POINTPATH /*(686)*/, _dwg_POINTPATH_fields, sizeof (struct _dwg_object_POINTPATH) },	/* 220 */
   { "POLYLINE_2D", DWG_TYPE_POLYLINE_2D /*(15)*/, _dwg_POLYLINE_2D_fields, sizeof (struct _dwg_entity_POLYLINE_2D) },	/* 221 */
@@ -13311,31 +13392,33 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 92 */
   { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 93 */
   { "OCD_Dimension", 0, "AcDbDimensionObjectContextData", _dwg_OCD_Dimension_fields, sizeof (Dwg_OCD_Dimension) },	/* 94 */
-  { "PROXY_LWPOLYLINE", 0, NULL, _dwg_PROXY_LWPOLYLINE_fields, sizeof (Dwg_PROXY_LWPOLYLINE) },	/* 95 */
-  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 96 */
-  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 97 */
-  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 98 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 99 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 100 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 101 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 102 */
-  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 103 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 104 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 105 */
-  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 106 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 107 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 108 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 109 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 110 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 111 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 112 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 113 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 114 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 115 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 116 */
-  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 117 */
-  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 118 */
-  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 119 */
+  { "POINTCLOUD_Clippings", (int)DWG_TYPE_POINTCLOUD, NULL, _dwg_POINTCLOUD_Clippings_fields, sizeof (Dwg_POINTCLOUD_Clippings) },	/* 95 */
+  { "POINTCLOUD_IntensityStyle", (int)DWG_TYPE_POINTCLOUD, NULL, _dwg_POINTCLOUD_IntensityStyle_fields, sizeof (Dwg_POINTCLOUD_IntensityStyle) },	/* 96 */
+  { "PROXY_LWPOLYLINE", 0, NULL, _dwg_PROXY_LWPOLYLINE_fields, sizeof (Dwg_PROXY_LWPOLYLINE) },	/* 97 */
+  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 98 */
+  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 99 */
+  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 100 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 101 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 102 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 103 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 104 */
+  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 105 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 106 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 107 */
+  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 108 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 109 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 110 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 111 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 112 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 113 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 114 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 115 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 116 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 117 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 118 */
+  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 119 */
+  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 120 */
+  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 121 */
 
 };
 

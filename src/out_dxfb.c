@@ -425,6 +425,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     GROUP (dxf);                                                              \
     fwrite (&s, sizeof (BITCODE_RLL), 1, dat->fh);                            \
   }
+#define FIELD_RLL(nam, dxf) FIELD_BLL (nam, dxf)
 #define HEADER_RLL(nam, dxf)                                                  \
   {                                                                           \
     GROUP (9);                                                                \

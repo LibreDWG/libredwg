@@ -3157,6 +3157,61 @@ BD,	DXF 50
 @end vtable
 @end indentedblock
 
+@strong{POINTCLOUD} @anchor{POINTCLOUD}
+@cindex entity, POINTCLOUD
+@vindex POINTCLOUD
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item class_version
+BS,	DXF 70
+@item origin
+3BD,	DXF 10
+@item saved_filename
+T,	DXF 1
+@item num_source_files
+BL,	DXF 90
+@item source_files
+TV*,	DXF 2
+@item extents_min
+3BD,	DXF 11
+@item extents_max
+3BD,	DXF 12
+@item num_points
+RLL,	DXF 92
+@item ucs_name
+T,	DXF 3
+@item ucs_origin
+3BD,	DXF 13
+@item ucs_x_dir
+3BD,	DXF 210
+@item ucs_y_dir
+3BD,	DXF 211
+@item ucs_z_dir
+3BD,	DXF 212
+@item pointclouddef
+H,	DXF 330
+@item reactor
+H,	DXF 360
+@item show_intensity
+B
+@item intensity_scheme
+BS,	DXF 71
+@item intensity_style
+Dwg_POINTCLOUD_IntensityStyle
+@item show_clipping
+B
+@item num_clippings
+BL
+@item clippings
+Dwg_POINTCLOUD_Clippings*
+
+@end vtable
+@end indentedblock
+
 @strong{POINTPARAMETERENTITY} @anchor{POINTPARAMETERENTITY}
 @cindex entity, POINTPARAMETERENTITY
 @vindex POINTPARAMETERENTITY
@@ -14448,6 +14503,50 @@ B,	DXF 295
 B,	DXF 296
 @item flip_arrow1
 B,	DXF 297
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_POINTCLOUD_Clippings} @anchor{Dwg_POINTCLOUD_Clippings}
+@vindex Dwg_POINTCLOUD_Clippings
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_entity_POINTCLOUD*
+@item is_inverted
+B
+@item type
+BS
+@item num_vertices
+BL
+@item vertices
+2RD*
+@item z_min
+BD
+@item z_max
+BD
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_POINTCLOUD_IntensityStyle} @anchor{Dwg_POINTCLOUD_IntensityStyle}
+@vindex Dwg_POINTCLOUD_IntensityStyle
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_entity_POINTCLOUD*
+@item min_intensity
+BD
+@item max_intensity
+BD
+@item intensity_low_treshold
+BD
+@item intensity_high_treshold
+BD
 
 @end vtable
 @end indentedblock

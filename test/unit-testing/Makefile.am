@@ -275,6 +275,7 @@ testdebug = \
 	orddimobjectcontextdata \
 	persubentmgr \
 	planesurface \
+	pointcloud \
 	pointpath \
 	radimobjectcontextdata \
 	radimlgobjectcontextdata \

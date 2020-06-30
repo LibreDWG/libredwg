@@ -231,7 +231,16 @@
 #  define SUB_FIELD_VECTOR_INL(o, nam, type, size, dxf)                       \
   SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)
 #endif
-
+#ifndef SUB_FIELD_2RD_VECTOR
+#  define SUB_FIELD_2RD_VECTOR(o,name, size, dxf)                             \
+  if (_obj->o.size > 0)                                                       \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          SUB_FIELD_2RD (o,name[vcount], dxf);                                \
+        }                                                                     \
+    }
+#endif
 #ifndef SUB_FIELD_VECTOR_TYPESIZE
 #  define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)              \
   if (_obj->o.size && _obj->o.nam)                                            \

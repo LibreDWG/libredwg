@@ -250,6 +250,7 @@ EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION** dwg_getall_LARGE_RADIAL_DIMENSION (Dw
   EXPORT Dwg_Entity_NAVISWORKSMODEL** dwg_getall_NAVISWORKSMODEL (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_NURBSURFACE** dwg_getall_NURBSURFACE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_PLANESURFACE** dwg_getall_PLANESURFACE (Dwg_Object_Ref* hdr);
+  EXPORT Dwg_Entity_POINTCLOUD** dwg_getall_POINTCLOUD (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_POINTPARAMETERENTITY** dwg_getall_POINTPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_REVOLVEDSURFACE** dwg_getall_REVOLVEDSURFACE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_ROTATIONPARAMETERENTITY** dwg_getall_ROTATIONPARAMETERENTITY (Dwg_Object_Ref* hdr);
@@ -545,6 +546,7 @@ EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION* dwg_object_to_LARGE_RADIAL_DIMENSION (
   EXPORT Dwg_Entity_NAVISWORKSMODEL* dwg_object_to_NAVISWORKSMODEL (Dwg_Object* obj);
   EXPORT Dwg_Entity_NURBSURFACE* dwg_object_to_NURBSURFACE (Dwg_Object* obj);
   EXPORT Dwg_Entity_PLANESURFACE* dwg_object_to_PLANESURFACE (Dwg_Object* obj);
+  EXPORT Dwg_Entity_POINTCLOUD* dwg_object_to_POINTCLOUD (Dwg_Object* obj);
   EXPORT Dwg_Entity_POINTPARAMETERENTITY* dwg_object_to_POINTPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_REVOLVEDSURFACE* dwg_object_to_REVOLVEDSURFACE (Dwg_Object* obj);
   EXPORT Dwg_Entity_ROTATIONPARAMETERENTITY* dwg_object_to_ROTATIONPARAMETERENTITY (Dwg_Object* obj);

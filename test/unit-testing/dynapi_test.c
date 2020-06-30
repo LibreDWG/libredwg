@@ -17882,6 +17882,252 @@ static int test_POINT (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_POINTCLOUD (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_POINTCLOUD *restrict pointcloud = obj->tio.entity->tio.POINTCLOUD;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "class_version", &class_version, NULL)
+        && class_version == pointcloud->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUD.class_version [BS] %hu != %hu", pointcloud->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "class_version", &class_version, 0)
+        && class_version == pointcloud->class_version)
+      pass ();
+    else
+      fail ("POINTCLOUD.class_version [BS] set+1 %hu != %hu", pointcloud->class_version, class_version);
+    pointcloud->class_version--;
+  }
+  {
+    Dwg_POINTCLOUD_Clippings* clippings;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_clippings", &count, NULL)
+        && dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "clippings", &clippings, NULL)
+        && clippings == pointcloud->clippings)
+      pass ();
+    else
+      fail ("POINTCLOUD.clippings [Dwg_POINTCLOUD_Clippings*] * %u num_clippings", count);
+  }
+  {
+    BITCODE_3BD extents_max;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "extents_max", &extents_max, NULL)
+        && !memcmp (&extents_max, &pointcloud->extents_max, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUD.extents_max [3BD]");
+  }
+  {
+    BITCODE_3BD extents_min;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "extents_min", &extents_min, NULL)
+        && !memcmp (&extents_min, &pointcloud->extents_min, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUD.extents_min [3BD]");
+  }
+  {
+    BITCODE_BS intensity_scheme;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "intensity_scheme", &intensity_scheme, NULL)
+        && intensity_scheme == pointcloud->intensity_scheme)
+      pass ();
+    else
+      fail ("POINTCLOUD.intensity_scheme [BS] %hu != %hu", pointcloud->intensity_scheme, intensity_scheme);
+    intensity_scheme++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "intensity_scheme", &intensity_scheme, 0)
+        && intensity_scheme == pointcloud->intensity_scheme)
+      pass ();
+    else
+      fail ("POINTCLOUD.intensity_scheme [BS] set+1 %hu != %hu", pointcloud->intensity_scheme, intensity_scheme);
+    pointcloud->intensity_scheme--;
+  }
+  {
+    Dwg_POINTCLOUD_IntensityStyle intensity_style;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "intensity_style", &intensity_style, NULL)
+        && !memcmp (&intensity_style, &pointcloud->intensity_style, sizeof (Dwg_POINTCLOUD_IntensityStyle)))
+        pass ();
+    else
+        fail ("POINTCLOUD.intensity_style [Dwg_POINTCLOUD_IntensityStyle]");
+  }
+  {
+    BITCODE_BL num_clippings;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_clippings", &num_clippings, NULL)
+        && num_clippings == pointcloud->num_clippings)
+      pass ();
+    else
+      fail ("POINTCLOUD.num_clippings [BL] %u != %u", pointcloud->num_clippings, num_clippings);
+    num_clippings++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "num_clippings", &num_clippings, 0)
+        && num_clippings == pointcloud->num_clippings)
+      pass ();
+    else
+      fail ("POINTCLOUD.num_clippings [BL] set+1 %u != %u", pointcloud->num_clippings, num_clippings);
+    pointcloud->num_clippings--;
+  }
+  {
+    BITCODE_RLL num_points;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_points", &num_points, NULL)
+        && num_points == pointcloud->num_points)
+      pass ();
+    else
+      fail ("POINTCLOUD.num_points [RLL] " FORMAT_RLL " != " FORMAT_RLL "", pointcloud->num_points, num_points);
+    num_points++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "num_points", &num_points, 0)
+        && num_points == pointcloud->num_points)
+      pass ();
+    else
+      fail ("POINTCLOUD.num_points [RLL] set+1 " FORMAT_RLL " != " FORMAT_RLL "", pointcloud->num_points, num_points);
+    pointcloud->num_points--;
+  }
+  {
+    BITCODE_BL num_source_files;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_source_files", &num_source_files, NULL)
+        && num_source_files == pointcloud->num_source_files)
+      pass ();
+    else
+      fail ("POINTCLOUD.num_source_files [BL] %u != %u", pointcloud->num_source_files, num_source_files);
+    num_source_files++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "num_source_files", &num_source_files, 0)
+        && num_source_files == pointcloud->num_source_files)
+      pass ();
+    else
+      fail ("POINTCLOUD.num_source_files [BL] set+1 %u != %u", pointcloud->num_source_files, num_source_files);
+    pointcloud->num_source_files--;
+  }
+  {
+    BITCODE_3BD origin;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "origin", &origin, NULL)
+        && !memcmp (&origin, &pointcloud->origin, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUD.origin [3BD]");
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "parent", &parent, NULL)
+        && !memcmp (&parent, &pointcloud->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("POINTCLOUD.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_H pointclouddef;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "pointclouddef", &pointclouddef, NULL)
+        && !memcmp (&pointclouddef, &pointcloud->pointclouddef, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("POINTCLOUD.pointclouddef [H]");
+  }
+  {
+    BITCODE_H reactor;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "reactor", &reactor, NULL)
+        && !memcmp (&reactor, &pointcloud->reactor, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("POINTCLOUD.reactor [H]");
+  }
+  {
+    BITCODE_T saved_filename;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "saved_filename", &saved_filename, NULL)
+        && saved_filename
+           ? strEQ ((char *)saved_filename, (char *)pointcloud->saved_filename)
+           : !pointcloud->saved_filename)
+      pass ();
+    else
+      fail ("POINTCLOUD.saved_filename [T] '%s' <> '%s'", saved_filename, pointcloud->saved_filename);
+  }
+  {
+    BITCODE_B show_clipping;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "show_clipping", &show_clipping, NULL)
+        && show_clipping == pointcloud->show_clipping)
+      pass ();
+    else
+      fail ("POINTCLOUD.show_clipping [B] " FORMAT_B " != " FORMAT_B "", pointcloud->show_clipping, show_clipping);
+    show_clipping++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "show_clipping", &show_clipping, 0)
+        && show_clipping == pointcloud->show_clipping)
+      pass ();
+    else
+      fail ("POINTCLOUD.show_clipping [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloud->show_clipping, show_clipping);
+    pointcloud->show_clipping--;
+  }
+  {
+    BITCODE_B show_intensity;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "show_intensity", &show_intensity, NULL)
+        && show_intensity == pointcloud->show_intensity)
+      pass ();
+    else
+      fail ("POINTCLOUD.show_intensity [B] " FORMAT_B " != " FORMAT_B "", pointcloud->show_intensity, show_intensity);
+    show_intensity++;
+    if (dwg_dynapi_entity_set_value (pointcloud, "POINTCLOUD", "show_intensity", &show_intensity, 0)
+        && show_intensity == pointcloud->show_intensity)
+      pass ();
+    else
+      fail ("POINTCLOUD.show_intensity [B] set+1 " FORMAT_B " != " FORMAT_B "", pointcloud->show_intensity, show_intensity);
+    pointcloud->show_intensity--;
+  }
+  {
+    BITCODE_TV* source_files;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_source_files", &count, NULL)
+        && dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "source_files", &source_files, NULL)
+        && source_files == pointcloud->source_files)
+      pass ();
+    else
+      fail ("POINTCLOUD.source_files [TV*] * %u num_source_files", count);
+  }
+  {
+    BITCODE_T ucs_name;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "ucs_name", &ucs_name, NULL)
+        && ucs_name
+           ? strEQ ((char *)ucs_name, (char *)pointcloud->ucs_name)
+           : !pointcloud->ucs_name)
+      pass ();
+    else
+      fail ("POINTCLOUD.ucs_name [T] '%s' <> '%s'", ucs_name, pointcloud->ucs_name);
+  }
+  {
+    BITCODE_3BD ucs_origin;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "ucs_origin", &ucs_origin, NULL)
+        && !memcmp (&ucs_origin, &pointcloud->ucs_origin, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUD.ucs_origin [3BD]");
+  }
+  {
+    BITCODE_3BD ucs_x_dir;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "ucs_x_dir", &ucs_x_dir, NULL)
+        && !memcmp (&ucs_x_dir, &pointcloud->ucs_x_dir, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUD.ucs_x_dir [3BD]");
+  }
+  {
+    BITCODE_3BD ucs_y_dir;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "ucs_y_dir", &ucs_y_dir, NULL)
+        && !memcmp (&ucs_y_dir, &pointcloud->ucs_y_dir, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUD.ucs_y_dir [3BD]");
+  }
+  {
+    BITCODE_3BD ucs_z_dir;
+    if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "ucs_z_dir", &ucs_z_dir, NULL)
+        && !memcmp (&ucs_z_dir, &pointcloud->ucs_z_dir, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("POINTCLOUD.ucs_z_dir [3BD]");
+  }
+  if (failed && (is_class_unstable ("POINTCLOUD") || is_class_debugging ("POINTCLOUD")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POINTCLOUD", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_POINTPARAMETERENTITY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -60558,6 +60804,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLANESURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_POINT)
     error += test_POINT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUD)
+    error += test_POINTCLOUD(obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPARAMETERENTITY)
     error += test_POINTPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
@@ -61130,6 +61378,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_PLANESURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_POINT)
     error += test_POINT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POINTCLOUD)
+    error += test_POINTCLOUD (obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPARAMETERENTITY)
     error += test_POINTPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
@@ -62000,6 +62250,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_POINT): %d != "
                "dwg_dynapi_fields_size (\"POINT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_POINTCLOUD);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUD");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_POINTCLOUD): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUD\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_POINTPARAMETERENTITY);
@@ -64672,6 +64930,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_OCD_Dimension): %d != "
                "dwg_dynapi_fields_size (\"OCD_Dimension\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_POINTCLOUD_Clippings);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUD_Clippings");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_POINTCLOUD_Clippings): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUD_Clippings\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_POINTCLOUD_IntensityStyle);
+  size2 = dwg_dynapi_fields_size ("POINTCLOUD_IntensityStyle");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_POINTCLOUD_IntensityStyle): %d != "
+               "dwg_dynapi_fields_size (\"POINTCLOUD_IntensityStyle\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_PROXY_LWPOLYLINE);

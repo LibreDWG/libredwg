@@ -10470,6 +10470,59 @@ DWG_OBJECT (DYNAMICBLOCKPROXYNODE)
   //SUBCLASS (AcDbDynamicBlockProxyMode)
 DWG_OBJECT_END
 
+// TODO POINTCLOUDEX
+DWG_ENTITY (POINTCLOUD)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbPointCloudObj)
+  FIELD_BS (class_version, 70);
+  FIELD_3BD (origin, 10);
+  FIELD_T (saved_filename, 1)
+  FIELD_BL (num_source_files, 90)
+  if (!FIELD_VALUE (num_source_files))
+    {
+      FIELD_3BD (extents_min, 11);
+      FIELD_3BD (extents_max, 12);
+      FIELD_BLL (num_points, 92);
+      FIELD_T (ucs_name, 3);
+      FIELD_3BD (ucs_origin, 13);
+      FIELD_3BD (ucs_x_dir, 210);
+      FIELD_3BD (ucs_y_dir, 211);
+      FIELD_3BD (ucs_z_dir, 212);
+      SINCE (R_2013) {
+        FIELD_HANDLE (pointclouddef, 5, 330);
+        FIELD_HANDLE (reactor, 3, 360);
+        FIELD_B (show_intensity, 0);
+        FIELD_BS (intensity_scheme, 71);
+        SUB_FIELD_BD (intensity_style, min_intensity, 40);
+        SUB_FIELD_BD (intensity_style, max_intensity, 41);
+        SUB_FIELD_BD (intensity_style, intensity_low_treshold, 42);
+        SUB_FIELD_BD (intensity_style, intensity_high_treshold, 43);
+        FIELD_B (show_clipping, 0);
+        FIELD_BL (num_clippings, 0);
+        REPEAT (num_clippings, clippings, Dwg_POINTCLOUD_Clippings)
+        REPEAT_BLOCK
+          SUB_FIELD_B (clippings[rcount1], is_inverted, 0);
+          SUB_FIELD_BS (clippings[rcount1], type, 0);
+          if (_obj->clippings[rcount1].type == 3) // polygon
+            {
+              SUB_FIELD_BL (clippings[rcount1], num_vertices, 0)
+            }
+          else // box or rectangle
+            _obj->clippings[rcount1].num_vertices = 2;
+          SUB_FIELD_2RD_VECTOR (clippings[rcount1], vertices, num_vertices, 0);
+          if (_obj->clippings[rcount1].type == 1) // box
+            {
+              SUB_FIELD_BD (clippings[rcount1], z_min, 0);
+              SUB_FIELD_BD (clippings[rcount1], z_max, 0);
+            }
+        END_REPEAT_BLOCK
+        SET_PARENT_OBJ (clippings);
+        END_REPEAT (clippings)
+      }
+    }
+  FIELD_VECTOR_T (source_files, T, num_source_files, 2)
+DWG_ENTITY_END
+  
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
 
@@ -10489,11 +10542,6 @@ DWG_OBJECT (XREFPANELOBJECT)
 DWG_OBJECT_END
 
 DWG_OBJECT (NPOCOLLECTION)
-  DECODE_UNKNOWN_BITS
-DWG_OBJECT_END
-
-// TODO POINTCLOUDEX
-DWG_OBJECT (POINTCLOUD)
   DECODE_UNKNOWN_BITS
 DWG_OBJECT_END
 

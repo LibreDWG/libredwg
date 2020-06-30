@@ -1234,52 +1234,83 @@ api_common_entity (dwg_object *obj)
                   pass ();                                                    \
                 else                                                          \
                   ok (#name "." #field "[%d]:\t(%f, %f, %f)", i, _value[_i].x, \
-                      _value[_i].y, _value[_i].z);                              \
+                      _value[_i].y, _value[_i].z);                            \
               }                                                               \
             else                                                              \
-              fail (#name "." #field "[%d]:\t(%f, %f, %f)", i, _value[_i].x,   \
-                    _value[_i].y, _value[_i].z);                                \
+              fail (#name "." #field "[%d]:\t(%f, %f, %f)", i, _value[_i].x,  \
+                    _value[_i].y, _value[_i].z);                              \
           }                                                                   \
       }                                                                       \
   }
 #define CHK_SUBCLASS_2RD(ptr, name, field)                                    \
   {                                                                           \
-    BITCODE_2RD _value;                                                        \
+    BITCODE_2RD _value;                                                       \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (_value.x == ptr.field.x && _value.y == ptr.field.y)                 \
+        if (_value.x == ptr.field.x && _value.y == ptr.field.y)               \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
-              ok (#name "." #field ":\t(%f, %f)", _value.x, _value.y);          \
+              ok (#name "." #field ":\t(%f, %f)", _value.x, _value.y);        \
           }                                                                   \
         else                                                                  \
-          fail (#name "." #field ":\t(%f, %f)", _value.x, _value.y);            \
+          fail (#name "." #field ":\t(%f, %f)", _value.x, _value.y);          \
+      }                                                                       \
+  }
+#define CHK_SUBCLASS_2DPOINTS(ptr, name, field, num)                          \
+  {                                                                           \
+    BITCODE_3RD *_value = NULL;                                               \
+    bool _ok;                                                                 \
+    if (dwg_dynapi_entity_fields (#name))                                     \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
+    else                                                                      \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
+    if (!_ok)                                                                 \
+      fail (#name "." #field);                                                \
+    else if (!_value)                                                         \
+      pass ();                                                                \
+    else                                                                      \
+      {                                                                       \
+        for (unsigned _i = 0; _i < (num); _i++)                               \
+          {                                                                   \
+            if (_value[_i].x == ptr.field[_i].x                               \
+                && _value[_i].y == ptr.field[_i].y)                           \
+              {                                                               \
+                if (g_counter > g_countmax)                                   \
+                  pass ();                                                    \
+                else                                                          \
+                  ok (#name "." #field "[%d]:\t(%f, %f)", i, _value[_i].x,    \
+                      _value[_i].y);                                          \
+              }                                                               \
+            else                                                              \
+              fail (#name "." #field "[%d]:\t(%f, %f)", i, _value[_i].x,      \
+                    _value[_i].y);                                            \
+          }                                                                   \
       }                                                                       \
   }
 #define CHK_SUBCLASS_H(ptr, name, field)                                      \
   {                                                                           \
-    BITCODE_H _value;                                                          \
+    BITCODE_H _value;                                                         \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
         char *_hdlname                                                        \
-            = _value ? dwg_dynapi_handle_name (obj->parent, _value) : NULL;     \
-        if (!_value)                                                           \
+            = _value ? dwg_dynapi_handle_name (obj->parent, _value) : NULL;   \
+        if (!_value)                                                          \
           {                                                                   \
             if (!ptr.field)                                                   \
               {                                                               \
@@ -1291,7 +1322,7 @@ api_common_entity (dwg_object *obj)
             else                                                              \
               fail (#name "." #field ":\tNULL");                              \
           }                                                                   \
-        else if (memcmp (&ptr.field, &_value, sizeof _value) == 0)              \
+        else if (memcmp (&ptr.field, &_value, sizeof _value) == 0)            \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \

@@ -1076,6 +1076,19 @@
   else                                                                        \
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
+#define SUB_FIELD_2RD_VECTOR(o,name, size, dxf)                               \
+  VECTOR_CHKCOUNT_LV (o.name, 2RD, _obj->o.size, dat)                         \
+  if (_obj->o.size > 0)                                                       \
+    {                                                                         \
+      _obj->o.name = (BITCODE_2RD *)calloc (_obj->o.size, sizeof (BITCODE_2RD));  \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          SUB_FIELD_2RD (o,name[vcount], dxf);                                \
+        }                                                                     \
+    }                                                                         \
+  else                                                                        \
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
 #define FIELD_2DD_VECTOR(name, size, dxf)                                     \
   VECTOR_CHKCOUNT_LV (name, 2DD, _obj->size, dat)                             \
   if (_obj->size > 0)                                                         \

@@ -7534,6 +7534,53 @@ typedef struct _dwg_object_DYNAMICBLOCKPROXYNODE
   // ??
 } Dwg_Object_DYNAMICBLOCKPROXYNODE;
 
+typedef struct _dwg_POINTCLOUD_IntensityStyle
+{
+  struct _dwg_entity_POINTCLOUD *parent;
+  BITCODE_BD min_intensity;		/* DXF 40 */
+  BITCODE_BD max_intensity;		/* DXF 41 */
+  BITCODE_BD intensity_low_treshold;	/* DXF 42 */
+  BITCODE_BD intensity_high_treshold;	/* DXF 43 */
+} Dwg_POINTCLOUD_IntensityStyle;
+
+typedef struct _dwg_POINTCLOUD_Clippings
+{
+  struct _dwg_entity_POINTCLOUD *parent;
+  BITCODE_B is_inverted;
+  BITCODE_BS type;
+  BITCODE_BL num_vertices;
+  BITCODE_2RD *vertices;
+  BITCODE_BD z_min;
+  BITCODE_BD z_max;
+} Dwg_POINTCLOUD_Clippings;
+
+typedef struct _dwg_entity_POINTCLOUD
+{
+  struct _dwg_object_entity *parent;
+  BITCODE_BS class_version; 	// 1 or 2 r2013+, DXF 70
+  BITCODE_3BD origin;		/*!< DXF 10 */
+  BITCODE_T saved_filename; 	/* DXF 1 */
+  BITCODE_BL num_source_files;  /* DXF 90 */
+  BITCODE_T *source_files;	/*!< DXF 2 */
+  BITCODE_3BD extents_min;	/*!< DXF 11 */
+  BITCODE_3BD extents_max;	/*!< DXF 12 */
+  BITCODE_RLL num_points;	/*!< DXF 92 */
+  BITCODE_T  ucs_name;		/*!< DXF 3 */
+  BITCODE_3BD ucs_origin;	/*!< DXF 13 */
+  BITCODE_3BD ucs_x_dir;	/*!< DXF 210 */
+  BITCODE_3BD ucs_y_dir;	/*!< DXF 211 */
+  BITCODE_3BD ucs_z_dir;	/*!< DXF 212 */
+  // r2013+:
+  BITCODE_H pointclouddef;	/*!< DXF 330 */
+  BITCODE_H reactor;		/*!< DXF 360 */
+  BITCODE_B show_intensity;	/*!< DXF ? */
+  BITCODE_BS intensity_scheme;	/*!< DXF 71 */
+  Dwg_POINTCLOUD_IntensityStyle intensity_style;
+  BITCODE_B show_clipping;	/*!< DXF ? */
+  BITCODE_BL num_clippings;	/*!< DXF ? */
+  Dwg_POINTCLOUD_Clippings *clippings;
+} Dwg_Entity_POINTCLOUD;
+
 /**
  -----------------------------------
  */
@@ -7704,6 +7751,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
     Dwg_Entity_NURBSURFACE *NURBSURFACE;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
+    Dwg_Entity_POINTCLOUD *POINTCLOUD;
     Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
     Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
     Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
@@ -9145,6 +9193,7 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_NAVISWORKSMODEL (Dwg_Object *obj);
   EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
+  EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_ROTATIONPARAMETERENTITY (Dwg_Object *obj);
