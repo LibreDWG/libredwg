@@ -436,7 +436,7 @@
   {                                                                           \
     SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
     bit_read_fixed (dat, _obj->nam, (int)len);                                \
-    LOG_TRACE (#nam ": \"%s\" [TFF %d " #dxf "]", _obj->nam, (int)len);       \
+    LOG_TRACE (#nam ": \"%.*s\" [TFF %d " #dxf "]", (int)len, _obj->nam, (int)len); \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
