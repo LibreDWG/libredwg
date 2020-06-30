@@ -1262,7 +1262,8 @@ classes_section:
           added = dwg_decode_add_object (dwg, dat, dat, last_offset);
           if (added > 0)
             error |= added; // else not added (skipped) or -1 for re-allocated
-          last_handle = dwg->object[dwg->num_objects - 1].handle.value;
+          if (dwg->num_objects)
+            last_handle = dwg->object[dwg->num_objects - 1].handle.value;
           // LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
         }
       if (dat->byte == oldpos)
