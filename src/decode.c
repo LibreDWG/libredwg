@@ -2913,6 +2913,7 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("SummaryInfo (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error = summaryinfo_private (dat, dwg);
 
@@ -2961,6 +2962,7 @@ read_2004_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("AuxHeader (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error = auxheader_private (dat, dwg);
 
@@ -3016,6 +3018,7 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("AppInfo (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error = appinfo_private (dat, dwg);
 
@@ -3062,6 +3065,7 @@ read_2004_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("FileDepList (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error = filedeplist_private (dat, dwg);
 
@@ -3108,6 +3112,7 @@ read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("Security (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error = security_private (dat, dwg);
 
@@ -3153,6 +3158,7 @@ read_2004_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("Signature (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error |= signature_private (dat, dwg);
 
@@ -3187,6 +3193,7 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("VBAProject (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   //DEBUG_HERE dwg_decode_ole2 ()
   _obj->size = dat->size;
@@ -3221,6 +3228,7 @@ read_2004_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
   LOG_TRACE ("AppInfoHistory (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   //DEBUG_HERE
   _obj->size = dat->size;
@@ -3271,6 +3279,7 @@ read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("RevHistory (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error = revhistory_private (dat, dwg);
 
@@ -3303,6 +3312,7 @@ read_2004_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("ObjFreeSpace (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "objfreespace.spec"
@@ -3364,6 +3374,7 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("Template (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error |= template_private (dat, dwg);
 
@@ -3413,6 +3424,7 @@ read_2004_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("AcDs datastorage (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error |= acds_private (dat, dwg);
   error &= ~DWG_ERR_SECTIONNOTFOUND;

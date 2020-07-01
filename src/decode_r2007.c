@@ -1718,6 +1718,7 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("\nVBAProject (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   DEBUG_HERE
   _obj->size = dat->size;
@@ -1759,6 +1760,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               dwg->header.summaryinfo_address, dat->byte);
   LOG_TRACE ("\nSummaryInfo (%lu)\n-------------------\n", sec_dat.size)
   str_dat = dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "summaryinfo.spec"
@@ -1798,6 +1800,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("\nAppInfo (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "appinfo.spec"
@@ -1822,7 +1825,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL vcount = 0;
+  BITCODE_RL vcount = 0, rcount1 = 0, rcount2 = 0;
 
   // type: 2, compressed, page size: 0x7400
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -1838,7 +1841,12 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("\nAuxHeader (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
+  // clang-format off
+  #include "auxheader.spec"
+  // clang-format on
+  
   LOG_TRACE ("\n")
   if (sec_dat.chain)
     free (sec_dat.chain);
@@ -1874,6 +1882,7 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dw
   LOG_TRACE ("\nAppInfoHistory (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   DEBUG_HERE
   _obj->size = dat->size;
@@ -1915,6 +1924,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("\nRevHistory (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "revhistory.spec"
@@ -1955,6 +1965,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("\nObjFreeSpace (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "objfreespace.spec"
@@ -1996,6 +2007,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("\nTemplate (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "template.spec"
@@ -2041,6 +2053,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("FileDepList (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "filedeplist.spec"
@@ -2081,6 +2094,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("Security (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "security.spec"
@@ -2122,6 +2136,7 @@ read_2007_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("Signature (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
   #include "signature.spec"
@@ -2180,6 +2195,7 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("AcDs datastorage (%lu)\n-------------------\n", sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
+  bit_chain_set_version (&old_dat, dat);
 
   error |= acds_private (dat, dwg);
   error &= ~DWG_ERR_SECTIONNOTFOUND;
