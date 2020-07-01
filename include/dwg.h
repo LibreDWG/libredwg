@@ -8385,8 +8385,8 @@ typedef struct
 
 typedef struct _dwg_SummaryInfo_Property
 {
-  BITCODE_T key;
-  BITCODE_T value;
+  BITCODE_T tag;   // CUSTOMPROPERTYTAG
+  BITCODE_T value; // CUSTOMPROPERTY
 } Dwg_SummaryInfo_Property;
 
 typedef struct _dwg_FileDepList_Files

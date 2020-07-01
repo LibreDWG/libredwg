@@ -41,12 +41,12 @@
   FIELD_TIMERLL (TDCREATE, 0);
   FIELD_TIMERLL (TDUPDATE, 0);
 
-  // CustomSummaryInfo StrPair's
+  // CustomPropertyInfo str pair's
   FIELD_RS (num_props, 0);
   REPEAT (num_props, props, Dwg_SummaryInfo_Property)
   REPEAT_BLOCK
-    FIELD_T (props[rcount1].key, 0);
-    FIELD_T (props[rcount1].value, 0);
+    FIELD_T (props[rcount1].tag, 0);   // CUSTOMPROPERTYTAG
+    FIELD_T (props[rcount1].value, 0); // CUSTOMPROPERTY
   END_REPEAT_BLOCK
   END_REPEAT (props)
 

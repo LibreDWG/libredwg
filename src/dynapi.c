@@ -12573,7 +12573,7 @@ static const Dwg_DYNAPI_field _dwg_SUNSTUDY_Dates_fields[] = {
 };
 /* from typedef struct _dwg_SummaryInfo_Property: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_SummaryInfo_Property_fields[] = {
-  { "key",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SummaryInfo_Property, key),
+  { "tag",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SummaryInfo_Property, tag),
     1,1,1, 0 },
   { "value",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_SummaryInfo_Property, value),
     1,1,1, 0 },

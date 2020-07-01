@@ -3349,12 +3349,12 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   json_advance_unknown (dat, tokens, t->type, 0);
                   return DWG_ERR_INVALIDTYPE;
                 }
-              tokens->index++; // OBJECT of 2: key, value. TODO: array of 2
+              tokens->index++; // OBJECT of 2: tag, value. TODO: array of 2
               json_fixed_key (key, dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               t = &tokens->tokens[tokens->index];
-              if (t->type == JSMN_STRING) // key
-                _obj->props[j].key = json_string (dat, tokens);
+              if (t->type == JSMN_STRING) // CUSTOMPROPERTYTAG
+                _obj->props[j].tag = json_string (dat, tokens);
               else if (t->type == JSMN_PRIMITIVE)
                 tokens->index++;
               else
@@ -3363,14 +3363,14 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               json_fixed_key (key, dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               t = &tokens->tokens[tokens->index];
-              if (t->type == JSMN_STRING) // value
+              if (t->type == JSMN_STRING) // CUSTOMPROPERTY
                 _obj->props[j].value = json_string (dat, tokens);
               else if (t->type == JSMN_PRIMITIVE)
                 tokens->index++;
               else
                 json_advance_unknown (dat, tokens, t->type, 0);
-              if (_obj->props[j].key || _obj->props[j].value)
-                LOG_TRACE ("props[%d] = (%s,%s)\n", j, _obj->props[j].key,
+              if (_obj->props[j].tag || _obj->props[j].value)
+                LOG_TRACE ("props[%d] = (%s,%s)\n", j, _obj->props[j].tag,
                            _obj->props[j].value)
             }
         }

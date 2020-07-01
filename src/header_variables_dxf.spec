@@ -39,16 +39,20 @@
   }
   SINCE (R_2004) {
     // usually only since 2010
-    if (dwg->summaryinfo.TITLE && strlen (dwg->summaryinfo.TITLE))
+    HEADER_VALUE_TU0 (TITLE, 1, dwg->summaryinfo.TITLE);
+    HEADER_VALUE_TU0 (SUBJECT, 1, dwg->summaryinfo.SUBJECT);
+    HEADER_VALUE_TU0 (AUTHOR, 1, dwg->summaryinfo.AUTHOR);
+    HEADER_VALUE_TU0 (KEYWORDS, 1, dwg->summaryinfo.KEYWORDS);
+    HEADER_VALUE_TU0 (LASTSAVEDBY, 1, dwg->summaryinfo.LASTSAVEDBY);
+    HEADER_VALUE_TU0 (REVISIONNUMBER, 1, dwg->summaryinfo.REVISIONNUMBER);
+    for (rcount2 = 0; rcount2 < dwg->summaryinfo.num_props; rcount2++)
       {
-        HEADER_VALUE_TU (TITLE, 1, dwg->summaryinfo.TITLE);
-        HEADER_VALUE_TU (SUBJECT, 1, dwg->summaryinfo.SUBJECT);
-        HEADER_VALUE_TU (AUTHOR, 1, dwg->summaryinfo.AUTHOR);
-        HEADER_VALUE_TU (KEYWORDS, 1, dwg->summaryinfo.KEYWORDS);
-      }
-    if (dwg->summaryinfo.LASTSAVEDBY && strlen (dwg->summaryinfo.LASTSAVEDBY))
-      {
-        HEADER_VALUE_TU (LASTSAVEDBY, 1, dwg->summaryinfo.LASTSAVEDBY);
+        if (dwg->summaryinfo.props[rcount2].tag &&
+            !bit_empty_T (dat, dwg->summaryinfo.props[rcount2].tag))
+          {
+            HEADER_VALUE_TU (CUSTOMPROPERTYTAG, 1, dwg->summaryinfo.props[rcount2].tag);
+            HEADER_VALUE_TU (CUSTOMPROPERTY, 1, dwg->summaryinfo.props[rcount2].value);
+          }
       }
   }
   SINCE (R_2013) {

@@ -79,6 +79,11 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   HEADER_VALUE (nam, type, dxf, dwg->header_vars.nam)
 #define HEADER_VALUE_TV(nam, dxf, value) HEADER_VALUE (nam, TV, dxf, value)
 #define HEADER_VALUE_TU(nam, dxf, value) HEADER_VALUE (nam, TU, dxf, value)
+#define HEADER_VALUE_TU0(nam, dxf, value)                                     \
+  if (dxf && value && !bit_empty_T (dat, value))                              \
+    {                                                                         \
+      HEADER_VALUE (nam, TU, dxf, value);                                     \
+    }
 
 #define FIELD_CAST(nam, type, cast, dxf) FIELDG (nam, cast, dxf)
 #define SUB_FIELD_CAST(o, nam, type, cast, dxf) FIELDG (o.nam, cast, dxf)

@@ -205,6 +205,13 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       fprintf (dat->fh, "$" #nam "\r\n");                                     \
       VALUE_TU (value, dxf);                                                  \
     }
+#define HEADER_VALUE_TU0(nam, dxf, value)                                     \
+  if (dxf && value && !bit_empty_T (dat, value))                              \
+    {                                                                         \
+      GROUP (9);                                                              \
+      fprintf (dat->fh, "$" #nam "\r\n");                                     \
+      VALUE_TU (value, dxf);                                                  \
+    }
 
 #define HEADER_3D(nam)                                                        \
   HEADER_9 (nam);                                                             \
