@@ -1810,6 +1810,42 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return error;
 }
 
+/* AuxHeader Section
+ */
+static int
+read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                             r2007_section *restrict sections_map,
+                             r2007_page *restrict pages_map)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  //Bit_Chain *str_dat;
+  Dwg_AuxHeader *_obj = &dwg->auxheader;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_RL vcount = 0;
+
+  // type: 2, compressed, page size: 0x7400
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_AUXHEADER);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_INFO ("%s section not found\n", "AuxHeader");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
+
+  LOG_TRACE ("\nAuxHeader (%lu)\n-------------------\n", sec_dat.size)
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
 /* Unknown AppInfoHistory Section
  */
 static int
@@ -2283,6 +2319,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   error |= read_2007_section_classes (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_handles (dat, hdl_dat, dwg, sections_map,
                                       pages_map);
+  error |= read_2007_section_auxheader (dat, dwg, sections_map, pages_map);
   if (dwg->header.thumbnail_address)
     error |= read_2007_section_preview (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);

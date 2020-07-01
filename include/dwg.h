@@ -8678,16 +8678,16 @@ typedef struct _dwg_auxheader
 {
   BITCODE_RC aux_intro[3]; /* ff 77 01 */
   BITCODE_RS dwg_version;
-  BITCODE_RS maint_version;
+  BITCODE_RL maint_version;
   BITCODE_RL numsaves;
   BITCODE_RL minus_1;
   BITCODE_RS numsaves_1;
   BITCODE_RS numsaves_2;
   BITCODE_RL zero;
   BITCODE_RS dwg_version_1;
-  BITCODE_RS maint_version_1;
+  BITCODE_RL maint_version_1;
   BITCODE_RS dwg_version_2;
-  BITCODE_RS maint_version_2;
+  BITCODE_RL maint_version_2;
   BITCODE_RS unknown_6rs[6];
   BITCODE_RL unknown_5rl[5];
   BITCODE_RD TDCREATE; /* ?? format TD */

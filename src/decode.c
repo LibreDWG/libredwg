@@ -941,7 +941,6 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    * Section 5 AuxHeader
    * R2000+, mostly redundant file header information
    */
-
   if (dwg->header.num_sections == 6 && dwg->header.version >= R_13c3)
     {
       int i;
@@ -2925,6 +2924,55 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 // may return OUTOFBOUNDS, needs to free the chain then
 static int
+auxheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  Dwg_AuxHeader *_obj = &dwg->auxheader;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_BL vcount;
+  if (!dat->chain || !dat->size)
+    return 1;
+
+  // clang-format off
+  #include "auxheader.spec"
+  // clang-format on
+
+  return error;
+}
+
+/* R13c3+ AuxHeader Section
+ */
+static int
+read_2004_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain old_dat, sec_dat = { 0 };
+  int error;
+  // type: 2, compressed, page size: 0x7400
+  error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_AUXHEADER);
+  if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
+    {
+      LOG_ERROR ("Failed to read uncompressed %s section", "AuxHeader");
+      if (sec_dat.chain)
+        free (sec_dat.chain);
+      return error;
+    }
+
+  LOG_TRACE ("AuxHeader (%lu)\n-------------------\n", sec_dat.size)
+  old_dat = *dat;
+  dat = &sec_dat; // restrict in size
+
+  error = auxheader_private (dat, dwg);
+
+  LOG_TRACE ("\n")
+  if (sec_dat.chain)
+    free (sec_dat.chain);
+  *dat = old_dat; // unrestrict
+  return error;
+}
+
+// may return OUTOFBOUNDS, needs to free the chain then
+static int
 appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
@@ -3609,6 +3657,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= read_2004_section_summary (dat, dwg);
   error |= read_2004_section_classes (dat, dwg);
   error |= read_2004_section_handles (dat, dwg);
+  error |= read_2004_section_auxheader (dat, dwg);
   if (dwg->header.thumbnail_address)
     error |= read_2004_section_preview (dat, dwg);
   error |= read_2004_section_appinfo (dat, dwg);
