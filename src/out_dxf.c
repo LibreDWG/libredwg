@@ -83,16 +83,24 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
     GROUP (dxf);                                                              \
     dxf_fixup_string (dat, (char *)value);                                    \
   }
-#define VALUE_TU(wstr, dxf)                                                   \
-    {                                                                         \
-      char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                           \
-      GROUP (dxf);                                                            \
-      if (u8)                                                                 \
-        fprintf (dat->fh, "%s\r\n", u8);                                      \
-      else                                                                    \
-        fprintf (dat->fh, "\r\n");                                            \
-      free (u8);                                                              \
-    }
+// in_json writes all strings as TV, in_dxf and decode not.
+#define VALUE_TU(wstr, dxf)                                             \
+  {                                                                     \
+    if (dat->opts & DWG_OPTS_INJSON)                                    \
+      {                                                                 \
+        VALUE_TV (wstr, dxf);                                           \
+      }                                                                 \
+    else                                                                \
+      {                                                                 \
+        char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                   \
+        GROUP (dxf);                                                    \
+        if (u8)                                                         \
+          fprintf (dat->fh, "%s\r\n", u8);                              \
+        else                                                            \
+          fprintf (dat->fh, "\r\n");                                    \
+        free (u8);                                                      \
+      }                                                                 \
+  }
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
     GROUP (dxf);                                                              \

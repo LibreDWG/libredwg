@@ -2402,10 +2402,13 @@ bit_eq_TU (const char *restrict str, BITCODE_TU restrict wstr)
   return result;
 }
 
-/* check if the string (ascii or unicode) is empty */
+/* check if the string (ascii or unicode) is NULL or empty */
 int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str)
 {
-  if (dat->from_version < R_2007)
+  if (!str)
+    return 1;
+  // hack: in_json still writes all strings as TV
+  if (dat->from_version < R_2007 || dat->opts & DWG_OPTS_INJSON)
     return !*str;
   else
     {
