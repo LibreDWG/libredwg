@@ -723,7 +723,7 @@ DWG_ENTITY (VERTEX_2D)
   }
   SINCE (R_13)
   {
-    FIELD_RC0 (flag, 70);
+    FIELD_RC (flag, 0);
     FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
@@ -773,9 +773,10 @@ DWG_ENTITY (VERTEX_2D)
       FIELD_BD (bulge, 42);
     }
     SINCE (R_2010) {
-      FIELD_BL (id, 91);
+      FIELD_BL0 (id, 91);
     }
     DXF {
+      FIELD_RC0 (flag, 70);
       if (FIELD_VALUE (flag) != 0)
         FIELD_BD (tangent_dir, 50);
     } else {
