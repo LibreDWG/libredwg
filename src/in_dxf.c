@@ -4885,7 +4885,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Object_ASSOCACTION *o = obj->tio.object->tio.ASSOCACTION;
   Dwg_Data *dwg = obj->parent;
   BITCODE_BL num;
-  BITCODE_H *hv;
+  BITCODE_H *hv = NULL;
   Dwg_ASSOCACTION_Deps *deps;
   unsigned class_version;
 
@@ -4979,40 +4979,60 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (class_version > 1)
     {
       pair = dxf_read_pair (dat);
-      num = pair->value.u;
+      num = pair ? pair->value.u : 0;
       EXPECT_INT_DXF ("num_owned_params", 90, BL);
-      hv = xcalloc (num, sizeof (BITCODE_H));
-      if (!hv)
-        return NULL;
+      if (num)
+        {
+          hv = xcalloc (num, sizeof (BITCODE_H));
+          if (!hv)
+            return NULL;
+        }
       for (unsigned i=0; i<num; i++)
         {
           BITCODE_H hdl;
           pair = dxf_read_pair (dat);
+          if (!pair || pair->type != VT_HANDLE)
+            {
+              LOG_ERROR ("Invalid ASSOCACTION.owned_params[%d] DXF code %d",
+                         i, pair ? pair->code : 0);
+              return NULL;
+            }
           hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
           LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_params",
                      ARGS_REF (hdl), pair->code);
           hv[i] = hdl;
           dxf_free_pair (pair);
         }
-      dwg_dynapi_entity_set_value (o, obj->name, "owned_params", &hv, 1);
+      if (num)
+        dwg_dynapi_entity_set_value (o, obj->name, "owned_params", &hv, 1);
 
       pair = dxf_read_pair (dat);
-      num = pair->value.u;
+      num = pair ? pair->value.u : 0;
       EXPECT_INT_DXF ("num_owned_params", 90, BL);
-      hv = xcalloc (num, sizeof (BITCODE_H));
-      if (!hv)
-        return NULL;
+      if (num)
+        {
+          hv = xcalloc (num, sizeof (BITCODE_H));
+          if (!hv)
+            return NULL;
+        }
       for (unsigned i=0; i<num; i++)
         {
           BITCODE_H hdl;
           pair = dxf_read_pair (dat);
+          if (!pair || pair->type != VT_HANDLE)
+            {
+              LOG_ERROR ("Invalid ASSOCACTION.owned_value_param_names[%d] DXF code %d",
+                         i, pair ? pair->code : 0);
+              return NULL;
+            }
           hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
           LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_value_param_names",
                      ARGS_REF (hdl), pair->code);
           hv[i] = hdl;
           dxf_free_pair (pair);
         }
-      dwg_dynapi_entity_set_value (o, obj->name, "owned_value_param_names", &hv, 1);
+      if (num)
+        dwg_dynapi_entity_set_value (o, obj->name, "owned_value_param_names", &hv, 1);
     }
 
   return NULL;
