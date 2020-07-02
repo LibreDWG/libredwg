@@ -2172,7 +2172,7 @@ DWG_OBJECT (DICTIONARY)
 #ifdef IS_DXF
   SUBCLASS (AcDbDictionary)
   SINCE (R_13c3)
-    FIELD_RC0 (hard_owner, 280);
+    FIELD_RC0 (is_hardowner, 280);
   SINCE (R_2000)
     FIELD_BS0 (cloning, 281);
 #else
@@ -2181,12 +2181,12 @@ DWG_OBJECT (DICTIONARY)
     SINCE (R_2000)
       {
         IF_ENCODE_FROM_EARLIER {
-          FIELD_VALUE (cloning) = FIELD_VALUE (hard_owner) & 0xffff;
+          FIELD_VALUE (cloning) = FIELD_VALUE (is_hardowner) & 0xffff;
         }
         FIELD_BS (cloning, 281);
       }
     if (dat->version != R_13c3 || dwg->header.maint_version > 4)
-      FIELD_RC (hard_owner, 280);
+      FIELD_RC (is_hardowner, 280);
   }
   VALUEOUTOFBOUNDS (numitems, 10000)
 #endif
@@ -2195,7 +2195,7 @@ DWG_OBJECT (DICTIONARY)
   if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
      REPEAT (numitems, texts, T)
       {
-        int dxf = FIELD_VALUE (hard_owner) & 1 ? 360 : 350;
+        int dxf = FIELD_VALUE (is_hardowner) & 1 ? 360 : 350;
         // ACAD_SORTENTS, ACAD_FILTER and SPATIAL are always hard 360
         if (dxf == 350 && dat->from_version >= R_2007)
           {
@@ -2253,8 +2253,8 @@ DWG_OBJECT (DICTIONARY)
 
   START_OBJECT_HANDLE_STREAM;
 #if !defined(IS_DXF) && !defined (IS_JSON)
-  // or DXF 360 if hard_owner
-  HANDLE_VECTOR_N (itemhandles, FIELD_VALUE (numitems), 2, 350);
+  // or DXF 360 if is_hardowner
+  HANDLE_VECTOR_N (itemhandles, FIELD_VALUE (numitems), 2, 0);
 #endif
 
 DWG_OBJECT_END
@@ -2266,8 +2266,8 @@ DWG_OBJECT (DICTIONARYWDFLT)
   SUBCLASS (AcDbDictionary)
   SINCE (R_2000)
   {
-    if (FIELD_VALUE (hard_owner))
-      FIELD_RC (hard_owner, 280);
+    if (FIELD_VALUE (is_hardowner))
+      FIELD_RC (is_hardowner, 280);
     FIELD_BS (cloning, 281);
   }
 #else
@@ -2280,7 +2280,7 @@ DWG_OBJECT (DICTIONARYWDFLT)
         FIELD_VALUE (cloning) = FIELD_VALUE (cloning_r14) & 0xffff;
       }
       FIELD_BS (cloning, 281);
-      FIELD_RC (hard_owner, 0);
+      FIELD_RC (is_hardowner, 0);
     }
 #endif
   VALUEOUTOFBOUNDS (numitems, 10000)
@@ -2288,7 +2288,7 @@ DWG_OBJECT (DICTIONARYWDFLT)
     if (FIELD_VALUE (itemhandles) && FIELD_VALUE (texts)) {
       REPEAT (numitems, texts, T)
       {
-        int dxf = FIELD_VALUE (hard_owner) & 1 ? 360 : 350;
+        int dxf = FIELD_VALUE (is_hardowner) & 1 ? 360 : 350;
         FIELD_T (texts[rcount1], 3);
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, dxf);
       }

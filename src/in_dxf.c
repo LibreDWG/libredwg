@@ -5620,7 +5620,7 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   BITCODE_H hdl;
 
   if (pair->code == 360)
-    _obj->hard_owner = 1;
+    _obj->is_hardowner = 1;
   num = _obj->numitems;
   hdl = dwg_add_handleref (dwg, 2, pair->value.u, obj);
   LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [H* %d]\n", obj->name, num,

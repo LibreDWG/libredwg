@@ -44973,19 +44973,19 @@ static int test_DICTIONARY (const Dwg_Object *obj)
     dictionary->cloning_r14--;
   }
   {
-    BITCODE_RC hard_owner;
-    if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "hard_owner", &hard_owner, NULL)
-        && hard_owner == dictionary->hard_owner)
+    BITCODE_RC is_hardowner;
+    if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "is_hardowner", &is_hardowner, NULL)
+        && is_hardowner == dictionary->is_hardowner)
       pass ();
     else
-      fail ("DICTIONARY.hard_owner [RC] %u != %u", dictionary->hard_owner, hard_owner);
-    hard_owner++;
-    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "hard_owner", &hard_owner, 0)
-        && hard_owner == dictionary->hard_owner)
+      fail ("DICTIONARY.is_hardowner [RC] %u != %u", dictionary->is_hardowner, is_hardowner);
+    is_hardowner++;
+    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "is_hardowner", &is_hardowner, 0)
+        && is_hardowner == dictionary->is_hardowner)
       pass ();
     else
-      fail ("DICTIONARY.hard_owner [RC] set+1 %u != %u", dictionary->hard_owner, hard_owner);
-    dictionary->hard_owner--;
+      fail ("DICTIONARY.is_hardowner [RC] set+1 %u != %u", dictionary->is_hardowner, is_hardowner);
+    dictionary->is_hardowner--;
   }
   {
     BITCODE_H* itemhandles;
@@ -45128,19 +45128,19 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
         fail ("DICTIONARYWDFLT.defaultid [H]");
   }
   {
-    BITCODE_RC hard_owner;
-    if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "hard_owner", &hard_owner, NULL)
-        && hard_owner == dictionarywdflt->hard_owner)
+    BITCODE_RC is_hardowner;
+    if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "is_hardowner", &is_hardowner, NULL)
+        && is_hardowner == dictionarywdflt->is_hardowner)
       pass ();
     else
-      fail ("DICTIONARYWDFLT.hard_owner [RC] %u != %u", dictionarywdflt->hard_owner, hard_owner);
-    hard_owner++;
-    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "hard_owner", &hard_owner, 0)
-        && hard_owner == dictionarywdflt->hard_owner)
+      fail ("DICTIONARYWDFLT.is_hardowner [RC] %u != %u", dictionarywdflt->is_hardowner, is_hardowner);
+    is_hardowner++;
+    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "is_hardowner", &is_hardowner, 0)
+        && is_hardowner == dictionarywdflt->is_hardowner)
       pass ();
     else
-      fail ("DICTIONARYWDFLT.hard_owner [RC] set+1 %u != %u", dictionarywdflt->hard_owner, hard_owner);
-    dictionarywdflt->hard_owner--;
+      fail ("DICTIONARYWDFLT.is_hardowner [RC] set+1 %u != %u", dictionarywdflt->is_hardowner, is_hardowner);
+    dictionarywdflt->is_hardowner--;
   }
   {
     BITCODE_H* itemhandles;
@@ -45176,14 +45176,14 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
         fail ("DICTIONARYWDFLT.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_TV* texts;
+    BITCODE_T* texts;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "numitems", &count, NULL)
         && dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "texts", &texts, NULL)
         && texts == dictionarywdflt->texts)
       pass ();
     else
-      fail ("DICTIONARYWDFLT.texts [TV*] * %u numitems", count);
+      fail ("DICTIONARYWDFLT.texts [T*] * %u numitems", count);
   }
   if (failed && (is_class_unstable ("DICTIONARYWDFLT") || is_class_debugging ("DICTIONARYWDFLT")))
     {

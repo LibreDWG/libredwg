@@ -1952,13 +1952,29 @@ typedef struct _dwg_object_DICTIONARY
   struct _dwg_object_object *parent;
 
   BITCODE_BL numitems;    /*!< no DXF */
-  BITCODE_BS cloning;     /*!< DXF 281 */
-  BITCODE_RC hard_owner;  /*!< DXF 330 */
+  BITCODE_RC is_hardowner;/*!< DXF 280 */
+  BITCODE_BS cloning;     /*!< DXF 281, ie merge_style */
   BITCODE_T* texts;       /*!< DXF 3 */
   BITCODE_H* itemhandles; /*!< DXF 350/360, pairwise with texts */
-
   BITCODE_RC cloning_r14; /*!< r14 only */
 } Dwg_Object_DICTIONARY;
+
+/**
+ Class DICTIONARYWDFLT (varies)
+ */
+typedef struct _dwg_object_DICTIONARYWDFLT
+{
+  struct _dwg_object_object *parent;
+
+  BITCODE_BL numitems;    /*!< no DXF */
+  BITCODE_RC is_hardowner;/*!< DXF 280 */
+  BITCODE_BS cloning;     /*!< DXF 281, ie merge_style */
+  BITCODE_T* texts;       /*!< DXF 3 */
+  BITCODE_H* itemhandles; /*!< DXF 350/360, pairwise with texts */
+  BITCODE_RL cloning_r14; /*!< r14 only */
+
+  BITCODE_H defaultid;
+} Dwg_Object_DICTIONARYWDFLT;
 
 /**
  OLEFRAME (43) entity
@@ -3315,23 +3331,6 @@ typedef struct _dwg_object_DICTIONARYVAR
   BITCODE_RC intval;
   BITCODE_TV str;
 } Dwg_Object_DICTIONARYVAR;
-
-/**
- Class DICTIONARYWDFLT (varies)
- */
-typedef struct _dwg_object_DICTIONARYWDFLT
-{
-  struct _dwg_object_object *parent;
-
-  BITCODE_BL numitems;    /*!< no DXF */
-  BITCODE_BS cloning;     /*!< DXF 281 */
-  BITCODE_RC hard_owner;  /*!< DXF 330 */
-  BITCODE_TV *texts;      /*!< DXF 3 */
-  BITCODE_H *itemhandles; /*!< DXF 350/360, pairwise with texts */
-
-  BITCODE_RL cloning_r14; /*!< r14 only */
-  BITCODE_H defaultid;
-} Dwg_Object_DICTIONARYWDFLT;
 
 /**
  Class TABLE (varies)

@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL i, numitems;
   BITCODE_BS cloning;
-  BITCODE_RC hard_owner;
+  BITCODE_RC is_hardowner;
   BITCODE_TV* texts;
   BITCODE_H *itemhandles, *hdls;
   BITCODE_RC cloning_r14;
@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (dictionary, DICTIONARY, numitems, BL);
   CHK_ENTITY_TYPE (dictionary, DICTIONARY, cloning, BS);
-  CHK_ENTITY_TYPE (dictionary, DICTIONARY, hard_owner, RC);
+  CHK_ENTITY_TYPE (dictionary, DICTIONARY, is_hardowner, RC);
   if (!dwg_dynapi_entity_value (dictionary, "DICTIONARY", "texts", &texts, NULL))
     fail ("DICTIONARY.texts");
   if (!dwg_dynapi_entity_value (dictionary, "DICTIONARY", "itemhandles", &itemhandles, NULL))

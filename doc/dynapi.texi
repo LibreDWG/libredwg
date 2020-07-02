@@ -4210,7 +4210,7 @@ struct _dwg_object_entity*
 @item dataflags
 RC
 @item elevation
-RD,	DXF 30
+RD,	DXF 31
 @item insertion_pt
 2DPOINT,	DXF 10
 @item alignment_pt
@@ -9038,10 +9038,10 @@ RC,	DXF 280
 struct _dwg_object_object*
 @item numitems
 BL
+@item is_hardowner
+RC,	DXF 280
 @item cloning
 BS,	DXF 281
-@item hard_owner
-RC,	DXF 280
 @item texts
 T*,	DXF 3
 @item itemhandles
@@ -9080,12 +9080,12 @@ T,	DXF 1
 struct _dwg_object_object*
 @item numitems
 BL
+@item is_hardowner
+RC,	DXF 280
 @item cloning
 BS,	DXF 281
-@item hard_owner
-RC,	DXF 280
 @item texts
-TV*,	DXF 3
+T*,	DXF 3
 @item itemhandles
 H*,	DXF 350
 @item cloning_r14
