@@ -10039,7 +10039,17 @@ resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
           Dwg_Eed *eed;
           int j = (int)eed_hdls->items[i].code;
           sscanf (eed_hdls->items[i].field, "%d", &objid);
+          if (objid <= 0 || objid >= dwg->num_objects)
+            {
+              LOG_ERROR ("Skip invalid postponed eed APPID %s", eed_hdls->items[i].field);
+              continue;
+            }
           eed = dwg->object[objid].tio.object->eed;
+          if (!eed || j >= (int)dwg->object[objid].tio.object->num_eed)
+            {
+              LOG_ERROR ("Skip invalid postponed APPID eed[%d]", j);
+              continue;
+            }
           memcpy (&eed[j].handle, &ref->handleref, sizeof (Dwg_Handle));
           eed[j].handle.code = 5;
           LOG_TRACE ("postponed eed[%d].handle for APPID.%s => " FORMAT_H
