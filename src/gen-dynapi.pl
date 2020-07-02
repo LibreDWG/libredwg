@@ -702,9 +702,9 @@ sub out_declarator {
   } else {
     $ENT{$key}->{$name} = $type;
   }
-  my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF])/) ? 1 : 0;
+  my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF]|D2T)/) ? 1 : 0;
   my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|CMC|H$)/) ? 1 : 0;
-  my $is_string = ($is_malloc and $type =~ /^T[UV]?$/) ? 1 : 0; # not TF or TFF
+  my $is_string = ($is_malloc and $type =~ /^(T[UV]?|D2T)$/) ? 1 : 0; # not TF or TFF
   my $sname = $name;
   if ($name =~ /\[(\d+)\]$/) {
     $is_malloc = 0;
@@ -967,6 +967,7 @@ my %FMT = (
     'char**' => '%p',
     'TV' => '%s',
     'T'  => '%s',
+    'D2T' => '%s',
     'TU' => '%ls',
     'TFF' => '%s',
     'BD' => '%g',
@@ -1918,7 +1919,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1922 "gen-dynapi.pl"
+#line 1923 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2002,7 +2003,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 2006 "gen-dynapi.pl"
+#line 2007 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

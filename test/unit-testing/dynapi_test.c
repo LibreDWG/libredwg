@@ -6491,12 +6491,12 @@ static int test_ATEXT (const Dwg_Object *obj)
         && char_spacing == atext->char_spacing)
       pass ();
     else
-      fail ("ATEXT.char_spacing [D2T] " FORMAT_D2T " != " FORMAT_D2T "", atext->char_spacing, char_spacing);
+      fail ("ATEXT.char_spacing [D2T] %s != %s", atext->char_spacing, char_spacing);
     if (dwg_dynapi_entity_set_value (atext, "ATEXT", "char_spacing", &char_spacing, 0)
         && char_spacing == atext->char_spacing)
       pass ();
     else
-      fail ("ATEXT.char_spacing [D2T] set+1 " FORMAT_D2T " != " FORMAT_D2T "", atext->char_spacing, char_spacing);
+      fail ("ATEXT.char_spacing [D2T] set+1 %s != %s", atext->char_spacing, char_spacing);
     atext->char_spacing--;
   }
   {
@@ -6618,12 +6618,12 @@ static int test_ATEXT (const Dwg_Object *obj)
         && left_offset == atext->left_offset)
       pass ();
     else
-      fail ("ATEXT.left_offset [D2T] " FORMAT_D2T " != " FORMAT_D2T "", atext->left_offset, left_offset);
+      fail ("ATEXT.left_offset [D2T] %s != %s", atext->left_offset, left_offset);
     if (dwg_dynapi_entity_set_value (atext, "ATEXT", "left_offset", &left_offset, 0)
         && left_offset == atext->left_offset)
       pass ();
     else
-      fail ("ATEXT.left_offset [D2T] set+1 " FORMAT_D2T " != " FORMAT_D2T "", atext->left_offset, left_offset);
+      fail ("ATEXT.left_offset [D2T] set+1 %s != %s", atext->left_offset, left_offset);
     atext->left_offset--;
   }
   {
@@ -6632,12 +6632,12 @@ static int test_ATEXT (const Dwg_Object *obj)
         && offset_from_arc == atext->offset_from_arc)
       pass ();
     else
-      fail ("ATEXT.offset_from_arc [D2T] " FORMAT_D2T " != " FORMAT_D2T "", atext->offset_from_arc, offset_from_arc);
+      fail ("ATEXT.offset_from_arc [D2T] %s != %s", atext->offset_from_arc, offset_from_arc);
     if (dwg_dynapi_entity_set_value (atext, "ATEXT", "offset_from_arc", &offset_from_arc, 0)
         && offset_from_arc == atext->offset_from_arc)
       pass ();
     else
-      fail ("ATEXT.offset_from_arc [D2T] set+1 " FORMAT_D2T " != " FORMAT_D2T "", atext->offset_from_arc, offset_from_arc);
+      fail ("ATEXT.offset_from_arc [D2T] set+1 %s != %s", atext->offset_from_arc, offset_from_arc);
     atext->offset_from_arc--;
   }
   {
@@ -6669,12 +6669,12 @@ static int test_ATEXT (const Dwg_Object *obj)
         && right_offset == atext->right_offset)
       pass ();
     else
-      fail ("ATEXT.right_offset [D2T] " FORMAT_D2T " != " FORMAT_D2T "", atext->right_offset, right_offset);
+      fail ("ATEXT.right_offset [D2T] %s != %s", atext->right_offset, right_offset);
     if (dwg_dynapi_entity_set_value (atext, "ATEXT", "right_offset", &right_offset, 0)
         && right_offset == atext->right_offset)
       pass ();
     else
-      fail ("ATEXT.right_offset [D2T] set+1 " FORMAT_D2T " != " FORMAT_D2T "", atext->right_offset, right_offset);
+      fail ("ATEXT.right_offset [D2T] set+1 %s != %s", atext->right_offset, right_offset);
     atext->right_offset--;
   }
   {
@@ -6758,12 +6758,12 @@ static int test_ATEXT (const Dwg_Object *obj)
         && text_size == atext->text_size)
       pass ();
     else
-      fail ("ATEXT.text_size [D2T] " FORMAT_D2T " != " FORMAT_D2T "", atext->text_size, text_size);
+      fail ("ATEXT.text_size [D2T] %s != %s", atext->text_size, text_size);
     if (dwg_dynapi_entity_set_value (atext, "ATEXT", "text_size", &text_size, 0)
         && text_size == atext->text_size)
       pass ();
     else
-      fail ("ATEXT.text_size [D2T] set+1 " FORMAT_D2T " != " FORMAT_D2T "", atext->text_size, text_size);
+      fail ("ATEXT.text_size [D2T] set+1 %s != %s", atext->text_size, text_size);
     atext->text_size--;
   }
   {
@@ -6797,12 +6797,12 @@ static int test_ATEXT (const Dwg_Object *obj)
         && xscale == atext->xscale)
       pass ();
     else
-      fail ("ATEXT.xscale [D2T] " FORMAT_D2T " != " FORMAT_D2T "", atext->xscale, xscale);
+      fail ("ATEXT.xscale [D2T] %s != %s", atext->xscale, xscale);
     if (dwg_dynapi_entity_set_value (atext, "ATEXT", "xscale", &xscale, 0)
         && xscale == atext->xscale)
       pass ();
     else
-      fail ("ATEXT.xscale [D2T] set+1 " FORMAT_D2T " != " FORMAT_D2T "", atext->xscale, xscale);
+      fail ("ATEXT.xscale [D2T] set+1 %s != %s", atext->xscale, xscale);
     atext->xscale--;
   }
   if (failed && (is_class_unstable ("ATEXT") || is_class_debugging ("ATEXT")))
@@ -61468,7 +61468,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 60463 "dynapi_test.c"
+#line 62655 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);

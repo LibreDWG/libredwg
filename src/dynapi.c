@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1922 "gen-dynapi.pl"
+#line 1923 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1242,11 +1242,11 @@ static const Dwg_DYNAPI_field _dwg_ATEXT_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_ATEXT, parent),
     1,1,0, 0 },
   { "text_size",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, text_size),
-    0,0,0, 42 },
+    1,1,1, 42 },
   { "xscale",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, xscale),
-    0,0,0, 41 },
+    1,1,1, 41 },
   { "char_spacing",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, char_spacing),
-    0,0,0, 43 },
+    1,1,1, 43 },
   { "style",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATEXT, style),
     1,1,1, 7 },
   { "t2",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATEXT, t2),
@@ -1256,11 +1256,11 @@ static const Dwg_DYNAPI_field _dwg_ATEXT_fields[] = {
   { "text_value",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ATEXT, text_value),
     1,1,1, 1 },
   { "offset_from_arc",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, offset_from_arc),
-    0,0,0, 44 },
+    1,1,1, 44 },
   { "right_offset",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, right_offset),
-    0,0,0, 45 },
+    1,1,1, 45 },
   { "left_offset",	"D2T", sizeof (BITCODE_D2T),  OFF (struct _dwg_entity_ATEXT, left_offset),
-    0,0,0, 46 },
+    1,1,1, 46 },
   { "center",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_ATEXT, center),
     1,0,0, 10 },
   { "radius",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_ATEXT, radius),
@@ -13623,7 +13623,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 2006 "gen-dynapi.pl"
+#line 2007 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

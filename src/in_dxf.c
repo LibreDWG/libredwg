@@ -8500,6 +8500,21 @@ new_object (char *restrict name, char *restrict dxfname,
                                      f->type, pair->code);
                           goto next_pair; // found
                         }
+                      // convert double to text (e.g. ATEXT)
+                      else if (strEQc (f->type, "D2T") && pair->type == VT_REAL)
+                        {
+                          // TODO: for now we need to do double-conversion (str->dbl->str),
+                          // because we don't have the initial dat->byte position.
+                          char *d2t = (char*)xcalloc (36, 1);
+                          sprintf (d2t, "%f", pair->value.d);
+                          dwg_dynapi_entity_set_value (_obj, obj->name,
+                                                       f->name, &d2t, 1);
+                          LOG_TRACE ("%s.%s = %s (from %f°) [%s %d]\n",
+                                     name, f->name, d2t, pair->value.d,
+                                     f->type, pair->code);
+                          free (d2t);
+                          goto next_pair; // found
+                        }
                       // resolve handle, by name or ref
                       else if (strEQc (f->type, "H"))
                         {
