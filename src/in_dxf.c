@@ -1901,7 +1901,10 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           add_eed (obj, "LWPOLYLINE", pair);
         }
       else
-        LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "LWPOLYLINE");
+        {
+          LOG_ERROR ("Invalid DXF code %d for %s", pair->code, "LWPOLYLINE");
+          return NULL;
+        }
     }
   return pair;
 }
@@ -7194,8 +7197,7 @@ new_object (char *restrict name, char *restrict dxfname,
         case 101:
           if (pair->value.s && strEQc (pair->value.s, "Embedded Object"))
             in_embedobj = 1;
-          else
-            goto start_loop; /* failure */
+          break;
         case 102:
           if (pair->value.s && strEQc (pair->value.s, "{ACAD_XDICTIONARY"))
             in_xdict = 1;
