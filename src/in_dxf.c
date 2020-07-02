@@ -9418,23 +9418,17 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Object_BLOCK_CONTROL *_ctrl
               = ctrl->tio.object->tio.BLOCK_CONTROL;
             int at_end = 1;
+            unsigned num_entries = _ctrl->num_entries;
             if (_ctrl)
               {
-                for (int j = _ctrl->num_entries - 1; j >= 0; j--)
+                for (int j = num_entries - 1; j >= 0; j--)
                   {
                     BITCODE_H ref = _ctrl->entries[j];
                     if (!ref)
                       {
                         if (at_end)
                           {
-                            _ctrl->num_entries--;
-                            _ctrl->entries = (BITCODE_H*)realloc (
-                                _ctrl->entries,
-                                _ctrl->num_entries * sizeof (BITCODE_H));
-                            if (_ctrl->num_entries && !_ctrl->entries)
-                              return DWG_ERR_OUTOFMEM;
-                            LOG_TRACE ("%s.num_entries-- => %d\n", ctrl->name,
-                                       _ctrl->num_entries);
+                            num_entries--;
                           }
                         else
                           {
@@ -9446,6 +9440,16 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       }
                     else
                       at_end = 0;
+                  }
+                // remove many empty entries at the end at once (avoids DDOS)
+                if (num_entries != _ctrl->num_entries)
+                  {
+                    _ctrl->entries = (BITCODE_H*)realloc (_ctrl->entries,
+                                                          num_entries * sizeof (BITCODE_H));
+                    if (num_entries && !_ctrl->entries)
+                      return DWG_ERR_OUTOFMEM;
+                    _ctrl->num_entries = num_entries;
+                    LOG_TRACE ("%s.num_entries => %d\n", ctrl->name, _ctrl->num_entries);
                   }
                 // leave room for one active entry
                 if (_ctrl->num_entries == 1 && !_ctrl->entries[0])
