@@ -5310,6 +5310,15 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               BITCODE_H *hdls;
               // can be -1
               BITCODE_BL num_entries = pair->value.i < 0 ? 0 : pair->value.i;
+              if (num_entries > 32767 // BS overflow
+                  && obj->fixedtype != DWG_TYPE_BLOCK_CONTROL
+                  && obj->fixedtype != DWG_TYPE_LAYER_CONTROL
+                  && obj->fixedtype != DWG_TYPE_VIEW_CONTROL
+                  && obj->fixedtype != DWG_TYPE_STYLE_CONTROL)
+                {
+                  LOG_ERROR ("%s.num_entries BS overflow", obj->name);
+                  num_entries = 0;
+                }
               hdls = (BITCODE_H*)xcalloc (num_entries, sizeof (BITCODE_H));
               if (!hdls)
                 num_entries = 0;
