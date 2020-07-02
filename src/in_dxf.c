@@ -4951,7 +4951,14 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       BITCODE_H hdl;
       int is_soft, code;
       pair = dxf_read_pair (dat);
-      deps[i].is_soft = pair->code == 360;
+      if (pair && (pair->code == 360 || pair->code == 330))
+        deps[i].is_soft = pair->code == 360;
+      else
+        {
+          LOG_ERROR ("Invalid ASSOCACTION.deps[%d].is_soft DXF code %d",
+                     i, pair ? pair->code : 0);
+          return NULL;
+        }
       code = deps[i].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
       deps[i].dep = dwg_add_handleref (dwg, code, pair->value.u, obj);
       LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "deps",
