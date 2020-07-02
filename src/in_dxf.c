@@ -1225,6 +1225,12 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
   for (j = i; j >= 0; j--)
     if (eed[j].handle.code)
       prev = j;
+  if (!(prev >= 0 && prev <= i))
+    {
+      LOG_ERROR ("Invalid EED, no prev %d size 1000 code", prev);
+      dwg_free_eed (obj);
+      return;
+    }
   assert (prev >= 0 && prev <= i);
   code = pair->code - 1000; // 1000
   if (code < 0 || code >= 1000)
