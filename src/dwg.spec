@@ -99,34 +99,51 @@ DWG_ENTITY (TEXT)
       FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE (dataflags);
 
+      DXF {
+        FIELD_BT0 (thickness, 39);
+      }
       if (!(dataflags & 0x01))
-        FIELD_RD (elevation, 30);
+        FIELD_RD (elevation, 0);
       FIELD_2RD (insertion_pt, 10);
-
+      DXF {
+        FIELD_RD (elevation, 30);
+        FIELD_RD (height, 40);
+        FIELD_T (text_value, 1);
+      }
       if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
+        FIELD_2DD (alignment_pt, 10.0, 20.0, 0);
+      FIELD_BE (extrusion, 0);
+      FIELD_BT (thickness, 0);
 
-      FIELD_BE (extrusion, 210);
-      FIELD_BT (thickness, 39);
+      DXF {
+        FIELD_RD (rotation, 50);
+        FIELD_RD (width_factor, 41);
+        FIELD_RD (oblique_angle, 51);
+        FIELD_HANDLE0 (style, 5, 7);
+      }
 
       if (!(dataflags & 0x04))
-        FIELD_RD (oblique_angle, 51);
+        FIELD_RD (oblique_angle, 0);
       if (!(dataflags & 0x08))
-        FIELD_RD (rotation, 50);
-
-      FIELD_RD (height, 40);
-
+        FIELD_RD (rotation, 0);
+      FIELD_RD (height, 0);
       if (!(dataflags & 0x10))
-        FIELD_RD (width_factor, 41);
-
-      FIELD_T (text_value, 1);
+        FIELD_RD (width_factor, 0);
+      FIELD_T (text_value, 0);
 
       if (!(dataflags & 0x20))
         FIELD_BS (generation, 71);
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment, 73);
+        FIELD_BS0 (vert_alignment, 73);
+
+      DXF {
+        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
+        FIELD_RD (elevation, 31);
+        FIELD_BE (extrusion, 210);
+        SUBCLASS (AcDbText) // not in ODA, but ACAD
+      }
     }
 
   COMMON_ENTITY_HANDLE_DATA;
