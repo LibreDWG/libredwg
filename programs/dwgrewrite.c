@@ -86,8 +86,62 @@ help (void)
   return 0;
 }
 
-int
-main (int argc, char *argv[])
+#ifdef __AFL_COMPILER
+#include "bits.h"
+#include "decode.h"
+#include "encode.h"
+__AFL_FUZZ_INIT();
+int main (int argc, char *argv[])
+{
+  Dwg_Data dwg;
+  Bit_Chain dat = { NULL, 0, 0, 0, 0 };
+  Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
+  FILE *fp;
+
+  __AFL_INIT();
+  printf ("Fuzzing decode + encode + decode from shared memory\n");
+
+  while (__AFL_LOOP(10000)) { // llvm_mode persistent, non-forking mode
+#if 1 // fastest mode via shared mem (crashes still)
+    dat.chain = __AFL_FUZZ_TESTCASE_BUF;
+    dat.size = __AFL_FUZZ_TESTCASE_LEN;
+    //printf ("size: %lu\n", dat.size);
+#elif 1 // still 1000x faster than the old file-forking fuzzer.
+    /* from stdin: */
+    dat.size = 0;
+    //dat.chain = NULL;
+    dat_read_stream (&dat, stdin);
+#else
+    /* else from file */
+    stat (argv[1], &attrib);
+    fp = fopen (argv[1], "rb");
+    if (!fp)
+      return 0;
+    dat.size = attrib.st_size;
+    dat_read_file (&dat, fp, argv[1]);
+    fclose (fp);
+#endif
+    if (dat.size < 100) continue;  // useful minimum input length
+    // dwg in only
+    if (dwg_decode (&dat, &dwg) <= DWG_ERR_CRITICAL) {
+      memset (&out_dat, 0, sizeof (out_dat));
+      bit_chain_set_version (&out_dat, &dat);
+      out_dat.version = R_2000;      
+      if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
+        exit (0);
+      dwg_decode (&out_dat, &dwg);
+      free (out_dat.chain);
+    }
+    else
+      exit (0);
+  }
+  dwg_free (&dwg);
+}
+#define main orig_main
+int orig_main (int argc, char *argv[]);
+#endif
+
+int main (int argc, char *argv[])
 {
   int error;
   int i = 1;

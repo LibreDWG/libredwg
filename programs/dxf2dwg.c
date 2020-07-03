@@ -34,6 +34,12 @@
 #include "logging.h"
 #include "suffix.inc"
 
+#ifdef __AFL_COMPILER
+#include "decode.h"
+#include "encode.h"
+#include "in_dxf.h"
+#endif
+
 static int help (void);
 
 static int opts = 1;
@@ -104,6 +110,58 @@ __asan_default_options (void)
 {
   return "detect_leaks=0";
 }
+#endif
+
+#ifdef __AFL_COMPILER
+__AFL_FUZZ_INIT();
+int main (int argc, char *argv[])
+{
+  Dwg_Data dwg;
+  Bit_Chain dat = { NULL, 0, 0, 0, 0 };
+  Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
+  FILE *fp;
+  struct stat attrib;
+
+  __AFL_INIT();
+  //dat.opts = 3;
+
+  while (__AFL_LOOP(10000)) { // llvm_mode persistent, non-forking mode
+#if 1 // fastest mode via shared mem (10x faster)
+    dat.chain = __AFL_FUZZ_TESTCASE_BUF;
+    dat.size = __AFL_FUZZ_TESTCASE_LEN;
+    printf ("Fuzzing in_dxf + encode from shmem (%lu)\n", dat.size);
+#elif 0 // still 10x faster than the old file-forking fuzzer.
+    /* from stdin: */
+    dat.size = 0;
+    //dat.chain = NULL;
+    dat_read_stream (&dat, stdin);
+    printf ("Fuzzing in_dxf + encode from stdin (%lu)\n", dat.size);
+#else
+    /* else from file */
+    stat (argv[1], &attrib);
+    fp = fopen (argv[1], "rb");
+    if (!fp)
+      return 0;
+    dat.size = attrib.st_size;
+    dat_read_file (&dat, fp, argv[1]);
+    fclose (fp);
+    printf ("Fuzzing in_dxf + encode from file (%lu)\n", dat.size);
+#endif
+
+    if (dat.size < 100) continue;  // useful minimum input length
+    if (dwg_read_dxf (&dat, &dwg) <= DWG_ERR_CRITICAL) {
+      memset (&out_dat, 0, sizeof (out_dat));
+      bit_chain_set_version (&out_dat, &dat);
+      out_dat.version = R_2000;      
+      dwg_encode (&dwg, &out_dat);
+      free (out_dat.chain);
+      dwg_free (&dwg);
+    }
+  }
+  dwg_free (&dwg);
+}
+#define main orig_main
+int orig_main (int argc, char *argv[]);
 #endif
 
 int

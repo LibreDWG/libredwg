@@ -1928,6 +1928,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     if (!dwg->header.section)
       dwg->header.section = (Dwg_Section*)calloc (dwg->header.num_sections,
                                                   sizeof (Dwg_Section));
+    if (!dwg->header.section)
+      {
+        LOG_ERROR ("Out of memory");
+        return DWG_ERR_OUTOFMEM;
+      }
     section_address = dat->byte;                 // save section address
     dat->byte += (dwg->header.num_sections * 9); /* RC + 2*RL */
     bit_write_CRC (dat, 0, 0xC0C1);
