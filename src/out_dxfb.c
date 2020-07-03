@@ -345,6 +345,12 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define HEADER_RC(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   VALUE_RC (dwg->header_vars.nam, dxf)
+#define HEADER_RC0(nam, dxf)                                                  \
+  if (dwg->header_vars.nam)                                                   \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      VALUE_RC (dwg->header_vars.nam, dxf);                                   \
+    }
 #define HEADER_B(nam, dxf) HEADER_RC (nam, dxf)
 
 #define VALUE_RS(value, dxf)                                                  \
