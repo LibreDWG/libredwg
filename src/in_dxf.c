@@ -4634,10 +4634,8 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      obj->name, i, j, pair->value.d, pair->code);
           break;
         case 45:
-          assert (i >= 0 && i < (int)num_cells);
-          assert (o->cells);
-          assert (j >= 0 && j < (int)o->cells[i].num_geometry);
-          assert (o->cells[i].geometry);
+          CHK_cells;
+          CHK_geometry;
           o->cells[i].geometry[j].width = pair->value.d;
           LOG_TRACE ("%s.cells[%d].geometry[%d].width = %f [BD %d]\n",
                      obj->name, i, j, pair->value.d, pair->code);
