@@ -49,7 +49,16 @@
 static int
 version (void)
 {
-  printf ("dwgfuzz %s INMEM (afl-clang-fast shared-memory persistency)\n", PACKAGE_VERSION);
+  printf ("dwgfuzz %s INMEM\n", PACKAGE_VERSION);
+#ifndef __AFL_COMPILER
+  printf ("not instrumented\n");
+#else
+#  ifdef __AFL_FUZZ_TESTCASE_BUF
+  printf ("shared-memory instrumented\n");
+#  else
+  printf ("instrumented\n");
+#  endif
+#endif
   return 0;
 }
 

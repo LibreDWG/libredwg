@@ -105,6 +105,8 @@ run ()
                     arg="-v2 $arg"
                 fi
                 ;;
+    dwgfuzz)    arg="-rw $arg"
+                ;;
     esac
     if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
         TESTPROG="$LOG_COMPILER $LOG_FLAGS"
@@ -115,6 +117,10 @@ run ()
     fi
     # indxf still leaks, GH #151
     if test "$bprog" = "dxf2dwg" -a -n "@HAVE_ASAN@"
+    then
+       TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    fi
+    if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
