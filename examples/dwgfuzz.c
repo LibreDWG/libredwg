@@ -142,11 +142,10 @@ main (int argc, char *argv[])
       dat_read_stream (&dat, stdin);
       printf ("Fuzzing from stdin (%lu)\n", dat.size);
 #elif FUZZ_MODE == FUZZ_FILE
-      stat (argv[2], &attrib);
+      dat.size = 0;
       fp = fopen (argv[2], "rb");
       if (!fp)
         return 0;
-      dat.size = attrib.st_size;
       dat_read_file (&dat, fp, argv[2]);
       fclose (fp);
       printf ("Fuzzing from file (%lu)\n", dat.size);

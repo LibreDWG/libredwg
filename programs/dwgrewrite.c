@@ -113,11 +113,10 @@ int main (int argc, char *argv[])
     dat_read_stream (&dat, stdin);
 #else
     /* else from file */
-    stat (argv[1], &attrib);
     fp = fopen (argv[1], "rb");
     if (!fp)
       return 0;
-    dat.size = attrib.st_size;
+    dat.size = 0;
     dat_read_file (&dat, fp, argv[1]);
     fclose (fp);
 #endif

@@ -79,6 +79,13 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                const char *restrict filename)
 {
   size_t size;
+  if (!dat->size)
+    {
+      struct stat attrib;
+      int fd = fileno (fp);
+      if (fd >= 0 && !fstat (fd, &attrib))
+        dat->size = attrib.st_size;
+    }
   dat->chain = (unsigned char *)calloc (1, dat->size);
   if (!dat->chain)
     {
