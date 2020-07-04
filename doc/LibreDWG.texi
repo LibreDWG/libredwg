@@ -948,6 +948,15 @@ but via the @file{dwg_api.h} only. The graphical representation for PS and SVG o
 lists the not yet reverse-engineered blobs from our examples files, and
 is the framework to guess the field layout for these. It is using picat (@url{http://picat-lang.org/}) to solve some of the field-packing problems.
 
+@item @file{dwgfuzz}
+@cindex dwgfuzz
+@anchor{dwgfuzz}
+afl++ fuzzing frontend, to test and debug various fast shared-memory options for afl-clang-fast,
+with the following runtime options: @code{-indxf}, @code{-injson}, @code{-rw}, @code{-dwg}, @code{-dxf}, @code{-dxfb}, @code{-json}, @code{-geojson}. All other output formats, like BMP, SVG, PS need to be fuzzed via their programs, which is the recommended way.
+The now default and fastest method INMEM does not need the 2nd file argument @code{@@@@}, the 2nd method STDIN neither.
+
+See also @url{https://github.com/LibreDWG/libredwg-fuzz} for our fuzzing setup to test new fuzzing campaigns automatically and find regressions.
+
 @end table
 
 @node Bindings
