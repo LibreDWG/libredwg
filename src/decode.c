@@ -6090,16 +6090,19 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
             {
               _obj->first_entity = dwg_add_handleref (dwg, 4, 0, NULL);
               _obj->last_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+              if (_obj->num_owned)
+                LOG_ERROR ("BLOCK_HEADER %s: => 0 entities\n", _objname);
+              _obj->num_owned = 0;
             }
           // link from first_entity to last_entity
           for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
             {
               Dwg_Object_Ref *hdl = _obj->entities[j];
-              Dwg_Object *o = dwg_ref_object (dwg, hdl); // may fail!
+              Dwg_Object *o = hdl ? dwg_ref_object (dwg, hdl) : NULL; // may fail!
               Dwg_Object_Entity *ent = o ? o->tio.entity : NULL;
               Dwg_Object_Ref *prev = j > 0 ? _obj->entities[j - 1] : NULL;
               Dwg_Object_Ref *next
-                  = j + 1 < _obj->num_owned ? _obj->entities[j + 1] : NULL;
+                = j + 1 < _obj->num_owned ? _obj->entities[j + 1] : NULL;
               unsigned long prev_ref = prev ? prev->absolute_ref : 0;
               unsigned long next_ref = next ? next->absolute_ref : 0;
 
@@ -6133,7 +6136,7 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                     {
                       LOG_TRACE ("first_entity: %4lX\n", hdl->absolute_ref);
                       _obj->first_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                        = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                   else if (_obj->first_entity->absolute_ref
                            != hdl->absolute_ref)
@@ -6144,7 +6147,7 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                                 hdl->absolute_ref);
                       changes++;
                       _obj->first_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                        = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                 }
               if (ent->prev_entity == NULL)
@@ -6181,7 +6184,7 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                     {
                       LOG_TRACE ("last_entity: %4lX\n", hdl->absolute_ref);
                       _obj->last_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                        = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                   else if (_obj->last_entity->absolute_ref
                            != hdl->absolute_ref)
@@ -6192,7 +6195,7 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                                 hdl->absolute_ref);
                       changes++;
                       _obj->last_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                        = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
                 }
             }
