@@ -12,6 +12,11 @@
 
 /*
  * dwgfuzz.c: afl++ fuzzing for all in- and exporters. Just not the seperate ones.
+ *            Also useful for debugging the fuzzers.
+ * AFL_DONT_OPTIMIZE=1 AFL_LLVM_INSTRIM=1 AFL_USE_ASAN=1 make -C examples dwgfuzz V=1
+ * AFL_DEBUG=15 AFL_DEBUG_CHILD_OUTPUT=1 gdb --args afl-fuzz -m none -i ../.fuzz-in-dxf/
+      -o .fuzz-out/ examples/dwgfuzz
+ * (gdb) set follow-fork-mode child
  * written by Reini Urban
  */
 
@@ -41,6 +46,12 @@
 #define FUZZ_MODE FUZZ_INMEM
 //#define FUZZ_MODE FUZZ_STDIN
 //#define FUZZ_MODE FUZZ_FILE
+static int
+version (void)
+{
+  printf ("dwgfuzz %s INMEM (afl-clang-fast shared-memory persistency)\n", PACKAGE_VERSION);
+  return 0;
+}
 
 #ifndef __AFL_COMPILER
 #  define __AFL_FUZZ_INIT()
@@ -48,11 +59,9 @@
      unsigned char *__AFL_FUZZ_TESTCASE_BUF;
      unsigned long __AFL_FUZZ_TESTCASE_LEN;
 #    define __AFL_INIT()                                                      \
-      stat (argv[2], &attrib);                                                \
       fp = fopen (argv[2], "rb");                                             \
       if (!fp)                                                                \
         return 0;                                                             \
-      dat.size = attrib.st_size;                                              \
       __AFL_FUZZ_TESTCASE_LEN = dat.size;                                     \
       dat_read_file (&dat, fp, argv[2]);                                      \
       __AFL_FUZZ_TESTCASE_BUF = dat.chain;
@@ -64,6 +73,31 @@
 #endif
 
 __AFL_FUZZ_INIT ();
+
+static int
+help (void)
+{
+#if FUZZ_MODE == FUZZ_FILE
+  printf ("\nUsage: dwgfuzz MODE @@\n");
+#else
+  printf ("\nUsage: dwgfuzz MODE\n");
+#endif
+  printf ("afl++ clang-fast shared-memory backend, using many importers and exporters.\n"
+          "\n");
+  printf ("MODE:\n");
+  printf ("  -indxf:   import from DXF,  export as r2000 DWG\n");
+  printf ("  -injson:  import from JSON, export as r2000 DWG\n");
+  printf ("  -rw:      import from DWG,  export as r2000 DWG, re-import from this DWG (rewrite)\n");
+  printf ("  -dwg:     import from DWG only\n");
+  printf ("  -dxf:     import from DWG,  export as DXF\n");
+  printf ("  -dxfb:    import from DWG,  export as binary DXF\n");
+  printf ("  -json:    import from DWG,  export as JSON\n");
+  printf ("  -geojson: import from DWG,  export as GeoJSON\n"
+          "\n");
+  printf (" --version        display the version and exit\n");
+  printf (" --help           display this help and exit\n");
+  exit (0);
+}
 
 int
 main (int argc, char *argv[])
@@ -104,6 +138,10 @@ main (int argc, char *argv[])
     mode = JSON;
   else if (strEQc (argv[1], "-geojson"))
     mode = GEOJSON;
+  else if (strEQc (argv[1], "--version"))
+    version();
+  else if (strEQc (argv[1], "--help"))
+    help();
   else
     return 1;
 #if FUZZ_MODE == FUZZ_FILE
@@ -149,6 +187,8 @@ main (int argc, char *argv[])
       dat_read_file (&dat, fp, argv[2]);
       fclose (fp);
       printf ("Fuzzing from file (%lu)\n", dat.size);
+#else
+      #error Missing FUZZ_MODE
 #endif
       if (dat.size == 0)
         exit (1);

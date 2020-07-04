@@ -21,8 +21,8 @@ WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD       = $(top_builddir)/src/libredwg.la -lm
 
-check_PROGRAMS   = load_dwg dwg2svg2
-EXTRA_PROGRAMS   = unknown bd bits dwgfuzz
+check_PROGRAMS   = load_dwg dwg2svg2 dwgfuzz
+EXTRA_PROGRAMS   = unknown bd bits
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
@@ -35,6 +35,7 @@ bd_SOURCE        = bd.c
 bd_LDADD         = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
 bits_SOURCE      = bits.c
 bits_LDADD       = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
+
 all: $(check_PROGRAMS)
 
 .PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov
@@ -165,6 +166,8 @@ alldxf_unknowns = \
 EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc $(alldxf_unknowns)
 EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm
 EXTRA_DIST += load_dwg.py unknown.pi ACAD_EVALUATION_GRAPH.pi
+EXTRA_man1_MANS = $(srcdir)/dwgfuzz.1
+
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
 DISTCLEANFILES = alldxf_0.inc alldxf_1.inc alldxf_2.inc
@@ -176,6 +179,15 @@ MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 dsymutil:
 	for e in $(check_PROGRAMS) $(EXTRA_PROGRAMS); do dsymutil $$e; done
+man: $(EXTRA_man1_MANS)
+
+if !HAVE_MINGW_CROSS
+# Note: These rules do not work cross-compiled
+regen-man: dwgfuzz
+	-for p in $(EXTRA_man1_MANS); do \
+	  base=`basename $$p .1`; \
+	  help2man -p $(PACKAGE_NAME) -o $$p ./$$base$(EXEEXT); done
+endif
 
 # emacs flymake-mode
 check-syntax:
