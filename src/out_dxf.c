@@ -905,8 +905,9 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 #undef DXF_3DSOLID
 #define DXF_3DSOLID dxf_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
 
-// skip index 256 bylayer
-// if the dxf code is 90-99 rather emit the rgb only
+// Skip index 256 bylayer
+// 257 is for method c8 NONE. Which index is for ByBlock?
+// If the dxf code is 90-99 rather emit the rgb only
 static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, const int dxf)
 {
   if (dat->version >= R_2004)
@@ -914,6 +915,11 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       if (dxf >= 90)
         {
           VALUE_RLd (color->rgb, dxf);
+          return;
+        }
+      if (color->method == 0xc8)
+        {
+          VALUE_RS (257, dxf);
           return;
         }
       VALUE_RS (color->index, dxf);

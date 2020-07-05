@@ -3754,7 +3754,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 93:
               if (!ctx->has_content_blk)
                 goto unknown_mleader;
-              if (pair->value.u > 256)
+              if (pair->value.u > 257)
                 {
                   ctx->content.blk.color.index = 256;
                   ctx->content.blk.color.rgb = pair->value.u & 0xFFFFFF;
@@ -3766,6 +3766,11 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               else
                 {
                   ctx->content.blk.color.index = pair->value.i;
+                  if (pair->value.i == 257)
+                    {
+                      ctx->content.blk.color.method = 0xc8;
+                      ctx->content.blk.color.rgb = 0xc8;
+                    }
                   LOG_TRACE (
                       "%s.leaders[].lines[%d].color.index = %d [CMC %d]\n",
                       obj->name, i, pair->value.i, pair->code);
@@ -4169,7 +4174,12 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
             {
               o->bg_color.rgb = pair->value.u;
               o->bg_color.method = pair->value.u >> 0x18;
-              o->bg_color.index = dwg_find_color_index (pair->value.u);
+              if (pair->value.u == 257)
+                {
+                  o->bg_color.method = o->bg_color.rgb = 0xc8;
+                }
+              else
+                o->bg_color.index = dwg_find_color_index (pair->value.u);
               LOG_TRACE ("%s.%s.bg_color = %08x [CMTC %d]\n",
                          obj->name, key, pair->value.u, pair->code);
             }
@@ -4177,7 +4187,13 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
             {
               o->content_format.content_color.rgb = pair->value.u;
               o->content_format.content_color.method = pair->value.u >> 0x18;
-              o->content_format.content_color.index = dwg_find_color_index (pair->value.u);
+              if (pair->value.u == 257)
+                {
+                  o->content_format.content_color.method =
+                    o->content_format.content_color.rgb = 0xc8;
+                }
+              else
+                o->content_format.content_color.index = dwg_find_color_index (pair->value.u);
               LOG_TRACE ("%s.%s.content_format.content_color = %08x [CMTC %d]\n",
                          obj->name, key, pair->value.u, pair->code);
             }
@@ -4186,9 +4202,13 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               if (grid < 0 || grid >= (int)o->num_borders)
                 return NULL;
               o->borders[grid].color.rgb = pair->value.d;
-              o->borders[grid].color.rgb = pair->value.u;
               o->borders[grid].color.method = pair->value.u >> 0x18;
-              o->borders[grid].color.index = dwg_find_color_index (pair->value.u);
+              if (pair->value.u == 257)
+                {
+                  o->borders[grid].color.method = o->borders[grid].color.rgb = 0xc8;
+                }
+              else
+                o->borders[grid].color.index = dwg_find_color_index (pair->value.u);
               LOG_TRACE ("%s.%s.borders[%d].color = %08x [CMTC %d]\n",
                          obj->name, key, grid, pair->value.u, pair->code);
             }
@@ -8629,6 +8649,10 @@ new_object (char *restrict name, char *restrict dxfname,
                           if (pair->code < 90)
                             {
                               color.index = pair->value.i;
+                              if (pair->value.i == 256)
+                                color.method = 0xc2;
+                              else if (pair->value.i == 257)
+                                color.method = 0xc8;
                               LOG_TRACE ("%s.%s.index = %d [%s %d]\n", name,
                                          f->name, pair->value.i, "CMC", pair->code);
                             }
