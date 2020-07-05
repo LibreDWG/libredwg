@@ -314,8 +314,8 @@
   UNTIL (R_11) {
     HEADER_VALUE_TV (DWGCODEPAGE, 3, codepage);
   }
-  VERSIONS (R_14, R_2000) { //? maybe only for r14
-    HEADER_RC (PICKSTYLE, 70);
+  VERSIONS (R_14, R_2000) {
+    HEADER_RC0 (PICKSTYLE, 70);
   }
   HEADER_HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE); //default: Standard
   HEADER_RC (CMLJUST, 70);

@@ -880,6 +880,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           (_obj->OLESTARTUP  ? 0x4000 : 0);
     // clang-format on
     LOG_TRACE ("HEADER.%s => 0x%x\n", "FLAGS", (unsigned)_obj->FLAGS);
+    dwg->Template.MEASUREMENT = _obj->MEASUREMENT;
+    LOG_TRACE ("TEMPLATE.MEASUREMENT = HEADER.MEASUREMENT %d\n",
+               (int)_obj->MEASUREMENT);
   }
 
   dxf_free_pair (pair);
