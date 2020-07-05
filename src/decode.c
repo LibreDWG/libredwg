@@ -5326,13 +5326,18 @@ dwg_add_object (Dwg_Data *restrict dwg)
   BITCODE_BL num = dwg->num_objects;
   int realloced = 0;
   if (!num)
-    dwg->object = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
+    {
+      dwg->object = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
+      dwg->dirty_refs = 1;
+    }
   else if (num % REFS_PER_REALLOC == 0)
     {
       Dwg_Object *restrict old = dwg->object;
       dwg->object = (Dwg_Object *)realloc (
           dwg->object, (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
       realloced = old != dwg->object;
+      if (realloced)
+        dwg->dirty_refs = 1;
     }
   if (!dwg->object)
     return DWG_ERR_OUTOFMEM;
