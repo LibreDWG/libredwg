@@ -269,7 +269,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
             {                                                                 \
               /* -Wpointer-to-int-cast */                                     \
               const int32_t _si = (int32_t) (intptr_t) (value);               \
-              fprintf (dat->fh, "%6i\r\n", _si);                              \
+              fprintf (dat->fh, "%9i\r\n", _si);                              \
             }                                                                 \
           else                                                                \
             fprintf (dat->fh, "%s\r\n", buf);                                 \
@@ -2444,11 +2444,13 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           && (strEQc (dxfname, "ACDBPLACEHOLDER")
               || strEQc (dxfname, "LAYOUT")))
         continue;
+      if (strEQc (dxfname, "DATATABLE"))
+        dxfname = "ACDBDATATABLE";
       RECORD (CLASS);
       VALUE_TV (dxfname, 1);
       VALUE_T (dwg->dwg_class[j].cppname, 2);
       VALUE_T (dwg->dwg_class[j].appname, 3);
-      VALUE_RS (dwg->dwg_class[j].proxyflag, 90);
+      VALUE_RL (dwg->dwg_class[j].proxyflag, 90);
       SINCE (R_2004) { VALUE_RC (dwg->dwg_class[j].num_instances, 91); }
       VALUE_RC (dwg->dwg_class[j].is_zombie, 280);
       // Is-an-entity. 1f2 for entities, 1f3 for objects

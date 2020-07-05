@@ -3197,7 +3197,7 @@ DWG_OBJECT (VPORT)
 
   SINCE (R_2000) {
     FIELD_RC (render_mode, 281);
-    FIELD_B (UCSVP, 71); // bit 0 of 71
+    FIELD_B (UCSVP, 65); // bit 0 of 71. ODA bug. documented as 71
     FIELD_3BD (ucsorg, 110);
     FIELD_3BD (ucsxdir, 111);
     FIELD_3BD (ucsydir, 112);
