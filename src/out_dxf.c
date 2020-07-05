@@ -295,6 +295,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)
             _buf[k] = '\0';
         }
+      // max len 17 resp. 18 with -
+      if (value < 0.0)
+        _buf[18] = '\0';
+      else
+        _buf[17] = '\0';
       fprintf (dat->fh, "%s\r\n", _buf);
     }
 }
