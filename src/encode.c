@@ -1684,7 +1684,7 @@ section_info_rebuild (Dwg_Data *dwg, Dwg_Section_Type lasttype)
  * Returns a summary bitmask of all errors.
  */
 AFL_GCC_TOOBIG
-int
+EXPORT int
 dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int ckr_missing = 1;

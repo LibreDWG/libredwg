@@ -30,7 +30,7 @@
 
 #define REFS_PER_REALLOC 128
 
-int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
                                     const Dwg_Object *restrict obj);
@@ -92,8 +92,8 @@ void section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,
                             Bit_Chain *restrict str);
 
 /* from dwg.c */
-int dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
-                   const char *restrict filename);
-int dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp);
+EXPORT int dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
+                          const char *restrict filename);
+EXPORT int dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp);
 
 #endif

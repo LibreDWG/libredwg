@@ -126,7 +126,7 @@ static const char *dwg_ref_tblname (const Dwg_Data *restrict dwg,
  * everything in dwg is cleared
  * and then either read from dat, or set to a default.
  */
-int
+EXPORT int
 dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int i;

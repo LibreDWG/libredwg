@@ -119,6 +119,7 @@ main (int argc, char *argv[])
   struct stat attrib;
   enum
   {
+    INVALID,
     INDXF,
     INJSON,
     RW,
@@ -127,7 +128,7 @@ main (int argc, char *argv[])
     DXFB,
     JSON,
     GEOJSON,
-  } mode;
+  } mode = INVALID;
 
   if (argc <= 1 || !*argv[1])
     return 1;
@@ -152,6 +153,8 @@ main (int argc, char *argv[])
   else if (strEQc (argv[1], "--help"))
     help();
   else
+    return 1;
+  if (mode == INVALID)
     return 1;
 #if FUZZ_MODE == FUZZ_FILE
   if (argc <= 2 || !*argv[2])
@@ -285,6 +288,7 @@ main (int argc, char *argv[])
               free (out_dat.chain);
             }
           break;
+        case INVALID:
         default:
           exit (1);
         }

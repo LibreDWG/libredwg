@@ -10107,7 +10107,7 @@ resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
     }
 }
 
-int
+EXPORT int
 dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
@@ -10295,7 +10295,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;  
 }
 
-int
+EXPORT int
 dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   dwg->opts |= DWG_OPTS_DXFB; // binary

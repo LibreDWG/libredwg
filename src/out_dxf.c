@@ -2954,7 +2954,7 @@ dxf_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 
 AFL_GCC_TOOBIG
-int
+EXPORT int
 dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & DWG_OPTS_MINIMAL;

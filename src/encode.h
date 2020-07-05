@@ -31,7 +31,7 @@
 #error in_dxf.h must be included after __FILE__ because of FORMAT_BD
 #endif
 
-int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
+EXPORT int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 
 /** Returns the class for the object.
     First searching class by name, not offset

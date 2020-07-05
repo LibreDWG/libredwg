@@ -72,9 +72,10 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
 void set_handle_size (Dwg_Handle *restrict hdl);
 
 /*------------------------------------------------------------------------------
- * Private functions
+ * Public functions
  */
-int
+
+EXPORT int
 dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                const char *restrict filename)
 {
@@ -108,7 +109,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   return 0;
 }
 
-int
+EXPORT int
 dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 {
   size_t size = 0;
@@ -152,10 +153,6 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
     }
   return 0;
 }
-
-/*------------------------------------------------------------------------------
- * Public functions
- */
 
 /** dwg_read_file
  * returns 0 on success.
