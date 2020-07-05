@@ -19,12 +19,8 @@ addons:
 matrix:
   fast_finish: true
   include:
-    - compiler: clang
-      #addons:
-      #  apt:
-      #    packages:
-      #      clang-3.8
-      env: ASAN=1 CONF="--disable-bindings --disable-write"
+    - compiler: gcc
+      env: ASAN=1 CONF="--disable-bindings"
     - compiler: gcc
       env: DISTCHECK=1 CONF="--enable-release"
     - compiler: gcc
@@ -45,11 +41,18 @@ install:
 
 script:
   - if [ -n "$ASAN" ]; then
-      CC="clang -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking" ;
+      CLANG="-O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking" ;
     fi
   - ./configure $CONF
     # ASAN started swapping with only 8GB
-  - make -j4
+  - if [ -n "$ASAN" ]; then
+        travis_wait make -C src encode.lo ;
+        travis_wait make -C src decode.lo ;
+        travis_wait make -j4 -C src ;
+        make -j4 ;
+    else
+        make -j4 ;
+    fi
     # ASAN just became too slow. skip unit-tests there.
   - if [ -n "$DISTCHECK" ]; then
       travis_wait make -j4 distcheck && sha256sum libredwg-*.tar.* ;
