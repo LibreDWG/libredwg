@@ -2516,8 +2516,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[sec_id].address = dat->byte;
       dwg->header.section[sec_id].size = 4;
       // 0 - English, 1- Metric
-      bit_write_RL (dat, (BITCODE_RL)dwg->header_vars.MEASUREMENT);
-      LOG_TRACE ("HEADER.MEASUREMENT: %d [RL]\n",
+      bit_write_RL_LE (dat, (BITCODE_RL)dwg->header_vars.MEASUREMENT ? 256 : 0);
+      LOG_TRACE ("HEADER.MEASUREMENT: %d [RL_LE]\n",
                  dwg->header_vars.MEASUREMENT);
     }
 

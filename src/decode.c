@@ -1455,6 +1455,7 @@ classes_section:
 
   if (dwg->header.num_sections > 4)
     {
+      BITCODE_RL v;
       LOG_INFO ("\n"
                 "=======> MEASUREMENT 4 (start)  : %8u\n",
                 (unsigned int)dwg->header.section[4].address)
@@ -1463,10 +1464,9 @@ classes_section:
                                + dwg->header.section[4].size))
       dat->byte = dwg->header.section[4].address;
       dat->bit = 0;
-      dwg->header_vars.MEASUREMENT = (BITCODE_BS)bit_read_RL (dat);
-      LOG_TRACE ("MEASUREMENT: " FORMAT_BS " [RL] (0 English/1 Metric)\n",
-                 dwg->header_vars.MEASUREMENT)
-
+      v = bit_read_RL_LE (dat);
+      LOG_TRACE ("MEASUREMENT: " FORMAT_RL " [RL_LE] (0 English/256 Metric)\n", v);
+      dwg->header_vars.MEASUREMENT = v ? 1 : 0;
       //LOG_TRACE ("         Size bytes :\t%lu\n", dat->size)
     }
 
