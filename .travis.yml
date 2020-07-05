@@ -24,7 +24,7 @@ matrix:
       #  apt:
       #    packages:
       #      clang-3.8
-      env: ASAN=1 CONF="--disable-bindings --disable-write --disable-dxf"
+      env: ASAN=1 CONF="--disable-bindings --disable-write"
     - compiler: gcc
       env: DISTCHECK=1 CONF="--enable-release"
     - compiler: gcc
@@ -50,9 +50,8 @@ script:
   - ./configure $CONF
   # starts swapping with only 8GB. seperate the biggest
   - if [ -n "$ASAN" ]; then
-      travis_wait 25 make -C src decode.lo ;
-      travis_wait 25 make -C src ;
-      travis_wait make ;
+      make -j4 -C src ;
+      make -j4 ;
     else
       make -j4 ;
     fi
