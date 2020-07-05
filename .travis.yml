@@ -1,6 +1,6 @@
 language: c
 sudo: false
-dist: xenial
+dist: bionic
 os:
   - linux
 #  - osx
@@ -48,14 +48,9 @@ script:
       CC="clang -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking" ;
     fi
   - ./configure $CONF
-  # starts swapping with only 8GB. seperate the biggest
-  - if [ -n "$ASAN" ]; then
-      make -j4 -C src ;
-      make -j4 ;
-    else
-      make -j4 ;
-    fi
-    # asan just became too slow. skip unit-tests there.
+    # ASAN started swapping with only 8GB
+  - make -j4
+    # ASAN just became too slow. skip unit-tests there.
   - if [ -n "$DISTCHECK" ]; then
       travis_wait make -j4 distcheck && sha256sum libredwg-*.tar.* ;
     else
