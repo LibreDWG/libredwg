@@ -3809,6 +3809,7 @@ static int
 dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const int i)
 {
   unsigned long pos = bit_position (dat);
+  unsigned long size;
   bit_write_RC (dat, data->code);
   LOG_TRACE ("EED[%d] code: %d [RC] ", i, data->code);
   switch (data->code)
@@ -3943,7 +3944,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
       dat->byte--;
       LOG_ERROR ("unknown EED code %d", data->code);
     }
-  return (int)(bit_position (dat) - pos);
+  size = bit_position (dat) - pos;
+  return (size % 8) ? (int)(size / 8) + 1 : (int)(size / 8);
 }
 
 #define dat_flush(orig, dat) bit_copy_chain (orig, dat)
