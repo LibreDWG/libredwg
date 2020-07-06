@@ -57,7 +57,7 @@ if [ -f "$b.dwg" ]; then
     log1="$b.log.orig"
     log2="$b.log"
     echo diff -bu "log1" "$log2"
-    diff -bu "$log1" "$log2"
+    diff -I '^-(objref|found:)' -bu "$log1" "$log2"
 
     test -f "$b.dxf.err" && cat "$b.dxf.err"
 
@@ -74,11 +74,11 @@ if [ -f "$b.dwg" ]; then
             c2=$(grep -c entity "$log2.tmp")
             if [ "$c1" = "$c2" ]; then
                 echo entities roundtrip in different order
-                diff -bu0 <(perl -lpe's/ \[.\d+\]//' "$log1.tmp" | sort -u) \
+                diff -I '^-(objref|found:)' -bu0 <(perl -lpe's/ \[.\d+\]//' "$log1.tmp" | sort -u) \
                           <(perl -lpe's/ \[.\d+\]//' "$log2.tmp" | sort -u)
             else
                 echo "$b roundtrip failed, $c1 vs $c2 entities"
-                diff -bu0 "$log1.tmp" "$log2.tmp" | grep -v '^@@'
+                diff -I '^-(objref|found:)' -bu0 "$log1.tmp" "$log2.tmp" | grep -v '^@@'
             fi
         fi
     fi

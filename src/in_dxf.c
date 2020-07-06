@@ -6481,8 +6481,8 @@ dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
     _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
 }
 
-// seperate model_space and model_space into its own fields, out of entries[]
-static void
+// seperate model_space and paper_space into its own fields, out of entries[]
+static int
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_BLOCK_CONTROL *restrict _ctrl,
                         const char *f)
@@ -6503,12 +6503,13 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
                      (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
           _ctrl->entries = (BITCODE_H *)realloc (_ctrl->entries,
                                     _ctrl->num_entries * sizeof (BITCODE_H));
-          break;
+          return 1;
         }
     }
+  return 0;
 }
 
-static void
+static int
 move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_LTYPE_CONTROL *restrict _ctrl,
                         const char *f)
@@ -6528,9 +6529,10 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
                      (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
           _ctrl->entries = (BITCODE_H *)realloc (_ctrl->entries,
                                     _ctrl->num_entries * sizeof (BITCODE_H));
-          break;
+          return 1;
         }
     }
+  return 0;
 }
 
 static void
@@ -6728,7 +6730,7 @@ get_numfield_value (void *restrict _obj, const Dwg_DYNAPI_field *restrict f)
 static Dxf_Pair *
 new_object (char *restrict name, char *restrict dxfname,
             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-            BITCODE_BL ctrl_id, BITCODE_BL i)
+            BITCODE_BL ctrl_id, BITCODE_BL *i_p)
 {
   const int is_tu = 1;
   Dwg_Object *obj;
@@ -6746,6 +6748,7 @@ new_object (char *restrict name, char *restrict dxfname,
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
+  BITCODE_BL i = i_p ? *i_p : 0;
   int cur_cell = -1;
   unsigned written = 0;
   BITCODE_RL curr_inserts = 0;
@@ -7440,6 +7443,8 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("%s.name = %s [T 2]\n", name, pair->value.s);
               if (!pair->value.s)
                 break;
+              assert (i_p); // needs ctrl_id
+              *i_p = i + 1;
               if (strEQc (name, "BLOCK_RECORD"))
                 {
                   // seperate mspace and pspace into its own fields
@@ -7455,8 +7460,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       dwg->header_vars.BLOCK_RECORD_PSPACE
                           = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
                       // move out of entries
-                      move_out_BLOCK_CONTROL (obj, _ctrl, f);
-                      i--;
+                      if (move_out_BLOCK_CONTROL (obj, _ctrl, f))
+                        *i_p = i;
                     }
                   else if (!strcasecmp (pair->value.s, "*Model_Space"))
                     {
@@ -7468,8 +7473,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       dwg->header_vars.BLOCK_RECORD_MSPACE
                           = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
                       // move out of entries
-                      move_out_BLOCK_CONTROL (obj, _ctrl, f);
-                      i--;
+                      if (move_out_BLOCK_CONTROL (obj, _ctrl, f))
+                        *i_p = i;
                     }
                 }
               else if (strEQc (name, "LTYPE"))
@@ -7487,8 +7492,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       dwg->header_vars.LTYPE_BYLAYER
                           = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
                       // move out of entries
-                      move_out_LTYPE_CONTROL (obj, _ctrl, f);
-                      i--;
+                      if (move_out_LTYPE_CONTROL (obj, _ctrl, f))
+                        *i_p = i;
                     }
                   else if (!strcasecmp (pair->value.s, "ByBlock"))
                     {
@@ -7500,8 +7505,8 @@ new_object (char *restrict name, char *restrict dxfname,
                       dwg->header_vars.LTYPE_BYBLOCK
                           = dwg_add_handleref (dwg, 5, obj->handle.value, obj);
                       // move out of entries
-                      move_out_LTYPE_CONTROL (obj, _ctrl, f);
-                      i--;
+                      if (move_out_LTYPE_CONTROL (obj, _ctrl, f))
+                        *i_p = i;
                     }
                 }
               break;
@@ -9432,7 +9437,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               char *dxfname = strdup (pair->value.s);
               dxf_free_pair (pair);
               // until 0 table or 0 ENDTAB
-              pair = new_object (table, dxfname, dat, dwg, ctrl_id, i++);
+              pair = new_object (table, dxfname, dat, dwg, ctrl_id, &i);
               if (!pair)
                 return DWG_ERR_INVALIDDWG;
               // undo BLOCK_CONTROL.entries and LTYPE_CONTROL.entries
@@ -9560,7 +9565,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               name[79] = '\0';
               entity_alias (name);
               dxf_free_pair (pair);
-              pair = new_object (name, dxfname, dat, dwg, 0, i++);
+              pair = new_object (name, dxfname, dat, dwg, 0, &i);
               if (!pair)
                 return DWG_ERR_INVALIDDWG;
               obj = &dwg->object[idx];
@@ -9756,7 +9761,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           char *dxfname = strdup (pair->value.s);
           dxf_free_pair (pair);
-          pair = new_object (name, dxfname, dat, dwg, 0, 0);
+          pair = new_object (name, dxfname, dat, dwg, 0, NULL);
           if (!pair)
             return DWG_ERR_INVALIDDWG;
           if (pair->code == 0 && pair->value.s)
@@ -9808,7 +9813,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               char *dxfname = strdup (pair->value.s);
               dxf_free_pair (pair);
-              pair = new_object (name, dxfname, dat, dwg, 0, 0);
+              pair = new_object (name, dxfname, dat, dwg, 0, NULL);
               if (!pair)
                 return DWG_ERR_INVALIDDWG;
             }
@@ -9846,7 +9851,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (is_dwg_object (name))
             {
               dxf_free_pair (pair);
-              pair = new_object (name, dxfname, dat, dwg, 0, 0);
+              pair = new_object (name, dxfname, dat, dwg, 0, NULL);
               if (!pair)
                 return DWG_ERR_INVALIDDWG;
             }
