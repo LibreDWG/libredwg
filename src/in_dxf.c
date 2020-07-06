@@ -10125,9 +10125,11 @@ resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
             }
           memcpy (&eed[j].handle, &ref->handleref, sizeof (Dwg_Handle));
           eed[j].handle.code = 5;
-          LOG_TRACE ("postponed eed[%d].handle for APPID.%s => " FORMAT_H
-                     " [H]\n",
-                     j, name, ARGS_H (eed[j].handle));
+          LOG_TRACE (
+              "postponed %s[%d]->eed[%d].handle for APPID.%s => " FORMAT_H
+              " [H]\n",
+              dwg->object[objid].name, objid, j, name,
+              ARGS_H (eed[j].handle));
         }
       else
         LOG_WARN ("Unknown eed[].handle for APPID.%s", name)
