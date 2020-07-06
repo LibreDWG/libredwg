@@ -1323,8 +1323,10 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      FIELD_RC (flag, 70);                                                    \
+      /* mask off 64, the loaded bit 6 */                                     \
+      VALUE_RC (_obj->flag & ~64, 70);                                        \
     }
+
 // unused
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
   SINCE (R_13)                                                                \
