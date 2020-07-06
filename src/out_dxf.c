@@ -505,6 +505,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     if (_obj->nam != 0)                                                       \
       FIELD_BS (nam, dxf)                                                     \
   }
+#define FIELD_B0(nam, dxf)                                                    \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      FIELD_B (nam, dxf)                                                      \
+  }
 #define FIELD_RC0(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 0)                                                       \
@@ -1311,8 +1316,16 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     dxf_cvt_tablerecord (dat, obj, _obj->name, 2);                            \
   else                                                                        \
     VALUE_TV ("*", 2)                                                         \
-  FIELD_RC (flag, 70);
-
+  if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
+    {                                                                         \
+      /* mask off plotflag and linewt */                                      \
+      VALUE_RC (_obj->flag & ~0x3f0, 70);                                     \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      FIELD_RC (flag, 70);                                                    \
+    }
+// unused
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
   SINCE (R_13)                                                                \
   {                                                                           \

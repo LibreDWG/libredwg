@@ -2752,14 +2752,8 @@ DWG_OBJECT (LAYER)
     FIELD_VALUE (locked) = flag & 8;
     FIELD_VALUE (plotflag) = flag & (1<<15) ? 1 : 0;
     FIELD_VALUE (linewt) = (flag & 0x03E0) >> 5;
-    DXF_OR_PRINT {
-      int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
-      FIELD_B (plotflag, 290);
-      JSON {
-        FIELD_RC (linewt, 370);
-      } else {
-        KEY (linewt); VALUE_RC ((signed char)lw, 370);
-      }
+    JSON {
+      FIELD_RC (linewt, 370);
     }
   }
   FIELD_CMC (color, 62);
@@ -2774,13 +2768,25 @@ DWG_OBJECT (LAYER)
 
   START_OBJECT_HANDLE_STREAM;
   SINCE (R_2000) {
-    FIELD_HANDLE (plotstyle, 5, 390);
+    FIELD_HANDLE (plotstyle, 5, 0);
   }
   SINCE (R_2007) {
-    FIELD_HANDLE (material, 5, 347);
+    FIELD_HANDLE (material, 5, 0);
   }
   FIELD_HANDLE (ltype, 5, 6);
-  //TODO handle: DXF 370
+  DXF {
+    int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
+    SINCE (R_2000) {
+      FIELD_B (plotflag, 290);
+    }
+    KEY (linewt); VALUE_RC ((signed char)lw, 370);
+    SINCE (R_2000) {
+      FIELD_HANDLE (plotstyle, 5, 390);
+    }
+    SINCE (R_2007) {
+      FIELD_HANDLE (material, 5, 347);
+    }
+  }
   SINCE (R_2013) {
     FIELD_HANDLE (visualstyle, 5, 348);
   }

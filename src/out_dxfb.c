@@ -228,6 +228,11 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     if (_obj->nam != 0)                                                       \
       FIELD_BS (nam, dxf)                                                     \
   }
+#define FIELD_B0(nam, dxf)                                                    \
+  {                                                                           \
+    if (_obj->nam)                                                            \
+      FIELD_B (nam, dxf)                                                      \
+  }
 #define FIELD_RC0(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 0)                                                       \
