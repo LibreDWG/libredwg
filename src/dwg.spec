@@ -2816,8 +2816,8 @@ DWG_OBJECT (STYLE)
   {
     FIELD_B (is_shape, 0);        //wrong oda doc
     FIELD_B (is_vertical, 0);     //
-    FIELD_VALUE (flag) |= (FIELD_VALUE (is_vertical) ? 4 : 0) +
-                          (FIELD_VALUE (is_shape) ? 1 : 0);
+    FIELD_VALUE (flag) |= (FIELD_VALUE (is_vertical) ? 1 : 0) +
+                          (FIELD_VALUE (is_shape) ? 4 : 0);
   }
   PRE (R_13)
   {

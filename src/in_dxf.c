@@ -7561,23 +7561,66 @@ new_object (char *restrict name, char *restrict dxfname,
         case 70:
           if (ctrl_id && pair->code == 70)
             {
+              BITCODE_B bit;;
+              flag = pair->value.i | 64;
               dwg_dynapi_entity_set_value (_obj, obj->name, "flag",
-                                           &pair->value, 1);
+                                           &flag, 1);
               LOG_TRACE ("%s.flag = %d [RC 70]\n", name, pair->value.i);
-              if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
+              if (obj->fixedtype == DWG_TYPE_STYLE)
                 {
-                  BITCODE_B flag0 = pair->value.i & 1;
-                  dwg_dynapi_entity_set_value (_obj, obj->name, "flag0",
-                                               &flag0, 1);
-                  LOG_TRACE ("%s.flag0 = %d [B]\n", name, flag0);
+
+#define SET_CTRL_BIT(b, bnam)                                           \
+                  bit = flag & b ? 1 : 0;                               \
+                  if (bit)                                              \
+                    {                                                   \
+                      dwg_dynapi_entity_set_value (_obj, obj->name, #bnam,\
+                                                   &bit, 1);            \
+                      LOG_TRACE ("%s.%s = %d [B]\n", name, #bnam, bit); \
+                    }
+
+                  SET_CTRL_BIT (1, is_vertical);
+                  SET_CTRL_BIT (4, is_shape);
+                }
+              else if (obj->fixedtype == DWG_TYPE_LAYER)
+                {
+                  SINCE (R_2000) {
+                    SET_CTRL_BIT (1, frozen);
+                    bit = flag & 2 ? 0 : 1; // reverse
+                    if (bit)
+                      {
+                        dwg_dynapi_entity_set_value (_obj, obj->name, "on",
+                                                     &bit, 1);
+                        LOG_TRACE ("%s.%s = %d [B]\n", name, "on", bit);
+                      }
+                    SET_CTRL_BIT (4, frozen_in_new);
+                    SET_CTRL_BIT (8, locked);
+                    SET_CTRL_BIT (32768, plotflag);
+                  } else {
+                    SET_CTRL_BIT (1, frozen);
+                    SET_CTRL_BIT (2, frozen_in_new);
+                    SET_CTRL_BIT (4, locked);
+                  }
+                }
+              else if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+                {
+                  SET_CTRL_BIT (1, anonymous);
+                  SET_CTRL_BIT (2, hasattrs);
+                  SET_CTRL_BIT (4, blkisxref);
+                  SET_CTRL_BIT (8, xrefoverlaid);
+                  SET_CTRL_BIT (32, loaded_bit);
+                }
+              else if (obj->fixedtype == DWG_TYPE_VIEW)
+                {
+                  SET_CTRL_BIT (1, is_pspace);
+                }
+              else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
+                {
+                  SET_CTRL_BIT (1, flag0);
                 }
               else if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_HEADER)
                 {
                   // also set via 290
-                  BITCODE_B is_on = pair->value.i ? 2 : 0;
-                  dwg_dynapi_entity_set_value (_obj, obj->name, "is_on",
-                                               &is_on, 1);
-                  LOG_TRACE ("%s.is_on = %d [B]\n", name, is_on);
+                  SET_CTRL_BIT (2, is_on);
                 }
               break;
             }

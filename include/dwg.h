@@ -2210,6 +2210,14 @@ typedef struct _dwg_object_LAYER_CONTROL
  */
 typedef struct _dwg_object_LAYER
 {
+  /*<! flag DXF 70 r2000+
+     1:  frozen
+     2:  on
+     4:  frozen_in_new
+     8:  locked
+     bits 6-10: linewt
+     32768: plotflag (bit 16)
+ */
   COMMON_TABLE_FIELDS(BS);
   BITCODE_B frozen;
   BITCODE_B on;
