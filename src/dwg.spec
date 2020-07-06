@@ -6019,7 +6019,7 @@ DWG_OBJECT (CELLSTYLEMAP)
 DWG_OBJECT_END
 
 //pg.246 20.4.103
-// stable
+// unstable, breaks acad dwg open
 DWG_OBJECT (TABLEGEOMETRY)
 
   SUBCLASS (AcDbTableGeometry)

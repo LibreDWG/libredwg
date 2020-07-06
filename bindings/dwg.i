@@ -308,7 +308,6 @@ EXPORT Dwg_Object_SORTENTSTABLE** dwg_getall_SORTENTSTABLE (Dwg_Data* dwg);
 EXPORT Dwg_Object_SPATIAL_FILTER** dwg_getall_SPATIAL_FILTER (Dwg_Data* dwg);
 EXPORT Dwg_Object_STYLE** dwg_getall_STYLE (Dwg_Data* dwg);
 EXPORT Dwg_Object_STYLE_CONTROL** dwg_getall_STYLE_CONTROL (Dwg_Data* dwg);
-EXPORT Dwg_Object_TABLEGEOMETRY** dwg_getall_TABLEGEOMETRY (Dwg_Data* dwg);
 EXPORT Dwg_Object_UCS** dwg_getall_UCS (Dwg_Data* dwg);
 EXPORT Dwg_Object_UCS_CONTROL** dwg_getall_UCS_CONTROL (Dwg_Data* dwg);
 EXPORT Dwg_Object_UNDERLAYDEFINITION** dwg_getall_UNDERLAYDEFINITION (Dwg_Data* dwg);
@@ -362,6 +361,7 @@ EXPORT Dwg_Object_SECTIONVIEWSTYLE** dwg_getall_SECTIONVIEWSTYLE (Dwg_Data* dwg)
 EXPORT Dwg_Object_SECTION_SETTINGS** dwg_getall_SECTION_SETTINGS (Dwg_Data* dwg);
 EXPORT Dwg_Object_SPATIAL_INDEX** dwg_getall_SPATIAL_INDEX (Dwg_Data* dwg);
 EXPORT Dwg_Object_SUN** dwg_getall_SUN (Dwg_Data* dwg);
+EXPORT Dwg_Object_TABLEGEOMETRY** dwg_getall_TABLEGEOMETRY (Dwg_Data* dwg);
 EXPORT Dwg_Object_TABLESTYLE** dwg_getall_TABLESTYLE (Dwg_Data* dwg);
 #ifdef DEBUG_CLASSES
 EXPORT Dwg_Object_ACMECOMMANDHISTORY** dwg_getall_ACMECOMMANDHISTORY (Dwg_Data* dwg);
@@ -609,7 +609,6 @@ EXPORT Dwg_Object_SORTENTSTABLE* dwg_object_to_SORTENTSTABLE (Dwg_Object* obj);
 EXPORT Dwg_Object_SPATIAL_FILTER* dwg_object_to_SPATIAL_FILTER (Dwg_Object* obj);
 EXPORT Dwg_Object_STYLE* dwg_object_to_STYLE (Dwg_Object* obj);
 EXPORT Dwg_Object_STYLE_CONTROL* dwg_object_to_STYLE_CONTROL (Dwg_Object* obj);
-EXPORT Dwg_Object_TABLEGEOMETRY* dwg_object_to_TABLEGEOMETRY (Dwg_Object* obj);
 EXPORT Dwg_Object_UCS* dwg_object_to_UCS (Dwg_Object* obj);
 EXPORT Dwg_Object_UCS_CONTROL* dwg_object_to_UCS_CONTROL (Dwg_Object* obj);
 EXPORT Dwg_Object_UNDERLAYDEFINITION* dwg_object_to_UNDERLAYDEFINITION (Dwg_Object* obj);
@@ -663,6 +662,7 @@ EXPORT Dwg_Object_SECTIONVIEWSTYLE* dwg_object_to_SECTIONVIEWSTYLE (Dwg_Object* 
 EXPORT Dwg_Object_SECTION_SETTINGS* dwg_object_to_SECTION_SETTINGS (Dwg_Object* obj);
 EXPORT Dwg_Object_SPATIAL_INDEX* dwg_object_to_SPATIAL_INDEX (Dwg_Object* obj);
 EXPORT Dwg_Object_SUN* dwg_object_to_SUN (Dwg_Object* obj);
+EXPORT Dwg_Object_TABLEGEOMETRY* dwg_object_to_TABLEGEOMETRY (Dwg_Object* obj);
 EXPORT Dwg_Object_TABLESTYLE* dwg_object_to_TABLESTYLE (Dwg_Object* obj);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Object_ACMECOMMANDHISTORY* dwg_object_to_ACMECOMMANDHISTORY (Dwg_Object* obj);

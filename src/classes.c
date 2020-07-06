@@ -63,6 +63,7 @@ static const Dwg_Object_Type _classes_unstable[] =
    DWG_TYPE_SECTION_SETTINGS,
    DWG_TYPE_SPATIAL_INDEX,
    DWG_TYPE_SUN,
+   DWG_TYPE_TABLEGEOMETRY,
    DWG_TYPE_TABLESTYLE,
   };
 static const Dwg_Object_Type _classes_debugging[] =

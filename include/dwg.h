@@ -8017,7 +8017,6 @@ typedef struct _dwg_object_object
     Dwg_Object_SECTION_MANAGER *SECTION_MANAGER;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
-    Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
     Dwg_Object_UNDERLAYDEFINITION *UNDERLAYDEFINITION;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
@@ -8062,6 +8061,7 @@ typedef struct _dwg_object_object
     Dwg_Object_SECTION_SETTINGS *SECTION_SETTINGS;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
     Dwg_Object_SUN *SUN;
+    Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
     /* debugging */
     Dwg_Object_ACMECOMMANDHISTORY *ACMECOMMANDHISTORY;
@@ -9264,7 +9264,6 @@ EXPORT int dwg_setup_SCALE (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_FILTER (Dwg_Object *obj);
-EXPORT int dwg_setup_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_setup_UNDERLAYDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_VBA_PROJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_VISUALSTYLE (Dwg_Object *obj);
@@ -9312,6 +9311,7 @@ EXPORT int dwg_setup_SECTIONVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_SETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);
+EXPORT int dwg_setup_TABLEGEOMETRY (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
   EXPORT int dwg_setup_ALIGNMENTPARAMETERENTITY (Dwg_Object *obj);
