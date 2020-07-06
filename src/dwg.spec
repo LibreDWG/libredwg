@@ -3521,9 +3521,16 @@ DWG_OBJECT (DIMSTYLE)
   }
   IF_FREE_OR_SINCE (R_2000)
     {
-      FIELD_T (DIMPOST, 3);
-      FIELD_T (DIMAPOST, 4);
-      FIELD_BD (DIMSCALE, 40);
+      FIELD_T0 (DIMPOST, 3);
+      FIELD_T0 (DIMAPOST, 4)
+      DXF {
+        if (FIELD_VALUE (DIMSCALE) != 1.0)
+          {
+            FIELD_BD (DIMSCALE, 40);
+          }
+      } else {
+        FIELD_BD (DIMSCALE, 40);
+      }
       FIELD_BD (DIMASZ, 41);
       FIELD_BD (DIMEXO, 42);
       FIELD_BD (DIMDLI, 43);

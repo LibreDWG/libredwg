@@ -212,6 +212,7 @@ static BITCODE_BL rcount1, rcount2;
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
+#define VALUE_BD(value, dxf) VALUE (value, BD, dxf)
 
 // FIELD_VECTOR_N(name, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
