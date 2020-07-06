@@ -2577,14 +2577,7 @@ DWG_ENTITY_END
 /*(48)*/
 DWG_OBJECT (BLOCK_CONTROL)
 
-  DXF {
-    // plus MSPACE and PSPACE
-    VALUE_RL (FIELD_VALUE (num_entries) +
-              (dwg->header_vars.BLOCK_RECORD_PSPACE ? 2 : 1), 70);
-  } else {
-    FIELD_BL (num_entries, 70);
-  }
-
+  FIELD_BL (num_entries, 70);
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
@@ -2704,13 +2697,7 @@ DWG_OBJECT_END
 /*(50)*/
 DWG_OBJECT (LAYER_CONTROL)
 
-  DXF {
-    // minus 0
-    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
-  } else {
-    FIELD_BL (num_entries, 70);
-  }
-
+  FIELD_BL (num_entries, 70);
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -2745,7 +2732,6 @@ DWG_OBJECT (LAYER)
     flag = FIELD_VALUE (flag);
     // contains frozen (1 bit), on (2 bit), frozen by default in new viewports (4 bit),
     // locked (8 bit), plotting flag (16 bit), and linewt (mask with 0x03E0)
-    //FIELD_VALUE (flag) = (BITCODE_RC)FIELD_VALUE (flag_s) & 0xff;
     FIELD_VALUE (frozen) = flag & 1;
     FIELD_VALUE (on) = !(flag & 2);
     FIELD_VALUE (frozen_in_new) = flag & 4;
@@ -2795,13 +2781,7 @@ DWG_OBJECT_END
 /* STYLE table (52) */
 DWG_OBJECT (STYLE_CONTROL)
 
-  DXF {
-    // minus Standard
-    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
-  } else {
-    FIELD_BL (num_entries, 70); //RC?
-  }
-
+  FIELD_BL (num_entries, 70);
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -2878,9 +2858,7 @@ DWG_OBJECT_END
 /*(56)*/
 DWG_OBJECT (LTYPE_CONTROL)
 
-  // DXF minus ByLayer/ByBlock/Continuous ?
   FIELD_BS (num_entries, 70);
-
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (byblock, 3, 0);
@@ -2989,13 +2967,7 @@ DWG_OBJECT_END
 /*(60)*/
 DWG_OBJECT (VIEW_CONTROL)
 
-  DXF {
-    // minus ?
-    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
-  } else {
-    FIELD_BL (num_entries, 70);
-  }
-
+  FIELD_BL (num_entries, 70);
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -3108,7 +3080,6 @@ DWG_OBJECT_END
 DWG_OBJECT (UCS_CONTROL)
 
   FIELD_BS (num_entries, 70); //BS or BL?
-
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -3152,13 +3123,7 @@ DWG_OBJECT_END
 /* (0x40/64) */
 DWG_OBJECT (VPORT_CONTROL)
 
-  DXF {
-    // minus Standard
-    VALUE_RL (FIELD_VALUE (num_entries) - 1, 70);
-  } else {
-    FIELD_BS (num_entries, 70);
-  }
-
+  FIELD_BS (num_entries, 70);
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -3360,7 +3325,6 @@ DWG_OBJECT_END
 DWG_OBJECT (APPID_CONTROL)
 
   FIELD_BS (num_entries, 70);
-
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
