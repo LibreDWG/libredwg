@@ -9,26 +9,24 @@
     FIELD_B (preview_exists, 0);
     if (ent->preview_exists)
       {
-        int dxf = 160;
-        // or DXF 92 for all PROXY vector preview data with klass->is_zombie
-        if (obj->klass && obj->klass->is_zombie)
-          {
-            dxf = 92;
+        int dxf = dat->version < R_2010 ? 92 : 160;
+        // was DXF 160 (used for block previews?).
+        // 92 also for all PROXY vector preview data with klass->is_zombie
 #ifdef IS_DECODER
-            ent->preview_is_proxy = 1;
+        if (obj->klass && obj->klass->is_zombie)
+          ent->preview_is_proxy = 1;
 #endif
-          }
 #if defined(IS_JSON) || defined(IS_PRINT)
         FIELD_B (preview_is_proxy, 0);
-        FIELD_BLL (preview_size, dxf);
+        FIELD_BLL (preview_size, 0);
 #else
         VERSIONS (R_13, R_2007)
           {
-            FIELD_CAST (preview_size, RL, BLL, dxf);
+            FIELD_CAST (preview_size, RL, BLL, 92);
           }
         SINCE (R_2010)
           {
-            FIELD_BLL (preview_size, dxf);
+            FIELD_BLL (preview_size, 160);
           }
 #endif
         if ((int)ent->preview_size >= 0 && ent->preview_size < 210210)

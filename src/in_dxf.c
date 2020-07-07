@@ -5664,9 +5664,8 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   _obj->numitems = num + 1;
 }
 
-/* read to ent->preview, starting with code 160 for bitmap previews,
-   Or with code 92 for PROXY GRAPHICS vector data for newer variable
-   entities, like WIPEOUT, LIGHT, MULTILEADER, ARC_DIMENSION, ...
+/* read to ent->preview, r2010+ code 160, earlier code 92.
+   like WIPEOUT, LIGHT, MULTILEADER, ARC_DIMENSION or PROXY GRAPHICS vector data.
 */
 static Dxf_Pair *
 add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -8547,8 +8546,9 @@ new_object (char *restrict name, char *restrict dxfname,
                           prev_vstyle = f;
                         }
                       // exceptions, where there's another field 92:
-                      if ((pair->code == 92) && is_entity
-                          && obj->fixedtype > DWG_TYPE_LAYOUT
+                      if (pair->code == 92
+                          && is_entity
+                          && dat->from_version < R_2010
                           && strEQc (subclass, "AcDbEntity"))
                         // not MULTILEADER.text_color, nor MESH.num_vertex
                         {
@@ -9142,7 +9142,7 @@ new_object (char *restrict name, char *restrict dxfname,
                               }
                             else
                               {
-                                if (is_entity && pair->code == 160) //
+                                if (is_entity && pair->code == 160 && dat->from_version >= R_2010)
                                   {
                                     pair = add_ent_preview (obj, dat, pair);
                                     goto start_loop; // already fresh pair
@@ -9163,19 +9163,13 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_INSANE ("----\n")
               // still needed? already handled above
               // not in dynapi: 92 as 310 size prefix for PROXY vector preview
-              if ((pair->code == 92) && is_entity
-                  && obj->fixedtype > DWG_TYPE_LAYOUT
+              // FIXME 92 is just for pre-r2010 entities. r2010+ is 160
+              if (pair->code == 92
+                  && is_entity
+                  && dat->from_version < R_2010
                   && (strEQc (subclass, "AcDbEntity")
                       || strEQc (subclass, "AcDbProxyEntity")
                       || strstr (subclass, "Surface")))
-                /*
-                  (obj->fixedtype == DWG_TYPE_WIPEOUT ||
-                   obj->fixedtype == DWG_TYPE_MESH ||
-                   obj->fixedtype == DWG_TYPE_MULTILEADER ||
-                   obj->fixedtype == DWG_TYPE_UNDERLAY ||
-                   obj->fixedtype == DWG_TYPE_HELIX ||
-                   obj->fixedtype == DWG_TYPE_LIGHT ||
-                   obj->fixedtype == DWG_TYPE_ARC_DIMENSION)) */
                 {
                   pair = add_ent_preview (obj, dat, pair);
                   goto start_loop;
