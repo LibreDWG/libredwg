@@ -349,7 +349,6 @@ EXPORT Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT** dwg_getall_BLOCKGRIPLOCATIONCOMPO
 EXPORT Dwg_Object_BLOCKVISIBILITYGRIP** dwg_getall_BLOCKVISIBILITYGRIP (Dwg_Data* dwg);
 EXPORT Dwg_Object_DBCOLOR** dwg_getall_DBCOLOR (Dwg_Data* dwg);
 EXPORT Dwg_Object_DETAILVIEWSTYLE** dwg_getall_DETAILVIEWSTYLE (Dwg_Data* dwg);
-EXPORT Dwg_Object_DIMASSOC** dwg_getall_DIMASSOC (Dwg_Data* dwg);
 EXPORT Dwg_Object_LIGHTLIST** dwg_getall_LIGHTLIST (Dwg_Data* dwg);
 EXPORT Dwg_Object_MATERIAL** dwg_getall_MATERIAL (Dwg_Data* dwg);
 EXPORT Dwg_Object_MENTALRAYRENDERSETTINGS** dwg_getall_MENTALRAYRENDERSETTINGS (Dwg_Data* dwg);
@@ -446,6 +445,7 @@ EXPORT Dwg_Object_CSACDOCUMENTOPTIONS** dwg_getall_CSACDOCUMENTOPTIONS (Dwg_Data
 EXPORT Dwg_Object_CURVEPATH** dwg_getall_CURVEPATH (Dwg_Data* dwg);
 EXPORT Dwg_Object_DATALINK** dwg_getall_DATALINK (Dwg_Data* dwg);
 EXPORT Dwg_Object_DATATABLE** dwg_getall_DATATABLE (Dwg_Data* dwg);
+EXPORT Dwg_Object_DIMASSOC** dwg_getall_DIMASSOC (Dwg_Data* dwg);
 EXPORT Dwg_Object_DMDIMOBJECTCONTEXTDATA** dwg_getall_DMDIMOBJECTCONTEXTDATA (Dwg_Data* dwg);
 EXPORT Dwg_Object_DYNAMICBLOCKPROXYNODE** dwg_getall_DYNAMICBLOCKPROXYNODE (Dwg_Data* dwg);
 EXPORT Dwg_Object_EVALUATION_GRAPH** dwg_getall_EVALUATION_GRAPH (Dwg_Data* dwg);
@@ -650,7 +650,6 @@ EXPORT Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT* dwg_object_to_BLOCKGRIPLOCATIONCOM
 EXPORT Dwg_Object_BLOCKVISIBILITYGRIP* dwg_object_to_BLOCKVISIBILITYGRIP (Dwg_Object* obj);
 EXPORT Dwg_Object_DBCOLOR* dwg_object_to_DBCOLOR (Dwg_Object* obj);
 EXPORT Dwg_Object_DETAILVIEWSTYLE* dwg_object_to_DETAILVIEWSTYLE (Dwg_Object* obj);
-EXPORT Dwg_Object_DIMASSOC* dwg_object_to_DIMASSOC (Dwg_Object* obj);
 EXPORT Dwg_Object_LIGHTLIST* dwg_object_to_LIGHTLIST (Dwg_Object* obj);
 EXPORT Dwg_Object_MATERIAL* dwg_object_to_MATERIAL (Dwg_Object* obj);
 EXPORT Dwg_Object_MENTALRAYRENDERSETTINGS* dwg_object_to_MENTALRAYRENDERSETTINGS (Dwg_Object* obj);
@@ -747,6 +746,7 @@ EXPORT Dwg_Object_TABLESTYLE* dwg_object_to_TABLESTYLE (Dwg_Object* obj);
   EXPORT Dwg_Object_CURVEPATH* dwg_object_to_CURVEPATH (Dwg_Object* obj);
   EXPORT Dwg_Object_DATALINK* dwg_object_to_DATALINK (Dwg_Object* obj);
   EXPORT Dwg_Object_DATATABLE* dwg_object_to_DATATABLE (Dwg_Object* obj);
+  EXPORT Dwg_Object_DIMASSOC* dwg_object_to_DIMASSOC (Dwg_Object* obj);
   EXPORT Dwg_Object_DMDIMOBJECTCONTEXTDATA* dwg_object_to_DMDIMOBJECTCONTEXTDATA (Dwg_Object* obj);
   EXPORT Dwg_Object_DYNAMICBLOCKPROXYNODE* dwg_object_to_DYNAMICBLOCKPROXYNODE (Dwg_Object* obj);
   EXPORT Dwg_Object_EVALUATION_GRAPH* dwg_object_to_EVALUATION_GRAPH (Dwg_Object* obj);

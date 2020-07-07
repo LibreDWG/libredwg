@@ -90,7 +90,6 @@ testobjects = \
 	dictionary \
 	dictionaryvar \
 	dictionarywdflt \
-	dimassoc \
 	dimension_aligned \
 	dimension_ang2ln \
 	dimension_ang3pt \
@@ -254,6 +253,7 @@ testdebug = \
 	datalink \
 	datatable \
 	dmdimobjectcontextdata \
+	dimassoc \
 	evaluation_graph \
 	extrudedsurface \
 	fcfobjectcontextdata \

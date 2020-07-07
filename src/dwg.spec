@@ -6930,63 +6930,6 @@ DWG_OBJECT (ASSOCFILLETSURFACEACTIONBODY)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// (varies) UNSTABLE
-// 1-4 references, see associativity bits 1-8.
-DWG_OBJECT (DIMASSOC)
-
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbDimAssoc)
-  FIELD_BLx (associativity, 90);
-  FIELD_B (trans_space_flag, 70);
-  FIELD_RC (rotated_type, 71);
-  FIELD_HANDLE (dimensionobj, 4, 330);
-  REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
-  REPEAT_BLOCK
-      // TODO: there could be much more blocks, up to 5.
-      // 0 1 2 3 => 1 2 4 8. skip unset bits
-      if (!(FIELD_VALUE (associativity) & (1<<rcount1)))
-        {
-#ifdef IS_JSON
-          ENDHASH;
-#endif
-          continue;
-        }
-      LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
-      // DXF: 1, 72, 10, ??, 75
-      SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
-      SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
-      // idpaths:
-      SUB_FIELD_BL0 (ref[rcount1], num_intsectobj, 74);
-      SUB_HANDLE_VECTOR (ref[rcount1], intsectobj, num_intsectobj, 5, 332);
-
-      SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
-      SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
-
-      // XrefFullSubentPath
-      SUB_FIELD_BL (ref[rcount1], num_xrefs, 0); // 1 or 2
-      SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_xrefs, 100)
-      SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
-
-// restrict only when writing, not when reading?
-//if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
-//  {
-      SUB_FIELD_BL0 (ref[rcount1], main_subent_type, 73);
-      SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
-      SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
-      FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
-//  }
-      SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
-      if (FIELD_VALUE (ref[rcount1].has_lastpt_ref))
-        {
-          SUB_FIELD_3BD (ref[rcount1], lastpt_ref, 0);
-        }
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ (ref)
-  END_REPEAT (ref)
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 /*
 TvVisualStyle:
   FIELD_T (name, 0);
@@ -8198,6 +8141,63 @@ DWG_OBJECT_END
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
+
+// (varies) UNSTABLE
+// 1-4 references, see associativity bits 1-8.
+DWG_OBJECT (DIMASSOC)
+
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbDimAssoc)
+  FIELD_BLx (associativity, 90);
+  FIELD_B (trans_space_flag, 70);
+  FIELD_RC (rotated_type, 71);
+  FIELD_HANDLE (dimensionobj, 4, 330);
+  REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
+  REPEAT_BLOCK
+      // TODO: there could be much more blocks, up to 5.
+      // 0 1 2 3 => 1 2 4 8. skip unset bits
+      if (!(FIELD_VALUE (associativity) & (1<<rcount1)))
+        {
+#ifdef IS_JSON
+          ENDHASH;
+#endif
+          continue;
+        }
+      LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
+      // DXF: 1, 72, 10, ??, 75
+      SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
+      SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
+      // idpaths:
+      SUB_FIELD_BL0 (ref[rcount1], num_intsectobj, 74);
+      SUB_HANDLE_VECTOR (ref[rcount1], intsectobj, num_intsectobj, 5, 332);
+
+      SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
+      SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
+
+      // XrefFullSubentPath
+      SUB_FIELD_BL (ref[rcount1], num_xrefs, 0); // 1 or 2
+      SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_xrefs, 100)
+      SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
+
+// restrict only when writing, not when reading?
+//if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
+//  {
+      SUB_FIELD_BL0 (ref[rcount1], main_subent_type, 73);
+      SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
+      SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
+      FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
+//  }
+      SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
+      if (FIELD_VALUE (ref[rcount1].has_lastpt_ref))
+        {
+          SUB_FIELD_3BD (ref[rcount1], lastpt_ref, 0);
+        }
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (ref)
+  END_REPEAT (ref)
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 // (varies) fails the unit-test
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
