@@ -3980,7 +3980,6 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       if (eed->size) // start of a new EED appid section
         {
           size = eed->size;
-          last_handle = &eed->handle;
           if (eed->raw && !need_recalc)
             {
               did_raw = 1;
@@ -4003,9 +4002,9 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                   eed->size = new_size;
                   bit_write_BS (dat, new_size);
                   LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
-                  bit_write_H (dat, &eed->handle);
+                  bit_write_H (dat, last_handle);
                   LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
-                             ARGS_H (eed->handle)); LOG_POS;
+                             ARGS_H (*last_handle)); LOG_POS;
                   LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
                   dat_flush (dat, &dat1);
                   new_size = 0;
@@ -4014,6 +4013,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               LOG_POS;
             }
           last_size = i;
+          last_handle = &eed->handle;
         }
       // and if not already written by the previous raw (this has size=0)
       else if (!did_raw && eed->data)
