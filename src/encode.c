@@ -476,9 +476,9 @@ static bool env_var_checked_p;
   RESET_VER                                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.entity->is_xdic_missing)                                  \
+    if (!obj->tio.entity->is_xdic_missing)                                    \
       {                                                                       \
-        VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, code,    \
+        VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, 3,       \
                       360);                                                   \
       }                                                                       \
   }                                                                           \
@@ -486,7 +486,7 @@ static bool env_var_checked_p;
   {                                                                           \
     SINCE (R_13)                                                              \
     {                                                                         \
-      VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, code,      \
+      VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, 3,         \
                     360);                                                     \
     }                                                                         \
   }                                                                           \
@@ -659,10 +659,6 @@ static bool env_var_checked_p;
   SINCE (R_13)                                                                \
   {                                                                           \
     START_HANDLE_STREAM;                                                      \
-    PRE (R_2007)                                                              \
-    {                                                                         \
-      error |= dwg_encode_common_entity_handle_data (dat, hdl_dat, obj);      \
-    }                                                                         \
   }                                                                           \
   RESET_VER
 
@@ -686,13 +682,17 @@ static bool env_var_checked_p;
 #define END_STRING_STREAM                                                     \
   *dat = sav_dat;                                                             \
   }
-#define ENCODE_COMMON_OBJECT_HANDLES                                          \
+#define ENCODE_COMMON_HANDLES                                                 \
   if (obj->supertype == DWG_SUPERTYPE_OBJECT && dat->version >= R_13)         \
     {                                                                         \
       VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 330);       \
       REACTORS (4);                                                           \
       XDICOBJHANDLE (3);                                                      \
-    }
+    }                                                                         \
+ else if (obj->supertype == DWG_SUPERTYPE_ENTITY && dat->version >= R_13)     \
+   {                                                                          \
+     error |= dwg_encode_common_entity_handle_data (dat, hdl_dat, obj);       \
+   }
 
 #define START_HANDLE_STREAM                                                   \
   LOG_INSANE ("HANDLE_STREAM @%lu.%u\n", dat->byte - obj->address, dat->bit)  \
@@ -718,7 +718,7 @@ static bool env_var_checked_p;
         Bit_Chain dat2;                                                       \
         bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
-        ENCODE_COMMON_OBJECT_HANDLES                                          \
+        ENCODE_COMMON_HANDLES                                          \
         obj_flush_hdlstream (obj, dat, hdl_dat); /* common */                 \
         obj_flush_hdlstream (obj, dat, &dat1); /* special accumulated */      \
         bit_chain_free (&dat1);                                               \
@@ -730,7 +730,7 @@ static bool env_var_checked_p;
         if (hdl_dat != dat)                                                   \
           bit_chain_free (hdl_dat);                                           \
         hdl_dat = dat;                                                        \
-        ENCODE_COMMON_OBJECT_HANDLES                                          \
+        ENCODE_COMMON_HANDLES                                                 \
       }                                                                       \
   }                                                                           \
   RESET_VER
