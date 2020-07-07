@@ -6105,6 +6105,7 @@ DWG_OBJECT (SCALE)
   FIELD_BD (paper_units, 140);
   FIELD_BD (drawing_units, 141);
   FIELD_B (is_unit_scale, 290);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // VBA_PROJECT (81 + varies), a blob
