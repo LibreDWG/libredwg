@@ -612,8 +612,10 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               char hex[80];
               json_fixed_key (hex, dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
-              LOG_TRACE ("%s.%s.rgb %s [CMC]\n", name, fname, hex);
               sscanf (hex, "%x", &color->rgb);
+              color->method = color->rgb >> 0x18;
+              LOG_TRACE ("%s.%s.rgb %x (method %x) [CMC]\n", name, fname,
+                         color->rgb, color->method);
             }
           else if (strEQc (key, "flag"))
             {

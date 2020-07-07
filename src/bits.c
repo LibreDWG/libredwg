@@ -2556,7 +2556,8 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
     {
       bit_write_BS (dat, 0);  // index override
       bit_write_BL (dat, color->rgb);
-      color->method = color->rgb >> 0x18;
+      if (!color->method && color->rgb & 0xFF000000)
+        color->method = color->rgb >> 0x18;
       if (color->method == 0xc2) // for entity
         {
           if (color->name && !bit_empty_T (dat, color->name))

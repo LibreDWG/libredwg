@@ -332,7 +332,7 @@ static bool env_var_checked_p;
     LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
-        LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
+        LOG_TRACE (#color ".rgb: 0x%08x [CMC.BL %d]\n",                       \
                    (unsigned)_obj->color.rgb, dxf + 420 - 62);                \
         LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->color.flag);                               \

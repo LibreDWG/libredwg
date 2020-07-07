@@ -1693,7 +1693,7 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             j++;
           CHK_array (j, lines);
           o->lines[j].color.rgb = pair->value.u;
-          LOG_TRACE ("MLINESTYLE.lines[%d].color.rgb = %06X [CMC 420]\n", j,
+          LOG_TRACE ("MLINESTYLE.lines[%d].color.rgb = %08X [CMC 420]\n", j,
                      pair->value.u);
         }
       else if (pair->code == 6)
@@ -2921,7 +2921,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j >= 0);
           assert (j < (int)o->num_colors);
           o->colors[j].color.rgb = pair->value.u;
-          LOG_TRACE ("HATCH.colors[%d].color.rgb = %06X [CMC 421]\n", j,
+          LOG_TRACE ("HATCH.colors[%d].color.rgb = %08X [CMC 421]\n", j,
                      pair->value.u);
         }
       else if (pair->code == 431 && o->num_colors)
@@ -3135,10 +3135,10 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (pair->value.u > 256)
                 {
                   lline->color.index = 256;
-                  lline->color.rgb = pair->value.u & 0xFFFFFF;
-                  lline->color.alpha = pair->value.u & 0xFF000000;
+                  lline->color.rgb = pair->value.u;
+                  lline->color.method = pair->value.u >> 0x18;
                   LOG_TRACE (
-                      "%s.leaders[].lines[%d].color.rgb = %06X [CMC %d]\n",
+                      "%s.leaders[].lines[%d].color.rgb = %08X [CMC %d]\n",
                       obj->name, i, pair->value.u, pair->code);
                 }
               else
@@ -3760,10 +3760,10 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (pair->value.u > 257)
                 {
                   ctx->content.blk.color.index = 256;
-                  ctx->content.blk.color.rgb = pair->value.u & 0xFFFFFF;
-                  ctx->content.blk.color.alpha = pair->value.u & 0xFF000000;
+                  ctx->content.blk.color.rgb = pair->value.u;
+                  ctx->content.blk.color.method = pair->value.u >> 0x18;
                   LOG_TRACE (
-                      "%s.leaders[].lines[%d].color.rgb = %06X [CMC %d]\n",
+                      "%s.leaders[].lines[%d].color.rgb = %08X [CMC %d]\n",
                       obj->name, i, pair->value.u, pair->code);
                 }
               else
@@ -3772,7 +3772,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   if (pair->value.i == 257)
                     {
                       ctx->content.blk.color.method = 0xc8;
-                      ctx->content.blk.color.rgb = 0xc8;
+                      ctx->content.blk.color.rgb = 0xc8000000;
                     }
                   LOG_TRACE (
                       "%s.leaders[].lines[%d].color.index = %d [CMC %d]\n",
@@ -4179,7 +4179,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               o->bg_color.method = pair->value.u >> 0x18;
               if (pair->value.u == 257)
                 {
-                  o->bg_color.method = o->bg_color.rgb = 0xc8;
+                  o->bg_color.method = 0xc8;
+                  o->bg_color.rgb = 0xc8000000;
                 }
               else
                 o->bg_color.index = dwg_find_color_index (pair->value.u);
@@ -4192,8 +4193,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               o->content_format.content_color.method = pair->value.u >> 0x18;
               if (pair->value.u == 257)
                 {
-                  o->content_format.content_color.method =
-                    o->content_format.content_color.rgb = 0xc8;
+                  o->content_format.content_color.method = 0xc8;
+                  o->content_format.content_color.rgb = 0xc8000000;
                 }
               else
                 o->content_format.content_color.index = dwg_find_color_index (pair->value.u);
@@ -4208,7 +4209,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               o->borders[grid].color.method = pair->value.u >> 0x18;
               if (pair->value.u == 257)
                 {
-                  o->borders[grid].color.method = o->borders[grid].color.rgb = 0xc8;
+                  o->borders[grid].color.method = 0xc8;
+                  o->borders[grid].color.rgb = 0xc8000000;
                 }
               else
                 o->borders[grid].color.index = dwg_find_color_index (pair->value.u);
@@ -7828,7 +7830,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   dwg_dynapi_entity_value (_obj, obj->name, fname, &color,
                                            NULL);
                   color.method = 0xc2;
-                  color.rgb = pair->value.l & 0x00ffffff;
+                  color.rgb = pair->value.l;
                   color.rgb |= 0xc2000000;
                   LOG_TRACE ("%s.%s.rgb = %08X [CMC %d]\n", name, fname,
                              pair->value.u, pair->code);
@@ -8709,10 +8711,16 @@ new_object (char *restrict name, char *restrict dxfname,
                             }
                           else if (pair->code < 430)
                             {
-                              color.rgb = pair->value.l & 0x00FFFFFF;
-                              color.alpha = (pair->value.l & 0xFF000000) >> 24;
-                              if (color.alpha)
-                                color.alpha_type = 3;
+                              color.rgb = pair->value.l;
+                              color.method = pair->value.l >> 0x18;
+                              if (pair->value.l == 257)
+                                {
+                                  color.method = 0xc8;
+                                  color.rgb = 0xc8000000;
+                                }
+                              //color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                              //if (color.alpha)
+                              //  color.alpha_type = 3;
                               LOG_TRACE ("%s.%s.rgb = %08X [%s %d]\n", name,
                                          f->name, pair->value.u, "CMC", pair->code);
                             }
@@ -8984,9 +8992,15 @@ new_object (char *restrict name, char *restrict dxfname,
                         else if (pair->code == 420)
                           {
                             color.rgb = pair->value.l;
-                            color.alpha = (pair->value.l & 0xFF000000) >> 24;
-                            if (color.alpha)
-                              color.alpha_type = 3;
+                            color.method = pair->value.l >> 0x18;
+                            if (pair->value.l == 257)
+                              {
+                                color.method = 0xc8;
+                                color.rgb = 0xc8000000;
+                              }
+                            //color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                            //if (color.alpha)
+                            //  color.alpha_type = 3;
                             LOG_TRACE ("COMMON.%s.rgb = %08X [%s %d]\n",
                                        f->name, pair->value.u, "CMC",
                                        pair->code);
@@ -9257,8 +9271,13 @@ new_object (char *restrict name, char *restrict dxfname,
                   Dwg_Object_LAYER *o = obj->tio.object->tio.LAYER;
                   if (pair->code == 420)
                     {
-                      o->color.rgb = 0xc2000000 & (pair->value.l & 0x00ffffff);
-                      o->color.method = 0xc2;
+                      o->color.rgb = pair->value.l;
+                      o->color.method = pair->value.l >> 0x18;
+                      if (pair->value.l == 257)
+                        {
+                          o->color.method = 0xc8;
+                          o->color.rgb = 0xc8000000;
+                        }
                       //o->color.alpha = (pair->value.l & 0xFF000000) >> 24;
                       //if (o->color.alpha)
                       //  o->color.alpha_type = 3;
