@@ -207,7 +207,7 @@ DWG_ENTITY (ATTRIB)
         FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
 
       FIELD_BE (extrusion, 210);
-      FIELD_BT (thickness, 39);
+      FIELD_BT0 (thickness, 39);
 
       if (!(dataflags & 0x04))
         FIELD_RD (oblique_angle, 51);
@@ -289,7 +289,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_2RD (insertion_pt, 10);
       FIELD_2RD (alignment_pt, 11);
       FIELD_3BD (extrusion, 210);
-      FIELD_BD (thickness, 39);
+      FIELD_BD0 (thickness, 39);
       FIELD_BD (oblique_angle, 51);
       FIELD_BD (rotation, 50);
       FIELD_BD (height, 40);
@@ -318,7 +318,7 @@ DWG_ENTITY (ATTDEF)
         FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
 
       FIELD_BE (extrusion, 210);
-      FIELD_BT (thickness, 39);
+      FIELD_BT0 (thickness, 39);
 
       if (!(dataflags & 0x04))
         FIELD_RD (oblique_angle, 51);
@@ -973,7 +973,7 @@ DWG_ENTITY (ARC)
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
     FIELD_BD (radius, 40);
-    FIELD_BT (thickness, 39);
+    FIELD_BT0 (thickness, 39);
     FIELD_BE (extrusion, 210);
     SUBCLASS (AcDbArc)
     FIELD_BD (start_angle, 50);
@@ -1000,7 +1000,7 @@ DWG_ENTITY (CIRCLE)
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
     FIELD_BD (radius, 40);
-    FIELD_BT (thickness, 39);
+    FIELD_BT0 (thickness, 39);
     FIELD_BE (extrusion, 210);
   }
 
@@ -1070,7 +1070,7 @@ DWG_ENTITY (LINE)
     }
 
   SINCE (R_13) {
-    FIELD_BT (thickness, 39);
+    FIELD_BT0 (thickness, 39);
     FIELD_BE (extrusion, 210);
   }
 
@@ -1319,7 +1319,7 @@ DWG_ENTITY (POINT)
   FIELD_BD (x, 10);
   FIELD_BD (y, 20);
   FIELD_BD (z, 30);
-  FIELD_BT (thickness, 39);
+  FIELD_BT0 (thickness, 39);
   FIELD_BE (extrusion, 210);
   FIELD_BD (x_ang, 50);
 
@@ -1457,7 +1457,7 @@ DWG_ENTITY (SOLID)
       FIELD_RD (elevation, 38);
   }
   LATER_VERSIONS {
-    FIELD_BT (thickness, 39);
+    FIELD_BT0 (thickness, 39);
     FIELD_BD (elevation, 38);
     FIELD_2RD (corner1, 10);
     FIELD_2RD (corner2, 11);
@@ -1485,7 +1485,7 @@ DWG_ENTITY (TRACE)
       FIELD_RD (elevation, 38);
   }
   LATER_VERSIONS {
-    FIELD_BT (thickness, 39);
+    FIELD_BT0 (thickness, 39);
     FIELD_BD (elevation, 38);
     FIELD_2RD (corner1, 10);
     FIELD_2RD (corner2, 11);
@@ -1518,7 +1518,7 @@ DWG_ENTITY (SHAPE)
     FIELD_BD (rotation, 50);
     FIELD_BD (width_factor, 41);
     FIELD_BD (oblique_angle, 51);
-    FIELD_BD (thickness, 39);
+    FIELD_BD0 (thickness, 39);
 #ifdef IS_DXF
     {
       Dwg_Object *style;
