@@ -703,7 +703,7 @@ sub out_declarator {
     $ENT{$key}->{$name} = $type;
   }
   my $is_malloc = ($type =~ /\*$/ or $type =~ /^(T$|T[UVF]|D2T)/) ? 1 : 0;
-  my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|CMC|H$)/) ? 1 : 0;
+  my $is_indirect = ($is_malloc or $type =~ /^(struct|[23T]|H$)/) ? 1 : 0;
   my $is_string = ($is_malloc and $type =~ /^(T[UV]?|D2T)$/) ? 1 : 0; # not TF or TFF
   my $sname = $name;
   if ($name =~ /\[(\d+)\]$/) {
@@ -1058,7 +1058,7 @@ for (<$in>) {
                     $type =~ /^[23HT]/ or
                     $type =~ /\*$/ or
                     $var  =~ /\[\d+\]$/ or
-                    $type =~ /^(BE|CMC)/)
+                    $type =~ /^(BE|CMC)$/)
         ? 1 : 0;
       if ($var  =~ /\[\d+\]$/) {
         $lname =~ s/\[\d+\]$//g;
@@ -1165,7 +1165,7 @@ EOF
                   $type =~ /^[TH23]/ or
                   $type =~ /\*$/ or
                   $var =~ /\[\d+\]$/ or
-                  $type =~ /^(BE|CMC|BLL)$/)
+                  $type =~ /^(BE|CMC)$/)
       ? 1 : 0;
     if ($var  =~ /\./) { # embedded structs, like ovr.name. some have fields, some not
       next if $var =~ /^ovr\./;
@@ -2563,12 +2563,6 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
         }
       else
         memcpy (old, value, sizeof (char*));
-    }
-  // CMC <2004 is color.index only
-  else if (strEQc (f->type, "CMC") && dwg_version < R_2004)
-    {
-      assert (OFF (struct _dwg_color, index) == 0);
-      memcpy (old, value, 2);
     }
   else
     memcpy (old, value, f->size);

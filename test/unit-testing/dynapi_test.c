@@ -57531,18 +57531,30 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
   {
     BITCODE_BLL alt_hlt;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hlt", &alt_hlt, NULL)
-        && !memcmp (&alt_hlt, &tvdeviceproperties->alt_hlt, sizeof (BITCODE_BLL)))
-        pass ();
+        && alt_hlt == tvdeviceproperties->alt_hlt)
+      pass ();
     else
-        fail ("TVDEVICEPROPERTIES.alt_hlt [BLL]");
+      fail ("TVDEVICEPROPERTIES.alt_hlt [BLL] " FORMAT_BLL " != " FORMAT_BLL "", tvdeviceproperties->alt_hlt, alt_hlt);
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hlt", &alt_hlt, 0)
+        && alt_hlt == tvdeviceproperties->alt_hlt)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.alt_hlt [BLL] set+1 " FORMAT_BLL " != " FORMAT_BLL "", tvdeviceproperties->alt_hlt, alt_hlt);
+    tvdeviceproperties->alt_hlt--;
   }
   {
     BITCODE_BLL alt_hltcolor;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hltcolor", &alt_hltcolor, NULL)
-        && !memcmp (&alt_hltcolor, &tvdeviceproperties->alt_hltcolor, sizeof (BITCODE_BLL)))
-        pass ();
+        && alt_hltcolor == tvdeviceproperties->alt_hltcolor)
+      pass ();
     else
-        fail ("TVDEVICEPROPERTIES.alt_hltcolor [BLL]");
+      fail ("TVDEVICEPROPERTIES.alt_hltcolor [BLL] " FORMAT_BLL " != " FORMAT_BLL "", tvdeviceproperties->alt_hltcolor, alt_hltcolor);
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "alt_hltcolor", &alt_hltcolor, 0)
+        && alt_hltcolor == tvdeviceproperties->alt_hltcolor)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.alt_hltcolor [BLL] set+1 " FORMAT_BLL " != " FORMAT_BLL "", tvdeviceproperties->alt_hltcolor, alt_hltcolor);
+    tvdeviceproperties->alt_hltcolor--;
   }
   {
     BITCODE_BD antialiasing_level;
@@ -57607,10 +57619,16 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
   {
     BITCODE_BLL geom_shader_usage;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "geom_shader_usage", &geom_shader_usage, NULL)
-        && !memcmp (&geom_shader_usage, &tvdeviceproperties->geom_shader_usage, sizeof (BITCODE_BLL)))
-        pass ();
+        && geom_shader_usage == tvdeviceproperties->geom_shader_usage)
+      pass ();
     else
-        fail ("TVDEVICEPROPERTIES.geom_shader_usage [BLL]");
+      fail ("TVDEVICEPROPERTIES.geom_shader_usage [BLL] " FORMAT_BLL " != " FORMAT_BLL "", tvdeviceproperties->geom_shader_usage, geom_shader_usage);
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "geom_shader_usage", &geom_shader_usage, 0)
+        && geom_shader_usage == tvdeviceproperties->geom_shader_usage)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.geom_shader_usage [BLL] set+1 " FORMAT_BLL " != " FORMAT_BLL "", tvdeviceproperties->geom_shader_usage, geom_shader_usage);
+    tvdeviceproperties->geom_shader_usage--;
   }
   {
     BITCODE_BS max_regen_threads;
@@ -61468,7 +61486,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 62655 "dynapi_test.c"
+#line 61489 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -62652,7 +62670,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 61619 "dynapi_test.c"
+#line 62673 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
