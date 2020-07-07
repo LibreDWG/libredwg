@@ -1370,7 +1370,8 @@ DWG_ENTITY (_3DFACE)
       FIELD_3DD (corner2, corner1, 11);
       FIELD_3DD (corner3, corner2, 12);
       FIELD_3DD (corner4, corner3, 13);
-      FIELD_BS0 (invis_flags, 70);
+      if (!FIELD_VALUE (has_no_flags))
+        FIELD_BS0 (invis_flags, 70);
     }
 
   COMMON_ENTITY_HANDLE_DATA;
