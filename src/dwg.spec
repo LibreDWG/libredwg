@@ -5984,9 +5984,8 @@ DWG_OBJECT (CELLSTYLEMAP)
 DWG_OBJECT_END
 
 //pg.246 20.4.103
-// unstable, breaks acad dwg open
+//stable
 DWG_OBJECT (TABLEGEOMETRY)
-
   SUBCLASS (AcDbTableGeometry)
   FIELD_BL (numrows, 90);
   VALUEOUTOFBOUNDS (numrows, 5000)

@@ -39,7 +39,7 @@ New features:
     SPATIAL_INDEX SUN TABLESTYLE.
 
     Fixed PROXY_OBJECT, PROXY_ENTITY.
-    Demoted to Unstable: SPATIAL_INDEX TABLEGEOMETRY
+    Demoted to Unstable: SPATIAL_INDEX
     Demoted to Debugging: PERSSUBENTMANAGER DIMASSOC
 
     Note: Unstable objects are not preserved via DXF conversion, just the external import

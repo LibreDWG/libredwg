@@ -136,8 +136,6 @@ Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongo
 effort, some minor parts are missing. Most DWG's can be read, some undocumented classes
 are skipped.
 
-* ACIS: version 1 is converted to a raw string. ACIS version 2, i.e. the forked variant ACIS 7.0 under the name ShapeManager, is dumped to a string containing the binary SAB format.
-
 @item Writing pre-R13 and R2004+ DWG
 Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
 ongoing effort and not yet implemented. We write as default in the R2000 format only.
@@ -210,7 +208,7 @@ Halfway:
 @item no test coverage for entities:
 
 I.e. we need an extended @file{example_2018.dwg} with all types,
-for the following missing entities:
+with the following missing entities:
 
   ARCALIGNEDTEXT BODY CAMERA DIMENSION_ANG3PT DIMENSION_DIAMETER
   DIMENSION_RADIUS DGNUNDERLAY DWFUNDERLAY
