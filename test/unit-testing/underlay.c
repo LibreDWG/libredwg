@@ -6,7 +6,7 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BL class_version;
-  dwg_point_3d extrusion, insertion_pt, scale;
+  dwg_point_3d extrusion, ins_pt, scale;
   BITCODE_RC flag;
   BITCODE_RC contrast;
   BITCODE_RC fade;
@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   dwg_ent_underlay *underlay = dwg_object_to_UNDERLAY (obj);
 
   CHK_ENTITY_3RD (underlay, UNDERLAY, extrusion);
-  CHK_ENTITY_3RD (underlay, UNDERLAY, insertion_pt);
+  CHK_ENTITY_3RD (underlay, UNDERLAY, ins_pt);
   CHK_ENTITY_3RD (underlay, UNDERLAY, scale);
   CHK_ENTITY_TYPE (underlay, UNDERLAY, flag, RC);
   CHK_ENTITY_TYPE (underlay, UNDERLAY, contrast, RC);

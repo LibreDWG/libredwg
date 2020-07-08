@@ -140,7 +140,7 @@ output_TEXT (dwg_object *obj)
   if (!text)
     log_error ("dwg_object_to_TEXT");
   dynget_utf8 (text, "TEXT", "text_value", &text_value);
-  dynget (text, "TEXT", "insertion_pt", &ins_pt);
+  dynget (text, "TEXT", "ins_pt", &ins_pt);
   dynget (text, "TEXT", "height", &fontsize);
 
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "

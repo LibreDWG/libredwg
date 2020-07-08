@@ -1149,7 +1149,7 @@ typedef struct _dwg_entity_TEXT
 
   BITCODE_RC dataflags;        /*!< r2000+ */
   BITCODE_RD elevation;        /*!< DXF 30 (z coord of 10), when dataflags & 1 */
-  BITCODE_2DPOINT insertion_pt; /*!< DXF 10 */
+  BITCODE_2DPOINT ins_pt;      /*!< DXF 10 */
   BITCODE_2DPOINT alignment_pt; /*!< DXF 11. optional, when dataflags & 2, i.e 72/73 != 0 */
   BITCODE_BE extrusion;       /*!< DXF 210. Default 0,0,1 */
   BITCODE_RD thickness;       /*!< DXF 39 */
@@ -1175,7 +1175,7 @@ typedef struct _dwg_entity_ATTRIB
   struct _dwg_object_entity *parent;
 
   BITCODE_BD elevation;
-  BITCODE_2DPOINT insertion_pt;
+  BITCODE_2DPOINT ins_pt;
   BITCODE_2DPOINT alignment_pt;
   BITCODE_BE extrusion;
   BITCODE_RD thickness;
@@ -1210,7 +1210,7 @@ typedef struct _dwg_entity_ATTDEF
   struct _dwg_object_entity *parent;
 
   BITCODE_BD elevation;
-  BITCODE_2DPOINT insertion_pt;
+  BITCODE_2DPOINT ins_pt;
   BITCODE_2DPOINT alignment_pt;
   BITCODE_BE extrusion;
   BITCODE_RD thickness;
@@ -1997,7 +1997,7 @@ typedef struct _dwg_entity_MTEXT
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_3BD insertion_pt;/*!< DXF 10 */
+  BITCODE_3BD ins_pt;	   /*!< DXF 10 */
   BITCODE_BE extrusion;    /*!< DXF 210 */
   BITCODE_3BD x_axis_dir;  /*!< DXF 11, defines the rotation */
   BITCODE_BD rect_height;  /*!< no DXF */
@@ -3647,11 +3647,11 @@ typedef struct _dwg_entity_TABLE
   BITCODE_BL unknown_bl;
   BITCODE_B unknown_b;
   BITCODE_BL unknown_bl1;
-  BITCODE_3BD insertion_pt; /*!< DXF 10 */
+  BITCODE_3BD ins_pt; 	    /*!< DXF 10 */
   BITCODE_3BD scale;        /*!< DXF 41 */
-  BITCODE_BB data_flags;
+  BITCODE_BB scale_flag;
   BITCODE_BD rotation;      /*!< DXF 50 */
-  BITCODE_BE extrusion;    /*!< DXF 210 */
+  BITCODE_BE extrusion;     /*!< DXF 210 */
   BITCODE_B has_attribs;    /*!< DXF 66 */
   BITCODE_BL num_owned;
   BITCODE_BS flag_for_table_value; /*!< DXF 90.
@@ -3914,7 +3914,7 @@ typedef struct _dwg_entity_UNDERLAY
   struct _dwg_object_entity *parent;
 
   BITCODE_BE extrusion; /*!< DXF 210 normal */
-  BITCODE_3BD insertion_pt; /*!< DXF 10 */
+  BITCODE_3BD ins_pt;  /*!< DXF 10 */
   BITCODE_3BD scale;   /*!< DXF 41 */
   BITCODE_BD angle;    /*!< DXF 50 */
   BITCODE_RC flag;     /*!< DXF 280: 1 is_clipped, 2 is_on, 4 is_monochrome,
@@ -6591,7 +6591,7 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   BITCODE_BS flag;	/*<! DXF 70 */ // 0
   BITCODE_BD rotation;	/*!< DXF 50 */ // 0.0 or 90.0
-  BITCODE_2RD insertion_pt; 	/*!< DXF 10-20 */
+  BITCODE_2RD ins_pt; 	/*!< DXF 10-20 */
   BITCODE_2RD alignment_pt; 	/*!< DXF 11-21 */
 } Dwg_Object_TEXTOBJECTCONTEXTDATA;
 
@@ -6602,7 +6602,7 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   BITCODE_BL flag;      	/*<! DXF 70 */
-  BITCODE_3BD insertion_pt; 	/*!< DXF 10 */
+  BITCODE_3BD ins_pt; 		/*!< DXF 10 */
   BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
   BITCODE_BD rect_height;	/*!< DXF 40 */
   BITCODE_BD rect_width;	/*!< DXF 41 */
@@ -6717,7 +6717,7 @@ typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA
   // TEXT
   BITCODE_BS flag;	/*<! DXF 70 */ // 0
   BITCODE_BD rotation;	/*!< DXF 50 */ // 0.0 or 90.0
-  BITCODE_2RD insertion_pt; 	/*!< DXF 10-20 */
+  BITCODE_2RD ins_pt; 	/*!< DXF 10-20 */
   BITCODE_2RD alignment_pt; 	/*!< DXF 11-21 */
   // MTEXTATTR
   BITCODE_B enable_context;
@@ -6745,7 +6745,7 @@ typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   BITCODE_BD rotation;           /* 50 */
-  BITCODE_3BD insertion_pt;      /* 10 */
+  BITCODE_3BD ins_pt;      	 /* 10 */
   BITCODE_3BD scale_factor;      /* 42-44 */
 } Dwg_Object_BLKREFOBJECTCONTEXTDATA;
 

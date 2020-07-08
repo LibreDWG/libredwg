@@ -1027,7 +1027,7 @@ H,	DXF 330
 struct _dwg_object_entity*
 @item elevation
 BD,	DXF 30
-@item insertion_pt
+@item ins_pt
 2DPOINT,	DXF 10
 @item alignment_pt
 2DPOINT,	DXF 11
@@ -1096,7 +1096,7 @@ T,	DXF 3
 struct _dwg_object_entity*
 @item elevation
 BD,	DXF 30
-@item insertion_pt
+@item ins_pt
 2DPOINT,	DXF 10
 @item alignment_pt
 2DPOINT,	DXF 11
@@ -2726,7 +2726,7 @@ H*
 
 @item parent
 struct _dwg_object_entity*
-@item insertion_pt
+@item ins_pt
 3BD,	DXF 10
 @item extrusion
 BE,	DXF 210
@@ -3954,11 +3954,11 @@ BL
 B
 @item unknown_bl1
 BL
-@item insertion_pt
+@item ins_pt
 3BD,	DXF 10
 @item scale
 3BD_1,	DXF 41
-@item data_flags
+@item scale_flag
 BB
 @item rotation
 BD,	DXF 50
@@ -4211,7 +4211,7 @@ struct _dwg_object_entity*
 RC
 @item elevation
 RD,	DXF 31
-@item insertion_pt
+@item ins_pt
 2DPOINT,	DXF 10
 @item alignment_pt
 2DPOINT,	DXF 11
@@ -4308,7 +4308,7 @@ BE,	DXF 210
 struct _dwg_object_entity*
 @item extrusion
 BE,	DXF 210
-@item insertion_pt
+@item ins_pt
 3BD,	DXF 10
 @item scale
 3BD_1,	DXF 41
@@ -6876,7 +6876,7 @@ B
 H,	DXF 340
 @item rotation
 BD,	DXF 50
-@item insertion_pt
+@item ins_pt
 3BD,	DXF 10
 @item scale_factor
 3BD_1,	DXF 42
@@ -10534,7 +10534,7 @@ H,	DXF 340
 BS,	DXF 70
 @item rotation
 BD,	DXF 50
-@item insertion_pt
+@item ins_pt
 2RD,	DXF 10
 @item alignment_pt
 2RD,	DXF 11
@@ -10565,7 +10565,7 @@ B
 H,	DXF 340
 @item flag
 BL,	DXF 70
-@item insertion_pt
+@item ins_pt
 3BD,	DXF 10
 @item x_axis_dir
 3BD,	DXF 11
@@ -11744,7 +11744,7 @@ H,	DXF 340
 BS,	DXF 70
 @item rotation
 BD,	DXF 50
-@item insertion_pt
+@item ins_pt
 2RD,	DXF 10
 @item alignment_pt
 2RD,	DXF 11

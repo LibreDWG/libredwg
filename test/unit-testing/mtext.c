@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans;
   BITCODE_CMC bg_fill_color;
   char *text;
-  dwg_point_3d insertion_pt, extrusion, x_axis_dir;
+  dwg_point_3d ins_pt, extrusion, x_axis_dir;
   BITCODE_H appid, style;
   BITCODE_BL ignore_attachment;
   BITCODE_BL numfragments;
@@ -28,7 +28,7 @@ api_process (dwg_object *obj)
   dwg_ent_mtext *mtext = dwg_object_to_MTEXT (obj);
 
   CHK_ENTITY_UTF8TEXT_W_OLD (mtext, MTEXT, text);
-  CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, insertion_pt);
+  CHK_ENTITY_3RD (mtext, MTEXT, ins_pt);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, extrusion);
   CHK_ENTITY_3RD_W_OLD (mtext, MTEXT, x_axis_dir);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, rect_width, BD);

@@ -31,7 +31,7 @@ DWG_ENTITY (TEXT)
   }
   SUBCLASS (AcDbText)
   PRE (R_13) {
-    FIELD_2RD (insertion_pt, 10);
+    FIELD_2RD (ins_pt, 10);
     FIELD_RD (height, 40);
     FIELD_TV (text_value, 1);
     if (R11OPTS (1))
@@ -59,7 +59,7 @@ DWG_ENTITY (TEXT)
       DXF {
         FIELD_BD0 (thickness, 39);
         FIELD_BD0 (elevation, 30);
-        FIELD_2RD (insertion_pt, 10);
+        FIELD_2RD (ins_pt, 10);
         FIELD_BD (height, 40);
         FIELD_TV (text_value, 1);
         FIELD_BD0 (rotation, 50);
@@ -74,7 +74,7 @@ DWG_ENTITY (TEXT)
         FIELD_3BD (extrusion, 210);
       } else {
         FIELD_BD (elevation, 30);
-        FIELD_2RD (insertion_pt, 10);
+        FIELD_2RD (ins_pt, 10);
         FIELD_2RD (alignment_pt, 11);
         FIELD_3BD (extrusion, 210);
         FIELD_BD0 (thickness, 39);
@@ -104,7 +104,7 @@ DWG_ENTITY (TEXT)
       }
       if (!(dataflags & 0x01))
         FIELD_RD (elevation, 0);
-      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (ins_pt, 10);
       DXF {
         FIELD_RD (elevation, 30);
         FIELD_RD (height, 40);
@@ -175,7 +175,7 @@ DWG_ENTITY (ATTRIB)
   VERSIONS (R_13, R_14)
     {
       FIELD_BD (elevation, 30);
-      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (ins_pt, 10);
       FIELD_2RD (alignment_pt, 11);
       FIELD_3BD (extrusion, 210);
       FIELD_BD (thickness, 39);
@@ -201,7 +201,7 @@ DWG_ENTITY (ATTRIB)
 
       if (!(dataflags & 0x01))
         FIELD_RD (elevation, 30);
-      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (ins_pt, 10);
 
       if (!(dataflags & 0x02))
         FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
@@ -285,7 +285,7 @@ DWG_ENTITY (ATTDEF)
   VERSIONS (R_13, R_14)
     {
       FIELD_BD (elevation, 30);
-      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (ins_pt, 10);
       FIELD_2RD (alignment_pt, 11);
       FIELD_3BD (extrusion, 210);
       FIELD_BD0 (thickness, 39);
@@ -311,7 +311,7 @@ DWG_ENTITY (ATTDEF)
 
       if (!(dataflags & 0x01))
         FIELD_RD (elevation, 30);
-      FIELD_2RD (insertion_pt, 10);
+      FIELD_2RD (ins_pt, 10);
 
       if (!(dataflags & 0x02))
         FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
@@ -460,7 +460,15 @@ DWG_ENTITY (INSERT)
 
   SINCE (R_2000)
     {
-      DXF_OR_PRINT {
+      JSON {
+        FIELD_BB (scale_flag, 0);
+        FIELD_3BD_1 (scale, 41);
+      }
+      PRINT {
+        FIELD_BB (scale_flag, 0);
+        FIELD_3BD_1 (scale, 41);
+      }
+      DXF {
         if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
           FIELD_3BD_1 (scale, 41);
       }
@@ -493,7 +501,6 @@ DWG_ENTITY (INSERT)
             }
           FIELD_3PT_TRACE (scale, DD, 41);
         }
-
       ENCODER
         {
           if (FIELD_VALUE (scale.x) == 1.0 &&
@@ -590,7 +597,15 @@ DWG_ENTITY (MINSERT)
 
   SINCE (R_2000)
     {
-      DXF_OR_PRINT {
+      JSON {
+        FIELD_BB (scale_flag, 0);
+        FIELD_3BD_1 (scale, 41);
+      }
+      PRINT {
+        FIELD_BB (scale_flag, 0);
+        FIELD_3BD_1 (scale, 41);
+      }
+      DXF {
         if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
           FIELD_3BD_1 (scale, 41);
       }
@@ -2356,7 +2371,7 @@ DWG_ENTITY (MTEXT)
     FIELD_HANDLE (style, 5, 7);
   } }
   SUBCLASS (AcDbMText)
-  FIELD_3BD (insertion_pt, 10);
+  FIELD_3BD (ins_pt, 10);
   FIELD_3BD (extrusion, 210);
   FIELD_3BD (x_axis_dir, 11);
 
@@ -2412,11 +2427,11 @@ DWG_ENTITY (MTEXT)
         // redundant fields
         FIELD_BL (ignore_attachment, 0); // not in DXF. prev as BS
         DXF {
-          FIELD_3BD (insertion_pt, 10);
+          FIELD_3BD (ins_pt, 10);
           FIELD_3BD (x_axis_dir, 11);
         } else {
           FIELD_3BD (x_axis_dir, 11);
-          FIELD_3BD (insertion_pt, 10);
+          FIELD_3BD (ins_pt, 10);
         }
         FIELD_BD (rect_width, 40);
         FIELD_BD (rect_height, 41);
@@ -5434,14 +5449,27 @@ DWG_ENTITY (TABLE)
     }
   else {
     SUBCLASS (AcDbBlockReference)
-    FIELD_3BD (insertion_pt, 10);
+    FIELD_3BD (ins_pt, 10);
     VERSIONS (R_13, R_14) {
       FIELD_3BD_1 (scale, 41);
     }
-    SINCE (R_2000)
+    JSON {
+      FIELD_BB (scale_flag, 0);
+      FIELD_3BD_1 (scale, 41);
+    }
+    PRINT {
+      FIELD_BB (scale_flag, 0);
+      FIELD_3BD_1 (scale, 41);
+    }
+    DXF {
+      if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
+        FIELD_3BD_1 (scale, 41);
+    }
+    DECODER_OR_ENCODER {
+      SINCE (R_2000)
       {
-        FIELD_BB (data_flags, 0);
-        switch (FIELD_VALUE (data_flags))
+        FIELD_BB (scale_flag, 0);
+        switch (FIELD_VALUE (scale_flag))
           {
             case 0:
               FIELD_VALUE (scale.x) = 1.0;
@@ -5464,9 +5492,9 @@ DWG_ENTITY (TABLE)
               FIELD_VALUE (scale.z) = 1.0;
               break;
             default:
-              LOG_ERROR ("Invalid data_flags in TABLE entity %d\n",
-                        (int)FIELD_VALUE (data_flags))
-              _obj->data_flags = 0;
+              LOG_ERROR ("Invalid scale_flag in TABLE entity %d\n",
+                        (int)FIELD_VALUE (scale_flag))
+              _obj->scale_flag = 0;
               DEBUG_HERE_OBJ
               return DWG_ERR_INVALIDTYPE;
               //break;
@@ -5475,6 +5503,7 @@ DWG_ENTITY (TABLE)
         FIELD_3PT_TRACE (scale, DD, 41);
   #endif
       }
+    }
   
     FIELD_BD (rotation, 50);
     FIELD_3BD (extrusion, 210);
@@ -6496,9 +6525,15 @@ DWG_ENTITY (UNDERLAY)
   SUBCLASS (AcDbUnderlayReference)
   FIELD_HANDLE (definition_id, 5, 340);
   FIELD_3BD (extrusion, 0);
-  FIELD_3DPOINT (insertion_pt, 10);
+  FIELD_3DPOINT (ins_pt, 10);
   FIELD_BD0 (angle, 0);
-  FIELD_3BD_1 (scale, 41); // not in DXF if 1.0
+  DXF {
+    if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
+      FIELD_3BD_1 (scale, 41);
+  }
+  else {
+    FIELD_3BD_1 (scale, 41);
+  }
   DXF {
     FIELD_BD0 (angle, 50);
     FIELD_3BD (extrusion, 210);
@@ -9100,7 +9135,7 @@ DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbBlkrefObjectContextData);
   FIELD_BD (rotation, 50)
-  FIELD_3BD (insertion_pt, 10);
+  FIELD_3BD (ins_pt, 10);
   FIELD_3BD_1 (scale_factor, 42);
 
   START_OBJECT_HANDLE_STREAM;
@@ -9144,7 +9179,7 @@ DWG_OBJECT (TEXTOBJECTCONTEXTDATA)
   SUBCLASS (AcDbTextObjectContextData)
   FIELD_BS (flag, 70); // 0
   FIELD_BD (rotation, 50); // 0.0 or 90.0
-  FIELD_2RD (insertion_pt, 10);
+  FIELD_2RD (ins_pt, 10);
   FIELD_2RD (alignment_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -9155,7 +9190,7 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
   SUBCLASS (AcDbTextObjectContextData)
   FIELD_BS (flag, 70); // 0
   FIELD_BD (rotation, 50); // 0.0 or 90.0
-  FIELD_2RD (insertion_pt, 10);
+  FIELD_2RD (ins_pt, 10);
   FIELD_2RD (alignment_pt, 11);
   SUBCLASS (AcDbMTextAttributeObjectContextData)
   FIELD_B (enable_context, 290);
@@ -9180,11 +9215,11 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   FIELD_BL (flag, 70);
   // From MTEXT Embedded object
   DXF {
-    FIELD_3BD (insertion_pt, 10); // ODA bug
+    FIELD_3BD (ins_pt, 10); // ODA bug
     FIELD_3BD (x_axis_dir, 11);
   } else {
     FIELD_3BD (x_axis_dir, 11);
-    FIELD_3BD (insertion_pt, 10);
+    FIELD_3BD (ins_pt, 10);
   }
   DXF {
     FIELD_BD (rect_height, 40);

@@ -1135,7 +1135,7 @@ my $known = {
     #SUBCLASS (AcDbBlockReference)
     10 => 'insertion_point',
     41 => 'scale.x',
-    #0 => 'data_flags',
+    #0 => 'scale_flag',
     42 => 'scale.y',
     43 => 'scale.z',
     50 => 'rotation',
@@ -1472,7 +1472,7 @@ my $known = {
     340 => 'scale',
     70 => 'flag',
     50 => 'rotation',
-    10 => 'insertion_pt',
+    10 => 'ins_pt',
     11 => 'alignment_pt',
     ],
   ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS => [
@@ -1490,7 +1490,7 @@ my $known = {
     100 => 'AcDbAnnotScaleObjectContextData',
     340 => 'scale',
     70 => 'flag',
-    11 => 'insertion_pt',
+    11 => 'ins_pt',
     10 => 'x_axis_dir',
     40 => 'text_height',
     41 => 'rect_width',
@@ -1806,7 +1806,7 @@ my $known = {
     283 => 'fade',
     ],
   UNDERLAY => [
-    10 => 'insertion_pt',
+    10 => 'ins_pt',
     41 => 'scale',
     50 => 'angle',
     210 => 'extrusion',

@@ -5167,15 +5167,6 @@ EXPORT void dwg_ent_table_get_scale (const dwg_ent_table *restrict table,
                                      int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_getter;
 
-EXPORT void dwg_ent_table_set_data_flags (dwg_ent_table *restrict table,
-                                          const unsigned char flags,
-                                          int *restrict error)
-    __nonnull ((3)) _deprecated_dynapi_setter;
-EXPORT unsigned char
-dwg_ent_table_get_data_flags (const dwg_ent_table *restrict table,
-                              int *restrict error)
-    __nonnull ((2)) _deprecated_dynapi_getter;
-
 EXPORT void dwg_ent_table_set_rotation (dwg_ent_table *restrict table,
                                         const BITCODE_BD rotation,
                                         int *restrict error)

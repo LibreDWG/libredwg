@@ -229,7 +229,7 @@ output_TEXT (Dwg_Object *obj)
 
   if (!text->text_value || entity_invisible (obj))
     return;
-  if (isnan_2BD (text->insertion_pt) || isnan_3BD (text->extrusion))
+  if (isnan_2BD (text->ins_pt) || isnan_3BD (text->extrusion))
     return;
   if (dwg->header.version >= R_2007)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
@@ -261,7 +261,7 @@ output_TEXT (Dwg_Object *obj)
   else
     fontfamily = "Courier";
 
-  transform_OCS_2d (&pt, text->insertion_pt, text->extrusion);
+  transform_OCS_2d (&pt, text->ins_pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"%s\" font-size=\"%f\" fill=\"%s\">%s</text>\n",
           obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,

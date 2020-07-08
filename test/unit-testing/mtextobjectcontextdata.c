@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_B has_xdic;
   BITCODE_H scale;
   BITCODE_BL flag;
-  BITCODE_3BD insertion_pt;
+  BITCODE_3BD ins_pt;
   BITCODE_3BD x_axis_dir;
   BITCODE_BD rect_height;
   BITCODE_BD rect_width;
@@ -36,7 +36,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (_obj, MTEXTOBJECTCONTEXTDATA, scale);
   // AcDbMTextObjectContextData
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, flag, BL);
-  CHK_ENTITY_3RD  (_obj, MTEXTOBJECTCONTEXTDATA, insertion_pt);
+  CHK_ENTITY_3RD  (_obj, MTEXTOBJECTCONTEXTDATA, ins_pt);
   CHK_ENTITY_3RD  (_obj, MTEXTOBJECTCONTEXTDATA, x_axis_dir);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, rect_height, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, rect_width, BD);

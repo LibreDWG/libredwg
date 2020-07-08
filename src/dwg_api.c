@@ -2921,7 +2921,7 @@ dwg_ent_text_get_text (const dwg_ent_text *restrict ent, int *restrict error)
     }
 }
 
-/** Returns the _dwg_entity_TEXT::insertion_pt, DXF 10.
+/** Returns the _dwg_entity_TEXT::ins_pt, DXF 10.
 \code Usage: dwg_ent_text_get_insertion_pt(text, &point, &error);
 \endcode
 \param[in] text     dwg_ent_text*
@@ -2941,8 +2941,8 @@ dwg_ent_text_get_insertion_pt (const dwg_ent_text *restrict text,
   )
     {
       *error = 0;
-      point->x = text->insertion_pt.x;
-      point->y = text->insertion_pt.y;
+      point->x = text->ins_pt.x;
+      point->y = text->ins_pt.y;
     }
   else
     {
@@ -2971,8 +2971,8 @@ dwg_ent_text_set_insertion_pt (dwg_ent_text *restrict text,
   )
     {
       *error = 0;
-      text->insertion_pt.x = point->x;
-      text->insertion_pt.y = point->y;
+      text->ins_pt.x = point->x;
+      text->ins_pt.y = point->y;
     }
   else
     {
@@ -3344,7 +3344,7 @@ dwg_ent_attrib_get_text (const dwg_ent_attrib *restrict ent,
     }
 }
 
-/** Returns the _dwg_entity_ATTRIB::insertion_pt, DXF 10.
+/** Returns the _dwg_entity_ATTRIB::ins_pt, DXF 10.
 \code Usage: dwg_ent_attrib_get_insertion_pt(attrib, &point, &error);
 \endcode
 \param[in] attrib   dwg_ent_attrib*
@@ -3364,8 +3364,8 @@ dwg_ent_attrib_get_insertion_pt (const dwg_ent_attrib *restrict attrib,
   )
     {
       *error = 0;
-      point->x = attrib->insertion_pt.x;
-      point->y = attrib->insertion_pt.y;
+      point->x = attrib->ins_pt.x;
+      point->y = attrib->ins_pt.y;
     }
   else
     {
@@ -3374,7 +3374,7 @@ dwg_ent_attrib_get_insertion_pt (const dwg_ent_attrib *restrict attrib,
     }
 }
 
-/** Sets the _dwg_entity_ATTRIB::insertion_pt, DXF 10
+/** Sets the _dwg_entity_ATTRIB::ins_pt, DXF 10
 \code Usage: dwg_ent_attrib_set_insertion_pt(attrib, &point, &error)
 \endcode
 \param[in] attrib   dwg_ent_attrib*
@@ -3394,8 +3394,8 @@ dwg_ent_attrib_set_insertion_pt (dwg_ent_attrib *restrict attrib,
   )
     {
       *error = 0;
-      attrib->insertion_pt.x = point->x;
-      attrib->insertion_pt.y = point->y;
+      attrib->ins_pt.x = point->x;
+      attrib->ins_pt.y = point->y;
     }
   else
     {
@@ -3762,7 +3762,7 @@ dwg_ent_attdef_get_default_value (const dwg_ent_attdef *restrict ent,
     }
 }
 
-/** Returns the _dwg_entity_ATTDEF::insertion_pt, DXF 10
+/** Returns the _dwg_entity_ATTDEF::ins_pt, DXF 10
 \code Usage: dwg_ent_attdef_get_insertion_pt(attdef, &point, &error);
 \endcode
 \param[in]  attdef  dwg_ent_attdef*
@@ -3782,8 +3782,8 @@ dwg_ent_attdef_get_insertion_pt (const dwg_ent_attdef *restrict attdef,
   )
     {
       *error = 0;
-      point->x = attdef->insertion_pt.x;
-      point->y = attdef->insertion_pt.y;
+      point->x = attdef->ins_pt.x;
+      point->y = attdef->ins_pt.y;
     }
   else
     {
@@ -3792,7 +3792,7 @@ dwg_ent_attdef_get_insertion_pt (const dwg_ent_attdef *restrict attdef,
     }
 }
 
-/** Sets the _dwg_entity_ATTDEF::insertion_pt, DXF 10
+/** Sets the _dwg_entity_ATTDEF::ins_pt, DXF 10
 \code Usage: dwg_ent_attdef_set_insertion_pt(attdef, &point, &error)
 \endcode
 \param[in] attdef   dwg_ent_attdef*
@@ -3812,8 +3812,8 @@ dwg_ent_attdef_set_insertion_pt (dwg_ent_attdef *restrict attdef,
   )
     {
       *error = 0;
-      attdef->insertion_pt.x = point->x;
-      attdef->insertion_pt.y = point->y;
+      attdef->ins_pt.x = point->x;
+      attdef->ins_pt.y = point->y;
     }
   else
     {
@@ -10044,7 +10044,7 @@ dwg_ent_shape_set_extrusion (dwg_ent_shape *restrict shape,
  *                    FUNCTIONS FOR MTEXT ENTITY                     *
  ********************************************************************/
 
-/** Sets the _dwg_entity_MTEXT::insertion_pt, DXF 10
+/** Sets the _dwg_entity_MTEXT::ins_pt, DXF 10
  */
 void
 dwg_ent_mtext_set_insertion_pt (dwg_ent_mtext *restrict mtext,
@@ -10058,9 +10058,9 @@ dwg_ent_mtext_set_insertion_pt (dwg_ent_mtext *restrict mtext,
   )
     {
       *error = 0;
-      mtext->insertion_pt.x = point->x;
-      mtext->insertion_pt.y = point->y;
-      mtext->insertion_pt.z = point->z;
+      mtext->ins_pt.x = point->x;
+      mtext->ins_pt.y = point->y;
+      mtext->ins_pt.z = point->z;
     }
   else
     {
@@ -10069,7 +10069,7 @@ dwg_ent_mtext_set_insertion_pt (dwg_ent_mtext *restrict mtext,
     }
 }
 
-/** Returns the _dwg_entity_MTEXT::insertion_pt, DXF 10
+/** Returns the _dwg_entity_MTEXT::ins_pt, DXF 10
  */
 void
 dwg_ent_mtext_get_insertion_pt (const dwg_ent_mtext *restrict mtext,
@@ -10083,9 +10083,9 @@ dwg_ent_mtext_get_insertion_pt (const dwg_ent_mtext *restrict mtext,
   )
     {
       *error = 0;
-      point->x = mtext->insertion_pt.x;
-      point->y = mtext->insertion_pt.y;
-      point->z = mtext->insertion_pt.z;
+      point->x = mtext->ins_pt.x;
+      point->y = mtext->ins_pt.y;
+      point->z = mtext->ins_pt.z;
     }
   else
     {
@@ -17274,7 +17274,7 @@ dwg_ent_body_set_acis_empty2 (dwg_ent_body *restrict body,
  *                    FUNCTIONS FOR TABLE ENTITY                     *
  ********************************************************************/
 
-/** Sets _dwg_entity_TABLE::insertion_pt, DXF 10.
+/** Sets _dwg_entity_TABLE::ins_pt, DXF 10.
 \param[in,out] table      dwg_ent_table*
 \param[in]     point      dwg_point_3d *
 \param[out]    error      set to 0 for ok, 1 on error
@@ -17292,9 +17292,9 @@ dwg_ent_table_set_insertion_pt (dwg_ent_table *restrict table,
   )
     {
       *error = 0;
-      table->insertion_pt.x = point->x;
-      table->insertion_pt.y = point->y;
-      table->insertion_pt.z = point->z;
+      table->ins_pt.x = point->x;
+      table->ins_pt.y = point->y;
+      table->ins_pt.z = point->z;
     }
   else
     {
@@ -17303,7 +17303,7 @@ dwg_ent_table_set_insertion_pt (dwg_ent_table *restrict table,
     }
 }
 
-/** Returns _dwg_entity_TABLE::insertion point, DXF 10.
+/** Returns _dwg_entity_TABLE::ins_pt, DXF 10.
 \param[in]  table      dwg_ent_table *
 \param[out] point      dwg_point_3d *
 \param[out] error      set to 0 for ok, 1 on error
@@ -17311,8 +17311,8 @@ dwg_ent_table_set_insertion_pt (dwg_ent_table *restrict table,
 */
 void
 dwg_ent_table_get_insertion_pt (const dwg_ent_table *restrict table,
-                                   dwg_point_3d *restrict point,
-                                   int *restrict error)
+                                dwg_point_3d *restrict point,
+                                int *restrict error)
 {
   if (table
 #  ifndef HAVE_NONNULL
@@ -17321,9 +17321,9 @@ dwg_ent_table_get_insertion_pt (const dwg_ent_table *restrict table,
   )
     {
       *error = 0;
-      point->x = table->insertion_pt.x;
-      point->y = table->insertion_pt.y;
-      point->z = table->insertion_pt.z;
+      point->x = table->ins_pt.x;
+      point->y = table->ins_pt.y;
+      point->z = table->ins_pt.z;
     }
   else
     {
@@ -17332,7 +17332,7 @@ dwg_ent_table_get_insertion_pt (const dwg_ent_table *restrict table,
     }
 }
 
-/** Sets _dwg_entity_TABLE::scale, DXF 41. if r13+
+/** Sets _dwg_entity_TABLE::scale, DXF 41. and the internal scale_flag.
 \param[in,out] table      dwg_ent_table*
 \param[in]     scale3d    dwg_point_3d*, scale in x, y, z
 \param[out]    error      set to 0 for ok, 1 on error
@@ -17350,18 +17350,18 @@ dwg_ent_table_set_scale (dwg_ent_table *restrict table,
   )
     {
       *error = 0;
-      // set data_flags (for r2000+)
+      // set scale_flag (for r2000+)
       if (scale3d->x == 1.0)
         {
           if (scale3d->y == 1.0 && scale3d->z == 1.0)
-            table->data_flags = 3;
+            table->scale_flag = 3;
           else
-            table->data_flags = 1;
+            table->scale_flag = 1;
         }
       else if (scale3d->x == scale3d->y && scale3d->x == scale3d->z)
-        table->data_flags = 2;
+        table->scale_flag = 2;
       else
-        table->data_flags = 0;
+        table->scale_flag = 0;
 
       table->scale.x = scale3d->x;
       table->scale.y = scale3d->y;
@@ -17399,50 +17399,6 @@ dwg_ent_table_get_scale (const dwg_ent_table *restrict table,
     {
       *error = 1;
       LOG_ERROR ("%s: empty arg", __FUNCTION__)
-    }
-}
-
-/** Sets _dwg_entity_TABLE::data_flags, if r2000+.
-\param[in]  table      dwg_ent_table *
-\param[in]  flags      0 - 3
-\param[out] error      set to 0 for ok, 1 on error
-\deprecated
-*/
-void
-dwg_ent_table_set_data_flags (dwg_ent_table *restrict table,
-                              const unsigned char flags, int *restrict error)
-{
-  if (table != NULL && flags <= 3)
-    {
-      *error = 0;
-      table->data_flags = flags;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
-    }
-}
-
-/** Returns _dwg_entity_TABLE::data_flags, no DXF.
-\param[in]  table      dwg_ent_table *
-\param[out] error      set to 0 for ok, 1 on error
-\deprecated
-*/
-unsigned char
-dwg_ent_table_get_data_flags (const dwg_ent_table *restrict table,
-                              int *restrict error)
-{
-  if (table)
-    {
-      *error = 0;
-      return table->data_flags;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
-      return '\0';
     }
 }
 

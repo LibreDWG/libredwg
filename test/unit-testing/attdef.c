@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_B lock_position_flag;
   char *tag, *default_value, *prompt;
   dwg_point_3d extrusion, pt3d;
-  dwg_point_2d insertion_pt, alignment_pt, pt2d;
+  dwg_point_2d ins_pt, alignment_pt, pt2d;
   BITCODE_H style, annotative_app;
   BITCODE_H mtext_handles;
   Dwg_Version_Type version = obj->parent->header.version;
@@ -26,7 +26,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, tag);
   CHK_ENTITY_UTF8TEXT (attdef, ATTDEF, prompt);
 
-  CHK_ENTITY_2RD_W_OLD (attdef, ATTDEF, insertion_pt);
+  CHK_ENTITY_2RD (attdef, ATTDEF, ins_pt);
   CHK_ENTITY_2RD (attdef, ATTDEF, alignment_pt);
   CHK_ENTITY_3RD_W_OLD (attdef, ATTDEF, extrusion);
   CHK_ENTITY_TYPE (attdef, ATTDEF, elevation, BD);

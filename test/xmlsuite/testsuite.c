@@ -648,7 +648,7 @@ add_text (xmlNodePtr rootnode, const Dwg_Object *obj)
   dtostring = doubletochar (text->height);
   newXMLProp ("Height", dtostring);
 
-  buf = spointprepare2 (text->insertion_pt.x, text->insertion_pt.y);
+  buf = spointprepare2 (text->ins_pt.x, text->ins_pt.y);
   newXMLProp ("InsertionPoint", buf);
 
   newXMLcProp ("TextString", (xmlChar *)text->text_value);
@@ -677,8 +677,8 @@ add_table (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("type", "IAcadTable");
   newXMLcProp ("desc", "IAcadTable: IAcadTable Interface");
 
-  buf = spointprepare (table->insertion_pt.x, table->insertion_pt.y,
-                       table->insertion_pt.z);
+  buf = spointprepare (table->ins_pt.x, table->ins_pt.y,
+                       table->ins_pt.z);
   newXMLProp ("InsertionPoint", buf);
 
   dtostring = doubletochar (table->num_rows);

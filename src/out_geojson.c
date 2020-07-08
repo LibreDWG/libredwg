@@ -827,7 +827,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         FEATURE (AcDbEntity : AcDbText, obj);
         GEOMETRY (Point);
         KEY (coordinates);
-        LASTFIELD_2DPOINT (insertion_pt);
+        LASTFIELD_2DPOINT (ins_pt);
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
@@ -839,7 +839,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
         FEATURE (AcDbEntity : AcDbMText, obj);
         GEOMETRY (Point);
         KEY (coordinates);
-        LASTFIELD_3DPOINT (insertion_pt);
+        LASTFIELD_3DPOINT (ins_pt);
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;

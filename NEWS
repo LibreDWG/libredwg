@@ -125,6 +125,7 @@ API breaking changes:
 
     For the stable objects:
     TEXT,ATTRIB,ATTDEF,SHAPE,STYLE: oblique_ang => oblique_angle,
+    TEXT,ATTRIB,ATTDEF,SHAPE,MTEXT,UNDERLAY,TABLE,...: insertion_pt => ins_pt,
     DIMENSION_* _13_pt => xline1_pt, _14_pt => xline2_pt,
       ext_line_rotation => oblique_angle
     DIMENSION_ANG2LN _16_pt => xline1start_pt, _14_pt => xline2start_pt,

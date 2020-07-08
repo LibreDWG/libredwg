@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_RC dataflags, rcvalue;
   char *text_value;
   dwg_point_3d extrusion;
-  dwg_point_2d insertion_pt, alignment_pt;
+  dwg_point_2d ins_pt, alignment_pt;
   BITCODE_H style;
 
   Dwg_Version_Type version = obj->parent->header.version;
@@ -22,7 +22,7 @@ api_process (dwg_object *obj)
       && (strcmp (dwg_ent_attrib_get_text (attrib, &error), text_value)
           || error))
     fail ("old API dwg_ent_attrib_get_text");
-  CHK_ENTITY_2RD_W_OLD (attrib, ATTRIB, insertion_pt);
+  CHK_ENTITY_2RD (attrib, ATTRIB, ins_pt);
   CHK_ENTITY_2RD (attrib, ATTRIB, alignment_pt);
   CHK_ENTITY_3RD_W_OLD (attrib, ATTRIB, extrusion);
   CHK_ENTITY_TYPE (attrib, ATTRIB, elevation, BD);

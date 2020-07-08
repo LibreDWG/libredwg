@@ -7033,12 +7033,12 @@ static int test_ATTDEF (const Dwg_Object *obj)
     attdef->horiz_alignment--;
   }
   {
-    BITCODE_2DPOINT insertion_pt;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &attdef->insertion_pt, sizeof (BITCODE_2DPOINT)))
+    BITCODE_2DPOINT ins_pt;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &attdef->ins_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
-        fail ("ATTDEF.insertion_pt [2DPOINT]");
+        fail ("ATTDEF.ins_pt [2DPOINT]");
   }
   {
     BITCODE_B lock_position_flag;
@@ -7392,12 +7392,12 @@ static int test_ATTRIB (const Dwg_Object *obj)
     attrib->horiz_alignment--;
   }
   {
-    BITCODE_2DPOINT insertion_pt;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &attrib->insertion_pt, sizeof (BITCODE_2DPOINT)))
+    BITCODE_2DPOINT ins_pt;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &attrib->ins_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
-        fail ("ATTRIB.insertion_pt [2DPOINT]");
+        fail ("ATTRIB.ins_pt [2DPOINT]");
   }
   {
     BITCODE_B lock_position_flag;
@@ -15814,12 +15814,12 @@ static int test_MTEXT (const Dwg_Object *obj)
     mtext->ignore_attachment--;
   }
   {
-    BITCODE_3BD insertion_pt;
-    if (dwg_dynapi_entity_value (mtext, "MTEXT", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &mtext->insertion_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (mtext, "MTEXT", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &mtext->ins_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("MTEXT.insertion_pt [3BD]");
+        fail ("MTEXT.ins_pt [3BD]");
   }
   {
     BITCODE_B is_not_annotative;
@@ -21783,21 +21783,6 @@ static int test_TABLE (const Dwg_Object *obj)
       fail ("TABLE.col_widths [BD*] * %u num_col_widths", count);
   }
   {
-    BITCODE_BB data_flags;
-    if (dwg_dynapi_entity_value (table, "TABLE", "data_flags", &data_flags, NULL)
-        && data_flags == table->data_flags)
-      pass ();
-    else
-      fail ("TABLE.data_flags [BB] " FORMAT_BB " != " FORMAT_BB "", table->data_flags, data_flags);
-    data_flags++;
-    if (dwg_dynapi_entity_set_value (table, "TABLE", "data_flags", &data_flags, 0)
-        && data_flags == table->data_flags)
-      pass ();
-    else
-      fail ("TABLE.data_flags [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", table->data_flags, data_flags);
-    table->data_flags--;
-  }
-  {
     BITCODE_CMC data_horiz_bottom_color;
     if (dwg_dynapi_entity_value (table, "TABLE", "data_horiz_bottom_color", &data_horiz_bottom_color, NULL)
         && !memcmp (&data_horiz_bottom_color, &table->data_horiz_bottom_color, sizeof (BITCODE_CMC)))
@@ -22598,12 +22583,12 @@ static int test_TABLE (const Dwg_Object *obj)
         fail ("TABLE.horiz_direction [3BD]");
   }
   {
-    BITCODE_3BD insertion_pt;
-    if (dwg_dynapi_entity_value (table, "TABLE", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &table->insertion_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (table, "TABLE", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &table->ins_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("TABLE.insertion_pt [3BD]");
+        fail ("TABLE.ins_pt [3BD]");
   }
   {
     BITCODE_H last_attrib;
@@ -22751,6 +22736,21 @@ static int test_TABLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("TABLE.scale [3BD_1]");
+  }
+  {
+    BITCODE_BB scale_flag;
+    if (dwg_dynapi_entity_value (table, "TABLE", "scale_flag", &scale_flag, NULL)
+        && scale_flag == table->scale_flag)
+      pass ();
+    else
+      fail ("TABLE.scale_flag [BB] " FORMAT_BB " != " FORMAT_BB "", table->scale_flag, scale_flag);
+    scale_flag++;
+    if (dwg_dynapi_entity_set_value (table, "TABLE", "scale_flag", &scale_flag, 0)
+        && scale_flag == table->scale_flag)
+      pass ();
+    else
+      fail ("TABLE.scale_flag [BB] set+1 " FORMAT_BB " != " FORMAT_BB "", table->scale_flag, scale_flag);
+    table->scale_flag--;
   }
   {
     BITCODE_H seqend;
@@ -23314,12 +23314,12 @@ static int test_TEXT (const Dwg_Object *obj)
     text->horiz_alignment--;
   }
   {
-    BITCODE_2DPOINT insertion_pt;
-    if (dwg_dynapi_entity_value (text, "TEXT", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &text->insertion_pt, sizeof (BITCODE_2DPOINT)))
+    BITCODE_2DPOINT ins_pt;
+    if (dwg_dynapi_entity_value (text, "TEXT", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &text->ins_pt, sizeof (BITCODE_2DPOINT)))
         pass ();
     else
-        fail ("TEXT.insertion_pt [2DPOINT]");
+        fail ("TEXT.ins_pt [2DPOINT]");
   }
   {
     BITCODE_RD oblique_angle;
@@ -23730,12 +23730,12 @@ static int test_UNDERLAY (const Dwg_Object *obj)
     underlay->flag--;
   }
   {
-    BITCODE_3BD insertion_pt;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &underlay->insertion_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &underlay->ins_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("UNDERLAY.insertion_pt [3BD]");
+        fail ("UNDERLAY.ins_pt [3BD]");
   }
   {
     BITCODE_BL num_clip_inverts;
@@ -35042,12 +35042,12 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
     blkrefobjectcontextdata->has_xdic--;
   }
   {
-    BITCODE_3BD insertion_pt;
-    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &blkrefobjectcontextdata->insertion_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &blkrefobjectcontextdata->ins_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("BLKREFOBJECTCONTEXTDATA.insertion_pt [3BD]");
+        fail ("BLKREFOBJECTCONTEXTDATA.ins_pt [3BD]");
   }
   {
     BITCODE_B is_default;
@@ -52112,12 +52112,12 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextattributeobjectcontextdata->has_xdic--;
   }
   {
-    BITCODE_2RD insertion_pt;
-    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &mtextattributeobjectcontextdata->insertion_pt, sizeof (BITCODE_2RD)))
+    BITCODE_2RD ins_pt;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &mtextattributeobjectcontextdata->ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
-        fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.insertion_pt [2RD]");
+        fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.ins_pt [2RD]");
   }
   {
     BITCODE_B is_default;
@@ -52339,12 +52339,12 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextobjectcontextdata->has_xdic--;
   }
   {
-    BITCODE_3BD insertion_pt;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &mtextobjectcontextdata->insertion_pt, sizeof (BITCODE_3BD)))
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &mtextobjectcontextdata->ins_pt, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("MTEXTOBJECTCONTEXTDATA.insertion_pt [3BD]");
+        fail ("MTEXTOBJECTCONTEXTDATA.ins_pt [3BD]");
   }
   {
     BITCODE_B is_default;
@@ -57462,12 +57462,12 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     textobjectcontextdata->has_xdic--;
   }
   {
-    BITCODE_2RD insertion_pt;
-    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "insertion_pt", &insertion_pt, NULL)
-        && !memcmp (&insertion_pt, &textobjectcontextdata->insertion_pt, sizeof (BITCODE_2RD)))
+    BITCODE_2RD ins_pt;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &textobjectcontextdata->ins_pt, sizeof (BITCODE_2RD)))
         pass ();
     else
-        fail ("TEXTOBJECTCONTEXTDATA.insertion_pt [2RD]");
+        fail ("TEXTOBJECTCONTEXTDATA.ins_pt [2RD]");
   }
   {
     BITCODE_B is_default;
