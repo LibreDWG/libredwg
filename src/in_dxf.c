@@ -2704,10 +2704,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_segs;
           if (k < 0 || o->paths[j].segs[k].curve_type != 4)
             {
-              o->paths[j].num_boundary_handles = pair->value.l;
+              o->paths[j].numboundary_handles = pair->value.l;
               o->num_boundary_handles += pair->value.l;
               LOG_TRACE (
-                  "HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n", j,
+                  "HATCH.paths[%d].numboundary_handles = %ld [BL 97]\n", j,
                   pair->value.l);
               k = 0;
             }
@@ -2722,9 +2722,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 97 && is_plpath)
         {
           CHK_paths;
-          o->paths[j].num_boundary_handles = pair->value.l;
+          o->paths[j].numboundary_handles = pair->value.l;
           o->num_boundary_handles += pair->value.l;
-          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n", j,
+          LOG_TRACE ("HATCH.paths[%d].numboundary_handles = %ld [BL 97]\n", j,
                      pair->value.l);
           k = 0;
         }

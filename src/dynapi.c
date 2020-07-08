@@ -11835,7 +11835,7 @@ static const Dwg_DYNAPI_field _dwg_HATCH_Path_fields[] = {
     0,0,0, 73 },
   { "polyline_paths",	"Dwg_HATCH_PolylinePath*", sizeof (Dwg_HATCH_PolylinePath*),  OFF (struct _dwg_HATCH_Path, polyline_paths),
     1,1,0, 0 },
-  { "num_boundary_handles",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_HATCH_Path, num_boundary_handles),
+  { "numboundary_handles",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_HATCH_Path, numboundary_handles),
     0,0,0, 97 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

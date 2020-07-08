@@ -162,7 +162,7 @@ api_process (dwg_object *obj)
                             paths[i].polyline_paths[j].bulge);
                   }
               }
-            CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, num_boundary_handles, BL);
+            CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, numboundary_handles, BL);
           }
     }
 

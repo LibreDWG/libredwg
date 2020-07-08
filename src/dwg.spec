@@ -3932,7 +3932,7 @@ DWG_ENTITY (HATCH)
           END_REPEAT (polyline_paths);
 #undef polyline_paths
         }
-      SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
+      SUB_FIELD_BL (paths[rcount1],numboundary_handles, 97);
 #if defined (IS_DXF) && !defined (IS_ENCODER)
       DXF {
         if (_obj->boundary_handles && rcount1 < _obj->num_boundary_handles) {
@@ -3944,7 +3944,7 @@ DWG_ENTITY (HATCH)
       }
 #endif
       DECODER {
-        FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount1].num_boundary_handles);
+        FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount1].numboundary_handles);
         FIELD_VALUE (has_derived) =
           FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount1].flag) & 0x4);
       }

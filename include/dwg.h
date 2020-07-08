@@ -2839,7 +2839,7 @@ typedef struct _dwg_HATCH_Path
   BITCODE_B closed;
   Dwg_HATCH_PolylinePath* polyline_paths;
 
-  BITCODE_BL num_boundary_handles;
+  BITCODE_BL numboundary_handles;
 } Dwg_HATCH_Path;
 
 typedef struct _dwg_HATCH_DefLine

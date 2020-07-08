@@ -14069,7 +14069,7 @@ B,	DXF 72
 B,	DXF 73
 @item polyline_paths
 Dwg_HATCH_PolylinePath*
-@item num_boundary_handles
+@item numboundary_handles
 BL,	DXF 97
 
 @end vtable
