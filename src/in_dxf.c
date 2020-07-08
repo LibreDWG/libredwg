@@ -828,12 +828,11 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
             {
               static BITCODE_TIMEBLL date = { 0, 0, 0 };
-              double ms;
               date.value = pair->value.d;
               date.days = (BITCODE_BL)trunc (pair->value.d);
-              date.ms = (BITCODE_BL)(86400.0 * (date.value - date.days));
-              LOG_TRACE ("HEADER.%s %.09f (%u, %u) [TIMEBLL %d]\n", &field[1],
-                         date.value, date.days, date.ms, pair->code);
+              date.ms = (BITCODE_BL)(86400000.0 * (date.value - date.days));
+              LOG_TRACE ("HEADER.%s %.09f (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]\n",
+                         &field[1], date.value, date.days, date.ms, pair->code);
               dwg_dynapi_header_set_value (dwg, &field[1], &date, 0);
             }
           else if (pair->type == VT_STRING)
@@ -8916,11 +8915,10 @@ new_object (char *restrict name, char *restrict dxfname,
                       else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
                         {
                           static BITCODE_TIMEBLL date = { 0, 0, 0 };
-                          double ms;
                           date.value = pair->value.d;
                           date.days = (BITCODE_BL)trunc (pair->value.d);
-                          date.ms = (BITCODE_BL)(86400.0 * (date.value - date.days));
-                          LOG_TRACE ("%s.%s %.09f (%u, %u) [TIMEBLL %d]\n", name,
+                          date.ms = (BITCODE_BL)(86400000.0 * (date.value - date.days));
+                          LOG_TRACE ("%s.%s %.09f (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]\n", name,
                                      f->name, date.value, date.days, date.ms, pair->code);
                           dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &date, 1);
                           goto next_pair;

@@ -539,7 +539,15 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define HEADER_TIMEBLL(nam, dxf)                                              \
   HEADER_9 (nam);                                                             \
   FIELD_TIMEBLL (nam, dxf)
-#define FIELD_TIMEBLL(nam, dxf) VALUE_RD (_obj->nam.value, dxf)
+#if 0
+// or just RD of the double value?
+#  define FIELD_TIMEBLL(nam, dxf)               \
+  VALUE_RL (_obj->nam.days, dxf);               \
+  VALUE_RL (_obj->nam.ms / 86.4, dxf)
+#else
+#  define FIELD_TIMEBLL(nam, dxf)               \
+  VALUE_RD (_obj->nam.value, dxf);
+#endif
 
 // FIELD_VECTOR_N(nam, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
