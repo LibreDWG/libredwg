@@ -5045,19 +5045,6 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_VALUEPARAM
   return 1;
 }
 
-// with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
-static Dxf_Pair *
-add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-                 Dxf_Pair *restrict pair)
-{
-  Dwg_Object_ASSOCACTION *o = obj->tio.object->tio.ASSOCACTION;
-  Dwg_Data *dwg = obj->parent;
-  BITCODE_BL num;
-  BITCODE_H *hv = NULL;
-  Dwg_VALUEPARAM *values = NULL;
-  Dwg_ASSOCACTION_Deps *deps;
-  unsigned class_version;
-
 #define EXPECT_INT_DXF(field, dxf, type)                                      \
   if (pair == NULL || pair->code != dxf)                                      \
     {                                                                         \
@@ -5100,6 +5087,95 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }                                                                         \
   dxf_free_pair (pair)
 
+static Dxf_Pair *
+add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                  Dxf_Pair *restrict pair)
+{
+  Dwg_Object_ASSOCNETWORK *o = obj->tio.object->tio.ASSOCNETWORK;
+  Dwg_Data *dwg = obj->parent;
+  BITCODE_BL num;
+  BITCODE_H *hv = NULL;
+  Dwg_ASSOCACTION_Deps *deps;
+
+  if (pair == NULL || pair->code != 90)
+    return pair;
+  EXPECT_INT_DXF ("network_version", 90, BS);
+  pair = dxf_read_pair (dat);
+  EXPECT_INT_DXF ("network_action_index", 90, BL);
+  pair = dxf_read_pair (dat);
+  num = pair->value.u;
+  EXPECT_INT_DXF ("num_actions", 90, BL);
+
+  deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  if (!deps)
+    {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  for (unsigned i=0; i<num; i++)
+    {
+      BITCODE_H hdl;
+      int is_owned, code;
+      pair = dxf_read_pair (dat);
+      if (pair && (pair->code == 360 || pair->code == 330))
+        deps[i].is_owned = pair->code == 360;
+      else
+        {
+          LOG_ERROR ("Invalid ASSOCACTION.deps[%d].is_owned DXF code %d",
+                     i, pair ? pair->code : 0);
+          return NULL;
+        }
+      code = deps[i].is_owned ? DWG_HDL_HARDOWN : DWG_HDL_SOFTPTR;
+      deps[i].dep = dwg_add_handleref (dwg, code, pair->value.u, obj);
+      LOG_TRACE ("%s.%s[%u] = " FORMAT_REF " [H %d]\n", obj->name, "deps", i,
+                 ARGS_REF (deps[i].dep), pair->code);
+      dxf_free_pair (pair);
+    }
+  dwg_dynapi_entity_set_value (o, obj->name, "actions", &deps, 1);
+
+  pair = dxf_read_pair (dat);
+  num = pair ? pair->value.u : 0;
+  EXPECT_INT_DXF ("num_owned_actions", 90, BL);
+  if (num)
+    {
+      hv = xcalloc (num, sizeof (BITCODE_H));
+      if (!hv)
+        return NULL;
+    }
+  for (unsigned i=0; i<num; i++)
+    {
+      BITCODE_H hdl;
+      pair = dxf_read_pair (dat);
+      if (!pair || pair->code != 330)
+        {
+          LOG_ERROR ("Invalid ASSOCNETWORK.owned_actions[%d] DXF code %d",
+                     i, pair ? pair->code : 0);
+          return NULL;
+        }
+      hdl = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+      LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H %d]\n", obj->name, "owned_actions",
+                 i, ARGS_REF (hdl), pair->code);
+      hv[i] = hdl;
+      dxf_free_pair (pair);
+    }
+  if (num)
+    dwg_dynapi_entity_set_value (o, obj->name, "owned_actions", &hv, 1);
+  return NULL;
+}
+
+// with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
+static Dxf_Pair *
+add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                 Dxf_Pair *restrict pair)
+{
+  Dwg_Object_ASSOCACTION *o = obj->tio.object->tio.ASSOCACTION;
+  Dwg_Data *dwg = obj->parent;
+  BITCODE_BL num;
+  BITCODE_H *hv = NULL;
+  Dwg_VALUEPARAM *values = NULL;
+  Dwg_ASSOCACTION_Deps *deps;
+  unsigned class_version;
+
   if (pair == NULL || pair->code != 90)
     return pair;
   class_version = pair->value.u;
@@ -5107,9 +5183,9 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("geometry_status", 90, BL);
   pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("owningnetwork", 5, 330, H); // or vector?
+  EXPECT_H_DXF ("owningnetwork", 4, 330, H);
   pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("actionbody", 4, 360, H);
+  EXPECT_H_DXF ("actionbody", 3, 360, H);
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("action_index", 90, BL);
   pair = dxf_read_pair (dat);
@@ -5139,7 +5215,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       code = deps[i].is_owned ? DWG_HDL_HARDOWN : DWG_HDL_SOFTPTR;
       deps[i].dep = dwg_add_handleref (dwg, code, pair->value.u, obj);
-      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "deps",
+      LOG_TRACE ("%s.%s[%u] = " FORMAT_REF " [H %d]\n", obj->name, "deps", i,
                  ARGS_REF (deps[i].dep), pair->code);
       dxf_free_pair (pair);
     }
@@ -5166,7 +5242,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          i, pair ? pair->code : 0);
               return NULL;
             }
-          hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+          hdl = dwg_add_handleref (dwg, 3, pair->value.u, obj);
           LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_params",
                      ARGS_REF (hdl), pair->code);
           hv[i] = hdl;
@@ -5174,6 +5250,12 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       if (num)
         dwg_dynapi_entity_set_value (o, obj->name, "owned_params", &hv, 1);
+
+      pair = dxf_read_pair (dat);
+      if (pair == NULL || pair->code != 90)
+        return pair;
+      // ignore the ValueParams class_version
+      dxf_free_pair (pair);
 
       pair = dxf_read_pair (dat);
       num = pair ? pair->value.u : 0;
@@ -7387,6 +7469,17 @@ new_object (char *restrict name, char *restrict dxfname,
                       else
                         goto next_pair;
                     }
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strstr (obj->name, "ASSOC")
+                       && strEQc (subclass, "AcDbAssocNetwork"))
+                {
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
+                  pair = add_ASSOCNETWORK (obj, dat, pair); // NULL for success
+                  if (!pair)
+                    goto next_pair;
                   else
                     goto start_loop; /* failure */
                 }
