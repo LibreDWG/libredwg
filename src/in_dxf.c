@@ -4573,12 +4573,17 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 330:
           CHK_cells;
           hdl = find_tablehandle (dwg, pair);
-          if (!hdl)
-            return NULL;
-          assert (hdl);
-          o->cells[i].tablegeometry = hdl;
+          if (hdl)
+            {
+              if (hdl->handleref.code != 4) // turn the 5 into a 4
+                o->cells[i].tablegeometry = dwg_add_handleref (dwg, 4, hdl->handleref.value, NULL);
+              else
+                o->cells[i].tablegeometry = hdl;
+            }
+          else
+            o->cells[i].tablegeometry = dwg_add_handleref (dwg, 4, 0, NULL);
           LOG_TRACE ("%s.cells[%d].tablegeometry = " FORMAT_REF " [H %d]\n",
-                       obj->name, i, ARGS_REF(hdl), pair->code);
+                       obj->name, i, ARGS_REF(o->cells[i].tablegeometry), pair->code);
           break;
         case 94:
           CHK_cells;
