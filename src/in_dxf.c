@@ -4905,6 +4905,146 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+static int
+add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_EvalVariant *value)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  if (pair == NULL || pair->code != 70)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", "EvalVariant",
+                 pair ? pair->code : -1, 70, "code");
+      return 0;
+    }
+  value->code = pair->value.i;
+  LOG_TRACE ("%s.%s = %d [BL %d]\n", "EvalVariant", "code", pair->value.i, pair->code);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  if (!pair || pair->code == 0)
+    return 0;
+  switch (dwg_resbuf_value_type (pair->value.i))
+    {
+    case VT_REAL:
+      value->u.bd = pair->value.d;
+      LOG_TRACE ("%s.%s = %f [BD %d]\n", "EvalVariant", "value", pair->value.d,
+                 pair->code);
+      break;
+    case VT_INT32:
+      value->u.bl = pair->value.u;
+      LOG_TRACE ("%s.%s = %u [BL %d]\n", "EvalVariant", "value", pair->value.u,
+                 pair->code);
+      break;
+    case VT_INT16:
+      value->u.bs = pair->value.i;
+      LOG_TRACE ("%s.%s = %d [BS %d]\n", "EvalVariant", "value", pair->value.i,
+                 pair->code);
+      break;
+    case VT_INT8:
+      value->u.rc = pair->value.i;
+      LOG_TRACE ("%s.%s = %d [RC %d]\n", "EvalVariant", "value", pair->value.i,
+                 pair->code);
+      break;
+    case VT_STRING:
+      value->u.text = dat->version >= R_2007
+        ? (BITCODE_T)bit_utf8_to_TU (pair->value.s)
+        : strdup (pair->value.s);
+      LOG_TRACE ("%s.%s = %s [T %d]\n", "EvalVariant", "value", pair->value.s,
+                 pair->code);
+      break;
+    case VT_HANDLE:
+      value->u.handle = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
+      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", "EvalVariant", "value",
+                 ARGS_REF (value->u.handle),
+                 pair->code);
+      break;
+    case VT_BINARY:
+    case VT_OBJECTID:
+    case VT_POINT3D:
+    case VT_INVALID:
+    case VT_INT64:
+    case VT_BOOL:
+    default:
+      LOG_ERROR ("Invalid EvalVariant.value.type %d", pair->code)
+      break;
+    }
+  dxf_free_pair (pair);
+  return 1;
+}
+
+static int
+add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_VALUEPARAM *value)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  if (pair == NULL || pair->code != 90)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", "VALUEPARAM",
+                 pair ? pair->code : -1, 90, "class_version");
+      return 0;
+    }
+  value->class_version = pair->value.u;
+  LOG_TRACE ("%s.%s = %d [BL %d]\n", "VALUEPARAM", "class_version",
+             pair->value.i, pair->code);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  if (pair == NULL || pair->code != 1)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", "VALUEPARAM",
+                 pair ? pair->code : -1, 1, "name");
+      return 0;
+    }
+  value->name = dwg->header.version >= R_2007
+    ? (BITCODE_T)bit_utf8_to_TU (pair->value.s)
+    : strdup (pair->value.s);
+  LOG_TRACE ("%s.%s = %s [BL %d]\n", "VALUEPARAM", "name",
+             pair->value.s, pair->code);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  if (pair == NULL || pair->code != 90)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", "VALUEPARAM",
+                 pair ? pair->code : -1, 90, "unit_type");
+      return 0;
+    }
+  value->unit_type = pair->value.u;
+  LOG_TRACE ("%s.%s = %d [BL %d]\n", "VALUEPARAM", "unit_type",
+             pair->value.i, pair->code);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  if (pair == NULL || pair->code != 90)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", "VALUEPARAM",
+                 pair ? pair->code : -1, 90, "num_vars");
+      return 0;
+    }
+  value->num_vars = pair->value.u;
+  LOG_TRACE ("%s.%s = %d [BL %d]\n", "VALUEPARAM", "num_vars",
+             pair->value.i, pair->code);
+  value->vars = xcalloc (value->num_vars, sizeof (Dwg_VALUEPARAM_vars));
+  if (!value->vars)
+    return 0;
+  for (unsigned j = 0; j < value->num_vars; j++)
+    {
+      int success = add_EVALVARIANT (dwg, dat, &value->vars[j].value);
+      if (!success)
+        return 0;
+      pair = dxf_read_pair (dat);
+      if (pair == NULL || pair->code != 330)
+        {
+          LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", "VALUEPARAM",
+                     pair ? pair->code : -1, 330, "handle");
+          return 0;
+        }
+      value->vars[j].handle = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+      LOG_TRACE ("%s.vars[%u].handle = " FORMAT_REF " [H %d]\n", "VALUEPARAM", j,
+                 ARGS_REF (value->vars[j].handle), pair->code);
+      dxf_free_pair (pair);
+    }
+  return 1;
+}
+
 // with ASSOC2DCONSTRAINTGROUP, ASSOCNETWORK, ASSOCACTION
 static Dxf_Pair *
 add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -5047,21 +5187,10 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       for (unsigned i=0; i<num; i++)
         {
           Dwg_VALUEPARAM *value = xcalloc (1, sizeof (Dwg_VALUEPARAM));
-          pair = dxf_read_pair (dat);
-          // FIXME add VALUEPARAM
-          /*
-          if (!pair || pair->type != VT_HANDLE)
-            {
-              LOG_ERROR ("Invalid ASSOCACTION.owned_value_param_names[%d] DXF code %d",
-                         i, pair ? pair->code : 0);
-              return NULL;
-            }
-          hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-          LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_value_param_names",
-                     ARGS_REF (hdl), pair->code);
-          */
+          int success = add_VALUEPARAMs (dwg, dat, value);
           values[i] = *value;
-          dxf_free_pair (pair);
+          if (!success)
+            return NULL;
         }
       if (num)
         dwg_dynapi_entity_set_value (o, obj->name, "values", &values, 1);
