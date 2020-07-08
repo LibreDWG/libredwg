@@ -7858,38 +7858,48 @@ DWG_OBJECT (ACSH_BOOLEAN_CLASS)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// (varies) unstable
+/* TODO replace by CALL_PRIVATE (ASSOCACTION) */
+#define AcDbAssocAction_fields                                                \
+  SUBCLASS (AcDbAssocAction)                                                  \
+  /* until r2010: 1, 2013+: 2 */                                              \
+  FIELD_BS (class_version, 90);                                               \
+  /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,                    \
+     3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,                          \
+     6 RejectedByClient */                                                    \
+  FIELD_BL (geometry_status, 90);                                             \
+  FIELD_HANDLE (owningnetwork, 4, 330);                                       \
+  FIELD_HANDLE (actionbody, 3, 360);                                          \
+  FIELD_BL (action_index, 90);                                                \
+  FIELD_BL (max_assoc_dep_index, 90);                                         \
+  FIELD_BL (num_deps, 90);                                                    \
+  REPEAT (num_deps, deps, Dwg_ASSOCACTION_Deps)                               \
+  REPEAT_BLOCK                                                                \
+  {                                                                           \
+    int dxf = _obj->deps[rcount1].is_owned ? 360 : 330;                       \
+    int code = _obj->deps[rcount1].is_owned ? 3 : 4;                          \
+    SUB_FIELD_B (deps[rcount1], is_owned, 0);                                 \
+    SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);                         \
+  }                                                                           \
+  END_REPEAT_BLOCK                                                            \
+  END_REPEAT (deps);                                                          \
+  if (FIELD_VALUE (class_version) > 1)                                        \
+    {                                                                         \
+      VALUE_BS (0, 90);                                                       \
+      FIELD_BL (num_owned_params, 90);                                        \
+      HANDLE_VECTOR (owned_params, num_owned_params, 3, 360);                 \
+      VALUE_BS (0, 90);                                                       \
+      FIELD_BL (num_values, 90);                                              \
+      REPEAT (num_values, values, Dwg_VALUEPARAM)                             \
+      REPEAT_BLOCK                                                            \
+          AcDbValueParam_fields (values[rcount1])                             \
+      END_REPEAT_BLOCK                                                        \
+      END_REPEAT (values);                                                    \
+    }
+
+// (varies) stable
 // call as dwg_##action_ASSOCACTION_private
 DWG_OBJECT (ASSOCACTION)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocAction)
-  /* until r2010: 1, 2013+: 2 */
-  FIELD_BS (class_version, 90);
-  FIELD_BL (geometry_status, 90); /* 0 */
-  FIELD_HANDLE (owningnetwork, 4, 330);
-  FIELD_HANDLE (actionbody, 3, 360);
-  FIELD_BL (action_index, 90);
-  FIELD_BL (max_assoc_dep_index, 90);
-  FIELD_BL (num_deps, 90);
-  REPEAT (num_deps, deps, Dwg_ASSOCACTION_Deps)
-  REPEAT_BLOCK
-  {
-    int dxf = _obj->deps[rcount1].is_soft ? 360 : 330;
-    int code = _obj->deps[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
-    SUB_FIELD_B (deps[rcount1], is_soft, 0);
-    SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);
-  }
-  END_REPEAT_BLOCK
-  END_REPEAT (deps);
-  if (FIELD_VALUE (class_version) > 1)
-  {
-    VALUE_BS (0, 90);
-    FIELD_BL (num_owned_params, 90);
-    HANDLE_VECTOR (owned_params, num_owned_params, 4, 360);
-    VALUE_BS (0, 90);
-    FIELD_BL (num_owned_value_param_names, 90); // TODO which hdl_code?
-    HANDLE_VECTOR (owned_value_param_names, num_owned_value_param_names, 5, 360);
-  }
+  AcDbAssocAction_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -7943,46 +7953,10 @@ DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-/* TODO replace by CALL_PRIVATE (ASSOCACTION) */
-#define AcDbAssocAction_fields                                                \
-  SUBCLASS (AcDbAssocAction)                                                  \
-  /* until r2010: 1, 2013+: 2 */                                              \
-  FIELD_BS (class_version, 90);                                               \
-  /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,                    \
-     3 Inconsistent, 4 NotEvaluated, 5 NotAvailable,                          \
-     6 RejectedByClient */                                                    \
-  FIELD_BL (geometry_status, 90);                                             \
-  FIELD_HANDLE (owningnetwork, 4, 330);                                       \
-  FIELD_HANDLE (actionbody, 3, 360);                                          \
-  FIELD_BL (action_index, 90);                                                \
-  FIELD_BL (max_assoc_dep_index, 90);                                         \
-  FIELD_BL (num_deps, 90);                                                    \
-  REPEAT (num_deps, deps, Dwg_ASSOCACTION_Deps)                               \
-  REPEAT_BLOCK                                                                \
-  {                                                                           \
-    int dxf = _obj->deps[rcount1].is_soft ? 360 : 330;                        \
-    int code                                                                  \
-        = _obj->deps[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;    \
-    SUB_FIELD_B (deps[rcount1], is_soft, 0);                                  \
-    SUB_FIELD_HANDLE (deps[rcount1], dep, code, dxf);                         \
-  }                                                                           \
-  END_REPEAT_BLOCK                                                            \
-  END_REPEAT (deps);                                                          \
-  if (FIELD_VALUE (class_version) > 1)                                        \
-    {                                                                         \
-      VALUE_BS (0, 90);                                                       \
-      FIELD_BL (num_owned_params, 90);                                        \
-      HANDLE_VECTOR (owned_params, num_owned_params, 4, 360);                 \
-      VALUE_BS (0, 90);                                                       \
-      FIELD_BL (num_owned_value_param_names, 90);                             \
-      HANDLE_VECTOR (owned_value_param_names, num_owned_value_param_names, 5, \
-                     360);                                                    \
-    }
-
-// subclass of AcDbAssocAction
+// (varies) stable
+// Subclass of AcDbAssocAction
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT (ASSOCNETWORK)
-  DECODE_UNKNOWN_BITS
   AcDbAssocAction_fields;
   SUBCLASS (AcDbAssocNetwork)
   FIELD_BS (network_version, 90);
@@ -7992,15 +7966,15 @@ DWG_OBJECT (ASSOCNETWORK)
   REPEAT (num_actions, actions, Dwg_ASSOCACTION_Deps)
   REPEAT_BLOCK
   {
-    int dxf = _obj->actions[rcount1].is_soft ? 360 : 330;
-    int code = _obj->actions[rcount1].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
-    SUB_FIELD_B (actions[rcount1], is_soft, 0);
+    int dxf = _obj->actions[rcount1].is_owned ? 360 : 330;
+    int code = _obj->actions[rcount1].is_owned ? DWG_HDL_HARDOWN : DWG_HDL_SOFTPTR;
+    SUB_FIELD_B (actions[rcount1], is_owned, 0);
     SUB_FIELD_HANDLE (actions[rcount1], dep, code, dxf);
   }
   END_REPEAT_BLOCK
   END_REPEAT (actions);
   FIELD_BL (num_owned_actions, 90);
-  HANDLE_VECTOR (owned_actions, num_owned_actions, 4, 360);
+  HANDLE_VECTOR (owned_actions, num_owned_actions, 4, 330);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

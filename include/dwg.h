@@ -5131,7 +5131,7 @@ typedef struct _dwg_ASSOCPARAMBASEDACTIONBODY
 typedef struct _dwg_ASSOCACTION_Deps
 {
   struct _dwg_object_ASSOCACTION *parent;
-  BITCODE_B is_soft;
+  BITCODE_B is_owned; // with AssocNewtwork means code 3 (hardowned) or 4 (softptr)
   BITCODE_H dep;
 } Dwg_ASSOCACTION_Deps;
 
@@ -5150,8 +5150,8 @@ typedef struct _dwg_ASSOCACTION_Deps
   Dwg_ASSOCACTION_Deps *deps;         /* 330 or 360 */      \
   BITCODE_BL num_owned_params;        /* 90 */              \
   BITCODE_H *owned_params;            /* 360 */             \
-  BITCODE_BL num_owned_value_param_names;        /* 90 */   \
-  BITCODE_H *owned_value_param_names             /* ? */
+  BITCODE_BL num_values;              /* 90 */              \
+  struct _dwg_VALUEPARAM *values
 
 // AcDbAssocDependency
 typedef struct _dwg_object_ASSOCDEPENDENCY
@@ -5233,7 +5233,7 @@ typedef struct _dwg_object_ASSOCNETWORK
   BITCODE_BL num_actions;           // 90
   Dwg_ASSOCACTION_Deps *actions;    // 330 or 360
   BITCODE_BL num_owned_actions;
-  BITCODE_H *owned_actions;
+  BITCODE_H *owned_actions;         // 4. 330
 } Dwg_Object_ASSOCNETWORK;
 
 /*  BITCODE_BS status;90: 0 uptodate, 1 changed_directly, 2 changed_transitive,

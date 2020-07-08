@@ -1,4 +1,4 @@
-// unstable
+// stable
 #define DWG_TYPE DWG_TYPE_ASSOCACTION
 #include "common.c"
 
@@ -16,9 +16,8 @@ api_process (dwg_object *obj)
   Dwg_ASSOCACTION_Deps *deps;
   BITCODE_BL num_owned_params;
   BITCODE_H *owned_params;
-  BITCODE_BL num_owned_value_param_names;
-  BITCODE_H *owned_value_param_names;
-  //Dwg_ACTIONBODY body;
+  BITCODE_BL num_values;
+  Dwg_VALUEPARAM *values;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_assocaction *_obj = dwg_object_to_ASSOCACTION (obj);
@@ -33,19 +32,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_deps, BL);
   for (unsigned i=0; i < num_deps; i++)
     {
-      CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_soft, B);
+      CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_owned, B);
       CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);
     }
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCACTION, owned_params, num_owned_params);
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_owned_value_param_names, BL);
-  CHK_ENTITY_HV (_obj, ASSOCACTION, owned_value_param_names, num_owned_value_param_names);
-
-  //CHK_SUBCLASS_UTF8TEXT (_obj->body, ACTIONBODY, evaluatorid);
-  //CHK_SUBCLASS_UTF8TEXT (_obj->body, ACTIONBODY, expression);
-  //CHK_SUBCLASS_TYPE (_obj->body, ACTIONBODY, value, BL);
-  //CHK_ENTITY_TYPE (_obj, ASSOCACTION, status, BL);
-  //CHK_ENTITY_H (_obj, ASSOCACTION, actionbody);
-  //CHK_ENTITY_H (_obj, ASSOCACTION, callback);
-  //CHK_ENTITY_H (_obj, ASSOCACTION, owningnetwork);
+  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_values, BL);
+  CHK_VALUEPARAM (num_values, values);
 }

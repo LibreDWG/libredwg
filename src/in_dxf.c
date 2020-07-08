@@ -4909,6 +4909,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
   BITCODE_BL num;
   BITCODE_H *hv = NULL;
+  Dwg_VALUEPARAM *values = NULL;
   Dwg_ASSOCACTION_Deps *deps;
   unsigned class_version;
 
@@ -4981,17 +4982,17 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   for (unsigned i=0; i<num; i++)
     {
       BITCODE_H hdl;
-      int is_soft, code;
+      int is_owned, code;
       pair = dxf_read_pair (dat);
       if (pair && (pair->code == 360 || pair->code == 330))
-        deps[i].is_soft = pair->code == 360;
+        deps[i].is_owned = pair->code == 360;
       else
         {
-          LOG_ERROR ("Invalid ASSOCACTION.deps[%d].is_soft DXF code %d",
+          LOG_ERROR ("Invalid ASSOCACTION.deps[%d].is_owned DXF code %d",
                      i, pair ? pair->code : 0);
           return NULL;
         }
-      code = deps[i].is_soft ? DWG_HDL_SOFTPTR : DWG_HDL_HARDPTR;
+      code = deps[i].is_owned ? DWG_HDL_HARDOWN : DWG_HDL_SOFTPTR;
       deps[i].dep = dwg_add_handleref (dwg, code, pair->value.u, obj);
       LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "deps",
                  ARGS_REF (deps[i].dep), pair->code);
@@ -5031,17 +5032,19 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
       pair = dxf_read_pair (dat);
       num = pair ? pair->value.u : 0;
-      EXPECT_INT_DXF ("num_owned_params", 90, BL);
+      EXPECT_INT_DXF ("num_values", 90, BL);
       if (num)
         {
-          hv = xcalloc (num, sizeof (BITCODE_H));
-          if (!hv)
+          values = (Dwg_VALUEPARAM*)xcalloc (num, sizeof (Dwg_VALUEPARAM*));
+          if (!values)
             return NULL;
         }
       for (unsigned i=0; i<num; i++)
         {
-          BITCODE_H hdl;
+          Dwg_VALUEPARAM *value = xcalloc (1, sizeof (Dwg_VALUEPARAM));
           pair = dxf_read_pair (dat);
+          // FIXME add VALUEPARAM
+          /*
           if (!pair || pair->type != VT_HANDLE)
             {
               LOG_ERROR ("Invalid ASSOCACTION.owned_value_param_names[%d] DXF code %d",
@@ -5051,11 +5054,12 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
           LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, "owned_value_param_names",
                      ARGS_REF (hdl), pair->code);
-          hv[i] = hdl;
+          */
+          values[i] = *value;
           dxf_free_pair (pair);
         }
       if (num)
-        dwg_dynapi_entity_set_value (o, obj->name, "owned_value_param_names", &hv, 1);
+        dwg_dynapi_entity_set_value (o, obj->name, "values", &values, 1);
     }
 
   return NULL;

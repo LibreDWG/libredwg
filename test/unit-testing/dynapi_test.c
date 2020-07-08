@@ -28603,19 +28603,19 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->num_owned_params--;
   }
   {
-    BITCODE_BL num_owned_value_param_names;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
-        && num_owned_value_param_names == assoc2dconstraintgroup->num_owned_value_param_names)
+    BITCODE_BL num_values;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_values", &num_values, NULL)
+        && num_values == assoc2dconstraintgroup->num_values)
       pass ();
     else
-      fail ("ASSOC2DCONSTRAINTGROUP.num_owned_value_param_names [BL] %u != %u", assoc2dconstraintgroup->num_owned_value_param_names, num_owned_value_param_names);
-    num_owned_value_param_names++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_value_param_names", &num_owned_value_param_names, 0)
-        && num_owned_value_param_names == assoc2dconstraintgroup->num_owned_value_param_names)
+      fail ("ASSOC2DCONSTRAINTGROUP.num_values [BL] %u != %u", assoc2dconstraintgroup->num_values, num_values);
+    num_values++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_values", &num_values, 0)
+        && num_values == assoc2dconstraintgroup->num_values)
       pass ();
     else
-      fail ("ASSOC2DCONSTRAINTGROUP.num_owned_value_param_names [BL] set+1 %u != %u", assoc2dconstraintgroup->num_owned_value_param_names, num_owned_value_param_names);
-    assoc2dconstraintgroup->num_owned_value_param_names--;
+      fail ("ASSOC2DCONSTRAINTGROUP.num_values [BL] set+1 %u != %u", assoc2dconstraintgroup->num_values, num_values);
+    assoc2dconstraintgroup->num_values--;
   }
   {
     BITCODE_H* owned_params;
@@ -28626,16 +28626,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOC2DCONSTRAINTGROUP.owned_params [H*] * %u num_owned_params", count);
-  }
-  {
-    BITCODE_H* owned_value_param_names;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_value_param_names", &count, NULL)
-        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "owned_value_param_names", &owned_value_param_names, NULL)
-        && owned_value_param_names == assoc2dconstraintgroup->owned_value_param_names)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
   }
   {
     BITCODE_H owningnetwork;
@@ -28652,6 +28642,16 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.parent [struct _dwg_object_object*]");
+  }
+  {
+    struct _dwg_VALUEPARAM* values;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_values", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "values", &values, NULL)
+        && values == assoc2dconstraintgroup->values)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.values [struct _dwg_VALUEPARAM*] * %u num_values", count);
   }
   {
     BITCODE_BL version;
@@ -28897,19 +28897,19 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
     assocaction->num_owned_params--;
   }
   {
-    BITCODE_BL num_owned_value_param_names;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
-        && num_owned_value_param_names == assocaction->num_owned_value_param_names)
+    BITCODE_BL num_values;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_values", &num_values, NULL)
+        && num_values == assocaction->num_values)
       pass ();
     else
-      fail ("ASSOCACTION.num_owned_value_param_names [BL] %u != %u", assocaction->num_owned_value_param_names, num_owned_value_param_names);
-    num_owned_value_param_names++;
-    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "num_owned_value_param_names", &num_owned_value_param_names, 0)
-        && num_owned_value_param_names == assocaction->num_owned_value_param_names)
+      fail ("ASSOCACTION.num_values [BL] %u != %u", assocaction->num_values, num_values);
+    num_values++;
+    if (dwg_dynapi_entity_set_value (assocaction, "ASSOCACTION", "num_values", &num_values, 0)
+        && num_values == assocaction->num_values)
       pass ();
     else
-      fail ("ASSOCACTION.num_owned_value_param_names [BL] set+1 %u != %u", assocaction->num_owned_value_param_names, num_owned_value_param_names);
-    assocaction->num_owned_value_param_names--;
+      fail ("ASSOCACTION.num_values [BL] set+1 %u != %u", assocaction->num_values, num_values);
+    assocaction->num_values--;
   }
   {
     BITCODE_H* owned_params;
@@ -28920,16 +28920,6 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOCACTION.owned_params [H*] * %u num_owned_params", count);
-  }
-  {
-    BITCODE_H* owned_value_param_names;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_owned_value_param_names", &count, NULL)
-        && dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "owned_value_param_names", &owned_value_param_names, NULL)
-        && owned_value_param_names == assocaction->owned_value_param_names)
-      pass ();
-    else
-      fail ("ASSOCACTION.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
   }
   {
     BITCODE_H owningnetwork;
@@ -28946,6 +28936,16 @@ static int test_ASSOCACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCACTION.parent [struct _dwg_object_object*]");
+  }
+  {
+    struct _dwg_VALUEPARAM* values;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "num_values", &count, NULL)
+        && dwg_dynapi_entity_value (assocaction, "ASSOCACTION", "values", &values, NULL)
+        && values == assocaction->values)
+      pass ();
+    else
+      fail ("ASSOCACTION.values [struct _dwg_VALUEPARAM*] * %u num_values", count);
   }
   if (failed && (is_class_unstable ("ASSOCACTION") || is_class_debugging ("ASSOCACTION")))
     {
@@ -32114,19 +32114,19 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
     assocnetwork->num_owned_params--;
   }
   {
-    BITCODE_BL num_owned_value_param_names;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
-        && num_owned_value_param_names == assocnetwork->num_owned_value_param_names)
+    BITCODE_BL num_values;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_values", &num_values, NULL)
+        && num_values == assocnetwork->num_values)
       pass ();
     else
-      fail ("ASSOCNETWORK.num_owned_value_param_names [BL] %u != %u", assocnetwork->num_owned_value_param_names, num_owned_value_param_names);
-    num_owned_value_param_names++;
-    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_owned_value_param_names", &num_owned_value_param_names, 0)
-        && num_owned_value_param_names == assocnetwork->num_owned_value_param_names)
+      fail ("ASSOCNETWORK.num_values [BL] %u != %u", assocnetwork->num_values, num_values);
+    num_values++;
+    if (dwg_dynapi_entity_set_value (assocnetwork, "ASSOCNETWORK", "num_values", &num_values, 0)
+        && num_values == assocnetwork->num_values)
       pass ();
     else
-      fail ("ASSOCNETWORK.num_owned_value_param_names [BL] set+1 %u != %u", assocnetwork->num_owned_value_param_names, num_owned_value_param_names);
-    assocnetwork->num_owned_value_param_names--;
+      fail ("ASSOCNETWORK.num_values [BL] set+1 %u != %u", assocnetwork->num_values, num_values);
+    assocnetwork->num_values--;
   }
   {
     BITCODE_H* owned_actions;
@@ -32149,16 +32149,6 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
       fail ("ASSOCNETWORK.owned_params [H*] * %u num_owned_params", count);
   }
   {
-    BITCODE_H* owned_value_param_names;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_owned_value_param_names", &count, NULL)
-        && dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "owned_value_param_names", &owned_value_param_names, NULL)
-        && owned_value_param_names == assocnetwork->owned_value_param_names)
-      pass ();
-    else
-      fail ("ASSOCNETWORK.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
-  }
-  {
     BITCODE_H owningnetwork;
     if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "owningnetwork", &owningnetwork, NULL)
         && !memcmp (&owningnetwork, &assocnetwork->owningnetwork, sizeof (BITCODE_H)))
@@ -32173,6 +32163,16 @@ static int test_ASSOCNETWORK (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCNETWORK.parent [struct _dwg_object_object*]");
+  }
+  {
+    struct _dwg_VALUEPARAM* values;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "num_values", &count, NULL)
+        && dwg_dynapi_entity_value (assocnetwork, "ASSOCNETWORK", "values", &values, NULL)
+        && values == assocnetwork->values)
+      pass ();
+    else
+      fail ("ASSOCNETWORK.values [struct _dwg_VALUEPARAM*] * %u num_values", count);
   }
   if (failed && (is_class_unstable ("ASSOCNETWORK") || is_class_debugging ("ASSOCNETWORK")))
     {
@@ -34685,19 +34685,19 @@ static int test_ASSOCVARIABLE (const Dwg_Object *obj)
     assocvariable->num_owned_params--;
   }
   {
-    BITCODE_BL num_owned_value_param_names;
-    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_owned_value_param_names", &num_owned_value_param_names, NULL)
-        && num_owned_value_param_names == assocvariable->num_owned_value_param_names)
+    BITCODE_BL num_values;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_values", &num_values, NULL)
+        && num_values == assocvariable->num_values)
       pass ();
     else
-      fail ("ASSOCVARIABLE.num_owned_value_param_names [BL] %u != %u", assocvariable->num_owned_value_param_names, num_owned_value_param_names);
-    num_owned_value_param_names++;
-    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "num_owned_value_param_names", &num_owned_value_param_names, 0)
-        && num_owned_value_param_names == assocvariable->num_owned_value_param_names)
+      fail ("ASSOCVARIABLE.num_values [BL] %u != %u", assocvariable->num_values, num_values);
+    num_values++;
+    if (dwg_dynapi_entity_set_value (assocvariable, "ASSOCVARIABLE", "num_values", &num_values, 0)
+        && num_values == assocvariable->num_values)
       pass ();
     else
-      fail ("ASSOCVARIABLE.num_owned_value_param_names [BL] set+1 %u != %u", assocvariable->num_owned_value_param_names, num_owned_value_param_names);
-    assocvariable->num_owned_value_param_names--;
+      fail ("ASSOCVARIABLE.num_values [BL] set+1 %u != %u", assocvariable->num_values, num_values);
+    assocvariable->num_values--;
   }
   {
     BITCODE_H* owned_params;
@@ -34708,16 +34708,6 @@ static int test_ASSOCVARIABLE (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOCVARIABLE.owned_params [H*] * %u num_owned_params", count);
-  }
-  {
-    BITCODE_H* owned_value_param_names;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_owned_value_param_names", &count, NULL)
-        && dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "owned_value_param_names", &owned_value_param_names, NULL)
-        && owned_value_param_names == assocvariable->owned_value_param_names)
-      pass ();
-    else
-      fail ("ASSOCVARIABLE.owned_value_param_names [H*] * %u num_owned_value_param_names", count);
   }
   {
     BITCODE_H owningnetwork;
@@ -34762,6 +34752,16 @@ static int test_ASSOCVARIABLE (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCVARIABLE.value [Dwg_EvalVariant]");
+  }
+  {
+    struct _dwg_VALUEPARAM* values;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "num_values", &count, NULL)
+        && dwg_dynapi_entity_value (assocvariable, "ASSOCVARIABLE", "values", &values, NULL)
+        && values == assocvariable->values)
+      pass ();
+    else
+      fail ("ASSOCVARIABLE.values [struct _dwg_VALUEPARAM*] * %u num_values", count);
   }
   if (failed && (is_class_unstable ("ASSOCVARIABLE") || is_class_debugging ("ASSOCVARIABLE")))
     {

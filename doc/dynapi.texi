@@ -5401,13 +5401,13 @@ BL,	DXF 90
 @item deps
 Dwg_ASSOCACTION_Deps*
 @item num_owned_params
-BL,	DXF 90
+BL
 @item owned_params
-H*,	DXF 360
-@item num_owned_value_param_names
-BL,	DXF 90
-@item owned_value_param_names
-H*,	DXF 360
+H*
+@item num_values
+BL
+@item values
+struct _dwg_VALUEPARAM*
 @item version
 BL,	DXF 90
 @item b1
@@ -5483,13 +5483,13 @@ BL,	DXF 90
 @item deps
 Dwg_ASSOCACTION_Deps*
 @item num_owned_params
-BL,	DXF 90
+BL
 @item owned_params
-H*,	DXF 360
-@item num_owned_value_param_names
-BL,	DXF 90
-@item owned_value_param_names
-H*,	DXF 360
+H*
+@item num_values
+BL
+@item values
+struct _dwg_VALUEPARAM*
 
 @end vtable
 @end indentedblock
@@ -6213,13 +6213,13 @@ BL,	DXF 90
 @item deps
 Dwg_ASSOCACTION_Deps*
 @item num_owned_params
-BL,	DXF 90
+BL
 @item owned_params
-H*,	DXF 360
-@item num_owned_value_param_names
-BL,	DXF 90
-@item owned_value_param_names
-H*,	DXF 360
+H*
+@item num_values
+BL
+@item values
+struct _dwg_VALUEPARAM*
 @item network_version
 BS,	DXF 90
 @item network_action_index
@@ -6231,7 +6231,7 @@ Dwg_ASSOCACTION_Deps*
 @item num_owned_actions
 BL,	DXF 90
 @item owned_actions
-H*,	DXF 360
+H*,	DXF 330
 
 @end vtable
 @end indentedblock
@@ -6774,13 +6774,13 @@ BL,	DXF 90
 @item deps
 Dwg_ASSOCACTION_Deps*
 @item num_owned_params
-BL,	DXF 90
+BL
 @item owned_params
-H*,	DXF 360
-@item num_owned_value_param_names
-BL,	DXF 90
-@item owned_value_param_names
-H*,	DXF 360
+H*
+@item num_values
+BL
+@item values
+struct _dwg_VALUEPARAM*
 @item name
 T,	DXF 1
 @item t58
@@ -12733,7 +12733,7 @@ H,	DXF 330
 
 @item parent
 struct _dwg_object_ASSOCACTION*
-@item is_soft
+@item is_owned
 B
 @item dep
 H

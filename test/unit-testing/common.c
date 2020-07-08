@@ -1520,53 +1520,43 @@ api_common_object (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL);\
   CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, material)
 
-#define CHK_ASSOCPARAMBASEDACTIONBODY(TYPE)                                   \
-  PRE (R_2013) {                                                              \
-    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, version, BL);    \
-    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, minor, BL);      \
-    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, num_deps, BL);   \
-    CHK_SUBCLASS_HV (_obj->pab, ASSOCPARAMBASEDACTIONBODY, deps,              \
-                     _obj->pab.num_deps);                                     \
-    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, l4, BL);         \
-    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, l5, BL);         \
-    CHK_SUBCLASS_H (_obj->pab, ASSOCPARAMBASEDACTIONBODY, assocdep);          \
-    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, num_values, BL); \
-    for (unsigned i = 0; i < _obj->pab.num_values; i++)                       \
+#define CHK_VALUEPARAM(numfield, valprefix)                                   \
+  for (unsigned i = 0; i < _obj->numfield; i++)                               \
     {                                                                         \
-      CHK_SUBCLASS_TYPE (_obj->pab.values[i], VALUEPARAM, class_version, BL); \
-      CHK_SUBCLASS_UTF8TEXT (_obj->pab.values[i], VALUEPARAM, name);          \
-      CHK_SUBCLASS_TYPE (_obj->pab.values[i], VALUEPARAM, unit_type, BL);     \
-      CHK_SUBCLASS_TYPE (_obj->pab.values[i], VALUEPARAM, num_vars, BL);      \
-      CHK_SUBCLASS_H (_obj->pab.values[i], VALUEPARAM, controlled_objdep);    \
-      for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)             \
+      CHK_SUBCLASS_TYPE (_obj->valprefix[i], VALUEPARAM, class_version, BL);  \
+      CHK_SUBCLASS_UTF8TEXT (_obj->valprefix[i], VALUEPARAM, name);           \
+      CHK_SUBCLASS_TYPE (_obj->valprefix[i], VALUEPARAM, unit_type, BL);      \
+      CHK_SUBCLASS_TYPE (_obj->valprefix[i], VALUEPARAM, num_vars, BL);       \
+      CHK_SUBCLASS_H (_obj->valprefix[i], VALUEPARAM, controlled_objdep);     \
+      for (unsigned j = 0; j < _obj->valprefix[i].num_vars; j++)              \
         {                                                                     \
-          unsigned dxf = _obj->pab.values[i].vars[j].value.code;              \
-          CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value, EvalVariant,  \
+          unsigned dxf = _obj->valprefix[i].vars[j].value.code;               \
+          CHK_SUBCLASS_TYPE (_obj->valprefix[i].vars[j].value, EvalVariant,   \
                              code, BSd);                                      \
           switch (dwg_resbuf_value_type (dxf))                                \
             {                                                                 \
             case VT_REAL:                                                     \
-              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+              CHK_SUBCLASS_TYPE (_obj->valprefix[i].vars[j].value,            \
                                  EvalVariant, u.bd, BD);                      \
               break;                                                          \
             case VT_INT32:                                                    \
-              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+              CHK_SUBCLASS_TYPE (_obj->valprefix[i].vars[j].value,            \
                                  EvalVariant, u.bl, BL);                      \
               break;                                                          \
             case VT_INT16:                                                    \
-              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+              CHK_SUBCLASS_TYPE (_obj->valprefix[i].vars[j].value,            \
                                  EvalVariant, u.bs, BS);                      \
               break;                                                          \
             case VT_INT8:                                                     \
-              CHK_SUBCLASS_TYPE (_obj->pab.values[i].vars[j].value,           \
+              CHK_SUBCLASS_TYPE (_obj->valprefix[i].vars[j].value,            \
                                  EvalVariant, u.rc, RC);                      \
               break;                                                          \
             case VT_STRING:                                                   \
-              CHK_SUBCLASS_UTF8TEXT (_obj->pab.values[i].vars[j].value,       \
+              CHK_SUBCLASS_UTF8TEXT (_obj->valprefix[i].vars[j].value,        \
                                      EvalVariant, u.text);                    \
               break;                                                          \
             case VT_HANDLE:                                                   \
-              CHK_SUBCLASS_H (_obj->pab.values[i].vars[j].value, EvalVariant, \
+              CHK_SUBCLASS_H (_obj->valprefix[i].vars[j].value, EvalVariant,  \
                               u.handle);                                      \
               break;                                                          \
             case VT_BINARY:                                                   \
@@ -1578,10 +1568,23 @@ api_common_object (dwg_object *obj)
             default:                                                          \
               fail ("Unknown VALUEPARAM.vars[%d].value.code %u", j, dxf);     \
             }                                                                 \
-          CHK_SUBCLASS_H (_obj->pab.values[i], VALUEPARAM,                    \
-                          controlled_objdep);                                 \
+          CHK_SUBCLASS_H (_obj->valprefix[i], VALUEPARAM, controlled_objdep); \
         }                                                                     \
-    }                                                                         \
+    }
+
+// FIXME TYPE unused
+#define CHK_ASSOCPARAMBASEDACTIONBODY(TYPE)                                   \
+  PRE (R_2013) {                                                              \
+    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, version, BL);    \
+    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, minor, BL);      \
+    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, num_deps, BL);   \
+    CHK_SUBCLASS_HV (_obj->pab, ASSOCPARAMBASEDACTIONBODY, deps,              \
+                     _obj->pab.num_deps);                                     \
+    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, l4, BL);         \
+    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, l5, BL);         \
+    CHK_SUBCLASS_H (_obj->pab, ASSOCPARAMBASEDACTIONBODY, assocdep);          \
+    CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, num_values, BL); \
+    CHK_VALUEPARAM (pab.num_values, pab.values);                              \
   }
 
 #define BLOCKPARAMETER_PropInfo(_prop)                                  \
