@@ -7968,7 +7968,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 // TODO or lines[].color
                 fname = "fill_color";
               else if (pair->code == 420 && strEQc (name, "VISUALSTYLE"))
-                fname = "color";
+                break; // ignore. always index 5
               else if (pair->code == 421 && strEQc (name, "VISUALSTYLE"))
                 fname = "face_mono_color";
               else if (pair->code == 422 && strEQc (name, "VISUALSTYLE"))
@@ -8064,7 +8064,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   color.rgb = pair->value.l;
                   color.rgb |= 0xc2000000;
                   LOG_TRACE ("%s.%s.rgb = %08X [CMC %d]\n", name, fname,
-                             pair->value.u, pair->code);
+                             color.rgb, pair->code);
                   dwg_dynapi_entity_set_value (_obj, obj->name, fname, &color,
                                                is_tu);
                   break;
