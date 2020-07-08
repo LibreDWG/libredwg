@@ -11662,9 +11662,9 @@ H,	DXF 340
 
 @item parent
 struct _dwg_object_object*
-@item num_rows
+@item numrows
 BL,	DXF 90
-@item num_cols
+@item numcols
 BL,	DXF 91
 @item num_cells
 BL,	DXF 92

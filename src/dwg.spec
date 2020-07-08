@@ -5988,10 +5988,10 @@ DWG_OBJECT_END
 DWG_OBJECT (TABLEGEOMETRY)
 
   SUBCLASS (AcDbTableGeometry)
-  FIELD_BL (num_rows, 90);
-  VALUEOUTOFBOUNDS (num_rows, 5000)
-  FIELD_BL (num_cols, 91);
-  VALUEOUTOFBOUNDS (num_cols, 5000)
+  FIELD_BL (numrows, 90);
+  VALUEOUTOFBOUNDS (numrows, 5000)
+  FIELD_BL (numcols, 91);
+  VALUEOUTOFBOUNDS (numcols, 5000)
   FIELD_BL (num_cells, 92);
   VALUEOUTOFBOUNDS (num_cells, 10000)
   REPEAT (num_cells, cells, Dwg_TABLEGEOMETRY_Cell)

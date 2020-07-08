@@ -3880,8 +3880,8 @@ typedef struct _dwg_TABLEGEOMETRY_Cell
 typedef struct _dwg_object_TABLEGEOMETRY
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL num_rows;
-  BITCODE_BL num_cols;
+  BITCODE_BL numrows;
+  BITCODE_BL numcols;
   BITCODE_BL num_cells; /* = num_rows * num_cols */
   Dwg_TABLEGEOMETRY_Cell *cells;
 } Dwg_Object_TABLEGEOMETRY;

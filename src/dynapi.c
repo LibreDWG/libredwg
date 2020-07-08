@@ -10004,9 +10004,9 @@ static const Dwg_DYNAPI_field _dwg_TABLECONTENT_fields[] = {
 static const Dwg_DYNAPI_field _dwg_TABLEGEOMETRY_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_TABLEGEOMETRY, parent),
     1,1,0, 0 },
-  { "num_rows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLEGEOMETRY, num_rows),
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLEGEOMETRY, numrows),
     0,0,0, 90 },
-  { "num_cols",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLEGEOMETRY, num_cols),
+  { "numcols",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLEGEOMETRY, numcols),
     0,0,0, 91 },
   { "num_cells",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLEGEOMETRY, num_cells),
     0,0,0, 92 },

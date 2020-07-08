@@ -57098,34 +57098,34 @@ static int test_TABLEGEOMETRY (const Dwg_Object *obj)
     tablegeometry->num_cells--;
   }
   {
-    BITCODE_BL num_cols;
-    if (dwg_dynapi_entity_value (tablegeometry, "TABLEGEOMETRY", "num_cols", &num_cols, NULL)
-        && num_cols == tablegeometry->num_cols)
+    BITCODE_BL numcols;
+    if (dwg_dynapi_entity_value (tablegeometry, "TABLEGEOMETRY", "numcols", &numcols, NULL)
+        && numcols == tablegeometry->numcols)
       pass ();
     else
-      fail ("TABLEGEOMETRY.num_cols [BL] %u != %u", tablegeometry->num_cols, num_cols);
-    num_cols++;
-    if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_cols", &num_cols, 0)
-        && num_cols == tablegeometry->num_cols)
+      fail ("TABLEGEOMETRY.numcols [BL] %u != %u", tablegeometry->numcols, numcols);
+    numcols++;
+    if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "numcols", &numcols, 0)
+        && numcols == tablegeometry->numcols)
       pass ();
     else
-      fail ("TABLEGEOMETRY.num_cols [BL] set+1 %u != %u", tablegeometry->num_cols, num_cols);
-    tablegeometry->num_cols--;
+      fail ("TABLEGEOMETRY.numcols [BL] set+1 %u != %u", tablegeometry->numcols, numcols);
+    tablegeometry->numcols--;
   }
   {
-    BITCODE_BL num_rows;
-    if (dwg_dynapi_entity_value (tablegeometry, "TABLEGEOMETRY", "num_rows", &num_rows, NULL)
-        && num_rows == tablegeometry->num_rows)
+    BITCODE_BL numrows;
+    if (dwg_dynapi_entity_value (tablegeometry, "TABLEGEOMETRY", "numrows", &numrows, NULL)
+        && numrows == tablegeometry->numrows)
       pass ();
     else
-      fail ("TABLEGEOMETRY.num_rows [BL] %u != %u", tablegeometry->num_rows, num_rows);
-    num_rows++;
-    if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "num_rows", &num_rows, 0)
-        && num_rows == tablegeometry->num_rows)
+      fail ("TABLEGEOMETRY.numrows [BL] %u != %u", tablegeometry->numrows, numrows);
+    numrows++;
+    if (dwg_dynapi_entity_set_value (tablegeometry, "TABLEGEOMETRY", "numrows", &numrows, 0)
+        && numrows == tablegeometry->numrows)
       pass ();
     else
-      fail ("TABLEGEOMETRY.num_rows [BL] set+1 %u != %u", tablegeometry->num_rows, num_rows);
-    tablegeometry->num_rows--;
+      fail ("TABLEGEOMETRY.numrows [BL] set+1 %u != %u", tablegeometry->numrows, numrows);
+    tablegeometry->numrows--;
   }
   {
     struct _dwg_object_object* parent;
