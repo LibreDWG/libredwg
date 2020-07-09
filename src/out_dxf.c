@@ -1274,6 +1274,8 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       SINCE (R_13)                                                            \
       {                                                                       \
         fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);           \
+        _XDICOBJHANDLE (3);                                                   \
+        _REACTORS (4);                                                        \
       }                                                                       \
       SINCE (R_14)                                                            \
       {                                                                       \
@@ -2180,7 +2182,8 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
     case DWG_TYPE_PLACEHOLDER:
       return minimal ? 0 : dwg_dxf_PLACEHOLDER (dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
-      // TODO dwg_dxf_PROXY_ENTITY(dat, obj);
+       // avoid unused warnings
+      error |= dwg_dxf_PROXY_ENTITY(dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
     case DWG_TYPE_OLEFRAME:
       return minimal ? 0 : dwg_dxf_OLEFRAME (dat, obj);
@@ -2486,6 +2489,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   unsigned int i;
+  BITCODE_BL vcount;
 
   SECTION (TABLES);
   {
@@ -2493,6 +2497,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_VPORT_CONTROL)
       {
+        Dwg_Object *obj = ctrl;
         TABLE (VPORT);
         // add handle 5 here at first
         COMMON_TABLE_CONTROL_FLAGS;
@@ -2508,7 +2513,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           }
         for (i = 0; i < dwg->vport_control.num_entries; i++)
           {
-            Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_VPORT)
               {
                 // reordered in the DXF: 2,70,10,11,12,13,14,15,16,...
@@ -2524,7 +2529,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_LTYPE_CONTROL)
       {
-        Dwg_Object *obj;
+        Dwg_Object *obj = ctrl;
         TABLE (LTYPE);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_LTYPE_CONTROL (dat, ctrl);
@@ -2556,12 +2561,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_LAYER_CONTROL)
       {
+        Dwg_Object *obj = ctrl;
         TABLE (LAYER);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_LAYER_CONTROL (dat, ctrl);
         for (i = 0; i < dwg->layer_control.num_entries; i++)
           {
-            Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_LAYER)
               error |= dwg_dxf_LAYER (dat, obj);
             // else if (obj && obj->type == DWG_TYPE_DICTIONARY)
@@ -2575,12 +2581,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_STYLE_CONTROL)
       {
+        Dwg_Object *obj = ctrl;
         TABLE (STYLE);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_STYLE_CONTROL (dat, ctrl);
         for (i = 0; i < dwg->style_control.num_entries; i++)
           {
-            Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_STYLE)
               {
                 error |= dwg_dxf_STYLE (dat, obj);
@@ -2594,12 +2601,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_VIEW_CONTROL)
       {
+        Dwg_Object *obj = ctrl;
         TABLE (VIEW);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_VIEW_CONTROL (dat, ctrl);
         for (i = 0; i < dwg->view_control.num_entries; i++)
           {
-            Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             // FIXME implement the other two
             if (obj && obj->type == DWG_TYPE_VIEW)
               error |= dwg_dxf_VIEW (dat, obj);
@@ -2618,12 +2626,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_UCS_CONTROL)
       {
+        Dwg_Object *obj = ctrl;
         TABLE (UCS);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_UCS_CONTROL (dat, ctrl);
         for (i = 0; i < dwg->ucs_control.num_entries; i++)
           {
-            Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_UCS)
               {
                 error |= dwg_dxf_UCS (dat, obj);
@@ -2638,12 +2647,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_APPID_CONTROL)
       {
+        Dwg_Object *obj = ctrl;
         TABLE (APPID);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_APPID_CONTROL (dat, ctrl);
         for (i = 0; i < dwg->appid_control.num_entries; i++)
           {
-            Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_APPID)
               {
                 error |= dwg_dxf_APPID (dat, obj);
@@ -2657,13 +2667,14 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
     if (ctrl && ctrl->fixedtype == DWG_TYPE_DIMSTYLE_CONTROL)
       {
+        Dwg_Object *obj = ctrl;
         TABLE (DIMSTYLE);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_DIMSTYLE_CONTROL (dat, ctrl);
         // ignoring morehandles
         for (i = 0; i < dwg->dimstyle_control.num_entries; i++)
           {
-            Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_DIMSTYLE)
               {
                 error |= dwg_dxf_DIMSTYLE (dat, obj);
@@ -2680,25 +2691,25 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
       if (ctrl && ctrl->fixedtype == DWG_TYPE_VPORT_ENTITY_CONTROL)
         {
+          Dwg_Object *obj = ctrl;
           TABLE (VPORT_ENTITY);
           COMMON_TABLE_CONTROL_FLAGS;
           error |= dwg_dxf_VPORT_ENTITY_CONTROL (dat, ctrl);
           for (i = 0; i < dwg->vport_entity_control.num_entries; i++)
             {
-              Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+              obj = dwg_ref_object (dwg, _ctrl->entries[i]);
               if (obj && obj->type == DWG_TYPE_VPORT_ENTITY_HEADER)
                 {
                   error |= dwg_dxf_VPORT_ENTITY_HEADER (dat, obj);
                 }
             }
-          // avoid unused warnings
-          dwg_dxf_PROXY_ENTITY (dat, &dwg->object[0]);
           ENDTAB ();
         }
     }
+
   SINCE (R_13)
   {
-    Dwg_Object *ctrl;
+    Dwg_Object *ctrl, *obj;
     Dwg_Object_BLOCK_CONTROL *_ctrl = dwg_block_control (dwg);
     Dwg_Object_Ref *ref;
     Dwg_Object *mspace = NULL, *pspace = NULL;
@@ -2708,6 +2719,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_CONTROL)
       return DWG_ERR_INVALIDDWG;
 
+    obj = ctrl;
     TABLE (BLOCK_RECORD);
     COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_BLOCK_CONTROL (dat, ctrl);
@@ -2741,7 +2753,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
     for (i = 0; i < dwg->block_control.num_entries; i++)
       {
-        Dwg_Object *obj = dwg_ref_object (dwg, dwg->block_control.entries[i]);
+        obj = dwg_ref_object (dwg, dwg->block_control.entries[i]);
         if (obj && obj->type == DWG_TYPE_BLOCK_HEADER
             && obj != mspace
             && obj != pspace)
