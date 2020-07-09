@@ -2188,13 +2188,7 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
     case DWG_TYPE_OLEFRAME:
       return minimal ? 0 : dwg_dxf_OLEFRAME (dat, obj);
     case DWG_TYPE_VBA_PROJECT:
-      if (!minimal)
-        {
-          LOG_ERROR ("Unhandled Object VBA_PROJECT");
-          // dwg_dxf_VBA_PROJECT(dat, obj);
-          return DWG_ERR_UNHANDLEDCLASS;
-        }
-      return 0;
+      return minimal ? 0 : dwg_dxf_VBA_PROJECT (dat, obj);
     case DWG_TYPE_LAYOUT:
       return minimal ? 0 : dwg_dxf_LAYOUT (dat, obj);
     default:
