@@ -170,8 +170,14 @@
       }
 #endif
     }
-  OTHER_VERSIONS
-    FIELD_CMC (color, 62);
+  OTHER_VERSIONS {
+    DXF {
+      if (ent->color.index != 256) // not bylayer
+        FIELD_BS (color.index, 62);
+    }
+    else
+      FIELD_CMC (color, 62);
+  }
 
   DXF {
     if (FIELD_VALUE (ltype_scale) != 1.0)
