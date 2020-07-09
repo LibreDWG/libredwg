@@ -8782,7 +8782,7 @@ H*
 @item endblk_entity
 H
 @item inserts
-H*
+H*,	DXF 331
 @item layout
 H,	DXF 340
 

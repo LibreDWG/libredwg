@@ -7737,7 +7737,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
   { "endblk_entity",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCK_HEADER, endblk_entity),
     1,0,0, 0 },
   { "inserts",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCK_HEADER, inserts),
-    1,1,0, 0 },
+    1,1,0, 331 },
   { "layout",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCK_HEADER, layout),
     1,0,0, 340 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},

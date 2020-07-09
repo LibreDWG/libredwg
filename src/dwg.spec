@@ -2608,6 +2608,16 @@ DWG_OBJECT (BLOCK_HEADER)
   DXF {
     // not allowed to be skipped, can be 0
     VALUE_HANDLE (_obj->layout, layout, 5, 340);
+    if (FIELD_VALUE (preview_size))
+      {
+        FIELD_BINARY (preview, FIELD_VALUE (preview_size), 310);
+      }
+    if (FIELD_VALUE (num_inserts))
+      {
+        VALUE_TFF ("{BLKREFS", 102);
+        HANDLE_VECTOR (inserts, num_inserts, 4, 331);
+        VALUE_TFF ("}", 102);
+      }
     // The DXF TABLE.BLOCK_RECORD only has this. More later in the BLOCKS section.
     return 0;
   }
