@@ -1320,6 +1320,13 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       /* mask off plotflag and linewt */                                      \
       VALUE_RC (_obj->flag & ~0x3f0, 70);                                     \
     }                                                                         \
+  else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
+    {                                                                         \
+      /* mask off 64, Optional for BLOCK_RECORD */                            \
+      BITCODE_RC _flag = _obj->flag & ~64;                                    \
+      if (_flag)                                                              \
+        VALUE_RC (_flag, 70);                                                 \
+    }                                                                         \
   else                                                                        \
     {                                                                         \
       /* mask off 64, the loaded bit 6 */                                     \
@@ -2693,8 +2700,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     Dwg_Object *ctrl;
     Dwg_Object_BLOCK_CONTROL *_ctrl = dwg_block_control (dwg);
-    // Dwg_Object *obj = dwg_ref_object(dwg, _ctrl->model_space);
-    // Dwg_Object *mspace = NULL, *pspace = NULL;
+    Dwg_Object_Ref *ref;
+    Dwg_Object *mspace = NULL, *pspace = NULL;
     if (!_ctrl)
       return DWG_ERR_INVALIDDWG;
     ctrl = &dwg->object[_ctrl->objid];
@@ -2705,7 +2712,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     COMMON_TABLE_CONTROL_FLAGS;
     error |= dwg_dxf_BLOCK_CONTROL (dat, ctrl);
 
-#if 1
+#if 0 // unordered pspace
     for (i = 0; i < dwg->num_objects; i++)
       {
         Dwg_Object *hdr = &dwg->object[i];
@@ -2718,26 +2725,25 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           }
       }
 #else
-    if (obj && obj->type == DWG_TYPE_BLOCK_HEADER)
+    mspace = dwg_model_space_object (dwg);
+    if (!mspace)
+      return DWG_ERR_INVALIDDWG;
+    RECORD (BLOCK_RECORD);
+    error |= dwg_dxf_BLOCK_HEADER (dat, mspace);
+
+    ref = dwg_paper_space_ref (dwg);
+    pspace = ref ? dwg_ref_object (dwg, ref) : NULL;
+    if (pspace)
       {
-        mspace = obj;
         RECORD (BLOCK_RECORD);
-        error |= dwg_dxf_BLOCK_HEADER (dat, obj);
+        error |= dwg_dxf_BLOCK_HEADER (dat, pspace);
       }
-    if (_ctrl->paper_space)
-      {
-        obj = dwg_ref_object (dwg, _ctrl->paper_space);
-        if (obj && obj->type == DWG_TYPE_BLOCK_HEADER)
-          {
-            pspace = obj;
-            RECORD (BLOCK_RECORD);
-            error |= dwg_dxf_BLOCK_HEADER (dat, obj);
-          }
-      }
+
     for (i = 0; i < dwg->block_control.num_entries; i++)
       {
-        obj = dwg_ref_object (dwg, dwg->block_control.block_headers[i]);
-        if (obj && obj->type == DWG_TYPE_BLOCK_HEADER && obj != mspace
+        Dwg_Object *obj = dwg_ref_object (dwg, dwg->block_control.entries[i]);
+        if (obj && obj->type == DWG_TYPE_BLOCK_HEADER
+            && obj != mspace
             && obj != pspace)
           {
             RECORD (BLOCK_RECORD);
