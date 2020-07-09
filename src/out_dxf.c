@@ -1285,7 +1285,6 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     }                                                                         \
   SINCE (R_13) { VALUE_TV ("AcDbSymbolTable", 100); }
 
-// TODO add 340
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
   SINCE (R_13)                                                                \
   {                                                                           \
@@ -1324,12 +1323,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       VALUE_RC (_obj->flag & ~0x3f0, 70);                                     \
     }                                                                         \
   else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
-    {                                                                         \
-      /* mask off 64, Optional for BLOCK_RECORD */                            \
-      BITCODE_RC _flag = _obj->flag & ~64;                                    \
-      if (_flag)                                                              \
-        VALUE_RC (_flag, 70);                                                 \
-    }                                                                         \
+    ; /* skip 70 for AcDbBlockTableRecord here. done in AcDbBlockBegin */     \
   else                                                                        \
     {                                                                         \
       /* mask off 64, the loaded bit 6 */                                     \
@@ -2603,15 +2597,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         for (i = 0; i < dwg->view_control.num_entries; i++)
           {
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
-            // FIXME implement the other two
             if (obj && obj->type == DWG_TYPE_VIEW)
               error |= dwg_dxf_VIEW (dat, obj);
-            /*
-              else if (obj && obj->fixedtype == DWG_TYPE_SECTIONVIEWSTYLE)
-              error |= dwg_dxf_SECTIONVIEWSTYLE(dat, obj);
-              if (obj && obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE) {
-              error |= dwg_dxf_DETAILVIEWSTYLE(dat, obj);
-            */
           }
         ENDTAB ();
       }
@@ -2708,7 +2695,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object_Ref *ref;
     Dwg_Object *mspace = NULL, *pspace = NULL;
     if (!_ctrl)
-      return DWG_ERR_INVALIDDWG;
+      {
+        LOG_ERROR ("BLOCK_CONTROL missing");
+        return DWG_ERR_INVALIDDWG;
+      }
     ctrl = &dwg->object[_ctrl->objid];
     if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_CONTROL)
       return DWG_ERR_INVALIDDWG;
