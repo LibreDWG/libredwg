@@ -84,22 +84,22 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
     dxf_fixup_string (dat, (char *)value);                                    \
   }
 // in_json writes all strings as TV, in_dxf and decode not.
-#define VALUE_TU(wstr, dxf)                                             \
-  {                                                                     \
-    if (dat->opts & DWG_OPTS_INJSON)                                    \
-      {                                                                 \
-        VALUE_TV (wstr, dxf);                                           \
-      }                                                                 \
-    else                                                                \
-      {                                                                 \
-        char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                   \
-        GROUP (dxf);                                                    \
-        if (u8)                                                         \
-          fprintf (dat->fh, "%s\r\n", u8);                              \
-        else                                                            \
-          fprintf (dat->fh, "\r\n");                                    \
-        free (u8);                                                      \
-      }                                                                 \
+#define VALUE_TU(wstr, dxf)                                                   \
+  {                                                                           \
+    if (dat->opts & DWG_OPTS_INJSON)                                          \
+      {                                                                       \
+        VALUE_TV (wstr, dxf);                                                 \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                         \
+        GROUP (dxf);                                                          \
+        if (u8)                                                               \
+          fprintf (dat->fh, "%s\r\n", u8);                                    \
+        else                                                                  \
+          fprintf (dat->fh, "\r\n");                                          \
+        free (u8);                                                            \
+      }                                                                       \
   }
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
@@ -108,23 +108,24 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
-    long len = (long)size;                                                    \
-    do                                                                        \
+    if (value)                                                                \
       {                                                                       \
-        short j;                                                              \
-        long l = len > 127 ? 127 : len;                                       \
-        GROUP (dxf);                                                          \
-        if (value)                                                            \
-          for (j = 0; j < l; j++)                                             \
-            {                                                                 \
-              fprintf (dat->fh, "%02X", value[j]);                            \
-            }                                                                 \
+        for (unsigned long j = 0; j < (unsigned long)(size); j++)             \
+          {                                                                   \
+            if (!(j % 127))                                                   \
+              {                                                               \
+                if (j)                                                        \
+                  fprintf (dat->fh, "\r\n");                                  \
+                GROUP (dxf);                                                  \
+              }                                                               \
+            fprintf (dat->fh, "%02X", (value)[j]);                            \
+          }                                                                   \
         fprintf (dat->fh, "\r\n");                                            \
-        len -= 127;                                                           \
       }                                                                       \
-    while (len > 127);                                                        \
   }
-#define FIELD_BINARY(name, size, dxf) if (dxf) VALUE_BINARY (_obj->name, size, dxf)
+#define FIELD_BINARY(name, size, dxf)                                         \
+  if (dxf)                                                                    \
+  VALUE_BINARY (_obj->name, size, dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -132,7 +133,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
 #define VALUE_HANDLE(value, nam, handle_code, dxf)                            \
   if (dxf)                                                                    \
     {                                                                         \
-      fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                                 \
+      fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                                \
                value != NULL ? ((BITCODE_H)value)->absolute_ref : 0);         \
     }
 // the name in the table, referenced by the handle
