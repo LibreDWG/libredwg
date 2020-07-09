@@ -2864,7 +2864,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 330 && o->num_boundary_handles && (BITCODE_BL)k < o->num_boundary_handles)
         {
           BITCODE_H ref
-              = dwg_add_handleref (obj->parent, 3, pair->value.u, obj);
+              = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
           if (!o->boundary_handles)
             o->boundary_handles = (BITCODE_H *)xcalloc (
                 o->num_boundary_handles, sizeof (BITCODE_H));
@@ -6858,11 +6858,9 @@ in_postprocess_handles (Dwg_Object *restrict obj)
           ent->next_entity = NULL; // temp.
           if (prev)
             {
-              if (prev->tio.entity->prev_entity)
-                prev->tio.entity->nolinks = 0;
-              if (obj->type == DWG_TYPE_BLOCK
-                  || (prev->type != DWG_TYPE_SEQEND
-                      && prev->type != DWG_TYPE_ENDBLK))
+              //if (prev->tio.entity->prev_entity)
+              //  prev->tio.entity->nolinks = 0;
+              if (prev->index + 1 != obj->index)
                 {
                   prev->tio.entity->nolinks = 0;
                   prev->tio.entity->next_entity
@@ -9623,7 +9621,6 @@ new_object (char *restrict name, char *restrict dxfname,
   else if (is_textlike (obj))
     postprocess_TEXTlike (obj);
 
-  in_postprocess_handles (obj);
   return pair;
 
  invalid_dxf:
@@ -10024,6 +10021,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   add_to_BLOCK_HEADER (obj, mspace_ref);
                 }
 
+              in_postprocess_handles (obj);
               strncpy (name, pair->value.s, 79);
               name[79] = '\0';
               entity_alias (name);
