@@ -119,6 +119,8 @@ API breaking changes:
   * Removed all extra null_handle fields, and add the missing handle fields.
   * Renamed all dwg_add_OBJECT functions to dwg_setup_OBJECT. They didn't add them, just setup
     the internal structures.
+  * Renamed VPORT_ENTITY_HEADER to VX_TABLE_RECORD and VPORT_ENTITY_CONTROL to VX_CONTROL.
+    Also section enum SECTION_VPORT_ENTITY to SECTION_VX and dwg->vport_entity_control likewise.
   * Hundreds of field renames due to harmonization efforts with the more generic
     JSON importer. Note that some deprecated dwg_api accessor functions were also
     renamed accordingly, but not all.

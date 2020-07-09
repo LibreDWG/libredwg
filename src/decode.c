@@ -584,10 +584,10 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         }
       break;
 
-    case SECTION_VPORT_ENTITY:
+    case SECTION_VX:
       if (tbl->number)
         {
-          LOG_WARN ("VPORT_ENTITY table ignored");
+          LOG_WARN ("VX table ignored");
           tbl->number = 0;
         }
       break;
@@ -725,7 +725,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_ptr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
   // skip: 0x69f - dat->bytes
   dat->byte = 0x69f;
-  decode_preR13_section_ptr ("VPORT_ENTITY", SECTION_VPORT_ENTITY, dat, dwg);
+  decode_preR13_section_ptr ("VX", SECTION_VX, dat, dwg);
   dat->byte += 38;
   // entities
   error |= decode_preR13_entities (entities_start, entities_end, 0, dat, dwg);
@@ -741,7 +741,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
   error |= decode_preR13_section (SECTION_APPID, dat, dwg);
   error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
-  error |= decode_preR13_section (SECTION_VPORT_ENTITY, dat, dwg);
+  error |= decode_preR13_section (SECTION_VX, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
   // blocks
@@ -806,7 +806,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_chk (SECTION_VPORT, dat, dwg);
   decode_preR13_section_chk (SECTION_APPID, dat, dwg);
   decode_preR13_section_chk (SECTION_DIMSTYLE, dat, dwg);
-  decode_preR13_section_chk (SECTION_VPORT_ENTITY, dat, dwg);
+  decode_preR13_section_chk (SECTION_VX, dat, dwg);
   rl1 = bit_read_RL (dat);
   LOG_TRACE ("long 0x%x\n", rl1); // address
 
@@ -4217,7 +4217,7 @@ obj_has_strings (unsigned int type)
     case DWG_TYPE_VPORT_CONTROL:
     case DWG_TYPE_APPID_CONTROL:
     case DWG_TYPE_DIMSTYLE_CONTROL:
-    case DWG_TYPE_VPORT_ENTITY_CONTROL:
+    case DWG_TYPE_VX_CONTROL:
       return 0;
     case DWG_TYPE_BLOCK_HEADER:
     case DWG_TYPE_LAYER:
@@ -4228,7 +4228,7 @@ obj_has_strings (unsigned int type)
     case DWG_TYPE_VPORT:
     case DWG_TYPE_APPID:
     case DWG_TYPE_DIMSTYLE:
-    case DWG_TYPE_VPORT_ENTITY_HEADER:
+    case DWG_TYPE_VX_TABLE_RECORD:
       return 1;
     case DWG_TYPE_GROUP:
     case DWG_TYPE_MLINESTYLE:
@@ -5252,6 +5252,11 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         case 24:
           error |= dwg_decode_VPORT (dat, obj);
           break;
+        /*
+        case 25: // or DIMENSION_RADIUS?
+          error |= dwg_decode_3DLINE (dat, obj);
+          break;
+        */
         default:
           LOG_ERROR ("Unknown object type %d", obj->type)
           break;
@@ -5710,17 +5715,17 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     case DWG_TYPE_DIMSTYLE:
       error = dwg_decode_DIMSTYLE (dat, obj);
       break;
-    case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      error = dwg_decode_VPORT_ENTITY_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.VPORT_ENTITY_CONTROL)
+    case DWG_TYPE_VX_CONTROL:
+      error = dwg_decode_VX_CONTROL (dat, obj);
+      if (!error && obj->tio.object->tio.VX_CONTROL)
         {
-          obj->tio.object->tio.VPORT_ENTITY_CONTROL->objid = num;
-          dwg->vport_entity_control
-              = *obj->tio.object->tio.VPORT_ENTITY_CONTROL;
+          obj->tio.object->tio.VX_CONTROL->objid = num;
+          dwg->vx_control
+              = *obj->tio.object->tio.VX_CONTROL;
         }
       break;
-    case DWG_TYPE_VPORT_ENTITY_HEADER:
-      error = dwg_decode_VPORT_ENTITY_HEADER (dat, obj);
+    case DWG_TYPE_VX_TABLE_RECORD:
+      error = dwg_decode_VX_TABLE_RECORD (dat, obj);
       break;
     case DWG_TYPE_GROUP:
       error = dwg_decode_GROUP (dat, obj);

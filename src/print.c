@@ -552,10 +552,10 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_print_DIMSTYLE_CONTROL (dat, obj);
     case DWG_TYPE_DIMSTYLE:
       return dwg_print_DIMSTYLE (dat, obj);
-    case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      return dwg_print_VPORT_ENTITY_CONTROL (dat, obj);
-    case DWG_TYPE_VPORT_ENTITY_HEADER:
-      return dwg_print_VPORT_ENTITY_HEADER (dat, obj);
+    case DWG_TYPE_VX_CONTROL:
+      return dwg_print_VX_CONTROL (dat, obj);
+    case DWG_TYPE_VX_TABLE_RECORD:
+      return dwg_print_VX_TABLE_RECORD (dat, obj);
     case DWG_TYPE_GROUP:
       return dwg_print_GROUP (dat, obj);
     case DWG_TYPE_MLINESTYLE:

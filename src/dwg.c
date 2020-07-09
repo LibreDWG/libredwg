@@ -1344,7 +1344,7 @@ dwg_obj_is_control (const Dwg_Object *obj)
              || type == DWG_TYPE_UCS_CONTROL || type == DWG_TYPE_VPORT_CONTROL
              || type == DWG_TYPE_APPID_CONTROL
              || type == DWG_TYPE_DIMSTYLE_CONTROL
-             || type == DWG_TYPE_VPORT_ENTITY_CONTROL);
+             || type == DWG_TYPE_VX_CONTROL);
 }
 
 EXPORT int
@@ -1357,7 +1357,7 @@ dwg_obj_is_table (const Dwg_Object *obj)
              || type == DWG_TYPE_VIEW || type == DWG_TYPE_UCS
              || type == DWG_TYPE_VPORT || type == DWG_TYPE_APPID
              || type == DWG_TYPE_DIMSTYLE
-             || type == DWG_TYPE_VPORT_ENTITY_HEADER);
+             || type == DWG_TYPE_VX_TABLE_RECORD);
 }
 
 EXPORT int
@@ -1568,7 +1568,7 @@ static const char * const dwg_section_r11_names[] =
   "VPORT",                    // 7
   "APPID",                    // 8
   "DIMSTYLE",                 // 9
-  "VPORT_ENTITY"              // 10
+  "VX"              	      // 10
 };
 
 const char *
@@ -1584,7 +1584,7 @@ dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
     }
   else
     {
-      return (sec_id <= SECTION_VPORT_ENTITY) ? dwg_section_r11_names[sec_id] : NULL;
+      return (sec_id <= SECTION_VX) ? dwg_section_r11_names[sec_id] : NULL;
     }
 }
 
@@ -2122,11 +2122,11 @@ dwg_ctrl_table (Dwg_Data *restrict dwg, const char *restrict table)
         vars->DIMSTYLE_CONTROL_OBJECT = ctrl
             = dwg_find_table_control (dwg, "DIMSTYLE_CONTROL");
     }
-  else if (strEQc (table, "VPORT_ENTITY"))
+  else if (strEQc (table, "VX"))
     {
-      if (!(ctrl = vars->VPORT_ENTITY_CONTROL_OBJECT))
-        vars->VPORT_ENTITY_CONTROL_OBJECT = ctrl
-            = dwg_find_table_control (dwg, "VPORT_ENTITY_CONTROL");
+      if (!(ctrl = vars->VX_CONTROL_OBJECT))
+        vars->VX_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "VX_CONTROL");
     }
   else if (strEQc (table, "GROUP"))
     {

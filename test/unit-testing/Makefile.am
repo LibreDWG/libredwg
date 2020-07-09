@@ -193,8 +193,8 @@ testobjects = \
 	visualstyle \
 	vport \
 	vport_control \
-	vport_entity_control \
-	vport_entity_header \
+	vx_control \
+	vx_table_record \
 	wipeout \
 	wipeoutvariables \
 	xline \

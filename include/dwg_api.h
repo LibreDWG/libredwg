@@ -597,8 +597,8 @@ typedef struct _dwg_object_VIEW		dwg_obj_view;
 typedef struct _dwg_object_VIEW_CONTROL		dwg_obj_view_control;
 typedef struct _dwg_object_VPORT		dwg_obj_vport;
 typedef struct _dwg_object_VPORT_CONTROL		dwg_obj_vport_control;
-typedef struct _dwg_object_VPORT_ENTITY_CONTROL		dwg_obj_vport_entity_control;
-typedef struct _dwg_object_VPORT_ENTITY_HEADER		dwg_obj_vport_entity_header;
+typedef struct _dwg_object_VX_CONTROL		dwg_obj_vx_control;
+typedef struct _dwg_object_VX_TABLE_RECORD		dwg_obj_vx_table_record;
 /* untyped > 500 */
 typedef struct _dwg_object_ACSH_BOOLEAN_CLASS		dwg_obj_acsh_boolean_class;
 typedef struct _dwg_object_ACSH_BOX_CLASS		dwg_obj_acsh_box_class;
@@ -897,8 +897,8 @@ dwg_get_OBJECT_DECL (obj_view, VIEW);
 dwg_get_OBJECT_DECL (obj_view_control, VIEW_CONTROL);
 dwg_get_OBJECT_DECL (obj_vport, VPORT);
 dwg_get_OBJECT_DECL (obj_vport_control, VPORT_CONTROL);
-dwg_get_OBJECT_DECL (obj_vport_entity_control, VPORT_ENTITY_CONTROL);
-dwg_get_OBJECT_DECL (obj_vport_entity_header, VPORT_ENTITY_HEADER);
+dwg_get_OBJECT_DECL (obj_vx_control, VX_CONTROL);
+dwg_get_OBJECT_DECL (obj_vx_table_record, VX_TABLE_RECORD);
 /* untyped > 500 */
 dwg_get_OBJECT_DECL (obj_acsh_boolean_class, ACSH_BOOLEAN_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_box_class, ACSH_BOX_CLASS);
@@ -1216,8 +1216,8 @@ DWG_GETALL_OBJECT_DECL (VIEW);
 DWG_GETALL_OBJECT_DECL (VIEW_CONTROL);
 DWG_GETALL_OBJECT_DECL (VPORT);
 DWG_GETALL_OBJECT_DECL (VPORT_CONTROL);
-DWG_GETALL_OBJECT_DECL (VPORT_ENTITY_CONTROL);
-DWG_GETALL_OBJECT_DECL (VPORT_ENTITY_HEADER);
+DWG_GETALL_OBJECT_DECL (VX_CONTROL);
+DWG_GETALL_OBJECT_DECL (VX_TABLE_RECORD);
 /* untyped > 500 */
 DWG_GETALL_OBJECT_DECL (ACSH_BOOLEAN_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_BOX_CLASS);
@@ -1541,8 +1541,8 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (VIEW);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VIEW_CONTROL);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VPORT);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VPORT_CONTROL);
-CAST_DWG_OBJECT_TO_OBJECT_DECL (VPORT_ENTITY_CONTROL);
-CAST_DWG_OBJECT_TO_OBJECT_DECL (VPORT_ENTITY_HEADER);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (VX_CONTROL);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (VX_TABLE_RECORD);
 /* untyped > 500 */
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BOOLEAN_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BOX_CLASS);

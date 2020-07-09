@@ -335,8 +335,8 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 204 */
   "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 205 */
   "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 206 */
-  "VPORT_ENTITY_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 207 */
-  "VPORT_ENTITY_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 208 */
+  "VX_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 207 */
+  "VX_TABLE_RECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 208 */
   "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 209 */
   "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 210 */
 
@@ -978,9 +978,9 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 70 },
   { "VPORT_CONTROL_OBJECT",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, VPORT_CONTROL_OBJECT),
     1,0,0, 0 },
-  { "VPORT_ENTITY_CONTROL_OBJECT",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, VPORT_ENTITY_CONTROL_OBJECT),
+  { "VX_CONTROL_OBJECT",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, VX_CONTROL_OBJECT),
     1,0,0, 0 },
-  { "VPORT_ENTITY_HEADER",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, VPORT_ENTITY_HEADER),
+  { "VX_TABLE_RECORD",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, VX_TABLE_RECORD),
     1,0,0, 0 },
   { "WIREFRAME",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, WIREFRAME),
     0,0,0, 0 },
@@ -10650,41 +10650,41 @@ static const Dwg_DYNAPI_field _dwg_VPORT_CONTROL_fields[] = {
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_VPORT_ENTITY_CONTROL: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_CONTROL_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VPORT_ENTITY_CONTROL, parent),
+/* from typedef struct _dwg_object_VX_CONTROL: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_VX_CONTROL_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VX_CONTROL, parent),
     1,1,0, 0 },
-  { "num_entries",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VPORT_ENTITY_CONTROL, num_entries),
+  { "num_entries",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VX_CONTROL, num_entries),
     0,0,0, 70 },
-  { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_VPORT_ENTITY_CONTROL, entries),
+  { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_VX_CONTROL, entries),
     1,1,0, 0 },
-  { "objid",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_VPORT_ENTITY_CONTROL, objid),
+  { "objid",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_VX_CONTROL, objid),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_VPORT_ENTITY_HEADER: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_VPORT_ENTITY_HEADER_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, parent),
+/* from typedef struct _dwg_object_VX_TABLE_RECORD: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_VX_TABLE_RECORD_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_VX_TABLE_RECORD, parent),
     1,1,0, 0 },
-  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, flag),
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VX_TABLE_RECORD, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, name),
+  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VX_TABLE_RECORD, name),
     1,1,1, 0 },
-  { "used",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, used),
+  { "used",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VX_TABLE_RECORD, used),
     0,0,0, 0 },
-  { "is_xref_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, is_xref_ref),
+  { "is_xref_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VX_TABLE_RECORD, is_xref_ref),
     0,0,0, 0 },
-  { "is_xref_resolved",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, is_xref_resolved),
+  { "is_xref_resolved",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VX_TABLE_RECORD, is_xref_resolved),
     0,0,0, 0 },
-  { "is_xref_dep",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, is_xref_dep),
+  { "is_xref_dep",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VX_TABLE_RECORD, is_xref_dep),
     0,0,0, 0 },
-  { "xref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, xref),
+  { "xref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VX_TABLE_RECORD, xref),
     1,0,0, 0 },
-  { "is_on",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, is_on),
+  { "is_on",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_VX_TABLE_RECORD, is_on),
     0,0,0, 290 },
-  { "viewport",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, viewport),
+  { "viewport",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VX_TABLE_RECORD, viewport),
     1,0,0, 338 },
-  { "prev_entry",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VPORT_ENTITY_HEADER, prev_entry),
+  { "prev_entry",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VX_TABLE_RECORD, prev_entry),
     1,0,0, 340 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -13482,8 +13482,8 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "VISUALSTYLE", DWG_TYPE_VISUALSTYLE /*(726)*/, _dwg_VISUALSTYLE_fields, sizeof (struct _dwg_object_VISUALSTYLE) },	/* 291 */
   { "VPORT", DWG_TYPE_VPORT /*(65)*/, _dwg_VPORT_fields, sizeof (struct _dwg_object_VPORT) },	/* 292 */
   { "VPORT_CONTROL", DWG_TYPE_VPORT_CONTROL /*(64)*/, _dwg_VPORT_CONTROL_fields, sizeof (struct _dwg_object_VPORT_CONTROL) },	/* 293 */
-  { "VPORT_ENTITY_CONTROL", DWG_TYPE_VPORT_ENTITY_CONTROL /*(70)*/, _dwg_VPORT_ENTITY_CONTROL_fields, sizeof (struct _dwg_object_VPORT_ENTITY_CONTROL) },	/* 294 */
-  { "VPORT_ENTITY_HEADER", DWG_TYPE_VPORT_ENTITY_HEADER /*(71)*/, _dwg_VPORT_ENTITY_HEADER_fields, sizeof (struct _dwg_object_VPORT_ENTITY_HEADER) },	/* 295 */
+  { "VX_CONTROL", DWG_TYPE_VX_CONTROL /*(70)*/, _dwg_VX_CONTROL_fields, sizeof (struct _dwg_object_VX_CONTROL) },	/* 294 */
+  { "VX_TABLE_RECORD", DWG_TYPE_VX_TABLE_RECORD /*(71)*/, _dwg_VX_TABLE_RECORD_fields, sizeof (struct _dwg_object_VX_TABLE_RECORD) },	/* 295 */
   { "WIPEOUT", DWG_TYPE_WIPEOUT /*(727)*/, _dwg_WIPEOUT_fields, sizeof (struct _dwg_entity_WIPEOUT) },	/* 296 */
   { "WIPEOUTVARIABLES", DWG_TYPE_WIPEOUTVARIABLES /*(728)*/, _dwg_WIPEOUTVARIABLES_fields, sizeof (struct _dwg_object_WIPEOUTVARIABLES) },	/* 297 */
   { "XLINE", DWG_TYPE_XLINE /*(41)*/, _dwg_RAY_fields, sizeof (struct _dwg_entity_RAY) },	/* 298 */

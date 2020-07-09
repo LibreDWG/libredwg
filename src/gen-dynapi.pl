@@ -599,12 +599,12 @@ EOF
 
 sub is_table {
   return shift =~ /^(?:BLOCK_HEADER|LAYER|STYLE|LTYPE|VIEW|UCS|
-                     VPORT|APPID|DIMSTYLE|VPORT_ENTITY_HEADER)$/x;
+                     VPORT|APPID|DIMSTYLE|VX_TABLE_RECORD)$/x;
 }
 
 sub is_table_control {
   return shift =~ /^(?:BLOCK|LAYER|STYLE|LTYPE|VIEW|UCS|
-                     VPORT|APPID|DIMSTYLE|VPORT_ENTITY)_CONTROL$/x;
+                     VPORT|APPID|DIMSTYLE|VX)_CONTROL$/x;
 }
 
 sub out_declarator {

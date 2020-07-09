@@ -3579,11 +3579,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     case DWG_TYPE_DIMSTYLE:
       error = dwg_encode_DIMSTYLE (dat, obj);
       break;
-    case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      error = dwg_encode_VPORT_ENTITY_CONTROL (dat, obj);
+    case DWG_TYPE_VX_CONTROL:
+      error = dwg_encode_VX_CONTROL (dat, obj);
       break;
-    case DWG_TYPE_VPORT_ENTITY_HEADER:
-      error = dwg_encode_VPORT_ENTITY_HEADER (dat, obj);
+    case DWG_TYPE_VX_TABLE_RECORD:
+      error = dwg_encode_VX_TABLE_RECORD (dat, obj);
       break;
     case DWG_TYPE_GROUP:
       error = dwg_encode_GROUP (dat, obj);

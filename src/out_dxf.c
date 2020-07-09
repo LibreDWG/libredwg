@@ -2160,8 +2160,8 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
     case DWG_TYPE_APPID:
     case DWG_TYPE_DIMSTYLE_CONTROL:
     case DWG_TYPE_DIMSTYLE:
-    case DWG_TYPE_VPORT_ENTITY_CONTROL:
-    case DWG_TYPE_VPORT_ENTITY_HEADER:
+    case DWG_TYPE_VX_CONTROL:
+    case DWG_TYPE_VX_TABLE_RECORD:
       break;
     case DWG_TYPE_GROUP:
       return dwg_dxf_GROUP (dat, obj);
@@ -2677,24 +2677,23 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  // fool the warnings. this table is nowhere to be found in the wild. maybe
-  // pre-R_11
-  if (0 && dwg->vport_entity_control.num_entries)
+  // fool the warnings. this table is nowhere to be found in the wild. maybe pre-R_11
+  if (0 && dwg->vx_control.num_entries)
     {
-      Dwg_Object_VPORT_ENTITY_CONTROL *_ctrl = &dwg->vport_entity_control;
+      Dwg_Object_VX_CONTROL *_ctrl = &dwg->vx_control;
       Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
-      if (ctrl && ctrl->fixedtype == DWG_TYPE_VPORT_ENTITY_CONTROL)
+      if (ctrl && ctrl->fixedtype == DWG_TYPE_VX_CONTROL)
         {
           Dwg_Object *obj = ctrl;
-          TABLE (VPORT_ENTITY);
+          TABLE (VX);
           COMMON_TABLE_CONTROL_FLAGS;
-          error |= dwg_dxf_VPORT_ENTITY_CONTROL (dat, ctrl);
-          for (i = 0; i < dwg->vport_entity_control.num_entries; i++)
+          error |= dwg_dxf_VX_CONTROL (dat, ctrl);
+          for (i = 0; i < dwg->vx_control.num_entries; i++)
             {
               obj = dwg_ref_object (dwg, _ctrl->entries[i]);
-              if (obj && obj->type == DWG_TYPE_VPORT_ENTITY_HEADER)
+              if (obj && obj->type == DWG_TYPE_VX_TABLE_RECORD)
                 {
-                  error |= dwg_dxf_VPORT_ENTITY_HEADER (dat, obj);
+                  error |= dwg_dxf_VX_TABLE_RECORD (dat, obj);
                 }
             }
           ENDTAB ();

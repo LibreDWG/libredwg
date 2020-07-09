@@ -555,11 +555,11 @@ match_UCS (const char *restrict filename, const Dwg_Object *restrict obj)
   return found;
 }
 static int
-match_VPORT_ENTITY_HEADER (const char *restrict filename, const Dwg_Object *restrict obj)
+match_VX_TABLE_RECORD (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (VPORT_ENTITY_HEADER, name, 2);
+  MATCH_OBJECT (VX_TABLE_RECORD, name, 2);
   return found;
 }
 
@@ -1277,7 +1277,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (VPORT)
       ELSEMATCH (DIMSTYLE)
       ELSEMATCH (UCS)
-      ELSEMATCH (VPORT_ENTITY_HEADER)
+      ELSEMATCH (VX_TABLE_RECORD)
       if (opt_tables)
         continue;
 

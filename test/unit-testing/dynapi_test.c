@@ -308,13 +308,13 @@ test_header (const Dwg_Data *dwg)
 
   }
   {
-    BITCODE_H vport_entity_header;
-    if (dwg_dynapi_header_value (dwg, "VPORT_ENTITY_HEADER", &vport_entity_header, NULL)
-        && !memcmp (&vport_entity_header, &dwg->header_vars.VPORT_ENTITY_HEADER, sizeof (dwg->header_vars.VPORT_ENTITY_HEADER))
+    BITCODE_H vx_table_record;
+    if (dwg_dynapi_header_value (dwg, "VX_TABLE_RECORD", &vx_table_record, NULL)
+        && !memcmp (&vx_table_record, &dwg->header_vars.VX_TABLE_RECORD, sizeof (dwg->header_vars.VX_TABLE_RECORD))
        )
       pass ();
     else
-      fail ("HEADER.VPORT_ENTITY_HEADER [H]");
+      fail ("HEADER.VX_TABLE_RECORD [H]");
   }
   {
     BITCODE_B dimaso;
@@ -4106,13 +4106,13 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.DIMSTYLE_CONTROL_OBJECT [H]");
   }
   {
-    BITCODE_H vport_entity_control_object;
-    if (dwg_dynapi_header_value (dwg, "VPORT_ENTITY_CONTROL_OBJECT", &vport_entity_control_object, NULL)
-        && !memcmp (&vport_entity_control_object, &dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT, sizeof (dwg->header_vars.VPORT_ENTITY_CONTROL_OBJECT))
+    BITCODE_H vx_control_object;
+    if (dwg_dynapi_header_value (dwg, "VX_CONTROL_OBJECT", &vx_control_object, NULL)
+        && !memcmp (&vx_control_object, &dwg->header_vars.VX_CONTROL_OBJECT, sizeof (dwg->header_vars.VX_CONTROL_OBJECT))
        )
       pass ();
     else
-      fail ("HEADER.VPORT_ENTITY_CONTROL_OBJECT [H]");
+      fail ("HEADER.VX_CONTROL_OBJECT [H]");
   }
   {
     BITCODE_H dictionary_acad_group;
@@ -61137,208 +61137,208 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_VPORT_ENTITY_CONTROL (const Dwg_Object *obj)
+static int test_VX_CONTROL (const Dwg_Object *obj)
 {
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_VPORT_ENTITY_CONTROL *restrict vport_entity_control = obj->tio.object->tio.VPORT_ENTITY_CONTROL;
+  Dwg_Object_VX_CONTROL *restrict vx_control = obj->tio.object->tio.VX_CONTROL;
   failed = 0;
   {
     BITCODE_H* entries;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &count, NULL)
-        && dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "entries", &entries, NULL)
-        && entries == vport_entity_control->entries)
+    if (dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "num_entries", &count, NULL)
+        && dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "entries", &entries, NULL)
+        && entries == vx_control->entries)
       pass ();
     else
-      fail ("VPORT_ENTITY_CONTROL.entries [H*] * %u num_entries", count);
+      fail ("VX_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
     BITCODE_BS num_entries;
-    if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &num_entries, NULL)
-        && num_entries == vport_entity_control->num_entries)
+    if (dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "num_entries", &num_entries, NULL)
+        && num_entries == vx_control->num_entries)
       pass ();
     else
-      fail ("VPORT_ENTITY_CONTROL.num_entries [BS] %hu != %hu", vport_entity_control->num_entries, num_entries);
+      fail ("VX_CONTROL.num_entries [BS] %hu != %hu", vx_control->num_entries, num_entries);
     num_entries++;
-    if (dwg_dynapi_entity_set_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "num_entries", &num_entries, 0)
-        && num_entries == vport_entity_control->num_entries)
+    if (dwg_dynapi_entity_set_value (vx_control, "VX_CONTROL", "num_entries", &num_entries, 0)
+        && num_entries == vx_control->num_entries)
       pass ();
     else
-      fail ("VPORT_ENTITY_CONTROL.num_entries [BS] set+1 %hu != %hu", vport_entity_control->num_entries, num_entries);
-    vport_entity_control->num_entries--;
+      fail ("VX_CONTROL.num_entries [BS] set+1 %hu != %hu", vx_control->num_entries, num_entries);
+    vx_control->num_entries--;
   }
   {
     BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "objid", &objid, NULL)
-        && objid == vport_entity_control->objid)
+    if (dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "objid", &objid, NULL)
+        && objid == vx_control->objid)
       pass ();
     else
-      fail ("VPORT_ENTITY_CONTROL.objid [BL] %u != %u", vport_entity_control->objid, objid);
+      fail ("VX_CONTROL.objid [BL] %u != %u", vx_control->objid, objid);
     objid++;
-    if (dwg_dynapi_entity_set_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "objid", &objid, 0)
-        && objid == vport_entity_control->objid)
+    if (dwg_dynapi_entity_set_value (vx_control, "VX_CONTROL", "objid", &objid, 0)
+        && objid == vx_control->objid)
       pass ();
     else
-      fail ("VPORT_ENTITY_CONTROL.objid [BL] set+1 %u != %u", vport_entity_control->objid, objid);
-    vport_entity_control->objid--;
+      fail ("VX_CONTROL.objid [BL] set+1 %u != %u", vx_control->objid, objid);
+    vx_control->objid--;
   }
   {
     struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (vport_entity_control, "VPORT_ENTITY_CONTROL", "parent", &parent, NULL)
-        && !memcmp (&parent, &vport_entity_control->parent, sizeof (struct _dwg_object_object*)))
+    if (dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "parent", &parent, NULL)
+        && !memcmp (&parent, &vx_control->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
-        fail ("VPORT_ENTITY_CONTROL.parent [struct _dwg_object_object*]");
+        fail ("VX_CONTROL.parent [struct _dwg_object_object*]");
   }
-  if (failed && (is_class_unstable ("VPORT_ENTITY_CONTROL") || is_class_debugging ("VPORT_ENTITY_CONTROL")))
+  if (failed && (is_class_unstable ("VX_CONTROL") || is_class_debugging ("VX_CONTROL")))
     {
-      ok ("%s failed %d tests (TODO unstable)", "VPORT_ENTITY_CONTROL", failed);
+      ok ("%s failed %d tests (TODO unstable)", "VX_CONTROL", failed);
       failed = 0;
     }
   return failed;
 }
-static int test_VPORT_ENTITY_HEADER (const Dwg_Object *obj)
+static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
 {
   int error = 0;
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_VPORT_ENTITY_HEADER *restrict vport_entity_header = obj->tio.object->tio.VPORT_ENTITY_HEADER;
+  Dwg_Object_VX_TABLE_RECORD *restrict vx_table_record = obj->tio.object->tio.VX_TABLE_RECORD;
   failed = 0;
   {
     BITCODE_RC flag;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, NULL)
-        && flag == vport_entity_header->flag)
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "flag", &flag, NULL)
+        && flag == vx_table_record->flag)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag [RC] %u != %u", vport_entity_header->flag, flag);
+      fail ("VX_TABLE_RECORD.flag [RC] %u != %u", vx_table_record->flag, flag);
     flag++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "flag", &flag, 0)
-        && flag == vport_entity_header->flag)
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "flag", &flag, 0)
+        && flag == vx_table_record->flag)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.flag [RC] set+1 %u != %u", vport_entity_header->flag, flag);
-    vport_entity_header->flag--;
+      fail ("VX_TABLE_RECORD.flag [RC] set+1 %u != %u", vx_table_record->flag, flag);
+    vx_table_record->flag--;
   }
   {
     BITCODE_B is_on;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_on", &is_on, NULL)
-        && is_on == vport_entity_header->is_on)
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "is_on", &is_on, NULL)
+        && is_on == vx_table_record->is_on)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_on [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_on, is_on);
+      fail ("VX_TABLE_RECORD.is_on [B] " FORMAT_B " != " FORMAT_B "", vx_table_record->is_on, is_on);
     is_on++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_on", &is_on, 0)
-        && is_on == vport_entity_header->is_on)
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "is_on", &is_on, 0)
+        && is_on == vx_table_record->is_on)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_on [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_on, is_on);
-    vport_entity_header->is_on--;
+      fail ("VX_TABLE_RECORD.is_on [B] set+1 " FORMAT_B " != " FORMAT_B "", vx_table_record->is_on, is_on);
+    vx_table_record->is_on--;
   }
   {
     BITCODE_B is_xref_dep;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_dep", &is_xref_dep, NULL)
-        && is_xref_dep == vport_entity_header->is_xref_dep)
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "is_xref_dep", &is_xref_dep, NULL)
+        && is_xref_dep == vx_table_record->is_xref_dep)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_dep, is_xref_dep);
+      fail ("VX_TABLE_RECORD.is_xref_dep [B] " FORMAT_B " != " FORMAT_B "", vx_table_record->is_xref_dep, is_xref_dep);
     is_xref_dep++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_dep", &is_xref_dep, 0)
-        && is_xref_dep == vport_entity_header->is_xref_dep)
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "is_xref_dep", &is_xref_dep, 0)
+        && is_xref_dep == vx_table_record->is_xref_dep)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_dep, is_xref_dep);
-    vport_entity_header->is_xref_dep--;
+      fail ("VX_TABLE_RECORD.is_xref_dep [B] set+1 " FORMAT_B " != " FORMAT_B "", vx_table_record->is_xref_dep, is_xref_dep);
+    vx_table_record->is_xref_dep--;
   }
   {
     BITCODE_B is_xref_ref;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_ref", &is_xref_ref, NULL)
-        && is_xref_ref == vport_entity_header->is_xref_ref)
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "is_xref_ref", &is_xref_ref, NULL)
+        && is_xref_ref == vx_table_record->is_xref_ref)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_ref, is_xref_ref);
+      fail ("VX_TABLE_RECORD.is_xref_ref [B] " FORMAT_B " != " FORMAT_B "", vx_table_record->is_xref_ref, is_xref_ref);
     is_xref_ref++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_ref", &is_xref_ref, 0)
-        && is_xref_ref == vport_entity_header->is_xref_ref)
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "is_xref_ref", &is_xref_ref, 0)
+        && is_xref_ref == vx_table_record->is_xref_ref)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", vport_entity_header->is_xref_ref, is_xref_ref);
-    vport_entity_header->is_xref_ref--;
+      fail ("VX_TABLE_RECORD.is_xref_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", vx_table_record->is_xref_ref, is_xref_ref);
+    vx_table_record->is_xref_ref--;
   }
   {
     BITCODE_BS is_xref_resolved;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_resolved", &is_xref_resolved, NULL)
-        && is_xref_resolved == vport_entity_header->is_xref_resolved)
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "is_xref_resolved", &is_xref_resolved, NULL)
+        && is_xref_resolved == vx_table_record->is_xref_resolved)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_xref_resolved [BS] %hu != %hu", vport_entity_header->is_xref_resolved, is_xref_resolved);
+      fail ("VX_TABLE_RECORD.is_xref_resolved [BS] %hu != %hu", vx_table_record->is_xref_resolved, is_xref_resolved);
     is_xref_resolved++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "is_xref_resolved", &is_xref_resolved, 0)
-        && is_xref_resolved == vport_entity_header->is_xref_resolved)
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "is_xref_resolved", &is_xref_resolved, 0)
+        && is_xref_resolved == vx_table_record->is_xref_resolved)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.is_xref_resolved [BS] set+1 %hu != %hu", vport_entity_header->is_xref_resolved, is_xref_resolved);
-    vport_entity_header->is_xref_resolved--;
+      fail ("VX_TABLE_RECORD.is_xref_resolved [BS] set+1 %hu != %hu", vx_table_record->is_xref_resolved, is_xref_resolved);
+    vx_table_record->is_xref_resolved--;
   }
   {
     BITCODE_TV name;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "name", &name, NULL)
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "name", &name, NULL)
         && name
-           ? strEQ ((char *)name, (char *)vport_entity_header->name)
-           : !vport_entity_header->name)
+           ? strEQ ((char *)name, (char *)vx_table_record->name)
+           : !vx_table_record->name)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.name [TV] '%s' <> '%s'", name, vport_entity_header->name);
+      fail ("VX_TABLE_RECORD.name [TV] '%s' <> '%s'", name, vx_table_record->name);
   }
   {
     struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "parent", &parent, NULL)
-        && !memcmp (&parent, &vport_entity_header->parent, sizeof (struct _dwg_object_object*)))
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "parent", &parent, NULL)
+        && !memcmp (&parent, &vx_table_record->parent, sizeof (struct _dwg_object_object*)))
         pass ();
     else
-        fail ("VPORT_ENTITY_HEADER.parent [struct _dwg_object_object*]");
+        fail ("VX_TABLE_RECORD.parent [struct _dwg_object_object*]");
   }
   {
     BITCODE_H prev_entry;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "prev_entry", &prev_entry, NULL)
-        && !memcmp (&prev_entry, &vport_entity_header->prev_entry, sizeof (BITCODE_H)))
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "prev_entry", &prev_entry, NULL)
+        && !memcmp (&prev_entry, &vx_table_record->prev_entry, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("VPORT_ENTITY_HEADER.prev_entry [H]");
+        fail ("VX_TABLE_RECORD.prev_entry [H]");
   }
   {
     BITCODE_RS used;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "used", &used, NULL)
-        && used == vport_entity_header->used)
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "used", &used, NULL)
+        && used == vx_table_record->used)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.used [RS] %hu != %hu", vport_entity_header->used, used);
+      fail ("VX_TABLE_RECORD.used [RS] %hu != %hu", vx_table_record->used, used);
     used++;
-    if (dwg_dynapi_entity_set_value (vport_entity_header, "VPORT_ENTITY_HEADER", "used", &used, 0)
-        && used == vport_entity_header->used)
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "used", &used, 0)
+        && used == vx_table_record->used)
       pass ();
     else
-      fail ("VPORT_ENTITY_HEADER.used [RS] set+1 %hu != %hu", vport_entity_header->used, used);
-    vport_entity_header->used--;
+      fail ("VX_TABLE_RECORD.used [RS] set+1 %hu != %hu", vx_table_record->used, used);
+    vx_table_record->used--;
   }
   {
     BITCODE_H viewport;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "viewport", &viewport, NULL)
-        && !memcmp (&viewport, &vport_entity_header->viewport, sizeof (BITCODE_H)))
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "viewport", &viewport, NULL)
+        && !memcmp (&viewport, &vx_table_record->viewport, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("VPORT_ENTITY_HEADER.viewport [H]");
+        fail ("VX_TABLE_RECORD.viewport [H]");
   }
   {
     BITCODE_H xref;
-    if (dwg_dynapi_entity_value (vport_entity_header, "VPORT_ENTITY_HEADER", "xref", &xref, NULL)
-        && !memcmp (&xref, &vport_entity_header->xref, sizeof (BITCODE_H)))
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "xref", &xref, NULL)
+        && !memcmp (&xref, &vx_table_record->xref, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("VPORT_ENTITY_HEADER.xref [H]");
+        fail ("VX_TABLE_RECORD.xref [H]");
   }
-  if (failed && (is_class_unstable ("VPORT_ENTITY_HEADER") || is_class_debugging ("VPORT_ENTITY_HEADER")))
+  if (failed && (is_class_unstable ("VX_TABLE_RECORD") || is_class_debugging ("VX_TABLE_RECORD")))
     {
-      ok ("%s failed %d tests (TODO unstable)", "VPORT_ENTITY_HEADER", failed);
+      ok ("%s failed %d tests (TODO unstable)", "VX_TABLE_RECORD", failed);
       failed = 0;
     }
   return failed;
@@ -62066,10 +62066,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VPORT(obj);
   else  if (obj->fixedtype == DWG_TYPE_VPORT_CONTROL)
     error += test_VPORT_CONTROL(obj);
-  else  if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_CONTROL)
-    error += test_VPORT_ENTITY_CONTROL(obj);
-  else  if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_HEADER)
-    error += test_VPORT_ENTITY_HEADER(obj);
+  else  if (obj->fixedtype == DWG_TYPE_VX_CONTROL)
+    error += test_VX_CONTROL(obj);
+  else  if (obj->fixedtype == DWG_TYPE_VX_TABLE_RECORD)
+    error += test_VX_TABLE_RECORD(obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUTVARIABLES)
     error += test_WIPEOUTVARIABLES(obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
@@ -62652,10 +62652,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_VPORT (obj);
   else  if (obj->fixedtype == DWG_TYPE_VPORT_CONTROL)
     error += test_VPORT_CONTROL (obj);
-  else  if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_CONTROL)
-    error += test_VPORT_ENTITY_CONTROL (obj);
-  else  if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_HEADER)
-    error += test_VPORT_ENTITY_HEADER (obj);
+  else  if (obj->fixedtype == DWG_TYPE_VX_CONTROL)
+    error += test_VX_CONTROL (obj);
+  else  if (obj->fixedtype == DWG_TYPE_VX_TABLE_RECORD)
+    error += test_VX_TABLE_RECORD (obj);
   else  if (obj->fixedtype == DWG_TYPE_WIPEOUTVARIABLES)
     error += test_WIPEOUTVARIABLES (obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
@@ -65000,20 +65000,20 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"VPORT_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VPORT_ENTITY_CONTROL);
-  size2 = dwg_dynapi_fields_size ("VPORT_ENTITY_CONTROL");
+  size1 = sizeof (struct _dwg_object_VX_CONTROL);
+  size2 = dwg_dynapi_fields_size ("VX_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VPORT_ENTITY_CONTROL): %d != "
-               "dwg_dynapi_fields_size (\"VPORT_ENTITY_CONTROL\"): %d\n", size1, size2);
+      fprintf (stderr, "sizeof(struct _dwg_object_VX_CONTROL): %d != "
+               "dwg_dynapi_fields_size (\"VX_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VPORT_ENTITY_HEADER);
-  size2 = dwg_dynapi_fields_size ("VPORT_ENTITY_HEADER");
+  size1 = sizeof (struct _dwg_object_VX_TABLE_RECORD);
+  size2 = dwg_dynapi_fields_size ("VX_TABLE_RECORD");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VPORT_ENTITY_HEADER): %d != "
-               "dwg_dynapi_fields_size (\"VPORT_ENTITY_HEADER\"): %d\n", size1, size2);
+      fprintf (stderr, "sizeof(struct _dwg_object_VX_TABLE_RECORD): %d != "
+               "dwg_dynapi_fields_size (\"VX_TABLE_RECORD\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_WIPEOUTVARIABLES);

@@ -305,7 +305,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SEQEND = 0x06,
   DWG_TYPE_INSERT = 0x07,
   DWG_TYPE_MINSERT = 0x08,
-  /* DWG_TYPE_<UNKNOWN> = 0x09, */
+  // DWG_TYPE_TRACE_old = 0x09, /* old TRACE r10-r11 only */
   DWG_TYPE_VERTEX_2D = 0x0a,
   DWG_TYPE_VERTEX_3D = 0x0b,
   DWG_TYPE_VERTEX_MESH = 0x0c,
@@ -366,8 +366,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_APPID = 0x43,
   DWG_TYPE_DIMSTYLE_CONTROL = 0x44,
   DWG_TYPE_DIMSTYLE = 0x45,
-  DWG_TYPE_VPORT_ENTITY_CONTROL = 0x46,
-  DWG_TYPE_VPORT_ENTITY_HEADER = 0x47,
+  DWG_TYPE_VX_CONTROL = 0x46,
+  DWG_TYPE_VX_TABLE_RECORD = 0x47,
   DWG_TYPE_GROUP = 0x48,
   DWG_TYPE_MLINESTYLE = 0x49,
   DWG_TYPE_OLE2FRAME = 0x4a,
@@ -792,7 +792,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
-  BITCODE_H VPORT_ENTITY_HEADER; /*!< r11-r2000 */
+  BITCODE_H VX_TABLE_RECORD; /*!< r11-r2000 */
   BITCODE_B DIMASO;
   BITCODE_B DIMSHO;
   BITCODE_B DIMSAV; /* undocumented */
@@ -1048,7 +1048,7 @@ typedef struct _dwg_header_variables {
   BITCODE_H VPORT_CONTROL_OBJECT;
   BITCODE_H APPID_CONTROL_OBJECT;
   BITCODE_H DIMSTYLE_CONTROL_OBJECT;
-  BITCODE_H VPORT_ENTITY_CONTROL_OBJECT; /*!< r11-r2000 */
+  BITCODE_H VX_CONTROL_OBJECT; /*!< r11-r2000 */
   BITCODE_H DICTIONARY_ACAD_GROUP;
   BITCODE_H DICTIONARY_ACAD_MLINESTYLE;
   BITCODE_H DICTIONARY_NAMED_OBJECT;
@@ -2141,6 +2141,7 @@ typedef struct _dwg_entity_MLINE
   BITCODE_BL objid
 
 // table entries may be imported from xref's
+
 #define COMMON_TABLE_FIELDS(laytype)      \
   struct _dwg_object_object *parent;      \
   BITCODE_##laytype flag;                 \
@@ -2596,26 +2597,26 @@ typedef struct _dwg_object_DIMSTYLE
 } Dwg_Object_DIMSTYLE;
 
 /**
- VPORT_ENTITY_CONTROL (70) table object (r11-r2000)
- The table header of all vport entities (unused in newer versions)
+ VX_CONTROL (70) table object (r11-r2000)
+ The table header for all viewport entities (unused in newer versions)
  Called VXTable
  */
-typedef struct _dwg_object_VPORT_ENTITY_CONTROL
+typedef struct _dwg_object_VX_CONTROL
 {
   COMMON_TABLE_CONTROL_FIELDS;
-} Dwg_Object_VPORT_ENTITY_CONTROL;
+} Dwg_Object_VX_CONTROL;
 
 /**
- VPORT_ENTITY_HEADER (71) table object (r11-r2000)
- Called VXTableRecord
+ VX_TABLE_RECORD (71) table object (r11-r2000)
+ Called VXTableRecord / VX_TABLE_RECORD
  */
-typedef struct _dwg_object_VPORT_ENTITY_HEADER
+typedef struct _dwg_object_VX_TABLE_RECORD
 {
   COMMON_TABLE_FIELDS(RC);
   BITCODE_B is_on;
   BITCODE_H viewport;
   BITCODE_H prev_entry;
-} Dwg_Object_VPORT_ENTITY_HEADER;
+} Dwg_Object_VX_TABLE_RECORD;
 
 /**
  GROUP (72) object
@@ -7985,8 +7986,8 @@ typedef struct _dwg_object_object
     Dwg_Object_VIEW_CONTROL *VIEW_CONTROL;
     Dwg_Object_VPORT *VPORT;
     Dwg_Object_VPORT_CONTROL *VPORT_CONTROL;
-    Dwg_Object_VPORT_ENTITY_CONTROL *VPORT_ENTITY_CONTROL;
-    Dwg_Object_VPORT_ENTITY_HEADER *VPORT_ENTITY_HEADER;
+    Dwg_Object_VX_CONTROL *VX_CONTROL;
+    Dwg_Object_VX_TABLE_RECORD *VX_TABLE_RECORD;
     /* untyped > 500 */
     Dwg_Object_ACSH_BOOLEAN_CLASS *ACSH_BOOLEAN_CLASS;
     Dwg_Object_ACSH_BOX_CLASS *ACSH_BOX_CLASS;
@@ -8328,7 +8329,7 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
   SECTION_VPORT = 8,
   SECTION_APPID = 9,
   SECTION_DIMSTYLE = 10,
-  SECTION_VPORT_ENTITY = 11,
+  SECTION_VX = 11,
 } Dwg_Section_Type_r11;
 
 typedef struct _dwg_section
@@ -8878,7 +8879,7 @@ typedef struct _dwg_struct
   Dwg_Object_VPORT_CONTROL      vport_control;
   Dwg_Object_APPID_CONTROL      appid_control;
   Dwg_Object_DIMSTYLE_CONTROL   dimstyle_control;
-  Dwg_Object_VPORT_ENTITY_CONTROL  vport_entity_control;
+  Dwg_Object_VX_CONTROL         vx_control;
 
   /* #define DWG_AUXHEADER_SIZE 123 */
   Dwg_AuxHeader auxheader;
@@ -9221,8 +9222,8 @@ EXPORT int dwg_setup_VIEW (Dwg_Object *obj);
 EXPORT int dwg_setup_VIEW_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_VPORT (Dwg_Object *obj);
 EXPORT int dwg_setup_VPORT_CONTROL (Dwg_Object *obj);
-EXPORT int dwg_setup_VPORT_ENTITY_CONTROL (Dwg_Object *obj);
-EXPORT int dwg_setup_VPORT_ENTITY_HEADER (Dwg_Object *obj);
+EXPORT int dwg_setup_VX_CONTROL (Dwg_Object *obj);
+EXPORT int dwg_setup_VX_TABLE_RECORD (Dwg_Object *obj);
 /* untyped > 500 */
 EXPORT int dwg_setup_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_setup_HATCH (Dwg_Object *obj);

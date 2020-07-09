@@ -645,9 +645,9 @@ H
 B,	DXF 70
 @item VPORT_CONTROL_OBJECT
 H
-@item VPORT_ENTITY_CONTROL_OBJECT
+@item VX_CONTROL_OBJECT
 H
-@item VPORT_ENTITY_HEADER
+@item VX_TABLE_RECORD
 H
 @item WIREFRAME
 B
@@ -12425,13 +12425,13 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{VPORT_ENTITY_CONTROL} @anchor{VPORT_ENTITY_CONTROL}
-@cindex object, VPORT_ENTITY_CONTROL
-@vindex VPORT_ENTITY_CONTROL
+@strong{VX_CONTROL} @anchor{VX_CONTROL}
+@cindex object, VX_CONTROL
+@vindex VX_CONTROL
 
-@cindex table_control, VPORT_ENTITY_CONTROL
+@cindex table_control, VX_CONTROL
 
-VPORT_ENTITY_CONTROL is a table_control object.
+VX_CONTROL is a table_control object.
 
 @indentedblock
 @vtable @code
@@ -12448,13 +12448,13 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{VPORT_ENTITY_HEADER} @anchor{VPORT_ENTITY_HEADER}
-@cindex object, VPORT_ENTITY_HEADER
-@vindex VPORT_ENTITY_HEADER
+@strong{VX_TABLE_RECORD} @anchor{VX_TABLE_RECORD}
+@cindex object, VX_TABLE_RECORD
+@vindex VX_TABLE_RECORD
 
-@cindex table, VPORT_ENTITY_HEADER
+@cindex table, VX_TABLE_RECORD
 
-VPORT_ENTITY_HEADER is a table object.
+VX_TABLE_RECORD is a table object.
 
 @indentedblock
 @vtable @code

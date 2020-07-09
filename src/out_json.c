@@ -1598,10 +1598,10 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_json_DIMSTYLE_CONTROL (dat, obj);
     case DWG_TYPE_DIMSTYLE:
       return dwg_json_DIMSTYLE (dat, obj);
-    case DWG_TYPE_VPORT_ENTITY_CONTROL:
-      return dwg_json_VPORT_ENTITY_CONTROL (dat, obj);
-    case DWG_TYPE_VPORT_ENTITY_HEADER:
-      return dwg_json_VPORT_ENTITY_HEADER (dat, obj);
+    case DWG_TYPE_VX_CONTROL:
+      return dwg_json_VX_CONTROL (dat, obj);
+    case DWG_TYPE_VX_TABLE_RECORD:
+      return dwg_json_VX_TABLE_RECORD (dat, obj);
     case DWG_TYPE_GROUP:
       return dwg_json_GROUP (dat, obj);
     case DWG_TYPE_MLINESTYLE:

@@ -1521,7 +1521,7 @@ is_table_name (const char *restrict name)
          || strEQc (name, "VPORT") || strEQc (name, "APPID")
          || strEQc (name, "BLOCK") || strEQc (name, "LAYER")
          || strEQc (name, "DIMSTYLE") || strEQc (name, "STYLE")
-         || strEQc (name, "VIEW") || strEQc (name, "VPORT_ENTITY")
+         || strEQc (name, "VIEW") || strEQc (name, "VX")
          || strEQc (name, "UCS") || strEQc (name, "BLOCK_RECORD")
          || strEQc (name, "BLOCK_HEADER");
 }
@@ -5415,6 +5415,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
 
   if (strEQc (name, "BLOCK_RECORD"))
     strcpy (ctrlname, "BLOCK_CONTROL");
+  else if (strEQc (name, "VX_TABLE_RECORD"))
+    strcpy (ctrlname, "VX_CONTROL");
   else
     {
       strncpy (ctrlname, name, 70);
@@ -5443,7 +5445,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   else
   ADD_TABLE_IF (VIEW, VIEW_CONTROL)
   else
-  ADD_TABLE_IF (VPORT_ENTITY, VPORT_ENTITY_CONTROL)
+  ADD_TABLE_IF (VX_TABLE_RECORD, VX_CONTROL)
   else
   ADD_TABLE_IF (BLOCK_RECORD, BLOCK_CONTROL)
   else
@@ -5639,7 +5641,7 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
     ;
   else if (pair->code == 3)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "DIMSTYLE");
-  // what is/was 4 and 5? VIEW? VPORT_ENTITY?
+  // what is/was 4 and 5? VIEW? VX?
   else if (pair->code == 6)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "LTYPE");
   else if (pair->code == 7)
@@ -7093,10 +7095,8 @@ new_object (char *restrict name, char *restrict dxfname,
           ADD_TABLE_IF (VIEW, VIEW)
           else
           ADD_TABLE_IF (BLOCK_RECORD, BLOCK_HEADER)
-          // else
-          // ADD_TABLE_IF (BLOCK_HEADER, BLOCK_HEADER)
-          // else
-          // ADD_TABLE_IF (VPORT_ENTITY, VPORT_ENTITY)
+          else
+          ADD_TABLE_IF (VX_TABLE_RECORD, VX_TABLE_RECORD)
           else
           // clang-format on
           {
@@ -7853,7 +7853,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   SET_CTRL_BIT (1, flag0);
                 }
-              else if (obj->fixedtype == DWG_TYPE_VPORT_ENTITY_HEADER)
+              else if (obj->fixedtype == DWG_TYPE_VX_TABLE_RECORD)
                 {
                   // also set via 290
                   SET_CTRL_BIT (2, is_on);
