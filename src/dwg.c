@@ -1845,7 +1845,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
 {
   Dwg_Object_Ref *ref;
   // ENTITY, DICTIONARY, XRECORD or class may need to be relative.
-  // GROUP needs to be absolute
+  // GROUP needs to be absolute. DICTIONARYVAr absolute
   // TODO: prev_entity/next_entity also
   // skip the search for existing absolute ref then.
   if (code > 5
@@ -1853,7 +1853,8 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
           && ((obj->fixedtype == DWG_TYPE_DICTIONARY
                || obj->fixedtype == DWG_TYPE_XRECORD
                || obj->supertype == DWG_SUPERTYPE_ENTITY
-               || obj->type > DWG_TYPE_GROUP))))
+               || (obj->type > DWG_TYPE_GROUP
+                   && obj->fixedtype != DWG_TYPE_DICTIONARYVAR)))))
     ;
   else
     {

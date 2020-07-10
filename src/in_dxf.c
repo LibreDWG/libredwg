@@ -77,6 +77,56 @@ static long num_dxf_objs;  // how many elements are added
 static long size_dxf_objs; // how many elements are allocated
 static Dxf_Objs *dxf_objs;
 
+
+#define EXPECT_DXF(nam, field, dxf)                                           \
+  if (pair == NULL || pair->code != dxf)                                      \
+    {                                                                         \
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", nam,       \
+                 pair ? pair->code : -1, dxf, #field);                        \
+      return pair;                                                            \
+    }
+#define EXPECT_INT_DXF(field, dxf, type)                                      \
+  EXPECT_DXF (obj->name, #field, dxf);                                        \
+  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
+  LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
+             pair->code);                                                     \
+  dxf_free_pair (pair)
+#define EXPECT_DBL_DXF(field, dxf, type)                                      \
+  EXPECT_DXF (obj->name, #field, dxf);                                        \
+  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
+  LOG_TRACE ("%s.%s = %f [" #type " %d]\n", obj->name, field, pair->value.d,  \
+             pair->code);                                                     \
+  dxf_free_pair (pair)
+#define EXPECT_H_DXF(field, htype, dxf, type)                                 \
+  EXPECT_DXF (obj->name, #field, dxf);                                        \
+  if (pair->value.u)                                                          \
+    {                                                                         \
+      BITCODE_H hdl = dwg_add_handleref (dwg, htype, pair->value.u, obj);     \
+      dwg_dynapi_entity_set_value (o, obj->name, field, &hdl, 1);             \
+      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, field,         \
+                 ARGS_REF (hdl), pair->code);                                 \
+    }                                                                         \
+  dxf_free_pair (pair)
+#define EXPECT_T_DXF(field, dxf)                                              \
+  EXPECT_DXF (obj->name, #field, dxf);                                        \
+  if (pair->value.s)                                                          \
+    {                                                                         \
+      dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value.s, 1);   \
+      LOG_TRACE ("%s.%s = \"%s\" [T %d]\n", obj->name, field,                 \
+                 pair->value.s, pair->code);                                  \
+    }                                                                         \
+  dxf_free_pair (pair)
+
+// stricter ordering for special subclasses:
+#define FIELD_B(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, B)
+#define FIELD_RC(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, RC)
+#define FIELD_BS(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BS)
+#define FIELD_BLd(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BLd)
+#define FIELD_BL(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BL)
+#define FIELD_BD(field, dxf) pair = dxf_read_pair (dat); EXPECT_DBL_DXF (#field, dxf, BD)
+#define FIELD_HANDLE(field, code, dxf) pair = dxf_read_pair (dat); EXPECT_H_DXF (#field, code, dxf, H)
+#define FIELD_T(field, dxf) pair = dxf_read_pair (dat); EXPECT_T_DXF (#field, dxf)
+
 static void *
 xcalloc (size_t n, size_t s)
 {
@@ -4926,23 +4976,18 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
-static int
+static Dxf_Pair *
 add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_EvalVariant *value)
 {
   Dxf_Pair *pair = dxf_read_pair (dat);
-  if (pair == NULL || pair->code != 70)
-    {
-      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", "EvalVariant",
-                 pair ? pair->code : -1, 70, "code");
-      return 0;
-    }
+  EXPECT_DXF ("EvalVariant", code, 70);
   value->code = pair->value.i;
   LOG_TRACE ("%s.%s = %d [BL %d]\n", "EvalVariant", "code", pair->value.i, pair->code);
   dxf_free_pair (pair);
 
   pair = dxf_read_pair (dat);
   if (!pair || pair->code == 0)
-    return 0;
+    return pair;
   switch (dwg_resbuf_value_type (pair->value.i))
     {
     case VT_REAL:
@@ -4989,7 +5034,7 @@ add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_EvalVarian
       break;
     }
   dxf_free_pair (pair);
-  return 1;
+  return NULL;
 }
 
 static int
@@ -5048,8 +5093,8 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_VALUEPARAM
     return 0;
   for (unsigned j = 0; j < value->num_vars; j++)
     {
-      int success = add_EVALVARIANT (dwg, dat, &value->vars[j].value);
-      if (!success)
+      pair = add_EVALVARIANT (dwg, dat, &value->vars[j].value);
+      if (pair)
         return 0;
       pair = dxf_read_pair (dat);
       if (pair == NULL || pair->code != 330)
@@ -5066,58 +5111,6 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_VALUEPARAM
   return 1;
 }
 
-#define EXPECT_INT_DXF(field, dxf, type)                                      \
-  if (pair == NULL || pair->code != dxf)                                      \
-    {                                                                         \
-      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
-                 pair ? pair->code : -1, dxf, field);                         \
-      return pair;                                                            \
-    }                                                                         \
-  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
-             pair->code);                                                     \
-  dxf_free_pair (pair)
-#define EXPECT_DBL_DXF(field, dxf, type)                                      \
-  if (pair == NULL || pair->code != dxf)                                      \
-    {                                                                         \
-      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
-                 pair ? pair->code : -1, dxf, field);                         \
-      return pair;                                                            \
-    }                                                                         \
-  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %f [" #type " %d]\n", obj->name, field, pair->value.d,  \
-             pair->code);                                                     \
-  dxf_free_pair (pair)
-#define EXPECT_H_DXF(field, htype, dxf, type)                                 \
-  if (pair == NULL || pair->code != dxf)                                      \
-    {                                                                         \
-      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
-                 pair ? pair->code : -1, dxf, field);                         \
-      return pair;                                                            \
-    }                                                                         \
-  if (pair->value.u)                                                          \
-    {                                                                         \
-      BITCODE_H hdl = dwg_add_handleref (dwg, htype, pair->value.u, obj);     \
-      dwg_dynapi_entity_set_value (o, obj->name, field, &hdl, 1);             \
-      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, field,         \
-                 ARGS_REF (hdl), pair->code);                                 \
-    }                                                                         \
-  dxf_free_pair (pair)
-#define EXPECT_T_DXF(field, dxf)                                              \
-  if (pair == NULL || pair->code != dxf)                                      \
-    {                                                                         \
-      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
-                 pair ? pair->code : -1, dxf, field);                         \
-      return pair;                                                            \
-    }                                                                         \
-  if (pair->value.s)                                                          \
-    {                                                                         \
-      dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value.s, 1);   \
-      LOG_TRACE ("%s.%s = \"%s\" [T %d]\n", obj->name, field,                     \
-                 pair->value.s, pair->code);                                  \
-    }                                                                         \
-  dxf_free_pair (pair)
-
 static Dxf_Pair *
 add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   Dxf_Pair *restrict pair)
@@ -5131,18 +5124,13 @@ add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (pair == NULL || pair->code != 90)
     return pair;
   EXPECT_INT_DXF ("network_version", 90, BS);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("network_action_index", 90, BL);
-  pair = dxf_read_pair (dat);
-  num = pair->value.u;
-  EXPECT_INT_DXF ("num_actions", 90, BL);
+  FIELD_BL (network_action_index, 90);
+  FIELD_BL (num_actions, 90);
+  num = o->num_actions;
 
   deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
-    {
-      LOG_ERROR ("Out of memory");
-      return NULL;
-    }
+    return NULL;
   for (unsigned i=0; i<num; i++)
     {
       BITCODE_H hdl;
@@ -5211,26 +5199,17 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     return pair;
   class_version = pair->value.u;
   EXPECT_INT_DXF ("class_version", 90, BS);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("geometry_status", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("owningnetwork", 4, 330, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("actionbody", 3, 360, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("action_index", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("max_assoc_dep_index", 90, BL);
+  FIELD_BL (geometry_status, 90);
+  FIELD_HANDLE (owningnetwork, 4, 330);
+  FIELD_HANDLE (actionbody, 4, 330);
+  FIELD_BL (action_index, 90);
+  FIELD_BL (max_assoc_dep_index, 90);
 
-  pair = dxf_read_pair (dat);
-  num = pair->value.u;
-  EXPECT_INT_DXF ("num_deps", 90, BL);
+  FIELD_BL (num_deps, 90);
+  num = o->num_deps;
   deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
-    {
-      LOG_ERROR ("Out of memory");
-      return NULL;
-    }
+    return NULL;
   for (unsigned i=0; i<num; i++)
     {
       BITCODE_H hdl;
@@ -5320,8 +5299,7 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
 
   EXPECT_INT_DXF ("class_version", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_0", 90, BL);
+  FIELD_BL (unknown_0, 90);
   pair = dxf_read_pair (dat);
   EXPECT_INT_DXF ("unknown_2", 90, BL);
   pair = dxf_read_pair (dat);
@@ -6556,14 +6534,6 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj,
   return pair;
 }
 
-#define FIELD_B(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, B)
-#define FIELD_RC(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, RC)
-#define FIELD_BS(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BS)
-#define FIELD_BLd(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BLd)
-#define FIELD_BL(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BL)
-#define FIELD_BD(field, dxf) pair = dxf_read_pair (dat); EXPECT_DBL_DXF (#field, dxf, BD)
-#define FIELD_HANDLE(field, code, dxf) pair = dxf_read_pair (dat); EXPECT_H_DXF (#field, code, dxf, H)
-#define FIELD_T(field, dxf) pair = dxf_read_pair (dat); EXPECT_T_DXF (#field, dxf)
 #define FIELD_CMC2004(field, dxf)                                             \
   SINCE (R_2004)                                                              \
   {                                                                           \
@@ -6632,16 +6602,10 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj,
         {
           // FIELD_BD (hatch_angles[i], 40);
           pair = dxf_read_pair (dat);
-          if (pair == NULL || pair->code != 40)
-            {
-              LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s",
-                         obj->name, pair ? pair->code : -1, 40,
-                         "hatch_angles");
-              return pair;
-            }
+          EXPECT_DXF (obj->name, hatch_angles, 40);
           o->hatch_angles[i] = pair->value.d;
-          LOG_TRACE ("%s.%s = %f [BD %d]\n", obj->name, "hatch_angles", pair->value.d,
-                     pair->code);
+          LOG_TRACE ("%s.%s[%d] = %f [BD %d]\n", obj->name, "hatch_angles", i,
+                     pair->value.d, pair->code);
           dxf_free_pair (pair);
         }
     }
