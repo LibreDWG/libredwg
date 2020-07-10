@@ -44806,6 +44806,21 @@ static int test_DETAILVIEWSTYLE (const Dwg_Object *obj)
     detailviewstyle->is_modified_for_recompute--;
   }
   {
+    BITCODE_BS mdoc_class_version;
+    if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "mdoc_class_version", &mdoc_class_version, NULL)
+        && mdoc_class_version == detailviewstyle->mdoc_class_version)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.mdoc_class_version [BS] %hu != %hu", detailviewstyle->mdoc_class_version, mdoc_class_version);
+    mdoc_class_version++;
+    if (dwg_dynapi_entity_set_value (detailviewstyle, "DETAILVIEWSTYLE", "mdoc_class_version", &mdoc_class_version, 0)
+        && mdoc_class_version == detailviewstyle->mdoc_class_version)
+      pass ();
+    else
+      fail ("DETAILVIEWSTYLE.mdoc_class_version [BS] set+1 %hu != %hu", detailviewstyle->mdoc_class_version, mdoc_class_version);
+    detailviewstyle->mdoc_class_version--;
+  }
+  {
     BITCODE_RC model_edge;
     if (dwg_dynapi_entity_value (detailviewstyle, "DETAILVIEWSTYLE", "model_edge", &model_edge, NULL)
         && model_edge == detailviewstyle->model_edge)
@@ -55541,6 +55556,21 @@ static int test_SECTIONVIEWSTYLE (const Dwg_Object *obj)
     else
       fail ("SECTIONVIEWSTYLE.is_modified_for_recompute [B] set+1 " FORMAT_B " != " FORMAT_B "", sectionviewstyle->is_modified_for_recompute, is_modified_for_recompute);
     sectionviewstyle->is_modified_for_recompute--;
+  }
+  {
+    BITCODE_BS mdoc_class_version;
+    if (dwg_dynapi_entity_value (sectionviewstyle, "SECTIONVIEWSTYLE", "mdoc_class_version", &mdoc_class_version, NULL)
+        && mdoc_class_version == sectionviewstyle->mdoc_class_version)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.mdoc_class_version [BS] %hu != %hu", sectionviewstyle->mdoc_class_version, mdoc_class_version);
+    mdoc_class_version++;
+    if (dwg_dynapi_entity_set_value (sectionviewstyle, "SECTIONVIEWSTYLE", "mdoc_class_version", &mdoc_class_version, 0)
+        && mdoc_class_version == sectionviewstyle->mdoc_class_version)
+      pass ();
+    else
+      fail ("SECTIONVIEWSTYLE.mdoc_class_version [BS] set+1 %hu != %hu", sectionviewstyle->mdoc_class_version, mdoc_class_version);
+    sectionviewstyle->mdoc_class_version--;
   }
   {
     BITCODE_BL num_hatch_angles;

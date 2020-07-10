@@ -6760,13 +6760,14 @@ typedef struct _dwg_object_FCFOBJECTCONTEXTDATA
 typedef struct _dwg_object_DETAILVIEWSTYLE
 {
   struct _dwg_object_object *parent;
-
-  BITCODE_BS class_version; /*!< DXF 70 0 */
+  // AcDbModelDocViewStyle
+  BITCODE_BS mdoc_class_version; /*!< DXF 70 0 */
   BITCODE_T desc;
   BITCODE_B is_modified_for_recompute;
   BITCODE_T display_name;
   BITCODE_BL viewstyle_flags; /* DXF 90. 1: cannot_rename */
-
+  // AcDbDetailViewStyle
+  BITCODE_BS class_version; /*!< DXF 70 0 */
   BITCODE_BL flags;
   BITCODE_H identifier_style;
   BITCODE_CMC identifier_color;
@@ -6800,12 +6801,14 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BS class_version; /*!< DXF 70 0 */
+  // AcDbModelDocViewStyle
+  BITCODE_BS mdoc_class_version; /*!< DXF 70 0 */
   BITCODE_T desc;
   BITCODE_B is_modified_for_recompute;
   BITCODE_T display_name;
   BITCODE_BL viewstyle_flags; /* DXF 90. 1: cannot_rename */
-
+  // AcDbSectionViewStyle
+  BITCODE_BS class_version; /*!< DXF 70 0 */
   BITCODE_BL flags; /* DXF 90. 1: cont_labeling, 2: show_arrowheads, 4: show_viewlabel, 
                        8: show_allplanelines, 0x10: show_allbendids, 0x20 show_end+bendlines
                        0x40: show_hatch ... */
@@ -7996,6 +7999,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ACSH_SPHERE_CLASS *ACSH_SPHERE_CLASS;
     Dwg_Object_ACSH_WEDGE_CLASS *ACSH_WEDGE_CLASS;
     Dwg_Object_CELLSTYLEMAP *CELLSTYLEMAP;
+    Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
     Dwg_Object_DICTIONARYWDFLT *DICTIONARYWDFLT;
     Dwg_Object_DYNAMICBLOCKPURGEPREVENTER *DYNAMICBLOCKPURGEPREVENTER;
@@ -8015,6 +8019,7 @@ typedef struct _dwg_object_object
     Dwg_Object_PLOTSETTINGS *PLOTSETTINGS;
     Dwg_Object_RASTERVARIABLES *RASTERVARIABLES;
     Dwg_Object_SCALE *SCALE;
+    Dwg_Object_SECTIONVIEWSTYLE *SECTIONVIEWSTYLE;
     Dwg_Object_SECTION_MANAGER *SECTION_MANAGER;
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
@@ -8050,7 +8055,6 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *BLOCKGRIPLOCATIONCOMPONENT;
     Dwg_Object_BLOCKVISIBILITYGRIP *BLOCKVISIBILITYGRIP;
     Dwg_Object_DBCOLOR *DBCOLOR;
-    Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
@@ -8058,7 +8062,6 @@ typedef struct _dwg_object_object
     Dwg_Object_PROXY_OBJECT *PROXY_OBJECT;
     Dwg_Object_RAPIDRTRENDERSETTINGS *RAPIDRTRENDERSETTINGS;
     Dwg_Object_RENDERSETTINGS *RENDERSETTINGS;
-    Dwg_Object_SECTIONVIEWSTYLE *SECTIONVIEWSTYLE;
     Dwg_Object_SECTION_SETTINGS *SECTION_SETTINGS;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
     Dwg_Object_SUN *SUN;
@@ -9243,6 +9246,7 @@ EXPORT int dwg_setup_ACSH_FILLET_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SPHERE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_WEDGE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
+EXPORT int dwg_setup_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYWDFLT (Dwg_Object *obj);
 EXPORT int dwg_setup_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
@@ -9262,6 +9266,7 @@ EXPORT int dwg_setup_PLACEHOLDER (Dwg_Object *obj);
 EXPORT int dwg_setup_PLOTSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RASTERVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_setup_SCALE (Dwg_Object *obj);
+EXPORT int dwg_setup_SECTIONVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_FILTER (Dwg_Object *obj);
@@ -9300,7 +9305,6 @@ EXPORT int dwg_setup_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKGRIPLOCATIONCOMPONENT (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKVISIBILITYGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
-EXPORT int dwg_setup_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
@@ -9308,7 +9312,6 @@ EXPORT int dwg_setup_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_setup_PROXY_OBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
-EXPORT int dwg_setup_SECTIONVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_SETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);

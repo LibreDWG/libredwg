@@ -9356,10 +9356,10 @@ DWG_OBJECT_END
 
 #endif /* DEBUG_CLASS || IS_FREE */
 
+// stable and needed for the NOD
 DWG_OBJECT (DETAILVIEWSTYLE)
-  //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbModelDocViewStyle)
-  FIELD_BS (class_version, 70); // 0
+  FIELD_BS (mdoc_class_version, 70); // 0
   FIELD_T (desc, 3);
   FIELD_B (is_modified_for_recompute, 290);
   SINCE (R_2018) {
@@ -9373,26 +9373,44 @@ DWG_OBJECT (DETAILVIEWSTYLE)
   FIELD_BL (flags, 90);
   DXF { VALUE_BS (1, 71); }
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
-  FIELD_CMC (identifier_color, 62); // in dxf all colors only r2004+
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (identifier_color, 62); // in dxf all colors only r2004+
+  }} else {
+    FIELD_CMC (identifier_color, 62);
+  }
   FIELD_BD (identifier_height, 40); // 5.0
   DXF {
     FIELD_HANDLE (arrow_symbol, 5, 340);
-    FIELD_CMC (arrow_symbol_color, 62);
+    SINCE (R_2004) {
+      FIELD_CMC (arrow_symbol_color, 62);
+    }
     FIELD_BD (arrow_symbol_size, 40);
   }
   FIELD_T (identifier_exclude_characters, 300);
   FIELD_BD (identifier_offset, 40);
   FIELD_RC (identifier_placement, 280);
   FIELD_HANDLE (arrow_symbol, 5, 0);
-  FIELD_CMC (arrow_symbol_color, 0);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (arrow_symbol_color, 0);
+  }} else {
+    FIELD_CMC (arrow_symbol_color, 0);
+  }
   FIELD_BD (arrow_symbol_size, 0);
   DXF { VALUE_BS (2, 71); }
   FIELD_HANDLE (boundary_ltype, 5, 340); // ltype
   FIELD_BLd (boundary_linewt, 90);
-  FIELD_CMC (boundary_line_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (boundary_line_color, 62);
+  }} else {
+    FIELD_CMC (boundary_line_color, 62);
+  }
   DXF { VALUE_BS (3, 71); }
   FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
-  FIELD_CMC (viewlabel_text_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (viewlabel_text_color, 62);
+  }} else {
+    FIELD_CMC (viewlabel_text_color, 62);
+  }
   FIELD_BD (viewlabel_text_height, 40);
   FIELD_BL (viewlabel_attachment, 90);
   FIELD_BD (viewlabel_offset, 40);
@@ -9401,19 +9419,27 @@ DWG_OBJECT (DETAILVIEWSTYLE)
   DXF { VALUE_BS (4, 71); }
   FIELD_HANDLE (connection_ltype, 5, 340); // ltype
   FIELD_BLd (connection_linewt, 90);
-  FIELD_CMC (connection_line_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (connection_line_color, 62);
+  }} else {
+    FIELD_CMC (connection_line_color, 62);
+  }
   FIELD_HANDLE (borderline_ltype, 5, 340);
   FIELD_BLd (borderline_linewt, 90);
-  FIELD_CMC (borderline_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (borderline_color, 62);
+  }} else {
+    FIELD_CMC (borderline_color, 62);
+  }
   FIELD_RC (model_edge, 280); // type, origin, direction
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// stable and needed for the NOD
 // subclass: VIEWSTYLE_ModelDoc => "AcDbModelDocViewStyle"
 DWG_OBJECT (SECTIONVIEWSTYLE)
-  //DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbModelDocViewStyle)
-  FIELD_BS (class_version, 70); // 0
+  FIELD_BS (mdoc_class_version, 70); // 0
   FIELD_T (desc, 3);
   FIELD_B (is_modified_for_recompute, 290);
   SINCE (R_2018) {
@@ -9427,11 +9453,19 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_BL (flags, 90); // 102
   DXF { VALUE_BS (1, 71); }
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
-  FIELD_CMC (identifier_color, 62); // in dxf all colors only r2004+
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (identifier_color, 62); // in dxf all colors only r2004+
+  }} else {
+    FIELD_CMC (identifier_color, 62);
+  }
   FIELD_BD (identifier_height, 40); // 5.0
   FIELD_HANDLE (arrow_start_symbol, 5, 340);
   FIELD_HANDLE (arrow_end_symbol, 5, 340);
-  FIELD_CMC (arrow_symbol_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (arrow_symbol_color, 62);
+  }} else {
+    FIELD_CMC (arrow_symbol_color, 62);
+  }
   FIELD_BD (arrow_symbol_size, 40);
   FIELD_T (identifier_exclude_characters, 300); // I, O, Q, S, X, Z
   DXF {
@@ -9443,10 +9477,18 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_BD (arrow_symbol_extension_length, 0);
   FIELD_HANDLE (plane_ltype, 5, 340); // ltype
   FIELD_BLd (plane_linewt, 90);
-  FIELD_CMC (plane_line_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (plane_line_color, 62);
+  }} else {
+    FIELD_CMC (plane_line_color, 62);
+  }
   FIELD_HANDLE (bend_ltype, 5, 340); // ltype
   FIELD_BLd (bend_linewt, 90);
-  FIELD_CMC (bend_line_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (bend_line_color, 62);
+  }} else {
+    FIELD_CMC (bend_line_color, 62);
+  }
   FIELD_BD (bend_line_length, 40);
   DXF {
     FIELD_BD (end_line_overshoot, 40);
@@ -9454,21 +9496,30 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   FIELD_BD (end_line_length, 40);
   DXF { VALUE_BS (3, 71); }
   FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
-  FIELD_CMC (viewlabel_text_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (viewlabel_text_color, 62);
+  }} else {
+    FIELD_CMC (viewlabel_text_color, 62);
+  }
   FIELD_BD (viewlabel_text_height, 40);
   FIELD_BL (viewlabel_attachment, 90);
   FIELD_BD (viewlabel_offset, 40); // 5.0
   FIELD_BL (viewlabel_alignment, 90);
   FIELD_T (viewlabel_pattern, 300);
   DXF { VALUE_BS (4, 71); }
-  FIELD_CMC (hatch_color, 62);
-  FIELD_CMC (hatch_bg_color, 62);
+  DXF { SINCE (R_2004) {
+    FIELD_CMC (hatch_color, 62);
+    FIELD_CMC (hatch_bg_color, 62);
+  }} else {
+    FIELD_CMC (hatch_color, 62);
+    FIELD_CMC (hatch_bg_color, 62);
+  }
   FIELD_T (hatch_pattern, 300);
   FIELD_BD (hatch_scale, 40);
   FIELD_BLd (hatch_transparency, 90);
   FIELD_B (unknown_b1, 290);
   FIELD_B (unknown_b2, 290);
-  FIELD_BLd (identifier_position, 0);
+  FIELD_BLd (identifier_position, 0); // DXF see above
   FIELD_BD (identifier_offset, 0);
   FIELD_BLd (arrow_position, 0);
   FIELD_BD (end_line_overshoot, 0);

@@ -625,6 +625,28 @@ dxf_find_lweight (const int lw)
 }
 
 static int
+dxf_read_CMC (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair, BITCODE_CMC *restrict color)
+{
+  if (pair->code < 90)
+    {
+      color->index = pair->value.i;
+      if (pair->value.i == 256)
+        color->method = 0xc2;
+      if (pair->value.i == 257)
+        color->method = 0xc8;
+      else if (dwg->header.version >= R_2004)
+        {
+          color->index = 256;
+          color->rgb = pair->value.l;
+          color->rgb |= 0xc2000000;
+        }
+      LOG_TRACE ("color.index = %d [%s %d]\n", pair->value.i, "CMC", pair->code);
+      return 0;
+    }
+  return 1;
+}
+
+static int
 dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
@@ -5055,7 +5077,17 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_VALUEPARAM
   LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
              pair->code);                                                     \
   dxf_free_pair (pair)
-
+#define EXPECT_DBL_DXF(field, dxf, type)                                      \
+  if (pair == NULL || pair->code != dxf)                                      \
+    {                                                                         \
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", obj->name, \
+                 pair ? pair->code : -1, dxf, field);                         \
+      return pair;                                                            \
+    }                                                                         \
+  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
+  LOG_TRACE ("%s.%s = %f [" #type " %d]\n", obj->name, field, pair->value.d,  \
+             pair->code);                                                     \
+  dxf_free_pair (pair)
 #define EXPECT_H_DXF(field, htype, dxf, type)                                 \
   if (pair == NULL || pair->code != dxf)                                      \
     {                                                                         \
@@ -5081,7 +5113,7 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, Dwg_VALUEPARAM
   if (pair->value.s)                                                          \
     {                                                                         \
       dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value.s, 1);   \
-      LOG_TRACE ("%s.%s = %s [H %d]\n", obj->name, field,                     \
+      LOG_TRACE ("%s.%s = \"%s\" [T %d]\n", obj->name, field,                     \
                  pair->value.s, pair->code);                                  \
     }                                                                         \
   dxf_free_pair (pair)
@@ -6524,6 +6556,140 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj,
   return pair;
 }
 
+#define FIELD_B(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, B)
+#define FIELD_RC(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, RC)
+#define FIELD_BS(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BS)
+#define FIELD_BLd(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BLd)
+#define FIELD_BL(field, dxf) pair = dxf_read_pair (dat); EXPECT_INT_DXF (#field, dxf, BL)
+#define FIELD_BD(field, dxf) pair = dxf_read_pair (dat); EXPECT_DBL_DXF (#field, dxf, BD)
+#define FIELD_HANDLE(field, code, dxf) pair = dxf_read_pair (dat); EXPECT_H_DXF (#field, code, dxf, H)
+#define FIELD_T(field, dxf) pair = dxf_read_pair (dat); EXPECT_T_DXF (#field, dxf)
+#define FIELD_CMC2004(field, dxf)                                             \
+  SINCE (R_2004)                                                              \
+  {                                                                           \
+    pair = dxf_read_pair (dat);                                               \
+    if (pair->code == 62)                                                     \
+      {                                                                       \
+        dxf_read_CMC (dwg, pair, &o->field);                                  \
+        dxf_free_pair (pair);                                                 \
+      }                                                                       \
+  }
+
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbSectionViewStyle (Dwg_Object *restrict obj,
+                          Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_SECTIONVIEWSTYLE *o = obj->tio.object->tio.SECTIONVIEWSTYLE;
+  BITCODE_BD *av;
+  // starting with 71 . 0
+  Dxf_Pair *pair;
+  FIELD_BL (flags, 90);
+  pair = dxf_read_pair (dat); // skip 71 . 1
+  FIELD_HANDLE (identifier_style, 5, 340); // textstyle
+  FIELD_CMC2004 (identifier_color, 62);
+  FIELD_BD (identifier_height, 40); // 5.0
+  FIELD_HANDLE (arrow_start_symbol, 5, 340);
+  FIELD_HANDLE (arrow_end_symbol, 5, 340);
+  FIELD_CMC2004 (arrow_symbol_color, 62);
+  FIELD_BD (arrow_symbol_size, 40);
+  FIELD_T (identifier_exclude_characters, 300); // I, O, Q, S, X, Z
+  FIELD_BLd (identifier_position, 90);
+  FIELD_BD (identifier_offset, 40);
+  FIELD_BLd (arrow_position, 90);
+  pair = dxf_read_pair (dat); // skip 71 . 2
+  FIELD_HANDLE (plane_ltype, 5, 340); // ltype
+  FIELD_BLd (plane_linewt, 90);
+  FIELD_CMC2004 (plane_line_color, 62);
+  FIELD_HANDLE (bend_ltype, 5, 340); // ltype
+  FIELD_BLd (bend_linewt, 90);
+  FIELD_CMC2004 (bend_line_color, 62);
+  FIELD_BD (bend_line_length, 40);
+  FIELD_BD (end_line_overshoot, 40);
+  FIELD_BD (end_line_length, 40);
+  pair = dxf_read_pair (dat); // skip 71 . 3
+  FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
+  FIELD_CMC2004 (viewlabel_text_color, 62);
+  FIELD_BD (viewlabel_text_height, 40);
+  FIELD_BL (viewlabel_attachment, 90);
+  FIELD_BD (viewlabel_offset, 40); // 5.0
+  FIELD_BL (viewlabel_alignment, 90);
+  FIELD_T (viewlabel_pattern, 300);
+  pair = dxf_read_pair (dat); // skip 71 . 4
+  FIELD_CMC2004 (hatch_color, 62);
+  FIELD_CMC2004 (hatch_bg_color, 62);
+  FIELD_T (hatch_pattern, 300);
+  FIELD_BD (hatch_scale, 40);
+  FIELD_BLd (hatch_transparency, 90);
+  FIELD_B (unknown_b1, 290);
+  FIELD_B (unknown_b2, 290);
+  FIELD_BL (num_hatch_angles, 90);
+  if (o->num_hatch_angles)
+    {
+      o->hatch_angles = (BITCODE_BD *)xcalloc (o->num_hatch_angles, 8);
+      for (unsigned i = 0; i < o->num_hatch_angles; i++)
+        {
+          // FIELD_BD (hatch_angles[i], 40);
+          pair = dxf_read_pair (dat);
+          if (pair == NULL || pair->code != 40)
+            {
+              LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s",
+                         obj->name, pair ? pair->code : -1, 40,
+                         "hatch_angles");
+              return pair;
+            }
+          o->hatch_angles[i] = pair->value.d;
+          LOG_TRACE ("%s.%s = %f [BD %d]\n", obj->name, "hatch_angles", pair->value.d,
+                     pair->code);
+          dxf_free_pair (pair);
+        }
+    }
+  return NULL;
+}
+
+static Dxf_Pair *
+add_AcDbDetailViewStyle (Dwg_Object *restrict obj,
+                          Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_DETAILVIEWSTYLE *o = obj->tio.object->tio.DETAILVIEWSTYLE;
+  // starting with 71 . 0
+  Dxf_Pair *pair;
+  FIELD_BL (flags, 90);
+  pair = dxf_read_pair (dat); // skip 71 . 1
+  FIELD_HANDLE (identifier_style, 5, 340); // textstyle
+  FIELD_CMC2004 (identifier_color, 62);
+  FIELD_BD (identifier_height, 40); // 5.0
+  FIELD_HANDLE (arrow_symbol, 5, 340);
+  FIELD_CMC2004 (arrow_symbol_color, 62);
+  FIELD_BD (arrow_symbol_size, 40);
+  FIELD_T (identifier_exclude_characters, 300);
+  FIELD_BD (identifier_offset, 40);
+  FIELD_RC (identifier_placement, 280);
+  pair = dxf_read_pair (dat); // skip 71 . 2
+  FIELD_HANDLE (boundary_ltype, 5, 340); // ltype
+  FIELD_BLd (boundary_linewt, 90);
+  FIELD_CMC2004 (boundary_line_color, 62);
+  pair = dxf_read_pair (dat); // skip 71 . 3
+  FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
+  FIELD_CMC2004 (viewlabel_text_color, 62);
+  FIELD_BD (viewlabel_text_height, 40);
+  FIELD_BL (viewlabel_attachment, 90);
+  FIELD_BD (viewlabel_offset, 40); // 5.0
+  FIELD_BL (viewlabel_alignment, 90);
+  FIELD_T (viewlabel_pattern, 300);
+  pair = dxf_read_pair (dat); // skip 71 . 4
+  FIELD_HANDLE (connection_ltype, 5, 340); // ltype
+  FIELD_BLd (connection_linewt, 90);
+  FIELD_CMC2004 (connection_line_color, 62);
+  FIELD_HANDLE (borderline_ltype, 5, 340);
+  FIELD_BLd (borderline_linewt, 90);
+  FIELD_CMC2004 (borderline_color, 62);
+  FIELD_RC (model_edge, 280); // type, origin, direction
+  return NULL;
+}
+
 // Also exported to in_json. To set list of children in POLYLINE_*/*INSERT
 void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned, BITCODE_H *owned)
@@ -7890,6 +8056,26 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("LWPOLYLINE.flag => %d [BS 70]\n", flag);
               break;
             }
+          else if (pair->code == 70 && strEQc (subclass, "AcDbModelDocViewStyle"))
+            {
+              BITCODE_BS ver = pair->value.i;
+              LOG_TRACE ("%s.mdoc_class_version = %d [BS %d]\n", name,
+                         pair->value.i, pair->code);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "mdoc_class_version", &ver,
+                                           is_tu);
+              break;
+            }
+          else if (pair->code == 70 &&
+                   (strEQc (subclass, "AcDbSectionViewStyle") ||
+                    strEQc (subclass, "AcDbDetailViewStyle")))
+            {
+              BITCODE_BS ver = pair->value.i;
+              LOG_TRACE ("%s.class_version = %d [BS %d]\n", name,
+                         pair->value.i, pair->code);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "class_version", &ver,
+                                           is_tu);
+              break;
+            }
           else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)
             {
               Dwg_Entity_DIMENSION_ANG2LN *o = obj->tio.entity->tio.DIMENSION_ANG2LN;
@@ -8566,6 +8752,22 @@ new_object (char *restrict name, char *restrict dxfname,
                              o->points[j].x, o->points[j].y, o->points[j].z);
                   j++;
                 }
+            }
+          else if (pair->code == 71 && strEQc (subclass, "AcDbSectionViewStyle"))
+            {
+              pair = add_AcDbSectionViewStyle (obj, dat);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 71 && strEQc (subclass, "AcDbDetailViewStyle"))
+            {
+              pair = add_AcDbDetailViewStyle (obj, dat);
+              if (pair && pair->code == 100) // success
+                goto start_loop;
+              else
+                goto search_field;
             }
           else if (pair->code == 8 &&
                    obj->fixedtype == DWG_TYPE_LAYERFILTER &&

@@ -8959,7 +8959,7 @@ CMC,	DXF 62
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item mdoc_class_version
 BS,	DXF 70
 @item desc
 T,	DXF 3
@@ -8969,6 +8969,8 @@ B,	DXF 290
 T,	DXF 300
 @item viewstyle_flags
 BL,	DXF 90
+@item class_version
+BS,	DXF 70
 @item flags
 BL,	DXF 90
 @item identifier_style
@@ -11249,7 +11251,7 @@ B,	DXF 290
 
 @item parent
 struct _dwg_object_object*
-@item class_version
+@item mdoc_class_version
 BS,	DXF 70
 @item desc
 T,	DXF 3
@@ -11259,6 +11261,8 @@ B,	DXF 290
 T,	DXF 300
 @item viewstyle_flags
 BL,	DXF 90
+@item class_version
+BS,	DXF 70
 @item flags
 BL,	DXF 90
 @item identifier_style
