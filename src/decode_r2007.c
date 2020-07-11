@@ -1572,7 +1572,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       dwg->dwg_class[i].unknown_2)
 
           dwg->dwg_class[i].dxfname
-              = bit_convert_TU (dwg->dwg_class[i].dxfname_u);
+              = bit_TU_to_utf8 (dwg->dwg_class[i].dxfname_u);
           if (dwg->dwg_class[i].dxfname
               && strEQc (dwg->dwg_class[i].dxfname, "LAYOUT"))
             dwg->layout_type = dwg->dwg_class[i].number;
