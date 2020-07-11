@@ -714,7 +714,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       {                                                                       \
         if (IS_FROM_TU (dat))                                                 \
           {                                                                   \
-            char *u8 = bit_convert_TU ((BITCODE_TU)_obj->nam);                \
+            char *u8 = bit_TU_to_utf8 ((BITCODE_TU)_obj->nam);                \
             if (u8 && *u8)                                                    \
               {                                                               \
                 GROUP (dxf);                                                  \
@@ -1171,13 +1171,13 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
           char name[256];
           if (IS_FROM_TU (dat))
             {
-              char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
+              char *u8 = bit_TU_to_utf8 ((BITCODE_TU)color->book_name);
               if (u8)
                 strncpy (name, u8, 127);
               else
                 name[0] = '\0';
               free (u8);
-              u8 = bit_convert_TU ((BITCODE_TU)color->name);
+              u8 = bit_TU_to_utf8 ((BITCODE_TU)color->name);
               if (u8)
                 {
                   if (*name)
@@ -1617,7 +1617,7 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     {
       if (IS_FROM_TU (dat))
         {
-          value = bit_convert_TU ((BITCODE_TU)value);
+          value = bit_TU_to_utf8 ((BITCODE_TU)value);
         }
       if (dat->from_version >= R_2000 && dat->version < R_2000)
         { // upcase. convert the other way round, from newer to older
@@ -1670,7 +1670,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     }
   if (IS_FROM_TU (dat)) // r2007+ unicode names
     {
-      name = bit_convert_TU ((BITCODE_TU)name);
+      name = bit_TU_to_utf8 ((BITCODE_TU)name);
     }
   if (!name || !*name)
     {
@@ -3644,7 +3644,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
         // first_owned_block
         if (IS_FROM_TU (dat))
           {
-            char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
+            char *s = bit_TU_to_utf8 ((BITCODE_TU)_hdr->name);
             LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", s);
             free (s);
           }
