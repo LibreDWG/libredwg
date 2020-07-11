@@ -226,16 +226,25 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
       ADD_OBJECT1 (token, LTYPE_CONTROL);                                     \
     }
 
+// DXF and JSON src encoding is either UTF-8 or codepage
+#define SET_STR(src)                                                          \
+  ({                                                                          \
+    Dwg_String *str = (char*)calloc (1, sizeof (String));                     \
+    str->str = strdup (src);                                                  \
+    str->len = strlen (src);                                                  \
+    str->cp = dwg->header.from_version < R_2007 ? dwg->header.codepage : CP_UTF8; \
+    str;
+})
+
 #define STRADD_TV(field, string)                                              \
   if (string)                                                                 \
     {                                                                         \
-      field = (char *)malloc (strlen (string) + 1);                           \
-      strcpy (field, string);                                                 \
+      field = SET_STR (string);                                               \
     }
 #define STRADD_T(field, string)                                               \
   if (string)                                                                 \
     {                                                                         \
-      field = dwg_add_u8_input (dwg, string);                                 \
+      field = SET_STR (string);                                               \
     }
 
 #ifndef __cplusplus
