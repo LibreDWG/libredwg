@@ -10332,6 +10332,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
                       && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
+                      Dwg_Object *prev_entity;
                       Dwg_Object_BLOCK_HEADER *_hdr
                           = blkhdr->tio.object->tio.BLOCK_HEADER;
                       ent->ownerhandle->obj = NULL; // still dirty
@@ -10340,37 +10341,41 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       LOG_TRACE ("BLOCK_HEADER.endblk_entity = " FORMAT_REF
                                  " [H] (blocks)\n",
                                  ARGS_REF (_hdr->endblk_entity));
+
+                      if ((prev_entity = find_prev_entity (obj)))
+                        {
+                          _hdr->last_entity = dwg_add_handleref (
+                              dwg, 4, prev_entity->handle.value, NULL);
+                          LOG_TRACE ("BLOCK_HEADER.last_entity = " FORMAT_REF
+                                     " [H] (blocks)\n",
+                                     ARGS_REF (_hdr->last_entity));
+                        }
                     }
                 }
               // normal entity
               else if (obj->supertype == DWG_SUPERTYPE_ENTITY)
                 {
-                  obj->tio.entity->entmode = entmode;
+                  Dwg_Object_Entity *ent = obj->tio.entity;
+                  Dwg_Object_BLOCK_HEADER *_hdr;
+                  ent->entmode = entmode;
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
                   // blkhdr.entries[] array already done in TABLES section
-                  if (blkhdr && dwg->header.version >= R_13
+                  if (ent->ownerhandle
+                      && (dwg->header.version >= R_13
+                          || dwg->header.version == R_INVALID)
+                      /* requires target version being set */
                       && dwg->header.version < R_2004
-                      && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+                      && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
+                      && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER
+                      && (_hdr = blkhdr->tio.object->tio.BLOCK_HEADER)
+                      && !_hdr->first_entity)
                     {
-                      Dwg_Object_BLOCK_HEADER *_hdr
-                          = blkhdr->tio.object->tio.BLOCK_HEADER;
-                      if (i == 1)
-                        {
-                          _hdr->first_entity = dwg_add_handleref (
-                              dwg, 4, obj->handle.value, NULL);
-                          LOG_TRACE ("BLOCK_HEADER.first_entity = " FORMAT_REF
-                                     " [H] (blocks)\n",
-                                     ARGS_REF (_hdr->first_entity));
-                        }
-                      else
-                        {
-                          _hdr->last_entity = dwg_add_handleref (
-                              dwg, 4, obj->handle.value, NULL);
-                          LOG_TRACE ("BLOCK_HEADER.last_entity = " FORMAT_REF
-                                     " [H] (blocks)\n",
-                                     ARGS_REF (_hdr->last_entity));
-                        }
+                      _hdr->first_entity = dwg_add_handleref (
+                          dwg, 4, obj->handle.value, NULL);
+                      LOG_TRACE ("BLOCK_HEADER.first_entity = " FORMAT_REF
+                                 " [H] (blocks)\n",
+                                 ARGS_REF (_hdr->first_entity));
                     }
                 }
             }
